@@ -1,0 +1,45 @@
+<?php 
+ $this->headTitle()->append($this->translate('Searchbar List'));
+ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/jquery.dataTables.min.js" );
+ $this->headScript ()->appendFile ( PUBLIC_PATH . "js/dataTableComman.js" );
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+ $this->headScript()->appendFile  ( PUBLIC_PATH . "js/back_end/searchbar.js");
+?>
+
+ <div id="searchbarlist">
+   <div class="wrap columns-2">
+    
+			<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+			<br><div class ="mainpage-content-colorbox success">
+			<?php if($this->messageSuccess!=''){?>
+			<span class="success"><?php echo $this->messageSuccess; ?></span>
+			<?php }?>
+			<?php if($this->messageError!=''){?>
+			<span class="error"><?php echo $this->messageError; ?></span>
+			<?php } ?>
+			</div>
+			<?php 
+			}?>
+	  
+        <h1 class="fl"><?php echo $this->translate('Searchbar'); ?>
+        <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ?>admin/searchbar/addkeyword'"><?php echo $this->translate('Add Excluded Keyword'); ?>
+        </button>
+        </h1>
+      <div class="clear"></div>
+         <p class="text-right" style="margin:0 34px 9px;"><a href="<?php echo HTTP_PATH ?>admin/searchbar/exportsearchbarlist"><?php echo $this->translate('Export List'); ?></a>
+         </p>
+         <table class="table table-bordered table-striped" id="keywordListTbl" cellpadding="0" cellspacing="0">
+          <thead>
+              <tr>
+                  <th><?php echo $this->translate('id');?></th>
+                  <th><?php echo $this->translate('Excluded keywords'); ?></th>
+                   <th><?php echo $this->translate('Action'); ?></th>
+                   <th><?php echo $this->translate('Created'); ?></th>
+                   <th><?php echo $this->translate('Delete'); ?></th>
+                </tr>
+             </thead>
+           </table> 
+ <!-- End code of list keywords -->
+ </div>
+ </div>
+        

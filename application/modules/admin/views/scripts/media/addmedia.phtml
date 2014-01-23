@@ -1,0 +1,169 @@
+<?php 
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-image-gallery.min.css");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-responsive.min.css");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery.fileupload-ui.css" );
+
+?>
+<?php echo $this->headTitle()->append('Upload Media');?>
+<!--<link rel="stylesheet" href="http://blueimp.github.com/Bootstrap-Image-Gallery/css/bootstrap-image-gallery.min.css"> -->
+
+<div id="new_media_div" class="wrap columns-2">
+          
+<div>
+  <br>
+    <!-- The file upload form used as target for the file upload widget -->
+     <h1><?php echo $this->translate('Upload New Media');?><a href="<?php echo HTTP_PATH.'admin/media';?>"><button class="btn ml10"><?php echo $this->translate('Cancel');?></button></a></h1>
+    <form name="mediaForm" id="fileupload" action="<?php echo HTTP_PATH.'admin/media/saveimage'?>" method="POST" enctype="multipart/form-data">
+      
+          <div class="mainpage-content-dashed" id="drop_media">
+         
+            <h2><?php echo $this->translate('Drop files here');?></h2><br><p><?php echo $this->translate('or');?></p><br> <!-- <input type="file" class="btn mb20" value="<?php //echo $this->translate('Select File');?>"> -->
+            
+            <span class="img-btn img-btn-success img-fileinput-button " style="display: inline-block !important; float: none;">
+                    <i class="icon-edit icon-white"></i>
+                    <span><?php echo $this->translate('Select File'); ?></span>
+                   	 <input  class="span3" id="fileupload" type="file" name="files" multiple> 
+                   	<input type="file" name="files[]" multiple >
+			 </span>  
+			 	    
+          
+            </div>
+            
+        <br>
+        <!-- The table listing the files available for upload/download -->
+        <table role="presentation" class="table table-striped" id="mediatable"><tbody class="files" data-toggle="modal-gallery" data-target="#modal-gallery"></tbody></table>
+    </form>
+   
+</div>
+<!-- modal-gallery is the modal dialog used for the image gallery -->
+<div id="modal-gallery" class="modal modal-gallery hide fade" data-filter=":odd">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal">&times;</a>
+        <h3 class="modal-title"></h3>
+    </div>
+    <div class="modal-body"><div class="modal-image"></div></div>
+    <div class="modal-footer">
+        <a class="btn modal-download" target="_blank">
+            <i class="icon-download"></i>
+            <span>Download</span>
+        </a>
+        <a class="btn btn-success modal-play modal-slideshow" data-slideshow="5000">
+            <i class="icon-play icon-white"></i>
+            <span>Slideshow</span>
+        </a>
+        <a class="btn btn-info modal-prev">
+            <i class="icon-arrow-left icon-white"></i>
+            <span>Previous</span>
+        </a>
+        <a class="btn btn-primary modal-next">
+            <span>Next</span>
+            <i class="icon-arrow-right icon-white"></i>
+        </a>
+    </div>
+</div>
+<!-- The template to display files available for upload -->
+<script id="template-upload" type="text/x-tmpl">
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-upload fade">
+        <td class="preview" ><span class="fade"></span></td>
+        <td  class="name" style="width:290px !important;"><p>{%=file.name%}</p></td>
+	
+{%=bytes=file.size %}
+  	{%=sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'] %}
+    {%= k = parseInt(Math.floor(Math.log(bytes) / Math.log(1024))) %}
+        
+
+        {% if (file.error) { %}
+            <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+        {% } else if (o.files.valid && !i) { %}
+            <td colspan="4" align="left">
+              <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" ><div class="bar" ></div><div class="progress-extended"></div></div>
+            <!--<div class="span5 fileupload-progress">
+                <div class="progress progress-success progress-striped active" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+                    <div class="bar" style="width:0%;">&nbsp</div>
+                </div>
+                <div class="progress-extended">&nbsp;</div>
+            </div>-->
+
+            </td>
+
+           {% if (!o.options.autoUpload) { %}
+<td class="start">
+                <button class="btn btn-primary">
+                    <i class="icon-upload icon-white"></i>
+                    <span>{%=locale.fileupload.start%}</span>
+                </button></td>
+            {% } %}
+        {% } else { %}
+          
+        {% } %}
+        {% if (!i) { %}<td class="cancel">
+            <!--<button class="btn btn-warning">
+                <i class="icon-ban-circle icon-white"></i>
+                <span>{%=locale.fileupload.cancel%}</span>
+            </button>-->
+</td>
+        {% } %}
+    </tr>
+{% } %}
+</script>
+<!-- The template to display files available for download -->
+<script id="template-download" type="text/x-jquery-tmpl">
+<?php //die;?>
+{% for (var i=0, file; file=o.files[i]; i++) { %}
+    <tr class="template-download fade" id="{%=file.id%}">
+        {% if (file.error) { %}
+            <td></td>
+            <td class="name"><p class="break_word_media">{%=file.name%}</p></span></td>
+            
+
+<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>
+            <td class="error" colspan="2"><span class="label label-important">{%=locale.fileupload.error%}</span> {%=locale.fileupload.errors[file.error] || file.error%}</td>
+        {% } else { %}
+            <td class="preview">{% if (file.thumbnail_url) { %}
+                <img src="{%=file.thumbnail_url%}">
+            {% } %}</td>
+            <td class="name">
+               <p class="break_word_media">{%=file.name%}</p>
+            </td>
+  	{%=bytes=file.size %}
+  {%=sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'] %}
+    {%= k = parseInt(Math.floor(Math.log(bytes) / Math.log(1024))) %}
+ <!--<td class="size"><span>{%=o.formatFileSize(file.size)%}</span></td>-->
+     <td class="size"><span>{%=(bytes / Math.pow(1024, k)).toFixed(1) + ' ' + sizes[k]%}</span></td>      
+        {% } %}
+<td colspan="3"></td>
+
+ {% if (file.id) { %}
+<td class="delete">
+<a class="show" href="#" id="show" rel="{%=file.id%}">Show</a>
+</td>
+ {% } %}         
+    </tr>
+	
+	{%=$('tr#last').remove()%}
+{%=$('#mediatable > tbody:last').append('<tr id="last" style="width:80% !important;"><td colspan="7"><button onclick="javascript:submitMedia();" class="btn btn-large btn-primary" id="addbuttonMedia"><?php echo $this->translate('SAVE ALL CHANGES');?></button><a href="<?php echo HTTP_PATH.'admin/media';?>" class="grey m10"><strong><?php echo $this->translate('CANCEL');?></strong></a></td></tr>')%}
+	
+ {% } %}
+</script>
+
+
+<?php 
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.ui.widget.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/tmpl.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/load-image.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/canvas-to-blob.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH ."js/jquery.iframe-transport.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.fileupload.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.fileupload-fp.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/jquery.fileupload-ui.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/locale.js");
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/addMedia.js");
+
+?>
+         
+</div>
+
+

@@ -1,0 +1,74 @@
+<?php 
+	if(count($this->partialCounter >0)){
+		$cls = 'iphone-col1-none';
+		if($this->partialCounter > 3){
+			
+			$cls = 'iphone-col1-top';
+		}
+	}
+	
+?>
+<div class="<?php echo $cls;?>">
+	<div class="<?php echo $cls;?>-left">
+    	<div style="" class="<?php echo $cls;?>-left-img crop">
+        <?php  	
+			if(file_exists(ROOT_PATH.ltrim($this->ArtIcon['path'],"/").'thum_article_samll_'. $this->ArtIcon['name']) && $this->ArtIcon['name']!=''):
+			
+				$img = PUBLIC_PATH.ltrim($this->ArtIcon['path'],"/") . 'thum_article_samll_'. $this->ArtIcon['name'];
+			
+			else:
+				$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
+				$img = HTTP_PATH . "public/thumb.php?src=".$img."&h=45&w=60&zc=0";
+			endif; ?>
+			
+			 <img class='' id="<?php echo $this->articles['id']; ?>" alt="<?php echo $this->title;?>" src="<?php echo $img;?>"/>
+			 
+        </div>
+    </div>
+    <div class="<?php echo $cls;?>-right">
+    	<div class="<?php echo $cls;?>-right-text1 text-blue">
+        	<h3>
+                <a title='<?php echo $this->title;?>' class="text-blue-link" onClick="javascript:viewCounter('onclick', 'article', <?php echo $this->id ; ?>);" class='text-blue-link' href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$this->permalink;?>">
+            		<?php 
+            		if(strlen($this->title) > 35):
+            		
+            			echo substr($this->title, 0,35).'..';
+            		
+            			else: 
+            			
+            			echo $this->title;
+            			
+            		endif;
+            		?>
+            	</a>
+            </h3>
+        </div>
+     	<div class="<?php echo $cls;?>-right-text2">
+
+        	<?php 
+        	
+        	if(isset($this->chapters[0])){
+        	
+	        	if($this->chapters[0]['content']!=null || $this->chapters[0]['content']!='undefined' || $this->chapters[0]['content']!=''){
+	        	
+	            	$allowed_tags = '<p>'; 
+	                $description = $this->chapters[0]['content'];
+	                $only = strip_tags($description); 
+	                if(strlen($only) > 70){
+	                	echo substr($only, 0,70).'...';
+	                }
+	                 else{
+	                    	echo $only; 
+	                    }
+	        		}
+			    }else{
+			    	
+			          
+			    }
+               
+             ?>
+       </div>
+    </div>
+</div> 
+      
+           

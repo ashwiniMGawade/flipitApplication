@@ -1,0 +1,42 @@
+ <?php
+ $title = $this->emailStepStatus==true ? 'Stap 4 van 4' : 'Stap 3 van 3';
+ $this->headTitle()->append($this->translate($title)); 
+ ?>
+<div class='new-outer'>
+<div class="new-signup-outer-round mt40">
+    	<div class="new-sigup-nav">
+        	<ul>
+            	
+            	<?php if($this->emailStepStatus):?>
+            	
+            	<li class="step1">1. <?php echo $this->translate('E-mailadres')?></li> 
+                <li class="step2">2. <?php echo $this->translate('Bevestiging e-mailadres')?></li>
+                <li class="step3">3. <?php echo $this->translate('Vertel ons wie je bent')?></li> 
+                <li class="step4 sltd">4. <?php echo $this->translate('Je bent nu klaar om te beginnen')?></li>
+                    
+           		<?php else: ?>
+           		
+           		<li class="step1 liWidth">1. <?php echo $this->translate('E-mailadres')?></li> 
+                <li class="step3 liWidth">2. <?php echo $this->translate('Vertel ons wie je bent')?></li> 
+                <li class="step4 sltd last-li-width">3. <?php echo $this->translate('Je bent nu klaar om te beginnen')?></li>
+                   
+           		<?php endif;?> 
+           </ul>
+        </div>
+    	
+    	<?php if(isset($this->exception)){?>
+    		<div id="notfound" class="yellow-box-error-box-code" style="margin-top : 70px; width: 935px; margin-left: 17px;"><strong><?php echo $this->translate($this->exception);?></strong></div>
+    	<?php }?>
+        <div class="step2_outer">
+        	<img src="<?php echo HTTP_PATH?>public/images/front_end/lock_icon.png" alt="" />
+            <h3 style='text-align: center;'><?php echo $this->translate('De registratie is compleet! Bekijk de Members-Only kortingscodes, voeg je favoriete winkels toe en bovenal shop voortaan alleen nog maar met korting!'); ?></h3>
+
+            <div class="step4-form">
+                
+                <div class="yellow_btn" style='width:380px;'>
+                    <a style='text-align: center'href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('mijn-favorieten') ?>?rnd=<?php echo rand(0,9999999); ?>"><?php echo $this->translate('Ga naar de members-only omgeving')?></a>
+                </div>
+           </div>
+        </div>
+    </div>
+</div>    

@@ -1,0 +1,161 @@
+<?php
+
+    $this->headTitle()->append($this->translate('Edit Category'));
+    $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/jquery.validate.js" );
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/editCategory.js" );
+	//$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.custom.css" );
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
+
+
+	$categoryPicturePath = '';
+	$categoryPictureName = '';
+	if(file_exists(ROOT_PATH.$this->editRec[0]['categoryicon']['path'].$this->editRec[0]['categoryicon']['name'])) {
+		$categoryPicturePath = PUBLIC_PATH_LOCALE.$this->editRec[0]['categoryicon']['path'].$this->editRec[0]['categoryicon']['name'];
+		$categoryPictureName = $this->editRec[0]['categoryicon']['name'];
+	}else {
+		$categoryPicturePath = PUBLIC_PATH ."images/upload/no.jpg";
+	}
+
+?>
+
+
+	<!-- update category -->
+<div id='editCategory' class="wrap columns-2">
+	<form action="<?php echo HTTP_PATH ;?>admin/category/editcategory" method="POST" name='updateCategoryForm' id="updateCategoryForm" method=POST enctype=multipart/form-data>
+	<input type="hidden" value="<?php echo $this->editRec[0]['categoryIconId'] ;?>" name='iconId' id='iconId' />
+	<input type="hidden" value="<?php echo $this->editRec[0]['id'] ?>" name='id' id='id' />
+	<input type="hidden" value="<?php echo $this->role; ?>" name='role' id='role' />
+	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
+
+	<h1><?php echo $this->translate('Edit Category'); ?><input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" /></h1>
+		<div id="poststuff" class="metabox-holder has-right-sidebar">
+			<div id="post-body">
+				<div>
+					<div class="mainpage-content">
+
+						<div class="mainpage-content-line">
+							<div class="mainpage-content-left">
+								<label><strong><?php echo $this->translate('Title')?></strong></label>
+							</div>
+							<div class="mainpage-content-right">
+								<div class="mainpage-content-right-inner-right-other"></div>
+								<div class="mainpage-content-right-inner-left-other">
+									<input type="text" name="categoryName"
+										placeholder="<?php echo $this->translate('Edit Title')?>"
+										class="span3" value="<?php echo $this->editRec[0]['name'] ?>">
+								</div>
+							</div>
+						</div>
+						<div class="mainpage-content-line">
+							<div class="mainpage-content-left">
+								<label><strong><?php echo $this->translate('Permalink')?></strong></label>
+							</div>
+							<div class="mainpage-content-right">
+								<div class="mainpage-content-right-inner-left">
+									<label><?php echo $this->translate('http://www.kortingscode.nl/categorieen/'); ?></label>
+								</div>
+								<div class="mainpage-content-right-inner-right-other"></div>
+								<div class="mainpage-content-right-inner-right-full">
+								<input <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> type="text" name="permaLink" id="permaLink" placeholder="centerparks" class="span3" value="<?php echo $this->editRec[0]['permaLink']; ?>">
+								<?php if($this->role == '3' || $this->role == '4'){ ?>
+                            	<input type="hidden" value="<?php echo $this->editRec[0]['permaLink']?>" name="permaLink" id="permaLink">
+                            	<?php }?>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="mainpage-content-line">
+							<div class="mainpage-content-left">
+								<label><strong><?php echo $this->translate('Meta title'); ?></strong></label>
+							</div>
+							<div class="mainpage-content-right">
+								<div class="mainpage-content-right-inner-right-other"></div>
+								<div class="mainpage-content-right-inner-left-other">
+								<input type="text" name="metaTitle" id="metaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->editRec[0]['metatitle'] ?>"/>
+								<span id="metaTextLeft" class="nobel"></span>
+								</div>
+							</div>
+						</div>
+
+						<div class="mainpage-content-line">
+							<div class="mainpage-content-left">
+								<label><strong><?php echo $this->translate('Meta Description'); ?></strong></label>
+							</div>
+							<div class="mainpage-content-right">
+								<div class="mainpage-content-right-inner-right-other"></div>
+								<div class="mainpage-content-right-inner-left-other">
+
+								<textarea class="input-xlarge mbot bbot ignore" id="metaDescription" name="metaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+									<span id="metaDescriptionleft" class="nobel"></span>
+
+							<!--<textarea class="input-xlarge mbot bbot ignore word_count" id="metaDescription" placeholder="<?php //echo $this->translate('Meta Description'); ?>" rows="3" name="metaDescription" ><?php //echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+							<input type="text" class="input-xlarge disabled btop word-count"  id="metaDescription_count" disabled="disabled">-->
+
+								<!--<textarea id="metaDescription" rows="3" class="word_count" name="metaDescription"
+								    placeholder="<?php //echo $this->translate('Meta Description')?>"><?php //echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+								    <div id="metaDescription_count" style="display:none"></div>-->
+
+								</div>
+							</div>
+						</div>
+
+						<div class="mainpage-content-line">
+							<div class="mainpage-content-left">
+								<label><strong><?php echo $this->translate('Category Icon'); ?></strong></label>
+							</div>
+
+							<img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $categoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image" style="margin-top:5px;">
+							<span class="ml15 img-name" title="<?php echo $categoryPictureName; ?>"  id="avtarName">
+                            	<?php echo strlen($categoryPictureName)< 60 ?  $categoryPictureName : substr($categoryPictureName, 0,60).'...'; ?>
+                            </span>
+							<div class="mainpage-content-right control-group">
+								<div style='width : 275px; margin-right: 245px; margin-top: 2px !important;' class="mainpage-content-right-inner-right-other upload"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
+								<div class="mainpage-content-right-inner-left-other">
+									</br>
+									<input class="span3 ignore" style="margin-top:-11px;" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
+								</div>
+							</div>
+						</div>
+
+						<div class="mainpage-content-line">
+							<div class="mainpage-content-left">
+								<label><strong><?php echo $this->translate('Description');?></strong></label>
+							</div>
+							<div class="mainpage-content-right">
+								<div class="mainpage-content-right-inner-right-other"></div>
+								<div class="mainpage-content-right-inner-left-other">
+
+								<textarea class="input-xlarge mbot bbot ignore word_count" id="description" placeholder="<?php echo $this->translate('Description');?>" rows="3" name="description"><?php echo trim($this->editRec[0]['description']);?></textarea>
+								 <input type="text" class="input-xlarge disabled btop word-count"  id="description_count" disabled="disabled">
+
+								<!--<textarea id="description" rows="3" class="word_count" name="description"
+								    placeholder="<?php //echo $this->translate('Description')?>"><?php //echo trim($this->editRec[0]['description']);?></textarea>
+								    <div id="description_count" style="display:none"></div>-->
+
+								</div>
+							</div>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<br class="clear">
+		</div>
+		<div class="mainpage-content-colorbox">
+		<input type="hidden" name="hId" id="hId" value="<?php echo $this->id;?>">
+			<button type="submit" class="btn btn-large btn-primary fl">
+            	<?php echo $this->translate('UPDATE CATEGORY'); ?>
+            </button>
+			<a href="<?php echo HTTP_PATH; ?>admin/category" class="fl m10"> <strong>
+			<?php echo $this->translate('CANCEL'); ?></strong>
+			</a><a id="deleteButton" href="javascript:void(0);" onclick="deleteCategoryByEdit();" class="fl red mt10"><strong>
+				<?php echo $this->translate('DELETE'); ?></strong></a>
+		</div>
+		<!-- /poststuff -->
+	</form>
+</div>

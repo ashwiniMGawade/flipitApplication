@@ -1,0 +1,74 @@
+<?php 
+$permalink = ltrim($_SERVER['REQUEST_URI'], '/');
+$myfav = explode('myfavorite', $permalink);
+
+if($myfav[0] == ''){
+      $permalink = FrontEnd_Helper_viewHelper::__link(rtrim('mijn-favorieten'));
+}
+$permalink = rtrim($permalink, '/');
+
+preg_match("/[^\/]+$/", $permalink, $matches);
+if(intval(@$matches[0]) > 0){
+      $permalink = explode('/'.$matches[0],$permalink);
+      $permalink = $permalink[0];
+}else{
+      $permalink = $permalink;
+}
+// if(empty($this->current) || $this->current=='1'){
+      
+      $splitVal = explode('?', $permalink);
+      $this->headLink( array( 'rel' => 'canonical','href' => HTTP_PATH . strtolower($splitVal[0])));
+
+// }else{
+
+//       $this->headLink( array( 'rel' => 'canonical','href' => HTTP_PATH . strtolower($permalink .'/'. $this->current)));
+// }
+
+if($this->pageCount > 1){
+
+      if($this->current - 1 != 0){
+            
+            if($this->current==2){
+                  
+                  $this->headLink( array( 'rel' => 'prev','href' => HTTP_PATH . $permalink));
+                  
+            }else{
+                  
+                  $this->headLink( array( 'rel' => 'prev','href' => HTTP_PATH . $permalink .'/'. ($this->current - 1) ));
+            }
+            
+      }
+      if($this->current <= 2){
+            
+            if($this->current=='1'){
+                  
+                  $splitVal = explode('?', $permalink);
+                  $permalink = $splitVal[0];
+            }
+            if($this->current+1 <= $this->pageCount):
+           		
+            	$this->headLink( array( 'rel' => 'next','href' => HTTP_PATH . $permalink .'/'. ($this->current + 1)));
+            
+            endif;
+            
+      }
+      
+      foreach ($this->pagesInRange as $pages){?>
+      <?php 
+      if($pages < 6 ){
+          $page = "";
+          if($pages > 1){
+                $page = "/".$pages;
+          }
+      ?>
+    <a href="<?php echo HTTP_PATH . $permalink . $page; ?>"><div class="paging-col1 <?php echo ($pages == $this->current) ? "paging-col1-selected" : "" ?>"><?php echo $pages;?></div> </a>
+    
+    <?php }elseif(isset($this->next) && $pages < 6){ ?>                            
+            <a href="<?php echo HTTP_PATH . $permalink . $page ?>"><div class="paging-rightarrow"> &nbsp; </div> </a>
+       <?php }
+      }
+      ?>
+      
+<?php }
+
+?>

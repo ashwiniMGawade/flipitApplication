@@ -1,0 +1,21 @@
+<div class="fav_txt_lt">
+	<?php 
+	$cls= '';
+	$cls1= '';
+	$cls2= '';
+	if($this->controllerName=='myfavorite' && $this->action=='index'){
+		$cls = 'sltd';
+		
+	}else if($this->controllerName=='myfavorite' && $this->action=='memberonlycodes'){
+		$cls1 = 'sltd';
+	}
+	else if($this->controllerName=='myfavorite' && $this->action=='showprofilepage'){
+		$cls2 = 'sltd';
+	}
+	?>
+	<ul>
+		<li class="p-deals"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link("mijn-favorieten")?>" class=" <?php echo $cls  ?>"><?php echo $this->translate('Persoonlijke deals')?></a></li>
+		<li class="m-codes"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link("mijn-favorieten")."/".FrontEnd_Helper_viewHelper::__link("memberonlycodes")?>" class=" <?php echo $cls1  ?>"><?php echo $this->translate('Members-Only codes')?></a></li>
+		<li class="my-profile"> <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link("login")."/".FrontEnd_Helper_viewHelper::__link("profiel")?>" class=" <?php echo $cls2  ?>"><?php echo $this->translate('Mijn profiel')?></a></li>
+	</ul>
+</div>

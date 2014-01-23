@@ -1,0 +1,279 @@
+<?php
+
+ $userlogin = false;
+		if (Auth_VisitorAdapter::hasIdentity()) :
+			
+					$userlogin = true;
+				endif;
+			 if(count($this->partialCounter >0)){		
+	      		
+			 	$title = $this->title;
+			    $class = '';
+				$logo = HTTP_PATH . 'public/images/front_end/no_image.png';
+				if (strlen ( $this->title ) > 40) {
+					$title = substr ( $this->title , 0, 40 );
+				}
+				if(isset($this->marginCounter))
+				{
+					$marginCounter = $this->marginCounter;
+				}else{
+					$marginCounter = 4;
+				}
+				if ($this->partialCounter % $marginCounter == 0) {
+				  $class = 'mr-none';
+				}
+				if (count ( $this->shop  ['logo'] ) > 0) {
+					if (file_exists ( ROOT_PATH . $this->shop  ['logo'] ['path'] . $this->shop  ['logo'] ['name'] )) {
+						$logo = PUBLIC_PATH . $this->shop  ['logo'] ['path'] . '/' . $this->shop  ['logo'] ['name'];
+					}
+				}
+				$this->authorName  = ucfirst ( strtolower ( $this->authorName  ) );
+				$authorName = $this->authorName ;
+				if (strlen ( $this->authorName  ) > 12) {
+				$authorName = substr ( $this->authorName , 0, 12 ) . '...';
+				}
+				
+				
+				$heightWidth = 'width="150" height="56"';//'width="224" height="108"'
+				if ($this->Visability  != 'DE') :
+					if (! $userlogin) :
+					$logo = $logo = HTTP_PATH . 'public/images/front_end/lock.png';
+					$heightWidth = 'width="80" height="80"';//''
+					endif;
+			    endif;
+				$dType = '';
+				if ($this->discountvalueType  == '1') :
+				$dType = '&euro;';
+				elseif ($this->discountvalueType  == '2') :
+				$dType = '%';
+				endif;
+				
+				$title = $this->title;
+				if (strlen ( $this->title  ) > 60) {
+					$title = substr ( $this->title , 0, 60 ) . '...';
+				}
+			?>
+                 <!-- Voucher Col1 Starts -->
+
+			<div class="voucher-col1 <?php echo $class; ?>"
+				onmouseover="showText(<?php echo $this->id ;?>)"
+				onmouseout="showImage(<?php echo $this->id ;?>)">
+				<div class="voucher-col1-top <?php echo ($this->Visability  == 'MEM') ? "" : "text-black"?>">
+					 <div class="voucher-col1-top-heading">
+						<h4>
+							<strong title="<?php echo $this->title;?>"><?php echo htmlentities($title);?></strong>
+						</h4>
+					</div>
+                <?php 
+                $margin='';
+                if($this->exclusiveCode =='1'):
+               	$margin='margin:-52px 0 0 3px;';
+                ?>
+                  <div class="voucher-col1-top-heading3">
+						<img width="56" height="56"
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/exclusive.png">
+					</div>
+              <?php endif;?>
+            	
+				</div>
+				<div class="voucher-col2-mid">
+					
+						<!-- <span class="fl text-black"><strong><?php //echo $this->shop ['name'];?>&nbsp;</strong></span> --> 
+                	<?php
+                	
+                	$height = '56px;';//'122px;'
+					if ($this->Visability  != 'DE') :
+					
+					endif;
+					if ($this->userGenerated ) {
+					
+				    }?>
+                	
+					<div class="voucher-col2-mid-mid shoptext<?php echo $this->id ;?>" style="display:none;height:<?php echo $height;?>">
+					<div class="voucher-col2-mid-top"><span class="fl text-blue-link"><strong><?php echo htmlentities($this->shop ['name']);?></strong>&nbsp;</span></div>
+					<?php $termandcondition = '';
+				if (count ( $this->termandcondition) > 5) {
+					
+					for($i=0;$i<5;$i++){
+						$termandcondition = $this->termandcondition  [$i] ['content'];?>
+						<h6><span class="wr-w18"><?php echo $termandcondition;?></span></h6>
+						 <?php }
+						
+				 }else{
+					
+					for($i=0;$i<count( $this->termandcondition);$i++){
+						$termandcondition = $this->termandcondition  [$i] ['content'];?>
+						<h6><span class="wr-w18"><?php echo $termandcondition;?></span></h6>
+											
+					<?php }}?>
+					</div>
+
+					<div class="voucher-col2-mid-mid-image shopimage<?php echo $this->id ;?>"" style="height:<?php echo $height; ?>text-align:center" >
+						<img src="<?php echo $logo; ?>" <?php echo $heightWidth; ?>>
+					</div>
+					<div class="voucher-col2-mid-bot shoptext<?php echo $this->id ;?>" style='text-align: center; display:none;'>
+						<h6>
+							<span class="fl"><?php echo $this->translate('Gedeeld door'); ?><a title="<?php echo $this->authorName ; ?>" class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.'about/profile/id/'.$this->authorId;?>"> <strong><?php echo $authorName;?></strong></a></span>
+						</h6> 
+                    <?php if($this->extendedOffer =='1'):?>
+                    <span class="fr"><a class="text-blue-link"
+							href="<?php echo HTTP_PATH_LOCALE;?>offer/couponinfo/id/<?php echo $this->id ; ?>"><?php echo $this->translate('More'); ?></a></span>
+                 <?php endif;?>
+                  </div>
+
+				</div>
+				<div class="voucher-col1-bot">
+                	 <?php
+					if (($this->Visability  == 'MEM' && $userlogin) || $this->Visability  == 'DE' || $this->userGenerated==1 && $userlogin) {
+					?> 
+                	<div class="black-btn">
+						<h3>
+							<strong><?php echo $this->couponCode ;?></strong>
+						</h3>
+					</div>
+					<?php 
+					
+					if($this->discountType=='PA'){ 
+						if(count($this->logo)>0){
+					 	$url = PUBLIC_PATH.$this->logo['path'].'/'.$this->logo['name'];
+					 }else{
+						 if($this->refOfferUrl != ""){
+						  		$url = $this->refOfferUrl;
+						 }else{
+						 	$url = HTTP_PATH_LOCALE.$this->shop['permaLink'];
+						 }
+					 }?>
+					<div class="red-btn" id="scratchImage<?php echo $this->id ;?>">
+					<a href="<?php echo $url; ?>" target="_blank">
+					<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png"> </a>
+					</div>
+					<?php } elseif($this->discountType=='SL'){
+						
+							 $url = $this->refURL;?>
+										<div class="red-btn" id="scratchImage<?php echo $this->id ; ?>">
+										<a href="<?php echo $url; ?>" target="_blank">
+										<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png"> </a>
+										</div>
+					<?php }
+					
+					else{ ?>
+					<div class="red-btn" id="scratchImage<?php echo $this->id ; ?>"
+						onclick="showCode(<?php echo $this->id ; ?>,0)">
+						<img width="217" height="39"
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png">
+					</div>
+				<?php  }
+					
+					}else{?>
+                    <div class="memeber-only">
+						<h4>
+							<strong><span class="fl text-black"><?php echo $this->translate('Members Only!'); ?></span>
+								<span class="fr"><a href="<?php echo HTTP_PATH;?>login"><img
+										width="78" height="33" alt=""
+										src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-inschrijven.png"></a></span>
+							</strong>
+						</h4>
+					</div>
+                    <?php }
+                 $padding = '';
+                 $PosVote = '0';
+                 $NegVote = '';
+                 $percentage = '0'; 
+                 $barWidth = '0';
+                 $barClass='';
+                 if ($this->userGenerated ) {
+                 	if($this->vote!=null){
+                 		for($i=0;$i<count($this->vote);$i++){
+                 			if($this->vote[$i]['vote']=='positive'){
+                 				$PosVote = count($this->vote);
+                 			}else{
+                 			$NegVote = count($this->vote);
+                 			}
+                 		}
+                 		$percentage = (($PosVote)/($NegVote+$PosVote))*100 ;
+                 	if($percentage>55){
+                 		$barClass = 'bar-green';
+                 	}
+                 	if((55>$percentage && $percentage>50)||($percentage==55)||($percentage==50)){
+                 		$barClass = 'bar-orange';
+                 	}if($percentage<50){
+                 		$barClass = 'bar-red';
+                 	}
+                 	$barWidth='width:'.$percentage.'%';
+                 	}
+                 		$padding = 'style="padding: 4px 10px;"'; ?>
+				   <div class="voucher-col2-bot-text" <?php echo $padding;?>>
+				   <?php //echo '<script>perce("'.$this->id.'");</script>';?>
+                	<div class="profile-bar" id="profile-bar<?php echo $this->id;?>">
+	                   
+	                    <div class="profile-bar-inner" id="vote<?php echo $this->id;?>" style="width:112px;">
+		                    <div id="prline" style="margin:0px;float:left;<?php echo $barWidth?>">
+		                    <div id="increased" class="<?php echo $barClass;?>" style=" float: left;margin: 0;width:100% !important;" ></div>
+		                    </div>
+		                 </div>
+
+		                 <div id="percentage" style="float:right; line-height:19px; margin-right:8px;"><strong><?php echo $percentage.'%';?></strong></div>
+	                 
+                   </div>
+                		<span class="fr"> <img style="margin-right: 4px;"
+							onclick="showCode(<?php echo $this->id ; ?>,'1')"
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/thumb-up.png" />
+							<img onclick="showCode(<?php echo $this->id ; ?>,'-1')"
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/thumb-down.png" />
+						</span> 
+						<div style="float: right; line-height: 23px;" id="showVote<?php echo $this->id ;?>"><strong class="fontClass"><?php echo $this->translate('votes:').$PosVote;?></strong></div>
+						
+	            	</div>
+                	<?php }else{?>
+                     <div class="voucher-col2-bot-text">
+                    	<?php //if($this->userGenerated ){ ?>
+                    	<span class="fl"><?php echo $this->translate('Verloopt op:'); ?> <strong
+							class="text-black"><?php echo date('d M Y',strtotime($this->endDate )); ?></strong></span>
+                      <?php //}else{?>
+                      <?php // }?>
+                         <?php 
+                       if($userlogin){
+                       	$userid = Auth_VisitorAdapter::getIdentity()->id;
+                         if($this->shop['id']!=''){?>
+                       <span class="fr">
+                       
+                      <?php 
+                      if($this->shop['favoriteshops']!=null){
+	                  	for($i=0;$i<count($this->shop['favoriteshops']);$i++){
+	                      		if($this->shop['favoriteshops'][$i]['visitorId']==$userid){
+	                      		$activeStar='';
+	                      		$inactiveStar='display:none';
+	                      		}
+	                      		else{	
+	                      			$activeStar='display:none';
+			                      	$inactiveStar='';
+	                      		}
+	                      	}
+                      }else{
+		          	       $activeStar='display:none';
+		                   $inactiveStar='';
+		                   }?>
+                       
+                         <img width="16" id="active"
+							height="15"
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/star-yellow.png" class="yellowstar<?php echo $this->shop['id'];?>" style="cursor:pointer;<?php echo $activeStar;?>">
+							
+                       <img id="Inactive" width="16"
+							height="15"
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/star.png" class="blackstar<?php echo $this->shop['id'];?>" onclick="javascript:activeStar(<?php echo $this->shop['id'];?>)" style="cursor:pointer; <?php echo $inactiveStar;?>">
+							</span>
+							<?php }}?>
+					</div>
+					<?php }?>
+					
+				</div>
+			</div>
+
+			<!-- Voucher Col1 Ends -->
+            <?php
+			}//else{?>
+			 <!-- 	<div style="text-align:center;font-size:14px;font-weight:bold;"><?php //echo $this->translate('No record found'); ?></div> -->
+	        <?php //}?>
+ 				<!-- Voucher Col1 Ends -->
+
+		           

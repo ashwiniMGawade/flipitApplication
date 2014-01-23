@@ -1,0 +1,266 @@
+
+<script type="text/javascript">
+
+//google plus button
+
+window.___gcfg = {lang: 'en-US'};
+
+(function() {
+  var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+  po.src = 'https://apis.google.com/js/plusone.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+
+//google plus button ends here 
+
+</script>	
+
+<!-- Popup Starts -->
+   <?php 
+   echo $this->minifyHeadScript()->prependFile (HTTP_PATH."public/js/front_end/socialmedia.js" );
+    $displaypositive = $displaynegative = 'style="display:none;"';
+    if($this->vote=='1'){
+    	
+    	$displaypositive = 'style="display:block;"';
+    }
+    if($this->vote=='-1'){
+    	
+    	$displaynegative = 'style="display:block;"';
+    } ?>
+ <div class="popup-outer mt20">
+    <!-- Positive feedback start -->
+    <div class="thanks-feedback2" <?php echo $displaypositive; ?> id="positive-feedback" > 
+         <!-- Thanks-feedback2 Col1 Starts -->
+        <div class="thanks-feedback2-col1">
+	        <div class="fl mt5">
+	        	<h3 class="text-black"><strong><img width="14" height="15" style="margin-right:5px;" src="<?php echo HTTP_PATH; ?>public/images/front_end/thumb-up.png">
+	        	<?php echo $this->translate('Cool, how much did you save?'); ?></strong></h3> 
+	        </div>
+	        <div class="fr"><img width="10" height="10" src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-grey.png" onclick = "$('#positive-feedback').fadeOut('slow');"></div>
+         </div>
+         <!-- Thanks-feedback2 Col1 Ends -->
+            
+         <!-- Thanks-feedback2 Col1 Starts -->
+        <div class="thanks-feedback2-col1 mt10">
+            <h3 class="fl mt5"><strong>$</strong></h3>
+            <p class="fl ml5"><input type="text" id="savemoneybox1" class="thanks-textbox1" maxlength="5" style="width:50px; height:37px;" name=""></p> <p class="fl mt10 ml5"><img width="2" height="2" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-dot.png"></p> 
+            <p class="fl ml5"><input type="text" name="" id="savemoneybox2" class="thanks-textbox1" maxlength="2" style="width:20px; height:37px;"></p>
+         </div>
+         <!-- Thanks-feedback2 Col1 Ends -->
+         
+        <h3 class="text-black fl"><strong><?php echo $this->translate('And i bought a ...'); ?></strong></h3>
+        <div class=" thanks-feedback2-col1 mt10"><input type="text" id="and_i_bought" name="and_i_bought" style="width:198px; height:37px;" class="thanks-textbox1"><input type="button" onclick="sendfeedback()" name="" class="btn-tellus ml10" style='margin-top: -9px;'></div>
+          
+        <div class="separator mt10" style="height:3px !important;">&nbsp;</div>
+          
+        <div class="popup-col1 bdr-none">
+          	<div class="fl text-black">
+            	<h4 class="mt10"><strong><?php echo $this->translate('Share this deal'); ?></strong></h4>
+          	</div>
+          	<div class="fr" style="margin-top:7px;">
+          		<?php echo FrontEnd_Helper_viewHelper::socialmedia('', '', $this->params['controller'],'popup') ?>
+	  		</div>
+       </div>
+    </div>
+        <!-- Positive feedback end  -->
+       <!-- Negative feedback start -->
+      <div class="thanks-feedback"  <?php echo $displaynegative; ?> id="nagetive-feedback" >
+        <div class="fl">
+        	<h3 class="text-black"><strong><?php echo $this->translate('Thanks for the feedback!'); ?></strong></h3> 
+        	<font class=" fl"> &nbsp;<?php echo $this->translate('Every vote helps other shoppers;'); ?></font>
+        </div>
+        <div class="fr">
+            <img width="10" height="10" src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-grey.png" onclick = "$('#nagetive-feedback').fadeOut('slow');">
+        </div>
+       </div>
+      
+        <!-- Negative feedback end -->
+       <!-- Popup Header Starts -->
+       <?php
+       if(LOCALE==''):
+       		$imagePop = HTTP_PATH."public/images/front_end/logo-popup.png";
+       else:
+       		$imagePop = HTTP_PATH."public/images/front_end/flip-logo.png";
+       endif;
+       ?>
+   	<div class="popup-header">
+    	<div class="popup-logo"><img src="<?php echo $imagePop; ?>"  alt="Logo"/></div>
+        <div class="popup-cross" onClick="custompopupClose()"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-white.png" width="10" height="10" /></div>
+    </div>
+     <!-- Popup Header Ends -->
+       
+     <!-- Popup Content Starts -->
+       	 <div class="popup-content-section">
+         <?php 
+  			$logo = HTTP_PATH.'public/images/NoImage/NoImage_200x100.jpg';
+         	if( count($this->offerdetail[0]['shop']['logo']) > 0 ){
+         		
+         	if( file_exists ( ROOT_PATH.ltrim($this->offerdetail[0]['shop']['logo']['path'],"/") .'thum_medium_store_'. $this->offerdetail[0]['shop']['logo']['name'] )) {
+         		
+         		$logo = PUBLIC_PATH.ltrim($this->offerdetail[0]['shop']['logo']['path'], "/").'thum_medium_store_'.$this->offerdetail[0]['shop']['logo']['name'];
+         	}
+         }?>
+            <!-- Popup Col1 Starts -->
+         	<div class="popup-col1">
+         		<div class="your-ms">
+         			<img alt='<?php echo $this->offerdetail[0]['shop']['name']; ?>' class='radiusImg' src="<?php echo $logo; ?>"/>
+         		</div>
+         		 <!-- DAY DIFFERENCE -->
+         		 <div class="text-grey-link">
+                  	<?php 
+                  	  $curdate = date('Y-m-d');
+                  	  $offerEndDate = date('Y-m-d',strtotime($this->offerdetail[0]['endDate']));
+                  	  $timestamp_start = strtotime($offerEndDate);
+                  	  $timestamp_end = strtotime($curdate);
+                  	  $difference = abs($timestamp_end - $timestamp_start);
+                  	  $nog = $this->translate('Nog maar');
+                  	  $nog1 = $this->translate('dagen geldig');
+                  	  $diff = floor($difference/(60*60*24));
+                  	?>
+                  <div>
+                  			<?php if($diff ==3 || $diff ==2){?>
+                    	
+                    		<span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dagen geldig!');; ?></span>
+	                    	
+	                    	
+	                    	<?php  } elseif ($diff ==1){?>
+	                    	
+	                    	<span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dag geldig!');; ?></span>
+	                    	
+	                    	
+	                    	<?php  } elseif ($diff ==0){?>
+	                    	
+	                    	<span class="text-orange"> <?php echo $this->translate('Expires today'); ?></span>  
+	                    	
+	                    	<?php  } else { ?>
+	                    	
+	                    	<?php echo $this->translate('Verloopt op:'); ?> <span class="text-black"><?php echo date('d M Y',strtotime($this->offerdetail[0]['endDate'])); ?></span> 
+	                    	
+	                    	<?php } ?>
+                    	
+                 </div>
+                </div>
+                <!-- END CODE FOR DAY DIFFERENCE -->
+                <div class="cop-popup-new-heading text-black">
+                  <h3><?php echo $this->offerdetail[0]['title']; ?></h3>
+                </div>
+                <div class="left mt5">
+	                <?php 
+	                //$link = '';
+	                if($this->offerdetail[0]['shop']['deepLink'] !='' || $this->offerdetail[0]['shop']['deepLink'] != null){
+	                	
+	                $link = $this->offerdetail[0]['shop']['deepLink'];	
+	                
+	                }elseif($this->offerdetail[0]['shop']['refUrl']!='' || $this->offerdetail[0]['shop']['refUrl']!= null){
+	                	
+	                $link = $this->offerdetail[0]['shop']['refUrl'];
+	                
+	                }elseif($this->offerdetail[0]['shop']['actualUrl']!='' || $this->offerdetail[0]['shop']['actualUrl']!= null){
+	                	
+	                $link = $this->offerdetail[0]['shop']['actualUrl'];
+	                
+	                }else{
+	                	
+	                	$link = HTTP_PATH_LOCALE.$this->offerdetail[0]['shop']['permaLink'];
+	                }
+	              
+	                $urlToShow = HTTP_PATH_LOCALE.'out/shop/'.$this->offerdetail[0]['shop']['id'];
+	                $bounceRate = "out/shop/".$this->offerdetail[0]['shop']['id'];
+	                
+	                ?>
+	               	<p><?php echo $this->translate('Als de website niet geopend is, '); ?><a class="text-blue-link" onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" href="<?php echo $urlToShow;?>" target="_blank"  rel="nofollow"><?php echo $this->translate('Klik dan hier'); ?></a>
+	                </p>
+                </div>
+             
+         	</div>
+            <!-- Popup Col1 Ends -->
+            
+            <div class="popup-col1 mt20" <?php echo $displaypositive; ?>>
+               <div class="fl progressbar" style="width:85%">
+                <div class="bar"  data-amount-part="37" data-amount-total="100" data-percentage="75"></div>
+             	</div>
+              	<div class="fr"><a href="javascript:;">
+                   <img width="31" hspace="5" height="28" src="<?php echo HTTP_PATH; ?>public/images/front_end/like-green.png"></a>
+                   <a href="javascript:;">
+                      <img width="31" height="28" src="<?php echo HTTP_PATH; ?>public/images/front_end/dislike-red.png">
+                   </a>
+               </div>
+           </div>
+           
+           <div class="popup-col1 mt20"  <?php echo $displaynegative; ?>>
+                <div class="fl progressbar" style="width:85%">
+                    <div class="bar"  data-amount-part="37" data-amount-total="100" data-percentage="75"></div>
+                </div>
+                <div class="fr"><a href="javascript:;"><img width="31" hspace="5" height="28" src="<?php echo HTTP_PATH; ?>public/images/front_end/like-grey.png"></a> 
+                <a href="javascript:;"><img width="31" height="28" src="<?php echo HTTP_PATH; ?>public/images/front_end/dislike-red.png"></a></div>
+            </div>
+            
+           
+         	<input type="hidden" name="votepercentage" id="votepercentage" value="<?php echo $this->votepercentage; ?>" />
+          <input type="hidden" name="voteId" id="voteId" value="<?php echo $this->voteId; ?>" />
+           
+            <!-- Popup Col1 Ends -->
+            <!-- Popup Col1 Starts -->
+            <?php  /* if(count($this->offerdetail[0]['termandcondition'])>0): ?>
+         	<div class="popup-col1 mt15 text-black">
+         		
+	            <div class="popup-footer">
+	             <h3> 
+	             <?php echo $this->translate('Terms and Conditions'); ?>
+	             </h3>
+	            	<div>
+		            <?php 
+		           		for($i=0;$i<count($this->offerdetail[0]['termandcondition']);$i++): 
+		           		
+		             	echo $this->offerdetail[0]['termandcondition'][$i]['content']; 
+		           		
+		          		endfor;
+		            ?>
+	            	</div>
+	            </div>
+	           
+	       </div>
+          <?php  endif; */?>
+            <!-- Popup Col1 Ends -->
+            
+          
+       </div>
+       <!-- Popup Content Ends -->
+         <!-- Popup Col1 Starts -->
+         	<div class="popup-col1  fl">
+           	  <div class="enter-code-outer">
+                    <div class="enter-code-left">
+                      <h3 class="text-white">
+                      	<strong><?php echo $this->translate('VOER DEZE CODE IN TIJDENS DE BESTELLING'); ?></strong>
+                      </h3>
+                      <img class="arrow-pop-left" src="<?php echo HTTP_PATH; ?>public/images/front_end/arrow-pop-right.png"/>
+                      <img class="arrow-pop-right" src="<?php echo HTTP_PATH; ?>public/images/front_end/arrow-pop-left.png"/>
+	                    <div class="popup-coupon-code">
+	                    	<div class="popup-coupon-code-inner">
+			                      <div class="coupon-code"><?php echo $this->code; ?></div>
+	                    	</div>
+	                    </div>
+                	</div>
+                </div>
+            </div>
+        <!-- Popup Col1 Ends --> 
+        
+          <!-- Popup Col1 Starts -->
+           <div class=" popup-col1 fl" style="margin-bottom: 30px;">
+            	 <div class=" popup-greybox-top text-black">
+	            	<h4><strong><?php echo $this->translate('Deel deze korting met familie en vrienden!'); ?></strong></h4>
+                    <div class='popup-greybox-social'>
+                        	<?php 
+                        	  $controller =  $this->params['controller'];
+                              $socialMedia = new FrontEnd_Helper_viewHelper();
+					          echo $socialMedia->socialmediaSmall('', '', $controller, 'popup');
+					        ?>
+					</div>
+		         </div>
+            </div>
+            <!-- Popup Col1 Ends -->	
+<div class="clr">&nbsp;</div>
+</div>
+
+
+<!-- Popup Starts -->

@@ -1,0 +1,237 @@
+<?php 
+	 $headerSearch = new FrontEnd_Helper_viewHelper(); 
+     $page = $this->page;
+     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."about' style='color:#6a6a6a'>".$this->translate('Profile')."</a>";
+  	 echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
+	 ?>
+      <?php 
+        $userDetails=$this->userDetails;
+        if(!empty($userDetails)):
+        $interestCategory = $this->interestCategory;
+        
+        $sinceDays = $this->sinceDays;
+        $mostread = $this->mostread;
+        /*echo "<pre>";
+        print_r($mostread);
+        echo "<pre>";*/
+        ?>
+        <!-- Contributor Outer Starts -->
+        <div class="white-bg">
+	        <div class="new-outer">
+	        <div class="contributor-outer">
+	        	<div class="contributor-left">
+	            	<div class="contributor-left-lt">
+	            	<?php  
+            			if(file_exists(BASE_ROOT.ltrim($userDetails[0]['profileimage']['path'], '/')."thum_large_widget_".$userDetails[0]['profileimage']['name']) && $userDetails[0]['profileimage']['name']!=''):
+							$profileImage = HTTP_PATH. "public/" . ltrim($userDetails[0]['profileimage']['path'],"/")."thum_large_widget_".$userDetails[0]['profileimage']['name'];
+						 else:
+						  	$profileImage = HTTP_PATH."public/images/NoImage/NoImage_142_121.jpg";
+						 endif;	
+						 $twitterimg = HTTP_PATH."public/images/front_end/twitter.png";
+						 $plusimg = HTTP_PATH."public/images/front_end/plus.png";
+						 $piimg = HTTP_PATH."public/images/front_end/p-icon.png";
+						 $dealguruimg = HTTP_PATH."public/images/front_end/btn-deal-guru.png";
+	                ?>
+	                	<div class="contributor-lt-img"><img src="<?php echo $profileImage; ?>"/></div>
+	                    <div class="contributor-lt-soical"><?php if($userDetails[0]['twitter']!=""): ?><a href="<?php echo $userDetails[0]['twitter']; ?>" target="_blank"><img src="<?php echo $twitterimg; ?>" width="24" height="24" /></a><?php endif; if($userDetails[0]['google']!=""): ?><a href="<?php echo $userDetails[0]['google']; ?>" target="_blank"><img src="<?php echo $plusimg; ?>" width="24" height="24" /></a><?php endif; if($userDetails[0]['pinterest']!=""): ?><a href="<?php echo $userDetails[0]['pinterest']; ?>" target="_blank"><img src="<?php echo $piimg; ?>" class="mr-none" width="24" height="24" /></a><?php endif; ?></div>
+	                </div>
+	                <div class="contributor-left-rt">
+	                	<div class="contributor-left-rt-heading">
+	                	  <h1 class="text-black"><?php echo $userDetails[0]['firstName']; ?>&nbsp;&nbsp;&nbsp;
+	                	  	<?php 
+	                	  	$view = new Zend_View();
+	                		$view->setScriptPath(APPLICATION_PATH . '/views/scripts/');
+	                	  	echo $view->render('partials/deal.phtml');
+							?>
+	                	  </h1>
+	                	</div>	
+	                    <div class="contributor-left-rt-text1"><?php echo $userDetails[0]['mainText']; ?></div>
+						<div class="contributor-intrest-outer">
+						
+	            			<div class="contributor-intrest-col2 text-black"><strong><?php echo $this->translate('Interests:');?></strong></div>
+	            			<?php 
+	            			foreach($interestCategory as $intCat): 
+	            			
+	            			$link = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('categorieen').'/'.$intCat['category'][0]['permaLink'];
+	            			?>
+	              				<div class="contributor-intrest-col1 text-black"><a href="<?php echo $link; ?>"><?php echo $intCat['category'][0]['name']; ?></a></div>
+	              			<?php
+	              			endforeach; 
+	              			?>
+	            		</div>
+	         		</div>
+	            </div>
+	            <?php 
+	            	$icon1 = HTTP_PATH."public/images/front_end/icon17.png";
+	            	$icon2 = HTTP_PATH."public/images/front_end/icon18.png";
+	            	$icon3 = HTTP_PATH."public/images/front_end/img-thumb2.png";
+	            	$icon4 = HTTP_PATH."public/images/front_end/img-thumb3.png";
+	            ?>
+	            <div class="contributor-right">
+	            
+	            	 <div class="right-categorieen-col1">
+	                	<div class=" right-categorieen-col1-left"><img src="<?php echo $icon1; ?>" width="27" height="22" /></div>
+	                    <p><?php echo $userDetails[0]['popularKortingscode']; ?> <?php echo $this->translate('Vouchercodes');?></p>
+	                </div>
+	                
+	                 <div class="right-categorieen-col1">
+	                	<div class=" right-categorieen-col1-left"><img src="<?php echo $icon2; ?>" width="24" height="21" /></div>
+	                    <p><?php echo $this->translate('Editor since');?><?php echo $sinceDays[0]['sinceDays']; ?> <?php echo $this->translate('Days');?></p>
+	                </div>
+	                
+	                 <div class="right-categorieen-col1">
+	                	<div class=" right-categorieen-col1-left"><img src="<?php echo $icon3; ?>" width="24" height="21" /></div>
+	                    <p><?php echo $this->translate('Likes'); echo " "; echo $userDetails[0]['likes']; ?></p>
+	                </div>
+	                
+	                 <div class="right-categorieen-col1 bg-none">
+	                	<div class=" right-categorieen-col1-left"><img src="<?php echo $icon4; ?>" width="24" height="21" /></div>
+	                    <p><?php echo $this->translate('Disikes'); echo " "; echo $userDetails[0]['dislike']; ?></p>
+	                </div>
+	            </div>
+	        </div>
+	        </div>
+        </div>
+        <!-- Contributor Outer Ends -->
+        
+      <?php 
+	  if(!empty($this->popularCode)):
+	  ?>
+        <!-- Separator Starts -->
+        <div class="separator">&nbsp;</div>
+        <!-- Separator Ends -->
+        <!-- Merchants Outer Starts -->
+     
+	      <div class="new-outer">
+	      <div class="merchants-outer">
+	       	  <div class="clr"><h2><?php echo $this->translate('Most popular vouchercodes by this editor');?></h2>
+	       	    </div>
+	        	<div class="merchants-bot">
+	           <?php  
+	           $k = 0;
+	           if(count($this->popularCode) > 0):
+	                    	foreach ($this->popularCode as $suggestion):
+	                    		$this->popularCode[$k]['marginCounter'] = 4;
+	                    		$k++;
+	                    	endforeach;
+	                    	echo $this->partialLoop('partials/offer.phtml', $this->popularCode); endif;?>
+	                </div>
+	        </div>
+	       </div>
+       
+      <?php 
+       endif;
+      ?>
+      
+      <!-- Merchants Outer Ends -->
+        <!-- Merchants Outer Starts -->
+        <?php 
+        if(!empty($this->favouriteShops)):
+        ?>
+         <!-- Separator Starts -->
+        <div class="separator">&nbsp;</div>
+        <!-- Separator Ends -->
+        <div class="white-bg">
+	        <div class="new-outer">
+	        <div class="merchants-outer">
+	       	  <div class="clr"><h2><?php echo $this->translate('Favoriete winkels');?></h2></div>
+	       	   
+	        	<div class="ms-zalando-outer">
+	        	<?php 
+	        	foreach($this->favouriteShops as $favShops):
+	        	  if(!empty($favShops['shops'])):
+	        		if(file_exists(ROOT_PATH.ltrim($favShops['shops'][0]['logo']['path'], '/')."thum_medium_".$favShops['shops'][0]['logo']['name']) && $favShops['shops'][0]['logo']['name']!=''):
+	        		    $img = PUBLIC_PATH.ltrim($favShops['shops'][0]['logo']['path'] , '/')."thum_medium_".$favShops['shops'][0]['logo']['name'];
+	        		else:
+	        			$img = HTTP_PATH."public/images/NoImage/storeLogo100_50.jpg";
+	        			
+	        		endif;
+	        			$mlink = HTTP_PATH_LOCALE.$favShops['shops'][0]['permaLink'];
+	        	  else:
+	        	  		$img = HTTP_PATH."public/images/NoImage/storeLogo100_50.jpg";
+	        	  		$mlink = HTTP_PATH_LOCALE;
+	        	  endif;
+	        		
+	        		
+	        		$shop_name = substr($favShops['name'],0,16);
+	        		
+	        	?>
+	            	<!--Ms Zalando Col1 Starts -->
+	                	<div class="favorite-shop-author">
+	                		<a title="<?php echo $favShops['name']; ?>" href="<?php echo $mlink; ?>"><img src="<?php echo $img; ?>"/></a>
+	                    	<a title="<?php echo $favShops['name']; ?>" href="<?php echo $mlink; ?>"><span><?php echo $shop_name; ?></span></a>
+	                    </div>
+	                <!--Ms Zalando Col1 Ends -->
+				<?php 
+				endforeach;
+				?>
+				 </div>
+	      </div>
+      	</div>
+      </div>
+      
+      <?php 
+      endif;
+      ?>
+         <!-- Merchants Outer Ends -->
+         <!-- Merchants Outer Ends -->
+      <?php 
+	  if(!empty($this->newestCode)):
+	  ?>
+         <!-- Separator Starts -->
+        <div class="separator">&nbsp;</div>
+        <!-- Separator Ends -->
+         
+          <!-- Merchants Outer Starts -->
+      <div class="new-outer">
+      <div class="merchants-outer">
+       	  <div class="clr"><h2><?php echo $this->translate('Latest vouchercodes by this editor');?></h2>
+       	   </div>
+        	<div class="merchants-bot">
+            
+                  <?php 
+                  $l = 0;
+                  if(count($this->newestCode) > 0):
+                  foreach ($this->newestCode as $new):
+                  $this->newestCode[$l]['marginCounter'] = 4;
+                  $l++;
+                  endforeach;
+                  echo $this->partialLoop('partials/offer.phtml', $this->newestCode); 
+                  endif;
+                  ?>
+            </div>
+      </div>
+      </div>
+      <?php 
+       endif;
+      ?>
+         <!-- Merchants Outer Ends -->
+        
+        <!-- Separator Starts -->
+        <div class="separator">&nbsp;</div>
+        <!-- Separator Ends -->
+        <?php 
+		if(!empty($this->mostread)):
+		?> 
+        <!-- Merchants Outer Starts -->
+        <div class="white-bg">
+	        <div class="new-outer">
+		      	<div class="merchants-outer">
+					<div class="clr">
+						<h2><?php echo $this->translate('Meest gelezen bespaar wijzers by this editor');?></h2>
+		       	 	</div>
+		        	<div class="common-div">
+		        		<?php  
+						echo $this->partialLoop('partials/mostReadAcls.phtml',$this->mostread);
+		        		?>
+		        	</div> 
+		      	</div>
+	        </div>
+        </div>
+        <?php endif; ?>   
+         <!-- Merchants Outer Ends -->
+<?php 
+
+	endif;
+	
+?>

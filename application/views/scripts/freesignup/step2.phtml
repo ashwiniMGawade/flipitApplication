@@ -1,0 +1,24 @@
+<?php 
+$this->headTitle()->append($this->translate('Stap 2 van 4')); ?>
+<div class='new-outer'>
+	<div class="new-signup-outer-round mt40">
+    	<div class="new-sigup-nav">
+        	<ul>
+            	<li class="step1">1. <?php echo $this->translate('E-mailadres')?></li> 
+                <li class="step2 sltd">2. <?php echo $this->translate('Bevestiging e-mailadres')?></li>
+                <li class="step3">3. <?php echo $this->translate('Vertel ons wie je bent')?></li> 
+                <li class="step4">4. <?php echo $this->translate('Je bent nu klaar om te beginnen')?></li>
+                 
+            </ul>
+        </div>
+    	
+        <div class="step2_outer">
+        	<img src="<?php echo HTTP_PATH?>public/images/front_end/steps-tick.png" alt="" />
+            <h3><?php echo $this->translate('Controleer je e-mail en bevestig jouw account door op de link te klikken.')?></h3>
+            <h2><?php echo $this->email;?></h2>
+        </div>
+        
+        
+    </div>
+   
+</div>

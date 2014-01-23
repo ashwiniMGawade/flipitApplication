@@ -1,0 +1,88 @@
+
+<?php 
+ $this->headTitle()->append($this->translate('Add Excluded Keyword'));
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/searchbar.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+ 
+?>
+
+<div class="wrap columns-2" id="addNewKeyword">
+   <h1><?php echo $this->translate('Add Redirect/Connect keyword in searchbar'); ?><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/searchbar'"><?php echo $this->translate('Cancel'); ?></button></h1>
+        <form method="POST" enctype=multipart/form-data name="addKeywordForm" id="addKeywordForm">
+        <div id="poststuff" class="metabox-holder has-right-sidebar">
+        <input type="hidden" name='selectedShopId' id='selectedShopId' value="">
+         <div id="post-body">
+           <div>
+           <div class="mainpage-content">
+               <div class="mainpage-content-line">
+                   <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Keyword'); ?></strong></label></div>
+                       <div class="mainpage-content-right">
+                         <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
+                          <div class="mainpage-content-right-inner-left-other">
+                          <input type="text" class="span3" placeholder="<?php echo $this->translate('Keyword'); ?>"  name="keyword" id="keyword" ></div>
+                          </div>
+                        </div>
+                        
+                        
+                        <div class="mainpage-content-line">
+                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Action'); ?></strong></label></div>
+                        <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-left-other">
+                         <div data-toggle="buttons-checkbox" class="btn-group">
+                         <button id='btnredirect' type="button" onclick="changeAction(this,0)" name="redirect" class="btn"><?php echo $this->translate("Redirect") ; ?></button>                     
+		                 <button id='btnconnect' style="border-radius: 0 4px 4px 0;" type="button" onclick="changeAction(this,1)" name="connect" class="btn btn-primary default"><?php echo $this->translate("Connect") ; ?></button>
+		                 <input value="<?php echo "1"?>" class="display-none" type="checkbox"  name="actionType" id="actionType" checked="checked"/>
+		                 </div>
+                          </div>
+                        </div>
+                        </div>
+                        <div class="mainpage-content-line mt10">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Redirect to'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other" style="width:250px;"></div>
+                               <div class="mainpage-content-right-inner-left-other">
+                                <input type="text" placeholder="<?php echo $this->translate('Redirect to'); ?>" class="span3" name="redirectTo" id="redirectTo" disabled="disabled"></div>
+                            </div>
+                        </div>
+                          
+                           <div class="mainpage-content-line mt10">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Connect to'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                            <div class="mainpage-content-right-inner-right-other" style="margin-top:2px;">
+                            <div data-toggle="buttons-checkbox" class="btn-group">
+                            	<button type="button" onclick="addShop();" name="addStore" id="addStore" class="btn btn-primary"><?php echo $this->translate("ADD STORE")?></button>
+                            </div>
+                            </div>
+                            <div class="mainpage-content-right-inner-left-other">
+                            <div>
+                            <input type="text" placeholder="<?php echo $this->translate('Search shop'); ?>" class="span3" name="connectTo" id="connectTo">
+                           </div>
+                           </div>
+                           </div>
+                           </div>
+                           <div class="mainpage-content-line mt10" id="listShop">
+                            <div class="mainpage-content-left"></div>
+                            <div class="mainpage-content-right">
+                            <ul id="shopListul-li">
+                           </ul> 
+                         <input type="hidden" id="selectedShopForSearchbar" name="selectedShopForSearchbar" value="">
+                         <div class="clear mb10"></div>
+                         </div>
+                         </div>
+                         </div>
+                        </div>
+                        </div>
+                      <br class="clear">
+                </div>
+               <div class="mainpage-content-colorbox">
+            	<button type="submit" id="createKeyword" class="btn btn-large btn-primary fl"><?php echo $this->translate('CREATE'); ?></button>
+                <a href="javascript:void(0);" onclick="window.location.href='<?php echo HTTP_PATH ;?>admin/searchbar'" class="fl m10" ><strong><?php echo $this->translate('CANCEL'); ?></strong></a>
+            </div>
+            <!-- /poststuff -->
+            </form>
+</div>

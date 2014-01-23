@@ -1,0 +1,30 @@
+<?php if (Auth_VisitorAdapter::hasIdentity()): ?>
+    <?php
+        $userid = Auth_VisitorAdapter::getIdentity()->id;
+        //$detail = Visitor::getuserdetail($userid);
+        $hash = md5($userid.microtime());
+    ?>
+
+    <div class="dropdown">
+        <a class="account" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('mijn-favorieten') ?>?hash=<?php echo $hash; ?>"><img width ="" height ="" style="float:left;" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-man.png" alt="user" />
+            <span><strong><?php echo $this->translate('Mijn profiel');?></strong></span>
+        </a>
+    </div>
+    <ul style="float:right;">
+		<li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper:: __link('info/privacy-cookies');?>" ><?php echo $this->translate('Cookies');?></a></li>
+        <?php if(LOCALE == ''):?>
+			<li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuws')?>"><?php echo $this->translate('News');?></a></li>
+		<?php endif; ?> 
+        <li><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout') ?>"><?php echo $this->translate('Uitloggen');?></a></li>
+    </ul>
+<?php else: ?>
+
+    <ul>
+        <li><img width ="" height ="" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-man.png" alt="user" /><a class="text-orange-link" rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1') ?>"><?php echo $this->translate('Inschrijven');?></a></li>
+        <li class="none"><a rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>"><?php echo $this->translate('Inloggen');?></a></li>
+        <li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper:: __link("info/privacy-cookies")?>"><?php echo $this->translate('Cookies');?></a></li>
+        <?php if(LOCALE == ''):?>
+			<li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuws')?>"><?php echo $this->translate('News');?></a></li>
+		<?php endif; ?> 	
+    </ul>
+<?php endif; ?>

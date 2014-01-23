@@ -1,0 +1,68 @@
+<?php 
+	echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => null));	
+?> 
+<!-- Separator Starts -->
+<div class="separator">&nbsp;</div>
+<!-- Separator Ends -->
+<!-- Voucher Outer Starts -->
+
+<div class="new-outer">
+    <div class="voucher-outer" >
+        <!-- Voucher Outer Left Starts -->
+        <div class="voucher-outer-left" style="margin: 0px;">
+            <!-- Voucher Outer Left Col1 Starts -->
+            <div class="voucher-outer-left-col1">
+         	    <div class="voucher-right ml-none">
+            	    <div class="voucher-heading mt15">
+                	    <h2 style='font-weight:bold;'><?php echo $this->translate('Zoek op winkelnaam en vind de beste kortingscodes!')?></h2>
+                    </div>
+                </div>
+       	    </div>
+            <!-- Voucher Outer Left Col1 Ends -->
+       </div>
+       <!-- Voucher Outer Left Ends -->
+       <!-- Voucher Outer Right Starts -->
+       <div class="voucher-outer-right"></div>
+       <!-- Voucher Outer Right Ends -->
+    </div>
+</div>
+
+<!-- Separator Starts -->
+<div class="separator">&nbsp;</div>
+<!-- Separator Ends -->
+<!-- Voucher Outer Starts -->
+
+<div class="new-outer">
+	<div class="merchants-outer mt20">
+       	  <div class="clr"><h2><?php echo $this->translate('Our Suggestions') ?></h2></div>
+        	<div class="merchants-bot" style='width: 102%;'>
+	            <?php 
+	                $k = 0;
+	                $userlogin = false;
+	                if(Auth_VisitorAdapter::hasIdentity()):
+	                    $userlogin = true;
+	                endif;
+	                if(count($this->suggestion) > 0):
+	                    foreach ($this->suggestion as $suggestion):
+	                        $this->suggestion[$k]['marginCounter'] = 4;
+	                        $k++;
+	                    endforeach;
+	                    echo $this->partialLoop('partials/offer.phtml', $this->suggestion ); 
+			 		else:
+	            	    $newshoplink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('alle-winkels');
+		                $popularshoplink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('populair');
+	            ?>		
+			   <div class="voucher-outer-left text-black">
+			       <h3><?php echo $this->translate('Sorry, we hebben geen suggesties te linken naar het zoeken..') ?></h3>
+			       <p>&nbsp;</p>
+				   <p>&nbsp;</p>
+				   <h5><?php echo $this->translate('Het is aan te raden te zoeken op winkelnaam. Let daarbij goed op de spelling.')?></h5>
+				   <p>&nbsp;</p>
+				   <h5><?php echo $this->translate('Probeer de zoekopdracht nogmaals in een andere verwoording of navigeer door ')?><a class="text-blue-link" href="<?php echo $newshoplink?>"><?php echo $this->translate('Winkels')?></a><?php echo $this->translate('of') ?> <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen')?>"><?php echo $this->translate('Categorieen') ?></a>!</h5>
+			   </div>	
+	          <?php endif; ?>    
+         </div>
+      </div>
+</div> 
+
+        

@@ -1,0 +1,360 @@
+<?php 
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/timepicker.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/addoffer.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
+
+$date = date("Y-m-d");// current date
+$today = time();
+$twoMonthsLater = strtotime("+2 months", $today);
+
+$role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+
+?>
+<?php echo $this->headTitle()->append('Create User Generated Offer');?>
+<div class="wrap columns-2">
+         <form action="<?php echo HTTP_PATH; ?>admin/offer/saveoffer" name="addOffer" id="addOffer" method="POST" enctype="multipart/form-data">
+          <h1><?php echo $this->translate('Create Offer');?><button type="button" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/offer'" href="#" class="btn ml10"><?php echo $this->translate('Cancel'); ?></button></h1>
+         
+            <div class="mainpage-content">
+            	<div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Visibility'); ?></strong></div>
+                    <div class="mainpage-content-right">
+                    	<div data-toggle="buttons-checkbox" class="btn-group">
+                            <button type="button" class="btn btn-primary" id="default" onClick="selectOfferType('default')"><?php echo $this->translate('Default'); ?></button>
+                            <input type="checkbox" checked="checked" class="display-none" name="defaultoffercheckbox" id="defaultoffercheckbox" value="defaultoffercheckbox">
+                          <?php if($role!= 4){?>                       
+                            <button type="button" class="btn" id="memberOnly" onClick="selectOfferType('memberOnly')"><?php echo $this->translate('Members Only'); ?></button>
+                             <input type="checkbox" name="memberonlycheckbox" class="display-none" id="memberonlycheckbox" value="defaultoffercheckbox">
+                         <?php } ?>
+                          </div>
+                    </div>          
+                </div>
+            </div>
+           <span id="shopDetailDiv" >
+            <div class="mainpage-content">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('For which shop?'); ?></strong></div>
+                    <div class="mainpage-content-right">
+                                <div class="mainpage-content-right-inner-right-other"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                
+ 
+	<select style="display: none;" name="whichshop" class="combobox" id="whichshop">
+		<option value=""></option>
+		<?php for($i=0;$i<count($this->shopList);$i++){
+		     if(trim($this->shopList[$i]['name'])!=''){ ?>
+		     	<option value="<?php echo $this->shopList[$i]['id']; ?>"><?php echo $this->shopList[$i]['name']; ?></option>
+		<?php     
+		      }
+		 } 
+			?>
+	</select>
+
+<input type="hidden" name="selctedshop" id="selctedshop" value=""> 
+                                  
+                              </div>
+                          </div>
+                </div>
+            </div>
+            <div class="mainpage-content" id="aboutShopDiv" style="display:none;">
+                <div class="mainpage-content-line mb10" id="aboutShopNoteDiv">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Note from this shop:'); ?></strong></div>
+                    <div class="mainpage-content-right" id="shopNotes">
+                      &nbsp;
+                  </div>
+                </div>
+                <div class="mainpage-content-line mb10" id="aboutManagerDiv">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Account manager'); ?></strong></div>
+                    <div class="mainpage-content-right" id="shopManager">
+                       &nbsp;
+                  </div>
+                </div>
+                <div class="mainpage-content-line mb10" id="aboutNertworkDiv">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Network'); ?></strong></div>
+                    <div class="mainpage-content-right" id="shopNetwork">
+                       &nbsp;
+                  </div>
+                </div>
+            </div>
+        </span>  
+            <div class="mainpage-content">
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><strong><?php echo $this->translate('Type of Discount'); ?></strong></div>
+                    <div class="mainpage-content-right">
+                       <div data-toggle="buttons-checkbox" class="btn-group mb20">
+                        <input type="checkbox" id="couponCodeCheckbox" name="couponCodeCheckbox" checked="checked" value="coupon" style="display:none;"> 
+                        <input type="checkbox" id="saleCheckbox" name="saleCheckbox" value="sale" style="display:none;"> 
+                        <input type="checkbox" id="printableCheckbox" name="printableCheckbox" value="printable" style="display:none;"> 
+                        <button type="button" class="btn btn-primary" id="couponCode" onClick="selectDiscountType('couponCode')"><?php echo $this->translate('Coupon'); ?></button>   
+                        <button type="button" class="btn" id="sale" onClick="selectDiscountType('sale')"><?php echo $this->translate('Sale'); ?></button>                     
+                        <button type="button" class="btn" id="printable" onClick="selectDiscountType('printable')"><?php echo $this->translate('Printable'); ?></button>
+                      </div>
+                     <span id="couponDiv">
+	                     <div class="clear line"></div>
+	                     	  <div class="mainpage-content-right-inner-left"><label><?php echo $this->translate('Coupon code'); ?></label></div>
+	                          <div class="mainpage-content-right-inner-right-other"></div>
+	                      	  <div class="mainpage-content-right-inner-right-full"><input type="text" name="couponCode" placeholder="centerparks" class="span3"></div>
+	                      <div class="mainpage-content-right-inner-left-other" id="categoryListdiv">
+	                       <?php
+							
+	                        for($i=0;$i<count($this->catList['aaData']);$i++){
+	                           if(trim($this->catList['aaData'][$i]['name'])!=''){ 
+	                      	?>
+	                      	<input type="checkbox" style="display:none;" id="category-<?php echo $this->catList['aaData'][$i]['id'];?>" value="<?php echo $this->catList['aaData'][$i]['id'];?>" name="selectedcategories[]">
+	                      	<button type="button" class="btn square-btn" id="categoryBtn-<?php echo $this->catList['aaData'][$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->catList['aaData'][$i]['id']; ?>')" title="<?php echo($this->catList['aaData'][$i]['name'])?>"><?php echo strlen($this->catList['aaData'][$i]['name']) < 20 ? $this->catList['aaData'][$i]['name'] : substr($this->catList['aaData'][$i]['name'],0,20).'..'; ?></button>
+	                      	<?php }
+	                          }?>
+	                       
+	                      </div>
+                    </span>  
+                    
+                    <span id="printDiv" style="display:none;">
+	                      <div class="clear line"></div>
+	                      <div data-toggle="buttons-checkbox" class="btn-group mb20">
+	                        <button type="button" class="btn btn-primary" id="uploadOfferOption" onClick="printOption('uploadOfferOption')" ><?php echo $this->translate('Upload Offer (pdf or jpg)'); ?></button>   
+	                        <button type="button" class="btn" id="userefurlOption" onClick="printOption('userefurlOption')" ><?php echo $this->translate('Use Ref URL / URL'); ?></button>                     
+	                      </div>
+	                      
+	                      <input type="checkbox" value="uploadoffer" id="uploadoffercheck" name="uploadoffercheck" style="display:none;" checked="checked">
+	                       <div class="mainpage-content-right-inner-right-other uploadOfferMessage"></div>
+	                      
+	                      <div class="mainpage-content-right-inner-left-other" id="uploadofferDiv">
+	                      <input type="file" class="ignore" name="uploadoffer" id = "uploadoffer" onchange="checkFileType(event)" />
+	                      </div>
+	                      
+	                       <input type="checkbox" value="offerrefurl" id="offerrefurlcheck" name="offerrefurlcheck" style="display:none;">
+	                      <div class="mainpage-content-right-inner-right-other offerrefurlMessage"></div>
+	                      <div class="mainpage-content-right-inner-left-other" id="offerrefurlDiv" style="display:none;">
+	                      <input type="text" class="span3" name="offerrefurlPR" id = "offerrefurlPR" placeholder="Ref url" />
+	                      </div>
+                    </span>  
+                  </div>
+                  
+                </div>
+            </div>
+            <div class="mainpage-content">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" id="addofferTitle"  name="addofferTitle" maxlength="60"  placeholder="This account is important, etc" class="span3 mbot bbot">
+                            <input type="text" disabled="disabled" placeholder="<?php echo $this->translate("Usergenerated offer title length 60 characters");?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Deeplinking is'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div data-toggle="buttons-checkbox" class="btn-group ">
+                        <button type="button" id="deepLinkOnbtn" class="btn"><?php echo $this->translate('On'); ?></button>                   
+                        <button type="button" id="deepLinkoofbtn" class="btn mr10 btn-primary"><?php echo $this->translate('Off'); ?></button>
+  						<input type="checkbox" name="deepLinkStatus" value="1" id="deepLinkStatus" style="display:none;">                                   
+                       </div>
+                        
+                    </div>
+                                       
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Ref URL'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                        	<input type="text" id="offerRefUrl" disabled="disabled" name = "offerRefUrl"  placeholder="Ref. Url" class="span3">
+                        </div>
+                    </div>
+                        
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Terms and Conditions'); ?></strong></label></div>
+                    
+                </div>
+                <div class="mainpage-content-line" id="termsAndCondition">
+                <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input id="termsAndcondition-0" name="termsAndcondition[]"  type="text" maxlength="80" placeholder="First Term" class="span3 mbot bbot ignore">
+                            <input type="text" id="metaTextLeft-0" disabled="disabled" placeholder="Characters Left: 80"  class="input-xlarge disabled btop word-count">
+                        </div>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input id="termsAndcondition-1" type="text" maxlength="80" name="termsAndcondition[]"  placeholder="Second Term" class="span3 mbot bbot ignore">
+                            <input type="text" id="metaTextLeft-1" disabled="disabled" placeholder="Characters Left: 80"  class="input-xlarge disabled btop word-count">
+                        </div>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input id="termsAndcondition-2" name="termsAndcondition[]" type="text" maxlength="80" placeholder="Third Term" class="span3 mbot bbot ignore">
+                            <input type="text" id="metaTextLeft-2" disabled="disabled" placeholder="Characters Left: 80"  class="input-xlarge disabled btop word-count">
+                        </div>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input id="termsAndcondition-3" name="termsAndcondition[]" type="text" maxlength="80" placeholder="Forth Term" class="span3 mbot bbot ignore">
+                            <input type="text" id="metaTextLeft-3" disabled="disabled" placeholder="Characters Left: 80"  class="input-xlarge disabled btop word-count">
+                        </div>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input id="termsAndcondition-4" name="termsAndcondition[]" type="text" maxlength="80" placeholder="Fifth Term" class="span3 mbot bbot ignore">
+                            <input type="text" id="metaTextLeft-4" disabled="disabled" placeholder="Characters Left: 80"  class="input-xlarge disabled btop word-count">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                	<div class="mainpage-content-left"><label><strong></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<button type="button" class="btn" onClick="addMoreTerms();"><?php echo $this->translate('Add More Terms'); ?></button>
+                    </div>
+                </div>
+            </div>
+            <div class="mainpage-content">
+            	<div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Start Date'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div class="mainpage-content-right-inner-right-other dateValidationMessage1"></div>
+                    	
+	                        <div class="mainpage-content-right-inner-left-other" style="width: 269px ! important;">
+	                        	<div data-date-format="dd-mm-yyyy" data-date="<?php echo date('d-m-Y');?>" id="dp3" class="input-append date">
+	                        		<input readonly="readonly" type="text"  style="width:120px !important;" value="<?php echo date('d-m-Y');?>"  placeholder="Sunday, April 1" class="span2 ignore2" id="offerStartDate" name="offerStartDate">
+	                        			<span class="add-on"><i class="icon-th"></i></span>
+								</div>
+			                     <div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
+			                          <input style='width: 124px!important;' type="text" id="offerstartTime" name="offerstartTime" class="input-small timepicker-default ignore2"><span class="add-on"><i class="icon-time"></i></span>
+			                     </div>
+	                        </div>
+                        
+                    </div>
+                                       
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('End Date'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div class="mainpage-content-right-inner-right-other dateValidationMessage2"></div>
+	                        <div class="mainpage-content-right-inner-left-other" style="width: 269px ! important;">
+	                        	<div data-date-format="dd-mm-yyyy" data-date="<?php echo @date("d-m-Y", $twoMonthsLater);?>" id="dp4" class="input-append date">
+	                        		<input readonly="readonly"  type="text" style="width:120px !important;" value="<?php 
+	                        		echo @date("d-m-Y", $twoMonthsLater); ?>" placeholder="Sunday, April 1" name="offerEndDate" id="offerEndDate" class="span2 ignore2">
+	                        	<span class="add-on"><i class="icon-th"></i></span>
+								</div>	
+		                    	<div class="input-append bootstrap-timepicker-component" style="display: inline-block;">
+
+		                           <input style='width: 124px!important;' type="text" name="offerendTime" id="offerendTime" class="input-small timepicker-default ignore2"><span class="add-on"><i class="icon-time"></i></span>
+
+		                         </div>
+	                        </div>
+                        
+                    </div>
+                                       
+                </div>
+                
+            </div>
+            <div class="mainpage-content">
+            	<div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Attach to pages'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	
+                        	<div class="web-address-list multiselect">
+                        	<ul>
+                        	<?php for($i=0;$i<count($this->pages);$i++){?>
+                        	<li class="list_1" style ="font-weight:normal;"><input type="checkbox" value="<?php echo $this->pages[$i]['id']; ?>" name="attachedpages[]" style="display: none;"> &nbsp;<?php echo $this->pages[$i]['pageTitle']; ?></li>
+                        	<?php }?>
+                        	</ul>
+                        	</div>
+                        
+                    </div>
+                                       
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Extra options'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div data-toggle="buttons-checkbox" class="btn-group ">
+                        <input type="checkbox" name="exclusivecheckbox" id="exclusivecheckbox" value="1" style="display:none;" />
+                        <input type="checkbox" name="editorpickcheckbox" id="editorpickcheckbox" value="2" style="display:none;"  />
+                        <button type="button" class="btn" value="exclusive" onCLick = "exclusiveeditorpick(event)">Exclusive Code</button>   
+                        <button type="button" style="margin-left:5px;" class="btn" value = "editorpic" onCLick = "exclusiveeditorpick(event)">Editors pick</button>                     
+                       </div>
+                        
+                    </div>
+                                       
+                </div>
+                
+                
+                   <div class="mainpage-content-line mb10" id="extendedOfferDiv">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Extended offer'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    	<div data-toggle="buttons-checkbox" class="btn-group ">
+                        <button type="button" class="btn" value="yes" onClick="extenOffer(event);"><?php echo $this->translate('Yes'); ?></button>   
+                        <button type="button" class="btn btn-primary" value="no" onClick="extenOffer(event);"><?php echo $this->translate('No'); ?></button>  
+                        <input type="checkbox" value="1" name="extendedoffercheckbox" id="extendedoffercheckbox" style="display:none;">                   
+                       </div>
+                        
+                    </div>
+                                       
+                </div>
+                
+            </div>
+            <div class="mainpage-content" style="display:none;" id="extendedoffer-container" style="display:none;">
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <input type="text" placeholder="This account is important, etc" name="extendedOfferTitle" id="extendedOfferTitle" class="span3 mbot bbot">
+                            <input type='text' id='metaTitleLeft' disabled='' placeholder='Characters Left: 80'  class='input-xlarge disabled btop word-count'>
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Ref URL'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                    		<input type="text" name="extendedOfferRefurl" id="extendedOfferRefurl" placeholder="http://www.centerparcs.nl/NL/NL/aanbieding/partner_aanbieding?utm_source=zanox&u" class="span3 ignore">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div class="mainpage-content-right-inner-left-other">
+                            <textarea rows="3" placeholder="Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben 
+    codes en korting beschikbaar voor lente zomer, herfst & winter." id="extendedOfferMetadesc" name="extendedOfferMetadesc" class="input-xlarge mbot bbot ignore"></textarea>
+                            <input type="text" id="metaDescLeft" disabled="disabled" placeholder="Characters Left: 255"  class="input-xlarge disabled btop word-count ignore">
+                        </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Full info about the Coupon'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-right-other"></div>
+                    <div class="mainpage-content-right-inner-left-other">
+                        <textarea rows="3" placeholder="Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben 
+codes en korting beschikbaar voor lente zomer, herfst & winter." id="couponInfo" name="couponInfo" class="input-xlarge mbot bbot ignore"></textarea>
+                        <input type="text" disabled="disabled" placeholder="Characters Left: 255" id="metacouponInfo" class="input-xlarge disabled btop word-count">
+                    </div>
+                  </div>
+               </div> 
+            </div>
+            <div class="mainpage-content-colorbox">
+            	<button id='addOfferBtn' type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('ADD OFFER'); ?></button>
+                <a href="<?php echo HTTP_PATH; ?>admin/offer" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
+            </div>
+         </form>   
+            <!-- /poststuff -->
+        </div>

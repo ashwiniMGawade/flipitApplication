@@ -1,0 +1,228 @@
+<?php 
+$this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/socialmedia.js" ); 
+     $page = $this->page;
+     echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => null)); 
+	 $permaLink = $this->permaLink;
+     if(!empty($page)){
+       ?>
+        <!-- Bespaarwijzer Starts -->
+        <div class="white-bg">
+          <div class="new-outer">
+            <div class="bespaarwijzer-outer">
+              <div class="bespaarwijzer-left">
+              	<div class="bespaarwijzer-left-heading">
+              	  <h1><?php  echo $page[0]['pageTitle']; ?></h1>
+              	</div>
+                <div class="bespaarwijzer-left-col1">
+                  <?php  
+                    
+                  if(file_exists(ROOT_PATH.$page[0]['logo']['path'].$page[0]['logo']['name']) && $page[0]['logo']['name']!=''){
+                  	$pagelogo = PUBLIC_PATH.$page[0]['logo']['path'].'thum_extra_large_'.$page[0]['logo']['name'];
+                  }else{
+                  	$pagelogo = HTTP_PATH."public/images/NoImage/NoImage_132_112.jpg";
+                  	$pagelogo = HTTP_PATH. "public/thumb.php?src=". $pagelogo . "&h=160&w=173&zc=0";
+                  }	
+                       ?>
+                  <div class="bespaarwijzer-left-col1-left">
+                    <img class='radiusImg' src="<?php  echo $pagelogo;?>" alt="<?php echo $page[0]['pageTitle']; ?>"/>
+                  </div>
+                  <div class="bespaarwijzer-left-col1-right">
+                    <?php echo $page[0]['content']; ?>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Bespaarwijzer Ends -->
+        
+        <!-- Separator Starts -->
+        <div class="separator">&nbsp;</div>
+        <!-- Separator Ends -->
+        
+       <!-- Social Likes Starts -->
+       <div class="new-outer">
+       <?php
+          $url = ""; 
+          $title = $this->translate("Share Kortingscode.nl en maak kans op een waardebon t.w.v. &euro; 50!");
+          $socialMedia = new FrontEnd_Helper_viewHelper();
+       	  echo $socialMedia->socialmedia($url, $title, 'moneysavingguide');
+       ?>
+        </div>
+       <!-- Social Likes Ends -->
+        
+         <!-- Separator Starts -->
+        <div class="separator">&nbsp;</div>
+        <!-- Separator Ends -->
+        <?php 
+    	if(!empty($this->popularAtTheMoment)):
+    	?>
+        <!-- Common Div Starts -->
+        <div class="new-outer">
+         <div class="common-div">
+         	<div class="popular-kortings-heading mt20 clr">
+            <h2><?php echo $this->translate('POPULAIR OP DIT MOMENT');?></h2>
+            
+          </div>
+    			<div class="common-div">
+    			
+      			<!-- Iphone COl1 Starts -->
+       			<?php 
+       			foreach($this->popularAtTheMoment as $moments): 
+       			?>              
+				<div class="iphone-col1">
+                   		<div class="iphone-col1-left">
+                   			<div class="iphone-col1-none-left-img">
+                    		<?php  	
+                    		$linkArticle = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $moments['articles']['permalink'];
+						 	if(file_exists(ROOT_PATH.$moments['articles']['ArtIcon']['path']."thum_article_samll_".$moments['articles']['ArtIcon']['name']) && $moments['articles']['ArtIcon']['name']!=''){
+						  		$img = PUBLIC_PATH.$moments['articles']['ArtIcon']['path']."thum_article_samll_".$moments['articles']['ArtIcon']['name'];
+						 	}else{
+						  		$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
+						 	}	
+                   			?>
+                      			<a href="<?php echo $linkArticle; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $moments['articles']['id']; ?>);"><img src="<?php echo $img; ?>"/></a>
+                        	
+                   		    </div>
+                   			<?php 
+                   			$nameArr = explode(' ', $moments['articles']['authorname']);
+                   			
+                   			$linkAuthor = HTTP_PATH_LOCALE."about/profile/id/".$moments['articles']['authorid'];
+                   			$user =  User::getProfileImage($moments['articles']['authorid']);
+						 	$username = $user['firstName'];
+						 	$name = substr($username,0, 5);
+						 	?>
+                        </div>
+                        <div class="iphone-col1-right">
+                        	<div class="iphone-col1-right-text1 text-blue">
+                            <h3>
+                              <a class="text-blue-link" href="<?php echo $linkArticle; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $moments['articles']['id']; ?>);"><?php echo $moments['articles']['title']; ?>
+                              </a>
+                            </h3>
+                        	</div>
+                            <div class="iphone-col1-right-text2">
+                                <?php 
+                                
+                                if(isset($this->chapters[0])){
+                                
+                                if($moments['chapters'][0]['content']!=null || $moments['chapters'][0]['content']!='undefined' || $moments['chapters'][0]['content']!=''){
+                                  $allowed_tags = '<h6>'; 
+                                  $description = $moments['articles']['chapters'][0]['content']; 
+                                  $only = strip_tags($description, $allowed_tags); 
+
+                                  if(strlen($only) > 110) { 
+                                    echo substr($only, 0,110).'...';
+                                  } else {
+                                    echo $only; 
+                                  	}
+							   }
+                                }else{
+							
+							}
+                                ?>
+                          </div>
+                       </div>
+				</div> 
+                <!-- Iphone COl1 Ends -->
+ 				<?php 
+ 				endforeach;
+ 				?>
+            </div>
+         </div>
+         </div>
+         <?php 
+         endif;
+         ?>
+        <!-- Common Div Ends -->
+         
+         <!-- Blue Listing Outer Starts -->
+          <div class="white-bg">
+            <div class="new-outer">
+              <div class="blue-listing-outer">
+                <div class="popular-kortings-heading mt20 clr">
+                  <h2><?php echo $this->translate('CAT');?></h2>
+                </div>
+                 <?php 
+                    if(!empty($this->allMoneySavingArticles)){
+                  ?>
+                  <?php 
+                    $ms =  array();
+                    $ms = $this->allMoneySavingArticles[0]['moneysaving'];
+                    $ret = 1;
+                    for($i=0;$i < count($ms);$i++) {
+                  ?>
+                <!-- Blue Listing Inner Starts -->
+                <div class="blue-listing-inner">
+                  <div class="blue-listing-heading">
+                    <?php $link = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzercat').'/'. $ms[$i]['articlecategory'][0]['permalink']; ?>
+                    <h3>
+                      <a href="<?php echo $link; ?>"><?php echo $ms[$i]['articlecategory'][0]['name']; ?></a>
+                    </h3>
+                  </div>
+                  <div class="blue-listing">
+                    <ul>
+                    <?php 
+
+                    for($j=0;$j < count($ms[$i]['refarticlecategory']);$j++) {
+                    	
+                    	$artId = $ms[$i]['refarticlecategory'][$j]['articles']['id'];
+                    	$alink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $ms[$i]['refarticlecategory'][$j]['articles']['permalink'];
+                    ?>
+                      <li>
+                        <h3>
+                          <a href="<?php echo $alink; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $artId; ?>);"><?php echo $ms[$i]['refarticlecategory'][$j]['articles']['title']; ?>
+                          </a>
+                        </h3>
+                      </li>
+                    	<?php 
+                        }
+                    	?>
+                    </ul>
+                    </div>
+                  </div>
+                  <?php if($ret%4 == 0){
+                  		?>
+                  		<br>
+                  <!-- Separator Starts -->
+                  	<div class="autosep">&nbsp;</div>
+                  <!-- Separator Ends --> 
+                  		<?php
+                  		}	
+                  ?>
+                  <!-- Blue Listing Inner Ends -->
+
+                  <?php $ret++; }
+                  } else {
+                  echo $this->translate("No Records Found");
+                  }
+                  ?>                
+              </div>
+            </div>
+            
+            <!-- Separator Starts -->
+            <div class="separator mt20">&nbsp;</div>
+            <!-- Separator Ends --> 
+
+          <!-- white bg ends--> 
+          </div> 
+
+	       <!-- Common Div Starts -->
+          <div class="new-outer">
+            <div class="common-div">
+              <div class="popular-kortings-heading mt20 clr">
+                <h2><?php echo $this->translate('MEEST GELEZEN BESPAAR WIJZERS');?></h2>
+              </div>
+              <div class="common-div">
+              <?php 
+              if(!empty($this->mostRead)){
+              	echo $this->partialLoop('partials/mostReadAcls.phtml',$this->mostRead); 
+                } else {
+              	echo $this->translate("No Records Found");
+                }
+              ?>
+              </div>
+            </div>
+          </div>
+     <!-- Common Div Ends -->
+     <?php } ?>

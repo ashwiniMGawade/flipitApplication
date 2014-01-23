@@ -1,0 +1,26 @@
+<div class="related-winkels">
+	<div>
+		<h4><?php echo $this->translate('Mensen die winkelen bij') .'&nbsp;'. $this->shopName .'&nbsp;'. $this->translate('winkelen ook bij...') ?></h4>
+	</div>
+	<ul>
+		<?php 
+			# render similar and related shops
+			
+			if(!empty($this->data)){
+	
+				foreach ($this->data as $value) {
+			
+					# generate li template
+				printf('<li class="%s"><a title="%s" href="%s">%s</a></li>',
+						 '',
+						 $value['name'],
+						 HTTP_PATH_LOCALE  . $value['permaLink'],
+	 					 ucfirst(FrontEnd_Helper_viewHelper::mbSubstring($value['name'],200))
+						) ;
+				}
+			}
+		?>
+		 
+	</ul>
+</div>
+ 

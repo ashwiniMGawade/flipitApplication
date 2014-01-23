@@ -1,0 +1,80 @@
+<?php 
+		$this->headTitle()->append($this->translate('FAQ'));
+		$breadcrumb = "<a href='".HTTP_PATH_LOCALE."helpsection/index/' style='color:#6a6a6a'>".$this->translate('Helpsection')."</a>";
+		$headerSearch = new FrontEnd_Helper_viewHelper();
+		//echo $headerSearch->headerSearch($breadcrumb);
+		echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>$breadcrumb));
+?>
+        <!-- Separator Starts -->
+
+        <div class="separator">&nbsp;</div>
+        <!-- Separator Ends -->
+        
+        <!-- blog-overview -->
+        <div class="blog-overview-lt">
+            <h1><strong>Frequently Asked Questions</strong><!-- Separator Starts -->
+            </h1>
+            <div class="separator mt20">&nbsp;</div>
+            <!-- Separator Ends -->
+            <div>
+            	<h5><strong class="text-black"><?php echo $this->data['pageTitle'];?> <br /></strong></h5>
+               <br>
+               <?php echo $this->data['content'];?>
+                <!-- <div class="blog-black-strip ">6 augustus 2012, door Jochem</div> -->
+            </div>
+                  
+        </div> 
+        <div class="blog-right">
+       	  <h3 class="bolg-heading"><strong>F.A.Q.</strong></h3>
+          <?php for($i=0;$i<count($this->pageList);$i++){?>
+            <div class="recent-blog">
+                <div class="recent-blog-text">
+                    <h5 class="text-blue"><a href="<?php echo HTTP_PATH_LOCALE.'helpsection/index/id/'.$this->pageList[$i]['id'];?>"><?php echo $this->pageList[$i]['pageTitle'];?></a></h5>
+                 </div>  
+            </div>
+            <?php }?>
+          
+            <span class="fr mt10">Search Through <a href="javascript:;" class="text-blue-link">All Posts</a></span>
+            <!-- blog-overview Ends -->
+            <div class="kcode-news mt40">
+              <div class="kcode-news-hdr">Kortingscode.nl Nieuwsbrief</div>                
+                    Ontvang de beste kortingen en <br />
+                    exclusieve acties in je inbox <br />
+                    
+                    <div class="kcode-news-img"><img src="images/msg-icon.png" alt="" /></div>
+                    
+                    <div class="register-outer">
+                        <input type="text" onblur="if(this.value=='') this.value=this.defaultValue;" onfocus="if(this.value==this.defaultValue) this.value='';" value="Vul je email in …" />
+                        <div class="reg-btn"><a href="javascript:;">Inschrijven</a></div>
+                    </div>
+                    
+                    <span>
+                        We houden niet van spam dus versturen wij alleen <br />
+                        emails als het echt nodig is.
+                    </span>
+                </div> 
+                
+                <span class="kc-message">"Kortingscode.nl is simply said <br />amazing! We love it"</span> 
+                <div class="new-york"><img src="images/the-new-york.jpg" border="0" /></div> 
+                <span class="text-center-sidebar mt20"><h4><strong class="text-black">ALSO FEATURED IN</strong></h4></span>
+                <div class="other-news-outer mt20">
+                	<div class="other-news">
+                    	<img src="images/bbc-news.jpg" border="0" />
+                    </div>
+                    <div class="other-news">
+                    	<img src="images/bbc-news.jpg" border="0" />
+                    </div>
+                    <div class="other-news">
+                    	<img src="images/bbc-news.jpg" border="0" />
+                    </div>
+                    <div class="other-news">
+                    	<img src="images/bbc-news.jpg" border="0" />
+                    </div>
+                    <div class="other-news">
+                    	<img src="images/bbc-news.jpg" border="0" />
+                    </div>
+                   
+                </div>
+                <span class="visit-center"><a href="javascript:;" class="text-blue-link">Visit our press center</a></span>
+             
+         </div>  

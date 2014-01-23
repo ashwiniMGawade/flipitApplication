@@ -1,0 +1,79 @@
+<?php
+
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/dataTableComman.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+//$this->headScript()->appendFile(PUBLIC_PATH . "/js/ext-lang-de-min.js?1209478552");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/shop.js");
+
+$sessionNamespace = new Zend_Session_Namespace();
+
+?>
+<?php echo $this->headTitle()->append('Shops List');?>
+<div id="imbullbody-content" style="overflow: hidden;">
+        <!-- Shops list start -->
+
+      <div id="shopList">
+       <div class="wrap columns-2">
+		<div class='wrap columns-2'>
+			<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+
+			<br>
+			<div class ="mainpage-content-colorbox success">
+
+			<?php if($this->messageSuccess!=''){?>
+
+			<span class="successserver"><?php echo $this->messageSuccess; ?></span>
+			<?php }?>
+
+			<?php if($this->messageError!=''){?>
+
+			<span class="errorserver"><?php echo $this->messageError; ?></span>
+			<?php } ?>
+			</div>
+		<?php
+		}?>
+		</div>
+        <h1 class="fl">Shops<button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop/createshop'" ><?php echo $this->translate('Add New Shop'); ?></button></h1><?php if($this->role == '1' || $this->role == '2')  { ?><a class="red trash-link" href="<?php echo HTTP_PATH ?>admin/shop/trash"><strong><?php echo $this->translate('Trash'); ?></strong></a><?php }?>
+        <div class="clear"></div>
+         <p class="text-right"><a href="<?php echo HTTP_PATH ?>admin/shop/importshops"><?php echo $this->translate('Import List'); ?></a> / <a href="<?php echo HTTP_PATH ?>admin/shop/local-export-xlx"><?php echo $this->translate('Local Export List'); ?></a>
+           <?php
+            # make gloabl shop export only available for superadmins
+         	if ( $sessionNamespace->settings['rights']['site']['rights'] == '1' ) : ?>
+                   / <a href="<?php echo HTTP_PATH ?>admin/shop/global-export-xlx"><?php echo $this->translate('Global Export List'); ?></a>
+          <?php endif;?>
+         </p>
+
+          <form class="well form-search searchbarbox" name="searchform" id="searchform">
+              <div class="mainpage-content-searchbart">
+                    <div class="mainpage-content-right-searchbar">
+                    <button id="searchByShop" type="button" class="btn btn-primary"><?php echo $this->translate('Search'); ?></button></div>
+                    <div class="mainpage-content-right-inner-left-searchbar">
+                    <input type="text" style="" class="span3" placeholder="Search shop..." name="searchShop" id="searchShop"></div>
+              </div>
+            </form>
+
+            <table  class="table table-bordered table-striped" id="shopListTable" style="position:relative;">
+                <thead>
+                  <tr>
+					<th style="display:none;"><?php echo $this->translate('Id'); ?></th>
+                    <th> <?php echo $this->translate('Shop name'); ?></th>
+                    <th> <?php echo $this->translate('PermaLink'); ?></th>
+                    <th><?php echo $this->translate('Money Shop') ; ?></th>
+                    <th class="th_shop_start"><?php echo $this->translate('Start'); ?></th>
+                    <th><?php echo $this->translate('Network'); ?></th>
+                    <th><?php echo $this->translate('Allow Discussion'); ?></th>
+                    <th><?php echo $this->translate('Display SignUp'); ?></th>
+                    <th><?php echo $this->translate('Online'); ?></th>
+                    <th><?php echo $this->translate('Offline Since'); ?></th>
+                    <th><?php echo $this->translate('Delete'); ?></th>
+
+                  </tr>
+                </thead>
+            </table>
+    </div>
+
+      <!-- Shops list End -->
+ </div>

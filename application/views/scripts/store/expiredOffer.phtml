@@ -1,0 +1,46 @@
+<?php			
+	if(count($this->shop['logo']) > 0):
+     	$img = HTTP_PATH."public/images/front_end/expired-code.png";
+    endif;
+
+    if($this->extendedOffer == 1):
+    	$openInNewTab = 0;
+    	$urlToShow = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('deals').'/'.$this->extendedUrl; 
+    else:
+    	$openInNewTab = 1;
+   		$urlToShow = HTTP_PATH_LOCALE."out/exoffer/".$this->id;
+    endif;
+   // echo $this->extendedUrl;
+    //echo "<pre>";print_r($this);echo "</pre>";
+    ?>
+   <!-- MS Grey Col Starts -->
+   <div class="ms-grey-col mr-none" style="margin-right:13px !important">
+      <div class="ms-grey-col-left crop">
+      <a href="<?php echo $urlToShow;?>"  rel="nofollow"   <?php if($openInNewTab == 1):?> target="_blank"<?php endif; ?> ><img id="<?php echo $this->shop['id'];?>" alt="<?php echo $this->shop['name'];?>" src="<?php  echo $img ; ?>"/></a>
+      <?php 
+      			if($this->title!=null && $this->title!=''):
+                 $title = $this->title;
+                 if (strlen ( $this->title  ) > 40) :
+                 	$title = substr ($this->title , 0, 40 ) . '...';
+                 endif;
+                 endif;
+                
+       ?>
+      </div>
+          <div class="ms-grey-col-right"><a href="<?php echo $urlToShow;?>"  rel="nofollow"   <?php if($openInNewTab == 1):?> target="_blank"<?php endif; ?> ><strong title='<?php echo $this->title;?>' ><?php echo $this->title=='' ? "Description not available right now.." : $title ?></strong></a></div>
+      		<div class="ms-grey-col-mid">
+                 <span>Code:</span>
+                 <?php if($this->couponCode!=null && $this->couponCode!=''):
+                 $title = $this->couponCode;
+                 if (strlen ( $this->couponCode  ) > 40) :
+                 	$title = substr ($this->couponCode, 0, 40 ) . '...';
+                 endif;
+                 ?>
+                 <span class="expired-grey-col text-gray"><?php echo $title;?>
+                  </span>
+                  <?php endif;?>
+                  <div><?php  echo $this->translate('Verloopt op:'); $date1 = new Zend_Date($this->endDate); echo ucwords($date1->get(Zend_Date::DATE_MEDIUM)); ?></div>
+            </div>
+      	
+    </div>
+ 	<!-- MS Grey Col Ends -->

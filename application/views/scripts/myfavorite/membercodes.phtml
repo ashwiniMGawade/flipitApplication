@@ -1,0 +1,18 @@
+<div class="fav_txt_rt">
+	<h3 class="text-blue"><?php echo $this->translate('Member only codes');?></h3>
+    <div class="sub_hdr">
+    	<img src="<?php echo HTTP_PATH?>public/images/front_end/fav_icon.png" alt="" />
+    	<?php echo $this->translate('Jouw favorieten codes');?>
+   </div>
+   <div class="mark-spencer-mid-left" style='width: 745px !important;'>
+	<?php 
+		$k = 0;
+		foreach ($this->offers as $paginatorCodes):
+			$this->offers[$k]['marginCounter'] = 3;
+			$k++;
+		endforeach;
+		echo $this->partialLoop('partials/offer.phtml', $this->offers); 
+		?>
+	</div>
+</div>
+         

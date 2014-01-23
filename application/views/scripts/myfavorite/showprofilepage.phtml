@@ -1,0 +1,19 @@
+<?php $this->minifyHeadScript()->prependFile (HTTP_PATH."public/js/front_end/profile.js" ); ?>
+<div class='new-outer'>
+	<div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px;<?php echo $this->messageSuccess != '' ? '' : 'display:none;'?>"><strong><?php echo $this->messageSuccess;?></strong></div>     
+	<!-- Search Outer2 Ends -->
+	<?php echo $this->render('/myfavorite/header.phtml')?>
+    <div class="new-signup-outer-round mt40">
+    	<!--Favourite Txt Bg-->
+        <div class="fav_txt_bg">
+        	<!--Lt Side-->
+        	 <?php echo $this->render('/myfavorite/leftpanel.phtml')?>
+            <!--//Lt Side-->
+            <!--Rt Side-->
+            <?php echo $this->render('/myfavorite/profile.phtml')?>
+            <!--Rt Side-->
+        </div>
+         <!--//Favourite Txt Bg-->
+    </div>
+  
+</div>

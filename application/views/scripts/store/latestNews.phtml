@@ -1,0 +1,49 @@
+<div class="store-links-col1">
+	<?php 
+		$datetime = strtotime($this->startdate);
+		$d = date('d', $datetime);
+		$m = date('M', $datetime);
+		$y = date('Y', $datetime);
+		
+	 ?>
+
+	<div class="date">
+		
+
+			<?php $findme = 'http'; ?>
+			<span><h2><strong><?php echo $d  ?></strong></h2></span>
+			<span><?php echo  $m ?></span><br/>
+			<span><?php echo  $y ?></span>
+			
+
+		
+	</div>
+	<div class="store-links-col1-text">
+		<h5 class="text-blue line-height22 font14">
+			<?php if($this->url!=null && $this->url!='') {?>
+			
+				<a class="text-blue-link" href="
+				<?php
+					if (strpos($this->url,$findme) !== false) {
+						echo $this->url;
+					} else {
+						echo 'http://'.$this->url; 
+					}?>" target=_blank"><?php echo $this->title;?></a>
+				
+			<?php } else { 
+				
+				echo $this->title;
+			}?>
+		</h5>
+		<p class="line-height20 font13"> <?php 
+		if($this->content!=""): 
+			$content = $this->content;
+			echo $content;
+		else: 
+			echo "No desc found"; 
+		endif;?>
+
+		</p>
+	</div>
+</div>
+<!-- Store-Link Col1 Ends -->
