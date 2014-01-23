@@ -378,7 +378,7 @@ class Category extends BaseCategory {
       * @return array $voucherCodes
       * @version 1.0
       */
-     public static function getCategoryVoucherCodes($id, $limit = null){
+     public static function getCategoryVoucherCodes($id, $limit = 0){
      
      	$newData = array();
      	$date = date('Y-m-d H:i:s');
@@ -405,6 +405,7 @@ class Category extends BaseCategory {
 		        ->andWhere('o.Visability!="MEM"')
 		        ->orderBy('o.exclusiveCode DESC')
 		        ->addOrderBy('o.startDate DESC')
+		        ->limit($limit)	
 		        ->fetchArray();
      			foreach($data as $res){
      		  		$newData[] = $res['Offer'];

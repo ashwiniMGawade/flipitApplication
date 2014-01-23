@@ -119,8 +119,7 @@ class CategoryController extends Zend_Controller_Action {
        $this->view->headMeta()->setName('description', @trim($category[0]['metaDescription']));
 	   
 	   //get voucher codes on category id basis from database
-	   $vouchers = Category::getCategoryVoucherCodes($category[0]['id']);
-	   
+	   $vouchers = Category::getCategoryVoucherCodes($category[0]['id'],71);
 	   
 	 
 	   $ArNew =  array();
@@ -129,7 +128,7 @@ class CategoryController extends Zend_Controller_Action {
 	   }
 	   $authorId = Category::getAuthorId();
 	   $this->view->authorId = $authorId['authorId'];
-	   $paginator = FrontEnd_Helper_viewHelper::renderPagination($vouchers,$this->_getAllParams(),27,7);
+	   $paginator = FrontEnd_Helper_viewHelper::renderPagination($vouchers,$this->_getAllParams(),27,3);
 	   $this->view->paginator = $paginator;
 	   
 	   //for facebook parameters
