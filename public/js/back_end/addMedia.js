@@ -61,15 +61,21 @@ function init(){
 				$('table#mediatable tr#'+id).after('<tr id='+id+'_b><td colspan="4">'+json.name+'</td><td></td><td></td><td><a href="#" onclick="show_hide('+id+');">'+__('Hide')+'</a></td></tr><tr id='+id+'_a><td colspan="7">'+addMediaForm+'</td></tr>');
 
 				$('tr#'+id).hide();
-				var src = PUBLIC_PATH_LOCALE +'images/upload/media/thumb_L/'+json.fileUrl;
-				src =  src.replace('admin.','') ;
+
+				var publicPath = PUBLIC_PATH_LOCALE.replace('admin.', '') ;
+
+				if(! /(http\:\/\/www.)/.test(publicPath))
+				{
+					  publicPath  = publicPath.replace('http://','http://www.')	;
+				}
+				var src = publicPath +'images/upload/media/thumb_L/'+json.fileUrl;
+			 
 				$('img#Image_'+id).attr("src",src);
 				$('input#name_'+id).val(json.name);
 				$('input#alternateText_'+id).val(json.alternateText);
 				$('input#caption_'+id).val(json.caption);
 				
-				var publicPath =  PUBLIC_PATH_LOCALE ; 
-				publicPath = publicPath.replace('admin.','') ;
+				
 				$('input#fileUrl_'+id).val(publicPath +'images/upload/media/'+json.fileUrl);
 				$('#description_'+id).val(json.description);
 				$('#last').show();

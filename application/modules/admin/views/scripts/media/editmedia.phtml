@@ -40,7 +40,15 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCount
 			<div class="mainpage-content-left"><label><strong><?php echo $this->translate('File URL:');?></strong></label></div>
 			<div class="mainpage-content-right">
 			<div class="mainpage-content-right-inner-left-other">
-			<input name="fileUrl" readonly type="text" placeholder="" class="span3" value="<?php echo str_replace("admin.","",HTTP_PATH) .'public/images/upload/media/'.$this->data['fileUrl'];?>">
+				<?php
+
+					$httpPath = str_replace("admin.","",HTTP_PATH) ;
+					if (! preg_match('/(http\:\/\/www.)/',HTTP_PATH))
+					{
+						$httpPath = str_replace("http://","http://www.",$httpPath) ;
+					}
+				 ?>
+			<input name="fileUrl" readonly type="text" placeholder="" class="span3" value="<?php echo $httpPath .'public/images/upload/media/'.$this->data['fileUrl'];?>">
 			</div>
 			</div>
 		</div>
