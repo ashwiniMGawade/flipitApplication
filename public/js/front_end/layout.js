@@ -569,14 +569,16 @@ function showCode1(event) {
 					$('#element_to_pop_up').html(data);
 
 					$("#blackImage" + offerId +" .coupon-code").html(($("div.coupon-code" ,data).html()).trim());
-					$("div.coupon-code.runtime-code","#element_to_pop_up").bigText();					if (vote != '0') {
+					$("div.coupon-code").bigText({'maximumFontSize': 20});
+					$("div.coupon-code.runtime-code","#element_to_pop_up").bigText();			
+					if (vote != '0') {
 
 						$('div.profile-bar div#vote' + offerId + ' div#pro')
 								.css({
 									'margin' : '0px',
 									'width' : '23%',
 									'float' : 'left'
-								});
+						});
 						$('.bar').progressbar();
 						$('div.fl div.bar div.ui-progressbar-value').show();
 						$('div.fl div.bar div.ui-progressbar-value').width(
@@ -662,7 +664,7 @@ function showCode(event) {
 
 					$('#element_to_pop_up').html(data);
 					$("#blackImage" + offerId +" .coupon-code").html(($("div.coupon-code" ,data).html()).trim());
-
+					$("div.coupon-code").bigText({'maximumFontSize': 20});
 					$("div.coupon-code.runtime-code","#element_to_pop_up").bigText();
 
 
