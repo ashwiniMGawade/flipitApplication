@@ -1210,14 +1210,14 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
    * @version 1.0
    * @return object $pagination
    */
-  public static function renderPagination($recordsArray,$params,$itemsPerPage,$range)
+  public static function renderPagination($recordsArray,$params,$itemsPerPage,$range = 3)
   {
 
 		$page = isset($params['page']) && intval($params['page'] > 0 ) ? $params['page'] : '1';
 	    $pagination = Zend_Paginator::factory($recordsArray);
 	  	$pagination->setCurrentPageNumber($page);
 	  	$pagination->setItemCountPerPage($itemsPerPage);
-	  	$pagination->setPageRange($range);
+	  	$pagination->setPageRange(3);
 	  	return $pagination;
   }
 
