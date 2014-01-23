@@ -36,7 +36,7 @@ Copyright (C) 2013 Daniel Hoffmann Bernardes, Icaro Technologies
         rotateText: null,
         padding: null,
         fontSizeFactor: 0.8,
-		maximumFontSize: 20,
+		maximumFontSize: 30,
         limitingDimension: "both"
     }
     

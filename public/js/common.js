@@ -125,7 +125,7 @@ jQuery(document).ready(function() {
 
 	if(jQuery("div.coupon-code").length > 0)
 	{
-		jQuery("div.coupon-code").bigText();
+		jQuery("div.coupon-code").bigText({'maximumFontSize': 20});
 	}
 	
 	// set user menu

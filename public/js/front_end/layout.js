@@ -569,9 +569,7 @@ function showCode1(event) {
 					$('#element_to_pop_up').html(data);
 
 					$("#blackImage" + offerId +" .coupon-code").html(($("div.coupon-code" ,data).html()).trim());
-					$("div.coupon-code").bigText();
-
-					if (vote != '0') {
+					$("div.coupon-code.runtime-code","#element_to_pop_up").bigText();					if (vote != '0') {
 
 						$('div.profile-bar div#vote' + offerId + ' div#pro')
 								.css({
@@ -665,7 +663,7 @@ function showCode(event) {
 					$('#element_to_pop_up').html(data);
 					$("#blackImage" + offerId +" .coupon-code").html(($("div.coupon-code" ,data).html()).trim());
 
-					$("div.coupon-code").bigText();
+					$("div.coupon-code.runtime-code","#element_to_pop_up").bigText();
 
 
 					if (vote != '0') {

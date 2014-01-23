@@ -158,7 +158,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			# PUBLIC PATH with locale
 			defined('PUBLIC_PATH_LOCALE')
 			|| define('PUBLIC_PATH_LOCALE',
-					'http://www.' . $_SERVER['HTTP_HOST']
+					'http://' . $_SERVER['HTTP_HOST']
 					. dirname($_SERVER['SCRIPT_NAME']) . '/' . $lang);
 
 
