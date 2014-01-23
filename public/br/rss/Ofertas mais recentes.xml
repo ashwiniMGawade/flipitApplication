@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+    <title><![CDATA[Novas ofertas]]></title>
+    <link>http://www.flipit.com/br</link>
+    <description><![CDATA[]]></description>
+    <pubDate>Mon, 07 Oct 2013 14:30:02 +0200</pubDate>
+    <image>
+      <url>http://www.flipit.com/public/images/front_end/flip-logo.png</url>
+      <title><![CDATA[Novas ofertas]]></title>
+      <link>http://www.flipit.com/br</link>
+    </image>
+    <generator>Zend_Feed</generator>
+    <language>pt-BR</language>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <item>
+      <title><![CDATA[Ganhe um reestruturante capilar CHI Silk Infusion]]></title>
+      <link>http://www.flipit.com/br/beleza-na-web</link>
+      <guid isPermaLink="false">307</guid>
+      <description><![CDATA[Nas compras acima de R$120. Enquanto durarem os estoques.]]></description>
+      <pubDate>Mon, 07 Oct 2013 13:47:17 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$100 de desconto na sua próxima compra na Dell]]></title>
+      <link>http://www.flipit.com/br/dell</link>
+      <guid isPermaLink="false">306</guid>
+      <description><![CDATA[Apenas para as compras na loja virtual.]]></description>
+      <pubDate>Mon, 07 Oct 2013 13:45:25 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe R$10 de bônus ao comprar perfume Cacharel Amor Amor]]></title>
+      <link>http://www.flipit.com/br/sepha</link>
+      <guid isPermaLink="false">303</guid>
+      <description><![CDATA[Cupom válido enquanto durarem os estoques.]]></description>
+      <pubDate>Mon, 07 Oct 2013 13:39:20 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Compre perfume Animale EDP 50ml e ganhe R$10 de bônus]]></title>
+      <link>http://www.flipit.com/br/sepha</link>
+      <guid isPermaLink="false">304</guid>
+      <description><![CDATA[Cupom válido enquanto durarem os estoques.]]></description>
+      <pubDate>Mon, 07 Oct 2013 13:40:14 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe R$20 de desconto na compra de um perfume NYC Elizabeth Arden]]></title>
+      <link>http://www.flipit.com/br/sepha</link>
+      <guid isPermaLink="false">300</guid>
+      <description><![CDATA[Promoção válida enquanto durar o estoque.]]></description>
+      <pubDate>Mon, 07 Oct 2013 13:36:46 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe R$10 de bônus ao comprar um perfume Givenchy Hot Couture]]></title>
+      <link>http://www.flipit.com/br/sepha</link>
+      <guid isPermaLink="false">301</guid>
+      <description><![CDATA[Cupom válido enquanto durarem os estoques.]]></description>
+      <pubDate>Mon, 07 Oct 2013 13:37:39 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe R$30 de bônus na compra de um perfume Carolina Herrera CH EDP Sublime]]></title>
+      <link>http://www.flipit.com/br/sepha</link>
+      <guid isPermaLink="false">302</guid>
+      <description><![CDATA[Cupom válido enquanto durarem os estoques]]></description>
+      <pubDate>Mon, 07 Oct 2013 13:38:33 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Compre eletroportáteis com 8% de desconto no Extra]]></title>
+      <link>http://www.flipit.com/br/extra</link>
+      <guid isPermaLink="false">298</guid>
+      <description><![CDATA[Válido só até o fim de outubro.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:03:02 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Cupom para obter 7% de desconto em DVDs na loja virtual do Extra]]></title>
+      <link>http://www.flipit.com/br/extra</link>
+      <guid isPermaLink="false">299</guid>
+      <description><![CDATA[Só até o fim de outubro.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:03:24 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe um Leave in para cabelos Uniq One Revlon]]></title>
+      <link>http://www.flipit.com/br/beleza-na-web</link>
+      <guid isPermaLink="false">284</guid>
+      <description><![CDATA[Nas compras acima de R$130.]]></description>
+      <pubDate>Thu, 03 Oct 2013 19:10:17 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe R$25 em compras no aniversário da Kanui]]></title>
+      <link>http://www.flipit.com/br/kanui</link>
+      <guid isPermaLink="false">269</guid>
+      <description><![CDATA[Para compras acima de R$140. ]]></description>
+      <pubDate>Thu, 03 Oct 2013 15:11:12 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe R$45 em compras no aniversário da Kanui]]></title>
+      <link>http://www.flipit.com/br/kanui</link>
+      <guid isPermaLink="false">270</guid>
+      <description><![CDATA[Para compras acima de R$250]]></description>
+      <pubDate>Thu, 03 Oct 2013 15:12:13 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe R$70 de desconto no aniversário da Kanui]]></title>
+      <link>http://www.flipit.com/br/kanui</link>
+      <guid isPermaLink="false">271</guid>
+      <description><![CDATA[Para compras acima de R$350.]]></description>
+      <pubDate>Thu, 03 Oct 2013 15:13:12 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$50 de desconto em joias na 21 Diamonds]]></title>
+      <link>http://www.flipit.com/br/21-diamonds</link>
+      <guid isPermaLink="false">263</guid>
+      <description><![CDATA[Cupom válido para compras acima de R$400.]]></description>
+      <pubDate>Tue, 01 Oct 2013 20:45:57 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$100 off em jóias na 21 Diamonds]]></title>
+      <link>http://www.flipit.com/br/21-diamonds</link>
+      <guid isPermaLink="false">264</guid>
+      <description><![CDATA[Para compras acima de R$800]]></description>
+      <pubDate>Tue, 01 Oct 2013 20:46:43 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[7% de desconto em secadoras Brastemp]]></title>
+      <link>http://www.flipit.com/br/brastemp-store</link>
+      <guid isPermaLink="false">262</guid>
+      <description><![CDATA[Cupom não cumulativo com outras promoções.]]></description>
+      <pubDate>Tue, 01 Oct 2013 20:41:22 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[30% off na Livraria da Folha]]></title>
+      <link>http://www.flipit.com/br/livraria-folha</link>
+      <guid isPermaLink="false">260</guid>
+      <description><![CDATA[30% de desconto em compras acima de R$150]]></description>
+      <pubDate>Tue, 01 Oct 2013 20:35:48 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[10% de desconto em presentes da Fabrica9]]></title>
+      <link>http://www.flipit.com/br/fabrica9</link>
+      <guid isPermaLink="false">261</guid>
+      <description><![CDATA[Compre presentes criativos para quem você gosta, na Fabrica9! Com este cupom, você obtém 10% de desconto. ]]></description>
+      <pubDate>Tue, 01 Oct 2013 20:38:18 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Roupas, sapatos e acessórios com 20% de desconto]]></title>
+      <link>http://www.flipit.com/br/olook</link>
+      <guid isPermaLink="false">229</guid>
+      <description><![CDATA[Cupom pode ser usado em compras de qualquer valor. Todos os produtos da loja estão inclusos.]]></description>
+      <pubDate>Thu, 26 Sep 2013 13:19:19 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[10% de desconto no 1o pedido]]></title>
+      <link>http://www.flipit.com/br/petlove</link>
+      <guid isPermaLink="false">220</guid>
+      <description><![CDATA[Na Petlove, você ganha 10% de desconto na sua primeira compra. Basta digitar o código do cupom. Só vale para a sua primeira compra.]]></description>
+      <pubDate>Wed, 25 Sep 2013 18:34:47 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Compre na Tricae com 10% de desconto]]></title>
+      <link>http://www.flipit.com/br/tricae</link>
+      <guid isPermaLink="false">217</guid>
+      <description><![CDATA[Oferta não válida para produtos das seguintes marcas: Nike, Mattel, Fisher Price, Burigotto, Lilica e Tigor, Galzerano. O cupom também não é válido para as categorias "videogames e acessórios" e "fraldas".]]></description>
+      <pubDate>Wed, 25 Sep 2013 18:15:18 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$14 de desconto na Mini in the Box]]></title>
+      <link>http://www.flipit.com/br/mini-in-the-box</link>
+      <guid isPermaLink="false">204</guid>
+      <description><![CDATA[Válido para compras acima de R$135.]]></description>
+      <pubDate>Thu, 26 Sep 2013 17:52:43 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$5 off na Mini in the Box]]></title>
+      <link>http://www.flipit.com/br/mini-in-the-box</link>
+      <guid isPermaLink="false">203</guid>
+      <description><![CDATA[Com este cupom, você ganha R$5 de desconto nas compras acima de R$65 na Mini in the Box.]]></description>
+      <pubDate>Wed, 25 Sep 2013 15:40:54 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$20 de bônus para comprar produtos de beleza na Beleza na Web]]></title>
+      <link>http://www.flipit.com/br/beleza-na-web</link>
+      <guid isPermaLink="false">193</guid>
+      <description><![CDATA[Para compras acima de R$150, em todo o site.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:15:34 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$15 de desconto para comprar o que você quiser na Dafiti]]></title>
+      <link>http://www.flipit.com/br/dafiti</link>
+      <guid isPermaLink="false">192</guid>
+      <description><![CDATA[Válido para compras acima de R$155. Apenas para a primeira compra.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:15:06 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[10% de desconto em todos os produtos da Mobly: móveis e itens de decoração]]></title>
+      <link>http://www.flipit.com/br/mobly</link>
+      <guid isPermaLink="false">177</guid>
+      <description><![CDATA[Válido para todos os produtos.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:15:58 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$35 de desconto em compras acima de R$100]]></title>
+      <link>http://www.flipit.com/br/mobly</link>
+      <guid isPermaLink="false">178</guid>
+      <description><![CDATA[Válido para todos os produtos.]]></description>
+      <pubDate>Mon, 23 Sep 2013 18:46:01 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[8% de desconto em todo o site da Mobly]]></title>
+      <link>http://www.flipit.com/br/mobly</link>
+      <guid isPermaLink="false">176</guid>
+      <description><![CDATA[Cupom válido em toda a loja.]]></description>
+      <pubDate>Mon, 23 Sep 2013 18:44:06 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[$10 de desconto na Light in the Box]]></title>
+      <link>http://www.flipit.com/br/light-in-the-box</link>
+      <guid isPermaLink="false">175</guid>
+      <description><![CDATA[Para compras acima de $90]]></description>
+      <pubDate>Mon, 23 Sep 2013 18:32:43 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[15% off em produtos de skate e surf]]></title>
+      <link>http://www.flipit.com/br/kanui</link>
+      <guid isPermaLink="false">169</guid>
+      <description><![CDATA[Produtos selecionadosde surf e skate estão com descontos na Kanui. Basta digitar o código para obter 15% de desconto.]]></description>
+      <pubDate>Thu, 26 Sep 2013 17:53:02 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$100 off na sua 1a compra ]]></title>
+      <link>http://www.flipit.com/br/kanui</link>
+      <guid isPermaLink="false">165</guid>
+      <description><![CDATA[Para compras acima de R$110.]]></description>
+      <pubDate>Mon, 23 Sep 2013 17:56:57 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[25% off na Kanui]]></title>
+      <link>http://www.flipit.com/br/kanui</link>
+      <guid isPermaLink="false">166</guid>
+      <description><![CDATA[Para sua primeira compra acima de R$170. Só válido para a primeira compra. É preciso cadastrar-se no site primeiro.]]></description>
+      <pubDate>Mon, 23 Sep 2013 17:57:51 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$40 off na Kanui]]></title>
+      <link>http://www.flipit.com/br/kanui</link>
+      <guid isPermaLink="false">167</guid>
+      <description><![CDATA[Para primeira compra. Valor total deve ser acima de R$260. Você tem de se cadastrar primeiro no site para que o cupom seja computado.]]></description>
+      <pubDate>Mon, 23 Sep 2013 17:58:48 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[5% de desconto na Free Italia]]></title>
+      <link>http://www.flipit.com/br/free-italia</link>
+      <guid isPermaLink="false">148</guid>
+      <description><![CDATA[É preciso se cadastrar no site para que o cupom seja válido.]]></description>
+      <pubDate>Mon, 23 Sep 2013 16:25:53 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[15% de desconto na Flores Online]]></title>
+      <link>http://www.flipit.com/br/flores-online</link>
+      <guid isPermaLink="false">138</guid>
+      <description><![CDATA[Oferta válida para todos os produtos do site. ]]></description>
+      <pubDate>Mon, 23 Sep 2013 16:00:51 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[12% de desconto em qualquer produto na Época Cosméticos]]></title>
+      <link>http://www.flipit.com/br/epoca-cosmeticos</link>
+      <guid isPermaLink="false">128</guid>
+      <description><![CDATA[Você precisa fazer login no site antes de usar o cupom, senão ele não será computado.]]></description>
+      <pubDate>Mon, 23 Sep 2013 15:08:32 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[20% off na Dafiti]]></title>
+      <link>http://www.flipit.com/br/dafiti</link>
+      <guid isPermaLink="false">110</guid>
+      <description><![CDATA[Cupom válido para compras a partir de R$170. Cada cupom só pode ser usado uma vez por CPF. Você precisa estar logado no site antes, para que o cupom seja computado.]]></description>
+      <pubDate>Mon, 23 Sep 2013 13:35:07 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[20% de desconto sobre o total da sua encomenda na Dafiti]]></title>
+      <link>http://www.flipit.com/br/dafiti</link>
+      <guid isPermaLink="false">107</guid>
+      <description><![CDATA[Cupom válido apenas para as compras acima de R$175. Você precisa fazer login no site antes de finalizar a compra, para que o cupom seja computado.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:47:03 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[15% de desconto na Dafiti]]></title>
+      <link>http://www.flipit.com/br/dafiti</link>
+      <guid isPermaLink="false">108</guid>
+      <description><![CDATA[Válido para compras acima de R$145. Cupom só pode ser usado uma vez para cada CPF. Você precisa estar logado no site para que o cupom seja computado.]]></description>
+      <pubDate>Mon, 23 Sep 2013 13:32:54 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[40% de desconto na Dafiti]]></title>
+      <link>http://www.flipit.com/br/dafiti</link>
+      <guid isPermaLink="false">109</guid>
+      <description><![CDATA[Cupom válido para compras acima de R$200. Cada cupom só pode ser usado uma vez por CPF. Você precisa estar logado no site para que o cupom seja computado.]]></description>
+      <pubDate>Mon, 23 Sep 2013 13:34:01 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Ganhe uma máscara de tratamento para cabelos coloridos Farmacolor]]></title>
+      <link>http://www.flipit.com/br/beleza-na-web</link>
+      <guid isPermaLink="false">104</guid>
+      <description><![CDATA[Nas compras acima de R$130, se você digitar o código do cupom leva a máscara Farmacolor de brinde.]]></description>
+      <pubDate>Mon, 23 Sep 2013 13:17:47 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[11% de desconto em câmeras digitais e filmadoras Sony]]></title>
+      <link>http://www.flipit.com/br/casas-bahia</link>
+      <guid isPermaLink="false">99</guid>
+      <description><![CDATA[Apenas para a marca Sony.]]></description>
+      <pubDate>Thu, 19 Sep 2013 20:23:40 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$15 para novos clientes ]]></title>
+      <link>http://www.flipit.com/br/coca-cola-clothing</link>
+      <guid isPermaLink="false">95</guid>
+      <description><![CDATA[A Coca-Cola Clothing dá R$15 de brinde na primeira compra. Para usar o cupom, primeiro você tem que cadastrar seu e-mail no site. ]]></description>
+      <pubDate>Thu, 26 Sep 2013 17:53:17 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[20% de desconto na Cipela]]></title>
+      <link>http://www.flipit.com/br/cipela</link>
+      <guid isPermaLink="false">94</guid>
+      <description><![CDATA[Use o cupom para obter 20% de desconto ao cadastrar-se na Cipela. Todos os produtos da loja estão inclusos.]]></description>
+      <pubDate>Thu, 19 Sep 2013 19:45:19 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$15 de desconto em sua primeira compra]]></title>
+      <link>http://www.flipit.com/br/casa-america</link>
+      <guid isPermaLink="false">84</guid>
+      <description><![CDATA[Para que o cupom acima seja computado, primeiro é preciso que você cadastre o seu e-mail no site da Casa América. O desconto só é válido para compras acima de R$100.]]></description>
+      <pubDate>Thu, 19 Sep 2013 18:25:52 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$25 de bônus para gastar em sua primeira compra na Cantão]]></title>
+      <link>http://www.flipit.com/br/cantao</link>
+      <guid isPermaLink="false">81</guid>
+      <description><![CDATA[A Cantão oferece R$25 para novos clientes. Para fazer o cupom funcionar, antes você precisa se cadastrar no site da Cantão e confirmar seu cadastro por e-mail. O cupom só é válido para compras acima de R$200.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:16:59 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[10% off ao comprar o que quiser]]></title>
+      <link>http://www.flipit.com/br/beleza-na-web</link>
+      <guid isPermaLink="false">69</guid>
+      <description><![CDATA[Compre o que quiser na loja Beleza na Web e ganhe 10% de desconto. Basta digitar o cupom.]]></description>
+      <pubDate>Thu, 19 Sep 2013 16:11:22 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[10% off em todos os produtos para bebês da loja Bebê Store]]></title>
+      <link>http://www.flipit.com/br/bebe-store</link>
+      <guid isPermaLink="false">62</guid>
+      <description><![CDATA[Desconto válido para compras acima de R$150. É necessário fazer login no site da loja para que o cupom funcione.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:18:01 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Cupom dá 15% de desconto na Bebê Store]]></title>
+      <link>http://www.flipit.com/br/bebe-store</link>
+      <guid isPermaLink="false">60</guid>
+      <description><![CDATA[Cupom válido apenas para quem se cadastrar na loja, recebendo a newsletter. O desconto de 15% só será válido se a compra for acima de R$200.]]></description>
+      <pubDate>Thu, 19 Sep 2013 15:43:14 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[5% na primeira compra na Bebê Store]]></title>
+      <link>http://www.flipit.com/br/bebe-store</link>
+      <guid isPermaLink="false">61</guid>
+      <description><![CDATA[É pai de primeira viagem e está montando o quartinho do seu filho? A Bebê Store está com um cupom de desconto especial: 5% de desconto na primeira compra! ]]></description>
+      <pubDate>Thu, 19 Sep 2013 15:44:49 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$20 de desconto na Aremo]]></title>
+      <link>http://www.flipit.com/br/aremo</link>
+      <guid isPermaLink="false">55</guid>
+      <description><![CDATA[Desconto válido apenas para a primeira compra, e para uma encomenda acima de R$100.]]></description>
+      <pubDate>Thu, 19 Sep 2013 15:10:10 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Livraria da Folha dá R$20 em compras acima de R$100]]></title>
+      <link>http://www.flipit.com/br/livraria-folha</link>
+      <guid isPermaLink="false">22</guid>
+      <description><![CDATA[Desconto aplicável sobre todos os produtos da loja, mas válido somente para as compras acima de R$100. ]]></description>
+      <pubDate>Thu, 26 Sep 2013 17:53:36 +0200</pubDate>
+    </item>
+  </channel>
+</rss>

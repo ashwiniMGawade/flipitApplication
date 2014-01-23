@@ -1,0 +1,15 @@
+/* 404 page */
+
+body {
+	color: #4d4c4c;
+	font-size: 62.5%;	
+	margin: 0;
+	padding: 0;
+}
+
+#screen-404 { 
+	width: 960px; 
+	margin: 150px auto 0 auto; 
+	padding: 0; 
+	color: #343434; 
+}

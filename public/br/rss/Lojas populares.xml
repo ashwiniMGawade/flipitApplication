@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
+  <channel>
+    <title><![CDATA[Popular offers]]></title>
+    <link>http://www.flipit.com/br</link>
+    <description><![CDATA[]]></description>
+    <pubDate>Mon, 07 Oct 2013 14:15:01 +0200</pubDate>
+    <image>
+      <url>http://www.flipit.com/public/images/front_end/flip-logo.png</url>
+      <title><![CDATA[Popular offers]]></title>
+      <link>http://www.flipit.com/br</link>
+    </image>
+    <generator>Zend_Feed</generator>
+    <language>pt-BR</language>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <item>
+      <title><![CDATA[10% off em todos os produtos para bebês da loja Bebê Store]]></title>
+      <link>http://www.flipit.com/br/bebe-store</link>
+      <guid isPermaLink="false">62</guid>
+      <description><![CDATA[Desconto válido para compras acima de R$150. É necessário fazer login no site da loja para que o cupom funcione.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:18:01 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[20% de desconto na Dafiti]]></title>
+      <link>http://www.flipit.com/br/dafiti</link>
+      <guid isPermaLink="false">107</guid>
+      <description><![CDATA[Cupom válido apenas para as compras acima de R$175. Você precisa fazer login no site antes de finalizar a compra, para que o cupom seja computado.]]></description>
+      <pubDate>Mon, 23 Sep 2013 13:31:15 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$25 de bônus para gastar em sua primeira compra na Cantão]]></title>
+      <link>http://www.flipit.com/br/cantao</link>
+      <guid isPermaLink="false">81</guid>
+      <description><![CDATA[A Cantão oferece R$25 para novos clientes. Para fazer o cupom funcionar, antes você precisa se cadastrar no site da Cantão e confirmar seu cadastro por e-mail. O cupom só é válido para compras acima de R$200.]]></description>
+      <pubDate>Mon, 07 Oct 2013 17:16:59 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[11% de desconto em câmeras digitais e filmadoras Sony]]></title>
+      <link>http://www.flipit.com/br/casas-bahia</link>
+      <guid isPermaLink="false">99</guid>
+      <description><![CDATA[Apenas para a marca Sony.]]></description>
+      <pubDate>Thu, 19 Sep 2013 20:23:40 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[8% de desconto em todo o site da Mobly]]></title>
+      <link>http://www.flipit.com/br/mobly</link>
+      <guid isPermaLink="false">176</guid>
+      <description><![CDATA[Cupom válido em toda a loja.]]></description>
+      <pubDate>Mon, 23 Sep 2013 18:44:06 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[15% off em produtos de skate e surf]]></title>
+      <link>http://www.flipit.com/br/kanui</link>
+      <guid isPermaLink="false">169</guid>
+      <description><![CDATA[Produtos selecionadosde surf e skate estão com descontos na Kanui. Basta digitar o código para obter 15% de desconto.]]></description>
+      <pubDate>Thu, 26 Sep 2013 17:53:02 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$20 de desconto na Aremo]]></title>
+      <link>http://www.flipit.com/br/aremo</link>
+      <guid isPermaLink="false">55</guid>
+      <description><![CDATA[Desconto válido apenas para a primeira compra, e para uma encomenda acima de R$100.]]></description>
+      <pubDate>Thu, 19 Sep 2013 15:10:10 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[R$15 para novos clientes ]]></title>
+      <link>http://www.flipit.com/br/coca-cola-clothing</link>
+      <guid isPermaLink="false">95</guid>
+      <description><![CDATA[A Coca-Cola Clothing dá R$15 de brinde na primeira compra. Para usar o cupom, primeiro você tem que cadastrar seu e-mail no site. ]]></description>
+      <pubDate>Thu, 26 Sep 2013 17:53:17 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[5% de desconto na Free Italia]]></title>
+      <link>http://www.flipit.com/br/free-italia</link>
+      <guid isPermaLink="false">148</guid>
+      <description><![CDATA[É preciso se cadastrar no site para que o cupom seja válido.]]></description>
+      <pubDate>Mon, 23 Sep 2013 16:25:53 +0200</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Livraria da Folha dá R$20 em compras acima de R$100]]></title>
+      <link>http://www.flipit.com/br/livraria-folha</link>
+      <guid isPermaLink="false">22</guid>
+      <description><![CDATA[Desconto aplicável sobre todos os produtos da loja, mas válido somente para as compras acima de R$100. ]]></description>
+      <pubDate>Thu, 26 Sep 2013 17:53:36 +0200</pubDate>
+    </item>
+  </channel>
+</rss>

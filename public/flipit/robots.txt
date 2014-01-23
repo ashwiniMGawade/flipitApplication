@@ -1,0 +1,24 @@
+User-agent: *
+Disallow:/admin/
+Disallow:/be/info/
+Disallow:/be/out/
+Disallow:/be/zoeken/
+Disallow:/pl/info/
+Disallow:/pl/out/
+Disallow:/pl/szukaj/
+Disallow:/ch/info/
+Disallow:/ch/out/
+Disallow:/ch/suchen/
+Disallow:/de/info/
+Disallow:/de/out/
+Disallow:/de/suchen/
+Disallow:/es/info/
+Disallow:/es/out/
+Disallow:/es/buscar/
+Disallow:/fr/info/
+Disallow:/fr/out/
+Disallow:/fr/recherche/
+Disallow:/in/info/
+Disallow:/in/out/
+Disallow:/in/search/
+

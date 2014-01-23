@@ -1,0 +1,605 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Board\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-31 15:04-0800\n"
+"PO-Revision-Date: 2012-12-31 15:04-0800\n"
+"Last-Translator: Authentic <support@authenticthemes.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;__;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-SearchPath-0: ..\n"
+
+#: ../404.php:17
+msgid "404: Page Not Found"
+msgstr ""
+
+#: ../404.php:22
+msgid ""
+"Unfortunately, the page you tried accessing could not be retrieved. Please "
+"visit the"
+msgstr ""
+
+#: ../404.php:22
+msgid "homepage"
+msgstr ""
+
+#: ../author.php:26
+msgid "Posts by"
+msgstr ""
+
+#: ../comments.php:15 ../comments.php:27
+msgid "Comment Navigation"
+msgstr ""
+
+#: ../comments.php:16 ../comments.php:28
+msgid "Older Comments"
+msgstr ""
+
+#: ../comments.php:17 ../comments.php:29
+msgid "Newer Comments"
+msgstr ""
+
+#: ../comments.php:47
+msgid "Name"
+msgstr ""
+
+#: ../comments.php:49
+msgid "Email"
+msgstr ""
+
+#: ../comments.php:51
+msgid "Website"
+msgstr ""
+
+#: ../comments.php:58
+msgid "Leave a reply"
+msgstr ""
+
+#: ../comments.php:60
+msgid "Log In To Comment"
+msgstr ""
+
+#: ../comments.php:64
+msgid "Cancel reply"
+msgstr ""
+
+#: ../comments.php:65
+msgid "Submit Comment"
+msgstr ""
+
+#: ../date.php:18 ../date.php:20 ../date.php:22
+msgid "Archive For"
+msgstr ""
+
+#: ../header.php:67
+msgid "Close Notification"
+msgstr ""
+
+#: ../header.php:69
+msgid "Open Notification"
+msgstr ""
+
+#: ../options.php:29
+msgid "General"
+msgstr ""
+
+#: ../options.php:33
+msgid "Custom Logo"
+msgstr ""
+
+#: ../options.php:34
+msgid "Upload your custom logo."
+msgstr ""
+
+#: ../options.php:40
+msgid "Notification Bar"
+msgstr ""
+
+#: ../options.php:41
+msgid "Enter your text for the notification bar."
+msgstr ""
+
+#: ../options.php:47
+msgid "AJAX Loading Instead of Pagination?"
+msgstr ""
+
+#: ../options.php:48
+msgid "Check box to enable the load more "
+msgstr ""
+
+#: ../options.php:56 ../functions/register-slides.php:54
+msgid "Slides"
+msgstr ""
+
+#: ../options.php:62
+msgid "Toggle: Slideshow"
+msgstr ""
+
+#: ../options.php:63
+msgid "Check this box to enable automatic slideshow for your slides."
+msgstr ""
+
+#: ../options.php:73
+msgid "Toggle: Randomize"
+msgstr ""
+
+#: ../options.php:74
+msgid "Check this box to enable the randomize feature for your slides."
+msgstr ""
+
+#: ../options.php:84
+msgid "Animation"
+msgstr ""
+
+#: ../options.php:85
+msgid "Select your animation of choice."
+msgstr ""
+
+#: ../options.php:95
+msgid "Direction"
+msgstr ""
+
+#: ../options.php:96
+msgid ""
+"Select the direction for your slides. Slide animation only & if using the "
+"<strong>vertical direction</strong> all slides must have the same height."
+msgstr ""
+
+#: ../options.php:106
+msgid "SlideShow Speed"
+msgstr ""
+
+#: ../options.php:107
+msgid "Enter your preferred slideshow speed in milliseconds."
+msgstr ""
+
+#: ../options.php:113
+msgid "Animation Speed"
+msgstr ""
+
+#: ../options.php:114
+msgid "Enter your preferred animation speed in milliseconds."
+msgstr ""
+
+#: ../options.php:121
+msgid "Slider Alternative"
+msgstr ""
+
+#: ../options.php:122
+msgid ""
+"If you prefer to use another slider you can enter the <strong>shortcode</"
+"strong> here."
+msgstr ""
+
+#: ../search.php:19 ../search.php:41
+msgid "Search Results For"
+msgstr ""
+
+#: ../search.php:44
+msgid "No results found for that query."
+msgstr ""
+
+#: ../searchform.php:11
+msgid "Type and hit enter to search"
+msgstr ""
+
+#: ../sidebar.php:27 ../sidebar.php:30
+msgid "Toggle"
+msgstr ""
+
+#: ../single.php:22 ../single.php:44
+msgid "prev"
+msgstr ""
+
+#: ../single.php:23 ../single.php:45
+msgid "next"
+msgstr ""
+
+#: ../single.php:34
+msgid "Posted On"
+msgstr ""
+
+#: ../single.php:35
+msgid "By"
+msgstr ""
+
+#: ../single.php:36
+msgid "Under"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:164
+#: ../functions/recommend-plugins.php:95
+msgid "Install Required Plugins"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:165
+#: ../functions/recommend-plugins.php:96
+msgid "Install Plugins"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:166
+#: ../functions/recommend-plugins.php:97
+#, php-format
+msgid "Installing Plugin: %s"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:167
+msgid "Something went wrong."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:178
+#: ../functions/class-tgm-plugin-activation.php:490
+#: ../functions/recommend-plugins.php:109
+msgid "Return to Required Plugins Installer"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:179
+#: ../functions/class-tgm-plugin-activation.php:1846
+#: ../functions/recommend-plugins.php:110
+msgid "Plugin activated successfully."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:180
+#, php-format
+msgid "All plugins installed and activated successfully. %1$s"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:517
+#: ../functions/class-tgm-plugin-activation.php:2058
+msgid "Return to the Dashboard"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:545
+#, php-format
+msgid "The following plugin was activated successfully: %s."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:704
+msgid "Dismiss this notice"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1091
+msgid "External Link"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1096
+msgid "Private Repository"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1099
+msgid "Pre-Packaged"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1103
+msgid "WordPress Repository"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1106
+msgid "Required"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1106
+msgid "Recommended"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1109
+msgid "Not Installed"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1111
+msgid "Installed But Not Activated"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1281
+#, php-format
+msgid ""
+"No plugins to install or activate. <a href=\"%1$s\" title=\"Return to the "
+"Dashboard\">Return to the Dashboard</a>"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1297
+msgid "Plugin"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1298
+msgid "Source"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1299
+msgid "Type"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1300
+msgid "Status"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1318
+msgid "Install"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1319
+msgid "Activate"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1829
+msgid "Install package not available."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1830
+#, php-format
+msgid "Downloading install package from <span class=\"code\">%s</span>&#8230;"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1831
+msgid "Unpacking the package&#8230;"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1832
+msgid "Installing the plugin&#8230;"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1833
+msgid "Plugin install failed."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1834
+msgid "Plugin installed successfully."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1845
+msgid "Plugin activation failed."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1955
+msgid ""
+"The installation and activation process is starting. This process may take a "
+"while on some hosts, so please be patient."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1956
+#, php-format
+msgid "%1$s installed and activated successfully."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1956
+#: ../functions/class-tgm-plugin-activation.php:1965
+msgid "Show Details"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1956
+#: ../functions/class-tgm-plugin-activation.php:1965
+msgid "Hide Details"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1957
+msgid "All installations and activations have been completed."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1958
+#, php-format
+msgid "Installing and Activating Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1962
+msgid ""
+"The installation process is starting. This process may take a while on some "
+"hosts, so please be patient."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1963
+#, php-format
+msgid "An error occurred while installing %1$s: <strong>%2$s</strong>."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1964
+#, php-format
+msgid "The installation of %1$s failed."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1965
+#, php-format
+msgid "%1$s installed successfully."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1966
+msgid "All installations have been completed."
+msgstr ""
+
+#: ../functions/class-tgm-plugin-activation.php:1967
+#, php-format
+msgid "Installing Plugin %1$s (%2$d/%3$d)"
+msgstr ""
+
+#: ../functions/comments-output.php:21
+#, php-format
+msgid "<cite class=\"author\">%s</cite>"
+msgstr ""
+
+#: ../functions/comments-output.php:23
+msgid "Reply"
+msgstr ""
+
+#: ../functions/load_more.php:105
+msgid "Load More"
+msgstr ""
+
+#: ../functions/load_more.php:106
+msgid "load more posts"
+msgstr ""
+
+#: ../functions/recommend-plugins.php:98
+msgid "Something went wrong with the plugin API."
+msgstr ""
+
+#: ../functions/recommend-plugins.php:111
+#, php-format
+msgid "All plugins installed and activated successfully. %s"
+msgstr ""
+
+#: ../functions/register-slides.php:55
+msgid "Slides Item"
+msgstr ""
+
+#: ../functions/register-slides.php:56
+msgid "Add New Item"
+msgstr ""
+
+#: ../functions/register-slides.php:57 ../functions/register-slides.php:59
+msgid "Add New Slides Item"
+msgstr ""
+
+#: ../functions/register-slides.php:58
+msgid "Edit Slides Item"
+msgstr ""
+
+#: ../functions/register-slides.php:60
+msgid "View Item"
+msgstr ""
+
+#: ../functions/register-slides.php:61
+msgid "Search Slides"
+msgstr ""
+
+#: ../functions/register-slides.php:62
+msgid "No slides items found"
+msgstr ""
+
+#: ../functions/register-slides.php:63
+msgid "No slides items found in trash"
+msgstr ""
+
+#: ../functions/register-slides.php:91
+msgid "Thumbnail"
+msgstr ""
+
+#: ../functions/register-slides.php:92
+msgid "Author"
+msgstr ""
+
+#: ../functions/register-slides.php:93
+msgid "Comments"
+msgstr ""
+
+#: ../functions/register-slides.php:94
+msgid "Date"
+msgstr ""
+
+#: ../functions/register-slides.php:119 ../functions/register-slides.php:129
+#: ../functions/register-slides.php:139
+msgid "None"
+msgstr ""
+
+#: ../functions/meta/meta-post.php:16
+msgid "Post Settings"
+msgstr ""
+
+#: ../functions/meta/meta-post.php:22
+msgid "Link Format URL"
+msgstr ""
+
+#: ../functions/meta/meta-post.php:24
+msgid "Enter the url for your link format URL."
+msgstr ""
+
+#: ../functions/meta/meta-post.php:29
+msgid "oEmbed URL (video)"
+msgstr ""
+
+#: ../functions/meta/meta-post.php:31 ../functions/meta/meta-slides.php:23
+msgid ""
+"Enter in a video URL that is compatible with WordPress's built-in oEmbed "
+"feature."
+msgstr ""
+
+#: ../functions/meta/meta-post.php:31 ../functions/meta/meta-slides.php:23
+msgid "Learn More"
+msgstr ""
+
+#: ../functions/meta/meta-slides.php:16
+msgid "Post Options"
+msgstr ""
+
+#: ../functions/meta/meta-slides.php:22
+msgid "Video URL"
+msgstr ""
+
+#: ../functions/meta/meta-slides.php:29
+msgid "Link URL"
+msgstr ""
+
+#: ../functions/meta/meta-slides.php:30
+msgid "Enter a URL to link this slide to. Example: http://authenticthemes.com"
+msgstr ""
+
+#: ../functions/meta/meta-slides.php:36
+msgid "Link Target"
+msgstr ""
+
+#: ../functions/meta/meta-slides.php:37
+msgid "Select a target for the URL."
+msgstr ""
+
+#: ../functions/widgets/widget-areas.php:14
+msgid "Sidebar"
+msgstr ""
+
+#: ../functions/widgets/widget-areas.php:16
+msgid "Widgets in this area are used on the main sidebar region."
+msgstr ""
+
+#: ../functions/widgets/widget-areas.php:25
+msgid "Footer 1"
+msgstr ""
+
+#: ../functions/widgets/widget-areas.php:27
+msgid "Widgets in this area are used in the first footer region."
+msgstr ""
+
+#: ../functions/widgets/widget-areas.php:35
+msgid "Footer 2"
+msgstr ""
+
+#: ../functions/widgets/widget-areas.php:37
+msgid "Widgets in this area are used in the second footer region."
+msgstr ""
+
+#: ../functions/widgets/widget-areas.php:45
+msgid "Footer 3"
+msgstr ""
+
+#: ../functions/widgets/widget-areas.php:47
+msgid "Widgets in this area are used in the third footer region."
+msgstr ""
+
+#: ../functions/widgets/widget-featured-posts.php:15
+msgid "Featured Posts"
+msgstr ""
+
+#: ../functions/widgets/widget-featured-posts.php:74
+msgid "Recent Posts"
+msgstr ""
+
+#: ../functions/widgets/widget-featured-posts.php:84
+msgid "Title:"
+msgstr ""
+
+#: ../functions/widgets/widget-featured-posts.php:89
+msgid "Select a Category:"
+msgstr ""
+
+#: ../functions/widgets/widget-featured-posts.php:92
+msgid "All"
+msgstr ""
+
+#: ../functions/widgets/widget-featured-posts.php:103
+msgid "Number to Show:"
+msgstr ""
+
+#: ../functions/widgets/widget-featured-posts.php:107
+msgid "Offset (the number of posts to skip):"
+msgstr ""
