@@ -1527,7 +1527,7 @@ class Offer extends BaseOffer
 
 	 	 $date = date('Y-m-d H:i:s');
 	 	 $data = Doctrine_Query::create()
-				->select('s.id,s.name, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+				->select('s.id,s.name, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
 				->from('Offer o')
 				->leftJoin('o.shop s')
 				->leftJoin('o.logo ologo')

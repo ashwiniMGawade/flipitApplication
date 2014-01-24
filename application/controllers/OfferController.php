@@ -167,6 +167,42 @@ class OfferController extends Zend_Controller_Action {
 
     		$topVouchercodes = Offer::getTopKortingscodeForShopPage(array(),20);
 
+/* 			echo "<pre>";
+    		print_r($topVouchercodes); */
+	  	  	# if top korting are less than 20 then add newest code tyo fill up the list upto 20
+			if(count($topVouchercodes) < 20 )
+			 {
+			 	# the limit of popular oces
+			 	$additionalCodes = 20 - count($topVouchercodes) ;
+
+			 	# GET TOP 5 POPULAR CODE
+			 	$additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
+
+
+
+
+		/* 	 print_r($additionalTopVouchercodes);
+
+			 die; */
+
+			 	# GET TOP 5 POPULAR CODE
+			 	$totalPopularCOdes = array_merge($topVouchercodes,$additionalTopVouchercodes) ;
+			 	FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list_shoppage', $totalPopularCOdes);
+
+
+			 	foreach ($additionalTopVouchercodes as $key => $value) {
+
+			 		$topVouchercodes[] = 	 array('id'=> $value['shop']['id'],
+			 										'permalink' => $value['shop']['permalink'],
+			 										'offer' => $value
+												  );
+			 	}
+
+
+			 }
+
+
+
     		FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVouchercodes);
 
     	} else {
