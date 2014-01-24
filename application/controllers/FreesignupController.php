@@ -251,7 +251,18 @@ class FreesignupController extends Zend_Controller_Action
 	    					array('name'=>'logincontact',
 	    						  'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;" href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('directlogin'). "/" . base64_encode($userdetail[0]['email']) ."/". $userdetail[0]['password'].'">'.$this->view->translate('My Profile').'</a>'
   	    					));
+                           
 
+
+                            //set the static content of mail so that we can change the text in PO Edit
+                            $staticContent = array(
+                                    array('name' => 'moreOffersLink',
+                                            'content' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('populair')
+                                    ),
+                                    array('name' => 'moreOffers',
+                                            'content' => $this->view->translate('Bekijk meer van onze top aanbiedingen') . ' >'
+                                    )
+                            );
 
 
 
@@ -268,7 +279,7 @@ class FreesignupController extends Zend_Controller_Action
 	    			$voucherCodesData['expDate'],$mailData,$poupularTitle);
 
     			//merge the permalinks array and static content array into single array
-    			$dataPermalink = array_merge($voucherCodesData['shopPermalink']);
+    			$dataPermalink = array_merge($voucherCodesData['shopPermalink'], $staticContent);
 
     			$email_data = Signupmaxaccount::getemailmaxaccounts();
     			$emailFrom  = $email_data[0]['emailperlocale'];
