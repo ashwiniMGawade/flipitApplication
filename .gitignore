@@ -133,4 +133,6 @@ dwsync.xml
 intermediate
 publish
 .idea
+deployment.properties
+deployment.xml
  
