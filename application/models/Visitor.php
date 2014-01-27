@@ -703,9 +703,5 @@ public static function getFavoriteShopForUser($visitorId,$shopId) {
 				->andWhere('active = 1')
 				->andWhere('weeklyNewsLetter = 1')
 				->fetchArray();
-
-
-
-
 	}
 }
