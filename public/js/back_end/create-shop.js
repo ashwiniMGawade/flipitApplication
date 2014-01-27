@@ -543,16 +543,10 @@ function validateFormAddNewShop(){
 				        			$("input[name=shopNavUrl]").parent('div').prev("div").removeClass('focus')
 				        			.removeClass('error').addClass('success');
 				        			
-				        			
-				        			
-				        		} else
-				        		{
+				        		} else {
 				        			$('span[for=shopNavUrl]' , $("[name=shopNavUrl]").parents('div.mainpage-content-right') )
 			        				.attr('remote-validated' , false);
 				        		}
-				        		
-				        		
-				        		
 				        	}
 						}					
 
@@ -572,24 +566,18 @@ function validateFormAddNewShop(){
 					shopDeepLinkUrl: {
 						required : true ,
 						regex : /((http|ftp|gopher|telnet|news|com|edu|gov):\/\/|)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
-						//regex :  /((?:^(http|ftp|gopher|telnet|news):\/\/))([_a-zA-Z\d\-]+(\.[_a-zA-Z\d\-]+)+)(([_a-zA-Z\d\-\\\.\/]+[_a-zA-Z\d\-\\\/])+)*$|^([_a-zA-Z\d\-]+(\.[_a-zA-Z\d\-]+)+)(([_a-zA-Z\d\-\\\.\/]+[_a-zA-Z\d\-\\\/])+)*$/
 					},
 					shopRefUrl :{
-						//required : true ,
-						// regex  : /^([_a-zA-Z\d\-]+(\.[_a-zA-Z\d\-]+)+)(([_a-zA-Z\d\-\\\.\/]+[_a-zA-Z\d\-\\\/])+)*$/
-						regex : /((http|ftp|gopher|telnet|news|com|edu|gov):\/\/|)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
+						regex : /((http|https):\/\/)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
 					},
 					shopActualUrl :{
-						//required : true ,
 						regex : /((http|ftp|gopher|telnet|news|com|edu|gov):\/\/|)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
 					},
 					shopViewCount : {
 						regex : /^\d+$/  
 					},					
 					serviceNumber : {
-						
 						required:  true
-						//regex : /^\([0-9]{3}\)[\s]{1}[0-9]{2}[\s]{1}[0-9]{2}[\s]{1}[0-9]{3}$/  
 					},
 					selecteditors : {
 						required : true
@@ -598,8 +586,7 @@ function validateFormAddNewShop(){
 					{
  						required : function(el)
 						{
-							if($("#howTouseStatus").val() == 1) 
-							{
+							if($("#howTouseStatus").val() == 1) {
 								return true ;
 							}
 							return false;
