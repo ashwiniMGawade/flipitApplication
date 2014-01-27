@@ -11552,14 +11552,28 @@ div.voucher-col-top-20 .shop-logo-img img {
     left: 0;
     margin-top: 0;
     top: 0;
-    width: 711px;
+    width: 711px
 }
 .nieuw-popular-outer a.text-black2-link {
-	font-size: 14px;
+	font-size: 14px
 }
 .nieuw-popular-outer a.text-black2-link.active {
-	color: #E69025;
+	color: #E69025
 }
 .nieuw-popular-outer a.text-black2-link.active:hover {
-	color: #0877BE;
+	color: #0877BE
+}
+.myprofile-messagebox {
+	color: #000;
+	margin: 50px auto 0 auto; 
+}
+.profile-welcome-message {
+    float: right;
+    height: auto;
+    margin: 30px 0 0;
+    text-align: left;
+    width: 785px
+}
+.profile-welcome-message h2 {
+ 	margin: 0 0 10px 0
 }
