@@ -35,26 +35,35 @@ class Admin_TestController extends Zend_Controller_Action
     {
         // action body
 
- 		$data = $this->getRequest()->getParam('data');
+ 
 
-    	$this->view->data = FrontEnd_Helper_viewHelper::sanitize( $data);
-
-        $this->view->data =  FrontEnd_Helper_viewHelper::replaceStringVariable($this->view->data);
-
-
-        echo str_replace("admin.","",HTTP_PATH);
-        $sessionNamespace = new Zend_Session_Namespace();
-
-        //var_dump($sessionNamespace->settings['rights']['content']['rights'] == '1');
 		echo "<pre>";
-      //  print_r($sessionNamespace->settings['rights']);
-		echo "/<pre>";
+		
+		
+		$input = array("a", "b", "c", "d", "e");
+		
+		
+		
+		$output = array_slice($input, 2);      // returns "c", "d", and "e"
+		$output = array_slice($input, -2, 1);  // returns "d"
+		$output = array_slice($input, 0, 3);   // returns "a", "b", and "c"
+		
+		// note the differences in the array keys
+		print_r(array_slice($input, 2, -1));
+		print_r(array_slice($input, 2, -1, true));
 
-
-		$a = new Varnish();
+		
+		echo "----------------\n";
+		
+ 
+		//array_chunk($visitors, 1000);
+		//print_r(array_chunk($input_array, 2, true));
 
 
     }
+    
+    
+    
 
 
 }

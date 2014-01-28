@@ -27,7 +27,7 @@ class SendNewsletter {
 	protected $_template = "" ;
 	protected $_rootPath = "" ;
 
-
+	
 	function __construct() {
 
 
@@ -71,8 +71,6 @@ class SendNewsletter {
 		$application = new Zend_Application(APPLICATION_ENV,
 				APPLICATION_PATH . '/configs/application.ini');
 
-		//$this->_mandrillKey =
-
 		$frontControlerObject = $application->getOption('resources');
 
 
@@ -109,7 +107,6 @@ class SendNewsletter {
 
 	protected function send($dsn, $key,$imbull) {
 
-
 		# setup appropriate vaues according to locale
 		if ($key == 'en') {
 			$this->_localePath = '';
@@ -141,7 +138,6 @@ class SendNewsletter {
 		$manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
 		$manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
 		Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-
 
 		try {
 
@@ -318,6 +314,7 @@ class SendNewsletter {
 			Signupmaxaccount::updateNewsletterSchedulingStatus();
 
 			$message = 'Newsletter has been sent successfully' ;
+			
 		} catch (Mandrill_Error $e) {
 			$message ='There is some problem in your data';
 		}
@@ -486,21 +483,19 @@ class SendNewsletter {
 	 */
 	protected function getDirectLoginLinks()
 	{
-
+		
 		$visitorData = array();
 		$visitorMetaData = array();
 		$toVisitorArray = array();
-
-
 
 		//retrieve the visitors with status, active and weeklynewsletter true
 		$visitors = new Visitor();
 
 		$visitors = $visitors->getVisitorsToSendNewsletter();
-
-
-/* 		//initialize the mandrill to retrieve the data of the users to whom we have sent mails
-		$mandrill = new Mandrill_Init( $this->_mandrillKey('mandrillKey'));
+		
+ 
+		//initialize the mandrill to retrieve the data of the users to whom we have sent mails
+		$mandrill = new Mandrill_Init( $this->_mandrillKey);
 		$getUserDataFromMandrill = $mandrill->users->senders();
 
 		//set the profile inactive if any user has hard bounce or soft bounce
@@ -508,7 +503,7 @@ class SendNewsletter {
 			if($value['soft_bounces'] >= 6 || $value['hard_bounces'] >= 2 ){
 				$updateActive = Doctrine_Query::create()->update('Visitor')->set('active',0)->where("email = '".$value['address']."'")->execute();
 			}
-		} */
+		} 
 
 			//loop the visitors and generate the links for unsubscribe and edit profile
 			foreach ($visitors as $key => $value) {

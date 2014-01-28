@@ -680,11 +680,11 @@ public static function getFavoriteShopForUser($visitorId,$shopId) {
 		$date = date($format);
 
 		$data = Doctrine_Query::create ()
-		->select("count(*) as amountsubs")
-		->from ("Visitor v")
-		->where('v.active_codeid=0')
-		->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-		return $data;
+			->select("count(*) as amountsubs")
+			->from ("Visitor v")
+			->where('v.active_codeid=0')
+			->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+			return $data;
 	}
 
 	/**
@@ -693,9 +693,10 @@ public static function getFavoriteShopForUser($visitorId,$shopId) {
 	 * return all visitors to whom newsletters to be sent
 	 * @author sp singh
 	 */
-	public function getVisitorsToSendNewsletter()
+	public function getVisitorsToSendNewsletter($recordPerPage = 1000)
 	{
-		return Doctrine_Query::create()->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
+		
+		return   Doctrine_Query::create()->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
 				->from('Visitor v')
 				->leftJoin("v.keywords k")
 				->orderBy("k.keyword")
