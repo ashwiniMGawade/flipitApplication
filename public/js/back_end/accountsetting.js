@@ -32,30 +32,28 @@
 $(document).ready(function() {
 
 	
-	$("#searchEmail").select2({
+	$("#testEmail").select2({
 		placeholder: __("Search Email"),
 		minimumInputLength: 1,
-		ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
-		 url: HOST_PATH + "admin/visitor/searchemails",
-		 dataType: 'json',
-		 data: function(term, page) {
-             return {
-            	 keyword: term,
-            	 flag: 0
+		ajax: { 
+			 url: HOST_PATH + "admin/visitor/searchemails",
+			 dataType: 'json',
+			 data: function(term, page) {
+	             return {
+	            	 keyword: term,
+	            	 flag: 0
              };
          },
 		 type: 'post',
-		 results: function (data, page) { // parse the results into the format expected by Select2.
-		 // since we are using custom formatting functions we do not need to alter remote JSON data
+		 results: function (data, page) { 
 			 return {results: data};
-			 
-		 }
+	 		 }
 		},
 		formatResult: function(data) { 
             return data; 
         },
         formatSelection: function(data) { 
-        	$("#searchEmail").val(data);
+        	$("#testEmail").val(data);
             return data; 
         }
 	});
