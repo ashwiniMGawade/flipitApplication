@@ -177,13 +177,10 @@
 							echo $yellowBoxWarning;
 						} else 	{
 							$offers =  $this->partialLoop('store/_popular-offers.phtml', $this->topPopularOffers);
-
 						}
 
 			            echo $speratorDiv; ?>
-
 				<div class="mark-spencer-mid-left" style='width:660px!important;'>
-
 				<?php echo $offers;
 				
 				# show promotional similar codes
@@ -205,14 +202,7 @@
 		<?php
 
 		# NO MONEY WITH CODE
-		elseif(count($this->offers) > 0): ?>
-
-			<?php /* if(count($this->relatedshops) >0): ?>
-				<div class="merchants-outer">
-					<?php echo $headingOfSimilerOffer;?>
-					<div class="merchants-bot"><?php echo $relatedOffer ?></div>
-				</div>
-			 <?php  endif; */
+		elseif(count($this->offers) > 0): 
 			 echo $speratorDiv; ?>
 
 			<!-- code for  one code -->

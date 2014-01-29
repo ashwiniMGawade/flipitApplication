@@ -396,8 +396,9 @@ if(count($this->termandcondition) > 0){
 						<div class="voucher-col2-mid-bot-new shoptext-new<?php echo $this->id ;?>" >
 	      	        	<?php  if ($this->userGenerated ) { ?>
 								<span class="fl"><i class="icon-user"></i>&nbsp;Toegevoegd door gebruiker</span>
-	               		<?php  } ?>
-							<?php if($this->userGenerated ==0 &&  $termandcondition!='' && $termandcondition!=null){ ?>
+	               		<?php  }
+
+	               		if($this->userGenerated ==0 &&  $termandcondition!='' && $termandcondition!=null) { ?>
 							<span class="fl"><a  onclick="showTeamAndCondition(<?php echo $this->id; ?>)" class="text-blue-link" href="javascript:void(0);"><?php echo $this->translate('Voorwaarden'); ?></a></span>
 							<?php
 	                         if($termandcondition!='' && $termandcondition!=null && $this->extendedOffer =='1'){?>
@@ -414,6 +415,18 @@ if(count($this->termandcondition) > 0){
 	                    		<a class="text-blue-link"  href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $this->extendedUrl;?>"><?php echo $this->translate('Meer over deze code'); ?></a>
 							</span>
 	                    <?php endif;?>
+							<span class="fl">
+							<?php	
+								  if(($termandcondition != '' && $termandcondition!= null ) || $this->extendedOffer =='1'){ 
+										  echo "  &nbsp; | &nbsp;" ;
+		                          }
+
+	                       		echo $this->translate("Meer");
+	                       		
+	                    		printf("&nbsp; <a href='%s'>%s</a>", HTTP_PATH_LOCALE.$this->shop['permalink'],
+                    				 ucfirst($this->shop['name']) ); 
+		                       ?>
+							</span>
 	                  	</div>
 						<div class="voucher-col2-bot-text voucher-col2-bot-text-new width-150">
 	                    	<?php

@@ -20,10 +20,8 @@ $this->minifyHeadScript()->prependFile ("public/js/front_end/top-20.js" );
 		<div class="voucher-outer-left-col2">
             <?php 
             if(count($this->topPopularOffers)>0){
-            $this->showMessageBar = false;
-            echo $this->partialLoop('store/_top-20-offers.phtml', 1,$this->topPopularOffers);
-            	
-
+	            $this->showMessageBar = false;
+	            echo $this->partialLoop('store/_top-20-offers.phtml', 1,$this->topPopularOffers);
             }else{
                  ?>
               <div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div> 
