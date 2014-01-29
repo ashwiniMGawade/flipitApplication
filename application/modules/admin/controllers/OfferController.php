@@ -52,6 +52,12 @@ class Admin_OfferController extends Zend_Controller_Action {
 
     	$allTiles = $this->getalltiles2Action();
     	$this->view->tiles = $allTiles;
+    	
+    	$flash = $this->_helper->getHelper('FlashMessenger');
+    	$message = $flash->getMessages();
+    	$this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+    	$this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+    	
 
      }
     public function editofferAction()
@@ -125,6 +131,8 @@ class Admin_OfferController extends Zend_Controller_Action {
 
     	$params = $this->_getAllParams();
 
+    	
+     
     	$offerObj = new Offer();
     	$offer = $offerObj->saveOffer($params);
 
@@ -145,8 +153,15 @@ class Admin_OfferController extends Zend_Controller_Action {
     			default :
 
 		    		self::updateVarnish($offer['ofer_id']);
-
+			
+		    		
 		    		$message = $this->view->translate('Offer has been added successfully.');
+		    		
+		    		if($params['saveAndAddnew'])
+		    		{
+		    			$message = $this->view->translate('Offer has been added successfully and add new offer again');
+		    		}
+		    		
 			    	$flash->addMessage(array('success' => $message ));
 
     		}
@@ -156,11 +171,14 @@ class Admin_OfferController extends Zend_Controller_Action {
     		$flash->addMessage(array('error' => $message ));
     	}
 
+    	if($params['saveAndAddnew'])
+    	{
+    		$this->_redirect(HTTP_PATH.'admin/offer/addoffer');
+    		
+    	} else {
+	    	$this->_redirect(HTTP_PATH.'admin/offer');
+    	}
 
-    	echo Zend_Json::encode($offer);
-    	$this->_redirect(HTTP_PATH.'admin/offer');
-
-    	die;
     }
 
 

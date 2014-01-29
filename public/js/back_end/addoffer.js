@@ -205,6 +205,7 @@ function init(){
 			if( errorExists[i] != true ) {
 				
 				jQuery('#addOfferBtn').removeAttr('disabled');
+				jQuery('#saveAndAddnew').removeAttr('disabled');
 				return false ;
 				
 			} 
@@ -237,6 +238,7 @@ function init(){
 		   
 		   
 			jQuery('#addOfferBtn').attr('disabled' ,"disabled");
+			jQuery('#saveAndAddnew').attr('disabled' ,"disabled");
 			
 			
 		   });
@@ -367,6 +369,7 @@ function addOffer(){
 	if(jQuery("form#addOffer").valid())	{
 		
 		jQuery('#addOfferBtn').attr('disabled' ,"disabled");
+		jQuery('#saveAndAddnew').attr('disabled' ,"disabled");
 		return true;
 		
 	}else {

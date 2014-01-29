@@ -33,6 +33,21 @@
 </script>
 <?php echo $this->headTitle()->append('Create Offer');?>
 <div class="wrap columns-2">
+
+        <div class='wrap columns-2'>
+		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+			<br><div class ="mainpage-content-colorbox success">
+		<?php if($this->messageSuccess!=''){?>
+			<span class="successserver"><?php echo $this->messageSuccess; ?></span>
+		<?php }
+		
+		if($this->messageError!=''){?>
+			<span class="errorserver"><?php echo $this->messageError; ?></span>
+			<?php } ?>
+			</div>
+		<?php } ?>
+		</div>
+		
          <form action="<?php echo HTTP_PATH; ?>admin/offer/saveoffer" name="addOffer" id="addOffer" method="POST" enctype="multipart/form-data" autocomplete="off">
 
           <h1><?php echo $this->translate('Create Offer');?>
@@ -522,7 +537,9 @@
             </div>
 
             <div class="mainpage-content-colorbox">
-            	<button id='addOfferBtn' type="submit" class="btn btn-large btn-primary fl"><?php echo $this->translate('ADD OFFER'); ?></button>
+            	<button id='addOfferBtn' onclick="jQuery('#saveAndAddnewId').val(false);" type="submit" class="btn btn-large btn-primary fl mr15"><?php echo $this->translate('ADD OFFER'); ?></button>
+            	<button id="saveAndAddnew" onclick="jQuery('#saveAndAddnewId').val(true);" class="btn btn-large btn-primary fl" type="submit"><?php echo $this->translate('Save and Add New Offer');?></button>
+            	<input type="hidden" id="saveAndAddnewId" name="saveAndAddnew" value="false" />
                 <a href="<?php echo HTTP_PATH; ?>admin/offer" class="fl m10"><strong class="ml10"><?php echo $this->translate('CANCEL'); ?></strong></a>
             </div>
        </form>
