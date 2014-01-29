@@ -1708,8 +1708,6 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
 	 */
 	public static function changeStatus($params){
 
-
-
 		$status = $params['status'] == 'offline' ? '0' : '1';
 
 		$shop = Doctrine_Core::getTable("Shop")->find($params['id']);
@@ -1717,10 +1715,10 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
 		if($params['status'] == 'offline')
 		{
 			$date = date('Y-m-d H:i:s')  ;
-			$status = 0;
+			$status = 0 ;
 		} else {
-			$status = 1;
-			$date = NULL;
+			$status = 1 ;
+			$date = NULL ;
 		}
 
 		$shop->status = $status;
