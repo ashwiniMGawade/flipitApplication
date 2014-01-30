@@ -9853,7 +9853,7 @@ color:#767676
 }
 
 .fav_img_outer .user-profile-txt h2 {
-float:left;
+
 width:775px;
 height:auto;
 font-size:30px;
@@ -11565,16 +11565,19 @@ div.voucher-col-top-20 .shop-logo-img img {
 }
 .myprofile-messagebox {
 	color: #000;
-	margin: 50px auto 0 auto; 
+	margin: 20px auto 0 auto; 
+	width: 755px
 }
-.profile-welcome-message {
+.newsletter-unsubscribed-cont {
     float: right;
     height: auto;
-    margin: 30px 0 0;
+    margin: 20px 0 0;
     text-align: left;
-    width: 785px
+    width: 100%
 }
-.profile-welcome-message h2 {
+
+
+.newsletter-unsubscribed-cont h2 {
  	margin: 0 0 10px 0
 }
 .similar-promotionl-offer-cont {

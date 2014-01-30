@@ -250,6 +250,26 @@ function updateprofile(){
 			flag = false;
 			$(window).scrollTop(0);
 			obj = $.parseJSON(obj);
+
+			// update current newsletter susbcription status
+			$("input#currentSubscriptionStatus").val(obj.newStatus);
+
+			// display appropridate update message	
+			switch(obj.updateType) {
+
+				case 'subsribed' :
+					$("div.newsletter-unsubscribed-cont").hide();
+				break;
+
+				case 'unsubscibed':
+					$("div.newsletter-unsubscribed-cont").show();
+				break;
+
+				default: 
+					// do nothing
+				break;
+			}
+
 			flashMessage(obj.message);
 			___removeOverLay();
 		}
