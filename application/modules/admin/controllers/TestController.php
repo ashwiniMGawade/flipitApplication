@@ -37,24 +37,33 @@ class Admin_TestController extends Zend_Controller_Action
 
  
 
-		echo "<pre>";
-		
-		
-		$input = array("a", "b", "c", "d", "e");
-		
-		
-		
-		$output = array_slice($input, 2);      // returns "c", "d", and "e"
-		$output = array_slice($input, -2, 1);  // returns "d"
-		$output = array_slice($input, 0, 3);   // returns "a", "b", and "c"
-		
-		// note the differences in the array keys
-		print_r(array_slice($input, 2, -1));
-		print_r(array_slice($input, 2, -1, true));
+		# gte top 5 vouchercodes
+		$topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 5);
 
-		
-		echo "----------------\n";
-		
+	 
+
+        # if top korting are less than 15 then add newest code to fill up the list upto 15
+        if(count($topVouchercodes) < 5 )
+         {
+            # the limit of popular oces
+            $additionalCodes = 5 - count($topVouchercodes) ;
+
+            # GET TOP 5 POPULAR CODE
+            $additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
+
+
+            foreach ($additionalTopVouchercodes as $key => $value) {
+
+                $topVouchercodes[] =     array('id'=> $value['shop']['id'],
+                                                'permalink' => $value['shop']['permalink'],
+                                                'offer' => $value
+                                              );
+            }
+ 		}
+
+		 
+
+
  
 		//array_chunk($visitors, 1000);
 		//print_r(array_chunk($input_array, 2, true));

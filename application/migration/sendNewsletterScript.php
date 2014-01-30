@@ -339,7 +339,10 @@ class SendNewsletter {
 
 
 		//get offers from top ten popular shops and top one cateory as in homepage
-		$topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10);
+        $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
+		$topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
+
+
 
 		$dataShopName = $dataShopImage =  $shopPermalink = $expDate = $dataOfferName = array();
 

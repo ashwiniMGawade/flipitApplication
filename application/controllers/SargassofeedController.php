@@ -18,29 +18,9 @@ class SargassofeedController extends Zend_Controller_Action
 
     	if($voucherflag){
 
-    		$topVouchercodes = Offer::getTopKortingscodeForShopPage(array(),20);
-
-
-
-            # if top korting are less than 20 then add newest code to fill up the list upto 20
-            if(count($topVouchercodes) < 20 )
-             {
-                # the limit of popular oces
-                $additionalCodes = 20 - count($topVouchercodes) ;
-
-                # GET TOP 5 POPULAR CODE
-                $additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
-
-
-                foreach ($additionalTopVouchercodes as $key => $value) {
-
-                    $topVouchercodes[] =     array('id'=> $value['shop']['id'],
-                                                    'permalink' => $value['shop']['permalink'],
-                                                    'offer' => $value
-                                                  );
-                }
-             }
-
+            # get top 20 vouchercodes
+            $topVouchercodes = Offer::getTopKortingscodeForShopPage(array(),20);
+            $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes ,20);
 
     		FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVouchercodes);
 

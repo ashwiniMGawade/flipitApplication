@@ -17,28 +17,8 @@ class MetronieuwsController extends  Zend_Controller_Action
 
     	# fetch 10 Popular voucher offers for http://www.metronieuws.nl
 
-   		$topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
-
-
-                    # if top korting are less than 20 then add newest code to fill up the list upto 20
-        if(count($topVouchercodes) < 10 )
-         {
-            # the limit of popular oces
-            $additionalCodes = 10 - count($topVouchercodes) ;
-
-            # GET TOP 5 POPULAR CODE
-            $additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
-
-
-            foreach ($additionalTopVouchercodes as $key => $value) {
-
-                $topVouchercodes[] =     array('id'=> $value['shop']['id'],
-                                                'permalink' => $value['shop']['permalink'],
-                                                'offer' => $value
-                                              );
-            }
-         }
-
+        $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
+        $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
 
 
     	$domain1 = $_SERVER['HTTP_HOST'];

@@ -819,5 +819,4 @@ class BackEnd_Helper_viewHelper
 					 'dataOfferName' =>  $dataOfferName );
 	}
 
-
 }
