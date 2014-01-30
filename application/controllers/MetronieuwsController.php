@@ -17,7 +17,29 @@ class MetronieuwsController extends  Zend_Controller_Action
 
     	# fetch 10 Popular voucher offers for http://www.metronieuws.nl
 
-   		$offers = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
+   		$topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
+
+
+                    # if top korting are less than 20 then add newest code to fill up the list upto 20
+        if(count($topVouchercodes) < 10 )
+         {
+            # the limit of popular oces
+            $additionalCodes = 10 - count($topVouchercodes) ;
+
+            # GET TOP 5 POPULAR CODE
+            $additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
+
+
+            foreach ($additionalTopVouchercodes as $key => $value) {
+
+                $topVouchercodes[] =     array('id'=> $value['shop']['id'],
+                                                'permalink' => $value['shop']['permalink'],
+                                                'offer' => $value
+                                              );
+            }
+         }
+
+
 
     	$domain1 = $_SERVER['HTTP_HOST'];
     	$domain = 'http://'.$domain1;
@@ -55,7 +77,7 @@ class MetronieuwsController extends  Zend_Controller_Action
     	// Cycle through the rankings, creating an array storing
     	// each, and push the array onto the $entries array
 
-    	foreach ($offers as  $offer) {
+    	foreach ($topVouchercodes as  $offer) {
 
 	    	$offerData = $offer['offer'] ;
 
@@ -69,6 +91,7 @@ class MetronieuwsController extends  Zend_Controller_Action
             }
 	    	$xml->writeElement('link', $domainPath . '/' . $offerData['shop']['permaLink']);
 	    	$xml->endElement();
+
     	}
 
     	$xml->writeElement('More', 'nl');
