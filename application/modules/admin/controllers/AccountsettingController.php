@@ -187,6 +187,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     		if($voucherflag){
 
+    			# get 10 popular vouchercodes for news letter	
                 $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
     			$topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
 
