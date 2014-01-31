@@ -17,7 +17,9 @@ class MetronieuwsController extends  Zend_Controller_Action
 
     	# fetch 10 Popular voucher offers for http://www.metronieuws.nl
 
-   		$offers = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
+        $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
+        $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
+
 
     	$domain1 = $_SERVER['HTTP_HOST'];
     	$domain = 'http://'.$domain1;
@@ -55,7 +57,7 @@ class MetronieuwsController extends  Zend_Controller_Action
     	// Cycle through the rankings, creating an array storing
     	// each, and push the array onto the $entries array
 
-    	foreach ($offers as  $offer) {
+    	foreach ($topVouchercodes as  $offer) {
 
 	    	$offerData = $offer['offer'] ;
 
@@ -69,6 +71,7 @@ class MetronieuwsController extends  Zend_Controller_Action
             }
 	    	$xml->writeElement('link', $domainPath . '/' . $offerData['shop']['permaLink']);
 	    	$xml->endElement();
+
     	}
 
     	$xml->writeElement('More', 'nl');

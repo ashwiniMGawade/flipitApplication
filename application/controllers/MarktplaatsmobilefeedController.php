@@ -19,7 +19,10 @@ class MarktplaatsmobilefeedController extends Zend_Controller_Action
     	//key not exist in cache
     	if($voucherflag){
     		
-    		$topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(15);
+	        # get top 15 vouchercodes
+            $topVouchercodes =PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(15);
+            $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,15);
+
     		FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list_feed', $topVouchercodes);
     		
     	} else {

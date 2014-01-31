@@ -446,10 +446,13 @@ function sendTestNewsLetter(e){
 		        'name': 'send',
 		        'value': 'test',
 		        'type': 'hidden'
+		    })).append(jQuery('<input>', {
+		        'name': 'testEmail',
+		        'value': $("input#testEmail").val(),
+		        'type': 'hidden'
 		    }));
-		    newForm.appendTo('body').submit().remove();
 
-		   //window.location.href = HOST_PATH + "admin/accountsetting/mandrill/send/test";
+		    newForm.appendTo('body').submit().remove();
 		}
 
 	});
@@ -519,10 +522,8 @@ function getTotalRecepients()
 			type : "post",
 			async : false,
 			success : function(data) {
-
 				count = 	data['recepients'];
 			}
-
 
 	});
 
@@ -540,7 +541,7 @@ function scheduleNewsletter(el)
 
 	$("input[type=hidden]#isScheduled").val(1);
 
-	jQuery('#dp3').datepicker(); //.on('changeDate' , validateStartEndTimestamp);
+	jQuery('#dp3').datepicker(); 
 
 
 	jQuery('#offerstartTime').timepicker({
@@ -548,7 +549,6 @@ function scheduleNewsletter(el)
             template: 'modal',
             showSeconds: false,
             showMeridian: false,
-         //   'afterUpdate'  : validateStartEndTimestamp
     });
 
 	$("div#timestamp-feild-container").show();

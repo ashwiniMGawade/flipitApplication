@@ -333,7 +333,32 @@ class LoginController extends Zend_Controller_Action {
 			 
 			if( $userdetail)
 			{
-				$userdetail['message'] = $this->view->translate( "Uw gegevens zijn succesvol aangepast") ;
+
+				$subsStatus = $this->getRequest()->getParam('currentSubscriptionStatus');
+				$newStatus =  $this->getRequest()->getParam('weekly') == 'on'  ? 1 : 0  ;
+
+				# chekc if your has not update newsletter status	
+				if($subsStatus == $newStatus)
+				{
+					$status = 0;	
+					$userdetail['message'] = $this->view->translate( "Uw gegevens zijn succesvol aangepast") ; 
+				} else {
+
+					# display subscribe/unsubscribe message 	
+					if($newStatus) {
+						$status = 'subsribed' ;
+						$userdetail['message'] = $this->view->translate( "you have successfully subscribed weekly newsletter.") ; 
+					} else {
+
+						$status = 'unsubscibed' ; 	
+						$userdetail['message'] = $this->view->translate( "Je bent succesvol uitgeschreven en je zal geen nieuwsbrieven meer van ons ontvangen.") ; 
+					}
+				}
+				$userdetail['newStatus'] = $newStatus ; 
+				$userdetail['updateType'] = $status;
+ 				
+
+
 			} else {
 				
 				$userdetail['message'] = $this->view->translate( "Please enter a valid email address") ;

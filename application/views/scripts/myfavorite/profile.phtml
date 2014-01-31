@@ -1,5 +1,6 @@
 <div class="fav_txt_rt">
 	<form action="" method='post' id='profileForm'>
+		<input id="currentSubscriptionStatus" name="currentSubscriptionStatus" type="hidden" value="<?php echo $this->userdetail['weeklyNewsLetter'] ? 1 : 0 ;?>" />
 		<div class="profile-outer-new mt20">
 			<?php if($this->userdetail['firstName']!='' && $this->userdetail['firstName']!=null){ ?>
 			 <h1 class="text-center"><?php echo $this->translate('Beste ') . " " . $this->userdetail['firstName'] . ',' . $this->translate(' hoe is het ?'); ?></h1>

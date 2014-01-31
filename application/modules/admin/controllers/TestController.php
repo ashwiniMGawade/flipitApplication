@@ -35,26 +35,44 @@ class Admin_TestController extends Zend_Controller_Action
     {
         // action body
 
- 		$data = $this->getRequest()->getParam('data');
+ 
 
-    	$this->view->data = FrontEnd_Helper_viewHelper::sanitize( $data);
+		# gte top 5 vouchercodes
+		$topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 5);
 
-        $this->view->data =  FrontEnd_Helper_viewHelper::replaceStringVariable($this->view->data);
+	 
+
+        # if top korting are less than 15 then add newest code to fill up the list upto 15
+        if(count($topVouchercodes) < 5 )
+         {
+            # the limit of popular oces
+            $additionalCodes = 5 - count($topVouchercodes) ;
+
+            # GET TOP 5 POPULAR CODE
+            $additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
 
 
-        echo str_replace("admin.","",HTTP_PATH);
-        $sessionNamespace = new Zend_Session_Namespace();
+            foreach ($additionalTopVouchercodes as $key => $value) {
 
-        //var_dump($sessionNamespace->settings['rights']['content']['rights'] == '1');
-		echo "<pre>";
-      //  print_r($sessionNamespace->settings['rights']);
-		echo "/<pre>";
+                $topVouchercodes[] =     array('id'=> $value['shop']['id'],
+                                                'permalink' => $value['shop']['permalink'],
+                                                'offer' => $value
+                                              );
+            }
+ 		}
+
+		 
 
 
-		$a = new Varnish();
+ 
+		//array_chunk($visitors, 1000);
+		//print_r(array_chunk($input_array, 2, true));
 
 
     }
+    
+    
+    
 
 
 }

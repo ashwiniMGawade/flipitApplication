@@ -1599,8 +1599,6 @@ class Admin_ShopController extends Zend_Controller_Action
 	public function shopstatusAction() {
 		$params = $this->_getAllParams ();
 		self::updateVarnish($params['id']);
-
-
 		$ret = Shop::changeStatus($params);
 
 		if($ret)

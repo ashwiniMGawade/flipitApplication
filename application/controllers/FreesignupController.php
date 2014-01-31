@@ -221,10 +221,12 @@ class FreesignupController extends Zend_Controller_Action
 
     			$userdetail = Visitor::getuserdetail($lastid);
 
-    			# gte top 5 vouchercodes
-    			$topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 5);
+    			# get top 5 vouchercodes
+                $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 5) ;
+    			$topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,5);
 
-    			//call functions to set the needed data in global arrays
+
+     			//call functions to set the needed data in global arrays
     			$voucherCodesData = BackEnd_Helper_viewHelper::getTopVouchercodesDataMandrill($topVouchercodes);
 
 
@@ -267,7 +269,7 @@ class FreesignupController extends Zend_Controller_Action
 
 
     			$poupularTitle = array( array('name' => 'poupularTitle',
-    							'content' => $this->view->translate('Top 5 kortingscodes :')
+    							'content' => $this->view->translate('Top 5 kortingscodes:')
     							));
 
 

@@ -33,11 +33,20 @@ $this->minifyHeadScript()->appendFile(HTTP_PATH."public/js/front_end/profileImag
     	
         <div class="user-profile-txt">
         	<h2><?php echo $this->userdetail['firstName']?></h2>
-	        <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox" style="<?php echo $this->messageSuccess != '' ? '' : 'display:none;'?>"><strong><?php echo $this->messageSuccess;?></strong></div>
+			<!-- show welcome message if a visitor has subscribed newsletter -->
+			<div class="welcome-message-cont">
+        		<?php echo $this->translate(utf8_encode('Welkom terug&#33; Voeg een aantal van je favoriete winkels toe zodat je altijd op de hoogte blijft van de beste acties &#38; kortingscodes&#33;'))?>
+        	</div>
+            <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox" style="<?php echo $this->messageSuccess != '' ? '' : 'display:none;'?>"><strong><?php echo $this->messageSuccess;?></strong>
+        	</div>
         </div>
-        <br class="clr" />
-        <div class="profile-welcome-message">
-        	<h2><?php echo $this->translate('Toch weer niewsbrieven ontvangen ?')?></h2>
-			<?php echo $this->translate(utf8_encode('Welkom terug&#33; Voeg een aantal van je favoriete winkels toe zodat je altijd op de hoogte blijft van de beste acties &#38; kortingscodes&#33;'))?>
-        </div>
+        	<br class="clr" />
+			<!-- show  a message saying you are unsubscribed from weekly newsletter -->
+			<div class="newsletter-unsubscribed-cont <?php echo $this->userdetail['weeklyNewsLetter'] ? 'hide' : '' ; ?>">
+	        	<h2><?php echo $this->translate('Toch weer niewsbrieven ontvangen ?')?></h2>
+	        	<p>
+					<?php echo $this->translate(utf8_encode('Wil jij toch nog op de hoogte blijven van de beste kortingscodes via onze nieuwsbrief? Vink dan de box hieronder aan bij wekelijkse nieuwsbrief en klik op update instellingen.'))?>
+	        	</p>
+	        </div>
+	
 </div>

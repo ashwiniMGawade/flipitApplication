@@ -1527,7 +1527,7 @@ class Offer extends BaseOffer
 
 	 	 $date = date('Y-m-d H:i:s');
 	 	 $data = Doctrine_Query::create()
-				->select('s.id,s.name, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+				->select('s.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
 				->from('Offer o')
 				->leftJoin('o.shop s')
 				->leftJoin('o.logo ologo')
@@ -1766,7 +1766,7 @@ class Offer extends BaseOffer
 	 	//	Zend_Debug::dump($shopId);
 
 	 	$OfferOfRelatedShops = Doctrine_Query::create()
-	 	->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+	 	->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
 	 	->from('Offer o')
 	 	->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
 	 	->leftJoin('o.shop s')
@@ -1799,7 +1799,7 @@ class Offer extends BaseOffer
 	 	if(count($catData) > 0){
 	 	//	Zend_Debug::dump($catData); die;
 	 		$OfferOfRelatedCats = Doctrine_Query::create()
-	 		->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+	 		->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
 	 		->from('Offer o')
 	 		->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
 	 		->leftJoin('o.shop s')

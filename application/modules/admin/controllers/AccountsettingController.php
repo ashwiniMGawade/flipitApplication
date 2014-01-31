@@ -187,9 +187,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     		if($voucherflag){
 
-    			$topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10);
-
-       			FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list', $topVouchercodes);
+    			# get 10 popular vouchercodes for news letter	
+                $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
+    			$topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
 
     	   	} else {
     			$topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvaouchercode_list');
@@ -407,23 +407,21 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     public function getDirectLoginLinks()
     {
     	$email_data = Signupmaxaccount::getallmaxaccounts();
-    	$testEmail = $email_data[0]['testemail'];
+    	$testEmail = $this->getRequest()->getParam('testEmail');
     	$dummyPass = MD5('12345678');
     	$send = $this->getRequest()->getParam('send');
     	$visitorData = array();
     	$visitorMetaData = array();
     	$toVisitorArray = array();
-
-
-
-
+ 
     	if(isset($send) && $send == 'test'){
+
+			$getTestEmaildata =  Visitor::getuserpwddetail($testEmail);
 
     		$key = 0;
     		$visitorData[$key]['rcpt'] = $testEmail;
     		$visitorData[$key]['vars'][0]['name'] = 'loginLink';
-    		$visitorData[$key]['vars'][0]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directlogin") . "/" . base64_encode($testEmail) ."/". $dummyPass;
-
+    		$visitorData[$key]['vars'][0]['content'] =  HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directlogin") . "/" . base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
     		$visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
     		$visitorData[$key]['vars'][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directloginunsubscribe") . "/" . base64_encode($testEmail) ."/". $dummyPass;
 
@@ -445,7 +443,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 				$visitors = $visitors->getVisitorsToSendNewsletter();
 
-/* 	    	   	//initialize the mandrill to retrieve the data of the users to whom we have sent mails
+				//initialize the mandrill to retrieve the data of the users to whom we have sent mails
 		    	$mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
 		    	$getUserDataFromMandrill = $mandrill->users->senders();
 
@@ -454,11 +452,10 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 		    		if($value['soft_bounces'] >= 6 || $value['hard_bounces'] >= 2 ){
 						$updateActive = Doctrine_Query::create()->update('Visitor')->set('active',0)->where("email = '".$value['address']."'")->execute();
 		    		}
-		    	} */
+		    	} 
 
 		    	//loop the visitors and generate the links for unsubscribe and edit profile
 		    	foreach ($visitors as $key => $value) {
-
 
 		    		# ADD REFERRAL KEYWORDS for mandril (recipient MetaData)
 		    		$keywords ='' ;
@@ -467,9 +464,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 		    			$keywords .= $word['keyword'] . ' ';
 		    		}
-
-
-
 
 		    		$visitorData[$key]['rcpt'] = $value['email'];
 		    		$visitorData[$key]['vars'][0]['name'] = 'loginLink';

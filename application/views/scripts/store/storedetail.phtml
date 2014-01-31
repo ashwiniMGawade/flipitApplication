@@ -101,7 +101,7 @@
 				<div class="mark-spencer-left">
 					<div class="ms-grey-col-left">
 					<?php
-					$url = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : $this->data[0]['affliateProgram']['name'];
+					$url = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : @$this->data[0]['affliateProgram']['name'];
 
 					# create click out only on when a shop is money shop
 					if($this->data[0]['affliateProgram']) : ?>
@@ -162,6 +162,7 @@
 <div class="mark-spencer-mid" >
 <!-- Mark Spencer Mid Left Starts -->
 <?php
+
 	if($this->data[0]['usergenratedcontent']==1):
 
 		# CHECK CONDITION
@@ -176,14 +177,21 @@
 							echo $yellowBoxWarning;
 						} else 	{
 							$offers =  $this->partialLoop('store/_popular-offers.phtml', $this->topPopularOffers);
-
 						}
 
 			            echo $speratorDiv; ?>
-
 				<div class="mark-spencer-mid-left" style='width:660px!important;'>
-
 				<?php echo $offers;
+				
+				# show promotional similar codes
+				if(count($this->relatedshops8) >0): ?>
+					<div class="similar-promotionl-offer-cont">
+						<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+					<?php	
+						echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
+					</div>
+				<?php endif;
+				
 				if ($this->data[0]['showSignupOption']) :
 					echo $this->esi($this->locale.'store/signup');
 				endif;
@@ -194,20 +202,22 @@
 		<?php
 
 		# NO MONEY WITH CODE
-		elseif(count($this->offers) > 0): ?>
-
-			<?php /* if(count($this->relatedshops) >0): ?>
-				<div class="merchants-outer">
-					<?php echo $headingOfSimilerOffer;?>
-					<div class="merchants-bot"><?php echo $relatedOffer ?></div>
-				</div>
-			 <?php  endif; */
+		elseif(count($this->offers) > 0): 
 			 echo $speratorDiv; ?>
 
 			<!-- code for  one code -->
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
 		    	<?php echo $offers;
 
+		    	# show promotional similar codes
+		    	if(count($this->relatedshops8) >0): ?>
+		    		<div class="similar-promotionl-offer-cont">
+		    			<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+		    			<?php	
+		    				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
+		    		</div>
+				<?php endif;
+		    					
 		    	if ($this->data[0]['showSignupOption']) :
 		    		echo $this->esi($this->locale.'store/signup');
 		    	endif;
@@ -233,7 +243,16 @@
 
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
 				<?php echo $offers;
-
+				
+				# show promotional similar codes
+		    	if(count($this->relatedshops8) >0): ?>
+		    		<div class="similar-promotionl-offer-cont">
+		    			<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+		    			<?php	
+    					echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
+	    		</div>
+				<?php endif;
+				
 				if ($this->data[0]['showSignupOption']) :
 					echo $this->esi($this->locale.'store/signup');
 				endif;
@@ -248,8 +267,17 @@
 
 			<!-- code for  one code -->
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
-				<?php echo $offers;
-
+			<?php echo $offers;
+				
+			# show promotional similar codes
+			if(count($this->relatedshops8) >0): ?>
+				<div class="similar-promotionl-offer-cont">
+					<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+				<?php	
+					echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
+				</div>
+			<?php endif; 
+			  
 				if ($this->data[0]['showSignupOption']) :
 					echo $this->esi($this->locale.'store/signup');
 				endif;
@@ -279,7 +307,15 @@
 
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
  		      	<?php echo $offers;
-
+ 		      	
+ 		      	# show promotional similar codes
+				if(count($this->relatedshops8) >0): ?>
+ 		      		<div class="similar-promotionl-offer-cont">
+ 		      			<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+ 		      			<?php	
+ 		      				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
+ 		      		</div>
+ 		      	<?php endif; 
  		      	if ($this->data[0]['showSignupOption']) :
  		      		echo $this->esi($this->locale.'store/signup');
  		      	endif;
@@ -301,6 +337,15 @@
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
  		      	<?php echo $offers;
 
+ 		      	# show promotional similar codes
+				if(count($this->relatedshops8) >0): ?>
+ 		      		<div class="similar-promotionl-offer-cont">
+ 		      			<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+ 		      			<?php	
+ 		      				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
+ 		      		</div>
+ 		      	<?php endif; 
+ 		      	 		      	
  		      	if ($this->data[0]['showSignupOption']) :
  		      		echo $this->esi($this->locale.'store/signup');
  		      	endif;
@@ -325,6 +370,15 @@
 				<div class="mark-spencer-mid-left" style="width:660px!important;">
 					<?php
 					echo $yellowBoxWarning;
+					
+					# show promotional similar codes
+					if(count($this->relatedshops8) >0): ?>
+						<div class="similar-promotionl-offer-cont">
+							<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+						<?php	
+							echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
+						</div>
+					<?php endif; 				
 					if ($this->data[0]['showSignupOption']) :
 						echo $this->esi($this->locale.'store/signup');
 					endif;
@@ -352,6 +406,16 @@
 		elseif(count($this->offers) > 0): ?>
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
 				<?php echo $offers;
+				
+				# show promotional similar codes
+				if(count($this->relatedshops8) >0): ?>
+					<div class="similar-promotionl-offer-cont">
+						<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+					<?php	
+						echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
+					</div>
+				<?php endif;  	  
+				    	
 				if ($this->data[0]['showSignupOption']) :
 					echo $this->esi($this->locale.'store/signup');
 				endif;
@@ -538,25 +602,9 @@
          <!-- Separator Starts -->
         <div class="separator">&nbsp;</div>
         <!-- Separator Ends -->
-      <?php endif;?>
-      <?php if(count($this->relatedshops8) >0):?>
-      <div class="new-outer">
-      	<!-- Merchants Outer Starts -->
-	      <div class="merchants-outer">
-	      	<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
-	        	<div class="merchants-bot">
-	        	<?php  echo $this->partialLoop('store/relatedOffer.phtml', $this->relatedshops8); ?>
-	        	</div>
-	        </div>
-	         <!-- Merchants Outer Ends -->
-        </div>
-        <!-- Separator Starts -->
-        <div class="separator">&nbsp;</div>
-        <!-- Separator Ends -->
-      <?php
-      endif; ?>
+      <?php endif;
 
-      <?php if(count($this->expiredOffers) >0):?>
+      if(count($this->expiredOffers) >0):?>
       <div class="new-outer">
 	      <!-- Merchants Outer Starts -->
 			<div class="merchants-outer">

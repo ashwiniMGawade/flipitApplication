@@ -55,6 +55,15 @@ class Admin_NewstickerController extends Zend_Controller_Action
      */
     public function createnewstickerAction()
     {
+    	$flash = $this->_helper->getHelper ( 'FlashMessenger' );
+    	
+    	$message = $flash->getMessages ();
+    	
+    	$this->view->messageSuccess = isset ( $message [0] ['success'] ) ? $message [0] ['success'] : '';
+    	
+    	$this->view->messageError = isset ( $message [0] ['error'] ) ? $message [0] ['error'] : '';
+    	
+    	
     	
     	$shopObj = new Shop();
     	
@@ -72,11 +81,26 @@ class Admin_NewstickerController extends Zend_Controller_Action
     			
 	    	$flash = $this->_helper->getHelper ( 'FlashMessenger' );
 	    	
-	    	$message = $this->view->translate ( 'News Ticker has been created successfully' );
+	    	
+	    	if($params['saveAndAddnew'])
+	    	{
+	    		$message = $this->view->translate('News Ticker has been created successfully and add new newsticker again');
+	    	} else {
+		    	$message = $this->view->translate ( 'News Ticker has been created successfully' );
+	    	}
 	    	
 	    	$flash->addMessage (array ('success' => $message ));
 	    	
-	    	$this->_redirect ( HTTP_PATH . 'admin/newsticker' );
+	    	
+	    	if($params['saveAndAddnew'])
+	    	{
+				$this->_redirect ( HTTP_PATH . 'admin/newsticker/createnewsticker' );
+	    	
+	    	} else {
+		    	$this->_redirect ( HTTP_PATH . 'admin/newsticker' );
+	    	}
+	    	
+	    	
     	}
     	
     }

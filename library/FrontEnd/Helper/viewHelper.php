@@ -1990,10 +1990,9 @@ EOD;
 
 					$img   = ltrim( sprintf("images/front_end/flags/flag_%s.jpg", $value['locale'] ) );
 
-					$string .= sprintf("<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span>%s</a></li>",
+					$string .= sprintf("<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
 								   		 trim($value['url']),
-										  $httpPath.'/public/'. $img ,
-										  self::retrunCountryName($value['locale']));
+										  $httpPath.'/public/'. $img );
 				}
 
 			}
@@ -2029,5 +2028,40 @@ EOD;
 
 		return $countries[$siteLocale];
 
+	}
+
+		/**
+	 * fillupTopCodeWithNewest
+	 *
+	 * This function is used to fill up popular offers with newest offer if popular offers are less then required number
+	 *
+	 * @param array $offer totla offers
+	 * @param integer $muber required length of codes 
+	 * @author sp Singh
+	 * @version 1.0
+	 */
+	public static function fillupTopCodeWithNewest($offers,$number) {
+ 
+		 # if top korting are less than $number then add newest code to fill up the list upto $number
+            if(count($offers) < $number )
+             {
+                # the limit of popular oces
+            	if(count($offers) < $number )
+					$additionalCodes = $number - count($offers) ;
+
+	                # GET TOP 5 POPULAR CODE
+	                $additionalTopVouchercodes = Offer::commongetnewestOffers('newest', $additionalCodes);
+
+
+	                foreach ($additionalTopVouchercodes as $key => $value) {
+
+	                    $offers[] =   array('id'=> $value['shop']['id'],
+	                                                    'permalink' => $value['shop']['permalink'],
+	                                                    'offer' => $value
+	                                                  );
+	                }
+             }
+
+      	 return $offers;
 	}
 }
