@@ -11,9 +11,6 @@ $imgstyle='';
 $termandcondition = '';
 if(count($this->termandcondition) > 0){
 	$termandcondition = $this->termandcondition  [0] ['content'];
-	if (strlen ( $termandcondition ) > 500) :
-	$termandcondition  = substr ($this->termandcondition  [0] ['content'] , 0, 500 ) . '...';
-	endif;
 }
  	$userlogin = false;
 	if (Auth_VisitorAdapter::hasIdentity()) :

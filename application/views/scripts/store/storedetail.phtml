@@ -101,7 +101,7 @@
 				<div class="mark-spencer-left">
 					<div class="ms-grey-col-left">
 					<?php
-					$url = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : $this->data[0]['affliateProgram']['name'];
+					$url = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : @$this->data[0]['affliateProgram']['name'];
 
 					# create click out only on when a shop is money shop
 					if($this->data[0]['affliateProgram']) : ?>
