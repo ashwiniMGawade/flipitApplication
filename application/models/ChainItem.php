@@ -161,7 +161,6 @@ class ChainItem extends BaseChainItem
 	public function update($data = false ,$shop)
 	{
 
-
 		# if show chain is on then modify status based on hsop status
 		if($shop['showChains'] == 1) {
 
@@ -235,7 +234,7 @@ class ChainItem extends BaseChainItem
 	 */
 	public  function postSave($event)
 	{
-		$this->updateVarnish();
+		//$this->updateVarnish();
 	}
 
 	/**

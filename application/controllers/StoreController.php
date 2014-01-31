@@ -496,7 +496,6 @@ class StoreController extends Zend_Controller_Action
 	  	 		$offers[] = 	 $value['offer'] ;
 	  	 	}
 	  	 	
-	  	 	
 	  	 }
  
   	  $this->view->topPopularOffers = $offers;
@@ -512,6 +511,7 @@ class StoreController extends Zend_Controller_Action
   	  
   	  $this->view->relatedshops = $relatedStoteByCat ;
   	  $this->view->relatedshops8 = $relatedStoteByCat  ;
+ 
   	  $this->view->cntPopular = count(FrontEnd_Helper_viewHelper::commonfrontendGetCode ('popular',$lim, $shopId));
   	  
   	  $this->view->controllerName = $this->getRequest()->getParam('controller');

@@ -1781,7 +1781,7 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
 				# verify a valid chain item exists
 				if(isset($chainItem[0]))
 				{
-					// $chainItem[0]->update($data,$this->toArray(false));
+					 $chainItem[0]->update($data,$this->toArray(false));
 				}
 
 			}
