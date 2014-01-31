@@ -11351,7 +11351,7 @@ input.font-change{
     min-width: 33px;
 	color: #2d2d2d;
 	opacity:0.6;
-    margin: 0px 10px 0px 0px;
+    margin: 0px 14px 0px 0px;
 }
 
 .chain-container .ml-country {
@@ -11369,7 +11369,6 @@ input.font-change{
 	opacity:1;
 }
 .chain-container ul li .flag-cont  {
-	margin-right: 15px;
 	vertical-align: text-top;
 }
 
