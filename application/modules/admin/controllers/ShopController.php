@@ -1065,6 +1065,7 @@ class Admin_ShopController extends Zend_Controller_Action
 		$varnishObj->addUrl(HTTP_PATH_FRONTEND);
 		$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('nieuw'));
 		$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('populair'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
 		$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('alle-winkels'));
 
 

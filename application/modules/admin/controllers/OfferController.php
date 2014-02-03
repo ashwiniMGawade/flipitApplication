@@ -1065,6 +1065,7 @@ class Admin_OfferController extends Zend_Controller_Action {
 		$varnishObj = new Varnish();
 		$varnishObj->addUrl(HTTP_PATH_FRONTEND);
 		$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('nieuw'));
+		$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
 		$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('populair'));
 
 		# make markplaatfeed url's get refreashed only in case of kortingscode
