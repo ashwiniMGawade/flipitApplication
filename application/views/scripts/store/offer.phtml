@@ -165,6 +165,60 @@ if(count($this->termandcondition) > 0){
 				</div>
 					<?php } ?>
 				<div class="voucher-col1-top voucher-col1-top-new <?php echo ($this->Visability  == 'MEM') ? "" : "text-black"?>">
+
+					<div class="voucher-col2-bot-text voucher-col2-bot-text-new">
+                    	<?php
+                    	
+                    	$curdate = date('Y-m-d');
+                    	$offerEndDate = date('Y-m-d',strtotime($this->endDate ));
+                    	$timestamp_start = strtotime($offerEndDate);
+                    	$timestamp_end = strtotime($curdate);
+                    	
+                    	$difference = abs($timestamp_end - $timestamp_start);
+                    	$diff = floor($difference/(60*60*24));
+                    	if($this->discountType == "CD"):
+                    	?>
+	                    	<p><?php
+	                    	//echo $this->startDate; //die; 
+	                    		$sdate = new Zend_Date(strtotime($this->startDate));
+		                    	echo $this->translate('Added'); ?>: <span class="text-black"><?php echo ucwords($sdate->get(Zend_Date::DATE_MEDIUM)); ?>, </span>
+	                    		
+	                    		<?php 
+	                    		if($diff ==5 || $diff ==4 || $diff ==3 || $diff ==2){
+	                    		?>
+	                    			<span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dagen geldig!');; ?></span>
+		                    	<?php  
+	                    		} elseif ($diff ==1){
+	                    			
+	                    			?><span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dag geldig!');; ?></span>
+		                    	<?php  
+	                    		} elseif ($diff ==0){
+	                    		?>
+		                    	
+		                    		<span class="text-orange"> <?php echo $this->translate('Expires today'); ?></span>  
+		                    	<?php
+								} else { 
+		                    		
+									$date1 = new Zend_Date(strtotime($this->endDate));
+		                    		echo $this->translate('Verloopt op:'); ?><span class="text-black"><?php echo ucwords($date1->get(Zend_Date::DATE_MEDIUM)); ?></span> 
+		                    	<?php 
+								} 
+								?>
+	                    	
+	                    	</p>
+                       <?php 
+                       elseif($this->discountType == "PR" || $this->discountType == "SL"):
+                    	?>
+	                    	<p><?php 
+	                   			$sdate = new Zend_Date(strtotime($this->startDate));
+		                    	echo $this->translate('Added'); ?>: <span class="text-black"><?php echo ucwords($sdate->get(Zend_Date::DATE_MEDIUM)); ?></span>
+	                    	
+	                    	</p>
+                       <?php 
+                       endif;
+                       ?>
+					</div>
+
 					<div class="voucher-col1-top-heading-new">
 						<h3>
 						<?php echo $title;?>
@@ -337,7 +391,7 @@ if(count($this->termandcondition) > 0){
 							<span class="fl"><i class="icon-user"></i>&nbsp;Toegevoegd door gebruiker</span>
                		<?php  } ?>
 						<?php if($this->userGenerated ==0 &&  $termandcondition!='' && $termandcondition!=null){ ?>
-						<span class="fl"><a  onclick="showTeamAndCondition(<?php echo $this->id; ?>)" class="text-blue-link" href="javascript:void(0);"><?php echo $this->translate('Voorwaarden'); ?></a></span>
+						<span class="fl arrow-down"><a  onclick="showTeamAndCondition(<?php echo $this->id; ?>)" class="text-blue-link" href="javascript:void(0);"><?php echo $this->translate('Voorwaarden'); ?></a></span>
 						<?php
                          if($termandcondition!='' && $termandcondition!=null && $this->extendedOffer =='1'){?>
                          <span class="fl">&nbsp; | &nbsp;</span>
@@ -354,58 +408,7 @@ if(count($this->termandcondition) > 0){
 						</span>
                     <?php endif;?>
                   	</div>
-					<div class="voucher-col2-bot-text voucher-col2-bot-text-new">
-                    	<?php
-                    	
-                    	$curdate = date('Y-m-d');
-                    	$offerEndDate = date('Y-m-d',strtotime($this->endDate ));
-                    	$timestamp_start = strtotime($offerEndDate);
-                    	$timestamp_end = strtotime($curdate);
-                    	
-                    	$difference = abs($timestamp_end - $timestamp_start);
-                    	$diff = floor($difference/(60*60*24));
-                    	if($this->discountType == "CD"):
-                    	?>
-	                    	<p><?php
-	                    	//echo $this->startDate; //die; 
-	                    		$sdate = new Zend_Date(strtotime($this->startDate));
-		                    	echo $this->translate('Added'); ?>: <span class="text-black"><?php echo ucwords($sdate->get(Zend_Date::DATE_MEDIUM)); ?>, </span>
-	                    		
-	                    		<?php 
-	                    		if($diff ==5 || $diff ==4 || $diff ==3 || $diff ==2){
-	                    		?>
-	                    			<span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dagen geldig!');; ?></span>
-		                    	<?php  
-	                    		} elseif ($diff ==1){
-	                    			
-	                    			?><span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dag geldig!');; ?></span>
-		                    	<?php  
-	                    		} elseif ($diff ==0){
-	                    		?>
-		                    	
-		                    		<span class="text-orange"> <?php echo $this->translate('Expires today'); ?></span>  
-		                    	<?php
-								} else { 
-		                    		
-									$date1 = new Zend_Date(strtotime($this->endDate));
-		                    		echo $this->translate('Verloopt op:'); ?>: <span class="text-black"><?php echo ucwords($date1->get(Zend_Date::DATE_MEDIUM)); ?></span> 
-		                    	<?php 
-								} 
-								?>
-	                    	
-	                    	</p>
-                       <?php 
-                       elseif($this->discountType == "PR" || $this->discountType == "SL"):
-                    	?>
-	                    	<p><?php 
-	                   			$sdate = new Zend_Date(strtotime($this->startDate));
-		                    	echo $this->translate('Added'); ?>: <span class="text-black"><?php echo ucwords($sdate->get(Zend_Date::DATE_MEDIUM)); ?></span>
-	                    	
-	                    	</p>
-                       <?php 
-                       endif;
-                       ?>
-					</div>
+
 				
 				<div id='panel'>
 					<div class='tearmAnCondition voucher-new-text' id='teamandCondition<?php echo $this->id ;?>' style='display: none!important;'>
