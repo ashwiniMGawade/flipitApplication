@@ -11258,12 +11258,11 @@ input.font-change{
 	-moz-border-radius:5px;
 	-webkit-border-radius:5px;
 	border-radius:5px;
-	padding:10px;
  	background:#fff;
 	border:1px solid #ddd;
 	overflow: hidden;
 	clear: both;
-    width: 637px;
+    width: 658px;
 }
 
 .simlilar-shops-plus-category-shops .related-winkels
@@ -11271,8 +11270,8 @@ input.font-change{
     background: none repeat scroll 0 0 #FFFFFF;
     border-radius: 5px 5px 5px 5px;
     float: left;
-    margin: 0 0 0 20px;
-	width: 487px;
+    margin: 5px 0 0 20px;
+	width: 500px;
 }
 
 .simlilar-shops-plus-category-shops ul {
