@@ -320,7 +320,7 @@ if(count($this->termandcondition) > 0){
 								
 						<?php }	else{
 							?>
-							<div class="black-btn" id="blackImage<?php echo $this->id; ?>">
+							<div class="black-btn" style="margin:8px 0 0 5px;" id="blackImage<?php echo $this->id; ?>">
 								<div class="coupon-code">
 									<?php 
 										# display code if its type is General
@@ -330,7 +330,7 @@ if(count($this->termandcondition) > 0){
 								 	?>
 							 	</div>
 							</div>
-							<div class="red-btn" id="<?php echo $this->id ; ?>" vote='0' onclick="showCode(this)">
+							<div class="red-btn" style="margin:8px 0 0 5px;" id="<?php echo $this->id ; ?>" vote='0' onclick="showCode(this)">
 								<a href="<?php echo $urlToShow;?>" onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"  rel="nofollow" target="_blank" >
 									<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png" alt="" />
 								</a>
