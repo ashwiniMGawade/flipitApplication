@@ -47,7 +47,7 @@ sub vcl_recv {
     }
 
     # Pass anything other than GET and HEAD directly.
-    if (req.request != "GET" && req.request != "HEAD" && req.request != "REFRESH" && req.request != "PURGE") {
+    if (req.request != "GET" && req.request != "HEAD" && req.request != "REFRESH" && req.request != "PURGE" && req.request != "BAN") {
         return( pass );
     } /* We only deal with GET and HEAD by default */
 
@@ -64,7 +64,8 @@ sub vcl_recv {
         if (!client.ip ~ ClearCache) {
             error 405 "Method not allowed";
         }else{
-            return (lookup);
+            ban("req.http.host == " +req.http.host+" && obj.http.content-type ~ "+req.http.content-type);
+            error 200 "Ban added";
         }
     }
 
