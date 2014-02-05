@@ -10815,7 +10815,7 @@ margin:0 0 0 20px;
     border-radius: 3px 3px 3px 3px;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
     transition: border 0.2s linear 0s, box-shadow 0.2s linear 0s;
-    width: 325px;
+    width: 250px;
 	float: left;
 	text-align:center;
 	padding:10px 0;
@@ -11179,7 +11179,7 @@ input.font-change{
 	display: block;
     float: left;
     width: 126px;
-    margin: 10px 0 10px 10px;
+    margin: 10px 0 19px 10px;
 }
 .new_box_cont:hover
 {

@@ -249,7 +249,7 @@ if(count($this->termandcondition) > 0){
 								} else { 
 		                    		
 									$date1 = new Zend_Date(strtotime($this->endDate));
-		                    		echo $this->translate('Verloopt op:'); ?><span class="text-black"><?php echo ucwords($date1->get(Zend_Date::DATE_MEDIUM)); ?></span> 
+		                    		echo $this->translate('Verloopt op:'); ?>&nbsp;<span class="text-black"><?php echo ucwords($date1->get(Zend_Date::DATE_MEDIUM)); ?></span> 
 		                    	<?php 
 								} 
 								?>
