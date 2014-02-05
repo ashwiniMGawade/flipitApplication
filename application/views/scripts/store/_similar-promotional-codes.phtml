@@ -212,7 +212,6 @@ if(count($this->termandcondition) > 0){
 						<span class='coupon-type-img'>
 							<img alt="<?php echo $this->translate($couponcodeImgAlt) ;?>" src="<?php echo $couponcodeImg; ?>">
 						</span>
-						<p><?php echo $this->translate('Alle') ?> <?php echo $this->shop['name']?> <?php echo $this->translate('codes') ?></p>
 					</a> 
 					<?php } ?>
 				<div class="voucher-col1-top voucher-col1-top-new <?php echo ($this->Visability  == 'MEM') ? "" : "text-black"?>">
@@ -442,6 +441,20 @@ if(count($this->termandcondition) > 0){
                     		<a class="text-blue-link"  href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $this->extendedUrl;?>"><?php echo $this->translate('Meer over deze code'); ?></a>
 						</span>
                     <?php endif;?>
+                    	<span class="fl">
+							<?php	
+								  if(($termandcondition != '' && $termandcondition!= null ) || $this->extendedOffer =='1'){ 
+										  echo "  &nbsp; | &nbsp;" ;
+		                          }
+
+	                       		echo $this->translate("Meer");
+	                       		
+	                    		printf("&nbsp;<a href='%s'>%s&nbsp;" . $this->translate('kortingscodes') . "</a>", HTTP_PATH_LOCALE.$this->shop['permalink'],
+                    				 ucfirst($this->shop['name']));
+
+                    			 
+		                       ?>
+						</span>
                   	</div>
 					
 				
