@@ -105,7 +105,7 @@ function getArticles(iSearchText,iStart,iSortCol,iSortDir) {
 				"bProcessing" : false,
 				"bServerSide" : true,
 				"iDisplayStart" : iStart,
-				"iDisplayLength" :200,
+				"iDisplayLength" :100,
 				"bDeferRender": true,
 				"aaSorting": [[ iSortCol , iSortDir ]],
                 "sPaginationType" : "bootstrap",

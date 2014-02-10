@@ -74,7 +74,7 @@ function pageList(iStart,iSortCol,iSortDir,iSearchText) {
 		"bProcessing" : false,
 		"bServerSide" : false,
 		"iDisplayStart" : iStart,
-		"iDisplayLength" :200,
+		"iDisplayLength" : 100,
 		"bDeferRender": true,
 		"aaSorting": [[ iSortCol , iSortDir ]],
 		"sPaginationType" : "bootstrap",

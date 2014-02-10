@@ -171,11 +171,13 @@ class Shop extends BaseShop {
 
 	public function preDelete($event)
 	{
+		$id = $this->id;
+
 
 		# check if shop is deleted permanently
 		if($this->deleted == 1)
 		{
-			$id = $this->id;
+		
 
 		 	$dela = Doctrine_Query::create()->delete()
 			 ->from('refShopCategory r')->where('r.shopid=' . $id)
@@ -220,7 +222,7 @@ class Shop extends BaseShop {
 
 
 			# update chain if shop is associated with chain
-			if($this->chainId)
+			if($this->chainItemId)
 			{
 				$chainItem = Doctrine_Core::getTable("ChainItem") ->findBySql(
 						'shopId = ? AND chainId = ?',
