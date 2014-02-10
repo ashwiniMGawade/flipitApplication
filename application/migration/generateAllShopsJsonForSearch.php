@@ -126,12 +126,11 @@ class CreateShopsJSON {
 								'value'=> $value['name'],
 								'permalink'=> $value['permalink'],
 								'id'=> $value['id']);
-						
-			
 		}
 		
 		$jsonHandle = fopen($pathToJSONFile, 'w');
-		fwrite($jsonHandle, Zend_Json::encode($shops));
+		$shopsData = " var shopsJSON = " . Zend_Json::encode($shops);
+		fwrite($jsonHandle, $shopsData);
 		fclose($jsonHandle);
 	
 	
@@ -140,8 +139,6 @@ class CreateShopsJSON {
 
 		$manager->closeConnection($DMC);
 	
-		
-		
 	}
 		
 }

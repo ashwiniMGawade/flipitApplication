@@ -139,7 +139,7 @@ function getOffers(txtOffer,txtShop,type) {
 				"bDestroy" : true,
 				"bProcessing" : false,
 				"bServerSide" : true,
-				"iDisplayLength" : 200,
+				"iDisplayLength" : 100,
 				"aaSorting": [[ 1, 'ASC' ]],
 				"sPaginationType" : "bootstrap",
 				//"sAjaxSource" : HOST_PATH+"admin/offer/getoffer/data/" + data,

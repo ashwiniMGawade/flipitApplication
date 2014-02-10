@@ -2,27 +2,6 @@
 echo $this->doctype("XHTML1_RDFA");
 
 // manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
-# add suffix according to locale
-$suffix = "" ;
-if(LOCALE)
-{
-	$suffix = "_" .LOCALE ;
-}
-$path =  ROOT_PATH . "language/backend_js" . strtoupper($suffix). ".po";
-
-$homepage = file_get_contents($path);
-preg_match_all('/msgid "(.*)"/', $homepage, $keys);
-preg_match_all('/msgstr "(.*)"/', $homepage, $strings);
-
-$str = array();
-foreach ($strings[1] as $key => $value) {
-	$str[] = array('null',$value);
-}
-
-$out = @array_combine($keys[1], $str);
-$json = preg_replace("/\\\\u([a-f0-9]{4})/e", "iconv('UCS-4LE','UTF-8',pack('V', hexdec('U$1')))", json_encode($out));
-
-$translations = " var json = " . $json . " ;  var jsonData = {};  jsonData['frontend_js'] =json;  var gt = new Gettext({ 'domain' : 'frontend_js' , 'locale_data' : jsonData });";
 
 $lang_locale = Signupmaxaccount::getallmaxaccounts();
 $lang = !empty($lang_locale[0]['locale']) ? $lang_locale[0]['locale'] : 'nl_NL';
@@ -30,7 +9,6 @@ $langArray = explode('_', $lang);
 $language = $langArray[0];
 ?>
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language; ?>" xmlns="http://www.w3.org/1999/xhtml">
-
 <head>
 <?php
 
@@ -118,6 +96,8 @@ echo $this->minifyHeadLink()
 echo $this->headStyle();
 echo $this->minifyHeadScript()->prependFile ("public/js/common.js" )
 							  ->prependFile ("public/js/front_end/jquery-bigtext.js" )
+  					   		  ->prependFile ("public/js/front_end/json/translation.js" )
+							  ->prependFile ("public/js/front_end/json/shops.js" )
 							  ->prependFile ("public/js/front_end/layout.js" )
 							  ->prependFile ("public/js/Gettext.js" )
 							  ->prependFile ("public/js/jquery-ui-1.8.16.custom.min.js" )
@@ -127,22 +107,7 @@ echo $this->minifyHeadScript()->prependFile ("public/js/common.js" )
 							  ->prependScript(  'var HOST_PATH = "'.  HTTP_PATH .'";'  )
 							  ->prependScript(  'var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";'  )
  							  ->prependScript( 'var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";'  );
-?>
-<script language="javascript">
-<?php echo $translations ;
-
-	# get shops from json and echo in the head for search
-	$filePath =  ROOT_PATH . "js/front_end/json/shops.js" ;
-	$shopsData = file_get_contents($filePath);
-	
-	if($shopsData)
-	{
-		echo $shopsData = " var shopsJSON = " .$shopsData ;
-	}
-
-?>
-</script>  
-<?php 
+ 
 $controller = $this->controller;
 
 $googleCodeErrorPage = "<script type='text/javascript'>
