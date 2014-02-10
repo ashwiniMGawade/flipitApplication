@@ -19,5 +19,5 @@ require 'globalShopExportScript.php';
 require 'generateAllShopsJsonForSearch.php';
 
 
-#run export all shops in associated json file for each locale
+#run cretae translation json fiel for each locale (used for javascript translations)
 require 'generateJsonForJsTranlastion.php';
