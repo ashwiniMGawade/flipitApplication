@@ -69,7 +69,7 @@
 		$offers = $this->partialLoop('store/offer.phtml', $this->offers);
 	endif;
 
-	if(count($this->relatedshops) >0):
+	if(count($this->relatedshops) > 0):
 		$relatedOffer = $this->partialLoop('store/relatedOffer.phtml', $this->relatedshops);
 	endif;
 
