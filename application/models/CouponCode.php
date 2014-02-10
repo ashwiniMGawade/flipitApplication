@@ -121,6 +121,7 @@ class CouponCode extends BaseCouponCode
 			$varnishObj->addUrl(HTTP_PATH);
 			$varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('nieuw'));
 			$varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('populair'));
+			$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
 
 
 			# make markplaatfeed url's get refreashed only in case of kortingscode
