@@ -17,3 +17,7 @@ require 'globalShopExportScript.php';
 
 #run export all shops in associated json file for each locale
 require 'generateAllShopsJsonForSearch.php';
+
+
+#run export all shops in associated json file for each locale
+require 'generateJsonForJsTranlastion.php';
