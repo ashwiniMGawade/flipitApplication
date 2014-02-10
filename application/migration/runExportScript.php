@@ -14,6 +14,3 @@ require 'visitorExportScript.php';
 
 #run global shop  export script
 require 'globalShopExportScript.php';
-
-#run export all shops in associated json file for each locale
-require 'generateAllShopsJsonForSearch.php';
