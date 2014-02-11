@@ -157,7 +157,7 @@ class Admin_OfferController extends Zend_Controller_Action {
 		    		
 		    		$message = $this->view->translate('Offer has been added successfully.');
 		    		
-		    		if($params['saveAndAddnew'])
+		    		if(filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN))
 		    		{
 		    			$message = $this->view->translate('Offer has been added successfully and add new offer again');
 		    		}
@@ -171,7 +171,7 @@ class Admin_OfferController extends Zend_Controller_Action {
     		$flash->addMessage(array('error' => $message ));
     	}
 
-    	if($params['saveAndAddnew'])
+    	if(filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN))
     	{
     		$this->_redirect(HTTP_PATH.'admin/offer/addoffer');
     		
@@ -908,9 +908,7 @@ class Admin_OfferController extends Zend_Controller_Action {
 			}
 		}
 
-
-
-
+ 
 		$objReader = PHPExcel_IOFactory::createReader('Excel2007');
 		$objPHPExcel = $objReader->load(ROOT_PATH."/shopsdata.xlsx");
 

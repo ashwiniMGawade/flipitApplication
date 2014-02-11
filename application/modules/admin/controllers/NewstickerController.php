@@ -81,8 +81,10 @@ class Admin_NewstickerController extends Zend_Controller_Action
     			
 	    	$flash = $this->_helper->getHelper ( 'FlashMessenger' );
 	    	
-	    	
-	    	if($params['saveAndAddnew'])
+	    	 
+	   		
+ 
+	    	if(filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN))
 	    	{
 	    		$message = $this->view->translate('News Ticker has been created successfully and add new newsticker again');
 	    	} else {
@@ -92,7 +94,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 	    	$flash->addMessage (array ('success' => $message ));
 	    	
 	    	
-	    	if($params['saveAndAddnew'])
+	    	if(filter_var($params['saveAndAddnew'], FILTER_VALIDATE_BOOLEAN))
 	    	{
 				$this->_redirect ( HTTP_PATH . 'admin/newsticker/createnewsticker' );
 	    	
