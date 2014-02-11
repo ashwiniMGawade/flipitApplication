@@ -2,7 +2,7 @@ User-agent: *
 Disallow:/info/
 Disallow:/rssfeed/
 Disallow:/out/
-Disallow:/zoeken/
+Disallow:/search/
 Disallow:/admin/
 
 Sitemap:http://www.flipit.com/be/sitemaps/sitemap_shops.xml

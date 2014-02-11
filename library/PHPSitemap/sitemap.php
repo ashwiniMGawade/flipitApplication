@@ -463,17 +463,20 @@ class PHPSitemap_sitemap
 		if(!empty($pagesPermalinks)):
 			foreach($pagesPermalinks as $permalinks):
 
-								$string1 = strstr($permalinks['permaLink'], "info/");
+				$string1 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("info"));
 				$string2 = strstr($permalinks['permaLink'], "rssfeed/");
 				$string3 = strstr($permalinks['permaLink'], "out/");
-				$string4 = strstr($permalinks['permaLink'], "zoeken/");
+                $string4 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("zoeken"));
 				$string5 = strstr($permalinks['permaLink'], "admin/");
 				$string6 = strstr($permalinks['permaLink'], "index");
 				$string7 = strstr($permalinks['permaLink'], "marktplaatsfeed");
 				$string8 = strstr($permalinks['permaLink'], "metronieuws");
+				$string9 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("mijn-favorieten"));
 			
+				
 				if($permalinks['permaLink'] != "" && $string1 == "" && $string2 == "" && $string3 == "" 
-							&& $string4 == "" && $string5 == "" && $string6 == "" && $string7 == "" && $string8 == ""):
+							&& $string4 == "" && $string5 == "" && $string6 == "" && $string7 == "" && $string8 == ""
+							&& $string9 == ""):
 									
 					if($locale=='en'):
 						$xml .= '<url><loc>'.$domain.'/'.$permalinks['permaLink'].'</loc></url>';
