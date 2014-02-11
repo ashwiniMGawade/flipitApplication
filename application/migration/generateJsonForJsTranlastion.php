@@ -1,9 +1,11 @@
 <?php
 
 /**
- * Generate json file of all shops for frontend serach
+ * Generate json file of javascript translation 
  *
  * @author Surinderpal Singh
+ * 
+ * @file generateJsonForJsTranlastion.php 	
  *
  */
 class CreateTranslationJSON {
