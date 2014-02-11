@@ -260,17 +260,15 @@ class Admin_ShopController extends Zend_Controller_Action
 				 $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
 				 BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
 				 		132, 95, $path);
-
-    			break ;
+       			break ;
 
     			case 'small_logo_file' :
     			break ;
-
+                
     			case 'big_logo_file' :
     				break ;
 
     		}
-
 
     		$adapter->addFilter(
     				new Zend_Filter_File_Rename(
@@ -296,11 +294,9 @@ class Admin_ShopController extends Zend_Controller_Action
     				array("fileName" => $data, "sttaus" => $status,
     						"msg" => $msg, "displayFileName" => $info['name'],
     						"path" => "$uploadPath" ,
-
     						"bEl" => $fileEl ));
     		die();
     	}
-
     }
 
     public function viewcontentAction(){

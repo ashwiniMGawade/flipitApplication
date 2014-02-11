@@ -753,15 +753,15 @@ class Admin_OfferController extends Zend_Controller_Action {
 
 		$url = strtolower($url);
 
-		$rp = Doctrine_Query::create()->select()->from("RoutePermalink")->where("permalink = '".urlencode($url)."'")->fetchArray();
-
-		if($id!='')
+		$rp = Doctrine_Query::create()->select('extendedUrl')->from("Offer")->where("extendedUrl = '".urlencode($url)."'")->fetchArray();
+ 
+		if($id != '')
 		{
-			$exactLink = 'offer/couponinfo/id/'.$id;
+		 
 
-			if(@$rp[0]['permalink'] == $url )
+			if(@$rp[0]['extendedUrl'] == $url )
 			{
-				if( @$rp[0]['exactlink'] == $exactLink){
+				if( @$rp[0]['id'] == $id ){
 					$res = array( 	'status' => '200' ,
 							'url' => $url ,
 							'shopNavUrl' => $url ) ;
@@ -778,11 +778,10 @@ class Admin_OfferController extends Zend_Controller_Action {
 
 		}
 
-
 		if( strlen($url )  > 0)
     	{
 
-    		if(@$rp[0]['permalink'] != $url )
+    		if(@$rp[0]['extendedUrl'] != $url )
     		{
 				$res = array ( 'status' => '200',
 						'url' => $url,
