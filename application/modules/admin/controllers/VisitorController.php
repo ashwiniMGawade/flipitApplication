@@ -23,11 +23,32 @@ class Admin_VisitorController extends Zend_Controller_Action
 
 		# redirect of a user don't have any permission for this controller
 		$sessionNamespace = new Zend_Session_Namespace();
+		$this->_settings  = $sessionNamespace->settings['rights'] ;
 
-		if($sessionNamespace->settings['rights']['administration']['rights'] != '1' &&
-					$sessionNamespace->settings['rights']['administration']['rights'] != '2' )
-		{
-			$this->_redirect('/admin/auth/index');
+
+		# apply admin level access on all controllers 
+		if($this->getRequest()->isXmlHttpRequest()) {
+		
+			# add action as new case which needs to be viewed by other users
+			switch(strtolower($this->view->action)) {
+				case 'searchemails':
+				 	# no restriction
+				break;
+				default:
+					if( $this->_settings['administration']['rights'] != '1' &&
+						$this->_settings['administration']['rights'] != '2'  ) {
+
+		    			$this->getResponse()->setHttpResponseCode(404);
+   						$this->_helper->redirector('index' , 'index' , null ) ;
+					}
+
+			}
+
+		} else {
+			if($this->_settings['administration']['rights'] != '1' &&
+						$this->_settings['administration']['rights'] != '2' ) 	{
+				$this->_redirect('/admin/auth/index');
+			}
 		}
 	}
 	/**
