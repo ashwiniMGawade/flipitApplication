@@ -1,61 +1,10 @@
 # Noindex on static files which are not allowed to be cached.
-
-<FilesMatch "\.(pdf|xlsx|xls|po|pot|mo|csv)$">
-  <ifModule mod_headers.c>
-    Header set X-Robots-Tag "noindex, nofollow"
-  </ifModule>
-</FilesMatch>
-
 RewriteEngine On
 
-# 301 redirect for host name followed by dot (like kortingscode.nl. and flipit.com.)
-RewriteCond %{HTTP_HOST} ^(?:.+)?((kortingscode\.nl)\.(.*)) [NC]
-RewriteRule (.*) http://www.kortingscode.nl/$1 [L,R=301]
 
-RewriteCond %{HTTP_HOST} ^(?:.+)?((flipit\.com)\.(.*)) [NC]
-RewriteRule (.*) http://www.flipit.com/$1 [L,R=301]
-
-# used in conjunction with rewritemap in httpd.conf for forcing lowercase
-#RewriteCond %{REQUEST_URI} [A-Z]
-#RewriteRule ^[\/]*(.*)$ /${lc:$1} [R=301,L]
-
-#making public folder hidden from the sitemaps
-RewriteCond %{REQUEST_URI} !^public/sitemaps
-RewriteRule ^sitemaps/(.*)$ public/sitemaps/$1 [L]
-RewriteRule ^(.*)/sitemaps/(.*)$ public/$1/sitemaps/$2 [L]
-
-RewriteCond %{SERVER_NAME} www\.kortingscode\.nl [NC]
-RewriteRule ^robots.txt  /public/robots.txt [L]
-
-#redirect www.kortingscode.nl/admin ot www.flipit.com/admin
-RewriteCond %{HTTP_HOST} ^www\.kortingscode\.nl$  [NC]
-RewriteRule ^(admin\/.*)$ http://www.flipit.com/$1 [L,R=301]
-
-# redirect www.kortingscode.nl/admin/*  to www.flipit.com/admin/*
-RewriteCond %{HTTP_HOST} ^www\.kortingscode\.nl$  [NC]
-RewriteRule ^(admin\/.*)$ http://www.flipit.com/$1 [L,R=301]
-
-RewriteBase /
-DirectorySlash Off
-# remove trailing slash
-#RewriteRule ^(.*)\/(\?.*)?$ $1$2 [R=301,L]
-RewriteRule ^((?!nieuws).*)\/(\?.*)?$ $1$2 [R=301,L]
-
-# Remove multiple slashes anywhre in URL
-RewriteCond %{REQUEST_URI} ^(.*)//(.*)$  
-RewriteRule . %1/%2 [R=301,L]
-
-# Remove multiple slashes after domain
-RewriteCond %{THE_REQUEST} ^([A-Z]{3,9})\ (.*)//([^\ ]*)
-RewriteRule ^ %2/%3 [R=301,L]
-
-#RewriteRule . %1/%2 [R=301,L]
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteRule ^(((?!admin).)*((?!\/).))$ /$1/ [L,R=301]
-#RewriteRule ^index(.*)$ $1 [R=301,L]
+RewriteRule ^([a-z]{2})(\/)index(.*)$ /$1 [L,R=301,NC]
 RewriteRule ^index(.*)$ / [L,R=301,NC]
-#RewriteRule ^/?$ /index [NC,L]
+
 
 #wp redirects (old blog)
 RewriteRule ^nieuws/overzicht(.+)?$ http://www.kortingscode.nl/nieuws? [R=301,L]
@@ -73,6 +22,8 @@ RewriteRule ^nieuws/([a-zA-Z0-9_-]*)/([a-zA-Z0-9_-]*)/?$ public/blog/index.php [
 RewriteRule ^nieuws/([a-zA-Z0-9_-]*)/([a-zA-Z0-9_-]*)/([a-zA-Z0-9_-]*)/?$ public/blog/index.php [NC,L]
 RewriteRule ^nieuws/([a-zA-Z0-9_-]*)/([a-zA-Z0-9_-]*)/([a-zA-Z0-9_-]*)/([a-zA-Z0-9_-]*)/?$ public/blog/index.php [NC,L]
 RewriteRule ^.*$ public/index.php [NC,L]
+
+
 # ----------------------------------------------------------------------
 # Gzip compression
 # ----------------------------------------------------------------------

@@ -918,8 +918,8 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
 		 }
 
 		$lang   =   strtolower($request->getParam('lang')) ;
-     //   var_dump($request->getParams());
-	//	die;
+  /*   	var_dump($request->getParams());
+		die;*/
 
 		if(! empty($lang) && $module == 'default' )
 		{
