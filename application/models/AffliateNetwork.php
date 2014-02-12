@@ -43,19 +43,19 @@ class AffliateNetwork extends BaseAffliateNetwork
     $sortBy = isset($params['sortBy']) ? @$params['sortBy'] : 'id DESC';
     $delVal = isset($params['off']) ?  array($params['off']) : array(0, 1);  
  	
- 	$networkList = Doctrine_Query::create() 
- 	                  ->select ('a.name as name ,a.id, a.subId') 
- 	                  ->from ( "AffliateNetwork as a" )
- 	                  ->where( "a.name LIKE ?", "$srh%")
- 	                  ->andWhere("a.deleted = 0" )
- 	                  ->whereIn('a.status', $delVal )
- 	                  ->andWhere("a.replaceWithId IS NULL")
- 	                  ->orderBy($sortBy);
- 	
- 	$list =  DataTable_Helper::generateDataTableResponse($networkList,
- 					$params, array("__identifier" => 'a.id','a.id','a.name','a.subid'),
- 					array(),array()); 
- 	return $list;
+    $networkList = Doctrine_Query::create() 
+                      ->select ('a.name as name ,a.id, a.subId') 
+                      ->from ( "AffliateNetwork as a" )
+                      ->where( "a.name LIKE ?", "$srh%")
+                      ->andWhere("a.deleted = 0" )
+                      ->whereIn('a.status', $delVal )
+                      ->andWhere("a.replaceWithId IS NULL")
+                      ->orderBy($sortBy);
+
+    $list =  DataTable_Helper::generateDataTableResponse($networkList,
+    				$params, array("__identifier" => 'a.id','a.id','a.name','a.subid'),
+    				array(),array()); 
+    return $list;
  	
  }
  

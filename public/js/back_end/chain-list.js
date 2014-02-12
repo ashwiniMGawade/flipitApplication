@@ -6,13 +6,55 @@ $(document).ready(init);
  */
 function init() {
 
+	var iSearchText = $.bbq.getState( 'iSearchText' , true ) || undefined;
 	var iStart = $.bbq.getState('iStart', true) || 0;
 	var iSortCol = $.bbq.getState('iSortCol', true) || 1;
 	var iSortDir = $.bbq.getState('iSortDir', true) || 'ASC';
 
-		// call to keyword list function while loading
+	$("input#searchChain").keypress(function(e)
+	{
+		// if the key pressed is the enter key
+		  if (e.which == 13)
+		  {
+			  getChainList($(this).val(),0,0,'asc');
+			  e.preventDefault(); 
+		  }
+			  
+	});
+
+	$('#searchByChain').click(searchByChain);
+
+	//Auto complete search for top five records in a dropdown
+	$("#searchChain").autocomplete({
+        minLength: 1,
+        source: function( request, response){
+        	var searchText = $('#searchChain').val()=='' ? undefined : $('#searchChain').val();
+        	$.ajax({
+        		url : HOST_PATH + "admin/chain/search-chain/keyword/" + searchText + "/flag/0",
+     			method : "post",
+     			dataType : "json",
+     			type : "post",
+     			success : function(data) {
+     				
+     				if (data != null) {
+     					
+     					//pass array of the respone in respone object of the autocomplete
+     					response(data);
+     				} 
+     			},
+     			error: function(message) {
+     				
+     	            // pass an empty array to close the menu if it was initially opened
+     	            response([]);
+     	        }
+   		 });
+        },
+        select: function( event, ui ) {}
+    }); 
+
+	// call to keyword list function while loading
 	if ($("table#chainTable").length) {
-		getChainList(iStart, iSortCol, iSortDir);
+		getChainList(iSearchText,iStart, iSortCol, iSortDir);
 	}
 
 
@@ -24,7 +66,6 @@ function init() {
 
 	if( $("form#addChainForm").length > 0 )
 	{
-	
 		addChainValidation();
 	}
 }
@@ -37,9 +78,12 @@ var click = false;
  * 
  * @author blal
  */
-function getChainList(iStart, iSortCol, iSortDir) {
+function getChainList(iSearchText,iStart, iSortCol, iSortDir) {
 
 	addOverLay();
+	$("ul.ui-autocomplete").css('display','none');
+	$("ul.ui-autocomplete").html('');
+
 	$('#chainTable').addClass('widthTB');
 	chainListTbl = $("table#chainTable")
 			.dataTable(
@@ -59,17 +103,8 @@ function getChainList(iStart, iSortCol, iSortDir) {
 						"bDeferRender" : true,
 						"aaSorting" : [ [ iSortCol, iSortDir ] ],
 						"sPaginationType" : "bootstrap",
-						"sAjaxSource" : HOST_PATH + "admin/chain/chain-list",
+						"sAjaxSource" : HOST_PATH + "admin/chain/chain-list/searchText/"+ iSearchText,
 						"aoColumns" : [
-								{
-
-									"fnRender" : function(obj) {
-										return obj.aData.id;
-									},
-									"bSortable" : false,
-									"bVisible" : false,
-									"sType" : 'numeric'
-								},
 								{
 									"fnRender" : function(obj) {
 										if (obj.aData.name != null) {
@@ -117,7 +152,8 @@ function getChainList(iStart, iSortCol, iSortDir) {
 							state['iStart'] = obj._iDisplayStart;
 							state['iSortCol'] = obj.aaSorting[0][0];
 							state['iSortDir'] = obj.aaSorting[0][1];
-
+  							state[ 'iSearchText' ] = iSearchText;
+ 							$("#searchChain").val(iSearchText);
 							$("#chainTable")
 									.find('tr')
 									.find('p','td')
@@ -131,18 +167,14 @@ function getChainList(iStart, iSortCol, iSortDir) {
 												$.bbq.pushState(state);
 												window.location.href = HOST_PATH
 														+ "admin/chain/chain-item/chain/"
-														+ eId
-														+ "?iStart="
-														+ obj._iDisplayStart
-														+ "&iSortCol="
-														+ obj.aaSorting[0][0]
-														+ "&iSortDir="
-														+ obj.aaSorting[0][1]
-														+ "&eId=" + eId;
+														+ eId 
 											});
 
 							// Set the state!
-
+							    
+							if(iSearchText == undefined){
+								$.bbq.removeState( 'iSearchText' );
+							}
 							$.bbq.pushState(state);
 							hashValue = location.hash;
 
@@ -320,3 +352,18 @@ function addChainValidation(){
 }
 
 
+/**
+ * Function call when user click on shop search button 
+ * or press enter 
+ * @author kraj
+ */
+function searchByChain()
+{
+	
+	var searchChain = $("#searchChain").val();
+	if(searchChain =='' || searchChain == null)
+	{
+		searchChain = undefined;
+	}
+	getChainList(searchChain,0,0,'asc');
+}

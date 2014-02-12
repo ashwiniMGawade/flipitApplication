@@ -6,10 +6,12 @@ $(document).ready(init);
  */
 function init() {
 
+	 
 	var iStart = $.bbq.getState('iStart', true) || 0;
 	var iSortCol = $.bbq.getState('iSortCol', true) || 1;
 	var iSortDir = $.bbq.getState('iSortDir', true) || 'ASC';
 
+	 
 	var CKVal = $('input#checkBoxVal').val();
 	if (CKVal == 0 || CKVal == '0') {
 		$("#addStore").hide();
@@ -100,16 +102,7 @@ function getChainList(iStart, iSortCol, iSortDir) {
 						"sPaginationType" : "bootstrap",
 						"sAjaxSource" : HOST_PATH + "admin/chain/chain-item-list/id/" + $("input#chainId").val()  ,
 						"aoColumns" : [
-								{
-
-									"fnRender" : function(obj) {
-										return obj.aData.id;
-									},
-									"bSortable" : false,
-									"bVisible" : false,
-									"sType" : 'numeric'
-								},
-								{
+		 						{
 									"fnRender" : function(obj) {
 										if (obj.aData.shopName != null) {
 
@@ -136,7 +129,9 @@ function getChainList(iStart, iSortCol, iSortDir) {
 													+ '</a></p>';
 										}
 										return "";
-									}
+									},
+									"bSearchable" : true,
+									"bSortable" : true,
 								},
 								{
 									"fnRender" : function(obj) {
@@ -181,15 +176,14 @@ function getChainList(iStart, iSortCol, iSortDir) {
 						"fnDrawCallback" : function(obj) {
 							$('#keywordListTbl').css('opacity', 1);
 
+				    	   window.scrollTo(0, 0);
+
 							var state = {};
 							state['iStart'] = obj._iDisplayStart;
 							state['iSortCol'] = obj.aaSorting[0][0];
 							state['iSortDir'] = obj.aaSorting[0][1];
 
-							 
-
 							// Set the state!
-
 							$.bbq.pushState(state);
 							hashValue = location.hash;
 
@@ -296,3 +290,4 @@ function deleteChain(id) {
 				}
 			});
 }
+ 

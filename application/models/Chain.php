@@ -51,11 +51,14 @@ class Chain extends BaseChain
 	public static function returnChainList($params)
 	{
 	
+	   	$srh =  @$params["searchText"] != 'undefined' ? @$params["searchText"] : '';
+
 		$chainList = Doctrine_Query::create ()
 		->select ("c.name")
 		->from ( "Chain c")
 		->addSelect("(SELECT count(ci.id) FROM ChainItem ci WHERE ci.chainId = c.id ) as totalShops")
-		->orderBy("c.name ASC");
+		->where("c.name LIKE ?", "$srh%");
+		
 		
 		$list = DataTable_Helper::generateDataTableResponse($chainList,
 		$params,array("__identifier" => 'c.id','c.id','name','totalShops'),
@@ -196,5 +199,22 @@ class Chain extends BaseChain
 		return $chain;		
 	}
 	
+
+	/**
+	* get top five chains
+	* @param string $keyword
+	* @return array $data
+	* 
+	*/
+	public static function searchChainItrem($keyword) {
+
+
+		$data = Doctrine_Query::create()->select('c.name as name')
+		                                ->from("Chain as c")
+		                                ->andWhere("c.name LIKE ?", "$keyword%")
+		                                ->orderBy("c.name ASC")
+		                                ->limit(5)->fetchArray();
+		    return $data;
+	}
 
 }

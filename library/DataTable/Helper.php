@@ -190,7 +190,7 @@ class DataTable_Helper
 
          	//die($Q->getSqlQuery());
             // ######################## Execute Query ###################
-     	    $sqlQuery = $Q->getSqlQuery();
+     	  //  $sqlQuery = $Q->getSqlQuery();
             $data = $Q->fetchArray();
             $retData = array();
             if ($actions != null) {
@@ -256,7 +256,7 @@ class DataTable_Helper
             "iTotalRecords" => intval($iTotal),
             "iTotalDisplayRecords" => intval($iDTotal),
             "aaData" => $retData
-            ,"query" => $sqlQuery
+           // ,"query" => $sqlQuery
             );
         }
         // build response

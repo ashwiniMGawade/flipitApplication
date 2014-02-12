@@ -98,8 +98,9 @@ class ChainItem extends BaseChainItem
 				->select ("c.shopName as shopName,w.name as website,c.locale as locale,c.status as status")
 				->from ( "ChainItem c")
 				->leftJoin("c.website w")
-				->where("c.chainId = ?" , $params["id"])
-				->orderBy("c.shopName ASC");
+				->where("c.chainId = ?" , $params["id"]);
+	 
+			 
 
 				$list = DataTable_Helper::generateDataTableResponse($chainList,
 				$params,array("__identifier" => 'c.id','c.id','shopName','website','locale','status'),
@@ -283,4 +284,7 @@ class ChainItem extends BaseChainItem
 
 
 	}
+
+ 
+
 }

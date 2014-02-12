@@ -8,7 +8,7 @@ $(document).ready(function() {
 	getNetWorkList(iSearchText,iStart,iSortCol,iSortDir);
 	
 	$("input#searchNetwork").keypress(function(e)
-		{
+	{
 			
 			// if the key pressed is the enter key
 			  if (e.which == 13)
@@ -18,6 +18,7 @@ $(document).ready(function() {
 			  }
 			  
 	});
+
 	$('#searchByAff').click(searchByAffiliate);
 	//Auto complete search for top five records in a dropdown
 	$("#searchNetwork").autocomplete({
@@ -186,7 +187,7 @@ function getNetWorkList(iSearchText,iStart,iSortCol,iSortDir) {
  */
 function editNetwork(){
 	  var id =  $(this).children('p.colorAsLink').attr('editId');
-	  window.location =HOST_PATH + 'admin/affiliate/editaffiliate/id/' + id;
+	  window.location = HOST_PATH + 'admin/affiliate/editaffiliate/id/' + id;
 }
 
 /**

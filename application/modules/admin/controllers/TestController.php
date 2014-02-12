@@ -21,7 +21,7 @@ class Admin_TestController extends Zend_Controller_Action
 		$this->view->controllerName = $this->getRequest()->getParam('controller');
 		$this->view->action = $this->getRequest()->getParam('action');
 
-
+  
 	}
 
 

@@ -325,7 +325,29 @@ class Admin_ChainController extends Zend_Controller_Action
     	}
     	 
     }
-    
+
+    /**
+    * Retruns top 5 chains for search
+    * @author Sp Singhy
+    * @version 1.0
+    */
+    public function searchChainAction() {
+
+        $ch = $this->getRequest()->getParam('keyword' );
+        $data = Chain::searchChain( $ch);
+        $ar = array ();
+        if (sizeof ( $data ) > 0) {
+            foreach ( $data as $d ) {
+             $ar [] = $d ['name'];
+            }
+        } else {
+            $msg = $this->view->translate('No Record Found');
+            $ar [] = $msg;
+        }
+        echo Zend_Json::encode ($ar);
+        die ();
+    }
+ 
 }
 
 
