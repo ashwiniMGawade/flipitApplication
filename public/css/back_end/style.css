@@ -3391,6 +3391,10 @@ div.wrap.newsletter-setting-container {
 	margin-bottom: 60px;
 }
 
-.red {
-    color: #B94A48
+.mainpage-content.aboutShopNoteDiv .mainpage-content-line .mainpage-content-left {
+    padding: 5px 0;
 }
+.mainpage-content.aboutShopNoteDiv .mainpage-content-right {
+    box-shadow: 0 1px 0 #FFFFFF !important;
+    padding: 6px 10px;
+ }
