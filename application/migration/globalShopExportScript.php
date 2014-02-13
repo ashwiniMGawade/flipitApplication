@@ -711,9 +711,21 @@ class GlobalShopExport {
 			$objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
 			 
 			 
-			//write to an xlsx file and upload to excel folder locale basis
-			$pathToFile = PUBLIC_PATH ;
-			$shopFile = $pathToFile."excels/globalShopList.xlsx";
+			# define upload path for excell
+	    	defined('UPLOAD_EXCEL_PATH')
+		    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
+
+
+	    	$pathToFile = UPLOAD_EXCEL_PATH . 'excels/' ;
+
+	    	# create dir if not exists
+	    	if(!file_exists($pathToFile)) {
+	    		mkdir($pathToFile, 774, TRUE);
+	    	}
+
+	    	$filepath = $pathToFile . "shopList.xlsx" ;
+
+			$shopFile = $pathToFile."globalShopList.xlsx";
 			 
 			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 			$objWriter->save($shopFile);
