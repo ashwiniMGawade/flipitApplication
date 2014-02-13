@@ -172,7 +172,7 @@ class LoginController extends Zend_Controller_Action {
 				$emailFrom  = $email_data[0]['emailperlocale'];
 				 
 				$mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
-				$template_name = 'wlcm-email';
+    			$template_name = $this->getInvokeArg('welcomeTemplate');
 				$template_content = $mailData;
 				$message = array(
 						'subject'    => $this->view->translate('Wachtwoord Wijziging'),
