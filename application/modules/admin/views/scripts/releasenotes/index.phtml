@@ -4,11 +4,43 @@
 
 <div id="releaseNotes" class="wrap">
 
-	<h1>From the 16th of Decemer on Release Notes will no longer be written. For more information see Imbull management.</h1>
+	<h1>Release Notes</h1>
+
+	<h2>Version 1.19 - 13 Feb, 2013</h2>
+	<div><strong>Front-end features:</strong></div>
+	<ul>
+	    <li>Coupons - Updated coupon code an image which is half see through.</li>
+	    <li>Offers - All offer titles now are links.</li>
+	    <li>Source - All json has been moved to external files.</li>
+	    <li>New offer style - Has been applied to nomoney overview and to shops when there are no offers.</li>
+	    <li>US date - The timestamp on special list offers is displayed correct.</li>
+
+	</ul>
+
+    <div><strong>Front-end bugs:</strong></div>
+	<ul>
+	    <li>Search - In au search gave a 404. The reason is > no other keyword in the translation files can be the same as the link. So all other search translations must either be in CAPS or have extra words. Only the url "search" is allowed to be called search.</li>
+	    <li>/index - All /index pages are redirected to the homepage.</li>
+	</ul>
+
+
+	<div><strong>Back-end features:</strong></div>
+	<ul>
+		<li>Chains - Added search to the chain overview.</li>
+		<li>Create/ edit offer - Shop notes are not RED so nobody reads over them.</li>
+		<li>Security - Stripping all script tags from the CMS from all input fields.</li>
+		<li>Extended offers - Url's are checked on uniqueness.</li>
+	</ul>
+
+	<div><strong>Back-end bugs:</strong></div>
+	<ul>
+		<li>Global shop export - The export path was still set to the old public location. Because the file could not be written to that location is failed to save.</li>
+		<li>Shop delete - Shops can be deleted from trash.</li>
+		<li>Create/ edit offer/ newsticker - Create offer/ newsticker goes back to the overview.</li>
+		<li>Test newsletter - It is possible for editors to send a newsletter test.</li>
+	</ul>
 
 	<hr>
-
-	<h1>Release Notes</h1>
 
 	<h2>Version 1.13.2 - 3 Dec, 2013</h2>
 	<div><strong>Front-end features:</strong></div>

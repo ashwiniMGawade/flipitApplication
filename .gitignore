@@ -186,6 +186,7 @@
 # OS or Editor folders
 .DS_Store
 Thumbs.db
+gtData.js
 .cache
 .project
 .settings
