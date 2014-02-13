@@ -238,7 +238,7 @@ class OfferController extends Zend_Controller_Action {
     	$this->view->fbtitle = @$offerDetail[0]['title'];
     	$this->view->fbshareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
     	$this->view->fbImg = $img;
-    	if($params['vote']!= '0'){
+    	if(isset($params['vote']) && $params['vote']!= '0'){
 	        $vote = new Vote();
 	        $votepercentage =  $vote->doVote($params);
 	        $this->view->votepercentage = $votepercentage['vote'];
