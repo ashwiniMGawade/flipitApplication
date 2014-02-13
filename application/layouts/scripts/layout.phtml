@@ -79,7 +79,7 @@ echo $this->minifyHeadLink()->prependStylesheet("public/css/placeholder_polyfill
 							->prependStylesheet("public/css/front_end/style.css");
 
 echo $this->headStyle();
-echo $this->headScript()->prependFile ("public/js/common.js" )
+echo $this->minifyHeadScript()->prependFile ("public/js/common.js" )
 							  ->prependFile ("public/js/front_end/jquery-bigtext.js" )
  							  ->prependFile ("public/js/front_end/json/translation.js" )
  							  ->prependFile ("public/js/front_end/json/shops.js" )
