@@ -435,17 +435,23 @@ function getShopDetail(value){
 			success : function(data) {
 				if (data != null) {
 
-					if(data[0].notes!=''){
+
+					if(data[0].notes != '' && data[0].notes != null){
+
 						jQuery('#aboutShopNoteDiv').show();
-						jQuery('#shopNotes').html(data[0].notes);
-					}
-					
-					if(data[0].affname){
-						
-						jQuery('#aboutNertworkDiv').show();
-						jQuery('#shopNetwork').html(data[0].affname);
+						jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
+					} else {
+						jQuery('#shopNotes').html('&nbsp;')
+											  .removeClass('alert-error');
 					}
 
+					if(data[0].affname != '' && data[0].affname != null){
+						jQuery('#aboutNertworkDiv').show();
+						jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
+					} else {
+						jQuery('#shopNetwork').html('&nbsp;')
+											  .removeClass('alert-error');
+					}
 					
 					/*if(data[0].deepLink){
 						  jQuery('#offerRefUrl').val(data[0].deepLink).attr("disabled", "disabled");;	

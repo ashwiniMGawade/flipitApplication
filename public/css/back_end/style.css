@@ -3397,4 +3397,8 @@ div.wrap.newsletter-setting-container {
 .mainpage-content.aboutShopNoteDiv .mainpage-content-right {
     box-shadow: 0 1px 0 #FFFFFF !important;
     padding: 6px 10px;
+    border-color: #ffffff;
+ }
+ .mainpage-content.aboutShopNoteDiv .mainpage-content-right.alert-error {
+    border-color: #EED3D7 !important;
  }

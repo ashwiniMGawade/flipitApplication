@@ -414,7 +414,7 @@ function setFormData(data){
 			 jQuery('input.spancombo').val(data[0].shop.name);
 			 if(data[0].shop.notes!=''){
 				jQuery('#aboutShopNoteDiv').show();
-				jQuery('#shopNotes').html(data[0].shop.notes);
+				jQuery('#shopNotes').html(data[0].shop.notes).addClass('alert-error');
 			 }
 			 jQuery('#aboutShopDiv').show();
 		     if(data[0].shop.accountManagerName!=''){
@@ -423,7 +423,7 @@ function setFormData(data){
 			 }
 			 if(data[0].affname){
 				jQuery('#aboutNertworkDiv').show();
-				jQuery('#shopNetwork').html(data[0].affname);
+				jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');
 			 }
 	   }	 
 	}
@@ -705,15 +705,21 @@ function getShopDetail(value){
 					
 					//if(data[0].notes!='' || data[0].accountManagerName!='' || data[0].accountManagerName!='') {
 						
-					if(data[0].notes!=''){
-						jQuery('#aboutShopNoteDiv').show();
-						jQuery('#shopNotes').html(data[0].notes);
-					}
-					
+					if(data[0].notes != '' && data[0].notes != null){
 
-					if(data[0].affname!=''){
+						jQuery('#aboutShopNoteDiv').show();
+						jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
+					} else {
+						jQuery('#shopNotes').html('&nbsp;')
+											  .removeClass('alert-error');
+					}
+
+					if(data[0].affname != '' && data[0].affname != null){
 						jQuery('#aboutNertworkDiv').show();
-						jQuery('#shopNetwork').html(data[0].affname);
+						jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
+					} else {
+						jQuery('#shopNetwork').html('&nbsp;')
+											  .removeClass('alert-error');
 					}
 					
 					jQuery('#aboutShopDiv').show();
