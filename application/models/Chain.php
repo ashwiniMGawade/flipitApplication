@@ -206,7 +206,7 @@ class Chain extends BaseChain
 	* @return array $data
 	* 
 	*/
-	public static function searchChainItrem($keyword) {
+	public static function searchChain($keyword) {
 
 
 		$data = Doctrine_Query::create()->select('c.name as name')
