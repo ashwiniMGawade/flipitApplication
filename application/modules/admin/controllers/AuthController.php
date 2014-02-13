@@ -234,7 +234,7 @@ class Admin_AuthController extends Zend_Controller_Action {
 					$subject = $this->view->translate("Forgot password");
 					$body = $bodyText;
 					//send a mail to user password update notification
-					//$sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents,$subject, $body);
+					$sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents,$subject, $body);
 					$url  =  HTTP_PATH . 'admin/auth/pwdresetsuccessfully';
 					$this->_redirect($url);
 				
