@@ -3062,6 +3062,8 @@ class Offer extends BaseOffer
     */
    public static function addConversion($id)
    {
+
+	 
 		$clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
 		$ip = ip2long($clientIP);
 
@@ -3069,16 +3071,17 @@ class Offer extends BaseOffer
 	   	if(Offer:: getcloakLink($id , true ))
 	   	{
 	   		   	# check for previous cnversion of same ip
-			   	$data = Doctrine_Query::create()
-					   	->select('count(c.id) as exists')
-			   			->addSelect("(SELECT  id FROM Conversions  con  WHERE con.id = c.id) as conversionId")
+			 	$data = Doctrine_Query::create()
+					   	->select('count(c.id) as exists,c.id')
 	   					->from('Conversions c')
 	   					->andWhere('c.offerId="'.$id.'"')
 	   					->andWhere('c.IP="'.$ip.'"')
 	   					->andWhere("c.converted=0")
+	   					->groupBy('c.id')
 	   		   		    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-		   	if($data['exists'] == 0 ){
+		
+		   	if(! $data['exists']){
 
 		   		# save conversion detail if an offer is associated with a network
 		   		$cnt  = new Conversions();
@@ -3092,8 +3095,9 @@ class Offer extends BaseOffer
 
 		   	} else{
 
+
 		   		# update existing conversion detail
-		   		$cnt = Doctrine_Core::getTable("Conversions")->find($data['conversionId']);
+		   		$cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
 		   		if($cnt)
 		   		{
 			   		$cnt->utma = $_COOKIE["__utma"];
