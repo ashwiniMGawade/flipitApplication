@@ -746,7 +746,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 					switch ($key) {
 						case 'o2feed' :
 							
-							if($lang == 'pl'){
+							if($lang == 'pl' || $lang == 'in'){
 								$router->addRoute("langmod_$key", new Zend_Controller_Router_Route(
 										'/:lang/'.$r->route,
 										array(

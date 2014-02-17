@@ -12,7 +12,9 @@ class O2feedController extends  Zend_Controller_Action
     public function top10XmlAction()
     {
 
-        
+       
+
+
     	$this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
@@ -32,7 +34,7 @@ class O2feedController extends  Zend_Controller_Action
         $domainPath = $domain . '/' . $locale;
 
         // Create the RSS array
-        $title =  $this->view->translate('Kortingscode.nl populairste kortingscodes') ;
+        $title =  $this->view->translate('Flipit.com/pl populairste kortingscodes') ;
         $link = $domainPath ;
         $desc  = $this->view->translate('Populairste kortingscodes') ;
 
@@ -46,11 +48,12 @@ class O2feedController extends  Zend_Controller_Action
         //channel
         $xml->startElement("channel");
 
+        $lang = str_replace("_","-", Zend_Registry::get('Zend_Locale') );
         //title, desc, link, date
         $xml->writeElement('title', $title);
         $xml->writeElement('description', $desc);
         $xml->writeElement('link', $link );
-        $xml->writeElement('language', 'nl');
+        $xml->writeElement('language', $lang);
 
         // Cycle through the rankings, creating an array storing
         // each, and push the array onto the $entries array
