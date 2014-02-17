@@ -656,6 +656,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		if($routeProp[0] != 'admin' && in_array(strtolower($routeProp[0]), $this->_moduleNames) ) {
 
 
+
 			$frontController = Zend_Controller_Front::getInstance();
 			$router = $frontController->getRouter();
 			if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl")
@@ -684,9 +685,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 						)
 				));
 
-						foreach($config->routes as $key => $r){
-								switch($key)
-								{
+				foreach($config->routes as $key => $r){
+					switch($key)
+					{
 
 									case 'usermenu' :
 
@@ -736,23 +737,42 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 			foreach($config->routes as $key => $r){
 
+			
 
 				if($r->type != "Zend_Controller_Router_Route_Regex")
 				{
 					$module  = isset($r->defaults->module) ? $r->defaults->module : 'default' ;
 					$page = isset($r->defaults->page) ? 1 : null ;
-					$router->addRoute("langmod_$key", new Zend_Controller_Router_Route(
-								'/:lang/'.$r->route,
-								array(
-										'lang' => ':lang',
-										'action' => $r->defaults->action,
-										'controller' => $r->defaults->controller,
-										'module' => $module,
-										'page' => $page
-								)
-						));
-				} else
-				{
+					switch ($key) {
+						case 'o2feed' :
+							
+							if($lang == 'pl'){
+								$router->addRoute("langmod_$key", new Zend_Controller_Router_Route(
+										'/:lang/'.$r->route,
+										array(
+												'lang' => ':lang',
+												'action' => 'top10.xml',
+												'controller' => 'o2feed'
+										)
+								));
+							}
+							break;
+						
+						default:
+							$router->addRoute("langmod_$key", new Zend_Controller_Router_Route(
+										'/:lang/'.$r->route,
+										array(
+												'lang' => ':lang',
+												'action' => $r->defaults->action,
+												'controller' => $r->defaults->controller,
+												'module' => $module,
+												'page' => $page
+										)
+								));
+							
+							break;
+					}
+				} else {
 
 					# base route for language params
 					$lang = new Zend_Controller_Router_Route(
@@ -772,49 +792,48 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 						);
 
 
+					switch($key)
+					{
+						
+						case 'profilepage' :
 
-				switch($key)
-				{
-					case 'profilepage' :
+							# validate page parameter with regex
+							$page = new Zend_Controller_Router_Route_Regex(
+									'^(\d?+)$',
+									array( 'page' => '1','action' => 'index'),
+									array( 1 => 'page' ),
+									'%d'
+							);
 
-						# validate page parameter with regex
-						$page = new Zend_Controller_Router_Route_Regex(
-								'^(\d?+)$',
-								array( 'page' => '1','action' => 'index'),
-								array( 1 => 'page' ),
-								'%d'
-						);
+							# cretae page route chain
+							$chainedRoute = new Zend_Controller_Router_Route_Chain();
+							$pageChained = $chainedRoute->chain($lang)
+											->chain($baseChain)
+											->chain($page);
+							# add routes to router
+							$router->addRoute('redactier_page', $pageChained);
 
-						# cretae page route chain
-						$chainedRoute = new Zend_Controller_Router_Route_Chain();
-						$pageChained = $chainedRoute->chain($lang)
-										->chain($baseChain)
-										->chain($page);
-						# add routes to router
-						$router->addRoute('redactier_page', $pageChained);
+						break;
+						case 'aboutdefault' :
 
-					break;
-					case 'aboutdefault' :
+							# validate slug parameter with regex i.e name of redactie
+							$slug = new Zend_Controller_Router_Route_Regex(
+									'^([a-zA-Z]+(?:-[a-zA-Z]+)?+)+$',
+									array( 'slug' => '','action' => 'profile'),
+									array( 1 => 'slug' ),
+									'%d'
+							);
 
-						# validate slug parameter with regex i.e name of redactie
-						$slug = new Zend_Controller_Router_Route_Regex(
-								'^([a-zA-Z]+(?:-[a-zA-Z]+)?+)+$',
-								array( 'slug' => '','action' => 'profile'),
-								array( 1 => 'slug' ),
-								'%d'
-						);
+							# cretae slug route chain
+							$chainedRouteSlug = new Zend_Controller_Router_Route_Chain();
+							$slugChained = $chainedRouteSlug->chain($lang)
+											->chain($baseChain)
+											->chain($slug);
 
-						# cretae slug route chain
-						$chainedRouteSlug = new Zend_Controller_Router_Route_Chain();
-						$slugChained = $chainedRouteSlug->chain($lang)
-										->chain($baseChain)
-										->chain($slug);
-
-						# add routes to router
-						$router->addRoute('redactier_slug', $slugChained);
-					break;
-
-				}
+							# add routes to router
+							$router->addRoute('redactier_slug', $slugChained);
+						break;
+ 					}
 
 				}
 			}
@@ -822,12 +841,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 		} else {
 
-
+			$router1 = Zend_Controller_Front::getInstance()->getRouter();
 			 # trigger error for flipt.com
 			if($domain == "flipit.com" || $domain == "www.flipit.com")
 			{
 				$router1 = Zend_Controller_Front::getInstance()->getRouter();
-
 
 		  	    $router1->addRoute("marktplaatsfeed", new Zend_Controller_Router_Route(
 								'marktplaatsfeed',
@@ -842,12 +860,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		  	    $router1->addRoute("metronieuws", new Zend_Controller_Router_Route(
 		  	    		'metronieuws/top10.xml',
 		  	    		array(
-
 		  	    				'action' => "error",
 		  	    				'controller' => "error"
 		  	    		)
 		  	    ));
-
 
 		  	    $router1->addRoute("sargassofeed", new Zend_Controller_Router_Route(
 								'sargassofeed',
@@ -858,10 +874,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 								)
 				  ));
-
-
 			}
-
 			//route redirection instance for rules written in routes.ini
 			$router = Zend_Controller_Front::getInstance()->getRouter();
 			$router->addConfig(new Zend_Config_Ini(APPLICATION_PATH.'/configs/routes.ini', 'production'), 'routes');
