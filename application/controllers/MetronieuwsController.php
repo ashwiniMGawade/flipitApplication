@@ -24,14 +24,8 @@ class MetronieuwsController extends  Zend_Controller_Action
     	$domain1 = $_SERVER['HTTP_HOST'];
     	$domain = 'http://'.$domain1;
 
-    	# set locale
-    	$locale = '';
-    	if(isset($_COOKIE['locale']) && ($_COOKIE['locale']) != 'en') {
-			$locale = '/' . $_COOKIE['locale'];
-    	}
-
     	#  doamin path with locale
-    	$domainPath = $domain . $locale;
+    	$domainPath = $domain ;
 
     	// Create the RSS array
     	$title =  $this->view->translate('Kortingscode.nl populairste kortingscodes') ;
