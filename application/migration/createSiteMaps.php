@@ -101,7 +101,7 @@ class CreateSiteMaps {
 			$suffix = "_" . strtoupper($key) ;
 		}
 		
-		$domainForRobot = $this->_hostName . '/' . $this->_localePath;
+		$domainForRobot = $this->_hostName . '/public/' . $this->_localePath;
 		
 		
 		defined('PUBLIC_PATH')
