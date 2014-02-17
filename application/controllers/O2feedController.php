@@ -12,9 +12,6 @@ class O2feedController extends  Zend_Controller_Action
     public function top10XmlAction()
     {
 
-       
-
-
     	$this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
