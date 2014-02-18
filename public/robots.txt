@@ -5,6 +5,6 @@ Disallow:/out/
 Disallow:/zoeken/
 Disallow:/admin/
 
-Sitemap:http://www.kortingscode.nl/sitemaps/sitemap_shops.xml
-Sitemap:http://www.kortingscode.nl/sitemaps/sitemap_bespaarwijzer.xml
-Sitemap:http://www.kortingscode.nl/sitemaps/sitemap_main.xml
+Sitemap:http://www.kortingscode.nl/public/sitemaps/sitemap_shops.xml
+Sitemap:http://www.kortingscode.nl/public/sitemaps/sitemap_bespaarwijzer.xml
+Sitemap:http://www.kortingscode.nl/public/sitemaps/sitemap_main.xml

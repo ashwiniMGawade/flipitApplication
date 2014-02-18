@@ -5,6 +5,6 @@ Disallow:/out/
 Disallow:/search/
 Disallow:/admin/
 
-Sitemap:http://www.flipit.com/sg/sitemaps/sitemap_shops.xml
-Sitemap:http://www.flipit.com/sg/sitemaps/sitemap_savingguides.xml
-Sitemap:http://www.flipit.com/sg/sitemaps/sitemap_main.xml
+Sitemap:http://www.flipit.com/public/sg/sitemaps/sitemap_shops.xml
+Sitemap:http://www.flipit.com/public/sg/sitemaps/sitemap_savingguides.xml
+Sitemap:http://www.flipit.com/public/sg/sitemaps/sitemap_main.xml
