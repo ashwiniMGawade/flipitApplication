@@ -11534,11 +11534,13 @@ div.voucher-col-top-20 .shop-logo-img img {
     width: 400px;
 }
 
-
 .voucher-col1-top-20-heading h3 {
     font-size: 16px;
     font-weight: 700;
     line-height: normal;
+}
+.voucher-col1-top-20-heading h3 a{
+    color:#000
 }
 
 .voucher-col-top-20 .shop-logo-img img.radiusImg {
@@ -11592,4 +11594,7 @@ div.voucher-col-top-20 .shop-logo-img img {
 }
 .similar-promotionl-offer-cont div.voucher-col1 a.new_box_cont p {
 	padding: 0px 0 5px
+}
+.voucher-col1-top-heading-new h3 a {
+	color: #000;
 }
