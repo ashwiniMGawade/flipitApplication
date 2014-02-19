@@ -528,12 +528,13 @@ class Admin_UserController extends Zend_Controller_Action
     public function permanentdeleteAction() {
 
 		$id = $this->getRequest()->getParam('id');
+		
 		if ($id) {
 
 			$User = new User();
 			$User->updateInDatabase($id, null, 1);
 
-			$u = Doctrine_Core::getTable("User")->find($id);
+/*			$u = Doctrine_Core::getTable("User")->find($id);
 			$del1 = Doctrine_Query::create()->delete()
 					->from('refUserWebsite w')->where("w.userId=" . $id)
 					->execute();
@@ -544,7 +545,7 @@ class Admin_UserController extends Zend_Controller_Action
 
 				$del2 = Doctrine_Query::create()->delete()->from('ProfileImage i')
 					->where("i.id=" . $u->profileImageId)->execute();
-			}
+			}*/
 
 		} else {
 
