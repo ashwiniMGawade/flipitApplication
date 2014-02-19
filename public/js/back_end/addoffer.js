@@ -447,10 +447,9 @@ function getShopDetail(value){
 
 					if(data[0].affname != '' && data[0].affname != null){
 						jQuery('#aboutNertworkDiv').show();
-						jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
+						jQuery('#shopNetwork').html(data[0].affname);
 					} else {
-						jQuery('#shopNetwork').html('&nbsp;')
-											  .removeClass('alert-error');
+						jQuery('#shopNetwork').html('&nbsp;');
 					}
 					
 					/*if(data[0].deepLink){
