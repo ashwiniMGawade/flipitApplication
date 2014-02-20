@@ -40,8 +40,7 @@ class User extends BaseUser
     public function validatePassword($passwordToBeVerified) {
 
         if ($this->password == md5($passwordToBeVerified)) {
-
-               return true;
+           return true;
         }
         return false;
     }
@@ -578,114 +577,139 @@ class User extends BaseUser
 
         $connections = $application->getOption('doctrine');
 
-        $manager = Doctrine_Manager::getInstance();
+        foreach ( $connections as $key => $connection ) {
 
-          if($flag==0){
+            // check database is being must be site 
+            if ($key != 'imbull' && isset($connection ['dsn'])) {
 
-            foreach ( $connections as $key => $connection ) {
-                // check database is being must be site
-                if ($key != 'imbull') {
-                    try {
-                            if(isset($connection ['dsn'])){
-                                    //echo $connection ['dsn'] . "<br/>";
-                                    //$manager->closeConnection($DMC1);
-
-                                    $DMC = Doctrine_Manager::connection($connection ['dsn'], 'doctrine_site');
-
-                                    $o = Doctrine_Query::create()->update('Offer')->set('authorName',"'$fullName'")
-                                        ->where('authorId=' . $id);
-                                    $o->execute();
-
-                                    $p = Doctrine_Query::create()->update('Page')->set('contentManagerName', "'$fullName'")
-                                        ->where('contentManagerId=' . $id);
-                                    $p->execute();
+                # create a run tiem connection to all site to update editor data
+                $connObj = BackEnd_Helper_DatabaseManager::addConnection($key);
+                $conn = $connObj['adapter'];
 
 
-                                    $a = Doctrine_Query::create()->update('Articles')->set('authorname', "'$fullName'")
-                                        ->where('authorid=' . $id);
-                                    $a->execute();
+                if($flag==0){
+        
+                    $o = Doctrine_Query::create($conn)->update('Offer')->set('authorName',"'$fullName'")
+                        ->where('authorId=' . $id);
+                    $o->execute();
 
-                                    $s = Doctrine_Query::create()->update('Shop')->set('accountManagerName', "'$fullName'")
-                                        ->where('accoutManagerId=' . $id);
-                                    $s->execute();
+                    $p = Doctrine_Query::create($conn)->update('Page')->set('contentManagerName', "'$fullName'")
+                        ->where('contentManagerId=' . $id);
+                    $p->execute();
 
 
-                                    $s1 = Doctrine_Query::create()->update('Shop')->set('contentManagerName', "'$fullName'")
-                                        ->where('contentManagerId=' . $id);
-                                    $s1->execute();
+                    $a = Doctrine_Query::create($conn)->update('Articles')->set('authorname', "'$fullName'")
+                        ->where('authorid=' . $id);
+                    $a->execute();
 
-                                    $manager->closeConnection($DMC);
+                    $s = Doctrine_Query::create($conn)->update('Shop')->set('accountManagerName', "'$fullName'")
+                        ->where('accoutManagerId=' . $id);
+                    $s->execute();
 
-                            }
 
-                    } catch ( Exception $e ) {
+                    $s1 = Doctrine_Query::create($conn)->update('Shop')->set('contentManagerName', "'$fullName'")
+                        ->where('contentManagerId=' . $id);
+                    $s1->execute();
 
-                        echo $e->getMessage ();
-                        echo "\n\n";
-                    }
-                    echo "\n\n";
-                }
+                } else if($flag==1){
 
-            }
 
-          } else if($flag==1){
+                    //update offer
+                    $offers = Doctrine_Query::create()->select('id')->from('Offer')->where('authorId=' . $id)->fetchArray();
 
-            foreach ( $connections as $key => $connection ) {
+                    # check if there is atleast one offer exists in the array
+                    if(count($offers) > 0){
 
-                // check database is being must be site
-                if ($key != 'imbull') {
+                        $ids = array();
 
-                    try {
-
-                        if(isset($connection ['dsn'])) {
-
-                            $connObj = BackEnd_Helper_DatabaseManager::addConnection($key);
-                            $conn = $connObj['adapter'];
-
-                            //echo $connection ['dsn'] . "<br/>";
-
-                            //update shops
-                            $shops = Doctrine_Query::create($conn)
-                                ->select('id,name')->from('Shop')
-                                ->where('contentManagerId=' . $id)->fetchArray();
-                            
-                            # check if there is atleast one shop exists in the array
-                            if(count($shops) > 0){
-
-                                $ids = array();
-
-                                if(!empty($shops)):
-                                    foreach($shops as $arr):
+                        if(!empty($offers)):
+                            foreach($offers as $arr):
                                         $ids[] = $arr['id'];
                                     endforeach;
-                                endif;
-                                $s1 = Doctrine_Query::create($conn)
-                                    ->update('Shop')
-                                    ->set('contentManagerName', "'$fullName'")
-                                    ->set('contentManagerId', 0)
-                                    ->whereIn('id', $ids)
-                                    ->execute();
+                        endif;
 
-                            }
+                        $o = Doctrine_Query::create($conn)->update('Offer')->set('authorName',"'$fullName'")
+                                ->set('authorName',"'$fullName'")
+                                ->set('authorId',0)
+                                ->whereIn('id', $ids) 
+                                ->execute();
 
-                            $connObj = BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
-                        }
-                    } catch ( Exception $e ) {
-
-                        echo $e->getMessage ();
-                        echo "\n\n";
                     }
-                echo "\n\n";
-                
+
+
+
+                    //update page
+                    $page = Doctrine_Query::create()->select('id')->from('Page')->where('contentManagerId=' . $id)->fetchArray();
+
+                    # check if there is atleast one page exists in the array
+                    if(count($page) > 0){
+
+                        $ids = array();
+
+                        if(!empty($page)):
+                            foreach($page as $arr):
+                                        $ids[] = $arr['id'];
+                                    endforeach;
+                        endif;
+
+                        $p = Doctrine_Query::create()->update('Page')
+                                ->set('contentManagerName', "'$fullName'")
+                                ->set('contentManagerId', 0)
+                                ->whereIn('id', $ids);
+                                $p->execute();
+
+                    }
+
+                    //update articles
+                    $art = Doctrine_Query::create()->select('id')->from('Articles')->where('authorid=' . $id)->fetchArray();
+
+                    # check if there is atleast one page exists in the array
+                    if(count($art) > 0){
+
+                        $ids = array();
+
+                        if(!empty($art)):
+                            foreach($art as $arr):
+                                        $ids[] = $arr['id'];
+                                    endforeach;
+                        endif;
+
+                        $a = Doctrine_Query::create()->update('Articles')->set('authorname', "'$fullName'")
+                                ->set('authorid', 0)
+                                ->whereIn('id', $ids)
+                                ->execute();
+
+                    }
+
+                    //update shops
+                    $shops = Doctrine_Query::create($conn)
+                        ->select('id,name')->from('Shop')
+                        ->where('contentManagerId=' . $id)->fetchArray();
+                    
+                    # check if there is atleast one shop exists in the array
+                    if(count($shops) > 0){
+
+                        $ids = array();
+
+                        if(!empty($shops)):
+                            foreach($shops as $arr):
+                                        $ids[] = $arr['id'];
+                                    endforeach;
+                        endif;
+
+                        $s = Doctrine_Query::create($conn)
+                            ->update('Shop')
+                            ->set('contentManagerName', "'$fullName'")
+                            ->set('contentManagerId', 0)
+                            ->whereIn('id', $ids)
+                            ->execute();
+                    }
+                }
+                $connObj = BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
             }
-
-
-          }
-      }
-
-       //return true;
-
+        }
     }
+
    /**
     * set user session related SS0
     * @param integer $uId

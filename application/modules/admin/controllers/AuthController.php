@@ -96,14 +96,12 @@ class Admin_AuthController extends Zend_Controller_Action {
 		
 		$result = $auth->authenticate($data_adapter);
 
-		
-		
 		if (Auth_StaffAdapter::hasIdentity()) {
 			
 			
 			//create object of user class
 			$timeSeconds = 28800;
-//			$Obj = new User();
+
 			$Obj = Doctrine_Core::getTable('User')
 			->findOneBy('id', Auth_StaffAdapter::getIdentity()->id);
 			
