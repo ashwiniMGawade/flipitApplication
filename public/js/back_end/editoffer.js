@@ -823,7 +823,7 @@ function getShopDetail(value){
 
 		 });
 	} else{
-		jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+		jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
 		jQuery(".strict-confirmation-alert").hide();
 	}
 }
