@@ -361,6 +361,7 @@ class Shop extends BaseShop {
 
 		$this->showSimliarShops = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['similarShops']);
 		$this->showChains = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['showChains']);
+		$this->strictConfirmation = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['strictConfirmation']);
 
 		// shop extra properties
 		$this->displayExtraProperties = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties']);
@@ -828,21 +829,9 @@ class Shop extends BaseShop {
  * @return shopDetail
  */
 public static function  getShopDetail ($shopId){
-
-	/*
+ 
 		$shopDetail = Doctrine_Query::create()
-		->select('s.notes,s.accountManagerName,s.deepLink,a.name as affname,cat.*')
-		->from("Shop s")
-		->leftJoin('s.affliatenetwork a')
-		->leftJoin('s.category cat')
-		->where('s.deleted=0')
-		->andWhere("s.id =$shopId")->fetchArray();
-		return $shopDetail;
-	*/
-
-
-		$shopDetail = Doctrine_Query::create()
-		->select('s.notes,s.accountManagerName,s.deepLink,s.deeplinkstatus,a.name as affname,cat.*')
+		->select('s.notes,s.accountManagerName,s.deepLink,s.deeplinkstatus,s.strictConfirmation,a.name as affname,cat.*')
 		->from("Shop s")
 		->leftJoin('s.affliatenetwork a')
 		->leftJoin('s.category cat')

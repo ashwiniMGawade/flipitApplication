@@ -978,7 +978,7 @@ class Offer extends BaseOffer
 
 	public static function getOfferDetail($offerId){
 		$shopDetail = Doctrine_Query::create()
-		->select('o.*,s.name,s.notes,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
+		->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
 		->from("Offer o")
 		->leftJoin('o.shop s')
 		->leftJoin('s.affliatenetwork a')

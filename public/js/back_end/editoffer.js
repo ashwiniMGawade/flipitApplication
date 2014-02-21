@@ -425,6 +425,33 @@ function setFormData(data){
 				jQuery('#aboutNertworkDiv').show();
 				jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');
 			 }
+
+			 // check if selected shop has restrcited content or not
+			// if yes then disable submit button and ask check to accept term and conditions
+			if(data[0].shop.strictConfirmation) {
+
+				jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
+				jQuery(".strict-confirmation-alert").show();
+				jQuery('#enableSaveButtons').removeAttr('checked');
+
+				// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
+				jQuery('#enableSaveButtons').click(function(){
+
+					if(data[0].shop.strictConfirmation){
+
+						if(jQuery(this).is(':checked')){
+							jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
+						} else{
+							jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
+						}
+					}
+				});
+
+
+			} else{
+				jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+				jQuery(".strict-confirmation-alert").hide();
+			}
 	   }	 
 	}
 	
@@ -694,100 +721,111 @@ function selectPagesInList() {
 }
 
 function getShopDetail(value){
-	jQuery('#selctedshop,#selctedPrvshop').val(value);
-	//jQuery('#aboutShopDiv,#aboutShopNoteDiv,#aboutManagerDiv,#aboutNertworkDiv').hide();
-    jQuery.ajax({
-		url : HOST_PATH + "admin/offer/shopdetail/shopId/" + value,
-			dataType : "json",
-			success : function(data) {
-				
-				if (data != null) {
+
+	if(value != "") {
+
+		jQuery('#selctedshop,#selctedPrvshop').val(value);
+		//jQuery('#aboutShopDiv,#aboutShopNoteDiv,#aboutManagerDiv,#aboutNertworkDiv').hide();
+	    jQuery.ajax({
+			url : HOST_PATH + "admin/offer/shopdetail/shopId/" + value,
+				dataType : "json",
+				success : function(data) {
 					
-					//if(data[0].notes!='' || data[0].accountManagerName!='' || data[0].accountManagerName!='') {
+					if (data != null) {
 						
-					if(data[0].notes != '' && data[0].notes != null){
+						if(data[0].notes != '' && data[0].notes != null){
 
-						jQuery('#aboutShopNoteDiv').show();
-						jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
-					} else {
-						jQuery('#shopNotes').html('&nbsp;')
-											  .removeClass('alert-error');
-					}
+							jQuery('#aboutShopNoteDiv').show();
+							jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
+						} else {
+							jQuery('#shopNotes').html('&nbsp;')
+												  .removeClass('alert-error');
+						}
 
-					if(data[0].affname != '' && data[0].affname != null){
-						jQuery('#aboutNertworkDiv').show();
-						jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
-					} else {
-						jQuery('#shopNetwork').html('&nbsp;')
-											  .removeClass('alert-error');
-					}
-					
-					jQuery('#aboutShopDiv').show();
-					
-					jQuery('#categoryListdiv').each(function() {
-						var checkboxes = jQuery(this).find("input:checkbox");
+						if(data[0].affname != '' && data[0].affname != null){
+							jQuery('#aboutNertworkDiv').show();
+							jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
+						} else {
+							jQuery('#shopNetwork').html('&nbsp;')
+												  .removeClass('alert-error');
+						}
 						
-						//console.log(bnt);
-						 
-						checkboxes.each(function() {
-							var checkbox = jQuery(this);
-							if (checkbox.attr("checked")){
-								jQuery('#categoryBtn-'+checkbox.val()).click();
-							} 
-						});	
-					});		
- 
- /*
-					if(data[0].deepLink){
-						  jQuery('#offerRefUrl').val(data[0].deepLink);	
-						  
-						  
-						  if(data[0].deepLinkStatus){
-							  jQuery('#deepLinkOnbtn').click();
-							  
-						  }else{
-							  jQuery('#deepLinkoofbtn').click();
-						  }
-						  
-						  
-						}else{
-							 jQuery('#offerRefUrl').attr("disabled", "disabled");
-							 //jQuery('#deepLinkoofbtn').click();	
-					}
-					
-					*/
-					var catCount = data[0].category.length;
-					
-					for(var i=0 ; i< catCount ; i++ ){
-						// Add class by Er.kundal for select catg of shop
-						jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
-						jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
-					}
-					
-					if(data[0].notes=='' && data[0].affname=='' && data[0].accountManagerName=='') {
-						jQuery('#aboutShopDiv').hide();
-					}
-					
-					/*if(data[0].notes=='' || data[0].accountManagerName=='' || data[0].affname=='') {
-						 jQuery('#aboutShopNoteDiv').hide();
-						 jQuery('#aboutManagerDiv').hide();
-						 jQuery('#aboutNertworkDiv').hide();
-						 jQuery('#aboutShopDiv').hide();
-					}*/
+						jQuery('#aboutShopDiv').show();
+						
+						jQuery('#categoryListdiv').each(function() {
+							var checkboxes = jQuery(this).find("input:checkbox");
+							
+							//console.log(bnt);
+							 
+							checkboxes.each(function() {
+								var checkbox = jQuery(this);
+								if (checkbox.attr("checked")){
+									jQuery('#categoryBtn-'+checkbox.val()).click();
+								} 
+							});	
+						});		
+	 
+							
+							// check if selected shop has restrcited content or not
+							// if yes then disable submit button and ask check to accept term and conditions
+							if(data[0].strictConfirmation) {
 
-				//} else {
-					
-				//	jQuery('#aboutShopDiv').hide();
-					//}
-				}
-			},
-			error: function(message) {
-	            // pass an empty array to close the menu if it was initially opened
-	           // response([]);
-	        }
+								jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
+								jQuery(".strict-confirmation-alert").show();
+								jQuery('#enableSaveButtons').removeAttr('checked');
+
+								// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
+								jQuery('#enableSaveButtons').click(function(){
+
+									if(data[0].strictConfirmation){
+
+										if(jQuery(this).is(':checked')){
+											jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
+										} else{
+											jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
+										}
+									}
+								});
+							} else{
+								jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
+								jQuery(".strict-confirmation-alert").hide();
+							}
+
+						var catCount = data[0].category.length;
+						
+						for(var i=0 ; i< catCount ; i++ ){
+							// Add class by Er.kundal for select catg of shop
+							jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
+							jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
+						}
+						
+						if(data[0].notes=='' && data[0].affname=='' && data[0].accountManagerName=='') {
+							jQuery('#aboutShopDiv').hide();
+						}
+						
+						/*if(data[0].notes=='' || data[0].accountManagerName=='' || data[0].affname=='') {
+							 jQuery('#aboutShopNoteDiv').hide();
+							 jQuery('#aboutManagerDiv').hide();
+							 jQuery('#aboutNertworkDiv').hide();
+							 jQuery('#aboutShopDiv').hide();
+						}*/
+
+					//} else {
+						
+					//	jQuery('#aboutShopDiv').hide();
+						//}
+					}
+				},
+				error: function(message) {
+		            // pass an empty array to close the menu if it was initially opened
+		           // response([]);
+		        }
 
 		 });
-	
+	} else{
+		jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+		jQuery(".strict-confirmation-alert").hide();
+	}
 }
 
 function selectOfferType(dIv){
@@ -1631,17 +1669,14 @@ function changeDateFlag()
 //used to validate start and end  date time
 function validateStartEndTimestamp()
 {
-	
 	var sDate = Date.parseExact( jQuery("input#offerStartDate").val() , "dd-MM-yyyy") ;
 	var eDate = Date.parseExact( jQuery("input#offerEndDate").val(), "dd-MM-yyyy") ;
-	
 	var now = new Date() ;
 	var currentDate = now.getDate() + "-" + ( now.getMonth() + 1 ) + "-" + now.getFullYear() ;
 	
 	currentDate = Date.parseExact( currentDate , "d-M-yyyy"); 
 	
 	// check start date should be greater than or equal to current date 
-	 
 	
 	var startTime = jQuery("input#offerstartTime").val();
 	var endTime = jQuery("input#offerendTime").val();
@@ -1650,19 +1685,14 @@ function validateStartEndTimestamp()
 	// check start date and end date is equaul
 	if( eDate.compareTo ( sDate ) == 0)
 	{
-			
-				// check time satrt time is greater than  end time 
-				if( startTime  >= endTime  ) 
-				{
-					hasError = true ;
-				} else {
-					
-					hasError = false  ; 
-				}
-				
-	
+		// check time satrt time is greater than  end time 
+		if(startTime  >= endTime) 
+		{
+			hasError = true ;
+		} else {
+			hasError = false  ; 
+		}
 	}
-	
 	
 	// end date is greaqtetr than start date 
 	if ( eDate.compareTo ( sDate ) < 0 ) 
@@ -1670,7 +1700,7 @@ function validateStartEndTimestamp()
 		hasError = true   ; 
 	}
 	
-	// chekc for error i.e start date time is greater than end date time
+	// check for error i.e start date time is greater than end date time
 	if(hasError)
 	{
 		// Change msg by Er.kundal

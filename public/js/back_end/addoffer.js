@@ -4,6 +4,7 @@ jQuery(document).ready(init);
 var errorExists = {} ;
 
 function init(){
+
 	jQuery('#saleDiv').hide();
 	jQuery('div.imgTiles li a').hover(showHidedDiv);
 	
@@ -383,8 +384,6 @@ function addOffer(){
  * in websiet multiselect then use this function
  * @author kraj
  */
-
-
 function selectPagesInList() {
 
 	if ((jQuery(this).children('input')).is(':checked')) {
@@ -427,86 +426,103 @@ jQuery.fn.multiselect = function() {
 
 
 function getShopDetail(value){
-	jQuery('#selctedshop').val(value);
-	//jQuery('#aboutShopDiv,#aboutShopNoteDiv,#aboutManagerDiv,#aboutNertworkDiv').show();
-    jQuery.ajax({
-		url : HOST_PATH + "admin/offer/shopdetail/shopId/" + value,
-			dataType : "json",
-			success : function(data) {
-				if (data != null) {
+
+	if(value != "") {
+
+		jQuery('#selctedshop').val(value);
+		
+	    jQuery.ajax({
+			url : HOST_PATH + "admin/offer/shopdetail/shopId/" + value,
+				dataType : "json",
+				success : function(data) {
+					if (data != null) {
 
 
-					if(data[0].notes != '' && data[0].notes != null){
+						if(data[0].notes != '' && data[0].notes != null){
 
-						jQuery('#aboutShopNoteDiv').show();
-						jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
-					} else {
-						jQuery('#shopNotes').html('&nbsp;')
-											  .removeClass('alert-error');
-					}
+							jQuery('#aboutShopNoteDiv').show();
+							jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');;
+						} else {
+							jQuery('#shopNotes').html('&nbsp;')
+												  .removeClass('alert-error');
+						}
 
-					if(data[0].affname != '' && data[0].affname != null){
-						jQuery('#aboutNertworkDiv').show();
-						jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
-					} else {
-						jQuery('#shopNetwork').html('&nbsp;')
-											  .removeClass('alert-error');
-					}
-					
-					/*if(data[0].deepLink){
-						  jQuery('#offerRefUrl').val(data[0].deepLink).attr("disabled", "disabled");;	
-						  
-						  
-						 if(data[0].deepLinkStatus){
-							  jQuery('#deepLinkOnbtn').click();
-							  
-						  }else{
-							  jQuery('#deepLinkoofbtn').click();
-						  }
+						if(data[0].affname != '' && data[0].affname != null){
+							jQuery('#aboutNertworkDiv').show();
+							jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
+						} else {
+							jQuery('#shopNetwork').html('&nbsp;')
+												  .removeClass('alert-error');
+						}
 						
-						  
-						}else{
-							 jQuery('#offerRefUrl').attr("disabled", "disabled");
-							 //jQuery('#deepLinkoofbtn').click();	
-					}*/
-					jQuery('#aboutShopDiv').show();
-					
-					jQuery('#categoryListdiv').each(function() {
-						var checkboxes = jQuery(this).find("input:checkbox");
-						checkboxes.each(function() {
-							var checkbox = jQuery(this);
-							if (checkbox.attr("checked")){
-								
-								jQuery('#categoryBtn-'+checkbox.val()).click();
-							} 
-						});	
-					});		
-					
-					var catCount = data[0].category.length;
-					
-					for(var i=0 ; i< catCount ; i++ ){
-						// Add class by Er.kundal for select catg of shop
-						jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
-						jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
-					}
-					
-					if(data[0].notes=='' && data[0].affname == '' && data[0].accountManagerName=='') {
-						jQuery('#aboutShopDiv').hide();
-					}
-					
-				//} else {
-					
-					//jQuery('#aboutShopDiv').hide();
-				//}
-			 }
-			},
-			error: function(message) {
-	            // pass an empty array to close the menu if it was initially opened
-	           // response([]);
-	        }
+						// check if selected shop has restrcited content or not
+						// if yes then disable submit button and ask check to accept term and conditions
+						if(data[0].strictConfirmation) {
+
+							jQuery("#addOfferBtn,#saveAndAddnew").addClass("disabled").attr('disabled','disabled');
+							jQuery(".strict-confirmation-alert").show();
+							jQuery('#enableSaveButtons').removeAttr('checked');
+
+							// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
+							jQuery('#enableSaveButtons').click(function(){
+
+								if(data[0].strictConfirmation){
+
+									if(jQuery(this).is(':checked')){
+										jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+									} else{
+										jQuery("#addOfferBtn,#saveAndAddnew").addClass("disabled").attr('disabled','disabled');
+									}
+								}
+							});
+
+
+						} else{
+							jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+							jQuery(".strict-confirmation-alert").hide();
+						}
+
+						jQuery('#aboutShopDiv').show();
+						
+						jQuery('#categoryListdiv').each(function() {
+							var checkboxes = jQuery(this).find("input:checkbox");
+							checkboxes.each(function() {
+								var checkbox = jQuery(this);
+								if (checkbox.attr("checked")){
+									
+									jQuery('#categoryBtn-'+checkbox.val()).click();
+								} 
+							});	
+						});		
+						
+						var catCount = data[0].category.length;
+						
+						for(var i=0 ; i< catCount ; i++ ){
+							// Add class by Er.kundal for select catg of shop
+							jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
+							jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
+						}
+						
+						if(data[0].notes=='' && data[0].affname == '' && data[0].accountManagerName=='') {
+							jQuery('#aboutShopDiv').hide();
+						}
+						
+					//} else {
+						
+						//jQuery('#aboutShopDiv').hide();
+					//}
+				 }
+				},
+				error: function(message) {
+		            // pass an empty array to close the menu if it was initially opened
+		           // response([]);
+		        }
 
 		 });
-	
+	} else{
+		jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+		jQuery(".strict-confirmation-alert").hide();
+	}
 }
 
 function selectOfferType(dIv){

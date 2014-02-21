@@ -169,7 +169,14 @@ abstract class BaseShop extends Doctrine_Record
         		'type' => 'boolean',
         		'notnull' => true,
         		'default' => 0
-        ));        
+        ));   
+
+        $this->hasColumn('strictConfirmation', 'boolean', null, array(
+                'type' => 'boolean',
+                'notnull' => true,
+                'default' => 0
+        ));   
+
         $this->hasColumn('chainItemId', 'integer', 20, array(
         		'type' => 'integer',
         		'length' => '20',
