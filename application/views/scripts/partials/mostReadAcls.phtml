@@ -1,76 +1,67 @@
 <?php 
-	if(count($this->partialCounter >0)){
-		$cls = 'iphone-col1-none';
-		if($this->partialCounter > 3){
-			
-			$cls = 'iphone-col1-top';
-		}
-	}
+    if(count($this->partialCounter >0)){
+        $cls = 'iphone-col1-none';
+        if($this->partialCounter > 3){
+            
+            $cls = 'iphone-col1-top';
+        }
+    }
 ?>
 <div class="<?php echo $cls;?>">
    <div class="<?php echo $cls ?>-left">
-   		<div class="<?php echo $cls ?>-left-img">
-        <?php  	
+        <div class="<?php echo $cls ?>-left-img">
+        <?php   
 
-			if(file_exists(ROOT_PATH.$this->articles['thumbnail']['path'].'thum_article_samll_'. $this->articles['thumbnail']['name']) && $this->articles['thumbnail']['name']!=''){
-				
-				$img = PUBLIC_PATH.$this->articles['thumbnail']['path'].'thum_article_samll_'. $this->articles['thumbnail']['name'];
-			
-			}else{
-				
-				$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
-			}	
-			 $mlink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer'). '/' .$this->articles['permalink'];
-			 $nameArr = explode(' ', $this->articles['authorname']);
-			 $profileLink = HTTP_PATH_LOCALE."about/profile/id/".$this->articles['authorid'];
-			 $user =  User::getProfileImage($this->articles['authorid']);
-			 $username = $user['firstName'];
-			 $name = substr($username,0, 5);
-			 $martId = $this->articles['id'];
+            if(file_exists(ROOT_PATH.$this->articles['thumbnail']['path'].'thum_article_samll_'. $this->articles['thumbnail']['name']) && $this->articles['thumbnail']['name']!=''){
+                
+                $img = PUBLIC_PATH.$this->articles['thumbnail']['path'].'thum_article_samll_'. $this->articles['thumbnail']['name'];
+            
+            }else{
+                
+                $img = HTTP_PATH_CDN."images/NoImage/homePageLogo45_60.jpg";
+            }   
+             $mlink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer'). '/' .$this->articles['permalink'];
+             $nameArr = explode(' ', $this->articles['authorname']);
+             $profileLink = HTTP_PATH_LOCALE."about/profile/id/".$this->articles['authorid'];
+             $user =  User::getProfileImage($this->articles['authorid']);
+             $username = $user['firstName'];
+             $name = substr($username,0, 5);
+             $martId = $this->articles['id'];
               ?>
-         	<a href="<?php echo $mlink; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $martId; ?>);"><img src="<?php echo $img; ?>" alt="<?php echo $this->articles['title']; ?>"/></a>
+            <a href="<?php echo $mlink; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $martId; ?>);"><img src="<?php echo $img; ?>" alt="<?php echo $this->articles['title']; ?>"/></a>
             </div>
            
             </div>
             <div class="<?php echo $cls ?>-right">
-            	<div class="<?php echo $cls ?>-right-text1 text-blue">
-            		<h3>
-	            		<a title='<?php echo $this->articles['title']; ?>' class="text-blue-link" href="<?php echo $mlink; ?>"  onClick="javascript:viewCounter('onclick', 'article', <?php echo $martId; ?>);">
-	            		<?php 
-		        		if(strlen($this->articles['title']) > 32):
-		        		
-		        			echo substr($this->articles['title'], 0,32).'..';
-		        		
-		        			else: 
-		        			
-		        			echo $this->articles['title'];
-		        			
-		        		endif;
-		        		?>
-	            		</a>
-	            	</h3>
+                <div class="<?php echo $cls ?>-right-text1 text-blue">
+                    <h3>
+                        <a title='<?php echo $this->articles['title']; ?>' class="text-blue-link" href="<?php echo $mlink; ?>"  onClick="javascript:viewCounter('onclick', 'article', <?php echo $martId; ?>);">
+                        <?php 
+                        if(strlen($this->articles['title']) > 32):
+                        
+                            echo substr($this->articles['title'], 0,32).'..';
+                        
+                            else: 
+                            
+                            echo $this->articles['title'];
+                            
+                        endif;
+                        ?>
+                        </a>
+                    </h3>
                 </div>
                 <div class="<?php echo $cls ?>-right-text2">
-	                <?php 
-	                
-	                if(isset($this->articles['chapters'][0])){
-	                	
-		                if($this->articles['chapters'][0]['content']!=null || $this->articles['chapters'][0]['content']!='undefined' || $this->articles['chapters'][0]['content']!=''){
-		                 $allowed_tags = '<h6>'; 
-		                 $description = $this->articles['chapters'][0]['content']; 
-		                 $only = strip_tags($description); 
-			                 if(strlen($only) > 70){
-			                	echo substr($only, 0,70).'...';
-			                 }
-			                 else
-			                 { 
-			                 } 
-		                	}
-			       }else{
-			
-			     	//echo $only;
-			        }
-	                 ?>
+                    <?php if(isset($this->articles['chapters'][0])){
+                            
+                            if($this->articles['chapters'][0]['content']!=null || $this->articles['chapters'][0]['content']!='undefined' || $this->articles['chapters'][0]['content']!=''){
+                             $allowed_tags = '<h6>'; 
+                             $description = $this->articles['chapters'][0]['content']; 
+                             $only = strip_tags($description); 
+                                 if(strlen($only) > 70){
+                                    echo substr($only, 0,70).'...';
+                                 }
+                            }
+                    } ?>
                </div>
          </div>
 </div> 

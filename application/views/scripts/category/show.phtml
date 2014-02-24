@@ -3,6 +3,11 @@
     	$breadcrumb = "<a href='".HTTP_PATH_LOCALE."category/index/' style='color:#6a6a6a'>".$this->translate('Categories')."</a>";
 		$headerSearch = new FrontEnd_Helper_viewHelper();
 		echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
+
+    echo $aa = HTTP_PATH ."public/images/NoImage/catLogo_95_95.jpg";
+
+    var_dump(file_exists($aa));
+
 		?> 
         <!-- Search Outer2 Ends -->
         
@@ -22,13 +27,13 @@
                  
                  <?php 
                   for($i = 0; $i < count($this->editRec); $i++){
-                   $categoryIconPath = '';
-			       if(file_exists(ROOT_PATH.$this->editRec[$i]['categoryicon']['path']."thum_large_".$this->editRec[$i]['categoryicon']['name'])) {
-			       $categoryIconPath = PUBLIC_PATH.$this->editRec[$i]['categoryicon']['path']."thum_large_".$this->editRec[$i]['categoryicon']['name'];
-			       
-			       }else {
-			   	 		$categoryIconPath = HTTP_PATH ."public/images/NoImage/catLogo_95_95.jpg";  
-			       }
+                     $categoryIconPath = '';
+        			       if(file_exists(ROOT_PATH.$this->editRec[$i]['categoryicon']['path']."thum_large_".$this->editRec[$i]['categoryicon']['name'])) {
+        			         $categoryIconPath = PUBLIC_PATH_CDN.$this->editRec[$i]['categoryicon']['path']."thum_large_".$this->editRec[$i]['categoryicon']['name'];
+        			       
+        			       }else{
+                        $categoryIconPath = HTTP_PATH_CDN ."images/NoImage/catLogo_95_95.jpg";  
+        			       }
                    ?>
                    <div class="voucher-left catlogo">
                    <img src ="<?php echo $categoryIconPath;?>" alt="<?php echo $this->editRec[$i]['name'];?>">

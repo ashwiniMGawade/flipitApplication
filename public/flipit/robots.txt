@@ -22,3 +22,4 @@ Disallow:/in/info/
 Disallow:/in/out/
 Disallow:/in/search/
 
+fliptit
