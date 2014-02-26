@@ -181,7 +181,7 @@ sub vcl_fetch{
     unset beresp.http.Server;
     unset beresp.http.X-Powered-By;
 
-    if (beresp.status >= 500 || beresp.http.X-Nocache  == "no-cache" || (req.url ~ "store/addfavoriteview" && req.http.X-Varnish-Hashed-On )) {
+    if (beresp.status >= 500 || beresp.status == 301 || beresp.http.X-Nocache  == "no-cache" || (req.url ~ "store/addfavoriteview" && req.http.X-Varnish-Hashed-On )) {
         set beresp.ttl = 0s;
         set beresp.http.Cache-Control = "max-age = 0";
     } elseif (req.request != "POST" && beresp.http.Set-Cookie !~ "delete") {
