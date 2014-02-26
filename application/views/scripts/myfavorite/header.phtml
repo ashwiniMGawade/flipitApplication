@@ -13,13 +13,12 @@ $this->minifyHeadScript()->appendFile(HTTP_PATH."public/js/front_end/profileImag
 			<?php 
 			 if($this->userdetail!=null)
 			 {
-				$img = HTTP_PATH.'public/images/front_end/per_icon.png';
+				$img = HTTP_PATH_CDN.'images/front_end/per_icon.png';
 				$cls = 'mt24';
 			 	if( count($this->userdetail['visitorimage'])){
-	         	if( file_exists ( ROOT_PATH.$this->userdetail['visitorimage']['path'] .'thum_'. $this->userdetail['visitorimage']['name'] )) {
 	         		$cls = '';
-	         		$img = PUBLIC_PATH.ltrim($this->userdetail['visitorimage']['path'],"/").'thum_'.$this->userdetail['visitorimage']['name'];
-	         		}
+	         		$img = PUBLIC_PATH_CDN.ltrim($this->userdetail['visitorimage']['path'],"/").'thum_'.$this->userdetail['visitorimage']['name'];
+	         		
 				 }
 			 }
 			?>

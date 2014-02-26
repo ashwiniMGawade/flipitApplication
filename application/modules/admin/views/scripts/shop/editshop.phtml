@@ -147,6 +147,16 @@
                           </div>
                     </div>
                 </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php 
+                        echo $this->translate("Strict Confirmation");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'strictConfirmation','on');" class="btn <?php if($this->data['strictConfirmation']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'strictConfirmation','off');" class="btn <?php if($this->data['strictConfirmation']=='0' || $this->data['strictConfirmation']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                          </div>
+                    </div>
+                </div>
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -717,7 +727,8 @@
             <input type="hidden" name="service" id="service" value="<?php echo ( $this->data['service'] ) ; ?>" />
             
             <input type="hidden" name="signupOption" id="signupOption" value="<?php echo ( $this->data['showSignupOption'] ) ; ?>" />
-		    <input type="hidden" name="showChains" id=showChains value="<?php echo ( $this->data['showChains'] ) ; ?>" />
+		    <input type="hidden" name="showChains" id="showChains" value="<?php echo ( $this->data['showChains'] ) ; ?>" />
+            <input type="hidden" name="strictConfirmation" id="strictConfirmation" value="<?php echo ( $this->data['strictConfirmation'] ) ; ?>" />
             
             <div class="mainpage-content-colorbox">
 

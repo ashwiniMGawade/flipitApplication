@@ -32,13 +32,9 @@
               	
                $categoryIconPath = '';
                $categoryName = '';
-               if(file_exists(ROOT_PATH.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'])){
-			    $categoryIconPath = PUBLIC_PATH.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name']; 
+                $categoryIconPath = PUBLIC_PATH_CDN.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name']; 
 			   $categoryName = $icons['name'];
-			   }else {
-			   	$categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
-			   	$categoryName = $icons['name'];
-			    }
+			   
 			    ?>
 			   
 			    <a class="image-description-outer <?php echo $class; ?>" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $icons['permaLink']; ?>">
@@ -85,11 +81,8 @@
 		  {
 		  	$img = '';
 		  	if(count($specialList)>0){
-			  if(file_exists(ROOT_PATH.$specialList[$s]['logo']['path']."thum_page_small".$specialList[$s]['logo']['name']) && $specialList[$s]['logo']['name']!=''){
-			  	$img = PUBLIC_PATH.$specialList[$s]['logo']['path']."thum_page_small".$specialList[$s]['logo']['name'];
-			  }else{
-			  	$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
-			 }
+			 	$img = PUBLIC_PATH_CDN.$specialList[$s]['logo']['path']."thum_page_small".$specialList[$s]['logo']['name'];
+			 
 		?>
 		     <div class="gesorteerde-col1-outer">
 	      	 <div class="gesorteerde-col1">

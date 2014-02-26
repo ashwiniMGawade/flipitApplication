@@ -104,6 +104,8 @@ if(empty($locale))
 
 function migrateDatabase($dsn, $key = "",$version = null)
 {
+	try {
+		
 		echo "Datbase: ".$dsn . "\n" ;
 		
 		# auto load doctrine library 
@@ -128,15 +130,29 @@ function migrateDatabase($dsn, $key = "",$version = null)
 		# crate migration instance 
 		$migration = new Doctrine_Migration(realpath(APPLICATION_PATH.'/models/migrations_site'), $DMC );
 		
-		Doctrine_Core::loadModels(realpath(dirname(__FILE__). "/../models"));
-		
-		# execute migrate() 
-		$migration->migrate($version);
+		 
+		echo $migration->getLatestVersion() . "\n";
+
+		echo $migration->getNextVersion() . "\n";
+		echo $migration->getNextMigrationClassVersion() . "\n";
+		echo $migration->getCurrentVersion() . "\n";
+
+		if($migration->getLatestVersion() > $migration->getCurrentVersion() )
+		{
+			# execute migrate() 
+			$migration->migrate($version);
+			echo "Database has been Migrated successfully \n\n";
+		} else {
+			echo "Database has been Migrated successfully \n\n";
+		}
 		
 		#close connection
 		$manager->closeConnection($DMC);
 			
-		echo "Database has been Migrated successfully \n\n";
+	} catch (Exception $e) {
+			
+		 var_dump($e->getMessage());
+	}
 			
 }
 

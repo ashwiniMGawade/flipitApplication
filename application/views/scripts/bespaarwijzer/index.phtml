@@ -16,12 +16,8 @@ $this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/socialme
                 <div class="bespaarwijzer-left-col1">
                   <?php  
                     
-                  if(file_exists(ROOT_PATH.$page[0]['logo']['path'].$page[0]['logo']['name']) && $page[0]['logo']['name']!=''){
-                  	$pagelogo = PUBLIC_PATH.$page[0]['logo']['path'].'thum_extra_large_'.$page[0]['logo']['name'];
-                  }else{
-                  	$pagelogo = HTTP_PATH."public/images/NoImage/NoImage_132_112.jpg";
-                  	$pagelogo = HTTP_PATH. "public/thumb.php?src=". $pagelogo . "&h=160&w=173&zc=0";
-                  }	
+                   	$pagelogo = PUBLIC_PATH_CDN.$page[0]['logo']['path'].'thum_extra_large_'.$page[0]['logo']['name'];
+                 	
                        ?>
                   <div class="bespaarwijzer-left-col1-left">
                     <img class='radiusImg' src="<?php  echo $pagelogo;?>" alt="<?php echo $page[0]['pageTitle']; ?>"/>
@@ -76,11 +72,8 @@ $this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/socialme
                    			<div class="iphone-col1-none-left-img">
                     		<?php  	
                     		$linkArticle = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $moments['articles']['permalink'];
-						 	if(file_exists(ROOT_PATH.$moments['articles']['ArtIcon']['path']."thum_article_samll_".$moments['articles']['ArtIcon']['name']) && $moments['articles']['ArtIcon']['name']!=''){
-						  		$img = PUBLIC_PATH.$moments['articles']['ArtIcon']['path']."thum_article_samll_".$moments['articles']['ArtIcon']['name'];
-						 	}else{
-						  		$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
-						 	}	
+						 		$img = PUBLIC_PATH_CDN.$moments['articles']['ArtIcon']['path']."thum_article_samll_".$moments['articles']['ArtIcon']['name'];
+						 	
                    			?>
                       			<a href="<?php echo $linkArticle; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $moments['articles']['id']; ?>);"><img src="<?php echo $img; ?>"/></a>
                         	

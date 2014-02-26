@@ -145,7 +145,7 @@ class StoreController extends Zend_Controller_Action
 				$fbImage = 'flipit.png';
 					
 		}
-		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
+		$this->view->fbImg = HTTP_PATH_CDN."images/" .$fbImage ;
       	 
       	
       	$this->view->stores 		= $chc;
@@ -292,13 +292,10 @@ class StoreController extends Zend_Controller_Action
 	  	  		
 	  	  	
 	  	  	if(count($shopdetail[0]['logo']) > 0):
-		    	if(@file_exists(ROOT_PATH.$shopdetail[0]['logo']['path'] .'thum_medium_store_'. $shopdetail[0]['logo']['name']) && $shopdetail[0]['logo']['name']!=''):
-		    		$img = PUBLIC_PATH.ltrim($shopdetail[0]['logo']['path'], "/").'thum_medium_store_'. $shopdetail[0]['logo']['name'];
-		    	else:
-		    		$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
-		    	endif;
+		    		$img = PUBLIC_PATH_CDN.ltrim($shopdetail[0]['logo']['path'], "/").'thum_medium_store_'. $shopdetail[0]['logo']['name'];
+		    	
 		    else:
-		    	$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
+		    	$img = HTTP_PATH_CDN."images/NoImage/NoImage_200x100.jpg";
 		    endif;
 		    
 		    
@@ -695,13 +692,10 @@ class StoreController extends Zend_Controller_Action
     	}
    	
     	if(count($getShopDetail[0]['logo']) > 0):
-    		if(file_exists(ROOT_PATH.$getShopDetail[0]['logo']['path'] .'thum_medium_store_'. $getShopDetail[0]['logo']['name']) && $getShopDetail[0]['logo']['name']!=''):
-    			$img = PUBLIC_PATH.ltrim($getShopDetail[0]['logo']['path'],"/").'thum_medium_store_'. $getShopDetail[0]['logo']['name'];
-    		else:
-    			$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
-    		endif;
+    			$img = PUBLIC_PATH_CDN.ltrim($getShopDetail[0]['logo']['path'],"/").'thum_medium_store_'. $getShopDetail[0]['logo']['name'];
+    		
     	else:
-    		$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
+    		$img = HTTP_PATH_CDN."images/NoImage/NoImage_200x100.jpg";
     	endif;
     	
     	//for facebook parameters

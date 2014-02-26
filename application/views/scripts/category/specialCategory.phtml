@@ -2,14 +2,9 @@
        $categoryIconPath = '';
       	$categoryName = '';
       	$id = $this->id;
-      	if(file_exists($this->categoryicon['path'].'thum_'.$this->categoryicon['name'])) :
-      	            $categoryIconPath = PUBLIC_PATH.$this->categoryicon['path'].'thum_'.$this->categoryicon['name'];
+      	            $categoryIconPath = PUBLIC_PATH_CDN.$this->categoryicon['path'].'thum_'.$this->categoryicon['name'];
       	       		$categoryName = $this->name;
-      	       	else :
-      	       
-      	       		$categoryIconPath = HTTP_PATH ."public/images/upload/no.jpg";
-      	           $categoryName = $this->name;
-      	       	endif;
+      	       	
       
       ?>
        

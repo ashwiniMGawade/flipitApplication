@@ -3402,3 +3402,13 @@ div.wrap.newsletter-setting-container {
  .mainpage-content.aboutShopNoteDiv .mainpage-content-right.alert-error {
     border-color: #EED3D7 !important;
  }
+ .strict-confirmation-alert{
+    padding: 10px 10px 0 ;
+    box-shadow: none
+ }
+
+ .strict-confirmation-alert input[type="checkbox"]{
+    margin:3px 5px 0 0;
+    vertical-align: top;
+    float: left;
+ }

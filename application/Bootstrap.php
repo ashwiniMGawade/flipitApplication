@@ -82,6 +82,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		# define HTTP path
 		define("HTTP_PATH", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
 
+		# read cdn settings
+		$cdnSettings = $this->getOption('cdn') ;
+
+		# define cdn server http path
+	 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
+			define("HTTP_PATH_CDN", trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] . '/'));
+		} else {
+			define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
+		}
+
+
 		# define root path
 		defined('BASE_ROOT')
 		|| define("BASE_ROOT", dirname($_SERVER['SCRIPT_FILENAME']) . '/' );
@@ -100,6 +111,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			|| define('PUBLIC_PATH',
 					'http://' . $_SERVER['HTTP_HOST']
 					. dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_lang) .'/');
+
+			# define cdn server public path
+		 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
+				define("PUBLIC_PATH_CDN", 
+						trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] 
+							.'/'. strtolower($this->_lang) .'/'));
+			} else {
+				define("PUBLIC_PATH_CDN", 
+						trim('http://' . $_SERVER['HTTP_HOST'] 
+							. '/'. strtolower($this->_lang) .'/'));
+			}
+
+
 
 			# define root path
 			defined('ROOT_PATH')
@@ -137,10 +161,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			{
 				#constant for zend cache key based on lcoale
 				define("LOCALE", '');
-
-			}
-
-
+ 			}
+ 
 			if(! defined('HTTP_PATH_FRONTEND') )
 			{
 				define("HTTP_PATH_FRONTEND", trim('http://www.' . $this->_siteName ."/"));
@@ -215,6 +237,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			|| define('PUBLIC_PATH',
 					'http://' . $_SERVER['HTTP_HOST']
 					. dirname($_SERVER['SCRIPT_NAME']) . '/');
+
+			# define cdn server public path
+		 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
+				define("PUBLIC_PATH_CDN", trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] . '/'));
+			} else {
+				define("PUBLIC_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
+			}
 
 			# define root path
 			defined('ROOT_PATH')

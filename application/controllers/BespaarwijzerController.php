@@ -125,7 +125,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		$this->view->fbtitle = @$page[0]['pageTitle'];
 		$this->view->fbshareUrl = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
 
-		$this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
+		$this->view->fbImg = HTTP_PATH_CDN."images/bespaarwijzer_og.png";
 
 		$this->view->popularAtTheMoment = $popularAtTheMoment;
 		$this->view->mostRead = $mostRead;
@@ -227,7 +227,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		$this->view->fbtitle = @$this->pageDetail[0]['name'];
 		$this->view->fbshareUrl = HTTP_PATH_LOCALE.$this->pageDetail[0]['permalink'];;
 		
-		$this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
+		$this->view->fbImg = HTTP_PATH_CDN."images/bespaarwijzer_og.png";
 
 		$this->view->category = $category;
 		$this->view->mostReadArtOfcategory = $mostreadArtOfCategory;
@@ -305,11 +305,8 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		for($i= 0;$i<count($getall);$i++){
 			
 			$autherImage  = $uobj->getProfileImage($getall[$i]['authorid']);
-			if(file_exists(ROOT_PATH.$autherImage['profileimage']['path'] .'thum_medium_'. $autherImage['profileimage']['name']) && $autherImage['profileimage']['name']!=''){
-		  		$img = PUBLIC_PATH.$autherImage['profileimage']['path'] .'thum_medium_'. $autherImage['profileimage']['name'];
-		    }else{
-		  		$img = HTTP_PATH ."public/images/NoImage/websiteLogo.jpg";
-		  	}
+					$img = PUBLIC_PATH_CDN.$autherImage['profileimage']['path'] .'thum_medium_'. $autherImage['profileimage']['name'];
+		    
 		    
 			$ArNew[$i]['id']  = $getall[$i]['id'];
 			$ArNew[$i]['title']  = $getall[$i]['title'];
@@ -340,11 +337,8 @@ class BespaarwijzerController extends Zend_Controller_Action {
 			  	    $despN = '';
 				  	$despP = '';
 					if(array_key_exists($key+1,$ArNew)){
-						if(file_exists(ROOT_PATH . $ArNew[$key+1]['articleImagePath'] .'thum_article_medium_'.  $ArNew[$key+1]['articleImageName']) && $ArNew[$key+1]['articleImageName'] != ''){
-							$imgNext = PUBLIC_PATH.$ArNew[$key+1]['articleImagePath'] .'thum_article_medium_'.  $ArNew[$key+1]['articleImageName'];
-						}else{
-							$imgNext = HTTP_PATH ."public/images/NoImage/NoImage_77x47.jpg";
-						}
+							$imgNext = PUBLIC_PATH_CDN.$ArNew[$key+1]['articleImagePath'] .'thum_article_medium_'.  $ArNew[$key+1]['articleImageName'];
+						
 						$this->view->nextImage =  @$imgNext;
 						$this->view->nextLink = $ArNew[$key+1]['permalink'];
 						$this->view->nextTitle = $ArNew[$key+1]['title'];
@@ -358,11 +352,8 @@ class BespaarwijzerController extends Zend_Controller_Action {
 						}
 					}else{
 						$firstElement = reset($ArNew);
-						if(file_exists(ROOT_PATH . $firstElement['articleImagePath'] .'thum_article_medium_'.  $firstElement['articleImageName']) && $firstElement['articleImageName'] != ''){
-							$imgNext = PUBLIC_PATH.$firstElement['articleImagePath'] .'thum_article_medium_'.  $firstElement['articleImageName'];
-						}else{
-							$imgNext = HTTP_PATH ."public/images/NoImage/NoImage_77x47.jpg";
-						}
+							$imgNext = PUBLIC_PATH_CDN.$firstElement['articleImagePath'] .'thum_article_medium_'.  $firstElement['articleImageName'];
+						
 						$this->view->nextImage =  @$imgNext;
 						$this->view->nextLink = $firstElement['permalink'];
 						$this->view->nextTitle = $firstElement['title'];
@@ -377,12 +368,8 @@ class BespaarwijzerController extends Zend_Controller_Action {
 					$this->view->nextDesc = $despN;
 					
 					if(array_key_exists($key-1,$ArNew)){
-						if(file_exists(ROOT_PATH . $ArNew[$key-1]['articleImagePath'] .'thum_article_medium_'.  $ArNew[$key-1]['articleImageName']) && $ArNew[$key-1]['articleImageName'] != ''){
-							$imgPrev = PUBLIC_PATH. $ArNew[$key-1]['articleImagePath'] .'thum_article_medium_'.  $ArNew[$key-1]['articleImageName'];
-						}else{
-							$imgPrev = HTTP_PATH."public/images/NoImage/NoImage_77x47.jpg";
-						}
-					
+							$imgPrev = PUBLIC_PATH_CDN. $ArNew[$key-1]['articleImagePath'] .'thum_article_medium_'.  $ArNew[$key-1]['articleImageName'];
+						
 						$this->view->prevImage = @$imgPrev;
 						$this->view->prevLink = $ArNew[$key-1]['permalink'];
 					    $this->view->prevTitle = $ArNew[$key-1]['title'];
@@ -397,11 +384,8 @@ class BespaarwijzerController extends Zend_Controller_Action {
 					 }
 					else{
 					     $lastElement = end($ArNew);
-					     if(file_exists(ROOT_PATH . $lastElement['articleImagePath'] .'thum_article_medium_'.  $lastElement['articleImageName']) && $lastElement['articleImageName'] != ''){
-					     	$imgPrev = PUBLIC_PATH.$lastElement['articleImagePath'] .'thum_article_medium_'.  $lastElement['articleImageName'];
-					     }else{
-					     	$imgPrev = HTTP_PATH."public/images/NoImage/NoImage_77x47.jpg";
-					     }
+					     	$imgPrev = PUBLIC_PATH_CDN.$lastElement['articleImagePath'] .'thum_article_medium_'.  $lastElement['articleImageName'];
+					     
 					     
 					     $this->view->prevImage = @$imgPrev;
 					     $this->view->prevLink = $lastElement['permalink'];
@@ -429,7 +413,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		$this->view->fbtitle = @$view[0]['title'];
 		$this->view->fbshareUrl = HTTP_PATH_LOCALE.@$view[0]['permalink'];
 		 
-		$this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
+		$this->view->fbImg = HTTP_PATH_CDN."images/bespaarwijzer_og.png";
 
 
 		

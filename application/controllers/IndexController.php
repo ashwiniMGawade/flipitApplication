@@ -70,7 +70,7 @@ class IndexController extends Zend_Controller_Action {
 				$fbImage = 'flipit.png';
 
 			}
-			$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
+			$this->view->fbImg = HTTP_PATH_CDN."images/" .$fbImage ;
 
 		}
 

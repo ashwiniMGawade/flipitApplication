@@ -12,14 +12,10 @@
 	<div class="<?php echo $cls;?>-left">
     	<div style="" class="<?php echo $cls;?>-left-img crop">
         <?php  	
-			if(file_exists(ROOT_PATH.ltrim($this->ArtIcon['path'],"/").'thum_article_samll_'. $this->ArtIcon['name']) && $this->ArtIcon['name']!=''):
 			
-				$img = PUBLIC_PATH.ltrim($this->ArtIcon['path'],"/") . 'thum_article_samll_'. $this->ArtIcon['name'];
+				$img = PUBLIC_PATH_CDN.ltrim($this->ArtIcon['path'],"/") . 'thum_article_samll_'. $this->ArtIcon['name'];
 			
-			else:
-				$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
-				$img = HTTP_PATH . "public/thumb.php?src=".$img."&h=45&w=60&zc=0";
-			endif; ?>
+			 ?>
 			
 			 <img class='' id="<?php echo $this->articles['id']; ?>" alt="<?php echo $this->title;?>" src="<?php echo $img;?>"/>
 			 

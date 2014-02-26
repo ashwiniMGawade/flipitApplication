@@ -111,6 +111,16 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
                           </div>
                     </div>
                 </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php
+                         echo $this->translate("Strict Confirmation");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'strictConfirmation','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'strictConfirmation','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -507,7 +517,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
             <input type="hidden" name="howTouseStatus" id="howTouseStatus" value="0" />
             <input type="hidden" name="signupOption" id=signupOption value="0" />
             
-            <input type="hidden" name="showChains" id=showChains value="0" />
+            <input type="hidden" name="showChains" id="showChains" value="0" />
+            <input type="hidden" name="strictConfirmation" id="strictConfirmation" value="0" />
             
             <!-- Extra shop hidden feilds -->
             

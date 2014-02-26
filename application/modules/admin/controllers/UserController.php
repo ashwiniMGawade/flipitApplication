@@ -528,6 +528,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function permanentdeleteAction() {
 
 		$id = $this->getRequest()->getParam('id');
+		
 		if ($id) {
 
 			$User = new User();
