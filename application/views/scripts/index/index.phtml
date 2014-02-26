@@ -19,7 +19,7 @@ if($this->banner)
 
 			$this->headStyle()->captureStart(); ?>
 			.search-outer-background {
-				background: url("<?php echo PUBLIC_PATH . $filePath ?>") no-repeat scroll center top rgba(0, 0, 0, 0);
+				background: url("<?php echo PUBLIC_PATH_CDN . $filePath ?>") no-repeat scroll center top rgba(0, 0, 0, 0);
                 background-size: cover;
    			}
 			<?php $this->headStyle()->captureEnd();
@@ -36,7 +36,7 @@ if($this->banner)
 
             $this->headStyle()->captureStart(); ?>
             .mid-home-inner {
-               background: url("<?php echo PUBLIC_PATH . $filePath ?>") no-repeat scroll center top rgba(0, 0, 0, 0);
+               background: url("<?php echo PUBLIC_PATH_CDN . $filePath ?>") no-repeat scroll center top rgba(0, 0, 0, 0);
                 background-size: cover;
             }
             <?php $this->headStyle()->captureEnd();
@@ -107,12 +107,8 @@ if($this->banner)
 		               <div class="popular-kortings-col3-left">
 			                  <div class="popular-kortings-col1-img">
 			                  <?php
-			                  	if(file_exists(ROOT_PATH.ltrim($topVoucherCode[$v]['offer']['shop']['logo']['path'], "/") .'thum_small_'. $topVoucherCode[$v]['offer']['shop']['logo']['name']) && $topVoucherCode[$v]['offer']['shop']['logo']['name']!=''){
-								  	$img = PUBLIC_PATH.ltrim($topVoucherCode[$v]['offer']['shop']['logo']['path'], "/") .'thum_small_'. $topVoucherCode[$v]['offer']['shop']['logo']['name'];
-								 }else{
-								  	$img1 = HTTP_PATH."public/images/NoImage/NoImage_77x47.jpg";
-								  	$img =  HTTP_PATH."public/thumb.php?src=".$img1."&h=42&w=84&zc=0";
-								 }
+			                  $img = PUBLIC_PATH_CDN.ltrim($topVoucherCode[$v]['offer']['shop']['logo']['path'], "/") .'thum_small_'. $topVoucherCode[$v]['offer']['shop']['logo']['name'];
+								
 		                   		?>
 
 			                    <a href="<?php echo HTTP_PATH_LOCALE.$topVoucherCode[$v]['offer']['shop']['permaLink'];  ?>">
@@ -197,12 +193,8 @@ if($this->banner)
                  	<div class="popular-kortings-col3-left">
 			                  <div class="popular-kortings-col1-img  ">
 			                  <?php
-			                 	if(file_exists(ROOT_PATH.ltrim($newestCoupon[$n]['shop']['logo']['path'],"/") .'thum_small_'. $newestCoupon[$n]['shop']['logo']['name']) && @$newestCoupon[$n]['shop']['logo']['name']!=''){
-								  	$img = PUBLIC_PATH.ltrim($newestCoupon[$n]['shop']['logo']['path'],"/") .'thum_small_'. $newestCoupon[$n]['shop']['logo']['name'];
-								  }else{
-								 	$img1 = HTTP_PATH."public/images/NoImage/NoImage_77x47.jpg";
-								 	$img =  HTTP_PATH."public/thumb.php?src=".$img1."&h=42&w=84&zc=0";
-								  }
+			                 	$img = PUBLIC_PATH_CDN.ltrim($newestCoupon[$n]['shop']['logo']['path'],"/") .'thum_small_'. $newestCoupon[$n]['shop']['logo']['name'];
+								 
                     		?>
 			                    <a href="<?php echo HTTP_PATH_LOCALE.$newestCoupon[$n]['shop']['permaLink'];?>">
 			                 		<img class='radiusImg' src="<?php  echo $img ; ?>" alt="<?php echo $newestCoupon[$n]['shop']['name'];?>" />
@@ -281,11 +273,8 @@ if($this->banner)
                 	 <div class="<?php echo $cls;?>">
                     	<div class="popular-kortings-col2-img  removeBg">
                     		<?php
-                    			if(file_exists(ROOT_PATH.$category[$c]['category']['categoryicon']['path'] .'thum_small_'. $category[$c]['category']['categoryicon']['name']) && @$category[$c]['category']['categoryicon']['name']!=''){
-								  	$img = PUBLIC_PATH.$category[$c]['category']['categoryicon']['path']  .'thum_small_'. $category[$c]['category']['categoryicon']['name'];
-								  }else{
-								  	$img = HTTP_PATH."public/images/NoImage/homeCat24_24.jpg";
-								 }
+                    			$img = PUBLIC_PATH_CDN.$category[$c]['category']['categoryicon']['path']  .'thum_small_'. $category[$c]['category']['categoryicon']['name'];
+								 
                     		?>
                     		<img class='' src="<?php  echo $img ; ?>" alt="<?php echo $category[$c]['category']['name'];?>" />
 
@@ -361,11 +350,8 @@ if($this->banner)
                 	 <div class="<?php echo $cls;?>">
                     	<div class="popular-kortings-col2-img">
                     	<?php
-                    	if(file_exists(ROOT_PATH.ltrim($specialList[$s]['page'][0]['logo']['path'], "/") .'thum_page_small'. $specialList[$s]['page'][0]['logo']['name']) && @$specialList[$s]['page'][0]['logo']['name']!=''){
-							$img = PUBLIC_PATH.ltrim($specialList[$s]['page'][0]['logo']['path'], "/") .'thum_page_small'. $specialList[$s]['page'][0]['logo']['name'];
-						}else{
-							$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
-							}
+                    		$img = PUBLIC_PATH_CDN.ltrim($specialList[$s]['page'][0]['logo']['path'], "/") .'thum_page_small'. $specialList[$s]['page'][0]['logo']['name'];
+						
 							?>
 							<img src="<?php echo $img ; ?>" alt="<?php echo $specialList[$s]['page'][0]['pageTitle'];?>" />
 
@@ -428,11 +414,8 @@ if($this->banner)
                     	<div class="popular-kortings-monetsaving-img rediusnone ">
                     	<?php
 
-                    	if(file_exists(ROOT_PATH.ltrim($saving['article']['thumbnail']['path'],"/") .'thum_article_medium_' . $saving['article']['thumbnail']['name']) && @$saving['article']['thumbnail']['name'] != ''){
-                    		$img = PUBLIC_PATH.ltrim($saving['article']['thumbnail']['path'], "/") .'thum_article_medium_'. $saving['article']['thumbnail']['name'];
-                    	}else {
-                    		$img = HTTP_PATH."public/images/NoImage/NoImage_70x60.png";
-                    	}
+                    		$img = PUBLIC_PATH_CDN.ltrim($saving['article']['thumbnail']['path'], "/") .'thum_article_medium_'. $saving['article']['thumbnail']['name'];
+                    	
                     	?>
 
                     	<a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$saving['article']['permalink'];  ?>"  >
@@ -572,11 +555,8 @@ if($this->banner)
 
         		$urlToShow = HTTP_PATH_LOCALE.$seeninLink.$asseen['toolltip'];
         		$url = $asseen['url'];
-        		if(file_exists(ROOT_PATH.$asseen['logo']['path'] .'thum_SeenIn_large'. $asseen['logo']['name']) && @$asseen['logo']['name'] != ''){
-        			$img = PUBLIC_PATH.$asseen['logo']['path'] .'thum_SeenIn_large'. $asseen['logo']['name'];
-        		}else {
-        			$img = HTTP_PATH."public/images/NoImage/homeSeeIn37_124.jpg";
-        		}
+        			$img = PUBLIC_PATH_CDN.$asseen['logo']['path'] .'thum_SeenIn_large'. $asseen['logo']['name'];
+        		
         	?>
        	    	<div class="partner1">
        	    	  <a>

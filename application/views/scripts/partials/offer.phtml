@@ -27,10 +27,8 @@
                 }
                 if (count ( $this->shop  ['logo'] ) > 0) {
                     $heightWidth='';
-                    
-                    if (file_exists ( ROOT_PATH . ltrim($this->shop  ['logo'] ['path'],"/") .'thum_big_' . $this->shop  ['logo'] ['name'] )) {
-                        $logo = PUBLIC_PATH . ltrim($this->shop['logo'] ['path'], "/") . 'thum_big_' . $this->shop  ['logo'] ['name'];
-                    }
+                    $logo = PUBLIC_PATH_CDN . ltrim($this->shop['logo'] ['path'], "/") . 'thum_big_' . $this->shop  ['logo'] ['name'];
+                 
                 }
                 $user =  User::getProfileImage($this->authorId);
                 
@@ -138,7 +136,7 @@
                     if($this->discountType=='PA'){ 
                         if(count($this->logo)>0){
                             $check = 0;
-                            $urlToShow = PUBLIC_PATH.ltrim($this->logo['path'],"/").$this->logo['name'];
+                            $urlToShow = PUBLIC_PATH_CDN.ltrim($this->logo['path'],"/").$this->logo['name'];
                         } elseif($this->refOfferUrl != ""){
                             
                             $check = 0;

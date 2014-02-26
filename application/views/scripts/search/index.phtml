@@ -36,17 +36,13 @@ if(count($this->popularstores)){
 				       	         	
 				       	         		if(count($pShop['logo']) > 0)
 				       	            	{
-				       	            		if(file_exists(ROOT_PATH.$pShop['logo']['imgpath']."thum_medium_".$pShop['logo']['imgname']) && $pShop['logo']['imgname']!=''){
 				       	            			
-				       	            			$img = PUBLIC_PATH.$pShop['logo']['imgpath']."thum_medium_".$pShop['logo']['imgname'];
+				       	            			$img = PUBLIC_PATH_CDN.$pShop['logo']['imgpath']."thum_medium_".$pShop['logo']['imgname'];
 				       	            			
-				       	            		}else{
-				       	            			$img = HTTP_PATH."public/images/NoImage/storeLogo100_50.jpg";
-				       	            		}
 				       	            		
 				       	            	}else {
 				       	            		
-				       	            		$img = HTTP_PATH."public/images/NoImage/storeLogo100_50.jpg";
+				       	            		$img = HTTP_PATH_CDN."images/NoImage/storeLogo100_50.jpg";
 				       	            	
 				       	            	}
 				       	         		echo '<a href="' .HTTP_PATH_LOCALE. $pShop['permaLink']. '"><img src="' . $img . '"  alt="' .$pShop['name'] . '"/></a>';

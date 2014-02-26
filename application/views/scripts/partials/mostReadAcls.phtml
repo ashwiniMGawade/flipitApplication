@@ -12,14 +12,9 @@
         <div class="<?php echo $cls ?>-left-img">
         <?php   
 
-            if(file_exists(ROOT_PATH.$this->articles['thumbnail']['path'].'thum_article_samll_'. $this->articles['thumbnail']['name']) && $this->articles['thumbnail']['name']!=''){
-                
-                $img = PUBLIC_PATH.$this->articles['thumbnail']['path'].'thum_article_samll_'. $this->articles['thumbnail']['name'];
-            
-            }else{
-                
-                $img = HTTP_PATH_CDN."images/NoImage/homePageLogo45_60.jpg";
-            }   
+              
+                $img = PUBLIC_PATH_CDN.$this->articles['thumbnail']['path'].'thum_article_samll_'. $this->articles['thumbnail']['name'];
+          
              $mlink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer'). '/' .$this->articles['permalink'];
              $nameArr = explode(' ', $this->articles['authorname']);
              $profileLink = HTTP_PATH_LOCALE."about/profile/id/".$this->articles['authorid'];

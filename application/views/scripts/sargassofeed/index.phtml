@@ -51,13 +51,8 @@
 
             # check an image is available or not
                     
-              if(file_exists(ROOT_PATH.ltrim( $value['offer']['shop']['logo']['path'], "/") .'thum_small_'. $value['offer']['shop']['logo']['name']) && $value['offer']['shop']['logo']['name']!=''){
-                  $img = PUBLIC_PATH.ltrim($value['offer']['shop']['logo']['path'], "/") .'thum_small_'. $value['offer']['shop']['logo']['name'];
-               } else {
-                
-                  $img = HTTP_PATH."public/images/NoImage/ShopLogo236_118.jpg";
-                  
-               }  
+                 $img = PUBLIC_PATH_CDN.ltrim($value['offer']['shop']['logo']['path'], "/") .'thum_small_'. $value['offer']['shop']['logo']['name'];
+               
                     ?>
             <a target="_blank" onClick="ga('send', 'event', 'sargasso', 'click', 'shop logo');" href="<?php echo HTTP_PATH_LOCALE . $value['offer']['shop']['permalink'];  ?>" class="zalando"><img src="<?php echo $img; ?>" alt="<?php echo $this->translate($value['offer']['shop']['name'])?>" />&nbsp;</a>
           </div>

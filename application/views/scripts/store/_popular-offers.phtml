@@ -25,22 +25,17 @@ if(count($this->termandcondition) > 0){
 		$imgstyle='style="position: relative;bottom:15px;"';
 		$title = $this->title;
 		$class = '';
-		$logo = HTTP_PATH .'public/images/NoImage/box_plain_06.png';
+		$logo = HTTP_PATH_CDN .'images/NoImage/box_plain_06.png';
 		
 		if (strlen ( $this->title ) > 150) {
 			$title = substr ( $this->title , 0, 150 );
 		}
 		if (!empty ( $this->tiles)) {
 			$heightWidth='';
-			if (file_exists ( ROOT_PATH . ltrim(@$this->tiles['path'],"/") ."thum_large_". @$this->tiles['name'] )) {
-				
-			 $logo = PUBLIC_PATH . ltrim(@$this->tiles['path'], "/")."thum_large_". @$this->tiles['name'];
 			
 				
-			}elseif (file_exists ( ROOT_PATH . ltrim(@$this->tiles['path'],"/") .@$this->tiles['name'] )) {
-				
-			 $logo = PUBLIC_PATH . ltrim(@$this->tiles['path'], "/").@$this->tiles['name'];
-			}
+			 $logo = PUBLIC_PATH_CDN . ltrim(@$this->tiles['path'], "/").@$this->tiles['name'];
+			
 		}
 		$user =  User::getProfileImage($this->authorId);
 		$aname  = ucfirst ( strtolower ( $user['firstName']) );
@@ -51,7 +46,7 @@ if(count($this->termandcondition) > 0){
 		
 		if ($this->Visability  != 'DE') :
 			if (! $userlogin) :
-					$logo = HTTP_PATH . 'public/images/front_end/lock.png';
+					$logo = HTTP_PATH_CDN . 'images/front_end/lock.png';
 					$text = '<strong style="position: relative; top: 13px;">'.$this->translate('Member only Coupon Code,').'<br>'.$this->translate('Join us to see this Coupon!').'</strong>';
 					$style='style="margin-bottom: 5px; z-index: 100000; color: #363636; font-size: 14px;"';
 					$heightWidth = 'width="80" height="90"';//''
@@ -91,7 +86,7 @@ if(count($this->termandcondition) > 0){
 
 				}elseif(count($this->logo)>0){
 					$check = 0;
-					$urlToShow = PUBLIC_PATH.ltrim($this->logo['path'], "/").$this->logo['name'];
+					$urlToShow = PUBLIC_PATH_CDN.ltrim($this->logo['path'], "/").$this->logo['name'];
 
 				}
 			}
@@ -157,10 +152,10 @@ if(count($this->termandcondition) > 0){
 			 			</div>
 			 			<div class="voting-btns">
 			 			<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '1');">
-			 				<img class="up-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-up.png" alt="Vote Up">
+			 				<img class="up-btn" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/vote-up.png" alt="Vote Up">
 			 			</a>	
 		 				<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '0');">
-			 				<img class="down-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-down.png" alt="Vote Down">
+			 				<img class="down-btn" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/vote-down.png" alt="Vote Down">
 			 				</a>
 			 			</div>	
 				</div>
@@ -192,11 +187,11 @@ if(count($this->termandcondition) > 0){
 					 
 					if(file_exists(ROOT_PATH .'images/front_end/' .$couponcodeImg )){
 						 
-						$couponcodeImg = PUBLIC_PATH .'images/front_end/' .$couponcodeImg ;
+						$couponcodeImg = PUBLIC_PATH_CDN .'images/front_end/' .$couponcodeImg ;
 						
 					}else{
 						
-						$couponcodeImg = HTTP_PATH .'public/images/front_end/' .$couponcodeImg ;
+						$couponcodeImg = HTTP_PATH_CDN .'images/front_end/' .$couponcodeImg ;
 					}				
 							
 					 # check shop logo exist
@@ -204,18 +199,13 @@ if(count($this->termandcondition) > 0){
        	            {
        	            	
        	            	# check logo path is correct
-       	            	if(file_exists(ROOT_PATH.ltrim($this->shop['logo']['path'],"/")."thum_big_".$this->shop['logo']['name'])
-
-       	            			&& $this->shop['logo']['name']!=''){
-       	            			$shopImge = PUBLIC_PATH.ltrim($this->shop['logo']['path'],"/")."thum_big_".$this->shop['logo']['name'];
-       	            	}else{
-       	            			# display fallback image
-       	            			$shopImge = HTTP_PATH."public/images/NoImage/ShopLogo234_117.jpg";
-       	            	}
+       	            	
+       	            			$shopImge = PUBLIC_PATH_CDN.ltrim($this->shop['logo']['path'],"/")."thum_big_".$this->shop['logo']['name'];
+       	            	
        	            }else {
        	            	
        	            		# display fallback image
-       	            		$shopImge = HTTP_PATH."public/images/NoImage/ShopLogo234_117.jpg";
+       	            		$shopImge = HTTP_PATH_CDN."images/NoImage/ShopLogo234_117.jpg";
        	            }
 					
 					
@@ -346,7 +336,7 @@ if(count($this->termandcondition) > 0){
 							</div>
 							<div class="red-btn" style="margin:8px 0 0 5px;" id="<?php echo $this->id ; ?>" vote='0' onclick="showCode(this)">
 								<a href="<?php echo $urlToShow;?>" onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"  rel="nofollow" target="_blank" >
-									<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png" alt="" />
+									<img width="217" height="39" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red.png" alt="" />
 								</a>
 							</div>
 					<?php  }   
@@ -358,7 +348,7 @@ if(count($this->termandcondition) > 0){
 								<strong><span class="fl text-black"><?php echo $this->translate('Members Only!'); ?></span>
 									<span class="fr"><a href="<?php echo HTTP_PATH;?>login"><img
 											width="78" height="33" alt=""
-											src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-inschrijven.png" /></a></span>
+											src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-inschrijven.png" /></a></span>
 								</strong>
 							</h4>
 					</div>

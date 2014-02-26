@@ -345,7 +345,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
                     <div class="mark-spencer-bot-col1-mid-textbox1">
                     <textarea name="offer_desc" id="offer_desc" class="textarea" style="width:195px; height:105px" cols="0" rows=""></textarea>
                     </div>
-                    <div class="mark-spencer-bot-col1-mid-textbox1" style="margin-bottom:4px!important"> <a href="javascript:;" onClick="sendiscountCoupon()"><img src="'.HTTP_PATH.'public/images/front_end/btn-deel-de-korting.png" width="196" height="37" /></a></div></form>';
+                    <div class="mark-spencer-bot-col1-mid-textbox1" style="margin-bottom:4px!important"> <a href="javascript:;" onClick="sendiscountCoupon()"><img src="'.HTTP_PATH_CDN.'images/front_end/btn-deel-de-korting.png" width="196" height="37" /></a></div></form>';
 		return $str;
 	}
 	/**
@@ -451,12 +451,8 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
              	<h4 class="sidebar-heading">'.$trans->translate('Sidebar categories title').'</h4>';
 	for($i=0;$i<count($popularCategory);$i++){
 
-		if(file_exists(ROOT_PATH.$popularCategory[$i]['category']['categoryicon']['path'].'thum_small_'.$popularCategory[$i]['category']['categoryicon']['name']) && $popularCategory[$i]['category']['categoryicon']['name']!=''){
-			$img = PUBLIC_PATH.$popularCategory[$i]['category']['categoryicon']['path'].'thum_small_'. $popularCategory[$i]['category']['categoryicon']['name'];
-		}else{
-
-			$img = HTTP_PATH."public/images/NoImage/homeCat24_24.jpg";
-		}
+			$img = PUBLIC_PATH_CDN.$popularCategory[$i]['category']['categoryicon']['path'].'thum_small_'. $popularCategory[$i]['category']['categoryicon']['name'];
+		
 
 		$bg_none = '';
 		$string.='<div class="right-categorieen-col1 '.$bg_none.'">
@@ -551,7 +547,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		<h4 class="text-white">' . $trans->translate('Doe mee met kortingscode.nl') . '</h4>
 		<p class="text-light-grey text-center mt10">' . $trans->translate('Krijg gratis toegang tot exclusieve Members-Only codes en kortingen!') . '</p>
 		<div class="log-direct-icon">
-			<img src="'.HTTP_PATH.'public/images/front_end/img-id-new.png" width="48" height="42" alt="New Icon" />
+			<img src="'.HTTP_PATH_CDN.'images/front_end/img-id-new.png" width="48" height="42" alt="New Icon" />
 		</div>';
 		if(Auth_VisitorAdapter::hasIdentity())
 		{
@@ -618,11 +614,10 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 		$trans = Zend_Registry::get('Zend_Translate');
 		$editorDetail = self :: getFamousEditorDetail($editorId);
-		$userPicture = HTTP_PATH.'public/images/NoImage/NoImage_142_90.jpg';
+		$userPicture = HTTP_PATH_CDN.'images/NoImage/NoImage_142_90.jpg';
 		if(isset($editorDetail[0]['profileimage']['name']) && $editorDetail[0]['profileimage']['name']!=''){
-			if(file_exists(ROOT_PATH.$editorDetail[0]['profileimage']['path'].$editorDetail[0]['profileimage']['name'])){
-				$userPicture = PUBLIC_PATH . '/'.$editorDetail[0]['profileimage']['path'].'thum_large_widget_'.$editorDetail[0]['profileimage']['name'];
-			}
+				$userPicture = PUBLIC_PATH_CDN .$editorDetail[0]['profileimage']['path'].'thum_large_widget_'.$editorDetail[0]['profileimage']['name'];
+			
 		}
 		$view = new Zend_View();
 		$view->setScriptPath(APPLICATION_PATH . '/views/scripts/');
@@ -694,11 +689,8 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		for($i=0;$i<count($articles);$i++){
 
 			$img = '';
-			if(file_exists(ROOT_PATH.$articles[$i]['articles']['ArtIcon']['path']."thum_article_medium_".$articles[$i]['articles']['ArtIcon']['name'])){
-				$img = PUBLIC_PATH.$articles[$i]['articles']['ArtIcon']['path']."thum_article_medium_".$articles[$i]['articles']['ArtIcon']['name'];
-			}else{
-				$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
-			}
+				$img = PUBLIC_PATH_CDN.$articles[$i]['articles']['ArtIcon']['path']."thum_article_medium_".$articles[$i]['articles']['ArtIcon']['name'];
+			
 		$string.='<div class="mostpopular-col1">
 					<div class="rediusnone1"><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . '<img src="' . $img . '"></a></div>
 					<div><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . $articles[$i]['articles']['title'].'</a></div></div>';
@@ -738,14 +730,13 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		$string ='<div class="mostpopular-outer sidebar">
 		<h4 class="sidebar-heading">'.$trans->translate('Other Helpful Saving Tips').'</h4>
 		<!-- Most Popular Col1 Starts -->';
+		
+		
 	  for($i=0;$i<count($articles);$i++){
 
 
-	  	if(file_exists(ROOT_PATH.$articles[$i]['thumbnail']['path']."thum_article_samll_".$articles[$i]['thumbnail']['name']) && @$articles[$i]['thumbnail']['name']!=''){
-	  		$img = PUBLIC_PATH.$articles[$i]['thumbnail']['path']."thum_article_samll_".$articles[$i]['thumbnail']['name'];
-	  	}else{
-	  		$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
-	  	}
+	  	$img = PUBLIC_PATH_CDN.$articles[$i]['thumbnail']['path']."thum_article_samll_".$articles[$i]['thumbnail']['name'];
+	  	
 
 	  	$string.='<div class="mostpopular-col1">
 		<span class="mostpopular-col1-img1">
@@ -1025,7 +1016,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
  					}
  		$mainUl .="<div class='clr'></div>";
- 		$mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer')."'><img src='".HTTP_PATH."public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle bespaarwijzers')."</a> &raquo;</div>";
+ 		$mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer')."'><img src='".HTTP_PATH_CDN."images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle bespaarwijzers')."</a> &raquo;</div>";
   		$mainUl .="</div>";//close row
 
   		$mainUl .="</div>";//close new-outer

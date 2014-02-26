@@ -3,7 +3,7 @@
             	
                 <?php if(count($this->topStores) > 0) :?>
 	                <div class="sub_hdr">
-	                	<img src="<?php echo HTTP_PATH?>public/images/front_end/fav_icon.png" alt="" />
+	                	<img src="<?php echo HTTP_PATH_CDN?>images/front_end/fav_icon.png" alt="" />
 	                    <?php echo $this->translate('Zoek op winkelnaam: Bol.com, Wehkamp, Zalando, etc.')?>
 	                </div>
                 
@@ -13,7 +13,7 @@
 	                			$img = ltrim($suggestion['shop']['logo']['imgpath'],"/").'thum_medium_store_'.$suggestion['shop']['logo']['imgname'];
 	                	?>
 		                	<div class="shops_fav_txt">
-		                    	<div class="shops_fav_top"><a href="<?php echo HTTP_PATH_LOCALE . $suggestion['shop']['permaLink']?>" ><img src="<?php echo PUBLIC_PATH . $img;?>" alt="<?php echo $suggestion['shop']['name']?>" /></a></div>
+		                    	<div class="shops_fav_top"><a href="<?php echo HTTP_PATH_LOCALE . $suggestion['shop']['permaLink']?>" ><img src="<?php echo PUBLIC_PATH_CDN . $img;?>" alt="<?php echo $suggestion['shop']['name']?>" /></a></div>
 		                        <div class="shops_fav_btm" onclick="addFavoriteShops(<?php echo $suggestion['shop']['id']?>,<?php echo Auth_VisitorAdapter::getIdentity()->id?>);"><?php echo $this->translate('Toevoegen')?></div>
 		                    </div>
 	                    <?php endforeach;?>
@@ -22,7 +22,7 @@
                 
                 <?php if(count($this->favShops) > 0) :?>
 	                <div class="sub_hdr">
-	                	<img src="<?php echo HTTP_PATH?>public/images/front_end/fav_icon.png" alt="" />
+	                	<img src="<?php echo HTTP_PATH_CDN?>images/front_end/fav_icon.png" alt="" />
 	                    <?php echo $this->translate('Cree&euml;r Favorieten');?>
 	                </div>
                 
@@ -34,7 +34,7 @@
 	                			   
 	                	?>
 				                	<div class="shops_fav_txt">
-				                    	<div class="shops_fav_top"><a href="<?php echo HTTP_PATH_LOCALE . $favShops['shops'][0]['permaLink']?>" ><img src="<?php echo PUBLIC_PATH . $img;?>" alt="<?php echo $favShops['shops'][0]['name']?>" /></a></div>
+				                    	<div class="shops_fav_top"><a href="<?php echo HTTP_PATH_LOCALE . $favShops['shops'][0]['permaLink']?>" ><img src="<?php echo PUBLIC_PATH_CDN . $img;?>" alt="<?php echo $favShops['shops'][0]['name']?>" /></a></div>
 				                        <div class="shops_fav_btmnew" onclick="deleteFavoriteShops(<?php echo $favShops['shops'][0]['id']?>,<?php echo Auth_VisitorAdapter::getIdentity()->id?>)"><?php echo $this->translate('verwijderen')?></div>
 				                    </div>
 	                    <?php
@@ -46,7 +46,7 @@
                  
                 <?php if(count($this->paginator)>0): ?>
 	                <div class="sub_hdr" style="margin-bottom: 25px;">
-	                	<img src="<?php echo HTTP_PATH?>public/images/front_end/fav_icon.png" alt="" />
+	                	<img src="<?php echo HTTP_PATH_CDN?>images/front_end/fav_icon.png" alt="" />
 	                    <?php echo $this->translate('Kortingscodes, speciaal voor jouw geselecteerd')?>
 	                </div>
 	                

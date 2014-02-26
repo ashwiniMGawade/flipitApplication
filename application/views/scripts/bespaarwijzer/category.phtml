@@ -30,12 +30,8 @@
             </div>
             <!-- Bespaarwijzer Left Ends -->
                    <?php  	
-						 if(file_exists(ROOT_PATH.$category[0]['ArtCatIcon']['path']."thum_articleCategory_big_".$category[0]['ArtCatIcon']['name']) && $category[0]['ArtCatIcon']['name']!=''){
-						  	$img = PUBLIC_PATH.$category[0]['ArtCatIcon']['path']."thum_articleCategory_big_".$category[0]['ArtCatIcon']['name'];
-						 }else{
-						  	$img = HTTP_PATH."public/images/NoImage/NoImage_250_250.jpg";
-						  	
-						 }	
+						  	$img = PUBLIC_PATH_CDN.$category[0]['ArtCatIcon']['path']."thum_articleCategory_big_".$category[0]['ArtCatIcon']['name'];
+						 
                    ?>
             
             <div class="financieel-right crop">
@@ -105,13 +101,8 @@
             <?php $ret1 = 1; ?>   
             <?php  
             foreach($relCategory as $relCat){
-            	if(file_exists(ROOT_PATH.$relCat['categoryicon']['path']."thum_medium_".$relCat['categoryicon']['name']) && $relCat['categoryicon']['name']!=''){
-            		$img1 = PUBLIC_PATH.$relCat['categoryicon']['path']."thum_medium_".$relCat['categoryicon']['name'];
-            	}else{
-            		//$img = HTTP_PATH."public/images/upload/no.jpg";
-            		//$img1 = HTTP_PATH. "public/thumb.php?src=". $img . "&h=50&w=50&zc=0";
-            		$img1 = HTTP_PATH."public/images/NoImage/NoImage50x50.jpg";
-            	}
+            		$img1 = PUBLIC_PATH_CDN.$relCat['categoryicon']['path']."thum_medium_".$relCat['categoryicon']['name'];
+            	
             	$catLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("categorieen")."/".$relCat['permaLink'];
             	?>
               <!-- Icon Description Outer Starts -->

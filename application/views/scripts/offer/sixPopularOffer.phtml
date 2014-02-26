@@ -7,10 +7,9 @@
 		$shopPicture = HTTP_PATH. "public/thumb.php?src=".$shopPicture."&h=31&w=62&zc=0";
 		if(isset( $this->offer['shop']['logo']['name'] ) && $this->offer['shop']['logo']['name'] != '' )
 		{    
-			if( file_exists ( ROOT_PATH .  $this->offer['shop']['logo']['path'] .'thum_big_'. $this->offer['shop']['logo']['name'] ))
-		    	{    
-		        	$shopPicture = PUBLIC_PATH .  $this->offer['shop']['logo']['path'] .'thum_big_'. $this->offer['shop']['logo']['name'] ;
-		       	}
+			   
+		        	$shopPicture = PUBLIC_PATH_CDN .  $this->offer['shop']['logo']['path'] .'thum_big_'. $this->offer['shop']['logo']['name'] ;
+		       	
 		}
 		$dType = '';
 		if ($this->offer['discountvalueType']  == '1') :

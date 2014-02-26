@@ -33,17 +33,17 @@ window.___gcfg = {lang: 'en-US'};
          <!-- Thanks-feedback2 Col1 Starts -->
         <div class="thanks-feedback2-col1">
 	        <div class="fl mt5">
-	        	<h3 class="text-black"><strong><img width="14" height="15" style="margin-right:5px;" src="<?php echo HTTP_PATH; ?>public/images/front_end/thumb-up.png">
+	        	<h3 class="text-black"><strong><img width="14" height="15" style="margin-right:5px;" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/thumb-up.png">
 	        	<?php echo $this->translate('Cool, how much did you save?'); ?></strong></h3> 
 	        </div>
-	        <div class="fr"><img width="10" height="10" src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-grey.png" onclick = "$('#positive-feedback').fadeOut('slow');"></div>
+	        <div class="fr"><img width="10" height="10" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/cross-grey.png" onclick = "$('#positive-feedback').fadeOut('slow');"></div>
          </div>
          <!-- Thanks-feedback2 Col1 Ends -->
             
          <!-- Thanks-feedback2 Col1 Starts -->
         <div class="thanks-feedback2-col1 mt10">
             <h3 class="fl mt5"><strong>$</strong></h3>
-            <p class="fl ml5"><input type="text" id="savemoneybox1" class="thanks-textbox1" maxlength="5" style="width:50px; height:37px;" name=""></p> <p class="fl mt10 ml5"><img width="2" height="2" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-dot.png"></p> 
+            <p class="fl ml5"><input type="text" id="savemoneybox1" class="thanks-textbox1" maxlength="5" style="width:50px; height:37px;" name=""></p> <p class="fl mt10 ml5"><img width="2" height="2" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/img-dot.png"></p> 
             <p class="fl ml5"><input type="text" name="" id="savemoneybox2" class="thanks-textbox1" maxlength="2" style="width:20px; height:37px;"></p>
          </div>
          <!-- Thanks-feedback2 Col1 Ends -->
@@ -70,7 +70,7 @@ window.___gcfg = {lang: 'en-US'};
         	<font class=" fl"> &nbsp;<?php echo $this->translate('Every vote helps other shoppers;'); ?></font>
         </div>
         <div class="fr">
-            <img width="10" height="10" src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-grey.png" onclick = "$('#nagetive-feedback').fadeOut('slow');">
+            <img width="10" height="10" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/cross-grey.png" onclick = "$('#nagetive-feedback').fadeOut('slow');">
         </div>
        </div>
       
@@ -85,7 +85,7 @@ window.___gcfg = {lang: 'en-US'};
        ?>
    	<div class="popup-header">
     	<div class="popup-logo"><img src="<?php echo $imagePop; ?>"  alt="Logo"/></div>
-        <div class="popup-cross" onClick="custompopupClose()"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-white.png" width="10" height="10" /></div>
+        <div class="popup-cross" onClick="custompopupClose()"><img src="<?php echo HTTP_PATH_CDN; ?>images/front_end/cross-white.png" width="10" height="10" /></div>
     </div>
      <!-- Popup Header Ends -->
        
@@ -95,10 +95,9 @@ window.___gcfg = {lang: 'en-US'};
   			$logo = HTTP_PATH.'public/images/NoImage/NoImage_200x100.jpg';
          	if( count($this->offerdetail[0]['shop']['logo']) > 0 ){
          		
-         	if( file_exists ( ROOT_PATH.ltrim($this->offerdetail[0]['shop']['logo']['path'],"/") .'thum_medium_store_'. $this->offerdetail[0]['shop']['logo']['name'] )) {
          		
-         		$logo = PUBLIC_PATH.ltrim($this->offerdetail[0]['shop']['logo']['path'], "/").'thum_medium_store_'.$this->offerdetail[0]['shop']['logo']['name'];
-         	}
+         		$logo = PUBLIC_PATH_CDN.ltrim($this->offerdetail[0]['shop']['logo']['path'], "/").'thum_medium_store_'.$this->offerdetail[0]['shop']['logo']['name'];
+         	
          }?>
             <!-- Popup Col1 Starts -->
          	<div class="popup-col1">
@@ -180,9 +179,9 @@ window.___gcfg = {lang: 'en-US'};
                 <div class="bar"  data-amount-part="37" data-amount-total="100" data-percentage="75"></div>
              	</div>
               	<div class="fr"><a href="javascript:;">
-                   <img width="31" hspace="5" height="28" src="<?php echo HTTP_PATH; ?>public/images/front_end/like-green.png"></a>
+                   <img width="31" hspace="5" height="28" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/like-green.png"></a>
                    <a href="javascript:;">
-                      <img width="31" height="28" src="<?php echo HTTP_PATH; ?>public/images/front_end/dislike-red.png">
+                      <img width="31" height="28" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/dislike-red.png">
                    </a>
                </div>
            </div>
@@ -191,8 +190,8 @@ window.___gcfg = {lang: 'en-US'};
                 <div class="fl progressbar" style="width:85%">
                     <div class="bar"  data-amount-part="37" data-amount-total="100" data-percentage="75"></div>
                 </div>
-                <div class="fr"><a href="javascript:;"><img width="31" hspace="5" height="28" src="<?php echo HTTP_PATH; ?>public/images/front_end/like-grey.png"></a> 
-                <a href="javascript:;"><img width="31" height="28" src="<?php echo HTTP_PATH; ?>public/images/front_end/dislike-red.png"></a></div>
+                <div class="fr"><a href="javascript:;"><img width="31" hspace="5" height="28" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/like-grey.png"></a> 
+                <a href="javascript:;"><img width="31" height="28" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/dislike-red.png"></a></div>
             </div>
             
            
@@ -233,8 +232,8 @@ window.___gcfg = {lang: 'en-US'};
                       <h3 class="text-white">
                       	<strong><?php echo $this->translate('VOER DEZE CODE IN TIJDENS DE BESTELLING'); ?></strong>
                       </h3>
-                      <img class="arrow-pop-left" src="<?php echo HTTP_PATH; ?>public/images/front_end/arrow-pop-right.png"/>
-                      <img class="arrow-pop-right" src="<?php echo HTTP_PATH; ?>public/images/front_end/arrow-pop-left.png"/>
+                      <img class="arrow-pop-left" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/arrow-pop-right.png"/>
+                      <img class="arrow-pop-right" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/arrow-pop-left.png"/>
 	                    <div class="popup-coupon-code">
 	                    	<div class="popup-coupon-code-inner">
 			                      <div class="coupon-code runtime-code"><?php echo $this->code; ?></div>

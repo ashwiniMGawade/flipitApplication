@@ -36,13 +36,9 @@ if($this->pageMode == true)
         <?php 
        
         $pageIconPath = '';
-        if(file_exists(ROOT_PATH.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'])) {
-        	$pageIconPath = PUBLIC_PATH.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
+        	$pageIconPath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
         	
-        }else {
-        	$pageIconPath = HTTP_PATH ."public/images/NoImage/NoImage_132_112.jpg";
-        	$pageIconPath = HTTP_PATH ."public/thumb.php?src=".$pageIconPath."&h=105&w=140&zc=0";
-        	}
+       
         	?>
         	   <div class="voucher-left">
         	   <img src ="<?php echo $pageIconPath;?>" alt="<?php echo $this->page['pageTitle']; ?>" class="radiusImg"/>

@@ -64,11 +64,9 @@
 	                        	 ?>
 		                    	<div class="about-col1">
 		                    			<?php  	
-								 		if(file_exists(BASE_ROOT.ltrim($alluser['profileimage']['path'],'/')."thum_large_widget_".$alluser['profileimage']['name']) && $alluser['profileimage']['name']!=''){
-								  			$img = HTTP_PATH. "public/" .ltrim($alluser['profileimage']['path'],"/")."thum_large_widget_".$alluser['profileimage']['name'];
-								 		}else{
-								  			$img = HTTP_PATH."public/images/NoImage/NoImage_142_121.jpg";
-										}
+								 		
+								  			$img = HTTP_PATH_CDN. "public/" .ltrim($alluser['profileimage']['path'],"/")."thum_large_widget_".$alluser['profileimage']['name'];
+								 		
 										?>
 		                        	<div class="white-box3"><a class="text-blue-link" href="<?php echo $profileLink; ?>"><img src="<?php echo $img; ?>"/></a></div>
 		                            <div class="about-col1-right">

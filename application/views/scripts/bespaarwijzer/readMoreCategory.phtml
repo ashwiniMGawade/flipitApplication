@@ -11,11 +11,8 @@
     <div class="<?php echo $cls;?>-left">
     	<div class="<?php echo $cls;?>-left-img">
         <?php  	
- 		if(file_exists(ROOT_PATH.$this->thumbnail['path'].'thum_article_samll_'. $this->thumbnail['name']) && $this->thumbnail['name']!=''){
-			$img = PUBLIC_PATH.$this->thumbnail['path'].'thum_article_samll_'.$this->thumbnail['name'];
-		}else{
-			$img = HTTP_PATH."public/images/NoImage/homePageLogo45_60.jpg";
-		}
+ 			$img = PUBLIC_PATH_CDN.$this->thumbnail['path'].'thum_article_samll_'.$this->thumbnail['name'];
+		
 		$mlink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $this->permalink;
 		$nameArr = explode(' ', $this->authorname);
 		$profileLink = HTTP_PATH_LOCALE."about/profile/id/".$this->authorid;

@@ -6,12 +6,12 @@ $src =  "images/front_end/find-icon2.png" ;
  
 if (file_exists ( ROOT_PATH . $src )) {
 
-	$src = PUBLIC_PATH . $src ;
+	$src = PUBLIC_PATH_CDN . $src ;
 		
 
 }else {
 
-	$src = HTTP_PATH.  "public/images/front_end/find-icon2.png" ;
+	$src = HTTP_PATH_CDN.  "images/front_end/find-icon2.png" ;
 }
 
 ?>

@@ -51,7 +51,7 @@ class MandrillController extends Zend_Controller_Action {
 		$this->getVouchercodesOfCategories($topCategories);
 		$this->getDirectLoginLinks();
 		
-		$this->headerMail = array(array('name' => 'headerMail', 'content' => "<img src='".HTTP_PATH."public/images/HeaderMail.gif'/>"));
+		$this->headerMail = array(array('name' => 'headerMail', 'content' => "<img src='".HTTP_PATH_CDN."images/HeaderMail.gif'/>"));
 		
 		$data = array_merge($this->dataShopName, $this->dataOfferName, 
 							$this->dataShopImage, $this->expDate,
@@ -96,13 +96,10 @@ class MandrillController extends Zend_Controller_Action {
 			$this->dataOfferName[$key]['content'] = $value['offer']['title'];
 			
 			if(count($value['offer']['shop']['logo']) > 0):
-				if(@file_exists(ROOT_PATH.$value['offer']['shop']['logo']['path'] .'thum_medium_store_'. $value['offer']['shop']['logo']['name']) && $value['offer']['shop']['logo']['name']!=''):
-				$img = PUBLIC_PATH.$value['offer']['shop']['logo']['path'].'thum_medium_store_'. $value['offer']['shop']['logo']['name'];
-				else:
-				$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
-				endif;
+				$img = PUBLIC_PATH_CDN.$value['offer']['shop']['logo']['path'].'thum_medium_store_'. $value['offer']['shop']['logo']['name'];
+				
 			else:
-				$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
+				$img = HTTP_PATH_CDN."images/NoImage/NoImage_200x100.jpg";
 			endif;
 			
 			$this->dataShopImage[$key]['name'] = 'shopLogo_'.($key+1);
@@ -122,13 +119,10 @@ class MandrillController extends Zend_Controller_Action {
 	public function getVouchercodesOfCategories($topCategories)
 	{
 		if(count($topCategories[0]['category']['categoryicon']) > 0):
-			if(@file_exists(ROOT_PATH.$topCategories[0]['category']['categoryicon']['path'] .'thum_medium_store_'. $topCategories[0]['category']['categoryicon']['name']) && $topCategories[0]['category']['categoryicon']['name']!=''):
-			$img = PUBLIC_PATH.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_store_'. $topCategories[0]['category']['categoryicon']['name'];
-			else:
-			$img = HTTP_PATH."public/images/NoImage/NoImage_70x60.png";
-			endif;
+			$img = PUBLIC_PATH_CDN.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_store_'. $topCategories[0]['category']['categoryicon']['name'];
+			
 		else:
-			$img = HTTP_PATH."public/images/NoImage/NoImage_70x60.png";
+			$img = HTTP_PATH_CDN."images/NoImage/NoImage_70x60.png";
 		endif;
 		$this->category = array(array('name' => 'categoryImage', 
 									  'content' => "<img src='".$img."'/>"
@@ -149,13 +143,10 @@ class MandrillController extends Zend_Controller_Action {
 			$this->dataOfferNameCat[$key]['content'] = $value['title'];
 				
 			if(count($value['shop']['logo']) > 0):
-				if(@file_exists(ROOT_PATH.$value['shop']['logo']['path'] .'thum_medium_store_'. $value['shop']['logo']['name']) && $value['shop']['logo']['name']!=''):
 					$img = PUBLIC_PATH.$value['shop']['logo']['path'].'thum_medium_store_'. $value['shop']['logo']['name'];
-				else:
-					$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
-				endif;
+				
 			else:
-				$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
+				$img = HTTP_PATH_CDN."images/NoImage/NoImage_200x100.jpg";
 			endif;
 				
 			$this->dataShopImageCat[$key]['name'] = 'shopLogoCat_'.($key+1);
