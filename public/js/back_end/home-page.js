@@ -91,7 +91,22 @@ $(document).ready(function(){
 
 
 
+	jQuery('#delete-header-image-btn').click(function(){
 
+		var headerImageName = jQuery('#delete-header-image-btn').attr('alt');
+		
+
+	});
+
+		
+	jQuery('#delete-widget-image-btn').click(function(){
+
+		var widgetImageName = jQuery('#delete-widget-image-btn').attr('alt');
+		
+
+	});
+
+	
 	$.ajax({
 		url : HOST_PATH + 'admin/homepage/getlocale',
 		type : 'post',

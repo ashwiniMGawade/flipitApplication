@@ -431,8 +431,14 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<div class="mainpage-content-right-inner-right-other">
 								<span class="message help-inline success margin-bottom-tenpx"></span>
 						</div>
+						<?php if($this->locale['0']['homepagebanner_name'] == '')
+				       { ?>
 				       <input type="file"  id="homepageBanner" class="span3 margin-bottom-tenpx" name="homepageBanner" >
+				       <?php } else { ?>
+				       	<button class="btn btn-primary" type="button" alt = "<?php echo $this->locale['0']['homepagebanner_name']; ?>" id="delete-header-image-btn"><?php echo $this->translate("Delete Image");?></button>
+				  <?php } ?>	
 				       <button class="btn btn-primary hide" type="button" id="update-header-image-btn"><?php echo $this->translate("Update Image");?></button>
+				       
 					   <div class="margin-bottom-tenpx">
 				           <span class="help-inline" id="logo_file_message"><?php echo $this->translate("Image Size: 2400 X 512 (*.jpg or *.png file only)") . "&nbsp;" . $this->translate("Max filesize:") . "&nbsp;" . ini_get('upload_max_filesize'); ?></span>
 					   </div>
@@ -469,7 +475,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<div class="mainpage-content-right-inner-right-other">
 								<span class="message help-inline success margin-bottom-tenpx"></span>
 						</div>
+						<?php if($this->locale['0']['homepage_widget_banner_name'] == '')
+				       { ?>
 				       <input type="file"  id="homepageWidgetBackground" class="span3 margin-bottom-tenpx" name="homepageWidgetBackground" >
+				         <?php } else { ?>
+				       	<button class="btn btn-primary" type="button" alt = "<?php echo $this->locale['0']['homepage_widget_banner_name'];  ?>" id="delete-widget-image-btn"><?php echo $this->translate("Delete Image");?></button>
+				  <?php } ?>
 				       <button class="btn btn-primary hide" type="button" id="update-widget-image-btn"><?php echo $this->translate("Update Image");?></button>
 					   <div class="margin-bottom-tenpx">
 				           <span class="help-inline" id="logo_file_message"><?php echo $this->translate("Image Size: 1080 X 350 (*.jpg or *.png file only)") . "&nbsp;" . $this->translate("Max filesize:") . "&nbsp;" . ini_get('upload_max_filesize'); ?></span>
