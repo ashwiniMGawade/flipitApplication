@@ -15,7 +15,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
     protected $_httpHost = null;
     protected $_siteName = "kortingscode.nl" ;
 
-
     /**
      * Set base controller or view request
      *
@@ -86,12 +85,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		$cdnSettings = $this->getOption('cdn') ;
 
 		# define cdn server http path
-	 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
+		if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
 			define("HTTP_PATH_CDN", trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] . '/'));
 		} else {
 			define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
 		}
-
+		
 
 		# define root path
 		defined('BASE_ROOT')
