@@ -43,7 +43,7 @@ border-radius: 5px;
 		          ?>
                   <span class="guide-text"><a class="text-blue-link" href="<?php echo $profileLink; ?>"><?php echo @$userview['firstName'] . " " . $userview['lastName'];?></a></span>
                    <?php 
-                    	      $img = HTTP_PATH_CDN."images/front_end/guide-cal.png";
+                    	      $img = HTTP_PATH ."public/images/front_end/guide-cal.png";
                     		  $update = strtotime($articleview['updated_at']);
                     		  $udate = date('d M Y', $update);
                 			  $date = $udate;
@@ -166,7 +166,7 @@ border-radius: 5px;
            		?>
 				<a class="left" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$this->prevLink; ?>">
 				  <?php if($this->prevLink !=""){?>
-				  	<img class="arrow-left" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/guide-arrows-prev.png" border="0">
+				  	<img class="arrow-left" src="<?php echo HTTP_PATH; ?>public/images/front_end/guide-arrows-prev.png" border="0">
 				  <?php } ?>
 				  <div class="guide-prev-img">
 				    <?php if($this->prevImage !=""){?>
@@ -189,7 +189,7 @@ border-radius: 5px;
            		                   );*/
            		?>
 				<a class="right" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $this->nextLink; ?>">
-                <img class="arrow-right" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/guide-arrows-next.png" border="0">
+                <img class="arrow-right" src="<?php echo  HTTP_PATH; ?>public/images/front_end/guide-arrows-next.png" border="0">
       			  		<div class="guide-next-img">
 		      			   <?php if($this->nextImage !=""){?>
 		      			   <img src="<?php echo $this->nextImage;?>" alt="<?php echo $this->nextTitle;?>">

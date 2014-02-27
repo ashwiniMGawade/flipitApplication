@@ -25,7 +25,7 @@ if(count($this->termandcondition) > 0){
 		$imgstyle='style="position: relative;bottom:15px;"';
 		$title = $this->title;
 		$class = '';
-		$logo = HTTP_PATH_CDN .'images/NoImage/box_plain_06.png';
+		$logo = HTTP_PATH .'public/images/NoImage/box_plain_06.png';
 		
 		if (strlen ( $this->title ) > 150) {
 			$title = substr ( $this->title , 0, 150 );
@@ -46,7 +46,7 @@ if(count($this->termandcondition) > 0){
 		
 		if ($this->Visability  != 'DE') :
 			if (! $userlogin) :
-					$logo = HTTP_PATH_CDN . 'images/front_end/lock.png';
+					$logo = HTTP_PATH .'public/images/front_end/lock.png';
 					$text = '<strong style="position: relative; top: 13px;">'.$this->translate('Member only Coupon Code,').'<br>'.$this->translate('Join us to see this Coupon!').'</strong>';
 					$style='style="margin-bottom: 5px; z-index: 100000; color: #363636; font-size: 14px;"';
 					$heightWidth = 'width="80" height="90"';//''
@@ -152,10 +152,10 @@ if(count($this->termandcondition) > 0){
 			 			</div>
 			 			<div class="voting-btns">
 			 			<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '1');">
-			 				<img class="up-btn" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/vote-up.png" alt="Vote Up">
+			 				<img class="up-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-up.png" alt="Vote Up">
 			 			</a>	
 		 				<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '0');">
-			 				<img class="down-btn" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/vote-down.png" alt="Vote Down">
+			 				<img class="down-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-down.png" alt="Vote Down">
 			 				</a>
 			 			</div>	
 				</div>
@@ -191,7 +191,7 @@ if(count($this->termandcondition) > 0){
 						
 					}else{
 						
-						$couponcodeImg = HTTP_PATH_CDN .'images/front_end/' .$couponcodeImg ;
+						$couponcodeImg = HTTP_PATH .'public/images/front_end/' .$couponcodeImg ;
 					}				
 							
 					 # check shop logo exist
@@ -205,7 +205,7 @@ if(count($this->termandcondition) > 0){
        	            }else {
        	            	
        	            		# display fallback image
-       	            		$shopImge = HTTP_PATH_CDN."images/NoImage/ShopLogo234_117.jpg";
+       	            		$shopImge = HTTP_PATH ."public/images/NoImage/ShopLogo234_117.jpg";
        	            }
 					
 					
@@ -342,7 +342,7 @@ if(count($this->termandcondition) > 0){
 							</div>
 							<div class="red-btn" style="margin:8px 0 0 5px;" id="<?php echo $this->id ; ?>" vote='0' onclick="showCode(this)">
 								<a href="<?php echo $urlToShow;?>" onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"  rel="nofollow" target="_blank" >
-									<img width="217" height="39" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red.png" alt="" />
+									<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png" alt="" />
 								</a>
 							</div>
 					<?php  }   
@@ -354,7 +354,7 @@ if(count($this->termandcondition) > 0){
 								<strong><span class="fl text-black"><?php echo $this->translate('Members Only!'); ?></span>
 									<span class="fr"><a href="<?php echo HTTP_PATH;?>login"><img
 											width="78" height="33" alt=""
-											src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-inschrijven.png" /></a></span>
+											src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-inschrijven.png" /></a></span>
 								</strong>
 							</h4>
 					</div>

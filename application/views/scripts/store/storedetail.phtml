@@ -35,7 +35,7 @@
 	$yellowBoxWarning  =
 	'<div class="yellow-box2 mt20 clr">
 	<div class="yellow-box2-img">
-	<img src="' .HTTP_PATH_CDN  . "images/front_end/icon19.png" . '" width="32" height="32" alt="" /></div>
+	<img src="' .HTTP_PATH  . "public/images/front_end/icon19.png" . '" width="32" height="32" alt="" /></div>
 	<div class="yellow-box2-text text-black">'
 	. $this->translate("Sorry") . " ". $this->data[0]['name']
 	. " ".  $this->translate('offers right now!') . '<br />
@@ -129,7 +129,7 @@
                                 <?php else: ?>
                                         <a target="_blank" disabled="disabled" rel="nofollow" class="btn text-blue-link fl btn-disabled">
                                 <?php   endif;  ?>
-                                <img class="weblogo" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/weblogo.png" alt=""/>
+                                <img class="weblogo" src="<?php echo HTTP_PATH; ?>public/images/front_end/weblogo.png" alt=""/>
 
                                 <?php
                                 $h = explode("//",$this->data[0]['actualUrl']);
@@ -391,7 +391,7 @@
 					if($this->data[0]['showSimliarShops'] && ! empty($this->similarShops)): ?>
 					  <div class="simlilar-shops-plus-category-shops">
 					  		<div class="new_box">
-								<img alt="Similar deals" src="<?php echo HTTP_PATH_CDN .'images/front_end/similar_shops.png';?> ">
+								<img alt="Similar deals" src="<?php echo HTTP_PATH .'public/images/front_end/similar_shops.png';?> ">
 							</div>
 							<?php echo $this->partial('store/_simlar-and-categfory-related-shops.phtml', array('data' => $this->similarShops,'shopName' => $this->data[0]['name'])); ?>
 					  </div>
@@ -428,7 +428,7 @@
 				if($this->data[0]['showSimliarShops'] && ! empty($this->similarShops)): ?>
 				  <div class="simlilar-shops-plus-category-shops">
 				  		<div class="new_box">
-								<img alt="Similar deals" src="<?php echo HTTP_PATH_CDN .'images/front_end/similar_shops.png';?> ">
+								<img alt="Similar deals" src="<?php echo HTTP_PATH .'public/images/front_end/similar_shops.png';?> ">
 						</div>
 						<?php echo $this->partial('store/_simlar-and-categfory-related-shops.phtml', array('data' => $this->similarShops,'shopName' => $this->data[0]['name'])); ?>
 				  </div>
@@ -453,10 +453,10 @@
 							<?php
 			                //echo ROOT_PATH.$this->profileImage['profileimage']['path']."thum_".$this->profileImage['profileimage']['name'];
 			                if($this->profileImage['profileimage']):
-			                		$img = HTTP_PATH_CDN. ltrim($this->profileImage['profileimage']['path'],"/"). 'thum_large_widget_' .$this->profileImage['profileimage']['name'];
+			                		$img = PUBLIC_PATH_CDN . ltrim($this->profileImage['profileimage']['path'],"/"). 'thum_large_widget_' .$this->profileImage['profileimage']['name'];
 			                	
 			                else:
-			                	$img = HTTP_PATH_CDN."images/NoImage/142x90.jpg";
+			                	$img = HTTP_PATH ."public/images/NoImage/142x90.jpg";
 			                endif;
 			                echo '<img alt="' .  $this->profileImage['firstName'] . '" class="" src="'.  $img . '"/>';
 			                ?>
@@ -479,7 +479,7 @@
 	                	  	  	echo $view->render('partials/dealBig.phtml');
 	                	  	  ?>
 			                <?php /*
-			                <img class="mt7" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/deal_guru_03.png" alt="" />
+			                <img class="mt7" src="<?php echo HTTP_PATH; ?>public/images/front_end/deal_guru_03.png" alt="" />
 			                */?>
 			            </div>
 			        </div>
@@ -500,7 +500,7 @@
 		         	<div class="ms-help-heading">
 		         	  <h4><strong><?php echo $this->translate('Hulp nodig met');?> <?php echo $this->data[0]['name'] . " " . $this->translate('Discount Codes 2012');?></strong></h4>
 		         	</div>
-		            <div class="ms-help-img"><img src="<?php echo HTTP_PATH_CDN; ?>images/front_end/img-question.png" width="26" height="26" alt="image" /></div>
+		            <div class="ms-help-img"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/img-question.png" width="26" height="26" alt="image" /></div>
  					<div class="ms-help-text1 line-height22 font14"><a class="text-blue-link" id="clicker" href="javascript:;"><?php echo $this->translate('Hier laten wij');?></a>&nbsp;<?php echo $this->translate('where to enter my Hotels.com code, or read our full');?>&nbsp;<a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE?><?php echo $pgname;?>"><?php echo $this->data[0]['name']."&nbsp;".$this->translate('kortingscode how to guide');?></a> <?php echo $this->translate('lezen!');?></div>
 		         </div>
 		    <!-- Ms Help Outer Ends -->
@@ -522,43 +522,43 @@
 		?>
 		<div class="new-widget-outer">
 				<div class="new-widget-header">
-	    		<div class="left"><img alt='image-cup' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-widget-cup.jpg" /></div>
+	    		<div class="left"><img alt='image-cup' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-widget-cup.jpg" /></div>
 				<div class=""><p class="font14"><?php echo $this->translate('Alle pluspunten van'); ?> <?php echo $this->data[0]['name']; ?> <?php echo $this->translate('op een rij!');?></p></div>
 	    	</div>
 
 			<?php if( $this->data[0]['ideal']){ ?>
-			<div class="new-wid-row"><span><img alt='img-icon1' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon1.jpg" /></span><?php echo $this->translate('Betaal mogelijkheid: iDEAL');?></div>
+			<div class="new-wid-row"><span><img alt='img-icon1' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon1.jpg" /></span><?php echo $this->translate('Betaal mogelijkheid: iDEAL');?></div>
 			<?php }
 
 			if( $this->data[0]['qShops']){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon2' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon2.jpg" /></span><?php echo $this->translate('Thuiswinkel waarborg');?></div>
+			<div class="new-wid-row"><span><img alt='image-icon2' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon2.jpg" /></span><?php echo $this->translate('Thuiswinkel waarborg');?></div>
 			<?php }
 
 			if( $this->isHotShop){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon3' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon3.jpg" /></span><?php echo $this->translate('Toppartner Kortingscode.nl');?></div>
+			<div class="new-wid-row"><span><img alt='image-icon3' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon3.jpg" /></span><?php echo $this->translate('Toppartner Kortingscode.nl');?></div>
 			<?php }
 
 			if( $this->data[0]['freeReturns']){ ?>
-			<div class="new-wid-row"><span><img  alt='image-icon4' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon4.jpg" /></span><?php echo $this->translate('Gratis retour');?></div>
+			<div class="new-wid-row"><span><img  alt='image-icon4' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon4.jpg" /></span><?php echo $this->translate('Gratis retour');?></div>
 			<?php }
 
 			if( $this->data[0]['pickupPoints']){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon5' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon5.jpg" /></span><?php echo $this->translate('Afhalen in de winkel');?></div>
+			<div class="new-wid-row"><span><img alt='image-icon5' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon5.jpg" /></span><?php echo $this->translate('Afhalen in de winkel');?></div>
 			<?php }
 
 			if( $this->isSuperPartner){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon6' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon6.jpg" /></span><?php echo $this->translate('Super partner');?></div>
+			<div class="new-wid-row"><span><img alt='image-icon6' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon6.jpg" /></span><?php echo $this->translate('Super partner');?></div>
 			<?php }
 
 			if( $this->data[0]['mobileShop']){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon7' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon7.jpg" /></span><?php echo $this->translate('Mobiele webshop');?></div>
+			<div class="new-wid-row"><span><img alt='image-icon7' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon7.jpg" /></span><?php echo $this->translate('Mobiele webshop');?></div>
 			<?php }
 			if($this->data[0]['service']){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon8' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon8.jpg" /></span><?php echo $this->translate('Klantenservice:');?> <?php echo $this->data[0]['serviceNumber'];?></div>
+			<div class="new-wid-row"><span><img alt='image-icon8' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon8.jpg" /></span><?php echo $this->translate('Klantenservice:');?> <?php echo $this->data[0]['serviceNumber'];?></div>
 			<?php }
 
 			if( $this->isPopular){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon9' src="<?php echo HTTP_PATH_CDN; ?>images/front_end/new-wid-icon9.jpg" /></span><?php echo $this->translate('Top 50 Populairste Shops');?></div>
+			<div class="new-wid-row"><span><img alt='image-icon9' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon9.jpg" /></span><?php echo $this->translate('Top 50 Populairste Shops');?></div>
 			<?php } ?>
 	</div>
 	<?php endif;?>
@@ -617,16 +617,16 @@
 
 <?php if($this->data[0]['howToUse'] == 1){
 		if(LOCALE==''):
-       		$imagePop = HTTP_PATH_CDN."images/front_end/logo-popup.png";
+       		$imagePop = HTTP_PATH ."public/images/front_end/logo-popup.png";
        else:
-       		$imagePop = HTTP_PATH_CDN."images/front_end/flip-logo.png";
+       		$imagePop = HTTP_PATH ."public/images/front_end/flip-logo.png";
        endif;?>
 <!-- popup div -->
 
 <div id="popup-wrapper" class="maindiv popup-outer">
 	<div class="popup-header">
     	<div class="popup-logo"><img src="<?php echo $imagePop; ?>" alt="Logo" /></div>
-        <div class="popup-cross" id="close-btn" onClick="custompopupClose()"><img src="<?php echo HTTP_PATH_CDN; ?>images/front_end/cross-white.png" width="10" height="10" alt="cross-white" /></div>
+        <div class="popup-cross" id="close-btn" onClick="custompopupClose()"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-white.png" width="10" height="10" alt="cross-white" /></div>
     </div>
 	<div class="middlediv"><h4><b><?php echo $this->translate("Zo gebruik je de") ." ". $this->data[0]['name'] ." ". $this->translate("kortingscodes:")?></b></h4>
 		<div class="pop-list-outer" id="list"><ol>
@@ -640,11 +640,11 @@
 				<?php if(!empty($this->data[0]['bigimage'])){ ?>
 					<img src="<?php echo PUBLIC_PATH_CDN.$this->data[0]['bigimage']['path']."thum_bigLogoFile_".$this->data[0]['bigimage']['name'];?>" width="280" height="197" alt="noimage"  />
 					<?php  } else{ ?>
-				  	<img src="<?php echo HTTP_PATH_CDN; ?>images/NoImage/280x100.jpg" width="280" height="197" alt="noimage"  />
+				  	<img src="<?php echo HTTP_PATH; ?>public/images/NoImage/280x100.jpg" width="280" height="197" alt="noimage"  />
 					<?php 	 }?>
 
 			 </div>
-			 <div class="popup-col1-right-col1 mt10" style="margin-bottom:10px"><img src="<?php echo HTTP_PATH_CDN; ?>images/front_end/shape1.png" width="14" height="43" alt="noimage" /></div>
+			 <div class="popup-col1-right-col1 mt10" style="margin-bottom:10px"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/shape1.png" width="14" height="43" alt="noimage" /></div>
 
 			<div class="greybox-popup">
 				<?php if(!empty($this->data[0]['smallimage'])){ ?>
@@ -653,7 +653,7 @@
 
 					<?php  } else{ ?>
 
-					<img src="<?php echo HTTP_PATH_CDN; ?>images/NoImage/280x197.jpg" width="280" height="100" alt="noimage" />
+					<img src="<?php echo HTTP_PATH; ?>public/images/NoImage/280x197.jpg" width="280" height="100" alt="noimage" />
 
 					<?php 	}?>
 			</div>

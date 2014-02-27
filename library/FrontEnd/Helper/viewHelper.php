@@ -547,7 +547,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		<h4 class="text-white">' . $trans->translate('Doe mee met kortingscode.nl') . '</h4>
 		<p class="text-light-grey text-center mt10">' . $trans->translate('Krijg gratis toegang tot exclusieve Members-Only codes en kortingen!') . '</p>
 		<div class="log-direct-icon">
-			<img src="'.HTTP_PATH_CDN.'images/front_end/img-id-new.png" width="48" height="42" alt="New Icon" />
+			<img src="'.HTTP_PATH .'public/images/front_end/img-id-new.png" width="48" height="42" alt="New Icon" />
 		</div>';
 		if(Auth_VisitorAdapter::hasIdentity())
 		{

@@ -57,7 +57,7 @@ class OfferController extends Zend_Controller_Action {
 			$fbImage = 'flipit.png';
 		}
 
-		$this->view->fbImg = HTTP_PATH_CDN."images/" .$fbImage ;
+		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
 		$this->view->shopId = '';
 		$this->view->controllerName = $params['controller'];
@@ -125,7 +125,7 @@ class OfferController extends Zend_Controller_Action {
       		$fbImage = 'flipit.png';
       	}
 
-      	$this->view->fbImg = HTTP_PATH_CDN."images/" .$fbImage ;
+      	$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
       	$this->view->shopId = '';
       	$this->view->controllerName = $params['controller'];
@@ -228,7 +228,7 @@ class OfferController extends Zend_Controller_Action {
     			$img = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'. $offerDetail[0]['shop']['logo']['name'];
     	
     	else:
-    		$img = HTTP_PATH_CDN."images/NoImage/NoImage_200x100.jpg";
+    		$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
     	endif;
 
     	//for facebook parameters
@@ -315,7 +315,7 @@ class OfferController extends Zend_Controller_Action {
 				$img = PUBLIC_PATH_CDN.$cpnDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $cpnDetails[0]['shop']['logo']['name'];
 			
 		else:
-			$img = HTTP_PATH_CDN."images/NoImage/NoImage_200x100.jpg";
+			$img = HTTP_PATH ."public/images/NoImage/NoImage_200x100.jpg";
 		endif;
 
 		//for facebook parameters
@@ -378,7 +378,7 @@ class OfferController extends Zend_Controller_Action {
 				$fbImage = 'flipit.png';
 
 		}
-		$this->view->fbImg = HTTP_PATH_CDN."images/" .$fbImage ;
+		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
 
 

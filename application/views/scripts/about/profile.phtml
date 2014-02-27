@@ -25,10 +25,10 @@
             			
 							$profileImage = HTTP_PATH_CDN. ltrim($userDetails[0]['profileimage']['path'],"/")."thum_large_widget_".$userDetails[0]['profileimage']['name'];
 						
-						 $twitterimg = HTTP_PATH_CDN."images/front_end/twitter.png";
-						 $plusimg = HTTP_PATH_CDN."images/front_end/plus.png";
-						 $piimg = HTTP_PATH_CDN."images/front_end/p-icon.png";
-						 $dealguruimg = HTTP_PATH_CDN."images/front_end/btn-deal-guru.png";
+						 $twitterimg = HTTP_PATH ."public/images/front_end/twitter.png";
+						 $plusimg = HTTP_PATH ."public/front_end/plus.png";
+						 $piimg = HTTP_PATH ."public/front_end/p-icon.png";
+						 $dealguruimg =HTTP_PATH ."public/front_end/btn-deal-guru.png";
 	                ?>
 	                	<div class="contributor-lt-img"><img src="<?php echo $profileImage; ?>"/></div>
 	                    <div class="contributor-lt-soical"><?php if($userDetails[0]['twitter']!=""): ?><a href="<?php echo $userDetails[0]['twitter']; ?>" target="_blank"><img src="<?php echo $twitterimg; ?>" width="24" height="24" /></a><?php endif; if($userDetails[0]['google']!=""): ?><a href="<?php echo $userDetails[0]['google']; ?>" target="_blank"><img src="<?php echo $plusimg; ?>" width="24" height="24" /></a><?php endif; if($userDetails[0]['pinterest']!=""): ?><a href="<?php echo $userDetails[0]['pinterest']; ?>" target="_blank"><img src="<?php echo $piimg; ?>" class="mr-none" width="24" height="24" /></a><?php endif; ?></div>
@@ -60,10 +60,10 @@
 	         		</div>
 	            </div>
 	            <?php 
-	            	$icon1 = HTTP_PATH_CDN."images/front_end/icon17.png";
-	            	$icon2 = HTTP_PATH_CDN."images/front_end/icon18.png";
-	            	$icon3 = HTTP_PATH_CDN."images/front_end/img-thumb2.png";
-	            	$icon4 = HTTP_PATH_CDN."images/front_end/img-thumb3.png";
+	            	$icon1 = HTTP_PATH ."public/images/front_end/icon17.png";
+	            	$icon2 = HTTP_PATH ."public/images/front_end/icon18.png";
+	            	$icon3 = HTTP_PATH ."public/images/front_end/img-thumb2.png";
+	            	$icon4 = HTTP_PATH ."public/images/front_end/img-thumb3.png";
 	            ?>
 	            <div class="contributor-right">
 	            
@@ -142,7 +142,7 @@
 	        		
 	        			$mlink = HTTP_PATH_LOCALE.$favShops['shops'][0]['permaLink'];
 	        	  else:
-	        	  		$img = HTTP_PATH_CDN."images/NoImage/storeLogo100_50.jpg";
+	        	  		$img = HTTP_PATH ."public/images/NoImage/storeLogo100_50.jpg";
 	        	  		$mlink = HTTP_PATH_LOCALE;
 	        	  endif;
 	        		

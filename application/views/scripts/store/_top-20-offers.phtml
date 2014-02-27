@@ -23,7 +23,7 @@ if(count($this->termandcondition) > 0){
 		$imgstyle='style="position: relative;bottom:15px;"';
 		$title = $this->title;
 		$class = '';
-		$logo = HTTP_PATH_CDN .'images/NoImage/box_plain_06.png';
+		$logo = HTTP_PATH .'public/images/NoImage/box_plain_06.png';
 
 		if (strlen ( $this->title ) > 150) {
 			$title = substr ( $this->title , 0, 150 );
@@ -45,7 +45,7 @@ if(count($this->termandcondition) > 0){
 
 		if ($this->Visability  != 'DE') :
 			if (! $userlogin) :
-					$logo = HTTP_PATH_CDN . 'images/front_end/lock.png';
+					$logo = HTTP_PATH .'public/images/front_end/lock.png';
 					$text = '<strong style="position: relative; top: 13px;">'.$this->translate('Member only Coupon Code,').'<br>'.$this->translate('Join us to see this Coupon!').'</strong>';
 					$style='style="margin-bottom: 5px; z-index: 100000; color: #363636; font-size: 14px;"';
 					$heightWidth = 'width="80" height="90"';//''
@@ -155,10 +155,10 @@ if(count($this->termandcondition) > 0){
 			 			</div>
 			 			<div class="voting-btns">
 			 			<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '1');">
-			 				<img class="up-btn" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/vote-up.png" alt="Vote Up">
+			 				<img class="up-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-up.png" alt="Vote Up">
 			 			</a>
 		 				<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '0');">
-			 				<img class="down-btn" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/vote-down.png" alt="Vote Down">
+			 				<img class="down-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-down.png" alt="Vote Down">
 			 				</a>
 			 			</div>
 				</div>
@@ -188,14 +188,11 @@ if(count($this->termandcondition) > 0){
 
 					}
 
-					if(file_exists(ROOT_PATH .'images/front_end/' .$couponcodeImg )){
-
-						$couponcodeImg = PUBLIC_PATH_CDN .'images/front_end/' .$couponcodeImg ;
-
-					}else{
+					
 
 						$couponcodeImg = HTTP_PATH .'public/images/front_end/' .$couponcodeImg ;
-					}
+
+					
 
 
 					 # check shop logo exist
@@ -209,7 +206,7 @@ if(count($this->termandcondition) > 0){
        	            }else {
 
        	            		# display fallback image
-       	            		$shopImge = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
+       	            		$shopImge = PUBLIC_PATH."images/NoImage/NoImage_200x100.jpg";
        	            }
 
 
@@ -348,7 +345,7 @@ if(count($this->termandcondition) > 0){
 								</div>
 								<div class="red-btn red-btn-top-20" id="<?php echo $this->id ; ?>" vote='0' onclick="showCode(this)">
 									<a href="<?php echo $urlToShow;?>" onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"  rel="nofollow" target="_blank" >
-										<img width="217" height="39" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red-top-20.png" alt="" />
+										<img width="217" height="39" src="<?php echo HTTP_PATH ?>public/images/front_end/btn-red-top-20.png" alt="" />
 									</a>
 								</div>
 						<?php  }
@@ -360,7 +357,7 @@ if(count($this->termandcondition) > 0){
 									<strong><span class="fl text-black"><?php echo $this->translate('Members Only!'); ?></span>
 										<span class="fr"><a href="<?php echo HTTP_PATH;?>login"><img
 												width="78" height="33" alt=""
-												src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-inschrijven.png" /></a></span>
+												src="<?php echo HTTP_PATH ?>public/images/front_end/btn-inschrijven.png" /></a></span>
 									</strong>
 								</h4>
 						</div>
@@ -487,7 +484,7 @@ if(count($this->termandcondition) > 0){
 						<div><span class="wr-w18"><?php echo $termandcondition;?></span></div>
 
 						<div class="close_area fr" id="close_area<?php echo $this->id ;?>" >
-							<a class="text-grey-link" onclick="hideReadMoreAndTeamCondition(<?php echo $this->id; ?>)" href="javascript:void(0);"><?php echo $this->translate('Close'); ?><img border="0" alt="" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/cross_03.png" />
+							<a class="text-grey-link" onclick="hideReadMoreAndTeamCondition(<?php echo $this->id; ?>)" href="javascript:void(0);"><?php echo $this->translate('Close'); ?><img border="0" alt="" src="<?php echo HTTP_PATH; ?>public/images/front_end/cross_03.png" />
 							</a>
 						</div>
 				</div>

@@ -145,7 +145,7 @@ class StoreController extends Zend_Controller_Action
 				$fbImage = 'flipit.png';
 					
 		}
-		$this->view->fbImg = HTTP_PATH_CDN."images/" .$fbImage ;
+		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
       	 
       	
       	$this->view->stores 		= $chc;
@@ -295,7 +295,7 @@ class StoreController extends Zend_Controller_Action
 		    		$img = PUBLIC_PATH_CDN.ltrim($shopdetail[0]['logo']['path'], "/").'thum_medium_store_'. $shopdetail[0]['logo']['name'];
 		    	
 		    else:
-		    	$img = HTTP_PATH_CDN."images/NoImage/NoImage_200x100.jpg";
+		    	$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
 		    endif;
 		    
 		    
@@ -695,7 +695,7 @@ class StoreController extends Zend_Controller_Action
     			$img = PUBLIC_PATH_CDN.ltrim($getShopDetail[0]['logo']['path'],"/").'thum_medium_store_'. $getShopDetail[0]['logo']['name'];
     		
     	else:
-    		$img = HTTP_PATH_CDN."images/NoImage/NoImage_200x100.jpg";
+    		$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
     	endif;
     	
     	//for facebook parameters

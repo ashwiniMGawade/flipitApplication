@@ -125,7 +125,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		$this->view->fbtitle = @$page[0]['pageTitle'];
 		$this->view->fbshareUrl = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
 
-		$this->view->fbImg = HTTP_PATH_CDN."images/bespaarwijzer_og.png";
+		$this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
 
 		$this->view->popularAtTheMoment = $popularAtTheMoment;
 		$this->view->mostRead = $mostRead;
@@ -227,7 +227,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		$this->view->fbtitle = @$this->pageDetail[0]['name'];
 		$this->view->fbshareUrl = HTTP_PATH_LOCALE.$this->pageDetail[0]['permalink'];;
 		
-		$this->view->fbImg = HTTP_PATH_CDN."images/bespaarwijzer_og.png";
+		$this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
 
 		$this->view->category = $category;
 		$this->view->mostReadArtOfcategory = $mostreadArtOfCategory;
@@ -305,7 +305,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		for($i= 0;$i<count($getall);$i++){
 			
 			$autherImage  = $uobj->getProfileImage($getall[$i]['authorid']);
-					$img = PUBLIC_PATH_CDN.$autherImage['profileimage']['path'] .'thum_medium_'. $autherImage['profileimage']['name'];
+			$img = HTTP_PATH.'public/' .$autherImage['profileimage']['path'] .'thum_medium_'. $autherImage['profileimage']['name'];
 		    
 		    
 			$ArNew[$i]['id']  = $getall[$i]['id'];
@@ -413,7 +413,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		$this->view->fbtitle = @$view[0]['title'];
 		$this->view->fbshareUrl = HTTP_PATH_LOCALE.@$view[0]['permalink'];
 		 
-		$this->view->fbImg = HTTP_PATH_CDN."images/bespaarwijzer_og.png";
+		$this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
 
 
 		

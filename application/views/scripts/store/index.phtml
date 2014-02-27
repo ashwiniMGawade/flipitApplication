@@ -35,7 +35,7 @@ echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>$breadcru
        	            			$img = PUBLIC_PATH_CDN.ltrim($pShop['shop']['logo']['imgpath'],"/")."thum_medium_".$pShop['shop']['logo']['imgname'];
        	            		
        	            	}else {
-       	            		$img = HTTP_PATH_CDN."images/NoImage/storeLogo100_50.jpg";
+       	            		$img = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
        	            	}
        	            	echo '<a href="'.HTTP_PATH_LOCALE.$pShop['shop']['permaLink'].'"><img src="' . $img . '"  alt="' .$pShop['shop']['name'] . '"/></a>';
        	      		}

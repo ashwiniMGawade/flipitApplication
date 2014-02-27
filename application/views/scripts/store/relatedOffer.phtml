@@ -11,7 +11,7 @@
 			    $class = '';
 			    $heightWidth='';
 			    $imgstyle='style="position: relative;bottom:15px;"';
-			    $logo = HTTP_PATH_CDN . 'images/NoImage/ShopLogo234_117.jpg';
+			    $logo = HTTP_PATH .'public/images/NoImage/ShopLogo234_117.jpg';
 				if (strlen ( $this->title ) > 40) {
 					$title = substr ( $this->title , 0, 40 );
 				}
@@ -48,7 +48,7 @@
 				if ($this->Visability  != 'DE') :
 					if (! $userlogin) :
 					
-					$logo = $logo = HTTP_PATH_CDN . 'images/front_end/lock.png';
+					$logo = $logo = HTTP_PATH .'public/images/front_end/lock.png';
 					$text = '<strong style="position: relative; top: 13px;">'.$this->translate('Member only Coupon Code,').'<br>'.$this->translate('Join us to see this Coupon!').'</strong>';
 					$style='style="margin-bottom: 5px; z-index: 100000; color: #363636; font-size: 14px;"';
 					$heightWidth = 'width="80" height="90"';
@@ -174,21 +174,21 @@
 					?>
 						<div class="red-btn-sale" id="<?php echo $this->id ;?>" > 
 							<a href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
-							<img width="217" height="39" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red.png"> </a>
+							<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png"> </a>
 						</div>
 					<?php 
 					} elseif($this->discountType=='SL'){
 					?>
 						<div class="red-btn-sale" id="<?php echo $this->id ; ?>">
 							<a href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
-							<img width="217" height="39" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red.png"> </a>
+							<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png"> </a>
 						</div>
 					<?php 
 					} else {
 					?>
 					<div class="red-btn" id="<?php echo $this->id ; ?>" vote='0' onclick="showCode(this)">
 						<a href="<?php echo $urlToShow;?>"  onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"  rel="nofollow"   target="_blank">
-							<img width="217" height="39" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red.png">
+							<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png">
 						</a>
 					</div>
 				<?php  }
@@ -200,7 +200,7 @@
 							<strong><span class="fl text-black"><?php echo $this->translate('Members Only!'); ?></span>
 								<span class="fr"><a href="<?php echo HTTP_PATH;?>login"><img
 										width="78" height="33" alt=""
-										src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-inschrijven.png"></a></span>
+										src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-inschrijven.png"></a></span>
 							</strong>
 						</h4>
 					</div>
@@ -247,9 +247,9 @@
                    </div>
                 		<span class="fr"> <img style="margin-right: 4px;"
 							onclick="showCodeDetail(<?php echo $this->id; ?>,'1')"
-							src="<?php echo HTTP_PATH_CDN; ?>images/front_end/thumb-up.png" />
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/thumb-up.png" />
 							<img onclick="showCodeDetail(<?php echo $this->id ; ?>,'-1')"
-							src="<?php echo HTTP_PATH_CDN; ?>images/front_end/thumb-down.png" />
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/thumb-down.png" />
 						</span> 
 						<div style="float: right; line-height: 15px;" id="showVote<?php echo $this->id ;?>"><strong class="fontClass"><?php echo $this->translate('votes:').$PosVote;?></strong></div>
 						

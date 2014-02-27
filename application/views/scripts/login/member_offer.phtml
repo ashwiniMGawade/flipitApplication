@@ -9,7 +9,7 @@
 	      		
 			 	$title = $this->title;
 			    $class = '';
-				$logo = HTTP_PATH_CDN . 'images/front_end/no_image.png';
+				$logo = HTTP_PATH .'public/images/front_end/no_image.png';
 				if (strlen ( $this->title ) > 40) {
 					$title = substr ( $this->title , 0, 40 );
 				}
@@ -36,7 +36,7 @@
 				$heightWidth = 'width="150" height="56"';//'width="224" height="108"'
 				if ($this->Visability  != 'DE') :
 					if (! $userlogin) :
-					$logo = $logo = HTTP_PATH_CDN . 'images/front_end/lock.png';
+					$logo = $logo = HTTP_PATH .'public/images/front_end/lock.png';
 					$heightWidth = 'width="80" height="80"';//''
 					endif;
 			    endif;
@@ -70,7 +70,7 @@
                 ?>
                   <div class="voucher-col1-top-heading3">
 						<img width="56" height="56"
-							src="<?php echo HTTP_PATH_CDN; ?>images/front_end/exclusive.png">
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/exclusive.png">
 					</div>
               <?php endif;?>
             	
@@ -144,14 +144,14 @@
 					 }?>
 					<div class="red-btn" id="scratchImage<?php echo $this->id ;?>">
 					<a href="<?php echo $url; ?>" target="_blank">
-					<img width="217" height="39" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red.png"> </a>
+					<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png"> </a>
 					</div>
 					<?php } elseif($this->discountType=='SL'){
 						
 							 $url = $this->refURL;?>
 										<div class="red-btn" id="scratchImage<?php echo $this->id ; ?>">
 										<a href="<?php echo $url; ?>" target="_blank">
-										<img width="217" height="39" src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red.png"> </a>
+										<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png"> </a>
 										</div>
 					<?php }
 					
@@ -159,7 +159,7 @@
 					<div class="red-btn" id="scratchImage<?php echo $this->id ; ?>"
 						onclick="showCode(<?php echo $this->id ; ?>,0)">
 						<img width="217" height="39"
-							src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-red.png">
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png">
 					</div>
 				<?php  }
 					
@@ -169,7 +169,7 @@
 							<strong><span class="fl text-black"><?php echo $this->translate('Members Only!'); ?></span>
 								<span class="fr"><a href="<?php echo HTTP_PATH;?>login"><img
 										width="78" height="33" alt=""
-										src="<?php echo HTTP_PATH_CDN; ?>images/front_end/btn-inschrijven.png"></a></span>
+										src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-inschrijven.png"></a></span>
 							</strong>
 						</h4>
 					</div>
@@ -216,9 +216,9 @@
                    </div>
                 		<span class="fr"> <img style="margin-right: 4px;"
 							onclick="showCode(<?php echo $this->id ; ?>,'1')"
-							src="<?php echo HTTP_PATH_CDN; ?>images/front_end/thumb-up.png" />
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/thumb-up.png" />
 							<img onclick="showCode(<?php echo $this->id ; ?>,'-1')"
-							src="<?php echo HTTP_PATH_CDN; ?>images/front_end/thumb-down.png" />
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/thumb-down.png" />
 						</span> 
 						<div style="float: right; line-height: 23px;" id="showVote<?php echo $this->id ;?>"><strong class="fontClass"><?php echo $this->translate('votes:').$PosVote;?></strong></div>
 						
@@ -255,11 +255,11 @@
                        
                          <img width="16" id="active"
 							height="15"
-							src="<?php echo HTTP_PATH_CDN; ?>images/front_end/star-yellow.png" class="yellowstar<?php echo $this->shop['id'];?>" style="cursor:pointer;<?php echo $activeStar;?>">
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/star-yellow.png" class="yellowstar<?php echo $this->shop['id'];?>" style="cursor:pointer;<?php echo $activeStar;?>">
 							
                        <img id="Inactive" width="16"
 							height="15"
-							src="<?php echo HTTP_PATH_CDN; ?>images/front_end/star.png" class="blackstar<?php echo $this->shop['id'];?>" onclick="javascript:activeStar(<?php echo $this->shop['id'];?>)" style="cursor:pointer; <?php echo $inactiveStar;?>">
+							src="<?php echo HTTP_PATH; ?>public/images/front_end/star.png" class="blackstar<?php echo $this->shop['id'];?>" onclick="javascript:activeStar(<?php echo $this->shop['id'];?>)" style="cursor:pointer; <?php echo $inactiveStar;?>">
 							</span>
 							<?php }}?>
 					</div>

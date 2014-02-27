@@ -95,7 +95,7 @@ class CategoryController extends Zend_Controller_Action {
 				$fbImage = 'flipit.png';
 					
 		}
-		$this->view->fbImg = HTTP_PATH_CDN."images/" .$fbImage ;
+		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
 		
 		$this->view->specialCat = $specialList;
@@ -142,7 +142,7 @@ class CategoryController extends Zend_Controller_Action {
 				$fbImage = 'flipit.png';
 					
 		}
-		$this->view->fbImg = HTTP_PATH_CDN."images/" .$fbImage ;
+		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 	   
 	   }else {
 	     throw new Zend_Controller_Action_Exception('', 404);

@@ -189,7 +189,7 @@ class FreesignupController extends Zend_Controller_Action
     			$params = '';
     			$domain = $_SERVER['HTTP_HOST'];
 
-    			$imgLogoMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH_CDN."images/flipit-welcome-mail.jpg'/></a>";
+    			$imgLogoMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
 
     			$siteName = "Flipit.com";
 
@@ -198,7 +198,7 @@ class FreesignupController extends Zend_Controller_Action
     			if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl")
     			{
 
-    				$imgLogoMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH_CDN."images/HeaderMail.gif'/></a>";
+    				$imgLogoMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
 
     				$siteName = "Kortingscode.nl";
 
