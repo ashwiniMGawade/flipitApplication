@@ -240,7 +240,8 @@ if(count($this->termandcondition) > 0){
 							<p><?php
 							//echo $this->startDate; //die;
 								$sdate = new Zend_Date(strtotime($this->startDate));
-
+								echo $this->translate('Added'); ?>: <span class="text-black"><?php echo ucwords($sdate->get(Zend_Date::DATE_MEDIUM)); ?>, </span>
+								<?php 	                    		
 								if($diff ==5 || $diff ==4 || $diff ==3 || $diff ==2){
 								?>
 									<span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dagen geldig!');; ?></span>
