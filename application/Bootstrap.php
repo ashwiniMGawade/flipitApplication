@@ -92,7 +92,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
 		}*/
 
-		# define cdn server http path
+		# define path for load images from front-end / back-end 
 		define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/public/'));
 
 		# define root path
