@@ -277,9 +277,15 @@ if(count($this->termandcondition) > 0){
 						</div>
 
 						<div class="voucher-col1-top-20-heading">
-						<h3>
-							<a id="<?php echo $this->id ;?>" id="<?php echo $this->id ;?>" href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="showCode1(this), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"><?php echo $title;?></a>
-						</h3>
+							<h3>
+								<?php 
+								# diplay popup only for coupon codes 
+								if($this->discountType == "CD"): ?>
+									<a id="<?php echo $this->id ;?>" href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="showCode1(this), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"><?php echo $title;?></a>
+								<?php else: ?>
+									<a id="<?php echo $this->id ;?>" href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"><?php echo $title;?></a>
+								<?php endif; ?>
+							</h3>
 						</div>
 
 	                <?php

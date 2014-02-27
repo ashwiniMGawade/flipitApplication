@@ -423,7 +423,7 @@ function setFormData(data){
 			 }
 			 if(data[0].affname){
 				jQuery('#aboutNertworkDiv').show();
-				jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');
+				jQuery('#shopNetwork').html(data[0].affname);
 			 }
 
 			 // check if selected shop has restrcited content or not
@@ -742,6 +742,7 @@ function getShopDetail(value){
 												  .removeClass('alert-error');
 						}
 
+
 						if(data[0].affname != '' && data[0].affname != null){
 							jQuery('#aboutNertworkDiv').show();
 							jQuery('#shopNetwork').html(data[0].affname).addClass('alert-error');;
@@ -749,6 +750,7 @@ function getShopDetail(value){
 							jQuery('#shopNetwork').html('&nbsp;')
 												  .removeClass('alert-error');
 						}
+
 						
 						jQuery('#aboutShopDiv').show();
 						
