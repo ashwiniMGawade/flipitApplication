@@ -453,7 +453,7 @@
 							<?php
 			                //echo ROOT_PATH.$this->profileImage['profileimage']['path']."thum_".$this->profileImage['profileimage']['name'];
 			                if($this->profileImage['profileimage']):
-			                		$img = PUBLIC_PATH_CDN . ltrim($this->profileImage['profileimage']['path'],"/"). 'thum_large_widget_' .$this->profileImage['profileimage']['name'];
+			                		$img = HTTP_PATH_CDN . ltrim($this->profileImage['profileimage']['path'],"/"). 'thum_large_widget_' .$this->profileImage['profileimage']['name'];
 			                	
 			                else:
 			                	$img = HTTP_PATH ."public/images/NoImage/142x90.jpg";
