@@ -86,17 +86,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 		# define cdn server http path
 
-	 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
-			//define("HTTP_PATH_CDN", trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] . '/'));
-			define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/public/'));
+// 	 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
+// 			//define("HTTP_PATH_CDN", trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] . '/'));
+// 			define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/public/'));
 			
-		} else {
-			//define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
+// 		} else {
+// 			//define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
 			
-			define("HTTP_PATH_CDN",
-					trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']]
-							.'/'. strtolower($this->_lang) .'/'));
-		}
+// 			define("HTTP_PATH_CDN",
+// 					trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']]
+// 							.'/'. strtolower($this->_lang) .'/'));
+// 		}
 
 		# define path for load images from front-end / back-end 
 		define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/public/'));
