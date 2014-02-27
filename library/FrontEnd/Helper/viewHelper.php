@@ -345,7 +345,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
                     <div class="mark-spencer-bot-col1-mid-textbox1">
                     <textarea name="offer_desc" id="offer_desc" class="textarea" style="width:195px; height:105px" cols="0" rows=""></textarea>
                     </div>
-                    <div class="mark-spencer-bot-col1-mid-textbox1" style="margin-bottom:4px!important"> <a href="javascript:;" onClick="sendiscountCoupon()"><img src="'.HTTP_PATH_CDN.'images/front_end/btn-deel-de-korting.png" width="196" height="37" /></a></div></form>';
+                    <div class="mark-spencer-bot-col1-mid-textbox1" style="margin-bottom:4px!important"> <a href="javascript:;" onClick="sendiscountCoupon()"><img src="'.HTTP_PATH.'public/images/front_end/btn-deel-de-korting.png" width="196" height="37" /></a></div></form>';
 		return $str;
 	}
 	/**
@@ -614,7 +614,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 		$trans = Zend_Registry::get('Zend_Translate');
 		$editorDetail = self :: getFamousEditorDetail($editorId);
-		$userPicture = HTTP_PATH_CDN.'images/NoImage/NoImage_142_90.jpg';
+		$userPicture = HTTP_PATH.'public/images/NoImage/NoImage_142_90.jpg';
 		if(isset($editorDetail[0]['profileimage']['name']) && $editorDetail[0]['profileimage']['name']!=''){
 				$userPicture = PUBLIC_PATH_CDN .$editorDetail[0]['profileimage']['path'].'thum_large_widget_'.$editorDetail[0]['profileimage']['name'];
 			
@@ -1016,7 +1016,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
  					}
  		$mainUl .="<div class='clr'></div>";
- 		$mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer')."'><img src='".HTTP_PATH_CDN."images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle bespaarwijzers')."</a> &raquo;</div>";
+ 		$mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer')."'><img src='".HTTP_PATH."public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle bespaarwijzers')."</a> &raquo;</div>";
   		$mainUl .="</div>";//close row
 
   		$mainUl .="</div>";//close new-outer
