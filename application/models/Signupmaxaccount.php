@@ -453,6 +453,23 @@ class Signupmaxaccount extends BaseSignupmaxaccount
  	}
 
 
+ 	/**
+	 *
+	 * @param array request array  saving SeeIn
+	 * @return integer id
+	 */
+	public static function  deleteHeaderImage($params)
+	{
+		$q = Doctrine_Query::create()->update('Signupmaxaccount')
+					->set('homepagebanner_name','?' , ' ')
+					->where('id=1')
+					->execute();
+
+		return true ;
+
+
+	}
+
 
  	/**
  	 *
@@ -509,6 +526,23 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 
 
  	}
+
+ 	/**
+	 *
+	 * @param array request array  saving SeeIn
+	 * @return integer id
+	 */
+	public static function  deleteWidgetImage($params)
+	{
+		$q = Doctrine_Query::create()->update('Signupmaxaccount')
+ 				->set('homepage_widget_banner_name' ,'?', ' ')
+ 				->where('id=1')
+ 				->execute();
+
+ 		return true ;
+
+
+	}
 
 
  	/**
