@@ -1066,6 +1066,36 @@ class Admin_HomepageController extends Zend_Controller_Action
 
 	}
 
+	/**
+	 *  deleteHeaderImage
+	 *
+	 *  Deletes the current Header Image
+	 *  @author Amit Sharma
+	 */
+	public function deleteHeaderImageAction()
+	{
+
+
+		if(	$this->_request->isXmlHttpRequest())
+		{
+			if ($this->_request->isPost())
+			{
+					$parmas = $this->_getAllParams();
+					$result = Signupmaxaccount::deleteHeaderImage($parmas);
+
+					self::updateVarnish();
+
+					$this->_helper->json($result);
+				
+			}
+
+		}
+
+		$this->_redirect ( '/admin/homepage' );
+
+	}
+
+
 	public function updateWidgetBackgroundImageAction()
 	{
 
@@ -1081,9 +1111,38 @@ class Admin_HomepageController extends Zend_Controller_Action
 
 					self::updateVarnish();
 
-
 					$this->_helper->json($result);
 				}
+			}
+
+		}
+
+		$this->_redirect ( '/admin/homepage' );
+
+	}
+
+	/**
+	 *  deleteWidgetImage
+	 *
+	 *  Deletes the current Widget Image
+	 *  @author Amit Sharma
+	 */
+
+	public function deleteWidgetImageAction()
+	{
+
+
+		if(	$this->_request->isXmlHttpRequest())
+		{
+			if ($this->_request->isPost())
+			{
+					$parmas = $this->_getAllParams();
+					$result = Signupmaxaccount::deleteWidgetImage($parmas);
+
+					self::updateVarnish();
+
+					$this->_helper->json($result);
+				
 			}
 
 		}

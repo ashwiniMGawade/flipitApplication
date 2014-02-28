@@ -94,7 +94,16 @@ $(document).ready(function(){
 	jQuery('#delete-header-image-btn').click(function(){
 
 		var headerImageName = jQuery('#delete-header-image-btn').attr('alt');
-		
+
+		$.ajax({
+				url : HOST_PATH + 'admin/homepage/delete-header-image',
+				type : 'post',
+				dataType : 'json',
+				data : {'imageName' : headerImageName},
+				success : function(obj){
+					window.location.reload(true);
+				}
+			});
 
 	});
 
@@ -102,6 +111,16 @@ $(document).ready(function(){
 	jQuery('#delete-widget-image-btn').click(function(){
 
 		var widgetImageName = jQuery('#delete-widget-image-btn').attr('alt');
+
+		$.ajax({
+				url : HOST_PATH + 'admin/homepage/delete-widget-image',
+				type : 'post',
+				dataType : 'json',
+				data : {'widgetName' : widgetImageName},
+				success : function(obj){
+					window.location.reload(true);
+				}
+			});
 		
 
 	});
@@ -2193,12 +2212,14 @@ $(function () {
 			// Add each uploaded file name to the #files list
 
         	jQuery('#progress .bar',".header-image-cont").css('width',  '100%');
-
+        	
             jQuery("#update-header-image-btn").off("click");
 			setTimeout(function(){
 				jQuery('.progress-file-detail',".header-image-cont").slideUp('slow',function() {
 					jQuery('#progress .bar',".header-image-cont").css('width',  '0%');
 					jQuery("#update-header-image-btn").hide();
+					 $("#delete-header-image-btn").show();
+					
 					$(".header-image-cont span.message").html('');
 
 				});
@@ -2217,12 +2238,13 @@ $(function () {
 				img.onload = function() {
 
 					$("img" , "div.homepageBanner-content").attr('src',newSrc);
+					
 
 				};
 
 				img.src = newSrc ;
 
-
+				
 
 			}
 
@@ -2258,6 +2280,8 @@ $(function () {
 						 $("span#selected-filename", ".header-image-cont").html(fileName);
 						 $('div.progress-file-detail', ".header-image-cont").show('fast');
 						 data.submit();
+						jQuery("#homepageBanner").hide();
+
 					 }
 
 				});
@@ -2278,6 +2302,8 @@ $(function () {
                 progress + '%'
             );
         }
+
+  
     }) ;
 
 
@@ -2294,12 +2320,14 @@ $(function () {
 			// Add each uploaded file name to the #files list
 
         	jQuery('#progress .bar', "div.widget-image-cont").css('width',  '100%');
-
+        	
             jQuery("#update-widget-image-btn").off("click");
 			setTimeout(function(){
 				jQuery('.progress-file-detail', "div.widget-image-cont").slideUp('slow',function() {
 					jQuery('#progress .bar', "div.widget-image-cont").css('width',  '0%');
 					jQuery("#update-widget-image-btn", "div.widget-image-cont").hide();
+					
+					jQuery("#delete-widget-image-btn").show();
 					$(".widget-image-cont span.message").html('');
 
 				});
@@ -2317,6 +2345,7 @@ $(function () {
 				img.onload = function() {
 
 					$("img" , "div.homepageWidget-content").attr('src',newSrc);
+					
 
 				};
 
@@ -2358,6 +2387,7 @@ $(function () {
 						 $("span#selected-filename", "div.widget-image-cont").html(fileName);
 						 $('div.progress-file-detail', "div.widget-image-cont").show('fast');
 						 data.submit();
+						 jQuery("#homepageWidgetBackground").hide();
 					 }
 
 				});
@@ -2378,6 +2408,7 @@ $(function () {
                 progress + '%'
             );
         }
+
     }) ;
 });
 
