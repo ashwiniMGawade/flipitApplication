@@ -533,7 +533,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			 $permalink = preg_replace( $search, $replace, $permalink);
 		 }
 
-
+	
 		# get last word in permalink using regex match
 		preg_match("/[^\/]+$/", $permalink, $matches);
 		if(intval(@$matches[0]) > 0){
@@ -548,7 +548,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			$permalink1 = $permalink;
 		}
 
-
+		
 		//$routeProp[0] = strtolower($routeProp[0]);
 		# check if permalink exists in route permalink table
 		if(count($data) > 0){
@@ -912,8 +912,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 								)
 				  ));
 			}
+
 			//route redirection instance for rules written in routes.ini
 			$router = Zend_Controller_Front::getInstance()->getRouter();
+
 			$router->addConfig(new Zend_Config_Ini(APPLICATION_PATH.'/configs/routes.ini', 'production'), 'routes');
 
 		}
