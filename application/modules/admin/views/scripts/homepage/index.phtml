@@ -410,11 +410,17 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			</h3>
 					<div class="mainpage-content-right-inner"></div>
 					<div class="mainpage-content-right-inner">
+					
+			 				
 						<div class="homepageBanner-content">
-			 					   	<img  src="<?php echo PUBLIC_PATH_LOCALE. $this->locale['0']['homepagebanner_path'] .
+							<?php  if($this->locale['0']['homepagebanner_name'] != 'null')
+				       { ?>
+							   	<img  src="<?php echo PUBLIC_PATH_LOCALE. $this->locale['0']['homepagebanner_path'] .
 								   	 $this->locale['0']['homepagebanner_name'] ?>">
-
+						
+					    <?php } ?>
 						</div>
+						
 						<div class="mainpage-content-right-inner-left-other">
 						</div>
 						<div class="progress-file-detail hide">
@@ -431,7 +437,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<div class="mainpage-content-right-inner-right-other">
 								<span class="message help-inline success margin-bottom-tenpx"></span>
 						</div>
-						<?php if($this->locale['0']['homepagebanner_name'] == ' ')
+						<?php if($this->locale['0']['homepagebanner_name'] == 'null')
 				       { ?>
 				      	 <input type="file"  id="homepageBanner" class="span3 margin-bottom-tenpx" name="homepageBanner" >
 				       <?php } else { ?>
@@ -455,11 +461,15 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			</h3>
 					<div class="mainpage-content-right-inner"></div>
 					<div class="mainpage-content-right-inner">
+					
 						<div class="homepageWidget-content">
+							<?php  if($this->locale['0']['homepage_widget_banner_name'] != 'null')
+				       { ?>
 			 					   	<img  src="<?php echo PUBLIC_PATH_LOCALE. $this->locale['0']['homepage_widget_banner_path'] .
 								   	 $this->locale['0']['homepage_widget_banner_name'] ?>">
-
+						<?php } ?>
 						</div>
+						
 						<div class="mainpage-content-right-inner-left-other">
 						</div>
 						<div class="progress-file-detail hide">
@@ -476,7 +486,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 						<div class="mainpage-content-right-inner-right-other">
 								<span class="message help-inline success margin-bottom-tenpx"></span>
 						</div>
-						<?php if($this->locale['0']['homepage_widget_banner_name'] == ' ')
+						<?php if($this->locale['0']['homepage_widget_banner_name'] == 'null')
 				       { ?>
 				       <input type="file"  id="homepageWidgetBackground" class="span3 margin-bottom-tenpx" name="homepageWidgetBackground" >
 				         <?php } else { ?>

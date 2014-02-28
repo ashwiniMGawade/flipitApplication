@@ -2237,7 +2237,8 @@ $(function () {
 
 				img.onload = function() {
 
-					$("img" , "div.homepageBanner-content").attr('src',newSrc);
+					//$("img" , "div.homepageBanner-content").attr('src',newSrc);
+					$('div.homepageBanner-content').append('<img  src="' + newSrc + '">');
 					
 
 				};
@@ -2344,7 +2345,10 @@ $(function () {
 
 				img.onload = function() {
 
-					$("img" , "div.homepageWidget-content").attr('src',newSrc);
+
+				   $('div.homepageWidget-content').append('<img  src="' + newSrc + '">');
+
+					//$("img" , "div.homepageWidget-content").attr('src',newSrc);
 					
 
 				};

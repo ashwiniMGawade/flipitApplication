@@ -461,7 +461,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 	public static function  deleteHeaderImage($params)
 	{
 		$q = Doctrine_Query::create()->update('Signupmaxaccount')
-					->set('homepagebanner_name','?' , ' ')
+					->set('homepagebanner_name','?' , 'null')
 					->where('id=1')
 					->execute();
 
@@ -535,7 +535,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 	public static function  deleteWidgetImage($params)
 	{
 		$q = Doctrine_Query::create()->update('Signupmaxaccount')
- 				->set('homepage_widget_banner_name' ,'?', ' ')
+ 				->set('homepage_widget_banner_name' ,'?', 'null')
  				->where('id=1')
  				->execute();
 
