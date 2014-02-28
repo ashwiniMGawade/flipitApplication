@@ -30,7 +30,7 @@ if($this->pageMode == true)
   
   	?>
   	
-  	<?php if($this->offercount >0){?>
+  	
   	
   		<div class="voucher-outer-left-col1 mt20">
         <?php 
@@ -41,7 +41,7 @@ if($this->pageMode == true)
        
         	?>
         	   <div class="voucher-left">
-        	   <img src ="<?php echo $pageIconPath;?>" alt="<?php echo $this->page['pageTitle']; ?>" class="radiusImg"/>
+        	   	<img src ="<?php echo $pageIconPath;?>" alt="<?php echo $this->page['pageTitle']; ?>" class="radiusImg"/>
         	   </div>
         	   
         	<div class="voucher-heading ml15 mt5">
@@ -54,6 +54,8 @@ if($this->pageMode == true)
          </div>
          
        <div class="separator" style="margin-top:17px;">&nbsp;</div>
+       
+       <?php if($this->offercount >0){?>
        
   		<div class="voucher-outer-left-col1 mt20">
  			<?php 
@@ -70,8 +72,10 @@ if($this->pageMode == true)
            </div>
   	  </div> 
   	  
-  	<?php }else{ ?> 
-  <div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div>
+  	<?php } else { ?> 
+  	
+  			<div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div>
+  			
   <?php } ?>       
   <?php 
   else :
