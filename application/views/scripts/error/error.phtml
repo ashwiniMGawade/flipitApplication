@@ -55,9 +55,12 @@ if($this->pageMode == true)
          
        <div class="separator" style="margin-top:17px;">&nbsp;</div>
        
-       <?php if($this->offercount >0){?>
+       
        
   		<div class="voucher-outer-left-col1 mt20">
+  		
+  		<?php if($this->offercount > 0){?>
+  		
  			<?php 
  						
  				echo $this->partialLoop('partials/offer.phtml', $this->paginator );
@@ -70,13 +73,14 @@ if($this->pageMode == true)
             	</div>
  			</div>
            </div>
-  	  </div> 
-  	  
-  	<?php } else { ?> 
+           <?php } else { ?> 
   	
   			<div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div>
   			
-  <?php } ?>       
+  	<?php } ?> 
+  	  </div> 
+  	  
+  	      
   <?php 
   else :
   ?>
