@@ -26,6 +26,7 @@ class Offer extends BaseOffer
 
 		$srhOffer 	= 	@$params["offerText"]!='undefined' ? $params["offerText"] : '';
 		$srhShop 	=   @$params["shopText"]!='undefined' ? $params["shopText"] : '';
+		$srhCoupon 	=   @$params["shopCoupon"]!='undefined' ? $params["shopCoupon"] : '';
 		$type 		=   @$params["couponType"]!='undefined' ? $params["couponType"] : '';
 		//get offer deleted or other by flag flag (1 or 0)
 		$flag = @$params['flag'];
@@ -36,7 +37,7 @@ class Offer extends BaseOffer
 		//echo 'T ' . $type ;
 
 		$offerList = Doctrine_Query::create()
-			->select('o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL')
+			->select('o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL,o.couponcode')
 			->from("Offer o")
 		///	->addSelect("(SELECT sum(onClick) FROM ViewCount WHERE offerId = o.id ) as clicks")
 			->leftJoin('o.shop s')
@@ -57,6 +58,9 @@ class Offer extends BaseOffer
 		if($srhShop!=''){
 			$offerList->andWhere("s.name LIKE ?", "%$srhShop%");
 		}
+		if($srhCoupon!=''){
+			$offerList->andWhere("o.couponcode LIKE ?", "%$srhCoupon%");
+		}
 		if($type!=''){
 			$offerList->andWhere("o.discountType="."'$type'");
 		}
@@ -66,7 +70,7 @@ class Offer extends BaseOffer
 		//print_r($offerList->getSqlQuery()); die;
 		$result	=	DataTable_Helper::generateDataTableResponse($offerList,
 				$params,
-				array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.Visability','o.extendedOffer','o.startDate','o.endDate', 'clicks','authorName'),
+				array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.Visability','o.couponcode','o.extendedOffer','o.startDate','o.endDate', 'clicks','authorName'),
 				array(),
 				array());
 		//echo "<pre>";
@@ -331,6 +335,25 @@ class Offer extends BaseOffer
 		->where('o.deleted=' . "'$flag'")
 		->andWhere("s.name LIKE ?", "$keyword%")->andWhere("o.userGenerated = '0'")
 		->orderBy("s.id ASC")->groupBy('s.name')->limit(5)->fetchArray();
+		//print_r($data); die;
+		return $data;
+	}
+
+	/**
+	 * Search top five Coupon
+	 * @param string $keyword
+	 * @param boolean $flag
+	 * @return array $data
+	 * @author Amit Sharma
+	 */
+	public static function searchToFiveCoupon($keyword,$flag){
+
+		$data = Doctrine_Query::create()
+		->select()
+		->from("Offer o")
+		->where('o.deleted=' . "'$flag'")
+		->andWhere("o.couponcode LIKE ?", "$keyword%")
+		->orderBy("o.id ASC")->limit(5)->fetchArray();
 		//print_r($data); die;
 		return $data;
 	}
