@@ -160,6 +160,7 @@
 		          </div>
 		        </div>
 			</li>
+			 <?php }  if($sessionNamespace->settings['rights']['content']['rights']== '1' || $sessionNamespace->settings['rights']['content']['rights']== '2' ){  ?>
 		       <li <?php if($controller == 'menu') { ?> class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" <?php }?> id="menu-links">
 
 			        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/menu"><br></a></div>
