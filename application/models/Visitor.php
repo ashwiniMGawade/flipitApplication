@@ -102,22 +102,16 @@ class Visitor extends BaseVisitor
 		}
 
 		$visitor = Doctrine_Core::getTable("Visitor")->find($id);
-		$visitor->firstName = FrontEnd_Helper_viewHelper::sanitize( $params['firstName'] );
-		$visitor->lastName = FrontEnd_Helper_viewHelper::sanitize( $params['lastName'] );
-		$visitor->dateOfBirth = FrontEnd_Helper_viewHelper::sanitize( $dob );
-
-
-		if(! $isUpdatedByAdmin)
+		$visitor->firstName = FrontEnd_Helper_viewHelper::sanitize($params['firstName']);
+		$visitor->lastName = FrontEnd_Helper_viewHelper::sanitize($params['lastName']);
+		$visitor->dateOfBirth = FrontEnd_Helper_viewHelper::sanitize($dob);
+		
+		if(isset($params['email']))
 		{
-			if(self::validateEmail($params['emailAddress']))
-			{
-				$visitor->email = FrontEnd_Helper_viewHelper::sanitize( $params['emailAddress'] );
-			} else {
-				return false ;
-			}
+			$visitor->email = FrontEnd_Helper_viewHelper::sanitize($params['email']);
+		} 
 
-		}
-		# check postal code
+	    # check postal code
 		if(isset($postalCode)){
 			$visitor->postalCode = FrontEnd_Helper_viewHelper::sanitize($postalCode );
 		}
@@ -167,7 +161,7 @@ class Visitor extends BaseVisitor
 		if($params['gender']=='male'){
 			$visitor->gender = 0;
 		}
-
+	
 		$visitor->save();
 
 		return array("ret" => $visitor->id ,
