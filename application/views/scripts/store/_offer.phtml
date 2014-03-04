@@ -14,7 +14,7 @@ foreach ($this->offers as $offer) {
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
         <div class="holder">
-            <?php echo $offerPartial->getMainButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink = '', $this->offersType); ?>
+            <?php echo $offerPartial->getCommonRedirectUrlForOffer($offer, $urlToShow, $offerBounceRate, $this->offersType , 'offerType'); ?>
             <div class="box">
     <?php
     if ($offer->discountType == 'PR' || $offer->discountType == 'PA') {
@@ -27,17 +27,12 @@ foreach ($this->offers as $offer) {
     ?>
                 <div class="text">
                     <p> <?php echo $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
-                    <a id="<?php echo $offer->id ;?>"
-                    href="<?php echo $urlToShow;?>"
-                    rel="nofollow" class="link" target="_blank"
-                    onClick="<?php echo $offer->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                    <?php echo $offerTitle;?>
-                    </a>
+                    <?php echo $offerPartial->getCommonRedirectUrlForOffer($offer, $urlToShow, $offerBounceRate, $offerTitle, 'offerTitle'); ?>
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink']; 
-    echo $offerPartial->getMainButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
+    echo $offerPartial->getCommonRedirectUrlForOffer($offer, $urlToShow, $offerBounceRate, $permalink, 'mainOfferClickoutButton');
     echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
     ?>
                 </div>
