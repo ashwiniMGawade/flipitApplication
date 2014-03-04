@@ -71,10 +71,10 @@ function validatestep1()
                 },
                 messages : {
                   emailAddress : {
-                        required : __("Enter your email address"),
-                        email : __("Please enter a valid email address"),
-                        minlength: __("Enter at least 6 characters"),
-                        remote : __("This email address is already in use")
+                        required : __("Voer uw e-mailadres in"),
+                        email : __("Voer een geldig e-mailadres"),
+                        minlength: __("Vul minimaal 6 karakters"),
+                        remote : __("Dit e-mailadres is al in gebruik")
                   }
                 },
                 onfocusin : function(element) {
