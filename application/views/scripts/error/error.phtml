@@ -1,70 +1,54 @@
 <?php
-
-//$this->headTitle()->append($this->translate('All Categories'));
 $breadcrumb = "<a href='".HTTP_PATH."category/index/' style='color:#6a6a6a'>".$this->translate('Categories')."</a>";
 $headerSearch = new FrontEnd_Helper_viewHelper();
 echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
 ?>
 <?php
 $messege=$this->message;
-switch ($messege)
-{
-case "Page not found":
-if($this->pageMode == true)
-{
 
-	$width = $display= '';
-	if($this->page['pageType'] != "offer"){
-  		$width = 'style="width:100%"';
-  		$display = 'style="display:none"';
-  	}
-?>
-<div class="alle-winkels-outer">
-   <!-- Alle Winkels Left Starts -->
-  <div id="left_container" class="" <?php echo $width; ?>>
-           	 	
-    
-  	 <!-- Start Special offer list -->          
-  	<?php 
-  	if($this->page['pageType'] == "offer"): 
-  
-  	?>
-  	
-  	
-  	
-  		<div class="voucher-outer-left-col1 mt20">
-        <?php 
-       
-        $pageIconPath = '';
-       $pageIconPath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
-        	
-       
-        	?>
-        	   <div class="voucher-left">
-        	   	<img src ="<?php echo $pageIconPath;?>" alt="<?php echo $this->page['pageTitle']; ?>" class="radiusImg"/>
-        	   </div>
-        	   
-        	<div class="voucher-heading ml15 mt5">
-            	<h1><?php echo $this->page['pageTitle']; ?></h1>
-            </div>
-            
-            <div class="voucher-text1 ml15">
-            	<span class="word-wrap-without-margin-category"><?php echo stripslashes($this->page['content']); ?></span>
-            </div>
-         </div>
-         
-       <div class="separator" style="margin-top:17px;">&nbsp;</div>
-       
-       
-       
-  		<div class="voucher-outer-left-col1 mt20">
-  		
-  		<?php if($this->offercount > 0){?>
-  		
- 			<?php 
- 						
- 				echo $this->partialLoop('partials/offer.phtml', $this->paginator );
- 			?>
+if($messege=="Page not found" &&  $this->matches < 3) 
+{
+	
+	if($this->pageMode == true)
+	{
+	    $width = $display= '';
+		if($this->page['pageType'] != "offer") {
+	  		$width = 'style="width:100%"';
+	  		$display = 'style="display:none"';
+	  	}
+	?>
+	<div class="alle-winkels-outer">
+	   <!-- Alle Winkels Left Starts -->
+	  <div id="left_container" class="" <?php echo $width; ?>>
+	      <!-- Start Special offer list -->          
+	      <?php 
+	      if($this->page['pageType'] == "offer"): 
+	      ?>
+		     <div class="voucher-outer-left-col1 mt20">
+			     <?php 
+			     $pageIconPath = '';
+			     $pageIconPath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
+			     ?>
+			     <div class="voucher-left">
+			         <img src ="<?php echo $pageIconPath;?>" alt="<?php echo $this->page['pageTitle']; ?>" class="radiusImg"/>
+			     </div>
+			        	   
+			     <div class="voucher-heading ml15 mt5">
+			         <h1><?php echo $this->page['pageTitle']; ?></h1>
+			     </div>
+			     
+			     <div class="voucher-text1 ml15">
+			         <span class="word-wrap-without-margin-category"><?php echo stripslashes($this->page['content']); ?></span>
+			     </div>
+		    </div>
+	         
+	        <div class="separator" style="margin-top:17px;">&nbsp;</div>
+	       	
+	       	<div class="voucher-outer-left-col1 mt20">
+	  		<?php if($this->offercount > 0) {?>
+	  		<?php 
+	 		echo $this->partialLoop('partials/offer.phtml', $this->paginator );
+	 		?>
             <div  class="voucher-paging-outer">
             	<div  class="voucher-paging-outer">
             	<div class="voucher-paging-inner">
@@ -73,19 +57,18 @@ if($this->pageMode == true)
             	</div>
  			</div>
            </div>
-           <?php } else { ?> 
-  	
-  			<div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div>
-  			
-  	<?php } ?> 
-  	  </div> 
-  	  
-  	      
-  <?php 
-  else :
-  ?>
-  <div class="guide-outer-new">
-  
+	       <?php } else { ?> 
+	       
+	  	     <div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div>
+	  			
+	  	    <?php } ?> 
+	  	  </div> 
+	  
+	  <?php 
+	  else :
+	  ?>
+	      <div class="guide-outer-new">
+	  
           	<div class="voucher-heading ml15 mt5">
               	<h1><?php echo $this->page['pageTitle']; ?></h1>
               </div>
@@ -93,31 +76,27 @@ if($this->pageMode == true)
               <div class="voucher-text1 ml15 mt20" <?php echo $width; ?>>
               	<span class="word-wrap-without-margin-category"><?php echo stripslashes($this->page['content']); ?></span>
               </div>
-           </div>
-  </div> 
-  <?php endif; ?> 
- 
-  <!-- Alle Winkels Left Ends -->
-  <!-- End Special offer list -->          
-   
-         <!-- Alle Winkels Right Starts -->
-		     <div id="right_container" class="alle-winkels-right" <?php echo $display; ?>>
-		 	<?php
-           	  	
-           	  	echo $this->widget;
-//            	  	echo FrontEnd_Helper_viewHelper::welcomeRocket()
-//            	  	.FrontEnd_Helper_viewHelper::PopularWinkelsWidget()
-//            	  	.FrontEnd_Helper_viewHelper::PopularCategoryWidget()
-//            	  	.FrontEnd_Helper_viewHelper::otherhelpfullSavingTipsWidget();
-				
-			?>
-		   </div>
-		   
-          <!-- Alle Winkels Right Ends -->
-</div>
-
-<?php break;}
-default: ?>
+	     </div>
+	  </div> 
+	  <?php endif; ?> 
+	 
+	  <!-- Alle Winkels Left Ends -->
+	  <!-- End Special offer list -->          
+	   
+	  <!-- Alle Winkels Right Starts -->
+	   <div id="right_container" class="alle-winkels-right" <?php echo $display; ?>>
+			 	 <?php echo $this->widget;  ?>
+	   </div>
+			   
+	<!-- Alle Winkels Right Ends -->
+	</div>
+	
+	<?php 
+	} 
+} 
+else 
+{ 
+?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
