@@ -155,8 +155,8 @@ class ErrorController extends Zend_Controller_Action
             		$splofferlists = Offer::getspecialofferonly($reqiurevaule);
 
             		$paginator = FrontEnd_Helper_viewHelper::renderPagination($splofferlists,@$matches[0],27,7);
-
-
+					
+            		$this->view->matches = $matches[0];
             		$this->view->widget = $wdgt;
             		$this->view->page = $page;
             		$this->view->paginator = $paginator;
