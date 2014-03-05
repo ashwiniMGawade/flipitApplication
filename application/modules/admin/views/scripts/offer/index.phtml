@@ -44,7 +44,7 @@ $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
             <div class="mainpage-content-colorbox">
                 <form class="form-search" id="searchform">
                 	<div class="fl">
-                        <input type='hidden' id="searchOffer" name="searchOffer" style="width:530px;"/>
+                        <input type='hidden' id="searchOffer" name="searchOffer" style="width:300px;"/>
 					</div>
                     <div class="fl ml15">
                         <select id='couponType' name='couponType'>
@@ -60,6 +60,9 @@ $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
                         <div class="mainpage-content-right-inner-left-searchbar-other">
                         	<input type="hidden" class="span3" id="searchShop" name="searchShop" style="width:300px;">
                         </div>
+                        <div class="mainpage-content-right-inner-left-searchbar-other">
+                          <input type="hidden" class="span3" id="searchCoupon" name="searchCoupon" style="width:208px;">
+                        </div>
                     </div>
                 </form>
             </div>
@@ -71,7 +74,7 @@ $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
                     <th><?php echo $this->translate('Shop');?></th>
                     <th><?php echo $this->translate('Type');?></th>
                     <th><?php echo $this->translate('Deeplinking');?></th>
-                    <th><?php echo $this->translate('Extended');?></th>
+                    <th><?php echo $this->translate('Coupon Code');?></th>
                     <th><?php echo $this->translate('Start');?></th>
                     <th><?php echo $this->translate('End');?></th>
                     <th><?php echo $this->translate('Clickouts');?></th>

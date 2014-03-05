@@ -190,9 +190,10 @@ class Admin_OfferController extends Zend_Controller_Action {
 	 */
 	public function getofferAction() {
 
-           $params = $this->_getAllParams();
+        $params = $this->_getAllParams();
 		//cal to getofferlist function from offer model class
 		$offerList = Offer::getofferList($params);
+		//echo "<pre>";print_r($offerList);die;
 		echo Zend_Json::encode($offerList);
 		die();
 	}
@@ -258,6 +259,45 @@ class Admin_OfferController extends Zend_Controller_Action {
 		}
 
 
+
+		echo Zend_Json::encode($ar);
+		die;
+
+		// action body
+	}
+
+
+	/**
+	 * search to five Coupon from database by flag
+	 * flag (1 deleted  or 0 not deleted )
+	 * @author Amit Sharma
+	 * @version 1.0
+	 */
+	public function searchtopfivecouponAction() {
+
+		$srh = $this->getRequest()->getParam('keyword');
+		$flag = $this->getRequest()->getParam('flag');
+		//cal to searchToFiveShop function from offer model class
+		$data = Offer::searchToFiveCoupon($srh, $flag);
+		//echo "<pre>";print_r($data);die;
+
+		$ar = array();
+		//$removeDup = array();
+		if (sizeof($data) > 0) {
+			//$ar[] = $srh;
+			foreach ($data as $d) {
+
+				$id =  $d['id'];
+				//array fro remove duplicate search text
+				$ar[] = $d['couponCode'];
+
+			}
+
+		} else {
+
+			$msg = $this->view->translate('No Record Found');
+			$ar[] = $msg;
+		}
 
 		echo Zend_Json::encode($ar);
 		die;

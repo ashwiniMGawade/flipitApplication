@@ -5,8 +5,9 @@ function init(){
 	var iSortDir = $.bbq.getState( 'iSortDir' , true ) || 'desc';
 	var iOfferText = $.bbq.getState( 'iOfferText' , true ) || undefined;
 	var iShopText = $.bbq.getState( 'iShopText' , true ) || undefined;
+	var iShopCoupon = $.bbq.getState( 'iShopCoupon' , true ) || undefined;
 	var iType = $.bbq.getState( 'iType' , true ) || undefined;
-	getOffers(iOfferText,iShopText,iType,iStart, iSortCol, iSortDir);
+	getOffers(iOfferText,iShopText,iShopCoupon,iType,iStart, iSortCol, iSortDir);
 	
 	$("#couponType").select2();
 	$("#couponType").select2("val", "");
@@ -77,6 +78,37 @@ function init(){
             return data; 
         },
 	});
+
+
+	$("#searchCoupon").select2({
+		placeholder: __("Search Coupon Code"),
+		minimumInputLength: 1,
+		ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
+		 url: HOST_PATH + "admin/offer/searchtopfivecoupon",
+		 dataType: 'json',
+		 data: function(term, page) {
+             return {
+            	 keyword: term,
+            	 flag: 0
+             };
+         },
+		 type: 'post',
+		 results: function (data, page) { // parse the results into the format expected by Select2.
+		 // since we are using custom formatting functions we do not need to alter remote JSON data
+			 return {results: data};
+			 
+		 }
+		},
+		formatResult: function(data) {
+			return data; 
+        },
+        formatSelection: function(data) { 
+        	$("#searchCoupon").val(data);
+            return data; 
+        },
+	});
+
+
 	
 	//autocomplete for offer 
 	//if press enter key the call search offer function
@@ -99,8 +131,19 @@ function init(){
 			        	searchByShop();
 			        }
 			});
+	//if press enter key the call search Coupon function
+	$("input#searchCoupon").keypress(function(e)
+			{
+			        // if the key pressed is the enter key
+			        if (e.which == 13)
+			        {
+			           
+			        	searchByShop();
+			        }
+			});
 	//bind a function with coupon type drowpdown list
 	$('select#couponType').change(searchByShop);
+	
 	
 	$(window).bind( 'hashchange', function(e) {
 		//console.log(window.location.hash);
@@ -124,21 +167,34 @@ function searchByShop()
 {
 	
 	var type = $("#couponType").select2('val');
+
 	if(type=='' || type==null)
 		{
 			type = undefined;
 		}
+
 	var searchShop = $("#searchShop").select2('val');
+
 	if(searchShop=='' || searchShop==null)
 		{
-		searchShop = undefined;
+			searchShop = undefined;
 		}
+
 	var txtOffer = $('#searchOffer').select2('val');
+
 	if(txtOffer=='' || txtOffer==null)
 	{
 		txtOffer = undefined;
 	}
-	getOffers(txtOffer,searchShop,type,0,5,'desc');
+
+	var searchCoupon = $("#searchCoupon").select2('val');
+
+	if(searchCoupon =='' || searchCoupon == null)
+	{
+		searchCoupon = undefined;
+	} 
+
+	getOffers(txtOffer,searchShop,searchCoupon,type,0,5,'desc');
 }
 
 
@@ -152,7 +208,7 @@ var click = false;
  * @param type
  * @author kraj
  */
-function getOffers(txtOffer,txtShop,type,iStart,iSortCol,iSortDir) {
+function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 	addOverLay();
 	
 	$("ul.ui-autocomplete").css('display','none');
@@ -175,7 +231,7 @@ function getOffers(txtOffer,txtShop,type,iStart,iSortCol,iSortDir) {
 				"oLanguage": {
 				      "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
 				},
-				"sAjaxSource" : encodeURI(HOST_PATH+"admin/offer/getoffer/offerText/"+ txtOffer  + "/shopText/"+ txtShop + "/couponType/"+ type +  "/flag/0"),
+				"sAjaxSource" : encodeURI(HOST_PATH+"admin/offer/getoffer/offerText/"+ txtOffer  + "/shopText/"+ txtShop + "/shopCoupon/"+ txtCoupon + "/couponType/"+ type +  "/flag/0"),
 				"aoColumns" : [
 						{
 							"fnRender" : function(obj) {
@@ -268,11 +324,11 @@ function getOffers(txtOffer,txtShop,type,iStart,iSortCol,iSortDir) {
 							"fnRender" : function(obj) {
 								var tag = '';
 								
-								if(obj.aData.refURL){
-									tag='Yes';
+								if(obj.aData.couponCode){
+									tag = obj.aData.couponCode;
 								}
 								else {
-									tag = 'No';
+									tag = 'No Code';
 								}
 								return "<a href='javascript:void(0)'>" + __(tag) + "</a>";
 							 
@@ -381,19 +437,23 @@ function getOffers(txtOffer,txtShop,type,iStart,iSortCol,iSortDir) {
 							click = true;
 							window.location.href = HOST_PATH+"admin/offer/editoffer/id/" + eId + "?iStart="+
 													obj._iDisplayStart+"&iSortCol="+obj.aaSorting[0][0]+"&iSortDir="+
-													obj.aaSorting[0][1]+"&iOfferText="+txtOffer+"&iShopText="+txtShop+
+													obj.aaSorting[0][1]+"&iOfferText="+txtOffer+"&iShopText="+txtShop+"&iShopCoupon="+txtCoupon+
 													"&iType="+type+"&eId="+eId;
 					});
 					
 					$("#couponType").select2('val',type);
 				    $("#searchShop").select2('val',txtShop);
 				    $("#searchOffer").select2('val',txtOffer);
+				    $("#searchCoupon").select2('val',txtCoupon);
 				    
 				    if(txtOffer == undefined){
 				    	$.bbq.removeState( 'iOfferText' );
 				    }
 				    if(txtShop == undefined){
 				    	$.bbq.removeState( 'iShopText' );
+				    } 
+				    if(txtCoupon == undefined){
+				    	$.bbq.removeState( 'iShopCoupon' );
 				    } 
 				    if(type == undefined){
 				    	$.bbq.removeState( 'iType' );
