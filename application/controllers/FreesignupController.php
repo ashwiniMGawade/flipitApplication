@@ -58,11 +58,6 @@ class FreesignupController extends Zend_Controller_Action
     	$message = $flash->getMessages();
     	$this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : null ;
 
-
-
-
-
-
     	$this->view->controllerName = $this->getRequest()->getParam('controller');
     	$this->view->action 		= $this->getRequest()->getParam('action');
 
@@ -70,8 +65,15 @@ class FreesignupController extends Zend_Controller_Action
     	$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
     	$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSignUp($permalink) ;
 
-    	$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
+
+        $pageName = 'Sign Up Step 1';
+        $pageId = PageAttribute::getPageIdByName($pageName);
+
+        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        
+        $this->view->pageTitle = @$relatedPage['pageTitle'];
+        $this->view->headTitle(@$relatedPage['metaTitle']);
+        $this->view->headMeta()->setName('description', @trim($relatedPage['metaDescription']));
 
     	//cal function and get status of email cofimation step
     	$this->view->emailStepStatus = Signupmaxaccount::getemailConfirmationStatus();
@@ -98,8 +100,15 @@ class FreesignupController extends Zend_Controller_Action
     	$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
     	$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSignUp($permalink) ;
 
-    	$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
+    	$pageName = 'Sign Up Step 2';
+        $pageId = PageAttribute::getPageIdByName($pageName);
+
+        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        
+        
+        $this->view->pageTitle = @$relatedPage['pageTitle'];
+        $this->view->headTitle(@$relatedPage['metaTitle']);
+        $this->view->headMeta()->setName('description', @trim($relatedPage['metaDescription']));
 
     	if($this->getRequest()->isPost()){
     		$params=$this->_request->getParams();
@@ -147,8 +156,14 @@ class FreesignupController extends Zend_Controller_Action
     	$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
     	$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSignUp($permalink) ;
 
-    	$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
+    	$pageName = 'Sign Up Step 3';
+        $pageId = PageAttribute::getPageIdByName($pageName);
+
+        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        
+        $this->view->pageTitle = @$relatedPage['pageTitle'];
+        $this->view->headTitle(@$relatedPage['metaTitle']);
+        $this->view->headMeta()->setName('description', @trim($relatedPage['metaDescription']));
 
     	//cal function and get status of email cofimation step
     	$this->view->emailStepStatus = Signupmaxaccount::getemailConfirmationStatus();
@@ -177,8 +192,14 @@ class FreesignupController extends Zend_Controller_Action
     	$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
     	$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSignUp($permalink) ;
 
-    	$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
+    	$pageName = 'Sign Up Step 4';
+        $pageId = PageAttribute::getPageIdByName($pageName);
+
+        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        
+        $this->view->pageTitle = @$relatedPage['pageTitle'];
+        $this->view->headTitle(@$relatedPage['metaTitle']);
+        $this->view->headMeta()->setName('description', @trim($relatedPage['metaDescription']));
 
     	//cal function and get status of email cofimation step
     	$this->view->emailStepStatus = Signupmaxaccount::getemailConfirmationStatus();

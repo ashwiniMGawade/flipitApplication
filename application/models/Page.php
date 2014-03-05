@@ -1063,10 +1063,10 @@ public static function exportpagelist() {
 		->andWhere('p.deleted=0')
 		->orderBy('id DESC')
 		->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
+		
 		return $data;
 	}
-	
+
 	/**
 	 * get page attrubute from page table by id
 	 * 
