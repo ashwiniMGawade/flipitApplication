@@ -68,10 +68,12 @@ class ShopExport {
 
 		// cycle htoruh all site database
 		$DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
-
-
+		
+		echo "\n";
+		print "Get all shops data from databases of all locales\n";
+		
 		// cycle htoruh all site database
-		foreach ( $connections as $key => $connection ) {
+		/*foreach ( $connections as $key => $connection ) {
 			// check database is being must be site
 			if ($key != 'imbull') {
 				try {
@@ -85,9 +87,10 @@ class ShopExport {
 				}
 				echo "\n\n";
 			}
-		}
+		}*/
 
-
+		$this->exportingShops($connections['en']['dsn'], 'en' ,$imbull ); //uncommnet this line when you check only kortingscode.nl excel export list
+		
 		$manager->closeConnection($DMC1);
 	}
 
@@ -172,7 +175,9 @@ class ShopExport {
 		//echo "<pre>";
 		//print_r($data); die;
     	//create object of phpExcel
-
+		echo "\n";
+		print "Parse shops data and save it into excel file\n";
+		
     	$objPHPExcel = new PHPExcel();
     	$objPHPExcel->setActiveSheetIndex(0);
     	$objPHPExcel->getActiveSheet()->setCellValue('A1', $this->_trans->translate('Shopname'));
@@ -219,7 +224,9 @@ class ShopExport {
     	//loop for each shop
     	foreach ($data as $shop)
     	{
-
+    		echo "\n";
+    		print "$key - Shops are being saved into excel file !!!";
+    		
     		//condition apply on affliatedprograme
     		$prog = '';
     		if($shop['affliateProgram']==true){
@@ -524,7 +531,8 @@ class ShopExport {
     		$daysWithoutCoupon = Shop::getDaysSinceShopWithoutOnlneOffers($shopId);
     		$timesShopFavourite = Shop::getTimesShopFavourite($shopId);
     		$lastWeekClicks = ShopViewCount::getAmountClickoutOfShop($shopId);
-    		$totalClicks = ShopViewCount::getTotalAmountClicksOfShop($shopId);
+    		//$totalClicks = ShopViewCount::getTotalAmountClicksOfShop($shopId);
+    		$totalClicks =  ShopViewCount::getTotalViewCountOfShopAndOffer($shopId);
     		$totalAmountCoupons = Offer::getTotalAmountOfCouponsShop($shopId, 'CD');
     		$totalAmountOffers = Offer::getTotalAmountOfCouponsShop($shopId);
 

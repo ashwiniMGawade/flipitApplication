@@ -90,7 +90,7 @@ class GlobalShopExport {
 			
 		}
 		
-		
+		//$this->getAllShops($connections['en']['dsn'], 'en' ,$imbull ); //uncommnet this line when you check only kortingscode.nl excel export list
 	 
 		$this->exportShopsInExcel();
 		
@@ -575,7 +575,8 @@ class GlobalShopExport {
 						$daysWithoutCoupon = Shop::getDaysSinceShopWithoutOnlneOffers($shopId);
 						$timesShopFavourite = Shop::getTimesShopFavourite($shopId);
 						$lastWeekClicks = ShopViewCount::getAmountClickoutOfShop($shopId);
-						$totalClicks =  ShopViewCount::getTotalAmountClicksOfShop($shopId);
+						//$totalClicks =  ShopViewCount::getTotalAmountClicksOfShop($shopId);
+						$totalClicks =  ShopViewCount::getTotalViewCountOfShopAndOffer($shopId);
 						$totalAmountCoupons = Offer::getTotalAmountOfCouponsShop($shopId, 'CD');
 						$totalAmountOffers = Offer::getTotalAmountOfCouponsShop($shopId);
 						
