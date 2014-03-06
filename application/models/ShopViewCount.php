@@ -105,4 +105,78 @@ class ShopViewCount extends BaseShopViewCount{
 		$totalClicks = $totalOfferClicks + $totalShopClicks;
 		return $totalClicks;
 	}
+	
+	/**
+	 * 
+	 * get total No. of Shop clickouts + offers
+	 * 
+	 * @author kraj
+	 * @param integer $shopId
+	 * @return integer $totalClicks
+	 * @version 1.0
+	 * 
+	 */
+	public static function getTotalViewCountOfShopAndOffer($shopId) {
+		
+		$format = 'Y-m-j H:i:s';
+		$date = date($format);
+		$allOffers = Doctrine_Query::create()
+			->select('o.id,o.totalViewcount as clicks')
+			->from('Offer o')
+			->where('o.deleted = 0' )
+			->andWhere('o.shopId = '.$shopId)
+			->andWhere('o.enddate > "'.$date.'"')
+			->andWhere('o.startdate <= "'.$date.'"')
+			->fetchArray() ;
+		
+		$totalOfferClicks = self::tranverseAllOffer($allOffers);
+		$totalShopClicks = self::getShopClicks($shopId);
+		$totalClicks =  $totalOfferClicks + $totalShopClicks;
+		return $totalClicks;
+		
+	}
+	
+	/**
+	 *
+	 * get total No. of offers clicks
+	 *
+	 * @author kraj
+	 * @param array $allOffers
+	 * @return integer $totalOfferClicks
+	 * @version 1.0
+	 *
+	 */
+	public static function tranverseAllOffer($allOffers)
+	{
+	 		$totalOfferClicks = 0;
+	 		if(!empty($allOffers)):
+	   			foreach($allOffers as $arr):
+	   				$totalOfferClicks = $totalOfferClicks + $arr['clicks'];
+	   			endforeach;
+	   		endif;
+	   		return $totalOfferClicks;
+	}
+	
+	/**
+	 *
+	 * get total No. of shop clicks
+	 *
+	 * @author kraj
+	 * @param integer $shopId
+	 * @return integer $totalShopClicks
+	 * @version 1.0
+	 *
+	 */
+	public static function getShopClicks($shopId)
+	{
+		$data = Doctrine_Query::create()
+		   ->select('s.id,s.totalViewcount as clicks')
+		   ->from('Shop s')
+		   ->where('s.deleted = 0')
+		   ->andWhere('s.id = '.$shopId)
+		   ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+		
+		$totalShopClicks = $data['clicks'];
+		return $totalShopClicks;
+	}
 }
