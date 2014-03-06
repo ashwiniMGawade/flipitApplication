@@ -328,7 +328,7 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 									tag = obj.aData.couponCode;
 								}
 								else {
-									tag = 'No Code';
+									tag = '<p style= "color: red;">Not Available</p>';
 								}
 								return "<a href='javascript:void(0)'>" + __(tag) + "</a>";
 							 
