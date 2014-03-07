@@ -3,7 +3,6 @@
 // You should not change it manually as it will be overwritten on next build
 // @codingStandardsIgnoreFile
 
-
 use \Codeception\Maybe;
 use Codeception\Module\CodeHelper;
 
