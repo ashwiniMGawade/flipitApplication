@@ -170,14 +170,11 @@ if(count($this->termandcondition) > 0){
 							
 					} 
 					 
-					if(file_exists(ROOT_PATH .'images/front_end/' .$couponcodeImg )){
+					
 						 
-						$couponcodeImg = PUBLIC_PATH_CDN .'images/front_end/' .$couponcodeImg ;
+					$couponcodeImg = PUBLIC_PATH.'images/front_end/' .$couponcodeImg ;
 						
-					}else{
-						
-						$couponcodeImg = HTTP_PATH .'public/images/front_end/' .$couponcodeImg ;
-					}				
+							
 							
 					 # check shop logo exist
 					if(count($this->shop['logo']) > 0)
