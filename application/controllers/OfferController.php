@@ -47,7 +47,7 @@ class OfferController extends Zend_Controller_Action
      *
      * @version 1.0
      */
-    public function expiredofferAction()
+    public function extendedofferAction()
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);

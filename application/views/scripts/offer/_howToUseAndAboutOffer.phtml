@@ -3,11 +3,13 @@
         <h2><?php echo $this->translate('About this voucher');?></h2>
         <p><?php echo $this->offerDescription;?></p>
     </article>
-    <?php 
+    <?php
+if($this->expiredMessage == 'false') { 
     echo $this->partial(
         'offer/_extendedExpiredCode.phtml',
         array('expiredOffer'=>$this->expiredOffer)
     );
+}
     ?>
     <article class="box terms-block">
         <h2><?php echo $this->translate('Terms &amp; Conditions');?></h2>

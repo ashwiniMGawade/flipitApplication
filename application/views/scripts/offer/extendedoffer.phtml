@@ -5,8 +5,6 @@ $this->minifyHeadLink()->prependStylesheet("/public/css/flipit-expired.css");
 
 $currentDate = date('Y-m-d h:i:s ');
 $offer = (object) $this->couponDetail[0];
-//echo strtotime($offer->endDate) ."<br/>". strtotime($currentDate); die;
-//$offerTemp =  $offer->endDate <= $currentDate ? $this->couponDetail[0] : $this->relatedOffer[0];
 $shopDiscussion = '';
 $partialViewPath = 'partials/';
 if($offer->shop['discussions'] == 1):
@@ -32,9 +30,10 @@ $termAndCondition = $this->partial(
     'offer/_howToUseAndAboutOffer.phtml',
     array(
         'termAndCondition' => $termsAndConditions,
-        'offerDescription'=>$offer->extendedFullDescription,
-        'expiredOffer'=>$this->couponDetail[0],
-    )
+        'offerDescription'=> $offer->extendedFullDescription,
+        'expiredOffer'=> $this->couponDetail[0],
+        'expiredMessage'=> $message == '' ? 'true':'false'
+   )
 );
 
 ?>
