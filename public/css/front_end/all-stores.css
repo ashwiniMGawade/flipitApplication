@@ -204,7 +204,7 @@ margin-top:/* negative half from the height */
     box-sizing: border-box;
 }
 #sidebar .form-signin-heading:before {
-    background: url("../images/sprite.png") no-repeat scroll -95px -130px rgba(0, 0, 0, 0);
+    background: url("../../images/sprite.png") no-repeat scroll -95px -130px rgba(0, 0, 0, 0);
     content: "";
     height: 68px;
     left: -2px;
