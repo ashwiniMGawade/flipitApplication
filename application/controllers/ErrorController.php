@@ -4,7 +4,7 @@ class ErrorController extends Zend_Controller_Action
 	public function errorAction()
     {
 
-    	$domain = $_SERVER['HTTP_HOST'];
+    	$domain = HTTP_PATH;
     	$this->view->controller = $this->_request->getControllerName();
 
         $errors = $this->_getParam('error_handler');
@@ -76,7 +76,7 @@ class ErrorController extends Zend_Controller_Action
 
 						$moduleNames = array_keys($cd);
 
-						$permalink = ltrim($_SERVER['REQUEST_URI'], '/');
+						$permalink = ltrim(REQUEST_URI, '/');
 						$routeProp = explode( '/' , $page) ;
 						//echo "<pre>"; print_r($routeProp); die;
 						$tempLang  = rtrim( $routeProp[0] , '/') ;

@@ -12,7 +12,7 @@ settings:
 modules:
     config:
         Db:
-            dsn: ''
-            user: ''
-            password: ''
-            dump: tests/_data/dump.sql
+            dsn: 'mysql:host=localhost;dbname=flipit_at'
+            user: 'root'
+            password: 'password'
+            dump: tests/_data/backup_site_at.sql

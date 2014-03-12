@@ -1,5 +1,5 @@
 <?php 
-
+include 'BootstrapConstant.php';
 /**
  * Bootstrap
  *
@@ -15,7 +15,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
     protected $request = null;
     protected $_httpHost = null;
     protected $_siteName = "kortingscode.nl" ;
-
+	
     /**
      * Set base controller or view request
      *
@@ -63,12 +63,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
      *
      */
 	function _initContants()  {
-
 		# get the front controller instance
 		$front = Zend_Controller_Front::getInstance();
 		$cd = $front->getControllerDirectory();
 		$this->_moduleNames = array_keys($cd);
-		$permalink = ltrim($_SERVER['REQUEST_URI'], '/');
+		$permalink = ltrim(REQUEST_URI, '/');
 		$routeProp = preg_split( "/[\/\?]+/" , $permalink ) ;
 		$tempLang  = rtrim( $routeProp[0] , '/') ;
 		if(in_array(strtolower($tempLang) , $this->_moduleNames)) {
@@ -80,27 +79,34 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		}
 
 		# define HTTP path
-		define("HTTP_PATH", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
+		define("HTTP_PATH", trim('http://' . HTTP_HOST . '/'));
 
+		# get env veriable
+		$envSettings = $this->getOption('ENV') ;
+		if($envSettings=='dev'):
+		    define("TEMP_PATH",  $this->getOption['TMP_PATH']);
+		else:
+		    define("TEMP_PATH", './tmp/');
+		endif;
 		# read cdn settings
 		$cdnSettings = $this->getOption('cdn') ;
 
 		# define cdn server http path
 
-	 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
-			define("HTTP_PATH_CDN", trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] . '/'));
-			//define("HTTP_PATH_CDN", trim('http://' . $cdnSettings[$_SERVER['HTTP_HOST']] . '/public/'));
+	 	if(isset($cdnSettings) && isset($cdnSettings[HTTP_HOST])){
+			define("HTTP_PATH_CDN", trim('http://'. $cdnSettings[HTTP_HOST] . '/'));
+			//define("HTTP_PATH_CDN", trim('http://' . $cdnSettings[HTTP_HOST] . '/public/'));
 			
 		} else {
-			define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
+			define("HTTP_PATH_CDN", trim('http://' . HTTP_HOST . '/'));
 			
 			/*define("HTTP_PATH_CDN",
-					trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']]
+					trim('http://'. $cdnSettings[HTTP_HOST]
 							.'/'. strtolower($this->_lang) .'/'));*/
 		}
 
 		# define path for load images from front-end / back-end 
-		//define("HTTP_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/public/'));
+		//define("HTTP_PATH_CDN", trim('http://' . HTTP_HOST . '/public/'));
 
 		# define root path
 		defined('BASE_ROOT')
@@ -113,22 +119,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			define("LOCALE",  trim(strtolower($this->_lang)));
 
 			# define LOCALE PATH for links
-			define("HTTP_PATH_LOCALE", trim('http://' . $_SERVER['HTTP_HOST'] . '/' . $this->_lang .'/' ));
+			define("HTTP_PATH_LOCALE", trim('http://' . HTTP_HOST . '/' . $this->_lang .'/' ));
 
 			# PUBLIC PATH
 			defined('PUBLIC_PATH')
 			|| define('PUBLIC_PATH',
-					'http://' . $_SERVER['HTTP_HOST']
+					'http://' . HTTP_HOST
 					. dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_lang) .'/');
 
 			# define cdn server public path
-		 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
+		 	if(isset($cdnSettings) && isset($cdnSettings[HTTP_HOST])){
 				define("PUBLIC_PATH_CDN", 
-						trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] 
+						trim('http://'. $cdnSettings[HTTP_HOST] 
 							.'/'. strtolower($this->_lang) .'/'));
 			} else {
 				define("PUBLIC_PATH_CDN", 
-						trim('http://' . $_SERVER['HTTP_HOST'] 
+						trim('http://' . HTTP_HOST 
 							. '/'. strtolower($this->_lang) .'/'));
 			}
 
@@ -182,14 +188,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			# PUBLIC PATH
 			defined('PUBLIC_PATH')
 			|| define('PUBLIC_PATH',
-					'http://' . $_SERVER['HTTP_HOST']
+					'http://' . HTTP_HOST
 					. dirname($_SERVER['SCRIPT_NAME']) . '/');
 
 
 			# PUBLIC PATH with locale
 			defined('PUBLIC_PATH_LOCALE')
 			|| define('PUBLIC_PATH_LOCALE',
-					'http://' . $_SERVER['HTTP_HOST']
+					'http://' . HTTP_HOST
 					. dirname($_SERVER['SCRIPT_NAME']) . '/' . $lang);
 
 
@@ -227,7 +233,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			# PUBLIC PATH
 			defined('HTTP_PATH_LOCALE')
 			|| define('HTTP_PATH_LOCALE',
-					'http://' . $_SERVER['HTTP_HOST']
+					'http://' . HTTP_HOST
 					. dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_lang) .'/');
 
 			//echo (PUBLIC_PATH_LOCALE);
@@ -239,19 +245,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 
 			# define LOCALE PATH for links
-			define("HTTP_PATH_LOCALE", trim('http://' . $_SERVER['HTTP_HOST'] . '/' ));
+			define("HTTP_PATH_LOCALE", trim('http://' . HTTP_HOST . '/' ));
 
 			# PUBLIC PATH
 			defined('PUBLIC_PATH')
 			|| define('PUBLIC_PATH',
-					'http://' . $_SERVER['HTTP_HOST']
+					'http://' . HTTP_HOST
 					. dirname($_SERVER['SCRIPT_NAME']) . '/');
 
 			# define cdn server public path
-		 	if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
-				define("PUBLIC_PATH_CDN", trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']] . '/'));
+		 	if(isset($cdnSettings) && isset($cdnSettings[HTTP_HOST])){
+				define("PUBLIC_PATH_CDN", trim('http://'. $cdnSettings[HTTP_HOST] . '/'));
 			} else {
-				define("PUBLIC_PATH_CDN", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
+				define("PUBLIC_PATH_CDN", trim('http://' . HTTP_HOST . '/'));
 			}
 
 			# define root path
@@ -286,7 +292,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 	 */
 	protected function _initDoctrine() {
 
-		$domain = $_SERVER['HTTP_HOST'];
+		$domain = HTTP_HOST;
 		spl_autoload_register(array('Doctrine', 'modelsAutoload'));
 		$manager = Doctrine_Manager::getInstance();
 		//$manager->setAttribute(Doctrine_Core::ATTR_TBLNAME_FORMAT, $doctrineOptions["prefix"] . '_%s');
@@ -346,7 +352,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		}
 
 
-		$domain = $_SERVER['HTTP_HOST'];
+		$domain = HTTP_HOST;
 
  		if(strlen($this->_lang) == 2 ) {
  			if($domain != "www.kortingscode.nl" && $domain != "kortingscode.nl" )
@@ -467,8 +473,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 		$url = '';
 		//trim slashes from URL from right and left
-		$permalink = ltrim($_SERVER['REQUEST_URI'], '/');
-		$domain = $_SERVER['HTTP_HOST'];
+		$permalink = ltrim(REQUEST_URI, '/');
+		$domain = HTTP_HOST;
 		$permalink = rtrim($permalink, '/');
 
 		#check if URI exist in route redirect table if this exists
@@ -929,8 +935,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			   'lifetime' => 300,                   // cache lifetime
 			   'automatic_serialization' => true
 			);
-
-			$backendOptions = array('cache_dir' => './tmp/');
+			
+			//echo $p =realpath('./tmp/');
+			
+			//die;
+			$backendOptions = array('cache_dir' => TEMP_PATH);
 			$cache = Zend_Cache::factory('Output',
 			                             'File',
 			                             $frontendOptions,
@@ -963,7 +972,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
 
 
 		# print in case public keyword exists in url
-		 preg_match('/public/', $_SERVER['REQUEST_URI'], $matches, PREG_OFFSET_CAPTURE, 1);
+		 preg_match('/public/', REQUEST_URI, $matches, PREG_OFFSET_CAPTURE, 1);
 
 		 if(count($matches) > 0)
 		 {
