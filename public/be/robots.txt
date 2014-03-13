@@ -5,6 +5,6 @@ Disallow:/out/
 Disallow:/search/
 Disallow:/admin/
 
-Sitemap:http://www.flipit.com/public/be/sitemaps/sitemap_shops.xml
-Sitemap:http://www.flipit.com/public/be/sitemaps/sitemap_voordeel.xml
-Sitemap:http://www.flipit.com/public/be/sitemaps/sitemap_main.xml
+Sitemap:http://www.flipit.com/be/sitemaps/sitemap_shops.xml
+Sitemap:http://www.flipit.com/be/sitemaps/sitemap_voordeel.xml
+Sitemap:http://www.flipit.com/be/sitemaps/sitemap_main.xml

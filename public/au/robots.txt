@@ -8,4 +8,3 @@ Disallow:/admin/
 Sitemap:http://www.flipit.com/au/sitemaps/sitemap_shops.xml
 Sitemap:http://www.flipit.com/au/sitemaps/sitemap_savingguides.xml
 Sitemap:http://www.flipit.com/au/sitemaps/sitemap_main.xml
-

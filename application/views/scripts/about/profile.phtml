@@ -26,9 +26,9 @@
 							$profileImage = HTTP_PATH_CDN. ltrim($userDetails[0]['profileimage']['path'],"/")."thum_large_widget_".$userDetails[0]['profileimage']['name'];
 						
 						 $twitterimg = HTTP_PATH ."public/images/front_end/twitter.png";
-						 $plusimg = HTTP_PATH ."public/front_end/plus.png";
-						 $piimg = HTTP_PATH ."public/front_end/p-icon.png";
-						 $dealguruimg =HTTP_PATH ."public/front_end/btn-deal-guru.png";
+						 $plusimg = HTTP_PATH ."public/images/front_end/plus.png";
+						 $piimg = HTTP_PATH ."public/images/front_end/p-icon.png";
+						 $dealguruimg =HTTP_PATH ."public/images/front_end/btn-deal-guru.png";
 	                ?>
 	                	<div class="contributor-lt-img"><img src="<?php echo $profileImage; ?>"/></div>
 	                    <div class="contributor-lt-soical"><?php if($userDetails[0]['twitter']!=""): ?><a href="<?php echo $userDetails[0]['twitter']; ?>" target="_blank"><img src="<?php echo $twitterimg; ?>" width="24" height="24" /></a><?php endif; if($userDetails[0]['google']!=""): ?><a href="<?php echo $userDetails[0]['google']; ?>" target="_blank"><img src="<?php echo $plusimg; ?>" width="24" height="24" /></a><?php endif; if($userDetails[0]['pinterest']!=""): ?><a href="<?php echo $userDetails[0]['pinterest']; ?>" target="_blank"><img src="<?php echo $piimg; ?>" class="mr-none" width="24" height="24" /></a><?php endif; ?></div>
