@@ -214,7 +214,7 @@ class MyfavoriteController extends Zend_Controller_Action
   				$pImage  = new VisitorImage();
   			}
 	  		$pImage->ext = $ext;
-	  		$pImage->path ='/images/upload/visitor/';
+	  		$pImage->path ='images/upload/visitor/';
 	  		$pImage->name = $result['fileName'];
 	  		$pImage->save();
 	  		//get id from zend auth for editing of current visitor 
@@ -223,7 +223,7 @@ class MyfavoriteController extends Zend_Controller_Action
 	  		$visitor->save();
 	  		
 	  		
-	  		$imgPath =  '/images/upload/visitor/' ;
+	  		$imgPath =  'images/upload/visitor/' ;
 	  		$imgName = "thum_".$result['fileName'] ;
 	  		
 	  		echo Zend_Json::encode( array( 'imgPath' => $imgPath  , 'imgName' =>  $imgName ) );

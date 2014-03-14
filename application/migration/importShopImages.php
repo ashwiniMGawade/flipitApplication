@@ -61,13 +61,13 @@ Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
 		
 		$handle = opendir(ROOT_PATH . '/Logo/Logo');
 		$rootpath = ROOT_PATH . '/Logo/Logo/';
-		$pathToUpload = ROOT_PATH . '/images/upload/shop/';
+		$pathToUpload = ROOT_PATH . 'images/upload/shop/';
 		$pathUpload = 'images/upload/shop/';
 		
 		//Screen Shots
 		$siteHandle = opendir(ROOT_PATH . '/Logo/Screenshot');
 		$rootSitePath = ROOT_PATH . '/Logo/Screenshot/';
-		$pathToUploadSiteImg = ROOT_PATH . '/images/upload/screenshot/';
+		$pathToUploadSiteImg = ROOT_PATH . 'images/upload/screenshot/';
 		$sitePathUpload = 'images/upload/screenshot/';
 		
 		

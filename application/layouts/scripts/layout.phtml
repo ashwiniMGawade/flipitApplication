@@ -91,7 +91,10 @@ echo $this->minifyHeadScript()->prependFile ("public/js/common.js" )
 							  ->prependFile ("public/js/jquery-1.7.2.min.js" )
 							  ->prependScript(  'var HOST_PATH = "'.  HTTP_PATH .'";'  )
 							  ->prependScript(  'var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";'  )
- 							  ->prependScript( 'var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";'  );
+ 							  ->prependScript( 'var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";'  )
+ 							  
+							  ->prependScript(  'var HTTP_PATH_CDN = "'.  HTTP_PATH_CDN .'";'  )
+							  ->prependScript(  'var PUBLIC_PATH_CDN = "'.  PUBLIC_PATH_CDN .'";'  );
 
 
 //Google analytics code Start

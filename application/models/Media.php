@@ -18,7 +18,7 @@ class Media extends BaseMedia
 		$options = array(
 				'script_url' => $this->getFullUrl().'/',
 				'upload_dir' => ROOT_PATH .'images/upload/media/',
-				'upload_url' => $this->getFullUrl().'/images/upload/media/',
+				'upload_url' => $this->getFullUrl().'images/upload/media/',
 				'param_name' => 'files',
 				// Set the following option to 'POST', if your server does not support
 				// DELETE requests. This is a parameter sent to the client:
