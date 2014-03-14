@@ -936,9 +936,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			   'automatic_serialization' => true
 			);
 			
-			//echo $p =realpath('./tmp/');
-			
-			//die;
+	
 			$backendOptions = array('cache_dir' => TEMP_PATH);
 			$cache = Zend_Cache::factory('Output',
 			                             'File',
