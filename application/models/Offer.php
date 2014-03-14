@@ -70,7 +70,7 @@ class Offer extends BaseOffer
 		//print_r($offerList->getSqlQuery()); die;
 		$result	=	DataTable_Helper::generateDataTableResponse($offerList,
 				$params,
-				array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.Visability','o.couponcode','o.extendedOffer','o.startDate','o.endDate', 'clicks','authorName'),
+				array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.Visability','o.couponcode','o.startDate','o.endDate', 'clicks','authorName'),
 				array(),
 				array());
 		//echo "<pre>";
