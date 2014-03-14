@@ -118,7 +118,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     	$this->view->store_data = $store_data;
     	$data = Signupcodes::getfreeCodelogin();
     	$this->view->codelogindata = $data;
-    	$maxacc_data = Signupmaxaccount::getallmaxaccounts();
+    	$maxacc_data = Signupmaxaccount::getAllMaxAccounts();
     	$this->view->maxacc_data = $maxacc_data;
     }
 
@@ -213,7 +213,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 
 	    	//Start get email locale basis
-	    	$email_data = Signupmaxaccount::getallmaxaccounts();
+	    	$email_data = Signupmaxaccount::getAllMaxAccounts();
 	    	$emailFrom  = $email_data[0]['emailperlocale'];
 	    	$emailSubject  = $email_data[0]['emailsubject'];
 	    	$senderName  = $email_data[0]['sendername'];
@@ -406,7 +406,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
      */
     public function getDirectLoginLinks()
     {
-    	$email_data = Signupmaxaccount::getallmaxaccounts();
+    	$email_data = Signupmaxaccount::getAllMaxAccounts();
     	$testEmail = $this->getRequest()->getParam('testEmail');
     	$dummyPass = MD5('12345678');
     	$send = $this->getRequest()->getParam('send');
@@ -533,7 +533,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     public function emailcontentAction()
     {
-    	$data = Signupmaxaccount::getallmaxaccounts();
+    	$data = Signupmaxaccount::getAllMaxAccounts();
     	$this->view->data = $data;
 
     	$this->view->rights = $this->_settings['administration'];

@@ -1,31 +1,19 @@
 <?php
-if($this->serverUrl() == 'http://www.flipit.com' || $this->serverUrl() == 'flipit.com' || $this->serverUrl() =='http://flipit.com'){
-
-	# render new view for flipit.com
-	$flipit = new Zend_View();
-	$flipit->setBasePath(APPLICATION_PATH . '/modules/flipit/views');
-		# check controller is index else diplay error page
-		if(zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index') :
-			echo $flipit->render('index/index.phtml');
-		else :
-			echo $flipit->render('error/error.phtml');
-		endif;
-	# return to render http response headers
-	return ;
-}
+$obj = FrontEnd_Helper_viewHelper::loadFlipitHomePage($this->serverUrl());
+echo $obj!='' ?  $obj['obj']->render($obj['path']) : '';
+echo $obj['path']!='' ? die : ''; 
 echo $this->doctype("XHTML1_RDFA");
-// manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
 
-$lang_locale = Signupmaxaccount::getallmaxaccounts();
-$lang = !empty($lang_locale[0]['locale']) ? $lang_locale[0]['locale'] : 'nl_NL';
+# manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
+$lang_locale = Signupmaxaccount::getLocaleName();
+$lang = !empty($lang_locale['locale']) ? $lang_locale['locale'] : 'nl_NL';
 $langArray = explode('_', $lang);
 $language = $langArray[0];
-
 ?>
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language; ?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php
-//set cononical
+# set cononical
 if(isset($this->canonical)):
 
 	if($this->canonical=='' || $this->canonical==null):

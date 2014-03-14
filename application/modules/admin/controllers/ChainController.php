@@ -84,7 +84,7 @@ class Admin_ChainController extends Zend_Controller_Action
 	    		$connObj = BackEnd_Helper_DatabaseManager::addConnection($locale);
 	    		 
 	    		$signMaxObj = new Signupmaxaccount($locale);
-	    		$langLocale =  $signMaxObj::getallmaxaccounts();
+	    		$langLocale =  $signMaxObj::getAllMaxAccounts();
 	    		$langLocale = !empty($langLocale[0]['locale']) ? $langLocale[0]['locale'] : 'nl_NL';
 	    		
 	    		

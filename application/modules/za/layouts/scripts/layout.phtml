@@ -1,7 +1,7 @@
 <?php
 echo $this->doctype("XHTML1_RDFA");
  
-$lang_locale = Signupmaxaccount::getallmaxaccounts();
+$lang_locale = Signupmaxaccount::getAllMaxAccounts();
 $lang = !empty($lang_locale[0]['locale']) ? $lang_locale[0]['locale'] : 'nl_NL';
 $langArray = explode('_', $lang);
 $language = $langArray[0];

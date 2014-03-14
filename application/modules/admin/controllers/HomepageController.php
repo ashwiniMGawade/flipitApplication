@@ -270,7 +270,7 @@ class Admin_HomepageController extends Zend_Controller_Action
     	$this->view->articles = MoneysavingArticle::getSaving();
 
     	// Return locale for front end
-    	$this->view->locale = Signupmaxaccount::getallmaxaccounts();
+    	$this->view->locale = Signupmaxaccount::getAllMaxAccounts();
 
     	$this->view->timezones_list = Signupmaxaccount::$timezones;
 
@@ -997,7 +997,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 
 	public function getlocaleAction()
 	{
-		$locale_data = Signupmaxaccount::getallmaxaccounts();
+		$locale_data = Signupmaxaccount::getAllMaxAccounts();
 		echo Zend_Json::encode($locale_data[0]['locale']);
 		die;
 	}
@@ -1035,7 +1035,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 			}
 	public function getemailAction()
 	{
-		$email_data = Signupmaxaccount::getallmaxaccounts();
+		$email_data = Signupmaxaccount::getAllMaxAccounts();
 		echo Zend_Json::encode($email_data[0]['emailperlocale']);
 		die;
 	}

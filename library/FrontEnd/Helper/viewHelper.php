@@ -3,6 +3,34 @@
 class FrontEnd_Helper_viewHelper
 {
 
+	#################################################################
+	#################### REFACTORED CODE ##############################
+	#################################################################
+	
+	public static function loadFlipitHomePage($flipitUrl)
+	{ 
+		
+		$htmlPath = '';
+		
+		$flipit = new Zend_View();
+		$flipit->setBasePath(APPLICATION_PATH . '/modules/flipit/views');
+		
+		if($flipitUrl == 'http://www.flipit.com' 
+				|| $flipitUrl == 'flipit.com' 
+				|| $flipitUrl =='http://flipit.com') :
+		    
+		    zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index' 
+			    ? $htmlPath = 'index/index.phtml'  
+			    : $htmlPath =  'error/error.phtml';
+			
+			return $loadArray = array('obj'=>$flipit,'path'=>$htmlPath);
+		endif;
+	}
+	
+	#################################################################
+	#################### END REFACTOR CODE ##########################
+	#################################################################
+	
 	/**
 	 * Common function to render sidebar widget of alphanumeric categories
 	 * @author cbhopal updated by kraj
@@ -2012,7 +2040,7 @@ EOD;
 	public static function retrunCountryName($siteLocale)
 	{
 
- 		$locale = Signupmaxaccount::getallmaxaccounts();
+ 		$locale = Signupmaxaccount::getAllMaxAccounts();
 		$locale = !empty($locale[0]['locale']) ? $locale[0]['locale'] : 'NL';
 
 		$countries = Zend_Locale::getTranslationList('territory', $locale, 2);

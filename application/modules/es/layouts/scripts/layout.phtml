@@ -3,7 +3,7 @@ echo $this->doctype("XHTML1_RDFA");
 
 // manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
  
-$lang_locale = Signupmaxaccount::getallmaxaccounts();
+$lang_locale = Signupmaxaccount::getAllMaxAccounts();
 $lang = !empty($lang_locale[0]['locale']) ? $lang_locale[0]['locale'] : 'nl_NL';
 $langArray = explode('_', $lang);
 $language = $langArray[0];

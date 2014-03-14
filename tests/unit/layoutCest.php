@@ -11,10 +11,20 @@ class layoutCest
     public function _after()
     {
     }
-
-    // tests
-    public function tryToTest(CodeGuy $I) {
-      return true;
-    }
-
+    public function validateLoadFlipitHomePage(CodeGuy $I)
+    {
+    	$I->wantTo('Validate load flipit function');
+    	$I->execute(function () {
+    		return FrontEnd_Helper_viewHelper::loadFlipitHomePage('www.flipit.com');
+    	});
+    	$I->expect('index.phtml');
+     }
+     public function validateGetAllMaxAccount(CodeGuy $I)
+     {
+    	$I->wantTo('Validate get all max account');
+    	$I->execute(function () {
+    		return Signupmaxaccount::getLocaleName();
+    	});
+    	$I->expect('locale');
+     }
 }
