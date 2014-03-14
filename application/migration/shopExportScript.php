@@ -73,7 +73,7 @@ class ShopExport {
 		print "Get all shops data from databases of all locales\n";
 		
 		// cycle htoruh all site database
-		/*foreach ( $connections as $key => $connection ) {
+		foreach ( $connections as $key => $connection ) {
 			// check database is being must be site
 			if ($key != 'imbull') {
 				try {
@@ -87,9 +87,9 @@ class ShopExport {
 				}
 				echo "\n\n";
 			}
-		}*/
+		}
 
-		$this->exportingShops($connections['en']['dsn'], 'en' ,$imbull ); //uncommnet this line when you check only kortingscode.nl excel export list
+		//$this->exportingShops($connections['en']['dsn'], 'en' ,$imbull ); //uncommnet this line when you check only kortingscode.nl excel export list
 		
 		$manager->closeConnection($DMC1);
 	}
