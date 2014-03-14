@@ -4,12 +4,17 @@ RewriteCond %{HTTP_HOST} ^www.kortingscode.nl$
 RewriteRule ^robots.txt$ public/robots.txt [NC,L]
 
 RewriteCond %{HTTP_HOST} ^www.flipit.com$
+RewriteRule ^(.*)/sitemaps/(.*)$ public/$1/sitemaps/$2 [L]
+
+RewriteCond %{HTTP_HOST} ^www.flipit.com$
 RewriteRule ^robots.txt$ public/flipit/robots.txt [NC,L]
 
 RewriteRule ^([a-z]{2})(\/)robots.txt$ /public/$1/robots.txt [NC,L]
 RewriteRule ^([a-z]{2})(\/)index(.*)$ /$1 [L,R=301,NC]
 RewriteRule ^index(.*)$ / [L,R=301,NC]
 
+RewriteCond %{HTTP_HOST} ^www.flipit.com$
+RewriteRule ^sitemaps$ public/flipit/robots.txt [NC,L]
 
 #wp redirects (old blog)
 RewriteRule ^nieuws/overzicht(.+)?$ http://www.kortingscode.nl/nieuws? [R=301,L]

@@ -451,6 +451,36 @@ function getShopDetail(value){
 					} else {
 						jQuery('#shopNetwork').html('&nbsp;');
 					}
+
+					 // check if selected shop has restrcited content or not
+					// if yes then disable submit button and ask check to accept term and conditions
+					if(data[0].strictConfirmation) {
+
+						jQuery("#addOfferBtn").addClass("disabled").attr('disabled','disabled');
+						jQuery("#saveAndAddnew").addClass("disabled").attr('disabled','disabled');
+						jQuery(".strict-confirmation-alert").show();
+						jQuery('#enableSaveButtons').removeAttr('checked');
+
+						// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
+						jQuery('#enableSaveButtons').click(function(){
+
+							if(data[0].strictConfirmation){
+
+								if(jQuery(this).is(':checked')){
+									jQuery("#addOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
+									jQuery("#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+								} else{
+									jQuery("#addOfferBtn").addClass("disabled").attr('disabled','disabled');
+									jQuery("#saveAndAddnew").addClass("disabled").attr('disabled','disabled');
+								}
+							}
+						});
+
+
+					} else{
+						jQuery("#addOfferBtn,#saveAndAddnew").removeClass("disabled").removeAttr('disabled','disabled');
+						jQuery(".strict-confirmation-alert").hide();
+					}
 					
 					/*if(data[0].deepLink){
 						  jQuery('#offerRefUrl').val(data[0].deepLink).attr("disabled", "disabled");;	
