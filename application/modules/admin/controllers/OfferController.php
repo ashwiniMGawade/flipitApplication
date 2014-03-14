@@ -123,6 +123,7 @@ class Admin_OfferController extends Zend_Controller_Action {
     	$shopObj = new Shop();
     	$Getshopdetails = $shopObj->getShopDetail($params['shopId']);
     	$details = Zend_Json::encode($Getshopdetails);
+    	
     	echo $details;
     	die;
     }
