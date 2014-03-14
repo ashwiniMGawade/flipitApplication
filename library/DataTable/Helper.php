@@ -190,7 +190,8 @@ class DataTable_Helper
 
          	//die($Q->getSqlQuery());
             // ######################## Execute Query ###################
-     	  //  $sqlQuery = $Q->getSqlQuery();
+     	  //echo $sqlQuery = $Q->getSqlQuery();
+         
             $data = $Q->fetchArray();
             $retData = array();
             if ($actions != null) {
