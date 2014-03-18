@@ -8,7 +8,14 @@
  */
 
 class IndexController extends Zend_Controller_Action {
-
+	
+	#################################################################
+	#################### REFACTORED CODE ##############################
+	#################################################################
+	
+	#################################################################
+	#################### END REFACTOR CODE ##########################
+	#################################################################
 	/**
 	 * override views based on modules if exists
 	 * @see Zend_Controller_Action::init()
@@ -38,7 +45,7 @@ class IndexController extends Zend_Controller_Action {
 	}
 
 	public function indexAction() {
-
+        
 
 		# get cononical link
 		$this->view->canonical = '';
