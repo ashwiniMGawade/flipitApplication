@@ -22,17 +22,18 @@ $this->headMeta()->appendName('robots',
 		);
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
-echo $this->headLink( array( 'rel' => 'shortcut icon',
-						'href' => HTTP_PATH . 'public/images/favicon.ico',
-						'type' => 'image/x-icon'
-					   )
-			   		);
-
+echo $this->headLink( 
+		array( 'rel' => 'shortcut icon',
+				'href' => HTTP_PATH . 'public/images/favicon.ico',
+				'type' => 'image/x-icon'
+			)
+	);
 echo $this->render('fbmeta.phtml');
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->headStyle();
 echo $this->render('layout_js.phtml');
+echo $this->headScript();
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 ?>
 </head>
