@@ -1,6 +1,6 @@
 <?php
 # render flipit.com home page when url www.flipit.com, http://www.flipit.com, flipit.com 
-$flipitHomePage = FrontEnd_Helper_viewHelper::loadFlipitHomePage($this->serverUrl());
+$flipitHomePage = FrontEnd_Helper_LayoutContent::loadFlipitHomePage($this->serverUrl());
 echo $flipitHomePage!='' ?  $flipitHomePage['obj']->render($flipitHomePage['path']) : '';
 echo $flipitHomePage['path']!='' ? die : ''; 
 echo $this->doctype("XHTML1_RDFA");
@@ -14,9 +14,9 @@ $language = $locale[0];
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language; ?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php
-$this->headLink(FrontEnd_Helper_viewHelper::loadCanonical($this->canonical));
+$this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical));
 $this->headMeta()->appendName('robots', 
-		FrontEnd_Helper_viewHelper::loadRobots(
+		FrontEnd_Helper_LayoutContent::loadRobots(
 				$this->param, $this->layout()->robotKeywords
 				)
 		);
@@ -51,7 +51,7 @@ echo $this->minifyHeadScript()->prependFile ("public/js/common.js" )
 							  ->prependScript(  'var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";'  )
  							  ->prependScript( 'var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";'  );
 
-echo FrontEnd_Helper_viewHelper::loadGoogleAnalyticsCode();
+echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 ?>
 </head>
 <body>
