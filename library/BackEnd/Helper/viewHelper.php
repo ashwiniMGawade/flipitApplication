@@ -773,8 +773,7 @@ class BackEnd_Helper_viewHelper
 
 			$path =  defined('HTTP_PATH_FRONTEND') ? HTTP_PATH_FRONTEND :  HTTP_PATH_LOCALE ;
 			$publicPath  =  defined('PUBLIC_PATH_CDN') ? PUBLIC_PATH_CDN :  PUBLIC_PATH ;
-
-
+			
 	        $dataShopName = $dataShopImage =  $shopPermalink = $expDate = $dataOfferName = array();
 
 		foreach ($topVouchercodes as $key => $value) {
@@ -790,7 +789,7 @@ class BackEnd_Helper_viewHelper
 
 			//set the logo for shop if it exists or not in $dataShopImage array
 			if(count($value['offer']['shop']['logo']) > 0):
-				    $img = $publicPath.$value['offer']['shop']['logo']['path'].'thum_medium_store_'. $value['offer']['shop']['logo']['name'];
+				$img = $publicPath.$value['offer']['shop']['logo']['path'].'thum_medium_store_'. $value['offer']['shop']['logo']['name'];
 			else:
 				$img = $publicPath."images/NoImage/NoImage_200x100.jpg";
 			endif;
