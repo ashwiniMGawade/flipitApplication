@@ -1,6 +1,8 @@
 <?php 
 class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
-
+	
+	protected $_moduleName = '';
+	
 	/**
 	 * This function is called once after router shutdown. It automatically
 	 * sets the layout for the default MVC or a module-specific layout. If
@@ -11,88 +13,79 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
 	 * @param Zend_Controller_Request_Abstract $request
 	 */
 	public function routeShutdown(Zend_Controller_Request_Abstract $request) {
-
+		
+		$this->_moduleName = strtolower($request->getModuleName());
 		$layout = Zend_Layout::getMvcInstance();
-		$module   = strtolower($request->getModuleName());
-		$controller = strtolower($request->getControllerName());
-		$action     = strtolower($request->getActionName());
 		$domain = $request->getHttpHost();
-		$frontController = Zend_Controller_Front::getInstance();
-
-
+		$languageLocale   =   strtolower($request->getParam('lang')) ;
 		# print in case public keyword exists in url
-		 preg_match('/public/', REQUEST_URI, $matches, PREG_OFFSET_CAPTURE, 1);
-
-		 if(count($matches) > 0)
-		 {
-		 	$module = 'default';
-		 }
-
-		$lang   =   strtolower($request->getParam('lang')) ;
-		//var_dump($request->getParams());
-		//die;
-
-		if(! empty($lang) && $module == 'default' )
-		{
-			if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl")
-			{
+		preg_match('/public/', REQUEST_URI, $matches, PREG_OFFSET_CAPTURE, 1);
+		
+		if(count($matches) > 0) {
+		    $this->_moduleName = 'default';
+		}
+		
+		if(!empty($languageLocale) && $this->_moduleName == 'default') {
+			
+			if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl") {
 				$layoutPath = APPLICATION_PATH .  '/layouts/scripts/' ;
 			} else {
-				$layoutPath = APPLICATION_PATH . '/modules/'.$lang.'/layouts/scripts/' ;
+				$layoutPath = APPLICATION_PATH . '/modules/'.$languageLocale.'/layouts/scripts/' ;
 			}
 
-			$layout->setLayoutPath( $layoutPath  );
+			$layout->setLayoutPath($layoutPath);
 
-		}else if(  empty($lang) && $module ) {
-			if($module == 'default' || $module == null) {
+		} else if(empty($languageLocale) && $this->_moduleName) {
+			
+			if($this->_moduleName == 'default' || $this->_moduleName == null) {
 				$layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
 			} else {
-				$layoutPath = APPLICATION_PATH . '/modules/'.$module.'/layouts/scripts/' ;
+				$layoutPath = APPLICATION_PATH . '/modules/'.$this->_moduleName.'/layouts/scripts/' ;
 			}
-			$layout->setLayoutPath( $layoutPath  );
+			
+			$layout->setLayoutPath($layoutPath);
 		}
 
-
 		# redirect to login page if url is flipit.com/ADMIN
-		if($lang == 'admin')
-		{
+		if($languageLocale == 'admin') {
 			header ('Location: http://'.$request->getScheme .'/'. $request->getHttpHost() .'/admin', true, 301);
 			exit();
 		}
 
-
 		$layout->setLayout('layout');
-		$front = Zend_Controller_Front::getInstance();
+		$frontController = Zend_Controller_Front::getInstance();
 
-        if (!($front->getPlugin('Zend_Controller_Plugin_ErrorHandler') instanceof Zend_Controller_Plugin_ErrorHandler)) {
+        if (!($frontController->getPlugin('Zend_Controller_Plugin_ErrorHandler') 
+        		instanceof Zend_Controller_Plugin_ErrorHandler)) {
+        	
             return;
         }
 
-
-        $error = $front->getPlugin('Zend_Controller_Plugin_ErrorHandler');
+        $errorHandler = $frontController->getPlugin('Zend_Controller_Plugin_ErrorHandler');
+        
         $httpRequest = new Zend_Controller_Request_Http();
         $httpRequest->setModuleName($request->getModuleName())
-                    ->setControllerName($error->getErrorHandlerController())
-                    ->setActionName($error->getErrorHandlerAction());
-        if ($front->getDispatcher()->isDispatchable($httpRequest)) {
-            $error->setErrorHandlerModule($request->getModuleName());
+                    ->setControllerName($errorHandler->getErrorHandlerController())
+                    ->setActionName($errorHandler->getErrorHandlerAction());
+        
+        if ($frontController->getDispatcher()->isDispatchable($httpRequest)) {
+            $errorHandler->setErrorHandlerModule($request->getModuleName());
         }
+        
         return ;
 
+        if (!$frontController->getDispatcher()->isDispatchable($request)) {
 
-        $front = Zend_Controller_Front::getInstance();
-        if (!$front->getDispatcher()->isDispatchable($request)) {
-
-        	if($module == 'default' && empty($lang) &&
-        			($request->getHttpHost() == "www.flipit.com" ||	$request->getHttpHost() == "flipit.com" ) )
-        	{
+        	if($this->_moduleName == 'default' && empty($languageLocale) &&
+        			($request->getHttpHost() == "www.flipit.com" 
+        			||	$request->getHttpHost() == "flipit.com" ) ) {
+        		
         		header ('Location: http://'.$request->getScheme .'/'. $request->getHttpHost(), true, 301);
+        		
         		exit();
         	}
         }
-
     }
-
 
     /**
      * This function is called after the request is dispatch to a controller.
@@ -100,52 +93,36 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
      *
      * @param Zend_Controller_Request_Abstract $request
      */
-    public function preDispatch(Zend_Controller_Request_Abstract $request)
-    {
-    	$lang   =   strtolower($request->getParam('lang')) ;
-
+    public function preDispatch(Zend_Controller_Request_Abstract $request) {
+    	
+    	$languageLocale   =   strtolower($request->getParam('lang')) ;
     	# lang is only vailble in case of flipit
-    	if(isset( $lang ) &&  !empty($lang))
-    	{
-
-    		# check user is logges in
-    		if(Auth_VisitorAdapter::hasIdentity())
-    		{
+    	if(isset( $languageLocale ) &&  !empty($languageLocale)) {
+    		
+    		if(Auth_VisitorAdapter::hasIdentity()) {
     			# get visitor locale
-	    		$vLocale =  Auth_VisitorAdapter::getIdentity()->currentLocale ;
-
-    			# compare locale and lang for visitor session validation
-		    	if($vLocale != $lang)
-		    	{
+	    		$visitorCurrentLocale =  Auth_VisitorAdapter::getIdentity()->currentLocale ;
+    			if($visitorCurrentLocale != $languageLocale) {
 		    		$request->setControllerName('login')->setActionName('logout');
 		    	}
     		}
     	}
-
-
-    	$module   = strtolower($request->getModuleName());
-    	$action   = strtolower($request->getActionName());
-
+    	
+    	$actionName   = strtolower($request->getActionName());
     	# log every request from cms
-    	if($module === 'admin' )
-    	{
+    	if($this->_moduleName === 'admin' ) {
+    		
 			self::cmsActivityLog($request);
-
 			$sessionNamespace = new Zend_Session_Namespace();
-
 			#force user to chnage his password if it's older than two months
-			if($sessionNamespace->showPasswordChange && $action != 'logout')
-			{
-				# check user is logges in
-				if(Auth_StaffAdapter::hasIdentity())
-				{
+			if($sessionNamespace->showPasswordChange && $actionName != 'logout') {
+				if(Auth_StaffAdapter::hasIdentity()) {
 					$request->setControllerName('Auth')->setActionName('update-password');
 				}
 			}
 
     	}
     }
-
 
     /**
      * cmsActivityLog
@@ -154,68 +131,53 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
      *
      * @param Zend_Controller_Request_Abstract $request
      */
-    function cmsActivityLog($request)
-    {
+    function cmsActivityLog($request) {
 
     		# ignore if a request is from datatable
-	    	$isDatatablRequest = $request->getParam('iDisplayStart') ;
+	    	$requestFromDatatable = $request->getParam('iDisplayStart') ;
 
-	    	if($request->isPost() && $isDatatablRequest == null)
-	    	{
+	    	if($request->isPost() && $requestFromDatatable == null) {
 
-    			# get params and convret them into json
-	    		$requestParams = $request->getParams() ;
-
-	    		unset($requestParams['module']);
-
+	    		$adminActivityForLogs = $request->getParams() ;
+	    		unset($adminActivityForLogs['module']);
 	     		# hide password fields
-	    		$replacements = array(  'pwd' => '********',
-	    				'oldPassword' => '********',
-	    				'newPassword' => '********',
-	    				'confirmNewPassword' => '********',
-	    				'password' => '********',
-	    				'confPassword' => '********' );
+	    		$replacements = array('pwd'=> '********',
+	    				'oldPassword'=> '********',
+	    				'newPassword'=> '********',
+	    				'confirmNewPassword'=> '********',
+	    				'password'=> '********',
+	    				'confPassword'=> '********');
 
 	    		foreach($replacements as $k => $v) {
-	    			if(array_key_exists($k, $requestParams)) {
-	    				$requestParams[$k] = $v;
+	    			if(array_key_exists($k, $adminActivityForLogs)) {
+	    				$adminActivityForLogs[$k] = $v;
 	    			}
 	    		}
 
-	    		$requestParams = Zend_Json::encode($requestParams) ;
-
-	    		# log directory path
-	    		$logDir = APPLICATION_PATH . "/../logs/";
-
-
+	    		$adminActivityForLogs = Zend_Json::encode($adminActivityForLogs) ;
+	    		
+	    		$logStorageLocation = APPLICATION_PATH . "/../logs/";
 	    		# create directory if it isn't exists and write log file
-	    		if(!file_exists( $logDir  ))
-	    		mkdir( $logDir , 776, TRUE);
+	    		if(!file_exists( $logStorageLocation  ))
+	    		mkdir( $logStorageLocation , 776, TRUE);
 
-
-	    		$fileName = $logDir  . 'cms';
-
-	    		# request url
+	    		$fileName = $logStorageLocation  . 'cms';
+	    		
 	    		$requestURI = $request->getRequestUri();
-
-	    		$email = '';
-	    		# check user is logges in
-	    		if(Auth_StaffAdapter::hasIdentity())
-	    		{
-		    		# get visitor locale
-		    		$email = ";" . Auth_StaffAdapter::getIdentity()->email ;
+	    		$emailOfCurrentUser = '';
+	    		
+	    		if(Auth_StaffAdapter::hasIdentity()) {
+		    		$emailOfCurrentUser = ";" . Auth_StaffAdapter::getIdentity()->email ;
 	    		}	else	{
-	    			$email = ";" ;
+	    			$emailOfCurrentUser = ";" ;
 	    		}
-
+	    		
 			    $locale = LOCALE == '' ? "kc" : LOCALE ;
-
 		    	# please avoid to format below template (like tab or space )
-		    	$requestLog = <<<EOD
-				{$locale}{$email};{$requestURI}; $requestParams
+$requestLog = <<<EOD
+                {$locale}{$emailOfCurrentUser};{$requestURI}; $adminActivityForLogs
 EOD;
 	    		FrontEnd_Helper_viewHelper::writeLog($requestLog , $fileName ) ;
-
     	}
     }
-}
+} 
