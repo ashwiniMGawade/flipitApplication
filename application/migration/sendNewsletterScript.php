@@ -16,6 +16,8 @@ class SendNewsletter {
 	protected $_linkPath = null;
 	protected $_publicPath = null;
 
+	protected $_public_cdn_path = null;
+	protected $_http_path_cdn = null;
 
 	# visitors data
 	protected $_recipientMetaData  = array();
@@ -72,8 +74,8 @@ class SendNewsletter {
 				APPLICATION_PATH . '/configs/application.ini');
 
 		$frontControlerObject = $application->getOption('resources');
-
-
+		
+		
 		$this->_mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
 		$this->_template = $frontControlerObject['frontController']['params']['newsletterTemplate'];
 
@@ -87,7 +89,7 @@ class SendNewsletter {
 		// cycle htoruh all site database
 		$DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
 
-
+		
 		// cycle thoruh all site database
 		foreach ( $connections as $key => $connection ) {
 			// check database is being must be site
@@ -115,6 +117,7 @@ class SendNewsletter {
 			$suffix = "" ;
 			$this->_locale = '';
 			$this->_siteName = "Kortingscode.nl";
+			$this->_public_cdn_path = "http://img.kortingscode.nl/public/";
 		} else {
 			$this->_localePath = $key . "/";
 			$this->_hostName = "http://www.flipit.com";
@@ -122,6 +125,7 @@ class SendNewsletter {
 			$this->_locale = $key;
 			$this->_siteName = "Flipit.com";
 			$this->_logo =  $this->_hostName ."/public/images/flipit-welcome-mail.jpg";
+			$this->_public_cdn_path = "http://img.kortingscode.nl/public/" . strtolower($this->_localePath);
 		}
 
 		defined('PUBLIC_PATH')
@@ -359,11 +363,7 @@ class SendNewsletter {
 
 			//set the logo for shop if it exists or not in $dataShopImage array
 			if(count($value['offer']['shop']['logo']) > 0):
-				if(@file_exists($this->_rootPath.$value['offer']['shop']['logo']['path'] .'thum_medium_store_'. $value['offer']['shop']['logo']['name']) && $value['offer']['shop']['logo']['name']!=''):
-					$img = $this->_publicPath .$value['offer']['shop']['logo']['path'].'thum_medium_store_'. $value['offer']['shop']['logo']['name'];
-				else:
-					$img = $this->_publicPath ."/images/NoImage/NoImage_200x100.jpg";
-				endif;
+				$img = $this->_public_cdn_path .$value['offer']['shop']['logo']['path'].'thum_medium_store_'. $value['offer']['shop']['logo']['name'];
 			else:
 				$img = $this->_publicPath ."/images/NoImage/NoImage_200x100.jpg";
 			endif;
@@ -410,11 +410,7 @@ class SendNewsletter {
 
 		//if it exists or not in $category array
 		if(count($topCategories[0]['category']['categoryicon']) > 0):
-			if(@file_exists($this->_rootPath.$topCategories[0]['category']['categoryicon']['path'] .'thum_medium_'. $topCategories[0]['category']['categoryicon']['name']) && $topCategories[0]['category']['categoryicon']['name']!=''):
-				$img = $this->_publicPath.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_'. $topCategories[0]['category']['categoryicon']['name'];
-			else:
-				$img = $this->_publicPath."/images/NoImage/NoImage_70x60.png";
-			endif;
+		    $img = $this->_public_cdn_path.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_'. $topCategories[0]['category']['categoryicon']['name'];
 		else:
 			$img = $this->_publicPath."/images/NoImage/NoImage_70x60.png";
 		endif;
@@ -446,11 +442,7 @@ class SendNewsletter {
 
 			//set the logo for shop in this category if it exists or not in $dataShopImageCat array
 			if(count($value['shop']['logo']) > 0):
-				if(@file_exists($this->_rootPath.$value['shop']['logo']['path'] .'thum_medium_store_'. $value['shop']['logo']['name']) && $value['shop']['logo']['name']!=''):
-					$img = $this->_publicPath.$value['shop']['logo']['path'].'thum_medium_store_'. $value['shop']['logo']['name'];
-				else:
-					$img = $this->_publicPath."/images/NoImage/NoImage_200x100.jpg";
-				endif;
+				$img = $this->_public_cdn_path.$value['shop']['logo']['path'].'thum_medium_store_'. $value['shop']['logo']['name'];
 			else:
 				$img = $this->_publicPath."/images/NoImage/NoImage_200x100.jpg";
 			endif;
