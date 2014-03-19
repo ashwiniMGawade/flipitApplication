@@ -14,7 +14,10 @@ $language = $locale[0];
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language; ?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php
-$this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical));
+FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)!=''
+   ? $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical))
+   : '';
+
 $this->headMeta()->appendName('robots', 
 		FrontEnd_Helper_LayoutContent::loadRobots(
 				$this->param, $this->layout()->robotKeywords

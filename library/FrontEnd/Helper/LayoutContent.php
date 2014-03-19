@@ -22,7 +22,7 @@ class FrontEnd_Helper_LayoutContent {
 	}
 	
 	public static function loadCanonical($canonical) {
-		$canonicalUrl = '';
+		$canonicalUrl  = '';
 		if(isset($canonical)):
 	
 			if($canonical=='' || $canonical==null):
