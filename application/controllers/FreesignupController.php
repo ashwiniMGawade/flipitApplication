@@ -249,8 +249,7 @@ class FreesignupController extends Zend_Controller_Action
 
      			//call functions to set the needed data in global arrays
     			$voucherCodesData = BackEnd_Helper_viewHelper::getTopVouchercodesDataMandrill($topVouchercodes);
-
-
+				
     			$mailData = array(array('name'=>'headerWelcome',
     									'content'=>$imgLogoMail
     							  ),
