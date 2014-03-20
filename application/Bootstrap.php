@@ -392,7 +392,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		}
 		
 		$this->_routePropeties =  explode( '/' , $permalink) ;
-		//var_dump($routeProp);
+		//var_dump($splitPermalinkFromQueryString);
 		
 		if(count($this->_routePropeties) == 1) {
 			$permalink = $this->_routePropeties[0] ;

@@ -1,15 +1,35 @@
 <?php
-echo $this->minifyHeadScript()
-        ->prependFile("public/js/common.js")
-		->prependFile("public/js/front_end/jquery-bigtext.js")
- 		->prependFile("public/js/front_end/json/translation.js")
- 		->prependFile("public/js/front_end/json/shops.js")
-		->prependFile("public/js/front_end/layout.js")
-		->prependFile("public/js/Gettext.js")
-		->prependFile("public/js/jquery-ui-1.8.16.custom.min.js")
-		->prependFile("public/js/back_end/jquery.validate.js")
-		->prependFile("public/js/bootstrap.js")
-		->prependFile("public/js/jquery-1.7.2.min.js" )
-		->prependScript('var HOST_PATH = "'.  HTTP_PATH .'";')
-		->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";')
- 		->prependScript('var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";');
+   $this->HeadScript()->prependFile("public/js/common.js");
+   $this->HeadScript()->prependFile("public/js/front_end/jquery-bigtext.js");
+
+if(LOCALE !='') :
+   $this->HeadScript()->prependFile("public/" . LOCALE ."/js/front_end/json/translation.js");
+   $this->HeadScript()->prependFile("public/" . LOCALE ."/js/front_end/json/shops.js");
+else:
+   $this->HeadScript()->prependFile("public/js/front_end/json/translation.js");
+   $this->HeadScript()->prependFile("public/js/front_end/json/shops.js");
+endif;
+
+   $this->HeadScript()->prependFile("public/js/front_end/layout.js");
+   $this->HeadScript()->prependFile("public/js/Gettext.js");
+   $this->HeadScript()->prependFile("public/js/jquery-ui-1.8.16.custom.min.js");
+   $this->HeadScript()->prependFile("public/js/back_end/jquery.validate.js");
+   $this->HeadScript()->prependFile("public/js/bootstrap.js");
+   $this->HeadScript()->prependFile("public/js/jquery-1.7.2.min.js" );
+   $this->HeadScript()->prependScript('var HOST_PATH = "'.  HTTP_PATH .'";');
+   $this->HeadScript()->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
+   $this->HeadScript()->prependScript('var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";');
+
+/*echo $this->minifyHeadScript()->prependFile ("public/js/common.js" )
+->prependFile ("public/js/front_end/jquery-bigtext.js" )
+->prependFile ("public/" . LOCALE . "/js/front_end/json/translation.js" )
+->prependFile ("public/" . LOCALE . "/js/front_end/json/shops.js" )
+->prependFile ("public/js/front_end/layout.js" )
+->prependFile ("public/js/Gettext.js" )
+->prependFile ("public/js/jquery-ui-1.8.16.custom.min.js" )
+->prependFile ("public/js/back_end/jquery.validate.js" )
+->prependFile ("public/js/bootstrap.js" )
+->prependFile ("public/js/jquery-1.7.2.min.js" )
+->prependScript(  'var HOST_PATH = "'.  HTTP_PATH .'";'  )
+->prependScript(  'var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";'  )
+->prependScript( 'var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";'  );*/

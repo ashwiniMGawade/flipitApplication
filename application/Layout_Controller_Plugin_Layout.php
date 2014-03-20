@@ -19,6 +19,8 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
 		$domain = $request->getHttpHost();
 		$languageLocale   =   strtolower($request->getParam('lang')) ;
 		# print in case public keyword exists in url
+		//var_dump($request->getParams());
+		
 		preg_match('/public/', REQUEST_URI, $matches, PREG_OFFSET_CAPTURE, 1);
 		
 		if(count($matches) > 0) {
@@ -30,7 +32,8 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
 			if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl") {
 				$layoutPath = APPLICATION_PATH .  '/layouts/scripts/' ;
 			} else {
-				$layoutPath = APPLICATION_PATH . '/modules/'.$languageLocale.'/layouts/scripts/' ;
+				//$layoutPath = APPLICATION_PATH . '/modules/'.$languageLocale.'/layouts/scripts/' ;
+				$layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
 			}
 
 			$layout->setLayoutPath($layoutPath);
@@ -41,6 +44,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
 				$layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
 			} else {
 				$layoutPath = APPLICATION_PATH . '/modules/'.$this->_moduleName.'/layouts/scripts/' ;
+				//$layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
 			}
 			
 			$layout->setLayoutPath($layoutPath);

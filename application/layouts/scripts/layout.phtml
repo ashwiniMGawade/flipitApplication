@@ -1,61 +1,111 @@
 <?php
-# render flipit.com home page when url www.flipit.com, http://www.flipit.com, flipit.com 
-$flipitHomePage = FrontEnd_Helper_LayoutContent::loadFlipitHomePage($this->serverUrl());
-echo $flipitHomePage!='' ?  $flipitHomePage['obj']->render($flipitHomePage['path']) : '';
-echo $flipitHomePage['path']!='' ? die : ''; 
-echo $this->doctype("XHTML1_RDFA");
+if(LOCALE=='') {
+	# render flipit.com home page when url www.flipit.com, http://www.flipit.com, flipit.com 
+	$flipitHomePage = FrontEnd_Helper_LayoutContent::loadFlipitHomePage($this->serverUrl());
+	echo $flipitHomePage!='' ?  $flipitHomePage['obj']->render($flipitHomePage['path']) : '';
+	echo $flipitHomePage['path']!='' ? die : ''; 
+}
 
+echo $this->doctype("XHTML1_RDFA");
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
 $localeName = Signupmaxaccount::getLocaleName();
 $countryLocale = !empty($localeName['locale']) ? $localeName['locale'] : 'nl_NL';
 $locale = explode('_', $countryLocale);
 $language = $locale[0];
+
 ?>
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language; ?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php
-FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)!=''
-   ? $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical))
-   : '';
 
-$this->headMeta()->appendName('robots', 
-		FrontEnd_Helper_LayoutContent::loadRobots(
-				$this->param, $this->layout()->robotKeywords
-				)
-		);
+if(isset($this->canonical)):
+  $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical));
+endif;
+
+
+if($this->serverUrl() == 'http://admin.kortingscode.nl') :
+	$this->headMeta()->appendName('robots', 'noindex, nofollow');
+	header("Location: http://admin.kortingscode.nl/admin");
+else :
+    $this->headMeta()->appendName('robots',	FrontEnd_Helper_LayoutContent::loadRobots($this->param, $this->layout()->robotKeywords));
+endif;
+
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
-echo $this->headLink( 
-		array( 'rel' => 'shortcut icon',
-				'href' => HTTP_PATH . 'public/images/favicon.ico',
-				'type' => 'image/x-icon'
-			)
-	);
-echo $this->render('fbmeta.phtml');
+echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+
+# if not kortingscode.nl website
+
+
+if(LOCALE=='') :
+	echo $this->render('fbmeta.phtml');
+ else :
+    echo $this->render(FrontEnd_Helper_LayoutContent::loadFbMeta($this->fbtitle, $this->fbshareUrl, $this->fbImg));
+endif;
+
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->headStyle();
 echo $this->render('layout_js.phtml');
 echo $this->headScript();
+
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 ?>
 </head>
 <body>
     <div class="outerwrapper">
-		<!-- hidden field for apply selected class on menu -->
+	    <!-- hidden field for apply selected class on menu -->
 	    <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
 	    <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
 	    <div class="nav-bg"></div>
 	    <div class="innerwrapper">
-		     <?php echo $this->render('partials/_header.phtml'); ?>
-			 <div class="content-section">
-                <?php echo $this->render('partials/_top_nav.phtml'); ?>
-			    <?php echo $this->layout()->content;?>
-			</div>
-		    <?php echo $this->render('partials/_footer.phtml');  ?>
+		    <?php 
+		    $modulePath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
+			$view = new Zend_View();
+			$view->setBasePath(APPLICATION_PATH . '/views/');
+				
+			if(file_exists($modulePath . 'scripts/partials/_header.phtml' )) :
+				
+				$headerView = new Zend_View();
+				$headerView->setBasePath($modulePath);
+				echo $headerView->render('partials/_header.phtml');
+			else :
+				echo $view->render('partials/_header.phtml');
+			endif;
+		    ?>
+			<div class="content-section">
+			<?php 
+			if(file_exists($modulePath . 'scripts/partials/_top_nav.phtml' )) :
+				$headerView = new Zend_View();
+				$headerView->setBasePath($modulePath);
+				echo $headerView->render('partials/_top_nav.phtml');
+			else :
+				echo $view->render('partials/_top_nav.phtml');
+			endif;
+
+			echo $this->layout()->content;
+			?>
+			</div>  	      
+			<?php 
+			if(file_exists($modulePath . 'scripts/partials/_footer.phtml' )) :
+				$headerView = new Zend_View();
+				$headerView->setBasePath($modulePath);
+				echo $headerView->render('partials/_footer.phtml');
+			else :
+				echo $view->render('partials/_footer.phtml');
+			endif;
+			?>
 		</div>
     </div>
-	<?php echo $this->render('partials/_pop_up.phtml'); ?>
+	<?php 	
+	if(file_exists($modulePath . 'scripts/partials/_pop_up.phtml' )) :
+		$headerView = new Zend_View();
+		$headerView->setBasePath($modulePath);
+		echo $headerView->render('partials/_pop_up.phtml');
+	else :
+		echo $view->render('partials/_pop_up.phtml');
+	endif;
+	?>
 </body>
 </html>
 
