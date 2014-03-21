@@ -11,25 +11,22 @@ class AddEmailSettingsTable extends Doctrine_Migration_Base
     					'autoincrement' => 1,
     					'notnull'  => 1
     			),
-    			'senderemail' => array(
+    			'email' => array(
     					'type'   => 'string'
     			),
-    			'sendername' => array(
-    					'type'   => 'integer',
-    					'length' => 11
+    			'name' => array(
+    					'type'   => 'string'
     			
     			),
-    			'emailsubject' => array(
-    					'type'   => 'integer',
-    					'length' => 11
+                'locale' => array(
+    					'type'   => 'string'
     			
     			),
-    			'emailheader' => array(
-    					'type'   => 'integer',
-    					'length' => 11
+    			'timezone' => array(
+    					'type'   => 'string'
     					 
     			),
-    			'deleted' => array(
+                'deleted' => array(
     					'type'   => 'boolean',
     					'length' => 1
     			),
