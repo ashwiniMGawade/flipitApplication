@@ -103,7 +103,7 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
        }else{
             // fetch with ajax. We still we wat to show the html
             $divID = rand(0,99999);
-            echo '<div id="'.$divID.'"></div>';
+            echo '<nav class="account-box" id="'.$divID.'"></nav>';
            ?>
             <script type="text/javascript">
                 $.get('<?php echo HTTP_PATH . ltrim($src , '/'); ?>', function(data) {

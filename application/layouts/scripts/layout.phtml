@@ -1,119 +1,168 @@
 <?php
-if(LOCALE=='') :
-	# render flipit.com home page when url www.flipit.com, http://www.flipit.com, flipit.com 
-	$flipitHomePage = 
-         FrontEnd_Helper_LayoutContent::loadFlipitHomePage($this->serverUrl());
+if($this->serverUrl() == 'http://www.flipit.com' || $this->serverUrl() == 'flipit.com' || $this->serverUrl() =='http://flipit.com'){
 
-	echo $flipitHomePage!='' ?  
-	     $flipitHomePage['viewObject']->render($flipitHomePage['htmlPath']) : '';
-	
-	echo $flipitHomePage['htmlPath']!='' ? die : ''; 
-endif;
-
+	# render new view for flipit.com
+	$flipit = new Zend_View();
+	$flipit->setBasePath(APPLICATION_PATH . '/modules/flipit/views');
+		# check controller is index else diplay error page
+		if(zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index') :
+			echo $flipit->render('index/index.phtml');
+		else :
+			echo $flipit->render('error/error.phtml');
+		endif;
+	# return to render http response headers
+	return ;
+}
 echo $this->doctype("XHTML1_RDFA");
-# manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
-$localeName = Signupmaxaccount::getLocaleName();
+// manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
 
-$countryLocale = !empty($localeName['locale']) ? 
-    $localeName['locale'] : 'nl_NL';
-
-$locale = explode('_', $countryLocale);
-$language = $locale[0];
+$lang_locale = Signupmaxaccount::getallmaxaccounts();
+$lang = !empty($lang_locale[0]['locale']) ? $lang_locale[0]['locale'] : 'nl_NL';
+$langArray = explode('_', $lang);
+$language = $langArray[0];
 
 ?>
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language; ?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <?php
-
+//set cononical
 if(isset($this->canonical)):
-  $this->headLink(
-      FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)
-  );
+
+	if($this->canonical=='' || $this->canonical==null):
+		$this->headLink( array( 'rel' => 'canonical',
+		'href' => rtrim(HTTP_PATH, '/')));
+	else:
+		$this->headLink( array( 'rel' => 'canonical',
+		'href' => HTTP_PATH  . strtolower($this->canonical)));
+
+	endif;
 endif;
 
+	if(isset($this->param) && $this->param != '' && $this->controllerName == 'search'):
+		//it checks if search query is there in URL then add noindex on search page
+		$this->headMeta()->appendName('robots', 'noindex, follow');
+	elseif (strtolower($this->controllerName) == 'login' && strtolower($this->actionName == 'forgotpassword')):
+		$this->headMeta()->appendName('robots', 'noindex, follow');
+	else:
+		//it checks if search query is not there in URL then add index on search page
 
-if($this->serverUrl() == 'http://admin.kortingscode.nl') :
-	$this->headMeta()->appendName('robots', 'noindex, nofollow');
-	header("Location: http://admin.kortingscode.nl/admin");
-else :
-    $this->headMeta()->appendName('robots',	
-        FrontEnd_Helper_LayoutContent::loadRobots(
-            $this->param, $this->layout()->robotKeywords
-        )
-    );
-endif;
+		#add noindex for every page after first page
+		if(Zend_Controller_Front::getInstance()->getRequest()->getParam('page' , null) > 1 ) :
+			$this->headMeta()->appendName('robots', 'noindex, follow');
+		else:
+			# robot keyword property is set by any action
+			if($this->layout()->robotKeywords)
+			{
+				$this->headMeta()->appendName('robots', $this->layout()->robotKeywords);
+			}else
+			{
+				$this->headMeta()->appendName('robots', 'index, follow');
+			}
+		endif;
+	endif;
+
 
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
-echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+echo $this->headLink( array( 'rel' => 'shortcut icon',
+						'href' => HTTP_PATH . 'public/images/favicon.ico',
+						'type' => 'image/x-icon'
+					   )
+			   		);
 
-# if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
-if(LOCALE=='') :
-	echo $this->render('fbmeta.phtml');
- else :
-    echo $this->render(FrontEnd_Helper_LayoutContent::loadFbMeta(
-    		    $this->fbtitle, 
-    		    $this->fbshareUrl, $this->fbImg
-    		)
-    	);
-endif;
-
+echo $this->render('fbmeta.phtml');
 echo $this->headMeta();
-echo $this->render('layout_css.phtml');
-echo $this->render('layout_js.phtml');
 
-echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
+echo $this->minifyHeadLink()->prependStylesheet("public/css/placeholder_polyfill.css")
+							->prependStylesheet("public/css/bootstrap.min.css")
+							->prependStylesheet("public/css/bootstrap.css")
+							->prependStylesheet("public/css/front_end/style.css");
+
+echo $this->headStyle();
+echo $this->minifyHeadScript()->prependFile ("public/js/common.js" )
+							  ->prependFile ("public/js/front_end/jquery-bigtext.js" )
+ 							  ->prependFile ("public/js/front_end/json/translation.js" )
+ 							  ->prependFile ("public/js/front_end/json/shops.js" )
+							  ->prependFile ("public/js/front_end/layout.js" )
+							  ->prependFile ("public/js/Gettext.js" )
+							  ->prependFile ("public/js/jquery-ui-1.8.16.custom.min.js" )
+							  ->prependFile ("public/js/back_end/jquery.validate.js" )
+							  ->prependFile ("public/js/bootstrap.js" )
+							  ->prependFile ("public/js/jquery-1.7.2.min.js" )
+							  ->prependScript(  'var HOST_PATH = "'.  HTTP_PATH .'";'  )
+							  ->prependScript(  'var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";'  )
+ 							  ->prependScript( 'var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";'  );
+
+
+//Google analytics code Start
+$controller = $this->controller;
+$googleCodeErrorPage = "<script type='text/javascript'>
+
+						(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+							(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+							m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+							})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+							ga('create', 'UA-17691171-4', 'kortingscode.nl');
+							ga('send', 'pageview');
+							ga('send', 'event', 'error', '404', 'page:ref' , document.location.pathname + document.location.search + ':' + document.referrer  );
+
+						</script>";
+
+$googleCodeFooter = "<script type='text/javascript'>
+
+					(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+						(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+						m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+						})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+						ga('create', 'UA-17691171-4', 'kortingscode.nl');
+						ga('send', 'pageview');
+
+					var _gaq = _gaq || [];
+						_gaq.push(['_setAccount', 'UA-17691171-1']);
+						_gaq.push(['_trackPageview']);
+
+					(function()
+						{ var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true; ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js'; var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s); }
+						)();
+					</script>";
+
+if($controller == 'error'){
+	echo $googleCodeErrorPage;
+}else{
+	echo $googleCodeFooter;
+}
+//Google analytics code End
 ?>
 </head>
 <body>
-    <div class="outerwrapper">
-	    <!-- hidden field for apply selected class on menu -->
-	    <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
-	    <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
-	    <div class="nav-bg"></div>
-	    <div class="innerwrapper">
-		    <?php 
-		    $modulePath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
-		    
-			$rootViews = new Zend_View();
-			$rootViews->setBasePath(APPLICATION_PATH . '/views/');
-				
-			$localeViews = new Zend_View();
-			$localeViews->setBasePath($modulePath);
-			
-			if(file_exists($modulePath . 'scripts/partials/_header.phtml' )) :
-				echo $localeViews->render('partials/_header.phtml');
-			else :
-				echo $rootViews->render('partials/_header.phtml');
-			endif;
-		    ?>
-			<div class="content-section">
-			<?php 
-			if(file_exists($modulePath . 'scripts/partials/_top_nav.phtml' )) :
-				echo $localeViews->render('partials/_top_nav.phtml');
-			else :
-				echo $rootViews->render('partials/_top_nav.phtml');
-			endif;
 
-			echo $this->layout()->content; // main content of the website like internal html 
-			?>
-			</div>  	      
-			<?php 
-			if(file_exists($modulePath . 'scripts/partials/_footer.phtml' )) :
-				echo $localeViews->render('partials/_footer.phtml');
-			else :
-				echo $rootViews->render('partials/_footer.phtml');
-			endif;
-			?>
+	<div class="outerwrapper <?php
+		if(Zend_Controller_Front::getInstance()->getRequest()->getControllerName() == "index" &&
+					Zend_Controller_Front::getInstance()->getRequest()->getActionName() == "index") {
+				echo "home";
+			}
+
+		?>">
+		<!-- hidden field for apply selected class on menu -->
+		<input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
+		<input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
+		<div class="nav-bg"></div>
+		<div class="innerwrapper">
+
+			<?php echo $this->render('partials/_header.phtml'); ?>
+
+				<div class="content-section">
+
+	      		<?php echo $this->render('partials/_top_nav.phtml'); ?>
+				<?php echo $this->layout()->content;?>
+			</div>
+
+			<?php echo $this->render('partials/_footer.phtml');  ?>
 		</div>
-    </div>
-	<?php 	
-	if(file_exists($modulePath . 'scripts/partials/_pop_up.phtml' )) :
-		echo $localeViews->render('partials/_pop_up.phtml');
-	else :
-		echo $rootViews->render('partials/_pop_up.phtml');
-	endif;
-	?>
+	 </div>
+	 <?php echo $this->render('partials/_pop_up.phtml'); ?>
 </body>
 </html>
 

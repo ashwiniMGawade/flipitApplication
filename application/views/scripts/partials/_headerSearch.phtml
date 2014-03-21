@@ -155,16 +155,9 @@ $(function() {
 <?php $this->headScript()->captureEnd() ;
 		$this->minifyHeadScript()->prependFile ("public/js/front_end/jquery.placeholder.js");
 		$trans = Zend_Registry::get('Zend_Translate');?>
-		<div class="search-outer-bg">				
-				<div class='search-outer2'>
-			        	
-			       	  	<div class='search-outer2-right'>
-			          		<div class='fl'>
-			          			<input placeholder="<?php echo $trans->translate('Find discount codes for your favorite stores')?>"  style='width:357px;' id='searchFieldHeader'  name='searchFieldHeader' label='searchFieldHeader' type='text'/>
-			          			<input id='searchFieldHeaderHidden'  name='searchFieldHeaderHidden' type='hidden' label='searchFieldHeaderHidden'/>
-			          		</div>
-			          		
-			          	<div class='orange-btn ml10'><a href='javascript:void(0);' id='searchbuttonHeader' alt="<?php echo $trans->translate('Search') ?> "><span><?php echo $trans->translate('Search') ?> </span></a></div>
-			            </div>
-        		</div>
-       </div>
+			<a href="#" class="opener"><span class="glyphicon glyphicon-search"></span></a>
+			<div class="slide">
+				<input placeholder="<?php echo $trans->translate('Type in a Store e.g.  Avis')?>"  style='width:357px;' class="form-control" id='searchFieldHeader'  name='searchFieldHeader' label='searchFieldHeader' type='text'/>
+				<input id='searchFieldHeaderHidden'  name='searchFieldHeaderHidden' type='hidden' label='searchFieldHeaderHidden'/>
+				<a href='javascript:void(0);'  class="btn btn-default" id='searchbuttonHeader' alt="<?php echo $trans->translate('Search') ?> "><span class="glyphicon glyphicon-search"></span></a>
+			</div>                              

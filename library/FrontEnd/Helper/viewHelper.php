@@ -847,7 +847,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 		$cnt = count($mainMenu);
 		$val = 1;
-		$string ='<div class="navigation"><ul>';
+		$string ='<nav id="nav" class="navigation"><ul>';
 		foreach ($mainMenu as $m) {
 
 			//echo $m['url']; die;
@@ -889,7 +889,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		}
 		$val++;
 		}
-		$string .= '</ul></div>';
+		$string .= '</ul></nav>';
 		return $string;
 	}
 
