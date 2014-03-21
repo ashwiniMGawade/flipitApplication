@@ -5,9 +5,9 @@ if(LOCALE=='') :
          FrontEnd_Helper_LayoutContent::loadFlipitHomePage($this->serverUrl());
 
 	echo $flipitHomePage!='' ?  
-	     $flipitHomePage['obj']->render($flipitHomePage['path']) : '';
+	     $flipitHomePage['viewObject']->render($flipitHomePage['htmlPath']) : '';
 	
-	echo $flipitHomePage['path']!='' ? die : ''; 
+	echo $flipitHomePage['htmlPath']!='' ? die : ''; 
 endif;
 
 echo $this->doctype("XHTML1_RDFA");

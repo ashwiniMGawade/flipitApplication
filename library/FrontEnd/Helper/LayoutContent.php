@@ -18,7 +18,7 @@ class FrontEnd_Helper_LayoutContent {
 				? $htmlPath = 'index/index.phtml'
 				: $htmlPath =  'error/error.phtml';
 			
-		return $flipitHomePage = array('obj'=>$flipit,'path'=>$htmlPath);
+		return $flipitHomePage = array('viewObject'=>$flipit,'htmlPath'=>$htmlPath);
 		endif;
 	}
 	
