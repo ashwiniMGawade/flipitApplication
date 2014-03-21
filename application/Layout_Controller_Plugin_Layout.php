@@ -43,7 +43,8 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
 			if($this->_moduleName == 'default' || $this->_moduleName == null) {
 				$layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
 			} else {
-				$layoutPath = APPLICATION_PATH . '/modules/'.$this->_moduleName.'/layouts/scripts/' ;
+				$layoutPath = 
+				    APPLICATION_PATH . '/modules/'.$this->_moduleName.'/layouts/scripts/' ;
 				//$layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
 			}
 			
