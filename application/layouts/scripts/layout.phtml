@@ -90,11 +90,12 @@ endif;
 			<div class="content-section">
 <?php
 if(file_exists($modulePath . 'scripts/partials/_top_nav.phtml')):
-    echo $localeViews->render('partials/_top_nav.phtml');
+   echo $localeViews->render('partials/_top_nav.phtml');
 else :
     echo $rootViews->render('partials/_top_nav.phtml');
 endif;
-   echo $this->layout()->content; // main content of the website like internal html
+  //echo $this->layout()->content; // main content of the website like internal html
+echo 'Welcome New Design';
 ?>
 			</div>
 <?php

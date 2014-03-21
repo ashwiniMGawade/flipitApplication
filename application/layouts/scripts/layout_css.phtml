@@ -1,5 +1,5 @@
 <?php
-if(LOCALE !='') :
+/*if(LOCALE !='') :
     $this->minifyHeadLink()->prependStylesheet("public/" .  LOCALE . "/css/style.css");
 endif;
 
@@ -11,4 +11,11 @@ if(LOCALE !='') :
     $this->minifyHeadLink()->prependStylesheet("public/flipit/css/general_style.css");
 endif;
 
-echo $this->minifyHeadLink()->prependStylesheet("public/css/front_end/style.css");
+echo $this->minifyHeadLink()->prependStylesheet("public/css/front_end/style.css");*/
+
+?>
+
+<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+<?php
+echo $this->HeadLink()->prependStylesheet("/public/css/all.css");
+?>
