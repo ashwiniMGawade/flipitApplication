@@ -531,7 +531,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             }
             //append page number for pagination if exist
             if (@$matches[0] > 0) {
-                //	$paramArray['page'] = @$matches[0];
+                //$paramArray['page'] = @$matches[0];
             }
 
             if (in_array(strtolower($this->_routeProperties[0]), $this->_moduleNames)) {
