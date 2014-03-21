@@ -1,15 +1,22 @@
 <?php
-if(LOCALE=='') {
+if(LOCALE=='') :
 	# render flipit.com home page when url www.flipit.com, http://www.flipit.com, flipit.com 
-	$flipitHomePage = FrontEnd_Helper_LayoutContent::loadFlipitHomePage($this->serverUrl());
-	echo $flipitHomePage!='' ?  $flipitHomePage['obj']->render($flipitHomePage['path']) : '';
+	$flipitHomePage = 
+         FrontEnd_Helper_LayoutContent::loadFlipitHomePage($this->serverUrl());
+
+	echo $flipitHomePage!='' ?  
+	     $flipitHomePage['obj']->render($flipitHomePage['path']) : '';
+	
 	echo $flipitHomePage['path']!='' ? die : ''; 
-}
+endif;
 
 echo $this->doctype("XHTML1_RDFA");
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
 $localeName = Signupmaxaccount::getLocaleName();
-$countryLocale = !empty($localeName['locale']) ? $localeName['locale'] : 'nl_NL';
+
+$countryLocale = !empty($localeName['locale']) ? 
+    $localeName['locale'] : 'nl_NL';
+
 $locale = explode('_', $countryLocale);
 $language = $locale[0];
 
@@ -19,7 +26,9 @@ $language = $locale[0];
 <?php
 
 if(isset($this->canonical)):
-  $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical));
+  $this->headLink(
+      FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)
+  );
 endif;
 
 
@@ -27,27 +36,31 @@ if($this->serverUrl() == 'http://admin.kortingscode.nl') :
 	$this->headMeta()->appendName('robots', 'noindex, nofollow');
 	header("Location: http://admin.kortingscode.nl/admin");
 else :
-    $this->headMeta()->appendName('robots',	FrontEnd_Helper_LayoutContent::loadRobots($this->param, $this->layout()->robotKeywords));
+    $this->headMeta()->appendName('robots',	
+        FrontEnd_Helper_LayoutContent::loadRobots(
+            $this->param, $this->layout()->robotKeywords
+        )
+    );
 endif;
 
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
 echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
 
-# if not kortingscode.nl website
-
-
+# if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
 if(LOCALE=='') :
 	echo $this->render('fbmeta.phtml');
  else :
-    echo $this->render(FrontEnd_Helper_LayoutContent::loadFbMeta($this->fbtitle, $this->fbshareUrl, $this->fbImg));
+    echo $this->render(FrontEnd_Helper_LayoutContent::loadFbMeta(
+    		    $this->fbtitle, 
+    		    $this->fbshareUrl, $this->fbImg
+    		)
+    	);
 endif;
 
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
-echo $this->headStyle();
 echo $this->render('layout_js.phtml');
-echo $this->headScript();
 
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 ?>
@@ -61,49 +74,44 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 	    <div class="innerwrapper">
 		    <?php 
 		    $modulePath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
-			$view = new Zend_View();
-			$view->setBasePath(APPLICATION_PATH . '/views/');
+		    
+			$rootViews = new Zend_View();
+			$rootViews->setBasePath(APPLICATION_PATH . '/views/');
 				
+			$localeViews = new Zend_View();
+			$localeViews->setBasePath($modulePath);
+			
 			if(file_exists($modulePath . 'scripts/partials/_header.phtml' )) :
-				
-				$headerView = new Zend_View();
-				$headerView->setBasePath($modulePath);
-				echo $headerView->render('partials/_header.phtml');
+				echo $localeViews->render('partials/_header.phtml');
 			else :
-				echo $view->render('partials/_header.phtml');
+				echo $rootViews->render('partials/_header.phtml');
 			endif;
 		    ?>
 			<div class="content-section">
 			<?php 
 			if(file_exists($modulePath . 'scripts/partials/_top_nav.phtml' )) :
-				$headerView = new Zend_View();
-				$headerView->setBasePath($modulePath);
-				echo $headerView->render('partials/_top_nav.phtml');
+				echo $localeViews->render('partials/_top_nav.phtml');
 			else :
-				echo $view->render('partials/_top_nav.phtml');
+				echo $rootViews->render('partials/_top_nav.phtml');
 			endif;
 
-			echo $this->layout()->content;
+			echo $this->layout()->content; // main content of the website like internal html 
 			?>
 			</div>  	      
 			<?php 
 			if(file_exists($modulePath . 'scripts/partials/_footer.phtml' )) :
-				$headerView = new Zend_View();
-				$headerView->setBasePath($modulePath);
-				echo $headerView->render('partials/_footer.phtml');
+				echo $localeViews->render('partials/_footer.phtml');
 			else :
-				echo $view->render('partials/_footer.phtml');
+				echo $rootViews->render('partials/_footer.phtml');
 			endif;
 			?>
 		</div>
     </div>
 	<?php 	
 	if(file_exists($modulePath . 'scripts/partials/_pop_up.phtml' )) :
-		$headerView = new Zend_View();
-		$headerView->setBasePath($modulePath);
-		echo $headerView->render('partials/_pop_up.phtml');
+		echo $localeViews->render('partials/_pop_up.phtml');
 	else :
-		echo $view->render('partials/_pop_up.phtml');
+		echo $rootViews->render('partials/_pop_up.phtml');
 	endif;
 	?>
 </body>

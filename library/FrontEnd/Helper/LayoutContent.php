@@ -13,7 +13,8 @@ class FrontEnd_Helper_LayoutContent {
 				|| $flipitUrl == 'flipit.com'
 				|| $flipitUrl =='http://flipit.com') :
 	
-				zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index'
+				zend_Controller_Front::getInstance()->getRequest()
+				->getControllerName() == 'index'
 				? $htmlPath = 'index/index.phtml'
 				: $htmlPath =  'error/error.phtml';
 			
@@ -25,22 +26,25 @@ class FrontEnd_Helper_LayoutContent {
 		
 		# add for all locale
 		$localePath = '';
-		if(LOCALE!='en'){
-		
+	
+		if(LOCALE!='en') :
 			$localePath = HTTP_PATH_LOCALE;
-		}else{
-		
+		else :
 			$localePath = HTTP_PATH;
-		}
-		# end code for all locale
+		endif;
 		
+		# end code for all locale
 		$canonicalUrl  = '';
 		if(isset($canonical)):
 	
 			if($canonical=='' || $canonical==null):
-			    $canonicalUrl =  array('rel' => 'canonical','href' => rtrim($localePath, '/'));
+			    $canonicalUrl =  array('rel' => 'canonical',
+			    		'href' => rtrim($localePath, '/')
+			    		);
 			else:
-			    $canonicalUrl =  array('rel' => 'canonical','href' => $localePath  . strtolower($canonical));
+			    $canonicalUrl =  array('rel' => 'canonical',
+			    		'href' => $localePath  . strtolower($canonical)
+			    		);
 			endif;
 	
 		endif;
@@ -69,7 +73,8 @@ class FrontEnd_Helper_LayoutContent {
 			
 		else:
 			#add noindex for every page after first page
-			if(Zend_Controller_Front::getInstance()->getRequest()->getParam('page' , null) > 1) :
+			if(Zend_Controller_Front::getInstance()
+					->getRequest()->getParam('page' , null) > 1) :
 		
 			    $robots  = 'noindex, follow';
 				
@@ -97,16 +102,18 @@ class FrontEnd_Helper_LayoutContent {
 		$pushSetAccount = 'UA-17691171-1';
 		
 		# set google analytics code for locale based like be/in etc
-		if(LOCALE!='') {
+		if(LOCALE!='') :
+		
 			$googleAnalyticsKey = 'UA-17691171-3';
 			$websiteName = 'flipit.com';
 			
-			if(LOCALE=='be') {
+			if(LOCALE=='be') :
 				$pushSetAccount = 'UA-17691171-5';
-		    } else {
+		    else :
 		    	$pushSetAccount = '';
-		    }
-		}
+		    endif;
+		    
+		endif;
 		
 		$googleAnalyticsCode = '';
 	
@@ -139,9 +146,9 @@ class FrontEnd_Helper_LayoutContent {
 		    ga('create', '$googleAnalyticsKey' , '$websiteName');
 		    ga('send', 'pageview');";
 			
-		 	if($pushSetAccount!='') {
+		 	if($pushSetAccount!='') :
 		 		
-			 $googleAnalyticsCode .=   "var _gaq = _gaq || [];
+			   $googleAnalyticsCode .=   "var _gaq = _gaq || [];
 			   _gaq.push(['_setAccount', '$pushSetAccount']);
 			   _gaq.push(['_trackPageview']);
 		
@@ -149,11 +156,13 @@ class FrontEnd_Helper_LayoutContent {
 			   { var ga = document.createElement('script'); ga.type = 'text/javascript';
 			   ga.async = true; ga.src = ('https:' == document.location.protocol ?
 			   'https://' : 'http://')
-			   + 'stats.g.doubleclick.net/dc.js'; var s = document.getElementsByTagName('script')[0];
+			   + 'stats.g.doubleclick.net/dc.js'; 
+			   var s = document.getElementsByTagName('script')[0];
 			   s.parentNode.insertBefore(ga, s); }
 			   )();"; 
 		 		
-		 	}
+		 	endif;
+		 	
 		    $googleAnalyticsCode .="</script>";
 		 
 	  endif;
@@ -162,18 +171,21 @@ class FrontEnd_Helper_LayoutContent {
 	}
 	
 	public static function loadFavicon() {
+		
 		$favicon = '';
+		
 		if(LOCALE=='') :
 			$favicon = array( 'rel' => 'shortcut icon',
-							'href' => HTTP_PATH . 'public/images/favicon.ico',
-							'type' => 'image/x-icon'
-					);
+					 'href' => HTTP_PATH . 'public/images/favicon.ico',
+					 'type' => 'image/x-icon'
+		    );
 		else :
 			$favicon =  array( 'rel' => 'shortcut icon',
 					'href' => HTTP_PATH . 'public/flipit/images/favicon.ico',
 					'type' => 'image/x-icon'
 			);
 		endif;
+		
 		return $favicon;
 	}
 	

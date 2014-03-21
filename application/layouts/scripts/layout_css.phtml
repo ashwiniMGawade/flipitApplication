@@ -1,11 +1,16 @@
 <?php
 if(LOCALE !='') :
-      $this->HeadLink()->prependStylesheet(APPLICATION_PATH. "public/" .  LOCALE . "/css/style.css");
+    $this->minifyHeadLink()->prependStylesheet("public/" .  LOCALE . "/css/style.css");
 endif;
-       $this->HeadLink()->prependStylesheet("public/css/placeholder_polyfill.css");
-	   $this->HeadLink()->prependStylesheet("public/css/bootstrap.min.css");
-	   $this->HeadLink()->prependStylesheet("public/css/bootstrap.css");
+
+    $this->minifyHeadLink()->prependStylesheet("public/css/placeholder_polyfill.css")
+	     ->prependStylesheet("public/css/bootstrap.min.css")
+	     ->prependStylesheet("public/css/bootstrap.css");
+    
 if(LOCALE !='') :
-	  $this->HeadLink()->prependStylesheet("public/flipit/css/general_style.css");
+	$this->minifyHeadLink()->prependStylesheet("public/flipit/css/general_style.css");
 endif;
-    echo  $this->HeadLink()->prependStylesheet("public/css/front_end/style.css");
+
+echo $this->minifyHeadLink()->prependStylesheet("public/css/front_end/style.css");
+    
+   
