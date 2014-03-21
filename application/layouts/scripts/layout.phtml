@@ -29,7 +29,6 @@ if(isset($this->canonical)):
     );
 endif;
 
-
 if($this->serverUrl() == 'http://admin.kortingscode.nl') :
     $this->headMeta()->appendName('robots', 'noindex, nofollow');
     header("Location: http://admin.kortingscode.nl/admin");
