@@ -1,5 +1,4 @@
-<div class="header-outer">
-    <div class="header-outer">
+<!--    <div class="header-outer">
         <div class="header">
         	<div style="color:#FFFFFF; padding: 4px 0;z-index:999999;min-width:500px; position:absolute;font-size: 11px;" >
             		<?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate('Default header text')) ;?>
@@ -20,4 +19,48 @@
             <?php echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action); ?>
         </div>
     </div>
-</div>
+</div>-->
+
+<header id="header">
+            <div class="top-panel">
+                <div class="container">
+                    <span class="slogan"><?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate('Default header text')) ;?></span>
+                    <a class="menu-account" href="#">account menu</a>
+                    <?php
+                    $this->locale = LOCALE != 'en' ? LOCALE  : '';
+                    $link = $this->locale. '/login/usermenu';
+                    echo $this->esi($link); ?>
+                </div>
+            </div>
+            <div class="navigation">
+                <div class="container">
+                    <?php  if(LOCALE == '') : ?>
+                    <?php   $logo = 'kortingscode-logo'; ?>
+                    <?php else :?>
+                    <?php   $logo = 'logo'; ?>
+                    <?php endif; ?>
+                    <strong class="<?php echo $logo; ?>"><a href="#">FlipIt</a></strong>
+                    <a href="#" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
+                    <div class="nav-bar">
+                        <div class="search-box">
+                            <?php
+                                $modulePath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
+            
+                                $rootViews = new Zend_View();
+                                $rootViews->setBasePath(APPLICATION_PATH . '/views/');
+                                    
+                                $localeViews = new Zend_View();
+                                $localeViews->setBasePath($modulePath);
+
+                                if(file_exists($modulePath . 'scripts/partials/_headerSearch.phtml' )) :
+                                    echo $localeViews->render('partials/_headerSearch.phtml');
+                                else :
+                                    echo $rootViews->render('partials/_headerSearch.phtml');
+                                endif;
+                            ?>                          
+                        </div>
+                        <?php echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action); ?>
+                    </div>
+                </div>
+            </div>
+</header>
