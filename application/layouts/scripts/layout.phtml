@@ -9,20 +9,19 @@ if(LOCALE=='') :
 endif;
 
 echo $this->doctype("XHTML1_RDFA");
+
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
 $localeName = Signupmaxaccount::getLocaleName();
-
 $countryLocale = !empty($localeName['locale']) ?
     $localeName['locale'] : 'nl_NL';
-
 $locale = explode('_', $countryLocale);
 $language = $locale[0];
-
 ?>
+
 <html lang="<?php echo $language; ?>" xml:lang="<?php echo $language;?>" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<?php
 
+<?php
 if(isset($this->canonical)):
     $this->headLink(
         FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)
@@ -65,6 +64,7 @@ echo $this->render('layout_js.phtml');
 
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 ?>
+
 </head>
 <body>
     <div class="outerwrapper">
@@ -74,42 +74,45 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 	    <div class="nav-bg"></div>
 	    <div class="innerwrapper">
 <?php
-$modulePath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
-$rootViews = new Zend_View();
-$rootViews->setBasePath(APPLICATION_PATH . '/views/');
-$localeViews = new Zend_View();
-$localeViews->setBasePath($modulePath);
+$localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/' ;
 
-if(file_exists($modulePath . 'scripts/partials/_header.phtml')) :
-    echo $localeViews->render('partials/_header.phtml');
+$basePartialViewPath = new Zend_View();
+$basePartialViewPath->setScriptPath(APPLICATION_PATH . '/views/scripts/partials/');
+
+$localePartialViewPath = new Zend_View();
+$localePartialViewPath->setScriptPath($localePartialPath);
+
+if(file_exists($localePartialPath .  '_header.phtml')) :
+    echo $localePartialViewPath->render('_header.phtml');
 else:
-    echo $rootViews->render('partials/_header.phtml');
+    echo $basePartialViewPath->render('_header.phtml');
 endif;
 ?>
 			<div class="content-section">
 <?php
-if(file_exists($modulePath . 'scripts/partials/_top_nav.phtml')):
-    echo $localeViews->render('partials/_top_nav.phtml');
+if(file_exists($localePartialPath .  '_top_nav.phtml')):
+    echo $localePartialViewPath->render('_top_nav.phtml');
 else :
-    echo $rootViews->render('partials/_top_nav.phtml');
+    echo $basePartialViewPath->render('_top_nav.phtml');
 endif;
-   echo $this->layout()->content; // main content of the website like internal html
+
+echo $this->layout()->content;
 ?>
 			</div>
 <?php
-if(file_exists($modulePath . 'scripts/partials/_footer.phtml')):
-    echo $localeViews->render('partials/_footer.phtml');
+if(file_exists($localePartialPath .  '_footer.phtml')):
+    echo $localePartialViewPath->render('_footer.phtml');
 else:
-    echo $rootViews->render('partials/_footer.phtml');
+    echo $basePartialViewPath->render('_footer.phtml');
 endif;
 ?>
 		</div>
     </div>
 <?php
-if(file_exists($modulePath . 'scripts/partials/_pop_up.phtml')):
-    echo $localeViews->render('partials/_pop_up.phtml');
+if(file_exists($localePartialPath . '_pop_up.phtml')):
+    echo $localePartialViewPath->render('_pop_up.phtml');
 else :
-    echo $rootViews->render('partials/_pop_up.phtml');
+    echo $basePartialViewPath->render('_pop_up.phtml');
 endif;
 ?>
 </body>

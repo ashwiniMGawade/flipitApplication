@@ -3,9 +3,9 @@ if(LOCALE !='') :
     $this->minifyHeadLink()->prependStylesheet("public/" .  LOCALE . "/css/style.css");
 endif;
 
-    $this->minifyHeadLink()->prependStylesheet("public/css/placeholder_polyfill.css")
-        ->prependStylesheet("public/css/bootstrap.min.css")
-        ->prependStylesheet("public/css/bootstrap.css");
+$this->minifyHeadLink()->prependStylesheet("public/css/placeholder_polyfill.css")
+    ->prependStylesheet("public/css/bootstrap.min.css")
+    ->prependStylesheet("public/css/bootstrap.css");
     
 if(LOCALE !='') :
     $this->minifyHeadLink()->prependStylesheet("public/flipit/css/general_style.css");

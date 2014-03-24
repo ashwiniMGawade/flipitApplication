@@ -14,7 +14,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected $request = null;
     protected $_httpHost = null;
     protected $_siteName = "kortingscode.nl" ;
-
     protected $_frontController = '';
     protected $_route ='';
     protected $_routeProperties = '';
