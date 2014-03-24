@@ -9,7 +9,7 @@ require_once 'BootstrapConstant.php';
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-    protected $_localeLanguage = null;
+    protected $_moduleDirectoryName = null;
     protected $_moduleName = array();
     protected $_request = null;
     protected $_httpHost = null;
@@ -57,16 +57,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     public function _initContants()
     {
-        $moduleDirectory = $this->_frontController->getControllerDirectory();
-        $this->_moduleName = array_keys($moduleDirectory);
-        $permalink = ltrim(REQUEST_URI, '/');
-        $this->_routeProperties = preg_split("/[\/\?]+/", $permalink);
-        $splitSlashFromUrl  = rtrim($this->_routeProperties[0], '/');
-
-        if (in_array(strtolower($splitSlashFromUrl), $this->_moduleName)) {
-            $this->_localeLanguage = strtolower($this->_routeProperties[0]);
+        $routeUrl = ltrim(REQUEST_URI, '/');
+        $this->_routeProperties = preg_split("/[\/\?]+/", $routeUrl);
+        $routeUrlWithoutSlash  = rtrim($this->_routeProperties[0], '/');
+        $moduleDirectoryNames = $this->_frontController->getControllerDirectory();
+        $this->_moduleName = array_keys($moduleDirectoryNames);
+        
+        if (in_array(strtolower($routeUrlWithoutSlash), $this->_moduleName)) {
+            $this->_moduleDirectoryName = strtolower($this->_routeProperties[0]);
         } else {
-            $this->_localeLanguage = "default" ;
+            $this->_moduleDirectoryName = "default" ;
         }
         
         #Enviorment Settings
@@ -79,38 +79,35 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
 
         #CDN Settings
-        $cdnServerName = $this->getOption('cdn');
-        if (isset($cdnServerName) && isset($cdnServerName[HTTP_HOST])) {
-            define("HTTP_PATH_CDN", trim('http://'. $cdnServerName[HTTP_HOST] . '/'));
+        $cdnUrl = $this->getOption('cdn');
+        if (isset($cdnUrl) && isset($cdnUrl[HTTP_HOST])) {
+            define("HTTP_PATH_CDN", trim('http://'. $cdnUrl[HTTP_HOST] . '/'));
         } else {
             define("HTTP_PATH_CDN", trim('http://' . HTTP_HOST . '/'));
         }
 
         defined('BASE_ROOT') || define("BASE_ROOT", dirname($_SERVER['SCRIPT_FILENAME']) . '/');
 
-        if (strlen(strtolower($this->_localeLanguage))==2 && ($this->_httpHost != "kortingscode.nl"
-                        &&  $this->_httpHost != "www.kortingscode.nl"
-               )
-        ) {
-            define("LOCALE", trim(strtolower($this->_localeLanguage)));
+        if (strlen(strtolower($this->_moduleDirectoryName))==2 && $this->_httpHost != "www.kortingscode.nl") {
+            define("LOCALE", trim(strtolower($this->_moduleDirectoryName)));
             define(
                 "HTTP_PATH_LOCALE",
-                trim('http://' . HTTP_HOST . '/' . $this->_localeLanguage .'/')
+                trim('http://' . HTTP_HOST . '/' . $this->_moduleDirectoryName .'/')
             );
             defined('PUBLIC_PATH')
             || define(
                 'PUBLIC_PATH',
                 'http://' . HTTP_HOST. dirname(
                     $_SERVER['SCRIPT_NAME']
-                ) . '/'.strtolower($this->_localeLanguage) .'/'
+                ) . '/'.strtolower($this->_moduleDirectoryName) .'/'
             );
             
-            if (isset($cdnServerName) && isset($cdnServerName[HTTP_HOST])) {
+            if (isset($cdnUrl) && isset($cdnUrl[HTTP_HOST])) {
                 define(
                     "PUBLIC_PATH_CDN",
                     trim(
-                        'http://'. $cdnServerName[HTTP_HOST]
-                        .'/'. strtolower($this->_localeLanguage) .'/'
+                        'http://'. $cdnUrl[HTTP_HOST]
+                        .'/'. strtolower($this->_moduleDirectoryName) .'/'
                     )
                 );
             } else {
@@ -118,7 +115,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     "PUBLIC_PATH_CDN",
                     trim(
                         'http://' . HTTP_HOST
-                        . '/'. strtolower($this->_localeLanguage) .'/'
+                        . '/'. strtolower($this->_moduleDirectoryName) .'/'
                     )
                 );
             }
@@ -127,13 +124,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             || define(
                 'ROOT_PATH',
                 dirname($_SERVER['SCRIPT_FILENAME']) . '/'
-                . strtolower($this->_localeLanguage) .'/'
+                . strtolower($this->_moduleDirectoryName) .'/'
             );
 
             defined('UPLOAD_PATH')
             || define(
                 'UPLOAD_PATH',
-                strtolower($this->_localeLanguage) .'/'. 'images/'
+                strtolower($this->_moduleDirectoryName) .'/'. 'images/'
             );
 
             defined('UPLOAD_IMG_PATH')
@@ -142,19 +139,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             defined('UPLOAD_EXCEL_PATH')
             || define(
                 'UPLOAD_EXCEL_PATH',
-                APPLICATION_PATH. '/../data/' . strtolower($this->_localeLanguage) .'/'. 'excels/'
+                APPLICATION_PATH. '/../data/' . strtolower($this->_moduleDirectoryName) .'/'. 'excels/'
             );
 
             defined('IMG_PATH')
             || define('IMG_PATH', PUBLIC_PATH . "images/");
 
-        } elseif (trim(strtolower($this->_localeLanguage)) == 'admin') {
+        } elseif (trim(strtolower($this->_moduleDirectoryName)) == 'admin') {
 
-            $languageKeyForLocale = '';
+            $localAbbreviation = '';
 
             if (isset($_COOKIE['locale']) && ($_COOKIE['locale']) != 'en') {
-                $languageKeyForLocale = $_COOKIE['locale'] . "/";
-                define("LOCALE", trim($languageKeyForLocale, '/'));
+                $localAbbreviation = $_COOKIE['locale'] . "/";
+                define("LOCALE", trim($localAbbreviation, '/'));
 
             } else {
                 define("LOCALE", '');
@@ -175,20 +172,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             || define(
                 'PUBLIC_PATH_LOCALE',
                 'http://' . HTTP_HOST
-                . dirname($_SERVER['SCRIPT_NAME']) . '/' . $languageKeyForLocale
+                . dirname($_SERVER['SCRIPT_NAME']) . '/' . $localAbbreviation
             );
 
             defined('ROOT_PATH')
             || define(
                 'ROOT_PATH',
-                dirname($_SERVER['SCRIPT_FILENAME']) . '/' . $languageKeyForLocale
+                dirname($_SERVER['SCRIPT_FILENAME']) . '/' . $localAbbreviation
             );
 
             defined('UPLOAD_PATH')
             || define('UPLOAD_PATH', 'images/');
 
             defined('UPLOAD_PATH1')
-            || define('UPLOAD_PATH1', $languageKeyForLocale);
+            || define('UPLOAD_PATH1', $localAbbreviation);
 
             defined('UPLOAD_IMG_PATH')
             || define('UPLOAD_IMG_PATH', UPLOAD_PATH . 'upload/');
@@ -196,7 +193,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             defined('UPLOAD_EXCEL_PATH')
             || define(
                 'UPLOAD_EXCEL_PATH',
-                APPLICATION_PATH. '/../data/' . strtolower($languageKeyForLocale) . 'excels/'
+                APPLICATION_PATH. '/../data/' . strtolower($localAbbreviation) . 'excels/'
             );
 
             defined('IMG_PATH')
@@ -206,7 +203,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             || define(
                 'HTTP_PATH_LOCALE',
                 'http://' . HTTP_HOST
-                . dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_localeLanguage) .'/'
+                . dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_moduleDirectoryName) .'/'
             );
 
         } else {
@@ -219,8 +216,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 . dirname($_SERVER['SCRIPT_NAME']) . '/'
             );
 
-            if (isset($cdnServerName) && isset($cdnServerName[HTTP_HOST])) {
-                define("PUBLIC_PATH_CDN", trim('http://'. $cdnServerName[HTTP_HOST] . '/'));
+            if (isset($cdnUrl) && isset($cdnUrl[HTTP_HOST])) {
+                define("PUBLIC_PATH_CDN", trim('http://'. $cdnUrl[HTTP_HOST] . '/'));
             } else {
                 define("PUBLIC_PATH_CDN", trim('http://' . HTTP_HOST . '/'));
             }
@@ -265,17 +262,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             "doctrine"
         );
 
-        if (strlen($this->_localeLanguage) == 2) {
-            $locale = $this->_localeLanguage ;
-        } elseif ($this->_localeLanguage == 'admin') {
+        if (strlen($this->_moduleDirectoryName) == 2) {
+            $locale = $this->_moduleDirectoryName ;
+        } elseif ($this->_moduleDirectoryName == 'admin') {
             $locale =  isset($_COOKIE['locale']) ? $_COOKIE['locale'] : 'en'  ;
         } else {
             $locale = 'en' ;
         }
 
-        if((strlen($this->_localeLanguage) == 2)
-                && $domain == "kortingscode.nl"
-                || $domain == "www.kortingscode.nl"):
+        if((strlen($this->_moduleDirectoryName) == 2) || $domain == "www.kortingscode.nl"):
             $locale = 'en' ;
         endif;
         $localSiteDbConnection =
@@ -283,7 +278,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $doctrineOptions[strtolower($locale)]['dsn'],
                 "doctrine_site"
             );
-        date_default_timezone_set('Asia/Calcutta');
+        date_default_timezone_set('Europe/Amsterdam');
         return $imbullDbConnection;
     }
 
@@ -297,20 +292,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $localeNameForTranslateFile = "_" .strtoupper(LOCALE);
         }
         $domain = HTTP_HOST;
-        if (strlen($this->_localeLanguage) == 2) {
-            if ($domain != "www.kortingscode.nl" && $domain != "kortingscode.nl") {
-                $localePath = '/'.$this->_localeLanguage.'/' ;
+        if (strlen($this->_moduleDirectoryName) == 2) {
+            if ($domain != "www.kortingscode.nl") {
+                $localePath = '/'.$this->_moduleDirectoryName.'/' ;
             } else {
                 $localePath = '/' ;
             }
-        } elseif ($this->_localeLanguage == 'admin') {
+        } elseif ($this->_moduleDirectoryName == 'admin') {
             $localePath =  isset($_COOKIE['locale'])
             && $_COOKIE['locale'] != 'en' ? '/'.$_COOKIE['locale'].'/' : '/'  ;
         } else {
             $localePath = '/' ;
         }
+        
         $localeName = Signupmaxaccount::getLocaleName();
-        $countryLocale = !empty($localeName[0]['locale']) ? $localeName[0]['locale'] : 'nl_NL';
+        $languageCultureName = !empty($localeName[0]['locale']) ? $localeName[0]['locale'] : 'nl_NL';
         $zendTranslate = new Zend_Translate(
             array(
                 'adapter' => 'gettext',
@@ -322,26 +318,26 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             array(
                 'content' => $languagePath.'frontend_php'
                 . $localeNameForTranslateFile . '.mo',
-                'locale' => $countryLocale,
+                'locale' => $languageCultureName,
            )
         );
         $zendTranslate->addTranslation(
             array(
                 'content' => $languagePath.'po_links'
                  . $localeNameForTranslateFile . '.mo',
-                 'locale' => $countryLocale,
+                 'locale' => $languageCultureName,
             )
         );
         $zendTranslate->addTranslation(
             array(
                 'content' => $languagePath.'backend_php'
                 . $localeNameForTranslateFile. '.mo',
-                'locale' => $countryLocale,
+                'locale' => $languageCultureName,
            )
         );
         Zend_Registry::set('Zend_Translate', $zendTranslate);
-        $countryLocale = new Zend_Locale($countryLocale);
-        Zend_Registry::set('Zend_Locale', $countryLocale);
+        $languageCultureName = new Zend_Locale($languageCultureName);
+        Zend_Registry::set('Zend_Locale', $languageCultureName);
         $date = new Zend_Date();
         $month = $date->get(Zend_Date::MONTH_NAME);
         $year = $date->get(Zend_Date::YEAR);
