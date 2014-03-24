@@ -9,9 +9,9 @@ require_once 'BootstrapConstant.php';
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
-    protected $languageLocale = null;
-    protected $moduleNames = array();
-    protected $request = null;
+    protected $_localeLanguage = null;
+    protected $_moduleName = array();
+    protected $_request = null;
     protected $_httpHost = null;
     protected $_siteName = "kortingscode.nl" ;
     protected $_frontController = '';
@@ -30,7 +30,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->_frontController->setRequest(new Zend_Controller_Request_Http());
         $this->_request = $this->_frontController->getRequest();
         $this->_httpHost = $this->_request->getHttpHost();
-
         $this->_route  = Zend_Controller_Front::getInstance()->getRouter();
         Zend_Registry::set('request', $this->_request);
         Zend_Registry::set('db_locale', false);
@@ -47,35 +46,30 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     protected function _initSiteModules()
     {
-        $viewRenderer =
-            Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
+        $viewRenderer = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer');
         $viewRenderer->initView();
         $viewRenderer->view->doctype('XHTML1_TRANSITIONAL');
-        //Add modules dirs to the controllers for default routes...
-        $this->_frontController
-            ->addModuleDirectory(APPLICATION_PATH . '/modules');
+        $this->_frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
     }
     /**
-     * set initial contand according to locale settings
+     * set initial content according to locale settings
      *
      */
     public function _initContants()
     {
-        # get the front controller instance
-        $moduleDirectories = $this->_frontController->getControllerDirectory();
-        $this->_moduleNames = array_keys($moduleDirectories);
-
+        $moduleDirectory = $this->_frontController->getControllerDirectory();
+        $this->_moduleName = array_keys($moduleDirectory);
         $permalink = ltrim(REQUEST_URI, '/');
-
         $this->_routeProperties = preg_split("/[\/\?]+/", $permalink);
-        $splitSleshFromUrl  = rtrim($this->_routeProperties[0], '/');
+        $splitSlashFromUrl  = rtrim($this->_routeProperties[0], '/');
 
-        if (in_array(strtolower($splitSleshFromUrl), $this->_moduleNames)) {
-            $this->_languageLocale = strtolower($this->_routeProperties[0]);
+        if (in_array(strtolower($splitSlashFromUrl), $this->_moduleName)) {
+            $this->_localeLanguage = strtolower($this->_routeProperties[0]);
         } else {
-            $this->_languageLocale = "default" ;
+            $this->_localeLanguage = "default" ;
         }
-
+        
+        #Enviorment Settings
         define("HTTP_PATH", trim('http://' . HTTP_HOST . '/'));
         $environment = $this->getOption('ENV');
         if ($environment == 'dev') {
@@ -84,6 +78,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             define("CACHE_DIRECTORY_PATH", './tmp/');
         }
 
+        #CDN Settings
         $cdnServerName = $this->getOption('cdn');
         if (isset($cdnServerName) && isset($cdnServerName[HTTP_HOST])) {
             define("HTTP_PATH_CDN", trim('http://'. $cdnServerName[HTTP_HOST] . '/'));
@@ -91,35 +86,31 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             define("HTTP_PATH_CDN", trim('http://' . HTTP_HOST . '/'));
         }
 
-        defined('BASE_ROOT')
-        || define("BASE_ROOT", dirname($_SERVER['SCRIPT_FILENAME']) . '/');
+        defined('BASE_ROOT') || define("BASE_ROOT", dirname($_SERVER['SCRIPT_FILENAME']) . '/');
 
-        if (strlen(strtolower($this->_languageLocale))==2 && ($this->_httpHost != "kortingscode.nl"
+        if (strlen(strtolower($this->_localeLanguage))==2 && ($this->_httpHost != "kortingscode.nl"
                         &&  $this->_httpHost != "www.kortingscode.nl"
                )
         ) {
-
-            define("LOCALE", trim(strtolower($this->_languageLocale)));
-
+            define("LOCALE", trim(strtolower($this->_localeLanguage)));
             define(
                 "HTTP_PATH_LOCALE",
-                trim('http://' . HTTP_HOST . '/' . $this->_languageLocale .'/')
+                trim('http://' . HTTP_HOST . '/' . $this->_localeLanguage .'/')
             );
-
             defined('PUBLIC_PATH')
             || define(
                 'PUBLIC_PATH',
                 'http://' . HTTP_HOST. dirname(
                     $_SERVER['SCRIPT_NAME']
-                ) . '/'.strtolower($this->_languageLocale) .'/'
+                ) . '/'.strtolower($this->_localeLanguage) .'/'
             );
-
+            
             if (isset($cdnServerName) && isset($cdnServerName[HTTP_HOST])) {
                 define(
                     "PUBLIC_PATH_CDN",
                     trim(
                         'http://'. $cdnServerName[HTTP_HOST]
-                        .'/'. strtolower($this->_languageLocale) .'/'
+                        .'/'. strtolower($this->_localeLanguage) .'/'
                     )
                 );
             } else {
@@ -127,7 +118,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     "PUBLIC_PATH_CDN",
                     trim(
                         'http://' . HTTP_HOST
-                        . '/'. strtolower($this->_languageLocale) .'/'
+                        . '/'. strtolower($this->_localeLanguage) .'/'
                     )
                 );
             }
@@ -136,13 +127,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             || define(
                 'ROOT_PATH',
                 dirname($_SERVER['SCRIPT_FILENAME']) . '/'
-                . strtolower($this->_languageLocale) .'/'
+                . strtolower($this->_localeLanguage) .'/'
             );
 
             defined('UPLOAD_PATH')
             || define(
                 'UPLOAD_PATH',
-                strtolower($this->_languageLocale) .'/'. 'images/'
+                strtolower($this->_localeLanguage) .'/'. 'images/'
             );
 
             defined('UPLOAD_IMG_PATH')
@@ -151,13 +142,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             defined('UPLOAD_EXCEL_PATH')
             || define(
                 'UPLOAD_EXCEL_PATH',
-                APPLICATION_PATH. '/../data/' . strtolower($this->_languageLocale) .'/'. 'excels/'
+                APPLICATION_PATH. '/../data/' . strtolower($this->_localeLanguage) .'/'. 'excels/'
             );
 
             defined('IMG_PATH')
             || define('IMG_PATH', PUBLIC_PATH . "images/");
 
-        } elseif (trim(strtolower($this->_languageLocale)) == 'admin') {
+        } elseif (trim(strtolower($this->_localeLanguage)) == 'admin') {
 
             $languageKeyForLocale = '';
 
@@ -215,14 +206,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             || define(
                 'HTTP_PATH_LOCALE',
                 'http://' . HTTP_HOST
-                . dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_languageLocale) .'/'
+                . dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_localeLanguage) .'/'
             );
 
         } else {
-
             define("LOCALE", '');
             define("HTTP_PATH_LOCALE", trim('http://' . HTTP_HOST . '/'));
-
             defined('PUBLIC_PATH')
             || define(
                 'PUBLIC_PATH',
@@ -235,7 +224,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             } else {
                 define("PUBLIC_PATH_CDN", trim('http://' . HTTP_HOST . '/'));
             }
-
+            
             defined('ROOT_PATH')
             || define('ROOT_PATH', dirname($_SERVER['SCRIPT_FILENAME']) . '/');
 
@@ -269,7 +258,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
         $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
-
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
         $doctrineOptions = $this->getOption('doctrine');
         $imbullDbConnection = Doctrine_Manager::connection(
@@ -277,29 +265,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             "doctrine"
         );
 
-        if (strlen($this->_languageLocale) == 2) {
-            $locale = $this->_languageLocale ;
-        } elseif ($this->_languageLocale == 'admin') {
+        if (strlen($this->_localeLanguage) == 2) {
+            $locale = $this->_localeLanguage ;
+        } elseif ($this->_localeLanguage == 'admin') {
             $locale =  isset($_COOKIE['locale']) ? $_COOKIE['locale'] : 'en'  ;
         } else {
             $locale = 'en' ;
         }
 
-        if((strlen($this->_languageLocale) == 2)
+        if((strlen($this->_localeLanguage) == 2)
                 && $domain == "kortingscode.nl"
                 || $domain == "www.kortingscode.nl"):
-
             $locale = 'en' ;
         endif;
-
         $localSiteDbConnection =
             Doctrine_Manager::connection(
                 $doctrineOptions[strtolower($locale)]['dsn'],
                 "doctrine_site"
             );
-
         date_default_timezone_set('Asia/Calcutta');
-
         return $imbullDbConnection;
     }
 
@@ -308,79 +292,64 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     public function _initTranslation()
     {
-        //localeSiffix like en,in etc
         $localeNameForTranslateFile = "" ;
         if (LOCALE) {
             $localeNameForTranslateFile = "_" .strtoupper(LOCALE);
         }
-
         $domain = HTTP_HOST;
-
-        if (strlen($this->_languageLocale) == 2) {
+        if (strlen($this->_localeLanguage) == 2) {
             if ($domain != "www.kortingscode.nl" && $domain != "kortingscode.nl") {
-                $localePath = '/'.$this->_languageLocale.'/' ;
+                $localePath = '/'.$this->_localeLanguage.'/' ;
             } else {
                 $localePath = '/' ;
             }
-        } elseif ($this->_languageLocale == 'admin') {
+        } elseif ($this->_localeLanguage == 'admin') {
             $localePath =  isset($_COOKIE['locale'])
             && $_COOKIE['locale'] != 'en' ? '/'.$_COOKIE['locale'].'/' : '/'  ;
         } else {
             $localePath = '/' ;
         }
-
         $localeName = Signupmaxaccount::getLocaleName();
         $countryLocale = !empty($localeName[0]['locale']) ? $localeName[0]['locale'] : 'nl_NL';
-
         $zendTranslate = new Zend_Translate(
             array(
                 'adapter' => 'gettext',
                 'disableNotices' => true
             )
         );
-
+        $languagePath = APPLICATION_PATH.'/../public'.strtolower($localePath).'language/';
         $zendTranslate->addTranslation(
             array(
-                'content' =>
-                APPLICATION_PATH.'/../public'.strtolower($localePath).'language/frontend_php'
+                'content' => $languagePath.'frontend_php'
                 . $localeNameForTranslateFile . '.mo',
                 'locale' => $countryLocale,
            )
         );
-
         $zendTranslate->addTranslation(
             array(
-                'content' =>
-                 APPLICATION_PATH.'/../public'.strtolower($localePath).'language/po_links'
+                'content' => $languagePath.'po_links'
                  . $localeNameForTranslateFile . '.mo',
                  'locale' => $countryLocale,
             )
         );
         $zendTranslate->addTranslation(
             array(
-                'content' =>
-                APPLICATION_PATH.'/../public'.strtolower($localePath).'language/backend_php'
+                'content' => $languagePath.'backend_php'
                 . $localeNameForTranslateFile. '.mo',
                 'locale' => $countryLocale,
            )
         );
-
         Zend_Registry::set('Zend_Translate', $zendTranslate);
-
         $countryLocale = new Zend_Locale($countryLocale);
         Zend_Registry::set('Zend_Locale', $countryLocale);
-
         $date = new Zend_Date();
         $month = $date->get(Zend_Date::MONTH_NAME);
         $year = $date->get(Zend_Date::YEAR);
         $day = $date->get(Zend_Date::DAY);
-        #define currecnt month for text with [month]
         defined('CURRENT_MONTH')
         || define('CURRENT_MONTH', $month);
-        #define currecnt year for text with [year]
         defined('CURRENT_YEAR')
         || define('CURRENT_YEAR', $year);
-        #define currecnt day for text with [day]
         defined('CURRENT_DAY')
         || define('CURRENT_DAY', $day);
     }
@@ -433,23 +402,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
      */
     public function _initRouter()
     {
-        //trim slashes from URL from right and left
         $permalink = ltrim(REQUEST_URI, '/');
         $domain = HTTP_HOST;
         $permalink = rtrim($permalink, '/');
-
-        #make a 301 redirection moved permanently
         $routeRedirectName = RouteRedirect::getRoute(HTTP_PATH.$permalink);
-        # we need the params after ?
         $splitPermalinkFromQueryString = strstr($permalink, '?');
 
         if (!empty($splitPermalinkFromQueryString)) {
             $permalink = strstr($permalink, '?', true);
         }
         if (count($routeRedirectName) > 0) {
-            #  and get $newurl from your list
             $redirectUrl =  $routeRedirectName[0]['redirectto'];
-            # set redirect code to 301 instead of default 302
             header('Location: '.$redirectUrl.$splitPermalinkFromQueryString, true, 301);
             exit();
         }
@@ -485,7 +448,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $permalink = preg_replace($searchString, $replaceString, $permalink);
         }
 
-        # get last word in permalink using regex match
         preg_match("/[^\/]+$/", $permalink, $matches);
 
         if (intval(@$matches[0]) > 0) {
@@ -510,30 +472,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $getPermalinkInfoFromDb[0]['exactlink'] =
                     $getPermalinkInfoFromDb[0]['exactlink'].'/attachedpage/'.$this->pageDetail[0]['id'];
             }
-            //explode actual URL on the basis of slash
             $parmalinkUrl = explode('/', $getPermalinkInfoFromDb[0]['exactlink']);
-            //set the first and second element of an array as controller & action
-            //and generate $paramArray with all params required for routing purpose
             $paramArray = array(
                     'controller' => @$parmalinkUrl[0],
                     'action'     => @$parmalinkUrl[1]
             );
-            //push extra parameters if required for routing in $paramArray
             for ($u = 2; $u < count(@$parmalinkUrl); $u++) {
                 if ($u % 2 == 0) {
                     $paramArray[@$parmalinkUrl[$u]] = @$parmalinkUrl[$u+1];
                 }
             }
-            //append relative pageid in $paramArray
             if (!empty($pageDetail)) {
                 $paramArray['attachedpage'] = $this->pageDetail[0]['id'];
             }
-            //append page number for pagination if exist
-            if (@$matches[0] > 0) {
-                //$paramArray['page'] = @$matches[0];
-            }
-
-            if (in_array(strtolower($this->_routeProperties[0]), $this->_moduleNames)) {
+            if (in_array(strtolower($this->_routeProperties[0]), $this->_moduleName)) {
 
                 $paramArray['module'] = 'default';
                 $paramArray['lang'] = $this->_routeProperties[0];
@@ -549,19 +501,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                             )
                         )
                     );
-
                     return ;
                 }
-                //route redirection to relative route
+        
                 $route = new Zend_Controller_Router_Route(
                     $this->_routeProperties[0] .'/'. $actualPermalink .'/*',
                     $paramArray
                 );
                 $this->_route->addRoute('user', $route);
-
                 return;
             } else {
-
                 $route = new Zend_Controller_Router_Route($actualPermalink.'/*', $paramArray);
                 $this->_route->addRoute('user', $route);
             }
@@ -606,7 +555,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $config = new Zend_Config_Ini(APPLICATION_PATH.'/configs/routes.ini', 'production');
         if ($this->_routeProperties[0] != 'admin' &&
-            in_array(strtolower($this->_routeProperties[0]), $this->_moduleNames)) {
+            in_array(strtolower($this->_routeProperties[0]), $this->_moduleName)) {
             if ($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl") {
                 $this->_route->addRoute(
                     'kortingscode',
@@ -618,7 +567,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                         )
                     )
                 );
-
                 return ;
             }
 
@@ -662,7 +610,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
             foreach ($config->routes as $key => $r) {
                 if ($r->type != "Zend_Controller_Router_Route_Regex") {
-
                     $module  = isset($r->defaults->module) ? $r->defaults->module : 'default' ;
                     $page = isset($r->defaults->page) ? 1 : null ;
                     switch ($key) {
@@ -698,9 +645,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                             break;
                     }
                 } else {
-                    # base route for language params
-                    $routelanguage = new Zend_Controller_Router_Route(':lang', array('lang' => ':lang'));
-                    # base route for redactie link translation
+                    $routeLanguage = new Zend_Controller_Router_Route(':lang', array('lang' => ':lang'));
                     $baseChain = new Zend_Controller_Router_Route(
                         '@redactie',
                         array(
@@ -710,7 +655,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     );
                     switch ($key) {
                         case 'profilepage':
-                            # validate page parameter with regex
                             $page = new Zend_Controller_Router_Route_Regex(
                                 '^(\d?+)$',
                                 array(
@@ -721,9 +665,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                                 ),
                                 '%d'
                             );
-                            # cretae page route chain
                             $chainedRoute = new Zend_Controller_Router_Route_Chain();
-                            $pageChained = $chainedRoute->chain($routelanguage)
+                            $pageChained = $chainedRoute->chain($routeLanguage)
                                             ->chain($baseChain)
                                             ->chain($page);
                             # add routes to router
@@ -741,7 +684,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                             );
                             # cretae slug route chain
                             $chainedRouteSlug = new Zend_Controller_Router_Route_Chain();
-                            $slugChained = $chainedRouteSlug->chain($routelanguage)
+                            $slugChained = $chainedRouteSlug->chain($routeLanguage)
                                             ->chain($baseChain)
                                             ->chain($slug);
                             # add routes to router
@@ -751,14 +694,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
                 }
             }
-
             return ;
-
         } else {
-
              # trigger error for flipt.com
             if ($domain == "flipit.com" || $domain == "www.flipit.com") {
-
                 $this->_route->addRoute(
                     "marktplaatsfeed",
                     new Zend_Controller_Router_Route(
@@ -798,15 +737,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 ),
                 'routes'
             );
-
         }
-
     }
 
     protected function _initCache()
     {
         $frontendOptions = array(
-           'lifetime' => 300,                   // cache lifetime
+           'lifetime' => 300,
            'automatic_serialization' => true
         );
         $backendOptions = array('cache_dir' => CACHE_DIRECTORY_PATH);
