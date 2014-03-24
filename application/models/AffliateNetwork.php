@@ -124,7 +124,7 @@ class AffliateNetwork extends BaseAffliateNetwork
     //find network by id
     self::replaceNetwork($params);
     
-    
+  
  	$data = Doctrine_Core::getTable('AffliateNetwork')->find($params['id']);
  	$data->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params["addNetworkText"]);
  	

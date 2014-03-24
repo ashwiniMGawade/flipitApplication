@@ -1,0 +1,124 @@
+[2014-03-12 16:43:56] layoutCest.tryToTest.INFO: PASSED [] []
+[2014-03-12 18:03:04] SigninCept.php.INFO: am on page "/index/login" [] []
+[2014-03-12 18:03:04] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 18:03:05] SigninCept.php.ALERT: Field by name, label, CSS or XPath 'uname' was not found on page. [] []
+[2014-03-12 18:03:05] SigninCept.php.INFO: # FAILED # [] []
+[2014-03-12 18:03:05] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 18:04:24] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 18:04:24] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 18:04:24] SigninCept.php.INFO: fill field "pwd","password" [] []
+[2014-03-12 18:04:24] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 18:04:26] SigninCept.php.INFO: see "Welcome, Kim" [] []
+[2014-03-12 18:04:26] SigninCept.php.ALERT: Failed asserting that 
+-->  <bold>/admin/offer</bold><info>window.onerror = function(){  }  Offers List //<!-- var PUBLIC_PATH_LOCALE = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_PUBLIC = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_LOCALE = "http://www.flipit.com/public/admin/"; //-->  //<!-- var HOST_PATH_P</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "welcome, kim". [] []
+[2014-03-12 18:04:26] SigninCept.php.INFO: # FAILED # [] []
+[2014-03-12 18:04:26] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 18:07:02] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 18:07:02] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 18:07:02] SigninCept.php.INFO: fill field "pwd","password" [] []
+[2014-03-12 18:07:02] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 18:07:04] SigninCept.php.INFO: see "Welkom, Kim" [] []
+[2014-03-12 18:07:04] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 18:12:23] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 18:12:24] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 18:12:24] SigninCept.php.INFO: fill field "pwd","password" [] []
+[2014-03-12 18:12:24] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 18:12:26] SigninCept.php.INFO: see "Welkom, Kim" [] []
+[2014-03-12 18:12:26] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 18:35:40] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 18:35:41] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 18:35:41] SigninCept.php.INFO: fill field "pwd","password" [] []
+[2014-03-12 18:35:41] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 18:35:43] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 18:42:02] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 18:42:02] SigninCept.php.INFO: fill field "uname","fernando@acepipe.com" [] []
+[2014-03-12 18:42:02] SigninCept.php.INFO: fill field "pwd","password" [] []
+[2014-03-12 18:42:02] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 18:42:04] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 18:57:36] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 18:57:37] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 18:57:37] SigninCept.php.INFO: fill field "pwd","password" [] []
+[2014-03-12 18:57:37] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 18:57:38] SigninCept.php.INFO: am on page "/admin/index/saveadmintext" [] []
+[2014-03-12 18:57:39] SigninCept.php.INFO: see " employees" [] []
+[2014-03-12 18:57:39] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 18:58:23] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 18:58:24] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 18:58:24] SigninCept.php.INFO: fill field "pwd","password123" [] []
+[2014-03-12 18:58:24] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 18:58:25] SigninCept.php.INFO: am on page "/admin/index/saveadmintext" [] []
+[2014-03-12 18:58:26] SigninCept.php.INFO: see " employees" [] []
+[2014-03-12 18:58:26] SigninCept.php.ALERT: Failed asserting that 
+-->  <bold>/admin/auth/index</bold><info>window.onerror = function(){  }   //<!-- var PUBLIC_PATH_LOCALE = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_PUBLIC = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_LOCALE = "http://www.flipit.com/public/admin/"; //-->  //<!-- var HOST_PATH_PUBLIC = "ht</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains " employees". [] []
+[2014-03-12 18:58:26] SigninCept.php.INFO: # FAILED # [] []
+[2014-03-12 18:58:26] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 19:08:05] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 19:08:06] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 19:08:06] SigninCept.php.INFO: fill field "pwd","password123" [] []
+[2014-03-12 19:08:06] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 19:08:07] SigninCept.php.INFO: am on page "/admin/index" [] []
+[2014-03-12 19:08:08] SigninCept.php.INFO: see "Content" [] []
+[2014-03-12 19:08:08] SigninCept.php.ALERT: Failed asserting that 
+-->  <bold>/admin/auth/index</bold><info>window.onerror = function(){  }   //<!-- var PUBLIC_PATH_LOCALE = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_PUBLIC = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_LOCALE = "http://www.flipit.com/public/admin/"; //-->  //<!-- var HOST_PATH_PUBLIC = "ht</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "content". [] []
+[2014-03-12 19:08:08] SigninCept.php.INFO: # FAILED # [] []
+[2014-03-12 19:08:08] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 19:08:51] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 19:08:52] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 19:08:52] SigninCept.php.INFO: fill field "pwd","password123" [] []
+[2014-03-12 19:08:52] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 19:08:53] SigninCept.php.INFO: am on page "/admin/" [] []
+[2014-03-12 19:08:54] SigninCept.php.INFO: see "Content" [] []
+[2014-03-12 19:08:54] SigninCept.php.ALERT: Failed asserting that 
+-->  <bold>/admin/auth/index</bold><info>window.onerror = function(){  }   //<!-- var PUBLIC_PATH_LOCALE = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_PUBLIC = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_LOCALE = "http://www.flipit.com/public/admin/"; //-->  //<!-- var HOST_PATH_PUBLIC = "ht</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "content". [] []
+[2014-03-12 19:08:54] SigninCept.php.INFO: # FAILED # [] []
+[2014-03-12 19:08:54] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 19:09:19] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 19:09:20] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 19:09:20] SigninCept.php.INFO: fill field "pwd","password" [] []
+[2014-03-12 19:09:20] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 19:09:21] SigninCept.php.INFO: am on page "/admin/" [] []
+[2014-03-12 19:09:22] SigninCept.php.INFO: see "Content" [] []
+[2014-03-12 19:09:22] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 19:09:46] SigninCept.php.INFO: am on page "/admin/" [] []
+[2014-03-12 19:09:47] SigninCept.php.INFO: see "Content" [] []
+[2014-03-12 19:09:47] SigninCept.php.ALERT: Failed asserting that 
+-->  <bold>/admin/auth/index</bold><info>window.onerror = function(){  }   //<!-- var PUBLIC_PATH_LOCALE = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_PUBLIC = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_LOCALE = "http://www.flipit.com/public/admin/"; //-->  //<!-- var HOST_PATH_PUBLIC = "ht</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "content". [] []
+[2014-03-12 19:09:47] SigninCept.php.INFO: # FAILED # [] []
+[2014-03-12 19:09:47] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 19:24:05] SigninCept.php.INFO: am on page "/admin/" [] []
+[2014-03-12 19:24:06] SigninCept.php.INFO: see "Content" [] []
+[2014-03-12 19:24:06] SigninCept.php.ALERT: Failed asserting that 
+-->  <bold>/admin/auth/index</bold><info>window.onerror = function(){  }   //<!-- var PUBLIC_PATH_LOCALE = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_PUBLIC = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_LOCALE = "http://www.flipit.com/public/admin/"; //-->  //<!-- var HOST_PATH_PUBLIC = "ht</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "content". [] []
+[2014-03-12 19:24:06] SigninCept.php.INFO: # FAILED # [] []
+[2014-03-12 19:24:06] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 19:25:07] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 19:25:07] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 19:25:07] SigninCept.php.INFO: fill field "pwd","password" [] []
+[2014-03-12 19:25:07] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 19:25:09] SigninCept.php.INFO: am on page "/admin/" [] []
+[2014-03-12 19:25:09] SigninCept.php.INFO: see "Content" [] []
+[2014-03-12 19:25:09] SigninCept.php.INFO: PASSED [] []
+[2014-03-12 19:28:51] SigninCept.php.INFO: am on page "/admin/auth" [] []
+[2014-03-12 19:28:52] SigninCept.php.INFO: fill field "uname","kim@web-flight.nl" [] []
+[2014-03-12 19:28:52] SigninCept.php.INFO: fill field "pwd","password123" [] []
+[2014-03-12 19:28:52] SigninCept.php.INFO: click "Login" [] []
+[2014-03-12 19:28:53] SigninCept.php.INFO: am on page "/admin/" [] []
+[2014-03-12 19:28:54] SigninCept.php.INFO: see "Content" [] []
+[2014-03-12 19:28:54] SigninCept.php.ALERT: Failed asserting that 
+-->  <bold>/admin/auth/index</bold><info>window.onerror = function(){  }   //<!-- var PUBLIC_PATH_LOCALE = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_PUBLIC = "http://www.flipit.com/public/"; //-->  //<!-- var HOST_PATH_LOCALE = "http://www.flipit.com/public/admin/"; //-->  //<!-- var HOST_PATH_PUBLIC = "ht</info>
+<debug>[Content too long to display. See complete response in '_log' directory]</debug>
+--> contains "content". [] []
+[2014-03-12 19:28:54] SigninCept.php.INFO: # FAILED # [] []
+[2014-03-12 19:28:54] SigninCept.php.INFO: PASSED [] []

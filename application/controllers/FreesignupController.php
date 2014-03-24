@@ -320,6 +320,10 @@ class FreesignupController extends Zend_Controller_Action
     			);
     			$mandrill->messages->sendTemplate($template_name, $template_content, $message);
 
+
+                $templateId = BackEnd_Helper_viewHelper::getTemplateId('welcome');
+                BackEnd_Helper_viewHelper::insertTemplateData($templateId);
+
   				$username = $userdetail[0]["email"];
     			$password = $userdetail[0]["password"];
     			$data_adapter = new Auth_VisitorAdapter($username, $password);

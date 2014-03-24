@@ -819,4 +819,35 @@ class BackEnd_Helper_viewHelper
 					 'dataOfferName' =>  $dataOfferName );
 	}
 
+
+	/**
+	 * getTemplateId
+	 * get template id
+	 * @param type of template
+	 * @author asharma
+	 */
+
+	public static function getTemplateId($type)
+	{
+		$id = Emails::getTemplateId($type);
+		return $id;
+		
+	}
+
+
+	/**
+	 * insertTemplateData
+	 * insert Template Data for inserting send date, counter
+	 * @param id of template
+	 * @author asharma
+	 */
+
+	public static function insertTemplateData($id)
+	{
+		$sendCounter =  Emails::getSendCounter($id);
+		$newCounterValue = $sendCounter + 1;
+		Emails::updateDateCounter($newCounterValue , $id);
+		
+	}
+
 }
