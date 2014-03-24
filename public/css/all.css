@@ -5913,6 +5913,18 @@ textarea {
   display: block;
   height: 100%;
 }
+.kortingscode-logo {
+  float: left;
+  background: url(../images/front_end/logo-new.png) no-repeat;
+  width: 308px;
+  height: 100px;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+.kortingscode-logo a {
+  display: block;
+  height: 100%;
+}
 .search-box {
   float: left;
   margin: 24px 28px 24px 0;

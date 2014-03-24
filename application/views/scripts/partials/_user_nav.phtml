@@ -15,7 +15,7 @@
         <?php if(LOCALE == ''):?>
 			<li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuws')?>"><?php echo $this->translate('News');?></a></li>
 		<?php endif; ?> -->
-     <li><a href="#"><?php echo $this->translate('Your offers');?></a> <span class="new"<?php echo $this->translate('New');?>></span></li>
+     <li><a href="#"><?php echo $this->translate('Your offers');?></a> <span class="new"><?php echo $this->translate('New');?></span></li>
         <li><a href="#"><?php echo $this->translate('Your brands');?></a></li>
         <li><span class="glyphicon glyphicon-user"></span><span><?php echo $this->translate('Welcome');?></span> <a href="#" class="name"><?php echo $detail[0]['firstName'];  ?></a></li>
         <li><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout') ?>"><?php echo $this->translate('Uitloggen');?></a></li>
@@ -29,7 +29,7 @@
         <?php if(LOCALE == ''):?>
 			<li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuws')?>"><?php echo $this->translate('News');?></a></li>
 		<?php endif; ?> -->
-         <li><a href="#"><?php echo $this->translate('Your offers');?></a> <span class="new"<?php echo $this->translate('New');?>></span></li>
+         <li><a href="#"><?php echo $this->translate('Your offers');?></a> <span class="new"><?php echo $this->translate('New');?></span></li>
         <li><a href="#"><?php echo $this->translate('Your brands');?></a></li>
            <li><a rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>"><?php echo $this->translate('Inloggen');?></a></li>
     </ul>
