@@ -643,13 +643,17 @@ class ShopExport {
     	$objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setAutoSize(true);
     	$objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
 
+		
+    	
+    	# define Real upload path for excel
+    	defined('UPLOAD_REAL_EXCEL_PATH')
+    	|| define('UPLOAD_REAL_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
 
-
-    	# define upload path for excell
+    	# define upload path for excel
     	defined('UPLOAD_EXCEL_PATH')
-	    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
+	    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../public/tmp/' );
 
-
+    	
     	$pathToFile = UPLOAD_EXCEL_PATH . strtolower($this->_localePath) . 'excels/' ;
 
     	# create dir if not exists
@@ -667,12 +671,34 @@ class ShopExport {
 
 		echo "\n";
 		print "$key - Shops have been exported successfully!!!";
-
+		
+	    copydir(UPLOAD_EXCEL_PATH.$key,UPLOAD_REAL_EXCEL_PATH.$key);
+		
 
 	}
+	
+	function copydir($source,$destination)
+	{
+		if(!is_dir($destination)){
+			$oldumask = umask(0);
+			mkdir($destination, 01777); // so you get the sticky bit set
+			umask($oldumask);
+		}
+		$dir_handle = @opendir($source) or die("Unable to open");
+		while ($file = readdir($dir_handle))
+		{
+			if($file!="." && $file!=".." && !is_dir("$source/$file")) //if it is file
+				copy("$source/$file","$destination/$file");
+			if($file!="." && $file!=".." && is_dir("$source/$file")) //if it is folder
+				copydir("$source/$file","$destination/$file");
+		}
+		closedir($dir_handle);
+	}
+	
+	
+	
 
 }
-
 
 new ShopExport();
 
