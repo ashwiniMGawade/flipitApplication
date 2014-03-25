@@ -68,23 +68,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         } else {
             $this->_moduleDirectoryName = "default" ;
         }
-        
-        #Enviorment Settings
-        define("HTTP_PATH", trim('http://' . HTTP_HOST . '/'));
-        $environment = $this->getOption('ENV');
-        if ($environment == 'dev') {
-            define("CACHE_DIRECTORY_PATH", $this->getOption['CACHE_DIRECTORY_PATH']);
-        } else {
-            define("CACHE_DIRECTORY_PATH", './tmp/');
-        }
-
+        self::defineConstantForCacheDirectory();
+        self::defineHttpPathConstantForCdn();
         #CDN Settings
-        $cdnUrl = $this->getOption('cdn');
+        /*$cdnUrl = $this->getOption('cdn');
         if (isset($cdnUrl) && isset($cdnUrl[HTTP_HOST])) {
             define("HTTP_PATH_CDN", trim('http://'. $cdnUrl[HTTP_HOST] . '/'));
         } else {
             define("HTTP_PATH_CDN", trim('http://' . HTTP_HOST . '/'));
-        }
+        }*/
 
         defined('BASE_ROOT') || define("BASE_ROOT", dirname($_SERVER['SCRIPT_FILENAME']) . '/');
 
@@ -266,13 +258,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $locale = $this->_moduleDirectoryName ;
         } elseif ($this->_moduleDirectoryName == 'admin') {
             $locale =  isset($_COOKIE['locale']) ? $_COOKIE['locale'] : 'en'  ;
-        } else {
+        } else if($this->_moduleDirectoryName == "default") {
             $locale = 'en' ;
         }
-
-        if((strlen($this->_moduleDirectoryName) == 2) || $domain == "www.kortingscode.nl"):
-            $locale = 'en' ;
-        endif;
+        
         $localSiteDbConnection =
             Doctrine_Manager::connection(
                 $doctrineOptions[strtolower($locale)]['dsn'],
@@ -750,6 +739,26 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $backendOptions
         );
         Zend_Registry::set('cache', $cache);
+    }
+    public function defineConstantForCacheDirectory()
+    {
+        define("HTTP_PATH", trim('http://' . HTTP_HOST . '/'));
+        $environment = $this->getOption('ENV');
+        if ($environment == 'dev') {
+            define("CACHE_DIRECTORY_PATH", $this->getOption['CACHE_DIRECTORY_PATH']);
+        } else {
+            define("CACHE_DIRECTORY_PATH", './tmp/');
+        }
+    }
+    public function defineHttpPathConstantForCdn()
+    {
+        #CDN Settings
+        $cdnUrl = $this->getOption('cdn');
+        if (isset($cdnUrl) && isset($cdnUrl[HTTP_HOST])) {
+            define("HTTP_PATH_CDN", trim('http://'. $cdnUrl[HTTP_HOST] . '/'));
+        } else {
+            define("HTTP_PATH_CDN", trim('http://' . HTTP_HOST . '/'));
+        }
     }
 }
 require_once 'Layout_Controller_Plugin_Layout.php';

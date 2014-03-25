@@ -90,7 +90,7 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
      */
     public function esi($src)
     {
-
+		
         if(!empty($_SERVER['HTTP_X_VARNISH'])){
             // If the ESI headers have not been sent yet do it now
             if(!self::$_varnishHeaderSent)
