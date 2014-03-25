@@ -712,9 +712,13 @@ class GlobalShopExport {
 			$objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
 			 
 			 
-			# define upload path for excell
+			# define Real upload path for excel
+			defined('UPLOAD_REAL_EXCEL_PATH')
+			|| define('UPLOAD_REAL_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
+			
+			# define upload path for excel
 	    	defined('UPLOAD_EXCEL_PATH')
-		    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
+		    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../public/tmp/' );
 
 
 	    	$pathToFile = UPLOAD_EXCEL_PATH . 'excels/' ;
@@ -730,8 +734,52 @@ class GlobalShopExport {
 			 
 			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 			$objWriter->save($shopFile);
+			
+			echo "\n";
+			print "$key - Shops have been exported successfully!!!";
+		
+			$key = 'excels/';
+			
+			 self::copydir($pathToFile, UPLOAD_REAL_EXCEL_PATH.$key);
+			 self::deleteDir($pathToFile);
 		}
 		
+	}
+	
+	protected function copydir($source,$destination)
+	{
+		if(!is_dir($destination)){
+			$oldumask = umask(0);
+			mkdir($destination, 01777); // so you get the sticky bit set
+			umask($oldumask);
+		}
+		$dir_handle = @opendir($source) or die("Unable to open");
+		while ($file = readdir($dir_handle))
+		{
+			if($file!="." && $file!=".." && !is_dir("$source/$file")) //if it is file
+				copy("$source/$file","$destination/$file");
+			if($file!="." && $file!=".." && is_dir("$source/$file")) //if it is folder
+				self::copydir("$source/$file","$destination/$file");
+		}
+		closedir($dir_handle);
+	}
+	
+	public static function deleteDir($dirPath) {
+		if (! is_dir($dirPath)) {
+			throw new InvalidArgumentException("$dirPath must be a directory");
+		}
+		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+			$dirPath .= '/';
+		}
+		$files = glob($dirPath . '*', GLOB_MARK);
+		foreach ($files as $file) {
+			if (is_dir($file)) {
+				self::deleteDir($file);
+			} else {
+				unlink($file);
+			}
+		}
+		rmdir($dirPath);
 	}
 	 
 }
