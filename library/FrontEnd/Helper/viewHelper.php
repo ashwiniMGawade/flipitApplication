@@ -843,14 +843,12 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 	public  static function generateMainMenu()
 	{
-		$mainMenu = menu::getLevelFirst();
+		$mainMenu = menu::getFirstLevelMenu();
 
-		$cnt = count($mainMenu);
+		$mainMenucount = count($mainMenu);
 		$val = 1;
-		$string ='<nav id="nav" class="navigation"><ul>';
+		$string ='<nav id="nav"><ul>';
 		foreach ($mainMenu as $m) {
-
-			//echo $m['url']; die;
 
 			$permalink = RoutePermalink::getPermalinks($m['url']);
 
@@ -866,25 +864,24 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 					}
 				}
 			}
-		$splitURL =explode('/', $m['url']);
 
-		if($val==$cnt)
+		if($val==$mainMenucount)
 		{
-			$a = str_replace(' ','-',trim(strtolower($m["name"])));
-			$string .= '<li><a rel="toggel" id="'. $a . '" name="'. $a. '" class="show_hide1" href="javascript:void(0);">' . $m["name"] . '</a></li>';
+			$menuName = str_replace(' ','-',trim(strtolower($m["name"])));
+			$string .= '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" class="show_hide1" href="javascript:void(0);">' . $m["name"] . '</a></li>';
 
 
 		}else{
 
-			$a = str_replace(' ','-',trim(strtolower($m["name"])));
+			$menuName = str_replace(' ','-',trim(strtolower($m["name"])));
 			preg_match('/http:\/\//', $m['url'],$matches);
 			if(count($matches) > 0){
 
-				$string .= '<li><a id="'. $a. '" name="'. $a. '" class="" href="'.  $m['url'] . '">' . $m["name"] . '</a></li>';
+				$string .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'.  $m['url'] . '">' . $m["name"] . '</a></li>';
 
 			}else{
 
-				$string .= '<li><a id="'. $a. '" name="'. $a. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $m["name"] . '</a></li>';
+				$string .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $m["name"] . '</a></li>';
 			}
 		}
 		$val++;
@@ -974,7 +971,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
   public static function generateSecondNav() {
   		$trans = Zend_Registry::get('Zend_Translate');
   		//call to self function and get first level menu from database
-		$data = menu::getLevelFirst();
+		$data = menu::getFirstLevelMenu();
 
 		$mainUl = '<div class="nav-container hide" style="display: none;">';
 		$mainUl .= '<div class="new-outer">';

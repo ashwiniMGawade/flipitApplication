@@ -157,7 +157,9 @@ $(function() {
 		$trans = Zend_Registry::get('Zend_Translate');?>
 			<a href="#" class="opener"><span class="glyphicon glyphicon-search"></span></a>
 			<div class="slide">
-				<input placeholder="<?php echo $trans->translate('Type in a Store e.g.  Avis')?>"  style='width:357px;' class="form-control" id='searchField'  name='searchField' label='searchField' type='text'/>
-				<input id='searchHidden'  name='searchHidden' type='hidden' label='searchHidden'/>
-				<a href='javascript:void(0);'  class="btn btn-default" id='searchbuttonHP' alt="<?php echo $trans->translate('Search') ?> "><span class="glyphicon glyphicon-search"></span></a>
+				<form role="form" class="search-form">
+					<input placeholder="<?php echo $trans->translate('Type in a Store e.g.  Avis')?>"  class="form-control" id='searchField'  name='searchField' label='searchField' type='text'/>
+					<input id='searchHidden'  name='searchHidden' type='hidden' label='searchHidden'/>
+					<a href='javascript:void(0);'  class="btn btn-default" id='searchbuttonHP' alt="<?php echo $trans->translate('Search') ?> "><span class="glyphicon glyphicon-search"></span></a>
+				</form>
 			</div>   

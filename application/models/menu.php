@@ -329,10 +329,10 @@ public static function deleteAllMenuRecord(){
  * @version 1.0
  * @return array $all
  */
-public static function getLevelFirst() {
+public static function getFirstLevelMenu() {
 
-	$all = Doctrine_Query::create()->from('menu')->orderBy('position')->where('parentId=0')->fetchArray();
-	return $all;
+	$mainMenu = Doctrine_Query::create()->from('menu')->orderBy('position')->where('parentId=0')->fetchArray();
+	return $mainMenu;
 		
 }
 /**
