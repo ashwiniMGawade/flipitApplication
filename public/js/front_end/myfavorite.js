@@ -29,7 +29,7 @@ function getsuggestionsshops(userId,flag,shopName){
 		 success:function(json){
 			for(i in json){
 				
-				 var imgSrc = HOST_PATH_PUBLIC +'/'+ json[i].shop.logo.imgpath + "thum_medium_store_" + json[i].shop.logo.imgname; 
+				 var imgSrc = PUBLIC_PATH_CDN + json[i].shop.logo.imgpath + "thum_medium_store_" + json[i].shop.logo.imgname; 
 				 
 				if(i == 0){
 					 html += "<h3 class='text-blue'>" +__('Favorieten')+ "</h3>" +
@@ -41,7 +41,7 @@ function getsuggestionsshops(userId,flag,shopName){
 				} 
 				
 				html += "<div class='shops_fav_txt mr18'>"+
-	        				"<div class='shops_fav_top'><a href='"+HOST_PATH_LOCALE + json[i].shop.permaLink+"'><img src='"+imgSrc+"' alt='"+json[i].shop.name+"' /></a></div>"+
+	        				"<div class='shops_fav_top'><a href='"+ HOST_PATH_LOCALE + json[i].shop.permaLink+"'><img src='"+imgSrc+"' alt='"+json[i].shop.name+"' /></a></div>"+
 	        				"<div class='shops_fav_btm' onclick='addFavoriteShops("+json[i].shop.id+","+userId+");'>"+__('Toevoegen')+"</div>"+
 	        			"</div>";
 			}
@@ -60,7 +60,7 @@ function getfavoriteselected(userId,flag,shopName){
 		 type:"post",
 		 success:function(json){
 			 for(j in json){
-				var imgSrc = HOST_PATH_PUBLIC +'/'+ json[j].shops[0].logo.path + "thum_medium_store_" + json[j].shops[0].logo.name;
+				var imgSrc = PUBLIC_PATH_CDN + json[j].shops[0].logo.path + "thum_medium_store_" + json[j].shops[0].logo.name;
 				if(j==0){
 					 html += "<div class='sub_hdr'>"+
 								"<img src='"+HOST_PATH+"public/images/front_end/fav_icon.png' alt='' />"+

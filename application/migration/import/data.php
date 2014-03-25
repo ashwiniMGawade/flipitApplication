@@ -142,7 +142,7 @@ function migrate_offers() {
 
                 /* determine logo file name */
                 $logo_base_path = '/Users/meyerdev/Sites/kortingscode.nl/public';
-                $logo_path_rest = '/images/upload/offer/';
+                $logo_path_rest = 'images/upload/offer/';
                 $logo_file_name = $wc_orig_id . '_' . $var_name;
 
                 $logo_abs_path = $logo_base_path . $logo_path_rest . $logo_file_name;

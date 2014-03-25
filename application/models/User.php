@@ -192,7 +192,7 @@ class User extends BaseUser
             $ext =  BackEnd_Helper_viewHelper::getImageExtension($imageName);
             $pImage  = new ProfileImage();
             $pImage->ext = $ext;
-            $pImage->path ='/images/upload/';
+            $pImage->path ='images/upload/';
             $pImage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
             $pImage->save();
             $this->profileImageId =  $pImage->id;
@@ -406,7 +406,7 @@ class User extends BaseUser
                     $pImage  = new ProfileImage();
                 }
                 $pImage->ext = $ext;
-                $pImage->path ='/images/upload/';
+                $pImage->path ='images/upload/';
                 $pImage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
                 $pImage->save();
 

@@ -343,7 +343,7 @@ class UserGeneratedOffer extends BaseOffer
 			    {
                 
 			       $this->logo->ext = $ext;
-			  	   $this->logo->path ='/images/upload/offer';
+			  	   $this->logo->path ='images/upload/offer';
 			  	   $this->logo->name = BackEnd_Helper_viewHelper::stripSlashesFromString($fileName);
 			   } 
 			}else{                                                   // add offer refUrl
@@ -469,7 +469,7 @@ class UserGeneratedOffer extends BaseOffer
 				{
 					
 					$this->logo->ext = $ext;
-					$this->logo->path ='/images/upload/offer';
+					$this->logo->path ='images/upload/offer';
 					$this->logo->name = BackEnd_Helper_viewHelper::stripSlashesFromString($fileName);
 				}
 					

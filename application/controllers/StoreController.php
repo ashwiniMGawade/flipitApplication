@@ -727,13 +727,13 @@ class StoreController extends Zend_Controller_Action
  	 
  		$handle = opendir(ROOT_PATH . '/Logo/Logo');
 		$rootpath = ROOT_PATH . '/Logo/Logo/';
-		$pathToUpload = ROOT_PATH . '/images/upload/shop/';
+		$pathToUpload = ROOT_PATH . 'images/upload/shop/';
 		$pathUpload = 'images/upload/shop/';
 		
 		//Screen Shots
 		$siteHandle = opendir(ROOT_PATH . '/Logo/Screenshot');
 		$rootSitePath = ROOT_PATH . '/Logo/Screenshot/';
-		$pathToUploadSiteImg = ROOT_PATH . '/images/upload/screenshot/';
+		$pathToUploadSiteImg = ROOT_PATH . 'images/upload/screenshot/';
 		$sitePathUpload = 'images/upload/screenshot/';
 		
 		
@@ -907,13 +907,13 @@ class StoreController extends Zend_Controller_Action
  	
  		$handle = opendir(ROOT_PATH . '/Logo/Logo');
 		$rootpath = ROOT_PATH . '/Logo/Logo/';
-		$pathToUpload = ROOT_PATH . '/images/upload/shop/';
+		$pathToUpload = ROOT_PATH . 'images/upload/shop/';
 		$pathUpload = 'images/upload/shop/';
 		
 		//Screen Shots
 		$siteHandle = opendir(ROOT_PATH . '/Logo/Screenshot');
 		$rootSitePath = ROOT_PATH . '/Logo/Screenshot/';
-		$pathToUploadSiteImg = ROOT_PATH . '/images/upload/screenshot/';
+		$pathToUploadSiteImg = ROOT_PATH . 'images/upload/screenshot/';
 		$sitePathUpload = 'images/upload/screenshot/';
 		
 		$image_array =  array(); // Array for all image names
