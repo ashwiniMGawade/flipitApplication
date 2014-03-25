@@ -671,31 +671,52 @@ class ShopExport {
 
 		echo "\n";
 		print "$key - Shops have been exported successfully!!!";
-		
-	    copydir(UPLOAD_EXCEL_PATH.$key,UPLOAD_REAL_EXCEL_PATH.$key);
+		if($key == 'en')
+		{
+			$key = 'excels';
+		}
+	  self::copydir(UPLOAD_EXCEL_PATH.$key,UPLOAD_REAL_EXCEL_PATH.$key);
+	  self::deleteDir(UPLOAD_EXCEL_PATH.$key);
 		
 
 	}
 	
-	function copydir($source,$destination)
+	protected function copydir($source,$destination)
 	{
 		if(!is_dir($destination)){
 			$oldumask = umask(0);
 			mkdir($destination, 01777); // so you get the sticky bit set
 			umask($oldumask);
 		}
+		
 		$dir_handle = @opendir($source) or die("Unable to open");
 		while ($file = readdir($dir_handle))
 		{
 			if($file!="." && $file!=".." && !is_dir("$source/$file")) //if it is file
 				copy("$source/$file","$destination/$file");
 			if($file!="." && $file!=".." && is_dir("$source/$file")) //if it is folder
-				copydir("$source/$file","$destination/$file");
+				self::copydir("$source/$file","$destination/$file");
 		}
 		closedir($dir_handle);
 	}
 	
-	
+	public static function deleteDir($dirPath) {
+		if (! is_dir($dirPath)) {
+			throw new InvalidArgumentException("$dirPath must be a directory");
+		}
+		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
+			$dirPath .= '/';
+		}
+		$files = glob($dirPath . '*', GLOB_MARK);
+		foreach ($files as $file) {
+			if (is_dir($file)) {
+				self::deleteDir($file);
+			} else {
+				unlink($file);
+			}
+		}
+		rmdir($dirPath);
+	}
 	
 
 }
