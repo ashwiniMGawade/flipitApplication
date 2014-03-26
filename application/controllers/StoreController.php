@@ -516,7 +516,7 @@ class StoreController extends Zend_Controller_Action
   	  $shareUrl = HTTP_PATH_LOCALE . $shopdetail[0]['permaLink'];
   	  $this->view->shareUrl = $shareUrl;//share to facebook
   	  # get editor picture from second server
-  	  $this->view->profileImage =  User::getProfileImage($shopdetail[0]['contentManagerId']);
+  	  $this->view->shopAuthor =  User::getProfileImage($shopdetail[0]['contentManagerId']);
   	  
   	  $this->view->displayExtraPropertiesWidget = $displayExtraPropertiesWidget ;
   	  $this->view->headTitle(@$shopdetail[0]['overriteTitle']);
@@ -1197,7 +1197,9 @@ class StoreController extends Zend_Controller_Action
    public function signupAction(){
    		$this->_helper->layout()->disableLayout();
    }
-   
+   public function signupwidgetAction(){
+   	$this->_helper->layout()->disableLayout();
+   }
    public function discountcodewidgetAction(){
    		$this->_helper->layout()->disableLayout();
    }

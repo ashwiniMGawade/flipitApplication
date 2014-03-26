@@ -1,90 +1,90 @@
 <?php
 //echo "<pre>"; print_r($this->offers); die;
-	echo $this->doctype('XHTML1_RDFA');
-	if($this->profileImage['addtosearch'] == 1):
-		if($this->profileImage['google']):
-			$google = $this->profileImage['google'];
-			echo $this->headLink( array( 'rel' => 'author','href' => $google));
-		endif;
-	endif;
+    echo $this->doctype('XHTML1_RDFA');
+    if($this->shopAuthor['addtosearch'] == 1):
+        if($this->shopAuthor['google']):
+            $google = $this->shopAuthor['google'];
+            echo $this->headLink( array( 'rel' => 'author','href' => $google));
+        endif;
+    endif;
 
-	$this->minifyHeadLink()->prependStylesheet("public/css/front_end/modalPopLite.css");
-	$this->minifyHeadScript()->prependFile ("public/js/front_end/modalPopLite.min.js" );
-	$this->minifyHeadScript()->prependFile ("public/js/front_end/jquery.expander.min.js" );
-	$this->minifyHeadScript()->prependFile ("public/js/front_end/socialmedia.js" );
-	$this->minifyHeadScript()->prependFile ("public/js/front_end/storeDetal.js" );
-	$this->minifyHeadScript()->appendFile("public/js/back_end/bootbox.min.js");
+    $this->minifyHeadLink()->prependStylesheet("public/css/front_end/modalPopLite.css");
+    $this->minifyHeadScript()->prependFile ("public/js/front_end/modalPopLite.min.js" );
+    $this->minifyHeadScript()->prependFile ("public/js/front_end/jquery.expander.min.js" );
+    $this->minifyHeadScript()->prependFile ("public/js/front_end/socialmedia.js" );
+    $this->minifyHeadScript()->prependFile ("public/js/front_end/storeDetal.js" );
+    $this->minifyHeadScript()->appendFile("public/js/back_end/bootbox.min.js");
 
-	?>
+    ?>
 <!-- Search Outer2 Starts -->
   <?php $getPermLinkNewOffer = Page::getPageFromPageAttr(6);
-  		//$Link = HTTP_PATH.$getPermLinkNewOffer->permaLink;
+        //$Link = HTTP_PATH.$getPermLinkNewOffer->permaLink;
     $bounceRate = "/out/shop/".@$this->data[0]['id'];
-    $urlToShow = HTTP_PATH_LOCALE.'out/shop/'.@$this->data[0]['id'];
-  	$Link = '';
-  	$pgname= "how-to/".$this->data[0]['permaLink'];
-  	$name =  strtoupper($this->data[0]['name']);
-	$breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate($name)."</a>";
-	echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>$breadcrumb));
-	$id = 0;
-	if(Auth_VisitorAdapter::hasIdentity()):
-		$id = Auth_VisitorAdapter::getIdentity()->id;
-	endif;
+    $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->data[0]['id'];
+    $Link = '';
+    $helpGuidePermalink= "how-to/".$this->data[0]['permaLink'];
+    $name =  strtoupper($this->data[0]['name']);
+    $breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate($name)."</a>";
+//  echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>$breadcrumb));
+    $id = 0;
+    if(Auth_VisitorAdapter::hasIdentity()):
+        $id = Auth_VisitorAdapter::getIdentity()->id;
+    endif;
 
-	#common code
-	$yellowBoxWarning  =
-	'<div class="yellow-box2 mt20 clr">
-	<div class="yellow-box2-img">
-	<img src="' .HTTP_PATH  . "public/images/front_end/icon19.png" . '" width="32" height="32" alt="" /></div>
-	<div class="yellow-box2-text text-black">'
-	. $this->translate("Sorry") . " ". $this->data[0]['name']
-	. " ".  $this->translate('offers right now!') . '<br />
-	<p>' .  $this->translate("Check out the") ." "
-	. '<a target="_blank" rel="nofollow" class="text-blue-link"'
-	. ' onclick=\'ga("send","event", "aff","' . $bounceRate . '");\' href=" ' .$urlToShow. '">'
-	. $this->data[0]["name"] . '</a>' .
-	" " . $this->translate("website to see what direct offers are available. Our deal team are working hard to bring you more great discounts soon.") ." " . '</p><p>' .
-	" " .$this->translate("However, you might also like these vouchercodes we have selected for you! Dont forget to have a look at or") . " "
-	. '<a class="text-blue-link" href="' . HTTP_PATH_LOCALE . "categorieen" . '">' .
-	" " .$this->translate("Categories") ." " . '</a>' . $this->translate('or')
-	.'<a class="text-blue-link"  href="' .  HTTP_PATH_LOCALE . "alle-winkels" . '">'
-	. " " . $this->translate("Stores overview") . '</a>'
-	. '</p></div></div>';
-
-
-	$offers = '';
+    #common code
+    $yellowBoxWarning  =
+    '<div class="yellow-box2 mt20 clr">
+    <div class="yellow-box2-img">
+    <img src="' .HTTP_PATH  . "public/images/front_end/icon19.png" . '" width="32" height="32" alt="" /></div>
+    <div class="yellow-box2-text text-black">'
+    . $this->translate("Sorry") . " ". $this->data[0]['name']
+    . " ".  $this->translate('offers right now!') . '<br />
+    <p>' .  $this->translate("Check out the") ." "
+    . '<a target="_blank" rel="nofollow" class="text-blue-link"'
+    . ' onclick=\'ga("send","event", "aff","' . $bounceRate . '");\' href=" ' .$shopUrl. '">'
+    . $this->data[0]["name"] . '</a>' .
+    " " . $this->translate("website to see what direct offers are available. Our deal team are working hard to bring you more great discounts soon.") ." " . '</p><p>' .
+    " " .$this->translate("However, you might also like these vouchercodes we have selected for you! Dont forget to have a look at or") . " "
+    . '<a class="text-blue-link" href="' . HTTP_PATH_LOCALE . "categorieen" . '">' .
+    " " .$this->translate("Categories") ." " . '</a>' . $this->translate('or')
+    .'<a class="text-blue-link"  href="' .  HTTP_PATH_LOCALE . "alle-winkels" . '">'
+    . " " . $this->translate("Stores overview") . '</a>'
+    . '</p></div></div>';
 
 
-	$this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-	$offerCount = count($this->offers) ;
-	if( $offerCount > 0):
-		$k = 0;
-		foreach ($this->offers as $offer):
-			$this->offers[$k]['codeUploadShowOrNot'] = $this->data[0]['usergenratedcontent'];
-			$this->offers[$k]['offerCount'] = $offerCount;
-			$this->offers[$k]['locale'] = $this->locale;
-			$k++;
-		endforeach;
+    $offers = '';
 
-		$offers = $this->partialLoop('store/offer.phtml', $this->offers);
-	endif;
 
-	if(count($this->relatedshops) > 0):
-		$relatedOffer = $this->partialLoop('store/relatedOffer.phtml', $this->relatedshops);
-	endif;
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $offerCount = count($this->offers) ;
+    if( $offerCount > 0):
+        $k = 0;
+        foreach ($this->offers as $offer):
+            $this->offers[$k]['codeUploadShowOrNot'] = $this->data[0]['usergenratedcontent'];
+            $this->offers[$k]['offerCount'] = $offerCount;
+            $this->offers[$k]['locale'] = $this->locale;
+            $k++;
+        endforeach;
 
-	$headingOfSimilerOffer = '<div class="clr"><h2>'
-	.$this->translate('Similar vouchercodes we think you will like!'). '</h2></div>';
-	$headingOfSimilerOfferMt20 = '<div class="popular-kortings-heading text-white clr mt20"><span>'
-	.  $this->translate('Similar vouchercodes we think you will like!'). '</span></div>';
+        $offers = $this->partialLoop('store/offer.phtml', $this->offers);
+    endif;
 
-	$discussion = '';
-	if($this->data[0]['discussions'] == 1):
-		$discussion	='<div class="voucher-col1-new">';
-		$discussion .=$this->render('partials/discussion.phtml');
-		$discussion .='</div>';
-	endif;
-	$speratorDiv = '<div class="separator"></div>';
+    if(count($this->relatedshops) > 0):
+        $relatedOffer = $this->partialLoop('store/relatedOffer.phtml', $this->relatedshops);
+    endif;
+
+    $headingOfSimilerOffer = '<div class="clr"><h2>'
+    .$this->translate('Similar vouchercodes we think you will like!'). '</h2></div>';
+    $headingOfSimilerOfferMt20 = '<div class="popular-kortings-heading text-white clr mt20"><span>'
+    .  $this->translate('Similar vouchercodes we think you will like!'). '</span></div>';
+
+    $discussion = '';
+    if($this->data[0]['discussions'] == 1):
+        $discussion ='<div class="voucher-col1-new">';
+        $discussion .=$this->render('partials/discussion.phtml');
+        $discussion .='</div>';
+    endif;
+    $speratorDiv = '<div class="separator"></div>';
 # end common code
 ?>
 
@@ -94,485 +94,490 @@
 <!-- Separator Ends -->
      <!-- Mark Spencer Top Starts -->
 <div class="clr"></div>
-	<div class="white-bg">
-		<div class="new-outer">
-		<div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
-			<div class="mark-spencer-top">
-				<div class="mark-spencer-left">
-					<div class="ms-grey-col-left">
-					<?php
-					$url = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : @$this->data[0]['affliateProgram']['name'];
-
-					# create click out only on when a shop is money shop
-					if($this->data[0]['affliateProgram']) : ?>
-					<a  target="_blank" rel="nofollow" class="text-blue-link" onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" href="<?php echo $urlToShow;?>">
-						<?php
-							endif;
-							echo'<img class="radiusImg" src="'. $this->img . '" alt="' . $this->data[0]['name']  . '" />';
-
-						if($this->data[0]['affliateProgram']) : ?>
-					</a>
-					<?php endif;?>
-					</div>
-				</div>
-			<div class="mark-spencer-right" >
-				<h1 class="line-normal"><?php echo $this->data[0]['title'];?></h1>
-				<h2 class="storedetail-subtitle">
-					<?php echo '' . $this->data[0]['subTitle'];?>
-				</h2>
-                        <div class='fav-div-content'>
-
-                                <?php
-                                # create click out only on when a shop is money shop
-                                if($this->data[0]['affliateProgram']) : ?>
-                                        <a target="_blank" rel="nofollow" class="btn text-blue-link fl"  onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" href="<?php echo $urlToShow;?>">
-                                <?php else: ?>
-                                        <a target="_blank" disabled="disabled" rel="nofollow" class="btn text-blue-link fl btn-disabled">
-                                <?php   endif;  ?>
-                                <img class="weblogo" src="<?php echo HTTP_PATH; ?>public/images/front_end/weblogo.png" alt=""/>
-
-                                <?php
-                                $h = explode("//",$this->data[0]['actualUrl']);
-                                if(isset($h[1])):
-                                        echo $h[1];
-                                else:
-                                        echo $this->data[0]['actualUrl'];
-                                endif;
-                                ?>
-                                </a>
-                                <?php
-                                echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id'].'&shopName='.urlencode($this->data[0]['name']));
-                                ?>
-                        </div>
-			</div>
-	           <!-- Social Likes Starts -->
-		      	<?php
-		      	  $controller =  $this->controllerName;
-		          $title = "<em>".$this->translate("Share the love!")."</em>";
-		          $socialMedia = new FrontEnd_Helper_viewHelper();
-		          echo $socialMedia->socialmediaSmall($url, $title, $controller);
-		       ?>
-		       <!-- Social Likes Ends -->
-			</div>
-		</div>
-	</div>
+<div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
+<div class="header-block header-block-2">
+    <div class="icon">
+        <?php
+        $affliateProgramUrl = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : @$this->data[0]['affliateProgram']['name'];
+        # create click out only on when a shop is money shop
+        if($this->data[0]['affliateProgram']) : 
+            $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
+            $affliateUrl = $shopUrl;
+            $affliateDisabled = '';
+            $affliateClass = '';
+        else:
+            $affliateBounceRate = '';
+            $affliateUrl = '#';
+            $affliateDisabled = 'disabled="disabled"';
+            $affliateClass = 'btn-disabled';
+        endif;
+        ?>
+        <a target="_blank" rel="nofollow" class="text-blue-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->img . '" alt="' . $this->data[0]['name']  . '"  width="176" height="89" />'; ?></a>
+    
+    </div>
+    <div class="box">
+        <h1><?php echo $this->data[0]['title'];?></h1>
+        <strong><?php echo '' . $this->data[0]['subTitle'];?></strong>
+            <a target="_blank" rel="nofollow" class="btn text-blue-link fl <?php echo $affliateClass; ?> pop btn btn-sm btn-default" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>">
+            <?php
+            $actualUrlWithoutDoubleSlash = explode("//",$this->data[0]['actualUrl']);
+            if(isset($actualUrlWithoutDoubleSlash[1])):
+                 $actualUrl = $actualUrlWithoutDoubleSlash[1];
+            else:
+                 $actualUrl = $this->data[0]['actualUrl'];
+            endif;
+            echo $actualUrl;
+            ?>
+            </a>
+            <?php
+            echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id'].'&shopName='.urlencode($this->data[0]['name']));
+            ?>
+             
+    </div>
+</div> 
 <div class="separator">&nbsp;</div>
 
-<div class="new-outer">
+<div class="new-outer row">
+<div id="content" class="col-md-8 col-sm-8">
 <div class="mark-spencer-mid" >
 <!-- Mark Spencer Mid Left Starts -->
 <?php
 
-	if($this->data[0]['usergenratedcontent']==1):
+    if($this->data[0]['usergenratedcontent']==1):
 
-		# CHECK CONDITION
-		if($this->data[0]['affliateProgram']==0):
-			# NO MONEY NO CODE
-			if(count($this->offers) <=0): ?>
+        # CHECK CONDITION
+        if($this->data[0]['affliateProgram']==0):
+            # NO MONEY NO CODE
+            if(count($this->offers) <=0): ?>
 
-				<?php
-						# show top popular code when no money code is available
-						if(! $this->topPopularOffers)
-						{
-							echo $yellowBoxWarning;
-						} else 	{
-							$offers =  $this->partialLoop('store/_popular-offers.phtml', $this->topPopularOffers);
-						}
+                <?php
+                        # show top popular code when no money code is available
+                        if(! $this->topPopularOffers)
+                        {
+                            echo $yellowBoxWarning;
+                        } else  {
+                            $offers =  $this->partialLoop('store/_popular-offers.phtml', $this->topPopularOffers);
+                        }
 
-			            echo $speratorDiv; ?>
-				<div class="mark-spencer-mid-left" style='width:660px!important;'>
-				<?php echo $offers;
-				if ($this->data[0]['showSignupOption']) :
-					echo $this->esi($this->locale.'store/signup');
-				endif;
-				
-				# show promotional similar codes
-				if(count($this->relatedshops8) >0): ?>
-					<div class="similar-promotionl-offer-cont">
-						<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
-					<?php	
-						echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
-					</div>
-				<?php endif;
-				
-				
-				echo $this->esi($this->locale.'store/discountcodewidget');
-				echo $discussion;
-				?>
-				</div>
-		<?php
+                        echo $speratorDiv; ?>
+                <div class="mark-spencer-mid-left" style='width:660px!important;'>
+                <?php echo $offers;
+                if ($this->data[0]['showSignupOption']) :
+                    echo $this->esi($this->locale.'store/signup');
+                endif;
+                
+                # show promotional similar codes
+                if(count($this->relatedshops8) >0): ?>
+                    <div class="similar-promotionl-offer-cont">
+                        <h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+                    <?php   
+                        echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?> 
+                    </div>
+                <?php endif;
+                
+                
+                echo $this->esi($this->locale.'store/discountcodewidget');
+                echo $discussion;
+                ?>
+                </div>
+        <?php
 
-		# NO MONEY WITH CODE
-		elseif(count($this->offers) > 0): 
-			 echo $speratorDiv; ?>
+        # NO MONEY WITH CODE
+        elseif(count($this->offers) > 0): 
+             echo $speratorDiv; ?>
 
-			<!-- code for  one code -->
-			<div class="mark-spencer-mid-left" style='width:660px!important;'>
-		    	<?php echo $offers;
-		    	if ($this->data[0]['showSignupOption']) :
-		    		echo $this->esi($this->locale.'store/signup');
-		    	endif;
-		    	# show promotional similar codes
-		    	if(count($this->relatedshops8) >0): ?>
-		    		<div class="similar-promotionl-offer-cont">
-		    			<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
-		    			<?php	
-		    				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
-		    		</div>
-				<?php endif;
-		    					
-		    	
-		    	echo $discussion;   ?>
-		 	</div>
-		    <!-- Mark Spencer Mid Left Ends -->
-	<!--end code for  one code -->
+            <!-- code for  one code -->
+            <div class="mark-spencer-mid-left" style='width:660px!important;'>
+                <?php echo $offers;
+                if ($this->data[0]['showSignupOption']) :
+                    echo $this->esi($this->locale.'store/signup');
+                endif;
+                # show promotional similar codes
+                if(count($this->relatedshops8) >0): ?>
+                    <div class="similar-promotionl-offer-cont">
+                        <h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+                        <?php   
+                            echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?> 
+                    </div>
+                <?php endif;
+                                
+                
+                echo $discussion;   ?>
+            </div>
+            <!-- Mark Spencer Mid Left Ends -->
+    <!--end code for  one code -->
 
-	<?php endif;
-	else:
+    <?php endif;
+    else:
 
-		# YES MONEY NO CODE
-		 if(count($this->offers) <=0): ?>
+        # YES MONEY NO CODE
+         if(count($this->offers) <=0): ?>
 
-		 	<?php echo $yellowBoxWarning;
-			if(count($this->relatedshops) >0):?>
-				<div class="merchants-outer">
-					<?php echo $headingOfSimilerOfferMt20;?>
-					<div class="merchants-bot"><?php echo $relatedOffer ?></div>
-				</div>
-			<?php  endif;
-			echo $speratorDiv; ?>
+            <?php echo $yellowBoxWarning;
+            if(count($this->relatedshops) >0):?>
+                <div class="merchants-outer">
+                    <?php echo $headingOfSimilerOfferMt20;?>
+                    <div class="merchants-bot"><?php echo $relatedOffer ?></div>
+                </div>
+            <?php  endif;
+            echo $speratorDiv; ?>
 
-			<div class="mark-spencer-mid-left" style='width:660px!important;'>
-				<?php echo $offers;
-					if ($this->data[0]['showSignupOption']) :
-					echo $this->esi($this->locale.'store/signup');
-				endif;
-				# show promotional similar codes
-		    	if(count($this->relatedshops8) >0): ?>
-		    		<div class="similar-promotionl-offer-cont">
-		    			<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
-		    			<?php	
-    					echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
-	    		</div>
-				<?php endif;
-				
-			
-				echo $this->esi($this->locale.'store/discountcodewidget');
-				echo $discussion; ?>
-			</div>
-			<!-- Mark Spencer Mid Left Ends -->
-	<?php
+            <div class="mark-spencer-mid-left" style='width:660px!important;'>
+                <?php echo $offers;
+                    if ($this->data[0]['showSignupOption']) :
+                    echo $this->esi($this->locale.'store/signup');
+                endif;
+                # show promotional similar codes
+                if(count($this->relatedshops8) >0): ?>
+                    <div class="similar-promotionl-offer-cont">
+                        <h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+                        <?php   
+                        echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?> 
+                </div>
+                <?php endif;
+                
+            
+                echo $this->esi($this->locale.'store/discountcodewidget');
+                echo $discussion; ?>
+            </div>
+            <!-- Mark Spencer Mid Left Ends -->
+    <?php
 
-	# YES MONEY WITH CODE
-	elseif(count($this->offers) >0):  ?>
+    # YES MONEY WITH CODE
+    elseif(count($this->offers) >0):  ?>
 
-			<!-- code for  one code -->
-			<div class="mark-spencer-mid-left" style='width:660px!important;'>
-			<?php echo $offers;
-				if ($this->data[0]['showSignupOption']) :
-					echo $this->esi($this->locale.'store/signup');
-				endif;	
-			# show promotional similar codes
-			if(count($this->relatedshops8) >0): ?>
-				<div class="similar-promotionl-offer-cont">
-					<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
-				<?php	
-					echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
-				</div>
-			<?php endif; 
-			  
-			
-				echo $discussion;?>
-			</div>
-			<?php endif;
-	endif;
+            <!-- code for  one code -->
+            <div class="mark-spencer-mid-left" style='width:660px!important;'>
+            <?php echo $offers;
+                if ($this->data[0]['showSignupOption']) :
+                    echo $this->esi($this->locale.'store/signup');
+                endif;  
+            # show promotional similar codes
+            if(count($this->relatedshops8) >0): ?>
+                <div class="similar-promotionl-offer-cont">
+                    <h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+                <?php   
+                    echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?> 
+                </div>
+            <?php endif; 
+              
+            
+                echo $discussion;?>
+            </div>
+            <?php endif;
+    endif;
 
-	# not user generated code
-	else:
+    # not user generated code
+    else:
 
-		# CHECK MOENY CONDITION
-		if($this->data[0]['affliateProgram']==0):
-			# NO MONEY AND NO CODE
-			if(count($this->offers) <=0):?>
-				<?php
-					# show top popular code when no money code is available
-					if(! $this->topPopularOffers)
-					{
-						echo $yellowBoxWarning;
-					} else 	{
-						$offers =  $this->partialLoop('store/_popular-offers.phtml', $this->topPopularOffers);
+        # CHECK MOENY CONDITION
+        if($this->data[0]['affliateProgram']==0):
+            # NO MONEY AND NO CODE
+            if(count($this->offers) <=0):?>
+                <?php
+                    # show top popular code when no money code is available
+                    if(! $this->topPopularOffers)
+                    {
+                        echo $yellowBoxWarning;
+                    } else  {
+                        $offers =  $this->partialLoop('store/_popular-offers.phtml', $this->topPopularOffers);
 
-					}
-			echo $speratorDiv; ?>
+                    }
+            echo $speratorDiv; ?>
 
 
-			<div class="mark-spencer-mid-left" style='width:660px!important;'>
- 		      	<?php echo $offers;
- 		      		if ($this->data[0]['showSignupOption']) :
- 		      		echo $this->esi($this->locale.'store/signup');
- 		      	endif;
- 		      	# show promotional similar codes
-				if(count($this->relatedshops8) >0): ?>
- 		      		<div class="similar-promotionl-offer-cont">
- 		      			<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
- 		      			<?php	
- 		      				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
- 		      		</div>
- 		      	<?php endif; 
- 		      
+            <div class="mark-spencer-mid-left" style='width:660px!important;'>
+                <?php echo $offers;
+                    if ($this->data[0]['showSignupOption']) :
+                    echo $this->esi($this->locale.'store/signup');
+                endif;
+                # show promotional similar codes
+                if(count($this->relatedshops8) >0): ?>
+                    <div class="similar-promotionl-offer-cont">
+                        <h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+                        <?php   
+                            echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?> 
+                    </div>
+                <?php endif; 
+              
 
- 		      	echo $discussion; ?>
- 		 	</div>
-	<?php
-		# NO MONEY AND WITH CODE
-		elseif(count($this->offers) >0): ?>
+                echo $discussion; ?>
+            </div>
+    <?php
+        # NO MONEY AND WITH CODE
+        elseif(count($this->offers) >0): ?>
 
-			<?php /*if(count($this->relatedshops) >0):?>
-				<div class="merchants-outer">
-					<?php echo $headingOfSimilerOffer;?>
-					<div class="merchants-bot"><?php echo $relatedOffer ?></div>
-				</div>
-			<?php  endif;  */
-			echo $speratorDiv; ?>
+            <?php /*if(count($this->relatedshops) >0):?>
+                <div class="merchants-outer">
+                    <?php echo $headingOfSimilerOffer;?>
+                    <div class="merchants-bot"><?php echo $relatedOffer ?></div>
+                </div>
+            <?php  endif;  */
+            echo $speratorDiv; ?>
 
-			<div class="mark-spencer-mid-left" style='width:660px!important;'>
- 		      	<?php echo $offers;
- 		      		if ($this->data[0]['showSignupOption']) :
- 		      		echo $this->esi($this->locale.'store/signup');
- 		      	endif;
- 		      	# show promotional similar codes
-				if(count($this->relatedshops8) >0): ?>
- 		      		<div class="similar-promotionl-offer-cont">
- 		      			<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
- 		      			<?php	
- 		      				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
- 		      		</div>
- 		      	<?php endif; 
- 		      	 		      	
- 		      
+            <div class="mark-spencer-mid-left" style='width:660px!important;'>
+                <?php echo $offers;
+                    if ($this->data[0]['showSignupOption']) :
+                    echo $this->esi($this->locale.'store/signup');
+                endif;
+                # show promotional similar codes
+                if(count($this->relatedshops8) >0): ?>
+                    <div class="similar-promotionl-offer-cont">
+                        <h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+                        <?php   
+                            echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?> 
+                    </div>
+                <?php endif; 
+                                
+              
 
- 		      	echo $discussion; ?>
- 		 	</div>
- 		      <!-- Mark Spencer Mid Left Ends -->
- 		     <!-- end code for no money MORE THAN 0 code -->
-		<?php endif;
-		else:
+                echo $discussion; ?>
+            </div>
+              <!-- Mark Spencer Mid Left Ends -->
+             <!-- end code for no money MORE THAN 0 code -->
+        <?php endif;
+        else:
 
-			# YES MONEY AND NO CODE
-			 if(count($this->offers) <=0): ?>
+            # YES MONEY AND NO CODE
+             if(count($this->offers) <=0): ?>
 
-			 	<?php if(count($this->relatedshops) >0):?>
-			 	<div class="merchants-outer">
-					<?php echo $headingOfSimilerOffer;?>
-					<div class="merchants-bot"><?php echo $relatedOffer ?></div>
-				</div>
-				<?php endif;?>
+                <?php if(count($this->relatedshops) >0):?>
+                <div class="merchants-outer">
+                    <?php echo $headingOfSimilerOffer;?>
+                    <div class="merchants-bot"><?php echo $relatedOffer ?></div>
+                </div>
+                <?php endif;?>
 
-				<div class="mark-spencer-mid-left" style="width:660px!important;">
-					<?php
-					echo $yellowBoxWarning;
-						if ($this->data[0]['showSignupOption']) :
-						echo $this->esi($this->locale.'store/signup');
-					endif;
-					# show promotional similar codes
-					if(count($this->relatedshops8) >0): ?>
-						<div class="similar-promotionl-offer-cont">
-							<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
-						<?php	
-							echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
-						</div>
-					<?php endif; 				
-				
+                <div class="mark-spencer-mid-left" style="width:660px!important;">
+                    <?php
+                    echo $yellowBoxWarning;
+                        if ($this->data[0]['showSignupOption']) :
+                        echo $this->esi($this->locale.'store/signup');
+                    endif;
+                    # show promotional similar codes
+                    if(count($this->relatedshops8) >0): ?>
+                        <div class="similar-promotionl-offer-cont">
+                            <h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+                        <?php   
+                            echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?> 
+                        </div>
+                    <?php endif;                
+                
 
-					echo $discussion; ?>
+                    echo $discussion; ?>
 
-					<!-- display similar shops and shop under sasme category widget -->
-					<?php
-					# check display similar shops is enabled or not
-					if($this->data[0]['showSimliarShops'] && ! empty($this->similarShops)): ?>
-					  <div class="simlilar-shops-plus-category-shops">
-					  		<div class="new_box">
-								<img alt="Similar deals" src="<?php echo HTTP_PATH .'public/images/front_end/similar_shops.png';?> ">
-							</div>
-							<?php echo $this->partial('store/_simlar-and-categfory-related-shops.phtml', array('data' => $this->similarShops,'shopName' => $this->data[0]['name'])); ?>
-					  </div>
-					<?php endif;?>
+                    <!-- display similar shops and shop under sasme category widget -->
+                    <?php
+                    # check display similar shops is enabled or not
+                    if($this->data[0]['showSimliarShops'] && ! empty($this->similarShops)): ?>
+                      <div class="simlilar-shops-plus-category-shops">
+                            <div class="new_box">
+                                <img alt="Similar deals" src="<?php echo HTTP_PATH .'public/images/front_end/similar_shops.png';?> ">
+                            </div>
+                            <?php echo $this->partial('store/_simlar-and-categfory-related-shops.phtml', array('data' => $this->similarShops,'shopName' => $this->data[0]['name'])); ?>
+                      </div>
+                    <?php endif;?>
 
-				</div>
-		 </div>
-		<!-- Mark Spencer Mid Right Starts -->
-		<?php
+                </div>
+         </div>
+        
+        <!-- Mark Spencer Mid Right Starts -->
+        <?php
 
-		# YES MONEY AND WITH CODE
-		elseif(count($this->offers) > 0): ?>
-			<div class="mark-spencer-mid-left" style='width:660px!important;'>
-				<?php echo $offers;
-				if ($this->data[0]['showSignupOption']) :
-					echo $this->esi($this->locale.'store/signup');
-				endif;
-				# show promotional similar codes
-				if(count($this->relatedshops8) >0): ?>
-					<div class="similar-promotionl-offer-cont">
-						<h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
-					<?php	
-						echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
-					</div>
-				<?php endif;  	  
-				    	
-				
+        # YES MONEY AND WITH CODE
+        elseif(count($this->offers) > 0): ?>
+            <div class="mark-spencer-mid-left" style='width:660px!important;'>
+                <?php echo $offers;
+                if ($this->data[0]['showSignupOption']) :
+                    echo $this->esi($this->locale.'store/signup');
+                endif;
+                # show promotional similar codes
+                if(count($this->relatedshops8) >0): ?>
+                    <div class="similar-promotionl-offer-cont">
+                        <h2><span><?php echo $this->translate("Compairable codes in store");?></span></h2>
+                    <?php   
+                        echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?> 
+                    </div>
+                <?php endif;      
+                        
+                
 
-				echo $discussion;?>
+                echo $discussion;?>
 
-			<!-- display similar shops and shop under sasme category widget -->
-				<?php
-				# check display similar shops is enabled or not
-				if($this->data[0]['showSimliarShops'] && ! empty($this->similarShops)): ?>
-				  <div class="simlilar-shops-plus-category-shops">
-				  		<div class="new_box">
-								<img alt="Similar deals" src="<?php echo HTTP_PATH .'public/images/front_end/similar_shops.png';?> ">
-						</div>
-						<?php echo $this->partial('store/_simlar-and-categfory-related-shops.phtml', array('data' => $this->similarShops,'shopName' => $this->data[0]['name'])); ?>
-				  </div>
-				<?php endif;?>
- 		 	</div>
-	       <?php endif;
-		endif;
-	endif;
-	?>
+            <!-- display similar shops and shop under sasme category widget -->
+                <?php
+                # check display similar shops is enabled or not
+                if($this->data[0]['showSimliarShops'] && ! empty($this->similarShops)): ?>
+                  <div class="simlilar-shops-plus-category-shops">
+                        <div class="new_box">
+                                <img alt="Similar deals" src="<?php echo HTTP_PATH .'public/images/front_end/similar_shops.png';?> ">
+                        </div>
+                        <?php echo $this->partial('store/_simlar-and-categfory-related-shops.phtml', array('data' => $this->similarShops,'shopName' => $this->data[0]['name'])); ?>
+                  </div>
+                <?php endif;?>
+            </div>
+           <?php endif;
+        endif;
+    endif;
+    ?>
 
-</div>
+</div></div>
 <!-- Common side bar -->
-	<!-- Mark Spencer Mid Right Starts -->
-		<div class="mark-spencer-mid-right new-sidebar">
-	       	<div class="mark-spencer-mid-right-text2">
-				<div class="mark-spencer-mid-right-text2-left  summary-out">
-			    	<?php if($this->profileImage!=null){?>
+<!--Refactored code-->
+                <aside id="sidebar" class="col-md-4 col-sm-4">
+                    <article class="block">
+                        <div class="intro intro-2">
 
-			    	<div class="new-outer-box">
-			        <div class="ms-chantal ms-chantal-new">
-			            <div class="ms-chantal-img  crop">
-							<?php
-			                //echo ROOT_PATH.$this->profileImage['profileimage']['path']."thum_".$this->profileImage['profileimage']['name'];
-			                if($this->profileImage['profileimage']):
-			                		$img = HTTP_PATH_CDN . ltrim($this->profileImage['profileimage']['path'],"/"). 'thum_large_widget_' .$this->profileImage['profileimage']['name'];
-			                	
-			                else:
-			                	$img = HTTP_PATH ."public/images/NoImage/142x90.jpg";
-			                endif;
-			                echo '<img alt="' .  $this->profileImage['firstName'] . '" class="" src="'.  $img . '"/>';
-			                ?>
-			            </div>
-			            <div class="ms-chantal-rt text-black">
-			                <span><?php echo $this->translate('Shopreview door');?></span>
-			                <?php
-                                	$fname = str_replace(' ', '', $this->profileImage['firstName']);
-                                	$lname = str_replace(' ', '', $this->profileImage['lastName']);
-                                	$link_url = $this->profileImage['slug'];
-                                	$allowed_tags = '<p>';
+                            <?php if($this->shopAuthor != null): ?>
 
-                     				$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('redactie')."/".$link_url;
-		                     ?>
-			                <strong><a class='text-blue-link' href='<?php echo $profileLink ?>'><?php echo $this->profileImage['firstName'];?></a></strong>
-			                <div class="clr"></div>
-			                <?php
-			                	$view = new Zend_View();
-	                	  	    $view->setScriptPath(APPLICATION_PATH . '/views/scripts/');
-	                	  	  	echo $view->render('partials/dealBig.phtml');
-	                	  	  ?>
-			                <?php /*
-			                <img class="mt7" src="<?php echo HTTP_PATH; ?>public/images/front_end/deal_guru_03.png" alt="" />
-			                */?>
-			            </div>
-			        </div>
-			    </div>
-			    <div class="clr"></div>
-			    <?php }?>
+                            <div class="deal">
+                                <div class="deal-holder">
+                                    <?php
+                                    $authorFirstname = str_replace(' ', '', $this->shopAuthor['firstName']);
+                                    $authorLastname = str_replace(' ', '', $this->shopAuthor['lastName']);
+                                    $authorImageSlug = $this->shopAuthor['slug'];
+                                    $authorProfileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('redactie')."/".$authorImageSlug;
+                                    ?>
+                                    <span class="text">
+                                        <?php echo $this->translate('All').' '.$this->data[0]['name'].' '.$this->translate('deals verified by'); ?> 
+                                        <span class="name"><?php echo $authorFirstname; ?></span>
+                                    </span>
+                                    <div class="photo">
+                                        <span class="text-box"><?php echo $this->translate('Hello'); ?></span>
+                                        <?php
+                                        $shopAuthorPath = HTTP_PATH_CDN . ltrim($this->shopAuthor['profileimage']['path'],"/"). 'thum_large_widget_' .$this->shopAuthor['profileimage']['name'];                                            
+                                        echo '<img alt="' .  $this->shopAuthor['firstName'] . '" class="" src="'.  $shopAuthorPath . '" width="120" height="120"/>';
+                                        ?>
+                                    </div>
+                                </div>
+                            </div>
 
-				<div class='' style="padding:10px;">
-			    	<div class="clr"></div>
-			       	<div class='expander mark-spencer-mid-right-text5'><p><?php echo $this->data[0]['shopText']; ?></p></div>
-			    </div>
-			 </div>
-		</div>
-       	<?php if($this->data[0]['howToUse']){?>
+                            <?php endif; ?>
 
-	         <!-- Ms Help Outer Starts -->
-		         <div class="ms-help-outer">
-		         	<div class="ms-help-heading">
-		         	  <h4><strong><?php echo $this->translate('Hulp nodig met');?> <?php echo $this->data[0]['name'] . " " . $this->translate('Discount Codes 2012');?></strong></h4>
-		         	</div>
-		            <div class="ms-help-img"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/img-question.png" width="26" height="26" alt="image" /></div>
- 					<div class="ms-help-text1 line-height22 font14"><a class="text-blue-link" id="clicker" href="javascript:;"><?php echo $this->translate('Hier laten wij');?></a>&nbsp;<?php echo $this->translate('where to enter my Hotels.com code, or read our full');?>&nbsp;<a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE?><?php echo $pgname;?>"><?php echo $this->data[0]['name']."&nbsp;".$this->translate('kortingscode how to guide');?></a> <?php echo $this->translate('lezen!');?></div>
-		         </div>
-		    <!-- Ms Help Outer Ends -->
-		    <?php }
-		    	 if(count($this->latestupdates) > 0):?>
-			    	<!-- Mark Spencer Mid Starts -->
-			    	<div class="news-sidebar-outer">
-			            <div class="clr store-news-title"><h4><strong><?php echo $this->translate('Het laatste ').($this->data[0]['name']).$this->translate(' nieuws') ;?> </strong></h4>
-			       	    </div>
-			       	    	<?php  echo $this->partialLoop('store/latestNews.phtml', $this->latestupdates); ?>
-			         </div>
-		    <?php endif; ?>
-			<!-- Extra options for shop -->
-		<?php
+                            <h1><?php echo $this->translate('About').' '.$this->data[0]['name'].' '.$this->translate('Vouchers').' '.date('Y'); ?></h1>
+                            <?php echo $this->data[0]['shopText']; ?>
+                        </div>
 
-		# if true then diplay following widget
-		if ( $this->displayExtraPropertiesWidget) :
+                        <?php if($this->data[0]['howToUse']): ?>
 
-		?>
-		<div class="new-widget-outer">
-				<div class="new-widget-header">
-	    		<div class="left"><img alt='image-cup' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-widget-cup.jpg" /></div>
-				<div class=""><p class="font14"><?php echo $this->translate('Alle pluspunten van'); ?> <?php echo $this->data[0]['name']; ?> <?php echo $this->translate('op een rij!');?></p></div>
-	    	</div>
+                        <ul class="add-info">
+                            <li>
+                                <h2><?php echo $this->translate('How to use code');?></h2>
+                                <p>
+                                    <a href="javascript:;" id="clicker"><?php echo $this->translate('Show me'); ?></a> 
+                                    <?php echo $this->translate('where to enter my').' '.$this->data[0]['name'].' '.$this->translate('code, or read our full'); ?> 
+                                    <a href="<?php echo HTTP_PATH_LOCALE.$helpGuidePermalink; ?>"><?php echo $this->data[0]['name'].' '.$this->translate('Promotional Code'); ?></a> 
+                                    <?php echo $this->translate('help guide'); ?>.
+                                </p>
+                            </li>
+                            <li class="web">
+                                <h2><?php echo $this->translate('Official website'); ?></h2>
+                                <a href="<?php echo $this->data[0]['actualUrl']; ?>"><?php echo $actualUrl; ?></a>
+                            </li>
+                        </ul>
 
-			<?php if( $this->data[0]['ideal']){ ?>
-			<div class="new-wid-row"><span><img alt='img-icon1' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon1.jpg" /></span><?php echo $this->translate('Betaal mogelijkheid: iDEAL');?></div>
-			<?php }
+                        <?php endif; ?>
 
-			if( $this->data[0]['qShops']){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon2' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon2.jpg" /></span><?php echo $this->translate('Thuiswinkel waarborg');?></div>
-			<?php }
+                    </article>
+                    <article class="block">
 
-			if( $this->isHotShop){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon3' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon3.jpg" /></span><?php echo $this->translate('Toppartner Kortingscode.nl');?></div>
-			<?php }
+                    <?php
+                        $controller =  $this->controllerName;
+                        $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
+                                <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+                        $socialMedia = new FrontEnd_Helper_viewHelper();
+                        echo $socialMedia->socialmediaSmall($affliateProgramUrl, $socialMediaTitle, $controller);
+                    ?>
+                    
+                    </article>
+                    <?php if(count($this->latestupdates) > 0):?>
+                    <section class="block">
+                        <h2><?php echo $this->translate('Latest news about').' '.$this->data[0]['name'];?></h2>
+                        <?php echo $this->partialLoop('store/latestNews.phtml', $this->latestupdates); ?>
+                    </section>
+                    <?php endif; ?>
+                    <?php if($this->chain):  ?>
+                    <article class="block">
+                    <?php echo $this->chain; ?>
+                    </article>
+                    <?php endif; ?>
+                    <div class="block">
+                        <div class="intro">
+                            <h2><?php echo $this->translate('Follow us'); ?></h2>
+                            <span><?php echo $this->translate('for the latest Avis voucher codes, plus a daily digest of our biggest offers'); ?>.</span>
+                        </div>
+                        <ul class="social-networks">
+                            <li><a href="#" class="facebook">facebook</a></li>
+                            <li><a href="#" class="twitter">twitter</a></li>
+                            <li><a href="#" class="pinterest">pinterest</a></li>
+                            <li><a href="#" class="google">google</a></li>
+                            <li><a href="#" class="rss">rss</a></li>
+                            <li><a href="#" class="mail">mail</a></li>
+                        </ul>
+                    </div>  
+                    <div class="block">
+                        <?php echo FrontEnd_Helper_viewHelper::PopularWinkelsWidget(); ?>
+                    </div>
+                    <?php
+                    if ($this->data[0]['showSignupOption']) : ?>
+                        <div class="block white">
+                            <?php echo $this->esi($this->locale.'store/signupwidget'); ?>
+                        </div>
+                    <?php endif; ?>
+                    <div class="mark-spencer-mid-right new-sidebar">
+                    <?php
 
-			if( $this->data[0]['freeReturns']){ ?>
-			<div class="new-wid-row"><span><img  alt='image-icon4' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon4.jpg" /></span><?php echo $this->translate('Gratis retour');?></div>
-			<?php }
+                    # if true then diplay following widget
+                    if ( $this->displayExtraPropertiesWidget) :
 
-			if( $this->data[0]['pickupPoints']){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon5' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon5.jpg" /></span><?php echo $this->translate('Afhalen in de winkel');?></div>
-			<?php }
+                    ?>
+                    <div class="new-widget-outer">
+                            <div class="new-widget-header">
+                            <div class="left"><img alt='image-cup' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-widget-cup.jpg" /></div>
+                            <div class=""><p class="font14"><?php echo $this->translate('Alle pluspunten van'); ?> <?php echo $this->data[0]['name']; ?> <?php echo $this->translate('op een rij!');?></p></div>
+                        </div>
 
-			if( $this->isSuperPartner){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon6' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon6.jpg" /></span><?php echo $this->translate('Super partner');?></div>
-			<?php }
+                        <?php if( $this->data[0]['ideal']){ ?>
+                        <div class="new-wid-row"><span><img alt='img-icon1' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon1.jpg" /></span><?php echo $this->translate('Betaal mogelijkheid: iDEAL');?></div>
+                        <?php }
 
-			if( $this->data[0]['mobileShop']){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon7' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon7.jpg" /></span><?php echo $this->translate('Mobiele webshop');?></div>
-			<?php }
-			if($this->data[0]['service']){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon8' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon8.jpg" /></span><?php echo $this->translate('Klantenservice:');?> <?php echo $this->data[0]['serviceNumber'];?></div>
-			<?php }
+                        if( $this->data[0]['qShops']){ ?>
+                        <div class="new-wid-row"><span><img alt='image-icon2' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon2.jpg" /></span><?php echo $this->translate('Thuiswinkel waarborg');?></div>
+                        <?php }
 
-			if( $this->isPopular){ ?>
-			<div class="new-wid-row"><span><img alt='image-icon9' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon9.jpg" /></span><?php echo $this->translate('Top 50 Populairste Shops');?></div>
-			<?php } ?>
-	</div>
-	<?php endif;?>
-	 <!-- End Extra options for shop -->
+                        if( $this->isHotShop){ ?>
+                        <div class="new-wid-row"><span><img alt='image-icon3' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon3.jpg" /></span><?php echo $this->translate('Toppartner Kortingscode.nl');?></div>
+                        <?php }
 
- 	<?php 	# display shop chain for other countries
-		if($this->chain):
-	 	echo $this->chain ;
-  		endif;
-  	?>
+                        if( $this->data[0]['freeReturns']){ ?>
+                        <div class="new-wid-row"><span><img  alt='image-icon4' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon4.jpg" /></span><?php echo $this->translate('Gratis retour');?></div>
+                        <?php }
 
-  	</div>
-  </div>
+                        if( $this->data[0]['pickupPoints']){ ?>
+                        <div class="new-wid-row"><span><img alt='image-icon5' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon5.jpg" /></span><?php echo $this->translate('Afhalen in de winkel');?></div>
+                        <?php }
+
+                        if( $this->isSuperPartner){ ?>
+                        <div class="new-wid-row"><span><img alt='image-icon6' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon6.jpg" /></span><?php echo $this->translate('Super partner');?></div>
+                        <?php }
+
+                        if( $this->data[0]['mobileShop']){ ?>
+                        <div class="new-wid-row"><span><img alt='image-icon7' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon7.jpg" /></span><?php echo $this->translate('Mobiele webshop');?></div>
+                        <?php }
+                        if($this->data[0]['service']){ ?>
+                        <div class="new-wid-row"><span><img alt='image-icon8' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon8.jpg" /></span><?php echo $this->translate('Klantenservice:');?> <?php echo $this->data[0]['serviceNumber'];?></div>
+                        <?php }
+
+                        if( $this->isPopular){ ?>
+                        <div class="new-wid-row"><span><img alt='image-icon9' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon9.jpg" /></span><?php echo $this->translate('Top 50 Populairste Shops');?></div>
+                        <?php } ?>
+                    </div>
+                    <?php endif;?>
+                    <!-- End Extra options for shop -->
+                    </div>
+                </aside>
+            </div>
+        </div>
 
 <!-- end of common side bar -->
 
@@ -580,23 +585,23 @@
   <!-- end simlir shop widget -->
 <!-- end display conditionality code  by kraj -->
 
-		<!-- Separator Starts -->
-			<div style="clear:both;"></div>
-         	<div class="separator mt20"></div>
+        <!-- Separator Starts -->
+            <div style="clear:both;"></div>
+            <div class="separator mt20"></div>
         <!-- Separator Ends -->
 
        <?php  if(count($this->msArticle) >0): ?>
-	       <div class="article-container">
-		      	<!-- Merchants Outer Starts -->
-		      	<div class="merchants-outer">
-		       		<div class="common-div">
-		       			<h2><?php echo  $this->translate("Guides"). " " . $this->data[0]['name']. " " . $this->translate("is mentioned in");?></h2>
-		        		<?php echo $this->partialLoop('store/msArticle.phtml', $this->msArticle); ?>
-		        	</div>
-		        </div>
-		         <!-- Merchants Outer Ends -->
-		         <div style="clear:both;"></div>
-	       </div>
+           <div class="article-container">
+                <!-- Merchants Outer Starts -->
+                <div class="merchants-outer">
+                    <div class="common-div">
+                        <h2><?php echo  $this->translate("Guides"). " " . $this->data[0]['name']. " " . $this->translate("is mentioned in");?></h2>
+                        <?php echo $this->partialLoop('store/msArticle.phtml', $this->msArticle); ?>
+                    </div>
+                </div>
+                 <!-- Merchants Outer Ends -->
+                 <div style="clear:both;"></div>
+           </div>
          <!-- Separator Starts -->
         <div class="separator">&nbsp;</div>
         <!-- Separator Ends -->
@@ -604,64 +609,64 @@
 
       if(count($this->expiredOffers) >0):?>
       <div class="new-outer">
-	      <!-- Merchants Outer Starts -->
-			<div class="merchants-outer">
-				<h2><?php echo  $this->translate("These offers from"). " " . $this->data[0]['name'].  " " .$this->translate("are expired");?></h2>
-				<div class="merchants-bot">
-				<?php  echo $this->partialLoop('store/expiredOffer.phtml', $this->expiredOffers); ?>
-				</div>
-			</div>
-	      <!-- Merchants Outer Ends -->
+          <!-- Merchants Outer Starts -->
+            <div class="merchants-outer">
+                <h2><?php echo  $this->translate("These offers from"). " " . $this->data[0]['name'].  " " .$this->translate("are expired");?></h2>
+                <div class="merchants-bot">
+                <?php  echo $this->partialLoop('store/expiredOffer.phtml', $this->expiredOffers); ?>
+                </div>
+            </div>
+          <!-- Merchants Outer Ends -->
       </div>
 
    <?php endif;?>
 
 <?php if($this->data[0]['howToUse'] == 1){
-		if(LOCALE==''):
-       		$imagePop = HTTP_PATH ."public/images/front_end/logo-popup.png";
+        if(LOCALE==''):
+            $imagePop = HTTP_PATH ."public/images/front_end/logo-popup.png";
        else:
-       		$imagePop = HTTP_PATH ."public/images/front_end/flip-logo.png";
+            $imagePop = HTTP_PATH ."public/images/front_end/flip-logo.png";
        endif;?>
 <!-- popup div -->
 
 <div id="popup-wrapper" class="maindiv popup-outer">
-	<div class="popup-header">
-    	<div class="popup-logo"><img src="<?php echo $imagePop; ?>" alt="Logo" /></div>
+    <div class="popup-header">
+        <div class="popup-logo"><img src="<?php echo $imagePop; ?>" alt="Logo" /></div>
         <div class="popup-cross" id="close-btn" onClick="custompopupClose()"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-white.png" width="10" height="10" alt="cross-white" /></div>
     </div>
-	<div class="middlediv"><h4><b><?php echo $this->translate("Zo gebruik je de") ." ". $this->data[0]['name'] ." ". $this->translate("kortingscodes:")?></b></h4>
-		<div class="pop-list-outer" id="list"><ol>
-		      <li><p><?php echo $this->translate("Click the green button to reveal the  code and open the retailer website in either a new tab or window, depending on your browser settings.")?></p></li>
-		      <li><p><?php echo $this->translate("Buy something nice. Check you've met any terms and conditions then head to the checkout.")?></p></li>
-		      <li><p><?php echo $this->translate('Copy the code from our site.')?></p></li>
-		   </ol>
-		</div>
-		<div style="float:right;margin-right:0;width:280px;">
-			 <div class="greybox-popup">
-				<?php if(!empty($this->data[0]['bigimage'])){ ?>
-					<img src="<?php echo PUBLIC_PATH_CDN.$this->data[0]['bigimage']['path']."thum_bigLogoFile_".$this->data[0]['bigimage']['name'];?>" width="280" height="197" alt="noimage"  />
-					<?php  } else{ ?>
-				  	<img src="<?php echo HTTP_PATH; ?>public/images/NoImage/280x100.jpg" width="280" height="197" alt="noimage"  />
-					<?php 	 }?>
+    <div class="middlediv"><h4><b><?php echo $this->translate("Zo gebruik je de") ." ". $this->data[0]['name'] ." ". $this->translate("kortingscodes:")?></b></h4>
+        <div class="pop-list-outer" id="list"><ol>
+              <li><p><?php echo $this->translate("Click the green button to reveal the  code and open the retailer website in either a new tab or window, depending on your browser settings.")?></p></li>
+              <li><p><?php echo $this->translate("Buy something nice. Check you've met any terms and conditions then head to the checkout.")?></p></li>
+              <li><p><?php echo $this->translate('Copy the code from our site.')?></p></li>
+           </ol>
+        </div>
+        <div style="float:right;margin-right:0;width:280px;">
+             <div class="greybox-popup">
+                <?php if(!empty($this->data[0]['bigimage'])){ ?>
+                    <img src="<?php echo PUBLIC_PATH_CDN.$this->data[0]['bigimage']['path']."thum_bigLogoFile_".$this->data[0]['bigimage']['name'];?>" width="280" height="197" alt="noimage"  />
+                    <?php  } else{ ?>
+                    <img src="<?php echo HTTP_PATH; ?>public/images/NoImage/280x100.jpg" width="280" height="197" alt="noimage"  />
+                    <?php    }?>
 
-			 </div>
-			 <div class="popup-col1-right-col1 mt10" style="margin-bottom:10px"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/shape1.png" width="14" height="43" alt="noimage" /></div>
+             </div>
+             <div class="popup-col1-right-col1 mt10" style="margin-bottom:10px"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/shape1.png" width="14" height="43" alt="noimage" /></div>
 
-			<div class="greybox-popup">
-				<?php if(!empty($this->data[0]['smallimage'])){ ?>
+            <div class="greybox-popup">
+                <?php if(!empty($this->data[0]['smallimage'])){ ?>
 
-					<img src="<?php echo PUBLIC_PATH_CDN.ltrim($this->data[0]['smallimage']['path'],"/")."thum_smallLogoFile_".$this->data[0]['smallimage']['name'];?>" width="280" height="100" alt="noimage" />
+                    <img src="<?php echo PUBLIC_PATH_CDN.ltrim($this->data[0]['smallimage']['path'],"/")."thum_smallLogoFile_".$this->data[0]['smallimage']['name'];?>" width="280" height="100" alt="noimage" />
 
-					<?php  } else{ ?>
+                    <?php  } else{ ?>
 
-					<img src="<?php echo HTTP_PATH; ?>public/images/NoImage/280x197.jpg" width="280" height="100" alt="noimage" />
+                    <img src="<?php echo HTTP_PATH; ?>public/images/NoImage/280x197.jpg" width="280" height="100" alt="noimage" />
 
-					<?php 	}?>
-			</div>
+                    <?php   }?>
+            </div>
 
-			</div>
-		  </div>
-	</div>
+            </div>
+          </div>
+    </div>
 <?php } ?>
 </div>
 

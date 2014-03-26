@@ -403,42 +403,42 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 	}
 	public static function PopularWinkelsWidget(){
-		$trans = Zend_Registry::get('Zend_Translate');
-		$poularWInkels = self::commonGetstoreForFrontEnd('popular',25);
-		$trans = Zend_Registry::get('Zend_Translate');
-		$string = '<div class="popular-winkels sidebar">
-             	<div class="popular-winkels-heading">
-             	  <h4 class="sidebar-heading">'.$trans->translate('Populaire Winkels').'</h4>
-             	</div><ul>';
-        for($i=0;$i<count($poularWInkels);$i++) {
+		 
+ 		$translate = Zend_Registry::get('Zend_Translate');
+		$popularStores = self::commonGetstoreForFrontEnd('popular',25);
+		$string = '<div class="intro">
+             	  <h2>'.$translate->translate('Populaire Winkels').'</h2>
+             	  <span>'.$translate->translate('Grab a promotional code, discount code or voucher for February 2014.').'</span>
+             	</div><ul class="tags">';
+        for($i=0;$i<count($popularStores);$i++) {
            $class = '';
            if($i%2==0){
            	$class = 'class="none"';
            }
 
-	if($poularWInkels[$i]['shop']['deepLink']!=null){
+	if($popularStores[$i]['shop']['deepLink']!=null){
 
-		$url = $poularWInkels[$i]['shop']['deepLink'];
+		$url = $popularStores[$i]['shop']['deepLink'];
 
-	}elseif ($poularWInkels[$i]['shop']['refUrl']!=null){
+	}elseif ($popularStores[$i]['shop']['refUrl']!=null){
 
-		$url = $poularWInkels[$i]['shop']['refUrl'];
+		$url = $popularStores[$i]['shop']['refUrl'];
 
-	}elseif($poularWInkels[$i]['shop']['actualUrl']){
+	}elseif($popularStores[$i]['shop']['actualUrl']){
 
-		$url = $poularWInkels[$i]['shop']['actualUrl'];
+		$url = $popularStores[$i]['shop']['actualUrl'];
 
 	}else{
 
-		$url = HTTP_PATH_LOCALE .$poularWInkels[$i]['shop']['permaLink'];
+		$url = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
 	}
 
-	$url = HTTP_PATH_LOCALE .$poularWInkels[$i]['shop']['permaLink'];
+	$url = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
 
-		$string .='<li '.$class.'><a title='.$poularWInkels[$i]['shop']['name'].' href='.$url.'>'.ucfirst(self::substring($poularWInkels[$i]['shop']['name'],200)).'</a></li>';
+		$string .='<li '.$class.'><a title='.$popularStores[$i]['shop']['name'].' href='.$url.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'],200)).'</a></li>';
 
         }
-         $string .='</ul></div>';
+         $string .='</ul>';
 		return $string;
 	}
 
@@ -1124,7 +1124,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
   	endif;
 
   	if($type == 'widget'):
-	  	$string="<div class='flike-outer' style='width: 56px; overflow: hidden; margin: 0px;'>
+	  	$socialMedia="<div class='flike-outer' style='width: 56px; overflow: hidden; margin: 0px;'>
 	  	<div id='fb-root' style='margin-top:-42px;'></div>
 	  	<div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
 	  	</div>
@@ -1135,7 +1135,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 	  	<div class='flike-outer' style='margin : 0px;'><div class='g-plus' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
 	  	</div>";
   	elseif ($type == 'popup'):
-  		$string="<div class='flike-outer' style='width: 49px; overflow: hidden; margin: 12px 0px 5px 49px;border-right:1px solid #E8E8E8;padding-right:48px'>
+  		$socialMedia="<div class='flike-outer' style='width: 49px; overflow: hidden; margin: 12px 0px 5px 49px;border-right:1px solid #E8E8E8;padding-right:48px'>
 						  	<div id='fb-root'></div>
 						  	<div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
 	  						</div>
@@ -1148,27 +1148,27 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 			</div>";
   	else:
 	  	//<!-- Social Links Starts -->
-	  	$string = "
+	  	$socialMedia = "
 	  	<div class='social-likes'>
-	  		<div class='social-likes-heading'>
-	  			<p>".$title."</p>
+	  		<div class='intro'>
+	  			".$title."
 	  		</div>
-	  		<div class='social-icons-container'>
-	  			<div class='flike-outer'>
+	  		<ul class='share-list'>
+	  		<li>
 	  				<div id='fb-root'></div>
 	  				<div class='fb-like' data-href='".$url."' data-send='false' data-layout='box_count' data-width='50' data-show-faces='false'>&nbsp;</div>
-			  	</div>
-			  	<div class='flike-outer'>
+			 </li>
+			  	<li>
 			  		<a href='https://twitter.com/share' data-url='".$url."' data-count='vertical' class='twitter-share-button'  data-lang='nl'></a>
-			  	</div>
-		  		<div class='flike-outer'>
+			  	</li>
+		  		<li>
 		  			<div class='g-plus' data-href='".$url."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-		  		</div>
-		  	</div>
+		  		</li>
+		  	</ul>
 		</div>";
   	endif;
   	//<!-- Social Links Ends -->
-  	return $string;
+  	return $socialMedia;
 
 
 
@@ -1944,31 +1944,27 @@ EOD;
 			$httpPathLocale = trim(HTTP_PATH_LOCALE, '/');
 			$httpPath = trim(HTTP_PATH, '/');
 
-			$trans = Zend_Registry::get('Zend_Translate');
+			$getTranslate = Zend_Registry::get('Zend_Translate');
 
-			$header = $trans->translate("is an international shop");
+			$header = $getTranslate->translate("is an international shop");
 
-			$subtext = $trans->translate("Check out the coupons and discounts from other countries when you're interested:");
-
-
+			$widgetText = $getTranslate->translate("Check out the coupons and discounts from other countries when you're interested:");
+		
 			# please avoid to format below template
 			$string = <<<EOD
-			<div class="ms-help-outer chain-container">
-		     	<div class="chain-header">
-		         	<h4>
-		         		{$shopName}&nbsp;$header
-		         	</h4>
-		         	<p>$subtext</p>
-		        </div>
-	        <div class="$class">
-		    <ul class = "bt">
+ 		     <div class="intro">
+				<h2>
+		         	{$shopName}
+		         </h2>
+		         <span>$widgetText</span>
+		    </div>
+		    <ul class="countries">
 EOD;
 
 			$hrefLinks = "" ;
          	$hasShops = false ;
 			foreach ($chain as $value)
-			{
-
+			{ 
 				$hrefLinks .=  isset($value['headLink']) ? $value['headLink']. "\n" : '';
 
 				if(! empty($value['shops']))
@@ -1989,8 +1985,6 @@ EOD;
 
 			$string .= <<<EOD
 		           	</ul>
-	           </div>
-	    </div>
 EOD;
 			return array('string' => $string , 'headLink' => $hrefLinks,'hasShops' => $hasShops );
 

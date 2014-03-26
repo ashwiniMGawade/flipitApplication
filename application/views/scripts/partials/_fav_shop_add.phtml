@@ -5,17 +5,17 @@
 	endif;
 	 
 	$favText =  $this->shopname ;
-	$favIconClass = "grey-heart";              			 
+	$favIconClass = "glyphicon-heart";              			 
 
 	if(Visitor::getFavoriteShopForUser($id, $this->shopid)):
-	    $favIconClass = "red-heart";
+	    $favIconClass = "glyphicon-heart";
 	endif;
 	              			 
 ?>
  					
 <a onclick="storeAddToFeborite(<?php echo $id; ?>,<?php echo $this->shopid; ?>)"  
-		class="btn text-blue-link fav-btn" 
+		class="pop btn btn-sm btn-default" 
        	href="javascript:void(0)" >
-    <span class="<?php echo $favIconClass ;?>"></span>
-    <?php echo $favText;?> 
+    <span class="glyphicon <?php echo $favIconClass ;?>"></span>
+    <?php //echo $favText;?>Love 
 </a>
