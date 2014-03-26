@@ -17,7 +17,7 @@ class OutController extends Zend_Controller_Action {
        	Offer::addConversion($offer_id);
        	
        	$link  = Offer::getcloakLink($offer_id , false );
-       	$this->_helper->redirector->setCode(301);
+       	//$this->_helper->redirector->setCode(301);
         $this->_redirect($link);
     }
     
@@ -32,7 +32,7 @@ class OutController extends Zend_Controller_Action {
     	$this->getResponse()->setHeader('X-Robots-Tag', 'nofollow');
     	$offer_id = $this->getRequest()->getParam('id');
     	$link  = Offer::getcloakLink($offer_id , false );
-    	$this->_helper->redirector->setCode(301);
+    	//$this->_helper->redirector->setCode(301);
         $this->_redirect($link);
     }
     
@@ -51,7 +51,7 @@ class OutController extends Zend_Controller_Action {
     	//FrontEnd_Helper_viewHelper::viewCounter('shop', 'onload', $offerId);
     	Shop::addConversion($shop_id);
     	$link = Shop::getStoreLinks($shop_id , false );
-    	$this->_helper->redirector->setCode(301);
+    	//$this->_helper->redirector->setCode(301);
         $this->_redirect($link);
     }
 	
