@@ -1,7 +1,9 @@
 <?php
 class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 {
-    protected $_moduleName = '';
+    protected $moduleName = '';
+    protected $localeDirectoryName ='';
+    protected $frontController = '';
     /**
      * This function is called once after router shutdown. It automatically
      * sets the layout for the default MVC or a module-specific layout. If
@@ -13,80 +15,91 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
      */
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
-        $this->_moduleName = strtolower($request->getModuleName());
-        $layout = Zend_Layout::getMvcInstance();
-        $domain = $request->getHttpHost();
-        $languageLocale   =   strtolower($request->getParam('lang'));
+        $this->moduleName = strtolower($request->getModuleName());
+        $this->localeDirectoryName   =   strtolower($request->getParam('lang'));
         # print in case public keyword exists in url
-        //var_dump($request->getParams());
-
         preg_match('/public/', REQUEST_URI, $matches, PREG_OFFSET_CAPTURE, 1);
 
         if (count($matches) > 0) {
-            $this->_moduleName = 'default';
+            $this->moduleName = 'default';
         }
 
-        if (!empty($languageLocale) && $this->_moduleName == 'default') {
-
-            if ($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl") {
-                $layoutPath = APPLICATION_PATH .  '/layouts/scripts/' ;
-            } else {
-                //$layoutPath = APPLICATION_PATH . '/modules/'.$languageLocale.'/layouts/scripts/' ;
-                $layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
-            }
-
-            $layout->setLayoutPath($layoutPath);
-
-        } elseif (empty($languageLocale) && $this->_moduleName) {
-
-            if ($this->_moduleName == 'default' || $this->_moduleName == null) {
-                $layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
-            } else {
-                $layoutPath =
-                    APPLICATION_PATH . '/modules/'.$this->_moduleName.'/layouts/scripts/' ;
-                //$layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
-            }
-
-            $layout->setLayoutPath($layoutPath);
-        }
+        self::setLayoutPath();
 
         # redirect to login page if url is flipit.com/ADMIN
-        if ($languageLocale == 'admin') {
+        if ($this->localeDirectoryName == 'admin') {
             header('Location: http://'.$request->getScheme .'/'. $request->getHttpHost() .'/admin', true, 301);
             exit();
         }
 
-        $layout->setLayout('layout');
-        $frontController = Zend_Controller_Front::getInstance();
+        $this->frontController = Zend_Controller_Front::getInstance();
+        self::getErrorHandlerPlugin($request);
 
-        if (!($frontController->getPlugin('Zend_Controller_Plugin_ErrorHandler')
+        if (!$this->frontController->getDispatcher()->isDispatchable($request)) {
+
+            if ($this->moduleName == 'default' && empty($this->localeDirectoryName) &&
+                    ($request->getHttpHost() == "www.flipit.com")) {
+                header('Location: http://'.$request->getScheme .'/'. $request->getHttpHost(), true, 301);
+                exit();
+            }
+
+        }
+    }
+
+    public function setLayoutPath()
+    {
+        $layout = Zend_Layout::getMvcInstance();
+
+        if (!empty($this->localeDirectoryName) && $this->moduleName == 'default') {
+            $layout->setLayoutPath(self::getLayoutPathForDefaultModule());
+        } elseif (empty($this->localeDirectoryName) && $this->moduleName) {
+            $layout->setLayoutPath(self::getLayoutPathForLocale());
+        }
+
+        $layout->setLayout('layout');
+    }
+
+    public function getLayoutPathForDefaultModule()
+    {
+        if (HTTP_HOST == "www.kortingscode.nl") {
+            $layoutPath = APPLICATION_PATH .  '/layouts/scripts/' ;
+        } else {
+            $layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
+        }
+
+        return $layoutPath;
+    }
+
+    public function getLayoutPathForLocale()
+    {
+        if ($this->moduleName == 'default' || $this->moduleName == null) {
+            $layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
+        } else {
+            $layoutPath =
+            APPLICATION_PATH . '/modules/'.$this->moduleName.'/layouts/scripts/' ;
+        }
+
+        return $layoutPath;
+    }
+
+    public function getErrorHandlerPlugin($request)
+    {
+        if (!($this->frontController->getPlugin('Zend_Controller_Plugin_ErrorHandler')
                 instanceof Zend_Controller_Plugin_ErrorHandler)) {
             return;
         }
 
-        $errorHandler = $frontController->getPlugin('Zend_Controller_Plugin_ErrorHandler');
+        $errorHandler = $this->frontController->getPlugin('Zend_Controller_Plugin_ErrorHandler');
 
         $httpRequest = new Zend_Controller_Request_Http();
         $httpRequest->setModuleName($request->getModuleName())
-                    ->setControllerName($errorHandler->getErrorHandlerController())
-                    ->setActionName($errorHandler->getErrorHandlerAction());
+        ->setControllerName($errorHandler->getErrorHandlerController())
+        ->setActionName($errorHandler->getErrorHandlerAction());
 
-        if ($frontController->getDispatcher()->isDispatchable($httpRequest)) {
+        if ($this->frontController->getDispatcher()->isDispatchable($httpRequest)) {
             $errorHandler->setErrorHandlerModule($request->getModuleName());
-        }
 
-        return ;
-
-        if (!$frontController->getDispatcher()->isDispatchable($request)) {
-
-            if ($this->_moduleName == 'default' && empty($languageLocale) &&
-                    ($request->getHttpHost() == "www.flipit.com"
-                    ||	$request->getHttpHost() == "flipit.com" )) {
-
-                header('Location: http://'.$request->getScheme .'/'. $request->getHttpHost(), true, 301);
-
-                exit();
-            }
+            return ;
         }
     }
 
@@ -98,22 +111,22 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request)
     {
-        $languageLocale   =   strtolower($request->getParam('lang'));
-        # lang is only vailble in case of flipit
-        if (isset( $languageLocale ) &&  !empty($languageLocale)) {
+        $this->localeDirectoryName   =   strtolower($request->getParam('lang'));
+
+        if (isset( $this->localeDirectoryName ) &&  !empty($this->localeDirectoryName)) {
 
             if (Auth_VisitorAdapter::hasIdentity()) {
-                # get visitor locale
                 $visitorCurrentLocale =  Auth_VisitorAdapter::getIdentity()->currentLocale ;
-                if ($visitorCurrentLocale != $languageLocale) {
+                if ($visitorCurrentLocale != $this->localeDirectoryName) {
                     $request->setControllerName('login')->setActionName('logout');
                 }
             }
+
         }
 
         $actionName   = strtolower($request->getActionName());
         # log every request from cms
-        if ($this->_moduleName === 'admin') {
+        if ($this->moduleName === 'admin') {
 
             self::cmsActivityLog($request);
             $sessionNamespace = new Zend_Session_Namespace();
@@ -166,10 +179,10 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
                 mkdir($logStorageLocation, 776, true);
             }
 
-                $fileName = $logStorageLocation  . 'cms';
+            $fileName = $logStorageLocation  . 'cms';
 
-                $requestURI = $request->getRequestUri();
-                $emailOfCurrentUser = '';
+            $requestURI = $request->getRequestUri();
+            $emailOfCurrentUser = '';
 
             if (Auth_StaffAdapter::hasIdentity()) {
                 $emailOfCurrentUser = ";" . Auth_StaffAdapter::getIdentity()->email ;

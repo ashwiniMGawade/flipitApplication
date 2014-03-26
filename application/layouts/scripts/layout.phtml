@@ -74,27 +74,33 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 	    <div class="nav-bg"></div>
 	    <div class="innerwrapper">
 <?php
-$localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/' ;
+$localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
 
-$basePartialViewPath = new Zend_View();
-$basePartialViewPath->setScriptPath(APPLICATION_PATH . '/views/scripts/partials/');
+$baseViewPath = new Zend_View();
+$baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
+
+$partials = 'partials/';
+$localePartialPath = $localeViewPath . 'scripts/' . $partials;
 
 $localePartialViewPath = new Zend_View();
-$localePartialViewPath->setScriptPath($localePartialPath);
+$localePartialViewPath->setBasePath($localeViewPath);
+
+
+
 
 if(file_exists($localePartialPath .  '_header.phtml')) :
-    echo $localePartialViewPath->render('_header.phtml');
+    echo $localePartialViewPath->render($partials. '_header.phtml');
 else:
-    echo $basePartialViewPath->render('_header.phtml');
+    echo $baseViewPath->render($partials. '_header.phtml');
 endif;
 ?>
 			<div class="content-section">
 <?php
 
 if(file_exists($localePartialPath .  '_top_nav.phtml')):
-    echo $localePartialViewPath->render('_top_nav.phtml');
+    echo $localePartialViewPath->render($partials. '_top_nav.phtml');
 else :
-    echo $basePartialViewPath->render('_top_nav.phtml');
+    echo $baseViewPath->render($partials. '_top_nav.phtml');
 endif;
 
 echo $this->layout()->content;
@@ -102,18 +108,18 @@ echo $this->layout()->content;
 			</div>
 <?php
 if(file_exists($localePartialPath .  '_footer.phtml')):
-    echo $localePartialViewPath->render('_footer.phtml');
+    echo $localePartialViewPath->render($partials. '_footer.phtml');
 else:
-    echo $basePartialViewPath->render('_footer.phtml');
+    echo $baseViewPath->render($partials. '_footer.phtml');
 endif;
 ?>
 		</div>
     </div>
 <?php
 if(file_exists($localePartialPath . '_pop_up.phtml')):
-    echo $localePartialViewPath->render('_pop_up.phtml');
+    echo $localePartialViewPath->render($partials. '_pop_up.phtml');
 else :
-    echo $basePartialViewPath->render('_pop_up.phtml');
+    echo $baseViewPath->render($partials. '_pop_up.phtml');
 endif;
 
 ?>
