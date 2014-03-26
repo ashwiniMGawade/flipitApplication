@@ -224,8 +224,7 @@ class ShopExport {
     	//loop for each shop
     	foreach ($data as $shop)
     	{
-    		echo "\n";
-    		print "$key - Shops are being saved into excel file !!!";
+    		print ".";
     		
     		//condition apply on affliatedprograme
     		$prog = '';
@@ -669,15 +668,14 @@ class ShopExport {
 
     	$manager->closeConnection($DMC);
 
-		print ".";
-		if($key == 'en')
-		{
+        echo "\n";
+        print "$key - Shops have been exported successfully!!!";
+		if($key == 'en') {
 			$key = 'excels';
-		}
-	  self::copydir(UPLOAD_EXCEL_PATH.$key,UPLOAD_REAL_EXCEL_PATH.$key);
-	  self::deleteDir(UPLOAD_EXCEL_PATH.$key);
-		
+        }
 
+        self::copydir(UPLOAD_EXCEL_PATH.$key,UPLOAD_REAL_EXCEL_PATH.$key);
+        self::deleteDir(UPLOAD_EXCEL_PATH.$key);
 	}
 	
 	protected function copydir($source,$destination)
