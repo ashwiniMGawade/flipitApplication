@@ -152,9 +152,9 @@ $(function() {
     $('input, textarea').placeholder();
    
    });
-<?php $this->headScript()->captureEnd() ;
-		$this->minifyHeadScript()->prependFile ("public/js/front_end/jquery.placeholder.js");
-		$trans = Zend_Registry::get('Zend_Translate');?>
+<?php $this->headScript()->captureEnd();
+    $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.placeholder.js");
+    $trans = Zend_Registry::get('Zend_Translate');?>
 			<a href="#" class="opener"><span class="glyphicon glyphicon-search"></span></a>
 			<div class="slide">
 				<form role="form" class="search-form">

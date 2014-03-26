@@ -1,7 +1,8 @@
 <header id="header">
             <div class="top-panel">
                 <div class="container">
-                    <span class="slogan"><?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate('Default header text')) ;?></span>
+                     <span class="slogan"><?php echo FrontEnd_Helper_viewHelper::
+                        replaceStringVariable($this->translate('Default header text'));?></span>
                     <a class="menu-account" href="#">Account menu</a>
                     <?php
                     $this->locale = LOCALE != 'en' ? LOCALE  : '';
@@ -10,18 +11,21 @@
                 </div>
             </div>
             <div class="navigation">
-                <div class="container">
-                    <?php  if(LOCALE == '') : ?>
+                    <div class="container">
+                    <?php 
+                    if(LOCALE == '') : ?>
                     <?php   $logo = 'kortingscode-logo';
                             $text = 'kortingscode';
-                    ?>
+                        ?>
                     <?php else :?>
                     <?php   $logo = 'logo'; 
                             $text = 'FlipIt';
-                    ?>
-                    <?php endif; ?>
-                    <strong class="<?php echo $logo; ?>"><a href="<?php APPLICATION_PATH; ?>"><?php echo $text;?></a></strong>
-                    <a href="#" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
+                        ?>
+                    <?php
+                    endif;
+                      ?>
+                        <strong class="<?php echo $logo; ?>"><a href="<?php APPLICATION_PATH; ?>"><?php echo $text;?></a></strong>
+                        <a href="#" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
                     <div class="nav-bar">
                         <div class="search-box">
                             <?php
@@ -34,11 +38,11 @@
                                 $localePartialViewPath = new Zend_View();
                                 $localePartialViewPath->setScriptPath($localePartialPath);
                                 
-                                if(file_exists($localePartialPath .  '_headerSearch.phtml')) :
+                            if(file_exists($localePartialPath .  '_headerSearch.phtml')) :
                                 echo $localePartialViewPath->render('_headerSearch.phtml');
                                 else:
                                 echo $basePartialViewPath->render('_headerSearch.phtml');
-                                endif;
+                            endif;
                             ?>                          
                         </div>
                         <?php echo  FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action); ?>
