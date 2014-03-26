@@ -163,6 +163,7 @@ if(count($this->termandcondition) > 0){
 					<div class="voucher-col2-bot-text voucher-col2-bot-text-new">
                     	<?php
                     	
+                    	
                     	$curdate = date('Y-m-d');
                     	$offerEndDate = date('Y-m-d',strtotime($this->endDate ));
                     	$timestamp_start = strtotime($offerEndDate);
@@ -201,7 +202,7 @@ if(count($this->termandcondition) > 0){
 	                    	
 	                    	</p>
                        <?php 
-                       elseif($this->discountType == "PR" || $this->discountType == "SL"):
+                       elseif($this->discountType == "PA" || $this->discountType == "PR" || $this->discountType == "SL"):
                     	?>
 	                    	<p><?php 
 	                   			$sdate = new Zend_Date(strtotime($this->startDate));
@@ -367,7 +368,7 @@ if(count($this->termandcondition) > 0){
 		<div class="fl">
 		<?php 
 			$classExt = "" ;
-			if($this->discountType == "PR" || $this->discountType == "SL"):
+			if($this->discountType == "PA" || $this->discountType == "PR" || $this->discountType == "SL"):
 				$classExt = "discountTyepPR";
 			endif;
 			

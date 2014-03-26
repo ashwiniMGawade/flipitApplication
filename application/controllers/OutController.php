@@ -9,16 +9,13 @@ class OutController extends Zend_Controller_Action {
  	 * @version 1.0
  	 */	
 	public function offerAction() {
-		
-		$this->getResponse()->setHeader('X-Robots-Tag', 'nofollow');
        	$offer_id = $this->getRequest()->getParam('id');
        	FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offer_id);
        	FrontEnd_Helper_viewHelper::viewCounter('offer', 'onload', $offer_id);
        	Offer::addConversion($offer_id);
-       	
        	$link  = Offer::getcloakLink($offer_id , false );
-       	//$this->_helper->redirector->setCode(301);
-        //$this->_redirect($link);
+       	$this->_helper->redirector->setCode(301);
+        $this->_redirect($link);
     }
     
     /**
@@ -28,12 +25,11 @@ class OutController extends Zend_Controller_Action {
      * @version 1.0
      */
     public function exofferAction() {
-    	
-    	$this->getResponse()->setHeader('X-Robots-Tag', 'nofollow');
+
     	$offer_id = $this->getRequest()->getParam('id');
     	$link  = Offer::getcloakLink($offer_id , false );
-    	//$this->_helper->redirector->setCode(301);
-        //$this->_redirect($link);
+    	$this->_helper->redirector->setCode(301);
+        $this->_redirect($link);
     }
     
     /**
@@ -44,15 +40,18 @@ class OutController extends Zend_Controller_Action {
      */
     public function shopAction() {
     	 
-    	$this->getResponse()->setHeader('X-Robots-Tag', 'nofollow');
+    	$this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender(TRUE);
     	$shop_id = $this->getRequest()->getParam('id');
     	//view count for Shop
     	FrontEnd_Helper_viewHelper::viewCounter('shop', 'onclick', $shop_id);
     	//FrontEnd_Helper_viewHelper::viewCounter('shop', 'onload', $offerId);
     	Shop::addConversion($shop_id);
     	$link = Shop::getStoreLinks($shop_id , false );
-    	//$this->_helper->redirector->setCode(301);
-        //$this->_redirect($link);
+    	$this->_helper->redirector->setCode(301);
+    	$this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $this->_redirect($link);
+        
     }
 	
 	public function clearcacheAction(){
