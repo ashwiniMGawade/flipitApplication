@@ -847,7 +847,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 		$cnt = count($mainMenu);
 		$val = 1;
-		$string ='<nav id="nav" class="navigation"><ul>';
+		$string ='<nav id="nav"><ul>';
 		foreach ($mainMenu as $m) {
 
 			//echo $m['url']; die;
