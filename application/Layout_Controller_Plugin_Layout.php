@@ -4,6 +4,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
     protected $moduleName = '';
     protected $localeDirectoryName ='';
     protected $frontController = '';
+    
     /**
      * This function is called once after router shutdown. It automatically
      * sets the layout for the default MVC or a module-specific layout. If
@@ -12,12 +13,13 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
      * set the layout in the controller itself.
      *
      * @param Zend_Controller_Request_Abstract $request
+     * 
      */
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
         $this->moduleName = strtolower($request->getModuleName());
-        $this->localeDirectoryName   =   strtolower($request->getParam('lang'));
-        # print in case public keyword exists in url
+        $this->localeDirectoryName = strtolower($request->getParam('lang'));
+        // print in case public keyword exists in url
         preg_match('/public/', REQUEST_URI, $matches, PREG_OFFSET_CAPTURE, 1);
 
         if (count($matches) > 0) {
@@ -26,7 +28,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 
         self::setLayoutPath();
 
-        # redirect to login page if url is flipit.com/ADMIN
+        // redirect to login page if url is flipit.com/ADMIN
         if ($this->localeDirectoryName == 'admin') {
             header('Location: http://'.$request->getScheme .'/'. $request->getHttpHost() .'/admin', true, 301);
             exit();
@@ -38,7 +40,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
         if (!$this->frontController->getDispatcher()->isDispatchable($request)) {
 
             if ($this->moduleName == 'default' && empty($this->localeDirectoryName) &&
-                    ($request->getHttpHost() == "www.flipit.com")) {
+                    ($request->getHttpHost() == 'www.flipit.com')) {
                 header('Location: http://'.$request->getScheme .'/'. $request->getHttpHost(), true, 301);
                 exit();
             }
@@ -61,10 +63,10 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 
     public function getLayoutPathForDefaultModule()
     {
-        if (HTTP_HOST == "www.kortingscode.nl") {
-            $layoutPath = APPLICATION_PATH .  '/layouts/scripts/' ;
+        if (HTTP_HOST == 'www.kortingscode.nl') {
+            $layoutPath = APPLICATION_PATH .  '/layouts/scripts/';
         } else {
-            $layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
+            $layoutPath = APPLICATION_PATH . '/layouts/scripts/';
         }
 
         return $layoutPath;
@@ -73,10 +75,10 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
     public function getLayoutPathForLocale()
     {
         if ($this->moduleName == 'default' || $this->moduleName == null) {
-            $layoutPath = APPLICATION_PATH . '/layouts/scripts/' ;
+            $layoutPath = APPLICATION_PATH . '/layouts/scripts/';
         } else {
             $layoutPath =
-            APPLICATION_PATH . '/modules/'.$this->moduleName.'/layouts/scripts/' ;
+            APPLICATION_PATH . '/modules/'.$this->moduleName.'/layouts/scripts/';
         }
 
         return $layoutPath;
@@ -99,7 +101,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
         if ($this->frontController->getDispatcher()->isDispatchable($httpRequest)) {
             $errorHandler->setErrorHandlerModule($request->getModuleName());
 
-            return ;
+            return;
         }
     }
 
@@ -116,7 +118,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
         if (isset( $this->localeDirectoryName ) &&  !empty($this->localeDirectoryName)) {
 
             if (Auth_VisitorAdapter::hasIdentity()) {
-                $visitorCurrentLocale =  Auth_VisitorAdapter::getIdentity()->currentLocale ;
+                $visitorCurrentLocale =  Auth_VisitorAdapter::getIdentity()->currentLocale;
                 if ($visitorCurrentLocale != $this->localeDirectoryName) {
                     $request->setControllerName('login')->setActionName('logout');
                 }
@@ -125,12 +127,12 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
         }
 
         $actionName   = strtolower($request->getActionName());
-        # log every request from cms
+        // log every request from cms
         if ($this->moduleName === 'admin') {
 
             self::cmsActivityLog($request);
             $sessionNamespace = new Zend_Session_Namespace();
-            #force user to chnage his password if it's older than two months
+            // force user to chnage his password if it's older than two months
             if ($sessionNamespace->showPasswordChange && $actionName != 'logout') {
                 if (Auth_StaffAdapter::hasIdentity()) {
                     $request->setControllerName('Auth')->setActionName('update-password');
@@ -149,20 +151,20 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
      */
     public function cmsActivityLog($request)
     {
-        # ignore if a request is from datatable
+        // ignore if a request is from datatable
         $requestFromDatatable = $request->getParam('iDisplayStart');
 
         if ($request->isPost() && $requestFromDatatable == null) {
             $adminActivityForLogs = $request->getParams();
             unset($adminActivityForLogs['module']);
-            # hide password fields
+            // hide password fields
             $replacements = array(
-                'pwd'=> '********',
-                'oldPassword'=> '********',
-                'newPassword'=> '********',
-                'confirmNewPassword'=> '********',
-                'password'=> '********',
-                'confPassword'=> '********'
+                'pwd' => '********',
+                'oldPassword' => '********',
+                'newPassword' => '********',
+                'confirmNewPassword' => '********',
+                'password' => '********',
+                'confPassword' => '********'
             );
 
             foreach ($replacements as $k => $v) {
@@ -173,8 +175,8 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 
             $adminActivityForLogs = Zend_Json::encode($adminActivityForLogs);
 
-            $logStorageLocation = APPLICATION_PATH . "/../logs/";
-            # create directory if it isn't exists and write log file
+            $logStorageLocation = APPLICATION_PATH . '/../logs/';
+            // create directory if it isn't exists and write log file
             if (!file_exists($logStorageLocation)) {
                 mkdir($logStorageLocation, 776, true);
             }
@@ -185,13 +187,13 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
             $emailOfCurrentUser = '';
 
             if (Auth_StaffAdapter::hasIdentity()) {
-                $emailOfCurrentUser = ";" . Auth_StaffAdapter::getIdentity()->email ;
+                $emailOfCurrentUser = ';' . Auth_StaffAdapter::getIdentity()->email;
             } else {
-                $emailOfCurrentUser = ";" ;
+                $emailOfCurrentUser = ';';
             }
 
-                $locale = LOCALE == '' ? "kc" : LOCALE ;
-                # please avoid to format below template (like tab or space )
+                $locale = LOCALE == '' ? 'kc' : LOCALE;
+                // please avoid to format below template (like tab or space )
                 $requestLog = <<<EOD
                 {$locale}{$emailOfCurrentUser};{$requestURI}; $adminActivityForLogs
 EOD;
