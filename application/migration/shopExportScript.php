@@ -658,7 +658,7 @@ class ShopExport {
 
     	# create dir if not exists
     	if(!file_exists($pathToFile)) {
-    		mkdir($pathToFile, 774, TRUE);
+    		mkdir($pathToFile, 0774, TRUE);
     	}
 
     	$filepath = $pathToFile . "shopList.xlsx" ;
@@ -669,8 +669,7 @@ class ShopExport {
 
     	$manager->closeConnection($DMC);
 
-		echo "\n";
-		print "$key - Shops have been exported successfully!!!";
+		print ".";
 		if($key == 'en')
 		{
 			$key = 'excels';
