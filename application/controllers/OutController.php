@@ -55,5 +55,5 @@ class OutController extends Zend_Controller_Action {
         $cache = Zend_Registry::get('cache');
         $cache->clean();
         echo 'cache is cleared';
-    }    
+    }
 }
