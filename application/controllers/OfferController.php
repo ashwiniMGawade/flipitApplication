@@ -94,7 +94,7 @@ class OfferController extends Zend_Controller_Action {
         	$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
 
-        $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers,$this->_getAllParams(),27,3);
+        $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers,$this->_getAllParams(),54,3);
         $this->view->paginator = $paginator;
 
       }
