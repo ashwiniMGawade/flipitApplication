@@ -725,7 +725,7 @@ class GlobalShopExport {
 
 	    	# create dir if not exists
 	    	if(!file_exists($pathToFile)) {
-	    		mkdir($pathToFile, 774, TRUE);
+	    		mkdir($pathToFile, 0774, TRUE);
 	    	}
 
 	    	$filepath = $pathToFile . "shopList.xlsx" ;
