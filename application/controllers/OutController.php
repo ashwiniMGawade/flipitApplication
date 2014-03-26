@@ -18,7 +18,7 @@ class OutController extends Zend_Controller_Action {
        	
        	$link  = Offer::getcloakLink($offer_id , false );
        	//$this->_helper->redirector->setCode(301);
-        $this->_redirect($link);
+        //$this->_redirect($link);
     }
     
     /**
@@ -33,7 +33,7 @@ class OutController extends Zend_Controller_Action {
     	$offer_id = $this->getRequest()->getParam('id');
     	$link  = Offer::getcloakLink($offer_id , false );
     	//$this->_helper->redirector->setCode(301);
-        $this->_redirect($link);
+        //$this->_redirect($link);
     }
     
     /**
@@ -52,7 +52,7 @@ class OutController extends Zend_Controller_Action {
     	Shop::addConversion($shop_id);
     	$link = Shop::getStoreLinks($shop_id , false );
     	//$this->_helper->redirector->setCode(301);
-        $this->_redirect($link);
+        //$this->_redirect($link);
     }
 	
 	public function clearcacheAction(){
