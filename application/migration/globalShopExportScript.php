@@ -23,7 +23,8 @@ class GlobalShopExport {
  
 	
 	
-	require_once('ConstatntForMigration.php');
+	require_once('ConstantForMigration.php');
+	require_once('commonMigrationFunctions.php');
 		// Create application, bootstrap, and run
 		$application = new Zend_Application(APPLICATION_ENV,
 				APPLICATION_PATH . '/configs/application.ini');
@@ -698,8 +699,8 @@ class GlobalShopExport {
 			
 			$key = 'excels/';
 			
-			FrontEnd_Helper_viewHelper::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
-			FrontEnd_Helper_viewHelper::deleteDirectory($pathToFile);
+			commonMigrationFunctions::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
+			commonMigrationFunctions::deleteDirectory($pathToFile);
 			
 		}
 		
