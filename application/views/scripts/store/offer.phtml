@@ -1,105 +1,303 @@
-	<section class="section">
-						<article class="block orange-block">
-							<div class="holder">
-								<a href="#" class="code">
-									<div class="center">
-										<div class="code-holder">
-											<strong>20<sup>%</sup></strong>
-											<span>off</span>
-										</div>
-									</div>
-									<footer class="bottom">code</footer>
-								</a>
-								<div class="box">
-									<div class="text">
-										<p><strong class="exclusive"><span class="glyphicon glyphicon-star"></span> Exclusive</strong> Added on November 4th 2013, Expires on Februari 31st 2014</p>
-										<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-									</div>
-									<div class="buttons">
-										<button class="btn blue btn-primary">Get code &amp; Open site</button>
-										<button class="btn orange btn-warning btn-code">Get code</button>
-									</div>
-									<div class="the-code">
-										<span class="instruction"><strong>enter this code at checkout</strong></span>
-										<strong class="code-value">aktiecode2014</strong>
-									</div>
-									<ul class="view-list">
-										<li><a href="#" class="terms">Terms &amp; conditions</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="offer-box">
-								<hr class="alt2">
-								<div class="offer">
-									<span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-								</div>
-							</div>
-							<div class="terms-block">
-								<h2>Terms &amp; Conditions</h2>
-								<ol class="num-list">
-									<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-									<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-									<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-									<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-									<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-									<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-									<li>One code is valid for a maximum of 6 people in the party.</li>
-									<li>Please present the code to your waiter/waitress when ordering your meal.</li>
-									<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-									<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-								</ol>
-							</div>
-						</article>
-						<div class="block block-form">
-							<div class="holder">
-								<div class="icon">
-									<img src="images/ico-01.png" width="176" height="89" alt="image description">
-								</div>
-								<div class="box">
-									<h2>Receive weekly updates of the best offers? <br> Sign up for our newsletter!</h2>
-									<form role="form" class="form-signin newsletter">
-										<input type="email" placeholder="Email Address" class="form-control">
-										<button type="submit" class="btn blue btn-lg btn-primary">sign up</button>
-									</form>
-								</div>
+ <?php 
+	  $id = 0;
+	  if(Auth_VisitorAdapter::hasIdentity()):
+		$id = Auth_VisitorAdapter::getIdentity()->id;
+	  endif; 
+      $text='';
+      $style='';
+      $imgstyle='';
+      $termandcondition = '';
+
+		if(count($this->termandcondition) > 0){
+			$termandcondition = $this->termandcondition  [0] ['content'];
+		}
+
+ 	$userlogin = false;
+
+	if (Auth_VisitorAdapter::hasIdentity()) :
+		$userlogin = true;
+	endif;
+
+		$heightWidth='';
+		$imgstyle='style="position: relative;bottom:15px;"';
+		$title = $this->title;
+		$class = '';
+		$logo = HTTP_PATH .'public/images/NoImage/box_plain_06.png';
+		
+		if (strlen ( $this->title ) > 150) {
+			$title = substr ( $this->title , 0, 150 );
+		}
+		
+		if (!empty ( $this->tiles)) {
+			$heightWidth='';
+			$logo = PUBLIC_PATH_CDN . ltrim(@$this->tiles['path'], "/").@$this->tiles['name'];
+		}
+			
+		if ($this->Visability  != 'DE') :
+			if (! $userlogin) :
+					$logo = HTTP_PATH .'public/images/front_end/lock.png';
+					$text = '<strong style="position: relative; top: 13px;">'.$this->translate('Member only Coupon Code,').'<br>'.$this->	  translate('Join us to see this Coupon!').'</strong>';
+					$style='style="margin-bottom: 5px; z-index: 100000; color: #363636; font-size: 14px;"';
+					$heightWidth = 'width="80" height="90"';
+					$imgstyle='style="position: relative; vertical-align: middle; bottom:50px;"';
+			endif;
+		endif;
+			
+			$dType = '';
+			if ($this->discountvalueType  == '1') :
+				$dType = '&euro;';
+			elseif ($this->discountvalueType  == '2') :
+				$dType = '%';
+			endif;
+
+					$bounceRate = "/out/offer/".$this->id;
+					if($this->refURL != ""){
+					 			
+					 	$urlToShow = HTTP_PATH_LOCALE."out/offer/".$this->id;
+					 			
+					}elseif($this->shop['refUrl'] != ""){
+					 			
+						$urlToShow = HTTP_PATH_LOCALE."out/offer/".$this->id;
+						  	
+					}elseif($this->shop['actualUrl'] != ""){
+						  				
+						$urlToShow = HTTP_PATH_LOCALE."out/offer/".$this->id;
+					}else{
+						 		
+						$urlToShow = HTTP_PATH_LOCALE.$this->shop['permalink'];
+					}			
+			
+			if($this->discountType=='PA'){
+				if($this->refOfferUrl != ""){
+					
+					$check = 1;
+					$url = $this->refOfferUrl;
+					$urlToShow = HTTP_PATH_LOCALE."out/offer/".$this->id;
+							
+				}elseif(count($this->logo)>0){
+					$check = 0;
+					$urlToShow = PUBLIC_PATH_CDN.ltrim($this->logo['path'], "/").$this->logo['name'];
+							
+				}
+			}
+			
+				# hide offer if coupon code type is unique and no code is available (if offer type is coupon code)
+				if( $this->discountType == 'CD' && $this->couponCodeType == 'UN' && $this->totalAvailableCodes == 0)
+				{
+					return;
+				}
+			?>
+		
+            <!-- Voucher Col1 Starts -->
+            <section class="section <?php echo $class; ?>"
+				onmouseover="showText(<?php echo $this->id ;?>)"
+				onmouseout="showImage(<?php echo $this->id ;?>)">
+			<article class="block <?php if($this->exclusiveCode =='1') ? "orange-block" : "active" ?>">	
+			<div class="holder">
+			 <?php  if ($this->userGenerated) { 
+			 
+			 	$padding = '';
+			 	$posVote = 0 ;
+			 	$negVote = 0 ;
+			 	$percentage = '0';
+			 	$barWidth = '0';
+			 	$barClass='';
+			 	if($this->vote!=null){
+
+		 		//print_r($this->vote);
+			 	//$percent = 100 * $row['wins'] / ($row['wins'] + $row['loses']); 
+			 		for($i=0;$i<count($this->vote);$i++){
+			 			if($this->vote[$i]['vote']=='positive'){
+			 				 ++$posVote ;
+			 			}else{
+			 				 ++$negVote ; 
+			 			}
+			 		}
+			 		//$percentage = (($PosVote)/($NegVote+$PosVote))*100 ;
+			 	
+			 		$percentage = 100 * $posVote / ( $posVote + $negVote )  ; 
+			 		if($percentage>55){
+			 			$barClass = 'bar-green';
+			 		}
+			 		if((55>$percentage && $percentage >50)||($percentage==55)||($percentage==50)){
+			 			$barClass = 'bar-orange';
+			 		}if($percentage<50){
+			 			$barClass = 'bar-red';
+			 		}
+			 	}
+			 	
+			 	
+			 	?>
+				
+				<div class="new_box user-generated-code">
+			 			<div class="success-rate">
+			 				<span class="rate"><?php echo round($percentage) ;?>%</span>
+			 				<span class="rate-success">SUCCES</span>
+								
+			 			</div>
+			 			<div class="voting-btns">
+			 			<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '1');">
+			 				<img class="up-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-up.png" alt="Vote Up">
+			 			</a>	
+		 				<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '0');">
+			 				<img class="down-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-down.png" alt="Vote Down">
+			 				</a>
+			 			</div>	
+				</div>
+					 	
+				<?php } else {	 ?>
+				
+
+					<a href="<?php echo $urlToShow;?>" class="code" target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
+						<!--<img src="<?php echo $logo; ?>" alt="<?php echo @$this->tiles['label']?>"/>-->
+						<div class="center">
+							<div class="code-holder">
+								<strong>20<sup>%</sup></strong>
+								<span>off</span>
 							</div>
 						</div>
-						<article class="block active">
-							<div class="holder">
-								<a href="#" class="code">
-									<div class="center">
-										<div class="code-holder">
-											<strong>20<sup>%</sup></strong>
-											<span>off</span>
-										</div>
-									</div>
-									<footer class="bottom">code</footer>
+							<footer class="bottom">code</footer>
+					</a>
+				<?php } ?>
+				<div class="box">
+				
+
+					<div class="text">
+                    	<?php
+                    	
+                    	$curdate = date('Y-m-d');
+                    	$offerEndDate = date('Y-m-d',strtotime($this->endDate ));
+                    	$timestamp_start = strtotime($offerEndDate);
+                    	$timestamp_end = strtotime($curdate);
+                    	
+                    	$difference = abs($timestamp_end - $timestamp_start);
+                    	$diff = floor($difference/(60*60*24));
+                    	if($this->discountType == "CD"):
+                    	?>
+	                    	<p><?php
+	                    	//echo $this->startDate; //die; 
+	                    		$sdate = new Zend_Date(strtotime($this->startDate));
+		                    	echo $this->translate('Added'); ?>: <span class="text-black"><?php echo ucwords($sdate->get(Zend_Date::DATE_MEDIUM)); ?>, </span>
+	                    		
+	                    		<?php 
+	                    		if($diff ==5 || $diff ==4 || $diff ==3 || $diff ==2){
+	                    		?>
+	                    			<span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dagen geldig!');; ?></span>
+		                    	<?php  
+	                    		} elseif ($diff ==1){
+	                    			
+	                    			?><span class="text-orange"><?php echo $this->translate('Nog maar');?>&nbsp;<?php echo $diff;?>&nbsp;<?php echo $this->translate('dag geldig!');; ?></span>
+		                    	<?php  
+	                    		} elseif ($diff ==0){
+	                    		?>
+		                    	
+		                    		<span class="text-orange"> <?php echo $this->translate('Expires today'); ?></span>  
+		                    	<?php
+								} else { 
+		                    		
+									$date1 = new Zend_Date(strtotime($this->endDate));
+		                    		echo $this->translate('Verloopt op:'); ?><span class="text-black"><?php echo ucwords($date1->get(Zend_Date::DATE_MEDIUM)); ?></span> 
+		                    	<?php 
+								} 
+								?>
+	                    	
+	                    	</p>
+                       <?php 
+                       elseif($this->discountType == "PR" || $this->discountType == "SL" || $this->discountType == "PA"):
+                    	?>
+	                    	<p><?php 
+	                   			$sdate = new Zend_Date(strtotime($this->startDate));
+		                    	echo $this->translate('Added'); ?>: <span class="text-black"><?php echo ucwords($sdate->get(Zend_Date::DATE_MEDIUM)); ?></span>
+	                    	
+	                    	</p>
+                       <?php 
+                       endif;
+                       ?>
+                       	if($this->discountType == "CD"): ?>
+							<a id="<?php echo $this->id ;?>" href="<?php echo $urlToShow;?>"  rel="nofollow" class="link"   target="_blank" onClick="showCode1(this), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"><?php echo $title;?></a>
+							<?php else: ?>
+							<a id="<?php echo $this->id ;?>" href="<?php echo $urlToShow;?>"  rel="nofollow" class="link"   target="_blank" onClick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"><?php echo $title;?></a>
+					    <?php endif; ?>
+                      
+					</div>
+
+					<div class="buttons">
+						<button class="btn blue btn-primary">Get code &amp; Open site
+
+							 <?php
+						if (($this->Visability  == 'MEM' && $userlogin) || $this->Visability  == 'DE' || $this->userGenerated==1 && $userlogin) {
+						?> 
+	                	
+						<?php  if($this->discountType=='PA'){  ?>
+
+							<button class="btn blue btn-primary" id="<?php echo $this->id ;?>" >
+								<a  href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
+									<?php echo $this->translate('>Get code &amp; Open site') ; ?>
 								</a>
-								<div class="box">
-									<div class="text">
-										<p>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-										<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-									</div>
-									<div class="buttons">
-										<button class="btn blue btn-primary">Get code &amp; Open site</button>
-										<button class="btn orange btn-warning btn-code">Get code</button>
-									</div>
-									<div class="the-code">
-										<span class="instruction"><strong>enter this code at checkout</strong></span>
-										<strong class="code-value">aktiecode2014</strong>
-									</div>
-									<ul class="view-list">
-										<li><a href="#" class="terms">Terms &amp; conditions</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="offer-box">
-								<hr class="alt2">
-								<div class="offer">
-									<span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-								</div>
-							</div>
-							<div class="terms-block">
+							</button>
+							
+						<?php } elseif($this->discountType=='SL'){
+						?>
+								<button class="btn blue btn-primary" id="<?php echo $this->id ;?>" >
+									<a  href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
+										<?php echo $this->translate('>Get code &amp; Open site') ; ?>
+									</a>
+								</button>
+								
+						<?php }	else{
+							?>
+							<button class="btn blue btn-primary" id="blackImage<?php echo $this->id; ?>" >
+														
+								<?php 
+									# display code if its type is General
+									if($this->couponCodeType == 'GN'):
+										echo $this->couponCode;  
+									endif;	
+							 	?>
+								
+							</button>
+							<button class="btn blue btn-primary" id="<?php echo $this->id ;?>" vote='0' onclick="showCode(this)" >
+								<a href="<?php echo $urlToShow;?>" onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"  rel="nofollow" target="_blank" >
+								<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png" alt="" />
+								</a>
+							</button>
+					<?php  }   
+
+						
+						}else{ ?>
+	                 <div class="memeber-only">
+							<h4>
+								<strong><span class="fl text-black"><?php echo $this->translate('Members Only!'); ?></span>
+									<span class="fr"><a href="<?php echo HTTP_PATH;?>login"><img
+											width="78" height="33" alt=""
+											src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-inschrijven.png" /></a></span>
+								</strong>
+							</h4>
+					</div>
+	                <?php } ?>
+	                <?php  if($this->discountType=='CD'){  ?>
+						
+						<a class="text-white-link" id="<?php echo $this->id ; ?>" vote='0' href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="showCode1(this), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
+						
+						<button class="btn orange btn-warning btn-code" id="<?php echo $this->id ; ?>" vote='0'><?php echo $this->ranslate('PAK DEZE AANBIEDING') ; ?></button>
+						</a>
+			   	 		
+			   	 	
+					<?php }?>
+							
+					</div>
+					<div class="the-code">
+						<span class="instruction"><strong>enter this code at checkout</strong></span>
+						<strong class="code-value">aktiecode2014</strong>
+					</div>
+					<ul class="view-list">
+						<li><a href="#" class="terms">Terms &amp; conditions</a></li>
+					</ul>
+				</div>
+			</div>
+
+
+				<div class="terms-block">
 								<h2>Terms &amp; Conditions</h2>
 								<ol class="num-list">
 									<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
@@ -114,207 +312,77 @@
 									<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
 								</ol>
 							</div>
-						</article>
-						<article class="block">
-							<div class="holder">
-								<a href="#" class="code red">
-									<div class="center">
-										<div class="code-holder">
-											<strong>20<sup>%</sup></strong>
-											<span>off</span>
-										</div>
-									</div>
-									<footer class="bottom">sale</footer>
-								</a>
-								<div class="box">
-									<div class="text">
-										<p>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-										<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-									</div>
-									<div class="buttons">
-										<button class="btn blue btn-primary">Get code &amp; Open site</button>
-										<button class="btn orange btn-warning btn-code">Get code</button>
-									</div>
-									<div class="the-code">
-										<span class="instruction"><strong>enter this code at checkout</strong></span>
-										<strong class="code-value">aktiecode2014</strong>
-									</div>
-									<ul class="view-list">
-										<li><a href="#" class="terms">Terms &amp; conditions</a></li>
-									</ul>
+
+
+
+			
+		<div class="fl">
+		<?php 
+			$classExt = "" ;
+			if($this->discountType == "PR" || $this->discountType == "SL"):
+				$classExt = "discountTyepPR";
+			endif;
+			
+		?>
+			<div class="voucher-col2-mid-new voucher-col2-mid <?php echo $classExt;?>">
+					<!-- <span class="fl text-black"><strong><?php //echo $this->shop ['name'];?>&nbsp;</strong></span> --> 
+			
+                	<?php
+                	$height = '56px;';
+					if(isset($this->shop['deepLink']) && $this->shop['deepLink']!=null){
+						$url = $this->shop['deepLink'];
+					}elseif(isset($this->shop['refUrl']) && $this->shop['refUrl']!=null){
+						$url = $this->shop['refUrl'];
+					}elseif (isset($this->shop['actualUrl']) && $this->shop['actualUrl']!=null){
+						$url = $this->shop['actualUrl'];
+					}else{
+						$url = HTTP_PATH_LOCALE.$this->shop['permalink'];
+					}?>
+					<div class="voucher-col2-mid-bot-new shoptext-new<?php echo $this->id ;?>" >
+      	        	<?php  if ($this->userGenerated ) { ?>
+							<span class="fl"><i class="icon-user"></i>&nbsp;Toegevoegd door gebruiker</span>
+               		<?php  } ?>
+						<?php if($this->userGenerated ==0 &&  $termandcondition!='' && $termandcondition!=null){ ?>
+						<span class="fl arrow-down"><a  onclick="showTeamAndCondition(<?php echo $this->id; ?>)" class="text-blue-link" href="javascript:void(0);"><?php echo $this->translate('Voorwaarden'); ?></a></span>
+						<?php
+                         if($termandcondition!='' && $termandcondition!=null && $this->extendedOffer =='1'){?>
+                         <span class="fl">&nbsp; | &nbsp;</span>
+                         
+                        <?php  }
+					
+					}?>
+						
+					</div> 
+					<div class="voucher-col2-mid-bot-new shoptext-new<?php echo $this->id ;?>">
+					<?php if($this->extendedOffer =='1'):?>
+                    	<span class="fl">
+                    		<a class="text-blue-link"  href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $this->extendedUrl;?>"><?php echo $this->translate('Meer over deze code'); ?></a>
+						</span>
+                    <?php endif;?>
+                  	</div>
+
+				
+				<div id='panel'>
+					<div class='tearmAnCondition voucher-new-text' id='teamandCondition<?php echo $this->id ;?>' style='display: none!important;'>
+							<h4><strong><?php echo $this->translate('Terms & Conditions')?></strong></h4>
+							
+								<div><span class="wr-w18"><?php echo $termandcondition;?></span></div>
+							
+								<div class="close_area fr" id="close_area<?php echo $this->id ;?>" >
+									<a class="text-grey-link" onclick="hideReadMoreAndTeamCondition(<?php echo $this->id; ?>)" href="javascript:void(0);"><?php echo $this->translate('Close'); ?><img border="0" alt="" src="<?php echo HTTP_PATH; ?>public/images/front_end/cross_03.png" />
+									</a> 
 								</div>
-							</div>
-							<div class="offer-box">
-								<hr class="alt2">
-								<div class="offer">
-									<span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-								</div>
-							</div>
-							<div class="terms-block">
-								<h2>Terms &amp; Conditions</h2>
-								<ol class="num-list">
-									<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-									<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-									<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-									<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-									<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-									<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-									<li>One code is valid for a maximum of 6 people in the party.</li>
-									<li>Please present the code to your waiter/waitress when ordering your meal.</li>
-									<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-									<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-								</ol>
-							</div>
-						</article>
-						<article class="block">
-							<div class="holder">
-								<a href="#" class="code purple">
-									<div class="center">
-										<div class="code-holder">
-											<strong>40<sup>%</sup></strong>
-											<span>off</span>
-										</div>
-									</div>
-									<footer class="bottom">printable</footer>
-								</a>
-								<div class="box">
-									<div class="img-code">
-										<img src="images/code.png" width="163" height="96" alt="image description">
-									</div>
-									<div class="holder-text">
-										<div class="text text-2">
-											<p>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-											<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-										</div>
-										<div class="buttons buttons-2">
-											<button class="btn blue btn-primary">Get code &amp; Open site</button>
-											<button class="btn btn-default btn-print">print now <span class="ico-print"></span></button>
-										</div>
-										<div class="the-code">
-											<span class="instruction"><strong>enter this code at checkout</strong></span>
-											<strong class="code-value">aktiecode2014</strong>
-										</div>
-										<ul class="view-list">
-											<li><a href="#" class="terms">Terms &amp; conditions</a></li>
-										</ul>
-									</div>
-								</div>
-							</div>
-							<div class="offer-box">
-								<hr class="alt2">
-								<div class="offer">
-									<span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-								</div>
-							</div>
-							<div class="terms-block">
-								<h2>Terms &amp; Conditions</h2>
-								<ol class="num-list">
-									<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-									<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-									<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-									<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-									<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-									<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-									<li>One code is valid for a maximum of 6 people in the party.</li>
-									<li>Please present the code to your waiter/waitress when ordering your meal.</li>
-									<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-									<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-								</ol>
-							</div>
-						</article>
-						<article class="block">
-							<div class="holder">
-								<a href="#" class="code">
-									<div class="center">
-										<div class="code-holder">
-											<strong>20<sup>%</sup></strong>
-											<span>off</span>
-										</div>
-									</div>
-									<footer class="bottom">code</footer>
-								</a>
-								<div class="box">
-									<div class="text">
-										<p>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-										<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-									</div>
-									<div class="buttons">
-										<button class="btn blue btn-primary">Get code &amp; Open site</button>
-										<button class="btn orange btn-warning btn-code">Get code</button>
-									</div>
-									<div class="the-code">
-										<span class="instruction"><strong>enter this code at checkout</strong></span>
-										<strong class="code-value">aktiecode2014</strong>
-									</div>
-									<ul class="view-list">
-										<li><a href="#" class="terms">Terms &amp; conditions</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="offer-box">
-								<hr class="alt2">
-								<div class="offer">
-									<span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-								</div>
-							</div>
-							<div class="terms-block">
-								<h2>Terms &amp; Conditions</h2>
-								<ol class="num-list">
-									<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-									<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-									<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-									<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-									<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-									<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-									<li>One code is valid for a maximum of 6 people in the party.</li>
-									<li>Please present the code to your waiter/waitress when ordering your meal.</li>
-									<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-									<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-								</ol>
-							</div>
-						</article>
-						<article class="block">
-							<div class="holder">
-								<a href="#" class="code blue">
-									<div class="center">
-										<div class="code-holder">
-											<strong>20<sup>%</sup></strong>
-											<span>off</span>
-										</div>
-									</div>
-									<footer class="bottom">deal</footer>
-								</a>
-								<div class="box">
-									<div class="text">
-										<p>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-										<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-									</div>
-									<div class="buttons">
-										<button class="btn blue btn-primary">Get code &amp; Open site</button>
-									</div>
-									<div class="the-code">
-										<span class="instruction"><strong>enter this code at checkout</strong></span>
-										<strong class="code-value">aktiecode2014</strong>
-									</div>
-									<ul class="view-list">
-										<li><a href="#" class="terms">Terms &amp; conditions</a></li>
-									</ul>
-								</div>
-							</div>
-							<div class="terms-block">
-								<h2>Terms &amp; Conditions</h2>
-								<ol class="num-list">
-									<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-									<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-									<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-									<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-									<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-									<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-									<li>One code is valid for a maximum of 6 people in the party.</li>
-									<li>Please present the code to your waiter/waitress when ordering your meal.</li>
-									<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-									<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-								</ol>
-							</div>
-						</article>
-					</section>
+						</div>
+				</div>
+				
+			</div>
+		</div>
+ </section>
+ <?php
+ if( $this->offerCount > 1 && intval($this->codeUploadShowOrNot)==1 && intval($this->partialCounter)== 2):
+		 echo $this->esi($this->locale.'store/discountcodewidget');
+ elseif( $this->offerCount < 2 && intval($this->codeUploadShowOrNot)==1 ):
+ 		echo $this->esi($this->locale.'store/discountcodewidget');
+ endif;
+?>
+<!-- Voucher Col1 Ends -->
