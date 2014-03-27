@@ -22,38 +22,8 @@ class GlobalShopExport {
 	set_time_limit(0);
  
 	
-	// Define path to application directory
-	defined('APPLICATION_PATH')
-	|| define('APPLICATION_PATH',
-			dirname(dirname(__FILE__)));
 	
-	defined('LIBRARY_PATH')
-	|| define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-	
-	defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
-	
-	// Define application environment
-	defined('APPLICATION_ENV')
-	|| define('APPLICATION_ENV',
-			(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-					: 'production'));
-	
-	
-	//Ensure library/ is on include_path
-	set_include_path(
-			implode(PATH_SEPARATOR,
-					array(realpath(APPLICATION_PATH . '/../library'),
-							get_include_path(),)));
-		set_include_path(
-				implode(PATH_SEPARATOR,
-						array(realpath(DOCTRINE_PATH), get_include_path(),)));
-		
-		/** Zend_Application */
-		require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
-		require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
-		require_once (LIBRARY_PATH . '/Zend/Application.php');
-		require_once(DOCTRINE_PATH . '/Doctrine.php');
-		
+	require_once('ConstatntForMigration.php');
 		// Create application, bootstrap, and run
 		$application = new Zend_Application(APPLICATION_ENV,
 				APPLICATION_PATH . '/configs/application.ini');
@@ -710,77 +680,34 @@ class GlobalShopExport {
 			$objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setAutoSize(true);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setAutoSize(true);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
-			 
-			 
-			# define Real upload path for excel
-			defined('UPLOAD_REAL_EXCEL_PATH')
-			|| define('UPLOAD_REAL_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
 			
-			# define upload path for excel
-	    	defined('UPLOAD_EXCEL_PATH')
-		    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../public/tmp/' );
+	  	
+			$pathToFile = UPLOAD_EXCEL_TMP_PATH . 'excels/' ;
 
-
-	    	$pathToFile = UPLOAD_EXCEL_PATH . 'excels/' ;
-
-	    	# create dir if not exists
 	    	if(!file_exists($pathToFile)) {
-	    		mkdir($pathToFile, 774, TRUE);
+	    		mkdir($pathToFile, 0774, TRUE);
 	    	}
 
 	    	$filepath = $pathToFile . "shopList.xlsx" ;
-
 			$shopFile = $pathToFile."globalShopList.xlsx";
-			 
 			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 			$objWriter->save($shopFile);
 			
 			echo "\n";
 			print "$key - Shops have been exported successfully!!!";
-		
+			
 			$key = 'excels/';
 			
-			 self::copydir($pathToFile, UPLOAD_REAL_EXCEL_PATH.$key);
-			 self::deleteDir($pathToFile);
+			FrontEnd_Helper_viewHelper::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
+			FrontEnd_Helper_viewHelper::deleteDirectory($pathToFile);
+			
 		}
 		
 	}
 	
-	protected function copydir($source,$destination)
-	{
-		if(!is_dir($destination)){
-			$oldumask = umask(0);
-			mkdir($destination, 01777); // so you get the sticky bit set
-			umask($oldumask);
-		}
-		$dir_handle = @opendir($source) or die("Unable to open");
-		while ($file = readdir($dir_handle))
-		{
-			if($file!="." && $file!=".." && !is_dir("$source/$file")) //if it is file
-				copy("$source/$file","$destination/$file");
-			if($file!="." && $file!=".." && is_dir("$source/$file")) //if it is folder
-				self::copydir("$source/$file","$destination/$file");
-		}
-		closedir($dir_handle);
-	}
 	
-	public static function deleteDir($dirPath) {
-		if (! is_dir($dirPath)) {
-			throw new InvalidArgumentException("$dirPath must be a directory");
-		}
-		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-			$dirPath .= '/';
-		}
-		$files = glob($dirPath . '*', GLOB_MARK);
-		foreach ($files as $file) {
-			if (is_dir($file)) {
-				self::deleteDir($file);
-			} else {
-				unlink($file);
-			}
-		}
-		rmdir($dirPath);
-	}
+	
+	
 	 
 }
 
