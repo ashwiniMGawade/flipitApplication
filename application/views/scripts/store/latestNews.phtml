@@ -9,8 +9,7 @@
 	 	?>
 		<em class="date"><?php echo $date.' '.$month.' '.$year; ?></em>
 		<h3>
-			<?php if($this->url!=null && $this->url!='') {?>
-			
+		<?php if ($this->url!=null && $this->url!='') { ?>	
 			<a href="
 			<?php
 				if (strpos($this->url,$httpPosition) !== false) {
@@ -18,15 +17,13 @@
 				} else {
 					echo 'http://'.$this->url; 
 				}?>" target="_blank"><?php echo $this->title;?></a>
-			
 		<?php } else { 
-			
 			echo $this->title;
 		}?>
         </h3>
 		<p>
 		<?php 
-		if($this->content!=""): 
+		if ($this->content!=""): 
 			$content = $this->content;
 			echo $content;
 		else: 
@@ -35,5 +32,3 @@
 		</p>
 	</article>
 </div>
-
-<!-- Store-Link Col1 Ends -->

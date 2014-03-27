@@ -54,6 +54,76 @@ class FrontEnd_Helper_viewHelper
 		}
 		return $string;
 	}
+
+	/**
+   * Common function for social media
+   * @author Raman updated by cbhopal
+   * @version 1.0
+   * @version 1.1
+   * @param $url string
+   * @param $title string
+   * @param $controller string
+   * @param $type string
+   * @return string
+   */
+	public static function socialmediaSmall($surl, $title, $controller , $type = null)
+	{
+
+		if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
+			$url = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
+			$url = self::generateSocialLink($url);
+	    else:
+			$url = HTTP_PATH;
+		endif;
+
+		if($type == 'widget'):
+	  	$socialMedia="<div class='flike-outer' style='width: 56px; overflow: hidden; margin: 0px;'>
+	  	<div id='fb-root' style='margin-top:-42px;'></div>
+	  	<div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
+	  	</div>
+	  	</div>
+	  	<div class='flike-outer' style='margin : 0px; padding-right: 6px;'>
+	  	<a href='https://twitter.com/share' data-count='vertical' class='twitter-share-button' data-url='".$url."' data-lang='nl' data-count = 'none'></a>
+	  	</div>
+	  	<div class='flike-outer' style='margin : 0px;'><div class='g-plus' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
+	  	</div>";
+		elseif ($type == 'popup'):
+			$socialMedia="<div class='flike-outer' style='width: 49px; overflow: hidden; margin: 12px 0px 5px 49px;border-right:1px solid #E8E8E8;padding-right:48px'>
+						  	<div id='fb-root'></div>
+						  	<div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
+	  						</div>
+						  	</div>
+						  	<div class='flike-outer' style='padding-right: 6px; margin: 12px 0px 5px 48px;border-right:1px solid #E8E8E8;padding-right:49px'>
+						  	<a href='https://twitter.com/share' data-url='".$url."' data-count='vertical' class='twitter-share-button'  data-lang='nl' data-count = 'none'></a>
+						  	</div>
+						  	<div class='flike-outer' style='float: right; margin: 12px 49px 5px 0px;'>
+							<div class='g-plus'   data-href='".$url."'  data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
+			</div>";
+		else:
+		
+	  	$socialMedia = "
+	  	<div class='social-likes'>
+	  		<div class='intro'>
+	  			".$title."
+	  		</div>
+	  		<ul class='share-list'>
+	  		<li>
+	  				<div id='fb-root'></div>
+	  				<div class='fb-like' data-href='".$url."' data-send='false' data-layout='box_count' data-width='50' data-show-faces='false'>&nbsp;</div>
+			 </li>
+			  	<li>
+			  		<a href='https://twitter.com/share' data-url='".$url."' data-count='vertical' class='twitter-share-button'  data-lang='nl'></a>
+			  	</li>
+		  		<li>
+		  			<div class='g-plus' data-href='".$url."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
+		  		</li>
+		  	</ul>
+		</div>";
+		endif;
+
+		return $socialMedia;
+	}
+  
 	/**
 	 * check key exist in cache or not
 	 * @author  kraj
@@ -137,29 +207,21 @@ class FrontEnd_Helper_viewHelper
 	 * @param integer $limit
 	 * @return array $data
 	 */
-	public static function commonGetstoreForFrontEnd($storeType,$limit="") {
-
+	public static function getStoreForFrontEnd($storeType,$limit="") {
 		$data = '';
 		switch(strtolower($storeType)) {
-
 			case 'all':
 				$data = Shop::getallStoreForFrontEnd();
 				break;
 			case 'recent':
-				//get all recent stores
 				$data = Shop::getrecentstores($limit);
 			break;
-
 			case 'popular':
-				//get popular stores
 	            $data = Shop::getPopularStore($limit);
 	            break;
-
 			default:
 			break;
-
 		}
-
 		return $data;
 	}
 	/**
@@ -402,44 +464,36 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		return $data;
 
 	}
-	public static function PopularWinkelsWidget(){
-		 
+	public static function PopularWinkelsWidget()
+	{
  		$translate = Zend_Registry::get('Zend_Translate');
-		$popularStores = self::commonGetstoreForFrontEnd('popular',25);
-		$string = '<div class="intro">
+		$popularStores = self::getStoreForFrontEnd('popular', 25);
+		$popularStoresContent = '<div class="intro">
              	  <h2>'.$translate->translate('Populaire Winkels').'</h2>
-             	  <span>'.$translate->translate('Grab a promotional code, discount code or voucher for February 2014.').'</span>
+             	  <span>'.$translate->translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
              	</div><ul class="tags">';
-        for($i=0;$i<count($popularStores);$i++) {
-           $class = '';
-           if($i%2==0){
-           	$class = 'class="none"';
-           }
+        
+        for ($i=0; $i<count($popularStores); $i++) {
+            $class ='';
+            if ($i%2==0) {
+                $class = 'class="none"';
+            }
 
-	if($popularStores[$i]['shop']['deepLink']!=null){
+            if ($popularStores[$i]['shop']['deepLink']!=null) {
+		        $url = $popularStores[$i]['shop']['deepLink'];
+	        } elseif ($popularStores[$i]['shop']['refUrl']!=null) {
+		        $url = $popularStores[$i]['shop']['refUrl'];
+	        } elseif ($popularStores[$i]['shop']['actualUrl']) {
+		        $url = $popularStores[$i]['shop']['actualUrl'];
+	        } else {
+		        $url = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
+	        }
 
-		$url = $popularStores[$i]['shop']['deepLink'];
-
-	}elseif ($popularStores[$i]['shop']['refUrl']!=null){
-
-		$url = $popularStores[$i]['shop']['refUrl'];
-
-	}elseif($popularStores[$i]['shop']['actualUrl']){
-
-		$url = $popularStores[$i]['shop']['actualUrl'];
-
-	}else{
-
-		$url = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
-	}
-
-	$url = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
-
-		$string .='<li '.$class.'><a title='.$popularStores[$i]['shop']['name'].' href='.$url.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'],200)).'</a></li>';
-
+	        $url = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
+            $popularStoresContent .='<li '.$class.'><a title='.$popularStores[$i]['shop']['name'].' href='.$url.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'], 200)).'</a></li>';
         }
-         $string .='</ul>';
-		return $string;
+        $popularStoresContent .='</ul>';
+		return $popularStoresContent;
 	}
 
 
@@ -1101,80 +1155,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 
   }
-
-  /**
-   * Common function for social media
-   * @author Raman updated by cbhopal
-   * @version 1.0
-   * @version 1.1
-   * @param $url string
-   * @param $title string
-   * @param $controller string
-   * @param $type string
-   * @return string
-   */
-  public static function socialmediaSmall($surl, $title, $controller , $type = null)
-  {
-
-  	if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
-  		$url = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
-  		$url = self::generateSocialLink($url);
-	else:
-  		$url = HTTP_PATH;
-  	endif;
-
-  	if($type == 'widget'):
-	  	$socialMedia="<div class='flike-outer' style='width: 56px; overflow: hidden; margin: 0px;'>
-	  	<div id='fb-root' style='margin-top:-42px;'></div>
-	  	<div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-	  	</div>
-	  	</div>
-	  	<div class='flike-outer' style='margin : 0px; padding-right: 6px;'>
-	  	<a href='https://twitter.com/share' data-count='vertical' class='twitter-share-button' data-url='".$url."' data-lang='nl' data-count = 'none'></a>
-	  	</div>
-	  	<div class='flike-outer' style='margin : 0px;'><div class='g-plus' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-	  	</div>";
-  	elseif ($type == 'popup'):
-  		$socialMedia="<div class='flike-outer' style='width: 49px; overflow: hidden; margin: 12px 0px 5px 49px;border-right:1px solid #E8E8E8;padding-right:48px'>
-						  	<div id='fb-root'></div>
-						  	<div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-	  						</div>
-						  	</div>
-						  	<div class='flike-outer' style='padding-right: 6px; margin: 12px 0px 5px 48px;border-right:1px solid #E8E8E8;padding-right:49px'>
-						  	<a href='https://twitter.com/share' data-url='".$url."' data-count='vertical' class='twitter-share-button'  data-lang='nl' data-count = 'none'></a>
-						  	</div>
-						  	<div class='flike-outer' style='float: right; margin: 12px 49px 5px 0px;'>
-							<div class='g-plus'   data-href='".$url."'  data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-			</div>";
-  	else:
-	  	//<!-- Social Links Starts -->
-	  	$socialMedia = "
-	  	<div class='social-likes'>
-	  		<div class='intro'>
-	  			".$title."
-	  		</div>
-	  		<ul class='share-list'>
-	  		<li>
-	  				<div id='fb-root'></div>
-	  				<div class='fb-like' data-href='".$url."' data-send='false' data-layout='box_count' data-width='50' data-show-faces='false'>&nbsp;</div>
-			 </li>
-			  	<li>
-			  		<a href='https://twitter.com/share' data-url='".$url."' data-count='vertical' class='twitter-share-button'  data-lang='nl'></a>
-			  	</li>
-		  		<li>
-		  			<div class='g-plus' data-href='".$url."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-		  		</li>
-		  	</ul>
-		</div>";
-  	endif;
-  	//<!-- Social Links Ends -->
-  	return $socialMedia;
-
-
-
-
-  }
-
 
   /**
    * Get footer dynamic links for two blocks over social media

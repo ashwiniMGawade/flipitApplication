@@ -1,9 +1,9 @@
 <?php
 //echo "<pre>"; print_r($this->offers); die;
     echo $this->doctype('XHTML1_RDFA');
-    if($this->shopAuthor['addtosearch'] == 1):
-        if($this->shopAuthor['google']):
-            $google = $this->shopAuthor['google'];
+    if($this->shopEditor['addtosearch'] == 1):
+        if($this->shopEditor['google']):
+            $google = $this->shopEditor['google'];
             echo $this->headLink( array( 'rel' => 'author','href' => $google));
         endif;
     endif;
@@ -22,7 +22,7 @@
     $bounceRate = "/out/shop/".@$this->data[0]['id'];
     $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->data[0]['id'];
     $Link = '';
-    $helpGuidePermalink= "how-to/".$this->data[0]['permaLink'];
+    $howToUseGuidePermalink= "how-to/".$this->data[0]['permaLink'];
     $name =  strtoupper($this->data[0]['name']);
     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate($name)."</a>";
 //  echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>$breadcrumb));
@@ -94,47 +94,49 @@
 <!-- Separator Ends -->
      <!-- Mark Spencer Top Starts -->
 <div class="clr"></div>
-<div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
+<!--Refactored code-->
 <div class="header-block header-block-2">
+    <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
     <div class="icon">
-        <?php
-        $affliateProgramUrl = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : @$this->data[0]['affliateProgram']['name'];
-        # create click out only on when a shop is money shop
-        if($this->data[0]['affliateProgram']) : 
-            $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
-            $affliateUrl = $shopUrl;
-            $affliateDisabled = '';
-            $affliateClass = '';
-        else:
-            $affliateBounceRate = '';
-            $affliateUrl = '#';
-            $affliateDisabled = 'disabled="disabled"';
-            $affliateClass = 'btn-disabled';
-        endif;
-        ?>
-        <a target="_blank" rel="nofollow" class="text-blue-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->img . '" alt="' . $this->data[0]['name']  . '"  width="176" height="89" />'; ?></a>
+<?php
+$affliateProgramUrl = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : @$this->data[0]['affliateProgram']['name'];
+# create click out only on when a shop is money shop
+if ($this->data[0]['affliateProgram']) :
+    $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
+    $affliateUrl = $shopUrl;
+    $affliateDisabled = '';
+    $affliateClass = '';
+else:
+    $affliateBounceRate = '';
+    $affliateUrl = '#';
+    $affliateDisabled = 'disabled="disabled"';
+    $affliateClass = 'btn-disabled';
+endif;
+?>
+        <a target="_blank" rel="nofollow" class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->img . '" alt="' . $this->data[0]['name']  . '"  width="176" height="89" />'; ?></a>
     
     </div>
     <div class="box">
         <h1><?php echo $this->data[0]['title'];?></h1>
         <strong><?php echo '' . $this->data[0]['subTitle'];?></strong>
-            <a target="_blank" rel="nofollow" class="btn text-blue-link fl <?php echo $affliateClass; ?> pop btn btn-sm btn-default" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>">
-            <?php
-            $actualUrlWithoutDoubleSlash = explode("//",$this->data[0]['actualUrl']);
-            if(isset($actualUrlWithoutDoubleSlash[1])):
-                 $actualUrl = $actualUrlWithoutDoubleSlash[1];
-            else:
-                 $actualUrl = $this->data[0]['actualUrl'];
-            endif;
-            echo $actualUrl;
-            ?>
+            <a target="_blank" rel="nofollow" class="btn text-blue-link fl store-header-link <?php echo $affliateClass; ?> pop btn btn-sm btn-default" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>">
+<?php
+$actualUrlWithoutDoubleSlash = explode("//", $this->data[0]['actualUrl']);
+if (isset($actualUrlWithoutDoubleSlash[1])):
+     $actualUrl = $actualUrlWithoutDoubleSlash[1];
+else:
+     $actualUrl = $this->data[0]['actualUrl'];
+endif;
+echo $actualUrl;
+?>
             </a>
-            <?php
-            echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id'].'&shopName='.urlencode($this->data[0]['name']));
-            ?>
+<?php
+echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id'].'&shopName='.urlencode($this->data[0]['name']));
+?>
              
     </div>
 </div> 
+<!--Refactored code-->
 <div class="separator">&nbsp;</div>
 
 <div class="new-outer row">
@@ -428,31 +430,31 @@
                     <article class="block">
                         <div class="intro intro-2">
 
-                            <?php if($this->shopAuthor != null): ?>
+                            <?php if($this->shopEditor != null): ?>
 
                             <div class="deal">
                                 <div class="deal-holder">
                                     <?php
-                                    $authorFirstname = str_replace(' ', '', $this->shopAuthor['firstName']);
-                                    $authorLastname = str_replace(' ', '', $this->shopAuthor['lastName']);
-                                    $authorImageSlug = $this->shopAuthor['slug'];
-                                    $authorProfileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('redactie')."/".$authorImageSlug;
+                                    $EditorFirstname = str_replace(' ', '', $this->shopEditor['firstName']);
+                                    $EditorLastname = str_replace(' ', '', $this->shopEditor['lastName']);
+                                    $EditorImageSlug = $this->shopEditor['slug'];
                                     ?>
                                     <span class="text">
-                                        <?php echo $this->translate('All').' '.$this->data[0]['name'].' '.$this->translate('deals verified by'); ?> 
-                                        <span class="name"><?php echo $authorFirstname; ?></span>
+                                        <?php echo $this->translate('All').' '.$this->data[0]['name'].' '.$this->translate('deals verified by'); ?>
+                                        <span class="name"><?php echo $EditorFirstname; ?></span>
                                     </span>
                                     <div class="photo">
                                         <span class="text-box"><?php echo $this->translate('Hello'); ?></span>
                                         <?php
-                                        $shopAuthorPath = HTTP_PATH_CDN . ltrim($this->shopAuthor['profileimage']['path'],"/"). 'thum_large_widget_' .$this->shopAuthor['profileimage']['name'];                                            
-                                        echo '<img alt="' .  $this->shopAuthor['firstName'] . '" class="" src="'.  $shopAuthorPath . '" width="120" height="120"/>';
+                                        $shopEditorPath = HTTP_PATH_CDN . ltrim($this->shopEditor['profileimage']['path'], "/"). 'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
+                                        echo '<img alt="' .  $this->shopEditor['firstName'] . '" class="" src="'.  $shopEditorPath . '" width="120" height="120"/>';
                                         ?>
-                                    </div>
+                                  </div>
                                 </div>
                             </div>
 
-                            <?php endif; ?>
+                            <?php endif;
+                            ?>
 
                             <h1><?php echo $this->translate('About').' '.$this->data[0]['name'].' '.$this->translate('Vouchers').' '.date('Y'); ?></h1>
                             <?php echo $this->data[0]['shopText']; ?>
@@ -466,7 +468,7 @@
                                 <p>
                                     <a href="javascript:;" id="clicker"><?php echo $this->translate('Show me'); ?></a> 
                                     <?php echo $this->translate('where to enter my').' '.$this->data[0]['name'].' '.$this->translate('code, or read our full'); ?> 
-                                    <a href="<?php echo HTTP_PATH_LOCALE.$helpGuidePermalink; ?>"><?php echo $this->data[0]['name'].' '.$this->translate('Promotional Code'); ?></a> 
+                                    <a href="<?php echo HTTP_PATH_LOCALE.$howToUseGuidePermalink; ?>"><?php echo $this->data[0]['name'].' '.$this->translate('Promotional Code'); ?></a>
                                     <?php echo $this->translate('help guide'); ?>.
                                 </p>
                             </li>
@@ -476,7 +478,8 @@
                             </li>
                         </ul>
 
-                        <?php endif; ?>
+                        <?php endif;
+                        ?>
 
                     </article>
                     <article class="block">
@@ -485,22 +488,31 @@
                         $controller =  $this->controllerName;
                         $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
                                 <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
-                        $socialMedia = new FrontEnd_Helper_viewHelper();
-                        echo $socialMedia->socialmediaSmall($affliateProgramUrl, $socialMediaTitle, $controller);
+                        $socialMediaHelper = new FrontEnd_Helper_viewHelper();
+                        echo $socialMediaHelper->socialmediaSmall($affliateProgramUrl, $socialMediaTitle, $controller);
                     ?>
                     
                     </article>
-                    <?php if(count($this->latestupdates) > 0):?>
+
+                    <?php if (count($this->latestupdates) > 0):?>
+
                     <section class="block">
                         <h2><?php echo $this->translate('Latest news about').' '.$this->data[0]['name'];?></h2>
                         <?php echo $this->partialLoop('store/latestNews.phtml', $this->latestupdates); ?>
                     </section>
-                    <?php endif; ?>
-                    <?php if($this->chain):  ?>
+
+                    <?php endif;
+                    ?>
+
+                    <?php if ($this->chain):  ?>
+
                     <article class="block">
                     <?php echo $this->chain; ?>
                     </article>
-                    <?php endif; ?>
+
+                    <?php endif;
+                    ?>
+
                     <div class="block">
                         <div class="intro">
                             <h2><?php echo $this->translate('Follow us'); ?></h2>
@@ -514,71 +526,80 @@
                             <li><a href="#" class="rss">rss</a></li>
                             <li><a href="#" class="mail">mail</a></li>
                         </ul>
-                    </div>  
-                    <div class="block">
-                        <?php echo FrontEnd_Helper_viewHelper::PopularWinkelsWidget(); ?>
                     </div>
-                    <?php
-                    if ($this->data[0]['showSignupOption']) : ?>
-                        <div class="block white">
-                            <?php echo $this->esi($this->locale.'store/signupwidget'); ?>
-                        </div>
+                    
+                    <?php if(isset($this->popularStoresList)): ?> 
+                    <div class="block">
+                        <?php echo $this->popularStoresList; ?>
+                    </div>
                     <?php endif; ?>
-                    <div class="mark-spencer-mid-right new-sidebar">
-                    <?php
+                    <?php if ($this->data[0]['showSignupOption']) : ?>
 
-                    # if true then diplay following widget
-                    if ( $this->displayExtraPropertiesWidget) :
+                        <div class="block white">
+                        <?php echo $this->esi($this->locale.'store/signupwidget'); ?>
+                        </div>
 
+                    <?php endif;
                     ?>
+
+                    <div class="mark-spencer-mid-right new-sidebar">
+
+                    <?php if ($this->displayExtraPropertiesWidget):
+                    ?>
+
+                    <div class="block">
                     <div class="new-widget-outer">
                             <div class="new-widget-header">
                             <div class="left"><img alt='image-cup' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-widget-cup.jpg" /></div>
-                            <div class=""><p class="font14"><?php echo $this->translate('Alle pluspunten van'); ?> <?php echo $this->data[0]['name']; ?> <?php echo $this->translate('op een rij!');?></p></div>
+                            <div class=""><p class="font14"><?php echo $this->translate('All the advantages of'); ?> <?php echo $this->data[0]['name']; ?> <?php echo $this->translate('in a row!');?></p></div>
                         </div>
-
-                        <?php if( $this->data[0]['ideal']){ ?>
-                        <div class="new-wid-row"><span><img alt='img-icon1' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon1.jpg" /></span><?php echo $this->translate('Betaal mogelijkheid: iDEAL');?></div>
+                        <?php 
+                        if ($this->data[0]['ideal']) {
+                        ?>
+                        <div class="new-wid-row"><span><img alt='img-icon1' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon1.jpg" /></span><?php echo $this->translate('Payment possibility: iDEAL');?></div>
+                        <?php }
+ 
+                        if ($this->data[0]['qShops']) { ?>
+                        <div class="new-wid-row"><span><img alt='image-icon2' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon2.jpg" /></span><?php echo $this->translate('Homeshopping');?></div>
                         <?php }
 
-                        if( $this->data[0]['qShops']){ ?>
-                        <div class="new-wid-row"><span><img alt='image-icon2' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon2.jpg" /></span><?php echo $this->translate('Thuiswinkel waarborg');?></div>
+                        if ($this->isHotShop) { ?>
+                        <div class="new-wid-row"><span><img alt='image-icon3' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon3.jpg" /></span><?php echo $this->translate('Share Flipit.com');?></div>
                         <?php }
 
-                        if( $this->isHotShop){ ?>
-                        <div class="new-wid-row"><span><img alt='image-icon3' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon3.jpg" /></span><?php echo $this->translate('Toppartner Kortingscode.nl');?></div>
+                        if ($this->data[0]['freeReturns']) { ?>
+                        <div class="new-wid-row"><span><img  alt='image-icon4' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon4.jpg" /></span><?php echo $this->translate('Free return');?></div>
                         <?php }
 
-                        if( $this->data[0]['freeReturns']){ ?>
-                        <div class="new-wid-row"><span><img  alt='image-icon4' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon4.jpg" /></span><?php echo $this->translate('Gratis retour');?></div>
+                        if ($this->data[0]['pickupPoints']) { ?>
+                        <div class="new-wid-row"><span><img alt='image-icon5' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon5.jpg" /></span><?php echo $this->translate('Collection in store');?></div>
                         <?php }
 
-                        if( $this->data[0]['pickupPoints']){ ?>
-                        <div class="new-wid-row"><span><img alt='image-icon5' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon5.jpg" /></span><?php echo $this->translate('Afhalen in de winkel');?></div>
-                        <?php }
-
-                        if( $this->isSuperPartner){ ?>
+                        if ($this->isSuperPartner) { ?>
                         <div class="new-wid-row"><span><img alt='image-icon6' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon6.jpg" /></span><?php echo $this->translate('Super partner');?></div>
                         <?php }
 
-                        if( $this->data[0]['mobileShop']){ ?>
-                        <div class="new-wid-row"><span><img alt='image-icon7' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon7.jpg" /></span><?php echo $this->translate('Mobiele webshop');?></div>
+                        if ($this->data[0]['mobileShop']) { ?>
+                        <div class="new-wid-row"><span><img alt='image-icon7' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon7.jpg" /></span><?php echo $this->translate('Money shop');?></div>
                         <?php }
-                        if($this->data[0]['service']){ ?>
-                        <div class="new-wid-row"><span><img alt='image-icon8' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon8.jpg" /></span><?php echo $this->translate('Klantenservice:');?> <?php echo $this->data[0]['serviceNumber'];?></div>
+                        if ($this->data[0]['service']) { ?>
+                        <div class="new-wid-row"><span><img alt='image-icon8' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon8.jpg" /></span><?php echo $this->translate('Customer service');?> <?php echo $this->data[0]['serviceNumber'];?></div>
                         <?php }
 
-                        if( $this->isPopular){ ?>
-                        <div class="new-wid-row"><span><img alt='image-icon9' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon9.jpg" /></span><?php echo $this->translate('Top 50 Populairste Shops');?></div>
+                        if ($this->isPopular) { ?>
+                        <div class="new-wid-row"><span><img alt='image-icon9' src="<?php echo HTTP_PATH; ?>public/images/front_end/new-wid-icon9.jpg" /></span><?php echo $this->translate('Top 50 Popular Shops');?></div>
                         <?php } ?>
                     </div>
+                    </div>
+
                     <?php endif;?>
+
                     <!-- End Extra options for shop -->
                     </div>
                 </aside>
             </div>
         </div>
-
+<!--Refactored code-->
 <!-- end of common side bar -->
 
 

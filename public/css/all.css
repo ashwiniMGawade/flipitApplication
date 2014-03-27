@@ -8892,3 +8892,7 @@ input[type="submit"]::-moz-focus-inner {
 @-ms-viewport {
   width: auto !important;
 }
+
+.store-header-link{
+	float: left;
+}

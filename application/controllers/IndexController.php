@@ -189,7 +189,7 @@ class IndexController extends Zend_Controller_Action {
 		$topstoreflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularshopForHomePage_list');
 		//key not exist in cache
     	if($topstoreflag){
-    		$topStores = FrontEnd_Helper_viewHelper::commonGetstoreForFrontEnd("popular", 16);
+    		$topStores = FrontEnd_Helper_viewHelper::getStoreForFrontEnd("popular", 16);
     		FrontEnd_Helper_viewHelper::setInCache('all_popularshopForHomePage_list', $topStores);
     	} else {
     		$topStores = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularshopForHomePage_list');
@@ -201,7 +201,7 @@ class IndexController extends Zend_Controller_Action {
 		//key not exist in cache
     	if($recentstoreflag){
 
-    		$recentStore = FrontEnd_Helper_viewHelper::commonGetstoreForFrontEnd("recent", 4);
+    		$recentStore = FrontEnd_Helper_viewHelper::getStoreForFrontEnd("recent", 4);
     		FrontEnd_Helper_viewHelper::setInCache('all_shop_list', $recentStore);
     	} else {
     		$recentStore = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_shop_list');

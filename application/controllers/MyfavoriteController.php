@@ -59,7 +59,7 @@ class MyfavoriteController extends Zend_Controller_Action
     	$this->view->action 		= $params['action'];
     	
         // fetch suggestions for shops which are not selected as favorite
-    	$topStores = FrontEnd_Helper_viewHelper::commonGetstoreForFrontEnd("popular");
+    	$topStores = FrontEnd_Helper_viewHelper::getStoreForFrontEnd("popular");
 	   	$getFavoriteNotSelectedAlready = FavoriteShop::rejectAlreadySelected($topStores);
     	$this->view->topStores = $getFavoriteNotSelectedAlready;
     	
@@ -99,7 +99,7 @@ class MyfavoriteController extends Zend_Controller_Action
    
    public function getsuggestionsshopsAction()
    {
-	   	$topStores = FrontEnd_Helper_viewHelper::commonGetstoreForFrontEnd("popular");
+	   	$topStores = FrontEnd_Helper_viewHelper::getStoreForFrontEnd("popular");
 	   	$getFavoriteNotSelectedAlready = FavoriteShop::rejectAlreadySelected($topStores);
    	 	echo Zend_Json::encode($getFavoriteNotSelectedAlready);
    	 	die;

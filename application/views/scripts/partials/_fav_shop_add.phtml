@@ -1,19 +1,19 @@
-<?php 
-	$id = 0;
-	if(Auth_VisitorAdapter::hasIdentity()):
-		$id = Auth_VisitorAdapter::getIdentity()->id;
-	endif;
+<?php
+$id = 0;
+if (Auth_VisitorAdapter::hasIdentity()):
+	$id=Auth_VisitorAdapter::getIdentity()->id;
+endif;
 	 
-	$favText =  $this->shopname ;
-	$favIconClass = "glyphicon-heart";              			 
+$favText =  $this->shopname ;
+$favIconClass = "glyphicon-heart";
 
-	if(Visitor::getFavoriteShopForUser($id, $this->shopid)):
-	    $favIconClass = "glyphicon-heart";
-	endif;
+if (Visitor::getFavoriteShopForUser($id, $this->shopid)):
+    $favIconClass = "glyphicon-heart";
+endif;
 	              			 
 ?>
  					
-<a onclick="storeAddToFeborite(<?php echo $id; ?>,<?php echo $this->shopid; ?>)"  
+<a onclick="storeAddToFeborite(<?php echo $id; ?>,<?php echo $this->shopid; ?>)"
 		class="pop btn btn-sm btn-default" 
        	href="javascript:void(0)" >
     <span class="glyphicon <?php echo $favIconClass ;?>"></span>
