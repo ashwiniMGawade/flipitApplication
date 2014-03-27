@@ -15,7 +15,7 @@ class VisitorExport {
 	function __construct() {
 
 	    require_once('ConstantForMigration.php');
-	    require_once('commonMigrationFunctions.php');
+	    require_once('CommonMigrationFunctions.php');
 		// Create application, bootstrap, and run
 		$application = new Zend_Application(APPLICATION_ENV,
 				APPLICATION_PATH . '/configs/application.ini');
@@ -322,8 +322,8 @@ class VisitorExport {
 				$keyIn = 'excels';
 			}
 			 
-			commonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn, UPLOAD_DATA_FOLDER_EXCEL_PATH.$keyIn);
-			commonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn);
+			CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn, UPLOAD_DATA_FOLDER_EXCEL_PATH.$keyIn);
+			CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn);
 			
 
 		} catch (Exception $e) {
