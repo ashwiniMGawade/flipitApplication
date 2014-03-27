@@ -1,5 +1,12 @@
 <?php
-//echo "<pre>"; print_r($this->offers); die;
+####### REFATORED CODE #####
+if(!empty($this->similarShops)):
+    $similarShopsAndSimilarCategory = $this->partial(
+        'store/_similar-and-category-related-shops.phtml',
+        array('similarShopsAndSimilarCategoryShops' => $this->similarShops)
+    );
+endif;
+
 	echo $this->doctype('XHTML1_RDFA');
 	if($this->profileImage['addtosearch'] == 1):
 		if($this->profileImage['google']):
@@ -386,17 +393,8 @@
 
 					echo $discussion; ?>
 
-					<!-- display similar shops and shop under sasme category widget -->
-					<?php
-					# check display similar shops is enabled or not
-					if($this->data[0]['showSimliarShops'] && ! empty($this->similarShops)): ?>
-					  <div class="simlilar-shops-plus-category-shops">
-					  		<div class="new_box">
-								<img alt="Similar deals" src="<?php echo HTTP_PATH .'public/images/front_end/similar_shops.png';?> ">
-							</div>
-							<?php echo $this->partial('store/_simlar-and-categfory-related-shops.phtml', array('data' => $this->similarShops,'shopName' => $this->data[0]['name'])); ?>
-					  </div>
-					<?php endif;?>
+            <!-- display similar shops and shop under same category widget -->
+                <?php echo $similarShopsAndSimilarCategory; ?>
 
 				</div>
 		 </div>
@@ -423,17 +421,8 @@
 
 				echo $discussion;?>
 
-			<!-- display similar shops and shop under sasme category widget -->
-				<?php
-				# check display similar shops is enabled or not
-				if($this->data[0]['showSimliarShops'] && ! empty($this->similarShops)): ?>
-				  <div class="simlilar-shops-plus-category-shops">
-				  		<div class="new_box">
-								<img alt="Similar deals" src="<?php echo HTTP_PATH .'public/images/front_end/similar_shops.png';?> ">
-						</div>
-						<?php echo $this->partial('store/_simlar-and-categfory-related-shops.phtml', array('data' => $this->similarShops,'shopName' => $this->data[0]['name'])); ?>
-				  </div>
-				<?php endif;?>
+			<!-- display similar shops and shop under same category widget -->
+            <?php echo $similarShopsAndSimilarCategory; ?>
  		 	</div>
 	       <?php endif;
 		endif;

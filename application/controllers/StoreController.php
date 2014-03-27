@@ -527,15 +527,11 @@ class StoreController extends Zend_Controller_Action
   	  $this->view->fbshareUrl = HTTP_PATH_LOCALE . $shopdetail[0]['permaLink'];
   	  $this->view->fbImg = $img;  	 
 
-  	  
-  	  # check display similar shops is enabled or not
-  	  if($shopdetail[0]['showSimliarShops'])
-  	  {
-	  	 $this->view->similarShops =  Shop::getSimilarShop($id,11);
-  	  }
-  	  
 
-  
+        // check display similar shops is enabled or not
+        if ($shopdetail[0]['showSimliarShops']) {
+            $this->view->similarShops =  Shop::getSimilarShopsAndSimilarCategoryShops($id, 11);
+        }
   }
   /**
    * search by char
