@@ -194,8 +194,7 @@ class ShopExport {
     	//loop for each shop
     	foreach ($data as $shop)
     	{
-    		echo "\n";
-    		print "$key - Shops are being saved into excel file !!!";
+    		print ".";
     		
     		//condition apply on affliatedprograme
     		$prog = '';
