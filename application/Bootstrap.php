@@ -78,7 +78,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 			$this->_lang = "default" ;
 		}
-
+		
+		
 		# define HTTP path
 		define("HTTP_PATH", trim('http://' . $_SERVER['HTTP_HOST'] . '/'));
 

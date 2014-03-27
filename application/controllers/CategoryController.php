@@ -128,7 +128,7 @@ class CategoryController extends Zend_Controller_Action {
 	   }
 	   $authorId = Category::getAuthorId();
 	   $this->view->authorId = $authorId['authorId'];
-	   $paginator = FrontEnd_Helper_viewHelper::renderPagination($vouchers,$this->_getAllParams(),27,3);
+	   $paginator = FrontEnd_Helper_viewHelper::renderPagination($vouchers,$this->_getAllParams(),54,3);
 	   $this->view->paginator = $paginator;
 	   
 	   //for facebook parameters

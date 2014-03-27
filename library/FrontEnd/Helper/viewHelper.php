@@ -2,7 +2,7 @@
 
 class FrontEnd_Helper_viewHelper
 {
-
+	
 	/**
 	 * Common function to render sidebar widget of alphanumeric categories
 	 * @author cbhopal updated by kraj
@@ -1114,16 +1114,16 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
    * @param $type string
    * @return string
    */
-  public static function socialmediaSmall($surl, $title, $controller , $type = null)
+  public static function socialmediaSmall($url, $title, $controller , $type = null)
   {
-
-  	if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
-  		$url = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
+   
+   	if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
+  		$url = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'], '/') ;
   		$url = self::generateSocialLink($url);
 	else:
   		$url = HTTP_PATH;
   	endif;
-
+	
   	if($type == 'widget'):
 	  	$string="<div class='flike-outer' style='width: 56px; overflow: hidden; margin: 0px;'>
 	  	<div id='fb-root' style='margin-top:-42px;'></div>
@@ -2058,4 +2058,56 @@ EOD;
 
       	 return $offers;
 	}
+	
+	/**
+	 * copyDirectory
+	 *
+	 * @param Source directory
+	 *
+	 * @param Destination directory
+	 */
+	
+	public static function copyDirectory($source,$destination)
+	{
+		if(!is_dir($destination)){
+			$oldumask = umask(0);
+			mkdir($destination, 01777); // so you get the sticky bit set
+			umask($oldumask);
+		}
+		$dir_handle = @opendir($source) or die("Unable to open");
+		while ($file = readdir($dir_handle))
+		{
+			if($file!="." && $file!=".." && !is_dir("$source/$file")) //if it is file
+				copy("$source/$file","$destination/$file");
+			if($file!="." && $file!=".." && is_dir("$source/$file")) //if it is folder
+				self::copyDirectory("$source/$file","$destination/$file");
+		}
+		closedir($dir_handle);
+	}
+	
+	/**
+	 * deleteDirectory
+	 *
+	 * @param directory path
+	 *
+	 */
+	
+	public static function deleteDirectory($directoryPath) {
+		if (! is_dir($directoryPath)) {
+			throw new InvalidArgumentException("$directoryPath must be a directory");
+		}
+		if (substr($directoryPath, strlen($directoryPath) - 1, 1) != '/') {
+			$directoryPath .= '/';
+		}
+		$files = glob($directoryPath . '*', GLOB_MARK);
+		foreach ($files as $file) {
+			if (is_dir($file)) {
+				self::deleteDirectory($file);
+			} else {
+				unlink($file);
+			}
+		}
+		rmdir($directoryPath);
+	}
+	
 }

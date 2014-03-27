@@ -23,38 +23,8 @@ class ShopExport {
 	$domain = 'http://www.'.$domain1;
 	*/
 
-	// Define path to application directory
-	defined('APPLICATION_PATH')
-	|| define('APPLICATION_PATH',
-			dirname(dirname(__FILE__)));
-
-	defined('LIBRARY_PATH')
-	|| define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-
-	defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
-
-	// Define application environment
-	defined('APPLICATION_ENV')
-	|| define('APPLICATION_ENV',
-			(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-					: 'production'));
-
-
-	//Ensure library/ is on include_path
-	set_include_path(
-			implode(PATH_SEPARATOR,
-					array(realpath(APPLICATION_PATH . '/../library'),
-							get_include_path(),)));
-		set_include_path(
-				implode(PATH_SEPARATOR,
-						array(realpath(DOCTRINE_PATH), get_include_path(),)));
-
-		/** Zend_Application */
-		require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
-		require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
-		require_once (LIBRARY_PATH . '/Zend/Application.php');
-		require_once(DOCTRINE_PATH . '/Doctrine.php');
-
+	
+	require_once('ConstatntForMigration.php');
 		// Create application, bootstrap, and run
 		$application = new Zend_Application(APPLICATION_ENV,
 				APPLICATION_PATH . '/configs/application.ini');
@@ -641,79 +611,36 @@ class ShopExport {
     	$objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setAutoSize(true);
     	$objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setAutoSize(true);
     	$objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
-
 		
-    	
-    	# define Real upload path for excel
-    	defined('UPLOAD_REAL_EXCEL_PATH')
-    	|| define('UPLOAD_REAL_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
+    
+	    	
+    	$pathToFile = UPLOAD_EXCEL_TMP_PATH . strtolower($this->_localePath) . 'excels/' ;
 
-    	# define upload path for excel
-    	defined('UPLOAD_EXCEL_PATH')
-	    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../public/tmp/' );
-
-    	
-    	$pathToFile = UPLOAD_EXCEL_PATH . strtolower($this->_localePath) . 'excels/' ;
-
-    	# create dir if not exists
     	if(!file_exists($pathToFile)) {
     		mkdir($pathToFile, 0774, TRUE);
     	}
 
     	$filepath = $pathToFile . "shopList.xlsx" ;
-
-	   	//write to an xlsx file and upload to excel folder locale basis
 		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
     	$objWriter->save($filepath);
-
     	$manager->closeConnection($DMC);
 
-        echo "\n";
-        print "$key - Shops have been exported successfully!!!";
-		if($key == 'en') {
-			$key = 'excels';
-        }
-
-        self::copydir(UPLOAD_EXCEL_PATH.$key,UPLOAD_REAL_EXCEL_PATH.$key);
-        self::deleteDir(UPLOAD_EXCEL_PATH.$key);
-	}
-	
-	protected function copydir($source,$destination)
-	{
-		if(!is_dir($destination)){
-			$oldumask = umask(0);
-			mkdir($destination, 01777); // so you get the sticky bit set
-			umask($oldumask);
-		}
+		echo "\n";
+		print "$key - Shops have been exported successfully!!!";
 		
-		$dir_handle = @opendir($source) or die("Unable to open");
-		while ($file = readdir($dir_handle))
+		if($key == 'en')
 		{
-			if($file!="." && $file!=".." && !is_dir("$source/$file")) //if it is file
-				copy("$source/$file","$destination/$file");
-			if($file!="." && $file!=".." && is_dir("$source/$file")) //if it is folder
-				self::copydir("$source/$file","$destination/$file");
+			$key = 'excels';
 		}
-		closedir($dir_handle);
+  
+	  FrontEnd_Helper_viewHelper::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$key, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
+	  FrontEnd_Helper_viewHelper::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$key);
+		
+
 	}
+
 	
-	public static function deleteDir($dirPath) {
-		if (! is_dir($dirPath)) {
-			throw new InvalidArgumentException("$dirPath must be a directory");
-		}
-		if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-			$dirPath .= '/';
-		}
-		$files = glob($dirPath . '*', GLOB_MARK);
-		foreach ($files as $file) {
-			if (is_dir($file)) {
-				self::deleteDir($file);
-			} else {
-				unlink($file);
-			}
-		}
-		rmdir($dirPath);
-	}
+
 	
 
 }
