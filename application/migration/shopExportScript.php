@@ -24,7 +24,8 @@ class ShopExport {
 	*/
 
 	
-	require_once('ConstantForMigration.php');
+	    require_once('ConstantForMigration.php');
+	    require_once('commonMigrationFunctions.php');
 		// Create application, bootstrap, and run
 		$application = new Zend_Application(APPLICATION_ENV,
 				APPLICATION_PATH . '/configs/application.ini');
@@ -633,8 +634,8 @@ class ShopExport {
 			$key = 'excels';
 		}
   
-	  Appplication_migration_commonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$key, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
-	  Appplication_migration_commonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$key);
+	  commonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$key, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
+	  commonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$key);
 		
 
 	}

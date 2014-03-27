@@ -1,5 +1,5 @@
 <?php
-class Appplication_migration_commonMigrationFunctions {
+class commonMigrationFunctions {
 	
 	/**
 	 * copyDirectory
