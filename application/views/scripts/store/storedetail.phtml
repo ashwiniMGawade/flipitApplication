@@ -585,18 +585,14 @@
          	<div class="separator mt20"></div>
         <!-- Separator Ends -->
 
-       <?php  if(count($this->msArticle) >0): ?>
-	       <div class="article-container">
-		      	<!-- Merchants Outer Starts -->
-		      	<div class="merchants-outer">
-		       		<div class="common-div">
-		       			<h2><?php echo  $this->translate("Guides"). " " . $this->data[0]['name']. " " . $this->translate("is mentioned in");?></h2>
-		        		<?php echo $this->partialLoop('store/msArticle.phtml', $this->msArticle); ?>
-		        	</div>
-		        </div>
-		         <!-- Merchants Outer Ends -->
-		         <div style="clear:both;"></div>
-	       </div>
+			<?php  if(count($this->moneySavingGuideArticle) >0): ?>
+
+			<header class="heading-box text-advice">
+				<h2><?php echo $this->translate("General money saving advice &amp; tricks for shopping at"). " " . $this->data[0]['name']; ?></h2>
+			</header>
+
+			<?php echo $this->partialLoop('store/moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle); ?>
+		        	
          <!-- Separator Starts -->
         <div class="separator">&nbsp;</div>
         <!-- Separator Ends -->

@@ -350,11 +350,11 @@ class StoreController extends Zend_Controller_Action
 	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
 	 		//key not exist in cache
 	 		if($flag){
-	 			$msArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateMSArticleShop($slug, $limit, $id));
-	 			FrontEnd_Helper_viewHelper::setInCache($key, $msArticle);
+	 			$moneySavingGuideArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateMSArticleShop($slug, $limit, $id));
+	 			FrontEnd_Helper_viewHelper::setInCache($key, $moneySavingGuideArticle);
 	 		} else {
 	 			//get from cache
-	 			$msArticle = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+	 			$moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
 	 		}
 	 		
  		} else {
@@ -410,7 +410,7 @@ class StoreController extends Zend_Controller_Action
   	  }
   	  $this->view->data = $shopdetail;
 
-  	  $this->view->msArticle = $msArticle;
+  	  $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
   	  $this->view->latestupdates = $latestupdates;
   	  $this->view->offers = $offers;
   	  
