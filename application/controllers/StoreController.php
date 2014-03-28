@@ -349,7 +349,7 @@ class StoreController extends Zend_Controller_Action
 	 		//FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
 	 		//key not exist in cache
-	 		if($flag){
+	        if ($flag) {
 	 			$moneySavingGuideArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle($slug, $limit, $id));
 	 			FrontEnd_Helper_viewHelper::setInCache($key, $moneySavingGuideArticle);
 	 		} else {
@@ -357,10 +357,10 @@ class StoreController extends Zend_Controller_Action
 	 			$moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
 	 		}
 	 		
- 		} else {
+        } else {
   	  		$url  =  HTTP_PATH_LOCALE. 'store/index';
   	  		$this->_redirect($url);
-  	  }
+        }
   	  
   	 // check this sho is a popular store or not 
   	 $isPopular =  Shop::getPopularStore( 0 , $shopdetail[0]['id']);
