@@ -262,17 +262,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             "doctrine"
         );
 
-        if (strlen($this->_moduleDirectoryName) == 2) {
+         if (strlen($this->_moduleDirectoryName) == 2) {
             $locale = $this->_moduleDirectoryName ;
         } elseif ($this->_moduleDirectoryName == 'admin') {
             $locale =  isset($_COOKIE['locale']) ? $_COOKIE['locale'] : 'en'  ;
-        } else {
+        } else if($this->_moduleDirectoryName == "default") {
             $locale = 'en' ;
         }
 
-        if((strlen($this->_moduleDirectoryName) == 2) || $domain == "www.kortingscode.nl"):
-            $locale = 'en' ;
-        endif;
         $localSiteDbConnection =
             Doctrine_Manager::connection(
                 $doctrineOptions[strtolower($locale)]['dsn'],

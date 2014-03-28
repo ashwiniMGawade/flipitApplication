@@ -1,60 +1,6 @@
 <?php 
-	$footerLinks = new FrontEnd_Helper_viewHelper();
-	$footer = $footerLinks->getFooterLinks();
-?>
-<!--
-<div class="home-footer-new">
-	<div class="CTA">
-		<div class="container" id="user_footer">
-			<?php 
-			 
-			 
-			$requestObj = Zend_Controller_Front::getInstance()->getRequest();
-				if(strtolower($requestObj->getControllerName())!='freesignup'){
-					
-					if(strtolower($requestObj->getActionName())!='step3' && strtolower($requestObj->getActionName())!='step1' && strtolower($requestObj->getActionName())!='step2'){
-				
-						$this->locale = LOCALE != 'en' ? LOCALE  : '';
-						$link = $this->locale. '/login/userfooter';
-						echo $this->esi($link); 
-					
-					}
-				}
-		   ?>
-			
-		</div>
-	</div>
-
-	<div class="footerlinks">
-		<div class="container">
-			<div class="kcode-links-lt">
-				<ul>
-					<div class="footerdivider"></div>
-						<?php echo $footer[0]['middleColumn1']; ?>
-					<div class="footerdivider"></div>
-						<?php echo $footer[0]['middleColumn2']; ?>
-				    <div class="footerdivider"></div>
-						<?php echo $footer[0]['middleColumn3']; ?>
-		           	<div class="footerdivider"></div>
-		        </ul>
-			</div>
-		</div>
-	</div>
-
-	<div class="socialbalk">
-		<div class="container" style="margin-top:40px;">
-
-		<?php echo $footer[0]['topFooter']; ?>
-		
-		<?php echo $footer[0]['bottomFooter']; ?>
-		</div>
-	</div>
-</div>
-
-
--->
-
-
+   $footer = FrontEnd_Helper_viewHelper::getFooterLinks();
+?> 
 <footer id="footer">
 			<div class="holder">
 				<div class="container">
@@ -74,35 +20,14 @@
 							</nav>
 						</div>
 						<div class="box col-md-3 col-sm-12">
-							<strong class="logo"><a href="#">FlipIt</a></strong>
-							<p>Alle kortingscodes geïdentificeerd als "Exclusief" mogen niet worden gepubliceerd zonder schriftelijke toestemming van <a href="#">Flipit.com</a></p>
-							<ul class="add-list">
-								<li>Flipit <a href="#">België</a></li>
-								<li>Volg ons op <a href="#">Facebook</a> en leer <a href="#">meer over onze missie</a>!</li>
-								<li>Terug naar landen selectie</li>
-							</ul>
+							<?php echo $footer[0]['middleColumn4']; ?>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="container">
 				<div class="bar">
-					<p>Alle kortingscodes geïdentificeerd als "Exclusief" mogen niet worden gepubliceerd in een medium zonder uitdrukkelijke schriftelijke toestemming van kortingscode.nl. Alle aanbiedingen zijn zorgvuldig uitgekozen door onze redactie en zijn correct op het moment van publicatie.</p>
-					<span>Copyright &copy; 2009-2012 Imbull BV. Kortingscode.nl. Alle logos &copy; behoren aan hun respectievelijke eigenaren. | All Rechten voorbehouden.</span>
-					<nav class="add-nav">
-						<ul>
-							<li><a href="#">Privacy</a></li>
-							<li><a href="#">Disclaimer</a></li>
-							<li><a href="#">In de media</a></li>
-							<li><a href="#">FAQ</a></li>
-							<li><a href="#">Contact</a></li>
-							<li><a href="#">Top 50</a></li>
-							<li><a href="#">Hyves</a></li>
-							<li><a href="#">Facebook</a></li>
-							<li><a href="#">Twitter</a></li>
-							<li><a href="#">RSS feed</a></li>
-						</ul>
-					</nav>
+					<?php echo $footer[0]['bottomFooter']; ?>
 				</div>
 			</div>
 		</footer>
