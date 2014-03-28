@@ -343,23 +343,22 @@ class StoreController extends Zend_Controller_Action
 	 		$slug = 'moneysaving';
 	 		$limit = 6;
 	 		
-	 		//get all money seving guide related currect shop
-	 		$key = 'all_msArticleInStore'  . $id . '_list';
+  	        //get all money seving guide related currect shop
+	 		$expiredOfferInStoreKey = 'all_msArticleInStore'  . $id . '_list';
 	 		
 	 		//FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
+	 		$cacheStatusByKey =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($expiredOfferInStoreKey);
 	 		//key not exist in cache
-	        if ($flag) {
+	        if ($cacheStatusByKey) {
 	 			$moneySavingGuideArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle($slug, $limit, $id));
-	 			FrontEnd_Helper_viewHelper::setInCache($key, $moneySavingGuideArticle);
+	 			FrontEnd_Helper_viewHelper::setInCache($expiredOfferInStoreKey, $moneySavingGuideArticle);
 	 		} else {
 	 			//get from cache
-	 			$moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+	 			$moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getFromCacheByKey($expiredOfferInStoreKey);
 	 		}
-	 		
         } else {
-  	  		$url  =  HTTP_PATH_LOCALE. 'store/index';
-  	  		$this->_redirect($url);
+  	  		$redirectToUrl = HTTP_PATH_LOCALE. 'store/index';
+  	  		$this->_redirect($redirectToUrl);
         }
   	  
   	 // check this sho is a popular store or not 

@@ -1238,8 +1238,8 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
    */
   public static function generateShopMoneySavingGuideArticle($slug, $limit, $id) {
 
-  	$data = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
-  	return $data;
+  	$ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
+  	return $ShopMoneySavingGuideArticle;
 
   }
 

@@ -1,7 +1,9 @@
 <?php $articleImage = PUBLIC_PATH_CDN.ltrim($this->ArtIcon['path'], "/") . 'thum_article_medium_'. $this->ArtIcon['name']; ?>
 <section class="tips-section">
     <article class="block">
-        <a onClick="javascript:viewCounter('onclick', 'article', <?php echo $this->id ; ?>);" href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$this->permalink;?>" title='<?php echo $this->title;?>'>
+        <a onClick="javascript:viewCounter('onclick', 'article', <?php echo $this->id ; ?>);" 
+        href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$this->permalink;?>"
+        title='<?php echo $this->title;?>'>
             <div class="image">
                 <img id="<?php echo $this->articles['id']; ?>" alt="<?php echo $this->title;?>" src="<?php echo $articleImage;?>" width="216" height="129">
             </div>
@@ -19,7 +21,7 @@ if (strlen($this->title) > 35) {
 <?php 
 if (isset($this->chapters[0])) {
     if ($this->chapters[0]['content']!=null || $this->chapters[0]['content']!='undefined' || $this->chapters[0]['content']!='') {
-        $allowed_tags = '<p>';
+        $allowedTags = '<p>';
         $articleContent = $this->chapters[0]['content'];
         $articleContent = strip_tags($articleContent);
         if (strlen($articleContent) > 120) {
