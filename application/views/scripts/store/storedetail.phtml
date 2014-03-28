@@ -1,4 +1,9 @@
 <?php
+######### REFACTORED CODE #####
+if($this->data[0]['discussions'] == 1):
+    $discussion = $this->render('partials/discussion.phtml');
+endif;
+
 //echo "<pre>"; print_r($this->offers); die;
 	echo $this->doctype('XHTML1_RDFA');
 	if($this->profileImage['addtosearch'] == 1):
@@ -78,12 +83,6 @@
 	$headingOfSimilerOfferMt20 = '<div class="popular-kortings-heading text-white clr mt20"><span>'
 	.  $this->translate('Similar vouchercodes we think you will like!'). '</span></div>';
 
-	$discussion = '';
-	if($this->data[0]['discussions'] == 1):
-		$discussion	='<div class="voucher-col1-new">';
-		$discussion .=$this->render('partials/discussion.phtml');
-		$discussion .='</div>';
-	endif;
 	$speratorDiv = '<div class="separator"></div>';
 # end common code
 ?>
@@ -220,9 +219,8 @@
 		    				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
 		    		</div>
 				<?php endif;
-		    					
-		    	
-		    	echo $discussion;   ?>
+
+                echo $discussion;?>
 		 	</div>
 		    <!-- Mark Spencer Mid Left Ends -->
 	<!--end code for  one code -->
@@ -258,7 +256,7 @@
 				
 			
 				echo $this->esi($this->locale.'store/discountcodewidget');
-				echo $discussion; ?>
+                echo $discussion; ?>
 			</div>
 			<!-- Mark Spencer Mid Left Ends -->
 	<?php
@@ -280,9 +278,7 @@
 					echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
 				</div>
 			<?php endif; 
-			  
-			
-				echo $discussion;?>
+            echo $discussion;?>
 			</div>
 			<?php endif;
 	endif;
@@ -319,9 +315,7 @@
  		      				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
  		      		</div>
  		      	<?php endif; 
- 		      
-
- 		      	echo $discussion; ?>
+                echo $discussion; ?>
  		 	</div>
 	<?php
 		# NO MONEY AND WITH CODE
@@ -348,10 +342,7 @@
  		      				echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
  		      		</div>
  		      	<?php endif; 
- 		      	 		      	
- 		      
-
- 		      	echo $discussion; ?>
+                echo $discussion; ?>
  		 	</div>
  		      <!-- Mark Spencer Mid Left Ends -->
  		     <!-- end code for no money MORE THAN 0 code -->
@@ -382,9 +373,7 @@
 							echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
 						</div>
 					<?php endif; 				
-				
-
-					echo $discussion; ?>
+                    echo $discussion; ?>
 
 					<!-- display similar shops and shop under sasme category widget -->
 					<?php
@@ -418,10 +407,7 @@
 						echo $this->partialLoop('store/_similar-promotional-codes.phtml', $this->relatedshops8); ?>	
 					</div>
 				<?php endif;  	  
-				    	
-				
-
-				echo $discussion;?>
+                echo $discussion;?>
 
 			<!-- display similar shops and shop under sasme category widget -->
 				<?php
