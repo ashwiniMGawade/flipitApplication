@@ -51,28 +51,11 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
     public function setLayoutPath()
     {
         $layout = Zend_Layout::getMvcInstance();
-
-        if (!empty($this->localeDirectoryName) && $this->moduleName == 'default') {
-            $layout->setLayoutPath(self::getLayoutPathForDefaultModule());
-        } elseif (empty($this->localeDirectoryName) && $this->moduleName) {
-            $layout->setLayoutPath(self::getLayoutPathForLocale());
-        }
-
+        $layout->setLayoutPath(self::getLayoutPath());
         $layout->setLayout('layout');
     }
-
-    public function getLayoutPathForDefaultModule()
-    {
-        if (HTTP_HOST == 'www.kortingscode.nl') {
-            $layoutPath = APPLICATION_PATH .  '/layouts/scripts/';
-        } else {
-            $layoutPath = APPLICATION_PATH . '/layouts/scripts/';
-        }
-
-        return $layoutPath;
-    }
-
-    public function getLayoutPathForLocale()
+    
+    public function getLayoutPath()
     {
         if ($this->moduleName == 'default' || $this->moduleName == null) {
             $layoutPath = APPLICATION_PATH . '/layouts/scripts/';
@@ -167,9 +150,9 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
                 'confPassword' => '********'
             );
 
-            foreach ($replacements as $k => $v) {
-                if (array_key_exists($k, $adminActivityForLogs)) {
-                    $adminActivityForLogs[$k] = $v;
+            foreach ($replacements as $replacementKey => $replacementValue) {
+                if (array_key_exists($replacementKey, $adminActivityForLogs)) {
+                    $adminActivityForLogs[$replacementKey] = $replacementValue;
                 }
             }
 
