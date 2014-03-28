@@ -1,7 +1,8 @@
 <?php
 ######### REFACTORED CODE #####
+$partialViewPath = 'partials/';
 if($this->data[0]['discussions'] == 1):
-    $discussion = $this->render('partials/discussion.phtml');
+    $discussion = $this->render($partialViewPath.'_discussion.phtml');
 endif;
 
 //echo "<pre>"; print_r($this->offers); die;
