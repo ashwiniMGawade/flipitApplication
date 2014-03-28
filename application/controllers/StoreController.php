@@ -343,24 +343,23 @@ class StoreController extends Zend_Controller_Action
 	 		$slug = 'moneysaving';
 	 		$limit = 6;
 	 		
-	 		//get all money seving guide related currect shop
-	 		$key = 'all_msArticleInStore'  . $id . '_list';
+  	        //get all money seving guide related currect shop
+	 		$expiredOfferInStoreKey = 'all_msArticleInStore'  . $id . '_list';
 	 		
 	 		//FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
+	 		$cacheStatusByKey =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($expiredOfferInStoreKey);
 	 		//key not exist in cache
-	 		if($flag){
-	 			$msArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateMSArticleShop($slug, $limit, $id));
-	 			FrontEnd_Helper_viewHelper::setInCache($key, $msArticle);
+	        if ($cacheStatusByKey) {
+	 			$moneySavingGuideArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle($slug, $limit, $id));
+	 			FrontEnd_Helper_viewHelper::setInCache($expiredOfferInStoreKey, $moneySavingGuideArticle);
 	 		} else {
 	 			//get from cache
-	 			$msArticle = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+	 			$moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getFromCacheByKey($expiredOfferInStoreKey);
 	 		}
-	 		
- 		} else {
-  	  		$url  =  HTTP_PATH_LOCALE. 'store/index';
-  	  		$this->_redirect($url);
-  	  }
+        } else {
+  	  		$redirectToUrl = HTTP_PATH_LOCALE. 'store/index';
+  	  		$this->_redirect($redirectToUrl);
+        }
   	  
   	 // check this sho is a popular store or not 
   	 $isPopular =  Shop::getPopularStore( 0 , $shopdetail[0]['id']);
@@ -410,7 +409,7 @@ class StoreController extends Zend_Controller_Action
   	  }
   	  $this->view->data = $shopdetail;
 
-  	  $this->view->msArticle = $msArticle;
+  	  $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
   	  $this->view->latestupdates = $latestupdates;
   	  $this->view->offers = $offers;
   	  

@@ -198,9 +198,8 @@ class MoneySaving extends BaseMoneySaving {
 	 * @version 1.0
 	 */
 	
-	public static function generateMSArticleShop($slug, $limit, $shopId) {
-		//echo $shopId; die;
-		$shopArticle = Doctrine_Query::create()->select('chap.*,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name')
+	public static function generateShopMoneySavingGuideArticle($slug, $limit, $shopId) {
+		$shopMoneySavingGuideArticle = Doctrine_Query::create()->select('chap.*,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name')
 		->from('Articles a')
 		->leftJoin('a.ArtIcon ai')
 		->leftJoin('a.relatedstores rs')
@@ -209,10 +208,7 @@ class MoneySaving extends BaseMoneySaving {
 		->andWhere('a.deleted=0')
 		->limit($limit)
 		->fetchArray();
-		//echo "<pre>";
-		//print_r($shopArticle); die;
-		return $shopArticle;
-	
+		return $shopMoneySavingGuideArticle;
 	}
 	
 	
@@ -312,33 +308,4 @@ class MoneySaving extends BaseMoneySaving {
 		return $article;
 	
 	}
-	/**
-	 * generate MS Articles related to a shop
-	 * @author Raman
-	 * @version 1.0
-	 
-	
-	public static function generateMSArticleShop($slug, $limit, $shopId) {
-	
-		$moneySavingArticles = self::generateMoneySavingArticles($slug);
-		$artArr = array();
-		for($i=0;$i<count($moneySavingArticles);$i++){
-			$artArr[] = $moneySavingArticles[$i]['id'];
-		}
-	
-		$shopArticle = Doctrine_Query::create()->select('a.title,a.content, a.authorname, a.authorid, ai.path, ai.name')
-		->from('Articles a')
-		->leftJoin('a.ArtIcon ai')
-		->leftJoin('a.relatedstores rs')
-		->whereIn('a.id', $artArr)
-		->where('rs.storeid='."'$shopId'")
-		->limit($limit)
-		//->getSqlQuery();
-	
-		->fetchArray();
-		return $shopArticle;
-	
-	}*/
-	
-	
 }
