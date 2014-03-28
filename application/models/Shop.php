@@ -1,6 +1,4 @@
 <?php
-
-
  /**
  * Shop
  *
@@ -15,17 +13,64 @@ class Shop extends BaseShop {
 
 
 
-	public function __contruct($connName = false)
-	{
-		if(! $connName)
-		{
-			$connName = "doctrine_site" ;
-		}
+    public function __contruct($connectionName = false)
+    {
+        if (!$connectionName) {
+            $connectionName = "doctrine_site" ;
+        }
+        Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
+    }
+     ##################################################################################
+     ################## REFACTORED CODE ###############################################
+     ##################################################################################
+    /**
+    * Function getSimilarShopsAndSimilarCategoryShops.
+    *
+    *  this return all the same shops and shops under same category.
+    *
+    *  @param integer $id
+    *  @return array
+    */
+    public static function getSimilarShops($shopId, $numberOfShops = 12)
+    {
+        $relatedShops = Doctrine_Query::create()->from('Shop s')
+            ->select("s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink, c.id,ss.name, ss.permaLink")
+            ->where("s.id = ?", $shopId)
+            ->leftJoin("s.relatedshops rs")
+            ->leftJoin("rs.logo as logo")
+            ->leftJoin('s.category c')
+            ->leftJoin('c.shop ss')
+            ->leftJoin('ss.logo img')
+            ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        
+        return self::removeDuplicateShops($relatedShops, $numberOfShops);
+    }
+    
+    protected function removeDuplicateShops($relatedShops, $numberOfShops)
+    {
+        $similarShopsWithoutDuplicate = array();
+        foreach ($relatedShops[0]['relatedshops'] as $value) {
+            if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
+                $mergedRelatedShops[$value['id']] = $value;
+            }
+        }
 
-		Doctrine_Manager::getInstance()->bindComponent($connName, $connName);
-
-	}
-
+        if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
+            // push shops related to same category which are not yet added
+            foreach ($relatedShops[0]['category'] as $category) {
+                foreach ($category['shop'] as $value) {
+                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops && !in_array($value['id'], $similarShopsWithoutDuplicate)) {
+                        $similarShopsWithoutDuplicate[$value['id']] = $value ;
+                    }
+                }
+            }
+        }
+        
+        return $similarShopsWithoutDuplicate;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
 	/**
 	 * addChain
 	 *
@@ -957,62 +1002,6 @@ public static function getallStoreForFrontEnd()
  	}
 
  }
-
- /**
-  *  getSimilarShop
-  *
-  *  this return all the same shops and shops under same category
-  *
-  *  @param integer $id
-  *  @return array
-  */
- public static function getSimilarShop($id,$noOfShop = 20 )
- {
-
-
-
- 	$data = Doctrine_Query::create()->from('Shop s')
- 				->select("s.name,s.permaLink,rs.name,rs.permaLink,c.id,ss.name,ss.permaLink")
- 				->where("s.id = ?", $id)
- 				->leftJoin("s.relatedshops rs")
- 				->leftJoin('s.category c')
- 				->leftJoin('c.shop ss')
- 				->fetchArray(null, Doctrine::HYDRATE_ARRAY);
-
- 	$shops = array();
-
-
- 	# push related shops to array
- 	foreach ($data[0]['relatedshops'] as $value) {
-
- 		if(count($shops) <= $noOfShop)
- 		{
- 			$shops[$value['id']] = $value ;
- 		}
- 	}
-
- 	if(count($shops) <= $noOfShop)
- 	{
-
-	 	# push shops related to same category which are not yet added
-	 	foreach ($data[0]['category'] as $category) {
-
-		 	foreach ($category['shop'] as $value) {
-
-		 		if(count($shops) <= $noOfShop && !in_array($value['id'],$shops))
-		 		{
-		 			$shops[$value['id']] = $value ;
-		 		}
-
-
-		 	}
-	 	}
- 	}
-
- 	return $shops;
-
-}
-
 
  /**
   * get first character of the store name

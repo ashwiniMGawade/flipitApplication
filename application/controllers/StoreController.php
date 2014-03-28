@@ -524,17 +524,10 @@ class StoreController extends Zend_Controller_Action
   	  # for facebook parameters
   	  $this->view->fbtitle = @$shopdetail[0]['overriteTitle'];
   	  $this->view->fbshareUrl = HTTP_PATH_LOCALE . $shopdetail[0]['permaLink'];
-  	  $this->view->fbImg = $img;  	 
-
-  	  
-  	  # check display similar shops is enabled or not
-  	  if($shopdetail[0]['showSimliarShops'])
-  	  {
-	  	 $this->view->similarShops =  Shop::getSimilarShop($id,11);
-  	  }
-  	  
-
-  
+  	  $this->view->fbImg = $img;
+        if ($shopdetail[0]['showSimliarShops']) {
+            $this->view->similarShops = Shop::getSimilarShops($id, 11);
+        }
   }
   /**
    * search by char

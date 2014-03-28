@@ -88,7 +88,9 @@ else:
     echo $basePartialViewPath->render('partials/_header.phtml');
 endif;
 ?>
+
         <div id="main" class="container">   
+
  <?php
 
 if(file_exists($localePartialPath .  'partials/_top_nav.phtml')):
@@ -116,5 +118,6 @@ else :
     echo $basePartialViewPath->render('partials/_pop_up.phtml');
 endif;
 ?>
+	    
 </body>
 </html>
