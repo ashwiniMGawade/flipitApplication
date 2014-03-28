@@ -1,28 +1,26 @@
  <?php 
 	  $id = 0;
-	  if(Auth_VisitorAdapter::hasIdentity()):
-		$id = Auth_VisitorAdapter::getIdentity()->id;
-	  endif; 
+ if(Auth_VisitorAdapter::hasIdentity()):
+	  $id = Auth_VisitorAdapter::getIdentity()->id;
+ endif; 
       $text='';
       $style='';
       $imgstyle='';
       $termandcondition = '';
-
-		if(count($this->termandcondition) > 0){
-			$termandcondition = $this->termandcondition  [0] ['content'];
-		}
-
- 	$userlogin = false;
-
-	if (Auth_VisitorAdapter::hasIdentity()) :
-		$userlogin = true;
-	endif;
-
-		$heightWidth='';
-		$imgstyle='style="position: relative;bottom:15px;"';
-		$title = $this->title;
-		$class = '';
-		$logo = HTTP_PATH .'public/images/NoImage/box_plain_06.png';
+ if(count($this->termandcondition) > 0){
+	  $termandcondition = $this->termandcondition  [0] ['content'];
+	}
+	
+ 	  $userlogin = false;
+ if(Auth_VisitorAdapter::hasIdentity()) :
+	  $userlogin = true;
+ endif;
+ 
+      $heightWidth='';
+	  $imgstyle='style="position: relative;bottom:15px;"';
+	  $title = $this->title;
+	  $class = '';
+	  $logo = HTTP_PATH .'public/images/NoImage/box_plain_06.png';
 		
 		if (strlen ( $this->title ) > 150) {
 			$title = substr ( $this->title , 0, 150 );
@@ -68,8 +66,8 @@
 					}			
 			
 			if($this->discountType=='PA'){
+				
 				if($this->refOfferUrl != ""){
-					
 					$check = 1;
 					$url = $this->refOfferUrl;
 					$urlToShow = HTTP_PATH_LOCALE."out/offer/".$this->id;
@@ -92,7 +90,7 @@
             <section class="section <?php echo $class; ?>"
 				onmouseover="showText(<?php echo $this->id ;?>)"
 				onmouseout="showImage(<?php echo $this->id ;?>)">
-			<article class="block <?php if($this->exclusiveCode =='1') ? "orange-block" : "active" ?>">	
+			<article class="block <?php $this->exclusiveCode =='1' ? "orange-block" : "active"; ?>">	
 			<div class="holder">
 			 <?php  if ($this->userGenerated) { 
 			 
@@ -133,8 +131,7 @@
 			 			<div class="success-rate">
 			 				<span class="rate"><?php echo round($percentage) ;?>%</span>
 			 				<span class="rate-success">SUCCES</span>
-								
-			 			</div>
+						</div>
 			 			<div class="voting-btns">
 			 			<a href="javascript:void(0);" onclick="doVote(<?php echo $id?>,<?php echo $this->id; ?> , '1');">
 			 				<img class="up-btn" src="<?php echo HTTP_PATH; ?>public/images/front_end/vote-up.png" alt="Vote Up">
@@ -377,6 +374,7 @@
 				
 			</div>
 		</div>
+	</article>
  </section>
  <?php
  if( $this->offerCount > 1 && intval($this->codeUploadShowOrNot)==1 && intval($this->partialCounter)== 2):
