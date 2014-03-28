@@ -23,13 +23,13 @@
 		
 		$refresLink = $this->translate("refresh") . " ". LOCALE ." ". $this->translate("cache");
 	}
-	$varnishCookieValue = isset($_COOKIE['passCache']) ? "Varnish Cache On" : "Varnish Cache Off";
-	$noCacheUrl = isset($_COOKIE['passCache']) ? "http://www.kortingscode.nl/NoCache/unset" : "http://www.kortingscode.nl/NoCache/set";
+
+	$varnishCacheOnOff = isset($_COOKIE['passCache']) ? $this->translate("Varnish Cache On") : $this->translate("Varnish Cache Off");
+	$varnishSetPassCacheUrl = isset($_COOKIE['passCache']) ? "http://www.kortingscode.nl/NoCache/unset" : "http://www.kortingscode.nl/NoCache/set";
 ?>
-  
-  <a href='javascript:void(0)' onclick="showLightBox(<?php echo "'$refresLink'" ?>)" style="margin-left:10px;color:white;"><?php echo $refresLink ;?></a>
-  <a href='<?php echo $noCacheUrl; ?>' style="margin-left:10px;color:white;"><?php echo $varnishCookieValue ;?></a>
-     <p class="toplinks-outer" style="width:480px;"><span class="text"><?php echo $this->translate('Welcome');?>,</span> <a class="userFirstName" href="<?php echo HTTP_PATH;?>admin/user/profile"><?php 
+    <a href='javascript:void(0)' onclick="showLightBox(<?php echo "'$refresLink'" ?>)" style="margin-left:10px;color:white;"><?php echo $refresLink ;?></a>
+    <a href='<?php echo $varnishSetPassCacheUrl; ?>' style="margin-left:10px;color:white;"><?php echo $varnishCacheOnOff ;?></a>
+    <p class="toplinks-outer" style="width:480px;"><span class="text"><?php echo $this->translate('Welcome');?>,</span> <a class="userFirstName" href="<?php echo HTTP_PATH;?>admin/user/profile"><?php 
 		$firstName =  Zend_Auth::getInstance()->getIdentity()->firstName;
 					if( strlen( $firstName ) > 20 ) {
             			$cut_text = substr( $firstName , 0, 10 ); //cut at 17 chars
