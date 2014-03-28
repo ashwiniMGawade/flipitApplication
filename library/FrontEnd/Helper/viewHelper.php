@@ -844,50 +844,40 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 	public  static function generateMainMenu()
 	{
 		$mainMenu = menu::getFirstLevelMenu();
-
-		$mainMenucount = count($mainMenu);
-		$val = 1;
-		$string ='<nav id="nav"><ul>';
-		foreach ($mainMenu as $m) {
-
-			$permalink = RoutePermalink::getPermalinks($m['url']);
-
+		$mainMenuCount = count($mainMenu);
+		$value = 1;
+		$navigationString ='<nav id="nav"><ul>';
+		foreach ($mainMenu as $menu) {
+			$permalink = RoutePermalink::getPermalinks($menu['url']);
 			if(count($permalink) > 0){
 				$link = $permalink[0]['permalink'];
 			}else{
-				$link = $m['url'];
-				if($m['url']== FrontEnd_Helper_viewHelper::__link('inschrijven')){
+				$link = $menu['url'];
+				if($menu['url']== FrontEnd_Helper_viewHelper::__link('inschrijven')){
 					if (Auth_VisitorAdapter::hasIdentity()){
 						$link = FrontEnd_Helper_viewHelper::__link('mijn-favorieten');
 					}else{
-							$link = $m['url'];
+							$link = $menu['url'];
 					}
 				}
 			}
-
-		if($val==$mainMenucount)
+		if($value==$mainMenuCount)
 		{
-			$menuName = str_replace(' ','-',trim(strtolower($m["name"])));
-			$string .= '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" class="show_hide1" href="javascript:void(0);">' . $m["name"] . '</a></li>';
-
-
+			$menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
+			$navigationString .= '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a></li>';
 		}else{
-
-			$menuName = str_replace(' ','-',trim(strtolower($m["name"])));
-			preg_match('/http:\/\//', $m['url'],$matches);
+			$menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
+			preg_match('/http:\/\//', $menu['url'],$matches);
 			if(count($matches) > 0){
-
-				$string .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'.  $m['url'] . '">' . $m["name"] . '</a></li>';
-
+				$navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'.  $menu['url'] . '">' . $menu["name"] . '</a></li>';
 			}else{
-
-				$string .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $m["name"] . '</a></li>';
+				$navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a></li>';
 			}
 		}
-		$val++;
+		$value++;
 		}
-		$string .= '</ul></nav>';
-		return $string;
+		$navigationString .= '</ul></nav>';
+		return $navigationString;
 	}
 
 

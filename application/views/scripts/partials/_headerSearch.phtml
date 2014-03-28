@@ -1,10 +1,7 @@
 <?php 
 $this->headScript()->captureStart(); ?>
-
 $(document).ready(function(){
-
 var cache = {};
-
 $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
 		   var self = this;
 		   $.each( items, function( index, item ) {
@@ -12,154 +9,119 @@ $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
 		         {self._renderItem( ul, item );}
 		      });
 }
-		
-		
 $("input#searchFieldHeader").autocomplete({
-		delay: 0,
-       	minLength : 1,
-		source :  function( request, response ) {
-						
-						var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
-						response( $.grep( shopsJSON, function( item ){
-						return matcher.test( item.label );
-						}) );
-		},
-        select: function(event, ui ) {
-        	//$('input#selectedShopId').val(ui.item.id);
+	delay: 0,
+    minLength : 1,
+	source :  function( request, response ) {
+				var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
+				response( $.grep( shopsJSON, function( item ){
+				return matcher.test( item.label );
+			  }) );
+	},
+    select: function(event, ui ) {
         	window.location.href = HOST_PATH_LOCALE + ui.item.permalink ;
-        },
-		focus: function( event, ui ) {
-			$('li.wLi2').removeClass('select');
+    },
+	focus: function( event, ui ) {
+		    $('li.wLi2').removeClass('select');
 			$('a#ui-active-menuitem').parents('li').addClass('select');
-		},
+		   },
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
         url = item.permalink;
-        // only change here was to replace .text() with .html()
-		return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
+        return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
 			$("<a href=' + url + '></a>").html('<div>' + (__highlight(item.label,$("input#searchFieldHeader").val())) + "</div>"))
 		.appendTo(ul);
      };  
-
     $("a#searchbuttonHeader").click(function(){
+	if ($("input#searchFieldHeader")
+		.val() == $(
+		"input#searchFieldHeaderHidden")
+		.val() && $("input#searchFieldHeader").val()!='') {
+		var autocomplete = $('input#searchFieldHeader').data("autocomplete");  
+		var matcher = new RegExp("("+ $.ui.autocomplete.escapeRegex($('input#searchFieldHeader').val())+ ")", "ig");
+		autocomplete.widget().children(".ui-menu-item").each(
+		function() {
+		var item = $(this).data("item.autocomplete");
+	    if (matcher.test(item.label|| item.value|| item)) {
+			 autocomplete.selectedItem = item;
+	    }				
+   });
 		
-		if ($("input#searchFieldHeader")
-														.val() == $(
-														"input#searchFieldHeaderHidden")
-														.val() && $("input#searchFieldHeader").val()!='') {
-														
-														
-											
-											
-														var autocomplete = $('input#searchFieldHeader').data(
-														"autocomplete");
-												var matcher = new RegExp(
-														"("
-																+ $.ui.autocomplete
-																		.escapeRegex($('input#searchFieldHeader')
-																				.val())
-																+ ")", "ig");
-			
-												autocomplete
-														.widget()
-														.children(".ui-menu-item")
-														.each(
-																function() {
-			
-																	var item = $(
-																			this)
-																			.data(
-																					"item.autocomplete");
-																	if (matcher
-																			.test(item.label
-																					|| item.value
-																					|| item)) {
-																		autocomplete.selectedItem = item;
-																	}
-			
-																});
-			
-												if (autocomplete.selectedItem
-														&& $('input#searchFieldHeader').val()
-																.toLowerCase() == autocomplete.selectedItem.value
-																.toLowerCase()) {
-													item = {};
-													item['permalink'] = autocomplete.selectedItem.permalink;
-													autocomplete._trigger("select",
-															'', {
-																'item' : item
-															});
-			
-												} else {
-			
-													var value = $(
-															"input#searchFieldHeader")
-															.val();
-													if (value == 'Vind kortingscodes voor jouw favoriete winkels..') {
-														return false;
-			
-													}
-													window.location.href = HOST_PATH_LOCALE
-															+ __("zoeken") + '/' + value;
-			
-												}
-											}
-	});
-	
-	$("input#searchFieldHeader").keyup(function(e){
-		if(e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40){
-			$("input#searchFieldHeaderHidden").val($(this).val());
+	if (autocomplete.selectedItem
+			&& $('input#searchFieldHeader').val()
+					.toLowerCase() == autocomplete.selectedItem.value
+					.toLowerCase()) {
+		item = {};
+		item['permalink'] = autocomplete.selectedItem.permalink;
+		autocomplete._trigger("select",
+				'', {
+					'item' : item
+				});
+
+	} else {
+
+		var value = $(
+				"input#searchFieldHeader")
+				.val();
+		if (value == 'Vind kortingscodes voor jouw favoriete winkels..') {
+			return false;
+
 		}
+		window.location.href = HOST_PATH_LOCALE
+				+ __("zoeken") + '/' + value;
+
+	}
+}
 	});
 	
-	$("input#searchFieldHeader").keypress(function(event){
-		
-		if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searchFieldHeaderHidden").val() == $("input#searchFieldHeader").val()){
-			
-			var autocomplete = $( this ).data( "autocomplete" );
-		   	 var matcher = new RegExp( "("+$.ui.autocomplete.escapeRegex($(this).val())+")", "ig"  );
-		   	 
-		   	 autocomplete.widget().children( ".ui-menu-item" ).each(function() {
-			   	
-		   		 var item = $( this ).data( "item.autocomplete" );
-			   	 if ( matcher.test( item.label || item.value || item ) ) {
-			   		 autocomplete.selectedItem = item;
-			   	 }
-			   	 
-		   	 });
+$("input#searchFieldHeader").keyup(function(e){
+	if(e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40){
+		$("input#searchFieldHeaderHidden").val($(this).val());
+	}
+});
+	
+$("input#searchFieldHeader").keypress(function(event){
+	
+if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searchFieldHeaderHidden").val() == $("input#searchFieldHeader").val()){
+	
+	var autocomplete = $( this ).data( "autocomplete" );
+   	 var matcher = new RegExp( "("+$.ui.autocomplete.escapeRegex($(this).val())+")", "ig"  );
+   	 
+   	 autocomplete.widget().children( ".ui-menu-item" ).each(function() {
+	   	
+   		 var item = $( this ).data( "item.autocomplete" );
+	   	 if ( matcher.test( item.label || item.value || item ) ) {
+	   		 autocomplete.selectedItem = item;
+	   	 }
+	   	 
+   	 });
 		   	
-		   	 if ( autocomplete.selectedItem && $(this).val().toLowerCase() == autocomplete.selectedItem.value.toLowerCase()) {
-		   		 item = {};
-		   		 item['permalink'] = autocomplete.selectedItem.permalink;
-		   		 autocomplete._trigger( "select", '', { 'item' : item } );
-		   	 }else{
-				var value = $("input#searchFieldHeader").val();
-				if(value == 'Vind kortingscodes voor jouw favoriete winkels..'){
-					return false;
-				}
-				window.location.href = HOST_PATH_LOCALE + __("zoeken") + '/' + value;
-			 }
+if ( autocomplete.selectedItem && $(this).val().toLowerCase() == autocomplete.selectedItem.value.toLowerCase()) {
+   		 item = {};
+   		 item['permalink'] = autocomplete.selectedItem.permalink;
+   		 autocomplete._trigger( "select", '', { 'item' : item } );
+   	 }else{
+		var value = $("input#searchFieldHeader").val();
+		if(value == 'Vind kortingscodes voor jouw favoriete winkels..'){
+			return false;
 		}
-		 $('ul.ui-autocomplete').addClass('wd1');
-		 //$('ul.ui-autocomplete li').addClass('wd1');
-	});
+		window.location.href = HOST_PATH_LOCALE + __("zoeken") + '/' + value;
+	 }
+}
+	 $('ul.ui-autocomplete').addClass('wd1');
+	 //$('ul.ui-autocomplete li').addClass('wd1');
+});
 });
 function __highlight(s, t) {
 	var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(t) + ")", "ig");
 	return s.replace(matcher, '<strong class="abcText">$1</strong>');
 }
-$(function() {
-    // Invoke the plugin
-    $('input, textarea').placeholder();
-   
-   });
 <?php $this->headScript()->captureEnd();
-    $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.placeholder.js");
-    $trans = Zend_Registry::get('Zend_Translate');?>
-			<a href="#" class="opener"><span class="glyphicon glyphicon-search"></span></a>
-			<div class="slide">
-				<form role="form" class="search-form">
-					<input placeholder="<?php echo $trans->translate('Type in a Store e.g.  Avis')?>"  class="form-control" id='searchField'  name='searchField' label='searchField' type='text'/>
-					<input id='searchHidden'  name='searchHidden' type='hidden' label='searchHidden'/>
-					<a href='javascript:void(0);'  class="btn btn-default" id='searchbuttonHP' alt="<?php echo $trans->translate('Search') ?> "><span class="glyphicon glyphicon-search"></span></a>
-				</form>
-			</div>   
+    $zendTranslate = Zend_Registry::get('Zend_Translate');?>
+	<a href="#" class="opener"><span class="glyphicon glyphicon-search"></span></a>
+	<div class="slide">
+		<form role="form" class="search-form">
+			<input placeholder="<?php echo $zendTranslate->translate('Type in a Store e.g.  Avis')?>"  class="form-control" id='searchField'  name='searchField' type='text'/>
+			<input id='searchHidden'  name='searchHidden' type='hidden' />
+			<a href='javascript:void(0);'  class="btn btn-default" id='searchbuttonHP' alt="<?php echo $zendTranslate->translate('Search') ?> "><span class="glyphicon glyphicon-search"></span></a>
+	    </form>
+	</div>   
