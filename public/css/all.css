@@ -8844,3 +8844,6 @@ input[type="submit"]::-moz-focus-inner {
 @-ms-viewport {
   width: auto !important;
 }
+ .fl-right {
+    float: right;
+  }
