@@ -1,5 +1,5 @@
 <?php
-
+# we set a passcache cookie for Flipit and Kortingscode.nl so that admin can bypass varnish 
 class NoCacheController extends Zend_Controller_Action {
     
    
@@ -14,8 +14,7 @@ class NoCacheController extends Zend_Controller_Action {
     	
     }
     
-    protected function settingCookie($cookieExpireTime)
-{
+    protected function settingCookie($cookieExpireTime) {
     	setcookie('passCache', '1' , $cookieExpireTime , '/');
     }
   
