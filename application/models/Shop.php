@@ -13,14 +13,12 @@ class Shop extends BaseShop {
 
 
 
-    public function __contruct($connName = false)
+    public function __contruct($connectionName = false)
     {
-        if (!$connName) {
-            $connName = "doctrine_site" ;
+        if (!$connectionName) {
+            $connectionName = "doctrine_site" ;
         }
-        
-        Doctrine_Manager::getInstance()->bindComponent($connName, $connName);
-
+        Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
      ##################################################################################
      ################## REFACTORED CODE ###############################################
@@ -33,10 +31,10 @@ class Shop extends BaseShop {
     *  @param integer $id
     *  @return array
     */
-    public static function getSimilarShopsAndSimilarCategoryShops($shopId, $numberOfShop = 12)
+    public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
-            ->select("s.name,s.permaLink, img.path, img.name,logo.path, logo.name ,rs.name,rs.permaLink,c.id,ss.name,ss.permaLink")
+            ->select("s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink, c.id,ss.name, ss.permaLink")
             ->where("s.id = ?", $shopId)
             ->leftJoin("s.relatedshops rs")
             ->leftJoin("rs.logo as logo")
@@ -45,27 +43,31 @@ class Shop extends BaseShop {
             ->leftJoin('ss.logo img')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         
-        $mergedRelatedShops = array();
-       
+        return self::removeDuplicateShops($relatedShops, $numberOfShops);
+    }
+    
+    protected function removeDuplicateShops($relatedShops, $numberOfShops)
+    {
+        $similarShopsWithoutDuplicate = array();
         foreach ($relatedShops[0]['relatedshops'] as $value) {
-            if (count($mergedRelatedShops) <= $numberOfShop) {
+            if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
                 $mergedRelatedShops[$value['id']] = $value;
             }
         }
-        
-        if (count($mergedRelatedShops) <= $numberOfShop) {
+
+        if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
             // push shops related to same category which are not yet added
             foreach ($relatedShops[0]['category'] as $category) {
                 foreach ($category['shop'] as $value) {
-                    if (count($mergedRelatedShops) <= $numberOfShop && !in_array($value['id'], $mergedRelatedShops)) {
-                        $mergedRelatedShops[$value['id']] = $value ;
+                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops && !in_array($value['id'], $similarShopsWithoutDuplicate)) {
+                        $similarShopsWithoutDuplicate[$value['id']] = $value ;
                     }
                 }
             }
         }
-        return $mergedRelatedShops;
+        
+        return $similarShopsWithoutDuplicate;
     }
-    
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################

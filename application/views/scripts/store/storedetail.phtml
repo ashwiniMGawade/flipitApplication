@@ -1,7 +1,7 @@
 <?php
 ####### REFATORED CODE #####
 if(!empty($this->similarShops)):
-    $similarShopsAndSimilarCategory = $this->partial(
+    $similarShopsAndSimilarCategoriesShops = $this->partial(
         'store/_similar-and-category-related-shops.phtml',
         array('similarShopsAndSimilarCategoryShops' => $this->similarShops)
     );
@@ -394,7 +394,7 @@ endif;
 					echo $discussion; ?>
 
             <!-- display similar shops and shop under same category widget -->
-                <?php echo $similarShopsAndSimilarCategory; ?>
+                <?php echo $similarShopsAndSimilarCategoriesShops; ?>
 
 				</div>
 		 </div>
@@ -422,7 +422,7 @@ endif;
 				echo $discussion;?>
 
             <!-- display similar shops and shop under same category widget -->
-            <?php echo $similarShopsAndSimilarCategory; ?>
+            <?php echo $similarShopsAndSimilarCategoriesShops; ?>
  		 	</div>
 	       <?php endif;
 		endif;
