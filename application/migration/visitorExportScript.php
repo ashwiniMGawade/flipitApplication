@@ -129,6 +129,9 @@ class VisitorExport {
 					->orderBy("v.id DESC")
 					->fetchArray();
 
+			echo "\n";
+		    print "Parse visitors data and save it into excel file\n";
+
 			//CREATE A OBJECT OF PHPECEL CLASS
 			$objPHPExcel = new PHPExcel();
 			$objPHPExcel->setActiveSheetIndex(0);
@@ -149,6 +152,8 @@ class VisitorExport {
 			$column = 2;
 			$row = 2;
 			foreach ($data as $visitor) {
+
+		        print ".";
 
 				$name  =  $visitor['firstName'] . " " . $visitor['lastName'];
 
