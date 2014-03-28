@@ -13,17 +13,15 @@ class Shop extends BaseShop {
 
 
 
-	public function __contruct($connName = false)
-	{
-		if(! $connName)
-		{
-			$connName = "doctrine_site" ;
-		}
+    public function __contruct($connName = false)
+    {
+        if (!$connName) {
+            $connName = "doctrine_site" ;
+        }
+        
+        Doctrine_Manager::getInstance()->bindComponent($connName, $connName);
 
-		Doctrine_Manager::getInstance()->bindComponent($connName, $connName);
-
-	}
-
+    }
      ##################################################################################
      ################## REFACTORED CODE ###############################################
      ##################################################################################
@@ -67,6 +65,7 @@ class Shop extends BaseShop {
         }
         return $mergedRelatedShops;
     }
+    
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
