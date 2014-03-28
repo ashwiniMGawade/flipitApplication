@@ -198,7 +198,7 @@ class MoneySaving extends BaseMoneySaving {
 	 * @version 1.0
 	 */
 	
-	public static function generateMSArticleShop($slug, $limit, $shopId) {
+	public static function generateShopMoneySavingGuideArticle($slug, $limit, $shopId) {
 		//echo $shopId; die;
 		$shopArticle = Doctrine_Query::create()->select('chap.*,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name')
 		->from('Articles a')
@@ -318,7 +318,7 @@ class MoneySaving extends BaseMoneySaving {
 	 * @version 1.0
 	 
 	
-	public static function generateMSArticleShop($slug, $limit, $shopId) {
+	public static function generateShopMoneySavingGuideArticle($slug, $limit, $shopId) {
 	
 		$moneySavingArticles = self::generateMoneySavingArticles($slug);
 		$artArr = array();

@@ -1236,9 +1236,9 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
    * @version 1.0
    * @return array $data
    */
-  public static function generateMSArticleShop($slug, $limit, $id) {
+  public static function generateShopMoneySavingGuideArticle($slug, $limit, $id) {
 
-  	$data = MoneySaving::generateMSArticleShop($slug, $limit, $id);
+  	$data = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
   	return $data;
 
   }

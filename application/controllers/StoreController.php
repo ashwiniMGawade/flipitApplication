@@ -350,7 +350,7 @@ class StoreController extends Zend_Controller_Action
 	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
 	 		//key not exist in cache
 	 		if($flag){
-	 			$moneySavingGuideArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateMSArticleShop($slug, $limit, $id));
+	 			$moneySavingGuideArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle($slug, $limit, $id));
 	 			FrontEnd_Helper_viewHelper::setInCache($key, $moneySavingGuideArticle);
 	 		} else {
 	 			//get from cache
