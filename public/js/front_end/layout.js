@@ -1108,9 +1108,9 @@ var validator = null;
  * form validation during update user
  * @author cbhopal
  */
-function validateSignupHomepage()
+function validateSignupHomepage(formName)
 {
-	validator  = $("form#formOneHomePage")
+	validator  = $(formName)
 	.validate(
 			{
 				errorClass : 'input-error-full-new',
@@ -1291,10 +1291,15 @@ function showDummyPage() {
 }
 
 
-function signUpFromHandler(){
-	validateSignupHomepage();
-	if($("form#formOneHomePage").valid()){
-		$("form#formOneHomePage").submit();
+function signUpFromHandler(formLocation){ 
+	if (formLocation == 'sidebar-widget') {
+		var formName = 'form#formSignupSidebarWidget';
+	} else{
+		var formName = 'form#formOneHomePage';
+	}
+	validateSignupHomepage(formName);
+	if($(formName).valid()){
+		$(formName).submit();
 	}
 
 	return false;

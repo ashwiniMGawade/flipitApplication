@@ -67,12 +67,12 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 
 </head>
 <body>
-    <div class="outerwrapper">
+    <div id="wrapper">
 	    <!-- hidden field for apply selected class on menu -->
 	    <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
 	    <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
 	    <div class="nav-bg"></div>
-	    <div class="innerwrapper">
+	    <div class="">
 <?php
 $localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
 
@@ -89,9 +89,10 @@ else:
 endif;
 ?>
 
+
         <div id="main" class="container">   
 
- <?php
+<?php
 
 if(file_exists($localePartialPath .  'partials/_top_nav.phtml')):
     echo $localePartialViewPath->render('partials/_top_nav.phtml');
