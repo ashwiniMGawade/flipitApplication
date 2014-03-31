@@ -537,34 +537,19 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
          <!-- Separator Starts -->
         <div class="separator">&nbsp;</div>
         <!-- Separator Ends -->
-<<<<<<< HEAD
-      <?php endif;
 
-      if(count($this->expiredOffers) >0):?>
-      <div class="new-outer">
-          <!-- Merchants Outer Starts -->
-            <div class="merchants-outer">
-                <h2><?php echo  $this->translate("These offers from"). " " . $this->data[0]['name'].  " " .$this->translate("are expired");?></h2>
-                <div class="merchants-bot">
-                <?php  echo $this->partialLoop('store/expiredOffer.phtml', $this->expiredOffers); ?>
-                </div>
-            </div>
-          <!-- Merchants Outer Ends -->
-      </div>
-=======
       <?php endif; ?>
       
         <!-- Refactored code -->
-        <?php if(count($this->expiredOffer) >0):?>
+        <?php if(count($this->expiredOffers) >0):?>
 			
 			<header class="heading-box text-expired">
             	<h2><?php echo  $this->translate('Expired').' '.$this->data[0]['name'].' '.$this->translate("vouchers and discounts"); ?></h2>
             	<strong><?php echo  $this->translate('Unfortunately ... These discount codes from').' '.$this->data[0]['name'].' '.$this->translate("you’ve missed");?>.</strong>
 			</header>
 			<section class="section-module">
-				<?php  echo $this->partialLoop('store/expiredOffer.phtml', $this->expiredOffer); ?>
+				<?php  echo $this->partialLoop('store/expiredOffer.phtml', $this->expiredOffers); ?>
 			</section>
->>>>>>> KC-2646-storepage-expired-codes-visitor-
 
         <?php endif;?>
         <!-- END Refactored code -->
