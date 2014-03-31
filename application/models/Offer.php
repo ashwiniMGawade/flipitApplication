@@ -1409,6 +1409,7 @@ class Offer extends BaseOffer
 					 	->andWhere('o.shopId=?',$shopId)
 					 	->andWhere('o.endDate > ?',$currentDate)
 					 	->andWhere('o.startdate <= "'.$date.'"')
+					 	->andWhere('o.deleted=0')
 					 	->limit(1)
 					 	->fetchArray();
 
