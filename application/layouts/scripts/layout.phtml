@@ -85,9 +85,6 @@ $localePartialPath = $localeViewPath . 'scripts/' . $partials;
 $localePartialViewPath = new Zend_View();
 $localePartialViewPath->setBasePath($localeViewPath);
 
-
-
-
 if(file_exists($localePartialPath .  '_header.phtml')) :
     echo $localePartialViewPath->render($partials. '_header.phtml');
 else:

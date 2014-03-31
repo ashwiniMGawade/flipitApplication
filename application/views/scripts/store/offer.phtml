@@ -90,7 +90,7 @@
             <section class="section <?php echo $class; ?>"
 				onmouseover="showText(<?php echo $this->id ;?>)"
 				onmouseout="showImage(<?php echo $this->id ;?>)">
-			<article class="block <?php $this->exclusiveCode =='1' ? "orange-block" : "active"; ?>">	
+			<article class="block <?php if($this->exclusiveCode == '1') { echo "orange-block";} else { "active";} ?>">	
 			<div class="holder">
 			 <?php  if ($this->userGenerated) { 
 			 
@@ -162,17 +162,22 @@
 					<div class="text">
                     	<?php
                     	
-                    	$curdate = date('Y-m-d');
+                    	$currentDate = date('Y-m-d');
                     	$offerEndDate = date('Y-m-d',strtotime($this->endDate ));
                     	$timestamp_start = strtotime($offerEndDate);
-                    	$timestamp_end = strtotime($curdate);
+                    	$timestamp_end = strtotime($currentDate);
                     	
                     	$difference = abs($timestamp_end - $timestamp_start);
                     	$diff = floor($difference/(60*60*24));
-                    	if($this->discountType == "CD"):
-                    	?>
-	                    	<p><?php
-	                    	//echo $this->startDate; //die; 
+                    	
+                    	?> <p>
+                    	
+                    	<?php 
+                    	 if($this->exclusiveCode == '1') { ?>
+                    	 		<strong class="exclusive"><span class="glyphicon glyphicon-star"></span> Exclusive</strong>
+                    		<?php  }
+                    		if($this->discountType == "CD"):
+                    		    
 	                    		$sdate = new Zend_Date(strtotime($this->startDate));
 		                    	echo $this->translate('Added'); ?>: <span class="text-black"><?php echo ucwords($sdate->get(Zend_Date::DATE_MEDIUM)); ?>, </span>
 	                    		
@@ -209,55 +214,48 @@
 	                    	</p>
                        <?php 
                        endif;
-                       ?>
-                       	if($this->discountType == "CD"): ?>
+                       
+                      if($this->discountType == "CD"){ ?>
 							<a id="<?php echo $this->id ;?>" href="<?php echo $urlToShow;?>"  rel="nofollow" class="link"   target="_blank" onClick="showCode1(this), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"><?php echo $title;?></a>
-							<?php else: ?>
+							<?php } else { ?>
 							<a id="<?php echo $this->id ;?>" href="<?php echo $urlToShow;?>"  rel="nofollow" class="link"   target="_blank" onClick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"><?php echo $title;?></a>
-					    <?php endif; ?>
+					    <?php } ?>
                       
 					</div>
 
 					<div class="buttons">
-						<button class="btn blue btn-primary">Get code &amp; Open site
-
+					
 							 <?php
 						if (($this->Visability  == 'MEM' && $userlogin) || $this->Visability  == 'DE' || $this->userGenerated==1 && $userlogin) {
 						?> 
 	                	
 						<?php  if($this->discountType=='PA'){  ?>
 
-							<button class="btn blue btn-primary" id="<?php echo $this->id ;?>" >
-								<a  href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
+						
+								<a  class="btn blue btn-primary" href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
 									<?php echo $this->translate('>Get code &amp; Open site') ; ?>
 								</a>
-							</button>
+						
 							
 						<?php } elseif($this->discountType=='SL'){
 						?>
-								<button class="btn blue btn-primary" id="<?php echo $this->id ;?>" >
-									<a  href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
+								
+									<a class="btn blue btn-primary"  href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
 										<?php echo $this->translate('>Get code &amp; Open site') ; ?>
 									</a>
-								</button>
+								
 								
 						<?php }	else{
 							?>
-							<button class="btn blue btn-primary" id="blackImage<?php echo $this->id; ?>" >
-														
+							<button class="btn blue btn-primary" id="blackImage<?php echo $this->id; ?>" >				
 								<?php 
 									# display code if its type is General
 									if($this->couponCodeType == 'GN'):
 										echo $this->couponCode;  
 									endif;	
 							 	?>
-								
 							</button>
-							<button class="btn blue btn-primary" id="<?php echo $this->id ;?>" vote='0' onclick="showCode(this)" >
-								<a href="<?php echo $urlToShow;?>" onclick="ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');"  rel="nofollow" target="_blank" >
-								<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png" alt="" />
-								</a>
-							</button>
+							
 					<?php  }   
 
 						
@@ -273,10 +271,9 @@
 					</div>
 	                <?php } ?>
 	                <?php  if($this->discountType=='CD'){  ?>
-						
-						<a class="text-white-link" id="<?php echo $this->id ; ?>" vote='0' href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="showCode1(this), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
-						
-						<button class="btn orange btn-warning btn-code" id="<?php echo $this->id ; ?>" vote='0'><?php echo $this->ranslate('PAK DEZE AANBIEDING') ; ?></button>
+	                
+						<a id="<?php echo $this->id ; ?>" class = "btn orange btn-warning btn-code" vote='0' href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="showCode1(this), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
+						<?php echo $this->translate('PAK DEZE AANBIEDING') ; ?>
 						</a>
 			   	 		
 			   	 	
