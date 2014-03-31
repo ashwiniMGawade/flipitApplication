@@ -349,6 +349,8 @@ class OfferController extends Zend_Controller_Action {
 		//echo "<pre>";print_r($relatedOffers);die;
 		$this->view->reloffer = $relatedOffers;
 		
+		$offers =  FrontEnd_Helper_viewHelper::commonfrontendGetCode("all", 1, $shopId, 0)  ;
+		$this->view->topOneOffer = $offers;
 		endif;
 	}
 /**

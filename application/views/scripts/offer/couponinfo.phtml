@@ -8,6 +8,8 @@
 	$urlToShow = "";
   ?>
     <?php 
+       $offer = $this->partialLoop('store/offer.phtml', $this->topOneOffer);
+    
          foreach($this->cpndetail as $cd)
          {
          	$startdate = strtotime(date('Y-m-d',strtotime($cd['startDate'])));
@@ -389,10 +391,18 @@
 			     </div>  
        	     	 <div class="coupon-arrows"><img src="http://kortingscode.nl/public/images/front_end/coupon-arrows-new.png"></div>	
 	       	 </div>
+	       	 <div class="clr"></div>
 	       	 
-	       	  	  <div class="separator mt20">&nbsp;</div>
+	       	  	    <div class="separator mt20 mb20">&nbsp;</div>
+		       	      <!-- Separator Ends --> 
+		       	      
+		       	      <div class="alle-winkels-outer" style="width: 658px;">
+		       	      
+	       	              <?php echo $offer;?>
+	            	  </div>
 		       	      <!-- Separator Ends --> 
 		       	  <div class="clr"></div>
+	       <?php if(count($offer) <= 0): ?>
 	       <div class="alle-winkels-outer">   
        	        	
 	       	  	 <div class="yellow-box2-alternative-code mt20 clr">
@@ -411,6 +421,7 @@
 						</div>
 				 </div>
 	       	  </div>
+	       	  <?php endif; ?>
 	       	     <!-- Separator Starts -->
 	       	      <div class="separator mt20">&nbsp;</div>
 	       	      <!-- Separator Ends --> 

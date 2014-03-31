@@ -924,7 +924,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 			case 'all':
 
-				$data = Offer::getAllOfferOnShop($shopId);
+				$data = Offer::getAllOfferOnShop($shopId, $limit);
 
 			break;
 
