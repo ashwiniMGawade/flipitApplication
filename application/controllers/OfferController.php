@@ -310,7 +310,9 @@ class OfferController extends Zend_Controller_Action {
 		$currentDate = date ( 'Y-m-d' );
 		// call to function from model to get offer details
 		$cpnDetails = Offer::getCouponDetails ( $permalink );
-
+		
+		
+		
 		if(count($cpnDetails[0]['logo']) > 0):
 				$img = PUBLIC_PATH_CDN.$cpnDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $cpnDetails[0]['shop']['logo']['name'];
 			
@@ -344,7 +346,9 @@ class OfferController extends Zend_Controller_Action {
 		if($shopId !=""):
 
 		$relatedOffers = Offer::getrelatedOffers ( $shopId, $currentDate );
+		//echo "<pre>";print_r($relatedOffers);die;
 		$this->view->reloffer = $relatedOffers;
+		
 		endif;
 	}
 /**
