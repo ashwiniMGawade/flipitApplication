@@ -348,7 +348,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		return $str;
 	}
 	/**
-	 * get Newest offer list for Store page from database
+	 * get Newest offer list for Store page from database.
 	 * @version 1.0
 	 * @return array $data
 	 */
@@ -357,33 +357,33 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 	##################################################################################
 	public static function getShopCouponCode($type, $limit, $shopId = 0)
 	{
-	    $shopCode = '';
+	    $shopCouponCodes = '';
 		switch(strtolower($type)) {
             case 'popular':
-				$shopCode = Offer::commongetpopularOffers($type, $limit, $shopId = 0);
+				$shopCouponCodes = Offer::commongetpopularOffers($type, $limit, $shopId = 0);
 				break;
 			case 'newest':
-				$shopCode = Offer::commongetnewestOffers($type, $limit, $shopId);
+				$shopCouponCodes = Offer::commongetnewestOffers($type, $limit, $shopId);
 				break;
 			case 'extended':
-				$shopCode = Offer::commongetextendedOffers($type, $limit, $shopId);
+				$shopCouponCodes = Offer::commongetextendedOffers($type, $limit, $shopId);
 				break;
 			case 'expired':
-				$shopCode = Offer::getExpiredOffers($type, $limit, $shopId);
+				$shopCouponCodes = Offer::getExpiredOffers($type, $limit, $shopId);
 				break;
 			case 'relatedshops':
-				$shopCode = Offer::commongetrelatedshops($type, $limit, $shopId);
+				$shopCouponCodes = Offer::commongetrelatedshops($type, $limit, $shopId);
 				break;
 			case 'relatedshopsbycat':
-				$shopCode = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
+				$shopCouponCodes = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
 			    break;
 			case 'latestupdates':
-				$shopCode = Offer::getLatestUpdates($type, $limit, $shopId);
+				$shopCouponCodes = Offer::getLatestUpdates($type, $limit, $shopId);
 				break;
 			default:
 				break;
 		}
-		return $shopCode;
+		return $shopCouponCodes;
 	}
 	##################################################################################
 	################## END REFACTORED CODE ###########################################
