@@ -189,24 +189,24 @@ class IndexController extends Zend_Controller_Action {
 		$topstoreflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularshopForHomePage_list');
 		//key not exist in cache
     	if($topstoreflag){
-    		$topStores = FrontEnd_Helper_viewHelper::getStoreForFrontEnd("popular", 16);
-    		FrontEnd_Helper_viewHelper::setInCache('all_popularshopForHomePage_list', $topStores);
+    		$topPopularStores = FrontEnd_Helper_viewHelper::getStoreForFrontEnd("popular", 16);
+    		FrontEnd_Helper_viewHelper::setInCache('all_popularshopForHomePage_list', $topPopularStores);
     	} else {
-    		$topStores = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularshopForHomePage_list');
+    		$topPopularStores = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularshopForHomePage_list');
     	}
-		$this->view->topStores = $topStores;
+		$this->view->topStores = $topPopularStores;
 
 		/*****************  fetch Recent Shops for homepage list **********************/
 		$recentstoreflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_shop_list');
 		//key not exist in cache
     	if($recentstoreflag){
 
-    		$recentStore = FrontEnd_Helper_viewHelper::getStoreForFrontEnd("recent", 4);
-    		FrontEnd_Helper_viewHelper::setInCache('all_shop_list', $recentStore);
+    		$recentStoreList = FrontEnd_Helper_viewHelper::getStoreForFrontEnd("recent", 4);
+    		FrontEnd_Helper_viewHelper::setInCache('all_shop_list', $recentStoreList);
     	} else {
-    		$recentStore = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_shop_list');
+    		$recentStoreList = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_shop_list');
     	}
-		$this->view->recentStore = $recentStore;
+		$this->view->recentStore = $recentStoreList;
 
 		/***************** fetch As seen IN  for homepage list **********************/
 		$seeninflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_homeseenin_list');

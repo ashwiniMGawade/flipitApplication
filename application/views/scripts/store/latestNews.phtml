@@ -5,14 +5,14 @@
 		$date = date('d', $datetime);
 		$month = date('M', $datetime);
 		$year = date('Y', $datetime);
-		$httpPosition = 'http';
+		$httpStringPosition = 'http';
 	 	?>
 		<em class="date"><?php echo $date.' '.$month.' '.$year; ?></em>
 		<h3>
 		<?php if ($this->url!=null && $this->url!='') { ?>	
 			<a href="
 			<?php
-				if (strpos($this->url,$httpPosition) !== false) {
+				if (strpos($this->url,$httpStringPosition) !== false) {
 					echo $this->url;
 				} else {
 					echo 'http://'.$this->url; 

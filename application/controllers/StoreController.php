@@ -241,44 +241,44 @@ class StoreController extends Zend_Controller_Action
             $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
             # key not exist in cache
             if($flag){
-                $shopdetail=FrontEnd_Helper_viewHelper::replaceStringArray(Shop::getStoredetail($id));
-                FrontEnd_Helper_viewHelper::setInCache($key, $shopdetail);
+                $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray(Shop::getStoredetail($id));
+                FrontEnd_Helper_viewHelper::setInCache($key, $shopInformation);
             } else {
                 # get from cache
-                $shopdetail = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+                $shopInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
                 # echo 'The result is comming from cache!!';
             }
             
             # if show permalink not exist then shop show 404 error
-            if(sizeof($shopdetail) >0){
+            if(sizeof($shopInformation) >0){
             }else{
                 $url  =  HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
                 $this->_redirect($url);
             }
                 
-            if ($shopdetail[0]['showChains']) {
-                $chains = FrontEnd_Helper_viewHelper::sidebarChainWidget($shopdetail[0]['id'], $shopdetail[0]['name'], $shopdetail[0]['chainItemId']);
+            if ($shopInformation[0]['showChains']) {
+                $shopChains = FrontEnd_Helper_viewHelper::sidebarChainWidget($shopInformation[0]['id'], $shopInformation[0]['name'], $shopInformation[0]['chainItemId']);
                 $logDirectoryPath = APPLICATION_PATH . "/../logs/test";
-                FrontEnd_Helper_viewHelper::writeLog($chains, $logDirectoryPath);
+                FrontEnd_Helper_viewHelper::writeLog($shopChains, $logDirectoryPath);
                 
-                if (isset($chains['headLink'])) {
-                    $this->view->layout()->customHeader = "\n" . $chains['headLink'];
+                if (isset($shopChains['headLink'])) {
+                    $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
                 }
 
-                if ($chains['hasShops'] && isset($chains['string'])) {
-                    $this->view->chain = $chains['string'] ;
+                if ($shopChains['hasShops'] && isset($shopChains['string'])) {
+                    $this->view->chain = $shopChains['string'] ;
                 }
             }
             
-            if (@$shopdetail[0]['customHeader']) {
+            if (@$shopInformation[0]['customHeader']) {
                 $this->view->layout()->customHeader =  $this->view->layout()->customHeader .
-                                           @$shopdetail[0]['customHeader'] . "\n" ;
+                                           @$shopInformation[0]['customHeader'] . "\n" ;
             }
                 
             
-            if(count($shopdetail[0]['logo']) > 0):
-                $img = PUBLIC_PATH_CDN.ltrim($shopdetail[0]['logo']['path'], "/").'thum_medium_store_'. $shopdetail[0]['logo']['name'];
+            if(count($shopInformation[0]['logo']) > 0):
+                $img = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
             else:
                 $img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
             endif;
@@ -347,7 +347,7 @@ class StoreController extends Zend_Controller_Action
       }
       
      // check this sho is a popular store or not 
-     $isPopular =  Shop::getPopularStore( 0 , $shopdetail[0]['id']);
+     $isPopular =  Shop::getPopularStore( 0 , $shopInformation[0]['id']);
       
       if(count($isPopular) >  0) {
         
@@ -359,7 +359,7 @@ class StoreController extends Zend_Controller_Action
       }
       
       // check This shop is hot at the moment or not
-      $__onlineOffers =  Offer::getShopCharacteristics($shopdetail[0]['id'] , 5) ;
+      $__onlineOffers =  Offer::getShopCharacteristics($shopInformation[0]['id'] , 5) ;
       
       if(count($__onlineOffers) >  4) {
         $this->view->isHotShop = true ;
@@ -367,22 +367,22 @@ class StoreController extends Zend_Controller_Action
         $this->view->isHotShop = false ;
       }
       // check This shop is hot at the moment or not
-      $__hasExclusiveOffers =  Offer::getShopCharacteristics($shopdetail[0]['id'] , 7 , true , true) ;
+      $__hasExclusiveOffers =  Offer::getShopCharacteristics($shopInformation[0]['id'] , 7 , true , true) ;
       
       if(count($__hasExclusiveOffers) >  6 )  {
         $this->view->isSuperPartner = true ;
       } else  {
         $this->view->isSuperPartner = false ;
       }
-      if( $shopdetail[0]['displayExtraProperties'] ) {
+      if( $shopInformation[0]['displayExtraProperties'] ) {
         
               # if $displayExtraPropertiesWidget is true then display shop extra properteis widget otherwise hide
               $displayExtraPropertiesWidget = true ;
               
               #check is all shop extra properties are false or not  
               if(!$this->view->isHotShop && !$this->view->isSuperPartner && ! $this->view->isPopular  &&
-                        !$shopdetail[0]['ideal'] && ! $shopdetail[0]['qShops'] && !$shopdetail[0]['freeReturns'] &&
-                    ! $shopdetail[0]['pickupPoints'] &&  !$shopdetail[0]['mobileShop'] &&  !$shopdetail[0]['service'])
+                        !$shopInformation[0]['ideal'] && ! $shopInformation[0]['qShops'] && !$shopInformation[0]['freeReturns'] &&
+                    ! $shopInformation[0]['pickupPoints'] &&  !$shopInformation[0]['mobileShop'] &&  !$shopInformation[0]['service'])
               {
                 
                   $displayExtraPropertiesWidget = false ;
@@ -392,10 +392,10 @@ class StoreController extends Zend_Controller_Action
         
         $displayExtraPropertiesWidget = false ;
       }
-      $this->view->data = $shopdetail;
+      $this->view->data = $shopInformation;
 
       $this->view->msArticle = $msArticle;
-      $this->view->latestupdates = $latestupdates;
+      $this->view->latestShopUpdates = $latestupdates;
       $this->view->offers = $offers;
       
     
@@ -497,23 +497,23 @@ class StoreController extends Zend_Controller_Action
       
       $this->view->controllerName = $this->getRequest()->getParam('controller');
       $this->view->img = $img;//image for the shop
-      $shareUrl = HTTP_PATH_LOCALE . $shopdetail[0]['permaLink'];
+      $shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
       $this->view->shareUrl = $shareUrl;//share to facebook
       # get editor picture from second server
-      $this->view->shopEditor =  User::getProfileImage($shopdetail[0]['contentManagerId']);
+      $this->view->shopEditor =  User::getProfileImage($shopInformation[0]['contentManagerId']);
       
       $this->view->displayExtraPropertiesWidget = $displayExtraPropertiesWidget ;
-      $this->view->headTitle(@$shopdetail[0]['overriteTitle']);
-      $this->view->headMeta()->setName('description', @trim($shopdetail[0]['metaDescription']));
+      $this->view->headTitle(@$shopInformation[0]['overriteTitle']);
+      $this->view->headMeta()->setName('description', @trim($shopInformation[0]['metaDescription']));
       
       # for facebook parameters
-      $this->view->fbtitle = @$shopdetail[0]['overriteTitle'];
-      $this->view->fbshareUrl = HTTP_PATH_LOCALE . $shopdetail[0]['permaLink'];
+      $this->view->fbtitle = @$shopInformation[0]['overriteTitle'];
+      $this->view->fbshareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
       $this->view->fbImg = $img;     
 
       
       # check display similar shops is enabled or not
-      if($shopdetail[0]['showSimliarShops'])
+      if($shopInformation[0]['showSimliarShops'])
       {
          $this->view->similarShops =  Shop::getSimilarShop($id,11);
       }
