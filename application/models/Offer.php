@@ -1690,30 +1690,35 @@ class Offer extends BaseOffer
 	  * @return array $data
 	  * @version 1.0
 	  */
-
-	 public static function commongetexpiredOffers($type, $limit, $shopId=0){
-	 	$expiredtime=date("Y-m-d 00:00:00");
-		$data = Doctrine_Query::create()
+	 ##################################################################################
+	 ################## REFACTORED CODE ###############################################
+	 ##################################################################################
+    public static function getExpiredOffers($type, $limit, $shopId = 0)
+    {
+	 	$expiredTime=date("Y-m-d 00:00:00");
+		$expiredOffers = Doctrine_Query::create()
 				->select('s.id,s.name,o.id, o.title,o.extendedfulldescription, o.visability, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer, o.extendedUrl, o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, img.id, img.path, img.name')
 				->from('Offer o')
 				->leftJoin('o.shop s')
 				->leftJoin('s.logo img')
-				->where('o.deleted=0' )
+				->where('o.deleted=0')
 				->andWhere('o.userGenerated=0')
-				->andWhere('o.enddate<'."'".$expiredtime."'")
+				->andWhere('o.enddate<'."'".$expiredTime."'")
 				->andWhere('o.discounttype="CD"')
 				->andWhere('s.deleted = 0')
 				->orderBy('o.id DESC');
-				if($shopId!=''){
-					$data->andWhere('s.id = '.$shopId.'');
-				}
-				$data->limit($limit);
-				$data = $data->fetchArray();
-
-				return $data;
-
-	 }
-
+		
+        if ($shopId != '') {
+				$expiredOffers->andWhere('s.id = '.$shopId.'');
+		}
+				
+			$expiredOffers->limit($limit);
+			$expiredOffers = $expiredOffers->fetchArray();
+			return $expiredOffers;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
 
 	 /**
 	  * get related shops for common function

@@ -348,54 +348,46 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		return $str;
 	}
 	/**
-	 * get Newest offer list for Store page  from database
-	 * @author Sunny patial
+	 * get Newest offer list for Store page from database
 	 * @version 1.0
 	 * @return array $data
 	 */
-	public static function shopfrontendGetCode($type,$limit,$shopId=0) {
-	    $data = '';
+	##################################################################################
+	################## REFACTORED CODE ###############################################
+	##################################################################################
+	public static function getShopCouponCode($type, $limit, $shopId = 0)
+	{
+	    $shopCode = '';
 		switch(strtolower($type)) {
-
-			case 'popular':
-
-				$data = Offer::commongetpopularOffers($type, $limit, $shopId=0);
+            case 'popular':
+				$shopCode = Offer::commongetpopularOffers($type, $limit, $shopId = 0);
 				break;
-
 			case 'newest':
-
-				$data = Offer::commongetnewestOffers($type, $limit, $shopId);
+				$shopCode = Offer::commongetnewestOffers($type, $limit, $shopId);
 				break;
-
 			case 'extended':
-
-				$data = Offer::commongetextendedOffers($type, $limit, $shopId);
+				$shopCode = Offer::commongetextendedOffers($type, $limit, $shopId);
 				break;
-
 			case 'expired':
-
-				$data = Offer::commongetexpiredOffers($type, $limit, $shopId);
+				$shopCode = Offer::getExpiredOffers($type, $limit, $shopId);
 				break;
-
 			case 'relatedshops':
-
-				$data = Offer::commongetrelatedshops($type, $limit, $shopId);
+				$shopCode = Offer::commongetrelatedshops($type, $limit, $shopId);
 				break;
 			case 'relatedshopsbycat':
-
-					$data = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
-			break;
+				$shopCode = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
+			    break;
 			case 'latestupdates':
-				$data = Offer::getLatestUpdates($type, $limit, $shopId);
+				$shopCode = Offer::getLatestUpdates($type, $limit, $shopId);
 				break;
-
 			default:
 				break;
 		}
-
-		return $data;
-
+		return $shopCode;
 	}
+	##################################################################################
+	################## END REFACTORED CODE ###########################################
+	##################################################################################
 	public static function getallrelatedshopsid($shopId) {
 
 		$data = Offer::commongetallrelatedshopsid($shopId);

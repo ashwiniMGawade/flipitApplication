@@ -315,25 +315,23 @@ class StoreController extends Zend_Controller_Action
 	  	  		$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
 	  	  		//echo 'The result is comming from cache!!';
 	  	  	}
-	 		//get all expired offer related currect shop
-	 		$key = 'all_expiredOfferInStore'. $id .'_list';
-	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-	 		//key not exist in cache
-	 		if($flag){
-	 			$expiredOffer =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::shopfrontendGetCode("expired",12,$id));
-	 			FrontEnd_Helper_viewHelper::setInCache($key, $expiredOffer);
+	 		$expiredOfferKey = 'all_expiredOfferInStore'. $id .'_list';
+	 		$expiredOfferFlag = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($expiredOfferKey);
+	 		
+	        if ($expiredOfferFlag) {
+	 			$expiredOffer = FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode("expired", 12, $id));
+	 			FrontEnd_Helper_viewHelper::setInCache($expiredOfferKey, $expiredOffer);
 	 		} else {
-	 			//get from cache
-	 			$expiredOffer = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+	 			$expiredOffer = FrontEnd_Helper_viewHelper::getFromCacheByKey($expiredOfferKey);
 	 		}
-	 		//echo "<pre>"; print_r($expiredOffer); die;
+	 		
 	 		//get all expired offer related currect shop
 	 		$key = 'all_latestupdatesInStore'  . $id . '_list';
 	 		//FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
 	 		//key not exist in cache
 	 		if($flag){
-	 			$latestupdates =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::shopfrontendGetCode('latestupdates',4,$id));
+	 			$latestupdates =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates',4,$id));
 	 			FrontEnd_Helper_viewHelper::setInCache($key, $latestupdates);
 	 		} else {
 	 			//get from cache
@@ -499,10 +497,10 @@ class StoreController extends Zend_Controller_Action
 	  endif;
   	  		
   	  		
-  	  $this->view->expiredOffers = $expiredOffer;
+  	  $this->view->expiredOffer = $expiredOffer;
   	  
   	  
-  	  $relatedStoteByCat =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::shopfrontendGetCode('relatedshopsbycat',4,$id));
+  	  $relatedStoteByCat =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode('relatedshopsbycat',4,$id));
   	  
   	  
   	  $this->view->relatedshops = $relatedStoteByCat ;
@@ -566,15 +564,15 @@ class StoreController extends Zend_Controller_Action
  	$params=$this->_request->getParams();
  	$this->view->shopId=$params["storeid"];
  	
- 	$this->view->shopoffer=FrontEnd_Helper_viewHelper::shopfrontendGetCode("newest",3,$params["storeid"]);
+ 	$this->view->shopoffer=FrontEnd_Helper_viewHelper::getShopCouponCode("newest",3,$params["storeid"]);
  	$shopdetail=Shop::getStoredetail($params["storeid"]);
  	
- 	$expiredcoupons=FrontEnd_Helper_viewHelper::shopfrontendGetCode("expired",'all',$params["storeid"]);
+ 	$expiredcoupons=FrontEnd_Helper_viewHelper::getShopCouponCode("expired",'all',$params["storeid"]);
  	$this->view->expiredOffers=$expiredcoupons;
  	
- 	$relatedshops=FrontEnd_Helper_viewHelper::shopfrontendGetCode('relatedshops','all',$params["storeid"]);
+ 	$relatedshops=FrontEnd_Helper_viewHelper::getShopCouponCode('relatedshops','all',$params["storeid"]);
  	$this->view->relatedshops=$relatedshops;
- 	$latestupdates=FrontEnd_Helper_viewHelper::shopfrontendGetCode('latestupdates',10,$params["storeid"]);
+ 	$latestupdates=FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates',10,$params["storeid"]);
  	$this->view->latestupdates=$latestupdates;
  	foreach($shopdetail as $v)
  	{
