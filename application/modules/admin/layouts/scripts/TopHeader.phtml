@@ -24,7 +24,7 @@
 		$refresLink = $this->translate("refresh") . " ". LOCALE ." ". $this->translate("cache");
 	}
 
-	$varnishCacheOnOff = isset($_COOKIE['passCache']) ? $this->translate("Varnish Cache On") : $this->translate("Varnish Cache Off");
+	$varnishCacheOnOff = isset($_COOKIE['passCache']) ? $this->translate("Varnish Cache Off") : $this->translate("Varnish Cache On");
 	$varnishSetPassCacheUrl = isset($_COOKIE['passCache']) ? "http://www.kortingscode.nl/NoCache/unset" : "http://www.kortingscode.nl/NoCache/set";
 ?>
     <a href='javascript:void(0)' onclick="showLightBox(<?php echo "'$refresLink'" ?>)" style="margin-left:10px;color:white;"><?php echo $refresLink ;?></a>
