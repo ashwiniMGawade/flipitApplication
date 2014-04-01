@@ -62,34 +62,36 @@ class LoginController extends Zend_Controller_Action {
 		if (!empty($errmsg)) {
 			$this->view->message = 'showmsg';
 		}
-		//check post form or not
-		if ($this->getRequest()->isPost()) {
-			$username = $params["uname"];
-			$password = MD5($params["pwd"]);
-			
-			$data_adapter = new Auth_VisitorAdapter($username, $password);
+		$memcache = Zend_Registry::get('cache');
+        if (!$memcacheResult = $memcache->load('dataset')) {
+            //check post form or not
+            if ($this->getRequest()->isPost()) {
+                $username = $params["uname"];
+                $password = MD5($params["pwd"]);
 
-			$auth = Zend_Auth::getInstance();
+                $data_adapter = new Auth_VisitorAdapter($username, $password);
 
-			$auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
-			$result = $auth->authenticate($data_adapter);
+                $auth = Zend_Auth::getInstance();
 
-			if (Auth_VisitorAdapter::hasIdentity()) {
+                $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
+                $result = $auth->authenticate($data_adapter);
 
-				$userid = Auth_VisitorAdapter::getIdentity()->id;
-				$obj = new Visitor();
-				$obj->updateLoginTime($userid);
-				//setcookie('kc_session_active', 1, time() + 2592000, '/');
-				setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
-				echo $url = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('mijn-favorieten'); 
-				die();
-			} else {
-				echo "false";
-				die();
+                if (Auth_VisitorAdapter::hasIdentity()) {
 
-			}
-		}
+                	$userid = Auth_VisitorAdapter::getIdentity()->id;
+                	$obj = new Visitor();
+                	$obj->updateLoginTime($userid);
+                	//setcookie('kc_session_active', 1, time() + 2592000, '/');
+                	setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
+                	echo $url = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('mijn-favorieten'); 
+                	die();
+                } else {
+                	echo "false";
+                	die();
 
+                }
+            }
+        }
 	}
 	/**
 	 * forget password by email
