@@ -154,7 +154,7 @@ class ErrorController extends Zend_Controller_Action
             		$reqiurevaule['awardType'] = $page['awardType'];
             		$splofferlists = Offer::getspecialofferonly($reqiurevaule);
 
-            		$paginator = FrontEnd_Helper_viewHelper::renderPagination($splofferlists,@$matches[0],27,7);
+            		$paginator = FrontEnd_Helper_viewHelper::renderPagination($splofferlists,@$matches[0], 54, 7);
 					
             		$this->view->matches = $matches[0];
             		$this->view->widget = $wdgt;
