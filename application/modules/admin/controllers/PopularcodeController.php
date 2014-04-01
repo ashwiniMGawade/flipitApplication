@@ -1,6 +1,7 @@
 <?php
 
 class Admin_PopularcodeController extends Zend_Controller_Action {
+
 	/**
 	 * check authentication before load the page
 	 * @see Zend_Controller_Action::preDispatch()
@@ -218,19 +219,15 @@ class Admin_PopularcodeController extends Zend_Controller_Action {
 	 * @author Raman
 	 * @version 1.0
 	 */
-	public function runscriptAction() {
-	
-		//generate papular code by formula
-		PopularCode::generatePopularCode();
-		
-		//get Popular code from database
-		$data = PopularCode::getPopularCode();
-		
-		self:: updateVarnish();
-		
-		echo Zend_Json::encode($data);
-		die();
-	}
+    public function runscriptAction()
+    {
+        ini_set('max_execution_time', 300);
+        PopularCode::generatePopularCode(true);
+        $data = PopularCode::getPopularCode();
+        self:: updateVarnish();
+        echo Zend_Json::encode($data);
+        die();
+    }
 
 	
 	/**

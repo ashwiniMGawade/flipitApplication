@@ -338,11 +338,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     	//set the logo for category, category name and more category link
     	//if it exists or not in $category array
         if(count($topCategories[0]['category']['categoryicon']) > 0):
-    	    if(@file_exists(ROOT_PATH.$topCategories[0]['category']['categoryicon']['path'] .'thum_medium_'. $topCategories[0]['category']['categoryicon']['name']) && $topCategories[0]['category']['categoryicon']['name']!=''):
-    	        $img = PUBLIC_PATH_LOCALE.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_'. $topCategories[0]['category']['categoryicon']['name'];
-    	    else:
-    	        $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_70x60.png";
-    	    endif;
+    	        $img = PUBLIC_PATH_CDN.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_'. $topCategories[0]['category']['categoryicon']['name'];
+    	    
     	else:
     	    $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_70x60.png";
     	endif;
@@ -373,11 +370,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     		//set the logo for shop in this category if it exists or not in $dataShopImageCat array
     		if(count($value['shop']['logo']) > 0):
-    		    if(@file_exists(ROOT_PATH.$value['shop']['logo']['path'] .'thum_medium_store_'. $value['shop']['logo']['name']) && $value['shop']['logo']['name']!=''):
-    		        $img = PUBLIC_PATH_LOCALE.$value['shop']['logo']['path'].'thum_medium_store_'. $value['shop']['logo']['name'];
-    		    else:
-    		        $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_200x100.jpg";
-    		    endif;
+    		        $img = PUBLIC_PATH_CDN.$value['shop']['logo']['path'].'thum_medium_store_'. $value['shop']['logo']['name'];
+    		   
     		else:
     		    $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_200x100.jpg";
     		endif;
