@@ -10,7 +10,7 @@ $permalink = rtrim($permalink, '/');
 preg_match("/[^\/]+$/", $permalink, $matches);
 
 if(intval(@$matches[0]) > 0 && intval(@$matches[0]) < 4) {
-	
+
 	if(intval($matches[0]) > intval($this->pageCount)) {
 		
 		$redirector = $this->getHelper('Redirector');
