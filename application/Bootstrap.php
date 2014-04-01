@@ -942,13 +942,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
     protected function _initMemcache()
     {
         if (extension_loaded('memcache'))
-        { echo $_SERVER['SERVER_PORT']; die;
-    //37.34.50.225
+        { 
             $cacheBackend = new Zend_Cache_Backend_Memcached(
                 array(
                     'servers' => array(
                         array(
-                            'host' => 'localhost',
+                            'host' => '37.34.50.225',
                             'port' => '80'
                         )
                         // Other servers here
@@ -969,7 +968,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
             $memcache = Zend_Cache::factory($cacheFrontend, $cacheBackend);
             Zend_Registry::set('cache', $memcache);
         } else {
-            echo 'Not in memcache'.$_SERVER['SERVER_PORT']; die;
         }
     }
 }
