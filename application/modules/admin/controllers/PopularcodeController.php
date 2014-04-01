@@ -220,6 +220,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action {
 	 */
 	public function runscriptAction() {
 	
+		ini_set('max_execution_time', 300);
 		//generate papular code by formula
 		PopularCode::generatePopularCode();
 		
