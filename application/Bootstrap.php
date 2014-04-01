@@ -938,6 +938,38 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			                             $backendOptions);
 			Zend_Registry::set('cache',$cache);
 		}
+
+    protected function _initMemcache()
+    {
+        if (extension_loaded('memcache'))
+        { 
+            $cacheBackend = new Zend_Cache_Backend_Memcached(
+                array(
+                    'servers' => array(
+                        array(
+                            'host' => '37.34.50.225',
+                            'port' => '80'
+                        )
+                        // Other servers here
+                    ),
+                    'compression' => true,
+                    'compatibility' => true
+                )
+            );
+            $cacheFrontend = new Zend_Cache_Core(
+                array(
+                    'caching' => true,
+                    'cache_id_prefix' => 'MyApp_',
+                    'write_control' => true,
+                    'automatic_serialization' => true,
+                    'ignore_user_abort' => true
+                )
+            );
+            $memcache = Zend_Cache::factory($cacheFrontend, $cacheBackend);
+            Zend_Registry::set('cache', $memcache);
+        } else {
+        }
+    }
 }
 
 

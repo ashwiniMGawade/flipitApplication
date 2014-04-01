@@ -219,6 +219,7 @@ class Admin_PopularcodeController extends Zend_Controller_Action {
 	 * @author Raman
 	 * @version 1.0
 	 */
+
     public function runscriptAction()
     {
         ini_set('max_execution_time', 300);
@@ -228,7 +229,6 @@ class Admin_PopularcodeController extends Zend_Controller_Action {
         echo Zend_Json::encode($data);
         die();
     }
-
 	
 	/**
 	 *  updateVarnish
