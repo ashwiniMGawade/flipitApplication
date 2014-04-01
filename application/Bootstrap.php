@@ -969,7 +969,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
             $memcache = Zend_Cache::factory($cacheFrontend, $cacheBackend);
             Zend_Registry::set('cache', $memcache);
         } else {
-            echo $_SERVER['SERVER_PORT']; die;
+            echo 'Not in memcache'.$_SERVER['SERVER_PORT']; die;
         }
     }
 }
