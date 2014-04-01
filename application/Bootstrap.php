@@ -163,14 +163,23 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 				$lang = $_COOKIE['locale'] . "/";
 
-
+				if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
+					define("PUBLIC_PATH_CDN",
+							trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']]
+									.'/'. strtolower($_COOKIE['locale']) .'/'));
+				}
 				#constant for zend cache key based on lcoale
 				define("LOCALE",  trim($lang , '/'));
 
 			} else
 			{
+				if(isset($cdnSettings) && isset($cdnSettings['www.kortingscode.nl'])){
+					define("PUBLIC_PATH_CDN",
+							trim('http://'. $cdnSettings['www.kortingscode.nl'] .'/'));
+				}
 				#constant for zend cache key based on lcoale
 				define("LOCALE", '');
+				
  			}
  
 			if(! defined('HTTP_PATH_FRONTEND') )
@@ -232,6 +241,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 					. dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_lang) .'/');
 
 			//echo (PUBLIC_PATH_LOCALE);
+			
+			
 
 		} else {
 

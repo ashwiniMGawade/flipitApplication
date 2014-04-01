@@ -771,6 +771,7 @@ class BackEnd_Helper_viewHelper
 	public static function getTopVouchercodesDataMandrill($topVouchercodes)
 	{
 
+		   
 			$path =  defined('HTTP_PATH_FRONTEND') ? HTTP_PATH_FRONTEND :  HTTP_PATH_LOCALE ;
 			$publicPath  =  defined('PUBLIC_PATH_CDN') ? PUBLIC_PATH_CDN :  PUBLIC_PATH ;
 			
