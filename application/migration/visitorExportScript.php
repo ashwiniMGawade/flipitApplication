@@ -14,43 +14,8 @@ class VisitorExport {
 
 	function __construct() {
 
-	/*
-	$domain1 = $_SERVER['HOSTNAME'];
-	$domain = 'http://www.'.$domain1;
-	*/
-
-	// Define path to application directory
-	defined('APPLICATION_PATH')
-	|| define('APPLICATION_PATH',
-			dirname(dirname(__FILE__)));
-
-	defined('LIBRARY_PATH')
-	|| define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-
-	defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
-
-	// Define application environment
-	defined('APPLICATION_ENV')
-	|| define('APPLICATION_ENV',
-			(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-					: 'production'));
-
-
-	//Ensure library/ is on include_path
-	set_include_path(
-			implode(PATH_SEPARATOR,
-					array(realpath(APPLICATION_PATH . '/../library'),
-							get_include_path(),)));
-		set_include_path(
-				implode(PATH_SEPARATOR,
-						array(realpath(DOCTRINE_PATH), get_include_path(),)));
-
-		/** Zend_Application */
-		require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
-		require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
-		require_once (LIBRARY_PATH . '/Zend/Application.php');
-		require_once(DOCTRINE_PATH . '/Doctrine.php');
-
+	    require_once('ConstantForMigration.php');
+	    require_once('CommonMigrationFunctions.php');
 		// Create application, bootstrap, and run
 		$application = new Zend_Application(APPLICATION_ENV,
 				APPLICATION_PATH . '/configs/application.ini');
@@ -164,6 +129,9 @@ class VisitorExport {
 					->orderBy("v.id DESC")
 					->fetchArray();
 
+			echo "\n";
+		    print "Parse visitors data and save it into excel file\n";
+
 			//CREATE A OBJECT OF PHPECEL CLASS
 			$objPHPExcel = new PHPExcel();
 			$objPHPExcel->setActiveSheetIndex(0);
@@ -184,6 +152,8 @@ class VisitorExport {
 			$column = 2;
 			$row = 2;
 			foreach ($data as $visitor) {
+
+		        print ".";
 
 				$name  =  $visitor['firstName'] . " " . $visitor['lastName'];
 
@@ -334,18 +304,11 @@ class VisitorExport {
 			$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
 
-
-
-	    	# define upload path for excell
-	    	defined('UPLOAD_EXCEL_PATH')
-		    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
-
-
-	    	$pathToFile = UPLOAD_EXCEL_PATH . strtolower($this->_localePath) . 'excels/' ;
+	    	$pathToFile = UPLOAD_EXCEL_TMP_PATH . strtolower($this->_localePath) . 'excels/' ;
 
 	    	# create dir if not exists
 	    	if(!file_exists($pathToFile)) {
-	    		mkdir($pathToFile, 774, TRUE);
+	    		mkdir($pathToFile, 0774, TRUE);
 	    	}
 
 	    	$visitorFile  = $pathToFile . "visitorList.xlsx" ;
@@ -358,6 +321,15 @@ class VisitorExport {
 
 			echo "\n";
 			print "$keyIn - Visitors have been exported successfully!!!";
+			
+			if($keyIn == 'en')
+			{
+				$keyIn = 'excels';
+			}
+			 
+			CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn, UPLOAD_DATA_FOLDER_EXCEL_PATH.$keyIn);
+			CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn);
+			
 
 		} catch (Exception $e) {
 			echo $e;

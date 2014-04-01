@@ -22,38 +22,9 @@ class GlobalShopExport {
 	set_time_limit(0);
  
 	
-	// Define path to application directory
-	defined('APPLICATION_PATH')
-	|| define('APPLICATION_PATH',
-			dirname(dirname(__FILE__)));
 	
-	defined('LIBRARY_PATH')
-	|| define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-	
-	defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
-	
-	// Define application environment
-	defined('APPLICATION_ENV')
-	|| define('APPLICATION_ENV',
-			(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-					: 'production'));
-	
-	
-	//Ensure library/ is on include_path
-	set_include_path(
-			implode(PATH_SEPARATOR,
-					array(realpath(APPLICATION_PATH . '/../library'),
-							get_include_path(),)));
-		set_include_path(
-				implode(PATH_SEPARATOR,
-						array(realpath(DOCTRINE_PATH), get_include_path(),)));
-		
-		/** Zend_Application */
-		require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
-		require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
-		require_once (LIBRARY_PATH . '/Zend/Application.php');
-		require_once(DOCTRINE_PATH . '/Doctrine.php');
-		
+	    require_once('ConstantForMigration.php');
+	    require_once('CommonMigrationFunctions.php');
 		// Create application, bootstrap, and run
 		$application = new Zend_Application(APPLICATION_ENV,
 				APPLICATION_PATH . '/configs/application.ini');
@@ -710,29 +681,34 @@ class GlobalShopExport {
 			$objPHPExcel->getActiveSheet()->getColumnDimension('AI')->setAutoSize(true);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('AJ')->setAutoSize(true);
 			$objPHPExcel->getActiveSheet()->getColumnDimension('AK')->setAutoSize(true);
-			 
-			 
-			# define upload path for excell
-	    	defined('UPLOAD_EXCEL_PATH')
-		    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
+			
+	  	
+			$pathToFile = UPLOAD_EXCEL_TMP_PATH . 'excels/' ;
 
-
-	    	$pathToFile = UPLOAD_EXCEL_PATH . 'excels/' ;
-
-	    	# create dir if not exists
 	    	if(!file_exists($pathToFile)) {
-	    		mkdir($pathToFile, 774, TRUE);
+	    		mkdir($pathToFile, 0774, TRUE);
 	    	}
 
 	    	$filepath = $pathToFile . "shopList.xlsx" ;
-
 			$shopFile = $pathToFile."globalShopList.xlsx";
-			 
 			$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
 			$objWriter->save($shopFile);
+			
+			echo "\n";
+			print "$key - Shops have been exported successfully!!!";
+			
+			$key = 'excels/';
+			
+			CommonMigrationFunctions::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
+			CommonMigrationFunctions::deleteDirectory($pathToFile);
+			
 		}
 		
 	}
+	
+	
+	
+	
 	 
 }
 

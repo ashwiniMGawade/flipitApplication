@@ -2,7 +2,7 @@
 
 class FrontEnd_Helper_viewHelper
 {
-
+	
 	/**
 	 * Common function to render sidebar widget of alphanumeric categories
 	 * @author cbhopal updated by kraj
@@ -924,7 +924,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 
 			case 'all':
 
-				$data = Offer::getAllOfferOnShop($shopId);
+				$data = Offer::getAllOfferOnShop($shopId, $limit);
 
 			break;
 
@@ -1114,16 +1114,16 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
    * @param $type string
    * @return string
    */
-  public static function socialmediaSmall($surl, $title, $controller , $type = null)
+  public static function socialmediaSmall($url, $title, $controller , $type = null)
   {
-
-  	if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
-  		$url = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
+   
+   	if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
+  		$url = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'], '/') ;
   		$url = self::generateSocialLink($url);
 	else:
   		$url = HTTP_PATH;
   	endif;
-
+	
   	if($type == 'widget'):
 	  	$string="<div class='flike-outer' style='width: 56px; overflow: hidden; margin: 0px;'>
 	  	<div id='fb-root' style='margin-top:-42px;'></div>
@@ -1203,8 +1203,11 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
    */
   public static function renderPagination($recordsArray,$params,$itemsPerPage,$range = 3)
   {
-  		
-		$page = intval($params['page'] > 0 ) ? $params['page'] : '1';
+  		if(isset($params['page'])){
+  	    	$page = intval($params['page'] > 0 ) ? $params['page'] : '1';
+  		}else{
+  			$page = 1;
+  		}
 	    $pagination = Zend_Paginator::factory($recordsArray);
 	  	$pagination->setCurrentPageNumber($page);
 	  	$pagination->setItemCountPerPage($itemsPerPage);

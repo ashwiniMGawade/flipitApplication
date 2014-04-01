@@ -56,21 +56,22 @@ class PageAttribute extends BasePageAttribute
 			for($i=1; $i<5; $i++)
 			{
 				
-				$sname = "Sign Up Step ".$i;
-				$findRecordFromDatabase = $data = Doctrine_Core::getTable('pageAttribute')->findOneBy('name', $sname);
-				if(!isset($findRecordFromDatabase))
+				$sname = "Sign Up Step $i";
+				$findRecordFromDatabase = Doctrine_Query::create()->from('pageAttribute p')->where('p.name = "'.$sname.'"')->fetchArray();
+				
+				if(count($findRecordFromDatabase) > 0)
 				{  
+		
+				}else{
+
 					$pageAttributeObject = new PageAttribute();
 					$pageAttributeObject->name = $sname;
 					$pageAttributeObject->save();
-					return true;
-				}else{
-
-					return false;
-
+					
 				}
 				
 			}
+			return true;
 			
 		}
 	
