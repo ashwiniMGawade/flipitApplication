@@ -22,10 +22,8 @@ class GeneratePopularCodes
         echo CommonMigrationFunctions::showProgressMessage(
             'get all popular codes data from databases of all locales'
         );
-       
-        // cycle htoruh all site database
+        
         foreach ($connections as $key => $connection) {
-            // check database is being must be site
             if ($key != 'imbull') {
                 try {
                     $this->genereatePopularOffers($connection['dsn'], $key, $imbull);
@@ -36,6 +34,7 @@ class GeneratePopularCodes
                 echo "\n\n";
             }
         }
+        
         //uncommnet this line when you run for one locale
         //$this->genereatePopularOffers($connections['be']['dsn'], 'be', $imbull);
         $manager->closeConnection($doctrineImbullDbConnection);
