@@ -1887,15 +1887,14 @@ EOD;
 		if($shopName){
 
 			$chain = Chain::returnChainData($chainItemId, $id);
-
-			if(! $chain)
+ 			if(! $chain)
 			{
 				return false ;
 			}
 
 			$class = "ml-country";
 
-			if(count($chain['shops']) > 1)
+			if(count($chain) > 1)
 			{
 				$class = "ml-countries";
 			}

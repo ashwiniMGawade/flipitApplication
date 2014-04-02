@@ -26,11 +26,11 @@ endif;
 	?>
 <!-- Search Outer2 Starts -->
   <?php $getPermLinkNewOffer = Page::getPageFromPageAttr(6);
-    $bounceRate = "/out/shop/".@$this->data[0]['id'];
-    $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->data[0]['id'];
+    $bounceRate = "/out/shop/".@$this->currentStoreInformation[0]['id'];
+    $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->currentStoreInformation[0]['id'];
     $Link = '';
-    $howToUseGuidePermalink= "how-to/".$this->data[0]['permaLink'];
-    $name =  strtoupper($this->data[0]['name']);
+    $howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
+    $name =  strtoupper($this->currentStoreInformation[0]['name']);
     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate($name)."</a>";
     $id = 0;
     if(Auth_VisitorAdapter::hasIdentity()):
@@ -42,12 +42,12 @@ endif;
     <div class="yellow-box2-img">
     <img src="' .HTTP_PATH  . "public/images/front_end/icon19.png" . '" width="32" height="32" alt="" /></div>
     <div class="yellow-box2-text text-black">'
-    . $this->translate("Sorry") . " ". $this->data[0]['name']
+    . $this->translate("Sorry") . " ". $this->currentStoreInformation[0]['name']
     . " ".  $this->translate('offers right now!') . '<br />
     <p>' .  $this->translate("Check out the") ." "
     . '<a target="_blank" rel="nofollow" class="text-blue-link"'
     . ' onclick=\'ga("send","event", "aff","' . $bounceRate . '");\' href=" ' .$shopUrl. '">'
-    . $this->data[0]["name"] . '</a>' .
+    . $this->currentStoreInformation[0]["name"] . '</a>' .
     " " . $this->translate("website to see what direct offers are available. Our deal team are working hard to bring you more great discounts soon.") ." " . '</p><p>' .
     " " .$this->translate("However, you might also like these vouchercodes we have selected for you! Dont forget to have a look at or") . " "
     . '<a class="text-blue-link" href="' . HTTP_PATH_LOCALE . "categorieen" . '">' .
@@ -65,7 +65,7 @@ endif;
     if( $offerCount > 0):
         $k = 0;
         foreach ($this->offers as $offer):
-            $this->offers[$k]['codeUploadShowOrNot'] = $this->data[0]['usergenratedcontent'];
+            $this->offers[$k]['codeUploadShowOrNot'] = $this->currentStoreInformation[0]['usergenratedcontent'];
             $this->offers[$k]['offerCount'] = $offerCount;
             $this->offers[$k]['locale'] = $this->locale;
             $k++;
@@ -84,7 +84,7 @@ endif;
     .  $this->translate('Similar vouchercodes we think you will like!'). '</span></div>';
 
     $discussion = '';
-    if($this->data[0]['discussions'] == 1):
+    if($this->currentStoreInformation[0]['discussions'] == 1):
         $discussion ='<div class="voucher-col1-new">';
         $discussion .=$this->render('partials/discussion.phtml');
         $discussion .='</div>';
@@ -104,9 +104,9 @@ endif;
     <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
     <div class="icon">
 <?php
-$affliateProgramUrl = @$this->data[0]['affliateProgram']['name']=='' ? $this->data[0]['actualUrl'] : @$this->data[0]['affliateProgram']['name'];
+$affliateProgramUrl = @$this->currentStoreInformation[0]['affliateProgram']['name']=='' ? $this->currentStoreInformation[0]['actualUrl'] : @$this->currentStoreInformation[0]['affliateProgram']['name'];
 // create click out only on when a shop is money shop
-if ($this->data[0]['affliateProgram']) :
+if ($this->currentStoreInformation[0]['affliateProgram']) :
     $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
     $affliateUrl = $shopUrl;
     $affliateDisabled = '';
@@ -118,25 +118,25 @@ else:
     $affliateClass = 'btn-disabled';
 endif;
 ?>
-        <a target="_blank" rel="nofollow" class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->img . '" alt="' . $this->data[0]['name']  . '"  width="176" height="89" />'; ?></a>
+        <a target="_blank" rel="nofollow" class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->img . '" alt="' . $this->currentStoreInformation[0]['name']  . '"  width="176" height="89" />'; ?></a>
     
     </div>
     <div class="box">
-        <h1><?php echo $this->data[0]['title'];?></h1>
-        <strong><?php echo '' . $this->data[0]['subTitle'];?></strong>
+        <h1><?php echo $this->currentStoreInformation[0]['title'];?></h1>
+        <strong><?php echo '' . $this->currentStoreInformation[0]['subTitle'];?></strong>
             <a target="_blank" rel="nofollow" class="btn text-blue-link fl store-header-link <?php echo $affliateClass; ?> pop btn btn-sm btn-default" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>">
 <?php
-$actualUrlWithoutDoubleSlash = explode("//", $this->data[0]['actualUrl']);
+$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
 if (isset($actualUrlWithoutDoubleSlash[1])):
      $actualUrl = $actualUrlWithoutDoubleSlash[1];
 else:
-     $actualUrl = $this->data[0]['actualUrl'];
+     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
 endif;
 echo $actualUrl;
 ?>
             </a>
 <?php
-echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id'].'&shopName='.urlencode($this->data[0]['name']));
+echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));
 ?>
              
     </div>
@@ -150,10 +150,10 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 <!-- Mark Spencer Mid Left Starts -->
 <?php
 
-	if($this->data[0]['usergenratedcontent']==1):
+	if($this->currentStoreInformation[0]['usergenratedcontent']==1):
 
 		# CHECK CONDITION
-		if($this->data[0]['affliateProgram']==0):
+		if($this->currentStoreInformation[0]['affliateProgram']==0):
 			# NO MONEY NO CODE
 			if(count($this->offers) <=0): ?>
 
@@ -169,7 +169,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 			            echo $speratorDiv; ?>
 				<div class="mark-spencer-mid-left" style='width:660px!important;'>
 				<?php echo $offers;
-				if ($this->data[0]['showSignupOption']) :
+				if ($this->currentStoreInformation[0]['showSignupOption']) :
 					echo $this->esi($this->locale.'store/signup');
 				endif;
 				
@@ -196,7 +196,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 			<!-- code for  one code -->
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
 		    	<?php echo $offers;
-		    	if ($this->data[0]['showSignupOption']) :
+		    	if ($this->currentStoreInformation[0]['showSignupOption']) :
 		    		echo $this->esi($this->locale.'store/signup');
 		    	endif;
 		    	# show promotional similar codes
@@ -231,7 +231,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
 				<?php echo $offers;
-					if ($this->data[0]['showSignupOption']) :
+					if ($this->currentStoreInformation[0]['showSignupOption']) :
 					echo $this->esi($this->locale.'store/signup');
 				endif;
 				# show promotional similar codes
@@ -256,7 +256,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 			<!-- code for  one code -->
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
 			<?php echo $offers;
-				if ($this->data[0]['showSignupOption']) :
+				if ($this->currentStoreInformation[0]['showSignupOption']) :
 					echo $this->esi($this->locale.'store/signup');
 				endif;	
 			# show promotional similar codes
@@ -278,7 +278,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 	else:
 
 		# CHECK MOENY CONDITION
-		if($this->data[0]['affliateProgram']==0):
+		if($this->currentStoreInformation[0]['affliateProgram']==0):
 			# NO MONEY AND NO CODE
 			if(count($this->offers) <=0):?>
 				<?php
@@ -295,7 +295,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
  		      	<?php echo $offers;
- 		      		if ($this->data[0]['showSignupOption']) :
+ 		      		if ($this->currentStoreInformation[0]['showSignupOption']) :
  		      		echo $this->esi($this->locale.'store/signup');
  		      	endif;
  		      	# show promotional similar codes
@@ -324,7 +324,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
  		      	<?php echo $offers;
- 		      		if ($this->data[0]['showSignupOption']) :
+ 		      		if ($this->currentStoreInformation[0]['showSignupOption']) :
  		      		echo $this->esi($this->locale.'store/signup');
  		      	endif;
  		      	# show promotional similar codes
@@ -358,7 +358,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 				<div class="mark-spencer-mid-left" style="width:660px!important;">
 					<?php
 					echo $yellowBoxWarning;
-						if ($this->data[0]['showSignupOption']) :
+						if ($this->currentStoreInformation[0]['showSignupOption']) :
 						echo $this->esi($this->locale.'store/signup');
 					endif;
 					# show promotional similar codes
@@ -385,7 +385,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 		elseif(count($this->offers) > 0): ?>
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
 				<?php echo $offers;
-				if ($this->data[0]['showSignupOption']) :
+				if ($this->currentStoreInformation[0]['showSignupOption']) :
 					echo $this->esi($this->locale.'store/signup');
 				endif;
 				# show promotional similar codes
@@ -426,7 +426,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
                                     $EditorImageSlug = $this->shopEditor['slug'];
                                     ?>
                                     <span class="text">
-                                        <?php echo $this->translate('All').' '.$this->data[0]['name'].' '.$this->translate('deals verified by'); ?>
+                                        <?php echo $this->translate('All').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('deals verified by'); ?>
                                         <span class="name"><?php echo $EditorFirstName; ?></span>
                                     </span>
                                     <div class="photo">
@@ -442,25 +442,25 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
                             <?php endif;
                             ?>
 
-                            <h1><?php echo $this->translate('About').' '.$this->data[0]['name'].' '.$this->translate('Vouchers').' '.date('Y'); ?></h1>
-                            <?php echo $this->data[0]['shopText']; ?>
+                            <h1><?php echo $this->translate('About').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('Vouchers').' '.date('Y'); ?></h1>
+                            <?php echo $this->currentStoreInformation[0]['shopText']; ?>
                         </div>
 
-                        <?php if($this->data[0]['howToUse']): ?>
+                        <?php if($this->currentStoreInformation[0]['howToUse']): ?>
 
                         <ul class="add-info">
                             <li>
                                 <h2><?php echo $this->translate('How to use code');?></h2>
                                 <p>
                                     <a href="javascript:void(0);" id="clicker"><?php echo $this->translate('Show me'); ?></a> 
-                                    <?php echo $this->translate('where to enter my').' '.$this->data[0]['name'].' '.$this->translate('code, or read our full'); ?> 
-                                    <a href="<?php echo HTTP_PATH_LOCALE.$howToUseGuidePermalink; ?>"><?php echo $this->data[0]['name'].' '.$this->translate('Promotional Code'); ?></a>
+                                    <?php echo $this->translate('where to enter my').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('code, or read our full'); ?> 
+                                    <a href="<?php echo HTTP_PATH_LOCALE.$howToUseGuidePermalink; ?>"><?php echo $this->currentStoreInformation[0]['name'].' '.$this->translate('Promotional Code'); ?></a>
                                     <?php echo $this->translate('help guide'); ?>.
                                 </p>
                             </li>
                             <li class="web">
                                 <h2><?php echo $this->translate('Official website'); ?></h2>
-                                <a href="<?php echo $this->data[0]['actualUrl']; ?>"><?php echo $actualUrl; ?></a>
+                                <a href="<?php echo $this->currentStoreInformation[0]['actualUrl']; ?>"><?php echo $actualUrl; ?></a>
                             </li>
                         </ul>
 
@@ -482,17 +482,17 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
                     <?php if (count($this->latestShopUpdates) > 0):?>
 
                     <section class="block">
-                        <h2><?php echo $this->translate('Latest news about').' '.$this->data[0]['name'];?></h2>
+                        <h2><?php echo $this->translate('Latest news about').' '.$this->currentStoreInformation[0]['name'];?></h2>
                         <?php echo $this->partialLoop('store/latestNews.phtml', $this->latestShopUpdates); ?>
                     </section>
 
                     <?php endif;
                     ?>
 
-                    <?php if ($this->chain):  ?>
+                    <?php if ($this->shopChain):  ?>
 
                     <article class="block">
-                    <?php echo $this->chain; ?>
+                    <?php echo $this->shopChain; ?>
                     </article>
 
                     <?php endif;
@@ -503,7 +503,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
                     </div>
                     <?php endif;
                     
-                    if ($this->data[0]['showSignupOption']) : ?>
+                    if ($this->currentStoreInformation[0]['showSignupOption']) : ?>
 
                         <div class="block white">
                         <?php echo $this->esi($this->locale.'store/signupwidget'); ?>
@@ -529,7 +529,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
 			<?php  if(count($this->moneySavingGuideArticle) >0): ?>
 
 			<header class="heading-box text-advice">
-				<h2><?php echo $this->translate("General money saving advice &amp; tricks for shopping at"). " " . $this->data[0]['name']; ?></h2>
+				<h2><?php echo $this->translate("General money saving advice &amp; tricks for shopping at"). " " . $this->currentStoreInformation[0]['name']; ?></h2>
 			</header>
 
 			<?php echo $this->partialLoop('store/moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle); ?>
@@ -544,8 +544,8 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
         <?php if(count($this->expiredOffers) >0):?>
 			
 			<header class="heading-box text-expired">
-            	<h2><?php echo  $this->translate('Expired').' '.$this->data[0]['name'].' '.$this->translate("vouchers and discounts"); ?></h2>
-            	<strong><?php echo  $this->translate('Unfortunately ... These discount codes from').' '.$this->data[0]['name'].' '.$this->translate("you’ve missed");?>.</strong>
+            	<h2><?php echo  $this->translate('Expired').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate("vouchers and discounts"); ?></h2>
+            	<strong><?php echo  $this->translate('Unfortunately ... These discount codes from').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate("you’ve missed");?>.</strong>
 			</header>
 			<section class="section-module">
 				<?php  echo $this->partialLoop('store/expiredOffer.phtml', $this->expiredOffers); ?>
@@ -554,7 +554,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
         <?php endif;?>
         <!-- END Refactored code -->
 
-<?php if($this->data[0]['howToUse'] == 1){
+<?php if($this->currentStoreInformation[0]['howToUse'] == 1){
         if(LOCALE==''):
             $imagePop = HTTP_PATH ."public/images/front_end/logo-popup.png";
        else:
@@ -567,7 +567,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
         <div class="popup-logo"><img src="<?php echo $imagePop; ?>" alt="Logo" /></div>
         <div class="popup-cross" id="close-btn" onClick="custompopupClose()"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/cross-white.png" width="10" height="10" alt="cross-white" /></div>
     </div>
-    <div class="middlediv"><h4><b><?php echo $this->translate("Zo gebruik je de") ." ". $this->data[0]['name'] ." ". $this->translate("kortingscodes:")?></b></h4>
+    <div class="middlediv"><h4><b><?php echo $this->translate("Zo gebruik je de") ." ". $this->currentStoreInformation[0]['name'] ." ". $this->translate("kortingscodes:")?></b></h4>
         <div class="pop-list-outer" id="list"><ol>
               <li><p><?php echo $this->translate("Click the green button to reveal the  code and open the retailer website in either a new tab or window, depending on your browser settings.")?></p></li>
               <li><p><?php echo $this->translate("Buy something nice. Check you've met any terms and conditions then head to the checkout.")?></p></li>
@@ -576,8 +576,8 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
         </div>
         <div style="float:right;margin-right:0;width:280px;">
              <div class="greybox-popup">
-                <?php if(!empty($this->data[0]['bigimage'])){ ?>
-                    <img src="<?php echo PUBLIC_PATH_CDN.$this->data[0]['bigimage']['path']."thum_bigLogoFile_".$this->data[0]['bigimage']['name'];?>" width="280" height="197" alt="noimage"  />
+                <?php if(!empty($this->currentStoreInformation[0]['bigimage'])){ ?>
+                    <img src="<?php echo PUBLIC_PATH_CDN.$this->currentStoreInformation[0]['bigimage']['path']."thum_bigLogoFile_".$this->currentStoreInformation[0]['bigimage']['name'];?>" width="280" height="197" alt="noimage"  />
                     <?php  } else{ ?>
                     <img src="<?php echo HTTP_PATH; ?>public/images/NoImage/280x100.jpg" width="280" height="197" alt="noimage"  />
                     <?php    }?>
@@ -586,9 +586,9 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->data[0]['id
              <div class="popup-col1-right-col1 mt10" style="margin-bottom:10px"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/shape1.png" width="14" height="43" alt="noimage" /></div>
 
             <div class="greybox-popup">
-                <?php if(!empty($this->data[0]['smallimage'])){ ?>
+                <?php if(!empty($this->currentStoreInformation[0]['smallimage'])){ ?>
 
-                    <img src="<?php echo PUBLIC_PATH_CDN.ltrim($this->data[0]['smallimage']['path'],"/")."thum_smallLogoFile_".$this->data[0]['smallimage']['name'];?>" width="280" height="100" alt="noimage" />
+                    <img src="<?php echo PUBLIC_PATH_CDN.ltrim($this->currentStoreInformation[0]['smallimage']['path'],"/")."thum_smallLogoFile_".$this->currentStoreInformation[0]['smallimage']['name'];?>" width="280" height="100" alt="noimage" />
 
                     <?php  } else{ ?>
 
