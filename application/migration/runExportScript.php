@@ -19,4 +19,4 @@ require 'generateAllShopsJsonForSearch.php';
 require 'generateJsonForJsTranlastion.php';
 
 #run create popular offers for site 
-require 'generatePopularCodes.php';
+require 'GeneratePopularCodes.php';

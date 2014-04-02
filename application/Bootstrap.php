@@ -173,9 +173,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 			} else
 			{
-				if(isset($cdnSettings) && isset($cdnSettings['www.kortingscode.nl'])){
+				
+				
+				if(isset($cdnSettings) && isset($cdnSettings['www.' . $this->_siteName])){
 					define("PUBLIC_PATH_CDN",
-							trim('http://'. $cdnSettings['www.kortingscode.nl'] .'/'));
+							trim('http://'. $cdnSettings['www.' . $this->_siteName] .'/'));
 				}
 				#constant for zend cache key based on lcoale
 				define("LOCALE", '');

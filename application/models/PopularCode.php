@@ -28,7 +28,7 @@ class PopularCode extends BasePopularCode
         $nowDate = $date;
 
         $newPopularCodes = self::newPopularCode($nowDate, $past4Days, $date);
-        self::deleteExpiredPopularCode($date);
+        self::deleteExpiredPopularCode($date, $flagForCache);
 
         $allExistingPopularCodes =  self::getAllExistingPopularCode();
 
@@ -42,12 +42,11 @@ class PopularCode extends BasePopularCode
         self::changePositionPopularCode($newArray, $flagForCache);
 
         self::getAllPopularCodeByOrder();
-        if ($flagForCache)
-        {
+        if ($flagForCache==true) {
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            die();
         }
+        return true;
     }
     public static function newPopularCode($nowDate, $past4Days, $date)
     {
@@ -68,10 +67,12 @@ class PopularCode extends BasePopularCode
         ->andWhere('o.Visability!="MEM"')
         ->groupBy('v.offerId')->orderBy('pop DESC')->limit(10)
         ->fetchArray();
-
+        //->getSqlQuery();
+        //echo $newPopularCodes; die;
+        
         return $newPopularCodes;
     }
-    public static function deleteExpiredPopularCode($date)
+    public static function deleteExpiredPopularCode($date, $flagForCache)
     {
         $popIds = Doctrine_Query::create()
         ->select('p.offerId, p.position')
@@ -85,7 +86,7 @@ class PopularCode extends BasePopularCode
             ->andWhere('o.enddate < "'.$date.'"')
             ->fetchOne();
             if($popIdsToDelete):
-                self::deletePopular($popId['offerId'], $popId['position']);
+                self::deletePopular($popId['offerId'], $popId['position'], $flagForCache);
             endif;
         endforeach;
 
@@ -187,8 +188,7 @@ class PopularCode extends BasePopularCode
                 $uid = $authorId[0]['authorId'];
                 $popularcodekey ="all_". "popularcode".$uid ."_list";
 
-                if($flagForCache)
-                {
+                if ($flagForCache==true) {
                     $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($popularcodekey);
                     if ($flag) {
 
@@ -535,7 +535,7 @@ class PopularCode extends BasePopularCode
      * @author kraj
      * @version 1.0
      */
-    public static function deletePopular($id, $position)
+    public static function deletePopular($id, $position, $flagForCache)
     {
         if ($id) {
             //delete popular code from list
@@ -549,17 +549,18 @@ class PopularCode extends BasePopularCode
             ->where('p.position >' . $position)
             ->execute();
 
-            //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            $key = 'all_widget5_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'all_widget6_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            if ($flagForCache==true) {
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+                $key = 'all_widget5_list';
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                $key = 'all_widget6_list';
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            }
         }
     }
 
