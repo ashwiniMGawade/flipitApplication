@@ -36,9 +36,8 @@ class GeneratePopularCodes
                 echo "\n\n";
             }
         }
-        //date_default_timezone_set('Asia/Calcutta');
         //uncommnet this line when you run for one locale
-        //$this->genereatePopularOffers($connections['in']['dsn'], 'in', $imbull);
+        //$this->genereatePopularOffers($connections['be']['dsn'], 'be', $imbull);
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
@@ -48,10 +47,13 @@ class GeneratePopularCodes
         $manager = CommonMigrationFunctions::loadDoctrineModels();
        
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - geneating new popular codes!!!"
+            "$key - deleting expired  popular codes!!!"
         );
         
-        PopularCode::generatePopularCode(false);
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        
+        PopularCode::deleteExpiredPopularCode($date, false);
         
         $manager->closeConnection($doctrineSiteDbConnection);
 
