@@ -8,15 +8,19 @@ if(!empty($this->similarShops)):
     );
 endif;
 
+$discussion = '';
 $partialViewPath = 'partials/';
 if($this->currentStoreInformation[0]['discussions'] == 1):
-$discussion = $this->render($partialViewPath.'_discussion.phtml');
+    $discussion = $this->partial('partials/_discussion.phtml',
+        array('shopName' => $this->currentStoreInformation[0]['name'])
+    );
 endif;
+
 echo $this->doctype('XHTML1_RDFA');
 if($this->profileImage['addtosearch'] == 1):
     if($this->profileImage['google']):
         $google = $this->profileImage['google'];
-        echo $this->headLink( array( 'rel' => 'author','href' => $google));
+        echo $this->headLink(array( 'rel' => 'author','href' => $google));
     endif;
 endif;
 
@@ -33,39 +37,15 @@ if(Auth_VisitorAdapter::hasIdentity()):
     $id = Auth_VisitorAdapter::getIdentity()->id;
 endif;
 
-$this->minifyHeadScript()->prependFile ("public/js/front_end/socialmedia.js" );
+$this->minifyHeadScript()->prependFile ("public/js/front_end/jquery.expander.min.js" );
+$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
-$yellowBoxWarning  =
-'<div class="yellow-box2 mt20 clr">
-<div class="yellow-box2-img">
-<img src="' .HTTP_PATH  . "public/images/front_end/icon19.png" . '" width="32" height="32" alt="" /></div>
-<div class="yellow-box2-text text-black">'
-. $this->translate("Sorry") . " ". $this->currentStoreInformation[0]['name']
-. " ".  $this->translate('offers right now!') . '<br />
-<p>' .  $this->translate("Check out the") ." "
-. '<a target="_blank" rel="nofollow" class="text-blue-link"'
-. ' onclick=\'ga("send","event", "aff","' . $bounceRate . '");\' href=" ' .$shopUrl. '">'
-. $this->currentStoreInformation[0]["name"] . '</a>' .
-" " . $this->translate("website to see what direct offers are available. Our deal team are working hard to bring you more great discounts soon.") ." " . '</p><p>' .
-" " .$this->translate("However, you might also like these vouchercodes we have selected for you! Dont forget to have a look at or") . " "
-. '<a class="text-blue-link" href="' . HTTP_PATH_LOCALE . "categorieen" . '">' .
-" " .$this->translate("Categories") ." " . '</a>' . $this->translate('or')
-.'<a class="text-blue-link"  href="' .  HTTP_PATH_LOCALE . "alle-winkels" . '">'
-. " " . $this->translate("Stores overview") . '</a>'
-. '</p></div></div>';
 $offers = '';
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-$offersCount = count($this->offers) ;
+$offersCount = count($this->offers);
 
-if( $offersCount > 0):
-    $k = 0;
-    foreach ($this->offers as $offer):
-        $this->offers[$k]['codeUploadShowOrNot'] = $this->currentStoreInformation[0]['usergenratedcontent'];
-        $this->offers[$k]['offerCount'] = $offersCount;
-        $this->offers[$k]['locale'] = $this->locale;
-        $k++;
-    endforeach;
-
+if(count($this->offers) > 0):
     $offers = $this->partialLoop('store/offer.phtml', $this->offers);
 endif;
 
@@ -73,8 +53,6 @@ if(count($this->relatedshops) > 0):
     $relatedOffer = $this->partialLoop('store/relatedOffer.phtml', $this->relatedshops);
 endif;
 
-$speratorDiv = '<div class="separator"></div>';
-# end common code
 ?>
 <div class="header-block header-block-2">
     <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
@@ -283,9 +261,9 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
         <section class="section">
             <?php echo $similarShopsAndSimilarCategoriesShops; ?>
         </section>
-        <section class="section section-comments">
-            <?php echo $discussion; ?>
-        </section>
+        
+        <?php echo $discussion; ?>
+      
         <?php  if(count($this->moneySavingGuideArticle) >0): ?>
 
         <header class="heading-box text-advice">

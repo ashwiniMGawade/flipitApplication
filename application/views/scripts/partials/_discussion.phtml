@@ -1,12 +1,10 @@
 <header class="heading-box text-ask">
    <h2>
-<?php
-echo $this->translate('Ask a question about Avis');
-?>
+<?php echo $this->translate('Ask a question about'). ' ' . $this->shopName;?>
    </h2>
    <strong>
 <?php
-echo $this->translate('Ask us anything about Avis and their discounts');
+echo $this->translate('Ask us anything about'). ' '.  $this->shopName.' '. $this->translate('and their discounts');
 ?>
    </strong>
 </header>
