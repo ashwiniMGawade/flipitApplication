@@ -544,7 +544,7 @@ function showImage(offerId) {
 	$('.shopimage' + offerId).show();
 }
 
-function showCode1(event) {
+function showCodePopUp(event) {
 
 	var offerId = $(event).attr('id');
 	var vote = $(event).attr('vote');

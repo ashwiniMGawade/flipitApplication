@@ -306,15 +306,15 @@ class StoreController extends Zend_Controller_Action
 	  	  	$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
 	  	  	# key not exist in cache 
 	  	  	
-	  	  	if($flag){
+	  	  //	if($flag){
  			$offers =  FrontEnd_Helper_viewHelper::commonfrontendGetCode("all",10,$id,0)  ;
-		    	$offers = FrontEnd_Helper_viewHelper::replaceStringArray($offers);
-	  	  		FrontEnd_Helper_viewHelper::setInCache($key, $offers);
-	  	  	} else {
+		    //	$offers = FrontEnd_Helper_viewHelper::replaceStringArray($offers);
+	  	  	//	FrontEnd_Helper_viewHelper::setInCache($key, $offers);
+	  	  	//} else {
 	  	  		//get from cache
-	  	  		$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+	  	  //		$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
 	  	  		//echo 'The result is comming from cache!!';
-	  	  	}
+	  	  //	}
 	 		//get all expired offer related currect shop
 	 		$key = 'all_expiredOfferInStore'. $id .'_list';
 	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
