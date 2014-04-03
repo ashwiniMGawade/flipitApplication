@@ -16,7 +16,7 @@ if($this->profileImage['addtosearch'] == 1):
     endif;
 endif;
 
-$getPermLinkNewOffer = Page::getPageFromPageAttr(6);
+$getPermaLinkNewOffer = Page::getPageFromPageAttr(6);
 $bounceRate = "/out/shop/".@$this->currentStoreInformation[0]['id'];
 $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->currentStoreInformation[0]['id'];
 $Link = '';
@@ -51,13 +51,13 @@ $yellowBoxWarning  =
 . '</p></div></div>';
 $offers = '';
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-$offerCount = count($this->offers) ;
+$offersCount = count($this->offers) ;
 
-if( $offerCount > 0):
+if( $offersCount > 0):
     $k = 0;
     foreach ($this->offers as $offer):
         $this->offers[$k]['codeUploadShowOrNot'] = $this->currentStoreInformation[0]['usergenratedcontent'];
-        $this->offers[$k]['offerCount'] = $offerCount;
+        $this->offers[$k]['offerCount'] = $offersCount;
         $this->offers[$k]['locale'] = $this->locale;
         $k++;
     endforeach;
@@ -68,11 +68,6 @@ endif;
 if(count($this->relatedshops) > 0):
     $relatedOffer = $this->partialLoop('store/relatedOffer.phtml', $this->relatedshops);
 endif;
-
-$headingOfSimilerOffer = '<div class="clr"><h2>'
-.$this->translate('Similar vouchercodes we think you will like!'). '</h2></div>';
-$headingOfSimilerOfferMt20 = '<div class="popular-kortings-heading text-white clr mt20"><span>'
-.  $this->translate('Similar vouchercodes we think you will like!'). '</span></div>';
 
 $discussion = '';
 if($this->currentStoreInformation[0]['discussions'] == 1):

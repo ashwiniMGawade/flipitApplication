@@ -1098,13 +1098,13 @@ public static function getallStoreForFrontEnd()
 	*/
     public static function getPopularStore($limit, $shopId = null)
     {
-		$nowDate = date('Y-m-d 00:00:00');
-		$data = Doctrine_Query::create()
+		$currentDate = date('Y-m-d 00:00:00');
+		$popularStoreData = Doctrine_Query::create()
 		->select('o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, img.name as imgname')
 		->from('PopularShop p')
-		->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$nowDate')) as exclusiveCount")
+		->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$currentDate')) as exclusiveCount")
 		->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
-		->addSelect("(SELECT COUNT(*) FROM Offer active WHERE (active.shopId = s.id AND o.endDate > '$nowDate')) as activeCount")
+		->addSelect("(SELECT COUNT(*) FROM Offer active WHERE (active.shopId = s.id AND o.endDate > '$currentDate')) as activeCount")
 		->leftJoin('p.shop s')
 		->leftJoin('s.offer o')
 		->leftJoin('s.logo img')
@@ -1113,13 +1113,13 @@ public static function getallStoreForFrontEnd()
 		->orderBy('p.position ASC');
 
 		if ($shopId) {
-			$data =  $data->andWhere("s.id = ? ", $shopId);
+			$popularStoreData =  $popularStoreData->andWhere("s.id = ? ", $shopId);
 		} else {
-			$data = $data->limit($limit);
+			$popularStoreData = $popularStoreData->limit($limit);
 		}
 
-		$data = $data->fetchArray();
-		return $data;
+		$popularStoreData = $popularStoreData->fetchArray();
+		return $popularStoreData;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -1244,7 +1244,7 @@ public static function getallStoreForFrontEnd()
      ##################################################################################
 	 public static function getStoreDetail($shopId)
 	 {
-	 	$nowDate = date('Y-m-d 00:00:00');
+	 	$currentDate = date('Y-m-d 00:00:00');
 	 	$storeDetail = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
 	 	->from('Shop s')
 	 	->leftJoin('s.logo img')
@@ -1255,8 +1255,8 @@ public static function getallStoreForFrontEnd()
 	 	->where('s.id='.$shopId)
 	 	->andWhere('s.deleted=0')
 	 	->andWhere('s.status=1');
-	 	$allStoreForCondition = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
-	 	return $allStoreForCondition;
+	 	$allStoresDetail = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
+	 	return $allStoresDetail;
 	 }
 	 ##################################################################################
 	 ################## END REFACTORED CODE ###########################################

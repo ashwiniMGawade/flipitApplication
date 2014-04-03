@@ -1804,7 +1804,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 			$logDir = APPLICATION_PATH . "../logs/";
 
 			if (!file_exists( $logDir))
-				mkdir( $logDir , 776, TRUE);
+				mkdir( $logDir , 0776, TRUE);
 			 $fileName = "default" ;
 		 	 $logfile = $logDir . $fileName;
 		}

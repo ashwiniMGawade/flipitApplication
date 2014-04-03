@@ -2037,7 +2037,7 @@ class Offer extends BaseOffer
 
 	public static function getShopCharacteristics($shopId, $limit = null, $getExclusiveOnly = false, $includingOffline = false)
 	{
-		$nowDate = date('Y-m-d H:i:s');
+		$currentDate = date('Y-m-d H:i:s');
 		$shopCharacteristics = Doctrine_Query::create()
 		->select('o.id,s.id')
 				->from('Offer o')
@@ -2046,8 +2046,8 @@ class Offer extends BaseOffer
 		
 		if (!$includingOffline) {
 			$shopCharacteristics = $shopCharacteristics->andWhere('o.offline = 0')
-			->andWhere('o.endDate >='."'$nowDate'")
-			->andWhere('o.startdate <= "'.$nowDate.'"');
+			->andWhere('o.endDate >='."'$currentDate'")
+			->andWhere('o.startdate <= "'.$currentDate.'"');
 		}
 
 		$shopCharacteristics= $shopCharacteristics->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
@@ -2096,7 +2096,7 @@ class Offer extends BaseOffer
 	{
 		$date = date('Y-m-d H:i:s');
 
-		$topKortingscodeForShopPage = Doctrine_Query::create()
+		$topKortingscodesForShopPage = Doctrine_Query::create()
 			->select('p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
 				o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name')
 			->from('PopularCode p')
@@ -2110,11 +2110,11 @@ class Offer extends BaseOffer
 			->andWhere('o.offline = 0');
 
 		if (!empty($shopCategories)) {
-			$topKortingscodeForShopPage = $topKortingscodeForShopPage->leftJoin('s.refShopCategory sc')
+			$topKortingscodesForShopPage = $topKortingscodesForShopPage->leftJoin('s.refShopCategory sc')
 					->andWhereIn('sc.categoryId', $shopCategories);
 		}
 
-		$topKortingscodeForShopPage = $topKortingscodeForShopPage->andWhere('s.status = 1')
+		$topKortingscodesForShopPage = $topKortingscodesForShopPage->andWhere('s.status = 1')
 					->andWhere('o.enddate > "'.$date.'"')
 			      	->andWhere('o.startdate <= "'.$date.'"')
 					->andWhere('o.discounttype = "CD"')
@@ -2123,7 +2123,7 @@ class Offer extends BaseOffer
 					->orderBy('p.position ASC')
 					->limit($limit)
 				    ->fetchArray();
-		return $topKortingscodeForShopPage;
+		return $topKortingscodesForShopPage;
 	}
 
 

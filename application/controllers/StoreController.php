@@ -232,21 +232,21 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
-        $shopsId = $shopParams['id'];
+        $currentShopId = $shopParams['id'];
         $shopId = $this->getRequest()->getParam('id');
 
         if ($shopId) {
-            $nowDate = date('Y-m-d H:i:s');
+            $currentDate = date('Y-m-d H:i:s');
             $ShopList = $shopId.'_list';
             $allShopDetailKey = 'all_shopdetail'.$ShopList;
             $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetail($shopId));
-            $allOfferInStoreKey = 'all_offerInStore'.$ShopList;
-            $offers = self::shopOffersBySetGetCache($allOfferInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("all", 10, $shopId, 0));
+            $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
+            $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("all", 10, $shopId, 0));
             $allExpiredOfferKey = 'all_expiredOfferInStore'.$ShopList;
             $expiredOffers = self::shopOffersBySetGetCache($allExpiredOfferKey, FrontEnd_Helper_viewHelper::getShopCouponCode("expired", 12, $shopId));
             $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
             $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $shopId));
-            $expiredOfferInStoreKey = 'all_msArticleInStore'.$ShopList;
+            $expiredOffersInStoreKey = 'all_msArticleInStore'.$ShopList;
             $moneySavingGuideArticle = self::shopOffersBySetGetCache('all_msArticleInStore'.$ShopList, FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle('moneysaving', 6, $shopId));
              if (sizeof($shopInformation) >0) {
             } else {
@@ -273,14 +273,10 @@ class StoreController extends Zend_Controller_Action
                 $this->view->layout()->customHeader = $this->view->layout()->customHeader . @$shopInformation[0]['customHeader'] . "\n" ;
             }
                 
-            if (count($shopInformation[0]['logo']) > 0) {
-                $ShopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
-            } else {
-                $ShopImage = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
-            }
+            $ShopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
         } else {
-            $redirectToUrl = HTTP_PATH_LOCALE. 'store/index';
-            $this->_redirect($redirectToUrl);
+            $urlToRedirect = HTTP_PATH_LOCALE. 'store/index';
+            $this->_redirect($urlToRedirect);
         }
 
         $isPopularStore = Shop::getPopularStore(0, $shopInformation[0]['id']);
@@ -332,12 +328,11 @@ class StoreController extends Zend_Controller_Action
         $this->view->expiredOffers = $expiredOffers;
         $relatedStoreByCategory = FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode('relatedshopsbycat', 4, $shopId));
         $this->view->relatedshops = $relatedStoreByCategory;
-        $this->view->relatedshops8 = $relatedStoreByCategory;
-        $this->view->countPopularOffers = count(FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $shopsId));
+        $this->view->relatedshopsByCategory = $relatedStoreByCategory;
+        $this->view->countPopularOffers = count(FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId));
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $ShopImage;
-        $shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
-        $this->view->shareUrl = $shareUrl;
+        $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
         $this->view->displayExtraPropertiesWidget = $displayExtraPropertiesWidget;
         $this->view->headTitle(@$shopInformation[0]['overriteTitle']);
