@@ -10,7 +10,7 @@ $offerBounceRate = "/out/offer/".$this->id;
 
 $dayDifference = FrontEnd_Helper_viewHelper::getDaysDifference($this->endDate);
 ?>
-<section class="section">
+
 	<!-- IF CODE EXCLUSIVE -->
 	<article class="block <?php echo $this->exclusiveCode == '1' ? "orange-block" :  "active"; ?>">
 		<div class="holder">
@@ -109,4 +109,4 @@ if($userLoginStatus==true  && intval($this->partialCounter)== 1):
     echo $this->render('store/_offerSignupForm.phtml');
 endif;
 ?>
-</section>
+ 
