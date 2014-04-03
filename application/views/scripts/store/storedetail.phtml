@@ -7,7 +7,10 @@ if(!empty($this->similarShops)):
         array('similarShopsAndSimilarCategoryShops' => $this->similarShops)
     );
 endif;
-
+$partialViewPath = 'partials/';
+if($this->currentStoreInformation[0]['discussions'] == 1):
+$discussion = $this->render($partialViewPath.'_discussion.phtml');
+endif;
 echo $this->doctype('XHTML1_RDFA');
 if($this->profileImage['addtosearch'] == 1):
     if($this->profileImage['google']):
@@ -69,12 +72,6 @@ if(count($this->relatedshops) > 0):
     $relatedOffer = $this->partialLoop('store/relatedOffer.phtml', $this->relatedshops);
 endif;
 
-$discussion = '';
-if($this->currentStoreInformation[0]['discussions'] == 1):
-    $discussion ='<div class="voucher-col1-new">';
-    $discussion .=$this->render('partials/discussion.phtml');
-    $discussion .='</div>';
-endif;
 $speratorDiv = '<div class="separator"></div>';
 # end common code
 ?>

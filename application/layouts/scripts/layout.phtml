@@ -87,8 +87,8 @@ else:
     echo $basePartialViewPath->render('partials/_header.phtml');
 endif;
 ?>
-        <div id="main" class="container">   
-<?php
+<div id="main" class="container">	
+ <?php
 
 if(file_exists($localePartialPath .  'partials/_top_nav.phtml')):
     echo $localePartialViewPath->render('partials/_top_nav.phtml');
