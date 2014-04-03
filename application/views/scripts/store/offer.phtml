@@ -14,10 +14,17 @@ $dayDifference = FrontEnd_Helper_viewHelper::getDaysDifference($this->endDate);
 	<!-- IF CODE EXCLUSIVE -->
 	<article class="block <?php echo $this->exclusiveCode == '1' ? "orange-block" :  "active"; ?>">
 		<div class="holder">
-			<a class="code" href="<?php echo $urlToShow;?>"  rel="nofollow"   
+			<a class="<?php echo FrontEnd_Helper_viewHelper::getClassNameForOffer($this);?>" href="<?php echo $urlToShow;?>"  rel="nofollow"   
 			target="_blank" 
 			onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
 			   <img src="<?php echo $offerDiscountImage; ?>" alt="<?php echo @$this->tiles['label']?>"/>
+			   <!-- <div class="center">
+					<div class="code-holder">
+						<strong>20<sup>%</sup></strong>
+						<span>off</span>
+					</div>
+				</div>
+				<footer class="bottom">code</footer>-->
 			</a> 
 			<div class="box">
 				<div class="text">

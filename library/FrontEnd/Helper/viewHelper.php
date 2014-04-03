@@ -135,6 +135,18 @@ class FrontEnd_Helper_viewHelper
 		return $offerOption . $dateFormatString;
 	}
 	
+	public static function getClassNameForOffer($currentOffer)
+	{
+		$className = 'code';
+		if ($currentOffer->discountType == "PR" && $currentOffer->discountType == "PA") {
+			$className .= ' purple';
+		} elseif($currentOffer->discountType=='SL') {
+			$className .= ' red';
+		} else if($currentOffer->extendedOffer =='1') {	
+			$className .= ' blue';
+		}
+		return $className;
+	}
 	###################################################################
 	############### EN REFACTORED CODE ################################
 	/**
