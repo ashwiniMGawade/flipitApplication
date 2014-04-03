@@ -87,7 +87,7 @@ $localePartialViewPath->setBasePath($localeViewPath);
 if(file_exists($localePartialPath .  '_header.phtml')) :
     echo $localePartialViewPath->render($partials.'_header.phtml');
 else:
-    echo $basePartialViewPath->render($partials.'_header.phtml');
+    echo $baseViewPath->render($partials.'_header.phtml');
 endif;
 ?>
 <div id="main" class="container">	
@@ -96,7 +96,7 @@ endif;
 if(file_exists($localePartialPath .  '_top_nav.phtml')):
     echo $localePartialViewPath->render($partials.'_top_nav.phtml');
 else :
-    echo $basePartialViewPath->render($partials. '_top_nav.phtml');
+    echo $baseViewPath->render($partials. '_top_nav.phtml');
 endif;
 
 echo $this->layout()->content;
