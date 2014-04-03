@@ -307,7 +307,7 @@ class StoreController extends Zend_Controller_Action
 	  	  	# key not exist in cache 
 	  	  	
 	  	  	if($flag){
- 			$offers =  FrontEnd_Helper_viewHelper::commonfrontendGetCode("all",10,$id,0)  ;
+ 			$offers =  FrontEnd_Helper_viewHelper::commonfrontendGetCode("all",'unlimited',$id,0)  ;
 		    	$offers = FrontEnd_Helper_viewHelper::replaceStringArray($offers);
 	  	  		FrontEnd_Helper_viewHelper::setInCache($key, $offers);
 	  	  	} else {

@@ -923,7 +923,9 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		switch(strtolower($type)) {
 
 			case 'all':
-
+				if ($limit == 'unlimited') {
+				    $limit = '';
+				}
 				$data = Offer::getAllOfferOnShop($shopId, $limit);
 
 			break;
