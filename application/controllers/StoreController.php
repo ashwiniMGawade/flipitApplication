@@ -218,6 +218,10 @@ class StoreController extends Zend_Controller_Action
         die;
         
     }
+    
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
     /**
      * show all details of one store
      * @version 1.0
@@ -235,7 +239,7 @@ class StoreController extends Zend_Controller_Action
             $nowDate = date('Y-m-d H:i:s');
             $ShopList = $shopId.'_list';
             $allShopDetailKey = 'all_shopdetail'.$ShopList;
-            $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoredetail($shopId));
+            $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetail($shopId));
             $allOfferInStoreKey = 'all_offerInStore'.$ShopList;
             $offers = self::shopOffersBySetGetCache($allOfferInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("all", 10, $shopId, 0));
             $allExpiredOfferKey = 'all_expiredOfferInStore'.$ShopList;
@@ -243,9 +247,8 @@ class StoreController extends Zend_Controller_Action
             $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
             $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $shopId));
             $expiredOfferInStoreKey = 'all_msArticleInStore'.$ShopList;
-            $moneySavingGuideArticle = self::shopOffersBySetGetCache($expiredOfferInStoreKey, FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle('moneysaving', 6, $shopId));
-
-            if (sizeof($shopInformation) >0) {
+            $moneySavingGuideArticle = self::shopOffersBySetGetCache('all_msArticleInStore'.$ShopList, FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle('moneysaving', 6, $shopId));
+             if (sizeof($shopInformation) >0) {
             } else {
                 $LocaleUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
@@ -399,6 +402,9 @@ class StoreController extends Zend_Controller_Action
 
         return $shopInformation;
     }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
   /**
    * search by char
    * 
@@ -438,7 +444,7 @@ class StoreController extends Zend_Controller_Action
  	$this->view->shopId=$params["storeid"];
  	
  	$this->view->shopoffer=FrontEnd_Helper_viewHelper::getShopCouponCode("newest",3,$params["storeid"]);
- 	$shopdetail=Shop::getStoredetail($params["storeid"]);
+ 	$shopdetail=Shop::getStoreDetail($params["storeid"]);
  	
  	$expiredcoupons=FrontEnd_Helper_viewHelper::getShopCouponCode("expired",'all',$params["storeid"]);
  	$this->view->expiredOffers=$expiredcoupons;

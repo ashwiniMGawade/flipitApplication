@@ -2023,7 +2023,9 @@ class Offer extends BaseOffer
 	}
 
 
-
+	##################################################################################
+	################## REFACTORED CODE ###############################################
+	##################################################################################
 	/**
 	 * check the characteristics of a shop like hot shop,super partner etc
 	 * @param $id integer shop id for which offer are listed
@@ -2031,27 +2033,25 @@ class Offer extends BaseOffer
 	 * @param $getExclusiveOnly boolean set true to get only exclusive offers
 	 * @param $includingOffline boolean set true to all offers including offline offers
 	 * @return array number of offer based on given constraints
-	 * @author sp singh
 	 */
 
-	public static function getShopCharacteristics($id , $limit = null , $getExclusiveOnly = false , $includingOffline = false)
+	public static function getShopCharacteristics($shopId, $limit = null, $getExclusiveOnly = false, $includingOffline = false)
 	{
 		$nowDate = date('Y-m-d H:i:s');
-		$data = Doctrine_Query::create()
-
+		$shopCharacteristics = Doctrine_Query::create()
 		->select('o.id,s.id')
 				->from('Offer o')
 				->leftJoin('o.shop s')
-				->where('o.deleted = 0' );
-		if(!$includingOffline)
-		{
-			$data = $data->andWhere('o.offline = 0')
+				->where('o.deleted = 0');
+		
+		if (!$includingOffline) {
+			$shopCharacteristics = $shopCharacteristics->andWhere('o.offline = 0')
 			->andWhere('o.endDate >='."'$nowDate'")
 			->andWhere('o.startdate <= "'.$nowDate.'"');
 		}
 
-		$data= $data->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
-		->andWhere('s.id='.$id)
+		$shopCharacteristics= $shopCharacteristics->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+		->andWhere('s.id='.$shopId)
 		->andWhere('s.deleted = 0')
 		->andWhere('o.discountType != "NW"')
 		->andWhere('o.Visability!="MEM"')
@@ -2062,25 +2062,21 @@ class Offer extends BaseOffer
 		->addOrderBy('o.popularityCount DESC')
 		->addOrderBy('o.title ASC');
 
-		// check need to get exclusive offers or not
-		if($getExclusiveOnly)
-		{
-			$data = $data->andWhere('o.exclusiveCode = 1' ) ;
-		}
-		// check $limit if passed or not
-		if($limit)
-		{
-			$data = $data->limit($limit);
-
+		if ($getExclusiveOnly) {
+			$shopCharacteristics = $shopCharacteristics->andWhere('o.exclusiveCode = 1');
 		}
 
-		$data = $data->fetchArray();
-		return $data;
+		if ($limit) {
+			$shopCharacteristics = $shopCharacteristics->limit($limit);
+		}
 
-
+		$shopCharacteristics = $shopCharacteristics->fetchArray();
+		return $shopCharacteristics;
 	}
 
-
+	##################################################################################
+	################## END REFACTORED CODE ###########################################
+	##################################################################################
 
 	/**
 	 * get top kortingscode same as home page but it displayed on shop page(only used when a shop is no money with no offers)
@@ -2089,7 +2085,6 @@ class Offer extends BaseOffer
 	 *
 	 * and sort poplar offers based on shop's category
 	 *
-	 * @author spsingh
 	 *
 	 * @param $limit integer limit for the no of offers. Default is set to 5
 	 * @param $shopCategories array  no money shop categories
@@ -2097,11 +2092,11 @@ class Offer extends BaseOffer
 	 * @return array $data
 	 */
 
-	public static function getTopKortingscodeForShopPage($shopCategories,$limit = 5 )
+	public static function getTopKortingscodeForShopPage($shopCategories, $limit = 5)
 	{
 		$date = date('Y-m-d H:i:s');
 
-		$data = Doctrine_Query::create()
+		$topKortingscodeForShopPage = Doctrine_Query::create()
 			->select('p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
 				o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name')
 			->from('PopularCode p')
@@ -2114,24 +2109,21 @@ class Offer extends BaseOffer
 			->andWhere('s.deleted=0')
 			->andWhere('o.offline = 0');
 
-		if(! empty($shopCategories))
-		{
-			$data = $data->leftJoin('s.refShopCategory sc')
+		if (!empty($shopCategories)) {
+			$topKortingscodeForShopPage = $topKortingscodeForShopPage->leftJoin('s.refShopCategory sc')
 					->andWhereIn('sc.categoryId', $shopCategories);
 		}
 
-			$data = $data->andWhere('s.status = 1')
-						->andWhere('o.enddate > "'.$date.'"')
-				      	->andWhere('o.startdate <= "'.$date.'"')
-						->andWhere('o.discounttype = "CD"')
-						->andWhere('o.userGenerated = 0')
-						->andWhere('o.Visability != "MEM"')
-						->orderBy('p.position ASC')
-						->limit($limit)
-					    ->fetchArray();
-
-
-		return $data;
+		$topKortingscodeForShopPage = $topKortingscodeForShopPage->andWhere('s.status = 1')
+					->andWhere('o.enddate > "'.$date.'"')
+			      	->andWhere('o.startdate <= "'.$date.'"')
+					->andWhere('o.discounttype = "CD"')
+					->andWhere('o.userGenerated = 0')
+					->andWhere('o.Visability != "MEM"')
+					->orderBy('p.position ASC')
+					->limit($limit)
+				    ->fetchArray();
+		return $topKortingscodeForShopPage;
 	}
 
 
@@ -2155,7 +2147,7 @@ class Offer extends BaseOffer
 	{
 		$date = date('Y-m-d H:i:s');
 
-		$data = Doctrine_Query::create()
+		$additionalTopKortingscodeForShopPage = Doctrine_Query::create()
 				->select('p.id,o.id,o.authorId,o.refURL,o.couponCodeType,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
 					o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
 
@@ -2172,7 +2164,7 @@ class Offer extends BaseOffer
 				->where('o.deleted =0')
 				->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
 				->andWhereNotIn('sc.categoryId', $shopCategories)
-				->andWhereNotIn('o.id', $offerIDs )
+				->andWhereNotIn('o.id', $offerIDs)
 				->andWhere('s.deleted=0')
 				->andWhere('o.offline = 0')
 				->andWhere('s.status = 1')
@@ -2184,7 +2176,7 @@ class Offer extends BaseOffer
 				->orderBy('p.position ASC')
 				->limit($limit)
 				->fetchArray();
-		return $data;
+		return $additionalTopKortingscodeForShopPage;
 	}
 
 

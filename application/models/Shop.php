@@ -169,13 +169,11 @@ class Shop extends BaseShop {
 
 	/**
 	 *  get shop categories
-	 *
-	 *  @param SP SINGH
 	 *  @return array contain shop categories ids'
 	 *
 	 */
 
-	public  static function returnShopCategories($id)
+	public static function returnShopCategories($id)
 	{
 
 		$data = Doctrine_Query::create()
@@ -183,14 +181,12 @@ class Shop extends BaseShop {
 				->from("refShopCategory r")
 				->where('r.shopid=' . $id)
 				->fetchArray();
-
-		$categories =  array() ;
-		foreach ($data  as $val)
-		{
-			$categories[]  =   $val['categoryId'] ;
-
+		$categories =  array();
+		
+		foreach ($data as $val) {
+			$categories[] = $val['categoryId'] ;
 		}
-		return $categories ;
+		return $categories;
 	}
 
 
@@ -1090,48 +1086,44 @@ public static function getallStoreForFrontEnd()
  	->fetchArray();
  	return $shopDetails;
  }
+	##################################################################################
+	################## REFACTORED CODE ###############################################
+	##################################################################################
+	/**
+	* get popular store
+	* @param $limit integer no of popular shops
+	* @param $shopId integer  optional get popular shop by its id
+	* @version 1.1
+	* @return array $data
+	*/
+    public static function getPopularStore($limit, $shopId = null)
+    {
+		$nowDate = date('Y-m-d 00:00:00');
+		$data = Doctrine_Query::create()
+		->select('o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, img.name as imgname')
+		->from('PopularShop p')
+		->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$nowDate')) as exclusiveCount")
+		->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
+		->addSelect("(SELECT COUNT(*) FROM Offer active WHERE (active.shopId = s.id AND o.endDate > '$nowDate')) as activeCount")
+		->leftJoin('p.shop s')
+		->leftJoin('s.offer o')
+		->leftJoin('s.logo img')
+		->where('s.deleted=0')
+		->addWhere('s.status=1')
+		->orderBy('p.position ASC');
 
- /**
- * get popular store
- * @author rkumar1 modified by spsingh1
- * @param $limit integer no of popular shops
- * @param $shopId integer  optional get popular shop by its id
- * @version 1.1
- * @return array $data
- */
- public static function getPopularStore($limit , $shopId = null){
+		if ($shopId) {
+			$data =  $data->andWhere("s.id = ? ", $shopId);
+		} else {
+			$data = $data->limit($limit);
+		}
 
- 	$nowDate = date('Y-m-d 00:00:00');
-
- 	$data = Doctrine_Query::create()
-
- 	->select('o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, img.name as imgname')
-	->from('PopularShop p')
- 	->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$nowDate')) as exclusiveCount")
- 	->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
- 	->addSelect("(SELECT COUNT(*) FROM Offer active WHERE (active.shopId = s.id AND o.endDate > '$nowDate')) as activeCount")
- 	->leftJoin('p.shop s')
- 	->leftJoin('s.offer o')
-  	->leftJoin('s.logo img')
-  	->where('s.deleted=0')
-  	->addWhere('s.status=1')
- 	->orderBy('p.position ASC');
-
- 	// check $shopId if passed or not
- 	if($shopId)
- 	{
-		$data =  $data->andWhere("s.id = ? " , $shopId);
- 	} else {
-		$data = $data->limit($limit);
-	}
-
- 	$data = $data->fetchArray();
-
- 	//echo "<pre>";
- 	//print_r($data); die;
- 	return $data;
- }
-
+		$data = $data->fetchArray();
+		return $data;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
 
  /**
   * get popular store
@@ -1247,30 +1239,28 @@ public static function getallStoreForFrontEnd()
  	->limit($limit)->fetchArray();
  	return $data;
  }
- /*
-  * sunny patial get store detail updated by kr
- * */
- public static function getStoredetail($shopId)
- {
-
- 	$nowDate = date('Y-m-d 00:00:00');
- 	$Q = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
- 	->from('Shop s')
- 	->leftJoin('s.logo img')
- 	->leftJoin('s.smallimage small')
- 	->leftJoin('s.bigimage big')
- 	->leftJoin('s.affliatenetwork aff')
- 	->leftJoin('s.screenshot scr')
- 	->where('s.id='.$shopId)
- 	->andWhere('s.deleted=0')
- 	->andWhere('s.status=1');
- 	//->andWhere('o.deleted=0')
- 	//->andWhere('o.endDate >'."'$nowDate'");//please uncomment if testing is success
- 	//die();
- 	$allStoreForCondition  = $Q->fetchArray(array(),Doctrine_Core::HYDRATE_ARRAY);
- 	return $allStoreForCondition;
- 	//return count($Q['popularcode']);
- }
+     ##################################################################################
+     ################## REFACTORED CODE ###############################################
+     ##################################################################################
+	 public static function getStoreDetail($shopId)
+	 {
+	 	$nowDate = date('Y-m-d 00:00:00');
+	 	$storeDetail = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
+	 	->from('Shop s')
+	 	->leftJoin('s.logo img')
+	 	->leftJoin('s.smallimage small')
+	 	->leftJoin('s.bigimage big')
+	 	->leftJoin('s.affliatenetwork aff')
+	 	->leftJoin('s.screenshot scr')
+	 	->where('s.id='.$shopId)
+	 	->andWhere('s.deleted=0')
+	 	->andWhere('s.status=1');
+	 	$allStoreForCondition = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
+	 	return $allStoreForCondition;
+	 }
+	 ##################################################################################
+	 ################## END REFACTORED CODE ###########################################
+	 ##################################################################################
 public static function shopAddInFavorite($userid,$shopid)
 {
 	   $flag = 0;

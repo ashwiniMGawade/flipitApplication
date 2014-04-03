@@ -944,60 +944,43 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		return $obj->getFamousUserDetail($eId);
 
 	}
+	##################################################################################
+	################## REFACTORED CODE ###############################################
+	##################################################################################
 	/**
 	 * get popular code list, Newest offer list, Extended offer list  from database
-	 * @author Raman
 	 * @version 1.0
 	 * @return array $data
 	 */
-	public static function commonfrontendGetCode($type, $limit = 10,$shopId=0, $userId="") {
-
+	public static function commonfrontendGetCode($type, $limit = 10, $shopId = 0, $userId = "")
+	{
 		switch(strtolower($type)) {
-
 			case 'all':
-
-				$data = Offer::getAllOfferOnShop($shopId);
-
-			break;
-
+				$shopData = Offer::getAllOfferOnShop($shopId);
+				break;
 			case 'popular':
-
-          $data = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
-
-			break;
-
+                $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
+				break;
 			case 'newest':
-
-				$data = Offer::commongetnewestOffers($type, $limit, $shopId, $userId);
-
-			break;
-
-
+				$shopData = Offer::commongetnewestOffers($type, $limit, $shopId, $userId);
+				break;
 			case 'newestmemberonly':
-
-				$data = Offer::commongetMemberOnlyOffer($type, $limit);
-
+				$shopData = Offer::commongetMemberOnlyOffer($type, $limit);
 				break;
-
 			case 'extended':
-
-				$data = Offer::commongetextendedOffers($type, $limit, $shopId);
+				$shopData = Offer::commongetextendedOffers($type, $limit, $shopId);
 				break;
-
 			case 'allcouponshowtoguide':
-
-				$data = Offer::getCouponOffersHowToGuide($shopId);
-
+				$shopData = Offer::getCouponOffersHowToGuide($shopId);
 				break;
-
-
 			default:
-			break;
+				break;
 		}
-
-		return $data;
-
+		return $shopData;
 	}
+	##################################################################################
+	################## END REFACTORED CODE ###########################################
+	##################################################################################
 	/**
 	 * generate submenu
 	 * @author kraj
@@ -1189,19 +1172,22 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
      return $data;
 
   }
-  /**
-   * generate MS Articles related to a shop
-   * @author Raman
-   * @version 1.0
-   * @return array $data
-   */
-  public static function generateShopMoneySavingGuideArticle($slug, $limit, $id) {
-
-  	$ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
-  	return $ShopMoneySavingGuideArticle;
-
-  }
-
+	##################################################################################
+	################## REFACTORED CODE ###############################################
+	##################################################################################
+    /**
+    * generate MoneySaving Articles related to a shop
+    * @version 1.0
+    * @return array $data
+    */
+    public static function generateShopMoneySavingGuideArticle($slug, $limit, $id)
+    {
+  	    $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
+  	    return $ShopMoneySavingGuideArticle;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
   /**
    * Get IP address of client system
    * @author Raman
@@ -1559,47 +1545,45 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
    * @param string $link
    * @version 1.0
    */
-  public  static function generatCononical($link)
-  {
+   ##################################################################################
+   ################## REFACTORED CODE ###############################################
+   ##################################################################################  
+    public static function generatCononical($link)
+    {
   		$permalink = $link;
 	  	preg_match("/^[\d]+$/", $permalink, $matches);
 
-	  	if(intval(@$matches[0]) > 0){
-	  		$permalink = explode('/'.$matches[0],$permalink);
+	  	if (intval(@$matches[0]) > 0) {
+	  		$permalink = explode('/'.$matches[0], $permalink);
 	  		$permalink = $permalink[0];
-	  	}else{
+	  	} else {
 	  		$permalink = $permalink;
 	  	}
 
-	  	$splitVal = explode('?', $permalink);
-		//echo "<pre>";print_r($splitVal);die;
+	  	$splitPermalinkValue = explode('?', $permalink);
 
-
-	  	if(!empty($splitVal)){
-
-	  		$permalink = $splitVal[0];
-
-	  	}else{
-
+	  	if (!empty($splitPermalinkValue)) {
+	  		$permalink = $splitPermalinkValue[0];
+	  	} else {
 	  		$permalink = $permalink;
 	  	}
 
-	  	if(LOCALE!='en') {
+	  	if (LOCALE!='en') {
+	  		$frontInstance = Zend_Controller_Front::getInstance();
+	  		$controllerDirectory = $frontInstance->getControllerDirectory();
+	  		$moduleNames = array_keys($controllerDirectory);
+	  		$routeProperty = explode('/', $permalink);
 
-	  		$front = Zend_Controller_Front::getInstance();
-	  		$cd = $front->getControllerDirectory();
-	  		$moduleNames = array_keys($cd);
-	  		$routeProp = explode( '/' , $permalink) ;
-
-	  		if(in_array($routeProp[0] , $moduleNames)) {
-	  			$tempLang  = ltrim($permalink , $routeProp[0]);
-	  			$permalink  = ltrim($tempLang , '/');
+	  		if (in_array($routeProperty[0], $moduleNames)) {
+	  			$tempLanguage = ltrim($permalink, $routeProperty[0]);
+	  			$permalink = ltrim($tempLanguage, '/');
 	  		}
-
 	  	}
-	  	//die($permalink);
 	  	return rtrim($permalink, '/');
-  }
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
   /**
    * Remove all content after  ?
    * @param unknown_type $json
@@ -1805,57 +1789,43 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		return $string;
 	}
 
-
+	##################################################################################
+	################## REFACTORED CODE ###############################################
+	##################################################################################
 	/**
 	 *
 	 * @param string $message message to write into log file
 	 * @param string  $logfile complete filepath
 	 * @return array regarding data saved or not
-	 *
-	 * @author SP Singh
 	 */
-	public static function writeLog($message, $logfile = '') {
-
-		// Determine log file
-		if($logfile == '') {
-
+	public static function writeLog($message, $logfile = '')
+	{
+		if ($logfile == '') {
 			$logDir = APPLICATION_PATH . "../logs/";
 
-			if(!file_exists( $logDir  ))
+			if (!file_exists( $logDir))
 				mkdir( $logDir , 776, TRUE);
-
 			 $fileName = "default" ;
-
 		 	 $logfile = $logDir . $fileName;
-
 		}
 
-		// Get time of request
 		if( ($time = $_SERVER['REQUEST_TIME']) == '') {
 			$time = time();
 		}
 
-		// Get IP address
 		if( ($remote_addr = $_SERVER['REMOTE_ADDR']) == '') {
 			$remote_addr = "REMOTE_ADDR_UNKNOWN";
 		}
 
-
-
-		// Format the date and time
 		$date = date("M d, Y H:i:s", $time);
 
-		// Append to the log file
 		if($fd = @fopen($logfile, "a")) {
 
-		# please avoid to format below template
 		$str = <<<EOD
 $date; $remote_addr; $message
 EOD;
-
 		$result = fwrite($fd, $str .PHP_EOL);
 		fclose($fd);
-
 
 		if($result > 0)
 				return array('status' => true);
@@ -1877,38 +1847,28 @@ EOD;
 	 * @param integer $chainItemId chain item id to fetch chain
 	 * @param string $shopName shop name
 	 *
-	 * @author sp singh
 	 *
 	 * @return string
 	 */
 	public static function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
 	{
-
-		if($shopName){
-
+		if ($shopName) {
 			$chain = Chain::returnChainData($chainItemId, $id);
- 			if(! $chain)
-			{
-				return false ;
+ 			if (! $chain) {
+				return false;
 			}
 
 			$class = "ml-country";
 
-			if(count($chain) > 1)
-			{
+			if (count($chain) > 1) {
 				$class = "ml-countries";
 			}
 
 			$httpPathLocale = trim(HTTP_PATH_LOCALE, '/');
 			$httpPath = trim(HTTP_PATH, '/');
-
 			$getTranslate = Zend_Registry::get('Zend_Translate');
-
 			$shopHeader = $getTranslate->translate("is an international shop");
-
 			$widgetText = $getTranslate->translate("Check out the coupons and discounts from other countries when you're interested:");
-		
-			# please avoid to format below template
 			$string = <<<EOD
  		     <div class="intro">
 				<h2>
@@ -1918,39 +1878,32 @@ EOD;
 		    </div>
 		    <ul class="countries">
 EOD;
-
 			$hrefLinks = "" ;
          	$hasShops = false ;
-			foreach ($chain as $value)
-			{ 
-				$hrefLinks .=  isset($value['headLink']) ? $value['headLink']. "\n" : '';
+			foreach ($chain as $chainValue) {
+				$hrefLinks .=  isset($chainValue['headLink']) ? $chainValue['headLink']. "\n" : '';
 
-				if(! empty($value['shops']))
-				{
+				if (! empty($chainValue['shops'])) {
 					$hasShops = true ;
-					# if shop exist then set $value as shop
-					$value = $value['shops'];
-
-
-					$img   = ltrim( sprintf("images/front_end/flags/flag_%s.jpg", $value['locale'] ) );
-
-					$string .= sprintf("<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
-								   		 trim($value['url']),
-										  $httpPath.'/public/'. $img );
+					$chainValue = $chainValue['shops'];
+					$image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainValue['locale']));
+					$string .= sprintf(
+						"<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
+						trim($chainValue['url']),
+						$httpPath.'/public/'. $image
+					);
 				}
-
 			}
-
 			$string .= <<<EOD
 		           	</ul>
 EOD;
-			return array('string' => $string , 'headLink' => $hrefLinks,'hasShops' => $hasShops );
-
-
+			return array('string' => $string , 'headLink' => $hrefLinks, 'hasShops' => $hasShops );
 		}
 		return false;
 	}
-
+	##################################################################################
+	################## END REFACTORED CODE ###########################################
+	##################################################################################
 	/**
 	 * retrunCountryName
 	 *
