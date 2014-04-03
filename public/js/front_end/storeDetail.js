@@ -1,3 +1,20 @@
+// refactored code 
+
+function showTermAndConditions(id)
+{
+	$('div#termAndConditions'+id).slideToggle();
+}
+
+function showCodeInformation(id)
+{
+	$('div#offerCodeDiv'+id).show();
+	$('div#websiteOfferLink'+id).show();
+	$('div#offerButton'+id).hide();
+	
+}
+// end refactored code
+
+
 function checkFavorite(uId,id){
 	alert(uId+id);
 }
@@ -72,10 +89,10 @@ $(document).ready(function(){
 	    userCollapseText: __('Less More')  // default is 'read less'
 	});
 });
-function showTeamAndCondition(id)
+function showTermAndCondition(id)
 {
 	$('div#close_area'+ id).show();
-	$('div#teamandCondition'+id).slideToggle();
+	$('div#termAndCondition'+id).slideToggle();
 }
 function showReadMore(id)
 {

@@ -73,46 +73,51 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 	    <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
 	    <div class="nav-bg"></div>
 <?php
-$localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
+$localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
 
-$basePartialViewPath = new Zend_View();
-$basePartialViewPath->setBasePath(APPLICATION_PATH . '/views/');
+$baseViewPath = new Zend_View();
+$baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
+
+$partials = 'partials/';
+$localePartialPath = $localeViewPath . 'scripts/' . $partials;
 
 $localePartialViewPath = new Zend_View();
-$localePartialViewPath->setBasePath($localePartialPath);
+$localePartialViewPath->setBasePath($localeViewPath);
 
-if(file_exists($localePartialPath .  'partials/_header.phtml')) :
-    echo $localePartialViewPath->render('partials/_header.phtml');
+if(file_exists($localePartialPath .  '_header.phtml')) :
+    echo $localePartialViewPath->render($partials.'_header.phtml');
 else:
-    echo $basePartialViewPath->render('partials/_header.phtml');
+    echo $basePartialViewPath->render($partials.'_header.phtml');
 endif;
 ?>
 <div id="main" class="container">	
  <?php
 
-if(file_exists($localePartialPath .  'partials/_top_nav.phtml')):
-    echo $localePartialViewPath->render('partials/_top_nav.phtml');
+if(file_exists($localePartialPath .  '_top_nav.phtml')):
+    echo $localePartialViewPath->render($partials.'_top_nav.phtml');
 else :
-    echo $basePartialViewPath->render('partials/_top_nav.phtml');
+    echo $basePartialViewPath->render($partials. '_top_nav.phtml');
 endif;
 
 echo $this->layout()->content;
 ?>
-         </div>
+            </div>
 <?php
-if(file_exists($localePartialPath .  'partials/_footer.phtml')):
-    echo $localePartialViewPath->render('partials/_footer.phtml');
+if(file_exists($localePartialPath .  '_footer.phtml')):
+    echo $localePartialViewPath->render($partials. '_footer.phtml');
 else:
-    echo $basePartialViewPath->render('partials/_footer.phtml');
+    echo $baseViewPath->render($partials. '_footer.phtml');
 endif;
 ?>
+        </div>
     </div>
 <?php
-if(file_exists($localePartialPath . 'partials/_pop_up.phtml')):
-    echo $localePartialViewPath->render('partials/_pop_up.phtml');
+if(file_exists($localePartialPath . '_pop_up.phtml')):
+    echo $localePartialViewPath->render($partials. '_pop_up.phtml');
 else :
-    echo $basePartialViewPath->render('partials/_pop_up.phtml');
+    echo $baseViewPath->render($partials. '_pop_up.phtml');
 endif;
+
 ?>
 	    
 </body>

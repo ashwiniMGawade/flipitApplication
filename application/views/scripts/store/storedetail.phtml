@@ -7,6 +7,7 @@ if(!empty($this->similarShops)):
         array('similarShopsAndSimilarCategoryShops' => $this->similarShops)
     );
 endif;
+
 $partialViewPath = 'partials/';
 if($this->currentStoreInformation[0]['discussions'] == 1):
 $discussion = $this->render($partialViewPath.'_discussion.phtml');
