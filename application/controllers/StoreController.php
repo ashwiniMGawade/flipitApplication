@@ -218,43 +218,41 @@ class StoreController extends Zend_Controller_Action
         die;
         
     }
+    
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
     /**
      * show all details of one store
-     * @author kraj
      * @version 1.0
      */
     public function storedetailAction()
     {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink);
-        
-    $lim=10;
-    $params = $this->_getAllParams ();
-    $shopId = $params ['id'];
-    $id = $this->getRequest()->getParam('id');
+        $shopPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($shopPermalink);
+        $shopRecordsLimit = 10;
+        $shopParams = $this->_getAllParams();
+        $currentShopId = $shopParams['id'];
+        $shopId = $this->getRequest()->getParam('id');
 
-    if($id) {
-        
-            $nowDate = date('Y-m-d H:i:s');
-            # get all newest offer related currect shop
-            $key = 'all_shopdetail'  . $id . '_list';
-            $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-            # key not exist in cache
-            if($flag){
-                $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray(Shop::getStoredetail($id));
-                FrontEnd_Helper_viewHelper::setInCache($key, $shopInformation);
+        if ($shopId) {
+            $currentDate = date('Y-m-d H:i:s');
+            $ShopList = $shopId.'_list';
+            $allShopDetailKey = 'all_shopdetail'.$ShopList;
+            $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetail($shopId));
+            $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
+            $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("all", 10, $shopId, 0));
+            $allExpiredOfferKey = 'all_expiredOfferInStore'.$ShopList;
+            $expiredOffers = self::shopOffersBySetGetCache($allExpiredOfferKey, FrontEnd_Helper_viewHelper::getShopCouponCode("expired", 12, $shopId));
+            $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
+            $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $shopId));
+            $expiredOffersInStoreKey = 'all_msArticleInStore'.$ShopList;
+            $moneySavingGuideArticle = self::shopOffersBySetGetCache('all_msArticleInStore'.$ShopList, FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle('moneysaving', 6, $shopId));
+             if (sizeof($shopInformation) >0) {
             } else {
-                # get from cache
-                $shopInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-                # echo 'The result is comming from cache!!';
-            }
-            
-            # if show permalink not exist then shop show 404 error
-            if(sizeof($shopInformation) >0){
-            }else{
-                $url  =  HTTP_PATH_LOCALE;
+                $LocaleUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
-                $this->_redirect($url);
+                $this->_redirect($LocaleUrl);
             }
                 
             if ($shopInformation[0]['showChains']) {
@@ -266,262 +264,142 @@ class StoreController extends Zend_Controller_Action
                     $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
                 }
 
-
-		  	  	# render shop chain
-		  	  	if($chains['hasShops'] && isset($chains['string'])){
-		  	  		$this->view->chain = $chains['string'] ;
-		  	  	}
-	  	  	
-	  	  	}
-	  	  	
-	  	  	if(@$shopInformation[0]['customHeader'])
-	  	  	{
-	  	  		$this->view->layout()->customHeader =  $this->view->layout()->customHeader . 
-  	  									   @$shopInformation[0]['customHeader'] . "\n" ;
-	  	  	}
-	  	  		
-	  	  	
-	  	  	if(count($shopInformation[0]['logo']) > 0):
-		    		$img = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
-		    	
-		    else:
-		    	$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
-		    endif;
-		    
-		    
-	  	  	# get all  offer related currect shop
-	  	  	$key = 'all_offerInStore'.$id.'_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-			
-	  	  	$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-	  	  	# key not exist in cache 
-	  	  	
-	  	  	if($flag){
- 			$offers =  FrontEnd_Helper_viewHelper::commonfrontendGetCode("all",10,$id,0)  ;
-		    	$offers = FrontEnd_Helper_viewHelper::replaceStringArray($offers);
-	  	  		FrontEnd_Helper_viewHelper::setInCache($key, $offers);
-	  	  	} else {
-	  	  		//get from cache
-	  	  		$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-	  	  		//echo 'The result is comming from cache!!';
-	  	  	}
-	 		$expiredOfferKey = 'all_expiredOfferInStore'. $id .'_list';
-	 		$expiredOfferFlag = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($expiredOfferKey);
-	 		
-	        if ($expiredOfferFlag) {
-	 			$expiredOffers = FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode("expired", 12, $id));
-	 			FrontEnd_Helper_viewHelper::setInCache($expiredOfferKey, $expiredOffers);
-	 		} else {
-	 			$expiredOffers = FrontEnd_Helper_viewHelper::getFromCacheByKey($expiredOfferKey);
-	 		}
-	 		
-	 		//get all expired offer related currect shop
-	 		$key = 'all_latestupdatesInStore'  . $id . '_list';
-	 		//FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-	 		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-	 		//key not exist in cache
-	 		if($flag){
-	 			$latestShopUpdates =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates',4,$id));
-	 			FrontEnd_Helper_viewHelper::setInCache($key, $latestupdates);
-	 		} else {
-	 			//get from cache
-	 			$latestShopUpdates = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-	 		}
-	 		
-	 		$slug = 'moneysaving';
-	 		$limit = 6;
-	 		
-  	        //get all money seving guide related currect shop
-	 		$expiredOfferInStoreKey = 'all_msArticleInStore'  . $id . '_list';
-	 		
-	 		//FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-	 		$cacheStatusByKey =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($expiredOfferInStoreKey);
-	 		//key not exist in cache
-	        if ($cacheStatusByKey) {
-	 			$moneySavingGuideArticle =   FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle($slug, $limit, $id));
-	 			FrontEnd_Helper_viewHelper::setInCache($expiredOfferInStoreKey, $moneySavingGuideArticle);
-	 		} else {
-	 			//get from cache
-	 			$moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getFromCacheByKey($expiredOfferInStoreKey);
-	 		}
+                if ($shopChains['hasShops'] && isset($shopChains['string'])) {
+                    $this->view->shopChain = $shopChains['string'] ;
+                }
+            }
+            
+            if (@$shopInformation[0]['customHeader']) {
+                $this->view->layout()->customHeader = $this->view->layout()->customHeader . @$shopInformation[0]['customHeader'] . "\n" ;
+            }
+                
+            $ShopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
         } else {
-  	  		$redirectToUrl = HTTP_PATH_LOCALE. 'store/index';
-  	  		$this->_redirect($redirectToUrl);
+            $urlToRedirect = HTTP_PATH_LOCALE. 'store/index';
+            $this->_redirect($urlToRedirect);
         }
-  	  
-  	 // check this sho is a popular store or not 
-  	 $isPopular =  Shop::getPopularStore( 0 , $shopInformation[0]['id']);
-  	  
-  	  if(count($isPopular) >  0) {
-  	  	
-  	  		$this->view->isPopular = true ;
-  	  		
-  	  } else {
-  	  	
-  	  	$this->view->isPopular = false ;
-  	  }
-  	  
-  	  // check This shop is hot at the moment or not
-  	  $__onlineOffers =  Offer::getShopCharacteristics($shopInformation[0]['id'] , 5) ;
-  	  
-  	  if(count($__onlineOffers) >  4) {
-  	  	$this->view->isHotShop = true ;
-  	  } else  {
-  	  	$this->view->isHotShop = false ;
-  	  }
-  	  // check This shop is hot at the moment or not
-  	  $__hasExclusiveOffers =  Offer::getShopCharacteristics($shopInformation[0]['id'] , 7 , true , true) ;
-  	  
-  	  if(count($__hasExclusiveOffers) >  6 )  {
-  	  	$this->view->isSuperPartner = true ;
-  	  } else  {
-  	  	$this->view->isSuperPartner = false ;
-  	  }
-  	  if( $shopInformation[0]['displayExtraProperties'] ) {
-  	  	
-  	    	  # if $displayExtraPropertiesWidget is true then display shop extra properteis widget otherwise hide
-		  	  $displayExtraPropertiesWidget = true ;
-		  	  
-		  	  #check is all shop extra properties are false or not  
-		  	  if(!$this->view->isHotShop && !$this->view->isSuperPartner && ! $this->view->isPopular  &&
-		  	  			!$shopInformation[0]['ideal'] && ! $shopInformation[0]['qShops'] && !$shopInformation[0]['freeReturns'] &&
-		  	  		! $shopInformation[0]['pickupPoints'] &&  !$shopInformation[0]['mobileShop'] &&  !$shopInformation[0]['service'])
-		  	  {
-		  	  	
-		  	  	  $displayExtraPropertiesWidget = false ;
-		  	  }
-		  	  
-  	  } else  {
-  	  	
-  	  	$displayExtraPropertiesWidget = false ;
-  	  }
-  	  $this->view->data = $shopInformation;
 
-  	  $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
-  	  $this->view->latestShopUpdates = $latestShopUpdates;
-  	  $this->view->offers = $offers;
-  	  
-      #  if no shop and no offer
-      if($this->view->data[0]['affliateProgram']==0 && count($this->view->offers) <=0):
-        
-            # fetch 5 Popular voucher offers KORTINGSCODES list display them for a particular shop
-        
-            $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvaouchercode_list_shoppage');
+        $isPopularStore = Shop::getPopularStore(0, $shopInformation[0]['id']);
 
-            $shopCtegories = Shop::returnShopCategories($id) ;
-        
-            
-            $voucherflag2 =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_categories_of_shoppage_'. $id );
-            
-            //key not exist in cache
-            if($voucherflag){
-                            
-                # GET TOP 5 POPULAR CODE
-                $shopCtegories = Shop::returnShopCategories($id) ;
-                FrontEnd_Helper_viewHelper::setInCache('all_categories_of_shoppage_'. $id , $shopCtegories);
-                                
-            } else {
-                            
-                $shopCtegories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_categories_of_shoppage_'. $id);
+        if (count($isPopularStore) >  0) {
+            $this->view->isPopularStore = true;
+        } else {
+            $this->view->isPopularStore = false;
+        }
+
+        $onlineHotStoreOffers = Offer::getShopCharacteristics($shopInformation[0]['id'], 5);
+
+        if (count($onlineHotStoreOffers) >  4) {
+            $this->view->isHotShop = true;
+        } else {
+            $this->view->isHotShop = false;
+        }
+
+        $exclusiveStoreOffers = Offer::getShopCharacteristics($shopInformation[0]['id'], 7, true, true);
+
+        if (count($exclusiveStoreOffers) >  6) {
+            $this->view->isSuperPartner = true;
+        } else {
+            $this->view->isSuperPartner = false;
+        }
+
+        if ($shopInformation[0]['displayExtraProperties']) {
+            $displayExtraPropertiesWidget = true;
+
+            if (!$this->view->isHotShop && !$this->view->isSuperPartner && ! $this->view->isPopularStore  &&
+                    !$shopInformation[0]['ideal'] && ! $shopInformation[0]['qShops'] && !$shopInformation[0]['freeReturns'] &&
+                ! $shopInformation[0]['pickupPoints'] &&  !$shopInformation[0]['mobileShop'] &&  !$shopInformation[0]['service']) {
+                $displayExtraPropertiesWidget = false;
             }
-            
-                
-        
-             //key not exist in cache
-              if($voucherflag){
-                
-                  # GET TOP 5 POPULAR CODE
-                  $topVouchercodes = Offer::getTopKortingscodeForShopPage($shopCtegories);
-                  FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list_shoppage', $topVouchercodes);
-                    
-              } else {
-                
-                  $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvaouchercode_list_shoppage');
-              }
-      
-            # traverse  $topVouchercodes array to make required array of offers
-          $offers = array();
+        } else {
+            $displayExtraPropertiesWidget = false;
+        }
+
+        $this->view->currentStoreInformation = $shopInformation;
+        $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
+        $this->view->latestShopUpdates = $latestShopUpdates;
+        $this->view->offers = $offers;
+
+        if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0):
+            $offers = self::topStorePopularOffers($shopId, $offers);
+            $this->view->topPopularOffers = $offers;
+        endif;
               
-         $offerIDs = array();
+        $this->view->expiredOffers = $expiredOffers;
+        $relatedStoreByCategory = FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode('relatedshopsbycat', 4, $shopId));
+        $this->view->relatedshops = $relatedStoreByCategory;
+        $this->view->relatedshopsByCategory = $relatedStoreByCategory;
+        $this->view->countPopularOffers = count(FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId));
+        $this->view->controllerName = $this->getRequest()->getParam('controller');
+        $this->view->storeImage = $ShopImage;
+        $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
+        $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
+        $this->view->displayExtraPropertiesWidget = $displayExtraPropertiesWidget;
+        $this->view->headTitle(@$shopInformation[0]['overriteTitle']);
+        $this->view->headMeta()->setName('description', @trim($shopInformation[0]['metaDescription']));
+        $this->view->facebookTitle = @$shopInformation[0]['overriteTitle'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
+        $this->view->facebookImage = $ShopImage;
+
+        if ($shopInformation[0]['showSimliarShops']) {
+            $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
+        }
+
+        $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
+    }
+
+    public function topStorePopularOffers($shopId, $offers)
+    {
+        $voucherflag = FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvaouchercode_list_shoppage');
+        $shopCategories = Shop::returnShopCategories($shopId);
+
+        if ($voucherflag) {
+            $shopCategories = Shop::returnShopCategories($shopId);
+            FrontEnd_Helper_viewHelper::setInCache('all_categories_of_shoppage_'. $shopId, $shopCategories);
+            $topVoucherCodes = Offer::getTopKortingscodeForShopPage($shopCategories);
+            FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list_shoppage', $topVoucherCodes);
+        } else {
+            $shopCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_categories_of_shoppage_'. $shopId);
+            $topVoucherCodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvaouchercode_list_shoppage');
+        }
+
+        $offers = array();
+        $storeOfferIds = array();
               
-          foreach ($topVouchercodes as $key => $value) {
-          
-          
-                 
-             $offers[] =     $value['offer'] ;
-             
-             $offerIDs[] = $value['offer']['id'];
-             
-             
-          
-          }
-          
-         
-          # if top korting who has same category as like its shop is less than 10 then display rests of the kortings   
-         if(count($offers) < 5 )
-         {
-            # the limit of popular oces 
-            $additionalShop = 5 - count($offers) ;
-            
-            # GET TOP 5 POPULAR CODE
-            $additionalTopVouchercodes = Offer::getAdditionalTopKortingscodeForShopPage($shopCtegories,$offerIDs,$additionalShop);
- 
-            
-            # GET TOP 5 POPULAR CODE
-            $totalPopularCOdes = array_merge($topVouchercodes,$additionalTopVouchercodes) ;
-            FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list_shoppage', $totalPopularCOdes);
-            
-            
-            foreach ($additionalTopVouchercodes as $key => $value) {
-            
-                $offers[] =      $value['offer'] ;
+        foreach ($topVoucherCodes as $topVouchercodeskey => $topVoucherCode) {
+            $offers[] = $topVoucherCode['offer'];
+            $storeOfferIds[] = $topVoucherCode['offer']['id'];
+        }
+
+        if (count($offers) < 5) {
+            $additionalShopOffers = 5 - count($offers);
+            $additionalTopVoucherCodes = Offer::getAdditionalTopKortingscodeForShopPage($shopCategories, $storeOfferIds, $additionalShopOffers);
+            $totalPopularCodes = array_merge($topVoucherCodes, $additionalTopVoucherCodes);
+            FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list_shoppage', $totalPopularCodes);
+
+            foreach ($additionalTopVoucherCodes as $additionalTopVoucherCodeskey => $additionalTopVoucherCode) {
+                $offers[] = $additionalTopVoucherCode['offer'];
             }
-            
-         }
- 
+        }
+        return $offers;
+    }
 
-  	  $this->view->topPopularOffers = $offers;
-  	  
-	  endif;
-  	  		
-  	  		
-  	  $this->view->expiredOffers = $expiredOffers;
-  	  
-  	  
-  	  $relatedStoreByCategory =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode('relatedshopsbycat',4,$id));
-  	  
-  	  
-  	  $this->view->relatedshops = $relatedStoreByCategory;
-  	  $this->view->relatedshops8 = $relatedStoreByCategory;
+    public function shopOffersBySetGetCache($shopKey = '', $shopFunction = '')
+    {
+        $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($shopKey);
 
-      $this->view->cntPopular = count(FrontEnd_Helper_viewHelper::commonfrontendGetCode ('popular',$lim, $shopId));
-      
-      $this->view->controllerName = $this->getRequest()->getParam('controller');
-      $this->view->img = $img;//image for the shop
-      $shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
-      $this->view->shareUrl = $shareUrl;//share to facebook
-      # get editor picture from second server
-      $this->view->shopEditor =  User::getProfileImage($shopInformation[0]['contentManagerId']);
-      
-      $this->view->displayExtraPropertiesWidget = $displayExtraPropertiesWidget ;
-      $this->view->headTitle(@$shopInformation[0]['overriteTitle']);
-      $this->view->headMeta()->setName('description', @trim($shopInformation[0]['metaDescription']));
-      
-      # for facebook parameters
-      $this->view->fbtitle = @$shopInformation[0]['overriteTitle'];
-      $this->view->fbshareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
-      $this->view->fbImg = $img;     
+        if ($cacheStatusByKey) {
+            $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray($shopFunction);
+            FrontEnd_Helper_viewHelper::setInCache($shopKey, $shopInformation);
+        } else {
+            $shopInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($shopKey);
+        }
 
-      
-      # check display similar shops is enabled or not
-      if($shopInformation[0]['showSimliarShops'])
-      {
-         $this->view->similarShops =  Shop::getSimilarShops($id,11);
-      }
-      
-      $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
-
-  }
+        return $shopInformation;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
   /**
    * search by char
    * 
@@ -561,7 +439,7 @@ class StoreController extends Zend_Controller_Action
  	$this->view->shopId=$params["storeid"];
  	
  	$this->view->shopoffer=FrontEnd_Helper_viewHelper::getShopCouponCode("newest",3,$params["storeid"]);
- 	$shopdetail=Shop::getStoredetail($params["storeid"]);
+ 	$shopdetail=Shop::getStoreDetail($params["storeid"]);
  	
  	$expiredcoupons=FrontEnd_Helper_viewHelper::getShopCouponCode("expired",'all',$params["storeid"]);
  	$this->view->expiredOffers=$expiredcoupons;
