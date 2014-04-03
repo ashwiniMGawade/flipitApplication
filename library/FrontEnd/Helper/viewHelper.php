@@ -49,20 +49,20 @@ class FrontEnd_Helper_viewHelper
 	{
 		$currentDate = date('Y-m-d');
 		$offerEndDate = date('Y-m-d', strtotime($endDate));
-		$timestamp_start = strtotime($offerEndDate);
-		$timestamp_end = strtotime($currentDate);
+		$timeStampStart = strtotime($offerEndDate);
+		$timeStampEnd = strtotime($currentDate);
 	
-		$dateDifference = abs($timestamp_end - $timestamp_start);
+		$dateDifference = abs($timeStampEnd - $timeStampStart);
 		$dayDifference = floor($dateDifference/(60*60*24));
 	}
 	
 	public static function getUserIsLoginOrNot()
 	{
-		$userlogin = false;
+		$userLoginStatus = false;
 		if (Auth_VisitorAdapter::hasIdentity()) :
-		$userlogin = true;
+		$userLoginStatus = true;
 		endif;
-		return $userlogin;
+		return $userLoginStatus;
 	}
 	
 	public static function getOfferOption($string)

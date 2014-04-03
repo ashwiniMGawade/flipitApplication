@@ -4,7 +4,7 @@ $offerTitle = substr($this->title, 0, 150);
 $offerDiscountImage = FrontEnd_Helper_viewHelper::getDiscountImage($this);
 $termsAndConditions = FrontEnd_Helper_viewHelper::getOfferTermsAndCondition($this);
 $urlToShow = FrontEnd_Helper_viewHelper::getUrlToShow($this);
-$userlogin = FrontEnd_Helper_viewHelper::getUserIsLoginOrNot();
+$userLoginStatus = FrontEnd_Helper_viewHelper::getUserIsLoginOrNot();
 
 $offerBounceRate = "/out/offer/".$this->id;
 
@@ -28,11 +28,11 @@ $dayDifference = FrontEnd_Helper_viewHelper::getDaysDifference($this->endDate);
                     onClick="<?php echo $this->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
                     <?php echo $offerTitle;?>
                     </a>
-                 </div>
+                </div>
 
-                 <div class="buttons" id="offerButton<?php echo $this->id ;?>">
+                <div class="buttons" id="offerButton<?php echo $this->id ;?>">
 <?php 
-if (($this->Visability  == 'MEM' && $userlogin) || $this->Visability  == 'DE' || $this->userGenerated==1 && $userlogin) {?>
+if (($this->Visability  == 'MEM' && $userLoginStatus) || $this->Visability  == 'DE' || $this->userGenerated==1 && $userLoginStatus) {?>
                      <a  class="btn blue btn-primary" 
                      href="<?php echo $urlToShow;?>"  
                      rel="nofollow"   target="_blank" onClick="showCodeInformation(<?php echo $this->id; ?>), viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
@@ -105,7 +105,7 @@ endif;?>
 		</div>
 	</article>
  <?php
-if($userlogin==true  && intval($this->partialCounter)== 1):
+if($userLoginStatus==true  && intval($this->partialCounter)== 1):
     echo $this->render('store/_offerSignupForm.phtml');
 endif;
 ?>
