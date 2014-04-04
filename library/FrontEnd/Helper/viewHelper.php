@@ -288,6 +288,21 @@ EOD;
 
         return $navigationString;
     }
+    
+    /**
+     * Get footer data
+     * @author Asharma
+     * @version 1.0
+     * @return array $data
+     */
+    public static function getFooterData()
+    {
+    	$footerData = Footer::getFooter();
+    
+    	return $footerData;
+    
+    }
+    
 
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -1298,19 +1313,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
 
   }
 
-  /**
-   * Get footer dynamic links for two blocks over social media
-   * @author Raman
-   * @version 1.0
-   * @return array $data
-   */
-  public static function getFooterLinks()
-  {
-    $data = Footer::getFooter();
 
-    return $data;
-
-  }
 
   /**
    * render pagination links
