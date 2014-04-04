@@ -260,10 +260,6 @@ class StoreController extends Zend_Controller_Action
                 $shopChains = FrontEnd_Helper_viewHelper::sidebarChainWidget($shopInformation[0]['id'], $shopInformation[0]['name'], $shopInformation[0]['chainItemId']);
                 $logDirectoryPath = APPLICATION_PATH . "/../logs/test";
                 
-                if ($shopChains['hasShops']!=null >0) {
-                    FrontEnd_Helper_viewHelper::writeLog($shopChains, $logDirectoryPath);
-                }
-                
                 if (isset($shopChains['headLink'])) {
                     $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
                 }

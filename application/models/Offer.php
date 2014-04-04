@@ -1922,7 +1922,7 @@ class Offer extends BaseOffer
         $data = Doctrine_Query::create()
                     ->from('OfferNews n')
                     ->andWhere('n.shopId = ' . $shopId)
-                    ->orderBy('n.updated_at DESC');
+                    ->orderBy('n.startdate DESC');
 
         $data = $data->limit($limit)->fetchArray();
         return $data;
