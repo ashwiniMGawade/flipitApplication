@@ -164,12 +164,9 @@ class FrontEnd_Helper_LayoutContent
                )();";
 
             endif;
-
             $googleAnalyticsCode .="</script>";
-
-      endif;
-
-      return $googleAnalyticsCode;
+        endif;
+        return $googleAnalyticsCode;
     }
 
     public static function loadFavicon()
