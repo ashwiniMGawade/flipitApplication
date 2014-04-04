@@ -1,19 +1,23 @@
 <header class="heading-box text-ask">
-   <h2>
-<?php echo $this->translate('Ask a question about'). ' ' . $this->shopName;?>
-   </h2>
-   <strong>
+    <h2>
 <?php
-echo $this->translate('Ask us anything about'). ' '.  $this->shopName.' '. $this->translate('and their discounts');
+echo $this->translate('Ask a question about'). ' ' . $this->shopName;
 ?>
-   </strong>
+    </h2>
+    <strong>
+<?php
+echo $this->translate('Ask us anything about'). ' '. $this->shopName.' '. $this->translate('and their discounts');
+?>
+    </strong>
 </header>
 <section id="disqus_thread" class="section section-comments"></section>
 <script type="text/javascript">
 /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
 var disqus_shortname = '<?php echo $this->translate('disqus_shortname');?>';
 </script>
-<?php echo $this->inlineScript()->appendFile($this->baseUrl("public/js/front_end/disqus.js")); ?>
+<?php
+echo $this->inlineScript()->appendFile($this->baseUrl("public/js/front_end/disqus.js"));
+?>
 <noscript><?php echo $this->translate('Please enable JavaScript to view the'); ?>
     <a href="http://disqus.com/?ref_noscript">
 <?php
@@ -29,5 +33,5 @@ echo $this->translate('comments powered by');
 <?php
 echo $this->translate('Disqus');
 ?>
-   </span>
+    </span>
 </a>
