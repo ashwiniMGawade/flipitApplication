@@ -112,7 +112,7 @@ endif;?>
 		</div>
 	</article>
  <?php
-if($userLoginStatus==true  && intval($this->partialCounter)== 1):
+if(intval($this->partialCounter)== 1):
     echo $this->render('store/_offerSignupForm.phtml');
 endif;
 ?>
