@@ -248,7 +248,8 @@ class StoreController extends Zend_Controller_Action
             $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $shopId));
             $expiredOffersInStoreKey = 'all_msArticleInStore'.$ShopList;
             $moneySavingGuideArticle = self::shopOffersBySetGetCache('all_msArticleInStore'.$ShopList, FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle('moneysaving', 6, $shopId));
-             if (sizeof($shopInformation) >0) {
+
+            if (sizeof($shopInformation) >0) {
             } else {
                 $LocaleUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
@@ -258,7 +259,10 @@ class StoreController extends Zend_Controller_Action
             if ($shopInformation[0]['showChains']) {
                 $shopChains = FrontEnd_Helper_viewHelper::sidebarChainWidget($shopInformation[0]['id'], $shopInformation[0]['name'], $shopInformation[0]['chainItemId']);
                 $logDirectoryPath = APPLICATION_PATH . "/../logs/test";
-                FrontEnd_Helper_viewHelper::writeLog($shopChains, $logDirectoryPath);
+                
+                if ($shopChains['hasShops']!=null >0) {
+                    FrontEnd_Helper_viewHelper::writeLog($shopChains, $logDirectoryPath);
+                }
                 
                 if (isset($shopChains['headLink'])) {
                     $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
