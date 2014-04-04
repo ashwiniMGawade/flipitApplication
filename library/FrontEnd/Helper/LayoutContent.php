@@ -67,29 +67,29 @@ class FrontEnd_Helper_LayoutContent
                 zend_Controller_Front::getInstance()
                 ->getRequest()->getControllerName()) == 'login'
                 && strtolower(
-                        zend_Controller_Front::getInstance()
-                        ->getRequest()->getActionName() == 'forgotpassword'
-                        )
+                    zend_Controller_Front::getInstance()
+                    ->getRequest()->getActionName() == 'forgotpassword'
+                    )
                 ):
 
-                $robots =  'noindex, follow';
+                $robots = 'noindex, follow';
 
         else:
             #add noindex for every page after first page
             if(Zend_Controller_Front::getInstance()
                     ->getRequest()->getParam('page' , null) > 1) :
 
-                $robots  = 'noindex, follow';
+                $robots = 'noindex, follow';
 
             else:
                 # robot keyword property is set by any action
                 if($robotOfDummyPages) :
 
-                    $robots  =  $robotOfDummyPages;
+                    $robots = $robotOfDummyPages;
 
                 else :
 
-                    $robots  =  'index, follow';
+                    $robots = 'index, follow';
 
                 endif;
             endif;
