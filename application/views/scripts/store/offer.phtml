@@ -1,20 +1,20 @@
 <?php
 $offerTitle = substr($this->title, 0, 150);
 
-$offerDiscountImage = FrontEnd_Helper_viewHelper::getDiscountImage($this);
-$termsAndConditions = FrontEnd_Helper_viewHelper::getOfferTermsAndCondition($this);
-$urlToShow = FrontEnd_Helper_viewHelper::getUrlToShow($this);
-$userLoginStatus = FrontEnd_Helper_viewHelper::getUserIsLoginOrNot();
+$offerDiscountImage = FrontEnd_Helper_OfferPartialFunctions::getDiscountImage($this);
+$termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($this);
+$urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($this);
+$userLoginStatus = FrontEnd_Helper_OfferPartialFunctions::getUserIsLoginOrNot();
 
 $offerBounceRate = "/out/offer/".$this->id;
 
-$dayDifference = FrontEnd_Helper_viewHelper::getDaysDifference($this->endDate);
+$dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($this->endDate);
 ?>
 
 	<!-- IF CODE EXCLUSIVE -->
 	<article class="block <?php echo $this->exclusiveCode == '1' ? "orange-block" :  "active"; ?>">
 		<div class="holder">
-			<a class="<?php echo FrontEnd_Helper_viewHelper::getClassNameForOffer($this);?>" href="<?php echo $urlToShow;?>"  rel="nofollow"   
+			<a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($this);?>" href="<?php echo $urlToShow;?>"  rel="nofollow"   
 			target="_blank" 
 			onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
 			   <!-- <img src="<?php echo $offerDiscountImage; ?>" alt="<?php echo @$this->tiles['label']?>"/>-->
@@ -28,7 +28,7 @@ $dayDifference = FrontEnd_Helper_viewHelper::getDaysDifference($this->endDate);
 			</a> 
 			<div class="box">
 				<div class="text">
-					<p> <?php echo FrontEnd_Helper_viewHelper::dateStringFormat($this, $dayDifference)?></p>
+					<p> <?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($this, $dayDifference)?></p>
                     <a id="<?php echo $this->id ;?>" 
                     href="<?php echo $urlToShow;?>"
                     rel="nofollow" class="link"   target="_blank" 
@@ -84,7 +84,7 @@ if ($this->discountType=='CD') {?>
 <?php 
 if ($this->extendedOffer =='1'):?>
                     		<a class="text-blue-link"  
-                    		href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $this->extendedUrl;?>">
+                    		href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_OfferPartialFunctions::__link('deals').'/'. $this->extendedUrl;?>">
                     		<?php echo $this->translate('Meer over deze code'); ?>
                     		</a>
     <?php 
