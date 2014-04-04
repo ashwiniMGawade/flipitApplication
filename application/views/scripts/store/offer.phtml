@@ -47,7 +47,9 @@ if (($this->Visability  == 'MEM' && $userLoginStatus) || $this->Visability == 'D
          <?php
     }
 }
+?>
 
+<?php 
 if ($this->discountType=='CD') {?>
                       <a id="<?php echo $this->id ; ?>" class = "btn orange btn-warning btn-code" vote='0' href="<?php echo $urlToShow;?>" rel="nofollow" target="_blank" onClick="showCodeInformation(<?php echo $this->id; ?>), showCodePopUp(this), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
                       <?php echo $this->translate('Pack this offer');?>
