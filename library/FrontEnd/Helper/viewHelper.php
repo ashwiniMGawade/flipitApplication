@@ -91,26 +91,26 @@ EOD;
 		    </div>
 		    <ul class="countries">
 EOD;
-			         	$hrefLinks = "" ;
-			         	$hasShops = false ;
-			         	foreach ($chain as $chainValue) {
-			         		$hrefLinks .=  isset($chainValue['headLink']) ? $chainValue['headLink']. "\n" : '';
+	         	$hrefLinks = "" ;
+	         	$hasShops = false ;
+	         	foreach ($chain as $chainValue) {
+	         		$hrefLinks .=  isset($chainValue['headLink']) ? $chainValue['headLink']. "\n" : '';
 	
-			         		if (! empty($chainValue['shops'])) {
-			         			$hasShops = true ;
-			         			$chainValue = $chainValue['shops'];
-			         			$image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainValue['locale']));
-			         			$string .= sprintf(
-			         					"<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
-			         					trim($chainValue['url']),
-			         					$httpPath.'/public/'. $image
-			         			);
-			         		}
-			         	}
+	         		if (! empty($chainValue['shops'])) {
+	         			$hasShops = true ;
+	         			$chainValue = $chainValue['shops'];
+	         			$image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainValue['locale']));
+	         			$string .= sprintf(
+	         					"<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
+	         					trim($chainValue['url']),
+	         					$httpPath.'/public/'. $image
+	         			);
+	         		}
+	         	}
 			         	$string .= <<<EOD
-		           	</ul>
+		     </ul>
 EOD;
-			         	return array('string' => $string , 'headLink' => $hrefLinks, 'hasShops' => $hasShops );
+		return array('string' => $string , 'headLink' => $hrefLinks, 'hasShops' => $hasShops );
 		}
 		return false;
 	}
@@ -125,24 +125,30 @@ EOD;
 		$shopCouponCodes = '';
 		switch(strtolower($type)) {
 			case 'popular':
+				//not refactored yet
 				$shopCouponCodes = Offer::commongetpopularOffers($type, $limit, $shopId = 0);
 				break;
 			case 'newest':
+				//not refactored yet
 				$shopCouponCodes = Offer::commongetnewestOffers($type, $limit, $shopId);
 				break;
 			case 'extended':
+				//not refactored yet
 				$shopCouponCodes = Offer::commongetextendedOffers($type, $limit, $shopId);
 				break;
 			case 'expired':
 				$shopCouponCodes = Offer::getExpiredOffers($type, $limit, $shopId);
 				break;
 			case 'relatedshops':
+				//not refactored yet
 				$shopCouponCodes = Offer::commongetrelatedshops($type, $limit, $shopId);
 				break;
 			case 'relatedshopsbycat':
+				//not refactored yet
 				$shopCouponCodes = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
 				break;
 			case 'latestupdates':
+				//not refactored yet
 				$shopCouponCodes = Offer::getLatestUpdates($type, $limit, $shopId);
 				break;
 			default:
