@@ -1,0 +1,56 @@
+<!-- Refactored code -->
+<?php
+if($this->extendedOffer == 1):
+    $expireOfferTarget = '_self';
+    $expiredOfferUrl = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('deals').'/'.$this->extendedUrl;
+else:
+    $expireOfferTarget = '_blank';
+    $expiredOfferUrl = HTTP_PATH_LOCALE."out/exoffer/".$this->id;
+endif;
+?>
+
+<div class="line">
+  <a href="<?php echo $expiredOfferUrl;?>"  rel="nofollow" target="<?php echo $expireOfferTarget; ?>">
+    <div class="holder">
+        <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
+        <div class="box">
+<?php 
+if ($this->title!=null && $this->title!=''):
+    $expiredOfferTitle = $this->title;
+
+    if (strlen($this->title) > 60):
+        $expiredOfferTitle = substr($this->title, 0, 60) . '...';
+    endif;
+
+endif;
+?>
+            <span class="text">
+            <?php
+            echo $this->title=='' ? $this->translate("Description not available right now..") : $expiredOfferTitle;
+            ?>
+            </span>
+<?php
+if ($this->couponCode!=null && $this->couponCode!=''):
+    $expiredOfferCouponCode = $this->couponCode;
+
+    if (strlen($this->couponCode) > 40):
+        $expiredOfferCouponCode = substr($this->couponCode, 0, 40) . '...';
+    endif;
+    ?>
+            <span class="mark"><?php echo $expiredOfferCouponCode;?></span>
+    <?php
+endif;
+?>
+        </div>
+    </div>
+    <span class="date">
+<?php
+echo $this->translate('Expires on:');
+$expiredOfferDate = new Zend_Date($this->endDate);
+echo ucwords($expiredOfferDate->get(Zend_Date::DATE_MEDIUM));
+?>
+    </span>
+  </a>
+</div>
+<hr class="alt2">
+<!-- Refactored code -->
