@@ -35,7 +35,7 @@ class FrontEnd_Helper_viewHelper
         if ($fd = @fopen($logfile, "a")) {
 
             $str = <<<EOD
-$date; $remote_addr; $message
+            $date; $remote_addr; $message
 EOD;
             $result = fwrite($fd, $str .PHP_EOL);
             fclose($fd);
@@ -91,27 +91,27 @@ EOD;
             </div>
             <ul class="countries">
 EOD;
-                         $hrefLinks = "" ;
-                         $hasShops = false ;
-                         foreach ($chain as $chainValue) {
-                             $hrefLinks .=  isset($chainValue['headLink']) ? $chainValue['headLink']. "\n" : '';
-
-                             if (! empty($chainValue['shops'])) {
-                                 $hasShops = true ;
-                                 $chainValue = $chainValue['shops'];
-                                 $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainValue['locale']));
-                                 $string .= sprintf(
-                                         "<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
-                                         trim($chainValue['url']),
-                                         $httpPath.'/public/'. $image
-                                 );
-                             }
-                         }
+	         $hrefLinks = "" ;
+	         $hasShops = false ;
+	         foreach ($chain as $chainValue) {
+	             $hrefLinks .=  isset($chainValue['headLink']) ? $chainValue['headLink']. "\n" : '';
+	
+		         if (! empty($chainValue['shops'])) {
+			         $hasShops = true ;
+			         $chainValue = $chainValue['shops'];
+			         $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainValue['locale']));
+			         $string .= sprintf(
+			            "<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
+			             trim($chainValue['url']),
+			             $httpPath.'/public/'. $image
+			            );
+		         }
+	         } 
                          $string .= <<<EOD
-                       </ul>
+            </ul>
 EOD;
 
-                         return array('string' => $string , 'headLink' => $hrefLinks, 'hasShops' => $hasShops );
+          return array('string' => $string , 'headLink' => $hrefLinks, 'hasShops' => $hasShops );
         }
 
         return false;

@@ -9,14 +9,15 @@ if(!empty($this->similarShops)):
 endif;
 
 $discussion = '';
+
 $partialViewPath = 'partials/';
 if($this->currentStoreInformation[0]['discussions'] == 1):
-    $discussion = $this->partial('partials/_discussion.phtml',
+    $discussion = $this->partial(
+    	$partialViewPath.'_discussion.phtml',
         array('shopName' => $this->currentStoreInformation[0]['name'])
     );
 endif;
 
-echo $this->doctype('XHTML1_RDFA');
 if($this->profileImage['addtosearch'] == 1):
     if($this->profileImage['google']):
         $google = $this->profileImage['google'];
@@ -37,7 +38,7 @@ if(Auth_VisitorAdapter::hasIdentity()):
     $id = Auth_VisitorAdapter::getIdentity()->id;
 endif;
 
-$this->minifyHeadScript()->prependFile ("public/js/front_end/jquery.expander.min.js" );
+$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js" );
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
@@ -69,7 +70,6 @@ else:
 endif;
 ?>
         <a target="_blank" rel="nofollow" class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->storeImage . '" alt="' . $this->currentStoreInformation[0]['name']  . '"  width="176" height="89" />'; ?></a>
-    
     </div>
     <div class="box">
         <h1><?php echo $this->currentStoreInformation[0]['title'];?></h1>
@@ -87,8 +87,7 @@ echo $actualUrl;
             </a>
 <?php
 echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));
-?>
-             
+?>        
     </div>
 </div> 
 <div class="row">
@@ -255,17 +254,16 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
                 </div>
             </article>
         </section>         
-            <?php echo $similarShopsAndSimilarCategoriesShops; ?>
-        
-        <?php echo $discussion; ?>
+<?php
+echo $similarShopsAndSimilarCategoriesShops;
+echo $discussion;
       
-        <?php  if(count($this->moneySavingGuideArticle) >0): ?>
+if(count($this->moneySavingGuideArticle) >0):
+    echo $this->partialLoop('store/_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle);
+endif;
 
-        <?php echo $this->partialLoop('store/_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle); ?>
-
-        <?php endif;
-
-        if(count($this->expiredOffers) >0):?>
+if(count($this->expiredOffers) >0):
+    ?>
         
         <header class="heading-box text-expired">
             <h2><?php echo  $this->translate('Expired').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate("vouchers and discounts"); ?></h2>
@@ -275,43 +273,53 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
             <?php  echo $this->partialLoop('store/_expiredOffer.phtml', $this->expiredOffers); ?>
         </section>
 
-        <?php endif;?>
+    <?php
+endif;
+?>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
         <article class="block">
             <div class="intro intro-2">
 
-                <?php if($this->shopEditor != null): ?>
+<?php
+if($this->shopEditor != null):
+    ?>
 
                 <div class="deal">
                     <div class="deal-holder">
-                        <?php
-                        $EditorFirstName = str_replace(' ', '', $this->shopEditor['firstName']);
-                        $EditorLastName = str_replace(' ', '', $this->shopEditor['lastName']);
-                        $EditorImageSlug = $this->shopEditor['slug'];
-                        ?>
+    <?php
+    $EditorFirstName = str_replace(' ', '', $this->shopEditor['firstName']);
+    $EditorLastName = str_replace(' ', '', $this->shopEditor['lastName']);
+    $EditorImageSlug = $this->shopEditor['slug'];
+    ?>
                         <span class="text">
-                            <?php echo $this->translate('All').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('deals verified by'); ?>
+    <?php
+    echo $this->translate('All').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('deals verified by');
+    ?>
                             <span class="name"><?php echo $EditorFirstName; ?></span>
                         </span>
                         <div class="photo">
                             <span class="text-box"><?php echo $this->translate('Hello'); ?></span>
-                            <?php
-                            $shopEditorPath = HTTP_PATH_CDN . ltrim($this->shopEditor['profileimage']['path'], "/"). 'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
-                            echo '<img alt="' .  $this->shopEditor['firstName'] . '" class="" src="'.  $shopEditorPath . '" width="120" height="120"/>';
-                            ?>
+    <?php
+    $shopEditorPath = HTTP_PATH_CDN . ltrim($this->shopEditor['profileimage']['path'], "/"). 'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
+    echo '<img alt="' .  $this->shopEditor['firstName'] . '" class="" src="'.  $shopEditorPath . '" width="120" height="120"/>';
+    ?>
                       </div>
                     </div>
                 </div>
 
-                <?php endif;
-                ?>
-
+    <?php
+endif;
+?>
                 <h1><?php echo $this->translate('About').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('Vouchers').' '.date('Y'); ?></h1>
-                <?php echo $this->currentStoreInformation[0]['shopText']; ?>
+<?php
+echo $this->currentStoreInformation[0]['shopText'];
+?>
             </div>
 
-            <?php if($this->currentStoreInformation[0]['howToUse']): ?>
+<?php
+if($this->currentStoreInformation[0]['howToUse']):
+    ?>
 
             <ul class="add-info">
                 <li>
@@ -329,53 +337,63 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
                 </li>
             </ul>
 
-            <?php endif;
-            ?>
+    <?php
+endif;
+?>
 
         </article>
         <article class="block">
 
-        <?php
-            $controllerName =  $this->controllerName;
-            $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
+<?php
+$controllerName =  $this->controllerName;
+$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
                     <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
-            echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl, $socialMediaTitle, $controllerName);
-        ?>
+echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl, $socialMediaTitle, $controllerName);
+?>
         
         </article>
 
-        <?php if (count($this->latestShopUpdates) > 0):?>
+<?php
+if (count($this->latestShopUpdates) > 0):?>
 
         <section class="block">
             <h2><?php echo $this->translate('Latest news about').' '.$this->currentStoreInformation[0]['name'];?></h2>
-            <?php echo $this->partialLoop('store/_latestNews.phtml', $this->latestShopUpdates); ?>
+   <?php echo $this->partialLoop('store/_latestNews.phtml', $this->latestShopUpdates); ?>
         </section>
 
-        <?php endif;
-        ?>
+   <?php
+endif;
+?>
 
-        <?php if ($this->shopChain):  ?>
+<?php
+if ($this->shopChain):
+    ?>
 
         <article class="block">
-        <?php echo $this->shopChain; ?>
+    <?php echo $this->shopChain; ?>
         </article>
 
-        <?php endif;
+    <?php
+endif;
         
-        if(isset($this->popularStoresList)): ?> 
+if(isset($this->popularStoresList)):
+    ?>
         <div class="block">
             <?php echo $this->popularStoresList; ?>
         </div>
-        <?php endif;
+    <?php
+endif;
         
-        if ($this->currentStoreInformation[0]['showSignupOption']) : ?>
+if ($this->currentStoreInformation[0]['showSignupOption']) :
+    ?>
 
             <div class="block white">
-            <?php echo $this->esi($this->locale.'store/signupwidget'); ?>
+     <?php echo $this->esi($this->locale.'store/signupwidget'); ?>
             </div>
 
-        <?php endif;
-        ?>
+    <?php
+endif;
+?>
     </aside>
 </div>
 </div>

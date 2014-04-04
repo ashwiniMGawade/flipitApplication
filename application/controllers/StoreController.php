@@ -283,42 +283,6 @@ class StoreController extends Zend_Controller_Action
             $this->_redirect($urlToRedirect);
         }
 
-        $isPopularStore = Shop::getPopularStore(0, $shopInformation[0]['id']);
-
-        if (count($isPopularStore) >  0) {
-            $this->view->isPopularStore = true;
-        } else {
-            $this->view->isPopularStore = false;
-        }
-
-        $onlineHotStoreOffers = Offer::getShopCharacteristics($shopInformation[0]['id'], 5);
-
-        if (count($onlineHotStoreOffers) >  4) {
-            $this->view->isHotShop = true;
-        } else {
-            $this->view->isHotShop = false;
-        }
-
-        $exclusiveStoreOffers = Offer::getShopCharacteristics($shopInformation[0]['id'], 7, true, true);
-
-        if (count($exclusiveStoreOffers) >  6) {
-            $this->view->isSuperPartner = true;
-        } else {
-            $this->view->isSuperPartner = false;
-        }
-
-        if ($shopInformation[0]['displayExtraProperties']) {
-            $displayExtraPropertiesWidget = true;
-
-            if (!$this->view->isHotShop && !$this->view->isSuperPartner && ! $this->view->isPopularStore  &&
-                    !$shopInformation[0]['ideal'] && ! $shopInformation[0]['qShops'] && !$shopInformation[0]['freeReturns'] &&
-                ! $shopInformation[0]['pickupPoints'] &&  !$shopInformation[0]['mobileShop'] &&  !$shopInformation[0]['service']) {
-                $displayExtraPropertiesWidget = false;
-            }
-        } else {
-            $displayExtraPropertiesWidget = false;
-        }
-
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
@@ -338,7 +302,6 @@ class StoreController extends Zend_Controller_Action
         $this->view->storeImage = $ShopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
-        $this->view->displayExtraPropertiesWidget = $displayExtraPropertiesWidget;
         $this->view->headTitle(@$shopInformation[0]['overriteTitle']);
         $this->view->headMeta()->setName('description', @trim($shopInformation[0]['metaDescription']));
         $this->view->facebookTitle = @$shopInformation[0]['overriteTitle'];
@@ -354,17 +317,17 @@ class StoreController extends Zend_Controller_Action
 
     public function topStorePopularOffers($shopId, $offers)
     {
-        $voucherflag = FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvaouchercode_list_shoppage');
+        $voucherCacheKeyCheck = FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvouchercode_list_shoppage');
         $shopCategories = Shop::returnShopCategories($shopId);
 
-        if ($voucherflag) {
+        if ($voucherCacheKeyCheck) {
             $shopCategories = Shop::returnShopCategories($shopId);
             FrontEnd_Helper_viewHelper::setInCache('all_categories_of_shoppage_'. $shopId, $shopCategories);
-            $topVoucherCodes = Offer::getTopKortingscodeForShopPage($shopCategories);
-            FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list_shoppage', $topVoucherCodes);
+            $topVoucherCodes = Offer::getTopCouponCodesForShopPage($shopCategories, 100);
+            FrontEnd_Helper_viewHelper::setInCache('all_popularvouchercode_list_shoppage', $topVoucherCodes);
         } else {
             $shopCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_categories_of_shoppage_'. $shopId);
-            $topVoucherCodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvaouchercode_list_shoppage');
+            $topVoucherCodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvouchercode_list_shoppage');
         }
 
         $offers = array();
@@ -372,19 +335,8 @@ class StoreController extends Zend_Controller_Action
               
         foreach ($topVoucherCodes as $topVouchercodeskey => $topVoucherCode) {
             $offers[] = $topVoucherCode['offer'];
-            $storeOfferIds[] = $topVoucherCode['offer']['id'];
         }
 
-        if (count($offers) < 5) {
-            $additionalShopOffers = 5 - count($offers);
-            $additionalTopVoucherCodes = Offer::getAdditionalTopKortingscodeForShopPage($shopCategories, $storeOfferIds, $additionalShopOffers);
-            $totalPopularCodes = array_merge($topVoucherCodes, $additionalTopVoucherCodes);
-            FrontEnd_Helper_viewHelper::setInCache('all_popularvaouchercode_list_shoppage', $totalPopularCodes);
-
-            foreach ($additionalTopVoucherCodes as $additionalTopVoucherCodeskey => $additionalTopVoucherCode) {
-                $offers[] = $additionalTopVoucherCode['offer'];
-            }
-        }
         return $offers;
     }
 

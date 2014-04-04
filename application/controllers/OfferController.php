@@ -165,7 +165,7 @@ class OfferController extends Zend_Controller_Action {
 
     	if($voucherflag){
 
-    		$topVouchercodes = Offer::getTopKortingscodeForShopPage(array(),20);
+    		$topVouchercodes = Offer::getTopCouponCodesForShopPage(array(),20);
 
 
 	  	  	# if top korting are less than 20 then add newest code tyo fill up the list upto 20
