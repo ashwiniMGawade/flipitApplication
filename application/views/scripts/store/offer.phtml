@@ -1,16 +1,12 @@
 <?php
 $offerTitle = substr($this->title, 0, 150);
-
 $offerDiscountImage = FrontEnd_Helper_OfferPartialFunctions::getDiscountImage($this);
 $termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($this);
 $urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($this);
 $userLoginStatus = FrontEnd_Helper_OfferPartialFunctions::getUserIsLoginOrNot();
-
 $offerBounceRate = "/out/offer/".$this->id;
-
 $dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($this->endDate);
 ?>
-
      <!-- IF CODE EXCLUSIVE -->
     <article class="block <?php echo $this->exclusiveCode == '1' ? "orange-block" :  "active"; ?>">
         <div class="holder">
