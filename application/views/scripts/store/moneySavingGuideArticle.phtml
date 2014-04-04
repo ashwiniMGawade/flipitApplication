@@ -1,4 +1,14 @@
-<?php $articleImage = PUBLIC_PATH_CDN.ltrim($this->ArtIcon['path'], "/") . 'thum_article_medium_'. $this->ArtIcon['name']; ?>
+<?php $articleImage = PUBLIC_PATH_CDN.ltrim($this->ArtIcon['path'], "/") . 'thum_article_medium_'. $this->ArtIcon['name']; 
+
+if ($this->partialCounter == 1) {
+$shopName = $this->partialLoop()->view->currentStoreInformation[0]['name'];
+?>
+<header class="heading-box text-advice">
+    <h2><?php echo $this->translate("General money saving advice &amp; tricks for shopping at"). " " . $shopName; ?></h2>
+</header>
+<?php
+} 
+?>
 <section class="tips-section">
     <article class="block">
         <a onClick="javascript:viewCounter('onclick', 'article', <?php echo $this->id ; ?>);" 

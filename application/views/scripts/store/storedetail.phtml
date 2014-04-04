@@ -258,17 +258,11 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
                 </div>
             </article>
         </section>         
-        <section class="section">
             <?php echo $similarShopsAndSimilarCategoriesShops; ?>
-        </section>
         
         <?php echo $discussion; ?>
       
         <?php  if(count($this->moneySavingGuideArticle) >0): ?>
-
-        <header class="heading-box text-advice">
-            <h2><?php echo $this->translate("General money saving advice &amp; tricks for shopping at"). " " . $this->currentStoreInformation[0]['name']; ?></h2>
-        </header>
 
         <?php echo $this->partialLoop('store/moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle); ?>
 
