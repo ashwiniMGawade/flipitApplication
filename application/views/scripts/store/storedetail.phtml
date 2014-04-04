@@ -13,7 +13,7 @@ $discussion = '';
 $partialViewPath = 'partials/';
 if($this->currentStoreInformation[0]['discussions'] == 1):
     $discussion = $this->partial(
-    	$partialViewPath.'_discussion.phtml',
+        $partialViewPath.'_discussion.phtml',
         array('shopName' => $this->currentStoreInformation[0]['name'])
     );
 endif;

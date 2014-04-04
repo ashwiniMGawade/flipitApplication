@@ -1,38 +1,27 @@
-<?php if (!Auth_VisitorAdapter::hasIdentity()): 
-
-	
+<?php if (!Auth_VisitorAdapter::hasIdentity()):
 $src =  "images/front_end/find-icon2.png" ;
- 
- 
-if (file_exists ( ROOT_PATH . $src )) {
-
-	$src = PUBLIC_PATH . $src ;
-		
-
+if (file_exists ( ROOT_PATH . $src ))
+    $src = PUBLIC_PATH . $src ;
 }else {
-
-	$src = HTTP_PATH ."public/images/front_end/find-icon2.png" ;
+    $src = HTTP_PATH ."public/images/front_end/find-icon2.png" ;
 }
-
 ?>
-
- 
-<div  class="voucher-col1 voucher-col1-new ">
-		<div class="new_box">
-				<img alt="" src="<?php echo $src;?>">
-		</div>
-		<div class="voucher-col1-top voucher-col1-top-new text-black">
-				<div class="voucher-col1-top-heading-new mt10">
-					<h3><?php echo $this->translate('Kortingscode niet gevonden? Meld je gratis aan en krijg direct toegang tot onze member-only codes...'); ?></h3>
-				</div>
-		</div>
-		<div class="fl">
-			<form id="formOneHomePage" action="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') .'/'. FrontEnd_Helper_viewHelper::__link('stap2')?>" method="post">
-			<div class="find_code2 blue-btn">
-				<input onkeypress="if(event.which == 13) {  signUpFromHandler(); event.preventDefault(); }" type="text" placeholder="<?php echo $this->translate('enter_email_address');?>"  name="emailAddress"/>
-				<a  onclick=" signUpFromHandler();" href="javascript:;" class="ml20"><span><?php echo $this->translate('submit signup');?></span></a>						
-			</div>
-		</form>        
-		</div>		
- </div>
+<div class="voucher-col1 voucher-col1-new ">
+        <div class="new_box">
+                <img alt="" src="<?php echo $src;?>">
+        </div>
+        <div class="voucher-col1-top voucher-col1-top-new text-black">
+                <div class="voucher-col1-top-heading-new mt10">
+                    <h3><?php echo $this->translate('Kortingscode niet gevonden? Meld je gratis aan en krijg direct toegang tot onze member-only codes...'); ?></h3>
+                </div>
+        </div>
+        <div class="fl">
+            <form id="formOneHomePage" action="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') .'/'. FrontEnd_Helper_viewHelper::__link('stap2')?>" method="post">
+            <div class="find_code2 blue-btn">
+                <input onkeypress="if(event.which == 13) {  signUpFromHandler(); event.preventDefault(); }" type="text" placeholder="<?php echo $this->translate('enter_email_address');?>"  name="emailAddress"/>
+                <a  onclick=" signUpFromHandler();" href="javascript:;" class="ml20"><span><?php echo $this->translate('submit signup');?></span></a>                       
+            </div>
+        </form>        
+        </div>      
+</div>
 <?php endif;?> 

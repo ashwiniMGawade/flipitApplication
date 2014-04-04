@@ -3,26 +3,26 @@
         <div class="container">
             <span class="slogan">
 <?php
-    echo FrontEnd_Helper_viewHelper::replaceStringVariable($this->translate('Default header text'));
+echo FrontEnd_Helper_viewHelper::replaceStringVariable($this->translate('Default header text'));
 ?>
             </span>
 <?php
-$this->locale = LOCALE != 'en' ? LOCALE  : '';
+$this->locale = LOCALE != 'en' ? LOCALE : '';
 $userMenuLink = $this->locale. '/login/usermenu';
-echo $this->esi($userMenuLink); 
+echo $this->esi($userMenuLink);
 ?>
         </div>
     </div>
     <div class="navigation">
         <div class="container">
 <?php 
-if(LOCALE == '') : 
+if(LOCALE == ''):
     $logoCssClass = 'kortingscode-logo';
     $siteName = 'kortingscode';
 else :
-    $logoCssClass = 'logo'; 
+    $logoCssClass = 'logo';
     $siteName = 'FlipIt';
-endif; 
+endif;
 ?>  
             <strong class="<?php echo $logoCssClass; ?>">
                 <a href="<?php echo APPLICATION_PATH; ?>"><?php echo $siteName;?></a>
@@ -31,12 +31,12 @@ endif;
             <div class="nav-bar">
                 <div class="search-box">
 <?php
-$localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/' ;
+$localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
 $basePartialViewPath = new Zend_View();
 $basePartialViewPath->setScriptPath(APPLICATION_PATH . '/views/scripts/partials/');
 $localePartialViewPath = new Zend_View();
 $localePartialViewPath->setScriptPath($localePartialPath);
-$loadFile = '_headerSearch.phtml';   
+$loadFile = '_headerSearch.phtml';
 
 if(file_exists($localePartialPath . $loadFile)) :
     echo $localePartialViewPath->render($loadFile);
@@ -46,7 +46,7 @@ endif;
 ?>
                </div>
 <?php 
-    echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action); 
+echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action);
 ?>
             </div>
         </div>
