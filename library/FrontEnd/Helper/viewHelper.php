@@ -1027,53 +1027,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		    }
 		return $string;
 	}
-	/**
-	 * generate main menu like home etc
-	 * @author kraj
-	 * @return mixed $string
-	 * @version 1.0
-	 */
-
-	public  static function generateMainMenu()
-	{
-		$mainMenu = menu::getFirstLevelMenu();
-		$mainMenuCount = count($mainMenu);
-		$value = 1;
-		$navigationString ='<nav id="nav"><ul>';
-		foreach ($mainMenu as $menu) {
-			$permalink = RoutePermalink::getPermalinks($menu['url']);
-
-			if(count($permalink) > 0){
-				$link = $permalink[0]['permalink'];
-			}else{
-				$link = $menu['url'];
-				if($menu['url']== FrontEnd_Helper_viewHelper::__link('inschrijven')){
-					if (Auth_VisitorAdapter::hasIdentity()){
-						$link = FrontEnd_Helper_viewHelper::__link('mijn-favorieten');
-					}else{
-							$link = $menu['url'];
-					}
-				}
-			}
-		if($value==$mainMenuCount)
-		{
-			$menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
-			$navigationString .= '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a></li>';
-		}else{
-			$menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
-			preg_match('/http:\/\//', $menu['url'],$matches);
-			if(count($matches) > 0){
-				$navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'.  $menu['url'] . '">' . $menu["name"] . '</a></li>';
-			}else{
-				$navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a></li>';
-			}
-		}
-		$value++;
-		}
-		$navigationString .= '</ul></nav>';
-		return $navigationString;
-	}
-
+	
 
 
 	public  static function getEditorDetail($uId){
@@ -1126,6 +1080,57 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default'){
 		}
 		return $shopData;
 	}
+	
+	
+	/**
+	 * generate main menu like home etc
+	 * @author asharma
+	 * @return mixed $string
+	 * @version 1.0
+	 */
+	
+	public  static function generateMainMenu()
+	{
+		$mainMenu = menu::getFirstLevelMenu();
+		$mainMenuCount = count($mainMenu);
+		$value = 1;
+		$navigationString ='<nav id="nav"><ul>';
+		foreach ($mainMenu as $menu) {
+			$permalink = RoutePermalink::getPermalinks($menu['url']);
+	
+			if(count($permalink) > 0){
+				$link = $permalink[0]['permalink'];
+			}else{
+				$link = $menu['url'];
+				if($menu['url']== FrontEnd_Helper_viewHelper::__link('inschrijven')){
+					if (Auth_VisitorAdapter::hasIdentity()){
+						$link = FrontEnd_Helper_viewHelper::__link('mijn-favorieten');
+					}else{
+						$link = $menu['url'];
+					}
+				}
+			}
+			if($value==$mainMenuCount)
+			{
+				$menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
+				$navigationString .= '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a></li>';
+			}else{
+				$menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
+				preg_match('/http:\/\//', $menu['url'],$matches);
+				if(count($matches) > 0){
+					$navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'.  $menu['url'] . '">' . $menu["name"] . '</a></li>';
+				}else{
+					$navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a></li>';
+				}
+			}
+			$value++;
+		}
+		$navigationString .= '</ul></nav>';
+		return $navigationString;
+	}
+	
+	
+	
 	##################################################################################
 	################## END REFACTORED CODE ###########################################
 	##################################################################################

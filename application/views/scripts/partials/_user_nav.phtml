@@ -2,12 +2,12 @@
 if(Auth_VisitorAdapter::hasIdentity()) : ?>
         <?php
             $userId = Auth_VisitorAdapter::getIdentity()->id;
-            $userDetails = Visitor::getuserdetail($userId);
+            $userInformation = Visitor::getuserdetail($userId);
         ?>
         <ul style="float:right;">
     	    <li><a href="javascript:void(0);"><?php echo $this->translate('Your offers');?></a> <span class="new"><?php echo $this->translate('New');?></span></li>
             <li><a href="javascript:void(0);"><?php echo $this->translate('Your brands');?></a></li>
-            <li><span class="glyphicon glyphicon-user"></span><span><?php echo $this->translate('Welcome');?></span> <a href="#" class="name"><?php echo $userDetails[0]['firstName'];  ?></a></li>
+            <li><span class="glyphicon glyphicon-user"></span><span><?php echo $this->translate('Welcome');?></span> <a href="#" class="name"><?php echo $userInformation[0]['firstName'];  ?></a></li>
             <li><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::
             __link('logout') ?>"><?php echo $this->translate('Uitloggen');?></a></li>
         </ul>
