@@ -46,7 +46,7 @@ class Shop extends BaseShop {
         return self::removeDuplicateShops($relatedShops, $numberOfShops);
     }
     
-    protected function removeDuplicateShops($relatedShops, $numberOfShops)
+    protected static function removeDuplicateShops($relatedShops, $numberOfShops)
     {
         $similarShopsWithoutDuplicate = array();
         foreach ($relatedShops[0]['relatedshops'] as $value) {
