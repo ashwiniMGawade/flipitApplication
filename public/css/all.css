@@ -7555,13 +7555,13 @@ hr.alt2 {
   display: inline-block;
   vertical-align: top;
   padding: 0 4% 8px;
+  float: left;
 }
 .countries li a {
   display: block;
   /*background: url(../images/sprite.png) no-repeat 0 -39px;*/
   width: 16px;
-  height: 11px;
-  text-indent: -9999px;
+  height: 20px;
   overflow: hidden;
 }
 .countries li a.poland {
