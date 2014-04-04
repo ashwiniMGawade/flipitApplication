@@ -9,15 +9,14 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
             $urlToShow = HTTP_PATH_LOCALE.$currentOffer->shop['permalink'];
         }
 
-        if ($currentOffer->discountType=='PA') {
-            if ($currentOffer->refOfferUrl != "") {
+        if ($currentOffer->discountType=='PA' || $currentOffer->discountType=='PR') {
+            if ($currentOffer->refOfferUrl != null) {
                 $urlToShow = self::getOfferBounceUrl($currentOffer->id);
             } elseif (count($currentOffer->logo)>0) {
                 $urlToShow = PUBLIC_PATH_CDN.ltrim($currentOffer->logo['path'], "/").$currentOffer->logo['name'];
             }
         }
-
-        return $urlToShow;
+       
     }
 
     public static function getOfferBounceUrl($offerId)
@@ -138,7 +137,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
     public static function getClassNameForOffer($currentOffer)
     {
         $className = 'code';
-        if ($currentOffer->discountType == "PR" && $currentOffer->discountType == "PA") {
+        if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $className .= ' purple';
         } elseif ($currentOffer->discountType=='SL') {
             $className .= ' red';
