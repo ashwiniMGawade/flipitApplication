@@ -5,14 +5,14 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper {
 	{
 	
 		if ($currentOffer->refURL != "" || $currentOffer->shop['refUrl']!= "" || $currentOffer->shop['actualUrl'] != "") {
-			$urlToShow = self::getOutOfferUrl($currentOffer->id);
+			$urlToShow = self::getOfferBounceUrl($currentOffer->id);
 		} else {
 			$urlToShow = HTTP_PATH_LOCALE.$currentOffer->shop['permalink'];
 		}
 	
 		if ($currentOffer->discountType=='PA') {
 			if ($currentOffer->refOfferUrl != "") {
-				$urlToShow = self::getOutOfferUrl($currentOffer->id);
+				$urlToShow = self::getOfferBounceUrl($currentOffer->id);
 			} elseif (count($currentOffer->logo)>0) {
 				$urlToShow = PUBLIC_PATH_CDN.ltrim($currentOffer->logo['path'], "/").$currentOffer->logo['name'];
 			}
@@ -20,7 +20,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper {
 		return $urlToShow;
 	}
 	
-	public static function getOutOfferUrl($offerId)
+	public static function getOfferBounceUrl($offerId)
 	{
 		return HTTP_PATH_LOCALE."out/offer/".$offerId;
 	}
