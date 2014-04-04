@@ -3,6 +3,7 @@
 function showTermAndConditions(id)
 {
 	$('div#termAndConditions'+id).slideToggle();
+	$('a#termAndConditionLink'+id).toggleClass('uparrow'); 
 }
 
 function showCodeInformation(id)

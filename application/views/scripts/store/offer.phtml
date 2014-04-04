@@ -70,7 +70,7 @@ if ($this->discountType=='CD') {?>
 				   <li>
 				   
 <?php if ($this->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) { ?>
-						<a  onclick="showTermAndConditions(<?php echo $this->id; ?>)" class="terms"  
+						<a id="termAndConditionLink<?php echo $this->id ;?>" onclick="showTermAndConditions(<?php echo $this->id; ?>)" class="terms"
 						href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp; 
 						<?php echo $this->translate('Conditions'); ?>
 						</a>
