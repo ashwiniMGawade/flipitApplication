@@ -120,25 +120,31 @@ EOD;
     {
         $shopCouponCodes = '';
         switch (strtolower($type)) {
-            case 'popular':
-                $shopCouponCodes = Offer::commongetpopularOffers($type, $limit, $shopId = 0);
-                break;
-            case 'newest':
-                $shopCouponCodes = Offer::commongetnewestOffers($type, $limit, $shopId);
-                break;
-            case 'extended':
-                $shopCouponCodes = Offer::commongetextendedOffers($type, $limit, $shopId);
-                break;
             case 'expired':
                 $shopCouponCodes = Offer::getExpiredOffers($type, $limit, $shopId);
                 break;
+            case 'popular':
+            //to be refactored in future
+                $shopCouponCodes = Offer::commongetpopularOffers($type, $limit, $shopId = 0);
+                break;
+            case 'newest':
+            //to be refactored in future
+                $shopCouponCodes = Offer::commongetnewestOffers($type, $limit, $shopId);
+                break;
+            case 'extended':
+            //to be refactored in future
+                $shopCouponCodes = Offer::commongetextendedOffers($type, $limit, $shopId);
+                break;
             case 'relatedshops':
+            //to be refactored in future
                 $shopCouponCodes = Offer::commongetrelatedshops($type, $limit, $shopId);
                 break;
             case 'relatedshopsbycat':
+            //to be refactored in future
                 $shopCouponCodes = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
                 break;
             case 'latestupdates':
+            //to be refactored in future
                 $shopCouponCodes = Offer::getLatestUpdates($type, $limit, $shopId);
                 break;
             default:
@@ -201,39 +207,6 @@ EOD;
         $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
 
         return $ShopMoneySavingGuideArticle;
-    }
-
-    /**
-    * get popular code list, Newest offer list, Extended offer list  from database
-    * @version 1.0
-    * @return array $data
-    */
-    public static function commonfrontendGetCode($type, $limit = 10, $shopId = 0, $userId = "")
-    {
-        switch (strtolower($type)) {
-            case 'all':
-                $shopData = Offer::getAllOfferOnShop($shopId);
-                break;
-            case 'popular':
-                $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
-                break;
-            case 'newest':
-                $shopData = Offer::commongetnewestOffers($type, $limit, $shopId, $userId);
-                break;
-            case 'newestmemberonly':
-                $shopData = Offer::commongetMemberOnlyOffer($type, $limit);
-                break;
-            case 'extended':
-                $shopData = Offer::commongetextendedOffers($type, $limit, $shopId);
-                break;
-            case 'allcouponshowtoguide':
-                $shopData = Offer::getCouponOffersHowToGuide($shopId);
-                break;
-            default:
-                break;
-        }
-
-        return $shopData;
     }
 
     /**
@@ -301,7 +274,38 @@ EOD;
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
+    /**
+    * get popular code list, Newest offer list, Extended offer list  from database
+    * @version 1.0
+    * @return array $data
+    */
+    public static function commonfrontendGetCode($type, $limit = 10, $shopId = 0, $userId = "")
+    {
+        switch (strtolower($type)) {
+            case 'all':
+                $shopData = Offer::getAllOfferOnShop($shopId);
+                break;
+            case 'popular':
+                $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
+                break;
+            case 'newest':
+                $shopData = Offer::commongetnewestOffers($type, $limit, $shopId, $userId);
+                break;
+            case 'newestmemberonly':
+                $shopData = Offer::commongetMemberOnlyOffer($type, $limit);
+                break;
+            case 'extended':
+                $shopData = Offer::commongetextendedOffers($type, $limit, $shopId);
+                break;
+            case 'allcouponshowtoguide':
+                $shopData = Offer::getCouponOffersHowToGuide($shopId);
+                break;
+            default:
+                break;
+        }
 
+        return $shopData;
+    }
     /**
      * Common function to render sidebar widget of alphanumeric categories
      * @author cbhopal updated by kraj
