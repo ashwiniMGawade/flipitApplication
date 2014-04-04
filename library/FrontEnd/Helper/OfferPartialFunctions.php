@@ -3,7 +3,6 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 {
     public static function getUrlToShow($currentOffer)
     {
-
         if ($currentOffer->refURL != "" || $currentOffer->shop['refUrl']!= "" || $currentOffer->shop['actualUrl'] != "") {
             $urlToShow = self::getOfferBounceUrl($currentOffer->id);
         } else {

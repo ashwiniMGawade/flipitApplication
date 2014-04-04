@@ -11,13 +11,13 @@ class FrontEnd_Helper_LayoutContent
         $flipit->setBasePath(APPLICATION_PATH . '/modules/flipit/views');
 
         if($flipitUrl == 'http://www.flipit.com'
-                || $flipitUrl == 'flipit.com'
-                || $flipitUrl =='http://flipit.com') :
+            || $flipitUrl == 'flipit.com'
+            || $flipitUrl =='http://flipit.com') :
 
-                zend_Controller_Front::getInstance()->getRequest()
-                ->getControllerName() == 'index'
-                ? $htmlPath = 'index/index.phtml'
-                : $htmlPath =  'error/error.phtml';
+            zend_Controller_Front::getInstance()->getRequest()
+            ->getControllerName() == 'index'
+            ? $htmlPath = 'index/index.phtml'
+            : $htmlPath =  'error/error.phtml';
 
         return $flipitHomePage = array('viewObject'=>$flipit,'htmlPath'=>$htmlPath);
         endif;
