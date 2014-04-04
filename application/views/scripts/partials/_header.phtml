@@ -30,11 +30,12 @@
     $basePartialViewPath = new Zend_View();
     $basePartialViewPath->setScriptPath(APPLICATION_PATH . '/views/scripts/partials/');
     $localePartialViewPath = new Zend_View();
-    $localePartialViewPath->setScriptPath($localePartialPath);                              
- if(file_exists($localePartialPath .  '_headerSearch.phtml')) :
-                echo $localePartialViewPath->render('_headerSearch.phtml');
+    $localePartialViewPath->setScriptPath($localePartialPath);
+    $loadFile = '_headerSearch.phtml';                              
+ if(file_exists($localePartialPath . $loadFile)) :
+                echo $localePartialViewPath->render($loadFile);
             else:
-                echo $basePartialViewPath->render('_headerSearch.phtml');
+                echo $basePartialViewPath->render($loadFile);
  endif;
      ?>                          
 	 </div>
