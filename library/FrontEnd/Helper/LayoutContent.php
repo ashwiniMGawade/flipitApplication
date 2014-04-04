@@ -151,7 +151,7 @@ class FrontEnd_Helper_LayoutContent
 
             if($pushSetAccount!='') :
 
-               $googleAnalyticsCode .=   "var _gaq = _gaq || [];
+               $googleAnalyticsCode .= "var _gaq = _gaq || [];
                _gaq.push(['_setAccount', '$pushSetAccount']);
                _gaq.push(['_trackPageview']);
 
