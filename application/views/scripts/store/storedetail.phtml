@@ -46,12 +46,9 @@ $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 
 if(count($this->offers) > 0):
-    $offers = $this->partialLoop('store/offer.phtml', $this->offers);
+    $offers = $this->partialLoop('store/_offer.phtml', $this->offers);
 endif;
 
-if(count($this->relatedshops) > 0):
-    $relatedOffer = $this->partialLoop('store/relatedOffer.phtml', $this->relatedshops);
-endif;
 
 ?>
 <div class="header-block header-block-2">
@@ -89,7 +86,7 @@ echo $actualUrl;
 ?>
             </a>
 <?php
-echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));
+echo $this->esi($this->locale.'store/_addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));
 ?>
              
     </div>
@@ -264,7 +261,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
       
         <?php  if(count($this->moneySavingGuideArticle) >0): ?>
 
-        <?php echo $this->partialLoop('store/moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle); ?>
+        <?php echo $this->partialLoop('store/_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle); ?>
 
         <?php endif;
 
@@ -275,7 +272,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
             <strong><?php echo  $this->translate('Unfortunately ... These discount codes from').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate("you’ve missed");?>.</strong>
         </header>
         <section class="section-module">
-            <?php  echo $this->partialLoop('store/expiredOffer.phtml', $this->expiredOffers); ?>
+            <?php  echo $this->partialLoop('store/_expiredOffer.phtml', $this->expiredOffers); ?>
         </section>
 
         <?php endif;?>
@@ -351,7 +348,7 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
 
         <section class="block">
             <h2><?php echo $this->translate('Latest news about').' '.$this->currentStoreInformation[0]['name'];?></h2>
-            <?php echo $this->partialLoop('store/latestNews.phtml', $this->latestShopUpdates); ?>
+            <?php echo $this->partialLoop('store/_latestNews.phtml', $this->latestShopUpdates); ?>
         </section>
 
         <?php endif;
