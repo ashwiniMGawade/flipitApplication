@@ -17,7 +17,7 @@ class FrontEnd_Helper_LayoutContent
             zend_Controller_Front::getInstance()->getRequest()
             ->getControllerName() == 'index'
             ? $htmlPath = 'index/index.phtml'
-            : $htmlPath =  'error/error.phtml';
+            : $htmlPath = 'error/error.phtml';
 
         return $flipitHomePage = array('viewObject'=>$flipit,'htmlPath'=>$htmlPath);
         endif;
@@ -44,7 +44,7 @@ class FrontEnd_Helper_LayoutContent
                         );
             else:
                 $canonicalUrl =  array('rel' => 'canonical',
-                        'href' => $localePath  . strtolower($canonical)
+                        'href' => $localePath . strtolower($canonical)
                         );
             endif;
 
@@ -61,7 +61,7 @@ class FrontEnd_Helper_LayoutContent
                 && zend_Controller_Front::getInstance()
                 ->getRequest()->getControllerName() == 'search'):
 
-                $robots  = 'noindex, follow';
+                $robots = 'noindex, follow';
 
         elseif (strtolower(
                 zend_Controller_Front::getInstance()
