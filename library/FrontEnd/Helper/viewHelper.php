@@ -71,12 +71,6 @@ EOD;
                 return false;
             }
 
-            $class = "ml-country";
-
-            if (count($chain) > 1) {
-                $class = "ml-countries";
-            }
-
             $httpPathLocale = trim(HTTP_PATH_LOCALE, '/');
             $httpPath = trim(HTTP_PATH, '/');
             $getTranslate = Zend_Registry::get('Zend_Translate');
@@ -93,16 +87,16 @@ EOD;
 EOD;
 	         $hrefLinks = "" ;
 	         $hasShops = false ;
-	         foreach ($chain as $chainValue) {
-	             $hrefLinks .=  isset($chainValue['headLink']) ? $chainValue['headLink']. "\n" : '';
+	         foreach ($chain as $chainInformation) {
+	             $hrefLinks .=  isset($chainInformation['headLink']) ? $chainInformation['headLink']. "\n" : '';
 	
-		         if (! empty($chainValue['shops'])) {
+		         if (! empty($chainInformation['shops'])) {
 			         $hasShops = true ;
-			         $chainValue = $chainValue['shops'];
-			         $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainValue['locale']));
+			         $chainInformation = $chainInformation['shops'];
+			         $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
 			         $string .= sprintf(
 			            "<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
-			             trim($chainValue['url']),
+			             trim($chainInformation['url']),
 			             $httpPath.'/public/'. $image
 			            );
 		         }
