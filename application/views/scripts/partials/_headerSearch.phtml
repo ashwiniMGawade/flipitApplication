@@ -1,13 +1,14 @@
-
 <?php
-    $this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/search.js");
-    $zendTranslate = Zend_Registry::get('Zend_Translate');
+$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
+$zendTranslate = Zend_Registry::get('Zend_Translate');
 ?>
-	<a href="javascript:void(0);" class="opener"><span class="glyphicon glyphicon-search"></span></a>
-	<div class="slide">
-		<form role="form" class="search-form">
-			<input placeholder="<?php echo $zendTranslate->translate('Type in a Store e.g.  Avis')?>"  class="form-control" id='searchField'  name='searchField' type='text'/>
-			<input id='searchHidden'  name='searchHidden' type='hidden' />
-			<a href='javascript:void(0);'  class="btn btn-default" id='searchbuttonHP' alt="<?php echo $zendTranslate->translate('Search') ?> "><span class="glyphicon glyphicon-search"></span></a>
-	    </form>
-	</div>   
+    <a href="javascript:void(0);" class="opener"><span class="glyphicon glyphicon-search"></span></a>
+    <div class="slide">
+        <form role="form" class="search-form">
+            <input placeholder="<?php echo $zendTranslate->translate('Type in a Store e.g.  Avis')?>"  class="form-control" id='searchField'  name='searchField' type='text'/>
+            <input id='searchHidden'  name='searchHidden' type='hidden' />
+            <a href='javascript:void(0);'  class="btn btn-default" id='searchbuttonHP' alt="<?php echo $zendTranslate->translate('Search') ?> ">
+                <span class="glyphicon glyphicon-search"></span>
+            </a>
+        </form>
+    </div>

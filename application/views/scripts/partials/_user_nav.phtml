@@ -1,27 +1,87 @@
 <?php 
-if(Auth_VisitorAdapter::hasIdentity()) : ?>
-        <?php
-            $userId = Auth_VisitorAdapter::getIdentity()->id;
-            $userInformation = Visitor::getuserdetail($userId);
-        ?>
-        <ul style="float:right;">
-    	    <li><a href="javascript:void(0);"><?php echo $this->translate('Your offers');?></a> <span class="new"><?php echo $this->translate('New');?></span></li>
-            <li><a href="javascript:void(0);"><?php echo $this->translate('Your brands');?></a></li>
-            <li><span class="glyphicon glyphicon-user"></span><span><?php echo $this->translate('Welcome');?></span> <a href="#" class="name"><?php echo $userInformation[0]['firstName'];  ?></a></li>
-            <li><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::
-            __link('logout') ?>"><?php echo $this->translate('Uitloggen');?></a></li>
-        </ul>
-        <?php else: ?>
-        <ul class = "fl-right">
-      		<li><a href="javascript:void(0);"><?php echo $this->translate('Your offers');?></a> <span class="new"><?php echo $this->translate('New');?></span></li>
-            <li><a href="javascript:void(0);"><?php echo $this->translate('Your brands');?></a></li>
-            <li><a rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>"><?php echo $this->translate('Inloggen');?></a></li>
-        </ul>
+if(Auth_VisitorAdapter::hasIdentity()) :
+    $userId = Auth_VisitorAdapter::getIdentity()->id;
+    $userInformation = Visitor::getuserdetail($userId);
+    ?>
+    <ul style="float:right;">
+        <li>
+            <a href="javascript:void(0);">
+    <?php
+    echo $this->translate('Your offers');
+    ?>
+            </a>
+            <span class="new">
     <?php 
+    echo $this->translate('New');
+    ?>
+            </span>
+        </li>
+        <li>
+            <a href="javascript:void(0);">
+    <?php
+    echo $this->translate('Your brands');
+    ?>
+            </a>
+        </li>
+        <li>
+            <span class="glyphicon glyphicon-user"></span>
+            <span>
+    <?php 
+    echo $this->translate('Welcome');
+    ?>
+            </span> 
+            <a href="#" class="name">
+    <?php
+    echo $userInformation[0]['firstName'];
+    ?>
+            </a>
+        </li>
+        <li>
+            <a href="
+    <?php
+    echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout');
+    ?>
+            ">
+    <?php
+    echo $this->translate('Uitloggen');
+    ?>
+            </a>
+        </li>
+    </ul>
+    <?php
+else:
+    ?>
+    <ul class = "fl-right">
+        <li>
+            <a href="javascript:void(0);">
+    <?php
+    echo $this->translate('Your offers');
+    ?>
+            </a>
+            <span class="new">
+    <?php 
+    echo $this->translate('New');
+    ?>
+            </span>
+        </li>
+        <li>
+            <a href="javascript:void(0);">
+    <?php
+    echo $this->translate('Your brands');
+    ?>
+            </a>
+        </li>
+        <li>
+            <a rel="nofollow" href="
+    <?php
+    echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login')
+    ?>
+            ">
+    <?php
+    echo $this->translate('Inloggen');
+    ?>
+            </a>
+        </li>
+    </ul>
+    <?php
 endif; 
-?>
-
- 
-                      
-                           
-                       
