@@ -12,6 +12,41 @@
  */
 class Offer extends BaseOffer
 {
+    
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
+    /**
+     * get expired voucher codes for common function
+     * @author Raman
+     * @return array $data
+     * @version 1.0
+     */
+    public static function getExpiredOffers($type, $limit, $shopId = 0)
+    {
+        $expiredTime = date("Y-m-d 00:00:00");
+        $expiredOffers = Doctrine_Query::create()
+        ->select('s.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer, o.extendedUrl, o.shopid')
+        ->from('Offer o')
+        ->leftJoin('o.shop s')
+        ->where('o.deleted=0')
+        ->andWhere('o.userGenerated=0')
+        ->andWhere('o.enddate<'."'".$expiredTime."'")
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('s.deleted = 0')
+        ->orderBy('o.id DESC');
+    
+        if ($shopId != '') {
+            $expiredOffers->andWhere('s.id = '.$shopId.'');
+        }
+        $expiredOffers->limit($limit);
+        $expiredOffers = $expiredOffers->fetchArray();
+        return $expiredOffers;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
+    
     /**
      * getofferList(deleted and non deleted by flag) fetches all record from database
      * also search according to keyword if present.
@@ -1683,40 +1718,6 @@ class Offer extends BaseOffer
                 ->limit($limit)->fetchArray();
         return $data;
      }
-
-     /**
-      * get expired voucher codes for common function
-      * @author Raman
-      * @return array $data
-      * @version 1.0
-      */
-     ##################################################################################
-     ################## REFACTORED CODE ###############################################
-     ##################################################################################
-    public static function getExpiredOffers($type, $limit, $shopId = 0)
-    {
-        $expiredTime = date("Y-m-d 00:00:00");
-        $expiredOffers = Doctrine_Query::create()
-                ->select('s.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer, o.extendedUrl, o.shopid')
-                ->from('Offer o')
-                ->leftJoin('o.shop s')
-                ->where('o.deleted=0')
-                ->andWhere('o.userGenerated=0')
-                ->andWhere('o.enddate<'."'".$expiredTime."'")
-                ->andWhere('o.discounttype="CD"')
-                ->andWhere('s.deleted = 0')
-                ->orderBy('o.id DESC');
-        
-        if ($shopId != '') {
-                $expiredOffers->andWhere('s.id = '.$shopId.'');
-        }
-            $expiredOffers->limit($limit);
-            $expiredOffers = $expiredOffers->fetchArray();
-            return $expiredOffers;
-    }
-    ##################################################################################
-    ################## END REFACTORED CODE ###########################################
-    ##################################################################################
 
      /**
       * get related shops for common function
