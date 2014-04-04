@@ -67,9 +67,10 @@ if ($this->discountType=='CD') {?>
 				</div>
 				
 				<ul class="view-list">
-				   <li>
+				    <li>
 				   
-<?php if ($this->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) { ?>
+<?php 
+if ($this->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) { ?>
 						<a id="termAndConditionLink<?php echo $this->id ;?>" onclick="showTermAndConditions(<?php echo $this->id; ?>)" class="terms"
 						href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp; 
 						<?php echo $this->translate('Conditions'); ?>
@@ -111,7 +112,8 @@ endif;?>
 			</ol>
 		</div>
 	</article>
- <?php
+	
+<?php
 if(intval($this->partialCounter)== 1):
     echo $this->render('store/_offerSignupForm.phtml');
 endif;
