@@ -35,7 +35,7 @@ class FrontEnd_Helper_viewHelper
         if ($fd = @fopen($logfile, "a")) {
 
             $str = <<<EOD
-$date; $remote_addr; $message
+            $date; $remote_addr; $message
 EOD;
             $result = fwrite($fd, $str .PHP_EOL);
             fclose($fd);
