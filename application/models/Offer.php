@@ -12,7 +12,7 @@
  */
 class Offer extends BaseOffer
 {
-    
+
     ##################################################################################
     ################## REFACTORED CODE ###############################################
     ##################################################################################
@@ -35,28 +35,165 @@ class Offer extends BaseOffer
         ->andWhere('o.discounttype="CD"')
         ->andWhere('s.deleted = 0')
         ->orderBy('o.id DESC');
-    
+
         if ($shopId != '') {
             $expiredOffers->andWhere('s.id = '.$shopId.'');
         }
         $expiredOffers->limit($limit);
         $expiredOffers = $expiredOffers->fetchArray();
+
         return $expiredOffers;
     }
+
+    /**
+     * get related shops for common function
+     * @author kraj modified by mkaur
+     * @return array $data
+     * @version 1.0
+     */
+
+    public static function commongetrelatedshopsByCategory($type, $limit, $shopId=0)
+    {
+        $date = date('Y-m-d H:i:s');
+        $shopData = array();
+        $catData = array();
+        //get all related category of the shop
+        $allRelatedCategory = self::getShopCategory($shopId);
+        if (sizeof($allRelatedCategory)>0) {
+
+            for ($i=0;$i<sizeof($allRelatedCategory);$i++) {
+
+                $catData[$i]=$allRelatedCategory[$i]['categoryId'];
+            }
+        }
+        //get related shop from datbase
+        $allRelatedShops=self::getRelatedShop($shopId);
+        if (sizeof($allRelatedShops)>0) {
+
+            for ($i=0;$i<sizeof($allRelatedShops);$i++) {
+
+                $shopData[$i]=$allRelatedShops[$i]['relatedshopId'];
+            }
+        }
+        if (count($shopData) > 0) {
+
+            //  Zend_Debug::dump($shopId);
+
+            $OfferOfRelatedShops = Doctrine_Query::create()
+            ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+            ->from('Offer o')
+            ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('s.refShopCategory c')
+            ->leftJoin('s.logo img')
+            ->where('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.affliateProgram = 1')
+            ->andWhere('o.discountType="CD"')
+            ->andWhere('o.Visability!="MEM"')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.userGenerated=0')
+            ->andWhereIn("o.shopId",$shopData)
+            ->andWhere("o.shopId != ".$shopId)
+            ->orderBy('o.startdate DESC')
+            ->limit($limit)
+            ->fetchArray();
+            //      echo "<pre>";
+            //      print_r($OfferOfRelatedShops); die;
+        } else {
+
+            $OfferOfRelatedShops = array();
+        }
+
+        if (count($catData) > 0) {
+            //  Zend_Debug::dump($catData); die;
+            $OfferOfRelatedCats = Doctrine_Query::create()
+            ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+            ->from('Offer o')
+            ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('s.refShopCategory c')
+            ->leftJoin('s.logo img')
+            ->where('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.affliateProgram = 1')
+            ->andWhere('o.discountType="CD"')
+            ->andWhere('o.Visability!="MEM"')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.userGenerated=0')
+            ->andWhereIn("c.categoryId",$catData)
+            ->andWhere("s.id != ".$shopId)
+            ->orderBy('o.startdate DESC')
+            ->limit($limit)
+            ->fetchArray();
+        } else {
+
+            $OfferOfRelatedCats = array();
+        }
+
+        $NewOfferOfRelatedShops = array();
+        $NewOfferOfRelatedCats = array();
+
+        foreach ($OfferOfRelatedShops as $shopsoffer):
+        $NewOfferOfRelatedShops["'".$shopsoffer['id']."'"] = $shopsoffer;
+        endforeach;
+
+        foreach ($OfferOfRelatedCats as $catsoffer):
+        $NewOfferOfRelatedCats["'".$catsoffer['id']."'"] = $catsoffer;
+        endforeach;
+
+        $result1 = array_merge($NewOfferOfRelatedShops, $NewOfferOfRelatedCats);
+
+        $newarr = array();
+        if (count($result1) > 0) {
+            $o = 0;
+            foreach($result1 as $newOfShop):
+
+            $newarr[$o] = @$newOfShop;
+            $o++;
+            endforeach;
+
+        }
+        $result = array_slice($newarr, 0, $limit);
+
+        return $result;
+    }
+
+    public static function getShopCategory($shopId)
+    {
+        $cat = Doctrine_Query::create()->from('refShopCategory r')->where('r.shopId='.$shopId)->fetchArray();
+
+        return $cat;
+    }
+    public static function getRelatedShop($shopId)
+    {
+        $shops = Doctrine_Query::create()->from('refShopRelatedshop r')->where('r.shopId='.$shopId)->fetchArray();
+
+        return $shops;
+    }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
-    
+
     /**
      * getofferList(deleted and non deleted by flag) fetches all record from database
      * also search according to keyword if present.
-     * @param array $params
+     * @param  array $params
      * @return array $offerList
      * @version 1.0
      * @author mkaur update by kraj
      */
-    public static  function getofferList($params){
-
+    public static function getofferList($params)
+    {
         $role =  Auth_StaffAdapter::getIdentity()->roleId;
 
         $srhOffer   =   @$params["offerText"]!='undefined' ? $params["offerText"] : '';
@@ -65,7 +202,6 @@ class Offer extends BaseOffer
         $type       =   @$params["couponType"]!='undefined' ? $params["couponType"] : '';
         //get offer deleted or other by flag flag (1 or 0)
         $flag = @$params['flag'];
-
 
         //echo 'O ' . $srhOffer ;
         //echo 'S ' . $srhShop ;
@@ -81,22 +217,21 @@ class Offer extends BaseOffer
         //->orderBy('o.startDate DESC');
 
         //condition for editor
-        if($role=='4')
-        {
+        if ($role=='4') {
             $offerList->andWhere("o.Visability='DE'");
 
         }
 
-        if($srhOffer != '' ){
+        if ($srhOffer != '') {
             $offerList->andWhere("o.title LIKE ?", "%$srhOffer%");
         }
-        if($srhShop!=''){
+        if ($srhShop!='') {
             $offerList->andWhere("s.name LIKE ?", "%$srhShop%");
         }
-        if($srhCoupon!=''){
+        if ($srhCoupon!='') {
             $offerList->andWhere("o.couponcode LIKE ?", "%$srhCoupon%");
         }
-        if($type!=''){
+        if ($type!='') {
             $offerList->andWhere("o.discountType="."'$type'");
         }
 
@@ -116,12 +251,13 @@ class Offer extends BaseOffer
 
     /**
      * Move record in trash.
-     * @param integer $id
+     * @param  integer $id
      * @version 1.0
      * @author  Er.kundal
      * @return integer $id
      */
-    public static function moveToTrash($id){
+    public static function moveToTrash($id)
+    {
         if ($id) {
             //find record by id
             $u = Doctrine_Core::getTable("Offer")->find($id);
@@ -155,7 +291,6 @@ class Offer extends BaseOffer
             $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
 
-
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
@@ -169,29 +304,28 @@ class Offer extends BaseOffer
 
             $u->delete();
 
-
         } else {
 
             $id = null;
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+
         return $id;
 
     }
     /**
      * Permanent delete record from database.
-     * @param integer $id
+     * @param  integer $id
      * @version 1.0
      * @author kraj
      * @return integer $id
      */
-    public static function deleteOffer($id){
-
+    public static function deleteOffer($id)
+    {
         if ($id) {
             //find record by id and change status (deleted=1)
             $u = Doctrine_Core::getTable("Offer")->find($id);
-
 
             $offer_id = $id;
             $authorId = self::getAuthorId($offer_id);
@@ -214,7 +348,6 @@ class Offer extends BaseOffer
 
             $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
@@ -256,12 +389,10 @@ class Offer extends BaseOffer
            $key = 'all_widget6_list';
            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-
             $del = Doctrine_Query::create()->delete()
             ->from('Offer o')
             ->where("o.id=" . $id)
             ->execute();
-
 
         } else {
             $id = null;
@@ -271,6 +402,7 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+
         return $id;
     }
     /**
@@ -279,14 +411,11 @@ class Offer extends BaseOffer
      * @version 1.0
      * @author kraj
      */
-    public static function restoreOffer($id){
-
+    public static function restoreOffer($id)
+    {
         if ($id) {
 
-
             $u = Doctrine_Core::getTable("Offer")->find($id);
-
-
 
             $offer_id = $id;
             $authorId = self::getAuthorId($offer_id);
@@ -310,7 +439,6 @@ class Offer extends BaseOffer
             $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
 
-
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
 
@@ -318,7 +446,6 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'all_widget6_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
 
             //update status of record by id(deleted=0)
             $O = Doctrine_Query::create()->update('Offer')
@@ -333,18 +460,19 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+
         return $id;
     }
     /**
      * Search to five offer
-     * @param string $keyword
-     * @param boolean $flag
+     * @param  string  $keyword
+     * @param  boolean $flag
      * @version 1.0
-     * @return array $data
+     * @return array   $data
      * @author kraj
      */
-    public static function searchToFiveOffer($keyword,$flag){
-
+    public static function searchToFiveOffer($keyword,$flag)
+    {
         $data = Doctrine_Query::create()
         ->select('o.title as title')
         ->from("Offer o")
@@ -352,18 +480,17 @@ class Offer extends BaseOffer
         ->andWhere("o.title LIKE ?", "$keyword%")
         ->orderBy("o.title ASC")->andWhere("o.userGenerated = '0'")->limit(5)->fetchArray();
 
-
         return $data;
     }
     /**
      * Search top five shop
-     * @param string $keyword
-     * @param boolean $flag
-     * @return array $data
+     * @param  string  $keyword
+     * @param  boolean $flag
+     * @return array   $data
      * @author kraj
      */
-    public static function searchToFiveShop($keyword,$flag){
-
+    public static function searchToFiveShop($keyword,$flag)
+    {
         $data = Doctrine_Query::create()
         ->select()
         ->from("Offer o")->leftJoin('o.shop s')
@@ -376,13 +503,13 @@ class Offer extends BaseOffer
 
     /**
      * Search top five Coupon
-     * @param string $keyword
-     * @param boolean $flag
-     * @return array $data
+     * @param  string  $keyword
+     * @param  boolean $flag
+     * @return array   $data
      * @author Amit Sharma
      */
-    public static function searchToFiveCoupon($keyword,$flag){
-
+    public static function searchToFiveCoupon($keyword,$flag)
+    {
         $data = Doctrine_Query::create()
         ->select()
         ->from("Offer o")
@@ -399,31 +526,27 @@ class Offer extends BaseOffer
      * @author kkumar
      */
 
-    public  function saveOffer($params){
-
-
-        if(!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news"){
+    public function saveOffer($params)
+    {
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
                 // check the offer type
-                if(isset($params['defaultoffercheckbox'])){     //offer type is default
+                if (isset($params['defaultoffercheckbox'])) {     //offer type is default
                     $this->Visability = 'DE';
-                    if($params['selctedshop']!=''){
+                    if ($params['selctedshop']!='') {
 
-                        if(intval($params['selctedshop']) > 0)
-                        {
+                        if (intval($params['selctedshop']) > 0) {
                             $this->shopId = $params['selctedshop'] ;
                         } else {
                             return array('result' => true , 'errType' => 'shop' );
                         }
                     }
-                }else{                                            // offer type member only
+                } else {                                            // offer type member only
                     $this->Visability = 'MEM';
                     $this->shopId = null;
                 }
-        }else{
+        } else {
 
-
-            if(intval($params['selctedshop']) > 0)
-            {
+            if (intval($params['selctedshop']) > 0) {
                 $this->shopId =  $params['selctedshop'] ;
             } else {
                 return array('result' => true , 'errType' => 'shop' );
@@ -431,66 +554,62 @@ class Offer extends BaseOffer
 
         }
 
-
         // check the discountype
-        if(isset($params['couponCodeCheckbox'])){             // discount type coupon
+        if (isset($params['couponCodeCheckbox'])) {             // discount type coupon
             $this->discountType = 'CD';
             $this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
             $this->discount = BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
             $this->discountvalueType =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['discountchk']);
-            if(isset($params['selectedcategories']))
-            {
+            if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
 
                     $this->refOfferCategory[]->categoryId = $categories ;
 
                 }
             }
-        }else if(isset($params['newsCheckbox'])){       // discount type sale
+        } elseif (isset($params['newsCheckbox'])) {       // discount type sale
             $this->discountType = 'NW';
-        }else if(isset($params['saleCheckbox'])){       // discount type sale
+        } elseif (isset($params['saleCheckbox'])) {       // discount type sale
             $this->discountType = 'SL';
-        }else{                                                // discount type printable
+        } else {                                                // discount type printable
             $this->discountType = 'PA';
             //check printable document
-            if(isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != ''){                          // upload offer
+            if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {                          // upload offer
 
                 $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
                 $ext =  BackEnd_Helper_viewHelper::getImageExtension($fileName);
                 $pattern = '/^[0-9]{10}_(.+)/i' ;
                  preg_match($pattern, $fileName , $matches );
-                if(!$fileName){
+                if (!$fileName) {
                     return false;
                 }
-                if(@$matches[1])
-                {
+                if (@$matches[1]) {
                    $this->logo->ext = $ext;
                    $this->logo->path ='images/upload/offer/';
                    $this->logo->name = $fileName;
                }
-            }else{                                                   // add offer refUrl
+            } else {                                                   // add offer refUrl
                 $this->refOfferUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
             }
         }
 
         $this->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
 
-        if(isset($params['deepLinkStatus']) ) {
+        if (isset($params['deepLinkStatus']) ) {
             $this->refURL =  BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
             //$this->shop->deepLink = $params['offerRefUrl'];
         }
 
-        if(trim($params['termsAndcondition'])!=''){
+        if (trim($params['termsAndcondition'])!='') {
             $this->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']) ;
         }
 
-
-        if(!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news"){
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
             $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
             $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
         }
 
-        if(isset($params['attachedpages'])){
+        if (isset($params['attachedpages'])) {
             foreach ($params['attachedpages'] as $pageId) {
 
                 $this->refOfferPage[]->pageId = $pageId ;
@@ -498,13 +617,13 @@ class Offer extends BaseOffer
             }
         }
 
-        if(isset($params['extendedoffercheckbox'])){                  // check if offer is extended
+        if (isset($params['extendedoffercheckbox'])) {                  // check if offer is extended
           $this->extendedOffer = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
           $this->extendedTitle =BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
           $this->extendedUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
           $this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
           $this->extendedFullDescription =BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
-        }else{
+        } else {
 
             $this->extendedOffer = 0;
             $this->extendedTitle = '';
@@ -514,19 +633,17 @@ class Offer extends BaseOffer
         }
 
         $this->exclusiveCode=$this->editorPicks = 0;
-        if(isset($params['exclusivecheckbox'])){
+        if (isset($params['exclusivecheckbox'])) {
             $this->exclusiveCode=1;
         }
 
-
-
-        if(isset($params['editorpickcheckbox'])){
+        if (isset($params['editorpickcheckbox'])) {
             $this->editorPicks=1;
         }
 
         $this->maxlimit=$this->maxcode='0';
 
-        if(isset($params['maxoffercheckbox'])){
+        if (isset($params['maxoffercheckbox'])) {
             $this->maxlimit='1';
             $this->maxcode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxoffertxt']);
         }
@@ -538,17 +655,16 @@ class Offer extends BaseOffer
 
         BackEnd_Helper_viewHelper::closeConnection($connUser);
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-        if(intval($params['offerImageSelect']) > 0){
+        if (intval($params['offerImageSelect']) > 0) {
 
             $this->tilesId = $params['offerImageSelect'];
         }
 
         // New code starts add blal
 
-        if(isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])){
+        if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
 
-            if(intval($params['selctedshop']) > 0)
-            {
+            if (intval($params['selctedshop']) > 0) {
                 $this->shopId = $params['selctedshop'] ;
 
             } else {
@@ -557,29 +673,26 @@ class Offer extends BaseOffer
 
         }
 
-
-
-        if(isset($params['fromWhichShop']) && $params['fromWhichShop']== 0){
+        if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
             $this->shopExist = 0;
-        }else{
+        } else {
             $this->shopExist = 1;
         }
 
-        if(isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])){
-
+        if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
 
             $saveNewShop = new Shop();
             $saveNewShop->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->permaLink = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->status = 1;
 
-            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != ''){
+            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
 
                 $fileName = self::uploadShopLogo('logoFile');
                 $saveNewShop->logo->ext =   BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
                 $saveNewShop->logo->path = 'images/upload/shop/';
                 $saveNewShop->logo->name = $fileName;
-                }else{
+                } else {
                     return false;
                 }
 
@@ -592,23 +705,19 @@ class Offer extends BaseOffer
 
         try {
 
-
-            if(intval($this->shopId) > 0)
-            {
+            if (intval($this->shopId) > 0) {
                 $this->save();
                 $key = trim('all_relatedShopInStore'  . intval(@$params['selctedshop']) . '_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            } else  {
+            } else {
                 return array('result' => true , 'errType' => 'shop' );
             }
 
-
-
     /***************** Start Add news code ********************/
         $lId = $this->id;
-        if(isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news"){
+        if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
             $newstitleloop = @$params['newsTitle'];
-            for($n=0;$n<count($newstitleloop);$n++){
+            for ($n=0;$n<count($newstitleloop);$n++) {
                 $savenews = new OfferNews();
                 $savenews->shopId = @$params['selctedshop'];
                 $savenews->offerId = @$lId;
@@ -645,8 +754,6 @@ class Offer extends BaseOffer
             $key = trim('all_relatedShopInStore'  . intval(@$params['selctedshop']) . '_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-
-
             $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
 
@@ -657,24 +764,24 @@ class Offer extends BaseOffer
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+
             return array('result' => true , 'ofer_id' => $this->id );
 
             $key = 'all_widget5_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'all_widget6_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        }catch (Exception $e){
-
+        } catch (Exception $e) {
             return false;
         }
 
     }
 
-
     /**
      *
      */
-     public static function addkortingscode($title,$shopid,$kortingscode,$desc,$userid,$uname){
+     public static function addkortingscode($title,$shopid,$kortingscode,$desc,$userid,$uname)
+     {
         $pc = new Offer();
         $pc->shopId =$shopid;
         $pc->title =BackEnd_Helper_viewHelper::stripSlashesFromString($title);
@@ -683,12 +790,9 @@ class Offer extends BaseOffer
         $pc->userGenerated = 1;
         $pc->authorId = BackEnd_Helper_viewHelper::stripSlashesFromString($userid);
         $pc->authorName =BackEnd_Helper_viewHelper::stripSlashesFromString($uname);
-        if($pc->save())
-        {
+        if ($pc->save()) {
             return true;
-        }
-        else{
-
+        } else {
             return false;
         }
      }
@@ -698,47 +802,41 @@ class Offer extends BaseOffer
      * @author kkumar
      */
 
-    public  function updateOffer($params){
+    public function updateOffer($params)
+    {
         //echo "<pre>"; print_r($params); die;
-        if(!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news"){
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
                 // check the offer type
-                if(isset($params['defaultoffercheckbox'])){      //offer type is default
+                if (isset($params['defaultoffercheckbox'])) {      //offer type is default
                     $this->Visability = 'DE';
-                    if($params['selctedshop']!=''){
+                    if ($params['selctedshop']!='') {
                         $this->shopId =  $params['selctedshop'] ;
                     }
-                }else{                                            // offer type member only
+                } else {                                            // offer type member only
                     $this->Visability = 'MEM';
                     $this->shopId = null;
                 }
-        }else{
+        } else {
             $this->shopId =  $params['selctedshop'] ;
         }
         // check the discountype
 
-
-        if(intval($params['offerImageSelect']) > 0){
+        if (intval($params['offerImageSelect']) > 0) {
 
             $this->tilesId =  $params['offerImageSelect'] ;
 
         }
 
-
-
-
         $this->couponCodeType = $params['couponCodeType'];
 
-
-        if(isset($params['couponCodeCheckbox'])){             // discount type coupon
-
+        if (isset($params['couponCodeCheckbox'])) {             // discount type coupon
 
             $this->discountType = 'CD';
             $this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
             $this->discount = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
             $this->discountvalueType = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountchk']);
             $this->refOfferCategory->delete();
-            if(isset($params['selectedcategories']))
-            {
+            if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
 
                     $this->refOfferCategory[]->categoryId = $categories ;
@@ -746,9 +844,9 @@ class Offer extends BaseOffer
                 }
             }
 
-        }else if(isset($params['newsCheckbox'])){       // discount type sale
+        } elseif (isset($params['newsCheckbox'])) {       // discount type sale
             $this->discountType = 'NW';
-        }else if(isset($params['saleCheckbox'])){       // discount type sale
+        } elseif (isset($params['saleCheckbox'])) {       // discount type sale
             $this->discountType = 'SL';
 
             //find if the offers exist in popular codes
@@ -758,13 +856,10 @@ class Offer extends BaseOffer
                 PopularCode::deletePopular($params['offerId'], $exist->position );
             }
 
-        }else{                                                // discount type printable
+        } else {                                                // discount type printable
             $this->discountType = 'PA';
 
-
             //$this->tilesId = null ;
-
-
 
             //find if the offers exist in popular codes
             $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
@@ -774,52 +869,48 @@ class Offer extends BaseOffer
             }
 
             //check printable document
-            if(isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != ''){  // upload offer
-
+            if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {  // upload offer
 
                 $this->refOfferUrl = '';
                 $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
                 $ext =  BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
                 $pattern = '/^[0-9]{10}_(.+)/i' ;
                 preg_match($pattern, $fileName , $matches );
-                if(!$fileName){
-
+                if (!$fileName) {
                     return false;
                 }
-                if(@$matches[1])
-                {
+                if (@$matches[1]) {
 
                     $this->logo->ext = $ext;
                     $this->logo->path ='images/upload/offer/';
                     $this->logo->name = $fileName;
                 }
 
-            }else{                                                     // add offer refUrl
+            } else {                                                     // add offer refUrl
                 $this->refOfferUrl = BackEnd_Helper_viewHelper::stripSlashesFromString ($params['offerrefurlPR']);
             }
         }
 
         $this->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
 
-        if(isset($params['deepLinkStatus'])){
+        if (isset($params['deepLinkStatus'])) {
             $this->refURL =  BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
-        }else{
+        } else {
             $this->refURL =  '';
         }
         $this->termandcondition->delete();
 
-
-        if(trim($params['termsAndcondition'])!=''){
+        if (trim($params['termsAndcondition'])!='') {
             $this->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
         }
 
-        if(!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news"){
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
             $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
             $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
         }
 
         $this->refOfferPage->delete();
-        if(isset($params['attachedpages'])){
+        if (isset($params['attachedpages'])) {
             foreach ($params['attachedpages'] as $pageId) {
 
                 $this->refOfferPage[]->pageId = $pageId ;
@@ -828,7 +919,7 @@ class Offer extends BaseOffer
         }
         //&& isset($params['couponCodeCheckbox'])
 
-        if(isset($params['extendedoffercheckbox'])){
+        if (isset($params['extendedoffercheckbox'])) {
             //echo "<pre>";
             //print_r($params['couponInfo']);
             // check if offer is extended
@@ -837,7 +928,7 @@ class Offer extends BaseOffer
             $this->extendedUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
             $this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
             $this->extendedFullDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
-        }else{
+        } else {
 
             $this->extendedOffer = 0;
             $this->extendedTitle = '';
@@ -847,62 +938,61 @@ class Offer extends BaseOffer
         }
 
         $this->exclusiveCode=$this->editorPicks=0;
-        if(isset($params['exclusivecheckbox'])){
+        if (isset($params['exclusivecheckbox'])) {
             $this->exclusiveCode=1;
         }
 
-        if(isset($params['editorpickcheckbox'])){
+        if (isset($params['editorpickcheckbox'])) {
             $this->editorPicks=1;
         }
 
         $this->maxlimit=$this->maxcode='0';
 
-        if(isset($params['maxoffercheckbox'])){
+        if (isset($params['maxoffercheckbox'])) {
             $this->maxlimit='1';
             $this->maxcode=$params['maxoffertxt'];
         }
 
         $getcategory = Doctrine_Query::create()->select()->from('Offer')->where('id = '.$params['offerId'] )->fetchArray();
 
-        if(!empty($getcategory)){
+        if (!empty($getcategory)) {
 
             $extendedUrl = mysql_real_escape_string($getcategory[0]['extendedUrl']);
 
             $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where('permalink = "?"', $extendedUrl)->andWhere('type = "EXTOFFER"')->fetchArray();
 
-            if(empty($getRouteLink)){
+            if (empty($getRouteLink)) {
                 $getRouteLink = 'empty';
             }
             //$updateRouteLink = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $getcategory[0]['permaLink'] );
-        }else{
+        } else {
             $updateRouteLink = new RoutePermalink();
         }
 
-
         // New code starts add blal
 
-        if(isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])){
+        if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
             //die("Hiiii");
             $this->shopId = @$params['selctedshop'];
         }
-        if(isset($params['fromWhichShop']) && $params['fromWhichShop']== 0){
+        if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
             $this->shopExist = 0;
-        }else{
+        } else {
             $this->shopExist = 1;
         }
-        if(isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])){
+        if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
             $saveNewShop = new Shop();
             $saveNewShop->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->permaLink = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->status = 1;
 
-            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != ''){
+            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
 
                 $fileName = self::uploadShopLogo('logoFile');
                 $saveNewShop->logo->ext =   BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
                 $saveNewShop->logo->path = 'images/upload/shop/';
                 $saveNewShop->logo->name = $fileName;
-            }else{
+            } else {
                 return false;
             }
 
@@ -925,9 +1015,9 @@ class Offer extends BaseOffer
             Doctrine_Query::create()->delete('OfferNews')
             ->where('offerId=' . $offerId)->execute();
 
-            if(isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news"){
+            if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
                 $newsloop = @$params['newsTitle'];
-                for($n=0;$n<count($newsloop);$n++){
+                for ($n=0;$n<count($newsloop);$n++) {
 
                     $savenews = new OfferNews();
                     $savenews->shopId = @$params['selctedshop'];
@@ -979,7 +1069,6 @@ class Offer extends BaseOffer
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
 
-
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
 
@@ -988,9 +1077,8 @@ class Offer extends BaseOffer
             $key = 'all_widget6_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-
             return array('result' => true);
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return false;
         }
     }
@@ -1001,8 +1089,8 @@ class Offer extends BaseOffer
      * @return array $userId
      * @version 1.0
      */
-    public static function getAuthorId($offerId){
-
+    public static function getAuthorId($offerId)
+    {
         $userId = Doctrine_Query::create()
         ->select('o.authorId')
         ->from("Offer o")
@@ -1012,15 +1100,14 @@ class Offer extends BaseOffer
         return $userId;
     }
 
-
-
     /**
      * get list of offer for export
      * @author kraj
      * @return array $offerList
      * @version 1.0
      */
-    public static function exportofferList (){
+    public static function exportofferList()
+    {
         $offerList = Doctrine_Query::create()
         ->select('o.*,s.name,s.deeplink,term.content')
         ->from("Offer o")
@@ -1031,10 +1118,12 @@ class Offer extends BaseOffer
         ->andWhere("o.userGenerated=0")
         ->orderBy("o.id DESC")
         ->fetchArray();
+
         return $offerList;
     }
 
-    public static function getOfferDetail($offerId){
+    public static function getOfferDetail($offerId)
+    {
         $shopDetail = Doctrine_Query::create()
         ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
         ->from("Offer o")
@@ -1049,11 +1138,12 @@ class Offer extends BaseOffer
         ->addSelect("(SELECT  count(cc.status) FROM CouponCode cc WHERE cc.offerid = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")
         ->andWhere("o.id =$offerId")->andWhere("o.userGenerated = '0'")->fetchArray();
+
         return $shopDetail;
     }
 
-
-    public static function getOfferInfo($offerId){
+    public static function getOfferInfo($offerId)
+    {
         $shopDetail = Doctrine_Query::create()
         ->select('o.*,s.name,s.notes,s.accountManagerName,s.deepLink,s.refUrl,s.actualUrl,s.affliateNetworkId as aid,s.permaLink,a.name as affname,a.id,p.id,tc.*,cat.id,img.*')
         ->from("Offer o")
@@ -1070,17 +1160,12 @@ class Offer extends BaseOffer
         return $shopDetail;
     }
 
-
-
-    public function uploadFile($imgName){
-
-
+    public function uploadFile($imgName)
+    {
         $uploadPath = "images/upload/offer/";
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         $img = $imgName;
-
-
 
         //unlink image file from folder if exist
         if ($img) {
@@ -1096,7 +1181,7 @@ class Offer extends BaseOffer
         $files = $adapter->getFileInfo();
 
         foreach ($files as $file => $info) {
-            if($file=='uploadoffer' && $info['name']!=''){
+            if ($file=='uploadoffer' && $info['name']!='') {
 
                 $name = $adapter->getFileName($file, false);
                 $name = $adapter->getFileName($file);
@@ -1124,9 +1209,9 @@ class Offer extends BaseOffer
                 $msg = "";
                 if ($adapter->isValid($file) == 1) {
                     $data = $orgName;
-                    return $data;
-                }else{
 
+                    return $data;
+                } else {
                     return false;
                 }
             }
@@ -1134,8 +1219,8 @@ class Offer extends BaseOffer
         }
     }
 
-    public static function uploadTiles($imgName){
-
+    public static function uploadTiles($imgName)
+    {
         $uploadPath = UPLOAD_IMG_PATH."offertiles/";
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
@@ -1188,15 +1273,14 @@ class Offer extends BaseOffer
             if ($adapter->isValid($file) == 1) {
 
                 $data = $orgName;
+
                 return $data;
 
-            }else{
-
+            } else {
                 return false;
             }
         }
     }
-
 
     public function uploadShopLogo($file)
     {
@@ -1212,7 +1296,6 @@ class Offer extends BaseOffer
         if (!file_exists($rootPath))
             mkdir($rootPath,776, true);
 
-
         // set destination path and apply validations
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, 'jpg,png');
@@ -1226,7 +1309,6 @@ class Offer extends BaseOffer
 
         // generates complete path of image
         $cp = $rootPath . $newName;
-
 
         /**
          *   generating thumnails for image
@@ -1260,13 +1342,13 @@ class Offer extends BaseOffer
         if ($adapter->isValid($file) == 1) {
 
             $data = $newName;
+
             return $data;
 
         } else {
             return false;
         }
     }
-
 
 /******************functions to be used on frontend*******************/
 
@@ -1361,7 +1443,6 @@ class Offer extends BaseOffer
         return $dataFinal;
     }
 
-
     /**
      * Search related offers in the relative shops on the basis of keywords in the search field
      * @author cbhopal updated by kraj
@@ -1404,7 +1485,8 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-    public static function getCouponDetails($extUrl){
+    public static function getCouponDetails($extUrl)
+    {
         $couponDetail = Doctrine_Query::create()
 
                        ->select('o.*,s.name,s.id,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
@@ -1418,9 +1500,9 @@ class Offer extends BaseOffer
                        ->andWhere('o.extendedOffer = 1')
                        ->andWhere('s.status = 1')
                        ->fetchArray();
+
         return $couponDetail;
      }
-
 
      /**
       * get related offers
@@ -1429,8 +1511,8 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function getrelatedOffers($shopId,$currentDate){
-
+     public static function getrelatedOffers($shopId,$currentDate)
+     {
         $date = date('Y-m-d H:i:s');
         $relatedOffers = Doctrine_Query::create()
                         ->select('o.*,s.id,s.name,s.permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
@@ -1457,12 +1539,13 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function getpopularOffers($offerId,$cpnDetails){
+     public static function getpopularOffers($offerId,$cpnDetails)
+     {
         //echo "<pre>";
         //print_r($cpnDetails); die;
         $date = date('Y-m-d H:i:s');
         $title = "";
-        if(isset($cpnDetails[0]['title']) && $cpnDetails[0]['title'] != ""){
+        if (isset($cpnDetails[0]['title']) && $cpnDetails[0]['title'] != "") {
         $title = $cpnDetails[0]['title'];
         }
         $popularOffers = Doctrine_Query::create()
@@ -1479,6 +1562,7 @@ class Offer extends BaseOffer
                         ->orderBy('po.id DESC')
                         ->limit(3)
                         ->fetchArray();
+
         return $popularOffers;
      }
 
@@ -1514,17 +1598,17 @@ class Offer extends BaseOffer
                 ->andWhere('o.Visability!="MEM"')
                 ->andWhere('o.userGenerated=0');
 
-                if($shopId!=''){
+                if ($shopId!='') {
 
                     $data->andWhere('s.id = '.$shopId.'');
                 }
 
-                if($userId!=''){
+                if ($userId!='') {
 
                     $data->andWhere('o.authorId = '.$userId.'');
                 }
 
-                if($limit!=''){
+                if ($limit!='') {
 
                     $data->limit($limit);
                 }
@@ -1532,8 +1616,7 @@ class Offer extends BaseOffer
                 $data = $data->orderBy('p.position ASC')->fetchArray();
                 $newData = array();
 
-
-                foreach($data as $res){
+                foreach ($data as $res) {
                     $newData[] = $res['offer'];
                 }
 
@@ -1545,8 +1628,8 @@ class Offer extends BaseOffer
       * @return array $data
       * @version 1.0
       */
-    public static function commongetMemberOnlyOffer($type,$limit){
-
+    public static function commongetMemberOnlyOffer($type,$limit)
+    {
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
                     ->select('s.id,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
@@ -1571,6 +1654,7 @@ class Offer extends BaseOffer
                     //->getSqlQuery();
                     //die;
                     ->fetchArray();
+
         return $data;
 
     }
@@ -1581,8 +1665,8 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function commongetnewestOffers($type, $limit, $shopId=0, $userId=""){
-
+     public static function commongetnewestOffers($type, $limit, $shopId=0, $userId="")
+     {
          $date = date('Y-m-d H:i:s');
          $data = Doctrine_Query::create()
                 ->select('s.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
@@ -1605,18 +1689,16 @@ class Offer extends BaseOffer
             //  ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
                 ->andWhere('o.userGenerated=0')
                 ->orderBy('o.startdate DESC');
-                if($shopId!=''){
+                if ($shopId!='') {
                     $data->andWhere('s.id = '.$shopId.'');
                 }
-                if($userId!=""){
+                if ($userId!="") {
                     $data->andWhere('o.authorId = '.$userId.'');
                 }
                 $data = $data->limit($limit)->fetchArray();
 
-
                 return $data;
      }
-
 
      /**
       * get latest voucher codes for rss feeds
@@ -1625,8 +1707,8 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function getNewestOffersForRSS(){
-
+     public static function getNewestOffersForRSS()
+     {
         $date = date('Y-m-d H:i:s');
 
         $data = Doctrine_Query::create()
@@ -1648,9 +1730,9 @@ class Offer extends BaseOffer
             ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
             ->orderBy('o.startdate DESC')
             ->fetchArray();
+
         return $data;
      }
-
 
      /**
       * get popular voucher codes for rss feeds
@@ -1659,9 +1741,9 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function getPopularOffersForRSS(){
+     public static function getPopularOffersForRSS()
+     {
         $date = date('Y-m-d H:i:s');
-
 
         $data = Doctrine_Query::create()
                                 ->select('terms.content as terms,o.id,o.title,s.permaLink as permalink,p.id,o.updated_at as lastUpdate')
@@ -1682,16 +1764,15 @@ class Offer extends BaseOffer
                                 ->andWhere('o.userGenerated=0')
                                 ->orderBy('p.position ASC')->fetchArray();
 
-
         $newData = array();
 
-        foreach($data as $res){
+        foreach ($data as $res) {
 
             $newData[] = $res['offer'];
         }
+
         return $newData;
      }
-
 
      /**
       * get extended voucher codes for common function
@@ -1700,7 +1781,8 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function commongetextendedOffers($type, $limit, $shopId=0){
+     public static function commongetextendedOffers($type, $limit, $shopId=0)
+     {
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
                 ->select('o.*, img.id, img.path, img.name')
@@ -1716,6 +1798,7 @@ class Offer extends BaseOffer
                 ->andWhere('o.startdate <= "'.$date.'"')
                 ->orderBy('o.id DESC')
                 ->limit($limit)->fetchArray();
+
         return $data;
      }
 
@@ -1726,12 +1809,13 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function commongetrelatedshops($type, $limit, $shopId=0){
+     public static function commongetrelatedshops($type, $limit, $shopId=0)
+     {
         $data =  null;
         $date = date('Y-m-d H:i:s');
         $lastdata=FrontEnd_Helper_viewHelper::getallrelatedshopsid($shopId);
-        if(sizeof($lastdata)>0){
-            for($i=0;$i<sizeof($lastdata);$i++){
+        if (sizeof($lastdata)>0) {
+            for ($i=0;$i<sizeof($lastdata);$i++) {
                 $shopdata[$i]=$lastdata[$i]['relatedshopId'];
             }
             $shopvalues=implode(",", $shopdata);
@@ -1760,155 +1844,23 @@ class Offer extends BaseOffer
      }
 
      /**
-      * get related shops for common function
-      * @author kraj modified by mkaur
-      * @return array $data
-      * @version 1.0
-      */
-
-     public static function commongetrelatedshopsByCategory($type, $limit, $shopId=0){
-        $date = date('Y-m-d H:i:s');
-        $shopData = array();
-        $catData = array();
-        //get all related category of the shop
-        $allRelatedCategory = self::getShopCategory($shopId);
-        if(sizeof($allRelatedCategory)>0){
-
-            for($i=0;$i<sizeof($allRelatedCategory);$i++){
-
-                $catData[$i]=$allRelatedCategory[$i]['categoryId'];
-            }
-        }
-        //get related shop from datbase
-        $allRelatedShops=self::getRelatedShop($shopId);
-        if(sizeof($allRelatedShops)>0){
-
-            for($i=0;$i<sizeof($allRelatedShops);$i++){
-
-                $shopData[$i]=$allRelatedShops[$i]['relatedshopId'];
-            }
-        }
-        if(count($shopData) > 0){
-
-        //  Zend_Debug::dump($shopId);
-
-        $OfferOfRelatedShops = Doctrine_Query::create()
-        ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
-        ->from('Offer o')
-        ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
-        ->leftJoin('o.shop s')
-        ->leftJoin('s.favoriteshops fv')
-        ->leftJoin('o.termandcondition terms')
-        ->leftJoin('o.vote vot')
-        ->leftJoin('s.refShopCategory c')
-        ->leftJoin('s.logo img')
-        ->where('o.deleted = 0')
-        ->andWhere('s.deleted = 0')
-        ->andWhere('s.affliateProgram = 1')
-        ->andWhere('o.discountType="CD"')
-        ->andWhere('o.Visability!="MEM"')
-        ->andWhere('o.enddate > "'.$date.'"')
-        ->andWhere('o.startdate <= "'.$date.'"')
-        ->andWhere('o.userGenerated=0')
-        ->andWhereIn("o.shopId",$shopData)
-        ->andWhere("o.shopId != ".$shopId)
-        ->orderBy('o.startdate DESC')
-        ->limit($limit)
-        ->fetchArray();
-//      echo "<pre>";
-//      print_r($OfferOfRelatedShops); die;
-        } else {
-
-            $OfferOfRelatedShops = array();
-        }
-
-
-        if(count($catData) > 0){
-        //  Zend_Debug::dump($catData); die;
-            $OfferOfRelatedCats = Doctrine_Query::create()
-            ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
-            ->from('Offer o')
-            ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
-            ->leftJoin('o.shop s')
-            ->leftJoin('s.favoriteshops fv')
-            ->leftJoin('o.termandcondition terms')
-            ->leftJoin('o.vote vot')
-            ->leftJoin('s.refShopCategory c')
-            ->leftJoin('s.logo img')
-            ->where('o.deleted = 0')
-            ->andWhere('s.deleted = 0')
-            ->andWhere('s.affliateProgram = 1')
-            ->andWhere('o.discountType="CD"')
-            ->andWhere('o.Visability!="MEM"')
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
-            ->andWhere('o.userGenerated=0')
-            ->andWhereIn("c.categoryId",$catData)
-            ->andWhere("s.id != ".$shopId)
-            ->orderBy('o.startdate DESC')
-            ->limit($limit)
-            ->fetchArray();
-            } else {
-
-            $OfferOfRelatedCats = array();
-        }
-
-
-        $NewOfferOfRelatedShops = array();
-        $NewOfferOfRelatedCats = array();
-
-        foreach ($OfferOfRelatedShops as $shopsoffer):
-            $NewOfferOfRelatedShops["'".$shopsoffer['id']."'"] = $shopsoffer;
-        endforeach;
-
-        foreach ($OfferOfRelatedCats as $catsoffer):
-            $NewOfferOfRelatedCats["'".$catsoffer['id']."'"] = $catsoffer;
-        endforeach;
-
-        $result1 = array_merge($NewOfferOfRelatedShops, $NewOfferOfRelatedCats);
-
-        $newarr = array();
-        if(count($result1) > 0){
-            $o = 0;
-            foreach($result1 as $newOfShop):
-
-                $newarr[$o] = @$newOfShop;
-                $o++;
-            endforeach;
-
-        }
-        $result = array_slice($newarr, 0, $limit);
-        return $result;
-     }
-
-    public static function getShopCategory($shopId)
-    {
-        $cat = Doctrine_Query::create()->from('refShopCategory r')->where('r.shopId='.$shopId)->fetchArray();
-        return $cat;
-    }
-    public static function getRelatedShop($shopId)
-    {
-        $shops = Doctrine_Query::create()->from('refShopRelatedshop r')->where('r.shopId='.$shopId)->fetchArray();
-        return $shops;
-    }
-     /**
       * get expired voucher codes for common function
       * @author Raman
       * @return array $data
       * @version 1.0
       */
 
-     public static function commongetallrelatedshopsid($shopId){
-
+     public static function commongetallrelatedshopsid($shopId)
+     {
         $data = Doctrine_Query::create()
             ->select('ref.relatedshopId,s.name,s.id')
             ->from("refShopRelatedshop ref")
             ->leftJoin('ref.shop s')
             ->andWhere("ref.shopId=".$shopId)->orderBy("s.name ASC")->fetchArray();
+
             return $data;
 
      }
-
 
      /**
       * get latest updates voucher codes for common function
@@ -1917,8 +1869,8 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function getLatestUpdates($type, $limit, $shopId=0){
-
+     public static function getLatestUpdates($type, $limit, $shopId=0)
+     {
         $expiredtime=date("Y-m-d 00:00:00");
         $data = Doctrine_Query::create()
                     ->from('OfferNews n')
@@ -1926,9 +1878,9 @@ class Offer extends BaseOffer
                     ->orderBy('n.startdate DESC');
 
         $data = $data->limit($limit)->fetchArray();
+
         return $data;
      }
-
 
      /**
       * Get newest offer for home page list from database
@@ -1936,7 +1888,8 @@ class Offer extends BaseOffer
       * @version 1.0
       * @return array $data
       */
-     public static function getNewstoffers($flag) {
+     public static function getNewstoffers($flag)
+     {
         $memOnly = "MEM";
         $data = Doctrine_Query::create()->select('o.title,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*')
         ->from("Offer o")
@@ -1949,6 +1902,7 @@ class Offer extends BaseOffer
         ->orderBy("o.id DESC")
         ->limit($flag)
         ->fetchArray();
+
         return $data;
 
      }
@@ -1982,8 +1936,7 @@ class Offer extends BaseOffer
         ->leftJoin('o.tiles t')
         ->where('o.deleted = 0' );
 
-        if(!$includingOffline)
-        {
+        if (!$includingOffline) {
             $data = $data->andWhere('o.offline = 0')
             ->andWhere('o.endDate >='."'$nowDate'")
             ->andWhere('o.startdate <= "'.$nowDate.'"');
@@ -2003,13 +1956,11 @@ class Offer extends BaseOffer
             ->addOrderBy('o.title ASC');
 
         // check need to get exclusive offers or not
-        if($getExclusiveOnly)
-        {
+        if ($getExclusiveOnly) {
             $data = $data->andWhere('o.exclusiveCode = 1' ) ;
         }
         // check $limit if passed or not
-        if($limit)
-        {
+        if ($limit) {
             $data = $data->limit($limit);
 
         }
@@ -2017,7 +1968,6 @@ class Offer extends BaseOffer
         $data = $data->fetchArray();
         //var_dump($data); die;
         return $data;
-
 
     }
 
@@ -2066,6 +2016,7 @@ class Offer extends BaseOffer
                     ->orderBy('p.position ASC')
                     ->limit($limit)
                     ->fetchArray();
+
         return $topCouponCodes;
     }
 
@@ -2077,8 +2028,8 @@ class Offer extends BaseOffer
      * shops will be displayed only when there is no offer based on condition like offer's category == shop's category
      *
      * and sort poplar offers based on offer's category
-     * @param array $shopCategories  no money shop categories
-     * @param array $offerIDs  offer which needs to bre excluded (these are already added)
+     * @param array $shopCategories no money shop categories
+     * @param array $offerIDs       offer which needs to bre excluded (these are already added)
      * @author spsingh
      *
      * @param $limit integer limit for the no of offers. Default is set to 5
@@ -2086,7 +2037,7 @@ class Offer extends BaseOffer
      * @return array $data
      */
 
-    public static function getAdditionalTopKortingscodeForShopPage($shopCategories,$offerIDs,$limit = 5 )
+    public static function getAdditionalTopKortingscodeForShopPage($shopCategories,$offerIDs,$limit = 5)
     {
         $date = date('Y-m-d H:i:s');
 
@@ -2119,9 +2070,9 @@ class Offer extends BaseOffer
                 ->orderBy('p.position ASC')
                 ->limit($limit)
                 ->fetchArray();
+
         return $additionalTopKortingscodeForShopPage;
     }
-
 
     /**
       * Get offers for how to guide page from database
@@ -2152,8 +2103,7 @@ class Offer extends BaseOffer
         ->leftJoin('o.tiles t')
         ->where('o.deleted = 0' );
 
-        if(!$includingOffline)
-        {
+        if (!$includingOffline) {
             $data = $data->andWhere('o.offline = 0')
             ->andWhere('o.endDate >='."'$nowDate'")
             ->andWhere('o.startdate <= "'.$nowDate.'"');
@@ -2174,14 +2124,12 @@ class Offer extends BaseOffer
         ->addOrderBy('o.title ASC');
 
         // check need to get execlusive offers or not
-        if($getExclusiveOnly)
-        {
+        if ($getExclusiveOnly) {
             $data = $data->andWhere('o.exclusiveCode = 1' ) ;
         }
 
         // check $limit if passed or not
-        if($limit)
-        {
+        if ($limit) {
             $data = $data->limit($limit);
 
         }
@@ -2198,7 +2146,8 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-    public static function getpopularOffersOfShops($shopId,$limit){
+    public static function getpopularOffersOfShops($shopId,$limit)
+    {
         $date = date('Y-m-d H:i:s');
         $popularOffers = Doctrine_Query::create()
                         ->select('po.*,o.*,terms.*,s.id,s.name,img.name,img.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
@@ -2221,49 +2170,38 @@ class Offer extends BaseOffer
         return $popularOffers;
      }
 
-
-
      /**
       * get total view count for offer and update the total viewcount
       *
       * @author sp singh
       * @version 1.0
       */
-     public static function updateTotalViewCount(){
-
-
+     public static function updateTotalViewCount()
+     {
          $data = Doctrine_Query::create()
                     ->select('o.id,o.totalViewcount,o.startDate,DATEDIFF(NOW(),o.startdate) as diff')
                     ->from('Offer o')
                     ->addSelect("(SELECT  sum(v.onclick)  as clicks FROM ViewCount v WHERE v.offerId = o.id and v.counted=0 ) as clicks")
                     ->fetchArray();
 
-
-        foreach ($data as $value)
-        {
+        foreach ($data as $value) {
 
             # update only when there ar new click out in view_count table
-            if($value['clicks'])
-            {
+            if ($value['clicks']) {
 
                     ViewCount::processViewCount($value['id']);
-
 
                     # COUNT POPULAITY OF AN OFFER based on otal clicks
 
                     $newtotal = intval($value['clicks']) + intval($value['totalViewcount']) ;
 
-
                     $dStart = new DateTime(date("y-m-d h:i:s"));
                     $dEnd  = new DateTime($value['startDate']);
                     $dDiff = $dEnd->diff($dStart);
 
-
-                    $diff = (int)$dDiff->days ;
-
+                    $diff = (int) $dDiff->days ;
 
                     $popularity = round( $newtotal / ($diff > 0 ? $diff : 1 ) , 4);
-
 
                     # update popularity and otal click counts
                     $shopList = Doctrine_Query::create()
@@ -2275,12 +2213,7 @@ class Offer extends BaseOffer
             }
         }
 
-
      }
-
-
-
-
 
      /**
       * get popular offers of particular shop
@@ -2289,7 +2222,8 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function getmemberexclusiveOffersOfShops(){
+     public static function getmemberexclusiveOffersOfShops()
+     {
         $date = date('Y-m-d H:i:s');
         $popularOffers = Doctrine_Query::create()
         ->select('po.*,o.*,terms.*,s.*,img.name,img.path,vot.id,vot.vote')
@@ -2307,6 +2241,7 @@ class Offer extends BaseOffer
         ->andWhere('s.deleted =0')
         ->orderBy('o.title ASC')
         ->fetchArray();
+
         return $popularOffers;
      }
 
@@ -2314,14 +2249,14 @@ class Offer extends BaseOffer
  * counter existence of  favorite shop in database
  * @author mkaur
  */
-     public static function countFavShop($shopId){
+     public static function countFavShop($shopId)
+     {
         $data = Doctrine_Query::create()->select('count(*) as total')
         ->from("FavoriteShop")->where('shopId='.$shopId)
         ->fetchArray();
-        if($data[0]['total']>0){
+        if ($data[0]['total']>0) {
             return true;
-        }
-        else{
+        } else {
         return null;
         }
      }
@@ -2330,9 +2265,10 @@ class Offer extends BaseOffer
   * add favorite shop in the database
   * @author mkaur
   */
-     public static  function addFavoriteShop($sid,$flag){
+     public static  function addFavoriteShop($sid,$flag)
+     {
         $userid = Auth_VisitorAdapter::getIdentity()->id;
-        if($flag=='1' || $flag==1){
+        if ($flag=='1' || $flag==1) {
             $fvshop = new FavoriteShop();
             $fvshop->shopId = $sid;
             $fvshop->visitorId = $userid;
@@ -2347,10 +2283,10 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+
             return 1;
 
-
-        }else {
+        } else {
 
             $d3 = Doctrine_Query::create()->delete()
                 ->from('FavoriteShop fs')
@@ -2367,16 +2303,17 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+
             return 2;
         }
-
 
 }
 /**
  * get member only offers
  * @author mkaur
  */
-        public static function getMemberonly(){
+        public static function getMemberonly()
+        {
             $date = date('Y-m-d H:i:s');
             $memOnly = "MEM";
             $data = Doctrine_Query::create()->select('o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
@@ -2401,6 +2338,7 @@ class Offer extends BaseOffer
                 $k++;
             endforeach;
             endif;
+
             return $data;
         }
 
@@ -2408,7 +2346,8 @@ class Offer extends BaseOffer
          * get member only offers
          * @author Er,kundal
          */
-        public static function getspecialofferonly($splconidtion){
+        public static function getspecialofferonly($splconidtion)
+        {
             $date = date('Y-m-d H:i:s');
 
             //echo $date;
@@ -2418,37 +2357,36 @@ class Offer extends BaseOffer
 
             $CDvaule = "";
             $couponRegular = 0;
-            if($splconidtion['couponregular'] == 1){
+            if ($splconidtion['couponregular'] == 1) {
 
                 $couponRegular = 1;
             }
 
             $editorpick = 0;
-            if($splconidtion['couponeditorpick'] == 1){
+            if ($splconidtion['couponeditorpick'] == 1) {
 
                 $editorpick = $splconidtion['couponeditorpick'];
             }
 
             $exclusive = 0;
-            if($splconidtion['couponexclusive'] == 1){
+            if ($splconidtion['couponexclusive'] == 1) {
 
                 $exclusive = $splconidtion['couponexclusive'];
             }
 
             $wordTitle = "";
-            if($splconidtion['enableWordConstraint'] == 1){
+            if ($splconidtion['enableWordConstraint'] == 1) {
 
                 $wordTitle = $splconidtion['wordTitle'];
             }
 
             $maxOffers = "";
-            if($splconidtion['maxOffers']){
+            if ($splconidtion['maxOffers']) {
 
                 $maxOffers = $splconidtion['maxOffers'];
             }
 
             $discountvaule = array($CDvaule);
-
 
             //get all offer that attached to page
             $data1 = Doctrine_Query::create()->select('op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
@@ -2490,27 +2428,24 @@ class Offer extends BaseOffer
             ->orderBy('o.exclusiveCode DESC')
             ->addOrderBy('o.startdate DESC');
 
-            if(isset($splconidtion['oderOffers']) && $splconidtion['oderOffers'] == 1){
+            if (isset($splconidtion['oderOffers']) && $splconidtion['oderOffers'] == 1) {
 
                 $Q->orderBy("o.title ASC");
-            }
-
-            else if(isset($splconidtion['oderOffers']) && $splconidtion['oderOffers'] == 0){
+            } elseif (isset($splconidtion['oderOffers']) && $splconidtion['oderOffers'] == 0) {
 
                 $Q->orderBy("o.title DESC");
-            }
-            else{
+            } else {
 
                 $Q->orderBy("o.id DESC");
             }
 
-            if(isset($splconidtion['enableWordConstraint']) && @$splconidtion['enableWordConstraint'] > 0 && @$splconidtion['enableWordConstraint'] != null){
+            if (isset($splconidtion['enableWordConstraint']) && @$splconidtion['enableWordConstraint'] > 0 && @$splconidtion['enableWordConstraint'] != null) {
 
                 $Q->andWhere('o.title LIKE ?',"$wordTitle%");
 
             }
 
-            if($splconidtion['couponregular'] == 1){
+            if ($splconidtion['couponregular'] == 1) {
 
                 $regular = 1;
             } else {
@@ -2519,58 +2454,56 @@ class Offer extends BaseOffer
 
             }
 
-            if($regular == 0){
+            if ($regular == 0) {
 
-                if($editorpick == 0){
+                if ($editorpick == 0) {
 
-                    if($exclusive == 0){
+                    if ($exclusive == 0) {
 
                         $Q->andWhere('o.discounttype!="CD"');
                         $Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
                         $Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                    }else{
+                    } else {
 
                         $Q->andWhere('o.discounttype ="CD"');
                         $Q->andWhere('o.exclusiveCode = 1');
                     }
               } else {
-                    if($exclusive == 0){
+                    if ($exclusive == 0) {
                         $Q->andWhere('o.discounttype="CD"');
                         $Q->andWhere('o.editorPicks = 1');
                         //$Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                    }else{
+                    } else {
                         $Q->andWhere('o.discounttype ="CD"');
                         $Q->andWhere('o.exclusiveCode = 1 or o.editorPicks = 1');
                     }
 
                 }
 
+            } else {
 
-            } else{
+                if ($editorpick == 0) {
 
-                if($editorpick == 0){
-
-                    if($exclusive == 0){
+                    if ($exclusive == 0) {
 
                         $Q->andWhere('o.discounttype="CD"');
                         $Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
                         $Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                    }else{
+                    } else {
 
                         $Q->andWhere('o.discounttype ="CD"');
                         $Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
                         $Q->andWhere('o.exclusiveCode = 1');
                     }
 
-
                 } else {
-                    if($exclusive == 0){
+                    if ($exclusive == 0) {
 
                         $Q->andWhere('o.discounttype="CD"');
                         $Q->andWhere('o.editorPicks = 1');
                         $Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
 
-                    }else{
+                    } else {
 
                         $Q->andWhere('o.discounttype ="CD"');
 
@@ -2579,20 +2512,17 @@ class Offer extends BaseOffer
                 }
 
             }
-            /*if(isset($splconidtion['maxOffers']) && @$splconidtion['maxOffers'] >0 && @$splconidtion['maxOffers'] != null){
+            /*if (isset($splconidtion['maxOffers']) && @$splconidtion['maxOffers'] >0 && @$splconidtion['maxOffers'] != null) {
                 $Q->LIMIT($maxOffers);
             }*/
 
             $data = $data1->fetchArray();
 
-
-
-
             //traverse array of all offer accordig to constrains
             $newarr = array();
-            if(count($data) > 0){
+            if (count($data) > 0) {
 
-                for($o=0;$o<count($data);$o++){
+                for ($o=0;$o<count($data);$o++) {
 
                     $newarr[$o] = @$data[$o]['Offer'];
                 }
@@ -2601,13 +2531,11 @@ class Offer extends BaseOffer
             //echo $data = $Q->getSqlQuery();  die;
             $data = $Q->fetchArray();
 
-
-
             $newarr1 = array();
 
-            if(count($data) > 0){
+            if (count($data) > 0) {
 
-                for($o=0;$o<count($data);$o++){
+                for ($o=0;$o<count($data);$o++) {
 
                     $publishdate = @$data[$o]['startDate'];
 
@@ -2628,24 +2556,22 @@ class Offer extends BaseOffer
                     $new_exp_date = strtotime($ExNewDate);
 
                     // echo $NewDate."<br>Type 2<br>".$todays_date;
-                    if(isset($splconidtion['enableTimeConst']) && @$splconidtion['enableTimeConst'] == 1){
+                    if (isset($splconidtion['enableTimeConst']) && @$splconidtion['enableTimeConst'] == 1) {
 
-
-                        if(@$splconidtion['timeType'] == 1){
+                        if (@$splconidtion['timeType'] == 1) {
 
                             //echo $NewDate; echo "<br>";
                             if ($expiration_date >= $today) {
                                 $newarr1[$o] = @$data[$o];
                                 //die('a');
                             }
-                        }
-                        else if(@$splconidtion['timeType'] == 2){
+                        } elseif (@$splconidtion['timeType'] == 2) {
                             if ($new_exp_date <= $today) {
                                 $newarr1[$o] = @$data[$o];
                                 //die('b');
                             }
                         }
-                    }else if(isset($splconidtion['enableclickconst']) && @$splconidtion['enableclickconst'] == true && @$splconidtion['enableclickconst'] == 1){
+                    } elseif (isset($splconidtion['enableclickconst']) && @$splconidtion['enableclickconst'] == true && @$splconidtion['enableclickconst'] == 1) {
                         if ($data[$o]['clicks'] >= $splconidtion['numberofclicks']) {
 
                             $newarr1[$o] = @$data[$o];
@@ -2660,16 +2586,15 @@ class Offer extends BaseOffer
 
             }
             $result = array_merge($newarr, $newarr1);
-            if(isset($splconidtion['maxOffers']) && @$splconidtion['maxOffers'] >0 && @$splconidtion['maxOffers'] != null){
+            if (isset($splconidtion['maxOffers']) && @$splconidtion['maxOffers'] >0 && @$splconidtion['maxOffers'] != null) {
                 //$Q->LIMIT($maxOffers);
                  $result = array_slice($result,0,$maxOffers);
 
             }
 
             $Fresult = array();
-            foreach ($result as $r)
-            {
-                 if(isset($Fresult[$r['id']])){
+            foreach ($result as $r) {
+                 if (isset($Fresult[$r['id']])) {
 
                  } else {
 
@@ -2677,13 +2602,10 @@ class Offer extends BaseOffer
                  }
             }
 
-
             return $Fresult;
             //return $result;
 
         }
-
-
 
 /**
  * Get total no of offers on userid basis
@@ -2691,7 +2613,8 @@ class Offer extends BaseOffer
  * @version 1.0
  * @return array $data
  */
-     public static function findNoOfOffersByUser($uid) {
+     public static function findNoOfOffersByUser($uid)
+     {
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()->select('count(*) as cout')
         ->from("Offer o")
@@ -2702,6 +2625,7 @@ class Offer extends BaseOffer
         ->andWhere('o.startdate <= "'.$date.'"')
         ->andWhere('s.deleted =0')
         ->fetchArray();
+
         return $data;
 
      }
@@ -2709,7 +2633,8 @@ class Offer extends BaseOffer
   * Get total vote count from database
   * @author mkaur
   */
-    public static function countVotes($id){
+    public static function countVotes($id)
+    {
       $positiveVotes = Doctrine_Query::create()
       ->select('count(*) as cnt')
       ->from("Vote v")
@@ -2728,6 +2653,7 @@ class Offer extends BaseOffer
        $arr = array();
        $arr['vote'] = (($positiveVotes[0]['cnt'])/($negativeVotes[0]['cnt']+$positiveVotes[0]['cnt']))*100 ;
        $arr['poscount'] = $positiveVotes[0]['cnt'];
+
        return $arr;
     }
 
@@ -2737,7 +2663,8 @@ class Offer extends BaseOffer
     * @return array $shopLogo
     * @version 1.0
     */
-   public static function getOfferShopDetail($offerId){
+   public static function getOfferShopDetail($offerId)
+   {
        $shopLogo = Doctrine_Query::create()
                     ->select('o.shopId,s.logoId,l.name,l.path,s.permaLink')
                     ->from("offer o")
@@ -2746,9 +2673,9 @@ class Offer extends BaseOffer
                     ->where('s.deleted=0')
                     ->andWhere("o.id = $offerId")
                     ->fetchArray();
+
     return $shopLogo;
    }
-
 
    /**
     * Get links for cloaking purpose and also check the offer has ref url or not
@@ -2760,8 +2687,8 @@ class Offer extends BaseOffer
     * @version 1.0
     */
 
-   public static function getcloakLink($offerId , $checkRefUrl = false ){
-
+   public static function getcloakLink($offerId , $checkRefUrl = false)
+   {
     $data = Doctrine_Query::create()
     ->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl')
     ->from('Offer o')
@@ -2771,33 +2698,25 @@ class Offer extends BaseOffer
 
     $network = Shop::getAffliateNetworkDetail( @$data['shop']['id'] );
 
-        if($checkRefUrl)
-        {
+        if ($checkRefUrl) {
             # retur false if s shop is not associated with any network
-            if(! isset($network['affliatenetwork']))
-            {
+            if (! isset($network['affliatenetwork'])) {
                 return false ;
             }
 
-            if(@$data['refURL'] != ""){
-
+            if (@$data['refURL'] != "") {
                 return true ;
 
-            }elseif (@$data['shop']['refUrl'] != ""){
-
+            } elseif (@$data['shop']['refUrl'] != "") {
                 return true ;
-            }else{
-
+            } else {
                 return true ;
             }
         }
 
-
         $subid = "" ;
-        if( isset($network['affliatenetwork']) )
-        {
-            if(!empty($network['subid']) )
-            {
+        if ( isset($network['affliatenetwork']) ) {
+            if (!empty($network['subid']) ) {
                  $subid = "&". $network['subid'] ;
                  $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
                  $ip = ip2long($clientIP);
@@ -2810,29 +2729,25 @@ class Offer extends BaseOffer
 
         }
 
-
-
-        if(@$data['refURL'] != ""){
+        if (@$data['refURL'] != "") {
 
             $url = @$data['refURL'];
 
             $url .= $subid ;
 
-
-        }elseif(@$data['shop']['refUrl'] != ""){
+        } elseif (@$data['shop']['refUrl'] != "") {
 
             $url = @$data['shop']['refUrl'];
             $url .=  $subid ;
 
-        }elseif(@$data['shop']['actualUrl'] != ""){
+        } elseif (@$data['shop']['actualUrl'] != "") {
 
             $url = @$data['shop']['actualUrl'];
-        }else{
+        } else {
 
             $urll = @$data['shop']['permalink'];
             $url = HTTP_PATH_LOCALE.$urll;
         }
-
 
         return $url ;
 
@@ -2845,7 +2760,8 @@ class Offer extends BaseOffer
     * @version 1.0
     */
 
-   public static function getAllExtendedOffers(){
+   public static function getAllExtendedOffers()
+   {
             $date = date('Y-m-d H:i:s');
             $data = Doctrine_Query::create()
             ->select('o.id, o.extendedUrl')
@@ -2859,9 +2775,9 @@ class Offer extends BaseOffer
             ->andWhere('o.startdate <= "'.$date.'"')
             ->orderBy('o.id DESC')
             ->fetchArray();
+
         return $data;
    }
-
 
    /**
    * getAllUrls
@@ -2873,7 +2789,7 @@ class Offer extends BaseOffer
    * @author Surinderpal Singh
    * @return array array of urls
    */
-   public static  function getAllUrls($id)
+   public static function getAllUrls($id)
    {
         # get offer data
         $offer  = Doctrine_Query::create()->select("o.id, o.extendedOffer,o.authorId , o.extendedUrl,
@@ -2890,20 +2806,17 @@ class Offer extends BaseOffer
         $urlsArray = array();
 
         # check for related shop permalink
-        if(isset($offer['shop']))
-        {
+        if (isset($offer['shop'])) {
             $urlsArray[] = $offer['shop']['permaLink'];
 
             # check if a shop has editor or not
-            if(isset($offer['shop']['contentManagerId']))
-            {
+            if (isset($offer['shop']['contentManagerId'])) {
 
                 # redactie permalink
                 $redactie =  User::returnEditorUrl($offer['shop']['contentManagerId']);
 
                 # check if an editor  has permalink then add it into array
-                if(isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 )
-                {
+                if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 ) {
                     $urlsArray[] = $redactie['permalink'] ;
                 }
             }
@@ -2911,52 +2824,40 @@ class Offer extends BaseOffer
         }
 
         # check for extende offer page
-        if(isset($offer['extendedOffer']))
-        {
+        if (isset($offer['extendedOffer'])) {
             # check for extende offer url
-            if($offer['extendedUrl'] && strlen( $offer['extendedUrl'] ) > 0 )
-            {
+            if ($offer['extendedUrl'] && strlen( $offer['extendedUrl'] ) > 0 ) {
                 $urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'deals') .'/'. $offer['extendedUrl'];
             }
         }
 
         # check for shop permalink
-        if($offer['shop']['howToUse'])
-        {
+        if ($offer['shop']['howToUse']) {
             # check for extende offer url
-            if( isset($offer['shop']['permaLink'])  && strlen( $offer['shop']['permaLink'] ) > 0 )
-            {
+            if ( isset($offer['shop']['permaLink'])  && strlen( $offer['shop']['permaLink'] ) > 0 ) {
                 $urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'how-to') .'/'. $offer['shop']['permaLink'];
             }
         }
 
-
-
         # check an offerr has one or more categories
-        if(isset($offer['category']) && count($offer['category']) > 0)
-        {
+        if (isset($offer['category']) && count($offer['category']) > 0) {
 
             $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'categorieen') .'/' ;
             # traverse through all catgories
-            foreach($offer['category'] as $value)
-            {
+            foreach ($offer['category'] as $value) {
                 # check if a category has permalink then add it into array
-                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 )
-                {
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
                     $urlsArray[] = $cetgoriesPage . $value['permaLink'] ;
                 }
             }
         }
 
         # check an offerr has one or more pages
-        if(isset($offer['page']) && count($offer['page']) > 0)
-        {
+        if (isset($offer['page']) && count($offer['page']) > 0) {
             # traverse through all pages
-            foreach($offer['page'] as $value)
-            {
+            foreach ($offer['page'] as $value) {
                 # check if a page has permalink then add it into array
-                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 )
-                {
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
                     $urlsArray[] = $value['permaLink'] ;
                 }
             }
@@ -2965,13 +2866,11 @@ class Offer extends BaseOffer
         return $urlsArray ;
    }
 
-
    /**
     * update zend varnish when all codes got expired
     *
     * @param integer $id offer id
     */
-
 
    public static function updateCache($id)
    {
@@ -2983,9 +2882,6 @@ class Offer extends BaseOffer
                 ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
         $shopId = $offer['shop']['id'] ;
-
-
-
 
         $key = 'all_shopdetail'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -3010,10 +2906,7 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
 
-
-
    }
-
 
    /**
     * addConversion
@@ -3026,13 +2919,11 @@ class Offer extends BaseOffer
    public static function addConversion($id)
    {
 
-     
         $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
         $ip = ip2long($clientIP);
 
         # save conversion detail if an offer is associated with a network
-        if(Offer:: getcloakLink($id , true ))
-        {
+        if (Offer:: getcloakLink($id , true )) {
                 # check for previous cnversion of same ip
                 $data = Doctrine_Query::create()
                         ->select('count(c.id) as exists,c.id')
@@ -3043,8 +2934,7 @@ class Offer extends BaseOffer
                         ->groupBy('c.id')
                         ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-        
-            if(! $data['exists']){
+            if (! $data['exists']) {
 
                 # save conversion detail if an offer is associated with a network
                 $cnt  = new Conversions();
@@ -3056,13 +2946,11 @@ class Offer extends BaseOffer
                 $cnt->subid = md5(time()*rand(1,999));
                 $cnt->save();
 
-            } else{
-
+            } else {
 
                 # update existing conversion detail
                 $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-                if($cnt)
-                {
+                if ($cnt) {
                     $cnt->utma = $_COOKIE["__utma"];
                     $cnt->utmz = $_COOKIE["__utmz"];
                     $time = time();
@@ -3084,6 +2972,7 @@ class Offer extends BaseOffer
                                     ->where("o.deleted= '0'")
                                     ->andWhere("o.userGenerated = '0'")
                                     ->fetchArray();
+
         return $offerList;
     }
 
@@ -3094,8 +2983,8 @@ class Offer extends BaseOffer
      * @version 1.0
      */
 
-    public static function getAmountOffersCreatedLastWeek() {
-
+    public static function getAmountOffersCreatedLastWeek()
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         // - 7 days from today
@@ -3109,6 +2998,7 @@ class Offer extends BaseOffer
         ->andWhere('o.discountType != "NW"')
         ->andWhere('o.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"')
         ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+
         return $data;
     }
 
@@ -3119,8 +3009,8 @@ class Offer extends BaseOffer
      * @version 1.0
      */
 
-    public static function getTotalAmountOfOffers(){
-
+    public static function getTotalAmountOfOffers()
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         $data = Doctrine_Query::create()
@@ -3131,19 +3021,20 @@ class Offer extends BaseOffer
         ->andWhere('o.startdate <= "'.$date.'"')
         ->andWhere('o.discountType != "NW"')
         ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+
         return $data;
     }
 
     /**
      * get total No of Coupons of a shop
      * @author Raman
-     * @param integer $shopId
+     * @param  integer $shopId
      * @return integer
      * @version 1.0
      */
 
-    public static function getTotalAmountOfCouponsShop($shopId, $type=''){
-
+    public static function getTotalAmountOfCouponsShop($shopId, $type='')
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         $data1 = Doctrine_Query::create()
@@ -3155,11 +3046,12 @@ class Offer extends BaseOffer
         ->andWhere('o.shopId = '.$shopId)
         ->andWhere('o.discountType != "NW"');
 
-        if($type == 'CD'){
+        if ($type == 'CD') {
             $data1->andWhere('o.discountType = "CD"');
         }
 
         $data = $data1->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+
         return $data['count'];
     }
 
@@ -3170,8 +3062,8 @@ class Offer extends BaseOffer
      * @version 1.0
      */
 
-    public static function getTotalAmountOfOffersByShopId($shopId){
-
+    public static function getTotalAmountOfOffersByShopId($shopId)
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         $data = Doctrine_Query::create()
@@ -3189,8 +3081,8 @@ class Offer extends BaseOffer
                 $Ids[] = $arr['id'];
             endforeach;
         endif;
+
         return $Ids;
     }
-
 
 }
