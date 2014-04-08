@@ -46,75 +46,82 @@ class Offer extends BaseOffer
     }
 
     /**
-     * get related shops for common function
-     * @author kraj modified by mkaur
-     * @return array $data
+     * get offer from similar shops and similar categories
+     *
+     * @return array $similarShopsAndSimilarCategoriesOffers
      * @version 1.0
      */
-
-    public static function commongetrelatedshopsByCategory($type, $limit, $shopId=0)
+    public static function similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId = 0)
     {
         $date = date('Y-m-d H:i:s');
-        $shopData = array();
-        $catData = array();
-        //get all related category of the shop
-        $allRelatedCategory = self::getShopCategory($shopId);
-        if (sizeof($allRelatedCategory)>0) {
+        $similarShopsOffers = self::getOffersBySimilarShops($date, $limit, $shopId);
 
-            for ($i=0;$i<sizeof($allRelatedCategory);$i++) {
+        $similarCategoriesOffers = self::getOffersBySimilarCategories($date, $limit, $shopId);
+        $similarShopsAndSimilarCategoriesOffers = self::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
+            $similarShopsOffers,
+            $similarCategoriesOffers,
+            $limit
+        );
 
-                $catData[$i]=$allRelatedCategory[$i]['categoryId'];
-            }
-        }
-        //get related shop from datbase
-        $allRelatedShops=self::getRelatedShop($shopId);
-        if (sizeof($allRelatedShops)>0) {
+        return $similarShopsAndSimilarCategoriesOffers;
+    }
 
-            for ($i=0;$i<sizeof($allRelatedShops);$i++) {
-
-                $shopData[$i]=$allRelatedShops[$i]['relatedshopId'];
-            }
-        }
-        if (count($shopData) > 0) {
-
-            //  Zend_Debug::dump($shopId);
-
-            $OfferOfRelatedShops = Doctrine_Query::create()
-            ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
-            ->from('Offer o')
-            ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
-            ->leftJoin('o.shop s')
-            ->leftJoin('s.favoriteshops fv')
-            ->leftJoin('o.termandcondition terms')
-            ->leftJoin('o.vote vot')
-            ->leftJoin('s.refShopCategory c')
-            ->leftJoin('s.logo img')
-            ->where('o.deleted = 0')
-            ->andWhere('s.deleted = 0')
-            ->andWhere('s.affliateProgram = 1')
-            ->andWhere('o.discountType="CD"')
-            ->andWhere('o.Visability!="MEM"')
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
-            ->andWhere('o.userGenerated=0')
-            ->andWhereIn("o.shopId",$shopData)
-            ->andWhere("o.shopId != ".$shopId)
-            ->orderBy('o.startdate DESC')
-            ->limit($limit)
-            ->fetchArray();
-            //      echo "<pre>";
-            //      print_r($OfferOfRelatedShops); die;
+    public static function getOffersBySimilarShops($date, $limit, $shopId)
+    {
+        $similarShopsIds = self::getShopsIdsForWhereIn($shopId);
+        if (count($similarShopsIds) > 0) {
+            $similarShopsOffers = Doctrine_Query::create()
+                ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+                ->from('Offer o')
+                ->addSelect("(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
+                ->leftJoin('o.shop s')
+                ->leftJoin('s.favoriteshops fv')
+                ->leftJoin('o.termandcondition terms')
+                ->leftJoin('o.vote vot')
+                ->leftJoin('s.refShopCategory c')
+                ->leftJoin('s.logo img')
+                ->where('o.deleted = 0')
+                ->andWhere('s.deleted = 0')
+                ->andWhere('s.affliateProgram = 1')
+                ->andWhere('o.discountType="CD"')
+                ->andWhere('o.Visability!="MEM"')
+                ->andWhere('o.enddate > "'.$date.'"')
+                ->andWhere('o.startdate <= "'.$date.'"')
+                ->andWhere('o.userGenerated=0')
+                ->andWhereIn("o.shopId", $similarShopsIds)
+                ->andWhere("o.shopId != ".$shopId)
+                ->orderBy('o.startdate DESC')
+                ->limit($limit)
+                ->fetchArray();
         } else {
-
-            $OfferOfRelatedShops = array();
+            $similarShopsOffers = array();
         }
 
-        if (count($catData) > 0) {
-            //  Zend_Debug::dump($catData); die;
-            $OfferOfRelatedCats = Doctrine_Query::create()
+        return $similarShopsOffers;
+    }
+
+    public static function getShopsIdsForWhereIn($shopId)
+    {
+        $similarShopsArray = array();
+        $similarShops=self::getRelatedShops($shopId);
+
+        if (sizeof($similarShops)>0) {
+            for ($i=0; $i<sizeof($similarShops); $i++) {
+                $similarShopsArray[$i] = $similarShops[$i]['relatedshopId'];
+            }
+        }
+
+        return $similarShopsArray;
+    }
+
+    public static function getOffersBySimilarCategories($date, $limit, $shopId)
+    {
+        $similarCategoriesIds = self::getCategoriesIdsForWhereIn($shopId);
+        if (count($similarCategoriesIds) > 0) {
+            $similarCategoriesOffer = Doctrine_Query::create()
             ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
             ->from('Offer o')
-            ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
+            ->addSelect("(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
             ->leftJoin('o.shop s')
             ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
@@ -129,55 +136,86 @@ class Offer extends BaseOffer
             ->andWhere('o.enddate > "'.$date.'"')
             ->andWhere('o.startdate <= "'.$date.'"')
             ->andWhere('o.userGenerated=0')
-            ->andWhereIn("c.categoryId",$catData)
+            ->andWhereIn("c.categoryId", $similarCategoriesIds)
             ->andWhere("s.id != ".$shopId)
             ->orderBy('o.startdate DESC')
             ->limit($limit)
             ->fetchArray();
         } else {
-
-            $OfferOfRelatedCats = array();
+            $similarCategoriesOffer = array();
         }
 
+        return $similarCategoriesOffer;
+    }
+
+    public static function getCategoriesIdsForWhereIn($shopId)
+    {
+        $similarCategories = array();
+        $shopsCategories = self::getShopsCategories($shopId);
+
+        if (sizeof($shopsCategories)>0) {
+            for ($i=0; $i<sizeof($shopsCategories); $i++) {
+                $similarCategories[$i]=$shopsCategories[$i]['categoryId'];
+            }
+        }
+
+        return $similarCategories;
+    }
+
+    public static function getShopsCategories($shopId)
+    {
+        $similarCategories = Doctrine_Query::create()->from('refShopCategory r')->where('r.shopId='.$shopId)->fetchArray();
+
+        return $similarCategories;
+    }
+    public static function getRelatedShops($shopId)
+    {
+        $similarShops = Doctrine_Query::create()->from('refShopRelatedshop r')->where('r.shopId='.$shopId)->fetchArray();
+
+        return $similarShops;
+    }
+
+    public static function mergeSimilarShopsOffersAndSimilarCategoriesOffers($similarShopsOffers, $similarCategoriesOffers, $limit)
+    {
+        $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
+        $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
+        $mergeOffers = array_merge($shopsOffers, $categoriesOffers);
+
+        return $offers = self::sliceOfferByLimit($mergeOffers, $limit);
+    }
+
+    public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
+    {
         $NewOfferOfRelatedShops = array();
+        foreach ($similarShopsOffers as $shopOffer):
+            $NewOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
+        endforeach;
+
+        return $NewOfferOfRelatedShops;
+    }
+
+    public static function createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers)
+    {
         $NewOfferOfRelatedCats = array();
-
-        foreach ($OfferOfRelatedShops as $shopsoffer):
-        $NewOfferOfRelatedShops["'".$shopsoffer['id']."'"] = $shopsoffer;
+        foreach ($similarCategoriesOffers as $categoryOffer):
+            $NewOfferOfRelatedCats["'".$categoryOffer['id']."'"] = $categoryOffer;
         endforeach;
 
-        foreach ($OfferOfRelatedCats as $catsoffer):
-        $NewOfferOfRelatedCats["'".$catsoffer['id']."'"] = $catsoffer;
-        endforeach;
-
-        $result1 = array_merge($NewOfferOfRelatedShops, $NewOfferOfRelatedCats);
-
-        $newarr = array();
-        if (count($result1) > 0) {
+        return $NewOfferOfRelatedCats;
+    }
+    public static function sliceOfferByLimit($mergeOffers, $limit)
+    {
+        $offers = array();
+        if (count($mergeOffers) > 0) {
             $o = 0;
-            foreach($result1 as $newOfShop):
-
-            $newarr[$o] = @$newOfShop;
-            $o++;
+            foreach($mergeOffers as $newOfShop):
+                $offers[$o] = @$newOfShop;
+                $o++;
             endforeach;
-
         }
-        $result = array_slice($newarr, 0, $limit);
+        $slicedOffer = array_slice($offers, 0, $limit);
 
-        return $result;
-    }
-
-    public static function getShopCategory($shopId)
-    {
-        $cat = Doctrine_Query::create()->from('refShopCategory r')->where('r.shopId='.$shopId)->fetchArray();
-
-        return $cat;
-    }
-    public static function getRelatedShop($shopId)
-    {
-        $shops = Doctrine_Query::create()->from('refShopRelatedshop r')->where('r.shopId='.$shopId)->fetchArray();
-
-        return $shops;
+        return $slicedOffer;
     }
 
     ##################################################################################

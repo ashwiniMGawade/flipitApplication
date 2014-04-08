@@ -139,9 +139,8 @@ EOD;
             //to be refactored in future
                 $shopCouponCodes = Offer::commongetrelatedshops($type, $limit, $shopId);
                 break;
-            case 'relatedshopsbycat':
-            //to be refactored in future
-                $shopCouponCodes = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
+            case 'similarstoresandsimilarcategoriesoffers':
+                $shopCouponCodes = Offer::similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId);
                 break;
             case 'latestupdates':
             //to be refactored in future
