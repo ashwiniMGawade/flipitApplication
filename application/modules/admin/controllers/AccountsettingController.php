@@ -288,27 +288,41 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    		$mandrillBatchLimit = 1;
 	    		$mandrillFirstOffset = 0;
 	    		$receiversList = $this->to;
-	    		for ($mandrillBatch = 0; $mandrillBatch<=(count($receiversList)); $mandrillBatch++) {
-	    			if ($mandrillBatch >= (50000 * $mandrillBatchLimit)) {
-	    				$mandrillUpperLimit = (50000 * $mandrillBatchLimit);
-	    				$mandrillBatchLimit++;
-	    				$slicedMandrillBatch =array_slice($receiversList, $mandrillFirstOffset, $mandrillUpperLimit);
-	    				$mandrillFirstOffset =  $mandrillBatch + 1;
-	    				$message = array(
-	    						'subject'    => $emailSubject ,
-	    						'from_email' => $emailFrom,
-	    						'from_name'  => $senderName,
-	    						'to'         => $slicedMandrillBatch ,
-	    						'inline_css' => true,
-	    						"recipient_metadata" =>   $this->recipientMetaData ,
-	    						'global_merge_vars' => $dataPermalink,
-	    						'merge_vars' => $this->loginLinkAndData
-	    				);
-	    		        $mandrill->messages->sendTemplate($template_name, $template_content, $message);
-	    			}
-	    		}
-	    		die;
-				$message = $this->view->translate('Newsletter has been sent successfully');
+		    	for ($mandrillBatch = 0; $mandrillBatch<=(count($receiversList)); $mandrillBatch++) {
+				    if(count($receiversList) < (500 * $mandrillBatchLimit)){
+				        $slicedMandrillBatch =array_slice($receiversList, $mandrillBatch, count($receiversList));
+				        $message = array(
+				                        'subject'    => $emailSubject ,
+				                        'from_email' => $emailFrom,
+				                        'from_name'  => $senderName,
+				                        'to'         => $slicedMandrillBatch ,
+				                        'inline_css' => true,
+				                        "recipient_metadata" =>   $this->recipientMetaData ,
+				                        'global_merge_vars' => $dataPermalink,
+				                        'merge_vars' => $this->loginLinkAndData
+				        );
+				        $mandrill->messages->sendTemplate($template_name, $template_content, $message);
+				        exit();
+				    }
+				    elseif ($mandrillBatch >= (500 * $mandrillBatchLimit)) {
+				        $mandrillUpperLimit = (500 * $mandrillBatchLimit);
+				        $mandrillBatchLimit++;
+				        $slicedMandrillBatch =array_slice($receiversList, $mandrillFirstOffset, $mandrillUpperLimit);
+				        $mandrillFirstOffset =  $mandrillBatch + 1;
+				        $message = array(
+				                        'subject'    => $emailSubject ,
+				                        'from_email' => $emailFrom,
+				                        'from_name'  => $senderName,
+				                        'to'         => $slicedMandrillBatch ,
+				                        'inline_css' => true,
+				                        "recipient_metadata" =>   $this->recipientMetaData ,
+				                        'global_merge_vars' => $dataPermalink,
+				                        'merge_vars' => $this->loginLinkAndData
+				        );
+				        $mandrill->messages->sendTemplate($template_name, $template_content, $message);
+				    }
+				}
+ 				$message = $this->view->translate('Newsletter has been sent successfully');
 
 	    	} catch (Mandrill_Error $e) {
 
