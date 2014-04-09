@@ -43,6 +43,38 @@ class Offer extends BaseOffer
         $expiredOffers = $expiredOffers->fetchArray();
         return $expiredOffers;
     }
+    
+    /**
+     * update zend varnish when all codes got expired
+     *
+     * @param integer $id offer id
+     */
+    public static function updateCache($id)
+    {
+    	$offer  = Doctrine_Query::create()->select("o.id,s.id")
+                  ->from('Offer o')
+                  ->leftJoin("o.shop s")
+                  ->where("o.id=? " , $id)
+                  ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $shopId = $offer['shop']['id'] ;
+        $key = 'all_shopdetail'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_offerInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_latestupdatesInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_expiredOfferInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_relatedShopInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $moneySavingGuideKey ="allMoneySavingGuideLists";
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(moneySavingGuideKey);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewOfferList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
+    }
+    
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -2966,53 +2998,7 @@ class Offer extends BaseOffer
    }
 
 
-   /**
-    * update zend varnish when all codes got expired
-    *
-    * @param integer $id offer id
-    */
 
-
-   public static function updateCache($id)
-   {
-        # get offer data
-        $offer  = Doctrine_Query::create()->select("o.id,s.id")
-                ->from('Offer o')
-                ->leftJoin("o.shop s")
-                ->where("o.id=? " , $id)
-                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-        $shopId = $offer['shop']['id'] ;
-
-
-
-
-        $key = 'all_shopdetail'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'all_offerInStore'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'all_latestupdatesInStore'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'all_expiredOfferInStore'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'all_relatedShopInStore'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-
-
-
-   }
 
 
    /**

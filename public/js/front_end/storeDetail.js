@@ -8,6 +8,7 @@ function showTermAndConditions(id)
 
 function showCodeInformation(id)
 {
+	$('#code-lightbox').show();
 	$('div#offerCodeDiv'+id).show();
 	$('div#websiteOfferLink'+id).show();
 	$('div#offerButton'+id).hide();
@@ -140,14 +141,14 @@ function doVote(uId,offer , vote)
 	}
 }
 function printIt(urlToShow) {
-	alert(urlToShow);
-	  var win = window.open();
-	  self.focus();
-	  win.document.open();
-	  win.document.write('<'+'html'+'><'+'body'+'>');
-	  win.document.write('<img src ='+urlToShow+'>');
-	  win.document.write('<'+'/body'+'><'+'/html'+'>');
-	  win.document.close();
-	  win.print();
-	  win.close();
+	
+    var win = window.open();
+    self.focus();
+    win.document.open();
+    win.document.write('<'+'html'+'><'+'body'+'>');
+    win.document.write('<img src ='+urlToShow+'>');
+    win.document.write('<'+'/body'+'><'+'/html'+'>');
+    win.document.close();
+    win.print();
+    win.close();
 }	

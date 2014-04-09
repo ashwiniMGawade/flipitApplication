@@ -208,55 +208,40 @@ class OfferController extends Zend_Controller_Action {
     /**
      * get offer detail from database
      *
-     * @author kkumar1
+     * @author asharma
      */
-	public function offerdetailAction(){
+public function offerDetailAction(){
 
-		$this->_helper->layout->disableLayout();
-    	$params = $this->_getAllParams();
-    	$this->view->params = $params;
-    	$obj = new Offer();
-    	$offerId = $params['id'];
+    $this->_helper->layout->disableLayout();
+    $parameters = $this->_getAllParams();
+    $this->view->params = $parameters;
+    $offerObject = new Offer();
+    $offerId = $parameters['id'];
 
-    	$offerDetail = $obj->getOfferInfo(@$params['id']);
-    	$this->view->offerdetail = $offerDetail;
-    	$this->view->vote = @$params['vote'];
-    	$this->view->votepercentage = 0;
-    	$this->view->headTitle(@$offerDetail[0]['title']);
-
-    	if(count($offerDetail[0]['shop']['logo']) > 0):
-    			$img = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'. $offerDetail[0]['shop']['logo']['name'];
-    	
-    	else:
-    		$img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
-    	endif;
-
-    	//for facebook parameters
-    	$this->view->fbtitle = @$offerDetail[0]['title'];
-    	$this->view->fbshareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
-    	$this->view->fbImg = $img;
-    	if(isset($params['vote']) && $params['vote']!= '0'){
-	        $vote = new Vote();
-	        $votepercentage =  $vote->doVote($params);
-	        $this->view->votepercentage = $votepercentage['vote'];
-	        $this->view->voteId = $votepercentage['voteId'];
-        }
-
-        # if code type is unique then a uniq code will be displayed otherwise displaye general code
-        if( $offerDetail[0]['couponCodeType']  == 'UN')
-        {
-        	$getUniqueCode = CouponCode::returnAvailableCoupon($offerId);
-
-        	if($getUniqueCode)
-        	{
-	        	$this->view->code = $getUniqueCode['code'] ;
-        	}
-        }else
-        {
-       		$this->view->code = $offerDetail[0]['couponCode']  ;
-
-        }
+    $offerDetail = $offerObject->getOfferInfo(@$parameters['id']);
+    $this->view->offerdetail = $offerDetail;
+    $this->view->vote = @$parameters['vote'];
+    $this->view->votepercentage = 0;
+    $this->view->headTitle(@$offerDetail[0]['title']);
+    $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'. $offerDetail[0]['shop']['logo']['name'];
+    $this->view->facebookTitle = @$offerDetail[0]['title'];
+    $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
+    $this->view->facebookImage = $shopImage;
+if(isset($parameters['vote']) && $parameters['vote']!= '0'){
+    $vote = new Vote();
+    $votepercentage =  $vote->doVote($parameters);
+    $this->view->votepercentage = $votepercentage['vote'];
+    $this->view->voteId = $votepercentage['voteId'];
     }
+if($offerDetail[0]['couponCodeType']  == 'UN'){
+    $getUniqueCode = CouponCode::returnAvailableCoupon($offerId);
+        if($getUniqueCode){
+        $this->view->code = $getUniqueCode['code'] ;
+        }
+}else{
+    $this->view->code = $offerDetail[0]['couponCode']  ;
+    }
+ }
 	public function feedbackAction(){
     	$params = $this->_getAllParams();
     	$vote = new Vote();

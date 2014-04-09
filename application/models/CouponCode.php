@@ -13,7 +13,63 @@
 class CouponCode extends BaseCouponCode
 {
 	
-	//exportCodeList
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
+	/**
+	 * change code status
+	 * @param integer $id
+	 * @return ture
+	 */
+	public static function updateCodeStatus($id, $code, $status = 0)
+	{
+        Doctrine_Query::create()->update('CouponCode')
+        ->set('status',  $status )
+        ->where("code = '" . $code ."'")
+        ->andWhere('offerid ='.  $id)
+        ->execute();
+		# refresh varnish if no codce is available
+        $totalAvailcode  = $data = Doctrine_Query::create()
+        ->select('count(id)')
+        ->from('CouponCode c')
+        ->where("c.offerid = " . $id )
+        ->andWhere('c.status=1')
+        ->fetchOne(NULL, Doctrine::HYDRATE_ARRAY);
+	
+        if($totalAvailcode['count'] == 0)
+        {
+            Offer::updateCache($id);
+            $varnishObj = new Varnish();
+            $varnishObj->addUrl(HTTP_PATH);
+            $varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('nieuw'));
+            $varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('populair'));
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
+            iF(LOCALE == '')
+            {
+                if(defined(HTTP_PATH_FRONTEND))
+                {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
+                }
+                else
+                {
+                    $varnishObj->addUrl(HTTP_PATH  . 'marktplaatsfeed');
+                    $varnishObj->addUrl(HTTP_PATH . 'marktplaatsmobilefeed' );
+                }
+            }
+            $varnishUrls = Offer::getAllUrls($id);
+            if(isset($varnishUrls) && count($varnishUrls) > 0)
+            {
+                foreach($varnishUrls as $value)
+                {
+                    $varnishObj->addUrl(HTTP_PATH . $value);
+                }
+            }
+        }
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
 	
 	
 	/**
@@ -88,73 +144,6 @@ class CouponCode extends BaseCouponCode
 		
 	}
 		
-	/**
-	 * change code status
-	 * @param integer $id
-	 * @return ture
-	 */
-	public static function updateCodeStatus($id,$code,$status = 0 )
-	{ 
-		 Doctrine_Query::create()->update('CouponCode')
-										->set('status',  $status )
-										->where("code = '" . $code ."'")
-										->andWhere('offerid ='.  $id) 
-										->execute();
-	 
-		# refresh varnish if no codce is available 
-		$totalAvailcode  = $data = Doctrine_Query::create()
-					->select('count(id)')
-					->from('CouponCode c')
-					->where("c.offerid = " . $id )
-					->andWhere('c.status=1')
-					->fetchOne(NULL, Doctrine::HYDRATE_ARRAY);
-		
 	
-		
-		
-		if($totalAvailcode['count'] == 0)
-		{
-			Offer::updateCache($id);
-			
-			// Add urls to refresh in Varnish
-			$varnishObj = new Varnish();
-			$varnishObj->addUrl(HTTP_PATH);
-			$varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('nieuw'));
-			$varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('populair'));
-			$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
-
-
-			# make markplaatfeed url's get refreashed only in case of kortingscode
-			iF(LOCALE == '')
-			{
-				
-				
-				if( defined(HTTP_PATH_FRONTEND) )
-				{
-					$varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
-					$varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
-					
-				}else {
-					$varnishObj->addUrl(  HTTP_PATH  . 'marktplaatsfeed');
-					$varnishObj->addUrl(  HTTP_PATH . 'marktplaatsmobilefeed' );
-				}
-			}
-
-
-				
-			# get all the urls related to an offer
-			$varnishUrls = Offer::getAllUrls( $id );
-				
-			# check $varnishUrls has atleast one url
-			if(isset($varnishUrls) && count($varnishUrls) > 0)
-			{
-				foreach($varnishUrls as $value)
-				{
-					$varnishObj->addUrl( HTTP_PATH . $value);
-				}
-			}
-			
-		}
-	
-   }
+   
 }
