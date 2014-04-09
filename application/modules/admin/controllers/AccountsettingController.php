@@ -284,21 +284,33 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    	$template_name = $this->getInvokeArg('newsletterTemplate');
 	    	$template_content = $data;
 
-	    	$message = array(
-	    			'subject'    => $emailSubject ,
-	    			'from_email' => $emailFrom,
-	    			'from_name'  => $senderName,
-	    			'to'         => $this->to ,
-	    			'inline_css' => true,
-	    			"recipient_metadata" =>   $this->recipientMetaData ,
-	    			'global_merge_vars' => $dataPermalink,
-	    			'merge_vars' => $this->loginLinkAndData
-	    	);
+	    	
 
 
-	    	try {
-
-				$mandrill->messages->sendTemplate($template_name, $template_content, $message);
+	    	try {  
+	    		$mandrillBatchLimit = 1;
+	    		$mandrillFirstOffset = 0;
+	    		for($mandrillBatch = 0; $mandrillBatch<=(count($this->to)); $mandrillBatch++) {
+	    			if ($mandrillBatch >= (1000 * $mandrillBatchLimit)) {
+	    				$mandrillBatchLimit++;
+	    				$slicedMandrillBatch =array_slice($this->to, $mandrillFirstOffset, $mandrillBatch);
+	    				$mandrillFirstOffset =  $mandrillBatch + 1;
+	    				$message = array(
+	    						'subject'    => $emailSubject ,
+	    						'from_email' => $emailFrom,
+	    						'from_name'  => $senderName,
+	    						'to'         => $this->to ,
+	    						'inline_css' => true,
+	    						"recipient_metadata" =>   $this->recipientMetaData ,
+	    						'global_merge_vars' => $dataPermalink,
+	    						'merge_vars' => $this->loginLinkAndData
+	    				);
+	    				echo 'mandrillFirstOffset--'.$mandrillFirstOffset;
+	    				echo 'mandrillBatch--'.$mandrillBatch;
+	    				//$mandrill->messages->sendTemplate($template_name, $template_content, $message);
+	    			}
+	    		}
+	    		die;
 				$message = $this->view->translate('Newsletter has been sent successfully');
 
 	    	} catch (Mandrill_Error $e) {
