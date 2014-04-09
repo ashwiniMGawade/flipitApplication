@@ -1,108 +1,110 @@
-<?php
-$offerTitle = substr($this->title, 0, 150);
-$offerDiscountImage = FrontEnd_Helper_OfferPartialFunctions::getDiscountImage($this);
-$termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($this);
-$urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($this);
-$userLoginStatus = FrontEnd_Helper_OfferPartialFunctions::getUserIsLoginOrNot();
-$offerBounceRate = "/out/offer/".$this->id;
-$dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($this->endDate);
-?>
-<!-- IF CODE EXCLUSIVE -->
-<article class="block <?php echo $this->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
-    <div class="holder">
-        <a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($this);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
-        target="_blank"
-        onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-        <!-- <img src="<?php echo $offerDiscountImage; ?>" alt="<?php echo @$this->tiles['label']?>"/>-->
-            <div class="center">
-                <div class="code-holder">
-                    <strong>20<sup>%</sup></strong>
-                        <span>off</span>
-                </div>
-            </div>
-            <footer class="bottom">code</footer>
-        </a>
-        <div class="box">
-            <div class="text">
-                <p> <?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($this, $dayDifference)?></p>
-                <a id="<?php echo $this->id ;?>"
-                href="<?php echo $urlToShow;?>"
-                rel="nofollow" class="link" target="_blank"
-                onClick="<?php echo $this->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                <?php echo $offerTitle;?>
-                </a>
-            </div>
-            <div class="buttons" id="offerButton<?php echo $this->id ;?>">
-                <a class="btn blue btn-primary"
-                href="<?php echo $urlToShow;?>"
-                rel="nofollow" target="_blank" onClick="<?php echo $this->discountType == 'CD' ? "showCodeInformation('$this->id')," : ''; ?>viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                <?php echo $this->translate('>Get code &amp; Open site'); ?>
-                </a>
-<?php
-if ($this->discountType=='PA' || $this->discountType=='PR') {
-    ?>
-                <button class="btn btn-default btn-print"><?php echo $this->translate('print now');?> <span class="ico-print"></span></button>
-    <?php
-}
-if ($this->discountType=='CD') {
-    ?>
-                <a id="<?php echo $this->id ; ?>" class = "btn orange btn-warning btn-code" vote='0' href="<?php echo $urlToShow;?>" rel="nofollow" target="_blank"onClick="showCodeInformation(<?php echo $this->id; ?>), showCodePopUp(this), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                <?php echo $this->translate('Pack this offer');?>
-                </a>
-    <?php
-}
-?>
-            </div>
-            <div class="the-code" id="offerCodeDiv<?php echo $this->id ;?>">
-                <span class="instruction"><strong><?php echo $this->translate('enter this code at checkout')?></strong></span>
-                <strong class="code-value"><?php echo $this->couponCode;?></strong>
-            </div>
 
-            <ul class="view-list">
-                <li>
 <?php
-if ($this->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) { ?>
-                    <a id="termAndConditionLink<?php echo $this->id ;?>" onclick="showTermAndConditions(<?php echo $this->id; ?>)" class="terms"
-                    href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp;
-                    <?php echo $this->translate('Conditions'); ?>
+//this header show when offers are related with similar shops
+echo FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->shopName, $this->offersType);
+?>
+<section class="section">
+<?php
+foreach ($this->offers as $offer) {
+    $offer = (object) $offer;
+    $offerTitle = substr($offer->title, 0, 150);
+    $termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
+    $urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($offer);
+    $userLoginStatus = FrontEnd_Helper_OfferPartialFunctions::getUserIsLoginOrNot();
+    $offerBounceRate = "/out/offer/".$offer->id;
+    $dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);
+    ?>
+    <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
+        <div class="holder">
+            <a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
+            target="_blank"
+            onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+            <?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferImage($offer, $this->offersType);?>
+            </a>
+            <div class="box">
+                <div class="text">
+                    <p> <?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($offer, $dayDifference)?></p>
+                    <a id="<?php echo $offer->id ;?>"
+                    href="<?php echo $urlToShow;?>"
+                    rel="nofollow" class="link" target="_blank"
+                    onClick="<?php echo $offer->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+                    <?php echo $offerTitle;?>
+                    </a>
+                </div>
+                <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
+                    <a class="btn blue btn-primary"
+                    href="<?php echo $urlToShow;?>"
+                    rel="nofollow" target="_blank" onClick="<?php echo $offer->discountType == 'CD' ? "showCodeInformation('$offer->id')," : ''; ?>viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+                    <?php echo $this->translate('>Get code &amp; Open site'); ?>
                     </a>
     <?php
-    if ($termsAndConditions!='' && $termsAndConditions!=null && $this->extendedOffer =='1') {?>
-        &nbsp; | &nbsp;
+    if ($offer->discountType=='PA' || $offer->discountType=='PR') {
+        ?>
+                    <button class="btn btn-default btn-print"><?php echo $this->translate('print now');?> <span class="ico-print"></span></button>
         <?php
     }
-}?>
-<?php
-if ($this->extendedOffer =='1'):?>
-                    <a class="text-blue-link"
-                    href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_OfferPartialFunctions::__link('deals').'/'. $this->extendedUrl;?>">
-                    <?php echo $this->translate('Meer over deze code'); ?>
+    if ($offer->discountType=='CD') {
+        ?>
+                    <a id="<?php echo $offer->id ; ?>" class = "btn orange btn-warning btn-code" vote='0' href="<?php echo $urlToShow;?>" rel="nofollow" target="_blank"onClick="showCodeInformation(<?php echo $offer->id; ?>), showCodePopUp(this), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+                    <?php echo $this->translate('Pack this offer');?>
                     </a>
+        <?php
+    }
+    ?>
+                </div>
+                <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
+                    <span class="instruction"><strong><?php echo $this->translate('enter this code at checkout')?></strong></span>
+                    <strong class="code-value"><?php echo $offer->couponCode;?></strong>
+                </div>
+    
+                <ul class="view-list">
+                    <li>
     <?php
-endif;?>
-                </li>
-            </ul>
+    if ($offer->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) { ?>
+                        <a id="termAndConditionLink<?php echo $offer->id ;?>" onclick="showTermAndConditions(<?php echo $offer->id; ?>)" class="terms"
+                        href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp;
+                        <?php echo $this->translate('Conditions'); ?>
+                        </a>
+        <?php
+        if ($termsAndConditions!='' && $termsAndConditions!=null && $offer->extendedOffer =='1') {?>
+            &nbsp; | &nbsp;
+            <?php
+        }
+    }?>
+    <?php
+    if ($offer->extendedOffer =='1'):?>
+                        <a class="text-blue-link"
+                        href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_OfferPartialFunctions::__link('deals').'/'. $offer->extendedUrl;?>">
+                        <?php echo $this->translate('Meer over deze code'); ?>
+                        </a>
+        <?php
+    endif;?>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-    <div class="offer-box" id="websiteOfferLink<?php echo $this->id ;?>">
-        <hr class="alt2">
-        <div class="offer">
-            <span><?php echo $this->translate('Grab this offer now:');?></span>
-            <a href="<?php echo $urlToShow;?>">
-            <?php echo $this->translate('Open ');?>
-            <?php echo $this->shop['name']; ?>
-            <?php echo $this->translate(' website');?>
-            </a>
+        <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>">
+            <hr class="alt2">
+            <div class="offer">
+                <span><?php echo $this->translate('Grab this offer now:');?></span>
+                <a href="<?php echo $urlToShow;?>">
+                <?php echo $this->translate('Open ');?>
+                <?php echo $offer->shop['name']; ?>
+                <?php echo $this->translate(' website');?>
+                </a>
+            </div>
         </div>
-    </div>
-    <div  class="terms-block" id='termAndConditions<?php echo $this->id ;?>'>
-        <h2><?php echo $this->translate('Terms');?> &amp; <?php echo $this->translate('Conditions')?></h2>
-        <ol class="num-list">
-        <?php echo $termsAndConditions;?>
-        </ol>
-    </div>
-</article>
-<?php
-if(intval($this->partialCounter)== 1):
-    echo $this->render('store/_offerSignupForm.phtml');
-endif;
+        <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
+            <h2><?php echo $this->translate('Terms');?> &amp; <?php echo $this->translate('Conditions')?></h2>
+            <ol class="num-list">
+            <?php echo $termsAndConditions;?>
+            </ol>
+        </div>
+    </article>
+    <?php
+    if(intval($this->partialCounter)== 1 && $this->offersType=='simple'):
+        echo $this->render('store/_offerSignupForm.phtml');
+    endif;
+}
+?>
+</section>

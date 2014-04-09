@@ -144,7 +144,59 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         } elseif ($currentOffer->extendedOffer =='1') {
             $className .= ' blue';
         }
-
         return $className;
     }
+    
+    public static function getOfferImage($currentOffer, $offersType)
+    {
+       $offerImageDiv ='';
+       if($offersType=='simple')
+       {
+          $offerDiscountImage = self::getDiscountImage($currentOffer);
+          $altAttributeText = @$currentOffer->tiles['label'];
+          $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText);
+       } else {
+           $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
+           $altAttributeText = $currentOffer->shop['name'];
+           $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText);
+           $offerImageDiv = $imageTag . '<footer class="bottom">' . self::getOfferFooterText($currentOffer) . '</footer>';
+       }
+       return $offerImageDiv;
+    }
+    
+    public static function getShopLogoForOffer($currentOffer)
+    {
+        return PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_small_'. $currentOffer->shop['logo']['name'];
+    }
+    
+    public static function getImageTag($offerDiscountImage, $altAttributeText){
+        return '<img src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
+    }
+    
+    public static function getOfferFooterText($currentOffer)
+    {
+        $trans = Zend_Registry::get('Zend_Translate');
+        $className = 'code';
+        if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
+            $className .= $trans->translate('printable');
+        } elseif ($currentOffer->discountType=='SL') {
+            $className .= $trans->translate('sale');
+        } elseif ($currentOffer->extendedOffer =='1') {
+            $className .= $trans->translate('deal');
+        }
+        return $className;
+    }
+    
+    public static function getSectionHeader($shopName, $offersType)
+    {
+        $trans = Zend_Registry::get('Zend_Translate');
+        $SimialrShopHeader = '';
+        if ($offersType=='similar') {
+            $SimialrShopHeader = '<header class="heading-box text-coupon">
+            <h2>'.$trans->translate('Coupon codes for similar stores').'</h2>
+            <strong>'.$trans->translate('Similar vouchers and discounts for'). ' ' . $shopName .'</strong>
+            </header>';
+        }
+        return $SimialrShopHeader;
+    } 
 }

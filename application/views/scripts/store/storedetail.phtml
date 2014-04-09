@@ -47,9 +47,19 @@ $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 
 if(count($this->offers) > 0):
-    $offers = $this->partialLoop('store/_offer.phtml', $this->offers);
+    $offers = $this->partial(
+        'store/_offer.phtml',
+        array('offers' => $this->offers, 'offersType'=>'simple', 'shopName' => $this->currentStoreInformation[0]['name'])
+    );
 endif;
 
+$similarOffers = '';
+if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
+    $similarOffers = $this->partial(
+        'store/_offer.phtml',
+        array('offers' => $this->similarShopsAndSimilarCategoriesOffers, 'offersType' => 'similar', 'shopName' => $this->currentStoreInformation[0]['name'])
+    );
+endif;
 
 ?>
 <div class="header-block header-block-2">
@@ -92,168 +102,8 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
 </div> 
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-       <section class="section"> 
-       <?php echo $offers; ?>
-       </section>
-        <header class="heading-box text-coupon">
-            <h2>Coupon codes for similar stores</h2>
-            <strong>Similar vouchers and discounts for Avis</strong>
-        </header>
-        <section class="section">
-            <article class="block">
-                <div class="holder">
-                    <a href="#" class="code code-2 red">
-                        <div class="center">
-                            <div class="code-holder">
-                                <img src="images/logo-01.png" width="130" height="68" alt="image description">
-                            </div>
-                        </div>
-                        <footer class="bottom">sale</footer>
-                    </a>
-                    <div class="box">
-                        <div class="text">
-                            <p>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-                            <a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-                        </div>
-                        <div class="buttons">
-                            <button class="btn blue btn-primary">Get code &amp; Open site</button>
-                            <button class="btn orange btn-warning btn-code">Get code</button>
-                        </div>
-                        <div class="the-code the-code-2">
-                            <span class="instruction"><strong>enter this code at checkout</strong></span>
-                            <strong class="code-value">aktiecode2014</strong>
-                        </div>
-                        <ul class="view-list">
-                            <li><a href="#" class="terms">Terms &amp; conditions</a></li>
-                            <li><a href="#" class="view">- &nbsp; <span>View all spartoo.nl Vouchers</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="offer-box">
-                    <hr class="alt2">
-                    <div class="offer">
-                        <span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-                    </div>
-                </div>
-                <div class="terms-block">
-                    <h2>Terms &amp; Conditions</h2>
-                    <ol class="num-list">
-                        <li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-                        <li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-                        <li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-                        <li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-                        <li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-                        <li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-                        <li>One code is valid for a maximum of 6 people in the party.</li>
-                        <li>Please present the code to your waiter/waitress when ordering your meal.</li>
-                        <li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-                        <li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-                    </ol>
-                </div>
-            </article>
-            <article class="block">
-                <div class="holder">
-                    <a href="#" class="code code-2 red">
-                        <div class="center">
-                            <div class="code-holder">
-                                <img src="images/logo-01.png" width="130" height="68" alt="image description">
-                            </div>
-                        </div>
-                        <footer class="bottom">sale</footer>
-                    </a>
-                    <div class="box">
-                        <div class="text">
-                            <p>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-                            <a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-                        </div>
-                        <div class="buttons">
-                            <button class="btn blue btn-primary">Get code &amp; Open site</button>
-                            <button class="btn orange btn-warning btn-code">Get code</button>
-                        </div>
-                        <div class="the-code the-code-2">
-                            <span class="instruction"><strong>enter this code at checkout</strong></span>
-                            <strong class="code-value">aktiecode2014</strong>
-                        </div>
-                        <ul class="view-list">
-                            <li><a href="#" class="terms">Terms &amp; conditions</a></li>
-                            <li><a href="#" class="view">- &nbsp; <span>View all spartoo.nl Vouchers</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="offer-box">
-                    <hr class="alt2">
-                    <div class="offer">
-                        <span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-                    </div>
-                </div>
-                <div class="terms-block">
-                    <h2>Terms &amp; Conditions</h2>
-                    <ol class="num-list">
-                        <li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-                        <li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-                        <li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-                        <li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-                        <li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-                        <li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-                        <li>One code is valid for a maximum of 6 people in the party.</li>
-                        <li>Please present the code to your waiter/waitress when ordering your meal.</li>
-                        <li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-                        <li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-                    </ol>
-                </div>
-            </article>
-            <article class="block">
-                <div class="holder">
-                    <a href="#" class="code code-2 red">
-                        <div class="center">
-                            <div class="code-holder">
-                                <img src="images/logo-01.png" width="130" height="68" alt="image description">
-                            </div>
-                        </div>
-                        <footer class="bottom">sale</footer>
-                    </a>
-                    <div class="box">
-                        <div class="text">
-                            <p>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-                            <a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-                        </div>
-                        <div class="buttons">
-                            <button class="btn blue btn-primary">Get code &amp; Open site</button>
-                            <button class="btn orange btn-warning btn-code">Get code</button>
-                        </div>
-                        <div class="the-code the-code-2">
-                            <span class="instruction"><strong>enter this code at checkout</strong></span>
-                            <strong class="code-value">aktiecode2014</strong>
-                        </div>
-                        <ul class="view-list">
-                            <li><a href="#" class="terms">Terms &amp; conditions</a></li>
-                            <li><a href="#" class="view">- &nbsp; <span>View all spartoo.nl Vouchers</span></a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="offer-box">
-                    <hr class="alt2">
-                    <div class="offer">
-                        <span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-                    </div>
-                </div>
-                <div class="terms-block">
-                    <h2>Terms &amp; Conditions</h2>
-                    <ol class="num-list">
-                        <li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-                        <li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-                        <li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-                        <li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-                        <li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-                        <li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-                        <li>One code is valid for a maximum of 6 people in the party.</li>
-                        <li>Please present the code to your waiter/waitress when ordering your meal.</li>
-                        <li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-                        <li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-                    </ol>
-                </div>
-            </article>
-        </section>         
+    <?php echo $offers; ?>
+    <?php echo $similarOffers; ?>
 <?php
 echo $similarShopsAndSimilarCategoriesShops;
 echo $discussion;

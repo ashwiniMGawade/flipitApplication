@@ -290,9 +290,8 @@ class StoreController extends Zend_Controller_Action
         endif;
               
         $this->view->expiredOffers = $expiredOffers;
-        $relatedStoreByCategory = FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::getShopCouponCode('relatedshopsbycat', 4, $shopId));
-        $this->view->relatedshops = $relatedStoreByCategory;
-        $this->view->relatedshopsByCategory = $relatedStoreByCategory;
+        $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode('similarStoresAndSimilarCategoriesOffers', 4, $shopId);
+        $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
         $this->view->countPopularOffers = count(FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId));
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $ShopImage;
