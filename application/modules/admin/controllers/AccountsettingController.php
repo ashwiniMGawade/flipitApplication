@@ -284,17 +284,15 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    	$template_name = $this->getInvokeArg('newsletterTemplate');
 	    	$template_content = $data;
 
-	    	
-
-
 	    	try {
 	    		$mandrillBatchLimit = 1;
 	    		$mandrillFirstOffset = 0;
-	    		for ($mandrillBatch = 0; $mandrillBatch<=(count($this->to)); $mandrillBatch++) {
-	    			if ($mandrillBatch >= (1000 * $mandrillBatchLimit)) {
-	    				$mandrillUpperLimit = (1000 * $mandrillBatchLimit);
+	    		$receiversList = $this->to;
+	    		for ($mandrillBatch = 0; $mandrillBatch<=(count($receiversList)); $mandrillBatch++) {
+	    			if ($mandrillBatch >= (50000 * $mandrillBatchLimit)) {
+	    				$mandrillUpperLimit = (50000 * $mandrillBatchLimit);
 	    				$mandrillBatchLimit++;
-	    				$slicedMandrillBatch =array_slice($this->to, $mandrillFirstOffset, $mandrillUpperLimit);
+	    				$slicedMandrillBatch =array_slice($receiversList, $mandrillFirstOffset, $mandrillUpperLimit);
 	    				$mandrillFirstOffset =  $mandrillBatch + 1;
 	    				$message = array(
 	    						'subject'    => $emailSubject ,
@@ -306,8 +304,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    						'global_merge_vars' => $dataPermalink,
 	    						'merge_vars' => $this->loginLinkAndData
 	    				);
-	    				echo "<pre>"; print_r($slicedMandrillBatch); echo "</pre>";
-	    		        //$mandrill->messages->sendTemplate($template_name, $template_content, $message);
+	    		        $mandrill->messages->sendTemplate($template_name, $template_content, $message);
 	    			}
 	    		}
 	    		die;
