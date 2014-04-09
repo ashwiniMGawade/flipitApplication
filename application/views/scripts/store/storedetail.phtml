@@ -47,13 +47,18 @@ $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 
 if(count($this->offers) > 0):
-    $offers = $this->partial('store/_offer.phtml', array('offers' => $this->offers, 'offersType'=>'simple'));
+    $offers = $this->partial(
+        'store/_offer.phtml',
+        array('offers' => $this->offers, 'offersType'=>'simple', 'shopName' => $this->currentStoreInformation[0]['name'])
+    );
 endif;
 
 $similarOffers = '';
 if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
-    //$similarOffers = $this->partialLoop('store/_offer.phtml', $this->similarShopsAndSimilarCategoriesOffers);
-    $similarOffers = $this->partial('store/_offer.phtml', array('offers' => $this->similarShopsAndSimilarCategoriesOffers, 'offersType' => 'similar'));
+    $similarOffers = $this->partial(
+        'store/_offer.phtml',
+        array('offers' => $this->similarShopsAndSimilarCategoriesOffers, 'offersType' => 'similar', 'shopName' => $this->currentStoreInformation[0]['name'])
+    );
 endif;
 
 ?>
@@ -97,16 +102,8 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
 </div> 
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-        <section class="section">
-        <?php echo $offers; ?>
-        </section>
-        <header class="heading-box text-coupon">
-            <h2>Coupon codes for similar stores</h2>
-            <strong>Similar vouchers and discounts for Avis</strong>
-        </header>
-        <section class="section"> 
-        <?php echo $similarOffers; ?>
-        </section>
+    <?php echo $offers; ?>
+    <?php echo $similarOffers; ?>
 <?php
 echo $similarShopsAndSimilarCategoriesShops;
 echo $discussion;

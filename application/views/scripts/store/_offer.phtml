@@ -1,3 +1,9 @@
+
+<?php
+//this header show when offers are related with similar shops
+echo FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->shopName, $this->offersType);
+?>
+<section class="section">
 <?php
 foreach ($this->offers as $offer) {
     $offer = (object) $offer;
@@ -13,7 +19,7 @@ foreach ($this->offers as $offer) {
             <a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
             target="_blank"
             onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-            <?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferOffer($offer, $this->offersType);?>
+            <?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferImage($offer, $this->offersType);?>
             </a>
             <div class="box">
                 <div class="text">
@@ -100,3 +106,5 @@ foreach ($this->offers as $offer) {
         echo $this->render('store/_offerSignupForm.phtml');
     endif;
 }
+?>
+</section>

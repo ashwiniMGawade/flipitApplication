@@ -147,7 +147,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         return $className;
     }
     
-    public static function getOfferOffer($currentOffer, $offersType)
+    public static function getOfferImage($currentOffer, $offersType)
     {
        $offerImageDiv ='';
        if($offersType=='simple')
@@ -186,4 +186,17 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         }
         return $className;
     }
+    
+    public static function getSectionHeader($shopName, $offersType)
+    {
+    	$trans = Zend_Registry::get('Zend_Translate');
+    	$SimialrShopHeader = '';
+    	if ($offersType=='similar') {
+        $SimialrShopHeader = '<header class="heading-box text-coupon">
+        <h2>'.$trans->translate('Coupon codes for similar stores').'</h2>
+        <strong>'.$trans->translate('Similar vouchers and discounts for'). ' ' . $shopName .'</strong>
+        </header>';
+    	}
+    	return $SimialrShopHeader;
+    } 
 }
