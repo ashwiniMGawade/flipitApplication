@@ -55,14 +55,12 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $similarShopsOffers = self::getOffersBySimilarShops($date, $limit, $shopId);
-
         $similarCategoriesOffers = self::getOffersBySimilarCategories($date, $limit, $shopId);
         $similarShopsAndSimilarCategoriesOffers = self::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
             $similarShopsOffers,
             $similarCategoriesOffers,
             $limit
         );
-
         return $similarShopsAndSimilarCategoriesOffers;
     }
 
@@ -96,7 +94,6 @@ class Offer extends BaseOffer
         } else {
             $similarShopsOffers = array();
         }
-
         return $similarShopsOffers;
     }
 
@@ -104,13 +101,11 @@ class Offer extends BaseOffer
     {
         $similarShopsArray = array();
         $similarShops=self::getRelatedShops($shopId);
-
         if (sizeof($similarShops)>0) {
             for ($i=0; $i<sizeof($similarShops); $i++) {
                 $similarShopsArray[$i] = $similarShops[$i]['relatedshopId'];
             }
         }
-
         return $similarShopsArray;
     }
 
@@ -144,7 +139,6 @@ class Offer extends BaseOffer
         } else {
             $similarCategoriesOffer = array();
         }
-
         return $similarCategoriesOffer;
     }
 
@@ -152,26 +146,22 @@ class Offer extends BaseOffer
     {
         $similarCategories = array();
         $shopsCategories = self::getShopsCategories($shopId);
-
         if (sizeof($shopsCategories)>0) {
             for ($i=0; $i<sizeof($shopsCategories); $i++) {
                 $similarCategories[$i]=$shopsCategories[$i]['categoryId'];
             }
         }
-
         return $similarCategories;
     }
 
     public static function getShopsCategories($shopId)
     {
         $similarCategories = Doctrine_Query::create()->from('refShopCategory r')->where('r.shopId='.$shopId)->fetchArray();
-
         return $similarCategories;
     }
     public static function getRelatedShops($shopId)
     {
         $similarShops = Doctrine_Query::create()->from('refShopRelatedshop r')->where('r.shopId='.$shopId)->fetchArray();
-
         return $similarShops;
     }
 
@@ -180,7 +170,6 @@ class Offer extends BaseOffer
         $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
         $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
         $mergeOffers = array_merge($shopsOffers, $categoriesOffers);
-
         return $offers = self::sliceOfferByLimit($mergeOffers, $limit);
     }
 
@@ -190,7 +179,6 @@ class Offer extends BaseOffer
         foreach ($similarShopsOffers as $shopOffer):
             $NewOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
         endforeach;
-
         return $NewOfferOfRelatedShops;
     }
 
@@ -200,9 +188,9 @@ class Offer extends BaseOffer
         foreach ($similarCategoriesOffers as $categoryOffer):
             $NewOfferOfRelatedCats["'".$categoryOffer['id']."'"] = $categoryOffer;
         endforeach;
-
         return $NewOfferOfRelatedCats;
     }
+    
     public static function sliceOfferByLimit($mergeOffers, $limit)
     {
         $offers = array();
@@ -214,7 +202,6 @@ class Offer extends BaseOffer
             endforeach;
         }
         $slicedOffer = array_slice($offers, 0, $limit);
-
         return $slicedOffer;
     }
 
