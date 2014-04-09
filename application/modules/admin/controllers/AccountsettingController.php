@@ -291,8 +291,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    		$mandrillBatchLimit = 1;
 	    		$mandrillFirstOffset = 0;
 	    		for ($mandrillBatch = 0; $mandrillBatch<=(count($this->to)); $mandrillBatch++) {
-	    			if ($mandrillBatch >= (2 * $mandrillBatchLimit)) {
-	    				$mandrillUpperLimit = (2 * $mandrillBatchLimit);
+	    			if ($mandrillBatch >= (1000 * $mandrillBatchLimit)) {
+	    				$mandrillUpperLimit = (1000 * $mandrillBatchLimit);
 	    				$mandrillBatchLimit++;
 	    				$slicedMandrillBatch =array_slice($this->to, $mandrillFirstOffset, $mandrillUpperLimit);
 	    				$mandrillFirstOffset =  $mandrillBatch + 1;
