@@ -113,7 +113,7 @@ class Offer extends BaseOffer
     {
         $similarCategoriesIds = self::getCategoriesIdsForWhereIn($shopId);
         if (count($similarCategoriesIds) > 0) {
-            $similarCategoriesOffers = Doctrine_Query::create()
+            $similarCategoriesOffer = Doctrine_Query::create()
             ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
             ->from('Offer o')
             ->addSelect("(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
@@ -137,9 +137,9 @@ class Offer extends BaseOffer
             ->limit($limit)
             ->fetchArray();
         } else {
-            $similarCategoriesOffers = array();
+            $similarCategoriesOffer = array();
         }
-        return $similarCategoriesOffers;
+        return $similarCategoriesOffer;
     }
 
     public static function getCategoriesIdsForWhereIn($shopId)
@@ -175,20 +175,20 @@ class Offer extends BaseOffer
 
     public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
     {
-        $newOfferOfRelatedShops = array();
+        $NewOfferOfRelatedShops = array();
         foreach ($similarShopsOffers as $shopOffer):
-            $newOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
+            $NewOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
         endforeach;
-        return $newOfferOfRelatedShops;
+        return $NewOfferOfRelatedShops;
     }
 
     public static function createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers)
     {
-        $newOfferOfRelatedCats = array();
+        $NewOfferOfRelatedCats = array();
         foreach ($similarCategoriesOffers as $categoryOffer):
-            $newOfferOfRelatedCats["'".$categoryOffer['id']."'"] = $categoryOffer;
+            $NewOfferOfRelatedCats["'".$categoryOffer['id']."'"] = $categoryOffer;
         endforeach;
-        return $newOfferOfRelatedCats;
+        return $NewOfferOfRelatedCats;
     }
     
     public static function sliceOfferByLimit($mergeOffers, $limit)
@@ -196,15 +196,140 @@ class Offer extends BaseOffer
         $offers = array();
         if (count($mergeOffers) > 0) {
             $o = 0;
-            foreach($mergeOffers as $newOffferShop):
-                $offers[$o] = @$newOffferShop;
+            foreach($mergeOffers as $newOfShop):
+                $offers[$o] = @$newOfShop;
                 $o++;
             endforeach;
         }
         $slicedOffer = array_slice($offers, 0, $limit);
         return $slicedOffer;
     }
-
+    
+    public static function getTop20Offers()
+    {
+        $cachedKeyForTop20 =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
+        if ($cachedKeyForTop20) {
+            $topVoucherCodes = self::getTopCouponCodesForShopPage(array(), 20);
+            // if top korting are less than 20 then add newest add in list
+            if (count($topVoucherCodes) < 20) {
+                $newestCodesLimit = 20 - count($topVoucherCodes);
+                $newestTopVouchercodes = self::getNewestOffers('newest', $newestCodesLimit);
+                foreach ($newestTopVouchercodes as $value) {
+                    $topVoucherCodes[] = array(
+                        'id'=> $value['shop']['id'],
+                        'permalink' => $value['shop']['permalink'],
+                        'offer' => $value
+                    );
+                }
+            }
+            FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVoucherCodes);
+        } else {
+            $topVoucherCodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('top_20_popularvaouchercode_list');
+        }
+        // traverse  $topVoucherCodes array to make required array of offers html file
+        $offers = array();
+        foreach ($topVoucherCodes as $value) {
+            $offers[] = $value['offer'];
+        }
+        return $offers;
+    }
+    /**
+     * get top kortingscode same as home page but it displayed on shop 
+     * page(only used when a shop is no money with no offers)
+     *
+     * offers will be displayed only when an offer's category == shop's category
+     *
+     * and sort poplar offers based on shop's category
+     *
+     * @param $limit integer limit for the no of offers. Default is set to 5
+     * @param $shopCategories array  no money shop categories
+     * @version 1.0
+     * @return array $data
+     */
+    public static function getTopCouponCodesForShopPage($shopCategories, $limit = 5)
+    {
+        $date = date('Y-m-d H:i:s');
+        $topCouponCodes = Doctrine_Query::create()
+        ->select('p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
+            o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
+            o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,
+            o.startDate,o.endDate,o.refOfferUrl,
+            o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name'
+        )
+        ->from('PopularCode p')
+        ->leftJoin('p.offer o')
+        ->leftJoin('o.shop s')
+        ->leftJoin('s.logo img')
+        ->leftJoin('o.termandcondition terms')
+        ->where('o.deleted =0')
+        ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+        ->andWhere('s.deleted=0')
+        ->andWhere('o.offline = 0');
+        
+        if (!empty($shopCategories)) {
+            $topCouponCodes = $topCouponCodes->leftJoin('s.refShopCategory sc')
+            ->andWhereIn('sc.categoryId', $shopCategories);
+        }
+        
+        $topCouponCodes = $topCouponCodes->andWhere('s.status = 1')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.discounttype = "CD"')
+            ->andWhere('o.userGenerated = 0')
+            ->andWhere('o.Visability != "MEM"')
+            ->orderBy('p.position ASC')
+            ->limit($limit)
+            ->fetchArray();
+        return $topCouponCodes;
+    }
+  
+    /**
+     * Get latest voucher codes for common function.
+     * 
+     * @return array $data
+     * @version 1.0
+     */
+    
+    public static function getNewestOffers($type, $limit, $shopId=0, $userId="")
+    {
+        $date = date('Y-m-d H:i:s');
+        $newestCouponCode = Doctrine_Query::create()->select(
+            's.id,s.name,
+            s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
+            s.actualUrl,terms.content,
+            o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+            o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
+            o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,
+            o.discountType,o.startdate,o.endDate,
+            img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.logo ologo')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or o.couponCodeType = 'GN'")
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability != "MEM"')
+            ->andWhere('o.userGenerated=0')
+            ->orderBy('o.startdate DESC');
+        if ($shopId!='') {
+            $newestCouponCode->andWhere('s.id = '.$shopId.'');
+        }
+        if ($userId!="") {
+            $newestCouponCode->andWhere('o.authorId = '.$userId.'');
+        }
+        $newestCouponCode = $newestCouponCode->limit($limit)->fetchArray();
+        return $newestCouponCode;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1684,48 +1809,6 @@ class Offer extends BaseOffer
 
     }
      /**
-      * get latest voucher codes for common function
-      * @author Raman modified by mkaur
-      * @return array $data
-      * @version 1.0
-      */
-
-     public static function commongetnewestOffers($type, $limit, $shopId=0, $userId="")
-     {
-         $date = date('Y-m-d H:i:s');
-         $data = Doctrine_Query::create()
-                ->select('s.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
-                ->from('Offer o')
-                ->leftJoin('o.shop s')
-                ->leftJoin('o.logo ologo')
-                ->leftJoin('o.vote vot')
-                ->leftJoin('s.logo img')
-                ->leftJoin('s.favoriteshops fv')
-                ->leftJoin('o.termandcondition terms')
-                ->where('o.deleted = 0' )
-                ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or o.couponCodeType = 'GN'")
-                ->andWhere('s.deleted = 0')
-                ->andWhere('s.status = 1')
-                ->andWhere('o.enddate > "'.$date.'"')
-                ->andWhere('o.startdate <= "'.$date.'"')
-                ->andWhere('o.discountType != "NW"')
-                ->andWhere('o.discounttype="CD"')
-                ->andWhere('o.Visability != "MEM"')
-            //  ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
-                ->andWhere('o.userGenerated=0')
-                ->orderBy('o.startdate DESC');
-                if ($shopId!='') {
-                    $data->andWhere('s.id = '.$shopId.'');
-                }
-                if ($userId!="") {
-                    $data->andWhere('o.authorId = '.$userId.'');
-                }
-                $data = $data->limit($limit)->fetchArray();
-
-                return $data;
-     }
-
-     /**
       * get latest voucher codes for rss feeds
       * @author Suridnerpal Singh
       * @return array
@@ -1995,57 +2078,6 @@ class Offer extends BaseOffer
         return $data;
 
     }
-
-    /**
-     * get top kortingscode same as home page but it displayed on shop page(only used when a shop is no money with no offers)
-     *
-     * offers will be displayed only when an offer's category == shop's category
-     *
-     * and sort poplar offers based on shop's category
-     *
-     *
-     * @param $limit integer limit for the no of offers. Default is set to 5
-     * @param $shopCategories array  no money shop categories
-     * @version 1.0
-     * @return array $data
-     */
-
-    public static function getTopCouponCodesForShopPage($shopCategories, $limit = 5)
-    {
-        $date = date('Y-m-d H:i:s');
-
-        $topCouponCodes = Doctrine_Query::create()
-            ->select('p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
-                o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name')
-            ->from('PopularCode p')
-            ->leftJoin('p.offer o')
-            ->leftJoin('o.shop s')
-            ->leftJoin('s.logo img')
-            ->leftJoin('o.termandcondition terms')
-            ->where('o.deleted =0')
-            ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-            ->andWhere('s.deleted=0')
-            ->andWhere('o.offline = 0');
-
-        if (!empty($shopCategories)) {
-            $topCouponCodes = $topCouponCodes->leftJoin('s.refShopCategory sc')
-                    ->andWhereIn('sc.categoryId', $shopCategories);
-        }
-
-        $topCouponCodes = $topCouponCodes->andWhere('s.status = 1')
-                    ->andWhere('o.enddate > "'.$date.'"')
-                    ->andWhere('o.startdate <= "'.$date.'"')
-                    ->andWhere('o.discounttype = "CD"')
-                    ->andWhere('o.userGenerated = 0')
-                    ->andWhere('o.Visability != "MEM"')
-                    ->orderBy('p.position ASC')
-                    ->limit($limit)
-                    ->fetchArray();
-
-        return $topCouponCodes;
-    }
-
-
 
     /**
      * get top kortingscode same as home page but it displayed on shop page(only used when a shop is no money with no offers)

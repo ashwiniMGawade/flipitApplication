@@ -5,7 +5,9 @@ echo FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->shopName, $t
 ?>
 <section class="section">
 <?php
+$dummyPartialCounter = '';
 foreach ($this->offers as $offer) {
+    $dummyPartialCounter++;
     $offer = (object) $offer;
     $offerTitle = substr($offer->title, 0, 150);
     $termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
@@ -102,7 +104,7 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    if(intval($this->partialCounter)== 1 && $this->offersType=='simple'):
+    if(($dummyPartialCounter == 1 && $this->offersType=='simple') || ($dummyPartialCounter == 1 && $this->offersType=='top20')):
         echo $this->render('store/_offerSignupForm.phtml');
     endif;
 }
