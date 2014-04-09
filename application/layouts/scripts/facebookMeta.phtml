@@ -1,0 +1,23 @@
+<?php 
+$domain = HTTP_HOST;
+if(isset($this->facebookTitle)){
+    $this->headMeta()->setProperty('og:title', @$this->facebookTitle);
+}
+$this->headMeta()->setProperty('og:type', 'website');
+if(isset($this->facebookShareUrl)){
+    $this->headMeta()->setProperty('og:url', @$this->facebookShareUrl);
+}
+if(isset($this->facebookDescription)){
+	$this->headMeta()->setProperty('og:description', @$this->facebookDescription);
+}
+if(isset($this->facebookLocale)){
+	$this->headMeta()->setProperty('og:locale', @$this->facebookLocale);
+}
+if(isset($this->facebookImage)){
+    $this->headMeta()->setProperty('og:image', @$this->facebookImage);
+}
+if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl"){
+    $this->headMeta()->setProperty('og:site_name', "Kortingscode.nl");
+}else{
+    $this->headMeta()->setProperty('og:site_name', "Flipit.com");
+}

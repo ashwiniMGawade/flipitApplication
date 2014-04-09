@@ -185,16 +185,28 @@ class FrontEnd_Helper_LayoutContent
         return $favicon;
     }
 
-    public static function loadFbMeta($title, $shareUrl, $fbImage)
+    public static function loadFacebookMeta($facebookTitle, $facebookShareUrl, $facebookbImage, $facebookDescription, $facebookLocale)
     {
-        $fbMetaUrl = 'fbmeta.phtml';
         $fb = new Zend_View();
         $fb->setScriptPath(APPLICATION_PATH . '/layouts/scripts/');
-        $fb->assign('fbtitle', $title);
-        $fb->assign('fbshareUrl', $shareUrl);
-        $fb->assign('fbImg', $fbImage);
-        $fbMetaUrl = 'fbmeta.phtml';
+        $fb->assign('facebookTitle', $facebookTitle);
+        $fb->assign('facebookShareUrl', $facebookShareUrl);
+        $fb->assign('facebookbImage', $facebookbImage);
+        $fb->assign('facebookDescription', $facebookDescription);
+        $fb->assign('facebookLocale', $facebookLocale);
+        $facebookMetaUrl = 'facebookMeta.phtml';
 
-        return $fbMetaUrl;
+        return $facebookMetaUrl;
+    }
+    
+    public static function loadTwitterMeta($twitterDescription, $twitterSite)
+    {
+        $twitter = new Zend_View();
+        $twitter->setScriptPath(APPLICATION_PATH . '/layouts/scripts/');
+        $twitter->assign('twitterDescription', $twitterDescription);
+        $fb->assign('twitterSite', $twitterSite);
+        $twitterMetaUrl = 'twitterMeta.phtml';
+
+        return $twitterMetaUrl;
     }
 }

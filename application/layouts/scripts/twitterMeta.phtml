@@ -1,0 +1,10 @@
+<?php 
+$domain = HTTP_HOST;
+if(isset($this->twitterDescription)){
+	$this->headMeta()->setProperty('twitter:description', @$this->twitterDescription);
+}
+if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl"){
+    $this->headMeta()->setProperty('twitter:site', "Kortingscode.nl");
+}else{
+    $this->headMeta()->setProperty('twitter:site', "Flipit.com");
+}

@@ -1,0 +1,179 @@
+<?php 
+$this->minifyHeadScript()->prependFile (HTTP_PATH."public/js/front_end/allStore.js");
+$this->minifyHeadScript()->prependFile (HTTP_PATH."public/js/front_end/sksmatt/js/easing.js");
+$this->minifyHeadScript()->prependFile (HTTP_PATH."public/js/front_end/sksmatt/js/jquery.ui.totop.js");
+$this->minifyHeadLink()->prependStylesheet(HTTP_PATH."public/js/front_end/sksmatt/css/ui.totop.css" );
+$breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate('ALL STORES')."</a>";
+$headerSearch = new FrontEnd_Helper_viewHelper();
+echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>$breadcrumb));
+?> 
+<!-- Search Outer2 Ends -->
+	<div class="new-outer">
+		<div class="alle-winkels-outer">
+        
+        	<!-- Alle Winkels Left Starts -->
+        	<div class="alle-winkels-left" id="left_container">
+           	 	<h1><?php echo $this->pageTitle;?></h1>
+             	     
+       <!-- Merchants Outer Starts -->
+      <div class="merchants-outer">
+       	
+       	<div class="merchants-bot-allstores">
+       	
+       	      <!-- CODE FOR SPECIAL REPORTS-->
+       	      <?php 
+       	     if(count($this->popularstores)){
+       	     	$i=1;
+       	     	 foreach ($this->popularstores as $pShop)
+       	         {
+       	         	$i++;
+	       	         	if($i==8){
+	       	         		break;
+	       	         	}
+       	         		if(count($pShop['shop']['logo']) > 0)
+       	            	{
+       	            			$img = PUBLIC_PATH_CDN.ltrim($pShop['shop']['logo']['imgpath'],"/")."thum_medium_".$pShop['shop']['logo']['imgname'];
+       	            		
+       	            	}else {
+       	            		$img = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
+       	            	}
+       	            	echo '<a href="'.HTTP_PATH_LOCALE.$pShop['shop']['permaLink'].'"><img src="' . $img . '"  alt="' .$pShop['shop']['name'] . '"/></a>';
+       	      		}
+				}  
+       	      ?>
+       	      <!-- END CODE FOR SPECIAL REPORTS-->
+       	      
+       	 </div>
+        </div>
+         <!-- As Seen Outer Ends -->
+            <!-- Separator Starts -->
+      			<div class="separator" style="margin:20px 0 10px 0;">&nbsp;</div>
+        	<!-- Separator Ends -->
+         <!-- Alphabet Outer Starts -->
+         
+			<!-- ABC Outer Starts -->
+            <div id='fixed' class="abc-outer">
+            <div class="abc-inner">
+            	<ul id='searchPanelForAllStore'>
+            		<?php 
+            			echo $this->searchPanel;
+            		?>
+              </ul>
+              </div>
+            </div>
+            <!-- ABC Outer Ends -->
+            <!-- Separator Starts -->
+            <div id="showerror" name="showerror" style="color:red;text-align:center;margin-bottom:10px;"></div>
+      		<div class="separator" class="mt10">&nbsp;</div>
+        	<!-- Separator Ends -->
+       	<?php 
+         if($this->stores!='' && $this->stores!=null){
+         foreach($this->stores as $key=>$s) { 
+         if($s!=null){
+         ?>
+         <div class="alphabet-outer" style="" id="<?php echo $key ?>" name="<?php echo $key ?>">
+          	<div class="popular-kortings-heading clr"><h3><?php echo $key=='abc' ? '0-9' : $key ;?></h3></div>
+            	<div class="alphabet">
+                   <?php  
+                        $actVal = ceil(count($s) / 3);
+                       if(is_float($actVal)){
+                       	
+                      		$upperBound = ceil(count($s) / 3);
+                      		$lowerBound = $upperBound -  1;
+                       }else{
+                       		$upperBound = $actVal;
+                       		$lowerBound = $actVal;
+                       }
+                      $lowerBound1 = $lowerBound;
+                      $flag= true;
+                      $flT = true;
+                      $TestUpper = true;
+                      foreach ($s as $sname) {
+                      	if($upperBound > 0){
+                      		if($flag){
+                      			echo "<ul>";
+                      			$flag =false;
+                      			$TestUpper = false;
+                      		}
+                      	?>
+                       	 <li>
+                       	 	<a href="<?php echo HTTP_PATH_LOCALE.$sname['permaLink'] ?>"><?php echo $sname['name']?></a>
+	                       	   <span>
+	                       	  <?php if(intval($sname['exclusive']) > 0){?>
+	                       	  	<img src="/public/images/front_end/icon11.png" title="<?php echo $this->translate('Exclusive deals');?>" width="" height="" />
+	                       	  	<?php } if(intval($sname['inpopular']) >0){?>
+	                       	  	<img src="/public/images/front_end/icon12.png" title="<?php echo $this->translate('Hot Discounts');?>" width="" height="" />
+	                       	  	<?php }
+	                       	  ?>
+	                       	  </span>
+	                       </li>
+                       <?php
+                        $upperBound--;
+                        }else if($lowerBound >=0){
+                      		if($flT){
+                      			echo "<ul>"; 
+                      			$flT = false;
+                      		}?>
+                      		<li><a href="<?php echo HTTP_PATH_LOCALE.$sname['permaLink'] ?>"><?php echo $sname['name']?></a>
+	                       	  <span>
+	                       	  <?php if(intval($sname['exclusive']) > 0){?>
+	                       	  	<img src="/public/images/front_end/icon11.png" title="<?php echo $this->translate('Exclusive deals');?>" width="" height="" />
+	                       	  	<?php } if(intval($sname['inpopular']) >0){?>
+	                       	  	<img src="/public/images/front_end/icon12.png" title="<?php echo $this->translate('Hot Discounts');?>" width="" height="" />
+	                       	  	<?php }
+	                       	  	?>
+	                       	  </span>
+                       	  	</li>
+                      		<?php 
+                      		if($lowerBound > 0){
+                      		 $lowerBound--;
+                      		 
+                      		}else{
+                      			echo "</ul>";
+                      			$flT = true;
+                      			$lowerBound = $lowerBound1;
+                      		}
+                      	}
+                      	if($upperBound==0 && $TestUpper==false)
+                      	{
+                      		echo "</ul>";
+                      		$TestUpper = true;
+                      	}
+                     } 
+                   ?>
+                    
+               </div>
+          </div>
+          <?php }?>
+      <!-- Alphabet Outer Ends -->
+      <!-- Separator Starts -->
+   	  <div class="separator">&nbsp;</div>
+       <!-- Separator Ends -->
+       <?php } } else {?>
+        <div class="alphabet-outer">
+          	<div class="popular-kortings-heading text-white clr"><span><?php echo $this->char=='' ? 'Store Not Found !' : $this->char; ?></span></div>
+            	<div class="alphabet">
+                   <ul>
+                     	<li class='icon-warning-sign'><?php echo $this->translate('Store Not Found !.');?></li>
+                       	 
+                   </ul>
+             </div>
+         </div>
+      <!-- Alphabet Outer Ends -->
+      <!-- Separator Starts -->
+   	  <div class="separator">&nbsp;</div>
+       <!-- Separator Ends --> 
+       <?php 
+       }?>
+       	</div>
+            <!-- Alle Winkels Left Ends -->
+            
+           <!-- Alle Winkels Right Starts -->
+		     <div class="alle-winkels-right" id="right_container">
+		        <?php 
+		        	echo FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(7);
+				?>
+		    </div>
+            <!-- Alle Winkels Right Ends -->
+        </div>
+    </div>

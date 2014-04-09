@@ -135,17 +135,22 @@ class StoreController extends Zend_Controller_Action
         }
         //for facebook parameters
         
-        $this->view->fbtitle = @$relatedPage['pageTitle'];
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE . $relatedPage['permaLink'];
+        $this->view->facebookTitle = @$relatedPage['pageTitle'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $relatedPage['permaLink'];
         
         if(LOCALE == '' )
         {
-                $fbImage = 'logo_og.png';
+                $facebookImage = 'logo_og.png';
+                $facebookLocale = '';
+                
         }else{
-                $fbImage = 'flipit.png';
+                $facebookImage = 'flipit.png';
+                $facebookLocale = LOCALE;
                     
         }
-        $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
+        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
+        $this->view->facebookDescription =  trim(@$relatedPage['metaDescription']);
+        $this->view->facebookLocale = $facebookLocale ;
          
         
         $this->view->stores         = $chc;
@@ -278,7 +283,7 @@ class StoreController extends Zend_Controller_Action
             $urlToRedirect = HTTP_PATH_LOCALE. 'store/index';
             $this->_redirect($urlToRedirect);
         }
-
+        
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
@@ -303,7 +308,18 @@ class StoreController extends Zend_Controller_Action
         $this->view->facebookTitle = @$shopInformation[0]['overriteTitle'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->facebookImage = $ShopImage;
-
+        $this->view->facebookDescription =  trim(@$shopInformation[0]['metaDescription']);
+        if(LOCALE == '' )
+        {
+        	$facebookLocale = '';
+        
+        }else{
+        	
+        	$facebookLocale = LOCALE;
+        }
+        $this->view->facebookLocale = $facebookLocale ;
+        $this->view->twitterDescription =  trim(@$shopInformation[0]['metaDescription']);
+        
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
