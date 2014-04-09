@@ -287,13 +287,15 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    	
 
 
-	    	try {  
+	    	try {
 	    		$mandrillBatchLimit = 1;
 	    		$mandrillFirstOffset = 0;
 	    		for($mandrillBatch = 0; $mandrillBatch<=(count($this->to)); $mandrillBatch++) {
 	    			if ($mandrillBatch >= (1000 * $mandrillBatchLimit)) {
+	    				$mandrillUpperLimit = (1000 * $mandrillBatchLimit);
 	    				$mandrillBatchLimit++;
-	    				$slicedMandrillBatch =array_slice($this->to, $mandrillFirstOffset, $mandrillBatch);
+	    				echo 'mandrillFirstOffset--'.$mandrillFirstOffset.'<br>';
+	    				$slicedMandrillBatch =array_slice($this->to, $mandrillFirstOffset, $mandrillUpperLimit);
 	    				$mandrillFirstOffset =  $mandrillBatch + 1;
 	    				$message = array(
 	    						'subject'    => $emailSubject ,
@@ -305,8 +307,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    						'global_merge_vars' => $dataPermalink,
 	    						'merge_vars' => $this->loginLinkAndData
 	    				);
-	    				echo 'mandrillFirstOffset--'.$mandrillFirstOffset;
-	    				echo 'mandrillBatch--'.$mandrillBatch;
+	    				
+	    				echo 'mandrillBatch--'.$mandrillBatch.'<br>';
 	    				//$mandrill->messages->sendTemplate($template_name, $template_content, $message);
 	    			}
 	    		}
