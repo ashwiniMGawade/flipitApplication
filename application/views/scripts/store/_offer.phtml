@@ -33,24 +33,9 @@ $dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($this-
                 </a>
             </div>
             <div class="buttons" id="offerButton<?php echo $this->id ;?>">
-                <a class="btn blue btn-primary"
-                href="<?php echo $urlToShow;?>"
-                rel="nofollow" target="_blank" onClick="<?php echo $this->discountType == 'CD' ? "showCodeInformation('$this->id')," : ''; ?>viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                <?php echo $this->translate('>Get code &amp; Open site'); ?>
-                </a>
-<?php
-if ($this->discountType=='PA' || $this->discountType=='PR') {
-    ?>
-                <button class="btn btn-default btn-print"><?php echo $this->translate('print now');?> <span class="ico-print"></span></button>
-    <?php
-}
-if ($this->discountType=='CD') {
-    ?>
-                <a id="<?php echo $this->id ; ?>" class = "btn orange btn-warning btn-code" vote='0' href="<?php echo $urlToShow;?>" rel="nofollow" target="_blank"onClick="showCodeInformation(<?php echo $this->id; ?>), showCodePopUp(this), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                <?php echo $this->translate('Pack this offer');?>
-                </a>
-    <?php
-}
+<?php   
+                echo FrontEnd_Helper_OfferPartialFunctions::getMainButtonforOffer($this,$urlToShow,$offerBounceRate);	
+                echo FrontEnd_Helper_OfferPartialFunctions::getSecondButtonforOffer($this,$urlToShow,$offerBounceRate);
 ?>
             </div>
             <div class="the-code" id="offerCodeDiv<?php echo $this->id ;?>">
