@@ -516,7 +516,7 @@ EOD;
         $data = '';
         switch (strtolower($storeType)) {
             case 'all':
-                $data = Shop::getallStoreForFrontEnd();
+                $data = Shop::getallStoresForFrontEnd();
                 break;
             case 'recent':
                 $data = Shop::getrecentstores($limit);
@@ -1147,11 +1147,11 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         $i = 0;
         $char = "'".$i."'";
         $string = "<li><a onClick=scrollbyCategory('abc'); id='0' class='' href='#0-9'>0-9</a></li>";
-         foreach (range('A','Z') as $i) {
-                $NoneClass = $i=='Z' ? 'none' : '';
-                $char = "'".$i."'";
-                $string .="<li class='".$NoneClass."'><a onClick=scrollbyCategory($char); id='" . $i . "'  href='#".$i."'>$i</a></li>";
-            }
+        foreach (range('A','Z') as $i) {
+            $NoneClass = $i=='Z' ? 'none' : '';
+            $char = "'".$i."'";
+            $string .="<li class='".$NoneClass."'><a onClick=scrollbyCategory($char); id='" . $i . "'  href='#".$i."'>$i</a></li>";
+        }
 
         return $string;
     }

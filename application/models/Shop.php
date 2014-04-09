@@ -139,6 +139,69 @@ class Shop extends BaseShop {
         return $allStoresDetail;
     }
    
+    /**
+     * get all store from database
+     * @version 0.1
+     * @return Ambigous <multitype:, multitype:unknown number >
+     */
+    public static function getallStoresForFrontEnd()
+    {
+        $nowDate = date('Y-m-d 00:00:00');
+        $storeData = Doctrine_Query::create()
+        ->select('o.id,s.id, s.name, s.permaLink as permalink')
+        ->from('Shop s')
+        ->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$nowDate')) as exclusiveCount")
+        ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
+        ->leftJoin('s.offer o')
+        ->leftJoin('s.logo img')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('s.name')->fetchArray();
+
+        $generateArrayAccessKey =array();
+        foreach ($storeData as $store) {
+            if($store['name']!='' && $store['name']!=null){
+                $FirstCharacter =  strtoupper(self::filter_firstchar($store['name']));
+                if(preg_match_all('/[0-9]/',$FirstCharacter,$characterMatch)) {
+                    if(intval($characterMatch[0][0]) >=0){
+                        $FirstCharacter = 'abc';
+                    }
+                }
+
+            $generateArrayAccessKey[$FirstCharacter][$store['id']] =
+            array("id"=>$store['id'],
+                    "permaLink"=>$store['permalink'],
+                    "name"=>$store['name'],
+                    "exclusive"=>$store['exclusiveCount'],
+                    "inpopular"=>$store['popularCount']);
+            }
+        }
+        return $generateArrayAccessKey;
+    }
+
+    /**
+    * get popular store
+    * @param $limit integer no of popular shops
+    * @param $shopId integer  optional get popular shop by its id
+    * @version 1.1
+    * @return array $data
+    */
+    public static function getAllPopularStores($limit)
+    {
+        $nowDate = date('Y-m-d 00:00:00');
+        $popularStores = Doctrine_Query::create()
+        ->select('p.id,s.name,s.permaLink,img.path as imgpath, img.name as imgname')
+        ->from('PopularShop p')
+        ->leftJoin('p.shop s')
+        ->leftJoin('s.logo img')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit);
+
+        $popularStores = $popularStores->fetchArray();
+        return $popularStores;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -970,50 +1033,6 @@ public static function  getShopDetail ($shopId){
 
 /*============================Function for front-end ======================= */
 
-/**
- * get all store from database
- * @author kraj
- * @version 0.1
- * @return Ambigous <multitype:, multitype:unknown number >
- */
-public static function getallStoreForFrontEnd()
- {
-    $nowDate = date('Y-m-d 00:00:00');
-    $data = Doctrine_Query::create()
-    ->select('o.id,s.id, s.name, s.permaLink as permalink')
-    ->from('Shop s')
-    ->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$nowDate')) as exclusiveCount")
-    ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
-    ->leftJoin('s.offer o')
-    ->leftJoin('s.logo img')
-    ->where('s.deleted=0')
-    ->addWhere('s.status=1')
-    ->orderBy('s.name')->fetchArray();
-
-    //return self::generateFullFillArray($data);
-    $generateArrayAccKey =array();
-    foreach ($data as $store) {
-        if($store['name']!='' && $store['name']!=null){
-            $FirstChar =  strtoupper(self::filter_firstchar($store['name']));
-            if(preg_match_all('/[0-9]/',$FirstChar,$match)) {
-                if(intval($match[0][0]) >=0){
-                    $FirstChar = 'abc';
-                }
-            }
-
-            $generateArrayAccKey[$FirstChar][$store['id']] =
-            array("id"=>$store['id'],
-                    "permaLink"=>$store['permalink'],
-                    "name"=>$store['name'],
-                    "exclusive"=>$store['exclusiveCount'],
-                    "inpopular"=>$store['popularCount']);
-        }
-    }
-    return $generateArrayAccKey;
-
- }
-
-
  /**
   * get total view count for shop and update the total viewcount
   * and also update its offers viewcount
@@ -1132,37 +1151,6 @@ public static function getallStoreForFrontEnd()
     ->andWhere('s.status = 1')
     ->fetchArray();
     return $shopDetails;
- }
-    
-
- /**
-  * get popular store
-  * @author rkumar1 modified by spsingh1
-  * @param $limit integer no of popular shops
-  * @param $shopId integer  optional get popular shop by its id
-  * @version 1.1
-  * @return array $data
-  */
- public static function getPopularStoreAll($limit){
-
-    $nowDate = date('Y-m-d 00:00:00');
-
-    $data = Doctrine_Query::create()
-
-    ->select('p.id,s.name,s.permaLink,img.path as imgpath, img.name as imgname')
-    ->from('PopularShop p')
-    ->leftJoin('p.shop s')
-    ->leftJoin('s.logo img')
-    ->where('s.deleted=0')
-    ->addWhere('s.status=1')
-    ->orderBy('p.position ASC')
-    ->limit($limit);
-
-    $data = $data->fetchArray();
-
-    //echo "<pre>";
-    //print_r($data); die;
-    return $data;
  }
 
  /**
