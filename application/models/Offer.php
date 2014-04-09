@@ -113,7 +113,7 @@ class Offer extends BaseOffer
     {
         $similarCategoriesIds = self::getCategoriesIdsForWhereIn($shopId);
         if (count($similarCategoriesIds) > 0) {
-            $similarCategoriesOffer = Doctrine_Query::create()
+            $similarCategoriesOffers = Doctrine_Query::create()
             ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
             ->from('Offer o')
             ->addSelect("(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
@@ -137,9 +137,9 @@ class Offer extends BaseOffer
             ->limit($limit)
             ->fetchArray();
         } else {
-            $similarCategoriesOffer = array();
+            $similarCategoriesOffers = array();
         }
-        return $similarCategoriesOffer;
+        return $similarCategoriesOffers;
     }
 
     public static function getCategoriesIdsForWhereIn($shopId)
@@ -175,20 +175,20 @@ class Offer extends BaseOffer
 
     public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
     {
-        $NewOfferOfRelatedShops = array();
+        $newOfferOfRelatedShops = array();
         foreach ($similarShopsOffers as $shopOffer):
-            $NewOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
+            $newOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
         endforeach;
-        return $NewOfferOfRelatedShops;
+        return $newOfferOfRelatedShops;
     }
 
     public static function createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers)
     {
-        $NewOfferOfRelatedCats = array();
+        $newOfferOfRelatedCats = array();
         foreach ($similarCategoriesOffers as $categoryOffer):
-            $NewOfferOfRelatedCats["'".$categoryOffer['id']."'"] = $categoryOffer;
+            $newOfferOfRelatedCats["'".$categoryOffer['id']."'"] = $categoryOffer;
         endforeach;
-        return $NewOfferOfRelatedCats;
+        return $newOfferOfRelatedCats;
     }
     
     public static function sliceOfferByLimit($mergeOffers, $limit)
@@ -196,8 +196,8 @@ class Offer extends BaseOffer
         $offers = array();
         if (count($mergeOffers) > 0) {
             $o = 0;
-            foreach($mergeOffers as $newOfShop):
-                $offers[$o] = @$newOfShop;
+            foreach($mergeOffers as $newOffferShop):
+                $offers[$o] = @$newOffferShop;
                 $o++;
             endforeach;
         }

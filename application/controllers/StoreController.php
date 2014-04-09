@@ -292,7 +292,6 @@ class StoreController extends Zend_Controller_Action
         $this->view->expiredOffers = $expiredOffers;
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode('similarStoresAndSimilarCategoriesOffers', 4, $shopId);
         $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
-        $this->view->relatedshopsByCategory = $similarShopsAndSimilarCategoriesOffers;
         $this->view->countPopularOffers = count(FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId));
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $ShopImage;
