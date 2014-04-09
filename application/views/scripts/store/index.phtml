@@ -1,0 +1,126 @@
+<div class="header-block">
+        <div class="icon icon-small">
+          <img src="images/ico-02.png" width="89" height="89" alt="image description">
+        </div>
+        <div class="box">
+          <h1>All stores</h1>
+          <strong>All stores sorted out for you from A to Z</strong>
+        </div>
+      </div>
+      <div class="row">
+        <div id="content" class="col-md-8 col-sm-8">
+          <div class="content-holder">
+            <ul class="alphabet">
+<?php 
+echo $this->searchPanel;
+?>
+            </ul>
+            <div class="block">
+              <h2>Popular stores</h2>
+              <ul class="shops">
+                <?php 
+             if(count($this->popularstores)){
+                $i=1;
+                 foreach ($this->popularstores as $pShop)
+                 {
+                    $i++;
+                        if($i==8){
+                            break;
+                        }
+                        if(count($pShop['shop']['logo']) > 0)
+                        {
+                                $img = PUBLIC_PATH_CDN.ltrim($pShop['shop']['logo']['imgpath'],"/")."thum_medium_".$pShop['shop']['logo']['imgname'];
+                            
+                        }else {
+                            $img = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
+                        }
+                        echo '<li><a href="'.HTTP_PATH_LOCALE.$pShop['shop']['permaLink'].'"><img src="' . $img . '"  alt="' .$pShop['shop']['name'] . '" width="92" height="47" /></a></li>';
+                    }
+                }  
+              ?>
+              </ul>
+            </div>
+
+
+
+
+
+            <?php 
+         if($this->stores!='' && $this->stores!=null){
+         foreach($this->stores as $key=>$s) { 
+         if($s!=null){
+         ?>
+ 
+            <div class="block">
+              <h2 id="<?php echo $key ?>" name="<?php echo $key ?>"><?php echo $key=='abc' ? '0-9' : $key ;?></h2>
+              <div class="row">
+                <?php  
+                        $actVal = ceil(count($s) / 3);
+                        if(is_float($actVal)){
+                        
+                            $upperBound = ceil(count($s) / 3);
+                            $lowerBound = $upperBound -  1;
+                       }else{
+                            $upperBound = $actVal;
+                            $lowerBound = $actVal;
+                       }
+                      $lowerBound1 = $lowerBound;
+                      $flag= true;
+                      $flT = true;
+                      $TestUpper = true;
+                      foreach ($s as $sname) {
+                        if($upperBound > 0){
+                            if($flag){
+                                echo "<ul class='shop-name box col-md-4 col-sm-4'>";
+                                $flag =false;
+                                $TestUpper = false;
+                            }
+                        ?>
+                          <li>
+                            <a href="<?php echo HTTP_PATH_LOCALE.$sname['permaLink'] ?>"><?php echo $sname['name']?></a>
+                           </li>
+                      
+                         <?php
+                        $upperBound--;
+                        }else if($lowerBound >=0){
+                            if($flT){
+                                echo "<ul class='shop-name box col-md-4 col-sm-4'>"; 
+                                $flT = false;
+                            }
+                            
+                        ?>
+                       
+                            <li>
+                            <a href="<?php echo HTTP_PATH_LOCALE.$sname['permaLink'] ?>"><?php echo $sname['name']?></a>
+                           </li>
+                      
+                            <?php 
+                            if($lowerBound > 0){
+                             $lowerBound--;
+                             
+                            }else{
+                                echo "</ul>";
+                                $flT = true;
+                                $lowerBound = $lowerBound1;
+                            }
+                        }
+                        if($upperBound==0 && $TestUpper==false)
+                        { 
+                            echo "</ul>";
+                            $TestUpper = true;
+                        }
+                     } 
+                   ?>
+              </div>
+            </div>
+          <?php }?>
+
+<?php } } else {?> 
+       <?php 
+       }?>
+
+          </div>
+        </div>
+       
+      </div>
+ 
