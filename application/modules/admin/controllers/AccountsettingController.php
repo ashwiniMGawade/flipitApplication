@@ -308,7 +308,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    						'merge_vars' => $this->loginLinkAndData
 	    				);
 	    				
-	    				echo 'mandrillBatch--'.$mandrillBatch.'<br>';
+	    				echo 'mandrillBatch--'.$mandrillUpperLimit.'<br>';
 	    				//$mandrill->messages->sendTemplate($template_name, $template_content, $message);
 	    			}
 	    		}
