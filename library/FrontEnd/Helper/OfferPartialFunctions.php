@@ -59,7 +59,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $userLoginStatus = false;
         if (Auth_VisitorAdapter::hasIdentity()) :
-        $userLoginStatus = true;
+            $userLoginStatus = true;
         endif;
 
         return $userLoginStatus;
@@ -79,7 +79,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         $trans = Zend_Registry::get('Zend_Translate');
 
         if ($currentOffer->exclusiveCode == '1'):
-        $offerOption = self::getOfferOption($trans->translate('Exclusive'));
+            $offerOption = self::getOfferOption($trans->translate('Exclusive'));
         elseif ($currentOffer->editorPicks =='1'):
         $offerOption = self::getOfferOption($trans->translate('Editor'));
         endif;
@@ -99,36 +99,36 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
         $dateFormatString = '';
         if($currentOffer->discountType == "CD"):
-        $dateFormatString .= $stringAdded;
-        $dateFormatString .= ':';
-        $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
-        $dateFormatString .= ',';
+            $dateFormatString .= $stringAdded;
+            $dateFormatString .= ':';
+            $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+            $dateFormatString .= ',';
 
-        if ($dayDifference ==5 || $dayDifference ==4 || $dayDifference ==3 || $dayDifference ==2) {
-            $dateFormatString .= $stringOnly;
-            $dateFormatString .= '&nbsp;';
-            $dateFormatString .= $dayDifference;
-            $dateFormatString .= '&nbsp;';
-            $dateFormatString .= $trans->translate('days valid!');
+            if ($dayDifference ==5 || $dayDifference ==4 || $dayDifference ==3 || $dayDifference ==2) {
+                $dateFormatString .= $stringOnly;
+                $dateFormatString .= '&nbsp;';
+                $dateFormatString .= $dayDifference;
+                $dateFormatString .= '&nbsp;';
+                $dateFormatString .= $trans->translate('days valid!');
 
-        } elseif ($dayDifference ==1) {
-            $dateFormatString .= $stringOnly;
-            $dateFormatString .= '&nbsp;';
-            $dateFormatString .= $dayDifference;
-            $dateFormatString .= '&nbsp;';
-            $dateFormatString .= $trans->translate('day only!');
+            } elseif ($dayDifference ==1) {
+                $dateFormatString .= $stringOnly;
+                $dateFormatString .= '&nbsp;';
+                $dateFormatString .= $dayDifference;
+                $dateFormatString .= '&nbsp;';
+                $dateFormatString .= $trans->translate('day only!');
 
-        } elseif ($dayDifference ==0) {
-            $dateFormatString .= $trans->translate('Expires today');
+            } elseif ($dayDifference ==0) {
+                $dateFormatString .= $trans->translate('Expires today');
 
-        } else {
-            $endDate = new Zend_Date(strtotime($this->endDate));
-            $dateFormatString .= $trans->translate('Expires on').':';
-            $dateFormatString .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
-        } elseif ($currentOffer->discountType == "PR" || $currentOffer->discountType == "SL" || $currentOffer->discountType == "PA"):
-        $dateFormatString .= $stringAdded;
-        $dateFormatString .= ':';
-        $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+            } else {
+                $endDate = new Zend_Date(strtotime($this->endDate));
+                $dateFormatString .= $trans->translate('Expires on').':';
+                $dateFormatString .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
+            } elseif ($currentOffer->discountType == "PR" || $currentOffer->discountType == "SL" || $currentOffer->discountType == "PA"):
+            $dateFormatString .= $stringAdded;
+            $dateFormatString .= ':';
+            $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
         endif;
 
         return $offerOption . $dateFormatString;
@@ -149,8 +149,8 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
     
     public static function getOfferImage($currentOffer, $offersType)
     {
-       $offerImageDiv ='';
-       if($offersType=='simple')
+        $offerImageDiv ='';
+        if($offersType=='simple')
        {
           $offerDiscountImage = self::getDiscountImage($currentOffer);
           $altAttributeText = @$currentOffer->tiles['label'];

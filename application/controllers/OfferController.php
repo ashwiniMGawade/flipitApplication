@@ -87,7 +87,7 @@ class OfferController extends Zend_Controller_Action {
         $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
 
         if($flag) {
-        	$offers = Offer::commongetnewestOffers('newest', 71, $this->view->shopId);
+        	$offers = Offer::getCommonNewestOffers('newest', 71, $this->view->shopId);
         	FrontEnd_Helper_viewHelper::setInCache('all_newoffer_list', $offers);
         } else {
         	//get from cache
