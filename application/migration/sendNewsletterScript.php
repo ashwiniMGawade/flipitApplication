@@ -301,47 +301,10 @@ class SendNewsletter {
 		
 
 		try {
-			$mandrillBatchLimit = 1;
-			$mandrillFirstOffset = 0;
-			$receiversList = $this->_to;
-			for ($mandrillBatch = 0; $mandrillBatch<=(count($receiversList)); $mandrillBatch++) {
-				if(count($receiversList) < (500 * $mandrillBatchLimit)){
-					$slicedMandrillBatch =array_slice($receiversList, $mandrillBatch, count($receiversList));
-					$message = array(
-							'subject'    => $emailSubject ,
-							'from_email' => $emailFrom,
-							'from_name'  => $senderName,
-							'to'         => $slicedMandrillBatch ,
-							'inline_css' => true,
-							"recipient_metadata" =>  $this->_recipientMetaData ,
-							'global_merge_vars' => $dataPermalink,
-							'merge_vars' => $this->_loginLinkAndData
-					);
-					$mandrill->messages->sendTemplate($template_name, $template_content, $message);
-					exit();
-				}
-				elseif ($mandrillBatch >= (500 * $mandrillBatchLimit)) {
-					$mandrillUpperLimit = (500 * $mandrillBatchLimit);
-					$mandrillBatchLimit++;
-					$slicedMandrillBatch =array_slice($receiversList, $mandrillFirstOffset, $mandrillUpperLimit);
-					$mandrillFirstOffset =  $mandrillBatch + 1;
-					$message = array(
-							'subject'    => $emailSubject ,
-							'from_email' => $emailFrom,
-							'from_name'  => $senderName,
-							'to'         => $slicedMandrillBatch ,
-							'inline_css' => true,
-							"recipient_metadata" =>  $this->_recipientMetaData ,
-							'global_merge_vars' => $dataPermalink,
-							'merge_vars' => $this->_loginLinkAndData
-					);
-					$mandrill->messages->sendTemplate($template_name, $template_content, $message);
-				}
-			}
-			
+			FrontEnd_Helper_viewHelper::sendMandrillTemplateByParameters($emailSubject, $emailFrom, $senderName,
+					$this->_recipientMetaData, $dataPermalink, $this->_loginLinkAndData, $template_name, $template_content, $mandrill, $this->_to);	
 
 			# set newsletter scheduling to be false and newsletter status true. Also set sending time to be past
-
 			Signupmaxaccount::updateNewsletterSchedulingStatus();
 
 			$message = 'Newsletter has been sent successfully' ;
