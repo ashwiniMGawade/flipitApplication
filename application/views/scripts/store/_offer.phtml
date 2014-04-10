@@ -34,7 +34,7 @@ $dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($this-
             </div>
             <div class="buttons" id="offerButton<?php echo $this->id ;?>">
 <?php   
-                echo FrontEnd_Helper_OfferPartialFunctions::getMainButtonforOffer($this,$urlToShow,$offerBounceRate);	
+                echo FrontEnd_Helper_OfferPartialFunctions::getMainButtonforOffer($this,$urlToShow,$offerBounceRate);   
                 echo FrontEnd_Helper_OfferPartialFunctions::getSecondButtonforOffer($this,$urlToShow,$offerBounceRate);
 ?>
             </div>
@@ -56,8 +56,7 @@ if ($this->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!
         &nbsp; | &nbsp;
         <?php
     }
-}?>
-<?php
+}
 if ($this->extendedOffer =='1'):?>
                     <a class="text-blue-link"
                     href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_OfferPartialFunctions::__link('deals').'/'. $this->extendedUrl;?>">

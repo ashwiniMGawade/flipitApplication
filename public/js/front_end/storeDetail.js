@@ -5,10 +5,14 @@ function showTermAndConditions(id)
 	$('div#termAndConditions'+id).slideToggle();
 	$('a#termAndConditionLink'+id).toggleClass('uparrow'); 
 }
+function showPopupTermAndConditions(id)
+{
+	$('div#termAndConditionsPopup'+id).slideToggle();
+	$('a#termAndConditionLinkPopup'+id).toggleClass('uparrow'); 
+}
 
 function showCodeInformation(id)
 {
-	$('#code-lightbox').show();
 	$('div#offerCodeDiv'+id).show();
 	$('div#websiteOfferLink'+id).show();
 	$('div#offerButton'+id).hide();

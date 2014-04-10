@@ -51,7 +51,7 @@ class Offer extends BaseOffer
      */
     public static function updateCache($id)
     {
-    	$offer  = Doctrine_Query::create()->select("o.id,s.id")
+        $offer  = Doctrine_Query::create()->select("o.id,s.id")
                   ->from('Offer o')
                   ->leftJoin("o.shop s")
                   ->where("o.id=? " , $id)

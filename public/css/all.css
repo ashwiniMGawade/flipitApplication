@@ -2441,6 +2441,7 @@ input[type="button"].btn-block {
 }
 .glyphicon-remove:before {
   content: "\e014";
+  cursor: pointer;
 }
 .glyphicon-zoom-in:before {
   content: "\e015";
@@ -8899,4 +8900,17 @@ input[type="submit"]::-moz-focus-inner {
 
 .store-header-link{
 	float: left;
+}
+#fade{
+	background: none repeat scroll 0 0 #000000;
+    color: #010000;
+    cursor: wait;
+    display: none;
+    height: 100%;
+    left: 0;
+    opacity: 0.6;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 900;
 }

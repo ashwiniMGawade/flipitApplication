@@ -2,96 +2,133 @@
 
 class OfferController extends Zend_Controller_Action {
 
-	/**
-	 * override views based on modules if exists
-	 * @see Zend_Controller_Action::init()
-	 * @author Bhart
-	 */
-	public function init() {
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
+    public function init() {
+    
+        $module   = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action     = strtolower($this->getRequest()->getActionName());
+    
+        # check module specific view exists or not
+        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
+    
+            # set module specific view script path
+            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
+        }
+        else{
+            # set default module view script path
+            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
+        }
+    }
+    
+    public function offerDetailAction() {
+    
+        $this->_helper->layout->disableLayout();
+        $parameters = $this->_getAllParams();
+        $this->view->params = $parameters;
+        $offerObject = new Offer();
+        $offerId = $parameters['id'];
+    
+        $offerDetail = $offerObject->getOfferInfo(@$parameters['id']);
+        $this->view->offerdetail = $offerDetail;
+        $this->view->vote = @$parameters['vote'];
+        $this->view->votepercentage = 0;
+        $this->view->headTitle(@$offerDetail[0]['title']);
+        $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'. $offerDetail[0]['shop']['logo']['name'];
+        $this->view->facebookTitle = @$offerDetail[0]['title'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
+        $this->view->facebookImage = $shopImage;
+        if(isset($parameters['vote']) && $parameters['vote']!= '0'){
+            $vote = new Vote();
+            $votepercentage =  $vote->doVote($parameters);
+            $this->view->votepercentage = $votepercentage['vote'];
+            $this->view->voteId = $votepercentage['voteId'];
+        }
+        if($offerDetail[0]['couponCodeType']  == 'UN'){
+            $getUniqueCode = CouponCode::returnAvailableCoupon($offerId);
+            if($getUniqueCode){
+                $this->view->code = $getUniqueCode['code'] ;
+            }
+        }else{
+            $this->view->code = $offerDetail[0]['couponCode']  ;
+        }
+    
+    }
 
-		$module   = strtolower($this->getRequest()->getParam('lang'));
-		$controller = strtolower($this->getRequest()->getControllerName());
-		$action     = strtolower($this->getRequest()->getActionName());
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
+    
 
-		# check module specific view exists or not
-		if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
 
-			# set module specific view script path
-			$this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-		}
-		else{
+    /**
+     * Get offer records from the database of by cache using backend key.
+     *
+     * @author mkaur updated by kraj
+     * @version 1.0
+     */
+    public function indexAction() {
 
-			# set default module view script path
-			$this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
-		}
-	}
+       $page = Page::getPageFromPageAttr(6);
 
-	/**
-	 * Get offer records from the database of by cache using backend key.
-	 *
-	 * @author mkaur updated by kraj
-	 * @version 1.0
-	 */
-	public function indexAction() {
+        $this->view->pageTitle = @$page->pageTitle;
+        $this->view->headTitle(@$page->metaTitle);
 
-	   $page = Page::getPageFromPageAttr(6);
+        if(@$page->customHeader)
+        {
+            $this->view->layout()->customHeader = "\n" . @$page->customHeader;
+        }
 
-		$this->view->pageTitle = @$page->pageTitle;
-    	$this->view->headTitle(@$page->metaTitle);
+        $this->view->headMeta()->setName('description', @trim($page->metaDescription));
+        $params = $this->_getAllParams ();
 
-		if(@$page->customHeader)
-    	{
-    		$this->view->layout()->customHeader = "\n" . @$page->customHeader;
-    	}
+        //for facebook parameters
+        $this->view->fbtitle = @$page->pageTitle;
+        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
 
-    	$this->view->headMeta()->setName('description', @trim($page->metaDescription));
-		$params = $this->_getAllParams ();
+        if(LOCALE == '' ) {
+            $fbImage = 'logo_og.png';
+        } else {
+            $fbImage = 'flipit.png';
+        }
 
-		//for facebook parameters
-		$this->view->fbtitle = @$page->pageTitle;
-		$this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
+        $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
-		if(LOCALE == '' ) {
-			$fbImage = 'logo_og.png';
-		} else {
-			$fbImage = 'flipit.png';
-		}
+        $this->view->shopId = '';
+        $this->view->controllerName = $params['controller'];
 
-		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
+        $getPermLinkPopOffer = Page::getPageFromPageAttrInOfferPop(5);
 
-		$this->view->shopId = '';
-		$this->view->controllerName = $params['controller'];
+        //get widget and set in caching
+        $key = 'all_widget6_list';
+        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
 
-		$getPermLinkPopOffer = Page::getPageFromPageAttrInOfferPop(5);
+        if($flag) {
 
-		//get widget and set in caching
-		$key = 'all_widget6_list';
-		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
+            $widget =  FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(6);
+            FrontEnd_Helper_viewHelper::setInCache($key, $widget);
 
-		if($flag) {
+        } else {
+            $widget = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+        }
 
-			$widget =  FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(6);
-			FrontEnd_Helper_viewHelper::setInCache($key, $widget);
-
-		} else {
-			$widget = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-		}
-
-		$this->view->widget = $widget;
-		if (isset ( $params ['id'] )) :
-			$this->view->shopId = $params ['id'];
-           	$this->view->newshoplink = HTTP_PATH_LOCALE.'offer/index/id/'.$params ['id'];
-		   	$this->view->popularshoplink = HTTP_PATH_LOCALE.'offer/popularoffer/id/'.$params['id'];
-		endif;
+        $this->view->widget = $widget;
+        if (isset ( $params ['id'] )) :
+            $this->view->shopId = $params ['id'];
+            $this->view->newshoplink = HTTP_PATH_LOCALE.'offer/index/id/'.$params ['id'];
+            $this->view->popularshoplink = HTTP_PATH_LOCALE.'offer/popularoffer/id/'.$params['id'];
+        endif;
 
         $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
 
         if($flag) {
-        	$offers = Offer::commongetnewestOffers('newest', 71, $this->view->shopId);
-        	FrontEnd_Helper_viewHelper::setInCache('all_newoffer_list', $offers);
+            $offers = Offer::commongetnewestOffers('newest', 71, $this->view->shopId);
+            FrontEnd_Helper_viewHelper::setInCache('all_newoffer_list', $offers);
         } else {
-        	//get from cache
-        	$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
+            //get from cache
+            $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
 
         $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers,$this->_getAllParams(),27,3);
@@ -99,154 +136,118 @@ class OfferController extends Zend_Controller_Action {
 
       }
 
-	public function top20Action() {
+    public function top20Action() {
 
-      	$page = Page::getPageFromPageAttr(37);
-
-
-      	$this->view->pageTitle = @$page->pageTitle;
-      	$this->view->headTitle(@$page->metaTitle);
-
-      	if(@$page->customHeader)
-      	{
-      		$this->view->layout()->customHeader = "\n" . @$page->customHeader;
-      	}
-
-      	$this->view->headMeta()->setName('description', @trim($page->metaDescription));
-      	$params = $this->_getAllParams ();
-
-      	//for facebook parameters
-      	$this->view->fbtitle = @$page->pageTitle;
-      	$this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('top-20');
-
-      	if(LOCALE == '' ) {
-      		$fbImage = 'logo_og.png';
-      	} else {
-      		$fbImage = 'flipit.png';
-      	}
-
-      	$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
-
-      	$this->view->shopId = '';
-      	$this->view->controllerName = $params['controller'];
-
-      	$getPermLinkPopOffer = Page::getPageFromPageAttrInOfferPop(5);
-
-      	//get widget and set in caching
-      	$key = 'all_widget6_list';
-      	$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-
-      	if($flag) {
-
-      		$widget =  FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(6);
-      		FrontEnd_Helper_viewHelper::setInCache($key, $widget);
-
-      	} else {
-      		$widget = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-      	}
-
-      	$this->view->widget = $widget;
-      	if (isset ( $params ['id'] )) :
-      	$this->view->shopId = $params ['id'];
-      	$this->view->newshoplink = HTTP_PATH_LOCALE.'offer/index/id/'.$params ['id'];
-      	$this->view->popularshoplink = HTTP_PATH_LOCALE.'offer/popularoffer/id/'.$params['id'];
-      	endif;
-
-      	$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
+        $page = Page::getPageFromPageAttr(37);
 
 
-      	# fetch top 20 Popular offers
+        $this->view->pageTitle = @$page->pageTitle;
+        $this->view->headTitle(@$page->metaTitle);
 
-      	$voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
+        if(@$page->customHeader)
+        {
+            $this->view->layout()->customHeader = "\n" . @$page->customHeader;
+        }
+
+        $this->view->headMeta()->setName('description', @trim($page->metaDescription));
+        $params = $this->_getAllParams ();
+
+        //for facebook parameters
+        $this->view->fbtitle = @$page->pageTitle;
+        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('top-20');
+
+        if(LOCALE == '' ) {
+            $fbImage = 'logo_og.png';
+        } else {
+            $fbImage = 'flipit.png';
+        }
+
+        $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
+
+        $this->view->shopId = '';
+        $this->view->controllerName = $params['controller'];
+
+        $getPermLinkPopOffer = Page::getPageFromPageAttrInOfferPop(5);
+
+        //get widget and set in caching
+        $key = 'all_widget6_list';
+        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
+
+        if($flag) {
+
+            $widget =  FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(6);
+            FrontEnd_Helper_viewHelper::setInCache($key, $widget);
+
+        } else {
+            $widget = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+        }
+
+        $this->view->widget = $widget;
+        if (isset ( $params ['id'] )) :
+        $this->view->shopId = $params ['id'];
+        $this->view->newshoplink = HTTP_PATH_LOCALE.'offer/index/id/'.$params ['id'];
+        $this->view->popularshoplink = HTTP_PATH_LOCALE.'offer/popularoffer/id/'.$params['id'];
+        endif;
+
+        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
 
 
-		# fetch top 20 Popular offers
-    	$voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
+        # fetch top 20 Popular offers
 
-    	if($voucherflag){
-
-    		$topVouchercodes = Offer::getTopCouponCodesForShopPage(array(),20);
+        $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
 
 
-	  	  	# if top korting are less than 20 then add newest code tyo fill up the list upto 20
-			if(count($topVouchercodes) < 20 )
-			 {
-			 	# the limit of popular oces
-			 	$additionalCodes = 20 - count($topVouchercodes) ;
+        # fetch top 20 Popular offers
+        $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
 
-			 	# GET TOP 5 POPULAR CODE
-			 	$additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
+        if($voucherflag){
+
+            $topVouchercodes = Offer::getTopCouponCodesForShopPage(array(),20);
 
 
-			 	foreach ($additionalTopVouchercodes as $key => $value) {
+            # if top korting are less than 20 then add newest code tyo fill up the list upto 20
+            if(count($topVouchercodes) < 20 )
+             {
+                # the limit of popular oces
+                $additionalCodes = 20 - count($topVouchercodes) ;
 
-			 		$topVouchercodes[] = 	 array('id'=> $value['shop']['id'],
-			 										'permalink' => $value['shop']['permalink'],
-			 										'offer' => $value
-												  );
-			 	}
-			 }
-    		FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVouchercodes);
+                # GET TOP 5 POPULAR CODE
+                $additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
 
-    	} else {
 
-    		$topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('top_20_popularvaouchercode_list');
-    	}
+                foreach ($additionalTopVouchercodes as $key => $value) {
 
-      	# traverse  $topVouchercodes array to make required array of offers
-      	$offers = array();
+                    $topVouchercodes[] =     array('id'=> $value['shop']['id'],
+                                                    'permalink' => $value['shop']['permalink'],
+                                                    'offer' => $value
+                                                  );
+                }
+             }
+            FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVouchercodes);
 
-      	$offerIDs = array();
+        } else {
 
-      	foreach ($topVouchercodes as $key => $value) {
-  	    	$offers[] = 	 $value['offer'] ;
-      	}
+            $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('top_20_popularvaouchercode_list');
+        }
 
-      	$this->view->topPopularOffers = $offers;
+        # traverse  $topVouchercodes array to make required array of offers
+        $offers = array();
+
+        $offerIDs = array();
+
+        foreach ($topVouchercodes as $key => $value) {
+            $offers[] =      $value['offer'] ;
+        }
+
+        $this->view->topPopularOffers = $offers;
 
       }
-    /**
-     * get offer detail from database
-     *
-     * @author asharma
-     */
-public function offerDetailAction(){
 
-    $this->_helper->layout->disableLayout();
-    $parameters = $this->_getAllParams();
-    $this->view->params = $parameters;
-    $offerObject = new Offer();
-    $offerId = $parameters['id'];
-
-    $offerDetail = $offerObject->getOfferInfo(@$parameters['id']);
-    $this->view->offerdetail = $offerDetail;
-    $this->view->vote = @$parameters['vote'];
-    $this->view->votepercentage = 0;
-    $this->view->headTitle(@$offerDetail[0]['title']);
-    $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'. $offerDetail[0]['shop']['logo']['name'];
-    $this->view->facebookTitle = @$offerDetail[0]['title'];
-    $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
-    $this->view->facebookImage = $shopImage;
-if(isset($parameters['vote']) && $parameters['vote']!= '0'){
-    $vote = new Vote();
-    $votepercentage =  $vote->doVote($parameters);
-    $this->view->votepercentage = $votepercentage['vote'];
-    $this->view->voteId = $votepercentage['voteId'];
-    }
-if($offerDetail[0]['couponCodeType']  == 'UN'){
-    $getUniqueCode = CouponCode::returnAvailableCoupon($offerId);
-        if($getUniqueCode){
-        $this->view->code = $getUniqueCode['code'] ;
-        }
-}else{
-    $this->view->code = $offerDetail[0]['couponCode']  ;
-    }
- }
-	public function feedbackAction(){
-    	$params = $this->_getAllParams();
-    	$vote = new Vote();
+    public function feedbackAction(){
+        $params = $this->_getAllParams();
+        $vote = new Vote();
         echo $votepercentage =  $vote->addfeedback($params);
-    	die;
+        die;
     }
  /**
    * addOffer
@@ -257,81 +258,81 @@ if($offerDetail[0]['couponCodeType']  == 'UN'){
    * @version 1.0
    */
     public function sendiscountcouponAction() {
-		$params = $this->_getAllParams ();
-		$obj = new UserGeneratedOffer ();
-		$obj->addOffer($params );
-		die();
-	}
+        $params = $this->_getAllParams ();
+        $obj = new UserGeneratedOffer ();
+        $obj->addOffer($params );
+        die();
+    }
 
-	public function mostpopularofferAction() {
+    public function mostpopularofferAction() {
 
-		ViewCount::generatePopularCode ();
+        ViewCount::generatePopularCode ();
 
-		$popularOffer = FrontEnd_Helper_viewHelper::commonfrontendGetPopularCode ();
+        $popularOffer = FrontEnd_Helper_viewHelper::commonfrontendGetPopularCode ();
 
-		die ();
+        die ();
 
-	}
-
-
-	/**
-	 * get coupon information
-	 *
-	 * @version 1.0
-	 * @author blal
-	 */
-	public function couponinfoAction() {
+    }
 
 
+    /**
+     * get coupon information
+     *
+     * @version 1.0
+     * @author blal
+     */
+    public function couponinfoAction() {
 
-		# get cononical link
-		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-
-		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
 
 
-		$params = $this->_getAllParams ();
-		$permalink = $params ['permalink'];
-		$currentDate = date ( 'Y-m-d' );
-		// call to function from model to get offer details
-		$cpnDetails = Offer::getCouponDetails ( $permalink );
+        # get cononical link
+        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
 
-		if(count($cpnDetails[0]['logo']) > 0):
-				$img = PUBLIC_PATH_CDN.$cpnDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $cpnDetails[0]['shop']['logo']['name'];
-			
-		else:
-			$img = HTTP_PATH ."public/images/NoImage/NoImage_200x100.jpg";
-		endif;
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
 
-		//for facebook parameters
-		$this->view->fbtitle = @$cpnDetails[0]['title'];
-		$this->view->fbshareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $cpnDetails[0]['extendedUrl'];
-		$this->view->fbImg = $img;
 
-		$this->view->cpndetail = $cpnDetails;
-		if(count($cpnDetails)==0) {
-			$this->_redirect(HTTP_PATH_LOCALE.'error');
-		}
-		if(count($cpnDetails)>0):
-		$shopId = $cpnDetails[0]['shopId'];
-		else:
-		$shopId = "";
-		endif;
+        $params = $this->_getAllParams ();
+        $permalink = $params ['permalink'];
+        $currentDate = date ( 'Y-m-d' );
+        // call to function from model to get offer details
+        $cpnDetails = Offer::getCouponDetails ( $permalink );
+
+        if(count($cpnDetails[0]['logo']) > 0):
+                $img = PUBLIC_PATH_CDN.$cpnDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $cpnDetails[0]['shop']['logo']['name'];
+            
+        else:
+            $img = HTTP_PATH ."public/images/NoImage/NoImage_200x100.jpg";
+        endif;
+
+        //for facebook parameters
+        $this->view->fbtitle = @$cpnDetails[0]['title'];
+        $this->view->fbshareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $cpnDetails[0]['extendedUrl'];
+        $this->view->fbImg = $img;
+
+        $this->view->cpndetail = $cpnDetails;
+        if(count($cpnDetails)==0) {
+            $this->_redirect(HTTP_PATH_LOCALE.'error');
+        }
+        if(count($cpnDetails)>0):
+        $shopId = $cpnDetails[0]['shopId'];
+        else:
+        $shopId = "";
+        endif;
 
 
         // call to function from model to get popular offers
-		$popularOffers = FrontEnd_Helper_viewHelper::gethomeSections("popular", 3);
+        $popularOffers = FrontEnd_Helper_viewHelper::gethomeSections("popular", 3);
 
-		$this->view->popoffer = $popularOffers;
-		$this->view->headTitle(@trim($this->view->cpndetail[0]['extendedTitle']));
-		$this->view->headMeta()->appendName('description', @trim($this->view->cpndetail[0]['extendedMetaDescription']));
+        $this->view->popoffer = $popularOffers;
+        $this->view->headTitle(@trim($this->view->cpndetail[0]['extendedTitle']));
+        $this->view->headMeta()->appendName('description', @trim($this->view->cpndetail[0]['extendedMetaDescription']));
 
-		if($shopId !=""):
+        if($shopId !=""):
 
-		$relatedOffers = Offer::getrelatedOffers ( $shopId, $currentDate );
-		$this->view->reloffer = $relatedOffers;
-		endif;
-	}
+        $relatedOffers = Offer::getrelatedOffers ( $shopId, $currentDate );
+        $this->view->reloffer = $relatedOffers;
+        endif;
+    }
 /**
  * Get Popular offer from database of by cache using admin key.
  *
@@ -340,137 +341,137 @@ if($offerDetail[0]['couponCodeType']  == 'UN'){
  */
     public function popularofferAction() {
 
-    	$page = Page::getPageFromPageAttrInOffer(5);
-		$this->view->pageTitle = @$page->pageTitle;
+        $page = Page::getPageFromPageAttrInOffer(5);
+        $this->view->pageTitle = @$page->pageTitle;
 
-		if(@$page->customHeader)
-		{
-			$this->view->layout()->customHeader = "\n" . @$page->customHeader;
-		}
+        if(@$page->customHeader)
+        {
+            $this->view->layout()->customHeader = "\n" . @$page->customHeader;
+        }
 
-		$this->view->headTitle(@$page->metaTitle);
-		$this->view->headMeta()->setName('description', @trim($page->metaDescription));
-		$params = $this->_getAllParams ();
+        $this->view->headTitle(@$page->metaTitle);
+        $this->view->headMeta()->setName('description', @trim($page->metaDescription));
+        $params = $this->_getAllParams ();
 
-		//for facebook parameters
-		$this->view->fbtitle = @$page->pageTitle;
-		$this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('populair');
+        //for facebook parameters
+        $this->view->fbtitle = @$page->pageTitle;
+        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('populair');
 
-		if(LOCALE == '' )
-		{
-				$fbImage = 'logo_og.png';
-		}else{
-				$fbImage = 'flipit.png';
+        if(LOCALE == '' )
+        {
+                $fbImage = 'logo_og.png';
+        }else{
+                $fbImage = 'flipit.png';
 
-		}
-		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
+        }
+        $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
 
 
-		$this->view->shopId = '';
-		$shopId = '';
-		$this->view->controllerName = $params['controller'];
-		$getPermLinkNewOffer = Page::getPageFromPageAttrInOfferPop(6);//get only one permalink
+        $this->view->shopId = '';
+        $shopId = '';
+        $this->view->controllerName = $params['controller'];
+        $getPermLinkNewOffer = Page::getPageFromPageAttrInOfferPop(6);//get only one permalink
 
-		//get widget and set in caching
-		$key = 'all_widget5_list';
-		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-		if($flag){
+        //get widget and set in caching
+        $key = 'all_widget5_list';
+        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
+        if($flag){
 
-			$widget =  FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(5);
-			FrontEnd_Helper_viewHelper::setInCache($key, $widget);
-		}else{
+            $widget =  FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(5);
+            FrontEnd_Helper_viewHelper::setInCache($key, $widget);
+        }else{
 
-			$widget = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-		}
-		$this->view->widget = $widget;
+            $widget = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
+        }
+        $this->view->widget = $widget;
 
-		if (isset ( $params ['id'] )) :
+        if (isset ( $params ['id'] )) :
 
             $shopId = $params ['id'];
-	        $this->view->newshoplink = HTTP_PATH_LOCALE.'offer/index/id/'.$params ['id'];
-		    $this->view->popularshoplink = HTTP_PATH_LOCALE.'offer/popularoffer/id/'.$params ['id'];
-		   	$this->view->shopId = $params ['id'];
+            $this->view->newshoplink = HTTP_PATH_LOCALE.'offer/index/id/'.$params ['id'];
+            $this->view->popularshoplink = HTTP_PATH_LOCALE.'offer/popularoffer/id/'.$params ['id'];
+            $this->view->shopId = $params ['id'];
 
-		endif;
-		$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newpopularcode_list');
-
-
-		if($flag){
+        endif;
+        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newpopularcode_list');
 
 
-			$offers = Offer::commongetpopularOffers('popular', 71, $shopId);
-			FrontEnd_Helper_viewHelper::setInCache('all_newpopularcode_list', $offers);
-
-		} else {
-
-			$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newpopularcode_list');
-		}
-
-	 $paginator = FrontEnd_Helper_viewHelper::renderPagination ($offers, $this->_getAllParams (), 27, 3);
-	 $this->view->paginator = $paginator;
+        if($flag){
 
 
-	}
+            $offers = Offer::commongetpopularOffers('popular', 71, $shopId);
+            FrontEnd_Helper_viewHelper::setInCache('all_newpopularcode_list', $offers);
+
+        } else {
+
+            $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newpopularcode_list');
+        }
+
+     $paginator = FrontEnd_Helper_viewHelper::renderPagination ($offers, $this->_getAllParams (), 27, 3);
+     $this->view->paginator = $paginator;
+
+
+    }
 
 /**
  * Varify existence of favorite shop in the table.
  * @author mkaur
  */
-	public function countshopAction(){
-		$params = $this->_getAllParams ();
-	if($params){
-		$countShop = Offer::countFavShop($params['id']);
-	}
-	echo Zend_Json::encode($countShop);
-	die();
-	}
+    public function countshopAction(){
+        $params = $this->_getAllParams ();
+    if($params){
+        $countShop = Offer::countFavShop($params['id']);
+    }
+    echo Zend_Json::encode($countShop);
+    die();
+    }
 
 /**
  * Add the favorite shop in database
  * @author mkaur
  */
-	public function addtofavoriteAction(){
-		$params = $this->_getAllParams ();
-		$add = Offer::addFavoriteShop($params['shopId'],$params['flag']);
-		echo Zend_Json::encode($add);
-		die();
-	}
+    public function addtofavoriteAction(){
+        $params = $this->_getAllParams ();
+        $add = Offer::addFavoriteShop($params['shopId'],$params['flag']);
+        echo Zend_Json::encode($add);
+        die();
+    }
 /**
  * Count Vote Percentage
  * @author mkaur
  */
-	public function countvotesAction(){
-		$id = $this->getRequest()->getParam('id');
-		$countVote = Offer::countVotes($id);
-		echo Zend_Json::encode($countVote);
-		die();
-	}
+    public function countvotesAction(){
+        $id = $this->getRequest()->getParam('id');
+        $countVote = Offer::countVotes($id);
+        echo Zend_Json::encode($countVote);
+        die();
+    }
 
-	public function clearcacheAction(){
-		$cache = Zend_Registry::get('cache');
-		$cache->clean();
-		echo 'cache is cleared';
-		exit;
-	}
+    public function clearcacheAction(){
+        $cache = Zend_Registry::get('cache');
+        $cache->clean();
+        echo 'cache is cleared';
+        exit;
+    }
 
-	public function deleteexpiredAction(){
+    public function deleteexpiredAction(){
 
-		set_time_limit(10000);
-		$current_date = date('Y-m-d h:m:s',strtotime('1-1-2011'));
-		$data = Doctrine_Query::create()
-		->select('o.id')
-		->from("Offer o")
-		->where('o.enddate <'."'$current_date'")
-		->fetchArray();
-		foreach($data as $arr):
+        set_time_limit(10000);
+        $current_date = date('Y-m-d h:m:s',strtotime('1-1-2011'));
+        $data = Doctrine_Query::create()
+        ->select('o.id')
+        ->from("Offer o")
+        ->where('o.enddate <'."'$current_date'")
+        ->fetchArray();
+        foreach($data as $arr):
 
-			Offer::deleteOffer($arr['id']);
-			echo "Offer Id: ".$arr['id']."Deleted"; echo "<br>";
+            Offer::deleteOffer($arr['id']);
+            echo "Offer Id: ".$arr['id']."Deleted"; echo "<br>";
 
-		endforeach;
+        endforeach;
 
-		die('done');
-	}
+        die('done');
+    }
 }
 
