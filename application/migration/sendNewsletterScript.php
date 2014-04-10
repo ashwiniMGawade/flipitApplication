@@ -178,13 +178,13 @@ class SendNewsletter {
 				echo "\n" ;
 
 				$sentTime = new Zend_Date($settings[0]['newletter_scheduled_time']);
-				$sentTime->get('YYYY-MM-dd HH:mm:ss') ;
+				$sentTime->get('YYYY-MM-dd HH:mm:ss');
 
 				$currentTime = new Zend_Date();
 				$currentTime->setTimezone($timezone);
 
 				echo "\n" ;
-				$currentTime->get('YYYY-MM-dd HH:mm:ss') ; ;
+				$currentTime->get('YYYY-MM-dd HH:mm:ss');
 
 				# if sent time is passed then send newsletter
 				if ($currentTime->isLater($sentTime)) {
@@ -301,8 +301,11 @@ class SendNewsletter {
 		
 
 		try {
-			FrontEnd_Helper_viewHelper::sendMandrillTemplateByParameters($emailSubject, $emailFrom, $senderName,
-					$this->_recipientMetaData, $dataPermalink, $this->_loginLinkAndData, $template_name, $template_content, $mandrill, $this->_to);	
+			FrontEnd_Helper_viewHelper::sendMandrillTemplateByParameters(
+					$emailSubject, $emailFrom, $senderName,
+					$this->_recipientMetaData, $dataPermalink,
+					$this->_loginLinkAndData, $template_name,
+					$template_content, $mandrill, $this->_to);	
 
 			# set newsletter scheduling to be false and newsletter status true. Also set sending time to be past
 			Signupmaxaccount::updateNewsletterSchedulingStatus();

@@ -2073,7 +2073,7 @@ EOD;
 	{
 		sort($mandrillUsersList);
 		$mandrillUsersList1  = array_chunk($mandrillUsersList, 500);
-		$i = 0;
+		$increment = 0;
 		foreach ($mandrillUsersList1 as $mandrillUserList) {
 			$mandrillMessage = array(
 				'subject'    => $emailSubject ,
@@ -2085,10 +2085,12 @@ EOD;
 				'global_merge_vars' => $dataPermalink,
 				'merge_vars' => $loginLinkAndData
 		);
-			//echo "<pre>"; print_r($mandrillUserList);
-			$mandrill->messages->sendTemplate($template_name, $template_content, $mandrillMessage);
-			
-			
+		$jsonFile = Zend_Json_Encoder::encode($mandrillUserList);
+		$file = fopen(BASE_ROOT."images/upload/mandrill/batch_".$increment.".txt","w");
+		fwrite($file, $jsonFile);
+		fclose($file);
+		$increment++;
+		//$mandrill->messages->sendTemplate($template_name, $template_content, $mandrillMessage);
 		}
 		
 	}
