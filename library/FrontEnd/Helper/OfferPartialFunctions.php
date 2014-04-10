@@ -16,6 +16,8 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
                 $urlToShow = PUBLIC_PATH_CDN.ltrim($currentOffer->logo['path'], "/").$currentOffer->logo['name'];
             }
         }
+        
+        return $urlToShow;
        
     }
 
@@ -53,6 +55,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
         $dateDifference = abs($timeStampEnd - $timeStampStart);
         $dayDifference = floor($dateDifference/(60*60*24));
+        
     }
 
     public static function getUserIsLoginOrNot()

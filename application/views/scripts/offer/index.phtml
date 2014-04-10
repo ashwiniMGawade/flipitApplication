@@ -1,3 +1,8 @@
+<?php
+$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js" );
+$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+?>
 <div class="header-block">
 				<div class="icon icon-small">
 					<img src="<?php echo HTTP_PATH; ?>public/images/ico-02.png" width="89" height="89" alt="image description">
@@ -13,7 +18,9 @@
             
             if(count($this->paginator)>0){
 				
-            	echo $this->render('store/_offer.phtml', $this->offers);
+            	echo $this->partial('store/_offer.phtml', array('offers'=> $this->offers, 
+            			'offersType'=>$this->offersType, 'shopName'=> '', 'shop'=>'')
+            		);
 
             }else{
                  ?>
@@ -27,3 +34,7 @@
 			  ?>
 </div>
 </div>
+<?php 
+
+
+?>

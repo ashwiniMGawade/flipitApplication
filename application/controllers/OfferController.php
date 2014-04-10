@@ -86,6 +86,7 @@ class OfferController extends Zend_Controller_Action {
 
         $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         $offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
+        //echo "<pre>";print_r($offers);die;
        /* if($flag){
         	
         	$offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
@@ -95,6 +96,8 @@ class OfferController extends Zend_Controller_Action {
         	$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }*/
         $this->view->offers = $offers;
+        $this->view->offersType = 'top20';
+        $this->view->shopName = 'top20';
 		$paginator = FrontEnd_Helper_viewHelper::renderPagination($offers,$this->_getAllParams(),27,3);
         $this->view->paginator = $paginator;
 

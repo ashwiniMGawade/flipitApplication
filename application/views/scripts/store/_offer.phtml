@@ -1,12 +1,15 @@
 
 <?php
 //this header show when offers are related with similar shops
+
 echo FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->shopName, $this->offersType);
 ?>
 <section class="section">
 <?php
 //echo "<pre>";print_r($this->offers);die;
+$dummyPartialCounter = '';
 foreach ($this->offers as $offer) {
+	$dummyPartialCounter++;
     $offer = (object) $offer;
     $offerTitle = substr($offer->title, 0, 150);
     $termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
@@ -103,7 +106,7 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    if(intval($this->partialCounter)== 1 && $this->offersType=='simple'):
+    if(intval($dummyPartialCounter) == 1 && $this->offersType=='top20'):
         echo $this->render('store/_offerSignupForm.phtml');
     endif;
 }
