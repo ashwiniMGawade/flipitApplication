@@ -288,7 +288,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 	    		FrontEnd_Helper_viewHelper::sendMandrillTemplateByParameters($emailSubject, $emailFrom, $senderName,
 	    				$this->recipientMetaData, $dataPermalink, $this->loginLinkAndData, $template_name, $template_content, $mandrill, $this->to);
  				$message = $this->view->translate('Newsletter has been sent successfully');
-
+die;
 	    	} catch (Mandrill_Error $e) {
 
 				//echo 'A mandrill error occurred: ' . get_class($e) . ' - ' . $e->getMessage();

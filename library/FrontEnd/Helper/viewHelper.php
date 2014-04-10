@@ -2058,48 +2058,38 @@ EOD;
       	 return $offers;
 	}
 	
-	public static function sendMandrillTemplateByParameters($emailSubject, $emailFrom, $senderName, 
-			$recipientMetaData, $dataPermalink, $loginLinkAndData, $template_name, $template_content, $mandrill, $mandrillUsersList)
-	{
-		$mandrillUsersBatchLimit = 1;
-		$mandrillFirstOffset = 0;
-		for ($mandrillUsersBatch = 0; $mandrillUsersBatch<=(count($mandrillUsersList)); $mandrillUsersBatch++) {
-			
-			if(count($mandrillUsersList) < (500 * $mandrillUsersBatchLimit)){
-				$slicedMandrillUsersBatch =array_slice($mandrillUsersList, $mandrillUsersBatch, count($mandrillUsersList));
-				$mandrillMessage = self::mandrillTemplateParameters($emailSubject, $emailFrom, $senderName, $slicedMandrillUsersBatch, 
-						$recipientMetaData, $dataPermalink, $loginLinkAndData);
-				$mandrill->messages->sendTemplate($template_name, $template_content, $mandrillMessage);
-				exit();
-			}
-			elseif ($mandrillUsersBatch >= (500 * $mandrillUsersBatchLimit)) {
-				$mandrillUpperLimit = (500 * $mandrillUsersBatchLimit);
-				$mandrillUsersBatchLimit++;
-				$slicedMandrillUsersBatch =array_slice($mandrillUsersList, $mandrillFirstOffset, $mandrillUpperLimit);
-				$mandrillFirstOffset =  $mandrillUsersBatch + 1;
-				$mandrillMessage = self::mandrillTemplateParameters($emailSubject, $emailFrom, $senderName, $slicedMandrillUsersBatch, 
-						$recipientMetaData, $dataPermalink, $loginLinkAndData);
-				$mandrill->messages->sendTemplate($template_name, $template_content, $mandrillMessage);
-			}
-			
-		}
-	}
-	
-	public static function mandrillTemplateParameters(
-	    $emailSubject, $emailFrom, $senderName, $slicedMandrillBatch, 
-	    $recipientMetaData, $dataPermalink, $loginLinkAndData
+	public static function sendMandrillTemplateByParameters(
+		$emailSubject,
+		$emailFrom,
+		$senderName,
+	    $recipientMetaData,
+		$dataPermalink,
+		$loginLinkAndData,
+		$template_name,
+		$template_content,
+		$mandrill,
+		$mandrillUsersList
 	)
 	{
-		$mandrillMessage = array(
+		sort($mandrillUsersList);
+		$mandrillUsersList1  = array_chunk($mandrillUsersList, 500);
+		$i = 0;
+		foreach ($mandrillUsersList1 as $mandrillUserList) {
+			$mandrillMessage = array(
 				'subject'    => $emailSubject ,
 				'from_email' => $emailFrom,
 				'from_name'  => $senderName,
-				'to'         => $slicedMandrillBatch ,
+				'to'         => $mandrillUserList ,
 				'inline_css' => true,
 				"recipient_metadata" =>   $recipientMetaData,
 				'global_merge_vars' => $dataPermalink,
 				'merge_vars' => $loginLinkAndData
 		);
-		return $mandrillMessage;
+			//echo "<pre>"; print_r($mandrillUserList);
+			$mandrill->messages->sendTemplate($template_name, $template_content, $mandrillMessage);
+			
+			
+		}
+		
 	}
 }
