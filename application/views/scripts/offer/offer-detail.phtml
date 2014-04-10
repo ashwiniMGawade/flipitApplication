@@ -1,0 +1,74 @@
+<?php
+$currentOffer = (object) $this->offerdetail[0];
+$dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($this->offerdetail[0]['endDate']);
+$termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($currentOffer);
+$urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($currentOffer);
+?>
+<section id="code-lightbox">
+    <div id="popup1" class="lightbox">
+        <a  class="glyphicon glyphicon-remove btn-close" onclick = "custompopupClose()"></a>
+        <header class="head">
+            <div class="icon">
+            <?php $logo = PUBLIC_PATH_CDN.ltrim($this->offerdetail[0]['shop']['logo']['path'], "/").'thum_medium_store_'.$this->offerdetail[0]['shop']['logo']['name'];?>
+                <img  src="<?php echo $logo; ?>" width="176" height="89" alt='<?php echo $this->offerdetail[0]['shop']['name']; ?>'>
+            </div>
+            <div class="box">
+                <div class="text">
+                    <p><?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($currentOffer, $dayDifference);?></p>
+                    <h1><?php echo $this->offerdetail[0]['title']; ?></h1>
+                </div>
+            </div>
+        </header>
+        <div class="block">
+            <form role="form">
+                <fieldset>
+                    <div class="holder">
+                        <?php $code = $this->code;?>
+                        <input class="default form-control" type="text" value="<?php echo $code; ?>">
+                        <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $code; ?>')">Copy Code</a>
+                    </div>
+                    <a href="<?php echo $urlToShow; ?>" class="btn blue btn-primary">
+                        <?php echo $this->translate('Open ').$this->offerdetail[0]['shop']['name'].$this->translate(' New Year Sale Code'); ?>
+                    </a>
+                </fieldset>
+            </form>
+        </div>
+        <footer class="bottom">
+<?php 
+if ($currentOffer->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) { ?>
+            <ul class="view-list">
+                <li>
+                    <a id="termAndConditionLinkPopup<?php echo $currentOffer->id ;?>" onclick="showPopupTermAndConditions(<?php echo $currentOffer->id; ?>)" class="terms"
+                        href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp;
+                        <?php echo $this->translate('Conditions'); ?>
+                    </a>
+                </li>
+            </ul>
+<?php
+if ($termsAndConditions!='' && $termsAndConditions!=null && $currentOffer->extendedOffer =='1') {?>
+        &nbsp; | &nbsp;
+<?php
+}
+  }?>
+            <div class="logo-box">
+<?php
+if(LOCALE==''):
+                $imagePopup = HTTP_PATH."public/images/front_end/logo-popup.png";
+else:
+                $imagePopup = HTTP_PATH."public/images/logo-3.png";
+?>
+                <img src = "<?php echo $imagePopup; ?>" width="109" height="49" alt="image description">
+<?php
+endif;
+?>
+                <span><?php echo $this->translate('Exclusive discount codes and deals');?></span>
+            </div>
+        </footer>
+    </div>
+    <div  class="terms-block" id='termAndConditionsPopup<?php echo $currentOffer->id ;?>' style = "display:none;">
+        <h2><?php echo $this->translate('Terms');?> &amp; <?php echo $this->translate('Conditions')?></h2>
+            <ol class="num-list">
+                <?php echo $termsAndConditions;?>
+            </ol>
+    </div>
+</section>
