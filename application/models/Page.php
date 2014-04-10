@@ -1055,8 +1055,8 @@ public static function exportpagelist() {
 	}
 	
 	
-	public static function getPageFromPageAttributeFiltered($id){
-	
+	public static function getPageFromPageAttributeFiltered($id)
+	{
 		$pageAttribute = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
 		->from('Page p')
 		->where("pageAttributeId = ?", $id)

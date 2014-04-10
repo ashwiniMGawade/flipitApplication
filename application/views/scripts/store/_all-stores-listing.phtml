@@ -1,0 +1,67 @@
+<?php
+$storeClass = "<ul class='shop-name box col-md-4 col-sm-4'>";
+foreach ($this->storesInformation as $storeKey => $stores) :
+    if ($stores != null) :
+        ?>
+        <div class="block" id="<?php echo strtolower($storeKey=='abc' ? '0-9' : $storeKey); ?>">
+            <h2><?php echo $storeKey=='abc' ? '0-9' : $storeKey ; ?></h2>
+            <div class="row">
+        <?php
+        $storeCount = ceil(count($stores) / 3);
+
+        if (is_float($storeCount)) :
+            $storeUpperBound = ceil(count($stores) / 3);
+            $storeLowerBound = $storeUpperBound -  1;
+        else :
+            $storeUpperBound = $storeCount;
+            $storeLowerBound = $storeCount;
+        endif;
+
+        $storeFinalLowerBound = $storeLowerBound;
+        $storeFlag= true;
+        $floatFlag = true;
+        $storeUpperLimit = true;
+        
+        foreach ($stores as $store) :
+            $storeName = "<li>
+                <a href='".HTTP_PATH_LOCALE.$store['permaLink']."'>".$store['name']."</a>
+                </li>";
+        	
+            if ($storeUpperBound > 0) :
+
+                if ($storeFlag) :
+                    echo $storeClass;
+                    $storeFlag = false;
+                    $storeUpperLimit = false;
+                endif;
+                
+                echo $storeName;
+                $storeUpperBound--;
+            elseif ($storeLowerBound >= 0):
+
+                if ($floatFlag) :
+                    echo $storeClass;
+                    $floatFlag = false;
+                endif;
+                echo $storeName;
+                
+                if ($storeLowerBound > 0) :
+                    $storeLowerBound--;
+                else :
+                	echo "</ul>";
+                    $floatFlag = true;
+                    $storeLowerBound = $storeFinalLowerBound;
+                endif;
+            endif;
+
+            if ($storeUpperBound==0 && $storeUpperLimit==false) :
+                echo "</ul>";
+                $storeUpperLimit = true;
+            endif;
+        endforeach;
+        ?>
+            </div>
+        </div>
+        <?php
+    endif;
+endforeach;

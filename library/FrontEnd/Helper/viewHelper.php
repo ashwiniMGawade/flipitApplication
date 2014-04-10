@@ -270,7 +270,26 @@ EOD;
     
     }
     
+    /**
+     * generate search panle for searching in all store page
+     * @param  char  $char
+     * @return mixed $string
+     * @version 1.0
+     */
+    public static function storeSearchPanel()
+    {
+        $store = 0;
+        $storeCharacter = "'".$store."'";
+        $storeSearch = "<li><a id='0' class='' href='#0-9'>0-9</a></li>";
+        
+        foreach (range('A', 'Z') as $store) {
+            $lastStoreClass = $store=='Z' ? 'last' : '';
+            $storeCharacter = "'".$store."'";
+            $storeSearch .="<li><a id='" . $store . "'  href='#".strtolower($store)."' class='".$lastStoreClass."'>$store</a></li>";
+        }
 
+        return $storeSearch;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1131,27 +1150,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                 </a>
             </span>
         </div>';
-
-        return $string;
-    }
-
-    /**
-     * generate search panle for searching in all store page
-     * @param  char  $char
-     * @author kraj
-     * @return mixed $string
-     * @version 1.0
-     */
-    public static function storeSearchPanel()
-    {
-        $i = 0;
-        $char = "'".$i."'";
-        $string = "<li><a onClick=scrollbyCategory('abc'); id='0' class='' href='#0-9'>0-9</a></li>";
-        foreach (range('A','Z') as $i) {
-            $NoneClass = $i=='Z' ? 'none' : '';
-            $char = "'".$i."'";
-            $string .="<li class='".$NoneClass."'><a onClick=scrollbyCategory($char); id='" . $i . "'  href='#".$i."'>$i</a></li>";
-        }
 
         return $string;
     }

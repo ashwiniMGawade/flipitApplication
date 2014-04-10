@@ -160,16 +160,16 @@ class Shop extends BaseShop {
 
         $generateArrayAccessKey =array();
         foreach ($storeData as $store) {
-            if($store['name']!='' && $store['name']!=null){
+            if ($store['name']!='' && $store['name']!=null) {
                 $FirstCharacter =  strtoupper(self::filter_firstchar($store['name']));
-                if(preg_match_all('/[0-9]/',$FirstCharacter,$characterMatch)) {
-                    if(intval($characterMatch[0][0]) >=0){
+                if (preg_match_all('/[0-9]/', $FirstCharacter, $characterMatch)) {
+                    if (intval($characterMatch[0][0]) >=0) {
                         $FirstCharacter = 'abc';
                     }
                 }
 
-            $generateArrayAccessKey[$FirstCharacter][$store['id']] =
-            array("id"=>$store['id'],
+                $generateArrayAccessKey[$FirstCharacter][$store['id']] =
+                array("id"=>$store['id'],
                     "permaLink"=>$store['permalink'],
                     "name"=>$store['name'],
                     "exclusive"=>$store['exclusiveCount'],
