@@ -179,7 +179,7 @@ class OfferController extends Zend_Controller_Action {
 			 	$additionalCodes = 20 - count($topVouchercodes) ;
 
 			 	# GET TOP 5 POPULAR CODE
-			 	$additionalTopVouchercodes = $offers = Offer::commongetnewestOffers('newest', $additionalCodes);
+			 	$additionalTopVouchercodes = $offers = Offer::getCommonNewestOffers('newest', $additionalCodes);
 
 
 			 	foreach ($additionalTopVouchercodes as $key => $value) {
