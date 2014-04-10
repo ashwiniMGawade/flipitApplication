@@ -49,7 +49,12 @@ $offersCount = count($this->offers);
 if(count($this->offers) > 0):
     $offers = $this->partial(
         'store/_offer.phtml',
-        array('offers' => $this->offers, 'offersType'=>'simple', 'shopName' => $this->currentStoreInformation[0]['name'])
+        array(
+            'offers' => $this->offers,
+            'offersType'=>'simple',
+            'shopName' => $this->currentStoreInformation[0]['name'],
+            'shop' => $this->currentStoreInformation[0]
+        )
     );
 endif;
 
@@ -57,7 +62,12 @@ $similarOffers = '';
 if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
     $similarOffers = $this->partial(
         'store/_offer.phtml',
-        array('offers' => $this->similarShopsAndSimilarCategoriesOffers, 'offersType' => 'similar', 'shopName' => $this->currentStoreInformation[0]['name'])
+        array(
+            'offers' => $this->similarShopsAndSimilarCategoriesOffers,
+            'offersType' => 'similar',
+            'shopName' => $this->currentStoreInformation[0]['name'],
+            'shop' => $this->currentStoreInformation[0]
+        )
     );
 endif;
 

@@ -1,4 +1,3 @@
-
 <?php
 //this header show when offers are related with similar shops
 echo FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->shopName, $this->offersType);
@@ -103,9 +102,19 @@ foreach ($this->offers as $offer) {
             </ol>
         </div>
     </article>
+    
     <?php
-    if(($dummyPartialCounter == 1 && $this->offersType=='simple') || ($dummyPartialCounter == 1 && $this->offersType=='top20')):
-        echo $this->render('store/_offerSignupForm.phtml');
+    if(($dummyPartialCounter == 1 && $this->offersType=='simple')
+        || ($dummyPartialCounter == 1 && $this->offersType=='top20')):?>
+        <div class="block block-form <?php echo $this->shop=='' ? 'block-form-2' : ''?>">
+            <div class="holder">
+                 <div class="<?php echo $this->shop=='' ? 'ico-box' : 'icon'?>">
+                    <?php echo FrontEnd_Helper_OfferPartialFunctions::getShopLogoForSignUp($this->shop);?>
+                 </div>
+        <?php echo $this->esi(LOCALE.'store/signup');?>
+           </div>
+        </div>
+        <?php 
     endif;
 }
 ?>

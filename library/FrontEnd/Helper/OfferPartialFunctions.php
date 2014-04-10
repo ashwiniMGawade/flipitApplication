@@ -198,5 +198,17 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
             </header>';
         }
         return $SimialrShopHeader;
-    } 
+    }
+    
+    public static function getShopLogoForSignUp($shop)
+    {
+    	$imgTagWithImage = '';
+        if($shop!=null){
+           $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
+           $imgTagWithImage = '<img alt="' . $shop['logo']['name']. '" src="'. $shopLogoImage .'">';
+        } else {
+           $imgTagWithImage = '<div class="ico-mail"></div>';
+        }
+        return $imgTagWithImage;
+    }
 }

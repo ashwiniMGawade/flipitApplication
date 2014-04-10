@@ -12,7 +12,12 @@ echo $this->partial(
 if(count($this->topPopularOffers) > 0):
     echo $this->partial(
         'store/_offer.phtml',
-        array('offers' => $this->topPopularOffers, 'offersType'=>'top20', 'shopName' =>'')
+        array(
+            'offers' => $this->topPopularOffers, 
+            'offersType'=>'top20',
+           'shopName' =>'',
+           'shop' =>''
+        )
     );
 endif;
 ?>
