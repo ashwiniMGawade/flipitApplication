@@ -60,7 +60,11 @@ if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
         array('offers' => $this->similarShopsAndSimilarCategoriesOffers, 'offersType' => 'similar', 'shopName' => $this->currentStoreInformation[0]['name'])
     );
 endif;
-
+$nomoneyNocodeMessage = '';
+if ($this->currentStoreInformation[0]['affliateProgram']!='1' && $offers=='')
+{
+    $nomoneyNocodeMessage = $this->partial('store/_nocode_nomoney_message.phtml');
+}
 ?>
 <div class="header-block header-block-2">
     <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
@@ -102,11 +106,12 @@ echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStor
 </div> 
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-    <?php echo $offers; ?>
-    <?php echo $similarOffers; ?>
-<?php
-echo $similarShopsAndSimilarCategoriesShops;
-echo $discussion;
+    <?php 
+    echo $nomoneyNocodeMessage;
+    echo $offers;
+    echo $similarOffers;
+    echo $similarShopsAndSimilarCategoriesShops;
+    echo $discussion;
       
 if(count($this->moneySavingGuideArticle) >0):
     echo $this->partialLoop('store/_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle);
@@ -245,5 +250,4 @@ if ($this->currentStoreInformation[0]['showSignupOption']) :
 endif;
 ?>
     </aside>
-</div>
 </div>
