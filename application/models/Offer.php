@@ -1690,11 +1690,11 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-     public static function commongetnewestOffers($type, $limit, $shopId=0, $userId="")
-     {
-         $date = date('Y-m-d H:i:s');
+    public static function getCommonNewestOffers($type, $limit, $shopId = 0, $userId = "")
+    {
+         $currentDateTime = date('Y-m-d H:i:s');
          $data = Doctrine_Query::create()
-                ->select('s.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+                ->select('s.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.extendedoffer,o.editorpicks,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
                 ->from('Offer o')
                 ->leftJoin('o.shop s')
                 ->leftJoin('o.logo ologo')
@@ -1702,28 +1702,27 @@ class Offer extends BaseOffer
                 ->leftJoin('s.logo img')
                 ->leftJoin('s.favoriteshops fv')
                 ->leftJoin('o.termandcondition terms')
-                ->where('o.deleted = 0' )
+                ->where('o.deleted = 0')
                 ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or o.couponCodeType = 'GN'")
                 ->andWhere('s.deleted = 0')
                 ->andWhere('s.status = 1')
-                ->andWhere('o.enddate > "'.$date.'"')
-                ->andWhere('o.startdate <= "'.$date.'"')
+                ->andWhere('o.enddate > "'.$currentDateTime.'"')
+                ->andWhere('o.startdate <= "'.$currentDateTime.'"')
                 ->andWhere('o.discountType != "NW"')
                 ->andWhere('o.discounttype="CD"')
                 ->andWhere('o.Visability != "MEM"')
-            //  ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
                 ->andWhere('o.userGenerated=0')
                 ->orderBy('o.startdate DESC');
-                if ($shopId!='') {
+        if ($shopId!='') {
                     $data->andWhere('s.id = '.$shopId.'');
-                }
-                if ($userId!="") {
+        }
+        if ($userId!="") {
                     $data->andWhere('o.authorId = '.$userId.'');
-                }
-                $data = $data->limit($limit)->fetchArray();
-
-                return $data;
-     }
+        }
+                    $newOffers = $data->limit($limit)->fetchArray();
+//echo "<pre>";print_r($newOffers);die('ss');
+        return $newOffers;
+    }
 
      /**
       * get latest voucher codes for rss feeds

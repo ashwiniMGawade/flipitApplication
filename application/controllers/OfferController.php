@@ -85,16 +85,17 @@ class OfferController extends Zend_Controller_Action {
 		endif;
 
         $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
-
-        if($flag) {
-        	$offers = Offer::getCommonNewestOffers('newest', 71, $this->view->shopId);
+        $offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
+       /* if($flag){
+        	
+        	$offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
         	FrontEnd_Helper_viewHelper::setInCache('all_newoffer_list', $offers);
         } else {
         	//get from cache
         	$offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
-        }
-
-        $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers,$this->_getAllParams(),27,3);
+        }*/
+        $this->view->offers = $offers;
+		$paginator = FrontEnd_Helper_viewHelper::renderPagination($offers,$this->_getAllParams(),27,3);
         $this->view->paginator = $paginator;
 
       }

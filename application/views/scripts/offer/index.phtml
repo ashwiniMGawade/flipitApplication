@@ -1,63 +1,29 @@
+<div class="header-block">
+				<div class="icon icon-small">
+					<img src="<?php echo HTTP_PATH; ?>public/images/ico-02.png" width="89" height="89" alt="image description">
+				</div>
+				<div class="box">
+					<h1>Newest Codes</h1>
+					<strong>Our most recent discount codes are listed here</strong>
+				</div>
+			</div>
+			<div class="row">
+				<div id="content" class="col-md-8 col-sm-8">
 <?php
-
-$breadcrumb = "<a href='".HTTP_PATH_LOCALE."kortingen' style='color:#6a6a6a'>".$this->translate('Offer')."</a>";
-
-?>
-<!-- Voucher Outer Starts -->
-<div class="new-outer">
-<div class="voucher-outer">
-
-	<!-- Voucher Outer Left Starts -->
-	<div class="voucher-outer-left">
-
-    	
-		<!-- Voucher Outer Left Col1 Ends -->
-
-		<!-- Voucher Outer Left Col2 Starts -->
-
-		<div class="voucher-outer-left-col2">
-            <?php
+            
             if(count($this->paginator)>0){
-
-            	echo $this->partialLoop('partials/offer.phtml', $this->paginator);
+				
+            	echo $this->render('store/_offer.phtml', $this->offers);
 
             }else{
                  ?>
               <div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div>
             <?php } ?>
-		</div>
-		<!-- Voucher Outer Left Col2 Ends -->
-
-		<!-- Voucher Paging Outer Starts -->
-		<div class="voucher-paging-outer">
-			<div class="voucher-paging-inner">
+	
+	
 
              <?php
 			 echo $this->paginationControl ( $this->paginator, 'Sliding', '/partials/_pagination.phtml' );
 			  ?>
-       </div>
-		</div>
-
-	<!-- Voucher Paging Outer Ends -->
-
-</div>
-<!-- Voucher Outer Left Ends -->
-
-<!-- Voucher Outer Right Starts -->
-
-<div class="voucher-outer-right" style="margin-top:72px;">
-	<!-- Waardebon Starts -->
-           	  <?php  echo $this->widget; ?>
-
-</div>
-<!-- Voucher Outer Right Ends -->
-
-<input type="hidden" id="shopId" value="<?php echo $this->shopId; ?>">
-
-<div class="clr"></div>
-
-<!-- Popup Starts -->
-
 </div>
 </div>
-<!-- Voucher Outer Ends -->

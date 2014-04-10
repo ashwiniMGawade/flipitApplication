@@ -5,6 +5,7 @@ echo FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->shopName, $t
 ?>
 <section class="section">
 <?php
+//echo "<pre>";print_r($this->offers);die;
 foreach ($this->offers as $offer) {
     $offer = (object) $offer;
     $offerTitle = substr($offer->title, 0, 150);
