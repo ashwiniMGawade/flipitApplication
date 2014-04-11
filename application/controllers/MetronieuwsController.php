@@ -13,8 +13,7 @@ class MetronieuwsController extends  Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        $feedCheck = false;
-        FrontEnd_Helper_viewHelper::top10Xml($feedCheck);
+        FrontEnd_Helper_viewHelper::top10Xml();
         $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8'); 
     }
 }

@@ -13,8 +13,7 @@ class whitelabelController extends  Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        $feedCheck = true;
-        FrontEnd_Helper_viewHelper::top10Xml($feedCheck);
+        FrontEnd_Helper_viewHelper::top10Xml(true);
         $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8'); 
     }
 

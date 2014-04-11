@@ -2111,7 +2111,7 @@ EOD;
         return true;
     }
 
-    public static function top10Xml($feedCheck)
+    public static function top10Xml($feedCheck = false)
     {
     	$zendTranslate = Zend_Registry::get('Zend_Translate');
     	$domainName ='http://'.$_SERVER['HTTP_HOST'];
