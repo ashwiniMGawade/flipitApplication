@@ -1,25 +1,26 @@
 <?php 
-echo "<pre>";print_r($this->couponDetail[0]);die;
-$urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($this->couponDetail[0]);
+
+$offer = (object) $this->couponDetail[0];
+$urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
 $dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);?>
 <div class="header-block header-block-2">
 	<div class="icon">
 		<?php
 		//echo "<pre>";print_r($this->couponDetail);die;
-		 $shopLink = HTTP_PATH_LOCALE.$this->couponDetail[0]['shop']['permaLink'];
-		 $shopPicture = PUBLIC_PATH_CDN .  ltrim($this->couponDetail[0]['shop']['logo']['path'],"/")  .'thum_big_'. $this->couponDetail[0]['shop']['logo']['name'] ; 
+		 $shopLink = HTTP_PATH_LOCALE.$offer->shop['permaLink'];
+		 $shopPicture = PUBLIC_PATH_CDN .  ltrim($offer->shop['logo']['path'],"/")  .'thum_big_'. $offer->shop['logo']['name'] ; 
 		 ?>
-		<img src="<?php echo $shopPicture;?>" width="176" height="89" alt="<?php echo $this->couponDetail[0]['shop']['name']; ?>" href= "<?php echo $shopLink; ?>" >
+		<img src="<?php echo $shopPicture;?>" width="176" height="89" alt="<?php echo $offer->shop['name']; ?>" href= "<?php echo $shopLink; ?>" >
 	</div>
 	<div class="box">
-		<h1><?php echo strlen($this->couponDetail[0]['title'])<= 50 ?  $this->couponDetail[0]['title'] : substr($this->couponDetail[0]['title'], 0, 50).'...';?></h1>
+		<h1><?php echo strlen($offer->title)<= 50 ?  $offer->title : substr($offer->title, 0, 50).'...';?></h1>
 	</div>
 </div>
 <div class="row">
 				<div id="content" class="col-md-8 col-sm-8">
 					<section class="section">
-						<article class="block <?php echo $this->couponDetail[0]['exclusiveCode'] == '1' ? "orange-block" : "active"; ?>">
+						<article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
 							<div class="holder">
 								<a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
             					target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
