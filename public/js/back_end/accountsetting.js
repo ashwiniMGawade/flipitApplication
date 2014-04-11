@@ -553,6 +553,8 @@ function scheduleNewsletter(el)
 
 	$("div#timestamp-feild-container").show();
 	$("a#sendNewsletter-btn").text(__('Save Scheduling'));
+	$("#disableNewsletter-btn").show();
+	$("a#disableNewsletter-btn").text(__('Disable Scheduling'));
 }
 
 /**
@@ -566,9 +568,29 @@ function unScheduleNewsletter(el)
 	$("input[type=hidden]#isScheduled").val(0);
 	$("div#timestamp-feild-container").hide();
 	$("a#sendNewsletter-btn").text(__('Send Newsletter'));
+	$("#disableNewsletter-btn").hide();
 }
 
 
+function disableNewsLetterSchedule(e)
+{
+ 	bootbox.confirm(__("Are you sure you want to disable the newsletter schedule?"),__('No'),__('Yes'),function(r){
+		if(!r){
+			return false;
+		} else {
+			e.preventDefault();
+			var newForm = jQuery('<form>', {
+		        'action': HOST_PATH + "admin/accountsetting/disablemandrillnewsletter",
+		        'target': '_top',
+		        'method' : 'post'
+		    });
+			$(newForm).append($("#speacialForm").html());
+			$("input#offerstartTime" , newForm).val( $("input#offerstartTime", "#speacialForm").val());
+			$("input#offerStartDate" , newForm ).val($("input#offerStartDate", "#speacialForm").val());
+			newForm.appendTo('body').submit().remove();
+		}
 
+	});
+ }
 
 
