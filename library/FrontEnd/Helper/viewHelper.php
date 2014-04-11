@@ -2110,4 +2110,54 @@ EOD;
         }
         return true;
     }
+
+    public static function top10Xml($feedCheck)
+    {
+    	$zendTranslate = Zend_Registry::get('Zend_Translate');
+    	$domainName ='http://'.$_SERVER['HTTP_HOST'];
+        $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
+        $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
+    	$xmlTitle =  $zendTranslate->translate('Kortingscode.nl populairste kortingscodes') ;
+    	$xmlDescription  = $zendTranslate->translate('Populairste kortingscodes') ;
+
+    	$xml = new XMLWriter();
+    	$xml->openURI('php://output');
+    	$xml->startDocument('1.0', 'utf-8');
+    	$xml->setIndent(2);
+    	if ($feedCheck == true) {
+    	$xml->startElement('rss');
+		$xml->writeAttribute('version', '2.0');
+		$xml->writeAttribute('xmlns:content', 'http://purl.org/rss/1.0/modules/content/');
+	    }
+    	$xml->startElement("channel");
+    	$xml->writeElement('title', $xmlTitle);
+    	$xml->writeElement('description', $xmlDescription);
+    	$xml->writeElement('link', $domainName);
+    	$xml->writeElement('language', 'nl');
+
+    	foreach ($topVouchercodes as  $offer) {
+	    	$top10Offers = $offer['offer'] ;
+	    	$xml->startElement("item");
+	    	$xml->writeElement('link', $domainName . '/' . $top10Offers['shop']['permaLink']);
+	    	$xml->writeElement('title', $top10Offers['shop']['name']);
+            
+            if (mb_strlen($top10Offers['title'], 'UTF-8') > 42) {
+                $xml->writeElement('description', mb_substr($top10Offers['title'], 0,42,  'UTF-8')."...");
+            } else {
+                $xml->writeElement('description', $top10Offers['title']);
+            }
+	    	$xml->endElement();
+    	}
+
+     	if ($feedCheck == false) {
+     		$xml->writeElement('More', 'nl');
+    		$xml->writeElement('moreLink', $domainName);
+    	}
+    	$xml->endElement();
+    	if ($feedCheck == true) {
+    		$xml->endElement();
+    	}
+    	$xml->endDocument();
+    	$xml->flush();
+    }
 }
