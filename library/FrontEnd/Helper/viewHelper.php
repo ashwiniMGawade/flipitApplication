@@ -2072,26 +2072,27 @@ EOD;
 	)
 	{
 		sort($mandrillUsersList);
+		sort($recipientMetaData);
+		sort($loginLinkAndData);
+		
 		$mandrillUsersList1  = array_chunk($mandrillUsersList, 500);
+		$recipientMetaData   = array_chunk($recipientMetaData, 500);
+		$loginLinkAndData    = array_chunk($loginLinkAndData, 500);
+		
 		$increment = 0;
-		foreach ($mandrillUsersList1 as $mandrillUserList) {
+		foreach ($mandrillUsersList1 as $key=>$mandrillUserList) {
 			$mandrillMessage = array(
 				'subject'    => $emailSubject ,
 				'from_email' => $emailFrom,
 				'from_name'  => $senderName,
 				'to'         => $mandrillUserList ,
 				'inline_css' => true,
-				"recipient_metadata" =>   $recipientMetaData,
+				"recipient_metadata" =>   $recipientMetaData[$key],
 				'global_merge_vars' => $dataPermalink,
-				'merge_vars' => $loginLinkAndData
+				'merge_vars' => $loginLinkAndData[$key]
 		);
-		$jsonFile = Zend_Json_Encoder::encode($mandrillUserList);
-		$file = fopen(BASE_ROOT."images/upload/mandrill/batch_".$increment.".txt","w");
-		fwrite($file, $jsonFile);
-		fclose($file);
-		$increment++;
-		//$mandrill->messages->sendTemplate($template_name, $template_content, $mandrillMessage);
+		$mandrill->messages->sendTemplate($template_name, $template_content, $mandrillMessage);
 		}
-		
+		return true;
 	}
 }

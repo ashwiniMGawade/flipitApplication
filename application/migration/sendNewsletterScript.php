@@ -271,7 +271,8 @@ class SendNewsletter {
 		);
 
 		//merge all the arrays into single array
-	 	$data = array_merge($voucherCodesData['dataShopName'],
+	 	$data = array_merge(
+	 			$voucherCodesData['dataShopName'],
 				$voucherCodesData['dataOfferName'],
 				$voucherCodesData['dataShopImage'],
 				$voucherCodesData['expDate'],
@@ -289,7 +290,7 @@ class SendNewsletter {
 									$staticContent);
 
 		//initialize mandrill with the template name and other necessary options
-		$mandrill = new Mandrill_Init($this->_mandrillKey );
+		$mandrill = new Mandrill_Init($this->_mandrillKey);
 		$template_name = $this->_template ;
 		$template_content = $data ;
 
@@ -511,7 +512,7 @@ class SendNewsletter {
 
 
 				$visitorMetaData[$key]['rcpt'] = $value['email'];
-				$visitorMetaData[$key]['values']['referrer'] = trim($keywords) ;
+				$visitorMetaData[$key]['values']['referrer'] = trim($keywords);
 				// $visitorMetaData[$key]['values']['url'] = '';
 
 				$visitorData[$key]['vars'][0]['content'] = $this->_linkPath . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directlogin") . "/" . base64_encode($value['email']) ."/". $value['password'];
