@@ -280,14 +280,14 @@ EOD;
     {
         $store = 0;
         $storeCharacter = "'".$store."'";
-        $storeSearch = "<li><a id='0' class='' href='#0-9'>0-9</a></li>";
+        $storeSearch = "<ul class='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
         
         foreach (range('A', 'Z') as $store) {
             $lastStoreClass = $store=='Z' ? 'last' : '';
             $storeCharacter = "'".$store."'";
             $storeSearch .="<li><a id='" . $store . "'  href='#".strtolower($store)."' class='".$lastStoreClass."'>$store</a></li>";
         }
-
+        $storeSearch .="</ul>";
         return $storeSearch;
     }
     ##################################################################################
@@ -425,7 +425,7 @@ EOD;
             </div>";
         else:
 
-        $socialMedia = "
+        $socialMedia = "<article class='block'>
         <div class='social-likes'>
             <div class='intro'>
                 ".$socialMediaTitle."
@@ -442,7 +442,7 @@ EOD;
                     <div class='g-plus' data-href='".$socialMediaUrl."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
                 </li>
             </ul>
-        </div>";
+        </div></article>";
         endif;
 
         return $socialMedia;

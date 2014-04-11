@@ -1,5 +1,25 @@
 <?php
 $store = 'store/';
+$popularStores = '';
+$storesInformation = '';
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+$controllerName =  $this->controllerName;
+$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
+                    <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+
+if (count($this->popularStores)) :
+     $popularStores = $this->partial(
+         $store.'_popular-stores.phtml',
+         array('popularStores' => $this->popularStores)
+     );
+endif;
+
+if ($this->storesInformation != '' && $this->storesInformation != null) :
+    $storesInformation = $this->partial(
+        $store.'_all-stores-listing.phtml',
+        array('storesInformation' => $this->storesInformation)
+    );
+endif;
 ?>
 <div class="header-block">
     <div class="icon icon-small">
@@ -12,46 +32,19 @@ $store = 'store/';
 </div>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-        <div class="content-holder">
-            <ul class="alphabet">
+        <div class="content-holder">            
 <?php 
 echo $this->storeSearchByAlphabet;
-?>
-            </ul>
-<?php
-if (count($this->popularStores)) :
-     $popularStores = $this->partial(
-         $store.'_popular-stores.phtml',
-         array('popularStores' => $this->popularStores)
-     );
-    echo $popularStores;
-endif;
-
-if ($this->storesInformation != '' && $this->storesInformation != null) :
-    $storesInformation = $this->partial(
-        $store.'_all-stores-listing.phtml',
-        array('storesInformation' => $this->storesInformation)
-    );
-    echo $storesInformation;
-endif;
+echo $popularStores;
+echo $storesInformation;
 ?>
         </div>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
-        <div class="block white">
 <?php
 echo $this->esi($this->locale.$store.'signupwidget');
-?>
-        </div>
-        <article class="block">
-<?php
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$controllerName =  $this->controllerName;
-$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-                    <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
 echo FrontEnd_Helper_viewHelper::socialmediaSmall('', $socialMediaTitle, $controllerName);
 ?>
-        </article>
     </aside>
 </div>
 </div>
