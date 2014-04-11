@@ -1,741 +1,207 @@
-<link href='http://fonts.googleapis.com/css?family=Marck+Script' rel='stylesheet' type='text/css'>
-<?php
-    $breadcrumb = "<a href='".HTTP_PATH_LOCALE."offer/index/' style='color:#6a6a6a'>".$this->translate('Offer')."</a>";
-	$headerSearch = new FrontEnd_Helper_viewHelper();
-	echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>$breadcrumb));
-	$out = $this->translate("out");
-	$offer = $this->translate("offer");
-	$urlToShow = "";
-  ?>
-    <?php 
-         foreach($this->cpndetail as $cd)
-         {
-         	$startdate = strtotime(date('Y-m-d',strtotime($cd['startDate'])));
-	        $enddate   = strtotime(date('Y-m-d',strtotime($cd['endDate'])));
-	        $daysdiff  = $enddate - $startdate;
-	        $daysLeft  = round($daysdiff/(60*60*24));
-	        $currentDate = strtotime(date('Y-m-d'));
-	        if($enddate < $currentDate){
-        	
-		    if(count($this->reloffer)>0 ){
-		    ?>  
-		   	<div class="white-bg">
-	       	<div class="alle-winkels-outer">
-	       <?php 
-	       	foreach($this->cpndetail as $o) { 
-	       		
-	       		$link_shop = HTTP_PATH_LOCALE.$o['shop']['permaLink'];
-	       		$shopPicture = HTTP_PATH .'public/images/NoImage/NoImage_200x100.jpg';
-	       	   	if(isset( $o['shop']['logo']['name'] ) && $o['shop']['logo']['name'] != '' )
-	       		{
-	       		
-	       		$shopPicture = PUBLIC_PATH_CDN .  ltrim($o['shop']['logo']['path'],"/")  .'thum_big_'. $o['shop']['logo']['name'] ;
-	       		
-	       		}
-	       		?>
-	       	    <div class="your-ms-small mt20">
-	       	    	<div class="your-ms-top extoffer" style="padding:0px; border-bottom:none;">
-	       	    		<a href="<?php echo $link_shop; ?>"><img alt='<?php echo $o['shop']['name']; ?>' class='radiusImg' src="<?php echo  $shopPicture;?>"/></a>
-	       	    	</div>
-	       	    	<div class="your-ms-bot clr"></div>
-	       	    </div>
-	       	    <?php 
-            		$daysdiff = strtotime(date('Y-m-d',strtotime($o['endDate']))) - strtotime(date('Y-m-d'));
-        	 		$daysLeft = round($daysdiff/(60*60*24)); 
-        	 		$addedDateWhite = new Zend_Date($o['startDate']);
-        	 		$expiryDateWhite = new Zend_Date($o['endDate']);
-        		?>
-	        	<div class="coupon-arrows">
-	        		<img src="<?php echo HTTP_PATH; ?>public/images/front_end/coupon-arrows.png" />
-	        	</div>
-            <div class="ms-text mt20">
-              <h1 class="mt5"><span class="text-black"><?php echo strlen($o['title'])<= 50 ?  $o['title'] : substr($o['title'], 0,50).'...';?></span></h1>  
-              <div class="mt5"><?php echo $this->translate('Added'); ?> <?php echo  $addedDateWhite->get(Zend_Date::DATE_FULL); ?>, <?php echo $this->translate('Expires'); ?> <?php echo $expiryDateWhite->get(Zend_Date::DATE_FULL); ?>
-              <strong class="text-black">
-	              <?php 
-					if($daysLeft ==2 || $daysLeft==3) {
-						echo ', Nog maar ' . $daysLeft. ' ' .$this->translate(' dagen geldig!');
-					}
-					else if($daysLeft==1){
-						echo ', Nog maar ' . $daysLeft. ' ' .$this->translate(' dag geldig!');
-					}
-					else if($daysLeft==0) {
-						echo ', ' . $this->translate('Expire Today');
-					}
-					?>
-				</strong>
-                </div> 
-                <?php 
-                $bounceRate = "/out/offer/".$this->id;
-              
-				if($cd['refURL']!=null){
-					$check = 1;
-					$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-					$url_shop = $cd['refURL'];
-					}elseif($cd['shop']['refUrl']!=null){
-					$check = 1;
-					$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-					$url_shop = $cd['shop']['refUrl'];
-					}elseif ($cd['shop']['actualUrl']!=null){
-					$check = 1;
-					$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-					$url_shop = $cd['shop']['actualUrl'];
-					}else{
-					$check = 0;
-					$url_shop = HTTP_PATH_LOCALE.$cd['shop']['permaLink'];
-					}
-					if($cd['discountType']=='PA'){
-						if(count($o['logo'])>0){
-							$url = HTTP_PATH_LOCALE.ltrim($o['logo']['path'],"/").$o['logo']['name'];
-						}else{
-							$url = $o['refOfferUrl'];
-						}
-				?>
-	           	<a class="fl mt20" rel1="<?php echo $url_shop; ?>" href="javascript:void(0)">
-	           		<img src="<?php echo HTTP_PATH; ?>public/images/front_end/toon-code-btn.png" border="0" />
-				</a>
-				<a class="coupon-code-altr" rel1="<?php echo $url; ?>" href="javascript:void(0)">
-					<div style='width: 413px' class="red-btn">
-						<img width="413" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png">
-					</div>
-				</a>
-				<?php }else{?>
-				<a class="fl" href="<?php echo $urlToShow;?>"  rel="nofollow" target="_blank" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0'), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
-					<div class="new-blue-btn" >
-						<?php echo $this->translate('PAK DEZE AANBIEDING') ; ?>
-					</div>
-				</a>
-				<a class="fl" href="<?php echo $urlToShow;?>"  rel="nofollow" target="_blank" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0'), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" >
-					<div class="black-btn" id="blackImage<?php echo $o['id']; ?>">
-						<div class="coupon-code"><?php echo $o['couponCode'];?></div>
-					</div>
-					<div  class="red-btn" id="<?php echo $o['id']; ?>" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0')">
-						<img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png">
-					</div>
-				</a>
-				<?php } ?>
-            <?php }?>
-		 	<!-- alternate coupon code starts-->
-        	
-       	</div>
-           <div class="clr"></div>
-           <div class="separator mt20">&nbsp;</div>
-            
-          <!-- Alle Winkels Starts -->
-          <div class="alle-winkels-outer">
-	       	<?php foreach($this->reloffer as $ro)
-        	{  
-        		
-        		
-        		$link_shop = HTTP_PATH_LOCALE.$ro['shop']['permaLink'];
-        		$shopPicture = HTTP_PATH .'public/images/NoImage/NoImage_200x100.jpg';
-        		$shopPicture = HTTP_PATH_CDN. "thumb.php?src=".$shopPicture."&h=100&w=200&zc=0";
-				 if(isset( $ro['shop']['logo']['name'] ) && $ro['shop']['logo']['name'] != '' ) 
-				 {
-				 	
-	                     $shopPicture = PUBLIC_PATH_CDN .  ltrim($ro['shop']['logo']['path'],"/")  .'thum_big_'. $ro['shop']['logo']['name'] ;
-	                
-	              }	
-        	?>
-        	<div class="your-ms-small mt20">
-        	<!--  <div class="your-ms-top extoffer"><img src="<?php echo $shopPicture; ?>" alt="Shop Image" width="198" /></div>--> 
-	        		<div class="your-ms-top extoffer" style="padding:0px; border-bottom:none;"><a href="<?php echo $link_shop; ?>"><img  alt='<?php echo $o['shop']['name']; ?>' class='radiusImg' src="<?php echo  $shopPicture ;?>"/></a></div>
-	        		<div class="your-ms-bot clr"></div>
-	        </div>
-            <?php 
-             $daysdiff = strtotime(date('Y-m-d',strtotime($ro['endDate']))) - strtotime(date('Y-m-d'));
-        	 $daysLeft = round($daysdiff/(60*60*24)); 
-        	 $addedDateOriginal = new Zend_Date($ro['startDate']);
-        	 $expiryDateOriginal = new Zend_Date($ro['endDate']);
-             ?>
-            <div class="ms-text mt20">
-              <h1 class="mt5"><span class="text-black"><?php echo strlen($ro['title'])<= 50 ?  $ro['title'] : substr($ro['title'], 0,50).'...';?></span></h1>  
-              <div class="mt5"><?php echo $this->translate('Added'); ?> <?php echo $addedDateOriginal->get(Zend_Date::DATE_FULL); ?>, <?php echo $this->translate('Expires'); ?> <?php echo $expiryDateOriginal->get(Zend_Date::DATE_FULL); ?> 
-                <strong class="text-black">
-                	<?php 
-        			if($daysLeft ==2 || $daysLeft==3) {
-						echo ', Nog maar ' . $daysLeft. ' ' .$this->translate(' dagen geldig!');
-					}
-					else if($daysLeft==1){
-						echo ', Nog maar ' . $daysLeft. ' ' .$this->translate(' dag geldig!');
-					}
-					else if($daysLeft==0) {
-						echo ', ' . $this->translate('Expire Today');
-					}
-  					?>
-                </strong>
-              </div>
-               <?php 
-               $bounceRate = "/out/offer/".$this->id;
-               if($cd['refURL']!=null){
-               		$check = 1;
-               		$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-               		$url_shop = $cd['refURL'];
-               
-               }elseif($cd['shop']['refUrl']!=null){
-               		
-               		$check = 1;
-               		$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-               		$url_shop = $cd['shop']['refUrl']; 
-               
-               }elseif ($cd['shop']['actualUrl']!=null){
-               		
-               		$check = 1;
-               		$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-               		$url_shop = $cd['shop']['actualUrl'];
-               	
-               }else{
-               		$check = 0;
-               		$url_shop = HTTP_PATH_LOCALE.$cd['shop']['permaLink'];
-               }
-               
-            if($cd['discountType']=='PA'){
-                   if(count($ro['logo'])>0){
-		           		$url = PUBLIC_PATH_CDN.ltrim($ro['logo']['path'],"/").$ro['logo']['name'];
-		           	}else{
-		           		$url = $ro['refOfferUrl'];
-		           	}
-           	?>
-           	<a class="fl mt20" rel1="<?php echo $url_shop; ?>" href="javascript:void(0)">
-            <img src="<?php echo HTTP_PATH; ?>public/images/front_end/toon-code-btn.png" border="0" /></a>
-            
-            <a class="coupon-code-altr" rel1="<?php echo $url; ?>" href="javascript:void(0)">
-            <div  class="red-btn"><img width="413" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png"></div>
-            </a>
-            <?php }else{?>
-            <a class="fl" href="<?php echo $urlToShow;?>"  rel="nofollow" target="_blank" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0'), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" >
-              <div class="new-blue-btn" >
-                <?php echo $this->translate('PAK DEZE AANBIEDING') ; ?>
-              </div>
-            </a>
-            <a class="fl" href="<?php echo $urlToShow;?>"  rel="nofollow" target="_blank" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0'), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" >
-              <div class="black-btn" id="blackImage<?php echo $o['id']; ?>">
-                <div class="coupon-code"><?php echo $o['couponCode'];?></div>
-              </div>
-              <div  class="red-btn" id="<?php echo $o['id']; ?>" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0')">
-                <img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png">
-              </div>
-            </a>
-            <?php }?>
-             </div>
-           </div>
-           	<!-- Separator Starts -->
-            <div class="separator mt20">&nbsp;</div>
-            <!-- Separator Ends --> 
-          </div>
-            
-            
-			<div class="clr"></div>
-            <!-- Page Left Starts -->
-        	<div class="alle-winkels-outer">
-       		  <h2 class="text-black"><?php echo $this->translate('Over deze kortingscode'); ?></h2>
-                <p class="mt15" style="word-wrap:break-word;"><?php echo $ro['extendedFullDescription']; ?></p>
-               
-               
-            
-            <!-- Separator Starts -->
-            <div class="separator mt20">&nbsp;</div>            
-            <!-- Separator Ends --> 
-             <div class="clr"></div> 
-             <?php if($ro['termandcondition']!='' && $ro['termandcondition']!=null){ ?>
-			<h3 class="text-black mt20"><?php echo $this->translate('Voorwaarden'); ?></h3>
-			<ol class="mr-none">
-			<?php foreach($ro['termandcondition'] as $rt)
-            {
-            ?>
-            <li><?php echo $rt['content']?></li>
-            <?php 
-			}
-            ?>
-            </ol>
-            <div class="separator mt20">&nbsp;</div>
-            <?php }?> 
-            </div>
-            
-            <div class="clr"></div>
-             <div class="alle-winkels-outer">
-             	<div class="coup-left">       
-				 <h3 class="text-black mt20"><?php echo $this->translate('Op '); ?><?php echo $ro['shop']['name']; ?><?php echo $this->translate(' kan je de actie '); ?><?php echo $o['title']; ?><?php echo $this->translate(' gebruiken&#33;'); ?></h3>
-		    	<?php 
-				$WebsiteScreenshot = HTTP_PATH .'public/images/NoImage/websiteLogo.jpg';
-				//$WebsiteScreenshot = HTTP_PATH. 'public/thumb.php?src='.$WebsiteScreenshot.'&h=0&w=450&zc=0';
-				if(isset( $ro['shop']['screenshot']['name'] ) && $ro['shop']['screenshot']['name'] != '' ) 
-				{
-				  
-					    $WebsiteScreenshot = PUBLIC_PATH_CDN .  ltrim($ro['shop']['screenshot']['path'],"/")  .'thum_large_'.  $ro['shop']['screenshot']['name'] ;
-					
-				}
-				?>
-				
-	            <p class="mt15"><?php echo $this->translate('Om jouw '); ?><?php echo $ro['shop']['name']; ?> <?php echo $this->translate('kortingscode te gebruiken moet je de code invoeren in het daarvoor bestemde vakje tijdens de bestelprocedure. '); ?><br /><br />
-		       	       <?php echo $this->translate("Below is a screenshot to show you where it's done:"); ?> </p>
-				
-				<div>
-					<img class="mt80" src="<?php echo HTTP_PATH; ?>public/images/front_end/web-arrow.png" border="0">
-					<span class='screenshot-text'><?php echo $this->translate('Hier is een screenshot van de webwinkel. Plaats direct je bestelling met korting.');?></span>
+<?php 
+echo "<pre>";print_r($this->couponDetail[0]);die;
+$urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($this->couponDetail[0]);
+$offerBounceRate = "/out/offer/".$offer->id;
+$dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);?>
+<div class="header-block header-block-2">
+	<div class="icon">
+		<?php
+		//echo "<pre>";print_r($this->couponDetail);die;
+		 $shopLink = HTTP_PATH_LOCALE.$this->couponDetail[0]['shop']['permaLink'];
+		 $shopPicture = PUBLIC_PATH_CDN .  ltrim($this->couponDetail[0]['shop']['logo']['path'],"/")  .'thum_big_'. $this->couponDetail[0]['shop']['logo']['name'] ; 
+		 ?>
+		<img src="<?php echo $shopPicture;?>" width="176" height="89" alt="<?php echo $this->couponDetail[0]['shop']['name']; ?>" href= "<?php echo $shopLink; ?>" >
+	</div>
+	<div class="box">
+		<h1><?php echo strlen($this->couponDetail[0]['title'])<= 50 ?  $this->couponDetail[0]['title'] : substr($this->couponDetail[0]['title'], 0, 50).'...';?></h1>
+	</div>
+</div>
+<div class="row">
+				<div id="content" class="col-md-8 col-sm-8">
+					<section class="section">
+						<article class="block <?php echo $this->couponDetail[0]['exclusiveCode'] == '1' ? "orange-block" : "active"; ?>">
+							<div class="holder">
+								<a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
+            					target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+            					<?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferImage($offer, $this->offersType);?>
+            					</a>
+								<div class="box">
+									<div class="text">
+										<p><strong class="exclusive"><span class="glyphicon glyphicon-star"></span> Exclusive</strong> Added on November 4th 2013, Expires on Februari 31st 2014</p>
+										<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
+									</div>
+									<div class="buttons">
+										<button class="btn blue btn-primary">Get code &amp; Open site</button>
+										<button class="btn orange btn-warning btn-code">Get code</button>
+									</div>
+									<div class="the-code">
+										<span class="instruction"><strong>enter this code at checkout</strong></span>
+										<strong class="code-value">aktiecode2014</strong>
+									</div>
+									<ul class="view-list">
+										<li><a href="#">View all Avis Voucher Codes</a></li>
+									</ul>
+								</div>
+							</div>
+						</article>
+						<div class="code-details">
+							<article class="box">
+								<h2>About this voucher</h2>
+								<p>Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapib sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius, consectetur diam. Class aptent osqu ad litora torquent per conubia nostra, per inceptos himenaeos. In rutrum consectetur semper.</p>
+							</article>
+							<article class="box terms-block">
+								<h2>Terms &amp; Conditions</h2>
+								<ol class="num-list">
+									<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
+									<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
+									<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
+									<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
+									<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
+									<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
+									<li>One code is valid for a maximum of 6 people in the party.</li>
+									<li>Please present the code to your waiter/waitress when ordering your meal.</li>
+									<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
+									<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
+								</ol>
+							</article>
+							<article class="box box-2">
+								<h2>How to Use The Voucher Codes</h2>
+								<p>Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapi bus lacus sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius.</p>
+								<div class="visual-img">
+									<img src="images/img-02.jpg" width="700" height="200" alt="image description">
+								</div>
+							</article>
+						</div>
+					</section>
+					<header class="heading-box text-ask">
+						<h2>Ask a question about Avis</h2>
+						<strong>Ask us anything about Avis and their discounts</strong>
+					</header>
+					<section class="section section-comments">
+						<header class="head-top">
+							<div class="box">
+								<a href="#" class="star-bubble"><span class="glyphicon glyphicon-star"></span><span class="bubble">0</span></a>
+								<h2>3 comments</h2>
+							</div>
+							<form action="#" class="comment-form">
+								<fieldset>
+									<div class="avatar">
+										<img src="images/photo-01.png" width="36" height="36" alt="image description">
+									</div>
+									<div class="input">
+										<textarea placeholder="Leave a messege..."></textarea>
+									</div>
+								</fieldset>
+							</form>
+							<div class="bar">
+								<ul class="settings">
+									<li><a href="#">Share</a></li>
+									<li><a href="#"><span class="ico"></span></a></li>
+								</ul>
+								<ul class="tabs-list">
+									<li class="active"><a href="#">Discussion</a></li>
+									<li><a href="#">Community</a></li>
+									<li><a href="#">My Disqus</a></li>
+								</ul>
+							</div>
+						</header>
+						<div class="tab-content">
+							<div class="comment-block">
+								<ul class="comment-list">
+									<li>
+										<div class="comment">
+											<img class="avatar" src="images/photo-01.png" width="36" height="36" alt="image description">
+											<div class="box">
+												<ul class="add-link">
+													<li><a href="#" class="author">Jake Franklin</a></li>
+													<li>2 days ago</li>
+												</ul>
+												<p>Lorem ipsum leo amet nisl quam ut primis lacinia nisi est pharetra gravida amet urna,</p>
+												<ul class="add-link link-2">
+													<li><span>12</span> <a href="#" class="up">up</a> <span class="divider">|</span> <a href="#" class="down">down</a></li>
+													<li><a href="#">Reply</a></li>
+													<li><a href="#">Share</a></li>
+												</ul>
+											</div>
+										</div>
+										<ul class="children">
+											<li>
+												<div class="comment">
+													<img class="avatar" src="images/photo-02.png" width="24" height="24" alt="image description">
+													<div class="box">
+														<ul class="add-link">
+															<li><a href="#" class="author">Erlen Masson</a></li>
+															<li>2 days ago</li>
+														</ul>
+														<p>Lorem ipsum leo amet nisl quam ut primis lacinia nisi est pharetra gravida amet urna,</p>
+														<ul class="add-link link-2">
+															<li><span>12</span> <a href="#" class="up">up</a> <span class="divider">|</span> <a href="#" class="down">down</a></li>
+															<li><a href="#">Reply</a></li>
+															<li><a href="#">Share</a></li>
+														</ul>
+													</div>
+												</div>
+											</li>
+										</ul>
+									</li>
+									<li>
+										<div class="comment">
+											<img class="avatar" src="images/photo-01.png" width="36" height="36" alt="image description">
+											<div class="box">
+												<ul class="add-link">
+													<li><a href="#" class="author">Speckyboy</a></li>
+													<li>2 days ago</li>
+												</ul>
+												<p>Lorem ipsum leo amet nisl quam ut primis lacinia nisi est pharetra gravida amet urna,</p>
+												<ul class="add-link link-2">
+													<li><span>12</span> <a href="#" class="up">up</a> <span class="divider">|</span> <a href="#" class="down">down</a></li>
+													<li><a href="#">Reply</a></li>
+													<li><a href="#">Share</a></li>
+												</ul>
+											</div>
+										</div>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<footer class="bottom-box">
+							<ul>
+								<li><a href="#" class="rss">Comment Feed</a></li>
+								<li><a href="#" class="email">Subscribe via email</a></li>
+							</ul>
+							<a href="#" class="add-logo"><img src="images/logo-03.png" width="88" height="16" alt="image description"></a>
+						</footer>
+					</section>
 				</div>
-				<p class="mt80"><?php echo $this->translate('Altijd op de hoogte blijven van '); ?><?php echo $ro['shop']['name']; ?> <?php echo $this->translate('kortingscodes&#63; Schrijf je dan in voor de'); ?> <a href="<?php echo HTTP_PATH . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1') ?>" rel="nofollow"><?php echo $this->translate('nieuwsbrief.'); ?></a></p>
+				<aside class="col-md-4 col-sm-4" id="sidebar">
+
+        <div class="block white">
+
+            <?php
+
+            $locale = LOCALE != 'en'? LOCALE. '/' : '';
+
+           echo $this->esi($locale.'store/signupwidget'); ?>
+
+        </div>
+
+        <article class="block">
+
+           <?php
+
+            $controllerName =  $this->controllerName;
+
+           $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
+
+            <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+
+            echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
+
+            ?>
+
+        </article>
+
+    </aside>
+
 				
-				</div>
-				<div class="coup-right">
-		            <div class="ms-box crop" style="padding:0px; border:none;background:none;">
-		            <img src="<?php  echo $WebsiteScreenshot; ?>" border="0" />
-		            </div>
-		        </div>
-            </div><!-- Page Left Ends -->
-              <?php } ?> 
-         
-         <div class="white-bg mt20">
-            <!-- Separator Starts -->
-			        <div class="separator">&nbsp;</div>
-			<!-- Separator Ends -->
-            <div class="alle-winkels-outer">
-		       	<div class="clr"><h2><?php echo $this->translate('Huidige Populaire Kortingscodes') ; ?> </h2></div>
-		       	   <?php echo $this->partialLoop('offer/sixPopularOffer.phtml', $this->popoffer); ?>
-		       	   <div class="clr"></div>
-				       <div class="popular-kortings-link">
-				       		<?php echo $this->translate('View all'); ?> <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE . $cd['shop']['permaLink'];?>"><?php echo $cd['shop']['name'];?> <?php echo $this->translate('Vouchercodes 2012'); ?></a>
-				       </div>
-	       	     </div>
-        	<!-- Separator Starts -->
-		        <div class="separator mt20">&nbsp;</div>
-		    <!-- Separator Ends -->
-        </div>
-       <?php 
-		    
-		    } else{
-        
-       	?>
-       	<!-- Coupon no-alternative code starts -->
-       	<!-- Alle Winkels Starts -->
-       	<div class="white-bg">
-<!--        		<div class="yellow-alternative-box-hide"></div> -->
-	       	<div class="alle-winkels-outer">
-	       	 
-	       	<?php 
-	       	
-	       	foreach($this->cpndetail as $o) {  
-	       		$link_shop = HTTP_PATH_LOCALE.$o['shop']['permaLink'];
-	       	    $shopPicture = HTTP_PATH .'public/images/NoImage/NoImage_200x100.jpg';
-	       	    $shopPicture= HTTP_PATH_CDN. "thumb.php?src=".$shopPicture."&h=100&w=200&zc=0";
-	       		if(isset( $o['shop']['logo']['name'] ) && $o['shop']['logo']['name'] != '' )
-	       		{
-	       		
-	       		$shopPicture = PUBLIC_PATH_CDN .  ltrim($o['shop']['logo']['path'],"/")  .'thum_big_'. $o['shop']['logo']['name'] ;
-	       		
-	       		}
-	       		?>
-	       	    <div class="your-ms-small mt20">
-		       	    <div class="your-ms-top extoffer" style="padding:0px; border-bottom:none;"><a href="<?php echo $link_shop; ?>"><img alt='<?php echo $o['shop']['name']; ?>' class='radiusImg' src="<?php echo  $shopPicture;?>"/></a></div>
-		       	    
-		       	    <div class="your-ms-bot clr"></div>
-	       	    </div>
-	       	    <?php 
-	       	    $daysdiff = strtotime(date('Y-m-d',strtotime($o['endDate']))) - strtotime(date('Y-m-d'));
-	       	    $daysLeft = round($daysdiff/(60*60*24));
-	       	    $addedDateOriginal = new Zend_Date($o['startDate']);
-	       	    $expiryDateOriginal = new Zend_Date($o['endDate']);
-	       	    ?>
-	       	    <div class="ms-text mt20">
-			       	    <h1 class="mt5"><span class="text-black"><?php echo strlen($o['title'])<= 50 ?  $o['title'] : substr($o['title'], 0,50).'...';?></span></h1>  
-			       	     <div class="mt5"><?php echo $this->translate('Added'); ?> <?php echo $addedDateOriginal->get(Zend_Date::DATE_FULL); ?>, <?php echo $this->translate('Expires'); ?> <?php echo $expiryDateOriginal->get(Zend_Date::DATE_FULL); ?>
-				       	     <strong class="text-black">
-					        	<?php 
-	       						if($daysLeft ==2 || $daysLeft==3) {
-									echo ', Nog maar ' . $daysLeft. ' ' .$this->translate(' dagen geldig!');
-								}
-								else if($daysLeft==1){
-									echo ', Nog maar ' . $daysLeft. ' ' .$this->translate(' dag geldig!');
-								}
-								else if($daysLeft==0) {
-									echo ', ' . $this->translate('Expire Today');
-								}
-					           ?>
-			              	</strong>
-		              	</div>
-		                
-		               <?php 
-		               $bounceRate = "/out/offer/".$this->id;
-		               if($cd['refURL']!=null){
-               				$check = 1;
-               				$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-               				$url_shop = $cd['refURL'];
-		               	 
-		               }elseif($cd['shop']['refUrl']!=null){
-		               	 
-		               		$check = 1;
-		               		$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-		               		$url_shop = $cd['shop']['refUrl'];
-		               	 
-		               }elseif ($cd['shop']['actualUrl']!=null){
-		               	 
-		               		$check = 1;
-		               		$urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-		               		$url_shop = $cd['shop']['actualUrl'];
-		               
-		               }else{
-		               		$check = 0;
-		               		$url_shop = HTTP_PATH_LOCALE.$cd['shop']['permaLink'];
-		               }
-		               
-		               
-		            if($cd['discountType']=='PA'){
-		           
-		           	if(count($o['logo'])>0){
-		           		$url = PUBLIC_PATH_CDN.ltrim($o['logo']['path'],"/"). $o['logo']['name'];
-		           	}else{
-		           		$url = $o['refOfferUrl'];
-		           	}
-		           	?>
-		           	
-		            <a class="fl mt20" rel1="<?php echo $url_shop; ?>" href="javascript:void(0)">
-		            <img src="<?php echo HTTP_PATH; ?>public/images/front_end/toon-code-btn.png" border="0" /></a>
-		            
-		            <a class="coupon-code-altr" rel1="<?php echo $url; ?>" href="javascript:void(0)">
-		            <div style='width: 413px' class="red-btn"><img width="413" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png"></div>
-		            </a>
-		            <?php }else{?>
-		            <a class="fl" href="<?php echo $urlToShow;?>"  rel="nofollow" target="_blank" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0'), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" >
-                  <div class="new-blue-btn" >
-                    <?php echo $this->translate('PAK DEZE AANBIEDING') ; ?>
-                  </div>
-                </a>
-                <a class="fl" href="<?php echo $urlToShow;?>"  rel="nofollow" target="_blank" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0'), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" >
-                  <div class="black-btn" id="blackImage<?php echo $o['id']; ?>">
-                    <div class="coupon-code"><?php echo $o['couponCode'];?></div>
-                  </div>
-                  <div  class="red-btn" id="<?php echo $o['id']; ?>" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0')">
-                    <img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png">
-                  </div>
-                </a>
-		            <?php }?>
-			     
-			     </div>  
-       	     	 <div class="coupon-arrows"><img src="http://kortingscode.nl/public/images/front_end/coupon-arrows-new.png"></div>	
-	       	 </div>
-	       	 
-	       	  	  <div class="separator mt20">&nbsp;</div>
-		       	      <!-- Separator Ends --> 
-		       	  <div class="clr"></div>
-	       <div class="alle-winkels-outer">   
-       	        	
-	       	  	 <div class="yellow-box2-alternative-code mt20 clr">
-			       	    <div class="yellow-box2-img"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/icon19.png" width="32" height="32" /></div>
-						<div class="yellow-box2-alternative-text text-black">
-							<strong>
-								 <?php echo $this->translate('Sorry, we hebben momenteel geen'); ?> <?php echo $o['title']; ?> <?php echo $this->translate('kortingscodes');?> :(
-					       	     <?php echo $this->translate('Ga naar de'); 
-					       	     $link = '';
-					       	     $link = $o['shop']['permaLink'];
-					       	     ?> 
-					       	     <a href="<?php echo HTTP_PATH_LOCALE.$link;?>" class="text-blue-link-u" style="float:none"><?php echo $o['shop']['name']; ?> <?php echo $this->translate('website'); ?></a>
-					       	     <?php echo $this->translate('en kijk welke direct aanbiedingen zij nu beschikbaar hebben. Ons kortingscodeteam
-		       	                 is keihard bezig om nieuwe kortingscodes voor je te regelen!'); ?>
-							</strong>
-						</div>
-				 </div>
-	       	  </div>
-	       	     <!-- Separator Starts -->
-	       	      <div class="separator mt20">&nbsp;</div>
-	       	      <!-- Separator Ends --> 
-	         </div>
-	       
-       	      
-       	       <div class="clr"></div>
-       	      <!-- Page Left Starts -->
-       	      <div class="alle-winkels-outer">
-	       	      <h2 class="text-black"><?php echo $this->translate('Over deze kortingscode'); ?></h2>
-	       	      <p class="mt15" style="word-wrap: break-word;"><?php echo $o['extendedFullDescription']; ?></p>
-	       	      
-	       	      <!-- Separator Starts -->
-			        <div class="separator mt20">&nbsp;</div>
-			        <!-- Separator Ends -->
-			         <div class="clr"></div>
-	       	      <?php if($o['termandcondition']!='' && $o['termandcondition']!=null){ ?>
-	       	      <h3 class="text-black mt20"><?php echo $this->translate('Voorwaarden'); ?></h3>
-	       	      <ol class="mr-none">
-	       	      <?php foreach($o['termandcondition'] as $t)
-	       	      {
-	       	      ?>
-	       	      <li><?php echo $t['content']?></li>
-	       	      <?php 
-	       	      }
-	       	      ?>
-	       	      </ol>
-	       	      <div class="separator mt20">&nbsp;</div>
-	       	      <?php }?>
-       	      </div>
-       	      
-       	      
-       	      <div class="clr"></div>
-       	      <div class="alle-winkels-outer">     	      
-       	      
-       	      
-       	      	<div class="coup-left">
-		       	      <h3 class="text-black mt20"><?php echo $this->translate('Op '); ?><?php echo $o['shop']['name']; ?><?php echo $this->translate(' kan je de actie '); ?><?php echo $o['title']; ?><?php echo $this->translate(' gebruiken&#33;'); ?></h3>
-		       	      <?php 
-		       	       $WebsiteScreenshot = HTTP_PATH .'public/images/NoImage/websiteLogo.jpg';
-		       	       //$WebsiteScreenshot = HTTP_PATH. 'public/thumb.php?src='.$WebsiteScreenshot.'&h=0&w=450&zc=0';
-		       	      if(isset( $o['shop']['screenshot']['name'] ) && $o['shop']['screenshot']['name'] != '' ) 
-		       	      {
-		       	       
-		       	        	$WebsiteScreenshot = PUBLIC_PATH_CDN .  ltrim($o['shop']['screenshot']['path'], "/") .'thum_large_'. $o['shop']['screenshot']['name'] ;
-		       	         
-		       	       }
-		       	       ?>
-		       	       <p class="mt15"><?php echo $this->translate('Om jouw '); ?><?php echo $o['shop']['name']; ?> <?php echo $this->translate('kortingscode te gebruiken moet je de code invoeren in het daarvoor bestemde vakje tijdens de bestelprocedure. '); ?><br /><br />
-		       	       <?php echo $this->translate("Below is a screenshot to show you where it's done:"); ?> </p>
-		       	       <div>
-							<img class="mt80" src="<?php echo HTTP_PATH; ?>public/images/front_end/web-arrow.png" border="0">
-							<span class='screenshot-text'><?php echo $this->translate('Hier is een screenshot van de webwinkel. Plaats direct je bestelling met korting.');?></span>
-						</div>
-		       	       	<p class="mt80"><?php echo $this->translate('Altijd op de hoogte blijven van '); ?><?php echo $o['shop']['name']; ?> <?php echo $this->translate('kortingscodes&#63; Schrijf je dan in voor de'); ?> <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1') ?>" rel="nofollow"><?php echo $this->translate('nieuwsbrief.'); ?></a></p>
-       	       </div>
-       	       <div class="coup-right">
-	       	       <div class="ms-box crop" style="padding:0px; border:none;background:none;">
-		            <img src="<?php  echo $WebsiteScreenshot; ?>" border="0" />
-		            </div>      
-       	       </div>
-       	       </div>
-       	     <!-- Alle Winkels Ends -->
-       	    <?php } ?>
-       	    <div class="white-bg mt20">
-	       	     <!-- Separator Starts -->
-		       	 <div class="separator">&nbsp;</div>
-	       	     <!-- Separator Ends -->
-	       	     <div class="alle-winkels-outer">
-		       	     <div class="clr"><h2><?php echo $this->translate('Huidige Populaire Kortingscodes') ; ?> </h2></div>
-		       	     	<?php echo $this->partialLoop('offer/sixPopularOffer.phtml', $this->popoffer); ?>
-		       	    	 <div class="clr"></div>
-			           <div class="popular-kortings-link">
-			       	   <?php echo $this->translate('View all'); ?> <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE . $cd['shop']['permaLink'];?>"><?php echo $cd['shop']['name'];?> <?php echo $this->translate('Vouchercodes 2012'); ?></a>
-			           </div>
-	       	     </div>
-	       	     <div class="separator mt20">&nbsp;</div>
-       	     </div>
-       	     <!-- Separator Starts -->
-       	     
-       	     <!-- Separator Ends -->
-       	     <!-- Coupon no-alternative code ends --> 
-       	        	   
-       	  <?php }
-          } elseif($enddate >= $currentDate){
-          	//die("test4");
-          	?>
-       	
-          <!-- Coupon extended Code starts-->
-          <!-- Alle Winkels Starts -->
-          <div class="white-bg">
-            <div class="alle-winkels-outer">
-              <?php 
-              foreach($this->cpndetail as $o) {
-              	
-              	$link_shop = HTTP_PATH_LOCALE.$o['shop']['permaLink'];
-                //echo "<pre>"; print_r($o); die;    
-                $shopPicture = HTTP_PATH .'public/images/NoImage/NoImage_200x100.jpg';
-                $shopPicture = HTTP_PATH_CDN. "thumb.php?src=".$shopPicture."&h=100&w=200&zc=0";
-
-                if(isset( $o['shop']['logo']['name'] ) && $o['shop']['logo']['name'] != '' ) {
-                  $shopPicture = PUBLIC_PATH_CDN .  ltrim($o['shop']['logo']['path'],"/")  .'thum_big_'. $o['shop']['logo']['name'] ;
-                   
-                  }	
-                ?>
-
-                <div class="your-ms-small mt20">
-                  <div class="your-ms-top extoffer" style="padding:0px; border-bottom:none;">
-                    <a href="<?php echo $link_shop; ?>"><img alt='<?php echo $o['shop']['name']; ?>' class='radiusImg' src="<?php echo  $shopPicture;?>"/></a>
-                  </div>
-                  <div class="your-ms-bot clr"></div>
-                </div>
-                <?php 
-                  $daysdiff = strtotime(date('Y-m-d',strtotime($o['endDate']))) - strtotime(date('Y-m-d'));
-                  $daysLeft = round($daysdiff/(60*60*24));
-                  $addedDateAgain = new Zend_Date($o['startDate']); 
-                  $expiryDateAgain = new Zend_Date($o['endDate']); 
-                ?>
-                <div class="ms-text mt20">
-                  <h1 class="mt5">
-                    <span class="text-black"><?php echo strlen($o['title'])<= 50 ?  $o['title'] : substr($o['title'], 0,50).'...';?></span>
-                  </h1>  
-                  <div class="mt5"><?php echo $this->translate('Added'); ?> <?php echo $addedDateAgain->get(Zend_Date::DATE_FULL); ?>, <?php echo $this->translate('Expires'); ?> <?php echo $expiryDateAgain->get(Zend_Date::DATE_FULL); ?> 
-                    <strong class="text-black">
-                      <?php 
-              			if($daysLeft ==2 || $daysLeft==3) {
-							echo ', Nog maar ' . $daysLeft. ' ' .$this->translate(' dagen geldig!');
-						}
-						else if($daysLeft==1){
-							echo ', Nog maar ' . $daysLeft. ' ' .$this->translate(' dag geldig!');
-						}
-						else if($daysLeft==0) {
-							echo ', ' . $this->translate('Expire Today');
-						}
-                      ?>
-                    </strong>
-                  </div>
-                  <?php 
-                  $bounceRate = "/out/offer/".$this->id;
-                  $out = $this->translate("out");
-                  $offer = $this->translate("offer");
-
-                  if($cd['refURL']!=null){
-                  $check = 1;
-                  $urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-                  $url_shop = $cd['refURL'];
-
-
-                  }elseif($o['shop']['refUrl']!=null){
-
-                  $check = 1;
-                  $urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-                  $shop_url = $o['shop']['refUrl']; 
-
-                  }elseif ($o['shop']['actualUrl']!=null){
-
-                  $check = 1;
-                  $urlToShow = HTTP_PATH_LOCALE."out/offer/".$o['id'];
-                  $shop_url = $o['shop']['actualUrl'];
-
-                  }else{
-                  $check = 0;
-                  $shop_url = HTTP_PATH_LOCALE.$o['shop']['permaLink'];
-                  }
-
-                  //echo "<pre>";
-                  //print_r($o); die;
-                  if($o['discountType']=='PA'){
-
-                  if(count($o['logo'])>0){
-
-                  $url = PUBLIC_PATH_CDN.ltrim($o['logo']['path'],"/").$o['logo']['name']; 
-                  }else{
-
-                  $url = $o['refOfferUrl']; 
-                }
-                ?>
-
-                <a rel1="<?php echo $shop_url;?>" href="javascript:void(0)" class="fl mt20">
-                  <img src="<?php echo HTTP_PATH; ?>public/images/front_end/toon-code-btn.png" border="0" />
-                </a>
-
-                <a rel1="<?php echo $url;?>" href="javascript:void(0)" class="coupon-code-altr">
-                  <img width="217" height="39" src="<?php echo HTTP_PATH .'public/images/front_end/coupon-code.png';?>">
-                </a>
-
-                <?php }else{?>
-                <a class="fl" href="<?php echo $urlToShow;?>"  rel="nofollow" target="_blank" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0'), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" >
-                  <div class="new-blue-btn" >
-                    <?php echo $this->translate('PAK DEZE AANBIEDING') ; ?>
-                  </div>
-                </a>
-                <a class="fl" href="<?php echo $urlToShow;?>"  rel="nofollow" target="_blank" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0'), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');" >
-                  <div class="black-btn" id="blackImage<?php echo $o['id']; ?>">
-                    <div class="coupon-code"><?php echo $o['couponCode'];?></div>
-                  </div>
-                  <div  class="red-btn" id="<?php echo $o['id']; ?>" onclick="showCodeDetail(<?php echo $o['id']; ?>,'0')">
-                    <img width="217" height="39" src="<?php echo HTTP_PATH; ?>public/images/front_end/btn-red.png">
-                  </div>
-                </a>
-                <?php }?>
-              </div>
-          </div>
-
-
-          <!-- Separator Starts -->
-          <div class="separator mt20">&nbsp;</div>
-          <!-- Separator Ends --> 
-          </div>
-
-        </div>
-        </div>
-         <div class="clr"></div>  
-            <!-- Page Left Starts -->
-        	<div class="alle-winkels-outer">
-	       		 <h2 class="text-black"><?php echo $this->translate('Over deze kortingscode'); ?></h2>
-	             <p class="mt15" style="word-wrap: break-word;"><?php echo $o['extendedFullDescription']; ?></p>
-
-	         
-	      
-           <!-- Separator Starts -->
-           <div class="separator mt20">&nbsp;</div>
-            <!-- Separator Ends --> 
-             <div class="clr"></div>
-	            <?php if($o['termandcondition']!='' && $o['termandcondition']!=null){ ?>
-				<h3 class="text-black mt15"><?php echo $this->translate('Voorwaarden'); ?></h3>
-				<ol class="mr-none">
-				<?php foreach($o['termandcondition'] as $t)
-				{
-				?>
-	            <li><?php echo $t['content']?></li>
-	            <?php 
-				}
-	            ?>
-	            </ol>
-	             <!-- Separator Starts -->
-           <div class="separator mt20">&nbsp;</div>
-            <!-- Separator Ends --> 
-	        <?php }?>
-	            
-          
-        </div>
-	        <div class="clr"></div> 
-	        <div class="alle-winkels-outer">   
-	           
-	           		  <div class='coup-left'>
-						<h3 class="text-black mt20"><?php echo $this->translate('Op '); ?>
-							<?php echo $o['shop']['name']; ?>
-							<?php echo $this->translate(' kan je de actie '); ?>
-							<?php echo $o['title']; ?>
-							<?php echo $this->translate(' gebruiken&#33;'); ?>
-						</h3>
-					    <?php 
-					    
-							$WebsiteScreenshot = HTTP_PATH .'public/images/NoImage/websiteLogo.jpg';
-							//$WebsiteScreenshot = HTTP_PATH. 'public/thumb.php?src='.$WebsiteScreenshot.'&h=0&w=450&zc=0';
-							if(isset( $o['shop']['screenshot']['name'] ) && $o['shop']['screenshot']['name'] != '' ) 
-							{
-							  
-								    $WebsiteScreenshot = PUBLIC_PATH_CDN .  ltrim($o['shop']['screenshot']['path'],"/") .'thum_large_'. $o['shop']['screenshot']['name'] ;
-								 
-							}
-					     ?>
-						<?php // echo $WebsiteScreenshot;?>
-			            <p class="mt15"><?php echo $this->translate('Om jouw '); ?><?php echo $o['shop']['name']; ?><?php echo $this->translate(' kortingscode te gebruiken moet je de code invoeren in het daarvoor bestemde vakje tijdens de bestelprocedure. '); ?><br /><br />
-		       	       <?php // echo $this->translate("Below is a screenshot to show you where it's done:"); ?> </p>
-						
-						<div>
-							<img class="mt80" src="<?php echo HTTP_PATH; ?>public/images/front_end/web-arrow.png" border="0">
-							<span class='screenshot-text'><?php echo $this->translate('Hier is een screenshot van de webwinkel. Plaats direct je bestelling met korting.');?></span>
-						</div>
-						<p class="mt80"><?php echo $this->translate('Altijd op de hoogte blijven van '); ?><?php echo $o['shop'] ['name']; ?> <?php echo $this->translate('kortingscodes&#63; Schrijf je dan in voor de'); ?> <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1') ?>" rel="nofollow"><?php echo $this->translate('nieuwsbrief.'); ?></a></p>
-					</div>
-					<div class='coup-right'>
-			            <div class="ms-box crop" style="padding:0px; border:none;background:none; height: auto;">
-			            <img src="<?php  echo $WebsiteScreenshot;?>" border="0" />
-			            </div>  
-		            </div>     
-            </div><!-- Page Left Ends -->
-            <!-- Page Right Starts -->
-           
-     
-           <!-- Alle Winkels Ends -->
-        
-	        
-	        <?php } ?>
-	        
-	        <div class="separator mt20">&nbsp;</div>
-	        <div class="white-bg">
-		      	<div class="clr">&nbsp;</div>
-		         <div class='alle-winkels-outer'>
-				        <div class="clr"><h2><?php echo $this->translate('Huidige Populaire Kortingscodes'); ?></h2></div>
-				        	<?php echo $this->partialLoop('offer/sixPopularOffer.phtml', $this->popoffer); ?>
-				        <div class="clr"></div>
-			           <div class="popular-kortings-link">
-			       	   <?php echo $this->translate('View all'); ?> <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE . $cd['shop']['permaLink'];?>"><?php echo $cd['shop']['name'];?> <?php echo $this->translate('Vouchercodes 2012'); ?></a>
-			           </div>
-	           </div>
-            	<!-- Separator Starts -->
-           		<div class="separator mt20">&nbsp;</div>
-           <!-- Coupon extended code ends --> 
-           </div>
-          
-           <?php } }   ?>
+</div>				

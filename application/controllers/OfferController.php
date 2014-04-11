@@ -323,7 +323,7 @@ class OfferController extends Zend_Controller_Action {
 		$this->view->fbshareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $cpnDetails[0]['extendedUrl'];
 		$this->view->fbImg = $img;
 
-		$this->view->cpndetail = $cpnDetails;
+		$this->view->couponDetail = $cpnDetails;
 		if(count($cpnDetails)==0) {
 			$this->_redirect(HTTP_PATH_LOCALE.'error');
 		}
