@@ -120,8 +120,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
                 	<?php
                 			$isScheduled = $this->data['0']['newletter_is_scheduled'] ;
                 			$sendDate = $isScheduled ?
-                							 date('d-m-Y', strtotime($this->data['0']['newletter_scheduled_time']))
-                							: date('d-m-Y');
+                							 date('m-d-Y', strtotime($this->data['0']['newletter_scheduled_time']))
+                							: date('m-d-Y');
 
 							$sendTime = isset($this->data['0']['newletter_is_scheduled'] )
                 						? date('H:i', strtotime($this->data['0']['newletter_scheduled_time']))
@@ -164,7 +164,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
 	                    <div class="mainpage-content-right">
 	                    	<div class="mainpage-content-right-inner-right-other dateValidationMessage1"></div>
 		                        <div class="mainpage-content-right-inner-left-other" style="width: 269px ! important;">
-		                        	<div data-date-format="dd-mm-yyyy" data-date="<?php echo $sendDate;?>" id="dp3" class="input-append date">
+		                        	<div data-date-format="mm-dd-yyyy" data-date="<?php echo $sendDate;?>" id="dp3" class="input-append date">
 		                        		<input readonly="readonly" type="text"  style="width:120px !important;" value="<?php echo $sendDate;?>"  placeholder="Sunday, April 1" class="span2 ignore2 date-time-cusor-style" id="offerStartDate" name="sendDate">
 		                        		<span class="add-on"><i class="icon-th"></i></span>
 									</div>
@@ -180,9 +180,13 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
 	                <div class="mainpage-content-line mb10">
 	                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate(''); ?></strong></label></div>
 	                    <div class="mainpage-content-right">
-	                        <div class="mainpage-content-right-inner-left-other">
-	                            <div data-toggle="buttons-checkbox" class="btn-group">
+	                        <div class="mainpage-content-right-inner-left-other help-inline">
+	                            <div data-toggle="buttons-checkbox" class="btn-group fl">
 	                                <a id="sendNewsletter-btn" class="btn btn-primary" href="javascript:;" onclick="sendNewsLetter(event)"><?php echo  $isScheduled ? $this->translate('Save Scheduling') : $this->translate('Send Newsletter'); ?></a>
+
+	                            </div>
+	                           <div data-toggle="buttons-checkbox" class="btn-group fl m5">
+	                            	<a id="disableNewsletter-btn" href="javascript:;" onclick="disableNewsLetterSchedule(event)"><?php echo  $isScheduled ? $this->translate('disable Scheduling') : ''; ?></a>
 	                            </div>
 	                        </div>
 	                    </div>

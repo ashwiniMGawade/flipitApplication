@@ -652,7 +652,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 
 
  	}
-
+   
  	/**
  	 * updateNewsletterSchedulingStatus
  	 *
@@ -677,4 +677,15 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 				 		->execute();
 
  	}
+
+ 	public static function disableNewsletterScheduling()
+    {
+    	$disableNewsletterSchedule = Doctrine_Query::create()
+				 		->update('Signupmaxaccount')
+				 		->set('newletter_is_scheduled', '0')
+				 		->set('newletter_status', '1')
+				 		->where('id=1')
+				 		->execute();
+		return $disableNewsletterSchedule;
+    }
 }

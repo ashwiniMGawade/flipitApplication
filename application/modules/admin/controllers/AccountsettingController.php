@@ -618,5 +618,18 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     	echo $this->_helper->json(array('recepients' => $visitors['recepients']), true);
     }
 
+    public function disablemandrillnewsletterAction()
+    {
+    	if ($this->_request->isPost()) {
+    		$flash = $this->_helper->getHelper('FlashMessenger');
+  
+    		if (Signupmaxaccount::disableNewsletterScheduling()) {
+    			$flash->addMessage(array('success' => $this->view->translate('Newsletter schedule has been successfully disabled')));
+    		}
+
+    		$this->_helper->redirector('emailcontent' , 'accountsetting' , null );
+    	}
+    }
+
 }
 

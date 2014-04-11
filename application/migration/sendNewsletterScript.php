@@ -191,7 +191,7 @@ class SendNewsletter {
 
 					echo "\nSending newletter...\n" ;
 
-					$this->mandrilHandler($key, $settings);
+					//$this->mandrilHandler($key, $settings);
 				}
 
 			} else {
