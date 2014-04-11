@@ -286,7 +286,8 @@ EOD;
 		    		'og:image'=>$headMetaValue->facebookImage, 'og:site_name'=>$site_name, 'twitter:description'=>$headMetaValue->twitterDescription,
 					'twitter:site'=>$site_name
 		    	 );
-   		return $value;
+   		
+    	return $value;
     }
     
 
