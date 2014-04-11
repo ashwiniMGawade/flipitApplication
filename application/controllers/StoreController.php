@@ -57,14 +57,14 @@ class StoreController extends Zend_Controller_Action
         
         $relatedPage =  Page::getPageFromPageAttrFiltered(7);
         
-        $this->view->pageTitle = @$relatedPage['pageTitle'];
-        $this->view->headTitle(@$relatedPage['metaTitle']);
-        $this->view->headMeta()->setName('description', @trim($relatedPage['metaDescription']));
+        $this->view->pageTitle = $relatedPage['pageTitle'];
+        $this->view->headTitle($relatedPage['metaTitle']);
+        $this->view->headMeta()->setName('description', trim($relatedPage['metaDescription']));
         
         
         if(@$relatedPage['customHeader'])
         {
-            $this->view->layout()->customHeader = "\n" . @$relatedPage['customHeader'];
+            $this->view->layout()->customHeader = "\n" . $relatedPage['customHeader'];
         }
         
         
@@ -135,7 +135,7 @@ class StoreController extends Zend_Controller_Action
         }
         //for facebook parameters
         
-        $this->view->facebookTitle = @$relatedPage['pageTitle'];
+        $this->view->facebookTitle = $relatedPage['pageTitle'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $relatedPage['permaLink'];
         
         if(LOCALE == '' )
@@ -149,7 +149,7 @@ class StoreController extends Zend_Controller_Action
                     
         }
         $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
-        $this->view->facebookDescription =  trim(@$relatedPage['metaDescription']);
+        $this->view->facebookDescription =  trim($relatedPage['metaDescription']);
         $this->view->facebookLocale = $facebookLocale ;
          
         
@@ -305,10 +305,11 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
         $this->view->headTitle(@$shopInformation[0]['overriteTitle']);
         $this->view->headMeta()->setName('description', @trim($shopInformation[0]['metaDescription']));
-        $this->view->facebookTitle = @$shopInformation[0]['overriteTitle'];
+        // Refactored Code
+        $this->view->facebookTitle = $shopInformation[0]['overriteTitle'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->facebookImage = $ShopImage;
-        $this->view->facebookDescription =  trim(@$shopInformation[0]['metaDescription']);
+        $this->view->facebookDescription =  trim($shopInformation[0]['metaDescription']);
         if(LOCALE == '' )
         {
         	$facebookLocale = '';
@@ -318,8 +319,8 @@ class StoreController extends Zend_Controller_Action
         	$facebookLocale = LOCALE;
         }
         $this->view->facebookLocale = $facebookLocale ;
-        $this->view->twitterDescription =  trim(@$shopInformation[0]['metaDescription']);
-        
+        $this->view->twitterDescription =  trim($shopInformation[0]['metaDescription']);
+        // Refactored End
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }

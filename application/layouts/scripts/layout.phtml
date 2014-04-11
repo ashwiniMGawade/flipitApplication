@@ -48,26 +48,17 @@ echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
 # if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
 if(LOCALE=='') :
     echo $this->render('facebookMeta.phtml');
-    echo $this->render('twitterMeta.phtml');
 else:
     echo $this->render(
         FrontEnd_Helper_LayoutContent::loadFacebookMeta(
             $this->facebookTitle,
             $this->facebookShareUrl,
             $this->facebookbImage,
-        	$this->facebookDescription,
-        	$this->facebookLocale		
+            $this->facebookDescription,
+            $this->facebookLocale
         )
     );
-    echo $this->render(
-        FrontEnd_Helper_LayoutContent::loadTwittrerMeta(
-            $this->twitterDescription,
-            $this->twitterSite
-
-        )
-    );
-endif;
-
+ endif;
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
