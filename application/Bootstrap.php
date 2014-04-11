@@ -917,6 +917,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		  	    		)
 		  	    ));
 
+		  	    $router1->addRoute("whitelabel", new Zend_Controller_Router_Route(
+		  	    		'whitelabel/top10.xml',
+		  	    		array(
+		  	    				'action' => "error",
+		  	    				'controller' => "error"
+		  	    		)
+		  	    ));
+
 		  	    $router1->addRoute("sargassofeed", new Zend_Controller_Router_Route(
 								'sargassofeed',
 								array(
