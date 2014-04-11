@@ -1,6 +1,6 @@
 <?php
 
-class whitelabelController extends  Zend_Controller_Action
+class WhitelabelController extends  Zend_Controller_Action
 {
 
     public function init()
@@ -18,4 +18,3 @@ class whitelabelController extends  Zend_Controller_Action
     }
 
 }
-

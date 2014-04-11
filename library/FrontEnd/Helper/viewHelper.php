@@ -2122,7 +2122,7 @@ EOD;
 
     	$xml = new XMLWriter();
     	$xml->openURI('php://output');
-    	$xml->startDocument('1.0', 'utf-8');
+    	$xml->startDocument('1.0');
     	$xml->setIndent(2);
     	if ($feedCheck == true) {
     	$xml->startElement('rss');
@@ -2134,24 +2134,31 @@ EOD;
     	$xml->writeElement('description', $xmlDescription);
     	$xml->writeElement('link', $domainName);
     	$xml->writeElement('language', 'nl');
-
+        
+        $shopName = 'shopname';
+        $description = 'title';
+        if ($feedCheck == true) {
+            $shopName = 'title';
+            $description = 'description';
+        }
     	foreach ($topVouchercodes as  $offer) {
 	    	$top10Offers = $offer['offer'] ;
 	    	$xml->startElement("item");
-	    	$xml->writeElement('link', $domainName . '/' . $top10Offers['shop']['permaLink']);
-	    	$xml->writeElement('title', $top10Offers['shop']['name']);
+	    	$xml->writeElement($shopName, $top10Offers['shop']['name']);
             
             if (mb_strlen($top10Offers['title'], 'UTF-8') > 42) {
-                $xml->writeElement('description', mb_substr($top10Offers['title'], 0,42,  'UTF-8')."...");
+                $xml->writeElement($description, mb_substr($top10Offers['title'], 0,42,  'UTF-8')."...");
             } else {
-                $xml->writeElement('description', $top10Offers['title']);
+                $xml->writeElement($description, $top10Offers['title']);
             }
+
+            $xml->writeElement('link', $domainName . '/' . $top10Offers['shop']['permaLink']);
 	    	$xml->endElement();
     	}
 
      	if ($feedCheck == false) {
      		$xml->writeElement('More', 'nl');
-    		$xml->writeElement('moreLink', $domainName);
+    	    $xml->writeElement('moreLink', $domainName);
     	}
     	$xml->endElement();
     	if ($feedCheck == true) {
