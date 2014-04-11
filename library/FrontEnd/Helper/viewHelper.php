@@ -2058,41 +2058,56 @@ EOD;
       	 return $offers;
 	}
 	
-	public static function sendMandrillTemplateByParameters(
-		$emailSubject,
-		$emailFrom,
-		$senderName,
-	    $recipientMetaData,
-		$dataPermalink,
-		$loginLinkAndData,
-		$template_name,
-		$template_content,
-		$mandrill,
-		$mandrillUsersList
-	)
+    /**
+    * sendMandrillNewsletterByBatch
+    *
+    * This function is used to send mandrill newsletter in batches of 500
+    *
+    * @param array $mandrillNewsletterSubject mandrill newsletter subject
+    * @param array $mandrillSenderEmailAddress
+    * @param array $mandrillSenderName
+    * @param array $recipientMetaData contains receipent email and referrer
+    * @param array $globalMergeVars contains shop permalinks
+    * @param array $mandrillMergeVars contains email, login link and login with unsubscribe
+    * @param array $templateName template name of mandrill
+    * @param array $templateContent
+    * @param object $mandrill
+    * @param array $mandrillUsersList
+    * @version 1.0
+    */
+    public static function sendMandrillNewsletterByBatch(
+        $mandrillNewsletterSubject,
+        $mandrillSenderEmailAddress,
+        $mandrillSenderName,
+        $recipientMetaData,
+        $globalMergeVars,
+        $mandrillMergeVars,
+        $templateName,
+        $templateContent,
+        $mandrill,
+        $mandrillUsersList
+    )
 	{
-		sort($mandrillUsersList);
-		sort($recipientMetaData);
-		sort($loginLinkAndData);
-		
-		$mandrillUsersList1  = array_chunk($mandrillUsersList, 500);
-		$recipientMetaData   = array_chunk($recipientMetaData, 500);
-		$loginLinkAndData    = array_chunk($loginLinkAndData, 500);
-		
-		$increment = 0;
-		foreach ($mandrillUsersList1 as $key=>$mandrillUserList) {
-			$mandrillMessage = array(
-				'subject'    => $emailSubject ,
-				'from_email' => $emailFrom,
-				'from_name'  => $senderName,
-				'to'         => $mandrillUserList ,
-				'inline_css' => true,
-				"recipient_metadata" =>   $recipientMetaData[$key],
-				'global_merge_vars' => $dataPermalink,
-				'merge_vars' => $loginLinkAndData[$key]
-		);
-		$mandrill->messages->sendTemplate($template_name, $template_content, $mandrillMessage);
-		}
-		return true;
-	}
+        sort($mandrillUsersList);
+        sort($recipientMetaData);
+        sort($mandrillMergeVars);
+        $mandrillUsersLists  = array_chunk($mandrillUsersList, 500);
+        $recipientMetaData   = array_chunk($recipientMetaData, 500);
+        $mandrillMergeVars    = array_chunk($mandrillMergeVars, 500);
+
+        foreach ($mandrillUsersLists as $mandrillUsersKey => $mandrillUsersEmailList) {
+            $mandrillMessage = array(
+                'subject'    => $mandrillNewsletterSubject,
+                'from_email' => $mandrillSenderEmailAddress,
+                'from_name'  => $mandrillSenderName,
+                'to'         => $mandrillUsersEmailList,
+                'inline_css' => true,
+                "recipient_metadata" => $recipientMetaData[$mandrillUsersKey],
+                'global_merge_vars' => $globalMergeVars,
+                'merge_vars' => $mandrillMergeVars[$mandrillUsersKey]
+            );
+            $mandrill->messages->sendTemplate($templateName, $templateContent, $mandrillMessage);
+        }
+        return true;
+    }
 }

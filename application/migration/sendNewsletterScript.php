@@ -291,22 +291,20 @@ class SendNewsletter {
 
 		//initialize mandrill with the template name and other necessary options
 		$mandrill = new Mandrill_Init($this->_mandrillKey);
-		$template_name = $this->_template ;
-		$template_content = $data ;
+		$templateName = $this->_template;
+		$templateContent = $data;
 
 		//Start get email locale basis
-		$emailFrom  = $settings[0]['emailperlocale'];
-		$emailSubject  = $settings[0]['emailsubject'];
-		$senderName  = $settings[0]['sendername'];
-
-		
+		$mandrillSenderEmailAddress  = $settings[0]['emailperlocale'];
+		$mandrillNewsletterSubject  = $settings[0]['emailsubject'];
+		$mandrillSenderName  = $settings[0]['sendername'];
 
 		try {
-			FrontEnd_Helper_viewHelper::sendMandrillTemplateByParameters(
-					$emailSubject, $emailFrom, $senderName,
+			FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+					$mandrillNewsletterSubject, $mandrillSenderEmailAddress, $mandrillSenderName,
 					$this->_recipientMetaData, $dataPermalink,
-					$this->_loginLinkAndData, $template_name,
-					$template_content, $mandrill, $this->_to);	
+					$this->_loginLinkAndData, $templateName,
+					$templateContent, $mandrill, $this->_to);	
 
 			# set newsletter scheduling to be false and newsletter status true. Also set sending time to be past
 			Signupmaxaccount::updateNewsletterSchedulingStatus();

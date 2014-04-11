@@ -214,9 +214,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 	    	//Start get email locale basis
 	    	$email_data = Signupmaxaccount::getallmaxaccounts();
-	    	$emailFrom  = $email_data[0]['emailperlocale'];
-	    	$emailSubject  = $email_data[0]['emailsubject'];
-	    	$senderName  = $email_data[0]['sendername'];
+	    	$mandrillSenderEmailAddress  = $email_data[0]['emailperlocale'];
+	    	$mandrillNewsletterSubject  = $email_data[0]['emailsubject'];
+	    	$mandrillSenderName  = $email_data[0]['sendername'];
 	    	//End get email locale basis
 
 
@@ -281,14 +281,13 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 	    	//initialize mandrill with the template name and other necessary options
 	    	$mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
-	    	$template_name = $this->getInvokeArg('newsletterTemplate');
-	    	$template_content = $data;
+	    	$templateName = $this->getInvokeArg('newsletterTemplate');
+	    	$templateContent = $data;
 
 	    	try {
-	    		FrontEnd_Helper_viewHelper::sendMandrillTemplateByParameters($emailSubject, $emailFrom, $senderName,
-	    				$this->recipientMetaData, $dataPermalink, $this->loginLinkAndData, $template_name, $template_content, $mandrill, $this->to);
+	    		FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch($mandrillNewsletterSubject, $mandrillSenderEmailAddress, $mandrillSenderName,
+	    				$this->recipientMetaData, $dataPermalink, $this->loginLinkAndData, $templateName, $templateContent, $mandrill, $this->to);
  				$message = $this->view->translate('Newsletter has been sent successfully');
-die;
 	    	} catch (Mandrill_Error $e) {
 
 				//echo 'A mandrill error occurred: ' . get_class($e) . ' - ' . $e->getMessage();
