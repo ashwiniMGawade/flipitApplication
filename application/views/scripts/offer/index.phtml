@@ -4,50 +4,45 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 ?>
 <div class="header-block">
-				<div class="icon icon-small">
-					<img src="<?php echo HTTP_PATH; ?>public/images/ico-02.png" width="89" height="89" alt="image description">
-				</div>
-				<div class="box">
-					<h1>Newest Codes</h1>
-					<strong>Our most recent discount codes are listed here</strong>
-				</div>
-			</div>
-			<div class="row">
-				<div id="content" class="col-md-8 col-sm-8">
-<?php
-            
-            if(count($this->paginator)>0){
-				
-            	echo $this->partial('store/_offer.phtml', array('offers'=> $this->offers, 
-            			'offersType'=>$this->offersType, 'shopName'=> '', 'shop'=>'')
-            		);
-
-            }else{
-                 ?>
-              <div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div>
-            <?php } ?>
-	
-	
-
-             <?php
-			 echo $this->paginationControl ( $this->paginator, 'Sliding', '/partials/_pagination.phtml' );
-			  ?>
-		
+    <div class="icon icon-small">
+        <img src="<?php echo HTTP_PATH; ?>public/images/ico-02.png" width="89" height="89" alt="image description">
+    </div>
+    <div class="box">
+        <h1>Newest Codes</h1>
+        <strong>Our most recent discount codes are listed here</strong>
+    </div>
 </div>
-<aside class="col-md-4 col-sm-4" id="sidebar">
-        <div class="block white">
+<div class="row">
+    <div id="content" class="col-md-8 col-sm-8">
+<?php
+if(count($this->paginator)>0){
+    echo $this->partial('store/_offer.phtml', array('offers'=> $this->offers, 
+         'offersType'=>$this->offersType, 'shopName'=> '', 'shop'=>'')
+         );
+    }else{
+?>
+        <div style="text-align:center;font-size:14px;font-weight:bold;">
+        <?php echo $this->translate('No record found');?>
+        </div>
+<?php } ?>
         <?php
-         $locale = LOCALE != 'en'? LOCALE. '/' : '';
-         echo $this->esi($locale.'store/signupwidget'); ?>
+        echo $this->paginationControl ( $this->paginator, 'Sliding', '/partials/_pagination.phtml' );
+        ?>
+        
+    </div>
+    <aside class="col-md-4 col-sm-4" id="sidebar">
+        <div class="block white">
+            <?php
+            $locale = LOCALE != 'en'? LOCALE. '/' : '';
+            echo $this->esi($locale.'store/signupwidget'); ?>
         </div>
         <article class="block">
-        <?php
-        $controllerName =  $this->controllerName;
-        $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-        <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
-        echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
-        ?>
+            <?php
+            $controllerName =  $this->controllerName;
+            $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
+            <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+            echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
+            ?>
         </article>
     </aside>
-   
 </div>
