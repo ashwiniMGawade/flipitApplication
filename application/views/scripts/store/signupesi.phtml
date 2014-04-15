@@ -6,10 +6,10 @@ if (!Auth_VisitorAdapter::hasIdentity()) {?>
         <form class="form-signin newsletter" id="formOneHomePage" 
         action="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') .'/'. FrontEnd_Helper_viewHelper::__link('stap2')?>" 
         method="post" >
-           <input type="email" class="form-control"
+           <input type="email" class="form-control" 
            onkeypress="if(event.which == 13) {  signUpFromHandler(); event.preventDefault(); }" 
-           placeholder="<?php echo $this->translate('enter_email_address');?>"
-           name="emailAddress"onkeypress="if(event.which == 13) {  signUpFromHandler(); event.preventDefault(); }" 
+           placeholder="<?php echo $this->translate('enter_email_address');?>" 
+           name="emailAddress" onkeypress="if(event.which == 13) { signUpFromHandler(); event.preventDefault(); }" 
            placeholder="<?php echo $this->translate('enter_email_address');?>" name="emailAddress"/>
            <button onclick="signUpFromHandler();" 
            class="btn blue btn-lg btn-primary" type="submit"><?php echo $this->translate('sign up');?></button>

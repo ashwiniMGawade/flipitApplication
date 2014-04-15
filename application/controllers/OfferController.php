@@ -7,25 +7,26 @@ class OfferController extends Zend_Controller_Action
     #####################################################
     public function top20Action()
     {
-        $page = Page::getPageFromPageAttr(37);
-        if (@$page->customHeader) {
-            $this->view->layout()->customHeader = "\n" . @$page->customHeader;
+        $pageName = 'top-20';
+        $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
+        $page = Page::getPageFromPageAttr($pageAttributeId);
+        if ($page->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $page->customHeader;
         }
         if (LOCALE == '') {
-            $fbImage = 'logo_og.png';
+            $facebookImage = 'logo_og.png';
         } else {
-            $fbImage = 'flipit.png';
+            $facebookImage = 'flipit.png';
         }
         $offers= Offer::getTop20Offers();
-        $params = $this->_getAllParams();
         
-        $this->view->pageTitle = @$page->pageTitle;
-        $this->view->headTitle(@$page->metaTitle);
-        $this->view->headMeta()->setName('description', @trim($page->metaDescription));
-        $this->view->fbtitle = @$page->pageTitle;
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('top-20');
-        $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
-        $this->view->controllerName = $params['controller'];
+        $this->view->pageTitle = $page->pageTitle;
+        $this->view->headTitle($page->metaTitle);
+        $this->view->headMeta()->setName('description', trim($page->metaDescription));
+        $this->view->fbtitle = $page->pageTitle;
+        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link($pageName);
+        $this->view->fbImg = HTTP_PATH."public/images/" .$facebookImage ;
+        $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->topPopularOffers = $offers;
     }
     ############################################################

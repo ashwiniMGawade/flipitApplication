@@ -248,7 +248,7 @@ class Offer extends BaseOffer
      */
     public static function getTopCouponCodesForShopPage($shopCategories, $limit = 5)
     {
-        $date = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d H:i:s');
         $topCouponCodes = Doctrine_Query::create()
         ->select('p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
             o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
@@ -272,8 +272,8 @@ class Offer extends BaseOffer
         }
         
         $topCouponCodes = $topCouponCodes->andWhere('s.status = 1')
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+            ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
             ->andWhere('o.discounttype = "CD"')
             ->andWhere('o.userGenerated = 0')
             ->andWhere('o.Visability != "MEM"')
@@ -293,7 +293,7 @@ class Offer extends BaseOffer
     public static function getNewestOffers($type, $limit, $shopId=0, $userId="")
     {
         $date = date('Y-m-d H:i:s');
-        $newestCouponCode = Doctrine_Query::create()->select(
+        $newestCouponCodes = Doctrine_Query::create()->select(
             's.id,s.name,
             s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
             s.actualUrl,terms.content,
@@ -322,13 +322,13 @@ class Offer extends BaseOffer
             ->andWhere('o.userGenerated=0')
             ->orderBy('o.startdate DESC');
         if ($shopId!='') {
-            $newestCouponCode->andWhere('s.id = '.$shopId.'');
+            $newestCouponCodes->andWhere('s.id = '.$shopId.'');
         }
         if ($userId!="") {
-            $newestCouponCode->andWhere('o.authorId = '.$userId.'');
+            $newestCouponCodes->andWhere('o.authorId = '.$userId.'');
         }
-        $newestCouponCode = $newestCouponCode->limit($limit)->fetchArray();
-        return $newestCouponCode;
+        $newestCouponCodes = $newestCouponCodes->limit($limit)->fetchArray();
+        return $newestCouponCodes;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
