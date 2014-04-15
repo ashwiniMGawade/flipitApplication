@@ -129,7 +129,7 @@ EOD;
                 break;
             case 'newest':
             //to be refactored in future
-                $shopCouponCodes = Offer::commongetnewestOffers($type, $limit, $shopId);
+                $shopCouponCodes = Offer::getNewestOffers($type, $limit, $shopId);
                 break;
             case 'extended':
             //to be refactored in future

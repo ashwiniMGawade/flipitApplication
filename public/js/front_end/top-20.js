@@ -1,14 +1,20 @@
-function showTeamAndCondition(id)
+// refactored code 
+
+function showTermAndConditions(id)
 {
-	$('div#close_area'+ id).show();
-	$('div#teamandCondition'+id).slideToggle();
+	$('div#termAndConditions'+id).slideToggle();
+	$('a#termAndConditionLink'+id).toggleClass('uparrow'); 
 }
-function hideReadMoreAndTeamCondition(id)
+
+function showCodeInformation(id)
 {
-	$('div#close_area'+ id).hide();
-	$('div#teamandCondition'+id).slideToggle();;
+	$('div#offerCodeDiv'+id).show();
+	$('div#websiteOfferLink'+id).show();
+	$('div#offerButton'+id).hide();
 	
 }
+// end refactored code
+
 function doVote(uId,offer , vote)
 {
 	

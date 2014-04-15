@@ -12,6 +12,21 @@
  */
 class Page extends BasePage
 {
+    #####################################################
+    ############ REFECTORED CODE ########################
+    public static function getPageAttributeByPermalink($permalink)
+    {
+        $pageAttribute = Doctrine_Query::create()
+        ->select('p.id, p.pageAttributeId')
+        ->from('Page p')
+        ->where("permaLink = '". $permalink ."'")
+        ->andWhere('p.deleted=0')
+        ->fetchArray();
+        return $pageAttribute[0]['pageAttributeId'];
+    }
+    ######################################################
+    ############ END REFACTORED CODE #####################
+    ######################################################
 	
 	/**
 	 * get default page
