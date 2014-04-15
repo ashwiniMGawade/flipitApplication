@@ -292,7 +292,7 @@ class Offer extends BaseOffer
     
     public static function getNewestOffers($type, $limit, $shopId=0, $userId="")
     {
-        $date = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d H:i:s');
         $newestCouponCodes = Doctrine_Query::create()->select(
             's.id,s.name,
             s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
@@ -314,8 +314,8 @@ class Offer extends BaseOffer
             ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or o.couponCodeType = 'GN'")
             ->andWhere('s.deleted = 0')
             ->andWhere('s.status = 1')
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+            ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
             ->andWhere('o.discountType != "NW"')
             ->andWhere('o.discounttype="CD"')
             ->andWhere('o.Visability != "MEM"')
