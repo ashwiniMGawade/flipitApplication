@@ -78,6 +78,10 @@ h1{
     float: left;
 }
 
+.coupon li .coupon-content .content a{
+    color: #000;
+    text-decoration: none;
+}
 .coupon-number {
     display: table;
     width: 18px;
