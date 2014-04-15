@@ -269,6 +269,26 @@ EOD;
     
     }
     
+    public static function getHeadMeta($headMetaValue)
+    {
+    	$domainName = HTTP_HOST;
+    	if($domainName == "www.kortingscode.nl")
+    	{
+    		$site_name = "Kortingscode.nl";
+    	}
+    	else
+    	{
+    		$site_name = "Flipit.com";
+    	}
+    	$value = array('og:title'=>$headMetaValue->facebookTitle, 'og:type'=>'website', 'og:url'=> $headMetaValue->facebookShareUrl,
+		    		'og:description'=>$headMetaValue->facebookDescription, 'og:locale'=>$headMetaValue->facebookLocale, 
+		    		'og:image'=>$headMetaValue->facebookImage, 'og:site_name'=>$site_name, 'twitter:description'=>$headMetaValue->twitterDescription,
+					'twitter:site'=>$site_name
+		    	 );
+   		
+    	return $value;
+    }
+    
 
     ##################################################################################
     ################## END REFACTORED CODE ###########################################

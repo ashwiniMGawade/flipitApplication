@@ -47,17 +47,18 @@ echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
 
 # if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
 if(LOCALE=='') :
-    echo $this->render('fbmeta.phtml');
+    echo $this->render('facebookMeta.phtml');
 else:
     echo $this->render(
-        FrontEnd_Helper_LayoutContent::loadFbMeta(
-            $this->fbtitle,
-            $this->fbshareUrl,
-            $this->fbImg
+        FrontEnd_Helper_LayoutContent::loadFacebookMeta(
+            $this->facebookTitle,
+            $this->facebookShareUrl,
+            $this->facebookbImage,
+            $this->facebookDescription,
+            $this->facebookLocale
         )
     );
-endif;
-
+ endif;
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
