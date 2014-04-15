@@ -99,7 +99,10 @@ endif;
 <div class="header-block header-block-2">
     <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
     <div class="icon">
-        <a target="_blank" rel="nofollow" class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->storeImage . '" alt="' . $this->currentStoreInformation[0]['name']  . '"  width="176" height="89" />'; ?></a>
+        <a target="_blank" rel="nofollow" 
+        class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> 
+        onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->storeImage . '" alt="' . $this->currentStoreInformation[0]['name']  . '"  width="176" height="89" />'; ?>
+        </a>
     </div>
     <div class="box">
         <h1><?php echo $this->currentStoreInformation[0]['title'];?></h1>
@@ -113,16 +116,16 @@ endif;
 </div> 
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-<?php 
-echo $nomoneyNocodeMessage;
-echo $offers;
-echo $similarOffersHeader;
-echo $similarOffers;
-echo $similarShopsAndSimilarCategoriesShops;
-echo $discussion;
-echo $moneySavingGuide;
-echo $expiredOffers;
-?>
+    <?php 
+    echo $nomoneyNocodeMessage;
+    echo $offers;
+    echo $similarOffersHeader;
+    echo $similarOffers;
+    echo $similarShopsAndSimilarCategoriesShops;
+    echo $discussion;
+    echo $moneySavingGuide;
+    echo $expiredOffers;
+    ?>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
         <article class="block">
@@ -174,13 +177,15 @@ if($this->currentStoreInformation[0]['howToUse']):
                     <p>
                         <a href="javascript:void(0);" id="clicker"><?php echo $this->translate('Show me'); ?></a> 
                         <?php echo $this->translate('where to enter my').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('code, or read our full'); ?> 
-                        <a href="<?php echo HTTP_PATH_LOCALE.$howToUseGuidePermalink; ?>"><?php echo $this->currentStoreInformation[0]['name'].' '.$this->translate('Promotional Code'); ?></a>
+                        <a href="<?php echo HTTP_PATH_LOCALE.$howToUseGuidePermalink; ?>">
+                        <?php echo $this->currentStoreInformation[0]['name'].' '.$this->translate('Promotional Code'); ?>
+                        </a>
                         <?php echo $this->translate('help guide'); ?>.
                     </p>
                 </li>
                 <li class="web">
                     <h2><?php echo $this->translate('Official website'); ?></h2>
-                    <a href="<?php echo $this->currentStoreInformation[0]['actualUrl']; ?>"><?php echo $actualUrl; ?></a>
+                    <a href="<?php echo $this->currentStoreInformation[0]['actualUrl']; ?>"><?php echo $actualUrl;?></a>
                 </li>
             </ul>
 
@@ -235,9 +240,8 @@ if ($this->currentStoreInformation[0]['showSignupOption']) :
     ?>
 
             <div class="block white">
-     <?php echo $this->esi($this->locale.$storeViewPartial.'signupwidget'); ?>
+    <?php echo $this->esi($this->locale.$storeViewPartial.'signupwidget'); ?>
             </div>
-
     <?php
 endif;
 ?>
