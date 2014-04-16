@@ -23,8 +23,7 @@ if(intval(@$matches[0]) > 0 && intval(@$matches[0]) < 4) {
       
 } else if(intval(@$matches[0]) > 3) {
 	
-	$redirector = $this->getHelper('Redirector');
-	$redirector->gotoUrl('error');
+	header('location:'. HTTP_PATH.$permalink); 
 	
 } else {
 	
