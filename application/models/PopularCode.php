@@ -346,7 +346,7 @@ class PopularCode extends BasePopularCode
     {
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-        ->select('p.id,o.title,o.shopid,o.couponCodeType,o.extendedOffer,o.endDate,o.extendedUrl,o.offerlogoid,o.couponcode,o.exclusivecode,o.discount,o.discountvalueType,s.name,s.permaLink,s.logoid,l.path,l.name,p.type, p.position, p.offerid')
+        ->select('p.id,o.title,o.shopid,o.couponCodeType,o.extendedOffer,o.startDate,o.endDate,o.extendedUrl,o.offerlogoid,o.couponcode,o.exclusivecode,o.discount,o.discountvalueType,s.name,s.permaLink,s.logoid,l.path,l.name,p.type, p.position, p.offerid')
         ->from('PopularCode p')
         ->leftJoin('p.offer o')
         ->leftJoin('o.shop s')
