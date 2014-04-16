@@ -23,6 +23,7 @@ img {
 
 header{
     background: none repeat scroll 0 0 #FD8024;
+    float: left;
     width: inherit;
     margin-bottom: 12px;
 }
@@ -40,7 +41,6 @@ header .head-main img{
 header .head-main .header-title{
     border: medium none;
     color: #FFFFFF;
-    float: left;
     font-size: 24px;
     margin: 0;
     padding: 0;
