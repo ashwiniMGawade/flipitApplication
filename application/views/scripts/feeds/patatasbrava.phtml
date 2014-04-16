@@ -21,21 +21,8 @@
 $topPopularCouponCode = $this->topPopularCoupons;
 $offerNumber = 1;
 for ($couponCounter = 0; $couponCounter<count($topPopularCouponCode); $couponCounter++):
-    $couponImage = PUBLIC_PATH_CDN.ltrim($topPopularCouponCode[$couponCounter]['offer']['shop']['logo']['path'], "/") .'thum_large_'. $topPopularCouponCode[$couponCounter]['offer']['shop']['logo']['name'];
-
-    if ($topPopularCouponCode[$couponCounter]['offer']['shop']['name'] != '') :
-        $couponTitle = $topPopularCouponCode[$couponCounter]['offer']['shop']['name'];
-
-        if (mb_strlen($topPopularCouponCode[$couponCounter]['offer']['shop']['name'], 'UTF-8') > 15) :
-            $couponTitle = mb_substr($topPopularCouponCode[$couponCounter]['offer']['shop']['name'], 0,15,  'UTF-8')."...";
-        endif;
-    endif;
-
-    $couponContent = $topPopularCouponCode[$couponCounter]['offer']['title'];
-
-    if(mb_strlen($topPopularCouponCode[$couponCounter]['offer']['title'], 'UTF-8') > 100):
-        $couponContent = mb_substr($topPopularCouponCode[$couponCounter]['offer']['title'], 0, 100, 'UTF-8').'...';
-    endif;
+    $couponImage = PUBLIC_PATH_CDN.ltrim($topPopularCouponCode[$couponCounter]['offer']['shop']['logo']['path'], "/") .'thum_large_'.$topPopularCouponCode[$couponCounter]['offer']['shop']['logo']['name'];
+        $couponContent = $topPopularCouponCode[$couponCounter]['offer']['title'];
     ?>
             <li>
                 <a href="<?php echo HTTP_PATH_LOCALE.$topPopularCouponCode[$couponCounter]['offer']['shop']['permaLink'];  ?>" class="coupon-image" target="_blank">
