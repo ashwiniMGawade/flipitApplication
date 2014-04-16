@@ -1057,14 +1057,14 @@ public static function exportpagelist() {
 	
 	public static function getPageFromPageAttributeFiltered($id)
 	{
-		$pageAttribute = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
+		$pageAttributes = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
 		->from('Page p')
 		->where("pageAttributeId = ?", $id)
 		->andWhere('p.deleted=0')
 		->orderBy('id DESC')
 		->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 		
-		return $pageAttribute;
+		return $pageAttributes;
 	}
 
 	/**

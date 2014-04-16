@@ -140,17 +140,16 @@ class Shop extends BaseShop {
     }
    
     /**
-     * get all store from database
+     * getallStoresForFrontEnd get all store from database.
      * @version 0.1
-     * @return Ambigous <multitype:, multitype:unknown number >
      */
     public static function getallStoresForFrontEnd()
     {
-        $nowDate = date('Y-m-d 00:00:00');
-        $storeData = Doctrine_Query::create()
+        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $storeInformation = Doctrine_Query::create()
         ->select('o.id,s.id, s.name, s.permaLink as permalink')
         ->from('Shop s')
-        ->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$nowDate')) as exclusiveCount")
+        ->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount")
         ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
         ->leftJoin('s.offer o')
         ->leftJoin('s.logo img')
@@ -158,8 +157,8 @@ class Shop extends BaseShop {
         ->addWhere('s.status=1')
         ->orderBy('s.name')->fetchArray();
 
-        $generateArrayAccessKey =array();
-        foreach ($storeData as $store) {
+        $storesForFrontend =array();
+        foreach ($storeInformation as $store) {
             if ($store['name']!='' && $store['name']!=null) {
                 $FirstCharacter =  strtoupper(self::filter_firstchar($store['name']));
                 if (preg_match_all('/[0-9]/', $FirstCharacter, $characterMatch)) {
@@ -168,7 +167,7 @@ class Shop extends BaseShop {
                     }
                 }
 
-                $generateArrayAccessKey[$FirstCharacter][$store['id']] =
+                $storesForFrontend[$FirstCharacter][$store['id']] =
                 array("id"=>$store['id'],
                     "permaLink"=>$store['permalink'],
                     "name"=>$store['name'],
@@ -176,7 +175,7 @@ class Shop extends BaseShop {
                     "inpopular"=>$store['popularCount']);
             }
         }
-        return $generateArrayAccessKey;
+        return $storesForFrontend;
     }
 
     /**

@@ -51,22 +51,22 @@ class StoreController extends Zend_Controller_Action
      */
     public function indexAction()
     {
-        $requestPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($requestPermalink);
+        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink);
         $relatedPageFromPageAttribute =  Page::getPageFromPageAttributeFiltered(7);
         $this->view->pageTitle = @$relatedPageFromPageAttribute['pageTitle'];
         $this->view->headTitle(@$relatedPageFromPageAttribute['metaTitle']);
         $this->view->headMeta()->setName('description', @trim($relatedPageFromPageAttribute['metaDescription']));
         
-        if (@$relatedPageFromPageAttribute['customHeader']) :
+        if ($relatedPageFromPageAttribute['customHeader']) :
             $this->view->layout()->customHeader = "\n" . @$relatedPageFromPageAttribute['customHeader'];
         endif;
         
         $this->view->controllerName = $this->getRequest()->getParam('controller');
-        $this->view->action         = $this->getRequest()->getParam('action');
+        $this->view->action = $this->getRequest()->getParam('action');
         $allStoresList = self::shopOffersBySetGetCache('all_shops_list', Shop::getallStoresForFrontEnd('all', null), true);
-        $popularStore = self::shopOffersBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
-        $searchPanel = self::shopOffersBySetGetCache('all_searchpanle_list', FrontEnd_Helper_viewHelper::storeSearchPanel(), true);
+        $popularStores = self::shopOffersBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
+        $storeSearchByAlphabet = self::shopOffersBySetGetCache('all_searchpanle_list', FrontEnd_Helper_viewHelper::storeSearchPanel(), true);
         $this->view->facebookTitle = @$relatedPageFromPageAttribute['pageTitle'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $relatedPageFromPageAttribute['permaLink'];
         
@@ -76,10 +76,10 @@ class StoreController extends Zend_Controller_Action
             $facebookImage = 'flipit.png';
         endif;
 
-        $this->view->facebookImage            = HTTP_PATH."public/images/" .$facebookImage;
-        $this->view->storesInformation        = $allStoresList;
-        $this->view->storeSearchByAlphabet    = $searchPanel;
-        $this->view->popularStores            = $popularStore;
+        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
+        $this->view->storesInformation = $allStoresList;
+        $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
+        $this->view->popularStores = $popularStores;
     }
 
     public function searchshopbycharAction()
@@ -263,16 +263,16 @@ class StoreController extends Zend_Controller_Action
         return $offers;
     }
 
-    public function shopOffersBySetGetCache($shopKey = '', $shopFunction = '', $replaceStringArrayCheck = '')
+    public function shopOffersBySetGetCache($shopKey = '', $shopRelatedFunction = '', $replaceStringArrayCheck = '')
     {
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($shopKey);
 
         if ($cacheStatusByKey) {
             
             if ($replaceStringArrayCheck == '') {
-                $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray($shopFunction);
+                $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray($shopRelatedFunction);
             } else{
-                $shopInformation = $shopFunction;
+                $shopInformation = $shopRelatedFunction;
             }
 
             FrontEnd_Helper_viewHelper::setInCache($shopKey, $shopInformation);
