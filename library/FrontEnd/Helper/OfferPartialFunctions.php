@@ -16,6 +16,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
                 $urlToShow = PUBLIC_PATH_CDN.ltrim($currentOffer->logo['path'], "/").$currentOffer->logo['name'];
             }
         }
+        return $urlToShow;
        
     }
 
@@ -53,6 +54,8 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
         $dateDifference = abs($timeStampEnd - $timeStampStart);
         $dayDifference = floor($dateDifference/(60*60*24));
+        
+        return $dayDifference;
     }
 
     public static function getUserIsLoginOrNot()
@@ -122,7 +125,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
             $dateFormatString .= $trans->translate('Expires today');
 
         } else {
-            $endDate = new Zend_Date(strtotime($this->endDate));
+            $endDate = new Zend_Date(strtotime($currentOffer->endDate));
             $dateFormatString .= $trans->translate('Expires on').':';
             $dateFormatString .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
         } elseif ($currentOffer->discountType == "PR" || $currentOffer->discountType == "SL" || $currentOffer->discountType == "PA"):

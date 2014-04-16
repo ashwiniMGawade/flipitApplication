@@ -1514,7 +1514,7 @@ class Offer extends BaseOffer
     {
         $couponDetail = Doctrine_Query::create()
 
-                       ->select('o.*,s.name,s.id,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+                       ->select('o.*,s.name,s.id,s.discussions,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                        ->from("Offer o")
                        ->leftJoin('o.shop s')
                        ->leftJoin('o.logo ologo')

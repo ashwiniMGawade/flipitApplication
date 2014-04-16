@@ -1,208 +1,136 @@
-<?php 
-
+<?php
 $offer = (object) $this->couponDetail[0];
 $urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
-$dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);?>
+$dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);
+$termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
+
+$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+?>
 <div class="header-block header-block-2">
-	<div class="icon">
-		<?php
-		//echo "<pre>";print_r($this->couponDetail);die;
-		 $shopLink = HTTP_PATH_LOCALE.$offer->shop['permaLink'];
-		 $shopPicture = PUBLIC_PATH_CDN .  ltrim($offer->shop['logo']['path'],"/")  .'thum_big_'. $offer->shop['logo']['name'] ; 
-		 ?>
-		<img src="<?php echo $shopPicture;?>" width="176" height="89" alt="<?php echo $offer->shop['name']; ?>" href= "<?php echo $shopLink; ?>" >
-	</div>
-	<div class="box">
-		<h1><?php echo strlen($offer->title)<= 50 ?  $offer->title : substr($offer->title, 0, 50).'...';?></h1>
-	</div>
+    <div class="icon">
+        <?php
+         $shopLink = HTTP_PATH_LOCALE.$offer->shop['permaLink'];
+         $shopPicture = PUBLIC_PATH_CDN . ltrim($offer->shop['logo']['path'], "/") .'thum_big_'. $offer->shop['logo']['name'];
+         ?>
+        <a href= "<?php echo $shopLink; ?>">
+            <img src="<?php echo $shopPicture;?>" width="176" height="89" alt="<?php echo $offer->shop['name'];?>">
+        </a>
+    </div>
+    <div class="box">
+        <h1><?php echo strlen($offer->title)<= 50 ?  $offer->title : substr($offer->title, 0, 50).'...';?></h1>
+    </div>
 </div>
 <div class="row">
-				<div id="content" class="col-md-8 col-sm-8">
-					<section class="section">
-						<article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
-							<div class="holder">
-								<a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
-            					target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-            					<?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferImage($offer, $this->offersType);?>
-            					</a>
-								<div class="box">
-									<div class="text">
-										<p><strong class="exclusive"><span class="glyphicon glyphicon-star"></span> Exclusive</strong> Added on November 4th 2013, Expires on Februari 31st 2014</p>
-										<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-									</div>
-									<div class="buttons">
-										<button class="btn blue btn-primary">Get code &amp; Open site</button>
-										<button class="btn orange btn-warning btn-code">Get code</button>
-									</div>
-									<div class="the-code">
-										<span class="instruction"><strong>enter this code at checkout</strong></span>
-										<strong class="code-value">aktiecode2014</strong>
-									</div>
-									<ul class="view-list">
-										<li><a href="#">View all Avis Voucher Codes</a></li>
-									</ul>
-								</div>
-							</div>
-						</article>
-						<div class="code-details">
-							<article class="box">
-								<h2>About this voucher</h2>
-								<p>Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapib sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius, consectetur diam. Class aptent osqu ad litora torquent per conubia nostra, per inceptos himenaeos. In rutrum consectetur semper.</p>
-							</article>
-							<article class="box terms-block">
-								<h2>Terms &amp; Conditions</h2>
-								<ol class="num-list">
-									<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-									<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-									<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-									<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-									<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-									<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-									<li>One code is valid for a maximum of 6 people in the party.</li>
-									<li>Please present the code to your waiter/waitress when ordering your meal.</li>
-									<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-									<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-								</ol>
-							</article>
-							<article class="box box-2">
-								<h2>How to Use The Voucher Codes</h2>
-								<p>Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapi bus lacus sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius.</p>
-								<div class="visual-img">
-									<img src="images/img-02.jpg" width="700" height="200" alt="image description">
-								</div>
-							</article>
-						</div>
-					</section>
-					<header class="heading-box text-ask">
-						<h2>Ask a question about Avis</h2>
-						<strong>Ask us anything about Avis and their discounts</strong>
-					</header>
-					<section class="section section-comments">
-						<header class="head-top">
-							<div class="box">
-								<a href="#" class="star-bubble"><span class="glyphicon glyphicon-star"></span><span class="bubble">0</span></a>
-								<h2>3 comments</h2>
-							</div>
-							<form action="#" class="comment-form">
-								<fieldset>
-									<div class="avatar">
-										<img src="images/photo-01.png" width="36" height="36" alt="image description">
-									</div>
-									<div class="input">
-										<textarea placeholder="Leave a messege..."></textarea>
-									</div>
-								</fieldset>
-							</form>
-							<div class="bar">
-								<ul class="settings">
-									<li><a href="#">Share</a></li>
-									<li><a href="#"><span class="ico"></span></a></li>
-								</ul>
-								<ul class="tabs-list">
-									<li class="active"><a href="#">Discussion</a></li>
-									<li><a href="#">Community</a></li>
-									<li><a href="#">My Disqus</a></li>
-								</ul>
-							</div>
-						</header>
-						<div class="tab-content">
-							<div class="comment-block">
-								<ul class="comment-list">
-									<li>
-										<div class="comment">
-											<img class="avatar" src="images/photo-01.png" width="36" height="36" alt="image description">
-											<div class="box">
-												<ul class="add-link">
-													<li><a href="#" class="author">Jake Franklin</a></li>
-													<li>2 days ago</li>
-												</ul>
-												<p>Lorem ipsum leo amet nisl quam ut primis lacinia nisi est pharetra gravida amet urna,</p>
-												<ul class="add-link link-2">
-													<li><span>12</span> <a href="#" class="up">up</a> <span class="divider">|</span> <a href="#" class="down">down</a></li>
-													<li><a href="#">Reply</a></li>
-													<li><a href="#">Share</a></li>
-												</ul>
-											</div>
-										</div>
-										<ul class="children">
-											<li>
-												<div class="comment">
-													<img class="avatar" src="images/photo-02.png" width="24" height="24" alt="image description">
-													<div class="box">
-														<ul class="add-link">
-															<li><a href="#" class="author">Erlen Masson</a></li>
-															<li>2 days ago</li>
-														</ul>
-														<p>Lorem ipsum leo amet nisl quam ut primis lacinia nisi est pharetra gravida amet urna,</p>
-														<ul class="add-link link-2">
-															<li><span>12</span> <a href="#" class="up">up</a> <span class="divider">|</span> <a href="#" class="down">down</a></li>
-															<li><a href="#">Reply</a></li>
-															<li><a href="#">Share</a></li>
-														</ul>
-													</div>
-												</div>
-											</li>
-										</ul>
-									</li>
-									<li>
-										<div class="comment">
-											<img class="avatar" src="images/photo-01.png" width="36" height="36" alt="image description">
-											<div class="box">
-												<ul class="add-link">
-													<li><a href="#" class="author">Speckyboy</a></li>
-													<li>2 days ago</li>
-												</ul>
-												<p>Lorem ipsum leo amet nisl quam ut primis lacinia nisi est pharetra gravida amet urna,</p>
-												<ul class="add-link link-2">
-													<li><span>12</span> <a href="#" class="up">up</a> <span class="divider">|</span> <a href="#" class="down">down</a></li>
-													<li><a href="#">Reply</a></li>
-													<li><a href="#">Share</a></li>
-												</ul>
-											</div>
-										</div>
-									</li>
-								</ul>
-							</div>
-						</div>
-						<footer class="bottom-box">
-							<ul>
-								<li><a href="#" class="rss">Comment Feed</a></li>
-								<li><a href="#" class="email">Subscribe via email</a></li>
-							</ul>
-							<a href="#" class="add-logo"><img src="images/logo-03.png" width="88" height="16" alt="image description"></a>
-						</footer>
-					</section>
-				</div>
-				<aside class="col-md-4 col-sm-4" id="sidebar">
-
+    <div id="content" class="col-md-8 col-sm-8">
+        <section class="section">
+            <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
+                <div class="holder">
+                    <a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
+                                target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+                                <?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferImage($offer, $this->offersType);?>
+                    </a>
+                    <div class="box">
+                        <div class="text">
+                            <p><?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($offer, $dayDifference)?></p>
+                                <a id="<?php echo $offer->id ;?>"
+                                            href="<?php echo $urlToShow;?>"
+                                            rel="nofollow" class="link" target="_blank"
+                                            onClick="<?php echo $offer->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+                                            <?php echo $offer->title;?>
+                                </a>
+                        </div>
+                        <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
+                            <a class="btn blue btn-primary"
+                            href="<?php echo $urlToShow;?>"
+                            rel="nofollow" target="_blank" onClick="<?php echo $offer->discountType == 'CD' ? "showCodeInformation('$offer->id')," : ''; ?>viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+                            <?php echo $this->translate('>Get code &amp; Open site'); ?>
+                            </a>
+<?php
+if ($offer->discountType=='PA' || $offer->discountType=='PR') {
+        ?>
+                            <button class="btn btn-default btn-print"><?php echo $this->translate('print now');?>
+                                <span class="ico-print"></span>
+                            </button>
+        <?php
+}
+if ($offer->discountType=='CD') {
+        ?>
+                            <a id="<?php echo $offer->id ; ?>" class = "btn orange btn-warning btn-code" vote='0'
+                            href="<?php echo $urlToShow;?>" rel="nofollow"
+                            target="_blank"onClick="showCodeInformation(<?php echo $offer->id; ?>), showCodePopUp(this),
+                            ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+                    <?php echo $this->translate('Pack this offer');?>
+                            </a>
+        <?php
+}
+    ?>
+                        </div>
+                        <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
+                            <span class="instruction"><strong><?php echo $this->translate('enter this code at checkout')?></strong></span>
+                            <strong class="code-value"><?php echo $offer->couponCode;?></strong>
+                        </div>
+                        <ul class="view-list">
+<?php 
+if (LOCALE == '') {
+    $domainName = HTTP_PATH;
+} else {
+    $domainName = HTTP_PATH_LOCALE;
+}
+?>
+                            <li>
+                                <a href="<?php echo $domainName.$offer->shop['name']; ?>">
+                                    <?php echo $this->translate('View all ').$offer->shop['name']. $this->translate(' Voucher Codes');?>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </article>
+            <div class="code-details">
+                <article class="box">
+                    <h2>About this voucher</h2>
+                    <p><?php echo $offer->extendedFullDescription;?></p>
+                </article>
+                <article class="box terms-block">
+                    <h2>Terms &amp; Conditions</h2>
+                    <ol class="num-list">
+                        <?php echo $termsAndConditions;?>
+                    </ol>
+                </article>
+                <article class="box box-2">
+                    <h2>How to Use The Voucher Codes</h2>
+                    <p>Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapi bus lacus sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius.</p>
+                        <div class="visual-img">
+                            <img src="<?php echo HTTP_PATH;?>public/images/img-02.jpg" width="700" height="200" alt="image description">
+                        </div>
+                </article>
+            </div>
+        </section>
+<?php 
+$discussion = '';
+$partialViewPath = 'partials/';
+if($offer->shop['discussions'] == 1):
+    $discussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
+endif;
+    echo $discussion;
+?>
+    </div>
+    <aside class="col-md-4 col-sm-4" id="sidebar">
         <div class="block white">
-
-            <?php
-
-            $locale = LOCALE != 'en'? LOCALE. '/' : '';
-
-           echo $this->esi($locale.'store/signupwidget'); ?>
-
+<?php
+$locale = LOCALE != 'en'? LOCALE. '/' : '';
+echo $this->esi($locale.'store/signupwidget'); ?>
         </div>
-
         <article class="block">
-
-           <?php
-
-            $controllerName =  $this->controllerName;
-
-           $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-
+<?php
+$controllerName =  $this->controllerName;
+$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
             <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
-
             echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
-
-            ?>
-
+?>
         </article>
-
     </aside>
-
-				
-</div>				
+</div>              
