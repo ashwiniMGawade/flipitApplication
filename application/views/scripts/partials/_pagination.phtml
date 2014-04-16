@@ -1,4 +1,5 @@
 <?php 
+//header('location:'. HTTP_PATH); die; exit;
 $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
 $myfav = explode('myfavorite', $permalink);
 
@@ -12,9 +13,9 @@ preg_match("/[^\/]+$/", $permalink, $matches);
 if(intval(@$matches[0]) > 0 && intval(@$matches[0]) < 4) {
 
 	if(intval($matches[0]) > intval($this->pageCount)) {
-		
-		$redirector = $this->getHelper('Redirector');
-		$redirector->gotoUrl('error');
+		$permalink = explode('/'.$matches[0],$permalink);
+        $permalink = $permalink[0];
+		header('location:'. HTTP_PATH.$permalink);  
 	}
     $permalink = explode('/'.$matches[0],$permalink);
     $permalink = $permalink[0];
