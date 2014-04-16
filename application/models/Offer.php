@@ -3090,6 +3090,7 @@ class Offer extends BaseOffer
 	 
 		$clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
 		$ip = ip2long($clientIP);
+die($clientIP);
 
 	   	# save conversion detail if an offer is associated with a network
 	   	if(Offer:: getcloakLink($id , true ))
