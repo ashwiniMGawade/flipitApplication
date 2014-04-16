@@ -1512,7 +1512,7 @@ class Offer extends BaseOffer
 
     public static function getCouponDetails($extUrl)
     {
-        $couponDetail = Doctrine_Query::create()
+        $couponDetails = Doctrine_Query::create()
 
                        ->select('o.*,s.name,s.id,s.discussions,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                        ->from("Offer o")
@@ -1526,8 +1526,8 @@ class Offer extends BaseOffer
                        ->andWhere('s.status = 1')
                        ->fetchArray();
 
-        return $couponDetail;
-     }
+        return $couponDetails;
+    }
 
      /**
       * get related offers
