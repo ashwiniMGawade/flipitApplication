@@ -2,6 +2,20 @@
  
 class StoreController extends Zend_Controller_Action
 {
+    #################################################
+    ######## REFACTORED CODE ########################
+    #################################################
+    public function addshopinfevoriteAction()
+    {
+        $shopid = $this->getRequest()->getParam("shopid");
+        $userid = $this->getRequest()->getParam("uId");
+        $shopInformation = Shop::shopAddInFavoriteInShopDetails($userid, $shopid);
+        echo Zend_Json::encode($shopInformation);
+        die();
+    }
+    ######################################################
+    ############### END REFACTORED CODE ##################
+    ######################################################
     
     /**
      * override views based on modules if exists
@@ -536,15 +550,6 @@ class StoreController extends Zend_Controller_Action
         $this->view->fbImg = $img;
     }
     
- public function addshopinfevoriteAction() {
-    
-    $shopid=$this->getRequest()->getParam("shopid");
-    $userid=$this->getRequest()->getParam("uId");
-    $data = Shop::shopAddInFavoriteInShopDetails($userid,$shopid);
-    echo Zend_Json::encode($data);
-    die();
-
- }
  public function abcAction() {
  
  }

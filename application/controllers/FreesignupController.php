@@ -10,7 +10,22 @@ require_once 'Zend/Controller/Action.php';
 
 class FreesignupController extends Zend_Controller_Action
 {
-
+    ######################################################
+    ############# REFACTORED CODE ########################
+    ######################################################
+    public function checkuserAction()
+    {
+        $visiterInformation = intval(Visitor::checkDuplicateUser($this->_getParam('emailAddress'), $this->_getParam('id')));
+        if ($visiterInformation > 0) {
+            echo Zend_Json::encode(false);
+        } else {
+            echo Zend_Json::encode(true);
+        }
+        die();
+    }
+    ######################################################
+    ########### END REFACTORED CODE#######################
+    ######################################################
 	/**
 	 * override views based on modules if exists
 	 * @see Zend_Controller_Action::init()
@@ -349,21 +364,6 @@ class FreesignupController extends Zend_Controller_Action
     		$url = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('login');
     		$this->_redirect($url);
     	}
-    }
-
-    public function checkuserAction(){
-    	$u =  new Visitor();
-    	$cnt  = intval($u->checkDuplicateUser($this->_getParam('emailAddress'),$this->_getParam('id')));
-    	if($cnt > 0)
-    	{
-    		echo Zend_Json::encode(false);
-
-    	} else {
-
-    		echo Zend_Json::encode(true);
-    	}
-
-    	die();
     }
 
     public function confirmemailAction()
