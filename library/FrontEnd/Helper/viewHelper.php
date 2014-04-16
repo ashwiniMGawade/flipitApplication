@@ -1259,21 +1259,25 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
    * @return array $data
    */
 
-  public static function getRealIpAddress()
-  {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
-        $ip=$_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
-        $ipRange=$_SERVER['HTTP_X_FORWARDED_FOR'];
-        $ip=current(array_slice(explode(",", $ipRange), 0, 1));
-    } else {
-        $ip=$_SERVER['REMOTE_ADDR'];
+    public static function getRealIpAddress()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+
+            $ip=$_SERVER['HTTP_CLIENT_IP'];
+
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+
+            $ipRange=$_SERVER['HTTP_X_FORWARDED_FOR'];
+            $ip=current(array_slice(explode(",", $ipRange), 0, 1)); //proxy returns multiple ip's. Only use the first.
+
+        } else {
+
+            $ip=$_SERVER['REMOTE_ADDR'];
+
+        }
+
+        return $ip;
     }
-    $ipRange = explode(",", $ip);
-
-    return $ip;
-
-  }
 
   /**
    * View counter common function
@@ -1617,7 +1621,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         $splitVal = explode('?', $permalink);
         //echo "<pre>";print_r($splitVal);die;
 
-
         if (!empty($splitVal)) {
 
             $permalink = $splitVal[0];
@@ -1686,7 +1689,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
             $permalink = $link;
         }
 
-
         $routeProp = explode( '/' , $permalink) ;
 
         $tempLang1  = rtrim($routeProp[0] , '/') ;
@@ -1742,7 +1744,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
 
             $permalink = $link;
 
-
         }
 
         $plink = $permalink;
@@ -1778,7 +1779,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
 
             $permalink = $link;
         }
-
 
         $routeProp = explode( '/' , $permalink) ;
 
@@ -1851,7 +1851,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         return $string;
     }
 
-
     /**
      *
      * @param  string $message message to write into log file
@@ -1885,8 +1884,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         if ( ($remote_addr = $_SERVER['REMOTE_ADDR']) == '') {
             $remote_addr = "REMOTE_ADDR_UNKNOWN";
         }
-
-
 
         // Format the date and time
         $date = date("M d, Y H:i:s", $time);
@@ -1996,7 +1993,6 @@ EOD;
 
             return array('string' => $string , 'headLink' => $hrefLinks,'hasShops' => $hasShops );
 
-
         }
 
         return false;
@@ -2043,7 +2039,6 @@ EOD;
 
                     # GET TOP 5 POPULAR CODE
                     $additionalTopVouchercodes = Offer::commongetnewestOffers('newest', $additionalCodes);
-
 
                     foreach ($additionalTopVouchercodes as $key => $value) {
 
@@ -2116,7 +2111,7 @@ EOD;
         $zendTranslate = Zend_Registry::get('Zend_Translate');
         $domainName ='http://'.$_SERVER['HTTP_HOST'];
         $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
-        $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
+        $topVouchercodes = FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
         $xmlTitle =  $zendTranslate->translate('Kortingscode.nl populairste kortingscodes') ;
         $xmlDescription  = $zendTranslate->translate('Populairste kortingscodes') ;
 
@@ -2125,9 +2120,9 @@ EOD;
         $xml->startDocument('1.0');
         $xml->setIndent(2);
         if ($feedCheck == true) {
-        $xml->startElement('rss');
-        $xml->writeAttribute('version', '2.0');
-        $xml->writeAttribute('xmlns:content', 'http://purl.org/rss/1.0/modules/content/');
+            $xml->startElement('rss');
+            $xml->writeAttribute('version', '2.0');
+            $xml->writeAttribute('xmlns:content', 'http://purl.org/rss/1.0/modules/content/');
         }
         $xml->startElement("channel");
         $xml->writeElement('title', $xmlTitle);
@@ -2141,13 +2136,13 @@ EOD;
             $shopName = 'title';
             $description = 'description';
         }
-        foreach ($topVouchercodes as  $offer) {
+        foreach ($topVouchercodes as $offer) {
             $top10Offers = $offer['offer'] ;
             $xml->startElement("item");
             $xml->writeElement($shopName, $top10Offers['shop']['name']);
 
             if (mb_strlen($top10Offers['title'], 'UTF-8') > 42) {
-                $xml->writeElement($description, mb_substr($top10Offers['title'], 0,42,  'UTF-8')."...");
+                $xml->writeElement($description, mb_substr($top10Offers['title'], 0, 42, 'UTF-8')."...");
             } else {
                 $xml->writeElement($description, $top10Offers['title']);
             }
@@ -2156,7 +2151,7 @@ EOD;
             $xml->endElement();
         }
 
-         if ($feedCheck == false) {
+        if ($feedCheck == false) {
              $xml->writeElement('More', 'nl');
             $xml->writeElement('moreLink', $domainName);
         }
