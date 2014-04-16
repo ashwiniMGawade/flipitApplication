@@ -161,9 +161,8 @@ EOD;
      * @param string $link
      * @version 1.0
      */
-    public static function generatCononical($link)
+    public static function generateCononical($permalink)
     {
-        $permalink = $link;
         preg_match("/^[\d]+$/", $permalink, $matches);
 
         if (intval(@$matches[0]) > 0) {

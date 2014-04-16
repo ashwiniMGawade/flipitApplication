@@ -1510,10 +1510,9 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-    public static function getCouponDetails($extUrl)
+    public static function getCouponDetails($extendedUrl)
     {
         $couponDetails = Doctrine_Query::create()
-
                        ->select('o.*,s.name,s.id,s.discussions,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                        ->from("Offer o")
                        ->leftJoin('o.shop s')
@@ -1521,7 +1520,7 @@ class Offer extends BaseOffer
                        ->leftJoin('o.termandcondition tc')
                        ->leftJoin('s.logo img')
                        ->leftJoin('s.screenshot ws')
-                       ->Where("o.extendedUrl = '".$extUrl."'")
+                       ->Where("o.extendedUrl = '".$extendedUrl."'")
                        ->andWhere('o.extendedOffer = 1')
                        ->andWhere('s.status = 1')
                        ->fetchArray();

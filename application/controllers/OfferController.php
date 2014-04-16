@@ -2,6 +2,43 @@
 
 class OfferController extends Zend_Controller_Action {
 
+	##################################################################################
+	################## REFACTORED CODE ###############################################
+	##################################################################################
+	/**
+	 * get coupon information
+	 *
+	 * @version 1.0
+	 * @author Amit
+	 */
+	public function couponinfoAction()
+	{
+		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+		$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
+		$parameters = $this->_getAllParams();
+		$extendedUrl = $parameters['permalink'];
+		$currentDate = date('Y-m-d');
+		$couponDetails = Offer::getCouponDetails($extendedUrl);
+		$shopImage = PUBLIC_PATH_CDN.$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $couponDetails[0]['shop']['logo']['name'];
+		// For Social media parameters
+		$this->view->facebookTitle = @$couponDetails[0]['title'];
+		$this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
+		$this->view->facebookImage = $shopImage;
+	
+		$this->view->couponDetail = $couponDetails;
+	
+		if (count($couponDetails)==0) {
+			$this->_redirect(HTTP_PATH_LOCALE.'error');
+		}
+	
+		$this->view->headTitle(@trim($this->view->couponDetail[0]['extendedTitle']));
+		$this->view->headMeta()->appendName('description', @trim($this->view->couponDetail[0]['extendedMetaDescription']));
+	}
+	
+	##################################################################################
+	################## END REFACTORED CODE ###########################################
+	##################################################################################
+    
     /**
      * override views based on modules if exists
      * @see Zend_Controller_Action::init()
@@ -289,47 +326,7 @@ class OfferController extends Zend_Controller_Action {
     }
 
 
-    /**
-     * get coupon information
-     *
-     * @version 1.0
-     * @author blal
-     */
-    public function couponinfoAction()
-    {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink);
-        $parameters = $this->_getAllParams();
-        $parameterPermalink = $parameters['permalink'];
-        $currentDate = date('Y-m-d');
-        $couponDetails = Offer::getCouponDetails($parameterPermalink);
-        $image = PUBLIC_PATH_CDN.$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $couponDetails[0]['shop']['logo']['name'];
-        // For Social media parameters
-        $this->view->facebookTitle = @$couponDetails[0]['title'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
-        $this->view->facebookImage = $image;
-
-        $this->view->couponDetail = $couponDetails;
-        
-        if (count($couponDetails)==0) {
-            $this->_redirect(HTTP_PATH_LOCALE.'error');
-        }
-        if(count($couponDetails)>0):
-            $shopId = $couponDetails[0]['shopId'];
-        else:
-        $shopId = "";
-        endif;
-        
-        if($shopId !=""):
-            $relatedOffers = Offer::getrelatedOffers($shopId, $currentDate);
-            $this->view->reloffer = $relatedOffers;
-        endif;
-        // get popular offers
-        $popularOffers = FrontEnd_Helper_viewHelper::gethomeSections("popular", 3);
-        $this->view->popoffer = $popularOffers;
-        $this->view->headTitle(@trim($this->view->couponDetail[0]['extendedTitle']));
-        $this->view->headMeta()->appendName('description', @trim($this->view->couponDetail[0]['extendedMetaDescription']));
-    }
+ 
 /**
  * Get Popular offer from database of by cache using admin key.
  *
