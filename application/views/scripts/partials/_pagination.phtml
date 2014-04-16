@@ -22,7 +22,8 @@ if(intval(@$matches[0]) > 0 && intval(@$matches[0]) < 4) {
      
       
 } else if(intval(@$matches[0]) > 3) {
-	
+	$permalink = explode('/'.$matches[0],$permalink);
+    $permalink = $permalink[0];
 	header('location:'. HTTP_PATH.$permalink); 
 	
 } else {
