@@ -134,16 +134,17 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         return $offerOption . $dateFormatString;
     }
 
-    public static function getClassNameForOffer($currentOffer)
+    public static function getClassNameForOffer($currentOffer, $offerType)
     {
         $className = 'code';
+        $className .= $offerType=='simple' ? '' : ' code-2';
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $className .= ' purple';
         } elseif ($currentOffer->discountType=='SL') {
             $className .= ' red';
         } elseif ($currentOffer->extendedOffer =='1') {
             $className .= ' blue';
-        }
+        } 
         return $className;
     }
     
@@ -154,11 +155,11 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
        {
           $offerDiscountImage = self::getDiscountImage($currentOffer);
           $altAttributeText = @$currentOffer->tiles['label'];
-          $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText);
+          $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
        } else {
            $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
            $altAttributeText = $currentOffer->shop['name'];
-           $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText);
+           $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
            $offerImageDiv = $imageTag . '<footer class="bottom">' . self::getOfferFooterText($currentOffer) . '</footer>';
        }
        return $offerImageDiv;
@@ -166,11 +167,18 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
     
     public static function getShopLogoForOffer($currentOffer)
     {
-        return PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_small_'. $currentOffer->shop['logo']['name'];
+        return PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_medium_store_'. $currentOffer->shop['logo']['name'];
     }
     
-    public static function getImageTag($offerDiscountImage, $altAttributeText){
-        return '<img src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
+    public static function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder) {
+        $imageTagForOffer = '';
+        if ($shopCodeHolder) {
+            $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
+            $imageTagForOffer = '<div class="center"><div class="code-holder">' . $imageTag . '</div></div>';
+        } else {
+        	$imageTagForOffer ='<img src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
+        }
+        return $imageTagForOffer;
     }
     
     public static function getOfferFooterText($currentOffer)

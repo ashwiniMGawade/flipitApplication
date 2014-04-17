@@ -1,56 +1,25 @@
 <!-- Refactored code -->
+<?php echo FrontEnd_Helper_ExpiredOffersPartialFunction::getExpiredOffersHeader($this->shopName);?>
+<section class="section-module">
 <?php
-if($this->extendedOffer == 1):
-    $expireOfferTarget = '_self';
-    $expiredOfferUrl = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('deals').'/'.$this->extendedUrl;
-else:
-    $expireOfferTarget = '_blank';
-    $expiredOfferUrl = HTTP_PATH_LOCALE."out/exoffer/".$this->id;
-endif;
-?>
-
-<div class="line">
-  <a href="<?php echo $expiredOfferUrl;?>"  rel="nofollow" target="<?php echo $expireOfferTarget; ?>">
-    <div class="holder">
-        <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
-        <div class="box">
-<?php 
-if ($this->title!=null && $this->title!=''):
-    $expiredOfferTitle = $this->title;
-
-    if (strlen($this->title) > 60):
-        $expiredOfferTitle = substr($this->title, 0, 60) . '...';
-    endif;
-
-endif;
-?>
-            <span class="text">
-            <?php
-            echo $this->title=='' ? $this->translate("Description not available right now..") : $expiredOfferTitle;
-            ?>
-            </span>
-<?php
-if ($this->couponCode!=null && $this->couponCode!=''):
-    $expiredOfferCouponCode = $this->couponCode;
-
-    if (strlen($this->couponCode) > 40):
-        $expiredOfferCouponCode = substr($this->couponCode, 0, 40) . '...';
-    endif;
-    ?>
-            <span class="mark"><?php echo $expiredOfferCouponCode;?></span>
-    <?php
-endif;
-?>
+foreach ($this->expiredOffers as $offer) :
+    $offer = (object) $offer;?>
+    <div class="line">
+      <a href="<?php echo FrontEnd_Helper_ExpiredOffersPartialFunction::getExpiredOfferUrl($offer);?>" 
+      rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
+        <div class="holder">
+            <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
+            <div class="box">
+                <span class="text">
+                <?php echo $offer->title=='' ? $this->translate("Description not available right now..") : FrontEnd_Helper_ExpiredOffersPartialFunction::getOfferTitle($offer->title); ?>
+                </span>
+                <?php echo FrontEnd_Helper_ExpiredOffersPartialFunction::getOfferCouponCode($offer->couponCode)?>
+            </div>
         </div>
+        <span class="date"><?php echo FrontEnd_Helper_ExpiredOffersPartialFunction::getExpiredOnDate($offer->endDate);?></span>
+      </a>
     </div>
-    <span class="date">
-<?php
-echo $this->translate('Expires on:');
-$expiredOfferDate = new Zend_Date($this->endDate);
-echo ucwords($expiredOfferDate->get(Zend_Date::DATE_MEDIUM));
-?>
-    </span>
-  </a>
-</div>
-<hr class="alt2">
-<!-- Refactored code -->
+    <hr class="alt2">
+    <?php 
+endforeach;?>
+</section>

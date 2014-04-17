@@ -1,15 +1,19 @@
 <?php
-####### REFATORED CODE #####
+$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+
+$storeViewPartialPath = 'store/';
 $similarShopsAndSimilarCategoriesShops ='';
 if(!empty($this->similarShops)):
     $similarShopsAndSimilarCategoriesShops = $this->partial(
-        'store/_similar-and-category-related-shops.phtml',
+        $storeViewPartialPath.'_similar-and-category-related-shops.phtml',
         array('similarShopsAndSimilarCategoryShops' => $this->similarShops)
     );
 endif;
 
 $discussion = '';
-
 $partialViewPath = 'partials/';
 if($this->currentStoreInformation[0]['discussions'] == 1):
     $discussion = $this->partial(
@@ -32,24 +36,14 @@ $Link = '';
 $howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
 $name =  strtoupper($this->currentStoreInformation[0]['name']);
 $breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate($name)."</a>";
-$id = 0;
 
-if(Auth_VisitorAdapter::hasIdentity()):
-    $id = Auth_VisitorAdapter::getIdentity()->id;
-endif;
-
-$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-
-$offers = '';
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 
+$offers = '';
 if(count($this->offers) > 0):
     $offers = $this->partial(
-        'store/_offer.phtml',
+        $storeViewPartialPath. '_offer.phtml',
         array(
             'offers' => $this->offers,
             'offersType'=>'simple',
@@ -60,10 +54,12 @@ if(count($this->offers) > 0):
     );
 endif;
 
+$similarOffersHeader = '';
 $similarOffers = '';
 if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
+    $similarOffersHeader = FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->currentStoreInformation[0]['name'], 'similar');
     $similarOffers = $this->partial(
-        'store/_offer.phtml',
+        $storeViewPartialPath.'_offer.phtml',
         array(
             'offers' => $this->similarShopsAndSimilarCategoriesOffers,
             'offersType' => 'similar',
@@ -79,6 +75,25 @@ endif;
     <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
     <div class="icon">
 <?php
+$noMoneyNocodeMessage = '';
+if ($this->currentStoreInformation[0]['affliateProgram']!='1' && $offers=='') :
+    $noMoneyNocodeMessage = $this->partial($storeViewPartialPath.'_noCodeNoMoneyMessage.phtml');
+    $similarOffersHeader = '';
+endif;
+
+$moneySavingGuide = '';
+if(count($this->moneySavingGuideArticle) >0):
+    $moneySavingGuide = $this->partialLoop($storeViewPartialPath.'_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle);
+endif;
+
+$expiredOffers ='';
+if(count($this->expiredOffers) >0):
+      $expiredOffers = $this->partial(
+          $storeViewPartialPath.'_expiredOffer.phtml',
+          array('expiredOffers'=>$this->expiredOffers,'shopName'=>$this->currentStoreInformation[0]['name'])
+      );
+endif;
+
 $affliateProgramUrl = @$this->currentStoreInformation[0]['affliateProgram']['name']=='' ? $this->currentStoreInformation[0]['actualUrl'] : @$this->currentStoreInformation[0]['affliateProgram']['name'];
 if ($this->currentStoreInformation[0]['affliateProgram']) :
     $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
@@ -91,54 +106,44 @@ else:
     $affliateDisabled = 'disabled="disabled"';
     $affliateClass = 'btn-disabled';
 endif;
+
+$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
+if (isset($actualUrlWithoutDoubleSlash[1])):
+    $actualUrl = $actualUrlWithoutDoubleSlash[1];
+else:
+    $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
+endif;
 ?>
-        <a target="_blank" rel="nofollow" class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->storeImage . '" alt="' . $this->currentStoreInformation[0]['name']  . '"  width="176" height="89" />'; ?></a>
+<div class="header-block header-block-2">
+    <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
+    <div class="icon">
+        <a target="_blank" rel="nofollow" 
+        class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> 
+        onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->storeImage . '" alt="' . $this->currentStoreInformation[0]['name']  . '"  width="176" height="89" />'; ?>
+        </a>
     </div>
     <div class="box">
         <h1><?php echo $this->currentStoreInformation[0]['title'];?></h1>
         <strong><?php echo '' . $this->currentStoreInformation[0]['subTitle'];?></strong>
-            <a target="_blank" rel="nofollow" class="btn text-blue-link fl store-header-link <?php echo $affliateClass; ?> pop btn btn-sm btn-default" <?php echo $affliateDisabled; ?> onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>">
-<?php
-$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
-if (isset($actualUrlWithoutDoubleSlash[1])):
-     $actualUrl = $actualUrlWithoutDoubleSlash[1];
-else:
-     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
-endif;
-echo $actualUrl;
-?>
+            <a target="_blank" rel="nofollow" 
+            class="btn text-blue-link fl store-header-link <?php echo $affliateClass; ?> pop btn btn-sm btn-default" <?php echo $affliateDisabled; ?>
+            onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl;?>"><?php echo $actualUrl;?>
             </a>
-<?php
-echo $this->esi($this->locale.'store/addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));
-?>        
+            <?php echo $this->esi($this->locale.$storeViewPartialPath.'addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));?>        
     </div>
 </div> 
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-    <?php echo $offers; ?>
-    <?php echo $similarOffers; ?>
-<?php
-echo $similarShopsAndSimilarCategoriesShops;
-echo $discussion;
-      
-if(count($this->moneySavingGuideArticle) >0):
-    echo $this->partialLoop('store/_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle);
-endif;
-
-if(count($this->expiredOffers) >0):
+    <?php 
+    echo $noMoneyNocodeMessage;
+    echo $offers;
+    echo $similarOffersHeader;
+    echo $similarOffers;
+    echo $similarShopsAndSimilarCategoriesShops;
+    echo $discussion;
+    echo $moneySavingGuide;
+    echo $expiredOffers;
     ?>
-        
-        <header class="heading-box text-expired">
-            <h2><?php echo  $this->translate('Expired').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate("vouchers and discounts"); ?></h2>
-            <strong><?php echo  $this->translate('Unfortunately ... These discount codes from').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate("you’ve missed");?>.</strong>
-        </header>
-        <section class="section-module">
-            <?php  echo $this->partialLoop('store/_expiredOffer.phtml', $this->expiredOffers); ?>
-        </section>
-
-    <?php
-endif;
-?>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
         <article class="block">
@@ -190,13 +195,15 @@ if($this->currentStoreInformation[0]['howToUse']):
                     <p>
                         <a href="javascript:void(0);" id="clicker"><?php echo $this->translate('Show me'); ?></a> 
                         <?php echo $this->translate('where to enter my').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('code, or read our full'); ?> 
-                        <a href="<?php echo HTTP_PATH_LOCALE.$howToUseGuidePermalink; ?>"><?php echo $this->currentStoreInformation[0]['name'].' '.$this->translate('Promotional Code'); ?></a>
+                        <a href="<?php echo HTTP_PATH_LOCALE.$howToUseGuidePermalink; ?>">
+                        <?php echo $this->currentStoreInformation[0]['name'].' '.$this->translate('Promotional Code'); ?>
+                        </a>
                         <?php echo $this->translate('help guide'); ?>.
                     </p>
                 </li>
                 <li class="web">
                     <h2><?php echo $this->translate('Official website'); ?></h2>
-                    <a href="<?php echo $this->currentStoreInformation[0]['actualUrl']; ?>"><?php echo $actualUrl; ?></a>
+                    <a href="<?php echo $this->currentStoreInformation[0]['actualUrl']; ?>"><?php echo $actualUrl;?></a>
                 </li>
             </ul>
 
@@ -221,7 +228,7 @@ if (count($this->latestShopUpdates) > 0):?>
 
         <section class="block">
             <h2><?php echo $this->translate('Latest news about').' '.$this->currentStoreInformation[0]['name'];?></h2>
-   <?php echo $this->partialLoop('store/_latestNews.phtml', $this->latestShopUpdates); ?>
+   <?php echo $this->partialLoop($storeViewPartialPath.'_latestNews.phtml', $this->latestShopUpdates); ?>
         </section>
 
    <?php
@@ -251,12 +258,10 @@ if ($this->currentStoreInformation[0]['showSignupOption']) :
     ?>
 
             <div class="block white">
-     <?php echo $this->esi($this->locale.'store/signupwidget'); ?>
+    <?php echo $this->esi($this->locale.$storeViewPartialPath.'signupwidget'); ?>
             </div>
-
     <?php
 endif;
 ?>
     </aside>
-</div>
 </div>
