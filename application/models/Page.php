@@ -24,6 +24,18 @@ class Page extends BasePage
         ->fetchArray();
         return $pageAttribute[0]['pageAttributeId'];
     }
+
+    public static function getPageFromPageAttributeFiltered($id)
+	{
+		$pageAttributes = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
+		->from('Page p')
+		->where("pageAttributeId = ?", $id)
+		->andWhere('p.deleted=0')
+		->orderBy('id DESC')
+		->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+		
+		return $pageAttributes;
+	}
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -1067,19 +1079,6 @@ public static function exportpagelist() {
 		->fetchOne();
 
 		return $data;
-	}
-	
-	
-	public static function getPageFromPageAttributeFiltered($id)
-	{
-		$pageAttributes = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
-		->from('Page p')
-		->where("pageAttributeId = ?", $id)
-		->andWhere('p.deleted=0')
-		->orderBy('id DESC')
-		->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-		
-		return $pageAttributes;
 	}
 
 	/**

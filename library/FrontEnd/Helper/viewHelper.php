@@ -165,33 +165,28 @@ EOD;
     {
         preg_match("/^[\d]+$/", $permalink, $matches);
 
-        if (intval(@$matches[0]) > 0) {
+        if (intval($matches[0]) > 0) {
             $permalink = explode('/'.$matches[0], $permalink);
             $permalink = $permalink[0];
-        } else {
-            $permalink = $permalink;
         }
 
-        $splitPermalinkValue = explode('?', $permalink);
+        $permalinkWithoutQueryString = explode('?', $permalink);
 
-        if (!empty($splitPermalinkValue)) {
-            $permalink = $splitPermalinkValue[0];
-        } else {
-            $permalink = $permalink;
+        if (!empty($permalinkWithoutQueryString)) {
+            $permalink = $permalinkWithoutQueryString[0];
         }
 
         if (LOCALE!='en') {
             $frontEndControllers = Zend_Controller_Front::getInstance();
-            $controllerDirectory = $frontEndControllers->getControllerDirectory();
-            $moduleNames = array_keys($controllerDirectory);
-            $routeProperty = explode('/', $permalink);
+            $frontEndControllerDirectory = $frontEndControllers->getControllerDirectory();
+            $moduleNames = array_keys($frontEndControllerDirectory);
+            $moduleNameOrPermalink = explode('/', $permalink);
 
-            if (in_array($routeProperty[0], $moduleNames)) {
-                $tempLanguage = ltrim($permalink, $routeProperty[0]);
-                $permalink = ltrim($tempLanguage, '/');
+            if (in_array($moduleNameOrPermalink[0], $moduleNames)) {
+                $permalink = ltrim($permalink, $moduleNameOrPermalink[0]);
+                $permalink = ltrim($permalink, '/');
             }
         }
-
         return rtrim($permalink, '/');
     }
 
@@ -294,19 +289,17 @@ EOD;
      * @return mixed $string
      * @version 1.0
      */
-    public static function storeSearchPanel()
+    public static function alphabetList()
     {
-        $store = 0;
-        $storeCharacter = "'".$store."'";
-        $storeSearch = "<ul class='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
+        $letterOrNumber = 0;
+        $alphabetList = "<ul class='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
         
-        foreach (range('A', 'Z') as $store) {
-            $lastStoreClass = $store=='Z' ? 'last' : '';
-            $storeCharacter = "'".$store."'";
-            $storeSearch .="<li><a id='" . $store . "'  href='#".strtolower($store)."' class='".$lastStoreClass."'>$store</a></li>";
+        foreach (range('A', 'Z') as $letterOrNumber) {
+            $lastAlphabetClass = $letterOrNumber=='Z' ? 'last' : '';
+            $alphabetList .="<li><a id='" . $letterOrNumber . "'  href='#".strtolower($letterOrNumber)."' class='".$lastAlphabetClass."'>$letterOrNumber</a></li>";
         }
-        $storeSearch .="</ul>";
-        return $storeSearch;
+        $alphabetList .="</ul>";
+        return $alphabetList;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
