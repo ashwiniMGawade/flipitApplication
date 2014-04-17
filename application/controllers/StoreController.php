@@ -2,6 +2,20 @@
  
 class StoreController extends Zend_Controller_Action
 {
+    #################################################
+    ######## REFACTORED CODE ########################
+    #################################################
+    public function addshopinfevoriteAction()
+    {
+        $shopId = $this->getRequest()->getParam("shopid");
+        $userId = $this->getRequest()->getParam("uId");
+        $shopInformation = Shop::shopAddInFavoriteInShopDetails($shopId, $userId);
+        echo Zend_Json::encode($shopInformation);
+        die();
+    }
+    ######################################################
+    ############### END REFACTORED CODE ##################
+    ######################################################
     
     /**
      * override views based on modules if exists
@@ -254,6 +268,21 @@ class StoreController extends Zend_Controller_Action
         }
 
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
+        
+        // zend form for sign up news letter and validate form 
+        $signUpNewsLetterform = new Application_Form_SignUp();
+        $this->view->form = $signUpNewsLetterform;
+        if ($this->getRequest()->isPost()) {
+            if ($signUpNewsLetterform->isValid($_POST)) {
+                $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
+                $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
+                $signUpStep2Url= HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('inschrijven') . '/' . FrontEnd_Helper_viewHelper::__link('stap2') . '/' . base64_encode($emailAddress);
+                $this->_redirect($signUpStep2Url);
+            } else {
+                $signUpNewsLetterform->highlightErrorElements();
+            }
+        } else {
+        }
     }
 
     public function topStorePopularOffers($shopId, $offers)
@@ -471,15 +500,6 @@ class StoreController extends Zend_Controller_Action
         $this->view->fbImg = $img;
     }
     
- public function addshopinfevoriteAction() {
-    
-    $shopid=$this->getRequest()->getParam("shopid");
-    $userid=$this->getRequest()->getParam("uId");
-    $data = Shop::shopAddInFavoriteInShopDetails($userid,$shopid);
-    echo Zend_Json::encode($data);
-    die();
-
- }
  public function abcAction() {
  
  }

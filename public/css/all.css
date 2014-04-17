@@ -8914,3 +8914,9 @@ input[type="submit"]::-moz-focus-inner {
     width: 100%;
     z-index: 900;
 }
+.input-error{
+   border: 1px solid red!important;
+}
+ul.errors{
+  display: none;
+}

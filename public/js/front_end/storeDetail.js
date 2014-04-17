@@ -1,4 +1,7 @@
 // refactored code 
+function setHiddenFieldValue(){
+    $('input#shopId').val($('input#currentShop').val());
+};
 function showTermAndConditions(id)
 {
     $('div#termAndConditions'+id).slideToggle();
