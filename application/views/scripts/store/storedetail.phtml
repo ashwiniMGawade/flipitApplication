@@ -208,16 +208,12 @@ endif;
 ?>
 
         </article>
-        <article class="block">
-
 <?php
 $controllerName =  $this->controllerName;
 $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
                     <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
 echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl, $socialMediaTitle, $controllerName);
 ?>
-        
-        </article>
 
 <?php
 if (count($this->latestShopUpdates) > 0):?>
@@ -251,12 +247,7 @@ if(isset($this->popularStoresList)):
 endif;
         
 if ($this->currentStoreInformation[0]['showSignupOption']) :
-    ?>
-
-            <div class="block white">
-    <?php echo $this->esi($this->locale.$storeViewPartialPath.'signupwidget'); ?>
-            </div>
-    <?php
+  echo $this->esi($this->locale.$storeViewPartialPath.'signupwidget'); 
 endif;
 ?>
     </aside>
