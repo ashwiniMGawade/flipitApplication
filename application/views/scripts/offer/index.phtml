@@ -37,15 +37,11 @@ if (count($this->paginator)>0) {
         
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-        <div class="block white">
             <?php
             $locale = LOCALE != 'en'? LOCALE. '/' : '';
             echo $this->esi($locale.'store/signupwidget'); ?>
-        </div>
-        <article class="block">
             <?php
             echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
             ?>
-        </article>
     </aside>
 </div>
