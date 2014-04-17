@@ -49,94 +49,26 @@ class StoreController extends Zend_Controller_Action
      * @author kraj
      * @version 1.0
      */
-    public function indexAction() {
-        
-        # get cononical link
+    public function indexAction()
+    {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink);
+        $relatedPageFromPageAttribute =  Page::getPageFromPageAttributeFiltered(7);
+        $this->view->pageTitle = @$relatedPageFromPageAttribute['pageTitle'];
+        $this->view->headTitle(@$relatedPageFromPageAttribute['metaTitle']);
+        $this->view->headMeta()->setName('description', @trim($relatedPageFromPageAttribute['metaDescription']));
         
-        $relatedPage =  Page::getPageFromPageAttrFiltered(7);
-        
-        $this->view->pageTitle = $relatedPage['pageTitle'];
-        $this->view->headTitle($relatedPage['metaTitle']);
-        $this->view->headMeta()->setName('description', trim($relatedPage['metaDescription']));
-        
-        
-        if(@$relatedPage['customHeader'])
-        {
-            $this->view->layout()->customHeader = "\n" . $relatedPage['customHeader'];
-        }
-        
+        if ($relatedPageFromPageAttribute['customHeader']) :
+            $this->view->layout()->customHeader = "\n" . @$relatedPageFromPageAttribute['customHeader'];
+        endif;
         
         $this->view->controllerName = $this->getRequest()->getParam('controller');
-        $this->view->action         = $this->getRequest()->getParam('action');
-        //get store by search pass st(storeId) cat($categoryId)
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_shops_list');
-        //key not exist in cache
-        //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shop_list');
-        if($flag){
-            //get from database and store all Store in cache
-            $chc = Shop::getallStoreForFrontEnd('all',null);
-            FrontEnd_Helper_viewHelper::setInCache('all_shops_list', $chc);
-            //echo  'FROM DATABASE';
-        } else {
-            //get from cache
-            $chc = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_shops_list');
-            //echo 'The result is comming from cache!!';
-        }
-        
-        
-        //check in cache of popularshop
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularshop_list');
-        //key not exist in cache
-        if($flag){
-        
-            //get from database and store popularStore in cache
-            $popularStore = Shop::getPopularStoreAll(10);
-            FrontEnd_Helper_viewHelper::setInCache('all_popularshop_list', $popularStore);
-            //echo  'FROM DATABASE';
-        
-        } else {
-            //get from cache
-            $popularStore = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularshop_list');
-            //echo 'The result is comming from cache!!';
-        }
-        
-        
-        //Get and store searchPanel  in cache like A-Z
-        //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_searchpanle_list');
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_searchpanle_list');
-        //key not exist in cache
-        if($flag){
-            //Get and store searchPanel  in cache like A-Z
-            $searchPanel = FrontEnd_Helper_viewHelper::storeSearchPanel();
-            FrontEnd_Helper_viewHelper::setInCache('all_searchpanle_list', $searchPanel);
-            //echo  'FROM DATABASE';
-             
-        } else {
-            //get from cache
-            $searchPanel = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_searchpanle_list');
-            //echo 'The result is comming from cache!!';
-        }
-        
-        //check category list exist in cache or not
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_category_list');
-        //key not exist in cache
-        if($flag){
-            //Get and store Category  in cache like A-Z
-            $allCat = Category::getCategoryIcons();
-            FrontEnd_Helper_viewHelper::setInCache('all_category_list', $allCat);
-            //echo  'FROM DATABASE';
-             
-        } else {
-             //get from cache
-            $allCat = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_category_list');
-            //echo 'The result is comming from cache!!';
-        }
-        //for facebook parameters
-        
-        $this->view->facebookTitle = $relatedPage['pageTitle'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $relatedPage['permaLink'];
+        $this->view->action = $this->getRequest()->getParam('action');
+        $allStoresList = self::shopOffersBySetGetCache('all_shops_list', Shop::getallStoresForFrontEnd('all', null), true);
+        $popularStores = self::shopOffersBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
+        $storeSearchByAlphabet = self::shopOffersBySetGetCache('all_searchpanle_list', FrontEnd_Helper_viewHelper::storeSearchPanel(), true);
+        $this->view->facebookTitle = @$relatedPageFromPageAttribute['pageTitle'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $relatedPageFromPageAttribute['permaLink'];
         
         if(LOCALE == '' )
         {
@@ -148,18 +80,15 @@ class StoreController extends Zend_Controller_Action
                 $facebookLocale = LOCALE;
                     
         }
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
+
+        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
+        $this->view->facebookLocale = $facebookLocale;
         $this->view->facebookDescription =  trim($relatedPage['metaDescription']);
-        $this->view->facebookLocale = $facebookLocale ;
-         
-        
-        $this->view->stores         = $chc;
-        $this->view->searchPanel    = $searchPanel;//show search panle like A-z
-        $this->view->popularstores  =$popularStore;//show popular store
-        $this->view->allCategory    = $allCat;
-     
-         
+        $this->view->storesInformation = $allStoresList;
+        $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
+        $this->view->popularStores = $popularStores;
     }
+
     public function searchshopbycharAction()
     {
         
@@ -352,12 +281,18 @@ class StoreController extends Zend_Controller_Action
         return $offers;
     }
 
-    public function shopOffersBySetGetCache($shopKey = '', $shopFunction = '')
+    public function shopOffersBySetGetCache($shopKey = '', $shopRelatedFunction = '', $replaceStringArrayCheck = '')
     {
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($shopKey);
 
         if ($cacheStatusByKey) {
-            $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray($shopFunction);
+            
+            if ($replaceStringArrayCheck == '') {
+                $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray($shopRelatedFunction);
+            } else{
+                $shopInformation = $shopRelatedFunction;
+            }
+
             FrontEnd_Helper_viewHelper::setInCache($shopKey, $shopInformation);
         } else {
             $shopInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($shopKey);
@@ -379,7 +314,7 @@ class StoreController extends Zend_Controller_Action
             if($flag){
             
                 //get from database and store all Store in cache
-                $chc = Shop::getallStoreForFrontEnd('all',null);
+                $chc = Shop::getallStoresForFrontEnd('all',null);
                 FrontEnd_Helper_viewHelper::setInCache('all_store_list', $chc);
             } else {
                 //get from cache

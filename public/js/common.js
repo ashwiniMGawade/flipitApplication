@@ -120,14 +120,16 @@ function localeSettingCMS(obj)
 }
 
 jQuery(document).ready(function() {
-
-
+	//Refactored block
+    if (jQuery(".shop-name")[0]) {
+        jQuery(".shop-name:last-child").append("<a class='btn-top' href='#'>"+ __(Back to top) +"</a>");
+    }
 
 	if(jQuery("div.coupon-code").length > 0)
 	{
 		jQuery("div.coupon-code").bigText({'maximumFontSize': 20});
 	}
-	
+	//end refactored block
 	// set user menu
 	// jQuery.post('/login/usermenu/rnd/'+Math.random()*9999999999, function(data) {
 	// 	jQuery('.top-nav').html(data);

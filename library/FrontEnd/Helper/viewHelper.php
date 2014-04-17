@@ -280,16 +280,35 @@ EOD;
     	{
     		$site_name = "Flipit.com";
     	}
-    	$value = array('og:title'=>$headMetaValue->facebookTitle, 'og:type'=>'website', 'og:url'=> $headMetaValue->facebookShareUrl,
+    	$socialMediaValue = array('og:title'=>$headMetaValue->facebookTitle, 'og:type'=>'website', 'og:url'=> $headMetaValue->facebookShareUrl,
 		    		'og:description'=>$headMetaValue->facebookDescription, 'og:locale'=>$headMetaValue->facebookLocale, 
 		    		'og:image'=>$headMetaValue->facebookImage, 'og:site_name'=>$site_name, 'twitter:description'=>$headMetaValue->twitterDescription,
 					'twitter:site'=>$site_name
 		    	 );
    		
-    	return $value;
+    	return $socialMediaValue;
     }
     
-
+    /**
+     * generate search panle for searching in all store page
+     * @param  char  $char
+     * @return mixed $string
+     * @version 1.0
+     */
+    public static function storeSearchPanel()
+    {
+        $store = 0;
+        $storeCharacter = "'".$store."'";
+        $storeSearch = "<ul class='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
+        
+        foreach (range('A', 'Z') as $store) {
+            $lastStoreClass = $store=='Z' ? 'last' : '';
+            $storeCharacter = "'".$store."'";
+            $storeSearch .="<li><a id='" . $store . "'  href='#".strtolower($store)."' class='".$lastStoreClass."'>$store</a></li>";
+        }
+        $storeSearch .="</ul>";
+        return $storeSearch;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -425,7 +444,7 @@ EOD;
             </div>";
         else:
 
-        $socialMedia = "
+        $socialMedia = "<article class='block'>
         <div class='social-likes'>
             <div class='intro'>
                 ".$socialMediaTitle."
@@ -442,7 +461,7 @@ EOD;
                     <div class='g-plus' data-href='".$socialMediaUrl."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
                 </li>
             </ul>
-        </div>";
+        </div></article>";
         endif;
 
         return $socialMedia;
@@ -535,7 +554,7 @@ EOD;
         $data = '';
         switch (strtolower($storeType)) {
             case 'all':
-                $data = Shop::getallStoreForFrontEnd();
+                $data = Shop::getallStoresForFrontEnd();
                 break;
             case 'recent':
                 $data = Shop::getrecentstores($limit);
@@ -1150,27 +1169,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                 </a>
             </span>
         </div>';
-
-        return $string;
-    }
-
-    /**
-     * generate search panle for searching in all store page
-     * @param  char  $char
-     * @author kraj
-     * @return mixed $string
-     * @version 1.0
-     */
-    public static function storeSearchPanel()
-    {
-        $i = 0;
-        $char = "'".$i."'";
-        $string = "<li><a onClick=scrollbyCategory('abc'); id='0' class='' href='#0-9'>0-9</a></li>";
-         foreach (range('A','Z') as $i) {
-                $NoneClass = $i=='Z' ? 'none' : '';
-                $char = "'".$i."'";
-                $string .="<li class='".$NoneClass."'><a onClick=scrollbyCategory($char); id='" . $i . "'  href='#".$i."'>$i</a></li>";
-            }
 
         return $string;
     }

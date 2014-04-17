@@ -1,3 +1,13 @@
+/*Updated css*/
+.shop-name {
+  margin: 0;
+  padding: 0 15px 0 15px;
+  list-style: none;
+}
+.shop-name:nth-child(3) li:last-child{
+  border: none;    
+}
+/*Updated Css*/
 .after {
   content: '';
   display: block;
@@ -56,11 +66,6 @@
 }
 .alphabet li a:hover {
   color: #33383e;
-}
-.shop-name {
-  margin: 0 -20px 0 0;
-  padding: 0;
-  list-style: none;
 }
 .shop-name li {
   margin: 0 0 6px;

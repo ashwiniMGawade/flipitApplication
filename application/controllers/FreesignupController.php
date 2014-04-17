@@ -69,7 +69,7 @@ class FreesignupController extends Zend_Controller_Action
         $pageName = 'Sign Up Step 1';
         $pageId = PageAttribute::getPageIdByName($pageName);
 
-        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        $relatedPage =  Page::getPageFromPageAttributeFiltered($pageId);
         
         $this->view->pageTitle = @$relatedPage['pageTitle'];
         $this->view->headTitle(@$relatedPage['metaTitle']);
@@ -103,7 +103,7 @@ class FreesignupController extends Zend_Controller_Action
     	$pageName = 'Sign Up Step 2';
         $pageId = PageAttribute::getPageIdByName($pageName);
 
-        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        $relatedPage =  Page::getPageFromPageAttributeFiltered($pageId);
         
         
         $this->view->pageTitle = @$relatedPage['pageTitle'];
@@ -159,7 +159,7 @@ class FreesignupController extends Zend_Controller_Action
     	$pageName = 'Sign Up Step 3';
         $pageId = PageAttribute::getPageIdByName($pageName);
 
-        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        $relatedPage =  Page::getPageFromPageAttributeFiltered($pageId);
         
         $this->view->pageTitle = @$relatedPage['pageTitle'];
         $this->view->headTitle(@$relatedPage['metaTitle']);
@@ -195,7 +195,7 @@ class FreesignupController extends Zend_Controller_Action
     	$pageName = 'Sign Up Step 4';
         $pageId = PageAttribute::getPageIdByName($pageName);
 
-        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        $relatedPage =  Page::getPageFromPageAttributeFiltered($pageId);
         
         $this->view->pageTitle = @$relatedPage['pageTitle'];
         $this->view->headTitle(@$relatedPage['metaTitle']);
