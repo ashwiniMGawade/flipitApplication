@@ -181,8 +181,8 @@ EOD;
         }
 
         if (LOCALE!='en') {
-            $frontInstance = Zend_Controller_Front::getInstance();
-            $controllerDirectory = $frontInstance->getControllerDirectory();
+            $frontEndControllers = Zend_Controller_Front::getInstance();
+            $controllerDirectory = $frontEndControllers->getControllerDirectory();
             $moduleNames = array_keys($controllerDirectory);
             $routeProperty = explode('/', $permalink);
 

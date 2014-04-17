@@ -97,7 +97,7 @@ class StoreController extends Zend_Controller_Action
 
         $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
         $this->view->facebookLocale = $facebookLocale;
-        $this->view->facebookDescription =  trim($relatedPage['metaDescription']);
+        $this->view->facebookDescription =  trim($relatedPageFromPageAttribute['metaDescription']);
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;

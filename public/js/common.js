@@ -122,7 +122,7 @@ function localeSettingCMS(obj)
 jQuery(document).ready(function() {
 	//Refactored block
     if (jQuery(".shop-name")[0]) {
-        jQuery(".shop-name:last-child").append("<a class='btn-top' href='#'>"+ __(Back to top) +"</a>");
+        jQuery(".shop-name:last-child").append("<a class='btn-top' href='#'>"+ __('Back to top') +"</a>");
     }
 
 	if(jQuery("div.coupon-code").length > 0)

@@ -1,22 +1,19 @@
 <?php
-$storeView = 'store/';
-$popularStores = '';
-$storesInformation = '';
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$controllerName =  $this->controllerName;
-$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-                    <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
 
+$storeViewPath = 'store/';
+$popularStores = '';
 if (count($this->popularStores)) :
      $popularStores = $this->partial(
-         $storeView.'_popular-stores.phtml',
+         $storeViewPath.'_popular-stores.phtml',
          array('popularStores' => $this->popularStores)
      );
 endif;
 
+$storesInformation = '';
 if ($this->storesInformation != '' && $this->storesInformation != null) :
     $storesInformation = $this->partial(
-        $storeView.'_all-stores-listing.phtml',
+        $storeViewPath.'_all-stores-listing.phtml',
         array('storesInformation' => $this->storesInformation)
     );
 endif;
@@ -42,7 +39,12 @@ echo $storesInformation;
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
 <?php
-echo $this->esi($this->locale.$storeView.'signupwidget');
+echo $this->esi($this->locale.$storeViewPath.'signupwidget');
+
+$controllerName =  $this->controllerName;
+$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
+                    <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+
 echo FrontEnd_Helper_viewHelper::socialmediaSmall('', $socialMediaTitle, $controllerName);
 ?>
     </aside>
