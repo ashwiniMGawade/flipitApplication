@@ -57,7 +57,7 @@ foreach ($this->offers as $offer) {
     if ($offer->extendedOffer =='1'):?>
                         <a class="text-blue-link"
                         href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_OfferPartialFunctions::__link('deals').'/'. $offer->extendedUrl;?>">
-                        <?php echo $this->translate('More about this code'); ?>
+                        <?php echo $this->translate('Meer over deze code'); ?>
                         </a>
         <?php
     endif;?>
@@ -85,8 +85,8 @@ foreach ($this->offers as $offer) {
     </article>
     
     <?php
-    if(($dummyPartialCounter == 1 && $this->offersType=='simple')
-        || ($dummyPartialCounter == 1 && $this->offersType=='top20')):?>
+    if(($dummyPartialCounter == 1 && $this->offersType=='simple' &&  $this->zendForm!='')
+        || ($dummyPartialCounter == 1 && $this->offersType=='top20' &&  $this->zendForm!='')):?>
         <div class="block block-form <?php echo $this->shop=='' ? 'block-form-2' : ''?>">
             <div class="holder">
                  <div class="<?php echo $this->shop=='' ? 'ico-box' : 'icon'?>">
