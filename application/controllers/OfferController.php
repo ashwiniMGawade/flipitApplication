@@ -34,21 +34,20 @@ class OfferController extends Zend_Controller_Action {
      */
     public function indexAction() 
     {
-        $page = Page::getPageFromPageAttr(6);
-        $this->view->pageTitle = $page->pageTitle;
-        $this->view->headTitle($page->metaTitle);
+        $offerPage = Page::getPageFromPageAttribute(6);
+        $this->view->pageTitle = $offerPage->pageTitle;
+        $this->view->headTitle($offerPage->metaTitle);
 
-        if($page->customHeader)
-        {
-            $this->view->layout()->customHeader = "\n" . $page->customHeader;
+        if ($offerPage->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $offerPage->customHeader;
         }
 
-        $this->view->headMeta()->setName('description', trim($page->metaDescription));
+        $this->view->headMeta()->setName('description', trim($offerPage->metaDescription));
         $params = $this->_getAllParams();
-        $this->view->facebookTitle = $page->pageTitle;
+        $this->view->facebookTitle = $offerPage->pageTitle;
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
 
-        if(LOCALE == '' ) {
+        if (LOCALE == '') {
             $facebookImage = 'logo_og.png';
         } else {
             $facebookImage = 'flipit.png';
@@ -57,10 +56,10 @@ class OfferController extends Zend_Controller_Action {
         $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
-        $getPermaLinkPopOffer = Page::getPageFromPageAttrInOfferPop(5);
+        $getPermaLinkPopOffer = Page::getPageFromPageAttributeInOfferPop(5);
         $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         
-        if($flag){
+        if ($flag) {
             $offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
             FrontEnd_Helper_viewHelper::setInCache('all_newoffer_list', $offers);
         } else {

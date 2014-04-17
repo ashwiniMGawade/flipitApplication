@@ -8900,3 +8900,9 @@ input[type="submit"]::-moz-focus-inner {
 .store-header-link{
 	float: left;
 }
+
+.no-record{
+    text-align:center;
+    font-size:14px;
+    font-weight:bold;
+}
