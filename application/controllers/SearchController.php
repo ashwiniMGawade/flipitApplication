@@ -34,7 +34,7 @@ class SearchController extends Zend_Controller_Action {
 		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSearch($permalink) ;
 		
 		$pageId = 36;
-		$this->pageDetail = Page::getPageFromPageAttr($pageId);
+		$this->pageDetail = Page::getPageFromPageAttribute($pageId);
 		$this->view->pageTitle = @$this->pageDetail->pageTitle;
 		
 		if($this->pageDetail->customHeader)

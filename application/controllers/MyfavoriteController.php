@@ -40,7 +40,7 @@ class MyfavoriteController extends Zend_Controller_Action
 
 		if (Auth_VisitorAdapter::hasIdentity()){
     		
-    		$this->pageDetail = Page::getPageFromPageAttr(16);
+    		$this->pageDetail = Page::getPageFromPageAttribute(16);
     		$this->view->pageTitle = @$this->pageDetail->pageTitle;
     		$this->view->headTitle(@$this->pageDetail->metaTitle);
     		

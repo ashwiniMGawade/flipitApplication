@@ -103,7 +103,7 @@ class LoginController extends Zend_Controller_Action {
 		
 		# get cononical link
 		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
+		$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
 		
 		$headTitle = $this->view->translate("Members Only ");
     	$this->view->headTitle($headTitle);

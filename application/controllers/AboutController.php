@@ -35,7 +35,7 @@ class AboutController extends Zend_Controller_Action {
 			//$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink);
 
 		 	$slug = 14;
-			$this->pageDetail = Page::getPageFromPageAttr(14);
+			$this->pageDetail = Page::getPageFromPageAttribute(14);
     		$this->view->pageTitle = @$this->pageDetail->pageTitle;
     		$this->view->headTitle(@$this->pageDetail->metaTitle);
 		 	$permalink = @$this->pageDetail->permaLink;
@@ -126,7 +126,7 @@ class AboutController extends Zend_Controller_Action {
 
 		# get cononical link
 		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
+		$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
 
 		/*
 		 * Example to cache a result of a query ()

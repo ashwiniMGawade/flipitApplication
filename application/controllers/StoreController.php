@@ -66,7 +66,7 @@ class StoreController extends Zend_Controller_Action
     public function indexAction()
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink);
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $relatedPageFromPageAttribute =  Page::getPageFromPageAttributeFiltered(7);
         $this->view->pageTitle = @$relatedPageFromPageAttribute['pageTitle'];
         $this->view->headTitle(@$relatedPageFromPageAttribute['metaTitle']);
@@ -177,7 +177,7 @@ class StoreController extends Zend_Controller_Action
     public function storedetailAction()
     {
         $shopPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($shopPermalink);
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
         $currentShopId = $shopParams['id'];
@@ -397,7 +397,7 @@ class StoreController extends Zend_Controller_Action
         
         # get cononical link
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
         
         $lim=10;
         $params = $this->_getAllParams ();

@@ -36,7 +36,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		
 		# get cononical link
 		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
+		$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
 		
         $permalink= FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
         $this->pageDetail = Page::getdefaultPageProperties($permalink);
@@ -146,7 +146,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		$perma = $this->getRequest ()->getParam ('permalink');
 		$permalinkForCanonical = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
 		//sdie($perma);
-		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalinkForCanonical) ;
+		$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalinkForCanonical) ;
 		$this->pageDetail = Articlecategory::getArticleCategory($perma);
 		//print_r($this->pageDetail); die;
 		$id = $this->pageDetail[0]['id'];
@@ -292,7 +292,7 @@ class BespaarwijzerController extends Zend_Controller_Action {
 		
 		# get cononical link
 		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
+		$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
 		
 		
 		$params = $this->_getAllParams();

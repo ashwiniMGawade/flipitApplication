@@ -9,7 +9,7 @@ class OfferController extends Zend_Controller_Action
     {
         $pageName = 'top-20';
         $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
-        $page = Page::getPageFromPageAttr($pageAttributeId);
+        $page = Page::getPageFromPageAttribute($pageAttributeId);
         if ($page->customHeader) {
             $this->view->layout()->customHeader = "\n" . $page->customHeader;
         }

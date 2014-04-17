@@ -816,7 +816,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                     </div>';
 
     }
-        $getPermLinkCategory = Page::getPageFromPageAttr(9);
+        $getPermLinkCategory = Page::getPageFromPageAttribute(9);
                $string.='<div class="fr mt10">'.$trans->translate('Ga naar').' <a class="text-blue-link" href='. HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('categorieen').'>'.$trans->translate('Alle Categorieen').'</a></div>
                </div>';
 

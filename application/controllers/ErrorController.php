@@ -112,7 +112,7 @@ class ErrorController extends Zend_Controller_Action
 	                $wdgt = FrontEnd_Helper_viewHelper::getSidebarWidget($arr=array(),rtrim($page,'/'));
 
                 	if($pagedata['pageType'] == 'default'):
-                		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($page) ;
+                		$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($page) ;
                 	endif;
 
 

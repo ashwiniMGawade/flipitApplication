@@ -1,8 +1,8 @@
 <?php 
 	$breadcrumb = "<a href='".HTTP_PATH_LOCALE ."zoeken/".$this->keyword."' style='color:#6a6a6a'>".$this->translate('Search Results')."</a>";
 	echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
-	$getPermLinkShops = Page::getPageFromPageAttr(7);
-	$getPermLinkCategory = Page::getPageFromPageAttr(9);
+	$getPermLinkShops = Page::getPageFromPageAttribute(7);
+	$getPermLinkCategory = Page::getPageFromPageAttribute(9);
 	if($this->flag == 1){
 	?>
 <?php 

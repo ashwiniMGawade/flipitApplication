@@ -53,7 +53,7 @@ class IndexController extends Zend_Controller_Action {
 		//$this->view->abcd = 'aaaaaaa';
 		$this->view->controllerName = 'index';
 		$pageId = $this->getRequest ()->getParam ('attachedpage');
-		$get = Page::getPageFromPageAttr(4);
+		$get = Page::getPageFromPageAttribute(4);
 
 
 

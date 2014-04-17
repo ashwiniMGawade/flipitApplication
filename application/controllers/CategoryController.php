@@ -32,10 +32,10 @@ class CategoryController extends Zend_Controller_Action {
 	 public function indexAction() {
 	 	
 	 	$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-    	$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
+    	$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
 	 	
 		//get category icons from database
-        $this->pageDetail = Page::getPageFromPageAttr(9);
+        $this->pageDetail = Page::getPageFromPageAttribute(9);
     	$this->view->pageTitle = @$this->pageDetail->pageTitle;
     	$this->view->headTitle(@$this->pageDetail->metaTitle);
     	$this->view->headMeta()->setName('description', @trim($this->pageDetail->metaDescription));
