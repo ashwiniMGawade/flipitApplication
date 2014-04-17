@@ -8,8 +8,8 @@ class StoreController extends Zend_Controller_Action
     public function addshopinfevoriteAction()
     {
         $shopId = $this->getRequest()->getParam("shopid");
-        $userid = $this->getRequest()->getParam("uId");
-        $shopInformation = Shop::shopAddInFavoriteInShopDetails($shopId, $userid);
+        $userId = $this->getRequest()->getParam("uId");
+        $shopInformation = Shop::shopAddInFavoriteInShopDetails($shopId, $userId);
         echo Zend_Json::encode($shopInformation);
         die();
     }
