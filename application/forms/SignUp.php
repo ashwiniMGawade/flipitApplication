@@ -3,12 +3,12 @@ class Application_Form_SignUp extends Application_Form_Base
 {
     public function init()
     {
-        $decoratorUsername = new Application_Form_SimpleInput();
+        $decoratorEmailAddress = new Application_Form_SimpleInput();
         $emailAddressTextBox = new Zend_Form_Element_Text(
             'emailAddress',
             array(
                 'decorators' => array(
-                   $decoratorUsername,'Errors',
+                   $decoratorEmailAddress,'Errors',
                 )
             )
         );

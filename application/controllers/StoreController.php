@@ -7,9 +7,9 @@ class StoreController extends Zend_Controller_Action
     #################################################
     public function addshopinfevoriteAction()
     {
-        $shopid = $this->getRequest()->getParam("shopid");
+        $shopId = $this->getRequest()->getParam("shopid");
         $userid = $this->getRequest()->getParam("uId");
-        $shopInformation = Shop::shopAddInFavoriteInShopDetails($userid, $shopid);
+        $shopInformation = Shop::shopAddInFavoriteInShopDetails($shopId, $userid);
         echo Zend_Json::encode($shopInformation);
         die();
     }
@@ -347,8 +347,8 @@ class StoreController extends Zend_Controller_Action
             if ($signUpNewsLetterform->isValid($_POST)) {
                 $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
                 $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
-                $url= HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('inschrijven') . '/' . FrontEnd_Helper_viewHelper::__link('stap2') . '/' . base64_encode($emailAddress);
-                $this->_redirect($url);
+                $signUpStep2Url= HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('inschrijven') . '/' . FrontEnd_Helper_viewHelper::__link('stap2') . '/' . base64_encode($emailAddress);
+                $this->_redirect($signUpStep2Url);
             } else {
                 $signUpNewsLetterform->highlightErrorElements();
             }

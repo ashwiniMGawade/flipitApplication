@@ -6,13 +6,13 @@ class Application_Form_SimpleInput extends Zend_Form_Decorator_Abstract
     public function render($content)
     {
         $element = $this->getElement();
-        $name = htmlentities($element->getFullyQualifiedName());
-        $id = htmlentities($element->getId());
-        $value = htmlentities($element->getValue());
-        $class = htmlentities($element->getAttrib('class'));
-        $placeHolder = htmlentities($element->getAttrib('placeholder'));
-        $type = htmlentities($element->getAttrib('type'));
-        $markup = sprintf($this->format, $class, $placeHolder, $name, $id, $type, $value);
+        $elementName = htmlentities($element->getFullyQualifiedName());
+        $elementId = htmlentities($element->getId());
+        $elementValue = htmlentities($element->getValue());
+        $elementClass = htmlentities($element->getAttrib('class'));
+        $elementPlaceHolder = htmlentities($element->getAttrib('placeholder'));
+        $elementType = htmlentities($element->getAttrib('type'));
+        $markup = sprintf($this->format, $elementClass, $elementPlaceHolder, $elementName, $elementId, $elementType, $elementValue);
         return $markup;
     }
 }
