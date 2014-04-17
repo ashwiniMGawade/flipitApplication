@@ -155,7 +155,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
        {
           $offerDiscountImage = self::getDiscountImage($currentOffer);
           $altAttributeText = @$currentOffer->tiles['label'];
-          $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText,false);
+          $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
        } else {
            $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
            $altAttributeText = $currentOffer->shop['name'];

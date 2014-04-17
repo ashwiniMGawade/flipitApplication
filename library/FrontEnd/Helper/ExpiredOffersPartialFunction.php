@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_ExpiredOfferPartialFunction extends FrontEnd_Helper_viewHelper{
+class FrontEnd_Helper_ExpiredOffersPartialFunction extends FrontEnd_Helper_viewHelper{
     
     public static function getExpiredOfferUrl($offer) {
     	if($offer->extendedOffer == 1):
@@ -41,7 +41,7 @@ class FrontEnd_Helper_ExpiredOfferPartialFunction extends FrontEnd_Helper_viewHe
     	return $expiredOn;
     }
     
-    public static function getExpiredOfferHeader($shopName) {
+    public static function getExpiredOffersHeader($shopName) {
     	$zendTranslate = Zend_Registry::get('Zend_Translate');
         $offerHeader = '';
     	$offerHeader = '<header class="heading-box text-expired">

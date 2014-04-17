@@ -1,22 +1,22 @@
 <!-- Refactored code -->
-<?php echo FrontEnd_Helper_ExpiredOfferPartialFunction::getExpiredOfferHeader($this->shopName);?>
+<?php echo FrontEnd_Helper_ExpiredOffersPartialFunction::getExpiredOffersHeader($this->shopName);?>
 <section class="section-module">
 <?php
 foreach ($this->expiredOffers as $offer) :
     $offer = (object) $offer;?>
     <div class="line">
-      <a href="<?php echo FrontEnd_Helper_ExpiredOfferPartialFunction::getExpiredOfferUrl($offer);?>" 
+      <a href="<?php echo FrontEnd_Helper_ExpiredOffersPartialFunction::getExpiredOfferUrl($offer);?>" 
       rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
         <div class="holder">
             <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
             <div class="box">
                 <span class="text">
-                <?php echo $offer->title=='' ? $this->translate("Description not available right now..") : FrontEnd_Helper_ExpiredOfferPartialFunction::getOfferTitle($offer->title); ?>
+                <?php echo $offer->title=='' ? $this->translate("Description not available right now..") : FrontEnd_Helper_ExpiredOffersPartialFunction::getOfferTitle($offer->title); ?>
                 </span>
-                <?php echo FrontEnd_Helper_ExpiredOfferPartialFunction::getOfferCouponCode($offer->couponCode)?>
+                <?php echo FrontEnd_Helper_ExpiredOffersPartialFunction::getOfferCouponCode($offer->couponCode)?>
             </div>
         </div>
-        <span class="date"><?php echo FrontEnd_Helper_ExpiredOfferPartialFunction::getExpiredOnDate($offer->endDate);?></span>
+        <span class="date"><?php echo FrontEnd_Helper_ExpiredOffersPartialFunction::getExpiredOnDate($offer->endDate);?></span>
       </a>
     </div>
     <hr class="alt2">

@@ -3,11 +3,11 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
-$storeViewPartial = 'store/';
+$storeViewPartialPath = 'store/';
 $similarShopsAndSimilarCategoriesShops ='';
 if(!empty($this->similarShops)):
     $similarShopsAndSimilarCategoriesShops = $this->partial(
-        $storeViewPartial.'_similar-and-category-related-shops.phtml',
+        $storeViewPartialPath.'_similar-and-category-related-shops.phtml',
         array('similarShopsAndSimilarCategoryShops' => $this->similarShops)
     );
 endif;
@@ -42,7 +42,7 @@ $offersCount = count($this->offers);
 $offers = '';
 if(count($this->offers) > 0):
     $offers = $this->partial(
-        $storeViewPartial.'_offer.phtml',
+        $storeViewPartialPath.'_offer.phtml',
         array('offers' => $this->offers, 'offersType'=>'simple', 'shopName' => $this->currentStoreInformation[0]['name'])
     );
 endif;
@@ -52,26 +52,26 @@ $similarOffers = '';
 if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
     $similarOffersHeader = FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->currentStoreInformation[0]['name'], 'similar');
     $similarOffers = $this->partial(
-        $storeViewPartial.'_offer.phtml',
+        $storeViewPartialPath.'_offer.phtml',
         array('offers' => $this->similarShopsAndSimilarCategoriesOffers, 'offersType' => 'similar', 'shopName' => $this->currentStoreInformation[0]['name'])
     );
 endif;
 
-$nomoneyNocodeMessage = '';
+$noMoneyNocodeMessage = '';
 if ($this->currentStoreInformation[0]['affliateProgram']!='1' && $offers=='') :
-    $nomoneyNocodeMessage = $this->partial($storeViewPartial.'_nocode_nomoney_message.phtml');
+    $noMoneyNocodeMessage = $this->partial($storeViewPartialPath.'_noCodeNoMoneyMessage.phtml');
     $similarOffersHeader = '';
 endif;
 
 $moneySavingGuide = '';
 if(count($this->moneySavingGuideArticle) >0):
-    $moneySavingGuide = $this->partialLoop($storeViewPartial.'_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle);
+    $moneySavingGuide = $this->partialLoop($storeViewPartialPath.'_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle);
 endif;
 
 $expiredOffers ='';
 if(count($this->expiredOffers) >0):
       $expiredOffers = $this->partial(
-          $storeViewPartial.'_expiredOffer.phtml',
+          $storeViewPartialPath.'_expiredOffer.phtml',
           array('expiredOffers'=>$this->expiredOffers,'shopName'=>$this->currentStoreInformation[0]['name'])
       );
 endif;
@@ -111,13 +111,13 @@ endif;
             class="btn text-blue-link fl store-header-link <?php echo $affliateClass; ?> pop btn btn-sm btn-default" <?php echo $affliateDisabled; ?>
             onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl;?>"><?php echo $actualUrl;?>
             </a>
-            <?php echo $this->esi($this->locale.$storeViewPartial.'addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));?>        
+            <?php echo $this->esi($this->locale.$storeViewPartialPath.'addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));?>        
     </div>
 </div> 
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
     <?php 
-    echo $nomoneyNocodeMessage;
+    echo $noMoneyNocodeMessage;
     echo $offers;
     echo $similarOffersHeader;
     echo $similarOffers;
@@ -210,7 +210,7 @@ if (count($this->latestShopUpdates) > 0):?>
 
         <section class="block">
             <h2><?php echo $this->translate('Latest news about').' '.$this->currentStoreInformation[0]['name'];?></h2>
-   <?php echo $this->partialLoop($storeViewPartial.'_latestNews.phtml', $this->latestShopUpdates); ?>
+   <?php echo $this->partialLoop($storeViewPartialPath.'_latestNews.phtml', $this->latestShopUpdates); ?>
         </section>
 
    <?php
@@ -240,7 +240,7 @@ if ($this->currentStoreInformation[0]['showSignupOption']) :
     ?>
 
             <div class="block white">
-    <?php echo $this->esi($this->locale.$storeViewPartial.'signupwidget'); ?>
+    <?php echo $this->esi($this->locale.$storeViewPartialPath.'signupwidget'); ?>
             </div>
     <?php
 endif;
