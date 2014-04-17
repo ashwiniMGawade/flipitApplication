@@ -27,7 +27,23 @@ class OfferController extends Zend_Controller_Action
         $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link($pageName);
         $this->view->fbImg = HTTP_PATH."public/images/" .$facebookImage ;
         $this->view->controllerName = $this->getRequest()->getControllerName();
-        $this->view->topPopularOffers = $offers;
+        $this->view->top20PopularOffers = $offers;
+
+        // zend form for sign up news letter and validate form
+        $signUpNewsLetterform = new Application_Form_SignUp();
+        $this->view->form = $signUpNewsLetterform;
+        if ($this->getRequest()->isPost()) {
+            if ($signUpNewsLetterform->isValid($_POST)) {
+                $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
+                $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
+                $signUpStep2Url= HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('inschrijven') . '/' . FrontEnd_Helper_viewHelper::__link('stap2') . '/' . base64_encode($emailAddress);
+                $this->_redirect($signUpStep2Url);
+            } else {
+                $signUpNewsLetterform->highlightErrorElements();
+            }
+        } else {
+        }
+
     }
      /**
 	 * get coupon information

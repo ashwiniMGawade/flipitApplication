@@ -1,6 +1,7 @@
 <?php
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/top-20.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 echo $this->partial(
     'partials/_top_new_popular_header.phtml',
     array('active' => 'top20', 'pageTitle' => $this->pageTitle)
@@ -9,30 +10,31 @@ echo $this->partial(
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
 <?php 
-if(count($this->topPopularOffers) > 0):
+if(count($this->top20PopularOffers) > 0):
     echo $this->partial(
         'store/_offer.phtml',
         array(
-            'offers' => $this->topPopularOffers, 
+            'offers' => $this->top20PopularOffers,
             'offersType'=>'top20',
-           'shopName' =>'',
-           'shop' =>''
+            'shopName' =>'',
+            'shop' =>'',
+            'zendForm'=>$this->form
         )
     );
 endif;
 ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-        <div class="block white">
-        <?php echo $this->esi(LOCALE.'store/signupwidget'); ?>
-        </div>
-        <article class="block">
+        
+        <?php
+        $locale = LOCALE != 'en'? LOCALE. '/' : '';
+        echo $this->esi($locale .'store/signupwidget'); ?>
+        
         <?php
         $controllerName =  $this->controllerName;
         $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
         <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
         echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
         ?>
-        </article>
     </aside>
 </div>
