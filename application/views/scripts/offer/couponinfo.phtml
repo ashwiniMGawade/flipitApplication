@@ -1,9 +1,12 @@
 <?php
 $offer = (object) $this->couponDetail[0];
-$urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($offer);
+$offerUrlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
-$dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);
-$termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
+$offerDayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);
+$offerTermsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
+$controllerName =  $this->controllerName;
+$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
+<span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
 
 $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
@@ -28,15 +31,15 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
         <section class="section">
             <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
                 <div class="holder">
-                    <a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
+                    <a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $offerUrlToShow;?>" rel="nofollow"
                                 target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
                                 <?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferImage($offer, $this->offersType);?>
                     </a>
                     <div class="box">
                         <div class="text">
-                            <p><?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($offer, $dayDifference)?></p>
+                            <p><?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($offer, $offerDayDifference)?></p>
                                 <a id="<?php echo $offer->id ;?>"
-                                            href="<?php echo $urlToShow;?>"
+                                            href="<?php echo $offerUrlToShow;?>"
                                             rel="nofollow" class="link" target="_blank"
                                             onClick="<?php echo $offer->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
                                             <?php echo $offer->title;?>
@@ -44,7 +47,7 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
                         </div>
                         <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
                             <a class="btn blue btn-primary"
-                            href="<?php echo $urlToShow;?>"
+                            href="<?php echo $offerUrlToShow;?>"
                             rel="nofollow" target="_blank" onClick="<?php echo $offer->discountType == 'CD' ? "showCodeInformation('$offer->id')," : ''; ?>viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
                             <?php echo $this->translate('>Get code &amp; Open site'); ?>
                             </a>
@@ -59,7 +62,7 @@ if ($offer->discountType=='PA' || $offer->discountType=='PR') {
 if ($offer->discountType=='CD') {
         ?>
                             <a id="<?php echo $offer->id ; ?>" class = "btn orange btn-warning btn-code" vote='0'
-                            href="<?php echo $urlToShow;?>" rel="nofollow"
+                            href="<?php echo $offerUrlToShow;?>" rel="nofollow"
                             target="_blank"onClick="showCodeInformation(<?php echo $offer->id; ?>), showCodePopUp(this),
                             ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
                     <?php echo $this->translate('Pack this offer');?>
@@ -97,12 +100,12 @@ if (LOCALE == '') {
                 <article class="box terms-block">
                     <h2>Terms &amp; Conditions</h2>
                     <ol class="num-list">
-                        <?php echo $termsAndConditions;?>
+                        <?php echo $offerTermsAndConditions;?>
                     </ol>
                 </article>
                 <article class="box box-2">
-                    <h2>How to Use The Voucher Codes</h2>
-                    <p>Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapi bus lacus sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius.</p>
+                    <h2><?php  echo $this->translate('How to Use The Voucher Codes'); ?></h2>
+                    <p><?php  echo $this->translate('Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapi bus lacus sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius.');?></p>
                         <div class="visual-img">
                             <img src="<?php echo HTTP_PATH;?>public/images/img-02.jpg" width="700" height="200" alt="image description">
                         </div>
@@ -110,12 +113,12 @@ if (LOCALE == '') {
             </div>
         </section>
 <?php 
-$discussion = '';
+$shopDiscussion = '';
 $partialViewPath = 'partials/';
 if($offer->shop['discussions'] == 1):
-    $discussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
+    $shopDiscussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
 endif;
-    echo $discussion;
+    echo $shopDiscussion;
 ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
@@ -126,11 +129,8 @@ echo $this->esi($locale.'store/signupwidget'); ?>
         </div>
         <article class="block">
 <?php
-$controllerName =  $this->controllerName;
-$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-            <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
-            echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
+echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
 ?>
         </article>
     </aside>
-</div>              
+</div>
