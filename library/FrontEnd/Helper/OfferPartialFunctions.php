@@ -8,7 +8,6 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         } else {
             $urlToShow = HTTP_PATH_LOCALE.$currentOffer->shop['permalink'];
         }
-
         if ($currentOffer->discountType=='PA' || $currentOffer->discountType=='PR') {
             if ($currentOffer->refOfferUrl != null) {
                 $urlToShow = self::getOfferBounceUrl($currentOffer->id);
@@ -26,8 +25,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
     public static function getDiscountImage($currentOffer)
     {
-        
-    	$offerDiscountImage ='';
+        $offerDiscountImage ='';
         if (!empty ( $currentOffer->tiles)) {
             $offerDiscountImage = PUBLIC_PATH_CDN . ltrim(@$currentOffer->tiles['path'], "/").@$currentOffer->tiles['name'];
         }
@@ -40,7 +38,6 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         if (count($currentOffer->termandcondition) > 0) {
             $termsAndConditions = $currentOffer->termandcondition[0]['content'];
         }
-
         return $termsAndConditions;
     }
 
@@ -61,7 +58,6 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         if (Auth_VisitorAdapter::hasIdentity()) :
             $userLoginStatus = true;
         endif;
-
         return $userLoginStatus;
     }
 
@@ -69,7 +65,6 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $string = '<strong class="exclusive">
         <span class="glyphicon glyphicon-star"></span>'.$string.'</strong>';
-
         return $string;
     }
 
@@ -77,26 +72,21 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $offerOption = '';
         $trans = Zend_Registry::get('Zend_Translate');
-
         if ($currentOffer->exclusiveCode == '1'):
             $offerOption = self::getOfferOption($trans->translate('Exclusive'));
         elseif ($currentOffer->editorPicks =='1'):
         $offerOption = self::getOfferOption($trans->translate('Editor'));
         endif;
-
         return $offerOption;
     }
 
     public static function dateStringFormat($currentOffer, $dayDifference)
     {
         $trans = Zend_Registry::get('Zend_Translate');
-
         $offerOption = self::getOfferExclusiveOrEditor($currentOffer);
-
         $stringAdded = $trans->translate('Added');
         $stringOnly = $trans->translate('Only');
         $startDate = new Zend_Date(strtotime($currentOffer->startDate));
-
         $dateFormatString = '';
         if($currentOffer->discountType == "CD"):
             $dateFormatString .= $stringAdded;
@@ -130,7 +120,6 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         $dateFormatString .= ':';
         $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
         endif;
-
         return $offerOption . $dateFormatString;
     }
 
@@ -147,12 +136,11 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         } 
         return $className;
     }
-    
+
     public static function getOfferImage($currentOffer, $offersType)
     {
         $offerImageDiv ='';
-        if($offersType=='simple')
-       {
+        if($offersType=='simple') {
           $offerDiscountImage = self::getDiscountImage($currentOffer);
           $altAttributeText = @$currentOffer->tiles['label'];
           $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
@@ -164,7 +152,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
        }
        return $offerImageDiv;
     }
-    
+
     public static function getShopLogoForOffer($currentOffer)
     {
         return PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_medium_store_'. $currentOffer->shop['logo']['name'];
@@ -176,11 +164,11 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
             $imageTagForOffer = '<div class="center"><div class="code-holder">' . $imageTag . '</div></div>';
         } else {
-        	$imageTagForOffer ='<img src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
+            $imageTagForOffer ='<img src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
         }
         return $imageTagForOffer;
     }
-    
+
     public static function getOfferFooterText($currentOffer)
     {
         $trans = Zend_Registry::get('Zend_Translate');
@@ -194,7 +182,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         }
         return $className;
     }
-    
+
     public static function getSectionHeader($shopName, $offersType)
     {
         $trans = Zend_Registry::get('Zend_Translate');
@@ -207,7 +195,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         }
         return $SimialrShopHeader;
     }
-    
+
     public static function getShopLogoForSignUp($shop) {
         $imgTagWithImage = '';
         if($shop!=null){
@@ -221,32 +209,32 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
     public static function getmainButtonforOffer($currentOffer, $urlToShow, $offerBounceRate)
     {
+        $trans = Zend_Registry::get('Zend_Translate');
         if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
             $onClick =  $currentOffer->discountType == "CD" ? "showCodeInformation($currentOffer->id)," : " "; 
             $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),showCodePopUp(this), ga('send', 'event', 'aff', '$offerBounceRate')";
             $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
-            '.$currentOffer->translate('>Get code &amp; Open site').' </a>';
+            '.$trans->translate('>Get code &amp; Open site').' </a>';
         }else{
             $onClick =  self::getUserIsLoginOrNot() == "true" ? "showPrintPopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
-            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href = "'.$urlToShow.'"  href="javascript:void(0);" target="_blank" onclick = "'.$onClick.'" rel="nofollow">'.$currentOffer->translate('>Get code &amp; Open site').'</a>';
+            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href = "'.$urlToShow.'"  href="javascript:void(0);" target="_blank" onclick = "'.$onClick.'" rel="nofollow">'.$trans->translate('>Get code &amp; Open site').'</a>';
         }
-    
         return $mainButton;
-    
     }
-    
+
     public static function getSecondButtonforOffer($currentOffer, $urlToShow, $offerBounceRate)
     {
+        $trans = Zend_Registry::get('Zend_Translate');
+        $secondButton = '';
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $onClick =  self::getUserIsLoginOrNot() == "true" ? "printIt('$urlToShow');" : " ";
-            $secondButton = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$currentOffer->translate('print now').'<span class="ico-print"></span></a>';
+            $secondButton = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$trans->translate('print now').'<span class="ico-print"></span></a>';
         }else if ($currentOffer->discountType=='CD') {
             $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate')";
-            $secondButton = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_blank" onClick="'.$onClick.'">'.$currentOffer->translate('Pack this offer').'</a>';
+            $secondButton = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_blank" onClick="'.$onClick.'">'.$trans->translate('Pack this offer').'</a>';
         }else if ($currentOffer->discountType == "SL"){
             $secondButton = '';
         }
-       
         return $secondButton;
     }
 }

@@ -5,40 +5,11 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js"
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
 $storeViewPartialPath = 'store/';
-$similarShopsAndSimilarCategoriesShops ='';
-if(!empty($this->similarShops)):
-    $similarShopsAndSimilarCategoriesShops = $this->partial(
-        $storeViewPartialPath.'_similar-and-category-related-shops.phtml',
-        array('similarShopsAndSimilarCategoryShops' => $this->similarShops)
-    );
+$noMoneyNocodeMessage = '';
+if ($this->currentStoreInformation[0]['affliateProgram']!='1' && $offers=='') :
+    $noMoneyNocodeMessage = $this->partial($storeViewPartialPath.'_noCodeNoMoneyMessage.phtml');
+    $similarOffersHeader = '';
 endif;
-
-$discussion = '';
-$partialViewPath = 'partials/';
-if($this->currentStoreInformation[0]['discussions'] == 1):
-    $discussion = $this->partial(
-        $partialViewPath.'_discussion.phtml',
-        array('shopName' => $this->currentStoreInformation[0]['name'])
-    );
-endif;
-
-if($this->profileImage['addtosearch'] == 1):
-    if($this->profileImage['google']):
-        $google = $this->profileImage['google'];
-        echo $this->headLink(array( 'rel' => 'author','href' => $google));
-    endif;
-endif;
-
-$getPermaLinkNewOffer = Page::getPageFromPageAttribute(6);
-$bounceRate = "/out/shop/".@$this->currentStoreInformation[0]['id'];
-$shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->currentStoreInformation[0]['id'];
-$Link = '';
-$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
-$name =  strtoupper($this->currentStoreInformation[0]['name']);
-$breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate($name)."</a>";
-
-$this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-$offersCount = count($this->offers);
 
 $offers = '';
 if(count($this->offers) > 0):
@@ -69,16 +40,21 @@ if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
     );
 endif;
 
-?>
-<input type="hidden" name="currentShop" id="currentShop" value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
-<div class="header-block header-block-2">
-    <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
-    <div class="icon">
-<?php
-$noMoneyNocodeMessage = '';
-if ($this->currentStoreInformation[0]['affliateProgram']!='1' && $offers=='') :
-    $noMoneyNocodeMessage = $this->partial($storeViewPartialPath.'_noCodeNoMoneyMessage.phtml');
-    $similarOffersHeader = '';
+$similarShopsAndSimilarCategoriesShops ='';
+if(!empty($this->similarShops)):
+    $similarShopsAndSimilarCategoriesShops = $this->partial(
+        $storeViewPartialPath.'_similar-and-category-related-shops.phtml',
+        array('similarShopsAndSimilarCategoryShops' => $this->similarShops)
+    );
+endif;
+
+$discussion = '';
+$partialViewPath = 'partials/';
+if($this->currentStoreInformation[0]['discussions'] == 1):
+    $discussion = $this->partial(
+        $partialViewPath.'_discussion.phtml',
+        array('shopName' => $this->currentStoreInformation[0]['name'])
+    );
 endif;
 
 $moneySavingGuide = '';
@@ -93,6 +69,24 @@ if(count($this->expiredOffers) >0):
           array('expiredOffers'=>$this->expiredOffers,'shopName'=>$this->currentStoreInformation[0]['name'])
       );
 endif;
+
+if($this->profileImage['addtosearch'] == 1):
+    if($this->profileImage['google']):
+        $google = $this->profileImage['google'];
+        echo $this->headLink(array( 'rel' => 'author','href' => $google));
+    endif;
+endif;
+
+$getPermaLinkNewOffer = Page::getPageFromPageAttribute(6);
+$bounceRate = "/out/shop/".@$this->currentStoreInformation[0]['id'];
+$shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->currentStoreInformation[0]['id'];
+$Link = '';
+$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
+$name =  strtoupper($this->currentStoreInformation[0]['name']);
+$breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate($name)."</a>";
+
+$this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+$offersCount = count($this->offers);
 
 $affliateProgramUrl = @$this->currentStoreInformation[0]['affliateProgram']['name']=='' ? $this->currentStoreInformation[0]['actualUrl'] : @$this->currentStoreInformation[0]['affliateProgram']['name'];
 if ($this->currentStoreInformation[0]['affliateProgram']) :
@@ -114,6 +108,7 @@ else:
     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
 endif;
 ?>
+<input type="hidden" name="currentShop" id="currentShop" value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <div class="header-block header-block-2">
     <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
     <div class="icon">
