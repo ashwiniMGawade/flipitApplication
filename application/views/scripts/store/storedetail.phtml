@@ -53,7 +53,8 @@ if(count($this->offers) > 0):
             'offers' => $this->offers,
             'offersType'=>'simple',
             'shopName' => $this->currentStoreInformation[0]['name'],
-            'shop' => $this->currentStoreInformation[0]
+            'shop' => $this->currentStoreInformation[0],
+            'zendForm'=>$this->form
         )
     );
 endif;

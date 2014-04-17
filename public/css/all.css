@@ -8903,3 +8903,6 @@ input[type="submit"]::-moz-focus-inner {
 .input-error{
    border: 1px solid red!important;
 }
+ul.errors{
+  display: none;
+}

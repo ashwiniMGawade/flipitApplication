@@ -111,7 +111,16 @@ foreach ($this->offers as $offer) {
                  <div class="<?php echo $this->shop=='' ? 'ico-box' : 'icon'?>">
                     <?php echo FrontEnd_Helper_OfferPartialFunctions::getShopLogoForSignUp($this->shop);?>
                  </div>
-        <?php echo $this->esi(LOCALE.'store/signup');?>
+                <?php 
+                if (!Auth_VisitorAdapter::hasIdentity()) {?>
+                    <div class="box">
+                        <h2><?php echo $this->translate('Receive weekly updates of the best offers?');?><br> 
+                        <?php echo $this->translate('Sign up for our newsletter!');?></h2>
+                        <?php echo $this->zendForm;?>
+                    </div>
+                    <?php 
+                }
+               ?>
            </div>
         </div>
         <?php 

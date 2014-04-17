@@ -8,7 +8,7 @@ if (!Auth_VisitorAdapter::hasIdentity()) {?>
         method="post" >
            <input type="email" class="form-control" 
            onkeypress="if(event.which == 13) { setHiddenFieldValue(), signUpNewsLetter(); event.preventDefault(); }" 
-           placeholder="<?php echo $this->translate('enter_email_address');?>" 
+           placeholder="<?php echo $this->translate('Email address');?>" 
            name="emailAddress" id="emailAddress" 
            placeholder="<?php echo $this->translate('enter_email_address');?>" name="emailAddress"/>
            <button onclick="setHiddenFieldValue(), signUpNewsLetter();" 

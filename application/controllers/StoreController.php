@@ -339,6 +339,21 @@ class StoreController extends Zend_Controller_Action
         }
 
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
+        
+        // zend form for sign up news letter and validate form 
+        $signUpNewsLetterform = new Application_Form_SignUp();
+        $this->view->form = $signUpNewsLetterform;
+        if ($this->getRequest()->isPost()) {
+            if ($signUpNewsLetterform->isValid($_POST)) {
+                $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
+                $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
+                $url= HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('inschrijven') . '/' . FrontEnd_Helper_viewHelper::__link('stap2') . '/' . base64_encode($emailAddress);
+                $this->_redirect($url);
+            } else {
+                $signUpNewsLetterform->highlightErrorElements();
+            }
+        } else {
+        }
     }
 
     public function topStorePopularOffers($shopId, $offers)
