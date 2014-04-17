@@ -226,37 +226,34 @@ class StoreController extends Zend_Controller_Action
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $relatedPageFromPageAttribute =  Page::getPageFromPageAttributeFiltered(7);
-        $this->view->pageTitle = @$relatedPageFromPageAttribute['pageTitle'];
-        $this->view->headTitle(@$relatedPageFromPageAttribute['metaTitle']);
-        $this->view->headMeta()->setName('description', @trim($relatedPageFromPageAttribute['metaDescription']));
+        $pageAttribute =  Page::getPageFromPageAttributeFiltered(7);
+        $this->view->pageTitle = $pageAttribute['pageTitle'];
+        $this->view->headTitle($pageAttribute['metaTitle']);
+        $this->view->headMeta()->setName('description', trim($pageAttribute['metaDescription']));
         
-        if ($relatedPageFromPageAttribute['customHeader']) :
-            $this->view->layout()->customHeader = "\n" . @$relatedPageFromPageAttribute['customHeader'];
+        if ($pageAttribute['customHeader']) :
+            $this->view->layout()->customHeader = "\n" . $pageAttribute['customHeader'];
         endif;
         
         $this->view->controllerName = $this->getRequest()->getParam('controller');
-        $this->view->action = $this->getRequest()->getParam('action');
         $allStoresList = self::shopOffersBySetGetCache('all_shops_list', Shop::getallStoresForFrontEnd('all', null), true);
         $popularStores = self::shopOffersBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
-        $storeSearchByAlphabet = self::shopOffersBySetGetCache('all_searchpanle_list', FrontEnd_Helper_viewHelper::storeSearchPanel(), true);
-        $this->view->facebookTitle = @$relatedPageFromPageAttribute['pageTitle'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $relatedPageFromPageAttribute['permaLink'];
+        $storeSearchByAlphabet = self::shopOffersBySetGetCache('all_searchpanle_list', FrontEnd_Helper_viewHelper::alphabetList(), true);
+        $this->view->facebookTitle = $pageAttribute['pageTitle'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $pageAttribute['permaLink'];
         
-        if(LOCALE == '' )
+        if(LOCALE == '')
         {
-                $facebookImage = 'logo_og.png';
-                $facebookLocale = '';
-                
+            $facebookImage = 'logo_og.png';
+            $facebookLocale = '';               
         }else{
-                $facebookImage = 'flipit.png';
-                $facebookLocale = LOCALE;
-                    
+            $facebookImage = 'flipit.png';
+            $facebookLocale = LOCALE;                 
         }
 
         $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
         $this->view->facebookLocale = $facebookLocale;
-        $this->view->facebookDescription =  trim($relatedPageFromPageAttribute['metaDescription']);
+        $this->view->facebookDescription =  trim($pageAttribute['metaDescription']);
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
