@@ -59,8 +59,8 @@ class StoreController extends Zend_Controller_Action
                 }
             }
 
-            if (@$shopInformation[0]['customHeader']) {
-                $this->view->layout()->customHeader = $this->view->layout()->customHeader . @$shopInformation[0]['customHeader'] . "\n" ;
+            if ($shopInformation[0]['customHeader']) {
+                $this->view->layout()->customHeader = $this->view->layout()->customHeader . $shopInformation[0]['customHeader'] . "\n" ;
             }
     
             $ShopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
