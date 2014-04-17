@@ -5,7 +5,6 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js"
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
 $storeViewPartialPath = 'store/';
-
 $offers = '';
 if(count($this->offers) > 0):
     $offers = $this->partial(
