@@ -1057,7 +1057,7 @@ public static function exportpagelist() {
 		return $data;
 	}
 	
-	public static function getPageFromPageAttr($id){
+	public static function getPageFromPageAttribute($id){
 	
 		$data = Doctrine_Query::create()->select('p.*')
 		->from('Page p')
@@ -1108,7 +1108,8 @@ public static function exportpagelist() {
 	 * @author kraj
 	 * @version 1.0
 	 */
-	public static function getPageFromPageAttrInOfferPop($id){
+	public static function getPageFromPageAttributeInOfferPop($id)
+	{
 		$data = Doctrine_Query::create()->select('p.id,p.permaLink')
 		->from('Page p')
 		->where("pageAttributeId = ?", $id)

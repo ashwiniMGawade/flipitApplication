@@ -58,30 +58,12 @@ class OfferController extends Zend_Controller_Action
 		$this->view->headTitle(@trim($this->view->couponDetail[0]['extendedTitle']));
 		$this->view->headMeta()->appendName('description', @trim($this->view->couponDetail[0]['extendedMetaDescription']));
 	}
-	
+
     /**
      * override views based on modules if exists
      * @see Zend_Controller_Action::init()
      * @author Bhart
-     */
-    public function init()
-    {
-        $module   = strtolower($this->getRequest()->getParam('lang'));
-        $controller = strtolower($this->getRequest()->getControllerName());
-        $action     = strtolower($this->getRequest()->getActionName());
-
-        # check module specific view exists or not
-        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")) {
-
-            # set module specific view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-        } else {
-
-            # set default module view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
-        }
-    }
-    
+     */    
     public function offerDetailAction()
     {
         $this->_helper->layout->disableLayout();
@@ -110,11 +92,24 @@ class OfferController extends Zend_Controller_Action
     
     }
 
-    ##################################################################################
-    ################## END REFACTORED CODE ###########################################
-    ##################################################################################
-    
+    public function init() {
 
+        $module   = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action     = strtolower($this->getRequest()->getActionName());
+
+        # check module specific view exists or not
+        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
+
+            # set module specific view script path
+            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
+        }
+        else{
+
+            # set default module view script path
+            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
+        }
+    }
 
     /**
      * Get offer records from the database of by cache using backend key.
@@ -122,73 +117,50 @@ class OfferController extends Zend_Controller_Action
      * @author mkaur updated by kraj
      * @version 1.0
      */
-    public function indexAction() {
+    public function indexAction() 
+    {
+        $offerPage = Page::getPageFromPageAttribute(6);
+        $this->view->pageTitle = $offerPage->pageTitle;
+        $this->view->headTitle($offerPage->metaTitle);
 
-       $page = Page::getPageFromPageAttr(6);
-
-        $this->view->pageTitle = @$page->pageTitle;
-        $this->view->headTitle(@$page->metaTitle);
-
-        if(@$page->customHeader)
-        {
-            $this->view->layout()->customHeader = "\n" . @$page->customHeader;
+        if ($offerPage->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $offerPage->customHeader;
         }
 
-        $this->view->headMeta()->setName('description', @trim($page->metaDescription));
-        $params = $this->_getAllParams ();
+        $this->view->headMeta()->setName('description', trim($offerPage->metaDescription));
+        $params = $this->_getAllParams();
+        $this->view->facebookTitle = $offerPage->pageTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
 
-        //for facebook parameters
-        $this->view->fbtitle = @$page->pageTitle;
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
-
-        if(LOCALE == '' ) {
-            $fbImage = 'logo_og.png';
+        if (LOCALE == '') {
+            $facebookImage = 'logo_og.png';
         } else {
-            $fbImage = 'flipit.png';
+            $facebookImage = 'flipit.png';
         }
 
-        $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
-
+        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
-
-        $getPermLinkPopOffer = Page::getPageFromPageAttrInOfferPop(5);
-
-        //get widget and set in caching
-        $key = 'all_widget6_list';
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-
-        if($flag) {
-
-            $widget =  FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(6);
-            FrontEnd_Helper_viewHelper::setInCache($key, $widget);
-
-        } else {
-            $widget = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-        }
-
-        $this->view->widget = $widget;
-        if (isset ( $params ['id'] )) :
-            $this->view->shopId = $params ['id'];
-            $this->view->newshoplink = HTTP_PATH_LOCALE.'offer/index/id/'.$params ['id'];
-            $this->view->popularshoplink = HTTP_PATH_LOCALE.'offer/popularoffer/id/'.$params['id'];
-        endif;
-
+        $getPermaLinkPopOffer = Page::getPageFromPageAttributeInOfferPop(5);
         $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
-
-        if($flag) {
-            $offers = Offer::commongetnewestOffers('newest', 71, $this->view->shopId);
+        
+        if ($flag) {
+            $offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
             FrontEnd_Helper_viewHelper::setInCache('all_newoffer_list', $offers);
         } else {
-            //get from cache
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
-
-        $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers,$this->_getAllParams(),27,3);
+        
+        $this->view->offers = $offers;
+        $this->view->offersType = 'top20';
+        $this->view->shopName = 'top20';
+        $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 40, 3);
         $this->view->paginator = $paginator;
-
-      }
-
+    }
+     ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
+        
     public function feedbackAction(){
         $params = $this->_getAllParams();
         $vote = new Vote();
@@ -249,6 +221,7 @@ class OfferController extends Zend_Controller_Action
                 $fbImage = 'logo_og.png';
         }else{
                 $fbImage = 'flipit.png';
+
         }
         $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 

@@ -15,7 +15,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
             } elseif (count($currentOffer->logo)>0) {
                 $urlToShow = PUBLIC_PATH_CDN.ltrim($currentOffer->logo['path'], "/").$currentOffer->logo['name'];
             }
-        }
+        } 
         return $urlToShow;
     }
 
@@ -59,7 +59,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $userLoginStatus = false;
         if (Auth_VisitorAdapter::hasIdentity()) :
-        $userLoginStatus = true;
+            $userLoginStatus = true;
         endif;
 
         return $userLoginStatus;
@@ -79,7 +79,7 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         $trans = Zend_Registry::get('Zend_Translate');
 
         if ($currentOffer->exclusiveCode == '1'):
-        $offerOption = self::getOfferOption($trans->translate('Exclusive'));
+            $offerOption = self::getOfferOption($trans->translate('Exclusive'));
         elseif ($currentOffer->editorPicks =='1'):
         $offerOption = self::getOfferOption($trans->translate('Editor'));
         endif;
@@ -99,10 +99,10 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
         $dateFormatString = '';
         if($currentOffer->discountType == "CD"):
-        $dateFormatString .= $stringAdded;
-        $dateFormatString .= ':';
-        $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
-        $dateFormatString .= ',';
+            $dateFormatString .= $stringAdded;
+            $dateFormatString .= ':';
+            $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+            $dateFormatString .= ',';
 
         if ($dayDifference ==5 || $dayDifference ==4 || $dayDifference ==3 || $dayDifference ==2) {
             $dateFormatString .= $stringOnly;
@@ -150,8 +150,8 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
     
     public static function getOfferImage($currentOffer, $offersType)
     {
-       $offerImageDiv ='';
-       if($offersType=='simple')
+        $offerImageDiv ='';
+        if($offersType=='simple')
        {
           $offerDiscountImage = self::getDiscountImage($currentOffer);
           $altAttributeText = @$currentOffer->tiles['label'];

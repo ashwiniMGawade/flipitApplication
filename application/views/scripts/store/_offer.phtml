@@ -1,11 +1,12 @@
 <?php
+//this header show when offers are related with similar shops
 echo FrontEnd_Helper_OfferPartialFunctions::getSectionHeader($this->shopName, $this->offersType);
 ?>
 <section class="section">
 <?php
 $dummyPartialCounter = '';
 foreach ($this->offers as $offer) {
-    $dummyPartialCounter++;
+	$dummyPartialCounter++;
     $offer = (object) $offer;
     $offerTitle = substr($offer->title, 0, 150);
     $termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
