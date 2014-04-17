@@ -161,9 +161,8 @@ EOD;
      * @param string $link
      * @version 1.0
      */
-    public static function generatCononical($link)
+    public static function generateCononical($permalink)
     {
-        $permalink = $link;
         preg_match("/^[\d]+$/", $permalink, $matches);
 
         if (intval(@$matches[0]) > 0) {
@@ -851,10 +850,9 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
      * @version 1.0
      * @return array $data
      */
-    public static function gethomeSections($offertype, $flag="")
+    public static function gethomeSections($offertype, $flag = "")
     {
         switch ($offertype) {
-
             case "popular":
                 $result = PopularCode :: gethomePopularvoucherCode($flag);
                 break;
@@ -864,24 +862,19 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
             case "category":
                 $result = Category :: getPopulerCategory($flag);
                 break;
-
             case "specialList":
                 $result = $data = SpecialList::getfronendsplpage($flag);
                 break;
-
             case "moneySaving":
                 $result = Articles :: getmoneySavingArticle($flag);
                 break;
-
             case "asseenin":
                 $result = SeenIn :: getSeenInContent();
                 break;
-
             case "about":
                 $status = 1;
                 $result = About :: getAboutContent($status);
                 break;
-
             case "loginwedget":
                 $result = self :: getloginwedget();
                 break;
