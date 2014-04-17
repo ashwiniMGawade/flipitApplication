@@ -26,11 +26,11 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
     public static function getDiscountImage($currentOffer)
     {
-        $offerDiscountImage ='';
+        
+    	$offerDiscountImage ='';
         if (!empty ( $currentOffer->tiles)) {
             $offerDiscountImage = PUBLIC_PATH_CDN . ltrim(@$currentOffer->tiles['path'], "/").@$currentOffer->tiles['name'];
         }
-
         return $offerDiscountImage;
     }
 

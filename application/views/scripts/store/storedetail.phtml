@@ -38,9 +38,9 @@ if(Auth_VisitorAdapter::hasIdentity()):
     $id = Auth_VisitorAdapter::getIdentity()->id;
 endif;
 
-$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js" );
+$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js" );
+$this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
 $offers = '';

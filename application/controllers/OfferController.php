@@ -23,35 +23,29 @@ class OfferController extends Zend_Controller_Action {
         }
     }
     
-    public function offerDetailAction() {
-    
+    public function offerDetailAction()
+    {
         $this->_helper->layout->disableLayout();
-        $parameters = $this->_getAllParams();
-        $this->view->params = $parameters;
+        $offerParameters = $this->_getAllParams();
+        $this->view->params = $offerParameters;
         $offerObject = new Offer();
-        $offerId = $parameters['id'];
-    
-        $offerDetail = $offerObject->getOfferInfo(@$parameters['id']);
+        $offerId = $offerParameters['id'];
+        $offerDetail = $offerObject->getOfferInfo(@$offerParameters['id']);
         $this->view->offerdetail = $offerDetail;
-        $this->view->vote = @$parameters['vote'];
+        $this->view->vote = @$offerParameters['vote'];
         $this->view->votepercentage = 0;
         $this->view->headTitle(@$offerDetail[0]['title']);
-        $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'. $offerDetail[0]['shop']['logo']['name'];
+        $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'.
+         $offerDetail[0]['shop']['logo']['name'];
         $this->view->facebookTitle = @$offerDetail[0]['title'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
         $this->view->facebookImage = $shopImage;
-        if(isset($parameters['vote']) && $parameters['vote']!= '0'){
-            $vote = new Vote();
-            $votepercentage =  $vote->doVote($parameters);
-            $this->view->votepercentage = $votepercentage['vote'];
-            $this->view->voteId = $votepercentage['voteId'];
-        }
-        if($offerDetail[0]['couponCodeType']  == 'UN'){
-            $getUniqueCode = CouponCode::returnAvailableCoupon($offerId);
-            if($getUniqueCode){
-                $this->view->code = $getUniqueCode['code'] ;
+        if ($offerDetail[0]['couponCodeType']  == 'UN') {
+            $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerId);
+            if ($getOfferUniqueCode) {
+                $this->view->code = $getOfferUniqueCode['code'] ;
             }
-        }else{
+        } else {
             $this->view->code = $offerDetail[0]['couponCode']  ;
         }
     

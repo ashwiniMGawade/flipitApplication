@@ -1,18 +1,18 @@
 function showCodePopUp(event) {
     
     var offerId = $(event).attr('id');
-    var vote = $(event).attr('vote');
+    var offerVote = $(event).attr('vote');
 
     $('#element_to_pop_up').html('');
     
     if(! ( /(iPod|iPhone|iPad)/i.test(navigator.userAgent) )) {
-    custompopup('element_to_pop_up');
+    customPopUp('element_to_pop_up');
             $.ajax({
                 url : HOST_PATH_LOCALE + "offer/offer-Detail",
                 method : "post",
                 data : {
                     'id' : offerId,
-                    'vote' : vote
+                    'vote' : offerVote
                 },
                 type : "post",
                 success : function(data) {
@@ -23,13 +23,13 @@ function showCodePopUp(event) {
     }
 }
 
-function custompopup(id) {
+function customPopUp(id) {
 
     var popupId = id; 
     $('#' + popupId).css({
         "z-index" : 999999
     }).fadeIn();
-    $('body').append('<div onClick="custompopupClose();" id="fade"></div>');
+    $('body').append('<div onClick="customPopUpClose();" id="fade"></div>');
     $('#fade').css({
         'filter' : 'alpha(opacity=80)'
     }).fadeIn();
@@ -41,7 +41,7 @@ function copyToClipboard(text) {
       window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
 }
 
-function custompopupClose() {
+function customPopUpClose() {
     $('#fade , .popup_block, .popup_block_signup').fadeOut('9000', function() {
     $('#fade').remove(); 
     });
