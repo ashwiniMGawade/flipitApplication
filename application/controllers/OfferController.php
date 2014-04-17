@@ -43,43 +43,36 @@ class OfferController extends Zend_Controller_Action
             }
         } else {
         }
-
     }
      /**
-	 * get coupon information
-	 *
-	 * @version 1.0
-	 * @author Amit
-	 */
-	public function couponinfoAction()
-	{
-		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-		$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-		$parameters = $this->_getAllParams();
-		$extendedUrl = $parameters['permalink'];
-		$currentDate = date('Y-m-d');
-		$couponDetails = Offer::getCouponDetails($extendedUrl);
-		$shopImage = PUBLIC_PATH_CDN.$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $couponDetails[0]['shop']['logo']['name'];
-		// For Social media parameters
-		$this->view->facebookTitle = @$couponDetails[0]['title'];
-		$this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
-		$this->view->facebookImage = $shopImage;
-	
-		$this->view->couponDetail = $couponDetails;
-	
-		if (count($couponDetails)==0) {
-			$this->_redirect(HTTP_PATH_LOCALE.'error');
-		}
-	
-		$this->view->headTitle(@trim($this->view->couponDetail[0]['extendedTitle']));
-		$this->view->headMeta()->appendName('description', @trim($this->view->couponDetail[0]['extendedMetaDescription']));
-	}
+     * get coupon information.
+     *
+     * @version 1.0
+     */
+    public function couponinfoAction()
+    {
+        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
+        $parameters = $this->_getAllParams();
+        $extendedUrl = $parameters['permalink'];
+        $currentDate = date('Y-m-d');
+        $couponDetails = Offer::getCouponDetails($extendedUrl);
+        $shopImage = PUBLIC_PATH_CDN.$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $couponDetails[0]['shop']['logo']['name'];
+        $this->view->facebookTitle = @$couponDetails[0]['title'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
+        $this->view->facebookImage = $shopImage;
+        $this->view->couponDetail = $couponDetails;
+        if (count($couponDetails)==0) {
+            $this->_redirect(HTTP_PATH_LOCALE.'error');
+        }
+        $this->view->headTitle(@trim($this->view->couponDetail[0]['extendedTitle']));
+        $this->view->headMeta()->appendName('description', @trim($this->view->couponDetail[0]['extendedMetaDescription']));
+    }
 
     /**
      * override views based on modules if exists
-     * @see Zend_Controller_Action::init()
-     * @author Bhart
-     */    
+     * 
+     */
     public function offerDetailAction()
     {
         $this->_helper->layout->disableLayout();
@@ -107,76 +100,67 @@ class OfferController extends Zend_Controller_Action
         }
     
     }
-
-    public function init() {
-
-        $module   = strtolower($this->getRequest()->getParam('lang'));
-        $controller = strtolower($this->getRequest()->getControllerName());
-        $action     = strtolower($this->getRequest()->getActionName());
-
-        # check module specific view exists or not
-        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-
-            # set module specific view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-        }
-        else{
-
-            # set default module view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
-        }
-    }
-
     /**
      * Get offer records from the database of by cache using backend key.
      *
-     * @author mkaur updated by kraj
      * @version 1.0
      */
-    public function indexAction() 
+    public function indexAction()
     {
         $offerPage = Page::getPageFromPageAttribute(6);
         $this->view->pageTitle = $offerPage->pageTitle;
         $this->view->headTitle($offerPage->metaTitle);
-
         if ($offerPage->customHeader) {
             $this->view->layout()->customHeader = "\n" . $offerPage->customHeader;
         }
-
         $this->view->headMeta()->setName('description', trim($offerPage->metaDescription));
         $params = $this->_getAllParams();
         $this->view->facebookTitle = $offerPage->pageTitle;
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
-
         if (LOCALE == '') {
             $facebookImage = 'logo_og.png';
         } else {
             $facebookImage = 'flipit.png';
         }
-
         $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
-        $getPermaLinkPopOffer = Page::getPageFromPageAttributeInOfferPop(5);
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
-        
-        if ($flag) {
+        $cacheKeyForNewsOffer =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
+        if ($cacheKeyForNewsOffer) {
             $offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
             FrontEnd_Helper_viewHelper::setInCache('all_newoffer_list', $offers);
         } else {
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
-        
         $this->view->offers = $offers;
         $this->view->offersType = 'top20';
         $this->view->shopName = 'top20';
         $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 40, 3);
         $this->view->paginator = $paginator;
     }
-     ##################################################################################
+    ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
-        
+    
+    public function init() {
+    
+        $module   = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action     = strtolower($this->getRequest()->getActionName());
+    
+        # check module specific view exists or not
+        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
+    
+            # set module specific view script path
+            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
+        }
+        else{
+    
+            # set default module view script path
+            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
+        }
+    }
+    
     public function feedbackAction(){
         $params = $this->_getAllParams();
         $vote = new Vote();
