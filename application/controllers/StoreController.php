@@ -48,18 +48,17 @@ class StoreController extends Zend_Controller_Action
             }
     
             if ($shopInformation[0]['showChains']) {
+
                 $shopChains = FrontEnd_Helper_viewHelper::sidebarChainWidget($shopInformation[0]['id'], $shopInformation[0]['name'], $shopInformation[0]['chainItemId']);
                 $logDirectoryPath = APPLICATION_PATH . "/../logs/test";
-    
                 if (isset($shopChains['headLink'])) {
                     $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
                 }
-    
                 if ($shopChains['hasShops'] && isset($shopChains['string'])) {
                     $this->view->shopChain = $shopChains['string'] ;
                 }
             }
-    
+
             if (@$shopInformation[0]['customHeader']) {
                 $this->view->layout()->customHeader = $this->view->layout()->customHeader . @$shopInformation[0]['customHeader'] . "\n" ;
             }
@@ -69,15 +68,15 @@ class StoreController extends Zend_Controller_Action
             $urlToRedirect = HTTP_PATH_LOCALE. 'store/index';
             $this->_redirect($urlToRedirect);
         }
-    
+
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->moneySavingGuideArticle = $moneySavingGuideArticle;
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->offers = $offers;
-    
+
         if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0):
-        $offers = self::topStorePopularOffers($shopId, $offers);
-        $this->view->topPopularOffers = $offers;
+            $offers = self::topStorePopularOffers($shopId, $offers);
+            $this->view->topPopularOffers = $offers;
         endif;
     
         $this->view->expiredOffers = $expiredOffers;
@@ -88,28 +87,22 @@ class StoreController extends Zend_Controller_Action
         $this->view->storeImage = $ShopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
-        $this->view->headTitle(@$shopInformation[0]['overriteTitle']);
-        $this->view->headMeta()->setName('description', @trim($shopInformation[0]['metaDescription']));
-        // Refactored Code
+        $this->view->headTitle($shopInformation[0]['overriteTitle']);
+        $this->view->headMeta()->setName('description', trim($shopInformation[0]['metaDescription']));
         $this->view->facebookTitle = $shopInformation[0]['overriteTitle'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->facebookImage = $ShopImage;
         $this->view->facebookDescription =  trim($shopInformation[0]['metaDescription']);
-        if(LOCALE == '' )
-        {
+        if (LOCALE == '') {
             $facebookLocale = '';
-    
-        }else{
-             
+        } else {
             $facebookLocale = LOCALE;
         }
         $this->view->facebookLocale = $facebookLocale ;
         $this->view->twitterDescription =  trim($shopInformation[0]['metaDescription']);
-        // Refactored End
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
-    
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
     
         // zend form for sign up news letter and validate form
@@ -132,7 +125,6 @@ class StoreController extends Zend_Controller_Action
     {
         $voucherCacheKeyCheck = FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvouchercode_list_shoppage');
         $shopCategories = Shop::returnShopCategories($shopId);
-    
         if ($voucherCacheKeyCheck) {
             $shopCategories = Shop::returnShopCategories($shopId);
             FrontEnd_Helper_viewHelper::setInCache('all_categories_of_shoppage_'. $shopId, $shopCategories);
@@ -142,34 +134,28 @@ class StoreController extends Zend_Controller_Action
             $shopCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_categories_of_shoppage_'. $shopId);
             $topVoucherCodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvouchercode_list_shoppage');
         }
-    
         $offers = array();
         $storeOfferIds = array();
-    
         foreach ($topVoucherCodes as $topVouchercodeskey => $topVoucherCode) {
             $offers[] = $topVoucherCode['offer'];
         }
-    
         return $offers;
     }
     
     public function shopOffersBySetGetCache($shopKey = '', $shopRelatedFunction = '', $replaceStringArrayCheck = '')
     {
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($shopKey);
-    
         if ($cacheStatusByKey) {
     
             if ($replaceStringArrayCheck == '') {
                 $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray($shopRelatedFunction);
-            } else{
+            } else {
                 $shopInformation = $shopRelatedFunction;
             }
-    
             FrontEnd_Helper_viewHelper::setInCache($shopKey, $shopInformation);
         } else {
             $shopInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($shopKey);
         }
-    
         return $shopInformation;
     }
     ######################################################
