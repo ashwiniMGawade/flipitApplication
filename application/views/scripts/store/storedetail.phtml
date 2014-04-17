@@ -5,11 +5,6 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js"
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
 $storeViewPartialPath = 'store/';
-$noMoneyNocodeMessage = '';
-if ($this->currentStoreInformation[0]['affliateProgram']!='1' && $offers=='') :
-    $noMoneyNocodeMessage = $this->partial($storeViewPartialPath.'_noCodeNoMoneyMessage.phtml');
-    $similarOffersHeader = '';
-endif;
 
 $offers = '';
 if(count($this->offers) > 0):
@@ -25,6 +20,8 @@ if(count($this->offers) > 0):
     );
 endif;
 
+
+
 $similarOffersHeader = '';
 $similarOffers = '';
 if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
@@ -38,6 +35,12 @@ if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
             'shop' => $this->currentStoreInformation[0]
         )
     );
+endif;
+
+$noMoneyNocodeMessage = '';
+if ($this->currentStoreInformation[0]['affliateProgram']!='1' && $offers=='') :
+    $noMoneyNocodeMessage = $this->partial($storeViewPartialPath.'_noCodeNoMoneyMessage.phtml');
+    $similarOffersHeader = '';
 endif;
 
 $similarShopsAndSimilarCategoriesShops ='';
