@@ -53,7 +53,8 @@ if(count($this->offers) > 0):
             'offers' => $this->offers,
             'offersType'=>'simple',
             'shopName' => $this->currentStoreInformation[0]['name'],
-            'shop' => $this->currentStoreInformation[0]
+            'shop' => $this->currentStoreInformation[0],
+            'zendForm'=>$this->form
         )
     );
 endif;
@@ -72,6 +73,7 @@ if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
 endif;
 
 ?>
+<input type="hidden" name="currentShop" id="currentShop" value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <div class="header-block header-block-2">
     <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
     <div class="icon">
