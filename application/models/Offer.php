@@ -330,6 +330,38 @@ class Offer extends BaseOffer
         $newestCouponCodes = $newestCouponCodes->limit($limit)->fetchArray();
         return $newestCouponCodes;
     }
+    
+    /**
+     * update zend varnish when all codes got expired
+     *
+     * @param integer $id offer id
+     */
+    public static function updateCache($id)
+    {
+        $offer  = Doctrine_Query::create()->select("o.id,s.id")
+                  ->from('Offer o')
+                  ->leftJoin("o.shop s")
+                  ->where("o.id=? " , $id)
+                  ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $shopId = $offer['shop']['id'] ;
+        $key = 'all_shopdetail'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_offerInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_latestupdatesInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_expiredOfferInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_relatedShopInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $moneySavingGuideKey ="allMoneySavingGuideLists";
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(moneySavingGuideKey);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewOfferList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
+    }
+    
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1807,39 +1839,6 @@ class Offer extends BaseOffer
         return $data;
 
     }
-     /**
-      * get latest voucher codes for rss feeds
-      * @author Suridnerpal Singh
-      * @return array
-      * @version 1.0
-      */
-
-     public static function getNewestOffersForRSS()
-     {
-        $date = date('Y-m-d H:i:s');
-
-        $data = Doctrine_Query::create()
-            ->select('terms.content as terms,o.id,o.title,s.permaLink as permalink,o.updated_at as lastUpdate')
-            ->from('Offer o')
-            ->leftJoin('o.shop s')
-            ->leftJoin('o.logo ologo')
-            ->leftJoin('o.vote vot')
-            ->leftJoin('s.logo img')
-            ->leftJoin('s.favoriteshops fv')
-            ->leftJoin('o.termandcondition terms')
-            ->where('o.deleted = 0' )
-            ->andWhere('s.deleted = 0')
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
-            ->andWhere('o.discountType != "NW"')
-            ->andWhere('o.discounttype="CD"')
-            ->andWhere('o.Visability != "MEM"')
-            ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
-            ->orderBy('o.startdate DESC')
-            ->fetchArray();
-
-        return $data;
-     }
 
      /**
       * get popular voucher codes for rss feeds
@@ -2920,48 +2919,6 @@ class Offer extends BaseOffer
         }
 
         return $urlsArray ;
-   }
-
-   /**
-    * update zend varnish when all codes got expired
-    *
-    * @param integer $id offer id
-    */
-
-   public static function updateCache($id)
-   {
-        # get offer data
-        $offer  = Doctrine_Query::create()->select("o.id,s.id")
-                ->from('Offer o')
-                ->leftJoin("o.shop s")
-                ->where("o.id=? " , $id)
-                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-        $shopId = $offer['shop']['id'] ;
-
-        $key = 'all_shopdetail'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'all_offerInStore'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'all_latestupdatesInStore'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'all_expiredOfferInStore'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'all_relatedShopInStore'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-
    }
 
    /**

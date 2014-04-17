@@ -13,7 +13,82 @@
 class CouponCode extends BaseCouponCode
 {
 	
-	//exportCodeList
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
+	/**
+	 *
+	 * it return an available coupon code whenever coupoun code type is unique
+	 *
+	 * @param integer $id offer id
+	 * @return string code;
+	 *
+	 * @author Amit
+	 *
+	 */
+	public static function returnAvailableCoupon($id)
+	{
+		$availableCoupon = Doctrine_Query::create()
+		->select('c.code')
+		->from('CouponCode c')
+		->where("c.offerid = " . $id)
+		->andWhere('c.status=1')
+		->limit(1)
+		->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+			
+		self::updateCodeStatus($id, $availableCoupon['code']);
+		return $availableCoupon;
+	}
+	
+	
+	/**
+	 * change code status
+	 * @param integer $id
+	 * @return ture
+	 */
+	public static function updateCodeStatus($id, $code, $status = 0)
+	{
+        Doctrine_Query::create()->update('CouponCode')
+        ->set('status', $status)
+        ->where("code = '" . $code ."'")
+        ->andWhere('offerid ='.  $id)
+        ->execute();
+		# refresh varnish if no codce is available
+        $totalAvailCode  = Doctrine_Query::create()
+        ->select('count(id)')
+        ->from('CouponCode c')
+        ->where("c.offerid = " . $id)
+        ->andWhere('c.status=1')
+        ->fetchOne(NULL, Doctrine::HYDRATE_ARRAY);
+	
+        if ($totalAvailCode['count'] == 0) {
+            Offer::updateCache($id);
+            $varnishObj = new Varnish();
+            $varnishObj->addUrl(HTTP_PATH);
+            $varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('nieuw'));
+            $varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('populair'));
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
+            if (LOCALE == '') {
+                if (defined(HTTP_PATH_FRONTEND)) {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
+                } else {
+                    $varnishObj->addUrl(HTTP_PATH  . 'marktplaatsfeed');
+                    $varnishObj->addUrl(HTTP_PATH . 'marktplaatsmobilefeed');
+                }
+            }
+            $varnishUrls = Offer::getAllUrls($id);
+            
+            if (isset($varnishUrls) && count($varnishUrls) > 0) {
+                foreach ($varnishUrls as $varnishValue) {
+                    $varnishObj->addUrl(HTTP_PATH . $varnishValue);
+                }
+            }
+        }
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
 	
 	
 	/**
@@ -62,99 +137,7 @@ class CouponCode extends BaseCouponCode
 		
 	}
 	
-	/**
-	 * 
-	 * it return an available coupon code whenever coupoun code type is unique
-	 * 
-	 * @param integer $id offer id
-	 * @return string code;
-	 * 
-	 * @author sp singh
-	 * 
-	 */
-	public static function returnAvailableCoupon($id)
-	{
-		$data = Doctrine_Query::create()
-		->select('c.code')
-		->from('CouponCode c')
-		->where("c.offerid = " . $id )
-		->andWhere('c.status=1')
-		->limit(1)
-		->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-			
-		self::updateCodeStatus($id, $data['code']);
-		return $data;
-		
-		
-	}
-		
-	/**
-	 * change code status
-	 * @param integer $id
-	 * @return ture
-	 */
-	public static function updateCodeStatus($id,$code,$status = 0 )
-	{ 
-		 Doctrine_Query::create()->update('CouponCode')
-										->set('status',  $status )
-										->where("code = '" . $code ."'")
-										->andWhere('offerid ='.  $id) 
-										->execute();
-	 
-		# refresh varnish if no codce is available 
-		$totalAvailcode  = $data = Doctrine_Query::create()
-					->select('count(id)')
-					->from('CouponCode c')
-					->where("c.offerid = " . $id )
-					->andWhere('c.status=1')
-					->fetchOne(NULL, Doctrine::HYDRATE_ARRAY);
-		
+
 	
-		
-		
-		if($totalAvailcode['count'] == 0)
-		{
-			Offer::updateCache($id);
-			
-			// Add urls to refresh in Varnish
-			$varnishObj = new Varnish();
-			$varnishObj->addUrl(HTTP_PATH);
-			$varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('nieuw'));
-			$varnishObj->addUrl(HTTP_PATH . FrontEnd_Helper_viewHelper::__link('populair'));
-			$varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
-
-
-			# make markplaatfeed url's get refreashed only in case of kortingscode
-			iF(LOCALE == '')
-			{
-				
-				
-				if( defined(HTTP_PATH_FRONTEND) )
-				{
-					$varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
-					$varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
-					
-				}else {
-					$varnishObj->addUrl(  HTTP_PATH  . 'marktplaatsfeed');
-					$varnishObj->addUrl(  HTTP_PATH . 'marktplaatsmobilefeed' );
-				}
-			}
-
-
-				
-			# get all the urls related to an offer
-			$varnishUrls = Offer::getAllUrls( $id );
-				
-			# check $varnishUrls has atleast one url
-			if(isset($varnishUrls) && count($varnishUrls) > 0)
-			{
-				foreach($varnishUrls as $value)
-				{
-					$varnishObj->addUrl( HTTP_PATH . $value);
-				}
-			}
-			
-		}
-	
-   }
+   
 }

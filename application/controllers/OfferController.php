@@ -59,10 +59,6 @@ class OfferController extends Zend_Controller_Action
 		$this->view->headMeta()->appendName('description', @trim($this->view->couponDetail[0]['extendedMetaDescription']));
 	}
 	
-	##################################################################################
-	################## END REFACTORED CODE ###########################################
-	##################################################################################
-    
     /**
      * override views based on modules if exists
      * @see Zend_Controller_Action::init()
@@ -85,6 +81,40 @@ class OfferController extends Zend_Controller_Action
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
     }
+    
+    public function offerDetailAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $offerParameters = $this->_getAllParams();
+        $this->view->params = $offerParameters;
+        $offerObject = new Offer();
+        $offerId = $offerParameters['id'];
+        $offerDetail = $offerObject->getOfferInfo(@$offerParameters['id']);
+        $this->view->offerdetail = $offerDetail;
+        $this->view->vote = @$offerParameters['vote'];
+        $this->view->votepercentage = 0;
+        $this->view->headTitle(@$offerDetail[0]['title']);
+        $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'.
+         $offerDetail[0]['shop']['logo']['name'];
+        $this->view->facebookTitle = @$offerDetail[0]['title'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
+        $this->view->facebookImage = $shopImage;
+        if ($offerDetail[0]['couponCodeType']  == 'UN') {
+            $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerId);
+            if ($getOfferUniqueCode) {
+                $this->view->code = $getOfferUniqueCode['code'] ;
+            }
+        } else {
+            $this->view->code = $offerDetail[0]['couponCode']  ;
+        }
+    
+    }
+
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
+    
+
 
     /**
      * Get offer records from the database of by cache using backend key.
@@ -94,7 +124,8 @@ class OfferController extends Zend_Controller_Action
      */
     public function indexAction() {
 
-        $page = Page::getPageFromPageAttr(6);
+       $page = Page::getPageFromPageAttr(6);
+
         $this->view->pageTitle = @$page->pageTitle;
         $this->view->headTitle(@$page->metaTitle);
 
@@ -158,59 +189,6 @@ class OfferController extends Zend_Controller_Action
 
       }
 
-    /**
-     * get offer detail from database
-     *
-     * @author kkumar1
-     */
-    public function offerdetailAction(){
-
-        $this->_helper->layout->disableLayout();
-        $params = $this->_getAllParams();
-        $this->view->params = $params;
-        $obj = new Offer();
-        $offerId = $params['id'];
-
-        $offerDetail = $obj->getOfferInfo(@$params['id']);
-        $this->view->offerdetail = $offerDetail;
-        $this->view->vote = @$params['vote'];
-        $this->view->votepercentage = 0;
-        $this->view->headTitle(@$offerDetail[0]['title']);
-
-        if(count($offerDetail[0]['shop']['logo']) > 0):
-                $img = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'. $offerDetail[0]['shop']['logo']['name'];
-        else:
-            $img = HTTP_PATH."public/images/NoImage/NoImage_200x100.jpg";
-        endif;
-
-        //for facebook parameters
-        $this->view->fbtitle = @$offerDetail[0]['title'];
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
-        $this->view->fbImg = $img;
-
-        if(isset($params['vote']) && $params['vote']!= '0'){
-            $vote = new Vote();
-            $votepercentage =  $vote->doVote($params);
-            $this->view->votepercentage = $votepercentage['vote'];
-            $this->view->voteId = $votepercentage['voteId'];
-        }
-
-        # if code type is unique then a uniq code will be displayed otherwise displaye general code
-
-        if( $offerDetail[0]['couponCodeType']  == 'UN')
-        {
-            $getUniqueCode = CouponCode::returnAvailableCoupon($offerId);
-
-            if($getUniqueCode)
-            {
-                $this->view->code = $getUniqueCode['code'] ;
-            }
-        }else
-        {
-            $this->view->code = $offerDetail[0]['couponCode']  ;
-
-        }
-    }
     public function feedbackAction(){
         $params = $this->_getAllParams();
         $vote = new Vote();
@@ -232,69 +210,14 @@ class OfferController extends Zend_Controller_Action
         die();
     }
 
-    public function mostpopularofferAction()
-    {
+    public function mostpopularofferAction() {
+
         ViewCount::generatePopularCode ();
 
         $popularOffer = FrontEnd_Helper_viewHelper::commonfrontendGetPopularCode ();
 
         die ();
 
-    }
-
-    /**
-     * get coupon information
-     *
-     * @version 1.0
-     * @author blal
-     */
-    public function couponinfoAction()
-    {
-        # get cononical link
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
-
-        $params = $this->_getAllParams ();
-        $permalink = $params ['permalink'];
-        $currentDate = date ( 'Y-m-d' );
-        // call to function from model to get offer details
-        $cpnDetails = Offer::getCouponDetails ( $permalink );
-
-        if(count($cpnDetails[0]['logo']) > 0):
-                $img = PUBLIC_PATH_CDN.$cpnDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $cpnDetails[0]['shop']['logo']['name'];
-
-        else:
-            $img = HTTP_PATH ."public/images/NoImage/NoImage_200x100.jpg";
-        endif;
-
-        //for facebook parameters
-        $this->view->fbtitle = @$cpnDetails[0]['title'];
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $cpnDetails[0]['extendedUrl'];
-        $this->view->fbImg = $img;
-
-        $this->view->cpndetail = $cpnDetails;
-        if (count($cpnDetails)==0) {
-            $this->_redirect(HTTP_PATH_LOCALE.'error');
-        }
-        if(count($cpnDetails)>0):
-        $shopId = $cpnDetails[0]['shopId'];
-        else:
-        $shopId = "";
-        endif;
-
-        // call to function from model to get popular offers
-        $popularOffers = FrontEnd_Helper_viewHelper::gethomeSections("popular", 3);
-
-        $this->view->popoffer = $popularOffers;
-        $this->view->headTitle(@trim($this->view->cpndetail[0]['extendedTitle']));
-        $this->view->headMeta()->appendName('description', @trim($this->view->cpndetail[0]['extendedMetaDescription']));
-
-        if($shopId !=""):
-
-        $relatedOffers = Offer::getrelatedOffers ( $shopId, $currentDate );
-        $this->view->reloffer = $relatedOffers;
-        endif;
     }
 
 /**
@@ -326,20 +249,12 @@ class OfferController extends Zend_Controller_Action
                 $fbImage = 'logo_og.png';
         }else{
                 $fbImage = 'flipit.png';
-
         }
         $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
         //for facebook parameters
         $this->view->fbtitle = @$page->pageTitle;
         $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('populair');
-
-        if (LOCALE == '') {
-                $fbImage = 'logo_og.png';
-        } else {
-                $fbImage = 'flipit.png';
-        }
-        $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
         $this->view->shopId = '';
         $shopId = '';
@@ -349,7 +264,6 @@ class OfferController extends Zend_Controller_Action
         //get widget and set in caching
         $key = 'all_widget5_list';
         $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-
         if($flag){
 
             $widget =  FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(5);
@@ -431,33 +345,6 @@ class OfferController extends Zend_Controller_Action
 
     public function deleteexpiredAction(){
 
-        set_time_limit(10000);
-        $current_date = date('Y-m-d h:m:s',strtotime('1-1-2011'));
-        $data = Doctrine_Query::create()
-        ->select('o.id')
-        ->from("Offer o")
-        ->where('o.enddate <'."'$current_date'")
-        ->fetchArray();
-        foreach($data as $arr):
-
-            Offer::deleteOffer($arr['id']);
-            echo "Offer Id: ".$arr['id']."Deleted"; echo "<br>";
-
-        endforeach;
-
-        die('done');
-    }
-
-    public function clearcacheAction()
-    {
-        $cache = Zend_Registry::get('cache');
-        $cache->clean();
-        echo 'cache is cleared';
-        exit;
-    }
-
-    public function deleteexpiredAction()
-    {
         set_time_limit(10000);
         $current_date = date('Y-m-d h:m:s',strtotime('1-1-2011'));
         $data = Doctrine_Query::create()

@@ -17,7 +17,6 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
             }
         }
         return $urlToShow;
-       
     }
 
     public static function getOfferBounceUrl($offerId)
@@ -27,11 +26,11 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
     public static function getDiscountImage($currentOffer)
     {
-        $offerDiscountImage ='';
+        
+    	$offerDiscountImage ='';
         if (!empty ( $currentOffer->tiles)) {
             $offerDiscountImage = PUBLIC_PATH_CDN . ltrim(@$currentOffer->tiles['path'], "/").@$currentOffer->tiles['name'];
         }
-
         return $offerDiscountImage;
     }
 
@@ -51,10 +50,8 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
         $offerEndDate = date('Y-m-d', strtotime($endDate));
         $timeStampStart = strtotime($offerEndDate);
         $timeStampEnd = strtotime($currentDate);
-
         $dateDifference = abs($timeStampEnd - $timeStampStart);
         $dayDifference = floor($dateDifference/(60*60*24));
-        
         return $dayDifference;
     }
 
@@ -114,14 +111,14 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
             $dateFormatString .= '&nbsp;';
             $dateFormatString .= $trans->translate('days valid!');
 
-        } elseif ($dayDifference ==1) {
+        } elseif ($dayDifference == 1) {
             $dateFormatString .= $stringOnly;
             $dateFormatString .= '&nbsp;';
             $dateFormatString .= $dayDifference;
             $dateFormatString .= '&nbsp;';
             $dateFormatString .= $trans->translate('day only!');
 
-        } elseif ($dayDifference ==0) {
+        } elseif ($dayDifference == 0) {
             $dateFormatString .= $trans->translate('Expires today');
 
         } else {
@@ -213,5 +210,36 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
            $imgTagWithImage = '<div class="ico-mail"></div>';
         }
         return $imgTagWithImage;
+    }
+
+    public static function getmainButtonforOffer($currentOffer, $urlToShow, $offerBounceRate)
+    {
+        if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
+            $onClick =  $currentOffer->discountType == "CD" ? "showCodeInformation($currentOffer->id)," : " "; 
+            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),showCodePopUp(this), ga('send', 'event', 'aff', '$offerBounceRate')";
+            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
+            '.$currentOffer->translate('>Get code &amp; Open site').' </a>';
+        }else{
+            $onClick =  self::getUserIsLoginOrNot() == "true" ? "showPrintPopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
+            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href = "'.$urlToShow.'"  href="javascript:void(0);" target="_blank" onclick = "'.$onClick.'" rel="nofollow">'.$currentOffer->translate('>Get code &amp; Open site').'</a>';
+        }
+    
+        return $mainButton;
+    
+    }
+    
+    public static function getSecondButtonforOffer($currentOffer, $urlToShow, $offerBounceRate)
+    {
+        if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
+            $onClick =  self::getUserIsLoginOrNot() == "true" ? "printIt('$urlToShow');" : " ";
+            $secondButton = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$currentOffer->translate('print now').'<span class="ico-print"></span></a>';
+        }else if ($currentOffer->discountType=='CD') {
+            $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate')";
+            $secondButton = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_blank" onClick="'.$onClick.'">'.$currentOffer->translate('Pack this offer').'</a>';
+        }else if ($currentOffer->discountType == "SL"){
+            $secondButton = '';
+        }
+       
+        return $secondButton;
     }
 }
