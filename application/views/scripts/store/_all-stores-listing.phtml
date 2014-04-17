@@ -1,20 +1,20 @@
 <?php
 $storeClass = "<ul class='shop-name box col-md-4 col-sm-4'>";
-foreach ($this->storesInformation as $storeKey => $stores) :
+foreach ($this->storesInformation as $storesKey => $stores) :
     if ($stores != null) :
         ?>
-        <div class="block" id="<?php echo strtolower($storeKey=='abc' ? '0-9' : $storeKey); ?>">
-            <h2><?php echo $storeKey=='abc' ? '0-9' : $storeKey ; ?></h2>
+        <div class="block" id="<?php echo strtolower($storesKey=='abc' ? '0-9' : $storesKey); ?>">
+            <h2><?php echo $storesKey=='abc' ? '0-9' : $storesKey; ?></h2>
             <div class="row">
         <?php
-        $storeCount = ceil(count($stores) / 3);
+        $numberOfStores = ceil(count($stores) / 3);
 
-        if (is_float($storeCount)) :
+        if (is_float($numberOfStores)) :
             $storeUpperBound = ceil(count($stores) / 3);
             $storeLowerBound = $storeUpperBound -  1;
         else :
-            $storeUpperBound = $storeCount;
-            $storeLowerBound = $storeCount;
+            $storeUpperBound = $numberOfStores;
+            $storeLowerBound = $numberOfStores;
         endif;
 
         $storeFinalLowerBound = $storeLowerBound;

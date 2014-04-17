@@ -1,5 +1,5 @@
 <?php
-$store = 'store/';
+$storeView = 'store/';
 $popularStores = '';
 $storesInformation = '';
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
@@ -9,14 +9,14 @@ $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
 
 if (count($this->popularStores)) :
      $popularStores = $this->partial(
-         $store.'_popular-stores.phtml',
+         $storeView.'_popular-stores.phtml',
          array('popularStores' => $this->popularStores)
      );
 endif;
 
 if ($this->storesInformation != '' && $this->storesInformation != null) :
     $storesInformation = $this->partial(
-        $store.'_all-stores-listing.phtml',
+        $storeView.'_all-stores-listing.phtml',
         array('storesInformation' => $this->storesInformation)
     );
 endif;
@@ -42,7 +42,7 @@ echo $storesInformation;
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
 <?php
-echo $this->esi($this->locale.$store.'signupwidget');
+echo $this->esi($this->locale.$storeView.'signupwidget');
 echo FrontEnd_Helper_viewHelper::socialmediaSmall('', $socialMediaTitle, $controllerName);
 ?>
     </aside>

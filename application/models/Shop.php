@@ -160,7 +160,7 @@ class Shop extends BaseShop {
         $storesForFrontend =array();
         foreach ($storeInformation as $store) {
             if ($store['name']!='' && $store['name']!=null) {
-                $FirstCharacter =  strtoupper(self::filter_firstchar($store['name']));
+                $FirstCharacter =  strtoupper(self::filterFirstCharacter($store['name']));
                 if (preg_match_all('/[0-9]/', $FirstCharacter, $characterMatch)) {
                     if (intval($characterMatch[0][0]) >=0) {
                         $FirstCharacter = 'abc';
@@ -181,13 +181,11 @@ class Shop extends BaseShop {
     /**
     * get popular store
     * @param $limit integer no of popular shops
-    * @param $shopId integer  optional get popular shop by its id
     * @version 1.1
-    * @return array $data
+    * @return array $popularStores
     */
     public static function getAllPopularStores($limit)
     {
-        $nowDate = date('Y-m-d 00:00:00');
         $popularStores = Doctrine_Query::create()
         ->select('p.id,s.name,s.permaLink,img.path as imgpath, img.name as imgname')
         ->from('PopularShop p')
@@ -196,9 +194,7 @@ class Shop extends BaseShop {
         ->where('s.deleted=0')
         ->addWhere('s.status=1')
         ->orderBy('p.position ASC')
-        ->limit($limit);
-
-        $popularStores = $popularStores->fetchArray();
+        ->limit($limit)->fetchArray();
         return $popularStores;
     }
     ##################################################################################
@@ -1066,14 +1062,13 @@ public static function  getShopDetail ($shopId){
 
  /**
   * get first character of the store name
-  * @author kraj
-  * @return char $var
-  * @return $rest
+  * @return character $var
+  * @return $filteredCharacter
   */
- public static function  filter_firstchar($var){
-
-    $rest = substr($var, 0,1);
-    return $rest;
+ public static function filterFirstCharacter($var)
+ {
+    $filteredCharacter = substr($var, 0,1);
+    return $filteredCharacter;
  }
  /**
   * get all store if has exclusive deal
