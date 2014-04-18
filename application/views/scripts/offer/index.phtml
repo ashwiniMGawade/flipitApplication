@@ -2,9 +2,6 @@
 $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$controllerName =  $this->controllerName;
-$socialMediaTitle = "<h2>".$this->translate('Share')."</h2><span>"
-.$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
 ?>
 <div class="header-block">
     <div class="icon icon-small">
@@ -39,9 +36,8 @@ if (count($this->paginator)>0) {
     <aside class="col-md-4 col-sm-4" id="sidebar">
             <?php
             $locale = LOCALE != 'en'? LOCALE. '/' : '';
-            echo $this->esi($locale.'store/signupwidget'); ?>
-            <?php
-            echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
+            echo $this->esi($locale.'store/signupwidget');
+            echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20');
             ?>
     </aside>
 </div>

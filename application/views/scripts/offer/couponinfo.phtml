@@ -1,12 +1,10 @@
 <?php
 $offer = (object) $this->couponDetail[0];
-$offerUrlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($offer);
+$offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
+$offerUrlToShow = $offerPartialClass->getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
-$offerDayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);
-$offerTermsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
-$controllerName =  $this->controllerName;
-$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-<span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+$offerDayDifference = $offerPartialClass->getDaysDifference($offer->endDate);
+$offerTermsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
 
 $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
@@ -31,13 +29,13 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
         <section class="section">
             <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
                 <div class="holder">
-                    <a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer);?>" href="<?php echo $offerUrlToShow;?>" rel="nofollow"
+                    <a class="<?php echo $offerPartialClass->getClassNameForOffer($offer);?>" href="<?php echo $offerUrlToShow;?>" rel="nofollow"
                                 target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                                <?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferImage($offer, $this->offersType);?>
+                                <?php echo $offerPartialClass->getOfferImage($offer, $this->offersType);?>
                     </a>
                     <div class="box">
                         <div class="text">
-                            <p><?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($offer, $offerDayDifference)?></p>
+                            <p><?php echo $offerPartialClass->dateStringFormat($offer, $offerDayDifference)?></p>
                                 <a id="<?php echo $offer->id ;?>"
                                             href="<?php echo $offerUrlToShow;?>"
                                             rel="nofollow" class="link" target="_blank"
@@ -122,15 +120,10 @@ endif;
 ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-        <div class="block white">
 <?php
 $locale = LOCALE != 'en'? LOCALE. '/' : '';
-echo $this->esi($locale.'store/signupwidget'); ?>
-        </div>
-        <article class="block">
-<?php
-echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
+echo $this->esi($locale.'store/signupwidget');
+echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20');
 ?>
-        </article>
     </aside>
 </div>

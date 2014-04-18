@@ -405,9 +405,12 @@ EOD;
    * @param $type string
    * @return string
    */
-    public static function socialmediaSmall($url, $socialMediaTitle, $controller , $type = null)
+    public static function socialmediaSmall($url='', $type = null)
     {
-
+        $trans = Zend_Registry::get('Zend_Translate');
+        $socialMediaTitle = "<h2>".$trans->translate('Share')."</h2>
+         <span>".$trans->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+        $controller = zend_Controller_Front::getInstance()->getRequest()->getControllerName();
         if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
             $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
             $socialMediaUrl = self::generateSocialLink($socialMediaUrl);

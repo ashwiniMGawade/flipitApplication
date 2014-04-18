@@ -19,6 +19,7 @@ if(count($this->offers) > 0):
         )
     );
 endif;
+
 $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
 $similarOffersHeader = '';
 $similarOffers = '';
@@ -81,11 +82,7 @@ endif;
 $getPermaLinkNewOffer = Page::getPageFromPageAttribute(6);
 $bounceRate = "/out/shop/".@$this->currentStoreInformation[0]['id'];
 $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->currentStoreInformation[0]['id'];
-$Link = '';
 $howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
-$name =  strtoupper($this->currentStoreInformation[0]['name']);
-$breadcrumb = "<a href='".HTTP_PATH_LOCALE."store/index/' style='color:#6a6a6a'>".$this->translate($name)."</a>";
-
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
 
@@ -107,6 +104,19 @@ if (isset($actualUrlWithoutDoubleSlash[1])):
     $actualUrl = $actualUrlWithoutDoubleSlash[1];
 else:
     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
+endif;
+
+$shopEditor = '';
+if($this->shopEditor != null):
+    $shopEditor = $this->partial(
+        $storeViewPartialPath.'_storeEditor.phtml',
+        array(
+           'shopEditor' => $this->shopEditor,
+           'shop' => $this->currentStoreInformation[0],
+            'howToUsePermalink'=>$howToUseGuidePermalink,
+            'actualUrl'=>$actualUrl
+        )
+    );
 endif;
 ?>
 <input type="hidden" name="currentShop" id="currentShop" value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -142,77 +152,9 @@ endif;
     ?>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
-        <article class="block">
-            <div class="intro intro-2">
-
 <?php
-if($this->shopEditor != null):
-    ?>
-
-                <div class="deal">
-                    <div class="deal-holder">
-    <?php
-    $EditorFirstName = str_replace(' ', '', $this->shopEditor['firstName']);
-    $EditorLastName = str_replace(' ', '', $this->shopEditor['lastName']);
-    $EditorImageSlug = $this->shopEditor['slug'];
-    ?>
-                        <span class="text">
-    <?php
-    echo $this->translate('All').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('deals verified by');
-    ?>
-                            <span class="name"><?php echo $EditorFirstName; ?></span>
-                        </span>
-                        <div class="photo">
-                            <span class="text-box"><?php echo $this->translate('Hello'); ?></span>
-    <?php
-    $shopEditorPath = HTTP_PATH_CDN . ltrim($this->shopEditor['profileimage']['path'], "/"). 'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
-    echo '<img alt="' .  $this->shopEditor['firstName'] . '" class="" src="'.  $shopEditorPath . '" width="120" height="120"/>';
-    ?>
-                      </div>
-                    </div>
-                </div>
-
-    <?php
-endif;
-?>
-                <h1><?php echo $this->translate('About').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('Vouchers').' '.date('Y'); ?></h1>
-<?php
-echo $this->currentStoreInformation[0]['shopText'];
-?>
-            </div>
-
-<?php
-if($this->currentStoreInformation[0]['howToUse']):
-    ?>
-
-            <ul class="add-info">
-                <li>
-                    <h2><?php echo $this->translate('How to use code');?></h2>
-                    <p>
-                        <a href="javascript:void(0);" id="clicker"><?php echo $this->translate('Show me'); ?></a> 
-                        <?php echo $this->translate('where to enter my').' '.$this->currentStoreInformation[0]['name'].' '.$this->translate('code, or read our full'); ?> 
-                        <a href="<?php echo HTTP_PATH_LOCALE.$howToUseGuidePermalink; ?>">
-                        <?php echo $this->currentStoreInformation[0]['name'].' '.$this->translate('Promotional Code'); ?>
-                        </a>
-                        <?php echo $this->translate('help guide'); ?>.
-                    </p>
-                </li>
-                <li class="web">
-                    <h2><?php echo $this->translate('Official website'); ?></h2>
-                    <a href="<?php echo $this->currentStoreInformation[0]['actualUrl']; ?>"><?php echo $actualUrl;?></a>
-                </li>
-            </ul>
-
-    <?php
-endif;
-?>
-
-        </article>
-<?php
-$controllerName =  $this->controllerName;
-$socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-                    <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
-echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl, $socialMediaTitle, $controllerName);
+echo $shopEditor;
+echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl);
 ?>
 
 <?php
@@ -230,11 +172,9 @@ endif;
 <?php
 if ($this->shopChain):
     ?>
-
         <article class="block">
     <?php echo $this->shopChain; ?>
         </article>
-
     <?php
 endif;
         

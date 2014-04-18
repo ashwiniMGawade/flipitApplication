@@ -25,16 +25,10 @@ endif;
 ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-        
         <?php
         $locale = LOCALE != 'en'? LOCALE. '/' : '';
-        echo $this->esi($locale .'store/signupwidget'); ?>
-        
-        <?php
-        $controllerName =  $this->controllerName;
-        $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-        <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
-        echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20', $socialMediaTitle, $controllerName);
+        echo $this->esi($locale .'store/signupwidget');
+        echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20');
         ?>
     </aside>
 </div>
