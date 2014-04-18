@@ -230,6 +230,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
         $this->view->facebookLocale = $facebookLocale;
         $this->view->facebookDescription =  trim($pageAttribute['metaDescription']);
+        $this->view->twitterDescription =  trim($shopInformation[0]['metaDescription']);
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
@@ -250,7 +251,7 @@ class StoreController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $msg = $this->view->translate('No Record Found');
         $limit = 10;
-        $data =Shop::commonSearchStoreForUserGenerated($srh,$limit);
+        $data =Shop::commonSearchStoreForUserGenerated($srh, $limit);
         //new array for autocomplete
         $ar = array();
         if (sizeof($data) > 0) {

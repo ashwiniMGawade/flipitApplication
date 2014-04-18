@@ -6,9 +6,9 @@ foreach ($this->offers as $offer) {
     $offer = (object) $offer;
     $offerBounceRate = "/out/offer/".$offer->id;
     $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
-    $dayDifference = $offerPartialClass->getDaysDifference($offer->endDate);
+    $daysTillOfferExpires = $offerPartialClass->getDaysTillOfferExpires($offer->endDate);
     $urlToShow = $offerPartialClass->getUrlToShow($offer);
-    $offerTitle = substr($offer->title, 0, 150);
+    $offerTitle = $offer->title;
     $termsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
@@ -30,7 +30,7 @@ foreach ($this->offers as $offer) {
     }
     ?>
                 <div class="text">
-                    <p> <?php echo $offerPartialClass->dateStringFormat($offer, $dayDifference)?></p>
+                    <p> <?php echo $offerPartialClass->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
                     <a id="<?php echo $offer->id ;?>"
                     href="<?php echo $urlToShow;?>"
                     rel="nofollow" class="link" target="_blank"

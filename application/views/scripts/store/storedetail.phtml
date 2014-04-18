@@ -24,7 +24,7 @@ $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
 $similarOffersHeader = '';
 $similarOffers = '';
 if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
-    $similarOffersHeader = $offerPartialClass->getSectionHeader($this->currentStoreInformation[0]['name'], 'similar');
+    $similarOffersHeader = $offerPartialClass->getSimilarShopHeader($this->currentStoreInformation[0]['name'], 'similar');
     $similarOffers = $this->partial(
         $storeViewPartialPath.'_offer.phtml',
         array(

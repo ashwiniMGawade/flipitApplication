@@ -89,22 +89,22 @@ EOD;
             </div>
             <ul class="countries">
 EOD;
-	         $hrefLinks = "" ;
-	         $hasShops = false ;
-	         foreach ($chain as $chainInformation) {
-	             $hrefLinks .=  isset($chainInformation['headLink']) ? $chainInformation['headLink']. "\n" : '';
-	
-		         if (! empty($chainInformation['shops'])) {
-			         $hasShops = true ;
-			         $chainInformation = $chainInformation['shops'];
-			         $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
-			         $string .= sprintf(
-			            "<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
-			             trim($chainInformation['url']),
-			             $httpPath.'/public/'. $image
-			            );
-		         }
-	         } 
+             $hrefLinks = "" ;
+             $hasShops = false ;
+             foreach ($chain as $chainInformation) {
+                 $hrefLinks .=  isset($chainInformation['headLink']) ? $chainInformation['headLink']. "\n" : '';
+    
+                 if (! empty($chainInformation['shops'])) {
+                     $hasShops = true ;
+                     $chainInformation = $chainInformation['shops'];
+                     $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
+                     $string .= sprintf(
+                        "<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
+                         trim($chainInformation['url']),
+                         $httpPath.'/public/'. $image
+                        );
+                 }
+             } 
                          $string .= <<<EOD
             </ul>
 EOD;
@@ -261,30 +261,26 @@ EOD;
      */
     public static function getFooterData()
     {
-    	$footerData = Footer::getFooter();
+        $footerData = Footer::getFooter();
     
-    	return $footerData;
+        return $footerData;
     
     }
-    
+
     public static function getHeadMeta($headMetaValue)
     {
-    	$domainName = HTTP_HOST;
-    	if($domainName == "www.kortingscode.nl")
-    	{
-    		$site_name = "Kortingscode.nl";
-    	}
-    	else
-    	{
-    		$site_name = "Flipit.com";
-    	}
-    	$socialMediaValue = array('og:title'=>$headMetaValue->facebookTitle, 'og:type'=>'website', 'og:url'=> $headMetaValue->facebookShareUrl,
-		    		'og:description'=>$headMetaValue->facebookDescription, 'og:locale'=>$headMetaValue->facebookLocale, 
-		    		'og:image'=>$headMetaValue->facebookImage, 'og:site_name'=>$site_name, 'twitter:description'=>$headMetaValue->twitterDescription,
-					'twitter:site'=>$site_name
-		    	 );
-   		
-    	return $socialMediaValue;
+        $domainName = HTTP_HOST;
+        if($domainName == "www.kortingscode.nl") {
+            $site_name = "Kortingscode.nl";
+        } else {
+            $site_name = "Flipit.com";
+        }
+        $socialMediaValue = array('og:title'=>$headMetaValue->facebookTitle, 'og:type'=>'website', 'og:url'=> $headMetaValue->facebookShareUrl,
+            'og:description'=>$headMetaValue->facebookDescription, 'og:locale'=>$headMetaValue->facebookLocale, 
+            'og:image'=>$headMetaValue->facebookImage, 'og:site_name'=>$site_name, 'twitter:description'=>$headMetaValue->twitterDescription,
+            'twitter:site'=>$site_name
+        );
+        return $socialMediaValue;
     }
     
     /**
@@ -305,6 +301,7 @@ EOD;
         $alphabetList .="</ul>";
         return $alphabetList;
     }
+
     public static function singUpNewsLetterRedirection($signUpNewsLetterform)
     {
         $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
@@ -862,7 +859,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         return $text;
     }
 
-    /**********************	Start Front end home page *************************************/
+    /********************** Start Front end home page *************************************/
 
     /**
      * This Comman function To geting many type home page Sections from database for front end
@@ -969,7 +966,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
 
         return $logindiv;
     }
-    /**********************	End Front end home page *************************************/
+    /********************** End Front end home page *************************************/
 
     /**
      * Get popular Editor list from database for fronthome page
@@ -1896,7 +1893,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
   }
 
   public static function setValueOfJs($json)
-  {	?>
+  { ?>
         <script type="text/javascript">
             var json = <?php echo $json;?>
             var jsonData = {};
@@ -1922,7 +1919,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
 
         $search = array(
                 '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
-                '@[\\\]@'	// Strip out slashes
+                '@[\\\]@'   // Strip out slashes
         );
 
         $string = preg_replace($search, array('',''), $string);
