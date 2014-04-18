@@ -15,19 +15,25 @@ class OfferController extends Zend_Controller_Action
         }
         if (LOCALE == '') {
             $facebookImage = 'logo_og.png';
+            $facebookLocale = '';
         } else {
             $facebookImage = 'flipit.png';
+            $facebookLocale = LOCALE;
         }
         $offers= Offer::getTop20Offers();
-        
+
         $this->view->pageTitle = $page->pageTitle;
         $this->view->headTitle($page->metaTitle);
         $this->view->headMeta()->setName('description', trim($page->metaDescription));
-        $this->view->fbtitle = $page->pageTitle;
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link($pageName);
-        $this->view->fbImg = HTTP_PATH."public/images/" .$facebookImage ;
+
+        $this->view->facebookTitle = $page->pageTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link($pageName);
+        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
+        $this->view->facebookDescription = trim($page->metaDescription);
+        $this->view->facebookLocale = $facebookLocale;
+        $this->view->twitterDescription = trim($page->metaDescription);
 
         // zend form for sign up news letter and validate form
         $signUpNewsLetterform = new Application_Form_SignUp();

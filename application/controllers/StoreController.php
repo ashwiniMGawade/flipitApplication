@@ -251,7 +251,7 @@ class StoreController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $msg = $this->view->translate('No Record Found');
         $limit = 10;
-        $data =Shop::commonSearchStoreForUserGenerated($srh,$limit);
+        $data =Shop::commonSearchStoreForUserGenerated($srh, $limit);
         //new array for autocomplete
         $ar = array();
         if (sizeof($data) > 0) {
