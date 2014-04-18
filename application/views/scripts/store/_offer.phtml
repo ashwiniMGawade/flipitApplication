@@ -13,10 +13,10 @@ foreach ($this->offers as $offer) {
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
         <div class="holder">
-            <a class="<?php echo $offerPartialClass->getClassNameForOffer($offer, $this->offersType);?>" 
+            <a id="<?php echo $offer->id ;?>" class="<?php echo $offerPartialClass->getClassNameForOffer($offer, $this->offersType);?>" 
             href="<?php echo $urlToShow;?>" rel="nofollow"
             target="_blank"
-            onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
+            onClick="<?php echo $offer->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
             <?php echo $offerPartialClass->getOfferImage($offer, $this->offersType);?>
             </a>
             <div class="box">
