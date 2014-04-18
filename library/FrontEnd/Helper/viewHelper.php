@@ -169,7 +169,7 @@ EOD;
     {
         preg_match("/^[\d]+$/", $permalink, $matches);
 
-        if (intval($matches[0]) > 0) {
+        if (isset($matches[0]) && intval($matches[0]) > 0) {
             $permalink = explode('/'.$matches[0], $permalink);
             $permalink = $permalink[0];
         }
