@@ -70,8 +70,8 @@ class FrontEnd_Helper_OfferPartialFunctions extends FrontEnd_Helper_viewHelper
 
     public static function getOfferExclusiveOrEditor($currentOffer)
     {
-        $offerOption = '';
         $trans = Zend_Registry::get('Zend_Translate');
+        $offerOption = '';
         if ($currentOffer->exclusiveCode == '1'):
             $offerOption = self::getOfferOption($trans->translate('Exclusive'));
         elseif ($currentOffer->editorPicks =='1'):
