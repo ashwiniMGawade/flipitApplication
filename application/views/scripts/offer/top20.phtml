@@ -4,7 +4,7 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js"
 $this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
-$subTitle = $this->translate('Our most popular codes are listed here');
+$subTitle = $this->content;
 $pageLogo = $this->pageLogo;
 echo $this->partial(
     'partials/_default_page_header.phtml',
