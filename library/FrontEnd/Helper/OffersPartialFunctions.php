@@ -27,7 +27,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $offerDiscountImage ='';
         if (!empty ( $currentOffer->tiles)) {
-            $offerDiscountImage = PUBLIC_PATH_CDN . ltrim(@$currentOffer->tiles['path'], "/").@$currentOffer->tiles['name'];
+            $offerDiscountImage = PUBLIC_PATH_CDN . ltrim($currentOffer->tiles['path'], "/").$currentOffer->tiles['name'];
         }
         return $offerDiscountImage;
     }
@@ -41,18 +41,18 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $termsAndConditions;
     }
 
-    public function getDaysDifference($endDate)
+    public function getDaysTillOfferExpires($endDate)
     {
         $currentDate = date('Y-m-d');
         $offerEndDate = date('Y-m-d', strtotime($endDate));
         $timeStampStart = strtotime($offerEndDate);
         $timeStampEnd = strtotime($currentDate);
         $dateDifference = abs($timeStampEnd - $timeStampStart);
-        $dayDifference = floor($dateDifference/(60*60*24));
-        return $dayDifference;
+        $daysTillOfferExpires = floor($dateDifference/(60*60*24));
+        return $daysTillOfferExpires;
     }
 
-    public function getUserIsLoginOrNot()
+    public function getUserIsLoggedInOrNot()
     {
         $userLoginStatus = false;
         if (Auth_VisitorAdapter::hasIdentity()) :
@@ -61,11 +61,11 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $userLoginStatus;
     }
 
-    public   function getOfferOption($string)
+    public function getOfferOption($offerOption)
     {
-        $string = '<strong class="exclusive">
-        <span class="glyphicon glyphicon-star"></span>'.$string.'</strong>';
-        return $string;
+        $offerOptionHtml = '<strong class="exclusive">
+        <span class="glyphicon glyphicon-star"></span>'.$offerOption.'</strong>';
+        return $offerOptionHtml;
     }
 
     public function getOfferExclusiveOrEditor($currentOffer)
@@ -79,48 +79,52 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $offerOption;
     }
 
-    public function dateStringFormat($currentOffer, $dayDifference)
+    public function getOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $offerOption = self::getOfferExclusiveOrEditor($currentOffer);
         $stringAdded = $this->zendTranslate->translate('Added');
         $stringOnly = $this->zendTranslate->translate('Only');
         $startDate = new Zend_Date(strtotime($currentOffer->startDate));
-        $dateFormatString = '';
+        $offerDates = '';
         if($currentOffer->discountType == "CD"):
-            $dateFormatString .= $stringAdded;
-            $dateFormatString .= ':';
-            $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
-            $dateFormatString .= ',';
+            $offerDates .= $stringAdded;
+            $offerDates .= ':';
+            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+            $offerDates .= ',';
 
-        if ($dayDifference ==5 || $dayDifference ==4 || $dayDifference ==3 || $dayDifference ==2) {
-            $dateFormatString .= $stringOnly;
-            $dateFormatString .= '&nbsp;';
-            $dateFormatString .= $dayDifference;
-            $dateFormatString .= '&nbsp;';
-            $dateFormatString .= $this->zendTranslate->translate('days valid!');
+        if ($daysTillOfferExpires ==5 || $daysTillOfferExpires ==4 || $daysTillOfferExpires ==3 || $daysTillOfferExpires ==2) {
+            $offerDates .= $stringOnly;
+            $offerDates .= '&nbsp;';
+            $offerDates .= $daysTillOfferExpires;
+            $offerDates .= '&nbsp;';
+            $offerDates .= $this->zendTranslate->translate('days valid!');
 
-        } elseif ($dayDifference == 1) {
-            $dateFormatString .= $stringOnly;
-            $dateFormatString .= '&nbsp;';
-            $dateFormatString .= $dayDifference;
-            $dateFormatString .= '&nbsp;';
-            $dateFormatString .= $this->zendTranslate->translate('day only!');
+        } elseif ($daysTillOfferExpires == 1) {
+            $offerDates .= $stringOnly;
+            $offerDates .= '&nbsp;';
+            $offerDates .= $daysTillOfferExpires;
+            $offerDates .= '&nbsp;';
+            $offerDates .= $this->zendTranslate->translate('day only!');
 
-        } elseif ($dayDifference == 0) {
-            $dateFormatString .= $this->zendTranslate->translate('Expires today');
+        } elseif ($daysTillOfferExpires == 0) {
+            $offerDates .= $this->zendTranslate->translate('Expires today');
 
         } else {
             $endDate = new Zend_Date(strtotime($currentOffer->endDate));
-            $dateFormatString .= $this->zendTranslate->translate('Expires on').':';
-            $dateFormatString .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
+            $offerDates .= $this->zendTranslate->translate('Expires on').':';
+            $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
         } elseif ($currentOffer->discountType == "PR" || $currentOffer->discountType == "SL" || $currentOffer->discountType == "PA"):
-        $dateFormatString .= $stringAdded;
-        $dateFormatString .= ':';
-        $dateFormatString .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+        $offerDates .= $stringAdded;
+        $offerDates .= ':';
+        $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
         endif;
-        return $offerOption . $dateFormatString;
+        return $offerDates;
     }
-
+    public function getOfferOptionAndOfferDates($currentOffer, $daysTillOfferExpires)
+    {
+        $offerOption = self::getOfferExclusiveOrEditor($currentOffer);
+        $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires);
+        return $offerOption . $offerDates;
+    }
     public function getClassNameForOffer($currentOffer, $offerType)
     {
         $className = 'code';
@@ -137,16 +141,16 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
 
     public function getOfferImage($currentOffer, $offersType)
     {
-        $offerImageDiv ='';
-        if($offersType=='simple') {
+        $offerImageDiv = '';
+        if($offersType == 'simple') {
           $offerDiscountImage = self::getDiscountImage($currentOffer);
-          $altAttributeText = @$currentOffer->tiles['label'];
+          $altAttributeText = $currentOffer->tiles['label'];
           $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
        } else {
            $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
            $altAttributeText = $currentOffer->shop['name'];
            $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
-           $offerImageDiv = $imageTag . '<footer class="bottom">' . self::getOfferFooterText($currentOffer) . '</footer>';
+           $offerImageDiv = $imageTag . '<footer class="bottom">' . self::getOfferTypeText($currentOffer) . '</footer>';
        }
        return $offerImageDiv;
     }
@@ -156,7 +160,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_medium_store_'. $currentOffer->shop['logo']['name'];
     }
     
-    public   function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder) {
+    public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder) {
         $imageTagForOffer = '';
         if ($shopCodeHolder) {
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
@@ -167,25 +171,25 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $imageTagForOffer;
     }
 
-    public function getOfferFooterText($currentOffer)
+    public function getOfferTypeText($currentOffer)
     {
         
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $footerText = $this->zendTranslate->translate('printable');
+            $offerTypeText = $this->zendTranslate->translate('printable');
         } elseif ($currentOffer->discountType=='SL') {
-            $footerText = $this->zendTranslate->translate('sale');
+            $offerTypeText = $this->zendTranslate->translate('sale');
         } elseif ($currentOffer->extendedOffer =='1') {
-            $footerText = $this->zendTranslate->translate('deal');
+            $offerTypeText = $this->zendTranslate->translate('deal');
         } else {
-        	$footerText = 'code';
+        	$offerTypeText = 'code';
         }
-        return $footerText;
+        return $offerTypeText;
     }
 
-    public function getSectionHeader($shopName, $offersType)
+    public function getSimilarShopHeader($shopName, $offersType)
     {
         $similarShopHeader = '';
-        if ($offersType=='similar') {
+        if ($offersType == 'similar') {
             $similarShopHeader = '<header class="heading-box text-coupon">
             <h2>'.$this->zendTranslate->translate('Coupon codes for similar stores').'</h2>
             <strong>'.$this->zendTranslate->translate('Similar vouchers and discounts for'). ' ' . $shopName .'</strong>
@@ -233,6 +237,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         }
         return $secondButton;
     }
+
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
     {
         $termAndConditionLink ='';
@@ -246,7 +251,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         }
         return $termAndConditionLink;
     }
-    
+
     public function getExtendedOfferLink($currentOffer)
     {
         $extendedOfferLink = '';

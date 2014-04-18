@@ -6,9 +6,9 @@ foreach ($this->offers as $offer) {
     $offer = (object) $offer;
     $offerBounceRate = "/out/offer/".$offer->id;
     $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
-    $dayDifference = $offerPartialClass->getDaysDifference($offer->endDate);
+    $daysTillOfferExpires = $offerPartialClass->getDaysTillOfferExpires($offer->endDate);
     $urlToShow = $offerPartialClass->getUrlToShow($offer);
-    $offerTitle = substr($offer->title, 0, 150);
+    $offerTitle = $offer->title;
     $termsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
@@ -21,7 +21,7 @@ foreach ($this->offers as $offer) {
             </a>
             <div class="box">
                 <div class="text">
-                    <p> <?php echo $offerPartialClass->dateStringFormat($offer, $dayDifference)?></p>
+                    <p> <?php echo $offerPartialClass->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
                     <a id="<?php echo $offer->id ;?>"
                     href="<?php echo $urlToShow;?>"
                     rel="nofollow" class="link" target="_blank"
@@ -69,8 +69,8 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    if(($offerCounter == 1 && $this->offersType=='simple')
-        || ($offerCounter == 1 && $this->offersType=='top20')):?>
+    if(($offerCounter == 1 && $this->offersType=='simple' && $this->shop['showSignupOption']=='1')
+        || ($offerCounter == 1 && $this->offersType=='top20' && $this->shop['showSignupOption']=='1')):?>
         <div class="block block-form <?php echo $this->shop=='' ? 'block-form-2' : ''?>">
             <div class="holder">
                  <div class="<?php echo $this->shop=='' ? 'ico-box' : 'icon'?>">
