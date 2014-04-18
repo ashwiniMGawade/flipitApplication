@@ -54,15 +54,28 @@ class OfferController extends Zend_Controller_Action
         $currentDate = date('Y-m-d');
         $couponDetails = Offer::getCouponDetails($extendedUrl);
         $shopImage = PUBLIC_PATH_CDN.$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $couponDetails[0]['shop']['logo']['name'];
-        $this->view->facebookTitle = @$couponDetails[0]['title'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
-        $this->view->facebookImage = $shopImage;
+        
         $this->view->couponDetail = $couponDetails;
         if (count($couponDetails)==0) {
             $this->_redirect(HTTP_PATH_LOCALE.'error');
         }
-        $this->view->headTitle(@trim($this->view->couponDetail[0]['extendedTitle']));
-        $this->view->headMeta()->appendName('description', @trim($this->view->couponDetail[0]['extendedMetaDescription']));
+        $this->view->headTitle(trim($this->view->couponDetail[0]['extendedTitle']));
+        $this->view->headMeta()->appendName('description', trim($this->view->couponDetail[0]['extendedMetaDescription']));
+        
+        if (LOCALE == '') {
+            $facebookImage = 'logo_og.png';
+            $facebookLocale = '';
+        } else {
+            $facebookImage = 'flipit.png';
+            $facebookLocale = LOCALE;
+        }
+        $this->view->facebookTitle = $couponDetails[0]['title'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
+        $this->view->facebookImage = $facebookImage;
+
+        $this->view->facebookDescription = trim($this->view->couponDetail[0]['extendedMetaDescription']);
+        $this->view->facebookLocale = $facebookLocale;
+        $this->view->twitterDescription = trim($this->view->couponDetail[0]['extendedMetaDescription']);
     }
 
     /**
@@ -104,23 +117,18 @@ class OfferController extends Zend_Controller_Action
     public function indexAction()
     {
         $offerPage = Page::getPageFromPageAttribute(6);
-        $this->view->pageTitle = $offerPage->pageTitle;
-        $this->view->headTitle($offerPage->metaTitle);
         if ($offerPage->customHeader) {
             $this->view->layout()->customHeader = "\n" . $offerPage->customHeader;
         }
-        $this->view->headMeta()->setName('description', trim($offerPage->metaDescription));
         $params = $this->_getAllParams();
-        $this->view->facebookTitle = $offerPage->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
+        
         if (LOCALE == '') {
             $facebookImage = 'logo_og.png';
+            $facebookLocale = '';
         } else {
             $facebookImage = 'flipit.png';
+            $facebookLocale = LOCALE;
         }
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
-        $this->view->shopId = '';
-        $this->view->controllerName = $params['controller'];
         $cacheKeyForNewsOffer =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         if ($cacheKeyForNewsOffer) {
             $offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
@@ -128,6 +136,21 @@ class OfferController extends Zend_Controller_Action
         } else {
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
+        $this->view->pageTitle = $offerPage->pageTitle;
+        $this->view->headTitle($offerPage->metaTitle);
+        $this->view->headMeta()->setName('description', trim($offerPage->metaDescription));
+ 
+        $this->view->facebookTitle = $offerPage->pageTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
+        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
+        $this->view->controllerName = $this->getRequest()->getControllerName();
+        $this->view->top20PopularOffers = $offers;
+        $this->view->facebookDescription = trim($offerPage->metaDescription);
+        $this->view->facebookLocale = $facebookLocale;
+        $this->view->twitterDescription = trim($offerPage->metaDescription);
+
+        $this->view->shopId = '';
+        $this->view->controllerName = $params['controller'];
         $this->view->offers = $offers;
         $this->view->offersType = 'top20';
         $this->view->shopName = 'top20';
