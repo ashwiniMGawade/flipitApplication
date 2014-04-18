@@ -305,6 +305,26 @@ EOD;
         $alphabetList .="</ul>";
         return $alphabetList;
     }
+    public static function singUpNewsLetterRedirection($signUpNewsLetterform)
+    {
+        $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
+        $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
+        $signUpStep2Url= HTTP_PATH_LOCALE.self::__link('inschrijven') . '/' . self::__link('stap2') . '/' . base64_encode($emailAddress);
+        return $signUpStep2Url;
+    }
+    
+    public static function signUpNewsLetter($signUpNewsLetterform, $signUpNewsLetter)
+    {
+        if ($signUpNewsLetter->getRequest()->isPost()) {
+            if ($signUpNewsLetterform->isValid($_POST)) {
+                $signUpStep2Url = self::singUpNewsLetterRedirection($signUpNewsLetterform);
+                header('location:'. $signUpStep2Url);
+            } else {
+                $signUpNewsLetterform->highlightErrorElements();
+            }
+        }
+        return true;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
