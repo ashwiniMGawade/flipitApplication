@@ -35,3 +35,10 @@ ul.errors{
     font-size:14px;
     font-weight:bold;
 }
+.popup_block {
+    left: 50%;
+    margin-left: -362px;
+    margin-top: -335px;
+    position: fixed;
+    top: 50%;
+}

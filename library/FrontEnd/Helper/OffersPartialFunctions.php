@@ -208,8 +208,8 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getMainButtonforOffer($currentOffer, $urlToShow, $offerBounceRate)
     {
         if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
-            $onClick =  $currentOffer->discountType == "CD" ? "showCodeInformation($currentOffer->id)," : " "; 
-            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),showCodePopUp(this), ga('send', 'event', 'aff', '$offerBounceRate')";
+            $onClick =  $currentOffer->discountType == "CD" ? "showCodeInformation($currentOffer->id),showCodePopUp(this)," : " ";
+            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate')";
             $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
             '.$this->zendTranslate->translate('>Get code &amp; Open site').' </a>';
         }else{

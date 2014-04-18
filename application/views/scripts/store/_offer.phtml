@@ -20,6 +20,15 @@ foreach ($this->offers as $offer) {
             <?php echo $offerPartialClass->getOfferImage($offer, $this->offersType);?>
             </a>
             <div class="box">
+    <?php
+    if ($offer->discountType == 'PR' || $offer->discountType == 'PA') {
+                ?>
+                <div class="img-code">
+                    <img width="163" height="96" alt="image description" src="<?php echo HTTP_PATH; ?>public/images/code.png">
+                </div>
+    <?php
+    }
+    ?>
                 <div class="text">
                     <p> <?php echo $offerPartialClass->dateStringFormat($offer, $dayDifference)?></p>
                     <a id="<?php echo $offer->id ;?>"
@@ -54,7 +63,7 @@ foreach ($this->offers as $offer) {
             <hr class="alt2">
             <div class="offer">
                 <span><?php echo $this->translate('Grab this offer now:');?></span>
-                <a href="<?php echo $urlToShow;?>">
+                <a target = "_blank" href="<?php echo $urlToShow;?>">
                 <?php echo $this->translate('Open ');?>
                 <?php echo $offer->shop['name']; ?>
                 <?php echo $this->translate(' website');?>
