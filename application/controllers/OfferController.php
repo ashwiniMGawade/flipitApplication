@@ -165,6 +165,11 @@ class OfferController extends Zend_Controller_Action
         $this->view->shopName = 'top20';
         $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 3);
         $this->view->paginator = $paginator;
+        
+        // zend form for sign up news letter and validate form
+        $signUpNewsLetterform = new Application_Form_SignUp();
+        $this->view->form = $signUpNewsLetterform;
+        FrontEnd_Helper_viewHelper::signUpNewsLetter($signUpNewsLetterform, $this);
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
