@@ -1,24 +1,24 @@
 <?php
-$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/partialOffer.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+
+$subTitle = $this->translate('Our most popular codes are listed here');
+$pageLogo = $this->pageLogo;
+echo $this->partial(
+    'partials/_default_page_header.phtml',
+    array('pageTitle' => $this->pageTitle, 'pageLogo'=>$pageLogo ,'subTitle'=>$subTitle )
+);
 ?>
-<div class="header-block">
-    <div class="icon icon-small">
-        <img src="<?php echo HTTP_PATH; ?>public/images/ico-02.png" width="89" height="89" alt="image description">
-    </div>
-    <div class="box">
-        <h1><?php echo $this->translate('Newest Codes');?></h1>
-        <strong><?php echo $this->translate('Our most recent discount codes are listed here'); ?></strong>
-    </div>
-</div>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
 <?php
 if (count($this->paginator)>0) {
-    echo $this->partial('store/_offer.phtml',
+    echo $this->partial(
+        'store/_offer.phtml',
         array('offers'=> $this->offers,
-         'offersType'=>$this->offersType, 'shopName'=> '', 'shop'=>'')
+         'offersType'=>$this->offersType, 'shopName'=> '', 'shop'=>'', 'zendForm'=>$this->form)
     );
 } else {
     ?>

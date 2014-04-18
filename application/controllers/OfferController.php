@@ -155,7 +155,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->offers = $offers;
         $this->view->offersType = 'top20';
         $this->view->shopName = 'top20';
-        $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 40, 3);
+        $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 3);
         $this->view->paginator = $paginator;
     }
     ##################################################################################
