@@ -1,11 +1,12 @@
 <?php
 $offer = (object) $this->offerdetail[0];
 $offerTitle = substr($offer->title, 0, 150);
-$offerDiscountImage = FrontEnd_Helper_OfferPartialFunctions::getDiscountImage($offer);
-$termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
-$urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($offer);
+$offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
+$offerDiscountImage =  $offerPartialClass->getDiscountImage($offer);
+$termsAndConditions =  $offerPartialClass->getOfferTermsAndCondition($offer);
+$urlToShow =  $offerPartialClass->getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
-$offerDayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);
+$offerDayDifference =  $offerPartialClass->getDaysDifference($offer->endDate);
 if (LOCALE == '') {
     $redirectUrl = HTTP_PATH;
     $siteImage = "";
@@ -23,7 +24,7 @@ if (LOCALE == '') {
             </div>
             <div class="box">
                 <div class="text">
-                    <p><?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($offer, $offerDayDifference);?></p>
+                    <p><?php echo  $offerPartialClass->dateStringFormat($offer, $offerDayDifference);?></p>
                     <h1><?php echo $offerTitle; ?></h1>
                 </div>
             </div>
