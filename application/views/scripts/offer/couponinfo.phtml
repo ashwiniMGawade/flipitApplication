@@ -3,7 +3,7 @@ $offer = (object) $this->couponDetail[0];
 $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
 $offerUrlToShow = $offerPartialClass->getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
-$offerDayDifference = $offerPartialClass->getDaysDifference($offer->endDate);
+$daysTillOfferExpires = $offerPartialClass->getDaysTillOfferExpires($offer->endDate);
 $offerTermsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
 $currentDate = date('Y-m-d h:i:s ');
 
@@ -57,7 +57,7 @@ endif;
                     </a>
                     <div class="box">
                         <div class="text">
-                            <p><?php echo $offerPartialClass->dateStringFormat($offer, $offerDayDifference)?></p>
+                            <p><?php echo $offerPartialClass->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
                                 <a id="<?php echo $offer->id ;?>"
                                             href="<?php echo $offerUrlToShow;?>"
                                             rel="nofollow" class="link" target="_blank"
