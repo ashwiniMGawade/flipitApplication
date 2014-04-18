@@ -11,6 +11,7 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/flipit-expired.css");
+
 if (LOCALE == '') {
     $domainName = HTTP_PATH;
 } else {
@@ -35,7 +36,7 @@ endif;
         </a>
     </div>
     <div class="box">
-        <h1><?php echo strlen($offer->title)<= 50 ?  $offer->title : substr($offer->title, 0, 50).'...';?></h1>
+        <h1><?php echo $offer->title;?></h1>
     </div>
 </div>
 <div class="row">
@@ -51,7 +52,7 @@ endif;
         <section class="section">
             <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
                 <div class="holder">
-                    <a class="<?php echo $offerPartialClass->getClassNameForOffer($offer,'simple');?>" href="<?php echo $offerUrlToShow;?>" rel="nofollow"
+                    <a class="<?php echo $offerPartialClass->getClassNameForOffer($offer, 'simple');?>" href="<?php echo $offerUrlToShow;?>" rel="nofollow"
                                 target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
                                 <?php echo $offerPartialClass->getOfferImage($offer, $this->offersType);?>
                     </a>

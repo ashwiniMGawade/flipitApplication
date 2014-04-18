@@ -322,6 +322,78 @@ EOD;
         }
         return true;
     }
+    
+    /**
+     * Common function for social media.
+     * @author Raman updated by cbhopal
+     * @version 1.0
+     * @version 1.1
+     * @param $url string
+     * @param $title string
+     * @param $controller string
+     * @param $type string
+     * @return string
+     */
+    public static function socialmediaSmall($url='', $type = null)
+    {
+        $trans = Zend_Registry::get('Zend_Translate');
+        $socialMediaTitle = "<h2>".$trans->translate('Share')."</h2>
+            <span>".$trans->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+        $controller = zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+        if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
+            $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
+            $socialMediaUrl = self::generateSocialLink($socialMediaUrl);
+        else:
+            $socialMediaUrl = HTTP_PATH;
+        endif;
+    
+        if($type == 'widget'):
+            $socialMedia="<div class='flike-outer'>
+                <div id='fb-root'></div>
+                <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
+                </div>
+                </div>
+                <div class='flike-outer'>
+                <a href='https://twitter.com/share' data-count='vertical' class='twitter-share-button' data-url='".$socialMediaUrl."' data-lang='nl' data-count = 'none'></a>
+                </div>
+                <div class='flike-outer'><div class='g-plus' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
+                </div>";
+        elseif ($type == 'popup'):
+            $socialMedia="<div class='flike-outer'>
+                <div id='fb-root'></div>
+                <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
+                </div>
+                </div>
+                <div class='flike-outer'>
+                <a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button'  data-lang='nl' data-count = 'none'></a>
+                </div>
+                <div class='flike-outer'>
+                <div class='g-plus'   data-href='".$socialMediaUrl."'  data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
+                </div>";
+        else:
+    
+            $socialMedia = "<article class='block'>
+                <div class='social-likes'>
+                <div class='intro'>
+                ".$socialMediaTitle."
+                </div>
+                <ul class='share-list'>
+                <li>
+                <div id='fb-root'></div>
+                <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-layout='box_count' data-width='50' data-show-faces='false'>&nbsp;</div>
+                </li>
+                <li>
+                <a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button'  data-lang='nl'></a>
+                </li>
+                <li>
+                <div class='g-plus' data-href='".$socialMediaUrl."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
+                </li>
+                </ul>
+                </div></article>";
+        endif;
+    
+        return $socialMedia;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -409,78 +481,6 @@ EOD;
         }
 
         return $string;
-    }
-
-    /**
-   * Common function for social media.
-   * @author Raman updated by cbhopal
-   * @version 1.0
-   * @version 1.1
-   * @param $url string
-   * @param $title string
-   * @param $controller string
-   * @param $type string
-   * @return string
-   */
-    public static function socialmediaSmall($url='', $type = null)
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $socialMediaTitle = "<h2>".$trans->translate('Share')."</h2>
-         <span>".$trans->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
-        $controller = zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-        if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
-            $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
-            $socialMediaUrl = self::generateSocialLink($socialMediaUrl);
-        else:
-            $socialMediaUrl = HTTP_PATH;
-        endif;
-
-        if($type == 'widget'):
-        $socialMedia="<div class='flike-outer'>
-        <div id='fb-root'></div>
-        <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-        </div>
-        </div>
-        <div class='flike-outer'>
-        <a href='https://twitter.com/share' data-count='vertical' class='twitter-share-button' data-url='".$socialMediaUrl."' data-lang='nl' data-count = 'none'></a>
-        </div>
-        <div class='flike-outer'><div class='g-plus' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-        </div>";
-        elseif ($type == 'popup'):
-            $socialMedia="<div class='flike-outer'>
-                            <div id='fb-root'></div>
-                            <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-                            </div>
-                            </div>
-                            <div class='flike-outer'>
-                            <a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button'  data-lang='nl' data-count = 'none'></a>
-                            </div>
-                            <div class='flike-outer'>
-                            <div class='g-plus'   data-href='".$socialMediaUrl."'  data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-            </div>";
-        else:
-
-        $socialMedia = "<article class='block'>
-        <div class='social-likes'>
-            <div class='intro'>
-                ".$socialMediaTitle."
-            </div>
-            <ul class='share-list'>
-            <li>
-                    <div id='fb-root'></div>
-                    <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-layout='box_count' data-width='50' data-show-faces='false'>&nbsp;</div>
-             </li>
-                <li>
-                    <a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button'  data-lang='nl'></a>
-                </li>
-                <li>
-                    <div class='g-plus' data-href='".$socialMediaUrl."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-                </li>
-            </ul>
-        </div></article>";
-        endif;
-
-        return $socialMedia;
     }
 
     /**

@@ -36,6 +36,18 @@ class Page extends BasePage
 		
 		return $pageAttributes;
 	}
+    
+    public static function getPageFromPageAttribute($id)
+    {
+    
+        $page = Doctrine_Query::create()->select('p.*,i.path,i.name')
+        ->from('Page p')->leftJoin('p.logo i')
+        ->where("pageAttributeId = ?", $id)
+        ->andWhere('p.deleted=0')
+        ->orderBy('id DESC')
+        ->fetchOne();
+        return $page;
+    }
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -1066,18 +1078,6 @@ public static function exportpagelist() {
 		->where("permaLink = '". $permalink ."'")
 		->andWhere('p.deleted=0')
 		->fetchArray();
-		return $data;
-	}
-	
-	public static function getPageFromPageAttribute($id){
-	
-		$data = Doctrine_Query::create()->select('p.*')
-		->from('Page p')
-		->where("pageAttributeId = ?", $id)
-		->andWhere('p.deleted=0')
-		->orderBy('id DESC')
-		->fetchOne();
-
 		return $data;
 	}
 
