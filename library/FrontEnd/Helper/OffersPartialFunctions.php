@@ -87,9 +87,9 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         $offerDates = '';
         if($currentOffer->discountType == "CD"):
             $offerDates .= $stringAdded;
-            $offerDates .= ':';
+            $offerDates .= ': ';
             $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
-            $offerDates .= ',';
+            $offerDates .= ', ';
 
         if ($daysTillOfferExpires ==5 || $daysTillOfferExpires ==4 || $daysTillOfferExpires ==3 || $daysTillOfferExpires ==2) {
             $offerDates .= $stringOnly;
@@ -110,11 +110,11 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
 
         } else {
             $endDate = new Zend_Date(strtotime($currentOffer->endDate));
-            $offerDates .= $this->zendTranslate->translate('Expires on').':';
+            $offerDates .= $this->zendTranslate->translate('Expires on').': ';
             $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
         } elseif ($currentOffer->discountType == "PR" || $currentOffer->discountType == "SL" || $currentOffer->discountType == "PA"):
         $offerDates .= $stringAdded;
-        $offerDates .= ':';
+        $offerDates .= ': ';
         $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
         endif;
         return $offerDates;
