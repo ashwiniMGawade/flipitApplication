@@ -1,23 +1,7 @@
 <?php
-$offer = (object) $this->couponDetail[0];
-$offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
-$offerUrlToShow = $offerPartialClass->getUrlToShow($offer);
-$offerBounceRate = "/out/offer/".$offer->id;
-$daysTillOfferExpires = $offerPartialClass->getDaysTillOfferExpires($offer->endDate);
-$offerTermsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
-$currentDate = date('Y-m-d h:i:s ');
-
-$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/flipit-expired.css");
-
-if (LOCALE == '') {
-    $domainName = HTTP_PATH;
-} else {
-    $domainName = HTTP_PATH_LOCALE;
-}
-
 $shopDiscussion = '';
 $partialViewPath = 'partials/';
 if($offer->shop['discussions'] == 1):
@@ -48,65 +32,19 @@ endif;
             <span class="text">Sorry, this coupon is already expired. Maybe the following coupon can help you</span>
         </div>
     </div>
-    <?php }?>
-        <section class="section">
-            <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
-                <div class="holder">
-                    <a class="<?php echo $offerPartialClass->getClassNameForOffer($offer, 'simple');?>" href="<?php echo $offerUrlToShow;?>" rel="nofollow"
-                                target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                                <?php echo $offerPartialClass->getOfferImage($offer, $this->offersType);?>
-                    </a>
-                    <div class="box">
-                        <div class="text">
-                            <p><?php echo $offerPartialClass->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
-                                <a id="<?php echo $offer->id ;?>"
-                                            href="<?php echo $offerUrlToShow;?>"
-                                            rel="nofollow" class="link" target="_blank"
-                                            onClick="<?php echo $offer->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-                                            <?php echo $offer->title;?>
-                                </a>
-                        </div>
-                        <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
-                        <?php
-                        echo $offerPartialClass->getMainButtonforOffer($offer, $offerUrlToShow, $offerBounceRate);
-                        echo $offerPartialClass->getSecondButtonforOffer($offer, $offerUrlToShow, $offerBounceRate);
-                        ?>
-                       </div>
-                       <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                            <span class="instruction"><strong><?php echo $this->translate('enter this code at checkout')?></strong></span>
-                            <strong class="code-value"><?php echo $offer->couponCode;?></strong>
-                       </div>
-                       <ul class="view-list">
-                           <li>
-                               <a href="<?php echo $domainName.$offer->shop['name']; ?>">
-                                    <?php echo $this->translate('View all ').$offer->shop['name']. $this->translate(' Voucher Codes');?>
-                               </a>
-                           </li>
-                       </ul>
-                   </div>
-               </div>
-           </article>
-           <div class="code-details">
-               <article class="box">
-                   <h2>About this voucher</h2>
-                   <p><?php echo $offer->extendedFullDescription;?></p>
-               </article>
-               <article class="box terms-block">
-                   <h2>Terms &amp; Conditions</h2>
-                   <ol class="num-list">
-                   <?php echo $offerTermsAndConditions;?>
-                   </ol>
-               </article>
-               <article class="box box-2">
-                   <h2><?php  echo $this->translate('How to Use The Voucher Codes'); ?></h2>
-                   <p><?php  echo $this->translate('Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapi bus lacus sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius.');?></p>
-                       <div class="visual-img">
-                           <img src="<?php echo HTTP_PATH;?>public/images/img-02.jpg" width="700" height="200" alt="image description">
-                       </div>
-               </article>
-        </div>
-    </section>
-    <?php echo $shopDiscussion;?>
+    <?php }
+    echo $this->partial(
+        'store/_offer.phtml',
+        array(
+            'offers' => array($this->couponDetail[0]),
+            'offersType'=>'top20',
+            'shopName' =>'',
+            'shop' =>'',
+            'zendForm'=>$this->form
+        )
+    );
+?>
+      <?php echo $shopDiscussion;?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
 <?php
