@@ -152,20 +152,11 @@ endif;
     ?>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
-<?php
-echo $shopEditor;
-echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl);
-?>
-
-<?php
+    <?php
+    echo $shopEditor;
+    echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl);
 if (count($this->latestShopUpdates) > 0):?>
-
-        <section class="block">
-            <h2><?php echo $this->translate('Latest news about').' '.$this->currentStoreInformation[0]['name'];?></h2>
-   <?php echo $this->partialLoop($storeViewPartialPath.'_latestNews.phtml', $this->latestShopUpdates); ?>
-        </section>
-
-   <?php
+    <?php echo $this->partial($storeViewPartialPath.'_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
 endif;
 ?>
 
@@ -187,7 +178,7 @@ if(isset($this->popularStoresList)):
 endif;
         
 if ($this->currentStoreInformation[0]['showSignupOption']) :
-  echo $this->esi($this->locale.$storeViewPartialPath.'signupwidget'); 
+    echo $this->esi($this->locale.$storeViewPartialPath.'signupwidget');
 endif;
 ?>
     </aside>
