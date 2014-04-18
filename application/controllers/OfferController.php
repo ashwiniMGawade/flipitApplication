@@ -71,6 +71,12 @@ class OfferController extends Zend_Controller_Action
             $facebookImage = 'flipit.png';
             $facebookLocale = LOCALE;
         }
+        
+        $currentDate = date('Y-m-d');
+        $relatedOffer = Offer::getrelatedOffers ($couponDetails[0]['shopId'], $currentDate );
+       // echo "<pre>"; print_r($relatedOffer); die;
+        $this->view->relatedOffer = $relatedOffer;
+        
         $this->view->facebookTitle = $couponDetails[0]['title'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
         $this->view->facebookImage = $facebookImage;

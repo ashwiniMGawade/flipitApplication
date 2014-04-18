@@ -1696,14 +1696,14 @@ class Offer extends BaseOffer
      {
         $date = date('Y-m-d H:i:s');
         $relatedOffers = Doctrine_Query::create()
-                        ->select('o.*,s.id,s.name,s.permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+                        ->select('o.*,s.*,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                         ->from('offer o')
                         ->leftJoin('o.shop s')
                         ->leftJoin('o.logo ologo')
                         ->leftJoin('o.termandcondition tc')
                         ->leftJoin('s.logo img')
                         ->leftJoin('s.screenshot ws')
-                        ->Where('o.extendedOffer=?','1')
+                        //->Where('o.extendedOffer=?','1')
                         ->andWhere('o.shopId=?',$shopId)
                         ->andWhere('o.endDate > ?',$currentDate)
                         ->andWhere('o.startdate <= "'.$date.'"')

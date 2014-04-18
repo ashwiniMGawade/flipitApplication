@@ -2,21 +2,47 @@
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/flipit-expired.css");
+
+$currentDate = date('Y-m-d h:i:s ');
+$offer = (object) $this->couponDetail[0];
+//echo strtotime($offer->endDate) ."<br/>". strtotime($currentDate); die;
+//$offerTemp =  $offer->endDate <= $currentDate ? $this->couponDetail[0] : $this->relatedOffer[0];
 $shopDiscussion = '';
 $partialViewPath = 'partials/';
 if($offer->shop['discussions'] == 1):
     $shopDiscussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
 endif;
 
+$offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
+$message = $offerPartialClass->getExpiredOfferMessage($offer->endDate, $currentDate);
+
+$extenderOffer = $this->partial(
+    'store/_offer.phtml',
+    array(
+    'offers' => array($message=='' ? $this->couponDetail[0] : $this->relatedOffer[0]),
+    'offersType'=>'expiredOffer',
+    'shopName' =>'',
+    'shop' =>'',
+    'zendForm'=>$this->form
+    )
+);
+
+$termsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
+$termAndCondition = $this->partial(
+    'offer/_howToUseAndAboutOffer.phtml',
+    array(
+        'termAndCondition' => $termsAndConditions,
+        'offerDescription'=>$offer->extendedFullDescription,
+        'expiredOffer'=>$this->couponDetail[0],
+    )
+);
+
 ?>
 <div class="header-block header-block-2">
     <div class="icon">
-        <?php
-         $shopLink = HTTP_PATH_LOCALE.$offer->shop['permaLink'];
-         $shopPicture = PUBLIC_PATH_CDN . ltrim($offer->shop['logo']['path'], "/") .'thum_big_'. $offer->shop['logo']['name'];
-         ?>
+        <?php $shopLink = HTTP_PATH_LOCALE.$offer->shop['permaLink']; ?>
         <a href= "<?php echo $shopLink; ?>">
-            <img src="<?php echo $shopPicture;?>" width="176" height="89" alt="<?php echo $offer->shop['name'];?>">
+            <img src="<?php echo $offerPartialClass->getShopLogoForOffer($offer);?>" width="176" height="89" alt="<?php echo $offer->shop['name'];?>">
         </a>
     </div>
     <div class="box">
@@ -25,32 +51,21 @@ endif;
 </div>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-    <?php if ($offer->endDate < $currentDate) { ?>
-    <div class="warning-message">
-        <div class="holder">
-            <span class="ico-warning"></span>
-            <span class="text">Sorry, this coupon is already expired. Maybe the following coupon can help you</span>
-        </div>
-    </div>
-    <?php }
-    echo $this->partial(
-        'store/_offer.phtml',
-        array(
-            'offers' => array($this->couponDetail[0]),
-            'offersType'=>'top20',
-            'shopName' =>'',
-            'shop' =>'',
-            'zendForm'=>$this->form
-        )
-    );
-?>
-      <?php echo $shopDiscussion;?>
+    <?php 
+    echo $message;
+    echo $extenderOffer;
+    echo $termAndCondition;
+    ?>
+    </section>
+    <?php 
+    echo $shopDiscussion;
+    ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-<?php
-$locale = LOCALE != 'en'? LOCALE. '/' : '';
-echo $this->esi($locale.'store/signupwidget');
-echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20');
-?>
+    <?php
+    $locale = LOCALE != 'en'? LOCALE. '/' : '';
+    echo $this->esi($locale.'store/signupwidget');
+    echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20');
+    ?>
     </aside>
 </div>

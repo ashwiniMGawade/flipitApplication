@@ -263,4 +263,24 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         endif;
         return $extendedOfferLink;
     }
+    
+    public function getViewAllCodeLink($shopName)
+    {
+       return $viewAllLink ='<a href="' . $shopName . '">'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</a>';
+    }
+    
+    public function getExpiredOfferMessage($endDate, $currentDate)
+    {
+        $expiredOfferMessage= '';
+        if ($endDate < $currentDate) {
+            $expiredOfferMessage = '<div class="warning-message">
+            <div class="holder">
+            <span class="ico-warning"></span>
+            <span class="text">'.$this->zendTranslate->translate("Sorry, this coupon is already expired. Maybe the following coupon can help you"). '</span>
+            </div>
+            </div>';
+        }
+        return $expiredOfferMessage;
+    }
+    
 }
