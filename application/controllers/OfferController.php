@@ -138,6 +138,7 @@ class OfferController extends Zend_Controller_Action
         } else {
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
+        $this->view->content = $offerPage->content;
         $this->view->pageTitle = $offerPage->pageTitle;
         $this->view->headTitle($offerPage->metaTitle);
         $this->view->headMeta()->setName('description', trim($offerPage->metaDescription));
