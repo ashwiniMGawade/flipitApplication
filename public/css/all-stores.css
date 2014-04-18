@@ -169,3 +169,13 @@
     margin: 15px 0 5px;
   }
 }
+
+.popup_block {
+position:fixed;
+top:50%;
+left:50%;
+margin-left:-362px;
+/* negative half from the width */
+margin-top:/* negative half from the height */
+-335px
+}
