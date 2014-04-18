@@ -104,7 +104,7 @@ class StoreController extends Zend_Controller_Action
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
-    
+
         // zend form for sign up news letter and validate form
         $signUpNewsLetterform = new Application_Form_SignUp();
         $this->view->form = $signUpNewsLetterform;
