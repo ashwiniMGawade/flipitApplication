@@ -5,16 +5,24 @@ $offerUrlToShow = $offerPartialClass->getUrlToShow($offer);
 $offerBounceRate = "/out/offer/".$offer->id;
 $offerDayDifference = $offerPartialClass->getDaysDifference($offer->endDate);
 $offerTermsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
+$currentDate = date('Y-m-d h:i:s ');
 
 $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadLink()->prependStylesheet("/public/css/flipit-expired.css");
+if (LOCALE == '') {
+    $domainName = HTTP_PATH;
+} else {
+    $domainName = HTTP_PATH_LOCALE;
+}
 
 $shopDiscussion = '';
 $partialViewPath = 'partials/';
 if($offer->shop['discussions'] == 1):
     $shopDiscussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
 endif;
+
 ?>
 <div class="header-block header-block-2">
     <div class="icon">
@@ -32,6 +40,14 @@ endif;
 </div>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
+    <?php if ($offer->endDate < $currentDate) { ?>
+    <div class="warning-message">
+        <div class="holder">
+            <span class="ico-warning"></span>
+            <span class="text">Sorry, this coupon is already expired. Maybe the following coupon can help you</span>
+        </div>
+    </div>
+    <?php }?>
         <section class="section">
             <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
                 <div class="holder">
@@ -60,13 +76,6 @@ endif;
                             <strong class="code-value"><?php echo $offer->couponCode;?></strong>
                        </div>
                        <ul class="view-list">
-<?php 
-if (LOCALE == '') {
-    $domainName = HTTP_PATH;
-} else {
-    $domainName = HTTP_PATH_LOCALE;
-}
-?>
                            <li>
                                <a href="<?php echo $domainName.$offer->shop['name']; ?>">
                                     <?php echo $this->translate('View all ').$offer->shop['name']. $this->translate(' Voucher Codes');?>
@@ -84,7 +93,7 @@ if (LOCALE == '') {
                <article class="box terms-block">
                    <h2>Terms &amp; Conditions</h2>
                    <ol class="num-list">
-                       <?php echo $offerTermsAndConditions;?>
+                   <?php echo $offerTermsAndConditions;?>
                    </ol>
                </article>
                <article class="box box-2">
@@ -96,7 +105,7 @@ if (LOCALE == '') {
                </article>
         </div>
     </section>
-<?php echo $shopDiscussion;?>
+    <?php echo $shopDiscussion;?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
 <?php
