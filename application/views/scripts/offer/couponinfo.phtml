@@ -15,8 +15,6 @@ $partialViewPath = 'partials/';
 if($offer->shop['discussions'] == 1):
     $shopDiscussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
 endif;
-
-?>
 ?>
 <div class="header-block header-block-2">
     <div class="icon">
@@ -37,7 +35,7 @@ endif;
         <section class="section">
             <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
                 <div class="holder">
-                    <a class="<?php echo $offerPartialClass->getClassNameForOffer($offer);?>" href="<?php echo $offerUrlToShow;?>" rel="nofollow"
+                    <a class="<?php echo $offerPartialClass->getClassNameForOffer($offer,'simple');?>" href="<?php echo $offerUrlToShow;?>" rel="nofollow"
                                 target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
                                 <?php echo $offerPartialClass->getOfferImage($offer, $this->offersType);?>
                     </a>

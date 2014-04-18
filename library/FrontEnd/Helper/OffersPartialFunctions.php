@@ -169,15 +169,17 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
 
     public function getOfferFooterText($currentOffer)
     {
-        $className = 'code';
+        
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $className .= $this->zendTranslate->translate('printable');
+            $footerText = $this->zendTranslate->translate('printable');
         } elseif ($currentOffer->discountType=='SL') {
-            $className .= $this->zendTranslate->translate('sale');
+            $footerText = $this->zendTranslate->translate('sale');
         } elseif ($currentOffer->extendedOffer =='1') {
-            $className .= $this->zendTranslate->translate('deal');
+            $footerText = $this->zendTranslate->translate('deal');
+        } else {
+        	$footerText = 'code';
         }
-        return $className;
+        return $footerText;
     }
 
     public function getSectionHeader($shopName, $offersType)
