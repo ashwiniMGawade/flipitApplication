@@ -3,5 +3,5 @@ $headMeta = FrontEnd_Helper_viewHelper::getHeadMeta($this);
 
 foreach ($headMeta as $socialMediakey=> $socialMediavalue)
 {
-   echo $this->headMeta()->setProperty($socialMediakey, $socialMediavalue);
+   $this->headMeta()->setProperty($socialMediakey, $socialMediavalue);
 }

@@ -217,7 +217,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
             '.$this->zendTranslate->translate('>Get code &amp; Open site').' </a>';
         }else{
-            $onClick =  self::getUserIsLoginOrNot() == "true" ? "showPrintPopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
+            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "showPrintPopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
             $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href = "'.$urlToShow.'"  href="javascript:void(0);" target="_blank" onclick = "'.$onClick.'" rel="nofollow">'.$this->zendTranslate->translate('>Get code &amp; Open site').'</a>';
         }
         return $mainButton;
@@ -227,7 +227,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $secondButton = '';
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $onClick =  self::getUserIsLoginOrNot() == "true" ? "printIt('$urlToShow');" : " ";
+            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : " ";
             $secondButton = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$this->zendTranslate->translate('print now').'<span class="ico-print"></span></a>';
         }else if ($currentOffer->discountType=='CD') {
             $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate')";
