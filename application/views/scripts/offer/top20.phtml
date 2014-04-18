@@ -1,13 +1,14 @@
 <?php
-
-$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/partialOffer.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
-echo $this->partial('partials/_top_new_popular_header.phtml',
-    array('active' => 'top20', 'pageTitle' => $this->pageTitle)
+$subTitle = $this->translate('Our most popular codes are listed here');
+$pageLogo = $this->pageLogo;
+echo $this->partial(
+    'partials/_default_page_header.phtml',
+    array('pageTitle' => $this->pageTitle, 'pageLogo'=>$pageLogo ,'subTitle'=>$subTitle )
 );
 ?>
 <div class="row">
