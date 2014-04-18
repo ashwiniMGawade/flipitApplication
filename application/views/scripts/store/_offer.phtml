@@ -24,7 +24,7 @@ foreach ($this->offers as $offer) {
     if ($offer->discountType == 'PR' || $offer->discountType == 'PA') {
                 ?>
                 <div class="img-code">
-                    <img width="163" height="96" alt="image description" src="<?php echo HTTP_PATH; ?>public/images/code.png">
+                    <img width="163" height="96" alt="image description" src="<?php echo $urlToShow; ?>">
                 </div>
     <?php
     }

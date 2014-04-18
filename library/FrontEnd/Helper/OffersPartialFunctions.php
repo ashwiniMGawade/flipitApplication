@@ -152,6 +152,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
            $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
            $offerImageDiv = $imageTag . '<footer class="bottom">' . self::getOfferTypeText($currentOffer) . '</footer>';
        }
+      
        return $offerImageDiv;
     }
 
