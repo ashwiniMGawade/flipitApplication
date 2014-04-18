@@ -1,7 +1,7 @@
 <?php
 class FrontEnd_Helper_ExpiredOffersPartialFunction extends FrontEnd_Helper_viewHelper{
     
-    public static function getExpiredOfferUrl($offer) {
+    public function getExpiredOfferUrl($offer) {
         if($offer->extendedOffer == 1):
             $expiredOfferUrl = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('deals').'/'.$offer->extendedUrl;
         else:
@@ -10,7 +10,7 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction extends FrontEnd_Helper_viewH
         return $expiredOfferUrl;
     }
     
-    public static function getOfferTitle($offerTitle) {
+    public function getOfferTitle($offerTitle) {
         if ($offerTitle!=null && $offerTitle!=''):
             $expiredOfferTitle = $offerTitle;
             if (strlen($offerTitle) > 60):
@@ -20,7 +20,7 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction extends FrontEnd_Helper_viewH
         return $expiredOfferTitle;
     }
     
-    public static function getOfferCouponCode($offerCouponCode) {
+    public function getOfferCouponCode($offerCouponCode) {
         $OfferSpan = '';
         if ($offerCouponCode!=null && $offerCouponCode!=''):
             $expiredOfferCouponCode = $offerCouponCode;
@@ -32,21 +32,19 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction extends FrontEnd_Helper_viewH
         return $OfferSpan;
     }
     
-    public static function getExpiredOnDate($offerEndDate) {
-        $expiredOn = '';
-        $zendTranslate = Zend_Registry::get('Zend_Translate');
-        $expiredOn =  $zendTranslate->translate('Expired on:');
+    public function getExpiredOnDate($offerEndDate) {
+        $offerExpiredOn = '';
+        $offerExpiredOn =  $this->zendTranslate->translate('Expired on:');
         $expiredOfferDate = new Zend_Date($offerEndDate);
-        $expiredOn = $expiredOn.ucwords($expiredOfferDate->get(Zend_Date::DATE_MEDIUM));
-        return $expiredOn;
+        $offerExpiredOn = $offerExpiredOn.ucwords($expiredOfferDate->get(Zend_Date::DATE_MEDIUM));
+        return $offerExpiredOn;
     }
     
-    public static function getExpiredOffersHeader($shopName) {
-        $zendTranslate = Zend_Registry::get('Zend_Translate');
+    public function getExpiredOffersHeader($shopName) {
         $offerHeader = '';
         $offerHeader = '<header class="heading-box text-expired">
-        <h2>' . $zendTranslate->translate('Expired').' '. $shopName .' '.$zendTranslate->translate("vouchers and discounts"). '</h2>
-        <strong>'. $zendTranslate->translate('Unfortunately ... These discount codes from').' '.$shopName.' '.$zendTranslate->translate("you’ve missed") .'</strong>
+        <h2>' . $this->zendTranslate->translate('Expired').' '. $shopName .' '.$this->zendTranslate->translate("vouchers and discounts"). '</h2>
+        <strong>'. $this->zendTranslate->translate('Unfortunately ... These discount codes from').' '.$shopName.' '.$this->zendTranslate->translate("you’ve missed") .'</strong>
         </header>';
         return $offerHeader;
     }

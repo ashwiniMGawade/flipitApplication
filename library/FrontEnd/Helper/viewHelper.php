@@ -5,6 +5,10 @@ class FrontEnd_Helper_viewHelper
     ##################################################################################
     ################## REFACTORED CODE ###############################################
     ##################################################################################
+    public $zendTranslate = '';
+    public function __construct() {
+        $this->zendTranslate =Zend_Registry::get('Zend_Translate');
+    }
     /**
      *
     * @param string $message message to write into log file

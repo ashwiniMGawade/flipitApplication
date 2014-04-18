@@ -1,26 +1,27 @@
 <section class="section">
 <?php
-$dummyPartialCounter = '';
+$offerCounter = '';
 foreach ($this->offers as $offer) {
-    $dummyPartialCounter++;
+    $offerCounter++;
     $offer = (object) $offer;
-    $offerTitle = substr($offer->title, 0, 150);
-    $termsAndConditions = FrontEnd_Helper_OfferPartialFunctions::getOfferTermsAndCondition($offer);
-    $urlToShow = FrontEnd_Helper_OfferPartialFunctions::getUrlToShow($offer);
-    $userLoginStatus = FrontEnd_Helper_OfferPartialFunctions::getUserIsLoginOrNot();
     $offerBounceRate = "/out/offer/".$offer->id;
-    $dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($offer->endDate);
+    $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
+    $dayDifference = $offerPartialClass->getDaysDifference($offer->endDate);
+    $urlToShow = $offerPartialClass->getUrlToShow($offer);
+    $offerTitle = substr($offer->title, 0, 150);
+    $termsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
         <div class="holder">
-            <a class="<?php echo FrontEnd_Helper_OfferPartialFunctions::getClassNameForOffer($offer, $this->offersType);?>" href="<?php echo $urlToShow;?>" rel="nofollow"
+            <a class="<?php echo $offerPartialClass->getClassNameForOffer($offer, $this->offersType);?>" 
+            href="<?php echo $urlToShow;?>" rel="nofollow"
             target="_blank"
             onClick="viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-            <?php echo FrontEnd_Helper_OfferPartialFunctions::getOfferImage($offer, $this->offersType);?>
+            <?php echo $offerPartialClass->getOfferImage($offer, $this->offersType);?>
             </a>
             <div class="box">
                 <div class="text">
-                    <p> <?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($offer, $dayDifference)?></p>
+                    <p> <?php echo $offerPartialClass->dateStringFormat($offer, $dayDifference)?></p>
                     <a id="<?php echo $offer->id ;?>"
                     href="<?php echo $urlToShow;?>"
                     rel="nofollow" class="link" target="_blank"
@@ -30,8 +31,8 @@ foreach ($this->offers as $offer) {
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
-    echo FrontEnd_Helper_OfferPartialFunctions::getMainButtonforOffer($offer, $urlToShow, $offerBounceRate);
-    echo FrontEnd_Helper_OfferPartialFunctions::getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate);
+    echo $offerPartialClass->getMainButtonforOffer($offer, $urlToShow, $offerBounceRate);
+    echo $offerPartialClass->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate);
     ?>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
@@ -41,26 +42,10 @@ foreach ($this->offers as $offer) {
     
                 <ul class="view-list">
                     <li>
-    <?php
-    if ($offer->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) { ?>
-                        <a id="termAndConditionLink<?php echo $offer->id ;?>" onclick="showTermAndConditions(<?php echo $offer->id; ?>)" class="terms"
-                        href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp;
-                        <?php echo $this->translate('Conditions'); ?>
-                        </a>
-        <?php
-        if ($termsAndConditions!='' && $termsAndConditions!=null && $offer->extendedOffer =='1') {?>
-            &nbsp; | &nbsp;
-            <?php
-        }
-    }?>
-    <?php
-    if ($offer->extendedOffer =='1'):?>
-                        <a class="text-blue-link"
-                        href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_OfferPartialFunctions::__link('deals').'/'. $offer->extendedUrl;?>">
-                        <?php echo $this->translate('More about this code'); ?>
-                        </a>
-        <?php
-    endif;?>
+    <?php 
+    echo $offerPartialClass->getTermAndConditionsLink($offer, $termsAndConditions);
+    echo $offerPartialClass->getExtendedOfferLink($offer);
+    ?>
                     </li>
                 </ul>
             </div>
@@ -83,29 +68,28 @@ foreach ($this->offers as $offer) {
             </ol>
         </div>
     </article>
-    
     <?php
-    if(($dummyPartialCounter == 1 && $this->offersType=='simple')
-        || ($dummyPartialCounter == 1 && $this->offersType=='top20')):?>
+    if(($offerCounter == 1 && $this->offersType=='simple')
+        || ($offerCounter == 1 && $this->offersType=='top20')):?>
         <div class="block block-form <?php echo $this->shop=='' ? 'block-form-2' : ''?>">
             <div class="holder">
                  <div class="<?php echo $this->shop=='' ? 'ico-box' : 'icon'?>">
-                    <?php echo FrontEnd_Helper_OfferPartialFunctions::getShopLogoForSignUp($this->shop);?>
+                 <?php echo $offerPartialClass->getShopLogoForSignUp($this->shop);?>
                  </div>
-                <?php 
-                if (!Auth_VisitorAdapter::hasIdentity()) {?>
-                    <div class="box">
-                        <h2><?php echo $this->translate('Receive weekly updates of the best offers?');?><br> 
-                        <?php echo $this->translate('Sign up for our newsletter!');?></h2>
-                        <?php echo $this->zendForm;?>
-                    </div>
-                    <?php 
-                }
-               ?>
+        <?php 
+        if (!Auth_VisitorAdapter::hasIdentity()) {?>
+                 <div class="box">
+                      <h2><?php echo $this->translate('Receive weekly updates of the best offers?');?><br> 
+                      <?php echo $this->translate('Sign up for our newsletter!');?>
+                      </h2>
+                      <?php echo $this->zendForm;?>
+                 </div>
+            <?php 
+        }
+        ?>
            </div>
         </div>
         <?php 
     endif;
-}
-?>
+}?>
 </section>
