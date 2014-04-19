@@ -409,7 +409,8 @@ EOD;
     
     public static function getHeaderBlockContent($affliateBounceRate, $affliateUrl, $affliateDisabled, $affliateClass, $shop, $message, $offerTitle)
     {
-         $divContent ='<div class="header-block header-block-2">
+        $trans = Zend_Registry::get('Zend_Translate');
+        $divContent ='<div class="header-block header-block-2">
                 <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
                 <div class="icon">
                     <a target="_blank" rel="nofollow" 
@@ -418,7 +419,7 @@ EOD;
                     </a>
                 </div> <div class="box">';
         if ($message !='storeDetail') {
-         	$shop['subTitle'] = 'Expired '.$shop['name'].' copuon code';
+         	$shop['subTitle'] = $trans->translate('Expired').' '.$shop['name'].' '.$trans->translate('copuon code');
         } else {
          	$shop['subTitle'] = $shop['subTitle'];
         }

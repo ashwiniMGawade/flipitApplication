@@ -64,7 +64,14 @@ foreach ($this->offers as $offer) {
                 </ul>
             </div>
         </div>
-        <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>">
+    <?php
+    if ($this->offersType!='expiredOffer') {
+            $style = '';
+    } else {
+            $style = 'style="display:block;"';
+    }
+    ?>
+        <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style; ?>>
             <hr class="alt2">
             <div class="offer">
                 <span><?php echo $this->translate('Grab this offer now:');?></span>

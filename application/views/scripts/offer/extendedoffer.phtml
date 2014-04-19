@@ -42,12 +42,18 @@ echo $headerBlock = FrontEnd_Helper_viewHelper::getLoveRelatedVariables($offer->
     <?php 
     echo $message;
     echo $extenderOffer;
+if ($message != '') { ?>
+         </section>
+    <?php
+}
     echo $termAndCondition;
+if ($message == '') {
     ?>
-    </section>
-    <!-- This is conditionally closed from _offer.phtml -->
+         </section>
     <?php 
-    echo $shopDiscussion;
+}
+        echo $shopDiscussion;
+    
     ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
