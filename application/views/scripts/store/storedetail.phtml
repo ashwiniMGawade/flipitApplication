@@ -80,24 +80,9 @@ if($this->profileImage['addtosearch'] == 1):
 endif;
 
 $getPermaLinkNewOffer = Page::getPageFromPageAttribute(6);
-$bounceRate = "/out/shop/".@$this->currentStoreInformation[0]['id'];
-$shopUrl = HTTP_PATH_LOCALE.'out/shop/'.@$this->currentStoreInformation[0]['id'];
 $howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $offersCount = count($this->offers);
-
-$affliateProgramUrl = @$this->currentStoreInformation[0]['affliateProgram']['name']=='' ? $this->currentStoreInformation[0]['actualUrl'] : @$this->currentStoreInformation[0]['affliateProgram']['name'];
-if ($this->currentStoreInformation[0]['affliateProgram']) :
-    $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
-    $affliateUrl = $shopUrl;
-    $affliateDisabled = '';
-    $affliateClass = '';
-else:
-    $affliateBounceRate = '';
-    $affliateUrl = '#';
-    $affliateDisabled = 'disabled="disabled"';
-    $affliateClass = 'btn-disabled';
-endif;
 
 $actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
 if (isset($actualUrlWithoutDoubleSlash[1])):
@@ -106,6 +91,7 @@ else:
     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
 endif;
 
+$headerBlock = FrontEnd_Helper_viewHelper::getLoveRelatedVariables($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
 $shopEditor = '';
 if($this->shopEditor != null):
     $shopEditor = $this->partial(
@@ -120,24 +106,7 @@ if($this->shopEditor != null):
 endif;
 ?>
 <input type="hidden" name="currentShop" id="currentShop" value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
-<div class="header-block header-block-2">
-    <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
-    <div class="icon">
-        <a target="_blank" rel="nofollow" 
-        class="text-blue-link store-header-link <?php echo $affliateClass; ?>" <?php echo $affliateDisabled; ?> 
-        onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl; ?>"><?php echo'<img class="radiusImg" src="'. $this->storeImage . '" alt="' . $this->currentStoreInformation[0]['name']  . '"  width="176" height="89" />'; ?>
-        </a>
-    </div>
-    <div class="box">
-        <h1><?php echo $this->currentStoreInformation[0]['title'];?></h1>
-        <strong><?php echo '' . $this->currentStoreInformation[0]['subTitle'];?></strong>
-            <a target="_blank" rel="nofollow" 
-            class="btn text-blue-link fl store-header-link <?php echo $affliateClass; ?> pop btn btn-sm btn-default" <?php echo $affliateDisabled; ?>
-            onclick="<?php echo $affliateBounceRate; ?>" href="<?php echo $affliateUrl;?>"><?php echo $actualUrl;?>
-            </a>
-            <?php echo $this->esi($this->locale.$storeViewPartialPath.'addfavoriteview?shopId='.$this->currentStoreInformation[0]['id'].'&shopName='.urlencode($this->currentStoreInformation[0]['name']));?>        
-    </div>
-</div> 
+<?php echo $headerBlock; ?> 
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
     <?php 
@@ -154,7 +123,7 @@ endif;
     <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
     echo $shopEditor;
-    echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl);
+    echo FrontEnd_Helper_viewHelper::socialmediaSmall($this->currentStoreInformation[0]['affliateProgram'] =='' ? $this->currentStoreInformation[0]['actualUrl'] : $this->currentStoreInformation[0]['affliateProgram']['name']);
 if (count($this->latestShopUpdates) > 0):?>
     <?php echo $this->partial($storeViewPartialPath.'_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
 endif;
