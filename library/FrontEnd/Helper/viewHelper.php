@@ -325,73 +325,65 @@ EOD;
     
     /**
      * Common function for social media.
-     * @author Raman updated by cbhopal
      * @version 1.0
-     * @version 1.1
      * @param $url string
-     * @param $title string
-     * @param $controller string
      * @param $type string
-     * @return string
+     * @return socialMedia
      */
-    public static function socialmediaSmall($url='', $type = null)
+    public static function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $socialMediaTitle = "<h2>".$trans->translate('Share')."</h2>
-            <span>".$trans->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+        $socialMediaUrl = self::getsocialMediaUrl();
+        $facebookLikeWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'facebook');
+        $twitterLikeWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'twitter');
+        $googlePlusOneWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'google');
+        $socialMedia = self::getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget);
+        return $socialMedia;
+    }
+
+    public static function getsocialMediaUrl()
+    {
         $controller = zend_Controller_Front::getInstance()->getRequest()->getControllerName();
         if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
-            $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
+            $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'], '/');
             $socialMediaUrl = self::generateSocialLink($socialMediaUrl);
         else:
             $socialMediaUrl = HTTP_PATH;
         endif;
+        return $socialMediaUrl;
+    }
     
-        if($type == 'widget'):
-            $socialMedia="<div class='flike-outer'>
-                <div id='fb-root'></div>
-                <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-                </div>
-                </div>
-                <div class='flike-outer'>
-                <a href='https://twitter.com/share' data-count='vertical' class='twitter-share-button' data-url='".$socialMediaUrl."' data-lang='nl' data-count = 'none'></a>
-                </div>
-                <div class='flike-outer'><div class='g-plus' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-                </div>";
-        elseif ($type == 'popup'):
-            $socialMedia="<div class='flike-outer'>
-                <div id='fb-root'></div>
-                <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-                </div>
-                </div>
-                <div class='flike-outer'>
-                <a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button'  data-lang='nl' data-count = 'none'></a>
-                </div>
-                <div class='flike-outer'>
-                <div class='g-plus'   data-href='".$socialMediaUrl."'  data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-                </div>";
+    public static function getSocialMediaLikeButtons($socialMediaUrl, $type)
+    {
+        if ($type == 'facebook') {
+            $socialMediaLikeButtons = "<div id='fb-root'></div><div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'></div>";
+        } elseif ($type == 'twitter') {
+            $socialMediaLikeButtons = "<div class='g-plus' data-href='".$socialMediaUrl."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>";
+        } elseif ($type == 'google') {
+            $socialMediaLikeButtons = "<a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button' data-lang='".LOCALE."'></a>";
+        }
+        return $socialMediaLikeButtons;
+    }
+
+    public static function getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget)
+    {
+        if($type == 'widget' || $type == 'popup'):
+            $socialMedia=$facebookLikeWidget.$googlePlusOneWidget.$twitterLikeWidget;
         else:
-    
-            $socialMedia = "<article class='block'>
-                <div class='social-likes'>
-                <div class='intro'>
-                ".$socialMediaTitle."
-                </div>
-                <ul class='share-list'>
-                <li>
-                <div id='fb-root'></div>
-                <div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-layout='box_count' data-width='50' data-show-faces='false'>&nbsp;</div>
-                </li>
-                <li>
-                <a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button'  data-lang='nl'></a>
-                </li>
-                <li>
-                <div class='g-plus' data-href='".$socialMediaUrl."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>
-                </li>
-                </ul>
-                </div></article>";
+            $zendTranslate = Zend_Registry::get('Zend_Translate');
+            $socialMediaTitle = "<h2>".$zendTranslate->translate('Share')."</h2>
+                <span>".$zendTranslate->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+            $socialMedia = "
+                <article class='block'>
+                    <div class='social-likes'>
+                        <div class='intro'>".$socialMediaTitle."</div>
+                        <ul class='share-list'>
+                            <li>".$facebookLikeWidget."</li>
+                            <li>".$googlePlusOneWidget."</li>
+                            <li>".$twitterLikeWidget."</li>
+                        </ul>
+                    </div>
+                </article>";
         endif;
-    
         return $socialMedia;
     }
     ##################################################################################

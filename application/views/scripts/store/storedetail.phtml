@@ -154,7 +154,7 @@ endif;
     <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
     echo $shopEditor;
-    echo FrontEnd_Helper_viewHelper::socialmediaSmall($affliateProgramUrl);
+    echo FrontEnd_Helper_viewHelper::socialMediaWidget($affliateProgramUrl);
 if (count($this->latestShopUpdates) > 0):?>
     <?php echo $this->partial($storeViewPartialPath.'_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
 endif;
