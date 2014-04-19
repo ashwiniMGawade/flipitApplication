@@ -1,8 +1,66 @@
-function showCodePopUp(event) {
-    
-    var offerId = $(event).attr('id');
-    var offerVote = $(event).attr('vote');
+// refactored code
+$(document).ready(function(){
+if(GetQueryStringParams("popup")){
+    showCodePopUp('popupOnLoad');
+    showCodeInformation(GetQueryStringParams("popup"));
+}
+});
+function OpenInNewTab(url)
+{
+    var win=window.open(url, '_blank');
+    win.focus();
+}
+function showTermAndConditions(id)
+{
+    $('div#termAndConditions'+id).slideToggle();
+    $('a#termAndConditionLink'+id).toggleClass('uparrow'); 
+}
+function showPopupTermAndConditions(id)
+{
+    $('div#termAndConditionsPopup'+id).slideToggle();
+    $('a#termAndConditionLinkPopup'+id).toggleClass('uparrow'); 
+}
+function showCodeInformation(id)
+{
+    $('div#offerCodeDiv'+id).show();
+    $('div#websiteOfferLink'+id).show();
+    $('div#offerButton'+id).hide();
+}
+function printIt(urlToShow) 
+{
+    var windowObject = window.open();
+    self.focus();
+    windowObject.document.open();
+    windowObject.document.write('<'+'html'+'><'+'body'+'>');
+    windowObject.document.write('<img src ='+urlToShow+'>');
+    windowObject.document.write('<'+'/body'+'><'+'/html'+'>');
+    windowObject.document.close();
+    windowObject.print();
+    windowObject.close();
+}
 
+function GetQueryStringParams(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+function showCodePopUp(event) {
+    if(event == 'popupOnLoad'){
+        var offerId = GetQueryStringParams("popup");
+        var offerVote = 0;
+    } else {
+        var offerId = $(event).attr('id');
+        var offerVote = $(event).attr('vote');
+    }
+    
     $('#element_to_pop_up').html('');
     
     if(! ( /(iPod|iPhone|iPad)/i.test(navigator.userAgent) )) {
@@ -36,11 +94,9 @@ function customPopUp(id) {
 
     return false;
 }
-
 function copyToClipboard(text) {
       window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
 }
-
 function customPopUpClose() {
     $('#fade , .popup_block, .popup_block_signup').fadeOut('9000', function() {
     $('#fade').remove(); 
@@ -95,6 +151,8 @@ function init() {
 var hide = false;
 $(document)
         .ready(
+        		
+        		
                 function() {
 
                     $('div.nav-container').hide();

@@ -214,12 +214,12 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
             $onClick =  $currentOffer->discountType == "CD" ? "showCodeInformation($currentOffer->id),showCodePopUp(this)," : " ";
-            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate')";
-            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
+            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink']."?popup=$currentOffer->id')";
+            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
             '.$this->zendTranslate->translate('>Get code &amp; Open site').' </a>';
         }else{
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "showPrintPopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
-            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href = "'.$urlToShow.'"  href="javascript:void(0);" target="_blank" onclick = "'.$onClick.'" rel="nofollow">'.$this->zendTranslate->translate('>Get code &amp; Open site').'</a>';
+            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$this->zendTranslate->translate('>Get code &amp; Open site').'</a>';
         }
         return $mainButton;
     }
@@ -231,8 +231,8 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : " ";
             $secondButton = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$this->zendTranslate->translate('print now').'<span class="ico-print"></span></a>';
         }else if ($currentOffer->discountType=='CD') {
-            $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate')";
-            $secondButton = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_blank" onClick="'.$onClick.'">'.$this->zendTranslate->translate('Pack this offer').'</a>';
+            $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink']."?popup=$currentOffer->id')";
+            $secondButton = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_self" onClick="'.$onClick.'">'.$this->zendTranslate->translate('Pack this offer').'</a>';
         }else if ($currentOffer->discountType == "SL"){
             $secondButton = '';
         }

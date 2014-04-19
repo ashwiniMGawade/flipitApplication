@@ -391,7 +391,7 @@ EOD;
     {
         $bounceRate = "/out/shop/".$shop['id'];
         $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.$shop['id'];
-        $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram']['name'];
+        $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
         if ($shop['affliateProgram']) :
             $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
             $affliateUrl = $shopUrl;

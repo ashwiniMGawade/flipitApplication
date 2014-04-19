@@ -123,7 +123,7 @@ endif;
     <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
     echo $shopEditor;
-    echo FrontEnd_Helper_viewHelper::socialMediaWidget($this->currentStoreInformation[0]['affliateProgram'] =='' ? $this->currentStoreInformation[0]['actualUrl'] : $this->currentStoreInformation[0]['affliateProgram']['name']);
+    echo FrontEnd_Helper_viewHelper::socialMediaWidget($this->currentStoreInformation[0]['affliateProgram'] =='' ? $this->currentStoreInformation[0]['actualUrl'] : $this->currentStoreInformation[0]['affliateProgram']);
 if (count($this->latestShopUpdates) > 0):?>
     <?php echo $this->partial($storeViewPartialPath.'_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
 endif;

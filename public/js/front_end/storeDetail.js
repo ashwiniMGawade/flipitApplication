@@ -1,33 +1,4 @@
-// refactored code 
-function showTermAndConditions(id)
-{
-    $('div#termAndConditions'+id).slideToggle();
-    $('a#termAndConditionLink'+id).toggleClass('uparrow'); 
-}
-function showPopupTermAndConditions(id)
-{
-    $('div#termAndConditionsPopup'+id).slideToggle();
-    $('a#termAndConditionLinkPopup'+id).toggleClass('uparrow'); 
-}
-function showCodeInformation(id)
-{
-    $('div#offerCodeDiv'+id).show();
-    $('div#websiteOfferLink'+id).show();
-    $('div#offerButton'+id).hide();
-}
-function printIt(urlToShow) 
-{
-    var windowObject = window.open();
-    self.focus();
-    windowObject.document.open();
-    windowObject.document.write('<'+'html'+'><'+'body'+'>');
-    windowObject.document.write('<img src ='+urlToShow+'>');
-    windowObject.document.write('<'+'/body'+'><'+'/html'+'>');
-    windowObject.document.close();
-    windowObject.print();
-    windowObject.close();
-}
-// end refactored code
+
 
 function checkFavorite(uId,id){
 	alert(uId+id);
@@ -102,6 +73,7 @@ $(document).ready(function(){
 	    expandText:       __('Read More'), // default is 'read more'
 	    userCollapseText: __('Less More')  // default is 'read less'
 	});
+	
 });
 function showTermAndCondition(id)
 {
