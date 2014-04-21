@@ -386,6 +386,25 @@ EOD;
         endif;
         return $socialMedia;
     }
+
+    /**
+    * render pagination links
+    * @param $totalRecordsForPagination array
+    * @param $paginationParameter array
+    * @param $itemCountPerPage integer
+    * @param $paginationRange integer
+    * @version 1.0
+    * @return object $pagination
+    */
+    public static function renderPagination($totalRecordsForPagination, $paginationParameter, $itemCountPerPage, $paginationRange = 3)
+    {
+        $currentPageNumber = intval($paginationParameter['page'] > 0 ) ? $paginationParameter['page'] : '1';
+        $pagination = Zend_Paginator::factory($totalRecordsForPagination);
+        $pagination->setCurrentPageNumber($currentPageNumber);
+        $pagination->setItemCountPerPage($itemCountPerPage);
+        $pagination->setPageRange($paginationRange);
+        return $pagination;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1328,30 +1347,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
     //<!-- Social Links Ends -->
     return $string;
 
-  }
-
-
-
-  /**
-   * render pagination links
-   * @author cbhopal
-   * @param $recordsArray array
-   * @param $params array
-   * @param $itemsPerPage integer
-   * @param $range integer
-   * @version 1.0
-   * @return object $pagination
-   */
-  public static function renderPagination($recordsArray,$params,$itemsPerPage,$range = 3)
-  {
-
-        $page = intval($params['page'] > 0 ) ? $params['page'] : '1';
-        $pagination = Zend_Paginator::factory($recordsArray);
-        $pagination->setCurrentPageNumber($page);
-        $pagination->setItemCountPerPage($itemsPerPage);
-        $pagination->setPageRange(3);
-
-        return $pagination;
   }
 
   /**

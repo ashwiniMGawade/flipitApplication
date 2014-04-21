@@ -17,7 +17,7 @@ echo $this->partial(
 if (count($this->paginator)>0) {
     echo $this->partial(
         'store/_offer.phtml',
-        array('offers'=> $this->offers,
+        array('offers'=> $this->paginator,
          'offersType'=>$this->offersType, 'shopName'=> '', 'shop'=>'', 'zendForm'=>$this->form)
     );
 } else {
@@ -27,17 +27,13 @@ if (count($this->paginator)>0) {
         </div>
     <?php
 }
-?>
-        <?php
-        echo $this->paginationControl($this->paginator, 'Sliding', '/partials/_pagination.phtml');
-        ?>
-        
+?>        
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-            <?php
-            $locale = LOCALE != 'en'? LOCALE. '/' : '';
-            echo $this->esi($locale.'store/signupwidget');
-            echo FrontEnd_Helper_viewHelper::socialMediaWidget('top20');
-            ?>
+        <?php
+        $locale = LOCALE != 'en'? LOCALE. '/' : '';
+        echo $this->esi($locale.'store/signupwidget');
+        echo FrontEnd_Helper_viewHelper::socialMediaWidget('top20');
+        ?>
     </aside>
 </div>

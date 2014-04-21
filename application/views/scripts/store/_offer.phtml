@@ -106,6 +106,10 @@ foreach ($this->offers as $offer) {
         <?php 
     endif;
 }
-if($this->offersType!='expiredOffer') { ?>
+if($this->offersType!='expiredOffer') { 
+    if($this->offersType == 'new') { 
+        echo $this->paginationControl($this->offers, 'Sliding', '/partials/_pagination.phtml');
+    }
+    ?>
 </section>
 <?php }?>
