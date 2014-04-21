@@ -41,24 +41,24 @@ if ($this->pageCount > 1) :
     endif;
 
     echo '<ul class="pagination">';
-    foreach ($this->pagesInRange as $pages) :
-        if ($pages < 4 ) :
-            $page = "";
-            if ($pages > 1) :
-                $page = "/".$pages;
+    foreach ($this->pagesInRange as $pageNumber) :
+        if ($pageNumber < 4 ) :
+            $pageNumberAfterSlash = '';
+            if ($pageNumber > 1) :
+                $pageNumberAfterSlash = "/".$pageNumber;
             endif;
             ?>
-            <li class="<?php echo ($pages == $this->current) ? "active" : "" ?>">
-                <a href="<?php echo HTTP_PATH . $permalink . $page; ?>">
-                <?php echo $pages;?> 
-                <?php if ($pages == $this->current) : ?>
+            <li class="<?php echo ($pageNumber == $this->current) ? "active" : "" ?>">
+                <a href="<?php echo HTTP_PATH . $permalink . $pageNumberAfterSlash; ?>">
+                <?php echo $pageNumber;?> 
+                <?php if ($pageNumber == $this->current) : ?>
                 <span class="sr-only">(current)</span>
                 <?php endif; ?>
                 </a>
             </li>
             <?php
-        elseif (isset($this->next) && $pages < 4) : ?>
-            <li class="next"> <a href="<?php echo HTTP_PATH . $permalink . $page ?>">&gt;</a></li>
+        elseif (isset($this->next) && $pageNumber < 4) : ?>
+            <li class="next"> <a href="<?php echo HTTP_PATH . $permalink . $pageNumberAfterSlash ?>">&gt;</a></li>
             <?php
         endif;
     endforeach;
