@@ -15,26 +15,36 @@ echo $this->partial(
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
 <?php 
+$storeViewPartialPath = 'store/';
 if(count($this->top20PopularOffers) > 0):
     echo $this->partial(
-        'store/_offer.phtml',
+        $storeViewPartialPath .'_offer.phtml',
         array(
             'offers' => $this->top20PopularOffers,
             'offersType'=>'top20',
             'shopName' =>'',
-            'shop' =>'',
+            'shopId' =>'',
             'zendForm'=>$this->form
         )
     );
 endif;
+
+$signUpWidgetForm = '';
+$signUpWidgetForm = $this->partial(
+    $storeViewPartialPath.'signupwidget.phtml',
+    array(
+       'zendForm' => $this->sideBarWidgetFrom,
+       'flagForDivClass'=>true,
+       'shopId'=>'',
+       'shopLogoOrDefaultImage'=>''
+    )
+);
+
 ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
 <?php 
-echo $this->partial(
-    'store/signupwidget.phtml',
-    array('zendForm' => $this->sideBarWidgetFrom)
-);
+echo $signUpWidgetForm;
 echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20');
 ?>
     </aside>

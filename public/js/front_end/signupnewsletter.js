@@ -34,10 +34,10 @@ function validateSignUpNewsLetter(formName) {
                             },
                             complete : function(data) {
                                 if (data.responseText == 'true') {
-                                    $("input#emailAddress").removeClass('input-error')
+                                    $(formName + " input#emailAddress").removeClass('input-error')
                                       .addClass('input-success');
                                 } else {
-                                    $("input#emailAddress").removeClass('input-success')
+                                    $(formName + " input#emailAddress").removeClass('input-success')
                                         .addClass('input-error');
                                 }
                             }

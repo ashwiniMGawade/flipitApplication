@@ -31,5 +31,18 @@ class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
         $signUpStep2Url= HTTP_PATH_LOCALE.self::__link('inschrijven') . '/' . self::__link('stap2') . '/' . base64_encode($emailAddress);
         return $signUpStep2Url;
     }
+
+    public function generateSignUpWidgetHeader($sideBarWidgetOrOfferWidget)
+    {
+       if ($sideBarWidgetOrOfferWidget==true) {
+        $signUpHeader='<h2 class="form-signin-heading">' .$this->zendTranslate->translate('Sign up').'
+            <span>'.$this->zendTranslate->translate('and join over').'<br>' .$this->zendTranslate->translate('10 million people')
+            .'</span></h2>';
+       } else {
+         $signUpHeader='<h2>'.$this->zendTranslate->translate('Receive weekly updates of the best offers?').'<br>'
+         .$this->zendTranslate->translate('Sign up for our newsletter!').'</h2>';
+       }
+       return $signUpHeader;
+    }
 }
 ?>
