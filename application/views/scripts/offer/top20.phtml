@@ -6,8 +6,9 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
 $subTitle = $this->content;
 $pageLogo = $this->pageLogo;
+$partialViewPath = 'partials/';
 echo $this->partial(
-    'partials/_default_page_header.phtml',
+    $partialViewPath.'_default_page_header.phtml',
     array('pageTitle' => $this->pageTitle, 'pageLogo'=>$pageLogo ,'subTitle'=>$subTitle )
 );
 ?>
@@ -29,9 +30,11 @@ endif;
 ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
-<?php
-$locale = LOCALE != 'en'? LOCALE. '/' : '';
-echo $this->esi($locale .'store/signupwidget');
+<?php 
+echo $this->partial(
+    'store/signupwidget.phtml',
+    array('zendForm' => $this->sideBarWidgetFrom)
+);
 echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20');
 ?>
     </aside>

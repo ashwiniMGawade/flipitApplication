@@ -176,9 +176,13 @@ if(isset($this->popularStoresList)):
         </div>
     <?php
 endif;
-        
-if ($this->currentStoreInformation[0]['showSignupOption']) :
-    echo $this->esi($this->locale.$storeViewPartialPath.'signupwidget');
+
+$userLoggedInOrNot = $offerPartialClass->getUserIsLoggedInOrNot();
+if ($this->currentStoreInformation[0]['showSignupOption'] && $userLoggedInOrNot==false) :
+    echo $this->partial(
+        $storeViewPartialPath.'signupwidget.phtml',
+        array('zendForm' => $this->sideBarWidgetFrom)
+    );
 endif;
 ?>
     </aside>

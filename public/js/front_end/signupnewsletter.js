@@ -9,8 +9,8 @@ var validRules = {
 var focusRules = {
     homeemail : ""
 };
-function signUpNewsLetter(){ 
-    var formName = 'form#formOneHomePage';
+function signUpNewsLetter(formName){ 
+    var formName = 'form#' + formName;
     validateSignUpNewsLetter(formName);
     if($(formName).valid()){
         $(formName).submit();

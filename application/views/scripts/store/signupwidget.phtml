@@ -1,26 +1,15 @@
-<div class="block block-2">
 <?php
-if (!Auth_VisitorAdapter::hasIdentity()):
-    $imagePath =  "images/front_end/find-icon2.png" ;
-    if (file_exists(ROOT_PATH.$imagePath)) :
-        $imagePath = PUBLIC_PATH . $imagePath ;
-    else :
-        $imagePath = HTTP_PATH ."public/".$imagePath;
-    endif;
-    ?>
-    <form role="form" class="form-signin newsletter" id="formSignupSidebarWidget" action="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') .'/'. FrontEnd_Helper_viewHelper::__link('stap2')?>" method="post">
+if (!Auth_VisitorAdapter::hasIdentity()): ?>
+    <div class="block block-2">
         <h2 class="form-signin-heading">
-        <?php echo $this->translate('Sign up'); ?> 
+        <?php echo $this->translate('Sign up'); ?>
         <span>
         <?php echo $this->translate('and join over'); ?>
         <br>
         <?php echo $this->translate('10 million people'); ?>
         </span>
         </h2>
-    <input onkeypress="if(event.which == 13) {  signUpFromHandler('sidebar-widget'); event.preventDefault(); }" type="email" placeholder="<?php echo $this->translate('enter_email_address');?>"  name="emailAddress" class="form-control">
-        <button  type="submit" onclick=" signUpFromHandler('sidebar-widget');" class="btn blue btn-lg btn-primary"><?php echo $this->translate('signup');?></button>
-    </form>
+        <?php echo $this->zendForm;?>
+    </div>
     <?php
 endif;
-?>
-</div>

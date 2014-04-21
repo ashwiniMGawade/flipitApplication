@@ -10,6 +10,7 @@ foreach ($this->offers as $offer) {
     $urlToShow = $offerPartialClass->getUrlToShow($offer);
     $offerTitle = $offer->title;
     $termsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
+    $userLoggedInOrNot = $offerPartialClass->getUserIsLoggedInOrNot();
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
         <div class="holder">
@@ -83,29 +84,23 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    if(($offerCounter == 1 && $this->offersType=='simple')
-        || ($offerCounter == 1 && $this->offersType=='top20')):?>
+    if(($offerCounter == 1 && $this->offersType=='simple' && $userLoggedInOrNot==false ) || ($offerCounter == 1 && $this->offersType=='top20' && $userLoggedInOrNot==false)):?>
         <div class="block block-form <?php echo $this->shop=='' ? 'block-form-2' : ''?>">
             <div class="holder">
                  <div class="<?php echo $this->shop=='' ? 'ico-box' : 'icon'?>">
                  <?php echo $offerPartialClass->getShopLogoForSignUp($this->shop);?>
                  </div>
-        <?php 
-        if (!Auth_VisitorAdapter::hasIdentity()) {?>
                  <div class="box">
                       <h2><?php echo $this->translate('Receive weekly updates of the best offers?');?><br> 
                       <?php echo $this->translate('Sign up for our newsletter!');?>
                       </h2>
                       <?php echo $this->zendForm;?>
                  </div>
-            <?php 
-        }
-        ?>
            </div>
         </div>
         <?php 
     endif;
 }
-if($this->offersType!='expiredOffer') { ?>
-</section>
+if ($this->offersType!='expiredOffer') { ?>
+    </section>
 <?php }?>
