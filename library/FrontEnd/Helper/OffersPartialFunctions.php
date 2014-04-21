@@ -218,8 +218,8 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
             '.$this->zendTranslate->translate('>Get code &amp; Open site').' </a>';
         }else{
-            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "showPrintPopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
-            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$this->zendTranslate->translate('>Get code &amp; Open site').'</a>';
+            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "showCodePopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
+            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" vote = "0" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$this->zendTranslate->translate('>Get code &amp; Open site').'</a>';
         }
         return $mainButton;
     }
@@ -281,6 +281,15 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             </div>';
         }
         return $expiredOfferMessage;
+    }
+    public function getSiteLogoforPopup()
+    {
+        if (LOCALE == '') {
+            $siteImage = "";
+        } else {
+            $siteImage = '<img class="logo-img" src="'.HTTP_PATH.'public/images/logo-3.png" width="109" height="49" alt="Flipit">';
+        }
+        return $siteImage;
     }
     
 }

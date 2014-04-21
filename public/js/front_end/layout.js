@@ -52,6 +52,7 @@ function GetQueryStringParams(sParam)
         }
     }
 }
+
 function showCodePopUp(event) {
     if(event == 'popupOnLoad'){
         var offerId = GetQueryStringParams("popup");
@@ -59,6 +60,7 @@ function showCodePopUp(event) {
     } else {
         var offerId = $(event).attr('id');
         var offerVote = $(event).attr('vote');
+        var offerUrl = $(event).attr('alt');
     }
     
     $('#element_to_pop_up').html('');
@@ -70,7 +72,8 @@ function showCodePopUp(event) {
                 method : "post",
                 data : {
                     'id' : offerId,
-                    'vote' : offerVote
+                    'vote' : offerVote,
+                    'imagePath': offerUrl
                 },
                 type : "post",
                 success : function(data) {

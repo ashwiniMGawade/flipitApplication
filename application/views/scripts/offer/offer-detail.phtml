@@ -1,18 +1,21 @@
 <?php
 $offer = (object) $this->offerdetail[0];
-$offerTitle = $offer->title;
 $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
-$offerDiscountImage =  $offerPartialClass->getDiscountImage($offer);
 $termsAndConditions =  $offerPartialClass->getOfferTermsAndCondition($offer);
-$urlToShow =  $offerPartialClass->getUrlToShow($offer);
-$offerBounceRate = "/out/offer/".$offer->id;
-$offerDayDifference =  $offerPartialClass->getDaysTillOfferExpires($offer->endDate);
-if (LOCALE == '') {
-    $redirectUrl = HTTP_PATH;
-    $siteImage = "";
-} else {
-    $redirectUrl = HTTP_PATH_LOCALE;
-    $siteImage = '<img class="logo-img" src="'.HTTP_PATH.'public/images/logo-3.png" width="109" height="49" alt="Flipit">';
+$DaysTillOfferExpires =  $offerPartialClass->getDaysTillOfferExpires($offer->endDate);
+if ($this->offerImagePath == '') {
+    $lightBoxcontent = $this->partial(
+        'offer/_lightBoxPartial.phtml',
+        array(
+            'offer' => $offer,
+            'termsAndConditions' => $termsAndConditions,
+            'siteImage' => $offerPartialClass->getSiteLogoforPopup(),
+            'code' => $this->code
+
+       )
+    );
+} else { 
+    $lightBoxcontent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">'; 
 }
 ?>
 <section id="code-lightbox">
@@ -24,52 +27,14 @@ if (LOCALE == '') {
             </div>
             <div class="box">
                 <div class="text">
-                    <p><?php echo  $offerPartialClass->getOfferOptionAndOfferDates($offer, $offerDayDifference);?></p>
-                    <h1><?php echo $offerTitle; ?></h1>
+                    <p><?php echo  $offerPartialClass->getOfferOptionAndOfferDates($offer, $DaysTillOfferExpires);?></p>
+                    <h1><?php echo $offer->title; ?></h1>
                 </div>
             </div>
         </header>
-        <div class="block">
-            <form role="form">
-                <fieldset>
-                    <div class="holder">
-                        <input class="default form-control" type="text" value="<?php echo $this->code; ?>">
-                        <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->code; ?>');">Copy Code</a>
-                    </div>
-                    <a href="<?php echo $offerBounceRate;?>" class="btn blue btn-primary"><?php echo $this->translate('Open ').$offer->shop['name'].$this->translate(' New Year Sale code'); ?></a>
-
-                </fieldset>
-            </form>
-        </div>
-        <footer class="bottom">
-
-            <ul class="view-list">
-                <li>
-                    <?php
-if ($offer->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) { ?>
-                            <a id="termAndConditionLinkPopup<?php echo $offer->id ;?>" onclick="showPopupTermAndConditions(<?php echo $offer->id; ?>)" class="terms"
-                            href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp;
-                            <?php echo $this->translate('Conditions'); ?>
-                            </a>
-                </li>
-            </ul>
-    <?php
-    if ($termsAndConditions!='' && $termsAndConditions!=null && $this->extendedOffer =='1') {?>
-        &nbsp; | &nbsp;
-        <?php
-    }
-}
-?>
-            <div class="logo-box">
-                <?php echo $siteImage;?>
-                <span><?php echo $this->translate('Exclusive discount codes and deals');?></span>
-            </div>
-        </footer>
-        <div class="terms-block" id='termAndConditionsPopup<?php echo $offer->id ;?>' style = "display:none;">
-            <ol class="num-list">
-                <?php echo $termsAndConditions;?>
-            </ol>
-        </div>
-    </div>
+       <?php
+        echo $lightBoxcontent;
+       ?> 
+    </div> 
 </section>
 

@@ -96,15 +96,21 @@ class OfferController extends Zend_Controller_Action
         $offerParameters = $this->_getAllParams();
         $this->view->params = $offerParameters;
         $offerObject = new Offer();
+        if (isset($offerParameters['imagePath']) && !empty($offerParameters['imagePath'])) {
+            $offerImagePath = $offerParameters['imagePath'];
+            $this->view->offerImagePath = $offerImagePath;
+        } else {
+            $this->view->offerImagePath = '';
+        }
         $offerId = $offerParameters['id'];
-        $offerDetail = $offerObject->getOfferInfo(@$offerParameters['id']);
+        $offerDetail = $offerObject->getOfferInfo($offerParameters['id']);
         $this->view->offerdetail = $offerDetail;
-        $this->view->vote = @$offerParameters['vote'];
+        $this->view->vote = $offerParameters['vote'];
         $this->view->votepercentage = 0;
         $this->view->headTitle(@$offerDetail[0]['title']);
         $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'.
          $offerDetail[0]['shop']['logo']['name'];
-        $this->view->facebookTitle = @$offerDetail[0]['title'];
+        $this->view->facebookTitle = $offerDetail[0]['title'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
         $this->view->facebookImage = $shopImage;
         if ($offerDetail[0]['couponCodeType']  == 'UN') {
