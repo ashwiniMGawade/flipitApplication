@@ -1,6 +1,6 @@
 <?php
 
-class MetronieuwsController extends  Zend_Controller_Action
+class WhitelabelController extends  Zend_Controller_Action
 {
 
     public function init()
@@ -13,8 +13,8 @@ class MetronieuwsController extends  Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-        FrontEnd_Helper_viewHelper::top10Xml();
+        FrontEnd_Helper_viewHelper::top10Xml(true);
         $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8'); 
     }
-}
 
+}

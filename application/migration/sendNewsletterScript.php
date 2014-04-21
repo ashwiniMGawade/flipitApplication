@@ -178,13 +178,13 @@ class SendNewsletter {
 				echo "\n" ;
 
 				$sentTime = new Zend_Date($settings[0]['newletter_scheduled_time']);
-				$sentTime->get('YYYY-MM-dd HH:mm:ss') ;
+				$sentTime->get('YYYY-MM-dd HH:mm:ss');
 
 				$currentTime = new Zend_Date();
 				$currentTime->setTimezone($timezone);
 
 				echo "\n" ;
-				$currentTime->get('YYYY-MM-dd HH:mm:ss') ; ;
+				$currentTime->get('YYYY-MM-dd HH:mm:ss');
 
 				# if sent time is passed then send newsletter
 				if ($currentTime->isLater($sentTime)) {
@@ -271,7 +271,8 @@ class SendNewsletter {
 		);
 
 		//merge all the arrays into single array
-	 	$data = array_merge($voucherCodesData['dataShopName'],
+	 	$data = array_merge(
+	 			$voucherCodesData['dataShopName'],
 				$voucherCodesData['dataOfferName'],
 				$voucherCodesData['dataShopImage'],
 				$voucherCodesData['expDate'],
@@ -289,32 +290,23 @@ class SendNewsletter {
 									$staticContent);
 
 		//initialize mandrill with the template name and other necessary options
-		$mandrill = new Mandrill_Init($this->_mandrillKey );
-		$template_name = $this->_template ;
-		$template_content = $data ;
+		$mandrill = new Mandrill_Init($this->_mandrillKey);
+		$templateName = $this->_template;
+		$templateContent = $data;
 
 		//Start get email locale basis
-		$emailFrom  = $settings[0]['emailperlocale'];
-		$emailSubject  = $settings[0]['emailsubject'];
-		$senderName  = $settings[0]['sendername'];
-
-		$message = array(
-				'subject'    => $emailSubject ,
-				'from_email' => $emailFrom,
-				'from_name'  => $senderName,
-				'to'         => $this->_to ,
-				'inline_css' => true,
-				"recipient_metadata" =>  $this->_recipientMetaData ,
-				'global_merge_vars' => $dataPermalink,
-				'merge_vars' => $this->_loginLinkAndData
-		);
+		$mandrillSenderEmailAddress  = $settings[0]['emailperlocale'];
+		$mandrillNewsletterSubject  = $settings[0]['emailsubject'];
+		$mandrillSenderName  = $settings[0]['sendername'];
 
 		try {
-
-			$mandrill->messages->sendTemplate($template_name, $template_content, $message);
+			FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+					$mandrillNewsletterSubject, $mandrillSenderEmailAddress, $mandrillSenderName,
+					$this->_recipientMetaData, $dataPermalink,
+					$this->_loginLinkAndData, $templateName,
+					$templateContent, $mandrill, $this->_to);	
 
 			# set newsletter scheduling to be false and newsletter status true. Also set sending time to be past
-
 			Signupmaxaccount::updateNewsletterSchedulingStatus();
 
 			$message = 'Newsletter has been sent successfully' ;
@@ -518,7 +510,7 @@ class SendNewsletter {
 
 
 				$visitorMetaData[$key]['rcpt'] = $value['email'];
-				$visitorMetaData[$key]['values']['referrer'] = trim($keywords) ;
+				$visitorMetaData[$key]['values']['referrer'] = trim($keywords);
 				// $visitorMetaData[$key]['values']['url'] = '';
 
 				$visitorData[$key]['vars'][0]['content'] = $this->_linkPath . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directlogin") . "/" . base64_encode($value['email']) ."/". $value['password'];

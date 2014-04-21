@@ -163,14 +163,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 				$lang = $_COOKIE['locale'] . "/";
 
-
+				if(isset($cdnSettings) && isset($cdnSettings[$_SERVER['HTTP_HOST']])){
+					define("PUBLIC_PATH_CDN",
+							trim('http://'. $cdnSettings[$_SERVER['HTTP_HOST']]
+									.'/'. strtolower($_COOKIE['locale']) .'/'));
+				}
 				#constant for zend cache key based on lcoale
 				define("LOCALE",  trim($lang , '/'));
 
 			} else
 			{
+				
+				
+				if(isset($cdnSettings) && isset($cdnSettings['www.' . $this->_siteName])){
+					define("PUBLIC_PATH_CDN",
+							trim('http://'. $cdnSettings['www.' . $this->_siteName] .'/'));
+				}
 				#constant for zend cache key based on lcoale
 				define("LOCALE", '');
+				
  			}
  
 			if(! defined('HTTP_PATH_FRONTEND') )
@@ -232,6 +243,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 					. dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->_lang) .'/');
 
 			//echo (PUBLIC_PATH_LOCALE);
+			
+			
 
 		} else {
 
@@ -904,6 +917,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		  	    		)
 		  	    ));
 
+		  	    $router1->addRoute("whitelabel", new Zend_Controller_Router_Route(
+		  	    		'whitelabel/top10.xml',
+		  	    		array(
+		  	    				'action' => "error",
+		  	    				'controller' => "error"
+		  	    		)
+		  	    ));
+
 		  	    $router1->addRoute("sargassofeed", new Zend_Controller_Router_Route(
 								'sargassofeed',
 								array(
@@ -938,6 +959,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 			                             $backendOptions);
 			Zend_Registry::set('cache',$cache);
 		}
+		
 }
 
 

@@ -214,9 +214,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 	    	//Start get email locale basis
 	    	$email_data = Signupmaxaccount::getallmaxaccounts();
-	    	$emailFrom  = $email_data[0]['emailperlocale'];
-	    	$emailSubject  = $email_data[0]['emailsubject'];
-	    	$senderName  = $email_data[0]['sendername'];
+	    	$mandrillSenderEmailAddress  = $email_data[0]['emailperlocale'];
+	    	$mandrillNewsletterSubject  = $email_data[0]['emailsubject'];
+	    	$mandrillSenderName  = $email_data[0]['sendername'];
 	    	//End get email locale basis
 
 
@@ -281,26 +281,13 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 	    	//initialize mandrill with the template name and other necessary options
 	    	$mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
-	    	$template_name = $this->getInvokeArg('newsletterTemplate');
-	    	$template_content = $data;
-
-	    	$message = array(
-	    			'subject'    => $emailSubject ,
-	    			'from_email' => $emailFrom,
-	    			'from_name'  => $senderName,
-	    			'to'         => $this->to ,
-	    			'inline_css' => true,
-	    			"recipient_metadata" =>   $this->recipientMetaData ,
-	    			'global_merge_vars' => $dataPermalink,
-	    			'merge_vars' => $this->loginLinkAndData
-	    	);
-
+	    	$templateName = $this->getInvokeArg('newsletterTemplate');
+	    	$templateContent = $data;
 
 	    	try {
-
-				$mandrill->messages->sendTemplate($template_name, $template_content, $message);
-				$message = $this->view->translate('Newsletter has been sent successfully');
-
+	    		FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch($mandrillNewsletterSubject, $mandrillSenderEmailAddress, $mandrillSenderName,
+	    				$this->recipientMetaData, $dataPermalink, $this->loginLinkAndData, $templateName, $templateContent, $mandrill, $this->to);
+ 				$message = $this->view->translate('Newsletter has been sent successfully');
 	    	} catch (Mandrill_Error $e) {
 
 				//echo 'A mandrill error occurred: ' . get_class($e) . ' - ' . $e->getMessage();
@@ -338,11 +325,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     	//set the logo for category, category name and more category link
     	//if it exists or not in $category array
         if(count($topCategories[0]['category']['categoryicon']) > 0):
-    	    if(@file_exists(ROOT_PATH.$topCategories[0]['category']['categoryicon']['path'] .'thum_medium_'. $topCategories[0]['category']['categoryicon']['name']) && $topCategories[0]['category']['categoryicon']['name']!=''):
-    	        $img = PUBLIC_PATH_LOCALE.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_'. $topCategories[0]['category']['categoryicon']['name'];
-    	    else:
-    	        $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_70x60.png";
-    	    endif;
+    	        $img = PUBLIC_PATH_CDN.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_'. $topCategories[0]['category']['categoryicon']['name'];
+    	    
     	else:
     	    $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_70x60.png";
     	endif;
@@ -373,11 +357,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     		//set the logo for shop in this category if it exists or not in $dataShopImageCat array
     		if(count($value['shop']['logo']) > 0):
-    		    if(@file_exists(ROOT_PATH.$value['shop']['logo']['path'] .'thum_medium_store_'. $value['shop']['logo']['name']) && $value['shop']['logo']['name']!=''):
-    		        $img = PUBLIC_PATH_LOCALE.$value['shop']['logo']['path'].'thum_medium_store_'. $value['shop']['logo']['name'];
-    		    else:
-    		        $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_200x100.jpg";
-    		    endif;
+    		        $img = PUBLIC_PATH_CDN.$value['shop']['logo']['path'].'thum_medium_store_'. $value['shop']['logo']['name'];
+    		   
     		else:
     		    $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_200x100.jpg";
     		endif;
@@ -635,6 +616,19 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 
     	echo $this->_helper->json(array('recepients' => $visitors['recepients']), true);
+    }
+
+    public function disablemandrillnewsletterAction()
+    {
+    	if ($this->_request->isPost()) {
+    		$flash = $this->_helper->getHelper('FlashMessenger');
+  
+    		if (Signupmaxaccount::disableNewsletterScheduling()) {
+    			$flash->addMessage(array('success' => $this->view->translate('Newsletter schedule has been successfully disabled')));
+    		}
+
+    		$this->_helper->redirector('emailcontent' , 'accountsetting' , null );
+    	}
     }
 
 }
