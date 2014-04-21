@@ -4,12 +4,12 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/create-shop.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
+$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css" );
 $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
 $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
-//echo "<pre>";
-//print_r($this->DefaultPagesList); die;
+
 ?>
 <?php echo $this->headTitle()->append('Create Shop');?>
 <div id="imbullbody-content" style="overflow: hidden;">
@@ -354,8 +354,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
                         <textarea rows="3" id="shopDescription" name="shopDescription" placeholder="<?php echo $this->translate('Small description about the shop')?>" class="input-xlarge mbot bbot ignore word_count"></textarea>
-						<input type="text" class="input-xlarge disabled btop word-count"  id="shopDescription_count" disabled="disabled">
-                         <!--<textarea class="input-xlarge mbot bbot ignore"   id="shopDescription" name="shopDescription" placeholder="<?php //echo $this->translate('Small description about the shop.'); ?>" rows="3"></textarea>
+						<!--<input type="text" class="input-xlarge disabled btop word-count"  id="shopDescription_count" disabled="disabled">
+                         <textarea class="input-xlarge mbot bbot ignore"   id="shopDescription" name="shopDescription" placeholder="<?php //echo $this->translate('Small description about the shop.'); ?>" rows="3"></textarea>
                          <input type="text" class="input-xlarge disabled btop word-count"  id="shopDescriptionLeft" value = "Characters Left: 150" placeholder="Word Count: 28" disabled="disabled">-->
                          
                         </div>

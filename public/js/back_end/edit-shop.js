@@ -168,7 +168,14 @@ function init()
 		jQuery('#pagemetaDescLeft').val(__("Shop page meta description length ") + (data.input) + __(" characters"));
 	});
 
- 	
+ 	CKEDITOR.replace( 'shopDescription',
+			{
+				//fullPage : true,
+				////extraPlugins : 'wordcount',
+				customConfig : 'config.js' ,  
+				toolbar :  'BasicToolbar'  ,
+				height : "300"
+	});
 	validateFormAddNewShop();
 		
 	

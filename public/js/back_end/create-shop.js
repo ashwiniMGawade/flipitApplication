@@ -156,6 +156,15 @@ function init()
 	$('#shopNotes').textareaCount(options2, function(data){
 		jQuery('#shopNotesLeft').val(__("Short note about the shop length ") + (data.input) + __(" characters"));
 	});
+
+	CKEDITOR.replace( 'shopDescription',
+			{
+				//fullPage : true,
+				////extraPlugins : 'wordcount',
+				customConfig : 'config.js' ,  
+				toolbar :  'BasicToolbar'  ,
+				height : "300"
+	});
 	
  
 /*	$('#shopDescription').textareaCount(options3, function(data){
