@@ -31,7 +31,7 @@ if (count($this->offersWithPagination)>0) {
         <?php
         $locale = LOCALE != 'en'? LOCALE. '/' : '';
         echo $this->esi($locale.'store/signupwidget');
-        echo FrontEnd_Helper_viewHelper::socialMediaWidget('top20');
+        echo FrontEnd_Helper_viewHelper::socialMediaWidget(strtolower($this->getRequest()->getActionName()));
         ?>
     </aside>
 </div>
