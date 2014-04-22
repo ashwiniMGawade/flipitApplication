@@ -9,8 +9,8 @@ var validRules = {
 var focusRules = {
     homeemail : ""
 };
-function signUpNewsLetter(){ 
-    var formName = 'form#formOneHomePage';
+function signUpNewsLetter(formName){ 
+    var formName = 'form#' + formName;
     validateSignUpNewsLetter(formName);
     if($(formName).valid()){
         $(formName).submit();
@@ -34,10 +34,10 @@ function validateSignUpNewsLetter(formName) {
                             },
                             complete : function(data) {
                                 if (data.responseText == 'true') {
-                                    $("input#emailAddress").removeClass('input-error')
+                                    $(formName + " input#emailAddress").removeClass('input-error')
                                       .addClass('input-success');
                                 } else {
-                                    $("input#emailAddress").removeClass('input-success')
+                                    $(formName + " input#emailAddress").removeClass('input-success')
                                         .addClass('input-error');
                                 }
                             }

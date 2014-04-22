@@ -1,0 +1,53 @@
+
+.fl-right {
+    float: right;
+}
+
+.store-header-link{
+  float: left;
+}
+#fade{
+    background: none repeat scroll 0 0 #000000;
+    color: #010000;
+    cursor: wait;
+    display: none;
+    height: 100%;
+    left: 0;
+    opacity: 0.6;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 900;
+}
+.input-error{
+   border: 1px solid red!important;
+}
+ul.errors{
+  display: none;
+
+.store-header-link{
+    float: left;
+}
+
+.no-record{
+    text-align:center;
+    font-size:14px;
+    font-weight:bold;
+}
+/* these lines will be remove when merge becouse these lines are duplicate */
+.newsletter input[type="submit"] {
+    float: left!important;
+    font-size: 14px!important;
+    height: 39px!important;
+    width: 99px!important;
+    min-width: 60px!important;
+    margin: 0 !important;
+    padding: 0!important;
+    border-radius: 2px!important;
+    -webkit-border-radius: 2px!important
+}
+#sidebar input[type="submit"] {
+    width: 100%!important;
+}
+
+/* end css */

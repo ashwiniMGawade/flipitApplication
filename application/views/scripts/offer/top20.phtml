@@ -6,33 +6,46 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
 $subTitle = $this->content;
 $pageLogo = $this->pageLogo;
+$partialViewPath = 'partials/';
 echo $this->partial(
-    'partials/_default_page_header.phtml',
+    $partialViewPath.'_default_page_header.phtml',
     array('pageTitle' => $this->pageTitle, 'pageLogo'=>$pageLogo ,'subTitle'=>$subTitle )
 );
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
 <?php 
+$storeViewPartialPath = 'store/';
 if(count($this->top20PopularOffers) > 0):
     echo $this->partial(
-        'store/_offer.phtml',
+        $storeViewPartialPath .'_offer.phtml',
         array(
             'offers' => $this->top20PopularOffers,
             'offersType'=>'top20',
             'shopName' =>'',
-            'shop' =>'',
+            'shopId' =>'',
             'zendForm'=>$this->form
         )
     );
 endif;
+
+$signUpWidgetForm = '';
+$signUpWidgetForm = $this->partial(
+    $storeViewPartialPath.'signupwidget.phtml',
+    array(
+       'zendForm' => $this->sideBarWidgetFrom,
+       'flagForDivClass'=>true,
+       'shopId'=>'',
+       'shopLogoOrDefaultImage'=>''
+    )
+);
+
 ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
 <?php
-$locale = LOCALE != 'en'? LOCALE. '/' : '';
-echo $this->esi($locale .'store/signupwidget');
-echo FrontEnd_Helper_viewHelper::socialMediaWidget('top20');
+echo $signUpWidgetForm;
+echo FrontEnd_Helper_viewHelper::socialmediaSmall('top20');
 ?>
     </aside>
 </div>
