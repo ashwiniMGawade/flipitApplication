@@ -21,7 +21,7 @@ class Application_Form_SignUp extends Application_Form_Base
                 )
             )
         );
-        $emailAddressTextBox->setRequired(true)->addErrorMessage('fgdsf');
+        $emailAddressTextBox->setRequired(true)->addErrorMessage('');
 
         $emailAddressTextBox->addValidator(
             'EmailAddress',
