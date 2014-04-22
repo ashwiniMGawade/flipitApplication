@@ -153,23 +153,22 @@ class OfferController extends Zend_Controller_Action
         $this->view->pageTitle = $offerPage->pageTitle;
         $this->view->headTitle($offerPage->metaTitle);
         $this->view->headMeta()->setName('description', trim($offerPage->metaDescription));
- 
         $this->view->facebookTitle = $offerPage->pageTitle;
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
         $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
         $this->view->controllerName = $this->getRequest()->getControllerName();
+        $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
         $this->view->facebookDescription = trim($offerPage->metaDescription);
         $this->view->facebookLocale = $facebookLocale;
         $this->view->twitterDescription = trim($offerPage->metaDescription);
-
+     
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
-        $this->view->offers = $offers;
-        $this->view->offersType = 'top20';
+        $this->view->offersType = 'newestOffer';
         $this->view->shopName = 'top20';
-        $paginator = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 3);
-        $this->view->paginator = $paginator;
+        $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 3);
+        $this->view->offersWithPagination = $offersWithPagination;
         
         // zend form for sign up news letter and validate form
         $signUpNewsLetterform = new Application_Form_SignUp();
