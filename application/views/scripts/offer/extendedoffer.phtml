@@ -11,8 +11,8 @@ if($offer->shop['discussions'] == 1):
     $shopDiscussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
 endif;
 
-$offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
-$message = $offerPartialClass->getExpiredOfferMessage($offer->endDate, $currentDate);
+$offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$message = $offerPartial->getExpiredOfferMessage($offer->endDate, $currentDate);
 
 $extenderOffer = $this->partial(
     'store/_offer.phtml',
@@ -25,7 +25,7 @@ $extenderOffer = $this->partial(
     )
 );
 
-$termsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
+$termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
 $termAndCondition = $this->partial(
     'offer/_howToUseAndAboutOffer.phtml',
     array(
