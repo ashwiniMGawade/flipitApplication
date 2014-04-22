@@ -179,21 +179,30 @@ margin-left:-362px;
 margin-top:/* negative half from the height */
 -335px
 }
-/* ADDED BE DEVELOPER */
+
+/* ADDED BE DEVELOPER PLEASE IGNOR THIS CSS , IT WILL ADD IN ALL.CSS BY DESIGNER */
 .newsletter input[type="submit"] {
+    border-radius: 2px;
     float: left;
     font-size: 14px;
     height: 39px;
-    width: 99px;
+    margin: 0;
     min-width: 60px;
-    margin: 0 ;
     padding: 0;
-
+    width: 99px;
+}
+.newsletter input[type="email"] {
+    width: 68%!important;
+}
+#sidebar input[type="email"] {
+     width: 210px !important;
 }
 #sidebar input[type="submit"] {
-    width: 100% ;
+     width: 99px !important;
 }
-
+*:before, *:after {
+    box-sizing: border-box;
+}
 #sidebar .form-signin-heading:before {
     background: url("../images/sprite.png") no-repeat scroll -95px -130px rgba(0, 0, 0, 0);
     content: "";

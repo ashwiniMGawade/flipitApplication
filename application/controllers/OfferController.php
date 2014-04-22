@@ -37,7 +37,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->facebookLocale = $facebookLocale;
         $this->view->twitterDescription = trim($page->metaDescription);
 
-        // zend form for sign up news letter and validate form
+        // zend form for sign up news letter and validate zend form
         $singUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
         $signUpFormSideBarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $singUpFormForStorePage, $signUpFormSideBarWidget);
