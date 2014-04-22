@@ -1,7 +1,7 @@
 <?php 
 	 $headerSearch = new FrontEnd_Helper_viewHelper(); 
      $page = $this->page;
-     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."about' style='color:#6a6a6a'>".$this->translate('Profile')."</a>";
+     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."about' style='color:#6a6a6a'>".$this->T('Profile')."</a>";
   	 echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
 	 ?>
       <?php 
@@ -46,7 +46,7 @@
 	                    <div class="contributor-left-rt-text1"><?php echo $userDetails[0]['mainText']; ?></div>
 						<div class="contributor-intrest-outer">
 						
-	            			<div class="contributor-intrest-col2 text-black"><strong><?php echo $this->translate('Interests:');?></strong></div>
+	            			<div class="contributor-intrest-col2 text-black"><strong><?php echo $this->T('Interests:');?></strong></div>
 	            			<?php 
 	            			foreach($interestCategory as $intCat): 
 	            			
@@ -69,22 +69,22 @@
 	            
 	            	 <div class="right-categorieen-col1">
 	                	<div class=" right-categorieen-col1-left"><img src="<?php echo $icon1; ?>" width="27" height="22" /></div>
-	                    <p><?php echo $userDetails[0]['popularKortingscode']; ?> <?php echo $this->translate('Vouchercodes');?></p>
+	                    <p><?php echo $userDetails[0]['popularKortingscode']; ?> <?php echo $this->T('Vouchercodes');?></p>
 	                </div>
 	                
 	                 <div class="right-categorieen-col1">
 	                	<div class=" right-categorieen-col1-left"><img src="<?php echo $icon2; ?>" width="24" height="21" /></div>
-	                    <p><?php echo $this->translate('Editor since');?><?php echo $sinceDays[0]['sinceDays']; ?> <?php echo $this->translate('Days');?></p>
+	                    <p><?php echo $this->T('Editor since');?><?php echo $sinceDays[0]['sinceDays']; ?> <?php echo $this->T('Days');?></p>
 	                </div>
 	                
 	                 <div class="right-categorieen-col1">
 	                	<div class=" right-categorieen-col1-left"><img src="<?php echo $icon3; ?>" width="24" height="21" /></div>
-	                    <p><?php echo $this->translate('Likes'); echo " "; echo $userDetails[0]['likes']; ?></p>
+	                    <p><?php echo $this->T('Likes'); echo " "; echo $userDetails[0]['likes']; ?></p>
 	                </div>
 	                
 	                 <div class="right-categorieen-col1 bg-none">
 	                	<div class=" right-categorieen-col1-left"><img src="<?php echo $icon4; ?>" width="24" height="21" /></div>
-	                    <p><?php echo $this->translate('Disikes'); echo " "; echo $userDetails[0]['dislike']; ?></p>
+	                    <p><?php echo $this->T('Disikes'); echo " "; echo $userDetails[0]['dislike']; ?></p>
 	                </div>
 	            </div>
 	        </div>
@@ -102,7 +102,7 @@
      
 	      <div class="new-outer">
 	      <div class="merchants-outer">
-	       	  <div class="clr"><h2><?php echo $this->translate('Most popular vouchercodes by this editor');?></h2>
+	       	  <div class="clr"><h2><?php echo $this->T('Most popular vouchercodes by this editor');?></h2>
 	       	    </div>
 	        	<div class="merchants-bot">
 	           <?php  
@@ -132,7 +132,7 @@
         <div class="white-bg">
 	        <div class="new-outer">
 	        <div class="merchants-outer">
-	       	  <div class="clr"><h2><?php echo $this->translate('Favoriete winkels');?></h2></div>
+	       	  <div class="clr"><h2><?php echo $this->T('Favoriete winkels');?></h2></div>
 	       	   
 	        	<div class="ms-zalando-outer">
 	        	<?php 
@@ -179,7 +179,7 @@
           <!-- Merchants Outer Starts -->
       <div class="new-outer">
       <div class="merchants-outer">
-       	  <div class="clr"><h2><?php echo $this->translate('Latest vouchercodes by this editor');?></h2>
+       	  <div class="clr"><h2><?php echo $this->T('Latest vouchercodes by this editor');?></h2>
        	   </div>
         	<div class="merchants-bot">
             
@@ -212,7 +212,7 @@
 	        <div class="new-outer">
 		      	<div class="merchants-outer">
 					<div class="clr">
-						<h2><?php echo $this->translate('Meest gelezen bespaar wijzers by this editor');?></h2>
+						<h2><?php echo $this->T('Meest gelezen bespaar wijzers by this editor');?></h2>
 		       	 	</div>
 		        	<div class="common-div">
 		        		<?php  

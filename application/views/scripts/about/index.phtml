@@ -1,7 +1,7 @@
 <?php 
  	 $headerSearch = new FrontEnd_Helper_viewHelper(); 
      $page = $this->page;
-     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."about' style='color:#6a6a6a'>".$this->translate('About')."</a>";
+     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."about' style='color:#6a6a6a'>".$this->T('About')."</a>";
   	 echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
 	 ?>
 		<!-- About Outer Starts -->
@@ -28,11 +28,11 @@
                    <!-- About Top Right Starts -->
                 	<div class="about-top-right">
                     	<div class="about-top-right-heading">
-                          <h3 class="text-black"><?php echo $this->translate('Join Us!');?></h3>
+                          <h3 class="text-black"><?php echo $this->T('Join Us!');?></h3>
                         </div>
-                        <div class="about-top-right-text1"><?php echo $this->translate('Spot deals, send them in! Gain access to members only Deals and receive all the prime vouchercodes!');?></div>
+                        <div class="about-top-right-text1"><?php echo $this->T('Spot deals, send them in! Gain access to members only Deals and receive all the prime vouchercodes!');?></div>
                         <div class="about-top-right-btn">
-                        <div class="blue-btn"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven')."/". FrontEnd_Helper_viewHelper::__link('stap1')?>" rel="nofollow"><span><?php echo $this->translate('Wordt GRATIS Member!');?></span></a></div></div>
+                        <div class="blue-btn"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven')."/". FrontEnd_Helper_viewHelper::__link('stap1')?>" rel="nofollow"><span><?php echo $this->T('Wordt GRATIS Member!');?></span></a></div></div>
                     
                     </div>
                       <!-- About Top Right Ends -->
@@ -47,7 +47,7 @@
        
         	<div class="clr"></div>
      	<div class="about-outer">
-            <div class="mt20"><h2><?php echo $this->translate('REDACTEURS');?></h2></div>
+            <div class="mt20"><h2><?php echo $this->T('REDACTEURS');?></h2></div>
             <!-- About Bot Starts -->
         		<div class="about-bot">
         			<div class="fl">
@@ -98,7 +98,7 @@
 		                     					echo $only; 
 		                     				}
 		                     				?>
-		                     				<a class="text-blue-link" href="<?php echo $profileLink; ?>"><?php echo $this->translate('...View Profile');?></a>
+		                     				<a class="text-blue-link" href="<?php echo $profileLink; ?>"><?php echo $this->T('...View Profile');?></a>
 		                              </div>
 		                            </div>
 		                        </div>
@@ -116,7 +116,7 @@
 	                       </div>
                         <?php                         
                         } else {
-                        	echo $this->translate("No Records Found");
+                        	echo $this->T("No Records Found");
                         }
                         ?>
 					</div>
@@ -125,7 +125,7 @@
             <!-- About Bot Ends -->
 			<?php 
         	} else {
-        		echo $this->translate("No Records Found");
+        		echo $this->T("No Records Found");
         	}
         ?>
         </div>
