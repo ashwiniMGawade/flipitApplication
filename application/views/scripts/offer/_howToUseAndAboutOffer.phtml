@@ -13,7 +13,7 @@ if($this->expiredMessage == 'false') {
             <p><?php echo $this->offerDescription;?></p>
         </article>
         <article class="box terms-block">
-            <h2><?php echo $this->translate('Terms &amp; Conditions');?></h2>
+            <h2><?php echo $this->translate('Terms').' & '.$this->translate('Conditions');?></h2>
             <ol class="num-list">
             <?php echo $this->termAndCondition;?>
             </ol>

@@ -44,28 +44,20 @@ class OfferController extends Zend_Controller_Action
         $this->view->form = $singUpFormForStorePage;
         $this->view->sideBarWidgetFrom = $signUpFormSideBarWidget;
     }
-     /**
-     * get coupon information.
-     *
-     * @version 1.0
-     */
+
     public function extendedofferAction()
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $parameters = $this->_getAllParams();
         $extendedUrl = $parameters['permalink'];
         $currentDate = date('Y-m-d');
         $couponDetails = Offer::getCouponDetails($extendedUrl);
         $shopImage = PUBLIC_PATH_CDN.$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $couponDetails[0]['shop']['logo']['name'];
-        
-        $this->view->couponDetail = $couponDetails;
+
         if (count($couponDetails)==0) {
             $this->_redirect(HTTP_PATH_LOCALE.'error');
         }
-        $this->view->headTitle(trim($this->view->couponDetail[0]['extendedTitle']));
-        $this->view->headMeta()->appendName('description', trim($this->view->couponDetail[0]['extendedMetaDescription']));
-        
+
         if (LOCALE == '') {
             $facebookImage = 'logo_og.png';
             $facebookLocale = '';
@@ -75,17 +67,21 @@ class OfferController extends Zend_Controller_Action
         }
         
         $currentDate = date('Y-m-d');
-        $relatedOffer = Offer::getrelatedOffers ($couponDetails[0]['shopId'], $currentDate );
-       // echo "<pre>"; print_r($relatedOffer); die;
-        $this->view->relatedOffer = $relatedOffer;
+        $topOfferFromStore = Offer::getrelatedOffers($couponDetails[0]['shopId'], $currentDate);
+        $this->view->topOfferFromStore = $topOfferFromStore;
+        $this->view->couponDetails = $couponDetails;
+        
+        $this->view->headTitle(trim($couponDetails[0]['extendedTitle']));
+        $this->view->headMeta()->appendName('description', trim($couponDetails[0]['extendedMetaDescription']));
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         
         $this->view->facebookTitle = $couponDetails[0]['title'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
         $this->view->facebookImage = $facebookImage;
 
-        $this->view->facebookDescription = trim($this->view->couponDetail[0]['extendedMetaDescription']);
+        $this->view->facebookDescription = trim($couponDetails[0]['extendedMetaDescription']);
         $this->view->facebookLocale = $facebookLocale;
-        $this->view->twitterDescription = trim($this->view->couponDetail[0]['extendedMetaDescription']);
+        $this->view->twitterDescription = trim($couponDetails[0]['extendedMetaDescription']);
     }
 
     /**
@@ -98,6 +94,7 @@ class OfferController extends Zend_Controller_Action
         $offerParameters = $this->_getAllParams();
         $this->view->params = $offerParameters;
         $offerObject = new Offer();
+        
         if (isset($offerParameters['imagePath']) && !empty($offerParameters['imagePath'])) {
             $offerImagePath = $offerParameters['imagePath'];
             $this->view->offerImagePath = $offerImagePath;
@@ -109,19 +106,19 @@ class OfferController extends Zend_Controller_Action
         $this->view->offerdetail = $offerDetail;
         $this->view->vote = $offerParameters['vote'];
         $this->view->votepercentage = 0;
-        $this->view->headTitle(@$offerDetail[0]['title']);
+        $this->view->headTitle($offerDetail[0]['title']);
         $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'.
-         $offerDetail[0]['shop']['logo']['name'];
+        $offerDetail[0]['shop']['logo']['name'];
         $this->view->facebookTitle = $offerDetail[0]['title'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
         $this->view->facebookImage = $shopImage;
         if ($offerDetail[0]['couponCodeType']  == 'UN') {
             $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerId);
             if ($getOfferUniqueCode) {
-                $this->view->code = $getOfferUniqueCode['code'] ;
+                $this->view->couponCode = $getOfferUniqueCode['code'] ;
             }
         } else {
-            $this->view->code = $offerDetail[0]['couponCode']  ;
+            $this->view->couponCode = $offerDetail[0]['couponCode']  ;
         }
     
     }
