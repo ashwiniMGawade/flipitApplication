@@ -152,6 +152,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
         $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
         $this->view->controllerName = $this->getRequest()->getControllerName();
+        $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
         $this->view->facebookDescription = trim($offerPage->metaDescription);
         $this->view->facebookLocale = $facebookLocale;
