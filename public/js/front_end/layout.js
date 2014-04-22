@@ -7,8 +7,8 @@ if(GetQueryStringParams("popup")){
 });
 function OpenInNewTab(url)
 {
-    var win=window.open(url, '_blank');
-    win.focus();
+    var windowObject=window.open(url, '_blank');
+    windowObject.focus();
 }
 function showTermAndConditions(id)
 {
@@ -39,16 +39,16 @@ function printIt(urlToShow)
     windowObject.close();
 }
 
-function GetQueryStringParams(sParam)
+function GetQueryStringParams(popupParameter)
 {
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
+    var popupPageURL = window.location.search.substring(1);
+    var popupURLVariables = popupPageURL.split('&');
+    for (var i = 0; i < popupURLVariables.length; i++)
     {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
+        var popupParameterName = popupURLVariables[i].split('=');
+        if (popupParameterName[0] == popupParameter) 
         {
-            return sParameterName[1];
+            return popupParameterName[1];
         }
     }
 }
@@ -97,18 +97,17 @@ function customPopUp(id) {
 
     return false;
 }
+
 function copyToClipboard(text) {
       window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
 }
+
 function customPopUpClose() {
     $('#fade , .popup_block, .popup_block_signup').fadeOut('9000', function() {
     $('#fade').remove(); 
     });
     return false;
 }
-
-
-
 /////////////////////////////////// Refactored End ////////////////////////////////////////////////////////////////
 
 var validRules = {
