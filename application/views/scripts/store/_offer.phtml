@@ -52,12 +52,11 @@ foreach ($this->offers as $offer) {
                 <ul class="view-list">
                     <li>
     <?php 
-    if($this->offersType!='expiredOffer')
-    {
-       echo $offerPartialClass->getTermAndConditionsLink($offer, $termsAndConditions);
-       echo $offerPartialClass->getExtendedOfferLink($offer);
+    if ($this->offersType!='expiredOffer') {
+        echo $offerPartialClass->getTermAndConditionsLink($offer, $termsAndConditions);
+        echo $offerPartialClass->getExtendedOfferLink($offer);
     } else {
-       echo $offerPartialClass->getViewAllCodeLink($offer->shop['name']);
+        echo $offerPartialClass->getViewAllCodeLink($offer->shop['name']);
     }
     ?>
                     </li>
@@ -113,6 +112,7 @@ foreach ($this->offers as $offer) {
         <?php 
     endif;
 }
-if($this->offersType!='expiredOffer') { ?>
-</section>
-<?php }?>
+if ($this->offersType!='expiredOffer') { ?>
+    </section>
+    <?php
+}

@@ -11,11 +11,10 @@ if ($this->offerImagePath == '') {
             'termsAndConditions' => $termsAndConditions,
             'siteImage' => $offerPartialClass->getSiteLogoforPopup(),
             'code' => $this->code
-
        )
     );
-} else { 
-    $lightBoxcontent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">'; 
+} else {
+    $lightBoxcontent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">';
 }
 ?>
 <section id="code-lightbox">
