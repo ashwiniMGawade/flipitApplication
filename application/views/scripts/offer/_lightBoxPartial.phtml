@@ -3,10 +3,10 @@
         <fieldset>
             <div class="holder">
                 <input class="default form-control" type="text" value="<?php echo $this->code; ?>">
-                <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->code; ?>');">Copy Code</a>
+                <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->code; ?>');"><?php echo $this->translate('Copy Code');?></a>
             </div>
             <a href="/out/offer/'.$this->offer->id.'" class="btn blue btn-primary">
-                <?php echo $this->translate('Open ').$this->offer->shop['name'].$this->translate(' New Year Sale code'); ?>
+                <?php echo $this->translate('Open').' '.$this->offer->shop['name'].' '.$this->translate('New Year Sale code'); ?>
             </a>
         </fieldset>
     </form>

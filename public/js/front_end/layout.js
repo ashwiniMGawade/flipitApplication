@@ -1,8 +1,8 @@
 // refactored code
 $(document).ready(function(){
-if(GetQueryStringParams("popup")){
+if(getQueryStringParams("popup")){
     showCodePopUp('popupOnLoad');
-    showCodeInformation(GetQueryStringParams("popup"));
+    showCodeInformation(getQueryStringParams("popup"));
 }
 });
 function OpenInNewTab(url)
@@ -39,13 +39,13 @@ function printIt(urlToShow)
     windowObject.close();
 }
 
-function GetQueryStringParams(popupParameter)
+function getQueryStringParams(popupParameter)
 {
-    var popupPageURL = window.location.search.substring(1);
-    var popupURLVariables = popupPageURL.split('&');
-    for (var i = 0; i < popupURLVariables.length; i++)
+    var popupPageUrl = window.location.search.substring(1);
+    var popupUrlVariables = popupPageUrl.split('&');
+    for (var i = 0; i < popupUrlVariables.length; i++)
     {
-        var popupParameterName = popupURLVariables[i].split('=');
+        var popupParameterName = popupUrlVariables[i].split('=');
         if (popupParameterName[0] == popupParameter) 
         {
             return popupParameterName[1];
@@ -55,7 +55,7 @@ function GetQueryStringParams(popupParameter)
 
 function showCodePopUp(event) {
     if(event == 'popupOnLoad'){
-        var offerId = GetQueryStringParams("popup");
+        var offerId = getQueryStringParams("popup");
         var offerVote = 0;
     } else {
         var offerId = $(event).attr('id');
