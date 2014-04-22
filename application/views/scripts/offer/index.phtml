@@ -4,20 +4,18 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js"
 $this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 
-$subTitle = $this->content;
-$pageLogo = $this->pageLogo;
 echo $this->partial(
     'partials/_default_page_header.phtml',
-    array('pageTitle' => $this->pageTitle, 'pageLogo'=>$pageLogo ,'subTitle'=>$subTitle )
+    array('pageTitle' => $this->pageTitle, 'pageLogo'=> $this->pageLogo, 'subTitle'=> $this->content)
 );
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
 <?php
-if (count($this->paginator)>0) {
+if (count($this->offersWithPagination)>0) {
     echo $this->partial(
         'store/_offer.phtml',
-        array('offers'=> $this->paginator,
+        array('offers'=> $this->offersWithPagination,
          'offersType'=>$this->offersType, 'shopName'=> '', 'shop'=>'', 'zendForm'=>$this->form)
     );
 } else {

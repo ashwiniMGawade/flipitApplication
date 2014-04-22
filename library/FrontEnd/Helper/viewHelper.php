@@ -405,6 +405,76 @@ EOD;
         $pagination->setPageRange($paginationRange);
         return $pagination;
     }
+
+    public static function getPagnation($pageCount, $currentPage, $redirector, $pagesInRange, $nextPage)
+    {
+        $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
+        $myfavorite = explode('myfavorite', $permalink);
+
+        if ($myfavorite[0] == '') :
+            $permalink = FrontEnd_Helper_viewHelper::__link(rtrim('mijn-favorieten'));
+        endif;
+
+        $permalink = rtrim($permalink, '/');
+        preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
+        if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :
+            $permalink = explode('/'.$permalinkMatches[0], $permalink);
+            $permalink = $permalink[0];
+        elseif (intval($permalinkMatches[0]) > 3) :
+            header('location:'.HTTP_PATH_LOCALE.'error');
+        else:
+            $permalink = $permalink;
+        endif;
+
+        $permalinkAfterQueryString = explode('?', $permalink);
+        $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
+        $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($permalinkAfterQueryString[0])));
+
+        if ($pageCount > 1) :
+            if ($currentPage - 1 != 0) :
+                if ($currentPage==2) :
+                    $previousPermalink = HTTP_PATH . $permalink;
+                else:
+                    $previousPermalink = HTTP_PATH . $permalink .'/'. ($currentPage - 1);
+                endif;
+                $view->headLink(array('rel' => 'prev', 'href' => $previousPermalink));
+            endif;
+
+            if ($currentPage <= 2) :
+                if ($currentPage == 1) :
+                    $permalinkAfterQueryString = explode('?', $permalink);
+                    $permalink = $permalinkAfterQueryString[0];
+                endif;
+                if ($currentPage+1 <= $pageCount):
+                    $view->headLink(array('rel' => 'next', 'href' => HTTP_PATH . $permalink .'/'. ($currentPage + 1)));
+                endif;
+            endif;
+
+            echo '<ul class="pagination">';
+            foreach ($pagesInRange as $pageNumber) :
+                if ($pageNumber < 4 ) :
+                    $pageNumberAfterSlash = '';
+                    if ($pageNumber > 1) :
+                        $pageNumberAfterSlash = "/".$pageNumber;
+                    endif;
+                    ?>
+                    <li class="<?php echo ($pageNumber == $currentPage) ? "active" : "" ?>">
+                        <a href="<?php echo HTTP_PATH . $permalink . $pageNumberAfterSlash; ?>">
+                        <?php echo $pageNumber;?> 
+                        <?php if ($pageNumber == $currentPage) : ?>
+                        <span class="sr-only">(current)</span>
+                        <?php endif; ?>
+                        </a>
+                    </li>
+                    <?php
+                elseif (isset($nextPage) && $pageNumber < 4) : ?>
+                    <li class="next"> <a href="<?php echo HTTP_PATH . $permalink . $pageNumberAfterSlash ?>">&gt;</a></li>
+                    <?php
+                endif;
+            endforeach;
+            echo "</ul>";
+        endif;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
