@@ -1,19 +1,19 @@
 <div class="section">
     <div class="code-details">
-<?php
-if ($this->expiredMessage == 'false') { 
+        <?php
+if($this->expiredMessage == 'false') { 
       echo $this->partial(
         'offer/_extendedExpiredCode.phtml',
         array('expiredOffer'=>$this->expiredOffer)
     );
 }
-?>
+        ?>
           <article class="box">
             <h2><?php echo $this->translate('About this voucher');?></h2>
             <p><?php echo $this->offerDescription;?></p>
         </article>
         <article class="box terms-block">
-            <h2><?php echo $this->translate('Terms &amp; Conditions');?></h2>
+            <h2><?php echo $this->translate('Terms').' & '.$this->translate('Conditions');?></h2>
             <ol class="num-list">
             <?php echo $this->termAndCondition;?>
             </ol>
@@ -28,3 +28,4 @@ if ($this->expiredMessage == 'false') {
         </article>
     </div>
 </div>
+

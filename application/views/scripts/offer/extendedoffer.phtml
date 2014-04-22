@@ -4,7 +4,7 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/flipit-expired.css");
 
 $currentDate = date('Y-m-d h:i:s ');
-$offer = (object) $this->couponDetail[0];
+$offer = (object) $this->couponDetails[0];
 $shopDiscussion = '';
 $partialViewPath = 'partials/';
 if($offer->shop['discussions'] == 1):
@@ -17,7 +17,7 @@ $message = $offerPartialClass->getExpiredOfferMessage($offer->endDate, $currentD
 $extenderOffer = $this->partial(
     'store/_offer.phtml',
     array(
-    'offers' => array($message=='' ? $this->couponDetail[0] : $this->relatedOffer[0]),
+    'offers' => array($message=='' ? $this->couponDetails[0] : $this->topOfferFromStore[0]),
     'offersType'=>'expiredOffer',
     'shopName' =>'',
     'shop' =>'',
@@ -31,7 +31,7 @@ $termAndCondition = $this->partial(
     array(
         'termAndCondition' => $termsAndConditions,
         'offerDescription'=> $offer->extendedFullDescription,
-        'expiredOffer'=> $this->couponDetail[0],
+        'expiredOffer'=> $this->couponDetails[0],
         'expiredMessage'=> $message == '' ? 'true':'false'
    )
 );
