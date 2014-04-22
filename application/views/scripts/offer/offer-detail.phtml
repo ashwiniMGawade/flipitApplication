@@ -4,17 +4,17 @@ $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $termsAndConditions =  $offerPartial->getOfferTermsAndCondition($offer);
 $daysTillOfferExpires =  $offerPartial->getDaysTillOfferExpires($offer->endDate);
 if ($this->offerImagePath == '') {
-    $lightBoxcontent = $this->partial(
+    $lightboxContent = $this->partial(
         'offer/_lightBoxPartial.phtml',
         array(
             'offer' => $offer,
             'termsAndConditions' => $termsAndConditions,
             'siteImage' => $offerPartial->getSiteLogoforPopup(),
-            'code' => $this->couponCode
+            'couponCode' => $this->couponCode
        )
     );
 } else {
-    $lightBoxcontent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">';
+    $lightboxContent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">';
 }
 ?>
 <section id="code-lightbox">
@@ -32,7 +32,7 @@ if ($this->offerImagePath == '') {
             </div>
         </header>
        <?php
-        echo $lightBoxcontent;
+        echo $lightboxContent;
        ?> 
     </div> 
 </section>

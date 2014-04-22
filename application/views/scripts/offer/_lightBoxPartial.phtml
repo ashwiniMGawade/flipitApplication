@@ -2,8 +2,8 @@
     <form role="form">
         <fieldset>
             <div class="holder">
-                <input class="default form-control" type="text" value="<?php echo $this->code; ?>">
-                <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->code; ?>');">Copy Code</a>
+                <input class="default form-control" type="text" value="<?php echo $this->couponCode; ?>">
+                <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->couponCode; ?>');">Copy Code</a>
             </div>
             <a href="/out/offer/'.$this->offer->id.'" class="btn blue btn-primary">
                 <?php echo $this->translate('Open ').$this->offer->shop['name'].$this->translate(' New Year Sale code'); ?>
