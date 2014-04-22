@@ -3,10 +3,10 @@
         <fieldset>
             <div class="holder">
                 <input class="default form-control" type="text" value="<?php echo $this->couponCode; ?>">
-                <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->couponCode; ?>');">Copy Code</a>
+                <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->couponCode; ?>');"><?php echo $this->translate('Copy Code');?></a>
             </div>
             <a href="/out/offer/'.$this->offer->id.'" class="btn blue btn-primary">
-                <?php echo $this->translate('Open ').$this->offer->shop['name'].$this->translate(' New Year Sale code'); ?>
+                <?php echo $this->translate('Open').' '.$this->offer->shop['name'].' '.$this->translate('New Year Sale code'); ?>
             </a>
         </fieldset>
     </form>
@@ -14,7 +14,7 @@
 <footer class="bottom">
     <ul class="view-list">
         <li>
- <?php
+<?php
 if ($this->offer->userGenerated ==0 &&  $this->termsAndConditions!='' && $this->termsAndConditions!=null) { ?>
             <a id="termAndConditionLinkPopup<?php echo $this->offer->id ;?>" onclick="showPopupTermAndConditions(<?php echo $this->offer->id; ?>)" class="terms"
                             href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp;
@@ -22,8 +22,8 @@ if ($this->offer->userGenerated ==0 &&  $this->termsAndConditions!='' && $this->
             </a>
         </li>
     </ul>
-<?php
-if ($this->termsAndConditions!='' && $this->termsAndConditions!=null && $this->extendedOffer =='1') {?>
+    <?php
+    if ($this->termsAndConditions!='' && $this->termsAndConditions!=null && $this->extendedOffer =='1') {?>
         &nbsp; | &nbsp;
         <?php
     }

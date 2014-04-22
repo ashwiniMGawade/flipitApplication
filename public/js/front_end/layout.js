@@ -1,14 +1,14 @@
 // refactored code
 $(document).ready(function(){
-if(GetQueryStringParams("popup")){
+if(getQueryStringParams("popup")){
     showCodePopUp('popupOnLoad');
-    showCodeInformation(GetQueryStringParams("popup"));
+    showCodeInformation(getQueryStringParams("popup"));
 }
 });
 function OpenInNewTab(url)
 {
-    var win=window.open(url, '_blank');
-    win.focus();
+    var windowObject=window.open(url, '_blank');
+    windowObject.focus();
 }
 function showTermAndConditions(id)
 {
@@ -39,23 +39,23 @@ function printIt(urlToShow)
     windowObject.close();
 }
 
-function GetQueryStringParams(sParam)
+function getQueryStringParams(popupParameter)
 {
-    var sPageURL = window.location.search.substring(1);
-    var sURLVariables = sPageURL.split('&');
-    for (var i = 0; i < sURLVariables.length; i++) 
+    var popupPageUrl = window.location.search.substring(1);
+    var popupUrlVariables = popupPageUrl.split('&');
+    for (var i = 0; i < popupUrlVariables.length; i++)
     {
-        var sParameterName = sURLVariables[i].split('=');
-        if (sParameterName[0] == sParam) 
+        var popupParameterName = popupUrlVariables[i].split('=');
+        if (popupParameterName[0] == popupParameter) 
         {
-            return sParameterName[1];
+            return popupParameterName[1];
         }
     }
 }
 
 function showCodePopUp(event) {
     if(event == 'popupOnLoad'){
-        var offerId = GetQueryStringParams("popup");
+        var offerId = getQueryStringParams("popup");
         var offerVote = 0;
     } else {
         var offerId = $(event).attr('id');
@@ -97,18 +97,17 @@ function customPopUp(id) {
 
     return false;
 }
+
 function copyToClipboard(text) {
       window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
 }
+
 function customPopUpClose() {
     $('#fade , .popup_block, .popup_block_signup').fadeOut('9000', function() {
     $('#fade').remove(); 
     });
     return false;
 }
-
-
-
 /////////////////////////////////// Refactored End ////////////////////////////////////////////////////////////////
 
 var validRules = {
