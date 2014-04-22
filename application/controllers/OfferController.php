@@ -42,11 +42,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->form = $signUpNewsLetterform;
         FrontEnd_Helper_viewHelper::signUpNewsLetter($signUpNewsLetterform, $this);
     }
-     /**
-     * get coupon information.
-     *
-     * @version 1.0
-     */
+
     public function extendedofferAction()
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
