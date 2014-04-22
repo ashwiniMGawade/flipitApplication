@@ -5,20 +5,20 @@ foreach ($this->offers as $offer) {
     $offerCounter++;
     $offer = (object) $offer;
     $offerBounceRate = "/out/offer/".$offer->id;
-    $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
-    $daysTillOfferExpires = $offerPartialClass->getDaysTillOfferExpires($offer->endDate);
-    $urlToShow = $offerPartialClass->getUrlToShow($offer);
+    $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+    $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
+    $urlToShow = $offerPartial->getUrlToShow($offer);
     $offerTitle = $offer->title;
-    $termsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
-    $userLoggedInOrNot = $offerPartialClass->getUserIsLoggedInOrNot();
+    $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
+    $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
         <div class="holder">
-            <a id="<?php echo $offer->id ;?>" class="<?php echo $offerPartialClass->getClassNameForOffer($offer, $this->offersType);?>" 
+            <a id="<?php echo $offer->id ;?>" class="<?php echo $offerPartial->getClassNameForOffer($offer, $this->offersType);?>" 
             href="<?php echo $urlToShow;?>" rel="nofollow"
             target="_blank"
             onClick="<?php echo $offer->discountType == "CD" ? 'showCodePopUp(this),' : '' ?> viewCounter('onclick', 'offer', <?php echo $offer->id; ?>), ga('send', 'event', 'aff','<?php echo $offerBounceRate; ?>');">
-            <?php echo $offerPartialClass->getOfferImage($offer, $this->offersType);?>
+            <?php echo $offerPartial->getOfferImage($offer, $this->offersType);?>
             </a>
             <div class="box">
     <?php
@@ -31,7 +31,7 @@ foreach ($this->offers as $offer) {
     }
     ?>
                 <div class="text">
-                    <p> <?php echo $offerPartialClass->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
+                    <p> <?php echo $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
                     <a id="<?php echo $offer->id ;?>"
                     href="<?php echo $urlToShow;?>"
                     rel="nofollow" class="link" target="_blank"
@@ -41,8 +41,8 @@ foreach ($this->offers as $offer) {
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
-    echo $offerPartialClass->getMainButtonforOffer($offer, $urlToShow, $offerBounceRate);
-    echo $offerPartialClass->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate);
+    echo $offerPartial->getMainButtonforOffer($offer, $urlToShow, $offerBounceRate);
+    echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate);
     ?>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
@@ -54,10 +54,10 @@ foreach ($this->offers as $offer) {
                     <li>
     <?php 
     if ($this->offersType!='expiredOffer') {
-        echo $offerPartialClass->getTermAndConditionsLink($offer, $termsAndConditions);
-        echo $offerPartialClass->getExtendedOfferLink($offer);
+        echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
+        echo $offerPartial->getExtendedOfferLink($offer);
     } else {
-        echo $offerPartialClass->getViewAllCodeLink($offer->shop['name']);
+        echo $offerPartial->getViewAllCodeLink($offer->shop['name']);
     }
     ?>
                     </li>
@@ -83,13 +83,13 @@ foreach ($this->offers as $offer) {
         </div>
     </article>
     <?php
-    $shopLogoOrDefaultImage = $offerPartialClass->getShopLogoForSignUp($this->shop);
+    $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shop);
     if(($offerCounter == 1 && $this->offersType=='simple') || ($offerCounter == 1 && $this->offersType=='top20')):
         echo $this->partial(
             'store/signupwidget.phtml',
             array(
                'zendForm' => $this->zendForm,
-               'flagForDivClass'=>false,
+               'sidebarWidgetShowOrNot'=>false,
                'shopId'=>$this->shop['id'],
                'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
            )

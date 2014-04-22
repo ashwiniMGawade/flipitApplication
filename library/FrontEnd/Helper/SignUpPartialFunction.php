@@ -1,30 +1,30 @@
 <?php
 class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
 {
-    public static function validateZendForm($currentSumittedForm, $singUpFormForStorePage, $signUpFormSideBarWidget)
+    public static function validateZendForm($currentSubmittedForm, $singUpFormForStorePage, $signUpFormSidebarWidget)
     {
-        self::checkFormIsValidOrNot($currentSumittedForm, $singUpFormForStorePage, $signUpFormSideBarWidget);
+        self::checkFormIsValidOrNot($currentSubmittedForm, $singUpFormForStorePage, $signUpFormSidebarWidget);
     }
     public static function createFormForSignUp($formName, $submitButtonLabel)
     {
         return new Application_Form_SignUp($formName, $submitButtonLabel);
     }
 
-    public static function checkFormIsValidOrNot($thisSignUpNewsLetterform, $singUpFormForStorePage, $signUpFormSideBarWidget)
+    public static function checkFormIsValidOrNot($currentSubmittedForm, $signUpFormForStorePage, $signUpFormSidebarWidget)
     {
-        if ($thisSignUpNewsLetterform->getRequest()->isPost()) {
-            $whichFormIsValidate = $thisSignUpNewsLetterform->getRequest()->getParam('SignUp')=='SignUp' ? $singUpFormForStorePage : $signUpFormSideBarWidget;
-            if ($whichFormIsValidate->isValid($thisSignUpNewsLetterform->getRequest()->getPost())) {
-                $signUpStep2Url = self::singUp2RedirectLink($whichFormIsValidate);
+        if ($currentSubmittedForm->getRequest()->isPost()) {
+            $whichFormIsPostForValidation = $currentSubmittedForm->getRequest()->getParam('SignUp')=='SignUp' ? $signUpFormForStorePage : $signUpFormSidebarWidget;
+            if ($whichFormIsPostForValidation->isValid($currentSubmittedForm->getRequest()->getPost())) {
+                $signUpStep2Url = self::signUp2RedirectLink($whichFormIsPostForValidation);
                 header('location:'. $signUpStep2Url);
             } else {
-                $whichFormIsValidate->highlightErrorElements();
+                $whichFormIsPostForValidation->highlightErrorElements();
             }
         }
         return true;
     }
 
-    public static function singUp2RedirectLink($signUpNewsLetterform)
+    public static function signUp2RedirectLink($signUpNewsLetterform)
     {
         $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
         $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
@@ -32,9 +32,9 @@ class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
         return $signUpStep2Url;
     }
 
-    public function generateSignUpWidgetHeader($sideBarWidgetOrOfferWidget)
+    public function getSignUpWidgetHeader($sidebarWidgetOrOfferWidget)
     {
-       if ($sideBarWidgetOrOfferWidget==true) {
+       if ($sidebarWidgetOrOfferWidget==true) {
         $signUpHeader='<h2 class="form-signin-heading">' .$this->zendTranslate->translate('Sign up').'
             <span>'.$this->zendTranslate->translate('and join over').'<br>' .$this->zendTranslate->translate('10 million people')
             .'</span></h2>';

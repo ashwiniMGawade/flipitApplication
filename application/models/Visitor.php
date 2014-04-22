@@ -33,9 +33,9 @@ class Visitor extends BaseVisitor
         return count($visitorInformation);
     }
     /**
-     * getFavoriteShopForUser
+     * Fuction ngetFavoriteShopForUser.
      *
-     * This function checks the favorite shop of user on userid basis
+     * This function checks the favorite shop of user on userid basis.
      *
      * @param integer $visitorId
      * @param integer $shopId
