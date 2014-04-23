@@ -420,8 +420,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		$localePath 	= $transSettings['localePath'];
 		$suffix 		= $transSettings['suffix'];
 
-		$session    	= new Zend_Session_Namespace('Transl8');
-		$activationMode = (isset($session->onlineTranslationActivated)) ? $session->onlineTranslationActivated : false;
+		if($this->_lang != 'admin'){
+			$session    	= new Zend_Session_Namespace('Transl8');
+			$activationMode = (isset($session->onlineTranslationActivated)) ? $session->onlineTranslationActivated : false;
+		}else{
+			$activationMode = false;
+		}
+
   		Zend_Registry::set('Transl8_Activated', $activationMode);
 
 		Transl8_Translate_Writer_Csv::setDestinationFolder(
@@ -483,14 +488,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 				)
 		);
 
-	    $configTranslation = array(
+	    $csvTranslation = array(
 	        'adapter'   => 'Transl8_Translate_Adapter_Csv',
 	        'scan'      => Zend_Translate::LOCALE_DIRECTORY,
 	        'content'   => $inlineTranslationFolder . '/' . $locale,
 	        'locale'    => $locale
 	    );
 
-	    $csvTranslate = new Zend_Translate($configTranslation);
+	    $csvTranslate = new Zend_Translate($csvTranslation);
 		$poTrans->addTranslation($csvTranslate);
 
 	    Zend_Registry::set('Zend_Locale', $locale);

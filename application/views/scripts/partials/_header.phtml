@@ -1,8 +1,15 @@
+<?php $translateSession = new Zend_Session_Namespace('Transl8'); ?>
+<?php if (!empty($translateSession->onlineTranslationActivated)): ?>
+    <div class="inline-translation-bar">
+        Inline translation active! <a href="http://www.flipit.com/admin">Return to Admin</a>
+    </div>
+<?php endif; ?>
 <div class="header-outer">
     <div class="header-outer">
         <div class="header">
         	<div style="color:#FFFFFF; padding: 4px 0;z-index:999999;min-width:500px; position:absolute;font-size: 11px;" >
             		<?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate('Default header text')) ;?>
+
     		</div>
             <div class="logo">
             <?php  if(LOCALE == '') : ?>

@@ -11600,17 +11600,35 @@ div.voucher-col-top-20 .shop-logo-img img {
 }
 
 .ui-dialog{
-	background-color: green;
+	background-color: #eeeeee;
+	border: 1px solid rgba(0,0,0,0.3);
+	-webkit-border-radius: 6px;
 	padding: 20px;
-	border:4px solid #000;
-	color:#fff;
+	color:#000;
 }
 .ui-dialog a{
-	color: #fff;
+	color: #c43d3a;
 	font-weight: bold;
 }
+.ui-dialog-title{
+	font-size: 14px;
+	cursor: move;
+	margin-bottom: 5px;
+}
 
-.ui-dialog-title{}
 .ui-dialog-titlebar-close{
 	float: right;
 }
+#transl8-form-container{
+	margin-top: 10px;
+}
+#transl8-form-container dd{ margin-left: 0px;}
+
+.inline-translation-bar{
+	color: #fff;
+	background-color: #000;
+	position: fixed;
+	z-index: 99999999;
+	padding: 10px;
+}
+
