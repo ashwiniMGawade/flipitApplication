@@ -312,11 +312,21 @@
         </div>
       </li>
 		<?php }?>
-	<li <?php   $color = '';  if($controller == 'language') {  $color = 'style=color:#0088CC'; ?> class="imbull-has-submenu menu-top menu-icon-language imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-language imbull-menu-open imbull-not-current-submenu" <?php }?> id="language-menu-links">
-	    <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/popularcode"><br></a></div>
-	    <div class=""><div></div></div>
-	    <a href="<?php echo HTTP_PATH?>admin/language" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-language" <?php echo $color;?>><?php echo $this->translate('Language File');?></a>
-	</li>
+		<li <?php   $color = '';  if($controller == 'language') {  $color = 'style=color:#0088CC'; ?> class="imbull-has-submenu menu-top menu-icon-language imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-language imbull-menu-open imbull-not-current-submenu" <?php }?> id="language-menu-links">
+		    <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/popularcode"><br></a></div>
+		    <div class=""><div></div></div>
+		    <a href="<?php echo HTTP_PATH?>admin/language" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-language" <?php echo $color;?>><?php echo $this->translate('Language File');?></a>
+		</li>
+		<?php
+			$storeUrl 			= (empty($_COOKIE['site_name'])) ? 'http://www.kortingscode.nl' : 'http://www.'.$_COOKIE['site_name'];
+			$domainUrl 			= ($storeUrl == 'http://www.kortingscode.nl') ? $storeUrl : HTTP_PATH;
+			$storeTranslateLink = $domainUrl.'/trans/activateinlinetranslation?storeUrl='.$storeUrl.'&hash='.$this->inlineTranslationHash();
+		?>
+		<li <?php   $color = '';  if($controller == 'language') {  $color = 'style=color:#0088CC'; ?> class="imbull-has-submenu menu-top menu-icon-language imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-language imbull-menu-open imbull-not-current-submenu" <?php }?> id="language-menu-links">
+		    <div class="imbull-menu-image"><a href="<?php echo $storeTranslateLink ?>"><br></a></div>
+		    <div class=""><div></div></div>
+		    <a href="<?php echo $storeTranslateLink ?>" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-language" <?php echo $color;?>><?php echo $this->translate('Start Inline Translation');?></a>
+		</li>
 	</ul>
 	<?php
 		#global settings available for only subper admin
