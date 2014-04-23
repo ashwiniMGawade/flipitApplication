@@ -483,8 +483,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 				)
 		);
 
-		//$this->checkCsvTranslationPresent($inlineTranslationFolder . '/' . $locale);
-
 	    $configTranslation = array(
 	        'adapter'   => 'Transl8_Translate_Adapter_Csv',
 	        'scan'      => Zend_Translate::LOCALE_DIRECTORY,
@@ -499,17 +497,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 	    Zend_Registry::set('Zend_Translate', $poTrans);
 	}
 
-	function checkCsvTranslationPresent($csvDir)
-	{
-		$locationFile = $csvDir . '/translations.csv';
-		if (!file_exists($csvDir)) {
-            mkdir($csvDir, 0777, true);
-            // init empty translation csv file
-            $current = file_get_contents($locationFile);
-            $current .= '"",""';
-            file_put_contents($locationFile, $current);
-        }
-	}
 
     protected function _initViewScripts()
     {
