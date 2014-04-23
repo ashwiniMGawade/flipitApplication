@@ -35,8 +35,8 @@ class PopularCode extends BasePopularCode
         $manullyAddedCodes = self::getOldManuallyAddedPopularCode($allExistingPopularCodes);
 
         $lengthOfNewPopCode = count($newPopularCodes);
-        $lengthOfOldManPopCode = count($manullyAddedCodes);
-        $totalLength = $lengthOfNewPopCode + $lengthOfOldManPopCode;
+        $lengthOfOldMainPopCode = count($manullyAddedCodes);
+        $totalLength = $lengthOfNewPopCode + $lengthOfOldMainPopCode;
 
         $newArray = self::mergeNewAndOldPopularCode($totalLength, $manullyAddedCodes, $newPopularCodes);
         self::changePositionPopularCode($newArray, $flagForCache);

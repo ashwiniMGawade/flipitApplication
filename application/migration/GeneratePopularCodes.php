@@ -44,18 +44,13 @@ class GeneratePopularCodes
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
-       
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - deleting expired  popular codes!!!"
         );
-        
         $format = 'Y-m-j H:i:s';
         $date = date($format);
-        
-        PopularCode::deleteExpiredPopularCode($date, false);
-        
+        PopularCode::generatePopularCode(false);
         $manager->closeConnection($doctrineSiteDbConnection);
-
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Popular codes has been created successfully!!!"
         );
