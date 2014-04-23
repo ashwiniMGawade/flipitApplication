@@ -19,26 +19,23 @@ class Visitor extends BaseVisitor
 
 	public $currentLocale = null ;
 
-	public static function checkDuplicateUser($email,$id = null)
-	{
-		$email =  FrontEnd_Helper_viewHelper::sanitize($email);
-		$id =  FrontEnd_Helper_viewHelper::sanitize($id);
-
-
-		$data = Doctrine_Query::create()->select('email')->from("Visitor")->where('id ='.$id )->fetchOne(array(),Doctrine::HYDRATE_ARRAY);
-
-		$cnt  = Doctrine_Core::getTable("Visitor")->findBy('email', $email)->toArray();
-
-		if(@$cnt[0]['email'] == @$data['email']){
-			$cnt = 0;
-		}else{
-			$cnt = count($cnt);
-		}
-		//print_r($cnt); die;
-
-		return $cnt;
-	}
-
+	#############################################################
+    ######### REFACTRED CODE ####################################
+    #############################################################
+    public static function checkDuplicateUser($email, $visitorId = null)
+    {
+        $emailAddress =  FrontEnd_Helper_viewHelper::sanitize($email);
+        $visitorId =  FrontEnd_Helper_viewHelper::sanitize($visitorId);
+        if ($visitorId!=null) {
+            $visitorInformation  = Doctrine_Core::getTable("Visitor")->find($visitorId)->toArray();
+        } else {
+            $visitorInformation  = Doctrine_Core::getTable("Visitor")->findBy('email', $emailAddress)->toArray();
+        }
+        return count($visitorInformation);
+    }
+    #############################################################
+    ######### END REFACTRED CODE ################################
+    #############################################################
 	/**
 	 *  validate email address
 	 * @param string $email
