@@ -1055,18 +1055,16 @@ public static function exportpagelist() {
 	}
 	
 	
-	public static function getPageFromPageAttrFiltered($id){
-	
-		$data = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
-		->from('Page p')
-		->where("pageAttributeId = ?", $id)
-		->andWhere('p.deleted=0')
-		->orderBy('id DESC')
-		->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-		
-		return $data;
-	}
-
+    public static function getPageFromPageAttrFiltered($id)
+    {
+        $data = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
+        ->from('Page p')
+        ->where("pageAttributeId = ?", $id)
+        ->andWhere('p.deleted=0')
+        ->orderBy('id DESC')
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return $data;
+    }
 	/**
 	 * get page attrubute from page table by id
 	 * 

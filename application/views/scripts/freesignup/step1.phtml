@@ -1,64 +1,50 @@
-<?php 
-
-    $this->headScript ()->prependFile ( HTTP_PATH . "public/js/front_end/step1.js" ); 
-    //$title = $this->emailStepStatus==true ? 'Stap 1 van 4' : 'Stap 1 van 3';
-    //$this->headTitle()->append($this->translate($title));
-
+<?php
+$this->headScript()->prependFile(HTTP_PATH."public/js/front_end/step1.js");
 ?>
 <div class='new-outer'>
-  <div class="new-signup-outer-round mt40">
-    	<div class="new-sigup-nav">
-    		<ul>
-            	<?php if($this->emailStepStatus):?>
-            	
-            	<li class="step1 sltd">1. <?php echo $this->translate('E-mailadres')?></li> 
-                <li class="step2">2. <?php echo $this->translate('Bevestiging e-mailadres')?></li>
-                <li class="step3">3. <?php echo $this->translate('Vertel ons wie je bent')?></li> 
-                <li class="step4">4. <?php echo $this->translate('Je bent nu klaar om te beginnen')?></li>
-                 
-          		<?php else: ?>
-          		
-          		<li class="step1 liWidth sltd">1. <?php echo $this->translate('E-mailadres')?></li> 
-    			<li class="step3 liWidth">2. <?php echo $this->translate('Vertel ons wie je bent')?></li> 
-                <li class="step4 last-li-width">3. <?php echo $this->translate('Je bent nu klaar om te beginnen')?></li>
-                 
-            	<?php endif;?>  
+    <div class="new-signup-outer-round mt40">
+        <div class="new-sigup-nav">
+            <ul>
+                <?php if($this->emailStepStatus):?>
+                <li class="step1 sltd">1. <?php echo $this->translate('E-mail address')?></li>
+                <li class="step2">2. <?php echo $this->translate('Confirmation e-mail address')?></li>
+                <li class="step3">3. <?php echo $this->translate('Tell us who you are')?></li>
+                <li class="step4">4. <?php echo $this->translate('You are now ready to begin')?></li>
+                <?php else: ?>
+                <li class="step1 liWidth sltd">1. <?php echo $this->translate('E-mail address')?></li>
+                <li class="step3 liWidth">2. <?php echo $this->translate('Tell us who you are')?></li>
+                <li class="step4 last-li-width">3. <?php echo $this->translate('You are now ready to begin')?></li>
+                <?php endif;?>
             </ul>
         </div>
-        
-    	
         <h2 class="mt40 fl">
-        <?php echo $this->translate('Schrijf je vandaag nog in en krijg gratis toegang tot exclusieve kortingscodes, win acties en blijf op de hoogte van alle aanbiedingen van jouw favoriete winkels.')?>
+        <?php echo $this->translate('Sign up today and get free access to exclusive discount codes, win actions and stay informed of all offers of your favorite stores.')?>
         </h2>
         
         <br class="clr"/>
-        <?php if(isset($this->messageError)){?>
-    		<div id="" class="yellow-box-error-box-code-2" ><strong><?php echo $this->messageError ;?></strong></div>
-    	<?php }?>
-         <form id='stepOneForm' method="post" action="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap2')?>">
-	       <div class="new-signup-form">
-	       		<h3 style="text-align:center;"></h3>
-	           
-		            <input type="text" placeholder="<?php echo $this->translate('Voer uw e-mailadres in')?>" id='emailAddress' name='emailAddress'/>
-		            <div class='errorAppend'></div> 
-		            
-		            <div id='changeWhenStep1' class="yellow_btn">
-		            	<input type='submit' name='submitStepOne' value='<?php echo $this->translate('aanmelden')?>' />
-		            </div>
-	           
-	            <div class="already-ac">
-	            	<?php echo $this->translate('Heeft u al een account?')?> <a href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('login')?>"><?php echo $this->translate('Klik hier om in te loggen')?></a>
-	            </div>
-	       
-	       </div> 
-        </form>
+        <?php if (isset($this->messageError)) {?>
+        <div id="" class="yellow-box-error-box-code-2" >
+            <strong><?php echo $this->messageError ;?></strong>
+        </div>
+        <?php } ?>
+         <form id='stepOneForm' method="post" 
+         action="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap2')?>">
+             <div class="new-signup-form">
+                 <h3 style="text-align:center;"></h3>
+                 <input type="text" placeholder="<?php echo $this->translate('Enter your email address')?>" id='emailAddress' name='emailAddress'/>
+                 <div class='errorAppend'></div> 
+                 <div id='changeWhenStep1' class="yellow_btn">
+                     <input type='submit' name='submitStepOne' value='<?php echo $this->translate('register')?>' />
+                 </div>
+                 <div class="already-ac">
+                    <?php echo $this->translate('Already have an account?')?> <a href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('login')?>"><?php echo $this->translate('Click here to log in')?></a>
+                 </div>
+             </div> 
+         </form>
     </div>
-
-	<?php if($this->testimonials[0]['showTestimonial']): 
-		       echo $this->render('login/login_footer_member.phtml') ;
-		  endif;
-	?>
+<?php 
+if ($this->testimonials[0]['showTestimonial']):
+    echo $this->render('login/login_footer_member.phtml');
+endif;
+?>
 </div>
- 
-        
-    	

@@ -10,7 +10,38 @@ require_once 'Zend/Controller/Action.php';
 
 class FreesignupController extends Zend_Controller_Action
 {
-
+	
+############## Refactored Start ########################
+    public function step1Action()
+    {
+        $flash  = $this->_helper->getHelper('FlashMessenger');
+        $message = $flash->getMessages();
+        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $pageName = 'Sign Up Step 1';
+        $pageId = PageAttribute::getPageIdByName($pageName);
+        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSignUp($permalink);
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : null;
+        $this->view->controllerName = $this->getRequest()->getParam('controller');
+        $this->view->action = $this->getRequest()->getParam('action');
+        $this->view->pageTitle = $relatedPage['pageTitle'];
+        $this->view->headTitle($relatedPage['metaTitle']);
+        $this->view->headMeta()->setName('description', trim($relatedPage['metaDescription']));
+        $this->view->emailStepStatus = Signupmaxaccount::getemailConfirmationStatus();
+        $this->view->testimonials = Signupmaxaccount::getTestimonials();
+    }
+    public function checkuserAction()
+    {
+        $visiotrClassObject =  new Visitor();
+        $countOfVisitor  = intval($visiotrClassObject->checkDuplicateUser($this->_getParam('emailAddress'), $this->_getParam('id')));
+        if ($countOfVisitor > 0) {
+            echo Zend_Json::encode(false);
+        } else {
+            echo Zend_Json::encode(true);
+        }
+        die();
+    }
+############## Refactored End ########################
 	/**
 	 * override views based on modules if exists
 	 * @see Zend_Controller_Action::init()
@@ -49,42 +80,7 @@ class FreesignupController extends Zend_Controller_Action
      * @author cbhopal modify by kraj
      * @version 1.0
      */
-    public function step1Action() {
 
-
-
-    	# display error message in case invalid email address
-    	$flash  = $this->_helper->getHelper('FlashMessenger');
-    	$message = $flash->getMessages();
-    	$this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : null ;
-
-    	$this->view->controllerName = $this->getRequest()->getParam('controller');
-    	$this->view->action 		= $this->getRequest()->getParam('action');
-
-    	# get cononical link
-    	$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-    	$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSignUp($permalink) ;
-
-
-        $pageName = 'Sign Up Step 1';
-        $pageId = PageAttribute::getPageIdByName($pageName);
-
-        $relatedPage =  Page::getPageFromPageAttrFiltered($pageId);
-        
-        $this->view->pageTitle = @$relatedPage['pageTitle'];
-        $this->view->headTitle(@$relatedPage['metaTitle']);
-        $this->view->headMeta()->setName('description', @trim($relatedPage['metaDescription']));
-
-    	//cal function and get status of email cofimation step
-    	$this->view->emailStepStatus = Signupmaxaccount::getemailConfirmationStatus();
-
-
-        //cal function and get status of testimonials
-    	$this->view->testimonials = Signupmaxaccount::getTestimonials();
-
-
-
-    }
     /**
      * Show step 2 of signup
      *
@@ -346,24 +342,6 @@ class FreesignupController extends Zend_Controller_Action
     	}
     }
 
-    public function checkuserAction(){
-    	$u =  new Visitor();
-    	$cnt  = intval($u->checkDuplicateUser($this->_getParam('emailAddress'),$this->_getParam('id')));
-    	if($cnt > 0)
-    	{
-    		echo Zend_Json::encode(false);
 
-    	} else {
-
-    		echo Zend_Json::encode(true);
-    	}
-
-    	die();
-    }
-
-    public function confirmemailAction()
-    {
-
-    }
 
 }

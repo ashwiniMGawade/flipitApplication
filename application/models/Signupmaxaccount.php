@@ -198,14 +198,15 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 	 * getTestimonials
 	 * @return array testimonials
 	 */
-	public static function getTestimonials(){
-		$data = Doctrine_Query::create()
-		->select('p.testemail,p.showTestimonial,p.testimonial1,p.testimonial2,p.testimonial3')
-		->from('Signupmaxaccount p')
-		->where('id=1')
-		->fetchArray();
-		return $data;
-	}
+    public static function getTestimonials()
+    {
+        $testimonials = Doctrine_Query::create()
+                ->select('p.testemail,p.showTestimonial,p.testimonial1,p.testimonial2,p.testimonial3')
+                ->from('Signupmaxaccount p')
+                ->where('id=1')
+                ->fetchArray();
+        return $testimonials;
+    }
 
 	public static function updatemaxlimit($maxlimit,$userid){
 		$q = Doctrine_Query::create()->update('Signupmaxaccount')
@@ -262,18 +263,18 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 	 * @author kraj
 	 * @version 1.0
 	 */
-	public static function getemailConfirmationStatus() {
-			$status = false;
-			$data = Doctrine_Query::create()
-			->select('p.id,p.email_confirmation')
-			->from('Signupmaxaccount p')
-			->where('id=1')
-			->fetchArray();
-			if(count($data) > 0) {
-				$status = $data[0]['email_confirmation'];
-			}
-			return $status;
-
+    public static function getemailConfirmationStatus()
+    {
+        $status = false;
+        $data = Doctrine_Query::create()
+                ->select('p.id,p.email_confirmation')
+                ->from('Signupmaxaccount p')
+                ->where('id=1')
+                ->fetchArray();
+        if (count($data) > 0) {
+            $status = $data[0]['email_confirmation'];
+        }
+        return $status;
 	}
 
 

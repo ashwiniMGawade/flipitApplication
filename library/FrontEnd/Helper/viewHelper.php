@@ -1669,89 +1669,61 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
    * @param string $link
    * @version 1.0
    */
-  public static function generatCononicalForSignUp($link)
-  {
-    $plink = $link;
-
-    if (LOCALE!="") {
-        $front = Zend_Controller_Front::getInstance();
-        $cd = $front->getControllerDirectory();
-        $moduleNames = array_keys($cd);
-        $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
-
-        $splitVal = explode('?', $link);
-        if (!empty($splitVal)) {
-
-            $permalink = $splitVal[0] ;
-
-        } else {
-
-            $permalink = $link;
-        }
-
-        $routeProp = explode( '/' , $permalink) ;
-
-        $tempLang1  = rtrim($routeProp[0] , '/') ;
-        $tempLang2  = ltrim($permalink , $tempLang1) ;
-        $tempLang  = ltrim($tempLang2 , '/') ;
-
-        //remove an email from the URL
-        $perArray = explode('/', $tempLang);
-        $originalString = "";
-        foreach($perArray as $arrayPer):
-
-            $decodedEmail = base64_decode($arrayPer);
-            if (filter_var($decodedEmail, FILTER_VALIDATE_EMAIL)) {
-
-                $originalString = $arrayPer;
-                // valid address
+  ######## Refactored Start ##############
+    public static function generatCononicalForSignUp($link)
+    {
+        $plink = $link;
+        
+        if (LOCALE!="") {
+            $front = Zend_Controller_Front::getInstance();
+            $cd = $front->getControllerDirectory();
+            $moduleNames = array_keys($cd);
+            $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
+            $splitVal = explode('?', $link);
+            if (!empty($splitVal)) {
+                    $permalink = $splitVal[0] ;
+            } else {
+                $permalink = $link;
             }
-
-        endforeach;
-
-        $perWithoutEmail = rtrim(str_replace($originalString, "", $tempLang), '/');
-
-        if (in_array($routeProp[0] , $moduleNames)) {
-
-            $plink = $perWithoutEmail;
-
-        }
-
-    } else {
-
-        $splitVal = explode('?', $link);
-        if (!empty($splitVal)) {
-
-            $permalink = $splitVal[0] ;
-            $perArray = explode('/', $permalink);
-
-            //remove an email from the URL
+            $routeProp = explode('/', $permalink);
+            $tempLang1  = rtrim($routeProp[0], '/');
+            $tempLang2  = ltrim($permalink, $tempLang1);
+            $tempLang  = ltrim($tempLang2, '/');
+            $perArray = explode('/', $tempLang);
             $originalString = "";
             foreach($perArray as $arrayPer):
-
                 $decodedEmail = base64_decode($arrayPer);
                 if (filter_var($decodedEmail, FILTER_VALIDATE_EMAIL)) {
-
                     $originalString = $arrayPer;
-                    // valid address
                 }
-
             endforeach;
+            $perWithoutEmail = rtrim(str_replace($originalString, "", $tempLang), '/');
 
-            $perWithoutEmail = rtrim(str_replace($originalString, "", $permalink), '/');
-            $permalink = $perWithoutEmail;
+            if (in_array($routeProp[0], $moduleNames)) {
+                $plink = $perWithoutEmail;
+            }
         } else {
-
-            $permalink = $link;
-
+            $splitVal = explode('?', $link);
+            if (!empty($splitVal)) {
+                $permalink = $splitVal[0] ;
+                $perArray = explode('/', $permalink);
+                $originalString = "";
+                foreach($perArray as $arrayPer):
+                    $decodedEmail = base64_decode($arrayPer);
+                    if (filter_var($decodedEmail, FILTER_VALIDATE_EMAIL)) {
+                        $originalString = $arrayPer;
+                    }
+                endforeach;
+                $perWithoutEmail = rtrim(str_replace($originalString, "", $permalink), '/');
+                $permalink = $perWithoutEmail;
+            } else {
+                $permalink = $link;
+            }
+            $plink = $permalink;
         }
-
-        $plink = $permalink;
+        return $plink;
     }
-
-    return $plink;
-  }
-
+    ######## Refactored End ##############
   /**
    * Generate cononical link for search page
    *

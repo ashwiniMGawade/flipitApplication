@@ -38,12 +38,11 @@ class PageAttribute extends BasePageAttribute
 	 *	Version: 1.0
 	 */
 
-	public static function getPageIdByName($name){
-
-		$data = Doctrine_Core::getTable('pageAttribute')->findOneBy('name', $name);
-		return $data->id;
-		
-	}
+	public static function getPageIdByName($name)
+    {
+        $data = Doctrine_Core::getTable('pageAttribute')->findOneBy('name', $name);
+        return $data->id;
+    }
 
 	/**
 	 *  Author Amit Sharma
