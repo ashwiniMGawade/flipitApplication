@@ -11610,19 +11610,20 @@ div.voucher-col-top-20 .shop-logo-img img {
 	color: #c43d3a;
 	font-weight: bold;
 }
-.ui-dialog-title{
-	font-size: 14px;
+.ui-widget-header{
+	font-size: 18px;
 	cursor: move;
 	margin-bottom: 5px;
 }
 
 .ui-dialog-titlebar-close{
 	float: right;
+	font-size: 12px;
 }
 #transl8-form-container{
 	margin-top: 10px;
 }
-#transl8-form-container dd{ margin-left: 0px;}
+#transl8-form-container dd{ margin-left: 0px; }
 
 .inline-translation-bar{
 	color: #fff;
@@ -11631,4 +11632,6 @@ div.voucher-col-top-20 .shop-logo-img img {
 	z-index: 99999999;
 	padding: 10px;
 }
+
+.transl8-link{ font-style: italic; font-size: 12px;}
 

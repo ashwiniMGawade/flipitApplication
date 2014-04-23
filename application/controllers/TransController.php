@@ -19,7 +19,7 @@
 			return $this->getHelper('Transl8')->submitAction();
 		}
 
-		public function activateinlinetranslationAction()
+		public function startinlinetranslationAction()
 		{
 			$this->_helper->layout->disableLayout();
 			$this->_helper->viewRenderer->setNoRender();
@@ -39,7 +39,16 @@
 				$session->onlineTranslationActivated = false;
 				echo "This function can only be activated from the admin";
 			}
+		}
 
+		public function stopinlinetranslationAction()
+		{
+			$this->_helper->layout->disableLayout();
+			$this->_helper->viewRenderer->setNoRender();
+
+			$session = new Zend_Session_Namespace('Transl8');
+			$session->onlineTranslationActivated = false;
+			$this->_redirect( 'http://www.flipit.com/admin' );
 		}
 
 		public function testAction()

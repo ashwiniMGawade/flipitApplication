@@ -69,12 +69,14 @@ class Transl8_Form extends Zend_Form
         $submitButtonReload   = new Zend_Form_Element_Submit(
             'translationFormSubmit'
         );
+        $submitButtonReload->setAttrib( 'class', 'btn btn-large btn-primary');
         $submitButtonReload->setLabel('Save and Reload');
         $this->addElement($submitButtonReload);
 
         $submitButtonNoReload   = new Zend_Form_Element_Submit(
             'translationFormSubmitNoReload'
         );
+        $submitButtonNoReload->setAttrib( 'class', 'btn btn-large btn-primary');
         $submitButtonNoReload->setLabel('Save');
         $this->addElement($submitButtonNoReload);
     }

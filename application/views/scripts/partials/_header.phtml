@@ -1,15 +1,14 @@
 <?php $translateSession = new Zend_Session_Namespace('Transl8'); ?>
 <?php if (!empty($translateSession->onlineTranslationActivated)): ?>
     <div class="inline-translation-bar">
-        Inline translation active! <a href="http://www.flipit.com/admin">Return to Admin</a>
+        Inline translation active! <a href="http://www.flipit.com/trans/stopinlinetranslation">Stop inline translation and return to Admin</a>
     </div>
 <?php endif; ?>
 <div class="header-outer">
     <div class="header-outer">
         <div class="header">
         	<div style="color:#FFFFFF; padding: 4px 0;z-index:999999;min-width:500px; position:absolute;font-size: 11px;" >
-            		<?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate('Default header text')) ;?>
-
+            	<?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate('Default header text')) ;?>
     		</div>
             <div class="logo">
             <?php  if(LOCALE == '') : ?>
@@ -18,12 +17,13 @@
             	<a style="position: relative;" href="<?php echo rtrim(HTTP_PATH_LOCALE,'/') ?>"><img src="<?php echo HTTP_PATH;?>public/images/front_end/flipit.png" alt="flipit.com" /></a>
             <?php endif; ?>
             </div>
-                <div class="top-nav" style="width:190px;position:relative;z-index:9999;">
-                	<?php
-                	$this->locale = LOCALE != 'en' ? LOCALE  : '';
-                	$link = $this->locale. '/login/usermenu';
-                    echo $this->esi($link); ?>
-                </div>
+            <div class="top-nav" style="width:190px;position:relative;z-index:9999;">
+            <?php
+                $this->locale = LOCALE != 'en' ? LOCALE  : '';
+                $link = $this->locale. '/login/usermenu';
+                echo $this->esi($link); 
+            ?>
+            </div>
             <?php echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action); ?>
         </div>
     </div>

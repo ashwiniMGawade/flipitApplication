@@ -236,7 +236,8 @@ $(function() {
                     $("#transl8-form textarea[name='" + name + "']").text(value);
                 });
                 $("#transl8-form-container").dialog("option", "title", data.translationKey);
-                $("#transl8-form-container").dialog( "option", "draggable", true );
+                $("#transl8-form-container").dialog("option", "draggable", true );
+                $("#transl8-form-container").dialog("option", "width", 400 );
                 $("#transl8-form-container").dialog("open");
             }
         });
