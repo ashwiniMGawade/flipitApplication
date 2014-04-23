@@ -47,8 +47,6 @@ class GeneratePopularCodes
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - deleting expired  popular codes!!!"
         );
-        $format = 'Y-m-j H:i:s';
-        $date = date($format);
         PopularCode::generatePopularCode(false);
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
