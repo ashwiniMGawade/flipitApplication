@@ -148,7 +148,7 @@ class SendNewsletter {
 			$settings = Signupmaxaccount::getallmaxaccounts();
 
 			# check if newsletter is scheduled and still not sent then proceed with  newsletter sending
-			if($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
+			//if($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
 				$cutsomLocale = !empty( $settings[0]['locale']) ? $settings[0]['locale'] : 'nl_NL';
 
 				$this->_trans = new Zend_Translate(array(
@@ -194,12 +194,12 @@ class SendNewsletter {
 					$this->mandrilHandler($key, $settings);
 				}
 
-			} else {
+			//} else {
 
-				echo "\n";
-				print "$key - Already sent";
+				//echo "\n";
+				//print "$key - Already sent";
 
-			}
+			//}
 
 		} catch (Exception $e) {
 
@@ -366,8 +366,7 @@ class SendNewsletter {
 			//set $expDate array with the expiry date of offer
 			$expiryDate = new Zend_Date($value['offer']['endDate']);
 			$expDate[$key]['name'] = 'expDate_'.($key+1);
-			$expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
-
+			$expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('Verloopt op:') ." " . date('d M Y',strtotime($expiryDate->get(Zend_Date::DATE_MEDIUM)));
 			//set $shopPermalink array with the permalink of shop
 			$shopPermalink[$key]['name'] = 'shopPermalink_'.($key+1);
 			$shopPermalink[$key]['content'] = $permalinkEmail;
