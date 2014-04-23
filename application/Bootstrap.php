@@ -386,26 +386,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		$transSettings = $this->getTranslationSettings();
 		$locale = $transSettings['locale'];
 
-
 		// INFO
 		// in every module folder there needs to be a "language/$locale" dir with translations.csv with minimal content "","" present.
-		// we need to think of a way to add links po file to the translations, i think we should convert the po file to csv and if we add this file to the "language/$locale" dir then ZF wil read this file to.
 		// The admin needs a link to do translations for a store, we need to add this link and activate a session value to activate the translator lib.
-		// Replace the currenct Translation helper for the new T
-
-
-
-		// TODO add translations for links to a csv as well? 'scan'      => Zend_Translate::LOCALE_DIRECTORY, should scan the new dir allready.
-		// $trans = new Zend_Translate(array(
-		// 				'adapter' => 'gettext',
-		// 				'disableNotices' => true));
-
-	 	// $trans->addTranslation(
-		// 		array(
-		// 				'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/po_links' . $suffix . '.mo',
-		// 				'locale' => $locale,
-		// 		)
-		// );
+		// Replace the current Translation helper for the new T helper
+		// UI edits
 
 		Zend_Registry::set('Zend_Locale', $locale);
   		$date = new Zend_Date();
@@ -435,18 +420,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		$localePath 	= $transSettings['localePath'];
 		$suffix 		= $transSettings['suffix'];
 
-  		// TODO set this to true only for Admin users
-  		Zend_Registry::set('Transl8_Activated', true);
+		$session    	= new Zend_Session_Namespace('Transl8');
+		$activationMode = (isset($session->onlineTranslationActivated)) ? $session->onlineTranslationActivated : false;
+  		Zend_Registry::set('Transl8_Activated', $activationMode);
 
+		Transl8_Translate_Writer_Csv::setDestinationFolder(
+			APPLICATION_PATH.'/../public'.$localePath.'language'
+		);
 
 	    if (Zend_Registry::get('Transl8_Activated')) {
 
 	        // we register the plugin, with the webservices hooks to work with.
-	        $plugin     = new Transl8_Controller_Plugin_Transl8();
+	        $plugin = new Transl8_Controller_Plugin_Transl8();
 	        $plugin->setActionGetFormData( $localePath.'trans/getformdata/');
 	        $plugin->setActionSubmit( $localePath.'trans/submit/');
 
-	        $front      = Zend_Controller_Front::getInstance();
+	        $front = Zend_Controller_Front::getInstance();
 	        $front->registerPlugin($plugin);
 
 	        Zend_Controller_Action_HelperBroker::addPath(
@@ -454,15 +443,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
                 'Transl8_Controller_Action_Helper'
             );
 
-	    	Transl8_Translate_Writer_Csv::setDestinationFolder(
-				APPLICATION_PATH.'/../public'.$localePath.'language'
-			);
-
-	  		// enable all the translations fields for the locals we want, for now its just 1..the current local
-			// $enabledLocales = array("fr_FR");
-			// foreach ($enabledLocales as $locale) {
-			// 	$locales[trim($locale)] = new Zend_Locale($locale);
-			// }
 			$locales[Zend_Registry::get('Zend_Locale')] = Zend_Registry::get('Zend_Locale');
 	        Transl8_Form::setLocales($locales);
 	    }
@@ -503,6 +483,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 				)
 		);
 
+		//$this->checkCsvTranslationPresent($inlineTranslationFolder . '/' . $locale);
+
 	    $configTranslation = array(
 	        'adapter'   => 'Transl8_Translate_Adapter_Csv',
 	        'scan'      => Zend_Translate::LOCALE_DIRECTORY,
@@ -511,12 +493,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 	    );
 
 	    $csvTranslate = new Zend_Translate($configTranslation);
-
-
 		$poTrans->addTranslation($csvTranslate);
 
 	    Zend_Registry::set('Zend_Locale', $locale);
 	    Zend_Registry::set('Zend_Translate', $poTrans);
+	}
+
+	function checkCsvTranslationPresent($csvDir)
+	{
+		$locationFile = $csvDir . '/translations.csv';
+		if (!file_exists($csvDir)) {
+            mkdir($csvDir, 0777, true);
+            // init empty translation csv file
+            $current = file_get_contents($locationFile);
+            $current .= '"",""';
+            file_put_contents($locationFile, $current);
+        }
 	}
 
     protected function _initViewScripts()
@@ -524,7 +516,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
         $this->bootstrap('view');
         $view = $this->getResource('view');
         $view->doctype('HTML5');
-
         $view->addHelperPath(APPLICATION_PATH . '/../library/Transl8/View/Helper/', 'Transl8_View_Helper_');
 
         return $view;

@@ -67,10 +67,6 @@ class Transl8_Translate_Writer_Csv
         $locationDir        = self::getDestinationFolder() . '/' . $locale;
         $locationFile       = $locationDir . '/translations.csv';
 
-        if (!file_exists($locationDir)) {
-            mkdir($locationDir, 0777, true);
-        }
-
         $openMode = 'r';
         if (!file_exists($locationFile)) {
             $openMode = 'w+';
