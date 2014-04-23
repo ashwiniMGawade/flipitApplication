@@ -1,7 +1,7 @@
-<div class="<?php echo $this->flagForDivClass==true ? 'block block-2' : 'box' ;?>">
+<div class="<?php echo $this->sidebarWidgetShowOrNot==true ? 'block block-2' : 'box' ;?>">
 <?php 
-$signUpPartialClass = new FrontEnd_Helper_SignUpPartialFunction();
-echo $signUpPartialClass->generateSignUpWidgetHeader($this->flagForDivClass);
+$signUpPartial = new FrontEnd_Helper_SignUpPartialFunction();
+echo $signUpPartial->getSignUpWidgetHeader($this->sidebarWidgetShowOrNot);
 echo $this->zendForm;
 ?>
 </div>

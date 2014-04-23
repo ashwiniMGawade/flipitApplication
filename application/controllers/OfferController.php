@@ -37,12 +37,11 @@ class OfferController extends Zend_Controller_Action
         $this->view->facebookLocale = $facebookLocale;
         $this->view->twitterDescription = trim($page->metaDescription);
 
-        // zend form for sign up news letter and validate zend form
-        $singUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
-        $signUpFormSideBarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $singUpFormForStorePage, $signUpFormSideBarWidget);
-        $this->view->form = $singUpFormForStorePage;
-        $this->view->sideBarWidgetFrom = $signUpFormSideBarWidget;
+        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormForStorePage;
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
     public function extendedofferAction()
@@ -169,11 +168,11 @@ class OfferController extends Zend_Controller_Action
         $this->view->shopName = 'top20';
         $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 3);
         $this->view->offersWithPagination = $offersWithPagination;
-        
-        // zend form for sign up news letter and validate form
-        $signUpNewsLetterform = new Application_Form_SignUp();
-        $this->view->form = $signUpNewsLetterform;
-        FrontEnd_Helper_viewHelper::signUpNewsLetter($signUpNewsLetterform, $this);
+        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormForStorePage;
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
