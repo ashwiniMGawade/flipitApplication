@@ -1,6 +1,5 @@
 <?php
 echo $this->render('offer/jsFileForOfferPartial.phtml');
-$this->minifyHeadLink()->prependStylesheet("/public/css/all-stores.css");
 $categoryFuturedImage = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path']."thum_large_".$this->categoryDetail[0]['categoryicon']['name'];
 $categoryPartial = new FrontEnd_Helper_CategoryPartialFunctions();
 echo $categoryPartial->getCategoryHeader($this->categoryDetail[0]['name'], $categoryFuturedImage);
