@@ -517,6 +517,20 @@ EOD;
             echo "</ul>";
         endif;
     }
+
+    public function popularCategoryWidget()
+    {
+        $allCategories = Category::getPopulerCategory();
+        $categorySidebarWodget = '<div class="block"><div class="intro">
+        <h2 class="sidebar-heading">'. $this->zendTranslate->translate('All Categories').'</h2></div>
+        <ul class="tags">';
+        for ($categoryIndex=0; $categoryIndex < count($allCategories); $categoryIndex++) {
+            $categorySidebarWodget.='<li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allCategories[$categoryIndex]['category']['permaLink'].'">'.$allCategories[$categoryIndex]['category']['name'].'</li>';
+        }
+        $categorySidebarWodget.='</ul></div>'; 
+        return $categorySidebarWodget;
+    }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -910,7 +924,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
     {
         $zendTranslate = Zend_Registry::get('Zend_Translate');
         $popularStores = self::getStoreForFrontEnd('popular', 25);
-        $popularStoresContent = '<div class="intro">
+        $popularStoresContent = '<div class="block"><div class="intro">
                    <h2>'.$zendTranslate->translate('Populaire Winkels').'</h2>
                    <span>'.$zendTranslate->translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
                  </div><ul class="tags">';
@@ -934,35 +948,10 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
             $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
             $popularStoresContent .='<li '.$class.'><a title='.$popularStores[$i]['shop']['name'].' href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'], 200)).'</a></li>';
         }
-        $popularStoresContent .='</ul>';
+        $popularStoresContent .='</ul></div>';
 
         return $popularStoresContent;
     }
-
-    public static function PopularCategoryWidget()
-    {
-        $popularCategory = Category::getPopulerCategory(8);
-        $trans = Zend_Registry::get('Zend_Translate');
-        $string = '<div class="right-categorieen sidebar">
-                 <h4 class="sidebar-heading">'.$trans->translate('Sidebar categories title').'</h4>';
-    for ($i=0;$i<count($popularCategory);$i++) {
-
-            $img = PUBLIC_PATH_CDN.$popularCategory[$i]['category']['categoryicon']['path'].'thum_small_'. $popularCategory[$i]['category']['categoryicon']['name'];
-
-        $bg_none = '';
-        $string.='<div class="right-categorieen-col1 '.$bg_none.'">
-                        <div class=" right-categorieen-col1-left"><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $popularCategory[$i]['category']['permaLink'].'" class="popular_article"><img src="'.$img.'" alt="'.$popularCategory[$i]['category']['name'].'"/></a></div>
-                        <div class=" right-categorieen-col1-right"><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $popularCategory[$i]['category']['permaLink'].'" class="popular_article">'.$popularCategory[$i]['category']['name'].'</a></div>
-                    </div>';
-
-    }
-        $getPermLinkCategory = Page::getPageFromPageAttribute(9);
-               $string.='<div class="fr mt10">'.$trans->translate('Ga naar').' <a class="text-blue-link" href='. HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('categorieen').'>'.$trans->translate('Alle Categorieen').'</a></div>
-               </div>';
-
-        return $string;
-    }
-
     public static function substring($text,$length)
     {
         if (strlen($text)>$length) {

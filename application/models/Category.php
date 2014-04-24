@@ -12,6 +12,84 @@
  */
 class Category extends BaseCategory {
 
+    #################################################################
+    ########### REFACTORED CODE #####################################
+    #################################################################
+    /**
+     * Function getCategoryVoucherCodes.
+     * 
+     * get vouchercodes per category.
+     * 
+     * @return array $categoryOffers
+     * @version 1.0
+     */
+    public static function getCategoryVoucherCodes($categoryId, $numberOfOffer = 0)
+    {
+         
+        $categoryOffers= array();
+        $currentDateAndTime = date('Y-m-d H:i:s');
+        $offers = Doctrine_Query::create()
+            ->select(
+            "roc.offerId as oid,roc.categoryId as cid,o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,fv.shopId,fv.visitorId,fv.Id,terms.content"
+            )
+            ->from("refOfferCategory roc")
+            ->leftJoin("roc.Category c")
+            ->leftJoin("roc.Offer o")
+            ->leftJoin("o.shop s")
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin("s.logo l")
+            ->leftJoin('s.favoriteshops fv')
+            ->Where("categoryId =".$categoryId)
+            ->andWhere("c.deleted = 0")
+            ->andWhere("c.status= 1")
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+            ->andWhere("s.deleted = 0")
+            ->andWhere("s.status = 1")
+            ->andWhere("o.deleted = 0")
+            ->andWhere("o.userGenerated = 0")
+            ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+            ->andWhere('o.startdate < "'.$currentDateAndTime.'"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability!="MEM"')
+            ->orderBy('o.exclusiveCode DESC')
+            ->addOrderBy('o.startDate DESC')
+            ->limit($numberOfOffer)
+            ->fetchArray();
+        foreach ($offers as $offer) {
+            $categoryOffers[] = $offer['Offer'];
+        }
+        return $categoryOffers;
+    }
+
+    /**
+     * Fnction getPopulerCategory.
+     * 
+     * Get popular Category list from database for fronthome page.
+     * 
+     * @version 1.0
+     * @return array $allCategories
+     */
+    public static function getPopulerCategory($flag = 0)
+    {
+        $currentDateAndTime = date('Y-m-d H:i:s');
+        $allCategories = Doctrine_Query::create()
+        ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
+        ->from('PopularCategory p')
+        ->addSelect("(SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'".$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff")
+        ->leftJoin('p.category o')
+        ->leftJoin('o.categoryicon i')
+        ->where('o.deleted=0')
+        ->andWhere('o.status= 1')
+        ->orderBy("countOff DESC")
+        ->limit($flag)
+        ->fetchArray();
+        return $allCategories;
+    }
+    
+    #################################################################
+    ########### END REFACTORED CODE #################################
+    #################################################################
 	/**
 	 * save new category
 	 * @param array $params
@@ -371,50 +449,6 @@ class Category extends BaseCategory {
 		        ->fetchArray();
 		return $categoryIcons;
      }
-     
-     /**
-      * get vouchercodes per category
-      * @author mkaur
-      * @return array $voucherCodes
-      * @version 1.0
-      */
-     public static function getCategoryVoucherCodes($id, $limit = 0){
-     
-     	$newData = array();
-     	$date = date('Y-m-d H:i:s');
-     	$data = Doctrine_Query::create()
-		     	->select("roc.offerId as oid,roc.categoryId as cid,o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,fv.shopId,fv.visitorId,fv.Id")
-		     	->from("refOfferCategory roc")
-		     	->leftJoin("roc.Category c")
-		     	->leftJoin("roc.Offer o")
-		     	->leftJoin("o.shop s")
-		     	->leftJoin("s.logo l")
-		        ->leftJoin('s.favoriteshops fv')
-		        ->Where("categoryId =".$id)
-		        ->andWhere("c.deleted = 0" )
-		        ->andWhere("c.status= 1")
-		        ->andWhere('o.discounttype="CD"')
-		        ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-		        ->andWhere("s.deleted = 0" )
-		        ->andWhere("s.status = 1" )
-		        ->andWhere("o.deleted = 0" )
-		        ->andWhere("o.userGenerated = 0" )
-		        ->andWhere('o.enddate > "'.$date.'"')
-		        ->andWhere('o.startdate < "'.$date.'"')
-		        ->andWhere('o.discounttype="CD"')
-		        ->andWhere('o.Visability!="MEM"')
-		        ->orderBy('o.exclusiveCode DESC')
-		        ->addOrderBy('o.startDate DESC')
-		        ->limit($limit)	
-		        ->fetchArray();
-     			foreach($data as $res){
-     		  		$newData[] = $res['Offer'];
-		     	}	
-		     	
-     	return $newData;	
-     	}
-     	
-    
      /**
       * get categories show in frontend user profile
       * @author sunny patial
@@ -430,28 +464,6 @@ class Category extends BaseCategory {
 				     	->orderBy("c.name ASC")
 				     	->fetchArray();
      	return $categoryIcons;
-     }
-     
-     /**
-      * Get popular Category list from database for fronthome page
-      * @author kkumar
-      * @version 1.0
-      * @return array $data
-      */
-     public static function getPopulerCategory($flag,$type='popular') {
-     $date = date('Y-m-d H:i:s');
-     $data = Doctrine_Query::create()
-		     	->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
-		     	->from('PopularCategory p')
-		     	->addSelect("(SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'".$date."' and off.discounttype='CD' and off.Visability!='MEM') as countOff")
-		     	->leftJoin('p.category o')
-		     	->leftJoin('o.categoryicon i')
-		     	->where('o.deleted=0' )
-		     	->andWhere('o.status= 1' )
-		     	->orderBy("countOff DESC")
-		     	->limit($flag)
-     			->fetchArray();
-       return $data;
      }
       
      /**
