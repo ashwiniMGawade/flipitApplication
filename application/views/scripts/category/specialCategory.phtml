@@ -1,22 +1,21 @@
-     <?php 
-       $categoryIconPath = '';
-      	$categoryName = '';
-      	$id = $this->id;
-      	            $categoryIconPath = PUBLIC_PATH_CDN.$this->categoryicon['path'].'thum_'.$this->categoryicon['name'];
-      	       		$categoryName = $this->name;
-      	       	
-      
-      ?>
-       
-           <div class="gesorteerde-col1-outer">
-	      	 <div class="gesorteerde-col1">
-	      	 <a href="<?php echo HTTP_PATH_LOCALE . $this->permaLink; ?>">
-	      	      <div class="gesorteerde-col1-img"><img src="<?php echo $categoryIconPath; ?>" width="60" height="41" /></div>
-				  <div class="gesorteerde-col1-text" style="color:#6A6A6A;"><?php echo strlen($categoryName)<= 10 ?  $categoryName : substr($categoryName, 0,10).'...'; ?></div>
-			</a>    
-		    </div>
-		   </div>
-	     
+<?php 
+$categoryIconPath = '';
+$categoryName = '';
+$id = $this->id;
+$categoryIconPath = PUBLIC_PATH_CDN.$this->categoryicon['path'].'thum_'.$this->categoryicon['name'];
+$categoryName = $this->name;
+?>  
+<div class="gesorteerde-col1-outer">
+    <div class="gesorteerde-col1">
+        <a href="<?php echo HTTP_PATH_LOCALE . $this->permaLink; ?>">
+	          <div class="gesorteerde-col1-img"><img src="<?php echo $categoryIconPath; ?>" width="60" height="41" /></div>
+            <div class="gesorteerde-col1-text" style="color:#6A6A6A;">
+                <?php echo strlen($categoryName)<= 10 ?  $categoryName : substr($categoryName, 0,10).'...'; ?>
+            </div>
+        </a>    
+    </div>
+</div>
+
 	     
       
         
