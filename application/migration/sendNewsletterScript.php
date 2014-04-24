@@ -148,7 +148,7 @@ class SendNewsletter {
 			$settings = Signupmaxaccount::getallmaxaccounts();
 
 			# check if newsletter is scheduled and still not sent then proceed with  newsletter sending
-			//if($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
+			if($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
 				$cutsomLocale = !empty( $settings[0]['locale']) ? $settings[0]['locale'] : 'nl_NL';
 
 				$this->_trans = new Zend_Translate(array(
@@ -194,12 +194,12 @@ class SendNewsletter {
 					$this->mandrilHandler($key, $settings);
 				}
 
-			//} else {
+			} else {
 
-				//echo "\n";
-				//print "$key - Already sent";
+				echo "\n";
+				print "$key - Already sent";
 
-			//}
+			}
 
 		} catch (Exception $e) {
 

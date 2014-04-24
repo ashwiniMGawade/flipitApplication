@@ -668,7 +668,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
  		$date = new DateTime();
  		$date->modify("+1 days");
  		$date = $date->format('Y-m-d H:i:s');
-
+ 		
  		$q = Doctrine_Query::create()
 				 		->update('Signupmaxaccount')
 				 		->set('newletter_scheduled_time', '?' , $date)

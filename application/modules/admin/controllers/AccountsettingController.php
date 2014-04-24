@@ -515,6 +515,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     public function emailcontentAction()
     {
     	$data = Signupmaxaccount::getallmaxaccounts();
+    	
     	$this->view->data = $data;
 
     	$this->view->rights = $this->_settings['administration'];
