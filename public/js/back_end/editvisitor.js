@@ -307,6 +307,11 @@ function validateFormEditUser(){
 						number: true
 						
 					},
+					email:{
+						required :true,
+						email: true
+						
+					},
 					/*postalCode:{
 						required: true, 
 						//,
