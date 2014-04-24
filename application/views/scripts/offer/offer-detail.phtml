@@ -1,21 +1,20 @@
 <?php
 $offer = (object) $this->offerdetail[0];
-$offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
-$termsAndConditions =  $offerPartialClass->getOfferTermsAndCondition($offer);
-$DaysTillOfferExpires =  $offerPartialClass->getDaysTillOfferExpires($offer->endDate);
+$offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$termsAndConditions =  $offerPartial->getOfferTermsAndCondition($offer);
+$daysTillOfferExpires =  $offerPartial->getDaysTillOfferExpires($offer->endDate);
 if ($this->offerImagePath == '') {
-    $lightBoxcontent = $this->partial(
+    $lightboxContent = $this->partial(
         'offer/_lightBoxPartial.phtml',
         array(
             'offer' => $offer,
             'termsAndConditions' => $termsAndConditions,
-            'siteImage' => $offerPartialClass->getSiteLogoforPopup(),
-            'code' => $this->code
-
+            'siteImage' => $offerPartial->getSiteLogoforPopup(),
+            'couponCode' => $this->couponCode
        )
     );
-} else { 
-    $lightBoxcontent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">'; 
+} else {
+    $lightboxContent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">';
 }
 ?>
 <section id="code-lightbox">
@@ -27,13 +26,13 @@ if ($this->offerImagePath == '') {
             </div>
             <div class="box">
                 <div class="text">
-                    <p><?php echo  $offerPartialClass->getOfferOptionAndOfferDates($offer, $DaysTillOfferExpires);?></p>
+                    <p><?php echo  $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);?></p>
                     <h1><?php echo $offer->title; ?></h1>
                 </div>
             </div>
         </header>
        <?php
-        echo $lightBoxcontent;
+        echo $lightboxContent;
        ?> 
     </div> 
 </section>

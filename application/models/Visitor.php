@@ -32,6 +32,27 @@ class Visitor extends BaseVisitor
         }
         return count($visitorInformation);
     }
+    /**
+     * Fuction ngetFavoriteShopForUser.
+     *
+     * This function checks the favorite shop of user on userid basis.
+     *
+     * @param integer $visitorId
+     * @param integer $shopId
+     */
+    public static function getFavoriteShopForUser($visitorId, $shopId)
+    {
+        $favoriteShops = Doctrine_Query::create()->select("fv.id as id")
+        ->from("FavoriteShop fv")
+        ->where('fv.visitorId='.$visitorId)
+        ->andWhere('fv.shopId='.$shopId)
+        ->fetchArray();
+        if (count($favoriteShops) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     #############################################################
     ######### END REFACTRED CODE ################################
     #############################################################
@@ -600,30 +621,6 @@ public static function Visitortotal_acc(){
 	->fetchArray();
 	return $data;
 }*/
-
-/**
- * getFavoriteShopForUser
- *
- * This function checks the favorite shop of user on userid basis
- *
- * @param integer $visitorId
- * @param integer $shopId
- */
-public static function getFavoriteShopForUser($visitorId,$shopId) {
-
-	$data = Doctrine_Query::create()->select("fv.id as id,s.name as name,s.permaLink,s.id as id,l.*")->
-	from("FavoriteShop fv")->leftJoin("fv.shops s")
-	->leftJoin('s.logo l')
-	->where('fv.visitorId='.$visitorId)
-	->andWhere('fv.shopId='.$shopId)
-	->fetchArray();
-
-	if(count($data) > 0){
-		return true;
-	}else{
-		return false;
-	}
-}
 	/**
 	 * function used to update password request
 	 * @param interger $vId

@@ -4,20 +4,20 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/flipit-expired.css");
 
 $currentDate = date('Y-m-d h:i:s ');
-$offer = (object) $this->couponDetail[0];
+$offer = (object) $this->couponDetails[0];
 $shopDiscussion = '';
 $partialViewPath = 'partials/';
 if($offer->shop['discussions'] == 1):
     $shopDiscussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
 endif;
 
-$offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
-$message = $offerPartialClass->getExpiredOfferMessage($offer->endDate, $currentDate);
+$offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$message = $offerPartial->getExpiredOfferMessage($offer->endDate, $currentDate);
 
 $extenderOffer = $this->partial(
     'store/_offer.phtml',
     array(
-    'offers' => array($message=='' ? $this->couponDetail[0] : $this->relatedOffer[0]),
+    'offers' => array($message=='' ? $this->couponDetails[0] : $this->topOfferFromStore[0]),
     'offersType'=>'expiredOffer',
     'shopName' =>'',
     'shop' =>'',
@@ -25,13 +25,13 @@ $extenderOffer = $this->partial(
     )
 );
 
-$termsAndConditions = $offerPartialClass->getOfferTermsAndCondition($offer);
+$termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
 $termAndCondition = $this->partial(
     'offer/_howToUseAndAboutOffer.phtml',
     array(
         'termAndCondition' => $termsAndConditions,
         'offerDescription'=> $offer->extendedFullDescription,
-        'expiredOffer'=> $this->couponDetail[0],
+        'expiredOffer'=> $this->couponDetails[0],
         'expiredMessage'=> $message == '' ? 'true':'false'
    )
 );

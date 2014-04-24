@@ -1,6 +1,15 @@
 <?php
 class Application_Form_SignUp extends Application_Form_Base
 {
+    public $zendFormName = '';
+    public $submitButtonLabel = '';
+    public function __construct($zendFormName, $submitButtonLabel)
+    {
+        $this->zendFormName = $zendFormName;
+        $this->submitButtonLabel = $submitButtonLabel;
+        parent::__construct();
+    }
+
     public function init()
     {
         $decoratorEmailAddress = new Application_Form_SimpleInput();
@@ -31,18 +40,19 @@ class Application_Form_SignUp extends Application_Form_Base
         $hiddenFieldForShopId = new Zend_Form_Element_Hidden('shopId');
         $hiddenFieldForShopId->setDecorators(array('ViewHelper'));
 
-        $submitButton = new Zend_Form_Element_Button('sign up');
+        $submitButton = new Zend_Form_Element_Submit('Sign Up');
         $submitButton->setAttrib('type', 'submit');
         $submitButton->setAttrib('id', 'Login');
+        $submitButton->setLabel($this->submitButtonLabel);
         $submitButton->setAttrib('class', 'btn blue btn-lg btn-primary');
-        $submitButton->setAttrib('onclick', 'setHiddenFieldValue(), signUpNewsLetter()');
+        $submitButton->setAttrib('onclick', 'setHiddenFieldValue(), signUpNewsLetter("' . $this->zendFormName .'")');
         $submitButton->setDecorators(array('ViewHelper'));
 
         $this->addElement($emailAddressTextBox)
             ->addElement($submitButton)
             ->addElement($hiddenFieldForShopId)
-            ->setAttrib('id', 'login')
-            ->setAttrib('id', 'formOneHomePage')
+            ->setAttrib('id', $this->zendFormName)
+            ->setAttrib('name', $this->zendFormName)
             ->setAttrib('class', 'form-signin newsletter')
             ->setMethod('POST')
             ->setDecorators(array('FormElements','Form'));

@@ -1,5 +1,5 @@
 <?php
- 
+
 class StoreController extends Zend_Controller_Action
 {
     #################################################
@@ -105,10 +105,11 @@ class StoreController extends Zend_Controller_Action
         }
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
 
-        // zend form for sign up news letter and validate form
-        $signUpNewsLetterform = new Application_Form_SignUp();
-        $this->view->form = $signUpNewsLetterform;
-        FrontEnd_Helper_viewHelper::signUpNewsLetter($signUpNewsLetterform, $this);
+        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormForStorePage;
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
     
     public function topStorePopularOffers($shopId, $offers)

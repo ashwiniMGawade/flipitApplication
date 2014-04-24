@@ -14,7 +14,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             } elseif (count($currentOffer->logo)>0) {
                 $urlToShow = PUBLIC_PATH_CDN.ltrim($currentOffer->logo['path'], "/").$currentOffer->logo['name'];
             }
-        } 
+        }
         return $urlToShow;
     }
 
@@ -106,16 +106,15 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $offerDates .= $this->zendTranslate->translate('day only!');
 
         } elseif ($daysTillOfferExpires == 0) {
-            $offerDates .= $this->zendTranslate->translate('Expires today');
-
+                $offerDates .= $this->zendTranslate->translate('Expires today');
         } else {
-            $endDate = new Zend_Date(strtotime($currentOffer->endDate));
-            $offerDates .= $this->zendTranslate->translate('Expires on').': ';
-            $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
+                $endDate = new Zend_Date(strtotime($currentOffer->endDate));
+                $offerDates .= $this->zendTranslate->translate('Expires on').': ';
+                $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
         } elseif ($currentOffer->discountType == "PR" || $currentOffer->discountType == "SL" || $currentOffer->discountType == "PA"):
-        $offerDates .= $stringAdded;
-        $offerDates .= ': ';
-        $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
+            $offerDates .= $stringAdded;
+            $offerDates .= ': ';
+            $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
         endif;
         return $offerDates;
     }
@@ -135,25 +134,25 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $className .= ' red';
         } elseif ($currentOffer->extendedOffer =='1') {
             $className .= ' blue';
-        } 
+        }
         return $className;
     }
 
     public function getOfferImage($currentOffer, $offersType)
     {
-        $offerImageDiv = '';
-        if($offersType == 'simple') {
-          $offerDiscountImage = self::getDiscountImage($currentOffer);
-          $altAttributeText = $currentOffer->tiles['label'];
-          $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
-       } else {
-           $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
-           $altAttributeText = $currentOffer->shop['name'];
-           $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
-           $offerImageDiv = $imageTag . '<footer class="bottom">' . self::getOfferTypeText($currentOffer) . '</footer>';
-       }
+         $offerImageDiv = '';
+        if ($offersType == 'simple') {
+            $offerDiscountImage = self::getDiscountImage($currentOffer);
+            $altAttributeText = $currentOffer->tiles['label'];
+            $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);
+        } else {
+            $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
+            $altAttributeText = $currentOffer->shop['name'];
+            $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
+            $offerImageDiv = $imageTag . '<footer class="bottom">' . self::getOfferTypeText($currentOffer) . '</footer>';
+        }
       
-       return $offerImageDiv;
+        return $offerImageDiv;
     }
 
     public function getShopLogoForOffer($currentOffer)
@@ -161,7 +160,8 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_medium_store_'. $currentOffer->shop['logo']['name'];
     }
     
-    public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder) {
+    public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder)
+    {
         $imageTagForOffer = '';
         if ($shopCodeHolder) {
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
@@ -199,13 +199,14 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $similarShopHeader;
     }
 
-    public function getShopLogoForSignUp($shop) {
+    public function getShopLogoForSignUp($shop)
+    {
         $imgTagWithImage = '';
-        if($shop!=null){
-           $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
-           $imgTagWithImage = '<img alt="' . $shop['logo']['name']. '" src="'. $shopLogoImage .'">';
+        if ($shop!=null) {
+            $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
+            $imgTagWithImage = '<img alt="' . $shop['logo']['name']. '" src="'. $shopLogoImage .'">';
         } else {
-           $imgTagWithImage = '<div class="ico-mail"></div>';
+            $imgTagWithImage = '<div class="ico-mail"></div>';
         }
         return $imgTagWithImage;
     }
@@ -217,7 +218,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink']."?popup=$currentOffer->id')";
             $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
             '.$this->zendTranslate->translate('>Get code &amp; Open site').' </a>';
-        }else{
+        } else {
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "showCodePopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
             $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" vote = "0" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$this->zendTranslate->translate('>Get code &amp; Open site').'</a>';
         }
@@ -230,10 +231,10 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : " ";
             $secondButton = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$this->zendTranslate->translate('print now').'<span class="ico-print"></span></a>';
-        }else if ($currentOffer->discountType=='CD') {
+        } else if ($currentOffer->discountType=='CD') {
             $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink']."?popup=$currentOffer->id')";
             $secondButton = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_self" onClick="'.$onClick.'">'.$this->zendTranslate->translate('Pack this offer').'</a>';
-        }else if ($currentOffer->discountType == "SL"){
+        } else if ($currentOffer->discountType == "SL") {
             $secondButton = '';
         }
         return $secondButton;
@@ -266,7 +267,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     
     public function getViewAllCodeLink($shopName)
     {
-       return $viewAllLink ='<a href="' . $shopName . '">'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</a>';
+        return $viewAllLink ='<a href="' . $shopName . '">'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</a>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)
