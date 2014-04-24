@@ -11386,7 +11386,7 @@ div.nieuw-popular-outer a.active {
 
 .new-outer-search{
 	position: relative;
-	z-index: 99999;
+	z-index: 99;
 	top:-105px;
 }
 
@@ -11603,8 +11603,10 @@ div.voucher-col-top-20 .shop-logo-img img {
 	background-color: #eeeeee;
 	border: 1px solid rgba(0,0,0,0.3);
 	-webkit-border-radius: 6px;
+	box-shadow: 0 3px 7px rgba(0,0,0,0.3);
 	padding: 20px;
 	color:#000;
+	z-index: 99999999;
 }
 .ui-dialog a{
 	color: #c43d3a;
@@ -11633,5 +11635,24 @@ div.voucher-col-top-20 .shop-logo-img img {
 	padding: 10px;
 }
 
-.transl8-link{ font-style: italic; font-size: 12px;}
+.transl8-text{
+	border: 1px dotted red;
+}
+.transl8-link{ 
+	font-style: italic; 
+	font-size: 12px;
+	color: red;
+}
+
+.transl8-link img{
+	width: 14px;
+	padding-left: 5px;
+}
+
+
+
+
+
+
+
 

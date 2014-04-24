@@ -29,17 +29,17 @@
  * @license     http://labs.inovia.fr/license MIT License
  * @author      Inovia-Team
  */
-class Transl8_View_Helper_T extends Zend_View_Helper_Abstract
+class Transl8_View_Helper_Translate extends Zend_View_Helper_Abstract
 {
 	protected $_defaultPlaceholder = '%value%';
 
 	/**
 	 * @see Transl8_View_Helper_T::translate()
 	 */
-	public function T($message, $param = null, $inlineTranslation = true)
-	{
-	    return $this->translate($message, $param, $inlineTranslation);
-	}
+	// public function T($message, $param = null, $inlineTranslation = true)
+	// {
+	//     return $this->translate($message, $param, $inlineTranslation);
+	// }
 
     /**
      * Return a content item into a local translated string

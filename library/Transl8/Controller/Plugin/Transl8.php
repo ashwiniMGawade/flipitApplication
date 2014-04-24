@@ -95,6 +95,7 @@ class Transl8_Controller_Plugin_Transl8 extends Zend_Controller_Plugin_Abstract
         $css            = $this->_getCss();
         $js             = $this->_getJs();
         $html           = $this->_getHtml();
+
         $editionForm    = $this->_getEditionForm();
 
         $injectionInHeadCode = $css;

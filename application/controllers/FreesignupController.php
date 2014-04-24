@@ -51,8 +51,6 @@ class FreesignupController extends Zend_Controller_Action
      */
     public function step1Action() {
 
-
-
     	# display error message in case invalid email address
     	$flash  = $this->_helper->getHelper('FlashMessenger');
     	$message = $flash->getMessages();

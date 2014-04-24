@@ -39,11 +39,11 @@
 	       <div class="new-signup-form">
 	       		<h3 style="text-align:center;"></h3>
 	           
-		            <input type="text" placeholder="<?php echo $this->translate('Voer uw e-mailadres in')?>" id='emailAddress' name='emailAddress'/>
+		            <input type="text" placeholder="<?php echo FrontEnd_Helper_viewHelper::__form('Voer uw e-mailadres in') ?>" id='emailAddress' name='emailAddress'/>
 		            <div class='errorAppend'></div> 
 		            
 		            <div id='changeWhenStep1' class="yellow_btn">
-		            	<input type='submit' name='submitStepOne' value='<?php echo $this->translate('aanmelden')?>' />
+		            	<input type='submit' name='submitStepOne' value='<?php echo FrontEnd_Helper_viewHelper::__form('aanmelden') ?>' />
 		            </div>
 	           
 	            <div class="already-ac">
@@ -51,6 +51,7 @@
 	            </div>
 	       
 	       </div> 
+
         </form>
     </div>
 
