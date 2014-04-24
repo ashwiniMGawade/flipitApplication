@@ -11598,3 +11598,8 @@ div.voucher-col-top-20 .shop-logo-img img {
 .voucher-col1-top-heading-new h3 a {
 	color: #000;
 }
+.signup-title {
+	margin: 80px auto 0;
+	width: 770px;
+	text-align: center;
+}
