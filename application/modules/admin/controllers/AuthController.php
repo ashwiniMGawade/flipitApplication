@@ -229,7 +229,7 @@ class Admin_AuthController extends Zend_Controller_Action {
 					//render view
 					$bodyText = $html->render('template.phtml');
 					$recipents = array("to" => $this->getRequest()->getParam("email"));
-					$subject = $this->view->translate("Forgot password");
+					$subject = FrontEnd_Helper_viewHelper::__email("Forgot password");
 					$body = $bodyText;
 					//send a mail to user password update notification
 					$sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents,$subject, $body);

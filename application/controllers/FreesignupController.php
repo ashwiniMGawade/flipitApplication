@@ -128,7 +128,7 @@ class FreesignupController extends Zend_Controller_Action
 		    	$bodyText = $html->render('confirmemail.phtml');
 
 		    	$recipents = array("to" => $params['emailAddress']);
-		    	$subject = $this->view->translate("Welkom bij Kortingscode.nl");
+		    	$subject = FrontEnd_Helper_viewHelper::__email("Welkom bij Kortingscode.nl");
 		    	$body = $bodyText;
 		    	$sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents,$subject, $body);
 		    }

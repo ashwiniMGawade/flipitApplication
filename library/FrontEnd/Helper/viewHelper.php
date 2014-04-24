@@ -1614,6 +1614,20 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
   }
 
   /**
+   * function to translate email strings according to language selected
+   * @author Daniel
+   * @return string $variable
+   * @version 1.0
+   */
+  public static function __email($variable)
+  {
+    $trans = Zend_Registry::get('Zend_Translate');
+    $variable = $trans->translate(_($variable));
+
+    return $variable;
+  }
+
+  /**
    * Generate cononical link
    *
    * generate cononical from link and split

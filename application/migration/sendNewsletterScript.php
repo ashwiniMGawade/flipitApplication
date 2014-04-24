@@ -251,13 +251,13 @@ class SendNewsletter {
 						'content' => $this->_siteName
 				),
 				array('name' => 'unsubscribe',
-						'content' => $this->_trans->translate('Uitschrijven')
+						'content' => FrontEnd_Helper_viewHelper::__email('Uitschrijven')
 				),
 				array('name' => 'editProfile',
-						'content' => $this->_trans->translate('Wijzigen profiel')
+						'content' => FrontEnd_Helper_viewHelper::__email('Wijzigen profiel')
 				),
 				array('name' => 'contact',
-						'content' => $this->_trans->translate('Contact')
+						'content' => FrontEnd_Helper_viewHelper::__email('Contact')
 				),
 				array('name' => 'contactLink',
 						'content' => $this->_linkPath . 'info/contact'
@@ -266,7 +266,7 @@ class SendNewsletter {
 						'content' => $this->_linkPath . FrontEnd_Helper_viewHelper::__link('populair')
 				),
 				array('name' => 'moreOffers',
-						'content' => $this->_trans->translate('Bekijk meer van onze top aanbiedingen') . ' >'
+						'content' => FrontEnd_Helper_viewHelper::__email('Bekijk meer van onze top aanbiedingen') . ' >'
 				)
 		);
 

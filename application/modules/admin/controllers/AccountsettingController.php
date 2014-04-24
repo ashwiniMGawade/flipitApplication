@@ -614,6 +614,8 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 			    	->andWhere('weeklyNewsLetter = 1')
 			    	->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
+		echo $visitors;
+
 
     	echo $this->_helper->json(array('recepients' => $visitors['recepients']), true);
     }
