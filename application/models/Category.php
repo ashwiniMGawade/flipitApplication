@@ -34,7 +34,7 @@ class Category extends BaseCategory {
 		$data->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params["description"]);
 		$data->status = '1';
 		$data->categoryIconId = $params["categoryIconNameHidden"];
-		
+		$data->featured_category = $params["featuredCategory"];
 		
 		if (isset($_FILES['categoryIconNameHidden']['name']) && $_FILES['categoryIconNameHidden']['name'] != ''){
 		$result = self::uploadImage('categoryIconNameHidden');
@@ -118,7 +118,7 @@ class Category extends BaseCategory {
 		$data->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params["metaTitle"]);
 		$data->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params["metaDescription"]);
 		$data->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params["description"]);
-		
+		$data->featured_category = $params["featuredCategory"];
        if (isset($_FILES['categoryIconNameHidden']['name']) && $_FILES['categoryIconNameHidden']['name'] != '') {
 		$result = self::uploadImage('categoryIconNameHidden');
 			if ($result['status'] == '200'){

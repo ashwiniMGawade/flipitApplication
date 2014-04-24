@@ -29,7 +29,13 @@
 	<input type="hidden" value="<?php echo $this->editRec[0]['id'] ?>" name='id' id='id' />
 	<input type="hidden" value="<?php echo $this->role; ?>" name='role' id='role' />
 	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
-
+	<?php
+	$featuredCategory = 1;
+    if($this->editRec[0]['featured_category'] == ''):
+        $featuredCategory = 0;
+    endif;
+	?>
+    <input type="hidden" name="featuredCategory" id="featuredCategory" value="<?php echo $featuredCategory;?>" />
 	<h1><?php echo $this->translate('Edit Category'); ?><input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" /></h1>
 		<div id="poststuff" class="metabox-holder has-right-sidebar">
 			<div id="post-body">
@@ -139,7 +145,20 @@
 								</div>
 							</div>
 						</div>
-
+                        <div class="mainpage-content-line mb10">
+                            <div class="mainpage-content-left"><label><strong>Featured category</strong></label></div>
+                                <div class="mainpage-content-right">
+                                    <div class="btn-group" data-toggle="buttons-checkbox">
+                                    <?php if ($featuredCategory == 1) { ?>
+                                    <button onclick="setOnOff(event,'featured-category','on');" class="btn btn-primary default" type="button">Ja</button>                     
+                                    <button onclick="setOnOff(event,'featured-category','off');" class="btn" type="button">Nee</button> 
+                                    <?php } else { ?>
+									<button onclick="setOnOff(event,'featured-category','on');" class="btn" type="button">Ja</button>                     
+                                    <button onclick="setOnOff(event,'featured-category','off');" class="btn btn-primary default" type="button">Nee</button> 
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
 					</div>
 
 				</div>

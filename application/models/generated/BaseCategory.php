@@ -68,6 +68,9 @@ abstract class BaseCategory extends Doctrine_Record
              'comment' => 'FK to image.id',
              'length' => '20',
              ));
+        $this->hasColumn('featured_category', 'boolean', null, array(
+             'type' => 'boolean',
+             ));
     }
 
     public function setUp()
