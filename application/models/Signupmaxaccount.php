@@ -618,11 +618,11 @@ class Signupmaxaccount extends BaseSignupmaxaccount
  	public static function saveScheduledNewsletter($request)
  	{
 
- 		$scheduledDate = $request->getParam("sendDate" , false);
+ 		$scheduledDate = explode('-', $request->getParam("sendDate"));
+        $scheduledDate = $scheduledDate[2]. "-" . $scheduledDate[0] . "-" . $scheduledDate[1];
  		$scheduledTime = $request->getParam("sendTime" , false);
- 		$timezone = $request->getParam("timezone" , false);;
-
- 		$timestamp =   date('Y-m-d',strtotime($scheduledDate)).' '.date('H:i:s',strtotime($scheduledTime)) ;
+ 		$timezone = $request->getParam("timezone" , false);
+        $timestamp =    $scheduledDate.' '.date('H:i:s',strtotime($scheduledTime));
 
  		try {
 
