@@ -640,7 +640,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 				//route redirection to relative route
 
-				$route = new Zend_Controller_Router_Route($lang .'/'. $permalink1.'/*',$paramArray);
+				$route = new Zend_Controller_Router_Route($lang .'/'. $permalink1, $paramArray);
 
 				$router->addRoute('user', $route);
 
@@ -651,20 +651,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 				//create an instance for zend router
 				$router = Zend_Controller_Front::getInstance()->getRouter();
 				//route redirection to relative route
-				$route = new Zend_Controller_Router_Route($permalink1.'/*',$paramArray);
+				$route = new Zend_Controller_Router_Route($permalink1, $paramArray);
 				$router->addRoute('user', $route);
 			}
 
 
 		}
-
+		
 		# for 301 redirections of old indexed pages
 		if(is_array($permalink)){
 			$permalinkToCheck = explode('/',$permalink[0]);
 		}else{
 			$permalinkToCheck = explode('/',$permalink);
 		}
-
+		
 		switch ($permalinkToCheck[0]) {
 
 			case "kortingen":
@@ -726,8 +726,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 			if(	$this->_request->isXmlHttpRequest())
 			{
-
-
+				
 				$router->addRoute('xmlHttp', new Zend_Controller_Router_Route(
 						'/:lang/:@controller/:@action/*',
 						array(
@@ -736,7 +735,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 								'module' => 'default'
 						)
 				));
-
+				
 				foreach($config->routes as $key => $r){
 					switch($key)
 					{
@@ -789,7 +788,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 			foreach($config->routes as $key => $r){
 
-			
+				
 
 				if($r->type != "Zend_Controller_Router_Route_Regex")
 				{
