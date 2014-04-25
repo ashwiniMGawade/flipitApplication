@@ -36,10 +36,8 @@ class CategoryController extends Zend_Controller_Action {
             $this->view->facebookDescription = trim($categoryDetail[0]['metaDescription']);
             $this->view->facebookLocale = $facebookLocale;
             $this->view->twitterDescription = trim($categoryDetail[0]['metaDescription']);
-            
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
-
         }
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
