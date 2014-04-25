@@ -520,12 +520,12 @@ EOD;
 
     public function popularCategoryWidget()
     {
-        $allCategories = Category::getPopulerCategory();
+        $allPopularCategories = Category::getPopularCategories();
         $categorySidebarWodget = '<div class="block"><div class="intro">
         <h2 class="sidebar-heading">'. $this->zendTranslate->translate('All Categories').'</h2></div>
         <ul class="tags">';
-        for ($categoryIndex=0; $categoryIndex < count($allCategories); $categoryIndex++) {
-            $categorySidebarWodget.='<li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allCategories[$categoryIndex]['category']['permaLink'].'">'.$allCategories[$categoryIndex]['category']['name'].'</li>';
+        for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
+            $categorySidebarWodget.='<li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name'].'</li>';
         }
         $categorySidebarWodget.='</ul></div>'; 
         return $categorySidebarWodget;
@@ -989,7 +989,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                 $result = PopularVouchercodes :: getNewstoffer($flag);
                 break;
             case "category":
-                $result = Category :: getPopulerCategory($flag);
+                $result = Category :: getPopularCategories($flag);
                 break;
             case "specialList":
                 $result = $data = SpecialList::getfronendsplpage($flag);
@@ -1456,7 +1456,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
    * @version 1.0
    * @return array $data
    */
-  public static function getPopulerCategory($flag,$type='popular')
+  public static function getPopularCategories($flag,$type='popular')
   {
     $data = Doctrine_Query::create()
     ->select('p.id,o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId')

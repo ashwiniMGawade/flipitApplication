@@ -23,12 +23,12 @@ class Category extends BaseCategory {
      * @return array $categoryOffers
      * @version 1.0
      */
-    public static function getCategoryVoucherCodes($categoryId, $numberOfOffer = 0)
+    public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0)
     {
          
         $categoryOffers= array();
         $currentDateAndTime = date('Y-m-d H:i:s');
-        $offers = Doctrine_Query::create()
+        $categoryOffersList = Doctrine_Query::create()
             ->select(
             "roc.offerId as oid,roc.categoryId as cid,o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,fv.shopId,fv.visitorId,fv.Id,terms.content"
             )
@@ -54,26 +54,26 @@ class Category extends BaseCategory {
             ->andWhere('o.Visability!="MEM"')
             ->orderBy('o.exclusiveCode DESC')
             ->addOrderBy('o.startDate DESC')
-            ->limit($numberOfOffer)
+            ->limit($numberOfOffers)
             ->fetchArray();
-        foreach ($offers as $offer) {
+        foreach ($categoryOffersList as $offer) {
             $categoryOffers[] = $offer['Offer'];
         }
         return $categoryOffers;
     }
 
     /**
-     * Fnction getPopulerCategory.
+     * Fnction getPopularCategories.
      * 
      * Get popular Category list from database for fronthome page.
      * 
      * @version 1.0
      * @return array $allCategories
      */
-    public static function getPopulerCategory($flag = 0)
+    public static function getPopularCategories($categoriesLimit = 0)
     {
         $currentDateAndTime = date('Y-m-d H:i:s');
-        $allCategories = Doctrine_Query::create()
+        $popularCategories = Doctrine_Query::create()
         ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
         ->from('PopularCategory p')
         ->addSelect("(SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'".$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff")
@@ -82,9 +82,9 @@ class Category extends BaseCategory {
         ->where('o.deleted=0')
         ->andWhere('o.status= 1')
         ->orderBy("countOff DESC")
-        ->limit($flag)
+        ->limit($categoriesLimit)
         ->fetchArray();
-        return $allCategories;
+        return $popularCategories;
     }
     
     #################################################################

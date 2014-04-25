@@ -259,7 +259,7 @@ class Admin_HomepageController extends Zend_Controller_Action
     	$this->view->code = @$data;
 
     	//Return Popular category code from database
-    	$catg = PopularCategory::getPopulerCategory();
+    	$catg = PopularCategory::getPopularCategories();
     	$this->view->category = @$catg;
 
     	//Return Popular category code from database
@@ -612,7 +612,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 
 
 		//get popular code from database
-		$data = PopularCategory::getPopulerCategory();
+		$data = PopularCategory::getPopularCategories();
 		echo Zend_Json::encode($data);
 		$key = 'all_widget5_list';
 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -641,7 +641,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 
 
 		//get popular code from database
-		$data = PopularCategory::getPopulerCategory();
+		$data = PopularCategory::getPopularCategories();
 		echo Zend_Json::encode($data);
 		$key = 'all_widget5_list';
 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -670,7 +670,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 
 
 		//get popular code from database
-		$data = PopularCategory::getPopulerCategory();
+		$data = PopularCategory::getPopularCategories();
 		echo Zend_Json::encode($data);
 
 		$key = 'all_widget5_list';
