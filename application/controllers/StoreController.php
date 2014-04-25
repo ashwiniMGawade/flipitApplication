@@ -503,9 +503,9 @@ class StoreController extends Zend_Controller_Action
   	  $this->view->expiredOffers = $expiredOffer;
   	  
   	  
-  	  $relatedStoteByCat =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::shopfrontendGetCode('relatedshopsbycat',4,$id));
+  	  $relatedStoteByCat =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::shopfrontendGetCode('relatedshopsbycat',10,$id));
   	  
-  	  
+  	 //echo "<pre>";print_r($relatedStoteByCat);die;
   	  $this->view->relatedshops = $relatedStoteByCat ;
   	  $this->view->relatedshops8 = $relatedStoteByCat  ;
  
