@@ -25,7 +25,6 @@ class Category extends BaseCategory {
      */
     public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0)
     {
-         
         $categoryOffers= array();
         $currentDateAndTime = date('Y-m-d H:i:s');
         $categoryOffersList = Doctrine_Query::create()
