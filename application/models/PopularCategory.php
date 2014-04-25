@@ -16,7 +16,7 @@ class PopularCategory extends BasePopularCategory
 	
 	public static function searchTopTenPopulerCategory($status="" , $keyword, $flag) {
 	
-		$lastdata=self :: getPopulerCategory();
+		$lastdata=self :: getPopularCategories();
 		
 		if(sizeof($lastdata)>0){
 			for($i=0;$i<sizeof($lastdata);$i++){
@@ -46,7 +46,7 @@ class PopularCategory extends BasePopularCategory
 	 * @version 1.0
 	 * @return array $data
 	 */
-	public static function getPopulerCategory() {
+	public static function getPopularCategories() {
 	
 		$data = Doctrine_Query::create()
 		->select('p.id,o.name,p.type,p.position,p.categoryId')
