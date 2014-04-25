@@ -1,6 +1,53 @@
 <?php
 class CategoryController extends Zend_Controller_Action {
 
+    #####################################################
+    ############# REFACORED CODE ########################
+    #####################################################
+    /**
+     * Function show.
+     * 
+     * get offer related to category.
+     */
+    public function showAction()
+    {
+        $categoryPermalink = $this->getRequest()->getParam('permalink');
+        $categoryDetail = Category::getCategoryforFrontend($categoryPermalink);
+        if (count($categoryDetail)> 0) {
+            $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetail[0]['id'], 71);
+            $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($categoryVoucherCodes, $this->_getAllParams(), 27, 3);
+            $this->view->offersWithPagination = $offersWithPagination;
+            $this->view->categoryDetail = $categoryDetail;
+            $this->view->offersType = 'categoryOffers';
+            $this->view->headTitle(trim($categoryDetail[0]['metatitle']));
+            $this->view->headMeta()->setName('description', trim($categoryDetail[0]['metaDescription']));
+
+            if (LOCALE == '') {
+                $facebookImage = 'logo_og.png';
+                $facebookLocale = LOCALE;
+            } else {
+                $facebookImage = 'flipit.png';
+                $facebookLocale = LOCALE;
+            }
+
+            $this->view->facebookTitle = $categoryDetail[0]['name'];
+            $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetail[0]['permaLink'];
+            $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
+            $this->view->facebookDescription = trim($categoryDetail[0]['metaDescription']);
+            $this->view->facebookLocale = $facebookLocale;
+            $this->view->twitterDescription = trim($categoryDetail[0]['metaDescription']);
+        } else {
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
+        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormForStorePage;
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+    }
+    #####################################################
+    ############ END REFACORED CODE #####################
+    #####################################################
 	/**
 	 * override views based on modules if exists
 	 * @see Zend_Controller_Action::init()
@@ -100,57 +147,6 @@ class CategoryController extends Zend_Controller_Action {
 		
 		$this->view->specialCat = $specialList;
 	}
-
-	
-	 /**
-	 * get offer related to category
-	 * @author mkaur updated by blal
-	 */
-	 public function showAction() {
-	  
-	 	$permalink = $this->getRequest ()->getParam ('permalink');
-	   //get category for voucher codes
-	   $category = Category::getCategoryforFrontend($permalink);
-	  
-	   $this->view->category = $category;
-	   if(count($category )> 0 ) {
-	   $this->view->editRec = $category;
-	   $this->view->headTitle(@trim($category[0]['metatitle']));
-       $this->view->headMeta()->setName('description', @trim($category[0]['metaDescription']));
-	   
-	   //get voucher codes on category id basis from database
-	   $vouchers = Category::getCategoryVoucherCodes($category[0]['id'],71);
-	   
-	 
-	   $ArNew =  array();
-	   foreach ($vouchers as $v){
-	   	$ArNew[$v['id']]  = $v;
-	   }
-	   $authorId = Category::getAuthorId();
-	   $this->view->authorId = $authorId['authorId'];
-	   $paginator = FrontEnd_Helper_viewHelper::renderPagination($vouchers,$this->_getAllParams(),27,3);
-	   $this->view->paginator = $paginator;
-	   
-	   //for facebook parameters
-	   $this->view->fbtitle = @$category[0]['name'];
-	   $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .@$category[0]['permaLink'];
-
-		if(LOCALE == '' )
-		{
-				$fbImage = 'logo_og.png';
-		}else{
-				$fbImage = 'flipit.png';
-					
-		}
-		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
-	   
-	   }else {
-	     throw new Zend_Controller_Action_Exception('', 404);
-	   	
-	   }
-	 }
-	  
-
 	  public function clearcacheAction(){
 	  	$cache = Zend_Registry::get('cache');
 	  	$cache->clean();
