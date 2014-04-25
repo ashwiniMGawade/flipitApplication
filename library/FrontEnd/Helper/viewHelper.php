@@ -391,7 +391,8 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                 break;
             case 'relatedshopsbycat':
 
-                    $data = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
+                $data = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
+                   
             break;
             case 'latestupdates':
                 $data = Offer::getLatestUpdates($type, $limit, $shopId);

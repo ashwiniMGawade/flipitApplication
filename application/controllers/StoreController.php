@@ -502,12 +502,15 @@ class StoreController extends Zend_Controller_Action
   	  		
   	  $this->view->expiredOffers = $expiredOffer;
   	  
-  	  
-  	  $relatedStoteByCat =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::shopfrontendGetCode('relatedshopsbycat',10,$id));
-  	  
-  	 //echo "<pre>";print_r($relatedStoteByCat);die;
+  	  if ($shopdetail[0]['affliateProgram'] == 0) {
+  	  		$limit = 10;
+  	  } else {
+  	  		$limit = 4;
+  	  }
+  	  $relatedStoteByCat =  FrontEnd_Helper_viewHelper::replaceStringArray(FrontEnd_Helper_viewHelper::shopfrontendGetCode('relatedshopsbycat',$limit,$id));
+ 
   	  $this->view->relatedshops = $relatedStoteByCat ;
-  	  $this->view->relatedshops8 = $relatedStoteByCat  ;
+  	  $this->view->relatedshops8 = $relatedStoteByCat;
  
   	  $this->view->cntPopular = count(FrontEnd_Helper_viewHelper::commonfrontendGetCode ('popular',$lim, $shopId));
   	  
