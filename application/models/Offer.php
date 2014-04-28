@@ -1819,18 +1819,21 @@ class Offer extends BaseOffer
 	 		$OfferOfRelatedShops = array();
 	 	}
 
-
 	 	if(count($catData) > 0){
-	 	//	Zend_Debug::dump($catData); die;
-	 		$OfferOfRelatedCats = Doctrine_Query::create()
-	 		->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+	 		$commaSepratedCategroyIdValues = implode(', ', $catData);
+	 		//Zend_Debug::dump($catData); die;
+	 		echo $OfferOfRelatedCats = Doctrine_Query::create()
+	 		->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,
+	 				terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode,
+	 			     o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id,
+	 				 img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
 	 		->from('Offer o')
 	 		->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
 	 		->leftJoin('o.shop s')
 	 		->leftJoin('s.favoriteshops fv')
 	 		->leftJoin('o.termandcondition terms')
 	 		->leftJoin('o.vote vot')
-	 		->leftJoin('s.refShopCategory c')
+	 		->leftJoin('o.refOfferCategory c')
 	 		->leftJoin('s.logo img')
 	 		->where('o.deleted = 0')
 	 		->andWhere('s.deleted = 0')
@@ -1840,7 +1843,7 @@ class Offer extends BaseOffer
 	 		->andWhere('o.enddate > "'.$date.'"')
 	 		->andWhere('o.startdate <= "'.$date.'"')
 	 		->andWhere('o.userGenerated=0')
-	 		->andWhereIn("c.categoryId",$catData)
+	 		->andWhere("c.categoryId IN ($commaSepratedCategroyIdValues)")
 	 		->andWhere("s.id != ".$shopId)
 	 		->orderBy('o.startdate DESC')
 	 		->limit($limit)
