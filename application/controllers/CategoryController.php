@@ -18,7 +18,7 @@ class CategoryController extends Zend_Controller_Action {
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($categoryVoucherCodes, $this->_getAllParams(), 27, 3);
             $this->view->offersWithPagination = $offersWithPagination;
             $this->view->categoryDetail = $categoryDetail;
-            $this->view->offersType = 'categoryOffers';
+            $this->view->offersType = 'offerWithPagenation';
             $this->view->headTitle(trim($categoryDetail[0]['metatitle']));
             $this->view->headMeta()->setName('description', trim($categoryDetail[0]['metaDescription']));
 
