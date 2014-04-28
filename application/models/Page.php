@@ -1135,7 +1135,6 @@ public static function exportpagelist() {
 		return $data;
 	}
 	/**
-	 *  @author kraj
 	 *  Get page details on id basis
 	 *	Version: 1.0
 	 */

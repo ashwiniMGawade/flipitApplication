@@ -1,115 +1,66 @@
 <?php
 class ErrorController extends Zend_Controller_Action
 {
+    protected $pagePermalink = '';
     public function errorAction()
     {
-        $domain = HTTP_PATH;
+        $websiteName = HTTP_PATH;
         $this->view->controller = $this->_request->getControllerName();
         $errors = $this->_getParam('error_handler');
         if (!$errors || !$errors instanceof ArrayObject) {
             $this->view->message = 'You have reached the error page';
             return;
         }
+       // echo $errors->type; die;
         switch ($errors->type) {
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ROUTE:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
-                $page  = ltrim($this->_request->getPathInfo(), '/');
-                $page = rtrim($page, '/');
-                $permalink = explode('/page/',$page);
-                if (count($permalink) > 0){
-                        $page = $permalink[0];
-                }
-                 preg_match("/[^\/]+$/", $page, $matches);
-                if (intval(@$matches[0]) > 0){
-                    $page = explode('/'.$matches[0],$page);
-                    if ($domain != "kortingscode.nl" || $domain != "www.kortingscode.nl"){
-                        $page = explode('/',$page[0]);
-                        if(!empty($page[1])):
-                            $pageSpecial = $page[1];
-                        else:
-                            $pageSpecial = $page[0];
-                        endif;
-                    } else {
-                        $pageSpecial = $page[0];
-                    }
-                    $pageSpecial = end($page);
-                    $pagedata = Page::getPageDetailInError($pageSpecial);
-                } else {
-                    if (LOCALE!='en') {
-                        $front = Zend_Controller_Front::getInstance();
-                        $cd = $front->getControllerDirectory();
-                        $moduleNames = array_keys($cd);
-                        $permalink = ltrim(REQUEST_URI, '/');
-                        $routeProp = explode('/', $page);
-                        $tempLang  = rtrim( $routeProp[0], '/');
-                        if (in_array($routeProp[0], $moduleNames)) {
-                            $page = "";
-                            foreach ($routeProp as $key => $route) {
-                                if ($key > 0) {
-                                    $page .= $route .'/';
-                                }
-                            }
-                        }
-
-                    }
-                    $pagedata = false ;
-                    if (strlen(rtrim($page,'/')) > 0 ) {
-                        $pagedata = Page::getPageDetailInError(rtrim($page,'/'));
-                    }
-                }
                 $this->view->message = 'Page not found';
-                if ($pagedata) {
-                   if (is_array($page)) {
-                        $page = end($page);
-                   }
-                    $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-                    $wdgt = $frontendViewHelper->getSidebarWidget($arr=array(), rtrim($page,'/'));
-                    if($pagedata['pageType'] == 'default'):
-                        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($page) ;
-                    endif;
-                    if ($pagedata['customHeader']) {
-                        $this->view->layout()->customHeader = "\n" . $pagedata['customHeader'];
+
+                $pagePermalink  = ltrim($this->_request->getPathInfo(), '/');
+                $pagePermalink = rtrim($pagePermalink, '/');
+                $permalink = explode('/page/', $pagePermalink);
+                if (count($permalink) > 0) {
+                        $pagePermalink = $permalink[0];
+                }
+                preg_match("/[^\/]+$/", $pagePermalink, $matches);
+                $pageDetails = $this->getPageDetail($pagePermalink);
+
+                if ($pageDetails) {
+                    if (is_array($this->pagePermalink)) {
+                        $this->pagePermalink = end($this->pagePermalink);
                     }
+                    
+                    
+                    if($pageDetails['pageType'] == 'default'):
+                        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($this->pagePermalink);
+                    endif;
+                    if ($pageDetails['customHeader']) {
+                        $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
+                    }
+                    
+                    $pageLogo  = Logo::getPageLogo($pageDetails['logoId']);
+
+                    $specialPageAttachedOffers = Offer::getSpecialPageOffers($pageDetails);
+                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination($specialPageAttachedOffers, @$matches[0], 27, 7);
+
+                    $frontendViewHelper = new FrontEnd_Helper_viewHelper();
+                    $sidebarWidget = $frontendViewHelper->getSidebarWidget($arr = array(), rtrim($this->pagePermalink, '/'));
+                    
+                    $this->view->pageTitle = $pageDetails['pageTitle'];
+                    $this->view->headTitle($pageDetails['metaTitle']);
+                    $this->view->headMeta()->setName('description', @trim($pageDetails['metaDescription']));
+                    
                     $this->view->pageMode = true;
-                    $values = $pagedata;
-                    $reqiurevaule = array();
-                    $page = $values;
-                    $logo  = Logo::getPageLogo(@$page['logoId']);
-                    $this->view->pageTitle = @$page['pageTitle'];
-                    $this->view->headTitle(@$page['metaTitle']);
-                    $this->view->headMeta()->setName('description', @trim($page['metaDescription']));
-                    $reqiurevaule['pageid'] = $page['id'];
-                    $reqiurevaule['pagetype'] = $page['pageType'];
-                    $reqiurevaule['couponregular'] = $page['couponRegular'];
-                    $reqiurevaule['couponeditorpick'] = $page['couponEditorPick'];
-                    $reqiurevaule['couponexclusive'] = $page['couponExclusive'];
-                    $reqiurevaule['showpage'] = $page['showPage'];
-                    $reqiurevaule['maxOffers'] = $page['maxOffers'];
-                    $reqiurevaule['oderOffers'] = $page['oderOffers'];
-                    $reqiurevaule['timeType'] = $page['timeType'];
-                    $reqiurevaule['enableTimeConst'] = $page['enableTimeConstraint'];
-                    $reqiurevaule['timenumOfDays'] = $page['timenumberOfDays'];
-                    $reqiurevaule['enableWordConstraint'] = $page['enableWordConstraint'];
-                    $reqiurevaule['wordTitle'] = $page['wordTitle'];
-                    $reqiurevaule['awardConst'] = $page['awardConstratint'];
-                    $reqiurevaule['enableclickconst'] = $page['enableClickConstraint'];
-                    $reqiurevaule['numberofclicks'] = $page['numberOfClicks'];
-                    $reqiurevaule['publishdate'] = $page['publishDate'];
-                    $reqiurevaule['awardConstratint'] = $page['awardConstratint'];
-                    $reqiurevaule['awardType'] = $page['awardType'];
-                    $splofferlists = Offer::getspecialofferonly($reqiurevaule);
-
-                    $paginator = FrontEnd_Helper_viewHelper::renderPagination($splofferlists,@$matches[0],27,7);
-
                     $this->view->matches = $matches[0];
-                    $this->view->widget = $wdgt;
-                    $this->view->page = $page;
-                    $this->view->paginator = $paginator;
-                    $this->view->offercount = @count($splofferlists);
-                    $this->view->pageLogo = @$logo[0];
+                    $this->view->widget = $sidebarWidget;
+                    $this->view->page = $pageDetails;
+                    $this->view->paginator = $specialOffersPaginator;
+                    $this->view->offercount = count($specialPageAttachedOffers);
+                    $this->view->pageLogo = $pageLogo[0];
                 } else {
-                    $this->getResponse ()->setHttpResponseCode(404);
+                    $this->getResponse()->setHttpResponseCode(404);
                 }
                 break;
             default:
@@ -146,5 +97,53 @@ class ErrorController extends Zend_Controller_Action
         $log = $bootstrap->getResource('Log');
         return $log;
     }
+    
+    public function getPageDetail($pagePermalink)
+    {
+        preg_match("/[^\/]+$/", $pagePermalink, $matches);
+        if (intval($matches[0]) > 0) {
+            $pagePermalink = explode('/'.$matches[0], $pagePermalink);
+            $pagePermalink  = $this->getDefaulPermalink($pagePermalink);
+        } else {
+            $pagePermalink = $this->getPermalinkForFlipit($pagePermalink);
+        }
+        $this->pagePermalink = $pagePermalink;
+        $pagedata = Page::getPageDetailInError(rtrim($pagePermalink, '/'));
+        return $pagedata;
+    }
+    
+    public function getPermalinkForFlipit($pagePermalink)
+    {
+        if (LOCALE!='en') {
+            $frontendControllersDirectory = Zend_Controller_Front::getInstance();
+            $moduleDirectories = $frontendControllersDirectory->getControllerDirectory();
+            $moduleNames = array_keys($moduleDirectories);
+            $routeProperties = explode('/', $pagePermalink);
+            if (in_array($routeProperties[0], $moduleNames)) {
+                $pagePermalink = "";
+                foreach ($routeProperties as $key => $route) {
+                    if ($key > 0) {
+                        $pagePermalink .= $route .'/';
+                    }
+                }
+            }
+        }
+        return $pagePermalink;
+    }
+    
+    public function getDefaulPermalink($pagePermalink)
+    {
+        if (HTTP_PATH != "www.kortingscode.nl") {
+            $splitParmalink = explode('/', $pagePermalink[0]);
+            if(!empty($splitParmalink[1])):
+                $pageSpecialPermailink = $splitParmalink[1];
+            else:
+                $pageSpecialPermailink = $splitParmalink[0];
+            endif;
+        } else {
+            $pageSpecialPermailink = $splitParmalink[0];
+        }
+        $pageSpecialPermailink = end($pagePermalink);
+        return $pageSpecialPermailink;
+    }
 }
-

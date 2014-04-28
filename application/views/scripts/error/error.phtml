@@ -1,62 +1,10 @@
 <?php
-echo $this->render('offer/jsFileForOfferPartial.phtml');
-$messege=$this->message;
-if ($messege=="Page not found" &&  $this->matches < 4) {
-    if ($this->pageMode == true) {
-        if ($this->page['pageType'] != "offer") {
-            $display = 'style="display:none"';
-        }
-
-        $signUpWidgetForm = $this->partial(
-            'store/signupwidget.phtml',
-            array(
-               'zendForm' => $this->sidebarWidgetForm,
-               'sidebarWidgetShowOrNot'=>true,
-               'shopId'=>'',
-               'shopLogoOrDefaultImage'=>''
-            )
-        );
-
-        $pageIconPath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
-        $categoryPartial = new FrontEnd_Helper_CategoryPartialFunctions();
-        echo $categoryPartial->getCategoryHeader($this->page['pageTitle'], $pageIconPath);
-        ?>
-        <div class="row">
-          <div class="col-md-8 col-sm-8" id="content">
-        <?php 
-        if ($this->page['pageType'] == "offer") {
-            if (count($this->offercount)>0) {
-                $offers = $this->partial(
-                    'store/_offer.phtml',
-                    array(
-                       'offers'=> $this->paginator,
-                       'offersType'=>'simple',
-                       'shopName'=> '',
-                       'shop'=>'',
-                       'zendForm'=>$this->form,
-                       'categoryPermaLink'=>''
-                   )
-                );
-            } else {
-                $offers ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
-            }
-            echo $offers;
-        } else {?>
-             <h1><?php echo $this->page['pageTitle']; ?></h1>
-             <?php echo stripslashes($this->page['content']);
-        }
-        ?>
-         </div>
-           <aside class="col-md-4 col-sm-4" id="sidebar" <?php echo $display; ?>>
-               <?php 
-               echo $this->widget;
-               echo FrontEnd_Helper_viewHelper::socialMediaWidget();
-               echo $signUpWidgetForm;
-               ?>
-           </aside>
-        </div>
-    <?php 
-    }
+//echo '<pre>';
+//print_r($this->page['content']);
+//die;
+$messege = $this->message;
+if ($messege == "Page not found" &&  $this->matches < 4) {
+    echo $this->render('error/pageContent.phtml');
 } else {
     echo $this->render('error/pageNotFound.phtml');
 }
