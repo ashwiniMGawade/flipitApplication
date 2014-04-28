@@ -1,7 +1,45 @@
 <?php
 class BackEnd_Helper_viewHelper
 {
-	/**
+    #####################################################
+    ############# REFACORED CODE ########################
+    #####################################################	
+    public static function getOnOffButtonsForFeaturedCategory($featuredCategory)
+    {
+    	$zendTranslate = Zend_Registry::get('Zend_Translate');
+    	if($featuredCategory == 1) {
+    		$featuredOnClass = 'btn-primary default';
+    		$featuredOffClass = '';
+    	} else {
+    		$featuredOnClass = '';
+    		$featuredOffClass = 'btn-primary default';
+    	}
+
+    	$featuredCategoryButton = '<button onclick="setOnOff(event,\'featured-category\',\'on\');" class="btn '.$featuredOnClass.'" type="button">'.$zendTranslate->translate('Ja').'</button>                     
+            <button onclick="setOnOff(event,\'featured-category\',\'off\');" class="btn '.$featuredOffClass.'" type="button">'.$zendTranslate->translate('Nee').'</button>';
+        return $featuredCategoryButton;
+    }
+
+    public function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '')
+    {
+        $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
+        if ($cacheStatusByKey) {
+    
+            if ($replaceStringArrayCheck == '') {
+                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($relatedFunction);
+            } else {
+                $requestedInformation = $relatedFunction;
+            }
+            FrontEnd_Helper_viewHelper::setInCache($dataKey, $requestedInformation);
+        } else {
+            $requestedInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($dataKey);
+        }
+        return $requestedInformation;
+    }
+    #####################################################
+    ############# END REFACORED CODE ####################
+    #####################################################
+    /**
 	 * Mail sent ot the user registration and forgot password etc
 	 * @param array $recipents
 	 * @param string $subject

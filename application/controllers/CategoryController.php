@@ -1,6 +1,48 @@
 <?php
 class CategoryController extends Zend_Controller_Action {
+    
+    #####################################################
+    ############# REFACORED CODE ########################
+    #####################################################
+    public function indexAction()
+    {
+        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
+        $this->pageDetail = Page::getPageFromPageAttribute(9);
+        $this->view->headTitle($this->pageDetail->metaTitle);
+        $this->view->headMeta()->setName('description', trim($this->pageDetail->metaDescription));
 
+        if ($this->pageDetail->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
+        }
+
+        $categories = BackEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoryIcons());
+        $specialPagesList = BackEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialOfferListPages());
+        $this->view->categories = array_merge($categories, $specialPagesList);
+
+        if (LOCALE == '') {
+            $facebookImage = 'logo_og.png';
+            $facebookLocale = '';
+        } else {
+            $facebookImage = 'flipit.png';
+            $facebookLocale = LOCALE;
+        }
+
+        $this->view->facebookTitle = $this->pageDetail->pageTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen');
+        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
+        $this->view->facebookDescription = trim($this->pageDetail->metaDescription);
+        $this->view->facebookLocale = $facebookLocale;
+        $this->view->twitterDescription = trim($this->pageDetail->metaDescription);
+        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormForStorePage;
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+    }
+    #####################################################
+    ############# END REFACORED CODE ####################
+    #####################################################
 	/**
 	 * override views based on modules if exists
 	 * @see Zend_Controller_Action::init()
@@ -24,84 +66,7 @@ class CategoryController extends Zend_Controller_Action {
 			$this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
 		}
 	}
-	
-	/**
-	 * get all category icons and special category list
-	 * @author blal
-	 */
-	 public function indexAction() {
-	 	
-	 	$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-    	$this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
-	 	
-		//get category icons from database
-        $this->pageDetail = Page::getPageFromPageAttribute(9);
-    	$this->view->pageTitle = @$this->pageDetail->pageTitle;
-    	$this->view->headTitle(@$this->pageDetail->metaTitle);
-    	$this->view->headMeta()->setName('description', @trim($this->pageDetail->metaDescription));
-    	$this->view->desc = @$this->pageDetail->content;
-    	$this->view->pageDetail = $this->pageDetail;
-	 	$cache = Zend_Registry::get('cache');
-	 	$pageKey ="all_category_list";
-	 	
-	 	
-	 	if( @$this->pageDetail->customHeader)
-	 	{
-	 		$this->view->layout()->customHeader = "\n" . @$this->pageDetail->customHeader;
-	 	}
-	 	
-	 	
-	 	// no cache available, lets query.
-	 	$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pageKey);
-	 	//key not exist in cache
-	 	if($flag){
-	 			
-	 		//get Page data from database and store in cache
-	 		$categoryIcons = Category::getCategoryIcons();  //function call from model to show category icons 
-	 		FrontEnd_Helper_viewHelper::setInCache($pageKey, $categoryIcons);
-	 		//echo  'FROM DATABASE';
-	 			
-	 	} else {
-	 		//get from cache
-	 		$categoryIcons = FrontEnd_Helper_viewHelper::getFromCacheByKey($pageKey);
-	 		//echo 'The result is comming from cache!!';
-	 	}
-	 	
-	 	$this->view->catIcons = $categoryIcons;
-	 	
-	 	
-	 	/******************* show offer list pages****************/
-	 	 
-		$pageKey ="all_categoryspeciallist_list";
-		$specialflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pageKey);
-		//key not exist in cache
-		if($specialflag){
-		    $specialList = Page::getOfferListPage();
-			FrontEnd_Helper_viewHelper::setInCache($pageKey, $specialList);
-			//echo  'FROM DATABASE';
-		} else {
-		
-			$specialList = FrontEnd_Helper_viewHelper::getFromCacheByKey($pageKey);
-			//echo 'The result is comming from cache!!';
-		}
-		
-		//for facebook parameters
-		$this->view->fbtitle = @$this->pageDetail->pageTitle;
-		$this->view->fbshareUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen');
-		if(LOCALE == '' )
-		{
-				$fbImage = 'logo_og.png';
-		}else{
-				$fbImage = 'flipit.png';
-					
-		}
-		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
 
-		
-		$this->view->specialCat = $specialList;
-	}
-
-	
 	 /**
 	 * get offer related to category
 	 * @author mkaur updated by blal

@@ -34,11 +34,16 @@ class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
 
     public function getSignUpWidgetHeader($sidebarWidgetOrOfferWidget)
     {
-       if ($sidebarWidgetOrOfferWidget==true) {
+       if ($sidebarWidgetOrOfferWidget== 'true') {
         $signUpHeader='<h2 class="form-signin-heading">' .$this->zendTranslate->translate('Sign up').'
             <span>'.$this->zendTranslate->translate('and join over').'<br>' .$this->zendTranslate->translate('10 million people')
             .'</span></h2>';
-       } else {
+       } else if($sidebarWidgetOrOfferWidget== 'category') {
+        $signUpHeader='<h2 class="form-signin-heading">' .'
+            <span>'.$this->zendTranslate->translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'
+            .'</span></h2>';
+       }
+       else {
          $signUpHeader='<h2>'.$this->zendTranslate->translate('Receive weekly updates of the best offers?').'<br>'
          .$this->zendTranslate->translate('Sign up for our newsletter!').'</h2>';
        }

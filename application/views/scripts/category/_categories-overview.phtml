@@ -1,0 +1,35 @@
+<?php
+foreach ($this->categories as $category) {
+    $featuredCategoryClass = '';
+    $featuredCategoryImageDimensions = '';
+    $featuredCategorySpan = '';
+    if(isset($category['featured_category']) && $category['featured_category'] != '') {
+        $featuredCategoryClass = "box-top"; 
+        $featuredCategoryImageDimensions = 'width= 366 height=367';
+        $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
+    }
+
+    $categoryImageSource = '';
+    $categoryName = '';
+    if(isset($category['categoryicon'])):
+        $categoryImage = $category['categoryicon'];
+    else:
+        $categoryImage = $category['logo'];
+    endif;
+
+    $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."thum_medium_".$categoryImage['name']; 
+    $categoryName = $category['name'];
+    ?>
+    <article class="box <?php echo $featuredCategoryClass; ?>">
+        <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $category['permaLink']; ?>">
+            <div class="image">
+                <img src ="<?php echo HTTP_PATH; ?>public/images/front_end/img-06.jpg" <?php echo  $featuredCategoryImageDimensions; ?> alt="<?php echo $categoryName;?>" />
+            </div>
+            <div class="caption">
+                <?php echo $featuredCategorySpan; ?>
+                <strong><?php echo $categoryName; ?></strong>
+            </div>
+        </a>
+    </article>
+    <?php  
+    }
