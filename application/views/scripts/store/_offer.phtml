@@ -41,8 +41,9 @@ foreach ($this->offers as $offer) {
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
-    echo $offerPartial->getMainButtonforOffer($offer, $urlToShow, $offerBounceRate);
-    echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate);
+    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink']; 
+    echo $offerPartial->getMainButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
+    echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
     ?>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
@@ -104,7 +105,7 @@ foreach ($this->offers as $offer) {
     endif;
 }
 if ($this->offersType!='expiredOffer') {
-    if ($this->offersType == 'newestOffer') {
+    if ($this->offersType == 'newestOffer' || $this->offersType=='offerWithPagenation') {
         echo $this->paginationControl($this->offers, 'Sliding', '/partials/_pagination.phtml');
     }
     ?>
