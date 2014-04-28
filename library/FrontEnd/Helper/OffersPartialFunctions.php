@@ -211,7 +211,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $imgTagWithImage;
     }
 
-    public function getMainButtonforOffer($currentOffer, $urlToShow, $offerBounceRate, $permalink)
+    public function getMainButtonforOffer($currentOffer, $urlToShow, $offerBounceRate, $permalink, $offersType = "")
     {
         if ($currentOffer->discountType == "CD") {
             $popupLink = "?popup=$currentOffer->id&type=code";
@@ -219,21 +219,30 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $popupLink = "?popup=$currentOffer->id&printable=$urlToShow";
         } else {
             $popupLink = '';
+        }
+
+        if ($offersType != '') {
+            $showImageOrButton = self::getOfferImage($currentOffer, $offersType);
+            $class= self::getClassNameForOffer($currentOffer, $offersType);
+        } else {
+            $showImageOrButton = $this->zendTranslate->translate('>Get code &amp; Open site');
+            $class="btn blue btn-primary";
         } 
         
         if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
 
             $onClick =  $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
             $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')";
+            $mainButton = '<a id="'.$currentOffer->id.'" class="'.$class.'" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
+            '.$showImageOrButton.' </a>';
 
-            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
-            '.$this->zendTranslate->translate('>Get code &amp; Open site').' </a>';
         } else {
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')" : HTTP_PATH_LOCALE."accountlogin" ;
-            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" vote = "0" href= "'.$offerBounceRate.'" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$this->zendTranslate->translate('>Get code &amp; Open site').'</a>';
+            $mainButton = '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$offerBounceRate.'" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$showImageOrButton.'</a>';
         }
         return $mainButton;
     }
+
 
     public function getSecondButtonforOffer($currentOffer, $urlToShow, $offerBounceRate, $permalink)
     {

@@ -1,11 +1,11 @@
 // refactored code
 $(document).ready(function(){
-if (getQueryStringParams("popup")) {
-    showCodePopUp('popupOnLoad');
-    if (getQueryStringParams("type") == 'code') {
-    	showCodeInformation(getQueryStringParams("popup"));
-	}
-}
+    if (getQueryStringParams("popup")) {
+        showCodePopUp('popupOnLoad');
+        if (getQueryStringParams("type") == 'code') {
+        showCodeInformation(getQueryStringParams("popup"));
+       }
+    }
 });
 function OpenInNewTab(url)
 {
@@ -156,8 +156,8 @@ function init() {
 var hide = false;
 $(document)
         .ready(
-        		
-        		
+                
+                
                 function() {
 
                     $('div.nav-container').hide();
