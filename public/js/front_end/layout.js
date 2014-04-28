@@ -1,9 +1,11 @@
 // refactored code
 $(document).ready(function(){
-if(getQueryStringParams("popup")){
-    showCodePopUp('popupOnLoad');
-    showCodeInformation(getQueryStringParams("popup"));
-}
+    if (getQueryStringParams("popup")) {
+        showCodePopUp('popupOnLoad');
+        if (getQueryStringParams("type") == 'code') {
+        showCodeInformation(getQueryStringParams("popup"));
+       }
+    }
 });
 function OpenInNewTab(url)
 {
@@ -57,6 +59,7 @@ function showCodePopUp(event) {
     if(event == 'popupOnLoad'){
         var offerId = getQueryStringParams("popup");
         var offerVote = 0;
+        var offerUrl = getQueryStringParams("printable");
     } else {
         var offerId = $(event).attr('id');
         var offerVote = $(event).attr('vote');
@@ -153,8 +156,8 @@ function init() {
 var hide = false;
 $(document)
         .ready(
-        		
-        		
+                
+                
                 function() {
 
                     $('div.nav-container').hide();
