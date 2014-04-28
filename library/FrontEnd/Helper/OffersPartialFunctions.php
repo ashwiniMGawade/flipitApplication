@@ -230,12 +230,10 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         } 
         
         if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
-
             $onClick =  $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
             $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')";
             $mainButton = '<a id="'.$currentOffer->id.'" class="'.$class.'" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
             '.$showImageOrButton.' </a>';
-
         } else {
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')" : HTTP_PATH_LOCALE."accountlogin" ;
             $mainButton = '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$offerBounceRate.'" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$showImageOrButton.'</a>';
