@@ -182,7 +182,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         } elseif ($currentOffer->extendedOffer =='1') {
             $offerTypeText = $this->zendTranslate->translate('deal');
         } else {
-        	$offerTypeText = 'code';
+            $offerTypeText = 'code';
         }
         return $offerTypeText;
     }
@@ -211,19 +211,36 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $imgTagWithImage;
     }
 
-    public function getMainButtonforOffer($currentOffer, $urlToShow, $offerBounceRate, $permalink)
+    public function getMainButtonforOffer($currentOffer, $urlToShow, $offerBounceRate, $permalink, $offersType = "")
     {
-        if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
-            $onClick =  $currentOffer->discountType == "CD" ? "showCodeInformation($currentOffer->id),showCodePopUp(this)," : " ";
-            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('". $permalink ."?popup=$currentOffer->id')";
-            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
-            '.$this->zendTranslate->translate('>Get code &amp; Open site').' </a>';
+        if ($currentOffer->discountType == "CD") {
+            $popupLink = "?popup=$currentOffer->id&type=code";
+        } elseif ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
+            $popupLink = "?popup=$currentOffer->id&printable=$urlToShow";
         } else {
-            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "showCodePopUp(this)" : HTTP_PATH_LOCALE."accountlogin" ;
-            $mainButton = '<a id="'.$currentOffer->id.'" class="btn blue btn-primary" vote = "0" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$this->zendTranslate->translate('>Get code &amp; Open site').'</a>';
+            $popupLink = '';
+        }
+
+        if ($offersType != '') {
+            $showImageOrButton = self::getOfferImage($currentOffer, $offersType);
+            $class= self::getClassNameForOffer($currentOffer, $offersType);
+        } else {
+            $showImageOrButton = $this->zendTranslate->translate('>Get code &amp; Open site');
+            $class="btn blue btn-primary";
+        } 
+        
+        if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
+            $onClick =  $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
+            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')";
+            $mainButton = '<a id="'.$currentOffer->id.'" class="'.$class.'" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
+            '.$showImageOrButton.' </a>';
+        } else {
+            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')" : HTTP_PATH_LOCALE."accountlogin" ;
+            $mainButton = '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$offerBounceRate.'" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$showImageOrButton.'</a>';
         }
         return $mainButton;
     }
+
 
     public function getSecondButtonforOffer($currentOffer, $urlToShow, $offerBounceRate, $permalink)
     {
