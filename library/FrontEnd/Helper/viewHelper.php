@@ -451,12 +451,6 @@ EOD;
     public static function getPagnation($pageCount, $currentPage, $redirector, $pagesInRange, $nextPage)
     {
         $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
-        $myfavorite = explode('myfavorite', $permalink);
-
-        if ($myfavorite[0] == '') :
-            $permalink = FrontEnd_Helper_viewHelper::__link(rtrim('mijn-favorieten'));
-        endif;
-
         $permalink = rtrim($permalink, '/');
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
         if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :
