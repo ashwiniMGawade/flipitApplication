@@ -531,6 +531,31 @@ EOD;
         return $categorySidebarWodget;
     }
 
+    /**
+     * Function browseByStoreWidget.
+     *
+     * Common function to render sidebar widget of alphanumeric categories.
+     *
+     * @return $browseByStoreWidget
+     */
+    public function browseByStoreWidget($type='default', $postion=1)
+    {
+        $browseByStoreWidget = '<div class="block">
+        <div class="intro">
+        <h2>'.$this->zendTranslate->translate('Browse by Store') .'</h2>
+        </div>
+        <div class="alphabet-holder">
+        <ul class="alphabet">';
+        foreach (range('A','Z') as $oneCharacter) {
+            $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
+            $browseByStoreWidget .= '<li><a href="' .$redirectUrl.'">'.$this->zendTranslate->translate($oneCharacter).'</a></li>';
+        };
+        $browseByStoreWidget.= '</ul>
+        </div>
+        </div>';
+        return $browseByStoreWidget;
+    }
+    
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -566,60 +591,6 @@ EOD;
 
         return $shopData;
     }
-    /**
-     * Common function to render sidebar widget of alphanumeric categories
-     * @author cbhopal updated by kraj
-     * @version 1.0
-     * @param
-     * @return string
-     */
-    public static function sideWidgetCalculator($type='default',$postion=1)
-    {
-        $margin_top = '';
-        $trans = Zend_Registry::get('Zend_Translate');
-        if ($postion!=0) {
-        $margin_top ='style ="margin-top:20px;"';
-        }
-        if ($type=='search') {
-            $string = "<div class='zoek-az-outer' ".$margin_top.">
-            <div class='zoek-az-heading'>
-            <h4>".$trans->translate('Zoek winkels A-Z')."</h4>
-            </div>
-            <div class='az-outer'>";
-
-                foreach (range('A','Z') as $i) {
-                    $string .= "<a href='" .HTTP_PATH_LOCALE ."alle-winkels#$i'><div class='az-col1 text-white'>
-                    <h4>".$trans->translate($i)."</h4>
-                    </div></a>";
-                };
-            $string .= "<a href='" .HTTP_PATH_LOCALE ."store/index/char/0'><div class='az-col1 text-white'>
-            <h6><strong>123</strong></h6>
-            </div></a>
-
-            </div>
-
-            <a class='mt20 fl' href='javascript:void(0);'><img src='".HTTP_PATH."public/images/front_end/blue-btn2.png' width='194' height='33' /></a>
-
-            </div>";
-        } else {
-
-            $string = '<div class="gedeeld sidebar" >
-            <h4 class="sidebar-heading">'.$trans->translate('Zoek winkels A-Z').'</h4>
-            <div class="zoke-inner">';
-            foreach (range('A','Z') as $i) {
-
-                    $c = "'" . $i . "'";
-                    $string .= '<a href="javascript:void(0)"  onclick="characterRedirect('. $c. ');" class="zoke-box">'.$i.'</a>';
-                };
-            $nine = "'abc'";
-            $string .='<a href="javascript:void(0)" onclick="characterRedirect('.$nine.');" class="zoke-box">0-9</a>
-            </div>
-            </div>';
-        }
-
-        return $string;
-    }
-
     /**
      * check key exist in cache or not
      * @author  kraj
@@ -729,7 +700,7 @@ EOD;
      * @version 1.0
      */
 
-    public static function getSidebarWidget($arr=array(),$page='')
+    public function getSidebarWidget($arr=array(),$page='')
     {
         $pagewidgets = Doctrine_Query::create()
         ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
@@ -750,15 +721,15 @@ EOD;
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_stores') {
             $string .= self::PopularWinkelsWidget();
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_category') {
-            $string .= self::PopularCategoryWidget();
+            $string .= $this->PopularCategoryWidget();
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_editor') {
             $string .= self::PopularEditorWidget(@$arr['userId'],$page);
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='most _popular_fashion') {
             $string .= self::MostPopularFashionGuideWidget();
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page!='search_result') {
-            $string .= self::sideWidgetCalculator('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
+            $string .= self::browseByStoreWidget('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page=='search_result') {
-            $string .= self::sideWidgetCalculator('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
+            $string .= self::browseByStoreWidget('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='other_helpful_tips') {
         $string .= self::otherhelpfullSavingTipsWidget();
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='join_us') {
@@ -803,9 +774,9 @@ public static function getSidebarWidgetViaId($pageId,$page='default')
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_editor') {
                 $string .= self::PopularEditorWidget(@$arr['userId'],$page);
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page!='search_result') {
-                $string .= self::sideWidgetCalculator('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
+                $string .= self::browseByStoreWidget('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page=='search_result') {
-                $string .= self::sideWidgetCalculator('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
+                $string .= self::browseByStoreWidget('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='other_helpful_tips') {
                 $string .= self::otherhelpfullSavingTipsWidget();
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='join_us') {
@@ -848,9 +819,9 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_editor') {
                 $string .= self::PopularEditorWidget(@$arr['userId'],$page);
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page!='search_result') {
-                $string .= self::sideWidgetCalculator('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
+                $string .= self::browseByStoreWidget('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page=='search_result') {
-                $string .= self::sideWidgetCalculator('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
+                $string .= self::browseByStoreWidget('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='other_helpful_tips') {
                 $string .= self::otherhelpfullSavingTipsWidget();
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='join_us') {
