@@ -15,7 +15,7 @@ class CategoryController extends Zend_Controller_Action {
         $categoryDetail = Category::getCategoryforFrontend($categoryPermalink);
         if (count($categoryDetail)> 0) {
             $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetail[0]['id'], 71);
-            $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($categoryVoucherCodes, $this->_getAllParams(), 27, 3);
+            $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($categoryVoucherCodes, $this->_getAllParams(), 10, 3);
             $this->view->offersWithPagination = $offersWithPagination;
             $this->view->categoryDetail = $categoryDetail;
             $this->view->offersType = 'offerWithPagenation';
