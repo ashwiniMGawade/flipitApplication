@@ -1,126 +1,39 @@
-   <!-- Search Outer2 Starts -->
-       <?php 
-         $breadcrumb = "<a href='".HTTP_PATH_LOCALE."category/index/' style='color:#6a6a6a'>".$this->translate('Categories')."</a>";
-         $headerSearch = new FrontEnd_Helper_viewHelper();
-         echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
-        ?>
-        <!-- Search Outer2 Ends -->
-        <!-- Alle Winkels Starts -->
-        <div class="alle-winkels-outer">
-        
-          <!-- Alle Winkels Left Starts -->
-          <div class="mt20 fl" id='left_container'>
-              <h1><?php echo $this->pageTitle;?></h1>
-
-            
-          <!-- Separator Starts -->
-          <div class="separator mt20">&nbsp;</div>
-          <!-- Separator Ends -->
-            
-             <!-- Icon Description Outer Starts -->
-              <?php 
-              $i=1;
-              if(count($this->catIcons) > 0){
-              foreach($this->catIcons as $icons ){
-              	$id =  $icons['id'];
-              	
-              	$class = '';
-              	if($i%6 == 0)
-              	{
-              	   $class = 'mr-none';
-              	}
-              	
-               $categoryIconPath = '';
-               $categoryName = '';
-                $categoryIconPath = PUBLIC_PATH_CDN.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name']; 
-			   $categoryName = $icons['name'];
-			   
-			    ?>
-			   
-			    <a class="image-description-outer <?php echo $class; ?>" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $icons['permaLink']; ?>">
-				   
-				    <span class="image-description-img">
-				    	<img src ="<?php echo $categoryIconPath;?>" alt="<?php echo $categoryName;?>" />
-				    </span>
-				    <span class="image-description-text">	  			   
-		              <?php
-		                echo $categoryName;
-		              ?>	  			    
-				    </span>
-				   
-			    </a>
-			    
-			    
-			   <?php  
-			   ++$i;
-              }
-              }
-              else{
-              ?>
-             <div style="text-align:center;font-size:14px;font-weight:bold;"><?php echo $this->translate('No record found'); ?></div> 
-             <?php } ?> 
-            <!-- Icon Description Outer Ends -->
-             
-                      
-     <!-- Gesorteerde Outer Starts -->
-         <div class="gesorteerde-outer mt40">
-          <div class="gesorteerde-heading">
-            <h2><?php echo $this->translate('Gesorteerde lijsten')?></h2>
-          </div>
-           <!-- Separator Starts -->
-          <div class="separator mt20">&nbsp;</div>
-          <!-- Separator Ends -->
-          
-            <div class="gesorteerde-text1"><?php echo $this->desc;?></div>
-	 		 <div class="gesorteerde-bot">
-		 		    <!-- Gesorteerde Col1 Outer Starts -->
-		 <?php 
-		
-		  $specialList = $this->specialCat;
-		  for($s=0;$s<count($specialList);$s++)
-		  {
-		  	$img = '';
-		  	if(count($specialList)>0){
-			 	$img = PUBLIC_PATH_CDN.$specialList[$s]['logo']['path']."thum_page_small".$specialList[$s]['logo']['name'];
-			 
-		?>
-		     <div class="gesorteerde-col1-outer">
-	      	 <div class="gesorteerde-col1">
-	      	 <a href="<?php echo HTTP_PATH_LOCALE . $specialList[$s]['permaLink'];  ?>" >
-	      	   <span class="gesorteerde-col1-img">
-	      	   		<img src ="<?php echo $img;?>" alt="<?php echo $specialList[$s]['pageTitle'];?>"/>
-	      	   </span>
-			   <span title='<?php echo $specialList[$s]['pageTitle']; ?>' class="gesorteerde-col1-text text-black-link"><?php echo strlen($specialList[$s]['pageTitle'])<= 24 ?  $specialList[$s]['pageTitle'] : substr($specialList[$s]['pageTitle'], 0,24).'..'; ?>
-			   </span>
-			</a>    
-		    </div>
-		   </div>
-		   
-		<?php } } ?>
-		     		
-		     		
-	         <!-- Gesorteerde Col1 Outer Ends -->
-	          </div>
-             <!-- Gesorteerde Bot Starts -->
-          </div>
-           <!-- Gesorteerde Outer Ends -->
-         
-       </div>
-       <!-- Alle Winkels Left Ends -->
-            
-           <!-- Alle Winkels Right Starts -->
-            <div class="alle-winkels-right" id='right_container'>
-            
-            <!-- Waardebon Starts -->
-             
-             <?php 
-                 echo FrontEnd_Helper_viewHelper::getSidebarWidgetViaId(9);
-             ?>
-             <!-- Waardebon Ends -->
+<?php
+echo $this->minifyHeadLink()->prependStylesheet("/public/css/all-categoties-alt.css");
+$storeViewPartialPath = 'store/';
+$signUpWidgetForm = '';
+$signUpWidgetForm = $this->partial(
+    $storeViewPartialPath.'signupwidget.phtml',
+        array(
+            'zendForm' => $this->sidebarWidgetForm,
+            'sidebarWidgetShowOrNot' => 'category',
+            'shopId' => '',
+            'shopLogoOrDefaultImage' => ''
+        )
+    );
+$categoriesWithSpecialPagesList = '';
+if (count($this->categoriesWithSpecialPagesList) > 0) {
+    $categoriesWithSpecialPagesList = $this->partial(
+        'category/_categories-overview.phtml',
+        array('categoriesWithSpecialPagesList'=> $this->categoriesWithSpecialPagesList)
+    );
+}
+?>
+<div class="row">
+    <div class="col-md-12 content-box">
+        <div class="section">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                <?php echo $this->translate('All Popular Categories and Special Topics'); ?>
+                </div>
             </div>
-            <!-- Alle Winkels Right Ends -->
+            <div class="catigories">
+            <?php echo $categoriesWithSpecialPagesList; ?> 
+            </div>
         </div>
-     <!-- Alle Winkels Ends -->
+        <div class="section section-newsletter" id="category-newsletter">
+        <?php echo $signUpWidgetForm; ?>
+        </div>
+    </div>
+</div>
 
-        
- 

@@ -48,6 +48,18 @@ class Page extends BasePage
         ->fetchOne();
         return $page;
     }
+
+    public static function getSpecialListPages()
+    {
+        $specialListPages = Doctrine_Query::create()
+            ->select('p.id,p.pageTitle as name,p.permaLink,i.path,i.name')
+            ->from('Page p')
+            ->leftJoin('p.logo i')
+            ->where("pageType = ?", 'offer')
+            ->andWhere('p.deleted=0')
+            ->fetchArray();
+        return $specialListPages;
+    }
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -1117,23 +1129,7 @@ public static function exportpagelist() {
 		->fetchOne();
 		return $data;
 	}
-	/**
-	 *  Author blal
-	 *  Get offer list pages
-	*/
-	
-	public static function getOfferListPage(){
-	
-		$data = Doctrine_Query::create()
-				->select('p.id,p.pageType,p.pageTitle,p.permaLink,p.metaDescription,i.path,i.name')
-				->from('Page p')
-				->leftJoin('p.logo i')
-				->where("pageType = ?", 'offer')
-				->andWhere('p.deleted=0')
-				->limit(9)
-				->fetchArray();
-		return $data;
-	}
+
 	/**
 	 *  @author kraj
 	 *  Get page details on id basis

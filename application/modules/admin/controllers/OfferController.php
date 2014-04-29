@@ -46,7 +46,7 @@ class Admin_OfferController extends Zend_Controller_Action {
     	$shopObj = new Shop();
     	$this->view->shopList=$shopObj->getOfferShopList();
     	$catObj = new Category();
-    	$this->view->catList = $catObj->getCategoryIcons();
+    	$this->view->catList = $catObj->getCategoriesDetail();
     	$pageObj = new Page();
     	$this->view->pages = $pageObj->getPagesOffer();
 
@@ -79,7 +79,7 @@ class Admin_OfferController extends Zend_Controller_Action {
     	$this->view->shopList=$shopObj->getOfferShopList();
 
     	$catObj = new Category();
-    	$this->view->catList=$catObj->getCategoryIcons();
+    	$this->view->catList=$catObj->getCategoriesDetail();
 
     	$pageObj = new Page();
     	$this->view->pages = $pageObj->getPagesOffer();
