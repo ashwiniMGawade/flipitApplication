@@ -37,10 +37,10 @@ class OfferController extends Zend_Controller_Action
         $this->view->facebookLocale = $facebookLocale;
         $this->view->twitterDescription = trim($page->metaDescription);
 
-        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
+        $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
-        $this->view->form = $signUpFormForStorePage;
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
