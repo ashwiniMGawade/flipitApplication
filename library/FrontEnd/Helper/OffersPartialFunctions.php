@@ -124,7 +124,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         $offerDates = self::getOfferDates($currentOffer, $daysTillOfferExpires);
         return $offerOption . $offerDates;
     }
-    public function getClassNameForOffer($currentOffer, $offerType)
+    public function getCssClassNameForOffer($currentOffer, $offerType)
     {
         $className = 'code';
         $className .= $offerType=='simple' ? '' : ' code-2';
@@ -223,41 +223,45 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $popupLink;
     }
 
-    public function getmainOfferLink($currentOffer, $urlToShow, $offerBounceRate, $popupLink, $OfferInstance, $class)
+    public function getmainOfferLink($currentOffer, $urlToShow, $offerBounceRate, $popupLink, $offerAnchorTagContent, $class)
     {
         
-        if ($currentOffer->discountType == "CD" || $currentOffer->discountType == "SL") {
+        if ($currentOffer->discountType == "CD" ) {
             $onClick =  $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
             $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')";
             $offerLink = '<a id="'.$currentOffer->id.'" class="'.$class.'" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
-            '.$OfferInstance.' </a>';
+            '.$offerAnchorTagContent.' </a>';
+        } elseif ($currentOffer->discountType == "SL") {
+            $onClick = "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate')";
+            $offerLink = '<a id="'.$currentOffer->id.'" class="'.$class.'" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
+            '.$offerAnchorTagContent.' </a>';
         } else {
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')" : HTTP_PATH_LOCALE."accountlogin" ;
-            $offerLink = '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$offerBounceRate.'" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$OfferInstance.'</a>';
+            $offerLink = '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$offerAnchorTagContent.'</a>';
         }
         return $offerLink;
     }
 
-    public function getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $OfferInstance, $class)
+    public function getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $offerAnchorTagContent, $class)
     {
         
         $popupLink = self::getPopupLink($currentOffer, $urlToShow);
-        echo $mainOfferLink = self::getmainOfferLink($currentOffer, $urlToShow, $offerBounceRate, $popupLink, $OfferInstance, $class);
+        echo $mainOfferLink = self::getmainOfferLink($currentOffer, $urlToShow, $offerBounceRate, $popupLink, $offerAnchorTagContent, $class);
         return $mainOfferLink;
     }
 
-    public function getCommonRedirectUrlForOffer($currentOffer, $urlToShow, $offerBounceRate, $offerInstance, $type)
+    public function getCommonRedirectUrlForOffer($currentOffer, $urlToShow, $offerBounceRate, $offerAnchorTagContent, $type)
     {
         $redirectUrl = '';
         switch ($type){
             case 'mainOfferClickoutButton': 
                 $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $this->zendTranslate->translate('>Get code &amp; Open site'), "btn blue btn-primary");
             break;
-            case 'offerTitle': 
-                $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $offerInstance, "link");
+            case 'offerTitle':
+                $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $offerAnchorTagContent, "link");
             break;
-            case 'offerType': 
-                $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, self::getOfferImage($currentOffer, $offerInstance), self::getClassNameForOffer($currentOffer, $offerInstance));
+            case 'offerImage': 
+                $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, self::getOfferImage($currentOffer, $offerAnchorTagContent), self::getCssClassNameForOffer($currentOffer, $offerAnchorTagContent));
             break;
             default: break;
         return $redirectUrl;
@@ -270,7 +274,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $buttonWithCodeforOffer = '';
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : " ";
+            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : "printIt('$urlToShow');";
             $buttonWithCodeforOffer = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$this->zendTranslate->translate('print now').'<span class="ico-print"></span></a>';
         } else if ($currentOffer->discountType=='CD') {
             $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate'),OpenInNewTab('". $permalink. "?popup=$currentOffer->id&type=code')";
