@@ -30,12 +30,7 @@
 	<input type="hidden" value="<?php echo $this->categoryDetail[0]['id'] ?>" name='id' id='id' />
 	<input type="hidden" value="<?php echo $this->role; ?>" name='role' id='role' />
 	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
-	<?php
-	$featuredCategory = 1;
-    if($this->categoryDetail[0]['featured_category'] == ''):
-        $featuredCategory = 0;
-    endif;
-	?>
+	<?php $featuredCategory = $this->categoryDetail[0]['featured_category'] == '' ? 0 : 1; ?>
     <input type="hidden" name="featuredCategory" id="featuredCategory" value="<?php echo $featuredCategory;?>" />
 	<h1><?php echo $this->translate('Edit Category'); ?><input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" /></h1>
 		<div id="poststuff" class="metabox-holder has-right-sidebar">
@@ -151,12 +146,8 @@
                                 <div class="mainpage-content-right">
                                     <div class="btn-group" data-toggle="buttons-checkbox">
                                     <?php $backEndViewHelper = new BackEnd_Helper_viewHelper();
-                                    if ($featuredCategory == 1) {
-                                    
-                                    echo $backEndViewHelper->getOnOffButtonsForFeaturedCategory(1);
-                                    } else {
-                                    echo $backEndViewHelper->getOnOffButtonsForFeaturedCategory(0);
-                                    } ?>
+                                    echo $featuredCategory == 1 ? $backEndViewHelper->getOnOffButtonsForFeaturedCategory(1) : $backEndViewHelper->getOnOffButtonsForFeaturedCategory(0);
+                                    ?>
                                 </div>
                             </div>
                         </div>
