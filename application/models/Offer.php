@@ -1822,7 +1822,7 @@ class Offer extends BaseOffer
 	 	if(count($catData) > 0){
 	 		$commaSepratedCategroyIdValues = implode(', ', $catData);
 	 		//Zend_Debug::dump($catData); die;
-	 		echo $OfferOfRelatedCats = Doctrine_Query::create()
+	 		$OfferOfRelatedCats = Doctrine_Query::create()
 	 		->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,
 	 				terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode,
 	 			     o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id,
@@ -1852,7 +1852,6 @@ class Offer extends BaseOffer
 
 	 		$OfferOfRelatedCats = array();
 	 	}
-
 
 	 	$NewOfferOfRelatedShops = array();
 	 	$NewOfferOfRelatedCats = array();
