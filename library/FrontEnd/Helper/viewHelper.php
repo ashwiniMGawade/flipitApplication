@@ -392,7 +392,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
             case 'relatedshopsbycat':
 
                 $data = Offer::commongetrelatedshopsByCategory($type, $limit, $shopId);
-                   
+
             break;
             case 'latestupdates':
                 $data = Offer::getLatestUpdates($type, $limit, $shopId);
@@ -879,13 +879,8 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                     }
                 }
             }
-        $splitURL =explode('/', $m['url']);
 
-        if ($val==$cnt) {
-            $a = str_replace(' ','-',trim(strtolower($m["name"])));
-            $string .= '<li><a rel="toggel" id="'. $a . '" name="'. $a. '" class="show_hide1" href="javascript:void(0);">' . $m["name"] . '</a></li>';
-
-        } else {
+            $splitURL =explode('/', $m['url']);
 
             $a = str_replace(' ','-',trim(strtolower($m["name"])));
             preg_match('/http:\/\//', $m['url'],$matches);
@@ -897,8 +892,8 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
 
                 $string .= '<li><a id="'. $a. '" name="'. $a. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $m["name"] . '</a></li>';
             }
-        }
-        $val++;
+
+            $val++;
         }
         $string .= '</ul></div>';
 
@@ -1674,7 +1669,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
     public static function generatCononicalForSignUp($link)
     {
         $plink = $link;
-        
+
         if (LOCALE!="") {
             $front = Zend_Controller_Front::getInstance();
             $cd = $front->getControllerDirectory();
@@ -1722,6 +1717,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
             }
             $plink = $permalink;
         }
+
         return $plink;
     }
     ######## Refactored End ##############
