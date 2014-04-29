@@ -51,7 +51,9 @@
 	. " " . $this->translate("Stores overview") . '</a>'
 	. '</p></div></div>';
 
-
+	$messageBox =  '<div class="info-most-interestedcodes voucher-col1-new">
+						'.$this->translate("Helaas hebben wij op dit moment geen kortingsen beschikbaar voor deze winkel. Vandaar hebben wij onze meest interessante codes van kortingscode.nl voor u geselecteerd.").'
+					</div>';
 	$offers = '';
 
 
@@ -308,7 +310,7 @@
 
 
 			<div class="mark-spencer-mid-left" style='width:660px!important;'>
- 		      	<?php echo $yellowBoxWarning;
+ 		      	<?php echo $messageBox;
 			//echo $offers;
  		      		if ($this->data[0]['showSignupOption']) :
  		      		//echo $this->esi($this->locale.'store/signup');
