@@ -103,7 +103,7 @@ class StoreController extends Zend_Controller_Action
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
-        $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
+        $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularShopWidget();
 
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
