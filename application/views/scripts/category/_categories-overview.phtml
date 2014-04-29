@@ -9,7 +9,6 @@ foreach ($this->categoriesWithSpecialPagesList as $category) {
         $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
     }
 
-    $categoryImageSource = '';
     $categoryImage = isset($category['categoryicon']) ? $category['categoryicon'] : $category['logo'];
     $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."thum_medium_".$categoryImage['name']; 
     ?>
