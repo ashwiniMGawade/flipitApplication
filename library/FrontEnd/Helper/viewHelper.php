@@ -742,7 +742,7 @@ EOD;
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='stuur_een') {
             $string .= self::DiscountCodeWidget();
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_stores') {
-            $string .= self::PopularWinkelsWidget();
+            $string .= self::popularShopWidget();
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_category') {
             $string .= self::PopularCategoryWidget();
         } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_editor') {
@@ -789,7 +789,7 @@ public static function getSidebarWidgetViaId($pageId,$page='default')
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='stuur_een') {
                 $string .= self::DiscountCodeWidget();
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_stores') {
-                $string .= self::PopularWinkelsWidget();
+                $string .= self::popularShopWidget();
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_category') {
                 $string .= self::PopularCategoryWidget();
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='most _popular_fashion') {
@@ -834,7 +834,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='stuur_een') {
                 $string .= self::DiscountCodeWidget();
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_stores') {
-                $string .= self::PopularWinkelsWidget();
+                $string .= self::popularShopWidget();
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_category') {
                 $string .= self::PopularCategoryWidget();
             } elseif ($pagewidgets[0]['widget'][$i]['slug']=='most _popular_fashion') {
@@ -914,7 +914,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         return $data;
 
     }
-    public static function PopularWinkelsWidget()
+    public static function popularShopWidget()
     {
         $zendTranslate = Zend_Registry::get('Zend_Translate');
         $popularStores = self::getStoreForFrontEnd('popular', 25);

@@ -1,6 +1,6 @@
 <?php
 echo $this->render('offer/jsFileForOfferPartial.phtml');
- $categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path']."thum_large_".$this->categoryDetail[0]['categoryicon']['name'];
+$categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path']."thum_large_".$this->categoryDetail[0]['categoryicon']['name'];
 $categoryPartial = new FrontEnd_Helper_CategoryPartialFunctions();
 echo $categoryPartial->getCategoryHeader($this->categoryDetail[0]['name'],  $categoryFeaturedImage);
 $storeViewPartialPath = 'store/';
@@ -31,7 +31,6 @@ $signUpWidgetForm = $this->partial(
 );
 ?> 
 <div class="row">
-    <input type="hidden" value="<?php echo $this->categoryDetail[0]['id'] ?>" name='id' id='id' />
     <div class="col-md-8 col-sm-8" id="content">
     <?php echo $offers; ?>
     </div>
@@ -40,7 +39,7 @@ $signUpWidgetForm = $this->partial(
     $frontendViewHelper = new FrontEnd_Helper_viewHelper();
     echo $frontendViewHelper->popularCategoryWidget();
     echo FrontEnd_Helper_viewHelper::socialMediaWidget();
-    echo FrontEnd_Helper_viewHelper::PopularWinkelsWidget();
+    echo FrontEnd_Helper_viewHelper::popularShopWidget();
     echo $signUpWidgetForm;
     ?>
     </aside>

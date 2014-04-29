@@ -10,7 +10,8 @@ if ($this->offerImagePath == '') {
             'offer' => $offer,
             'termsAndConditions' => $termsAndConditions,
             'siteImage' => $offerPartial->getSiteLogoforPopup(),
-            'couponCode' => $this->couponCode
+            'couponCode' => $this->couponCode,
+            'urlToShow' => $offerPartial->getUrlToShow($offer)
        )
     );
 } else {

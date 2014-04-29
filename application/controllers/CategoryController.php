@@ -13,12 +13,12 @@ class CategoryController extends Zend_Controller_Action {
     {
         $categoryPermalink = $this->getRequest()->getParam('permalink');
         $categoryDetail = Category::getCategoryforFrontend($categoryPermalink);
-        if (count($categoryDetail)> 0) {
+        if (count($categoryDetail) > 0) {
             $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetail[0]['id'], 71);
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($categoryVoucherCodes, $this->_getAllParams(), 27, 3);
             $this->view->offersWithPagination = $offersWithPagination;
             $this->view->categoryDetail = $categoryDetail;
-            $this->view->offersType = 'categoryOffers';
+            $this->view->offersType = 'offerWithPagenation';
             $this->view->headTitle(trim($categoryDetail[0]['metatitle']));
             $this->view->headMeta()->setName('description', trim($categoryDetail[0]['metaDescription']));
 
@@ -39,10 +39,10 @@ class CategoryController extends Zend_Controller_Action {
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
         }
-        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
+        $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
-        $this->view->form = $signUpFormForStorePage;
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
     

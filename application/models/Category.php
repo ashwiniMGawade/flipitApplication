@@ -61,9 +61,9 @@ class Category extends BaseCategory {
     }
 
     /**
-     * Fnction getPopularCategories.
+     * Function getPopularCategories.
      * 
-     * Get popular Category list from database for fronthome page.
+     * Get popular Category list from database for front-end.
      * 
      * @version 1.0
      * @return array $allCategories
@@ -84,7 +84,19 @@ class Category extends BaseCategory {
         ->fetchArray();
         return $popularCategories;
     }
-
+    
+    public static function getCategoryforFrontend($permalink)
+    {
+        $categoryDetail = Doctrine_Query::create()->select("c.*,i.name,i.path")
+        ->from('Category c')
+        ->LeftJoin("c.categoryicon i")
+        ->where("permalink = ?", $permalink)
+        ->andWhere('c.deleted=0')
+        ->andWhere('c.status= 1')
+        ->fetchArray();
+        return $categoryDetail;
+    
+    }
     /**
      * Save new category.
      *
@@ -252,18 +264,6 @@ class Category extends BaseCategory {
 	
 	}
 	
-	public static function getCategoryforFrontend($permalink) {
-	
-		$data = Doctrine_Query::create()->select("c.*,i.name,i.path")
-		->from('Category c')
-		->LeftJoin("c.categoryicon i")
-		->where("permalink = ?", $permalink)
-		->andWhere('c.deleted=0')
-		->andWhere('c.status= 1')
-		->fetchArray();
-		return $data;
-	
-	}
 	
 	/**
 	 * upload image for category icon
