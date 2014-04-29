@@ -84,7 +84,7 @@ class Category extends BaseCategory {
         ->fetchArray();
         return $popularCategories;
     }
-    
+
     public static function getCategoryforFrontend($permalink)
     {
         $categoryDetail = Doctrine_Query::create()->select("c.*,i.name,i.path")
@@ -193,6 +193,7 @@ class Category extends BaseCategory {
         $categoryRoute->type = 'CAT';
         $categoryRoute->exactlink = 'category/show/id/'.$category->id;
         $categoryRoute->save();
+        return true;
     }
 
     public static function getCategoryRoutePermalink($categoryInfo)
