@@ -3,6 +3,7 @@ foreach ($this->categoriesWithSpecialPagesList as $category) {
     $featuredCategoryClass = '';
     $featuredCategoryImageDimensions = '';
     $featuredCategorySpan = '';
+    
     if(isset($category['featured_category']) && $category['featured_category'] != '') {
         $featuredCategoryClass = "box-top"; 
         $featuredCategoryImageDimensions = 'width= 366 height=367';
