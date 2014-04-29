@@ -8,7 +8,6 @@ if($myfav[0] == '') {
 }
 
 $permalink = rtrim($permalink, '/');
-//echo $permalink;
 preg_match("/[^\/]+$/", $permalink, $matches);
 
 if (intval(@$matches[0]) > 0 && intval(@$matches[0]) < 4) {
@@ -19,7 +18,13 @@ if (intval(@$matches[0]) > 0 && intval(@$matches[0]) < 4) {
 		header('location:'. HTTP_PATH.$permalink);
 	} else if(intval($this->pageCount)==1) {
 		$baseLink = explode('/', $permalink);
+
+		if(intval($baseLink[1]) == 1 ) {
+			header('location:'. HTTP_PATH.$baseLink[0]);
+			exit;
+		}
 		header('location:'. HTTP_PATH.$baseLink[0] ."/" .$baseLink[1]);
+		exit;
 	}
     $permalink = explode('/'.$matches[0], $permalink);
     $permalink = $permalink[0];
