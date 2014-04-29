@@ -48,8 +48,8 @@ class CategoryController extends Zend_Controller_Action {
     
     public function indexAction()
     {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
+        $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
         $this->pageDetail = Page::getPageFromPageAttribute(9);
         $this->view->headTitle($this->pageDetail->metaTitle);
         $this->view->headMeta()->setName('description', trim($this->pageDetail->metaDescription));
@@ -58,28 +58,19 @@ class CategoryController extends Zend_Controller_Action {
             $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
         }
 
-        $categories = BackEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoryIcons());
-        $specialPagesList = BackEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialOfferListPages());
-        $this->view->categories = array_merge($categories, $specialPagesList);
-
-        if (LOCALE == '') {
-            $facebookImage = 'logo_og.png';
-            $facebookLocale = '';
-        } else {
-            $facebookImage = 'flipit.png';
-            $facebookLocale = LOCALE;
-        }
-
+        $allCategories = BackEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoriesDetail());
+        $specialPagesList = BackEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialListPages());
+        $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
         $this->view->facebookTitle = $this->pageDetail->pageTitle;
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen');
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
+        $this->view->facebookImage = FACEBOOK_IMAGE;
         $this->view->facebookDescription = trim($this->pageDetail->metaDescription);
-        $this->view->facebookLocale = $facebookLocale;
+        $this->view->facebookLocale = FACEBOOK_LOCALE;
         $this->view->twitterDescription = trim($this->pageDetail->metaDescription);
-        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
+        $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
-        $this->view->form = $signUpFormForStorePage;
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
+        $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
     #####################################################

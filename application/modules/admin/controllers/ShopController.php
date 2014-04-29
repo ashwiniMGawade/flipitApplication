@@ -386,7 +386,7 @@ class Admin_ShopController extends Zend_Controller_Action
     	$category = new Category();
 
 
-    	$this->view->categoryList = $category->getCategoryIcons();
+    	$this->view->categoryList = $category->getCategoriesDetail();
 
 
 
@@ -467,7 +467,7 @@ class Admin_ShopController extends Zend_Controller_Action
     	/* get Category List*/
     	$arr['status'] = '1';
     	$category = new Category();
-    	$this->view->categoryList = $category->getCategoryIcons();
+    	$this->view->categoryList = $category->getCategoriesDetail();
 
     	$site_name = "";
     	if(isset($_COOKIE['site_name'])){

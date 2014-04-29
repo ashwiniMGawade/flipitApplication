@@ -1,5 +1,5 @@
 <?php
-foreach ($this->categories as $category) {
+foreach ($this->categoriesWithSpecialPagesList as $category) {
     $featuredCategoryClass = '';
     $featuredCategoryImageDimensions = '';
     $featuredCategorySpan = '';
@@ -10,24 +10,17 @@ foreach ($this->categories as $category) {
     }
 
     $categoryImageSource = '';
-    $categoryName = '';
-    if(isset($category['categoryicon'])):
-        $categoryImage = $category['categoryicon'];
-    else:
-        $categoryImage = $category['logo'];
-    endif;
-
+    $categoryImage = isset($category['categoryicon']) ? $category['categoryicon'] : $category['logo'];
     $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."thum_medium_".$categoryImage['name']; 
-    $categoryName = $category['name'];
     ?>
     <article class="box <?php echo $featuredCategoryClass; ?>">
         <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $category['permaLink']; ?>">
             <div class="image">
-                <img src ="<?php echo HTTP_PATH; ?>public/images/front_end/img-06.jpg" <?php echo  $featuredCategoryImageDimensions; ?> alt="<?php echo $categoryName;?>" />
+                <img src ="<?php echo $categoryImageSource; ?>" <?php echo  $featuredCategoryImageDimensions; ?> alt="<?php echo $category['name'];?>" />
             </div>
             <div class="caption">
                 <?php echo $featuredCategorySpan; ?>
-                <strong><?php echo $categoryName; ?></strong>
+                <strong><?php echo $category['name']; ?></strong>
             </div>
         </a>
     </article>

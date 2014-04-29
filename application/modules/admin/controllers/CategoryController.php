@@ -123,7 +123,7 @@ class Admin_CategoryController extends Zend_Controller_Action {
 		if ($id > 0) {
 			// get edit category
 			$category = Category::getCategory ($id);
-			$this->view->editRec = $category;
+			$this->view->categoryDetail = $category;
 		}
 		
 		if ($this->getRequest ()->isPost ()) {

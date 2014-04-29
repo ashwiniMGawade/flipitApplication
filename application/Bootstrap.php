@@ -85,6 +85,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         } else {
             self::constantsForDefaultModule();
         }
+        self::constantsForFacebookImageAndLocale();
+    }
+    
+    public function constantsForFacebookImageAndLocale()
+    {
+        if (LOCALE == '') {
+            define('FACEBOOK_IMAGE', HTTP_PATH."public/images/logo_og.png");
+            define('FACEBOOK_LOCALE', '');
+        } else {
+            define('FACEBOOK_IMAGE', HTTP_PATH."public/images/flipit.png");
+            define('FACEBOOK_LOCALE', LOCALE);
+        }
     }
 
     public function constantForCacheDirectory()

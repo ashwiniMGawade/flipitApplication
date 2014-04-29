@@ -86,7 +86,8 @@ class Category extends BaseCategory {
     }
 
     /**
-     * save new category
+     * Save new category.
+     *
      * @param array $params
      * @return mixed
      * @version 1.0
@@ -119,7 +120,8 @@ class Category extends BaseCategory {
     }
 
     /**
-     * update by id category
+     * Update by id category.
+     *
      * @param array $params
      * @version 1.0
      */
@@ -200,6 +202,7 @@ class Category extends BaseCategory {
             ->set('type', "'CAT'")
             ->set('exactlink', "'".$categoryPermalink."'");
         $updateRouteLink->where('type = "CAT"')->andWhere("permalink = '".$categoryInfo[0]['permaLink']."'")->execute();
+        return true;
     }
 
     public static function updateCategoryFeaturedImage($categoryId)
@@ -208,15 +211,16 @@ class Category extends BaseCategory {
                 ->set('c.featured_category', 0)
                 ->where('c.id !='. $categoryId)
                 ->execute();
+        return true;
     }
     
     /**
-    * get categories icons to show in grid view at frontend
-    * @return array $categoryIcons
+    * get categories detail to show in grid view at frontend
+    * @return array $categoriesDetail
     * @version 1.0
     */
-    public static function getCategoryIcons(){
-        $categoryIcons = Doctrine_Query::create()
+    public static function getCategoriesDetail(){
+        $categoriesDetail = Doctrine_Query::create()
                 ->select('c.name,c.id,i.path,i.name,c.permaLink,c.featured_category')
                 ->from("Category c")
                 ->leftJoin("c.categoryicon i")
@@ -224,7 +228,7 @@ class Category extends BaseCategory {
                 ->andWhere("c.status= 1")
                 ->orderBy("c.featured_category DESC")
                 ->fetchArray();
-        return $categoryIcons;
+        return $categoriesDetail;
     }
     #####################################################
     ############# ENd REFACORED CODE ####################

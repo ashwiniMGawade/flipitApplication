@@ -49,17 +49,16 @@ class Page extends BasePage
         return $page;
     }
 
-    public static function getSpecialOfferListPages()
+    public static function getSpecialListPages()
     {
-        $specialOfferList = Doctrine_Query::create()
+        $specialListPages = Doctrine_Query::create()
             ->select('p.id,p.pageTitle as name,p.permaLink,i.path,i.name')
             ->from('Page p')
             ->leftJoin('p.logo i')
             ->where("pageType = ?", 'offer')
             ->andWhere('p.deleted=0')
-            ->limit(9)
             ->fetchArray();
-        return $specialOfferList;
+        return $specialListPages;
     }
     ######################################################
     ############ END REFACTORED CODE #####################

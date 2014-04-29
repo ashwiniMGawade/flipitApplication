@@ -11,6 +11,13 @@ $signUpWidgetForm = $this->partial(
             'shopLogoOrDefaultImage' => ''
         )
     );
+$categoriesWithSpecialPagesList = '';
+if (count($this->categoriesWithSpecialPagesList) > 0) {
+    $categoriesWithSpecialPagesList = $this->partial(
+        'category/_categories-overview.phtml',
+        array('categoriesWithSpecialPagesList'=> $this->categoriesWithSpecialPagesList)
+    );
+}
 ?>
 <div class="row">
     <div class="col-md-12 content-box">
@@ -21,14 +28,7 @@ $signUpWidgetForm = $this->partial(
                 </div>
             </div>
             <div class="catigories">
-                <?php 
-                if (count($this->categories) > 0) {
-                    echo $this->partial(
-                    'category/_categories-overview.phtml',
-                    array('categories'=> $this->categories)
-                );
-            }
-            ?> 
+            <?php echo $categoriesWithSpecialPagesList; ?> 
             </div>
         </div>
         <div class="section section-newsletter" id="category-newsletter">

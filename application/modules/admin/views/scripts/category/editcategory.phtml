@@ -8,13 +8,14 @@
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.custom.css" );
 	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/category-common.js");
 
 
 	$categoryPicturePath = '';
 	$categoryPictureName = '';
-	if(file_exists(ROOT_PATH.$this->editRec[0]['categoryicon']['path'].$this->editRec[0]['categoryicon']['name'])) {
-		$categoryPicturePath = PUBLIC_PATH_LOCALE.$this->editRec[0]['categoryicon']['path'].$this->editRec[0]['categoryicon']['name'];
-		$categoryPictureName = $this->editRec[0]['categoryicon']['name'];
+	if(file_exists(ROOT_PATH.$this->categoryDetail[0]['categoryicon']['path'].$this->categoryDetail[0]['categoryicon']['name'])) {
+		$categoryPicturePath = PUBLIC_PATH_LOCALE.$this->categoryDetail[0]['categoryicon']['path'].$this->categoryDetail[0]['categoryicon']['name'];
+		$categoryPictureName = $this->categoryDetail[0]['categoryicon']['name'];
 	}else {
 		$categoryPicturePath = PUBLIC_PATH ."images/upload/no.jpg";
 	}
@@ -25,13 +26,13 @@
 	<!-- update category -->
 <div id='editCategory' class="wrap columns-2">
 	<form action="<?php echo HTTP_PATH ;?>admin/category/editcategory" method="POST" name='updateCategoryForm' id="updateCategoryForm" method=POST enctype=multipart/form-data>
-	<input type="hidden" value="<?php echo $this->editRec[0]['categoryIconId'] ;?>" name='iconId' id='iconId' />
-	<input type="hidden" value="<?php echo $this->editRec[0]['id'] ?>" name='id' id='id' />
+	<input type="hidden" value="<?php echo $this->categoryDetail[0]['categoryIconId'] ;?>" name='iconId' id='iconId' />
+	<input type="hidden" value="<?php echo $this->categoryDetail[0]['id'] ?>" name='id' id='id' />
 	<input type="hidden" value="<?php echo $this->role; ?>" name='role' id='role' />
 	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
 	<?php
 	$featuredCategory = 1;
-    if($this->editRec[0]['featured_category'] == ''):
+    if($this->categoryDetail[0]['featured_category'] == ''):
         $featuredCategory = 0;
     endif;
 	?>
@@ -51,7 +52,7 @@
 								<div class="mainpage-content-right-inner-left-other">
 									<input type="text" name="categoryName"
 										placeholder="<?php echo $this->translate('Edit Title')?>"
-										class="span3" value="<?php echo $this->editRec[0]['name'] ?>">
+										class="span3" value="<?php echo $this->categoryDetail[0]['name'] ?>">
 								</div>
 							</div>
 						</div>
@@ -65,9 +66,9 @@
 								</div>
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-right-full">
-								<input <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> type="text" name="permaLink" id="permaLink" placeholder="centerparks" class="span3" value="<?php echo $this->editRec[0]['permaLink']; ?>">
+								<input <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> type="text" name="permaLink" id="permaLink" placeholder="centerparks" class="span3" value="<?php echo $this->categoryDetail[0]['permaLink']; ?>">
 								<?php if($this->role == '3' || $this->role == '4'){ ?>
-                            	<input type="hidden" value="<?php echo $this->editRec[0]['permaLink']?>" name="permaLink" id="permaLink">
+                            	<input type="hidden" value="<?php echo $this->categoryDetail[0]['permaLink']?>" name="permaLink" id="permaLink">
                             	<?php }?>
 								</div>
 
@@ -81,7 +82,7 @@
 							<div class="mainpage-content-right">
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-left-other">
-								<input type="text" name="metaTitle" id="metaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->editRec[0]['metatitle'] ?>"/>
+								<input type="text" name="metaTitle" id="metaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->categoryDetail[0]['metatitle'] ?>"/>
 								<span id="metaTextLeft" class="nobel"></span>
 								</div>
 							</div>
@@ -95,14 +96,14 @@
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-left-other">
 
-								<textarea class="input-xlarge mbot bbot ignore" id="metaDescription" name="metaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+								<textarea class="input-xlarge mbot bbot ignore" id="metaDescription" name="metaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo trim($this->categoryDetail[0]['metaDescription']); ?></textarea>
 									<span id="metaDescriptionleft" class="nobel"></span>
 
-							<!--<textarea class="input-xlarge mbot bbot ignore word_count" id="metaDescription" placeholder="<?php //echo $this->translate('Meta Description'); ?>" rows="3" name="metaDescription" ><?php //echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+							<!--<textarea class="input-xlarge mbot bbot ignore word_count" id="metaDescription" placeholder="<?php //echo $this->translate('Meta Description'); ?>" rows="3" name="metaDescription" ><?php //echo trim($this->categoryDetail[0]['metaDescription']); ?></textarea>
 							<input type="text" class="input-xlarge disabled btop word-count"  id="metaDescription_count" disabled="disabled">-->
 
 								<!--<textarea id="metaDescription" rows="3" class="word_count" name="metaDescription"
-								    placeholder="<?php //echo $this->translate('Meta Description')?>"><?php //echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+								    placeholder="<?php //echo $this->translate('Meta Description')?>"><?php //echo trim($this->categoryDetail[0]['metaDescription']); ?></textarea>
 								    <div id="metaDescription_count" style="display:none"></div>-->
 
 								</div>
@@ -135,24 +136,26 @@
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-left-other">
 
-								<textarea class="input-xlarge mbot bbot ignore word_count" id="description" placeholder="<?php echo $this->translate('Description');?>" rows="3" name="description"><?php echo trim($this->editRec[0]['description']);?></textarea>
+								<textarea class="input-xlarge mbot bbot ignore word_count" id="description" placeholder="<?php echo $this->translate('Description');?>" rows="3" name="description"><?php echo trim($this->categoryDetail[0]['description']);?></textarea>
 								 <input type="text" class="input-xlarge disabled btop word-count"  id="description_count" disabled="disabled">
 
 								<!--<textarea id="description" rows="3" class="word_count" name="description"
-								    placeholder="<?php //echo $this->translate('Description')?>"><?php //echo trim($this->editRec[0]['description']);?></textarea>
+								    placeholder="<?php //echo $this->translate('Description')?>"><?php //echo trim($this->categoryDetail[0]['description']);?></textarea>
 								    <div id="description_count" style="display:none"></div>-->
 
 								</div>
 							</div>
 						</div>
                         <div class="mainpage-content-line mb10">
-                            <div class="mainpage-content-left"><label><strong>Featured category</strong></label></div>
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Featured category'); ?></strong></label></div>
                                 <div class="mainpage-content-right">
                                     <div class="btn-group" data-toggle="buttons-checkbox">
-                                    <?php if ($featuredCategory == 1) { 
-                                    echo BackEnd_Helper_viewHelper::getOnOffButtonsForFeaturedCategory(1);
+                                    <?php $backEndViewHelper = new BackEnd_Helper_viewHelper();
+                                    if ($featuredCategory == 1) {
+                                    
+                                    echo $backEndViewHelper->getOnOffButtonsForFeaturedCategory(1);
                                     } else {
-                                    echo BackEnd_Helper_viewHelper::getOnOffButtonsForFeaturedCategory(0);
+                                    echo $backEndViewHelper->getOnOffButtonsForFeaturedCategory(0);
                                     } ?>
                                 </div>
                             </div>
