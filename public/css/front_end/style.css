@@ -11612,8 +11612,10 @@ div.voucher-col-top-20 .shop-logo-img img {
 	box-shadow: 0 3px 7px rgba(0,0,0,0.3);
 	padding: 20px;
 	color:#000;
-	z-index: 99999999;
+	z-index: 99999999 !important;
 }
+.ui-front { z-index: 99999999 !important; }
+
 .ui-dialog a{
 	color: #c43d3a;
 	font-weight: bold;
