@@ -151,6 +151,7 @@ class SendNewsletter {
 			if($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
 				$cutsomLocale = !empty( $settings[0]['locale']) ? $settings[0]['locale'] : 'nl_NL';
 
+
 				$this->_trans = new Zend_Translate(array(
 						'adapter' => 'gettext',
 						'disableNotices' => true));
@@ -172,6 +173,7 @@ class SendNewsletter {
 
 
 				Zend_Registry::set('Zend_Translate', $this->_trans);
+				Zend_Registry::set('Zend_Locale', $cutsomLocale);
 
 				$timezone = $settings[0]['timezone'];
 
@@ -366,7 +368,9 @@ class SendNewsletter {
 			//set $expDate array with the expiry date of offer
 			$expiryDate = new Zend_Date($value['offer']['endDate']);
 			$expDate[$key]['name'] = 'expDate_'.($key+1);
-			$expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('Verloopt op:') ." " . date('d M Y',strtotime($expiryDate->get(Zend_Date::DATE_MEDIUM)));
+			$expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
+
+
 			//set $shopPermalink array with the permalink of shop
 			$shopPermalink[$key]['name'] = 'shopPermalink_'.($key+1);
 			$shopPermalink[$key]['content'] = $permalinkEmail;
