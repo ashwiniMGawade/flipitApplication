@@ -344,14 +344,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		return $conn1;
 	}
 
-	/**
-	 * Set the initial translation
-	 *
-	 * @author chetan
-	 */
-	function _initTranslation(){
-
-
+	// function to get the local (module name), real local and path.. This is code which use to be only in _initTranslation but was needed in more functions.
+	function getTranslationSettings(){
 		# add suffix according to locale
 		$suffix = "" ;
 		if(LOCALE)
@@ -379,33 +373,25 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
  		$locale = Signupmaxaccount::getallmaxaccounts();
 		$locale = !empty($locale[0]['locale']) ? $locale[0]['locale'] : 'nl_NL';
 
+		return array('locale' => $locale, 'localePath' => $localePath, 'suffix' => $suffix);
+	}
 
-		$trans = new Zend_Translate(array(
-						'adapter' => 'gettext',
-						'disableNotices' => true));
+	/**
+	 * Set the initial translation
+	 *
+	 * @author chetan
+	 */
+	function _initTranslation(){
 
-		$trans->addTranslation(
-				array(
-						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/frontend_php' . $suffix . '.mo',
-						'locale' => $locale,
-				)
-		);
+		$transSettings = $this->getTranslationSettings();
+		$locale = $transSettings['locale'];
 
-		$trans->addTranslation(
-				array(
-						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/po_links' . $suffix . '.mo',
-						'locale' => $locale,
-				)
-		);
-		$trans->addTranslation(
-				array(
-						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/backend_php' . $suffix. '.mo',
-						'locale' => $locale,
-				)
-		);
+		// INFO
+		// in every module folder there needs to be a "language/$locale" dir with translations.csv with minimal content "","" present.
+		// The admin needs a link to do translations for a store, we need to add this link and activate a session value to activate the translator lib.
+		// Replace the current Translation helper for the new T helper
+		// UI edits
 
-		Zend_Registry::set('Zend_Translate', $trans);
-		$locale = new Zend_Locale( $locale );
 		Zend_Registry::set('Zend_Locale', $locale);
   		$date = new Zend_Date();
   		$month = $date->get(Zend_Date::MONTH_NAME);
@@ -425,6 +411,121 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
   		defined('CURRENT_DAY')
   		|| define('CURRENT_DAY', $day );
   	}
+
+	protected function _initPluginLiveTranslation()
+	{
+
+		$transSettings 	= $this->getTranslationSettings();
+		$locale 		= $transSettings['locale'];
+		$localePath 	= $transSettings['localePath'];
+		$suffix 		= $transSettings['suffix'];
+
+		if($this->_lang != 'admin'){
+			$session    	= new Zend_Session_Namespace('Transl8');
+			$activationMode = (isset($session->onlineTranslationActivated)) ? $session->onlineTranslationActivated : false;
+		}else{
+			$activationMode = false;
+		}
+
+  		Zend_Registry::set('Transl8_Activated', $activationMode);
+
+		Transl8_Translate_Writer_Csv::setDestinationFolder(
+			APPLICATION_PATH.'/../public'.$localePath.'language'
+		);
+
+	    if (Zend_Registry::get('Transl8_Activated')) {
+
+	        // we register the plugin, with the webservices hooks to work with.
+	        $plugin = new Transl8_Controller_Plugin_Transl8();
+	        $plugin->setActionGetFormData( $localePath.'trans/getformdata/');
+	        $plugin->setActionSubmit( $localePath.'trans/submit/');
+
+	        $front = Zend_Controller_Front::getInstance();
+	        $front->registerPlugin($plugin);
+
+	        Zend_Controller_Action_HelperBroker::addPath(
+                APPLICATION_PATH . '/../library/Transl8/Controller/Action/Helper/',
+                'Transl8_Controller_Action_Helper'
+            );
+
+			$locales[Zend_Registry::get('Zend_Locale')] = Zend_Registry::get('Zend_Locale');
+	        Transl8_Form::setLocales($locales);
+	    }
+	}
+
+	protected function _initI18n()
+	{
+		$transSettings 	= $this->getTranslationSettings();
+		$locale 		= $transSettings['locale'];
+		$localePath 	= $transSettings['localePath'];
+		$suffix 		= $transSettings['suffix'];
+
+	    Zend_Locale::setDefault('en_US');
+
+	    $locale     				= new Zend_Locale( Zend_Registry::get('Zend_Locale') );
+	    $inlineTranslationFolder    = Transl8_Translate_Writer_Csv::getDestinationFolder();
+
+		$poTrans = new Zend_Translate(array(
+						'adapter' => 'gettext',
+						'disableNotices' => true));
+
+	 	$poTrans->addTranslation(
+				array(
+						'content'	=> APPLICATION_PATH.'/../public'.strtolower($localePath).'language/po_links' . $suffix . '.mo',
+						'locale' 	=> $locale
+				)
+		);
+		$poTrans->addTranslation(
+				array(
+						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/fallback/frontend_php' . $suffix . '.mo',
+						'locale' => $locale
+				)
+		);
+		$poTrans->addTranslation(
+				array(
+						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/backend_php' . $suffix . '.mo',
+						'locale' => $locale
+				)
+		);
+
+		$poTrans->addTranslation(
+				array(
+						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/form' . $suffix . '.mo',
+						'locale' => $locale
+				)
+		);
+
+		$poTrans->addTranslation(
+				array(
+						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/email' . $suffix . '.mo',
+						'locale' => $locale
+				)
+		);
+
+	    $csvTranslation = array(
+	        'adapter'   => 'Transl8_Translate_Adapter_Csv',
+	        'scan'      => Zend_Translate::LOCALE_DIRECTORY,
+	        'content'   => $inlineTranslationFolder . '/' . $locale,
+	        'locale'    => $locale
+	    );
+
+	    $csvTranslate = new Zend_Translate($csvTranslation);
+		$poTrans->addTranslation($csvTranslate);
+
+	    Zend_Registry::set('Zend_Locale', $locale);
+	    Zend_Registry::set('Zend_Translate', $poTrans);
+	}
+
+
+    protected function _initViewScripts()
+    {
+        $this->bootstrap('view');
+        $view = $this->getResource('view');
+        $view->doctype('HTML5');
+        $view->addHelperPath(APPLICATION_PATH . '/../library/Transl8/View/Helper/', 'Transl8_View_Helper_');
+
+        return $view;
+    }
 
 	/**
 	 * initDocType
@@ -1056,6 +1157,9 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract {
         }
 
     }
+
+
+
 
 
     /**

@@ -39,6 +39,7 @@ class IndexController extends Zend_Controller_Action {
 
 	public function indexAction() {
 
+		
 
 		# get cononical link
 		$this->view->canonical = '';

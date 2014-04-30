@@ -1,9 +1,9 @@
 <body>
 <p><?php 
-	echo $this->translate('Hi') .' ' .$this->name; ?>,</p>
-<p><?php echo $this->translate('Your password has been reset as per your request on our website');?><?php echo $this->host; ?></p>
-<p><?php echo $this->translate('Your new password is:');?><strong><?php echo $this->pwd; ?></strong> </p>
+	echo FrontEnd_Helper_viewHelper::__email('Hi') .' ' .$this->name; ?>,</p>
+<p><?php echo FrontEnd_Helper_viewHelper::__email('Your password has been reset as per your request on our website');?><?php echo $this->host; ?></p>
+<p><?php echo FrontEnd_Helper_viewHelper::__email('Your new password is:');?><strong><?php echo $this->pwd; ?></strong> </p>
 <br/>
-<p><?php echo $this->translate('Regards');?>,<br/><?php echo $this->translate('Kortingscode Team')?></p>
+<p><?php echo FrontEnd_Helper_viewHelper::__email('Regards');?>,<br/><?php echo FrontEnd_Helper_viewHelper::__email('Kortingscode Team')?></p>
 
 </body>
