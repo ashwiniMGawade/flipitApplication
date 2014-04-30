@@ -475,6 +475,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 						'locale' 	=> $locale
 				)
 		);
+
+
 		$poTrans->addTranslation(
 				array(
 						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/fallback/frontend_php' . $suffix . '.mo',

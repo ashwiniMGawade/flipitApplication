@@ -7,18 +7,18 @@
 
     <div class="dropdown">
         <a class="account" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('mijn-favorieten') ?>?hash=<?php echo $hash; ?>"><img width ="" height ="" style="float:left;" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-man.png" alt="user" />
-            <span><strong><?php echo $this->translate('Mijn profiel');?></strong></span>
+            <span><strong><?php echo FrontEnd_Helper_viewHelper:: __form('Mijn profiel');?></strong></span>
         </a>
     </div>
     <ul style="float:right;">
-		<li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper:: __link('info/privacy-cookies');?>" ><?php echo $this->translate('Cookies');?></a></li>
-        <li><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout') ?>"><?php echo $this->translate('Uitloggen');?></a></li>
+		<li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper:: __link('info/privacy-cookies');?>" ><?php echo FrontEnd_Helper_viewHelper:: __form('Cookies');?></a></li>
+        <li><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout') ?>"><?php echo FrontEnd_Helper_viewHelper:: __form('Uitloggen');?></a></li>
     </ul>
 <?php else: ?>
 
     <ul>
-        <li><img width ="" height ="" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-man.png" alt="user" /><a class="text-orange-link" rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1') ?>"><?php echo $this->translate('Inschrijven');?></a></li>
-        <li class="none"><a rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>"><?php echo $this->translate('Inloggen');?></a></li>
-        <li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper:: __link("info/privacy-cookies")?>"><?php echo $this->translate('Cookies');?></a></li>
+        <li><img width ="" height ="" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-man.png" alt="user" /><a class="text-orange-link" rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1') ?>"><?php echo FrontEnd_Helper_viewHelper:: __form('Inschrijven');?></a></li>
+        <li class="none"><a rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>"><?php echo FrontEnd_Helper_viewHelper:: __form('Inloggen');?></a></li>
+        <li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper:: __link("info/privacy-cookies")?>"><?php echo FrontEnd_Helper_viewHelper:: __form('Cookies');?></a></li>
     </ul>
 <?php endif; ?>

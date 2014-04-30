@@ -163,8 +163,8 @@ class Admin_LanguageController extends Zend_Controller_Action
    		$existback_js = strstr($fileName, 'backend_js' . $suffix);// check if back_js keyword is present
    		$existfront_js = strstr($fileName, 'frontend_js' . $suffix);// check if front_js keyword is present
       $existlinks = strstr($fileName, 'links');// check if links keyword is present
-      $existForm = strstr($fileName, 'form');// check if form keyword is present
-   		$existEmail = strstr($fileName, 'email');// check if emails keyword is present
+      $existForm = strstr($fileName, 'form'  . $suffix);// check if form keyword is present
+   		$existEmail = strstr($fileName, 'email'  . $suffix);// check if emails keyword is present
    		$obj = new FrontEnd_Helper_POTCreator();
 
    		if($existback_php){
