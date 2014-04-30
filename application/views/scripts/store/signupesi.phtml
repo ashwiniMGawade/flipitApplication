@@ -29,8 +29,8 @@ if (file_exists ( ROOT_PATH . $src )) {
 		<div class="fl">
 			<form id="formOneHomePage" action="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') .'/'. FrontEnd_Helper_viewHelper::__link('stap2')?>" method="post">
 			<div class="find_code2 blue-btn">
-				<input onkeypress="if(event.which == 13) {  signUpFromHandler(); event.preventDefault(); }" type="text" placeholder="<?php echo $this->translate('enter_email_address');?>"  name="emailAddress"/>
-				<a  onclick=" signUpFromHandler();" href="javascript:;" class="ml20"><span><?php echo $this->translate('submit signup');?></span></a>						
+				<input onkeypress="if(event.which == 13) {  signUpFromHandler(); event.preventDefault(); }" type="text" placeholder="<?php echo FrontEnd_Helper_viewHelper::__form('enter_email_address');?>"  name="emailAddress"/>
+				<a onclick=" signUpFromHandler();" href="javascript:;" class="ml20"><span><?php echo FrontEnd_Helper_viewHelper::__form('submit signup');?></span></a>						
 			</div>
 		</form>        
 		</div>		

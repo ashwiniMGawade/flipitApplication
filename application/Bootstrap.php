@@ -477,13 +477,27 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 		);
 		$poTrans->addTranslation(
 				array(
-						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/frontend_php' . $suffix . '.mo',
+						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/fallback/frontend_php' . $suffix . '.mo',
 						'locale' => $locale
 				)
 		);
 		$poTrans->addTranslation(
 				array(
 						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/backend_php' . $suffix . '.mo',
+						'locale' => $locale
+				)
+		);
+
+		$poTrans->addTranslation(
+				array(
+						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/form' . $suffix . '.mo',
+						'locale' => $locale
+				)
+		);
+
+		$poTrans->addTranslation(
+				array(
+						'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/email' . $suffix . '.mo',
 						'locale' => $locale
 				)
 		);

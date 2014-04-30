@@ -21,6 +21,9 @@
 
 		public function startinlinetranslationAction()
 		{
+
+			// no varnisch
+            setcookie('passCache', '1' , time() + 3600*8 , '/');
 			$this->_helper->layout->disableLayout();
 			$this->_helper->viewRenderer->setNoRender();
 
@@ -39,10 +42,13 @@
 				$session->onlineTranslationActivated = false;
 				echo "This function can only be activated from the admin";
 			}
+
+
 		}
 
 		public function stopinlinetranslationAction()
 		{
+            setcookie('passCache', '1' , '1' , '/');
 			$this->_helper->layout->disableLayout();
 			$this->_helper->viewRenderer->setNoRender();
 
