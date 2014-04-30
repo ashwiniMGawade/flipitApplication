@@ -74,12 +74,6 @@ class FreesignupController extends Zend_Controller_Action
     	$headTitle = $this->view->translate("Members Only ");
     	$this->view->headTitle($headTitle);
     }
-    /**
-     * Show step 1 of signup
-     *
-     * @author cbhopal modify by kraj
-     * @version 1.0
-     */
 
     /**
      * Show step 2 of signup
@@ -126,7 +120,7 @@ class FreesignupController extends Zend_Controller_Action
 		    	$bodyText = $html->render('confirmemail.phtml');
 
 		    	$recipents = array("to" => $params['emailAddress']);
-		    	$subject = $this->view->translate("Welkom bij Kortingscode.nl");
+		    	$subject = FrontEnd_Helper_viewHelper::__email("Welkom bij Kortingscode.nl");
 		    	$body = $bodyText;
 		    	$sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents,$subject, $body);
 		    }

@@ -162,7 +162,9 @@ class Admin_LanguageController extends Zend_Controller_Action
    		$existfront_php = strstr($fileName, 'frontend_php' . $suffix);// check if front_php keyword is present
    		$existback_js = strstr($fileName, 'backend_js' . $suffix);// check if back_js keyword is present
    		$existfront_js = strstr($fileName, 'frontend_js' . $suffix);// check if front_js keyword is present
-   		$existlinks = strstr($fileName, 'links');// check if links keyword is present
+      $existlinks = strstr($fileName, 'links');// check if links keyword is present
+      $existForm = strstr($fileName, 'form');// check if form keyword is present
+   		$existEmail = strstr($fileName, 'email');// check if emails keyword is present
    		$obj = new FrontEnd_Helper_POTCreator();
 
    		if($existback_php){
@@ -200,8 +202,22 @@ class Admin_LanguageController extends Zend_Controller_Action
    			$scanPath[3] = APPLICATION_PATH.'/../public/js/front_end';
    			$obj->set_exts('php|phtml|js');
    			$obj->set_regular('/(__link)\([^)]*\)/');
+   		}elseif ($existForm) {
+        $scanPath[0] = APPLICATION_PATH . '/controllers';
+        $scanPath[1] = APPLICATION_PATH . '/views';
+        $scanPath[2] = APPLICATION_PATH . '/modules';
+        $scanPath[3] = LIBRARY_PATH . '/FrontEnd';
+        $obj->set_exts('php|phtml');
+        $obj->set_regular('/(__form)\([^)]*\)/');
+      }elseif ($existEmail) {
+        $scanPath[0] = APPLICATION_PATH . '/controllers';
+        $scanPath[1] = APPLICATION_PATH . '/views';
+        $scanPath[2] = APPLICATION_PATH . '/modules';
+        $scanPath[3] = APPLICATION_PATH . '/migration';
+        $obj->set_exts('php|phtml');
+        $obj->set_regular('/(__email)\([^)]*\)/');
+      }
 
-   		}
    		//echo "<pre>"; print_r($scanPath); die;
 
    		$obj->set_root($scanPath);

@@ -1,5 +1,4 @@
 <?php
-
 $this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/jquery.placeholder.js");
 
 
@@ -63,11 +62,13 @@ if($this->banner)
 
         <div class="search-outer">
             <div class="fl">
-                <input value="<?php echo $this->translate('Vind kortingscodes voor jouw favoriete winkels..'); ?>"  onblur="if(this.value=='') this.value=this.defaultValue;" onfocus="if(this.value==this.defaultValue) this.value='';" id='searchField'  name='searchField' label='searchField' type="text" />
+                <input value="<?php echo FrontEnd_Helper_viewHelper::__form('Vind kortingscodes voor jouw favoriete winkels..') ?>"  onblur="if(this.value=='') this.value=this.defaultValue;" onfocus="if(this.value==this.defaultValue) this.value='';" id='searchField'  name='searchField' label='searchField' type="text" />
                 <input type='hidden' name='searchHidden' label='searchHidden' id='searchHidden' />
             </div>
-            <a href="javascript:void(0);" alt="<?php echo $this->translate('ZOEKEN');?>">
-                <button class="searchbutton" id='searchbuttonHP' value='<?php echo $this->translate('ZOEKEN');?>'><?php echo $this->translate('ZOEKEN');?></button>
+            <a href="javascript:void(0);" alt="<?php echo FrontEnd_Helper_viewHelper::__form('ZOEKEN');?>">
+                <button class="searchbutton" id='searchbuttonHP' value='<?php echo FrontEnd_Helper_viewHelper::__form('ZOEKEN');?>'>
+                    <?php echo FrontEnd_Helper_viewHelper::__form('ZOEKEN');?>
+                </button>
             </a>
         </div>
     </div>

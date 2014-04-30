@@ -68,14 +68,14 @@
 	                	<div class="f-txt"><?php echo $this->translate('Geboortedatum:')?></div>
 	                    <div class="form-rt">
 	                    	<select class="select-95 comboBox" name="birthDay" id="birthDay">
-	                        	<option value=''><?php echo $this->translate('Dag')?></option>
+	                        	<option value=''><?php echo FrontEnd_Helper_viewHelper::__form('Dag')?></option>
 	                        	<?php for($i=1; $i<32; $i++) :?>
 			                          	<option value='<?php echo $i;?>' ><?php echo $i;?></option>
 		                        <?php endfor; ?>
 	                        </select>
 	                        
 	                        <select class="select-95 comboBox" name="birthMonth" id="birthMonth">
-	                        	<option value=''><?php echo $this->translate('Maand')?></option>
+	                        	<option value=''><?php echo FrontEnd_Helper_viewHelper::__form('Maand')?></option>
 	                        	<?php for($j=1; $j<13; $j++) :?>
 			                           	<option value='<?php echo $j < 10 ? '0'.$j : $j;?>' ><?php echo $j < 10 ? '0'.$j : $j;?></option>
 		                        <?php endfor; ?>
@@ -83,7 +83,7 @@
 	                        
 	                        
 	                         <select class="select-95 comboBox" name="birthYear" id="birthYear" >
-	                        	<option value=''><?php echo $this->translate('Jaar')?></option>
+	                        	<option value=''><?php echo FrontEnd_Helper_viewHelper::__form('Jaar')?></option>
 	                        	<?php 
 				                       $year = date("Y");
 				                        	
@@ -150,7 +150,7 @@
 	                	<div class="f-txt"></div>
 	                    <div class="form-rt">
 	                    	<div class="yellow_btn">
-	                        	<input type='submit' name='submitStepThree' value='<?php echo $this->translate('bevestig')?>' />
+	                        	<input type='submit' name='submitStepThree' value='<?php echo FrontEnd_Helper_viewHelper::__form('bevestig')?>' />
 	                        </div>
 	                    </div>
 	                </div>
