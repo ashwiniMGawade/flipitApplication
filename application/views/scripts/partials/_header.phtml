@@ -8,8 +8,8 @@
 <div class="header-outer">
     <div class="header-outer">
         <div class="header">
-        	<div style="color:#FFFFFF; padding: 4px 0;z-index:99999;min-width:500px; position:absolute;font-size: 11px;" >
-            	<?php echo $this->translate('Default header text'); ?>
+        	<div style="color:#FFFFFF; padding: 4px 0;z-index:999999;min-width:500px; position:absolute;font-size: 11px;" >
+            	<?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate('Default header text')) ;?>
     		</div>
             <div class="logo">
             <?php  if(LOCALE == '') : ?>
