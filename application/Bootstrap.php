@@ -437,8 +437,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap {
 
 	        // we register the plugin, with the webservices hooks to work with.
 	        $plugin = new Transl8_Controller_Plugin_Transl8();
-	        $plugin->setActionGetFormData( $localePath.'trans/getformdata/');
-	        $plugin->setActionSubmit( $localePath.'trans/submit/');
+	        $plugin->setActionGetFormData( $localePath.'trans/getformdata');
+	        $plugin->setActionSubmit( $localePath.'trans/submit');
 
 	        $front = Zend_Controller_Front::getInstance();
 	        $front->registerPlugin($plugin);
