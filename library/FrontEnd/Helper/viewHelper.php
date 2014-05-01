@@ -534,10 +534,13 @@ EOD;
     * @return array $data
     */
     public static function commonfrontendGetCode($type, $limit = 10, $shopId = 0, $userId = "")
-    {
+    {  
         switch (strtolower($type)) {
             case 'all':
                 $shopData = Offer::getAllOfferOnShop($shopId);
+                break;
+            case 'topsixoffers':
+                $shopData = Offer::getAllOfferOnShop($shopId, $limit);
                 break;
             case 'popular':
                 $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);

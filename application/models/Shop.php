@@ -196,6 +196,30 @@ class Shop extends BaseShop {
         ->limit($limit)->fetchArray();
         return $popularStores;
     }
+
+    public static function getshopDetails($permalink)
+    {
+        $shopDetails = Doctrine_Query::create()
+        ->select('s.*,img.name,img.path,chptr.*')
+        ->from('shop s')
+        ->leftJoin('s.logo img')
+        ->leftJoin('s.howtochapter chptr')
+        ->Where("s.permaLink='".$permalink."'")
+        ->andWhere('s.status = 1')
+        ->fetchArray();
+        return $shopDetails;
+    }
+
+    public static function getShopIdFromPermalink($permalink)
+    {
+        $shopId = Doctrine_Query::create()
+        ->select('s.id')
+        ->from('shop s')
+        ->Where("s.permaLink='".$permalink."'")
+        ->andWhere('s.status = 1')
+        ->fetchArray();
+        return $shopId;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1124,26 +1148,6 @@ public static function  getShopDetail ($shopId){
     return $Q;
     //die();
     //return count($Q['popularcode']);
- }
-
- /**
-  * get shop details for how to guide from database
-  * @author blal
-  * @return array $shopDetails
-  * @version 1.0
-  */
-
- public static function getshopDetails($shopId)
- {
-    $shopDetails = Doctrine_Query::create()
-    ->select('s.*,img.name,img.path,chptr.*')
-    ->from('shop s')
-    ->leftJoin('s.logo img')
-    ->leftJoin('s.howtochapter chptr')
-    ->Where("s.permaLink='".$shopId."'")
-    ->andWhere('s.status = 1')
-    ->fetchArray();
-    return $shopDetails;
  }
 
  /**
