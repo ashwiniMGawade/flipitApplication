@@ -732,7 +732,7 @@ EOD;
         } elseif ($pageWidgets[0]['widget'][$i]['slug']=='stuur_een') {
             $sidebarWidgets .= self::DiscountCodeWidget();
         } elseif ($pageWidgets[0]['widget'][$i]['slug']=='popular_stores') {
-            $sidebarWidgets .= self::PopularWinkelsWidget();
+            $sidebarWidgets .= self::popularShopWidget();
         } elseif ($pageWidgets[0]['widget'][$i]['slug']=='popular_category') {
             $sidebarWidgets .= $this->PopularCategoryWidget();
         } elseif ($pageWidgets[0]['widget'][$i]['slug']=='popular_editor') {
