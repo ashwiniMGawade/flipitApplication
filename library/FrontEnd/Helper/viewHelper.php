@@ -366,7 +366,7 @@ EOD;
         return $socialMedia;
     }
     
-    public static function getLoveRelatedVariables($shop, $message, $offerTitle)
+    public static function getShopHeader($shop, $message, $offerTitle)
     {
         $bounceRate = "/out/shop/".$shop['id'];
         $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.$shop['id'];

@@ -89,7 +89,7 @@ else:
     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
 endif;
 
-$headerBlock = FrontEnd_Helper_viewHelper::getLoveRelatedVariables($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
+$headerBlock = FrontEnd_Helper_viewHelper::getShopHeader($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
 $shopEditor = '';
 if($this->shopEditor != null):
     $shopEditor = $this->partial(
@@ -134,31 +134,17 @@ endif;
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
-    echo $shopEditor;
-    echo FrontEnd_Helper_viewHelper::socialMediaWidget($this->currentStoreInformation[0]['affliateProgram'] =='' ? $this->currentStoreInformation[0]['actualUrl'] : $this->currentStoreInformation[0]['affliateProgram']);
-if (count($this->latestShopUpdates) > 0):?>
-    <?php echo $this->partial($storeViewPartialPath.'_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
-endif;
-?>
-
-<?php
-if ($this->shopChain):
+    echo $this->partial(
+            $storeViewPartialPath. '_shop-sidebar.phtml',
+            array(
+                'shopEditor' => $shopEditor,
+                'latestShopUpdates'=> $this->latestShopUpdates,
+                'shopChain' => $this->shopChain,
+                'shop' => $this->currentStoreInformation[0],
+                'popularStoresList'=> $this->popularStoresList,
+                'signUpWidgetForm' => $signUpWidgetForm
+            )
+        );
     ?>
-        <article class="block">
-    <?php echo $this->shopChain; ?>
-        </article>
-    <?php
-endif;
-        
-if(isset($this->popularStoresList)):
-    ?>
-        <div class="block">
-            <?php echo $this->popularStoresList; ?>
-        </div>
-    <?php
-endif;
-
-echo $signUpWidgetForm;
-?>
     </aside>
 </div>

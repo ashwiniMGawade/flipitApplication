@@ -51,7 +51,12 @@ class OfferController extends Zend_Controller_Action
         $extendedUrl = $parameters['permalink'];
         $currentDate = date('Y-m-d');
         $couponDetails = Offer::getCouponDetails($extendedUrl);
+        $ShopList = $couponDetails[0]['shop']['id'].'_list';
+        $allShopDetailKey = 'all_shopdetail'.$ShopList;
+        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allShopDetailKey, Shop::getStoreDetails($couponDetails[0]['shop']['id']));
         $shopImage = PUBLIC_PATH_CDN.$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $couponDetails[0]['shop']['logo']['name'];
+        $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
+        $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $couponDetails[0]['shop']['id']));
 
         if (count($couponDetails)==0) {
             $this->_redirect(HTTP_PATH_LOCALE.'error');
@@ -67,9 +72,12 @@ class OfferController extends Zend_Controller_Action
         
         $currentDate = date('Y-m-d');
         $topOfferFromStore = Offer::getrelatedOffers($couponDetails[0]['shopId'], $currentDate);
+        $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularShopWidget();
+        $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->topOfferFromStore = $topOfferFromStore;
         $this->view->couponDetails = $couponDetails;
-        
+        $this->view->currentStoreInformation = $shopInformation;
+        $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
         $this->view->headTitle(trim($couponDetails[0]['extendedTitle']));
         $this->view->headMeta()->appendName('description', trim($couponDetails[0]['extendedMetaDescription']));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
@@ -81,6 +89,11 @@ class OfferController extends Zend_Controller_Action
         $this->view->facebookDescription = trim($couponDetails[0]['extendedMetaDescription']);
         $this->view->facebookLocale = $facebookLocale;
         $this->view->twitterDescription = trim($couponDetails[0]['extendedMetaDescription']);
+        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormForStorePage;
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
     /**
