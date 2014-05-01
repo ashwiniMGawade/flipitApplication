@@ -1,7 +1,7 @@
 <?php
 foreach ($this->categoriesWithSpecialPagesList as $category) {
     $featuredCategoryClass = '';
-    $featuredCategoryImageDimensions = '';
+    $featuredCategoryImageDimensions = 'width= 175 height=174';
     $featuredCategorySpan = '';
     
     if(isset($category['featured_category']) && $category['featured_category'] != '') {
@@ -11,7 +11,7 @@ foreach ($this->categoriesWithSpecialPagesList as $category) {
     }
 
     $categoryImage = isset($category['categoryicon']) ? $category['categoryicon'] : $category['logo'];
-    $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."thum_medium_".$categoryImage['name']; 
+    $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."".$categoryImage['name']; 
     ?>
     <article class="box <?php echo $featuredCategoryClass; ?>">
         <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $category['permaLink']; ?>">
