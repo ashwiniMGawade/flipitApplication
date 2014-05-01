@@ -136,7 +136,7 @@ class StoreController extends Zend_Controller_Action
     public function shopOffersBySetGetCache($shopKey = '', $shopRelatedFunction = '', $replaceStringArrayCheck = '')
     {
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($shopKey);
-      //  if ($cacheStatusByKey) {
+        if ($cacheStatusByKey) {
     
             if ($replaceStringArrayCheck == '') {
                 $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray($shopRelatedFunction);
@@ -144,9 +144,9 @@ class StoreController extends Zend_Controller_Action
                 $shopInformation = $shopRelatedFunction;
             }
             FrontEnd_Helper_viewHelper::setInCache($shopKey, $shopInformation);
-     //   } else {
-     //       $shopInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($shopKey);
-     //   }
+        } else {
+            $shopInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($shopKey);
+        }
         return $shopInformation;
     }
 
