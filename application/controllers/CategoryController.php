@@ -58,8 +58,8 @@ class CategoryController extends Zend_Controller_Action {
             $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
         }
 
-        $allCategories = BackEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoriesDetail());
-        $specialPagesList = BackEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialListPages());
+        $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoriesDetail());
+        $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialListPages());
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
         $this->view->facebookTitle = $this->pageDetail->pageTitle;
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen');

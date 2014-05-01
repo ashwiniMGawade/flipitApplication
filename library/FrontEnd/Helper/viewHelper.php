@@ -524,7 +524,23 @@ EOD;
         $categorySidebarWodget.='</ul></div>'; 
         return $categorySidebarWodget;
     }
-
+    
+    public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '')
+    {
+        $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
+        if ($cacheStatusByKey) {
+    
+            if ($replaceStringArrayCheck == '') {
+                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($relatedFunction);
+            } else {
+                $requestedInformation = $relatedFunction;
+            }
+            FrontEnd_Helper_viewHelper::setInCache($dataKey, $requestedInformation);
+        } else {
+            $requestedInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($dataKey);
+        }
+        return $requestedInformation;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################

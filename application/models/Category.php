@@ -107,14 +107,9 @@ class Category extends BaseCategory {
     public static function saveCategories($categoryParameter)
     {
         $category = new Category();
-        $category->name = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["categoryName"]);
-        $category->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["permaLink"]);
-        $category->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["metaTitle"]);
-        $category->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["metaDescription"]);
-        $category->description = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["description"]);
+        self::getCategoryParameters($categoryParameter, $category);
         $category->status = '1';
         $category->categoryIconId = $categoryParameter["categoryIconNameHidden"];
-        $category->featured_category = $categoryParameter["featuredCategory"];
         $uploadedImage = self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden');
         $categoryImageExtension = BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
         $category->categoryicon->ext = $categoryImageExtension;
@@ -123,7 +118,7 @@ class Category extends BaseCategory {
 
         try {
             $category->save();
-            self::updateCategoryFeaturedImage($category->id);
+            self::updateFeaturedCategory($category->id);
             self::categoryRoutePermalinkSave($categoryParameter, $category);
             return array($category->toArray(), $category->toArray());
         }catch (Exception $e){
@@ -140,12 +135,7 @@ class Category extends BaseCategory {
     public static function updateCategory($categoryParameter)
     {
         $category = Doctrine_Core::getTable('Category')->find( $categoryParameter['id']);
-        $category->name = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["categoryName"]);
-        $category->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["permaLink"]);
-        $category->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["metaTitle"]);
-        $category->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["metaDescription"]);
-        $category->description = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["description"]);
-        $category->featured_category = $categoryParameter["featuredCategory"];
+        self::getCategoryParameters($categoryParameter, $category);
         $uploadedImage = self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category);
         $categoryInfo = self::getCategoryById($categoryParameter['id']);
 
@@ -161,7 +151,7 @@ class Category extends BaseCategory {
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
         try {
             $category->save();
-            self::updateCategoryFeaturedImage($categoryParameter['id']);
+            self::updateFeaturedCategory($categoryParameter['id']);
             if(!empty($getRouteLink)){
                 self::updateCategoryRoutePermalink($categoryParameter, $categoryInfo);
             }     
@@ -170,6 +160,17 @@ class Category extends BaseCategory {
             return false;
         }
         
+    }
+    
+    public function getCategoryParameters($categoryParameter, $category)
+    {
+        $category->name = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["categoryName"]);
+        $category->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["permaLink"]);
+        $category->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["metaTitle"]);
+        $category->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["metaDescription"]);
+        $category->description = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["description"]);
+        $category->featured_category = $categoryParameter["featuredCategory"];
+        return true;
     }
 
     public static function setCategoryIcon($categoryIconFileName, $categoryIconName, $category)
@@ -218,29 +219,25 @@ class Category extends BaseCategory {
         return true;
     }
 
-    public static function updateCategoryFeaturedImage($categoryId)
+    public static function updateFeaturedCategory($categoryId)
     {
         Doctrine_Query::create()->update('Category c')
-                ->set('c.featured_category', 0)
-                ->where('c.id !='. $categoryId)
-                ->execute();
+            ->set('c.featured_category', 0)
+            ->where('c.id !='. $categoryId)
+            ->execute();
         return true;
     }
     
-    /**
-    * get categories detail to show in grid view at frontend
-    * @return array $categoriesDetail
-    * @version 1.0
-    */
-    public static function getCategoriesDetail(){
+    public static function getCategoriesDetail()
+    {
         $categoriesDetail = Doctrine_Query::create()
-                ->select('c.name,c.id,i.path,i.name,c.permaLink,c.featured_category')
-                ->from("Category c")
-                ->leftJoin("c.categoryicon i")
-                ->where("c.deleted=0" )
-                ->andWhere("c.status= 1")
-                ->orderBy("c.featured_category DESC")
-                ->fetchArray();
+            ->select('c.name,c.id,i.path,i.name,c.permaLink,c.featured_category')
+            ->from("Category c")
+            ->leftJoin("c.categoryicon i")
+            ->where("c.deleted=0" )
+            ->andWhere("c.status= 1")
+            ->orderBy("c.featured_category DESC")
+            ->fetchArray();
         return $categoriesDetail;
     }
     #####################################################

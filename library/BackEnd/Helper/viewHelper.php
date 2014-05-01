@@ -11,34 +11,17 @@ class BackEnd_Helper_viewHelper
 
     public function getOnOffButtonsForFeaturedCategory($featuredCategory)
     {
-    	if($featuredCategory == 1) {
-    		$featuredOnClass = 'btn-primary default';
-    		$featuredOffClass = '';
-    	} else {
-    		$featuredOnClass = '';
-    		$featuredOffClass = 'btn-primary default';
-    	}
+        if($featuredCategory == 1) {
+            $featuredOnClass = 'btn-primary default';
+            $featuredOffClass = '';
+        } else {
+            $featuredOnClass = '';
+            $featuredOffClass = 'btn-primary default';
+        }
 
-    	$featuredCategoryButton = '<button onclick="setOnOff(event,\'featured-category\',\'on\');" class="btn '.$featuredOnClass.'" type="button">'.$this->zendTranslate->translate('Yes').'</button>                     
+        $featuredCategoryButton = '<button onclick="setOnOff(event,\'featured-category\',\'on\');" class="btn '.$featuredOnClass.'" type="button">'.$this->zendTranslate->translate('Yes').'</button>                     
             <button onclick="setOnOff(event,\'featured-category\',\'off\');" class="btn '.$featuredOffClass.'" type="button">'.$this->zendTranslate->translate('No').'</button>';
         return $featuredCategoryButton;
-    }
-
-    public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '')
-    {
-        $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
-        if ($cacheStatusByKey) {
-    
-            if ($replaceStringArrayCheck == '') {
-                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($relatedFunction);
-            } else {
-                $requestedInformation = $relatedFunction;
-            }
-            FrontEnd_Helper_viewHelper::setInCache($dataKey, $requestedInformation);
-        } else {
-            $requestedInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($dataKey);
-        }
-        return $requestedInformation;
     }
     #####################################################
     ############# END REFACORED CODE ####################
