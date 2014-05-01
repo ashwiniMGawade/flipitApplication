@@ -723,7 +723,6 @@ EOD;
         ->andWhere('w.status=1')
         ->andWhere('w.deleted=0')
         ->fetchArray();
-
         $sidebarWidgets = '';
         if (count($pageWidgets)>0) {
         for ($i=0;$i<count($pageWidgets[0]['widget']);$i++) {
@@ -749,10 +748,7 @@ EOD;
             $sidebarWidgets .= self::joinUsWidget();
         } elseif ($pageWidgets[0]['widget'][$i]['slug']=='social_media') {
             $sidebarWidgets .= self::socialmedia('','','','widget');
-
-        } else {
-            $sidebarWidgets .= str_replace( '<br />', '', html_entity_decode($pageWidgets[0]['widget'][$i]['content']) );
-        }
+        } 
       }
     }
 
