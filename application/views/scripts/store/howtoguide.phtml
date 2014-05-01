@@ -60,10 +60,8 @@ echo $headerBlock;
     $offers = $this->offers;
     for ($i = 0; $i<count($offers); $i++) {
         $signUpForm = '';
-        $offerType = '';
         if ($i == 0) {
-            $signUpForm = $this->form;
-            $offerType = 'howToGuide';
+            $signUpForm = $this->form; 
         }
         $storeFilteredOffers = $this->partial(
                 $storeViewPartialPath. '_offer.phtml',
@@ -73,7 +71,7 @@ echo $headerBlock;
                     'shopName' => $this->currentStoreInformation[0]['name'],
                     'shop' => $this->currentStoreInformation[0],
                     'zendForm'=> $signUpForm,
-                    'pageType' => $offerType
+                    'pageType' => 'howToGuide'
                 )
             ); 
         if ($i == 0) {
