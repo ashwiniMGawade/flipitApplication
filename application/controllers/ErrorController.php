@@ -66,13 +66,13 @@ class ErrorController extends Zend_Controller_Action
             die();
         }
 
-        $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formOneHomePage', 'SignUp');
+        $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
         
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;
-        $this->view->form = $signUpFormForStorePage;
+        $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
@@ -88,8 +88,8 @@ class ErrorController extends Zend_Controller_Action
 
     public function getPageParmalink()
     {
-        $pagePermalink  = ltrim($this->_request->getPathInfo(), '/');
-        $pagePermalink = rtrim($pagePermalink, '/');
+        $pagePermalinkWithoutLeftSlash  = ltrim($this->_request->getPathInfo(), '/');
+        $pagePermalink = rtrim($pagePermalinkWithoutLeftSlash, '/');
         $permalink = explode('/page/', $pagePermalink);
         if (count($permalink) > 0) {
             $pagePermalink = $permalink[0];
@@ -106,7 +106,7 @@ class ErrorController extends Zend_Controller_Action
             $pagePermalink = $this->getPermalinkForFlipit($pagePermalink);
         }
         $this->pagePermalink = $pagePermalink;
-        $pagedata = Page::getPageDetailInError(rtrim($pagePermalink, '/'));
+        $pagedata = Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
         return $pagedata;
     }
 
@@ -121,27 +121,27 @@ class ErrorController extends Zend_Controller_Action
         if (HTTP_PATH != "www.kortingscode.nl") {
             $splitParmalink = explode('/', $pagePermalink[0]);
             if(!empty($splitParmalink[1])):
-                $pageSpecialPermailink = $splitParmalink[1];
+                 $specialPagePermailink = $splitParmalink[1];
             else:
-                $pageSpecialPermailink = $splitParmalink[0];
+                 $specialPagePermailink = $splitParmalink[0];
             endif;
         } else {
-            $pageSpecialPermailink = $splitParmalink[0];
+             $specialPagePermailink = $splitParmalink[0];
         }
-        return $pageSpecialPermailink;
+        return  $specialPagePermailink;
     }
 
     public function getPermalinkForFlipit($pagePermalink)
     {
         if (LOCALE!='en') {
-            $frontendControllersDirectory = Zend_Controller_Front::getInstance();
-            $moduleDirectories = $frontendControllersDirectory->getControllerDirectory();
+            $frontEndControllersDirectory = Zend_Controller_Front::getInstance();
+            $moduleDirectories = $frontEndControllersDirectory->getControllerDirectory();
             $moduleNames = array_keys($moduleDirectories);
             $routeProperties = explode('/', $pagePermalink);
             if (in_array($routeProperties[0], $moduleNames)) {
                 $pagePermalink = "";
-                foreach ($routeProperties as $key => $route) {
-                    if ($key > 0) {
+                foreach ($routeProperties as $routeIndex => $route) {
+                    if ($routeIndex > 0) {
                         $pagePermalink .= $route .'/';
                     }
                 }

@@ -52,15 +52,15 @@ class Page extends BasePage
      *  Get page details on id basis
      *	Version: 1.0
      */
-    public static function getPageDetailInError($page)
+    public static function getPageDetailsInError($page)
     {
-        $nowDate = date('Y-m-d H:i:s');
-        $data = Doctrine_Query::create()->from('Page p')
+        $currentDate = date('Y-m-d H:i:s');
+        $pageDetails = Doctrine_Query::create()->from('Page p')
         ->where("p.permalink="."'$page'")
         ->leftJoin("p.widget w")
-        ->andWhere('p.publishDate <= '."'$nowDate'")
+        ->andWhere('p.publishDate <= '."'$currentDate'")
         ->andWhere('p.deleted=0')->fetchOne();
-        return $data;
+        return $pageDetails;
     }
     ######################################################
     ############ END REFACTORED CODE #####################

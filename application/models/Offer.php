@@ -372,18 +372,18 @@ class Offer extends BaseOffer
         $currentDateAndTime = date('Y-m-d H:i:s');
         $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDateAndTime);
         $constraintsRelatedOffers = self::getOfferByPageConstraints($specialPage, $currentDateAndTime);
-        $pageAndPageConstrainsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
-        $specialOffers = self::getArrayForOfferPhtml($pageAndPageConstrainsOffers, $specialPage);
+        $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+        $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
         return $specialOffers;
     }
 
     public static function getSpecialOffersByPage($pageId, $currentDateAndTime)
     {
-        $specialPageOffers = self::getOfferByPageId($pageId, $currentDateAndTime);
+        $specialPageOffers = self::getOffersByPageId($pageId, $currentDateAndTime);
         return self::removeDuplicateOffers($specialPageOffers);
     }
 
-    public static function getOfferByPageId($pageId, $currentDateAndTime)
+    public static function getOffersByPageId($pageId, $currentDateAndTime)
     {
         $specialPageOffers = Doctrine_Query::create()
         ->select('op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
@@ -411,13 +411,13 @@ class Offer extends BaseOffer
 
     public static function removeDuplicateOffers($specialPageOffers)
     {
-        $specialOffersWithoutDuplicate = array();
+        $specialOffersWithoutDuplication = array();
         if (count($specialPageOffers) > 0) {
             for ($offerIndex = 0; $offerIndex < count($specialPageOffers); $offerIndex++) {
-                $specialOffersWithoutDuplicate[$offerIndex] = $specialPageOffers[$offerIndex]['Offer'];
+                $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['Offer'];
             }
         }
-        return $specialOffersWithoutDuplicate;
+        return $specialOffersWithoutDuplication;
     }
 
     public static function getOfferByPageConstraints($specialPage, $currentDateAndTime)
@@ -480,15 +480,15 @@ class Offer extends BaseOffer
     {
         if ($offerEditorpick == 0) {
             if ($offerExclusive == 0) {
-                $offersConstraintsQuery = self::constraintsNoCouponNoExclusiveNoEditorPick($offersConstraintsQuery);
+                $offersConstraintsQuery = self::noCouponNoExclusiveNoEditorPickConstraints($offersConstraintsQuery);
             } else {
-                $offersConstraintsQuery = self::constraintsYesCouponAndYesExclusive($offersConstraintsQuery);
+                $offersConstraintsQuery = self::yesCouponAndYesExclusiveConstraints($offersConstraintsQuery);
             }
         } else {
             if ($offerExclusive == 0) {
-                $offersConstraintsQuery = self::constraintsYesCouponAndYesEditorPicks($offersConstraintsQuery);
+                $offersConstraintsQuery = self::yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery);
             } else {
-                $offersConstraintsQuery = self::constraintsYesCouponAndYesEditorPicksOrYesExclusive($offersConstraintsQuery);
+                $offersConstraintsQuery = self::yesCouponAndYesEditorPicksOrYesExclusiveConstraints($offersConstraintsQuery);
             }
         }
         return $offersConstraintsQuery;
@@ -498,108 +498,108 @@ class Offer extends BaseOffer
     {
         if ($offerEditorpick == 0) {
             if ($offerExclusive == 0) {
-                $offersConstraintsQuery = self::constraintsYesCouponAndNoEditorPicksAndNoExclusive($offersConstraintsQuery);
+                $offersConstraintsQuery = self::yesCouponAndNoEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
             } else {
-                $offersConstraintsQuery = self::constraintsYesCouponAndYesExclusiveAndNoEditorPicks($offersConstraintsQuery);
+                $offersConstraintsQuery = self::yesCouponAndYesExclusiveAndNoEditorPicksConstraints($offersConstraintsQuery);
             }
         } else {
             if ($offerExclusive == 0) {
-                $offersConstraintsQuery = self::constraintsYesCouponAndYesEditorPicksAndNoExclusive($offersConstraintsQuery);
+                $offersConstraintsQuery = self::yesCouponAndYesEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
             } else {
-                $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
+                $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
             }
         }
         return $offersConstraintsQuery;
     }
 
-    public static function constraintsNoCouponNoExclusiveNoEditorPick($offersConstraintsQuery)
+    public static function noCouponNoExclusiveNoEditorPickConstraints($offersConstraintsQuery)
     {
-        $offersConstraintsQuery = self::constraintNoCouponCode($offersConstraintsQuery);
-        $offersConstraintsQuery = self::constraintsNoExclusiveCodeAndNoEditorPickCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
 
-    public static function constraintsYesCouponAndYesExclusive($offersConstraintsQuery)
+    public static function yesCouponAndYesExclusiveConstraints($offersConstraintsQuery)
     {
-        $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
-        $offersConstraintsQuery = self::constraintYesExclusiveCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesExclusiveCodeConstraint($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
 
-    public static function constraintsYesCouponAndYesEditorPicks($offersConstraintsQuery)
+    public static function yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery)
     {
-        $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
-        $offersConstraintsQuery = self::constraintYesEditorPicksCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesEditorPicksCodeConstraint($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
 
-    public static function constraintsYesCouponAndYesEditorPicksOrYesExclusive($offersConstraintsQuery)
+    public static function yesCouponAndYesEditorPicksOrYesExclusiveConstraints($offersConstraintsQuery)
     {
-        $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
-        $offersConstraintsQuery = self::constraintsYesExclusiveOrYesEditorPick($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesExclusiveOrYesEditorPickConstraints($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
 
-    public static function constraintsYesCouponAndNoEditorPicksAndNoExclusive($offersConstraintsQuery)
+    public static function yesCouponAndNoEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery)
     {
-        $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
-        $offersConstraintsQuery = self::constraintsNoExclusiveCodeAndNoEditorPickCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
 
-    public static function constraintsYesCouponAndYesExclusiveAndNoEditorPicks($offersConstraintsQuery)
+    public static function yesCouponAndYesExclusiveAndNoEditorPicksConstraints($offersConstraintsQuery)
     {
-        $offersConstraintsQuery = self::constraintsYesCouponAndYesExclusive($offersConstraintsQuery);
-        $offersConstraintsQuery = self::constraintNoEditorPicksCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesCouponAndYesExclusiveConstraints($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noEditorPicksCodeConstraint($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
 
-    public static function constraintsYesCouponAndYesEditorPicksAndNoExclusive($offersConstraintsQuery)
+    public static function yesCouponAndYesEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery)
     {
-        $offersConstraintsQuery = self::constraintsYesCouponAndYesEditorPicks($offersConstraintsQuery);
-        $offersConstraintsQuery = self::constraintNotExclusiveCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery);
+        $offersConstraintsQuery = self::notExclusiveCodeConstraint($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
     
     
-    public static function constraintsNoExclusiveCodeAndNoEditorPickCode($offersConstraintsQuery)
+    public static function noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery)
     {
-        $offersConstraintsQuery = self::constraintNoEditorPicksCode($offersConstraintsQuery);
-        $offersConstraintsQuery = self::constraintNotExclusiveCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noEditorPicksCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::notExclusiveCodeConstraint($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
 
-    public static function constraintNoCouponCode($offersConstraintsQuery)
+    public static function noCouponCodeConstraint($offersConstraintsQuery)
     {
         return $offersConstraintsQuery->andWhere('o.discounttype!="CD"');
     }
 
-    public static function constraintsYesExclusiveOrYesEditorPick($offersConstraintsQuery)
+    public static function yesExclusiveOrYesEditorPickConstraints($offersConstraintsQuery)
     {
         return  $offersConstraintsQuery->andWhere('o.exclusiveCode = 1 or o.editorPicks = 1');
     }
 
-    public static function constraintNoEditorPicksCode($offersConstraintsQuery)
+    public static function noEditorPicksCodeConstraint($offersConstraintsQuery)
     {
         return $offersConstraintsQuery->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
     }
 
-    public static function constraintNotExclusiveCode($offersConstraintsQuery)
+    public static function notExclusiveCodeConstraint($offersConstraintsQuery)
     {
         return $offersConstraintsQuery->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
     }
 
-    public static function constraintYesExclusiveCode($offersConstraintsQuery)
+    public static function yesExclusiveCodeConstraint($offersConstraintsQuery)
     {
         return $offersConstraintsQuery->andWhere('o.exclusiveCode = 1');
     }
 
-    public static function constraintYesEditorPicksCode($offersConstraintsQuery)
+    public static function yesEditorPicksCodeConstraint($offersConstraintsQuery)
     {
         return $offersConstraintsQuery->andWhere('o.editorPicks = 1');
     }
 
-    public static function constraintYesCouponCode($offersConstraintsQuery)
+    public static function yesCouponCodeConstraint($offersConstraintsQuery)
     {
         return $offersConstraintsQuery->andWhere('o.discounttype ="CD"');
     }
@@ -611,22 +611,22 @@ class Offer extends BaseOffer
             for ($offerIndex = 0; $offerIndex < count($specialOffersByConstraints); $offerIndex++) {
 
                 $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate'];
-                $offerExpireDate = $specialOffersByConstraints[$offerIndex]['endDate'];
-                $offerDaysIncrease = ' +'.$specialPage['timenumberOfDays'].' day';
-                $offerDaysDecrease = ' -'.$specialPage['timenumberOfDays'].' day';
-                $dateWithIncreasedDays = date('Y-m-d', strtotime($offerPublishDate .$offerDaysIncrease));
-                $dateWithDecreasedDays = date('Y-m-d', strtotime($offerExpireDate .$offerDaysDecrease));
-                $todayDate = strtotime(date("Y-m-d"));
-                $offerExpirationDate = strtotime($dateWithIncreasedDays);
-                $newExprationDate = strtotime($dateWithDecreasedDays);
+                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['endDate'];
+                $offerSubmissionDaysIncreasedBy = ' +'.$specialPage['timenumberOfDays'].' days';
+                $offerSubmissionDaysDecreasedBy  = ' -'.$specialPage['timenumberOfDays'].' days';
+                $increasedOfferPublishDate = date('Y-m-d', strtotime($offerPublishDate .$offerSubmissionDaysIncreasedBy));
+                $decreasedOfferExpiredDate = date('Y-m-d', strtotime($offerExpiredDate .$offerSubmissionDaysDecreasedBy));
+                $currentDate = strtotime(date("Y-m-d"));
+                $newOfferPublishDate = strtotime($increasedOfferPublishDate);
+                $newOfferExprationDate = strtotime($decreasedOfferExpiredDate);
 
                 if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1) {
                     if ($specialPage['timeType'] == 1) {
-                        if ($offerExpirationDate >= $todayDate) {
+                        if ($newOfferPublishDate >= $currentDate) {
                             $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                         }
                     } elseif ($specialPage['timeType'] == 2) {
-                        if ($newExprationDate <= $todayDate) {
+                        if ($newOfferExprationDate <= $currentDate) {
                             $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                         }
                     }
@@ -643,19 +643,19 @@ class Offer extends BaseOffer
         return $offersAccordingToConstraints;
     }
 
-    public static function getArrayForOfferPhtml($specialMargedOffers, $specialPage)
+    public static function getDataForOfferPhtml($specialMargedOffers, $specialPage)
     {
         if (isset($specialPage['maxOffers']) && @$specialPage['maxOffers'] > 0 && @$specialPage['maxOffers'] != null) {
             $specialMargedOffers = array_slice($specialMargedOffers, 0, $specialPage['maxOffers']);
         }
-        $specialOffers = array();
+        $specialOffersAfterMerging = array();
         foreach ($specialMargedOffers as $specialOffer) {
-            if (isset($specialOffers[$specialOffer['id']])) {
+            if (isset($specialOffersAfterMerging[$specialOffer['id']])) {
             } else {
-                $specialOffers[$specialOffer['id']] = $specialOffer;
+                $specialOffersAfterMerging[$specialOffer['id']] = $specialOffer;
             }
         }
-        return $specialOffers;
+        return $specialOffersAfterMerging;
     }
 
     ##################################################################################
