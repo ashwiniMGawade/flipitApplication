@@ -1,0 +1,107 @@
+<?php
+$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+
+$headerBlock = FrontEnd_Helper_viewHelper::getLoveRelatedVariables($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
+$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
+$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
+if (isset($actualUrlWithoutDoubleSlash[1])):
+    $actualUrl = $actualUrlWithoutDoubleSlash[1];
+else:
+    $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
+endif;
+
+$storeViewPartialPath = 'store/';
+$shopEditor = '';
+if($this->shopEditor != null):
+    $shopEditor = $this->partial(
+        $storeViewPartialPath.'_storeEditor.phtml',
+        array(
+           'shopEditor' => $this->shopEditor,
+           'shop' =>$this->currentStoreInformation[0],
+           'howToUsePermalink'=>$howToUseGuidePermalink,
+           'actualUrl'=>$actualUrl
+        )
+    );
+endif;
+
+$signUpWidgetForm = '';
+if ($this->currentStoreInformation[0]['showSignupOption']) :
+    $signUpWidgetForm = $this->partial(
+        $storeViewPartialPath.'signupwidget.phtml',
+        array(
+           'zendForm' => $this->sidebarWidgetForm,
+           'sidebarWidgetShowOrNot'=>true,
+           'shopId'=>$this->currentStoreInformation[0]['id'],
+           'shopLogoOrDefaultImage'=>''
+        )
+    );
+endif;
+
+$howToGuides = '';
+if ($this->howToGuides) :
+    $howToGuides = $this->partial(
+        $storeViewPartialPath.'_how-to-guide-chapters.phtml',
+        array(
+           'howToGuides' => $this->howToGuides,
+           'shopName' => $this->currentStoreInformation[0]['name']
+        )
+    );
+endif;
+ 
+echo $headerBlock;
+?>
+<div class="row">
+    <div id="content" class="col-md-8 col-sm-8">
+    <?php
+    $offers = $this->offers;
+    for ($i = 0; $i<count($offers); $i++) {
+        $storeFilteredOffers = $this->partial(
+                $storeViewPartialPath. '_offer.phtml',
+                array(
+                    'offers' => $offers[$i],
+                    'offersType'=>'howToGuide',
+                    'shopName' => $this->currentStoreInformation[0]['name'],
+                    'shop' => $this->currentStoreInformation[0],
+                    'zendForm'=>$this->form
+                )
+            ); 
+        if ($i == 0) {
+        echo  $storeFilteredOffers.$howToGuides;
+        } else {
+            echo '<header class="heading-box text-star">
+                    <h2>'.$this->translate('Most valuable codes from').' '. $this->currentStoreInformation[0]['name'].'</h2>
+                </header>'.$storeFilteredOffers;
+        }
+    }
+    ?>
+    </div>
+    <aside id="sidebar" class="col-md-4 col-sm-4">
+    <?php
+    echo $shopEditor;
+    echo FrontEnd_Helper_viewHelper::socialMediaWidget($this->currentStoreInformation[0]['affliateProgram'] =='' ? $this->currentStoreInformation[0]['actualUrl'] : $this->currentStoreInformation[0]['affliateProgram']);
+
+    if (count($this->latestShopUpdates) > 0):?>
+        <?php echo $this->partial($storeViewPartialPath.'_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
+    endif;
+
+    if ($this->shopChain):
+        ?>
+            <article class="block">
+        <?php echo $this->shopChain; ?>
+            </article>
+        <?php
+    endif;
+            
+    if(isset($this->popularStoresList)):
+        echo $this->popularStoresList;
+    endif;
+
+    echo $signUpWidgetForm;
+    ?>
+    </aside>
+</div>
+     
