@@ -92,16 +92,18 @@ foreach ($this->offers as $offer) {
     </article>
     <?php
     $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shop);
-    if(($offerCounter == 1 && $this->offersType=='simple') || ($offerCounter == 1 && $this->offersType=='top20') || ($offerCounter == 1 && $this->offersType=='offerPage')):
-        echo $this->partial(
-            'store/signupwidget.phtml',
-            array(
-               'zendForm' => $this->zendForm,
-               'sidebarWidgetShowOrNot'=>false,
-               'shopId'=>$this->shop['id'],
-               'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
-           )
-        );
+    if($offerCounter == 1) :
+        if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'):
+            echo $this->partial(
+                'store/signupwidget.phtml',
+                array(
+                   'zendForm' => $this->zendForm,
+                   'sidebarWidgetShowOrNot'=>false,
+                   'shopId'=>$this->shop['id'],
+                   'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
+               )
+            );
+        endif;
     endif;
 }
 if ($this->offersType!='expiredOffer') {
