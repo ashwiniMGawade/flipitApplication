@@ -1,3 +1,17 @@
+// refactored code
+$(document).ready(function(){
+    if (getQueryStringParams("popup")) {
+        showCodePopUp('popupOnLoad');
+        if (getQueryStringParams("type") == 'code') {
+        showCodeInformation(getQueryStringParams("popup"));
+       }
+    }
+});
+function OpenInNewTab(url)
+{
+    var windowObject=window.open(url, '_blank');
+    windowObject.focus();
+}
 function showTermAndConditions(id)
 {
     $('div#termAndConditions'+id).slideToggle();
@@ -26,27 +40,75 @@ function printIt(urlToShow)
     windowObject.print();
     windowObject.close();
 }
-$(function () {
-	$('#popup-wrapper').modalPopLite({ openButton: '#clicker', closeButton: '#close-btn' });
-});
-function doVote(uId,offer , vote) {
-	if(uId==0) {
-		addStoreToFavorite();
-	} else {
-		$.ajax({
-			url:HOST_PATH_LOCALE + "store/add-vote/offer/"+ offer  + "/vote/"  + vote,
-			method:"post",
-			dataType:"json",
-			type:"POST",
-			success:function(json){
-				if(json.flag){
-					flashMessage(__('Your vote is succesfully registered'));
-				}else {
-					flashMessage(  __('You have already voted it'));
-				}
-				$("span.rate" , ".success-rate").html(json.succes);
-			}
-		});
-	
-	}
+
+function getQueryStringParams(popupParameter)
+{
+    var popupPageUrl = window.location.search.substring(1);
+    var popupUrlVariables = popupPageUrl.split('&');
+    for (var i = 0; i < popupUrlVariables.length; i++)
+    {
+        var popupParameterName = popupUrlVariables[i].split('=');
+        if (popupParameterName[0] == popupParameter) 
+        {
+            return popupParameterName[1];
+        }
+    }
 }
+
+function showCodePopUp(event) {
+    if(event == 'popupOnLoad'){
+        var offerId = getQueryStringParams("popup");
+        var offerVote = 0;
+        var offerUrl = getQueryStringParams("printable");
+    } else {
+        var offerId = $(event).attr('id');
+        var offerVote = $(event).attr('vote');
+        var offerUrl = $(event).attr('alt');
+    }
+    
+    $('#element_to_pop_up').html('');
+    
+    if(! ( /(iPod|iPhone|iPad)/i.test(navigator.userAgent) )) {
+    customPopUp('element_to_pop_up');
+            $.ajax({
+                url : HOST_PATH_LOCALE + "offer/offer-Detail",
+                method : "post",
+                data : {
+                    'id' : offerId,
+                    'vote' : offerVote,
+                    'imagePath': offerUrl
+                },
+                type : "post",
+                success : function(data) {
+                    $('#element_to_pop_up').html(data);
+                    $('#code-lightbox').show();
+                }
+            });
+    }
+}
+
+function customPopUp(id) {
+
+    var popupId = id; 
+    $('#' + popupId).css({
+        "z-index" : 999999
+    }).fadeIn();
+    $('body').append('<div onClick="customPopUpClose();" id="fade"></div>');
+    $('#fade').css({
+        'filter' : 'alpha(opacity=80)'
+    }).fadeIn();
+
+    return false;
+}
+
+function copyToClipboard(text) {
+      window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+}
+
+function customPopUpClose() {
+    $('#fade , .popup_block, .popup_block_signup').fadeOut('9000', function() {
+    $('#fade').remove(); 
+    });
+    return false;
+}
+
