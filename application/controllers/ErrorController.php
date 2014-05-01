@@ -18,7 +18,6 @@ class ErrorController extends Zend_Controller_Action
                 $pagePermalink = $this->getPageParmalink();
                 $pageNumber  = $this->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
-
                 if ($pageDetails) {
                     if (is_array($this->pagePermalink)) {
                         $this->pagePermalink = end($this->pagePermalink);
