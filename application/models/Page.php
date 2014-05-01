@@ -1145,25 +1145,7 @@ public static function exportpagelist() {
 		->fetchOne();
 		return $data;
 	}
-<<<<<<< HEAD
 
-	/**
-	 *  @author kraj
-	 *  Get page details on id basis
-	 *	Version: 1.0
-	 */
-public static function getPageDetailInError($page){
-	
-	$nowDate = date('Y-m-d H:i:s');
-	$data = Doctrine_Query::create()->from('Page p')
-	->where( "p.permalink="."'$page'")
-	->leftJoin( "p.widget w" )
-	->andWhere('p.publishDate <= '."'$nowDate'")
-	->andWhere('p.deleted=0')->fetchOne();
-	
-	return $data;
-}
-=======
 	/**
 	 *  Author blal
 	 *  Get offer list pages
@@ -1181,7 +1163,7 @@ public static function getPageDetailInError($page){
 				->fetchArray();
 		return $data;
 	}
->>>>>>> KC-2903-categories-in-special-list-visit
+
 
 /**
  * get default page
@@ -1199,4 +1181,5 @@ public static function PagesPermalinksList(){
 	->fetchArray();
 	return $q;
 }
+
 }

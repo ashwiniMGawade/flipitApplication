@@ -724,33 +724,6 @@ EOD;
         ->andWhere('w.deleted=0')
         ->fetchArray();
 
-<<<<<<< HEAD
-        $string = '';
-        if (count($pagewidgets)>0) {
-        for ($i=0;$i<count($pagewidgets[0]['widget']);$i++) {
-        if ($pagewidgets[0]['widget'][$i]['slug']=='win_a_voucher') {
-         $string .= self::WinVoucherWidget($arr);
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='stuur_een') {
-            $string .= self::DiscountCodeWidget();
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_stores') {
-            $string .= self::popularShopWidget();
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_category') {
-            $string .= self::PopularCategoryWidget();
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_editor') {
-            $string .= self::PopularEditorWidget(@$arr['userId'],$page);
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='most _popular_fashion') {
-            $string .= self::MostPopularFashionGuideWidget();
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page!='search_result') {
-            $string .= self::sideWidgetCalculator('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page=='search_result') {
-            $string .= self::sideWidgetCalculator('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='other_helpful_tips') {
-        $string .= self::otherhelpfullSavingTipsWidget();
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='join_us') {
-            $string .= self::joinUsWidget();
-        } elseif ($pagewidgets[0]['widget'][$i]['slug']=='social_media') {
-            $string .= self::socialmedia('','','','widget');
-=======
         $sidebarWidgets = '';
         if (count($pageWidgets)>0) {
         for ($i=0;$i<count($pageWidgets[0]['widget']);$i++) {
@@ -776,7 +749,7 @@ EOD;
             $sidebarWidgets .= self::joinUsWidget();
         } elseif ($pageWidgets[0]['widget'][$i]['slug']=='social_media') {
             $sidebarWidgets .= self::socialmedia('','','','widget');
->>>>>>> KC-2903-categories-in-special-list-visit
+
         } else {
             $sidebarWidgets .= str_replace( '<br />', '', html_entity_decode($pageWidgets[0]['widget'][$i]['content']) );
         }
