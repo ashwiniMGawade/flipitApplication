@@ -44,7 +44,7 @@ endif;
 $howToGuides = '';
 if ($this->howToGuides) :
     $howToGuides = $this->partial(
-        $storeViewPartialPath.'_how-to-guide.phtml',
+        $storeViewPartialPath.'_how-to-guide-chapters.phtml',
         array(
            'howToGuides' => $this->howToGuides,
            'shopName' => $this->currentStoreInformation[0]['name']
