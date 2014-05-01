@@ -1,7 +1,7 @@
-<div class="<?php echo $this->sidebarWidgetShowOrNot==true ? 'block block-2' : 'box' ;?>">
+<div class="<?php echo $this->SignupFormWidgetType== 'sidebarWidget' ? 'block block-2' : 'box' ;?>">
 <?php 
 $signUpPartial = new FrontEnd_Helper_SignUpPartialFunction();
-echo $signUpPartial->getSignUpWidgetHeader($this->sidebarWidgetShowOrNot);
+echo $signUpPartial->getSignUpWidgetHeader($this->SignupFormWidgetType);
 echo $this->zendForm;
 ?>
 </div>

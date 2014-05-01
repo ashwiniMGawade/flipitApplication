@@ -2,7 +2,7 @@
 $signUpForm = $this->partial(
     'partials/_signupwidget.phtml',
     array(
-        'sidebarWidgetShowOrNot'=>$this->sidebarWidgetShowOrNot,
+        'SignupFormWidgetType'=>$this->SignupFormWidgetType,
         'zendForm'=>$this->zendForm,
     )
 );
@@ -13,7 +13,7 @@ if(Auth_VisitorAdapter::hasIdentity()):
 endif;
 $shopId = $this->shopId=='' ? 0 : $this->shopId;
 if (Visitor::getFavoriteShopForUser($visitorId, $shopId)==false):
-    if ($this->sidebarWidgetShowOrNot==false) {?>
+    if ($this->SignupFormWidgetType== 'widgetWithinOffers') {?>
         <div class="block block-form <?php echo $this->shop=='' ? 'block-form-2' : ''?>">
             <div class="holder">
                 <div class="<?php echo $this->shopId=='' ? 'ico-box' : 'icon'?>">

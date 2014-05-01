@@ -1,24 +1,24 @@
 <?php
-foreach ($this->categoriesWithSpecialPagesList as $category) {
+foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     $featuredCategoryClass = '';
     $featuredCategorySpan = '';
     
-    if(isset($category['featured_category']) && $category['featured_category'] != '') {
+    if(isset($categoryWithSpecialPage['featured_category']) && $categoryWithSpecialPage['featured_category'] != '') {
         $featuredCategoryClass = "box-top"; 
         $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
     }
 
-    $categoryImage = isset($category['categoryicon']) ? $category['categoryicon'] : $category['logo'];
+    $categoryImage = isset($categoryWithSpecialPage['categoryicon']) ? $categoryWithSpecialPage['categoryicon'] : $categoryWithSpecialPage['logo'];
     $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."".$categoryImage['name']; 
     ?>
     <article class="box <?php echo $featuredCategoryClass; ?>">
-        <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $category['permaLink']; ?>">
+        <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $categoryWithSpecialPage['permaLink']; ?>">
             <div class="image">
-                <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $category['name'];?>" />
+                <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $categoryWithSpecialPage['name'];?>" />
             </div>
             <div class="caption">
                 <?php echo $featuredCategorySpan; ?>
-                <strong><?php echo $category['name']; ?></strong>
+                <strong><?php echo $categoryWithSpecialPage['name']; ?></strong>
             </div>
         </a>
     </article>

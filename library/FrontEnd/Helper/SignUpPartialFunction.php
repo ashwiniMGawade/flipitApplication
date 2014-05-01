@@ -32,13 +32,13 @@ class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
         return $signUpStep2Url;
     }
 
-    public function getSignUpWidgetHeader($sidebarWidgetOrOfferWidget)
+    public function getSignUpWidgetHeader($widgetType)
     {
-       if ($sidebarWidgetOrOfferWidget== 'true') {
+       if ($widgetType== 'sidebarWidget') {
         $signUpHeader='<h2 class="form-signin-heading">' .$this->zendTranslate->translate('Sign up').'
             <span>'.$this->zendTranslate->translate('and join over').'<br>' .$this->zendTranslate->translate('10 million people')
             .'</span></h2>';
-       } else if($sidebarWidgetOrOfferWidget== 'category') {
+       } else if($widgetType == 'categoryPageSignupForm') {
         $signUpHeader='<h2 class="form-signin-heading">' .'
             <span>'.$this->zendTranslate->translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'
             .'</span></h2>';

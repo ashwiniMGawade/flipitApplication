@@ -109,7 +109,7 @@ if ($this->currentStoreInformation[0]['showSignupOption']) :
         $storeViewPartialPath.'signupwidget.phtml',
         array(
            'zendForm' => $this->sidebarWidgetForm,
-           'sidebarWidgetShowOrNot'=>true,
+           'SignupFormWidgetType'=> 'sidebarWidget',
            'shopId'=>$this->currentStoreInformation[0]['id'],
            'shopLogoOrDefaultImage'=>''
         )

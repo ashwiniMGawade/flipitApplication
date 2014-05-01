@@ -88,7 +88,7 @@ foreach ($this->offers as $offer) {
             'store/signupwidget.phtml',
             array(
                'zendForm' => $this->zendForm,
-               'sidebarWidgetShowOrNot'=>false,
+               'SignupFormWidgetType'=> 'widgetWithinOffers',
                'shopId'=>$this->shop['id'],
                'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
            )
