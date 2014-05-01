@@ -121,7 +121,7 @@ class Shop extends BaseShop {
         return $popularStoreData;
     }
     
-    public static function getStoreDetail($shopId)
+    public static function getStoreDetails($shopId)
     {
         $currentDate = date('Y-m-d 00:00:00');
         $storeDetail = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
@@ -208,17 +208,6 @@ class Shop extends BaseShop {
         ->andWhere('s.status = 1')
         ->fetchArray();
         return $shopDetails;
-    }
-
-    public static function getShopIdFromPermalink($permalink)
-    {
-        $shopId = Doctrine_Query::create()
-        ->select('s.id')
-        ->from('shop s')
-        ->Where("s.permaLink='".$permalink."'")
-        ->andWhere('s.status = 1')
-        ->fetchArray();
-        return $shopId;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################

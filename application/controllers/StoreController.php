@@ -30,7 +30,7 @@ class StoreController extends Zend_Controller_Action
             $currentDate = date('Y-m-d H:i:s');
             $ShopList = $shopId.'_list';
             $allShopDetailKey = 'all_shopdetail'.$ShopList;
-            $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetail($shopId));
+            $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetails($shopId));
             $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
             $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("all", 10, $shopId, 0));
             $allExpiredOfferKey = 'all_expiredOfferInStore'.$ShopList;
@@ -192,11 +192,11 @@ class StoreController extends Zend_Controller_Action
     {
         $howToGuidePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidePermalink);
-        $params = $this->_getAllParams();
-        $shopId = shop::getShopIdFromPermalink($params['permalink']);
-        $ShopList = $shopId[0]['id'].'_list';
+        $parameters = $this->_getAllParams();
+        $howToGuides=Shop::getshopDetails($parameters['permalink']); 
+        $ShopList = $howToGuides[0]['id'].'_list';
         $allShopDetailKey = 'all_shopdetail'.$ShopList;
-        $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetail($shopId[0]['id']));
+        $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetails($howToGuides[0]['id']));
         
         if ($shopInformation[0]['showChains']) {
             $shopChains = FrontEnd_Helper_viewHelper::sidebarChainWidget($shopInformation[0]['id'], $shopInformation[0]['name'], $shopInformation[0]['chainItemId']);
@@ -210,11 +210,11 @@ class StoreController extends Zend_Controller_Action
         }
 
         $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
-        $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $shopId[0]['id']));
+        $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $howToGuides[0]['id']));
         $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
-        $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("topSixOffers", 6, $shopId[0]['id'], 0));
+        $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("topSixOffers", 6, $howToGuides[0]['id'], 0));
         $offers = array_chunk($offers, 3);
-        $howToGuides=Shop::getshopDetails($params['permalink']); 
+        
 
         if(LOCALE == '')
         {
@@ -392,7 +392,7 @@ class StoreController extends Zend_Controller_Action
     $this->view->shopId=$params["storeid"];
     
     $this->view->shopoffer=FrontEnd_Helper_viewHelper::getShopCouponCode("newest",3,$params["storeid"]);
-    $shopdetail=Shop::getStoreDetail($params["storeid"]);
+    $shopdetail=Shop::getStoreDetails($params["storeid"]);
     
     $expiredcoupons=FrontEnd_Helper_viewHelper::getShopCouponCode("expired",'all',$params["storeid"]);
     $this->view->expiredOffers=$expiredcoupons;

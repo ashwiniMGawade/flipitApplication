@@ -59,22 +59,22 @@ echo $headerBlock;
     <?php
     $offers = $this->offers;
     for ($i = 0; $i<count($offers); $i++) {
-        $filteredOffers = $this->partial(
+        $storeFilteredOffers = $this->partial(
                 $storeViewPartialPath. '_offer.phtml',
                 array(
                     'offers' => $offers[$i],
-                    'offersType'=>'howToGuides',
+                    'offersType'=>'howToGuide',
                     'shopName' => $this->currentStoreInformation[0]['name'],
                     'shop' => $this->currentStoreInformation[0],
                     'zendForm'=>$this->form
                 )
             ); 
         if ($i == 0) {
-        echo  $filteredOffers.$howToGuides;
+        echo  $storeFilteredOffers.$howToGuides;
         } else {
             echo '<header class="heading-box text-star">
                     <h2>'.$this->translate('Most valuable codes from').' '. $this->currentStoreInformation[0]['name'].'</h2>
-                </header>'.$filteredOffers;
+                </header>'.$storeFilteredOffers;
         }
     }
     ?>
