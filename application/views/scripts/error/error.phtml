@@ -1,7 +1,4 @@
 <?php
-//echo '<pre>';
-//print_r($this->page['content']);
-//die;
 $messege = $this->message;
 if ($messege == "Page not found" &&  $this->matches < 4) {
     echo $this->render('error/pageContent.phtml');
