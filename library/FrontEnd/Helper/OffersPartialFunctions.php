@@ -141,7 +141,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getOfferImage($currentOffer, $offersType)
     {
          $offerImageDiv = '';
-        if ($offersType == 'simple') {
+        if ($offersType == 'simple' || $offersType == 'expiredOffer') {
             $offerDiscountImage = self::getDiscountImage($currentOffer);
             $altAttributeText = $currentOffer->tiles['label'];
             $offerImageDiv = self::getImageTag($offerDiscountImage, $altAttributeText, false);

@@ -1966,10 +1966,11 @@ class Offer extends BaseOffer
     public static function getCouponDetails($extendedUrl)
     {
         $couponDetails = Doctrine_Query::create()
-                       ->select('o.*,s.name,s.id,s.discussions,s.permaLink,s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.affliateProgram,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+                       ->select('t.*,o.*,s.name,s.id,s.discussions,s.permaLink,s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.affliateProgram,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                        ->from("Offer o")
                        ->leftJoin('o.shop s')
                        ->leftJoin('o.logo ologo')
+                       ->leftJoin('o.tiles t')
                        ->leftJoin('o.termandcondition tc')
                        ->leftJoin('s.logo img')
                        ->leftJoin('s.screenshot ws')
@@ -1987,16 +1988,16 @@ class Offer extends BaseOffer
       * @return array $relatedOffers
       * @version 1.0
       */
-
-     public static function getrelatedOffers($shopId,$currentDate)
+     public static function getrelatedOffers($shopId, $currentDate)
      {
         $date = date('Y-m-d H:i:s');
         $relatedOffers = Doctrine_Query::create()
-                        ->select('o.*,s.*,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+                        ->select('t.*, o.*,s.*,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                         ->from('offer o')
                         ->leftJoin('o.shop s')
                         ->leftJoin('o.logo ologo')
                         ->leftJoin('o.termandcondition tc')
+                        ->leftJoin('o.tiles t')
                         ->leftJoin('s.logo img')
                         ->leftJoin('s.screenshot ws')
                         //->Where('o.extendedOffer=?','1')
