@@ -363,9 +363,9 @@ class Offer extends BaseOffer
     }
     
     /**
-     * Function getSpecialOffers
+     * Function getSpecialPageOffers
      * 
-     * get member only offers
+     * get member only $specialOffers
      */
     public static function getSpecialPageOffers($specialPage)
     {
@@ -422,18 +422,12 @@ class Offer extends BaseOffer
 
     public static function getOfferByPageConstraints($specialPage, $currentDateAndTime)
     {
-        $specialOffersByConstraints = self::getSpecialOffersByPageConstraint($specialPage, $currentDateAndTime);
+        $specialOffersByConstraints = self::getSpecialOffersByPageConstraints($specialPage, $currentDateAndTime);
         return self::getFilteredOffersByConstraints($specialPage, $specialOffersByConstraints);
     }
 
-    public static function getSpecialOffersByPageConstraint($specialPage, $currentDateAndTime)
+    public static function getSpecialOffersByPageConstraints($specialPage, $currentDateAndTime)
     {
-        $editorpick = $specialPage['couponEditorPick']==1 ? $specialPage['couponEditorPick'] : 0;
-        $exclusive = $specialPage['couponExclusive'] == 1 ? $specialPage['couponExclusive'] : 0;
-        $wordTitle = $specialPage['enableWordConstraint']==1 ? $specialPage['enableWordConstraint'] : '';
-        $maxOffers = isset($specialPage['maxOffers']) ? $specialPage['maxOffers'] : '';
-        $regular = $specialPage['couponRegular'] == 1 ? $specialPage['couponRegular'] : 0;
-
         $offersConstraintsQuery = Doctrine_Query::create()
         ->select('o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
         ->from('Offer o')
@@ -452,6 +446,13 @@ class Offer extends BaseOffer
         ->andWhere('o.discounttype!="SL" and o.discounttype!="PA"')
         ->orderBy('o.exclusiveCode DESC')
         ->addOrderBy('o.startdate DESC');
+        $offersConstraintsQuery = self::implementOffersConstraints($offersConstraintsQuery, $specialPage);
+        $specialOffersByConstraints = $offersConstraintsQuery->fetchArray();
+        return $specialOffersByConstraints;
+    }
+
+    public static function implementOffersConstraints($offersConstraintsQuery, $specialPage)
+    {
         if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
             $offersConstraintsQuery->orderBy("o.title ASC");
         } elseif (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 0) {
@@ -459,54 +460,150 @@ class Offer extends BaseOffer
         } else {
             $offersConstraintsQuery->orderBy("o.id DESC");
         }
-        if (isset($specialPage['enableWordConstraint']) && @$specialPage['enableWordConstraint'] > 0 && @$specialPage['enableWordConstraint'] != null) {
+        if (isset($specialPage['enableWordConstraint']) && $specialPage['enableWordConstraint'] > 0 && $specialPage['enableWordConstraint'] != null) {
+            $wordTitle = $specialPage['wordTitle'];
             $offersConstraintsQuery->andWhere('o.title LIKE ?', "$wordTitle%");
         }
-        if ($regular == 0) {
-            if ($editorpick == 0) {
-                if ($exclusive == 0) {
-                    $offersConstraintsQuery->andWhere('o.discounttype!="CD"');
-                    $offersConstraintsQuery->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-                    $offersConstraintsQuery->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                } else {
-                    $offersConstraintsQuery->andWhere('o.discounttype ="CD"');
-                    $offersConstraintsQuery->andWhere('o.exclusiveCode = 1');
-                }
-            } else {
-                if ($exclusive == 0) {
-                    $offersConstraintsQuery->andWhere('o.discounttype="CD"');
-                    $offersConstraintsQuery->andWhere('o.editorPicks = 1');
-                } else {
-                    $offersConstraintsQuery->andWhere('o.discounttype ="CD"');
-                    $offersConstraintsQuery->andWhere('o.exclusiveCode = 1 or o.editorPicks = 1');
-                }
-            }
+
+        $offerEditorpick = $specialPage['couponEditorPick']==1 ? $specialPage['couponEditorPick'] : 0;
+        $offerExclusive = $specialPage['couponExclusive'] == 1 ? $specialPage['couponExclusive'] : 0;
+        $offerRegular = $specialPage['couponRegular'] == 1 ? $specialPage['couponRegular'] : 0;
+        if ($offerRegular == 0) {
+            $offersConstraintsQuery = self::offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
         } else {
-            if ($editorpick == 0) {
-                if ($exclusive == 0) {
-                    $offersConstraintsQuery->andWhere('o.discounttype="CD"');
-                    $offersConstraintsQuery->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-                    $offersConstraintsQuery->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                } else {
-                    $offersConstraintsQuery->andWhere('o.discounttype ="CD"');
-                    $offersConstraintsQuery->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-                    $offersConstraintsQuery->andWhere('o.exclusiveCode = 1');
-                }
-            } else {
-                if ($exclusive == 0) {
-                    $offersConstraintsQuery->andWhere('o.discounttype="CD"');
-                    $offersConstraintsQuery->andWhere('o.editorPicks = 1');
-                    $offersConstraintsQuery->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                } else {
-                    $offersConstraintsQuery->andWhere('o.discounttype ="CD"');
-                }
-            }
+            $offersConstraintsQuery = self::offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
         }
-        $specialOffersByConstraints = $offersConstraintsQuery->fetchArray();
-        return $specialOffersByConstraints;
+        return $offersConstraintsQuery;
     }
 
+    public static function offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
+    {
+        if ($offerEditorpick == 0) {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::constraintsNoCouponNoExclusiveNoEditorPick($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::constraintsYesCouponAndYesExclusive($offersConstraintsQuery);
+            }
+        } else {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::constraintsYesCouponAndYesEditorPicks($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::constraintsYesCouponAndYesEditorPicksOrYesExclusive($offersConstraintsQuery);
+            }
+        }
+        return $offersConstraintsQuery;
+    }
+
+    public static function offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
+    {
+        if ($offerEditorpick == 0) {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::constraintsYesCouponAndNoEditorPicksAndNoExclusive($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::constraintsYesCouponAndYesExclusiveAndNoEditorPicks($offersConstraintsQuery);
+            }
+        } else {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::constraintsYesCouponAndYesEditorPicksAndNoExclusive($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
+            }
+        }
+        return $offersConstraintsQuery;
+    }
+
+    public static function constraintsNoCouponNoExclusiveNoEditorPick($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::constraintNoCouponCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::constraintsNoExclusiveCodeAndNoEditorPickCode($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function constraintsYesCouponAndYesExclusive($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::constraintYesExclusiveCode($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function constraintsYesCouponAndYesEditorPicks($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::constraintYesEditorPicksCode($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function constraintsYesCouponAndYesEditorPicksOrYesExclusive($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::constraintsYesExclusiveOrYesEditorPick($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function constraintsYesCouponAndNoEditorPicksAndNoExclusive($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::constraintYesCouponCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::constraintsNoExclusiveCodeAndNoEditorPickCode($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function constraintsYesCouponAndYesExclusiveAndNoEditorPicks($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::constraintsYesCouponAndYesExclusive($offersConstraintsQuery);
+        $offersConstraintsQuery = self::constraintNoEditorPicksCode($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function constraintsYesCouponAndYesEditorPicksAndNoExclusive($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::constraintsYesCouponAndYesEditorPicks($offersConstraintsQuery);
+        $offersConstraintsQuery = self::constraintNotExclusiveCode($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
     
+    
+    public static function constraintsNoExclusiveCodeAndNoEditorPickCode($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::constraintNoEditorPicksCode($offersConstraintsQuery);
+        $offersConstraintsQuery = self::constraintNotExclusiveCode($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function constraintNoCouponCode($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.discounttype!="CD"');
+    }
+
+    public static function constraintsYesExclusiveOrYesEditorPick($offersConstraintsQuery)
+    {
+        return  $offersConstraintsQuery->andWhere('o.exclusiveCode = 1 or o.editorPicks = 1');
+    }
+
+    public static function constraintNoEditorPicksCode($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
+    }
+
+    public static function constraintNotExclusiveCode($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
+    }
+
+    public static function constraintYesExclusiveCode($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.exclusiveCode = 1');
+    }
+
+    public static function constraintYesEditorPicksCode($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.editorPicks = 1');
+    }
+
+    public static function constraintYesCouponCode($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.discounttype ="CD"');
+    }
+
     public static function getFilteredOffersByConstraints($specialPage, $specialOffersByConstraints)
     {
         $offersAccordingToConstraints = array();
@@ -545,7 +642,6 @@ class Offer extends BaseOffer
         }
         return $offersAccordingToConstraints;
     }
-    
 
     public static function getArrayForOfferPhtml($specialMargedOffers, $specialPage)
     {

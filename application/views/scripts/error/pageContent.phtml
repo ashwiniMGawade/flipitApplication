@@ -4,11 +4,11 @@ if ($this->pageMode == true) {
     $sidebarWidgetHtml = '';
     $pageContent = '';
     if ($this->page['pageType'] == "offer") {
-        if (count($this->offercount)>0) {
+        if ($this->offercount > 0) {
             $pageContent = $this->partial(
                 'store/_offer.phtml',
                 array(
-                   'offers'=> $this->paginator,
+                   'offers'=> $this->offersPaginator,
                    'offersType'=>'offerPage',
                    'shopName'=> '',
                    'shop'=>'',
@@ -19,7 +19,6 @@ if ($this->pageMode == true) {
         } else {
             $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
         }
-
         $signUpWidgetForm = $this->partial(
             'store/signupwidget.phtml',
             array(

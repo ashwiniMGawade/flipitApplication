@@ -32,9 +32,9 @@ class ErrorController extends Zend_Controller_Action
 
                     $pageLogo  = Logo::getPageLogo($pageDetails['logoId']);
                     $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
-                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination($specialPageOffers, $pageNumber, 27, 7);
+                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination($specialPageOffers, $pageNumber, 30, 3);
                     $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-                    $sidebarWidget = $frontendViewHelper->getSidebarWidget($arr = array(), rtrim($this->pagePermalink, '/'));
+                    $sidebarWidget = $frontendViewHelper->getSidebarWidget($sidebarParameters = array(), rtrim($this->pagePermalink, '/'));
 
                     $this->view->message = 'Page not found';
                     $this->view->pageTitle = $pageDetails['pageTitle'];
@@ -44,7 +44,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->page = $pageDetails;
                     $this->view->pageLogo = $pageLogo[0];
                     $this->view->offercount = count($specialPageOffers);
-                    $this->view->paginator = $specialOffersPaginator;
+                    $this->view->offersPaginator = $specialOffersPaginator;
                     $this->view->widget = $sidebarWidget;
                     $this->view->pageMode = true;
                 } else {
@@ -128,7 +128,6 @@ class ErrorController extends Zend_Controller_Action
         } else {
             $pageSpecialPermailink = $splitParmalink[0];
         }
-        $pageSpecialPermailink = end($pagePermalink);
         return $pageSpecialPermailink;
     }
 

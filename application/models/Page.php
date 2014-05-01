@@ -48,6 +48,20 @@ class Page extends BasePage
         ->fetchOne();
         return $page;
     }
+    /**
+     *  Get page details on id basis
+     *	Version: 1.0
+     */
+    public static function getPageDetailInError($page)
+    {
+        $nowDate = date('Y-m-d H:i:s');
+        $data = Doctrine_Query::create()->from('Page p')
+        ->where("p.permalink="."'$page'")
+        ->leftJoin("p.widget w")
+        ->andWhere('p.publishDate <= '."'$nowDate'")
+        ->andWhere('p.deleted=0')->fetchOne();
+        return $data;
+    }
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -1134,21 +1148,6 @@ public static function exportpagelist() {
 				->fetchArray();
 		return $data;
 	}
-	/**
-	 *  Get page details on id basis
-	 *	Version: 1.0
-	 */
-public static function getPageDetailInError($page){
-	
-	$nowDate = date('Y-m-d H:i:s');
-	$data = Doctrine_Query::create()->from('Page p')
-	->where( "p.permalink="."'$page'")
-	->leftJoin( "p.widget w" )
-	->andWhere('p.publishDate <= '."'$nowDate'")
-	->andWhere('p.deleted=0')->fetchOne();
-	
-	return $data;
-}
 
 /**
  * get default page
