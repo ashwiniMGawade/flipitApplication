@@ -228,7 +228,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         
         if ($currentOffer->discountType == "CD" ) {
             $onClick =  $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permaLink'].$popupLink."')";
+            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')";
             $offerLink = '<a id="'.$currentOffer->id.'" class="'.$class.'" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
             '.$offerAnchorTagContent.' </a>';
         } elseif ($currentOffer->discountType == "SL") {

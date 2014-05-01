@@ -32,7 +32,7 @@ foreach ($this->offers as $offer) {
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
-    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permaLink']; 
+    $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
     echo $offerPartial->getCommonRedirectUrlForOffer($offer, $urlToShow, $offerBounceRate, $permalink, 'mainOfferClickoutButton');
     echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
     ?>
