@@ -45,7 +45,7 @@ foreach ($this->offers as $offer) {
                 <ul class="view-list">
                     <li>
     <?php 
-    if ($this->offersType!='expiredOffer') {
+    if ($this->offersType!='extendedOffer') {
         echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
         echo $offerPartial->getExtendedOfferLink($offer);
     } else {
@@ -57,7 +57,7 @@ foreach ($this->offers as $offer) {
             </div>
         </div>
     <?php
-    if ($this->offersType!='expiredOffer') {
+    if ($this->offersType!='extendedOffer') {
             $style = '';
     } else {
             $style = 'style="display:block;"';
@@ -98,7 +98,7 @@ foreach ($this->offers as $offer) {
         endif;
     endif;
 }
-if ($this->offersType!='expiredOffer') {
+if ($this->offersType!='extendedOffer') {
     if ($this->offersType == 'newestOffer' || $this->offersType=='offerWithPagenation' || $this->offersType=='offerPage') {
         echo $this->paginationControl($this->offers, 'Sliding', '/partials/_pagination.phtml');
     }

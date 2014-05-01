@@ -1,9 +1,4 @@
 <?php
-$this->minifyHeadScript()->prependFile("public/js/front_end/partialOffer.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-
 echo $this->partial(
     'partials/_default_page_header.phtml',
     array('pageTitle' => $this->pageTitle, 'pageLogo'=> $this->pageLogo, 'subTitle'=> $this->content)
