@@ -146,7 +146,7 @@ class Category extends BaseCategory {
         $category->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params["metaDescription"]);
         $category->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params["description"]);
         $category->featured_category = $params["featuredCategory"];
-        $uploadedImage = self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden');
+        $uploadedImage = self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category);
         $categoryInfo = self::getCategoryById($params['id']);
 
         if (!empty($categoryInfo[0]['permaLink'])) {
@@ -172,7 +172,7 @@ class Category extends BaseCategory {
         
     }
 
-    public static function setCategoryIcon($categoryIconFileName, $categoryIconName)
+    public static function setCategoryIcon($categoryIconFileName, $categoryIconName, $category)
     {
         if (isset($categoryIconFileName) && $categoryIconFileName != '') {
             $uploadedImage = self::uploadImage($categoryIconName);
