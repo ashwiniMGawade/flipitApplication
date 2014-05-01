@@ -362,6 +362,302 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
     }
     
+    /**
+     * Function getSpecialPageOffers
+     * 
+     * get member only $specialOffers
+     */
+    public static function getSpecialPageOffers($specialPage)
+    {
+        $currentDateAndTime = date('Y-m-d H:i:s');
+        $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDateAndTime);
+        $constraintsRelatedOffers = self::getOfferByPageConstraints($specialPage, $currentDateAndTime);
+        $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+        $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
+        return $specialOffers;
+    }
+
+    public static function getSpecialOffersByPage($pageId, $currentDateAndTime)
+    {
+        $specialPageOffers = self::getOffersByPageId($pageId, $currentDateAndTime);
+        return self::removeDuplicateOffers($specialPageOffers);
+    }
+
+    public static function getOffersByPageId($pageId, $currentDateAndTime)
+    {
+        $specialPageOffers = Doctrine_Query::create()
+        ->select('op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
+        ->from('refOfferPage op')
+        ->leftJoin('op.Offer o')
+        ->leftJoin('o.logo ologo')
+        ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('s.logo l')
+        ->leftJoin('s.favoriteshops fv')
+        ->where('op.pageId = '.$pageId)
+        ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+        ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+        ->andWhere('o.deleted =0')
+        ->andWhere('s.deleted =0')
+        ->andWhere('s.status = 1')
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('o.Visability!="MEM"')
+        ->orderBy('o.exclusiveCode DESC')
+        ->addOrderBy('o.startdate DESC')
+        ->fetchArray();
+        return $specialPageOffers;
+    }
+
+    public static function removeDuplicateOffers($specialPageOffers)
+    {
+        $specialOffersWithoutDuplication = array();
+        if (count($specialPageOffers) > 0) {
+            for ($offerIndex = 0; $offerIndex < count($specialPageOffers); $offerIndex++) {
+                $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['Offer'];
+            }
+        }
+        return $specialOffersWithoutDuplication;
+    }
+
+    public static function getOfferByPageConstraints($specialPage, $currentDateAndTime)
+    {
+        $specialOffersByConstraints = self::getSpecialOffersByPageConstraints($specialPage, $currentDateAndTime);
+        return self::getFilteredOffersByConstraints($specialPage, $specialOffersByConstraints);
+    }
+
+    public static function getSpecialOffersByPageConstraints($specialPage, $currentDateAndTime)
+    {
+        $offersConstraintsQuery = Doctrine_Query::create()
+        ->select('o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
+        ->from('Offer o')
+        ->leftJoin('o.logo ologo')
+        ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('s.logo l')
+        ->leftJoin('s.favoriteshops fv')
+        ->andWhere('o.deleted =0')
+        ->andWhere("o.userGenerated = 0")
+        ->andWhere('s.deleted =0')
+        ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+        ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+        ->andWhere('o.Visability!="MEM"')
+        ->andWhere('o.discounttype!="SL" and o.discounttype!="PA"')
+        ->orderBy('o.exclusiveCode DESC')
+        ->addOrderBy('o.startdate DESC');
+        $offersConstraintsQuery = self::implementOffersConstraints($offersConstraintsQuery, $specialPage);
+        $specialOffersByConstraints = $offersConstraintsQuery->fetchArray();
+        return $specialOffersByConstraints;
+    }
+
+    public static function implementOffersConstraints($offersConstraintsQuery, $specialPage)
+    {
+        if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
+            $offersConstraintsQuery->orderBy("o.title ASC");
+        } elseif (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 0) {
+            $offersConstraintsQuery->orderBy("o.title DESC");
+        } else {
+            $offersConstraintsQuery->orderBy("o.id DESC");
+        }
+        if (isset($specialPage['enableWordConstraint']) && $specialPage['enableWordConstraint'] > 0 && $specialPage['enableWordConstraint'] != null) {
+            $wordTitle = $specialPage['wordTitle'];
+            $offersConstraintsQuery->andWhere('o.title LIKE ?', "$wordTitle%");
+        }
+
+        $offerEditorpick = $specialPage['couponEditorPick']==1 ? $specialPage['couponEditorPick'] : 0;
+        $offerExclusive = $specialPage['couponExclusive'] == 1 ? $specialPage['couponExclusive'] : 0;
+        $offerRegular = $specialPage['couponRegular'] == 1 ? $specialPage['couponRegular'] : 0;
+        if ($offerRegular == 0) {
+            $offersConstraintsQuery = self::offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
+        } else {
+            $offersConstraintsQuery = self::offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
+        }
+        return $offersConstraintsQuery;
+    }
+
+    public static function offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
+    {
+        if ($offerEditorpick == 0) {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::noCouponNoExclusiveNoEditorPickConstraints($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::yesCouponAndYesExclusiveConstraints($offersConstraintsQuery);
+            }
+        } else {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::yesCouponAndYesEditorPicksOrYesExclusiveConstraints($offersConstraintsQuery);
+            }
+        }
+        return $offersConstraintsQuery;
+    }
+
+    public static function offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
+    {
+        if ($offerEditorpick == 0) {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::yesCouponAndNoEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::yesCouponAndYesExclusiveAndNoEditorPicksConstraints($offersConstraintsQuery);
+            }
+        } else {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::yesCouponAndYesEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+            }
+        }
+        return $offersConstraintsQuery;
+    }
+
+    public static function noCouponNoExclusiveNoEditorPickConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::noCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesExclusiveConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesExclusiveCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesEditorPicksCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesEditorPicksOrYesExclusiveConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesExclusiveOrYesEditorPickConstraints($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndNoEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesExclusiveAndNoEditorPicksConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponAndYesExclusiveConstraints($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noEditorPicksCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery);
+        $offersConstraintsQuery = self::notExclusiveCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+    
+    
+    public static function noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::noEditorPicksCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::notExclusiveCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function noCouponCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.discounttype!="CD"');
+    }
+
+    public static function yesExclusiveOrYesEditorPickConstraints($offersConstraintsQuery)
+    {
+        return  $offersConstraintsQuery->andWhere('o.exclusiveCode = 1 or o.editorPicks = 1');
+    }
+
+    public static function noEditorPicksCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
+    }
+
+    public static function notExclusiveCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
+    }
+
+    public static function yesExclusiveCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.exclusiveCode = 1');
+    }
+
+    public static function yesEditorPicksCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.editorPicks = 1');
+    }
+
+    public static function yesCouponCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.discounttype ="CD"');
+    }
+
+    public static function getFilteredOffersByConstraints($specialPage, $specialOffersByConstraints)
+    {
+        $offersAccordingToConstraints = array();
+        if (count($specialOffersByConstraints) > 0) {
+            for ($offerIndex = 0; $offerIndex < count($specialOffersByConstraints); $offerIndex++) {
+
+                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate'];
+                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['endDate'];
+                $offerSubmissionDaysIncreasedBy = ' +'.$specialPage['timenumberOfDays'].' days';
+                $offerSubmissionDaysDecreasedBy  = ' -'.$specialPage['timenumberOfDays'].' days';
+                $increasedOfferPublishDate = date('Y-m-d', strtotime($offerPublishDate .$offerSubmissionDaysIncreasedBy));
+                $decreasedOfferExpiredDate = date('Y-m-d', strtotime($offerExpiredDate .$offerSubmissionDaysDecreasedBy));
+                $currentDate = strtotime(date("Y-m-d"));
+                $newOfferPublishDate = strtotime($increasedOfferPublishDate);
+                $newOfferExprationDate = strtotime($decreasedOfferExpiredDate);
+
+                if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1) {
+                    if ($specialPage['timeType'] == 1) {
+                        if ($newOfferPublishDate >= $currentDate) {
+                            $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
+                        }
+                    } elseif ($specialPage['timeType'] == 2) {
+                        if ($newOfferExprationDate <= $currentDate) {
+                            $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
+                        }
+                    }
+                } elseif (isset($specialPage['enableClickConstraint']) && $specialPage['enableClickConstraint'] == true && $specialPage['enableClickConstraint'] == 1) {
+                    if ($specialOffersByConstraints[$offerIndex]['clicks'] >= $specialPage['numberOfClicks']) {
+                        $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
+                    }
+                } else {
+                    $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
+                }
+
+            }
+        }
+        return $offersAccordingToConstraints;
+    }
+
+    public static function getDataForOfferPhtml($specialMargedOffers, $specialPage)
+    {
+        if (isset($specialPage['maxOffers']) && @$specialPage['maxOffers'] > 0 && @$specialPage['maxOffers'] != null) {
+            $specialMargedOffers = array_slice($specialMargedOffers, 0, $specialPage['maxOffers']);
+        }
+        $specialOffersAfterMerging = array();
+        foreach ($specialMargedOffers as $specialOffer) {
+            if (isset($specialOffersAfterMerging[$specialOffer['id']])) {
+            } else {
+                $specialOffersAfterMerging[$specialOffer['id']] = $specialOffer;
+            }
+        }
+        return $specialOffersAfterMerging;
+    }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -2468,271 +2764,6 @@ class Offer extends BaseOffer
             endif;
 
             return $data;
-        }
-
-        /**
-         * get member only offers
-         * @author Er,kundal
-         */
-        public static function getspecialofferonly($splconidtion)
-        {
-            $date = date('Y-m-d H:i:s');
-
-            //echo $date;
-            $memOnly = "MEM";
-
-            $pId = $splconidtion['pageid'];
-
-            $CDvaule = "";
-            $couponRegular = 0;
-            if ($splconidtion['couponregular'] == 1) {
-
-                $couponRegular = 1;
-            }
-
-            $editorpick = 0;
-            if ($splconidtion['couponeditorpick'] == 1) {
-
-                $editorpick = $splconidtion['couponeditorpick'];
-            }
-
-            $exclusive = 0;
-            if ($splconidtion['couponexclusive'] == 1) {
-
-                $exclusive = $splconidtion['couponexclusive'];
-            }
-
-            $wordTitle = "";
-            if ($splconidtion['enableWordConstraint'] == 1) {
-
-                $wordTitle = $splconidtion['wordTitle'];
-            }
-
-            $maxOffers = "";
-            if ($splconidtion['maxOffers']) {
-
-                $maxOffers = $splconidtion['maxOffers'];
-            }
-
-            $discountvaule = array($CDvaule);
-
-            //get all offer that attached to page
-            $data1 = Doctrine_Query::create()->select('op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
-            ->from('refOfferPage op')
-            ->leftJoin('op.Offer o')
-            ->leftJoin('o.logo ologo')
-            ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-            ->leftJoin('o.shop s')
-            ->leftJoin('o.vote vot')
-            ->leftJoin('s.logo l')
-            ->leftJoin('s.favoriteshops fv')
-            ->where('op.pageId = '.$pId)
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
-            ->andWhere('o.deleted =0')
-            ->andWhere('s.deleted =0')
-            ->andWhere('s.status = 1')
-            ->andWhere('o.discounttype="CD"')
-            ->andWhere('o.Visability!="MEM"')
-            ->orderBy('o.exclusiveCode DESC')
-            ->addOrderBy('o.startdate DESC');
-
-            //Query for get all offer with constraint
-            $Q = Doctrine_Query::create()->select('o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
-            ->from('Offer o')
-            ->leftJoin('o.logo ologo')
-            ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-            ->leftJoin('o.shop s')
-            ->leftJoin('o.vote vot')
-            ->leftJoin('s.logo l')
-            ->leftJoin('s.favoriteshops fv')
-            ->andWhere('o.deleted =0')
-            ->andWhere("o.userGenerated = 0")
-            ->andWhere('s.deleted =0')
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
-            ->andWhere('o.Visability!="MEM"')
-            ->andWhere('o.discounttype!="SL" and o.discounttype!="PA"')
-            ->orderBy('o.exclusiveCode DESC')
-            ->addOrderBy('o.startdate DESC');
-
-            if (isset($splconidtion['oderOffers']) && $splconidtion['oderOffers'] == 1) {
-
-                $Q->orderBy("o.title ASC");
-            } elseif (isset($splconidtion['oderOffers']) && $splconidtion['oderOffers'] == 0) {
-
-                $Q->orderBy("o.title DESC");
-            } else {
-
-                $Q->orderBy("o.id DESC");
-            }
-
-            if (isset($splconidtion['enableWordConstraint']) && @$splconidtion['enableWordConstraint'] > 0 && @$splconidtion['enableWordConstraint'] != null) {
-
-                $Q->andWhere('o.title LIKE ?',"$wordTitle%");
-
-            }
-
-            if ($splconidtion['couponregular'] == 1) {
-
-                $regular = 1;
-            } else {
-
-                $regular = 0;
-
-            }
-
-            if ($regular == 0) {
-
-                if ($editorpick == 0) {
-
-                    if ($exclusive == 0) {
-
-                        $Q->andWhere('o.discounttype!="CD"');
-                        $Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-                        $Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                    } else {
-
-                        $Q->andWhere('o.discounttype ="CD"');
-                        $Q->andWhere('o.exclusiveCode = 1');
-                    }
-              } else {
-                    if ($exclusive == 0) {
-                        $Q->andWhere('o.discounttype="CD"');
-                        $Q->andWhere('o.editorPicks = 1');
-                        //$Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                    } else {
-                        $Q->andWhere('o.discounttype ="CD"');
-                        $Q->andWhere('o.exclusiveCode = 1 or o.editorPicks = 1');
-                    }
-
-                }
-
-            } else {
-
-                if ($editorpick == 0) {
-
-                    if ($exclusive == 0) {
-
-                        $Q->andWhere('o.discounttype="CD"');
-                        $Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-                        $Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-                    } else {
-
-                        $Q->andWhere('o.discounttype ="CD"');
-                        $Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-                        $Q->andWhere('o.exclusiveCode = 1');
-                    }
-
-                } else {
-                    if ($exclusive == 0) {
-
-                        $Q->andWhere('o.discounttype="CD"');
-                        $Q->andWhere('o.editorPicks = 1');
-                        $Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-
-                    } else {
-
-                        $Q->andWhere('o.discounttype ="CD"');
-
-                    }
-
-                }
-
-            }
-            /*if (isset($splconidtion['maxOffers']) && @$splconidtion['maxOffers'] >0 && @$splconidtion['maxOffers'] != null) {
-                $Q->LIMIT($maxOffers);
-            }*/
-
-            $data = $data1->fetchArray();
-
-            //traverse array of all offer accordig to constrains
-            $newarr = array();
-            if (count($data) > 0) {
-
-                for ($o=0;$o<count($data);$o++) {
-
-                    $newarr[$o] = @$data[$o]['Offer'];
-                }
-
-            }
-            //echo $data = $Q->getSqlQuery();  die;
-            $data = $Q->fetchArray();
-
-            $newarr1 = array();
-
-            if (count($data) > 0) {
-
-                for ($o=0;$o<count($data);$o++) {
-
-                    $publishdate = @$data[$o]['startDate'];
-
-                    $expireDate = @$data[$o]['endDate'];
-                    //echo $expireDate; echo "<br>";
-                    //echo $splconidtion['timenumOfDays'];echo "<br>";
-                    $timeconstriant = ' +'.@$splconidtion['timenumOfDays'].' day';
-                    $timeconstriant1 = ' -'.@$splconidtion['timenumOfDays'].' day';
-
-                    $NewDate=date('Y-m-d', strtotime($publishdate .$timeconstriant));
-                    //echo $NewDate; echo "<br>";
-                    $ExNewDate = date('Y-m-d', strtotime($expireDate .$timeconstriant1));
-
-                    //echo $ExNewDate; echo "<br>";
-                    $todays_date = date("Y-m-d");
-                    $today = strtotime($todays_date);
-                    $expiration_date = strtotime($NewDate);
-                    $new_exp_date = strtotime($ExNewDate);
-
-                    // echo $NewDate."<br>Type 2<br>".$todays_date;
-                    if (isset($splconidtion['enableTimeConst']) && @$splconidtion['enableTimeConst'] == 1) {
-
-                        if (@$splconidtion['timeType'] == 1) {
-
-                            //echo $NewDate; echo "<br>";
-                            if ($expiration_date >= $today) {
-                                $newarr1[$o] = @$data[$o];
-                                //die('a');
-                            }
-                        } elseif (@$splconidtion['timeType'] == 2) {
-                            if ($new_exp_date <= $today) {
-                                $newarr1[$o] = @$data[$o];
-                                //die('b');
-                            }
-                        }
-                    } elseif (isset($splconidtion['enableclickconst']) && @$splconidtion['enableclickconst'] == true && @$splconidtion['enableclickconst'] == 1) {
-                        if ($data[$o]['clicks'] >= $splconidtion['numberofclicks']) {
-
-                            $newarr1[$o] = @$data[$o];
-                            //die('c');
-                        }
-
-                    } else {
-
-                        $newarr1[$o] = @$data[$o];
-                    }
-                    }
-
-            }
-            $result = array_merge($newarr, $newarr1);
-            if (isset($splconidtion['maxOffers']) && @$splconidtion['maxOffers'] >0 && @$splconidtion['maxOffers'] != null) {
-                //$Q->LIMIT($maxOffers);
-                 $result = array_slice($result,0,$maxOffers);
-
-            }
-
-            $Fresult = array();
-            foreach ($result as $r) {
-                 if (isset($Fresult[$r['id']])) {
-
-                 } else {
-
-                    $Fresult[$r['id']] = $r;
-                 }
-            }
-
-            return $Fresult;
-            //return $result;
-
         }
 
 /**

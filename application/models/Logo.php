@@ -12,12 +12,18 @@
  */
 class Logo extends BaseLogo
 {
-	public static function getPageLogo($lid){
-	
-		$logo = Doctrine_Query::create()->select()
-		->from('logo l')
-		->where("l.id = ?", $lid)
-		->fetchArray();
-		return $logo;
-	}
+    #################################################
+    ########### REFACTORED CODE #####################
+    #################################################
+    public static function getPageLogo($logoId)
+    {
+        $pageLogo = Doctrine_Query::create()->select()
+        ->from('logo l')
+        ->where("l.id = ?", $logoId)
+        ->fetchArray();
+        return $pageLogo;
+    }
+    #################################################
+    ########### END REFACTORED CODE #################
+    #################################################
 }

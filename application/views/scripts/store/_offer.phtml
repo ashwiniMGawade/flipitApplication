@@ -83,22 +83,23 @@ foreach ($this->offers as $offer) {
     </article>
     <?php
     $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shop);
-    if(($offerCounter == 1 && $this->offersType=='simple') || ($offerCounter == 1 && $this->offersType=='top20')):
-        if($this->zendForm != '') :
-        echo $this->partial(
-            'store/signupwidget.phtml',
-            array(
-               'zendForm' => $this->zendForm,
-               'SignupFormWidgetType'=> 'widgetWithinOffers',
-               'shopId'=>$this->shop['id'],
-               'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
-           )
-        );
-    endif;
+
+    if($offerCounter == 1) :
+        if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'):
+            echo $this->partial(
+                'store/signupwidget.phtml',
+                array(
+                   'zendForm' => $this->zendForm,
+                   'SignupFormWidgetType'=> 'widgetWithinOffers',
+                   'shopId'=>$this->shop['id'],
+                   'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
+               )
+            );
+        endif;
     endif;
 }
 if ($this->offersType!='expiredOffer') {
-    if ($this->offersType == 'newestOffer' || $this->offersType=='offerWithPagenation') {
+    if ($this->offersType == 'newestOffer' || $this->offersType=='offerWithPagenation' || $this->offersType=='offerPage') {
         echo $this->paginationControl($this->offers, 'Sliding', '/partials/_pagination.phtml');
     }
     if (isset($this->pageType) && $this->pageType == 'howToGuide') {

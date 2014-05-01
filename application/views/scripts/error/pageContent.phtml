@@ -1,0 +1,44 @@
+<?php
+if ($this->pageMode == true) {
+    $sidebarWidgetHtml = '';
+    $pageContent = '';
+    if ($this->page['pageType'] == "offer") {
+        if ($this->offercount > 0) {
+            $pageContent = $this->partial(
+                'store/_offer.phtml',
+                array(
+                   'offers'=> $this->offersPaginator,
+                   'offersType'=>'offerPage',
+                   'shopName'=> '',
+                   'shop'=>'',
+                   'zendForm'=>$this->form,
+               )
+            );
+        } else {
+            $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
+        }
+        $signUpWidgetForm = $this->partial(
+            'store/signupwidget.phtml',
+            array(
+               'zendForm' => $this->sidebarWidgetForm,
+               'SignupFormWidgetType'=> 'sidebarWidget',
+               'shopId'=>'',
+               'shopLogoOrDefaultImage'=>''
+            )
+        );
+        $sidebarWidgets = $this->widget . FrontEnd_Helper_viewHelper::socialMediaWidget(). $signUpWidgetForm;
+        $sidebarWidgetHtml = '<aside class="col-md-4 col-sm-4" id="sidebar">' . $sidebarWidgets . '</aside>';
+    } else {
+        $pageContent="<h1>".$this->page['pageTitle']."</h1>".stripslashes($this->page['content']);
+    }
+    $pageIconPath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
+    $categoryPartial = new FrontEnd_Helper_CategoryPartialFunctions();
+    echo $categoryPartial->getCategoryOrSpecialPageHeder($this->page['pageTitle'], $pageIconPath);?>
+    <div class="row">
+        <div class="col-md-8 col-sm-8" id="content">
+        <?php echo $pageContent;?>
+        </div>
+        <?php echo $sidebarWidgetHtml ?>
+    </div>
+    <?php 
+}

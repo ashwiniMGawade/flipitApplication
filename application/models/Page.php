@@ -49,6 +49,7 @@ class Page extends BasePage
         return $page;
     }
 
+
     public static function getSpecialListPages()
     {
         $specialListPages = Doctrine_Query::create()
@@ -59,6 +60,21 @@ class Page extends BasePage
             ->andWhere('p.deleted=0')
             ->fetchArray();
         return $specialListPages;
+    }
+    /**
+     *  Get page details on id basis
+     *	Version: 1.0
+     */
+    public static function getPageDetailsInError($page)
+    {
+        $currentDate = date('Y-m-d H:i:s');
+        $pageDetails = Doctrine_Query::create()->from('Page p')
+        ->where("p.permalink="."'$page'")
+        ->leftJoin("p.widget w")
+        ->andWhere('p.publishDate <= '."'$currentDate'")
+        ->andWhere('p.deleted=0')->fetchOne();
+        return $pageDetails;
+
     }
     ######################################################
     ############ END REFACTORED CODE #####################
@@ -1131,21 +1147,23 @@ public static function exportpagelist() {
 	}
 
 	/**
-	 *  @author kraj
-	 *  Get page details on id basis
-	 *	Version: 1.0
-	 */
-public static function getPageDetailInError($page){
+	 *  Author blal
+	 *  Get offer list pages
+	*/
 	
-	$nowDate = date('Y-m-d H:i:s');
-	$data = Doctrine_Query::create()->from('Page p')
-	->where( "p.permalink="."'$page'")
-	->leftJoin( "p.widget w" )
-	->andWhere('p.publishDate <= '."'$nowDate'")
-	->andWhere('p.deleted=0')->fetchOne();
+	public static function getOfferListPage(){
 	
-	return $data;
-}
+		$data = Doctrine_Query::create()
+				->select('p.id,p.pageType,p.pageTitle,p.permaLink,p.metaDescription,i.path,i.name')
+				->from('Page p')
+				->leftJoin('p.logo i')
+				->where("pageType = ?", 'offer')
+				->andWhere('p.deleted=0')
+				->limit(9)
+				->fetchArray();
+		return $data;
+	}
+
 
 /**
  * get default page
@@ -1163,4 +1181,5 @@ public static function PagesPermalinksList(){
 	->fetchArray();
 	return $q;
 }
+
 }
