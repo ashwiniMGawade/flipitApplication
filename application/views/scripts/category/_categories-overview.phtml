@@ -1,12 +1,10 @@
 <?php
 foreach ($this->categoriesWithSpecialPagesList as $category) {
     $featuredCategoryClass = '';
-    $featuredCategoryImageDimensions = '';
     $featuredCategorySpan = '';
     
     if(isset($category['featured_category']) && $category['featured_category'] != '') {
         $featuredCategoryClass = "box-top"; 
-        $featuredCategoryImageDimensions = 'width= 366 height=367';
         $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
     }
 
@@ -16,7 +14,7 @@ foreach ($this->categoriesWithSpecialPagesList as $category) {
     <article class="box <?php echo $featuredCategoryClass; ?>">
         <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $category['permaLink']; ?>">
             <div class="image">
-                <img src ="<?php echo $categoryImageSource; ?>" <?php echo  $featuredCategoryImageDimensions; ?> alt="<?php echo $category['name'];?>" />
+                <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $category['name'];?>" />
             </div>
             <div class="caption">
                 <?php echo $featuredCategorySpan; ?>
