@@ -84,6 +84,7 @@ foreach ($this->offers as $offer) {
     <?php
     $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shop);
     if(($offerCounter == 1 && $this->offersType=='simple') || ($offerCounter == 1 && $this->offersType=='top20')):
+        if($this->zendForm != '') :
         echo $this->partial(
             'store/signupwidget.phtml',
             array(
@@ -93,6 +94,7 @@ foreach ($this->offers as $offer) {
                'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
            )
         );
+    endif;
     endif;
 }
 if ($this->offersType!='expiredOffer') {

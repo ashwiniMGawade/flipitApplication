@@ -3,7 +3,7 @@
 </header>
 <section class="section section-guide">
     <div class="holder">
-        <ol class="num-list">
+        <ul class="num-list">
             <?php 
             $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
             foreach($this->howToGuides as $howToGuides):
@@ -25,7 +25,7 @@
                 endforeach;
             endforeach;
             ?>
-        </ol>
+        </ul>
     </div>
     <a class="link-box link-back" href="#">
         <hr class="alt2">
