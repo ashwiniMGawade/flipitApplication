@@ -213,7 +213,7 @@ class StoreController extends Zend_Controller_Action
         $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $howToGuides[0]['id']));
         $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
         $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("topSixOffers", 6, $howToGuides[0]['id'], 0));
-        $offers = array_chunk($offers, 3);
+        $offers = array_chunk($offers, 2);
         
 
         if(LOCALE == '')
