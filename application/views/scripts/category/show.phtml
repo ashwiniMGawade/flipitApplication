@@ -2,7 +2,7 @@
 echo $this->render('offer/jsFileForOfferPartial.phtml');
 $categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path']."thum_large_".$this->categoryDetail[0]['categoryicon']['name'];
 $categoryPartial = new FrontEnd_Helper_CategoryPartialFunctions();
-echo $categoryPartial->getCategoryHeader($this->categoryDetail[0]['name'],  $categoryFeaturedImage);
+echo $categoryPartial->getCategoryOrSpecialPageHeder($this->categoryDetail[0]['name'],  $categoryFeaturedImage);
 $storeViewPartialPath = 'store/';
 $offers = '';
 if (count($this->offersWithPagination)>0) {
@@ -40,6 +40,7 @@ $signUpWidgetForm = $this->partial(
     echo $frontendViewHelper->popularCategoryWidget();
     echo FrontEnd_Helper_viewHelper::socialMediaWidget();
     echo FrontEnd_Helper_viewHelper::popularShopWidget();
+    echo $frontendViewHelper->browseByStoreWidget();
     echo $signUpWidgetForm;
     ?>
     </aside>

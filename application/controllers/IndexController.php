@@ -157,7 +157,7 @@ class IndexController extends Zend_Controller_Action {
     				$reqiurevaule['publishdate'] = $page['publishDate'];
     				$reqiurevaule['awardConstratint'] = $page['awardConstratint'];
     				$reqiurevaule['awardType'] = $page['awardType'];
-    				$splofferlists[] = count (Offer::getspecialofferonly($reqiurevaule) );
+    				$splofferlists[] = count (Offer::getSpecialPageOffers($reqiurevaule) );
     			}
     		}
     		FrontEnd_Helper_viewHelper::setInCache('all_speciallist_list',$specialList);
