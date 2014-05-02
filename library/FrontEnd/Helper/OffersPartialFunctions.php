@@ -247,17 +247,17 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $redirectUrl = '';
         switch ($type){
-            case 'mainOfferClickoutButton': 
+            case 'mainOfferClickoutButton':
                 $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $this->zendTranslate->translate('>Get code &amp; Open site'), "btn blue btn-primary");
             break;
             case 'offerTitle':
                 $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $offerAnchorTagContent, "link");
             break;
-            case 'offerImage': 
+            case 'offerImage':
                 $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, self::getOfferImage($currentOffer, $offerAnchorTagContent), self::getCssClassNameForOffer($currentOffer, $offerAnchorTagContent));
             break;
             default: break;
-        return $redirectUrl;
+            return $redirectUrl;
         }
        
     }
