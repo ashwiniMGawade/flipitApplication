@@ -15,6 +15,7 @@ else:
 endif;
 
 $storeViewPartialPath = 'store/';
+$partialViewPath = 'partials/';
 $shopEditor = '';
 if($this->shopEditor != null):
     $shopEditor = $this->partial(
@@ -31,7 +32,7 @@ endif;
 $signUpWidgetForm = '';
 if ($this->currentStoreInformation[0]['showSignupOption']) :
     $signUpWidgetForm = $this->partial(
-        $storeViewPartialPath.'signupwidget.phtml',
+        $partialViewPath.'_signupForm.phtml',
         array(
            'zendForm' => $this->sidebarWidgetForm,
            'SignupFormWidgetType'=> 'sidebarWidget',
@@ -64,7 +65,7 @@ echo $headerBlock;
             $signUpForm = $this->form; 
         }
         $storeFilteredOffers = $this->partial(
-               'partials/_offer.phtml',
+               $partialViewPath .'_offer.phtml',
                 array(
                     'offers' => $offers[$i],
                     'offersType'=>'simple',

@@ -7,7 +7,7 @@ echo $this->partial(
 $storeViewPartialPath = 'store/';
 $signUpWidgetForm = '';
     $signUpWidgetForm = $this->partial(
-        $storeViewPartialPath.'signupwidget.phtml',
+        $partialsViewPath.'_signupForm.phtml',
         array(
            'zendForm' => $this->sidebarWidgetForm,
            'SignupFormWidgetType'=>'sidebarWidget',

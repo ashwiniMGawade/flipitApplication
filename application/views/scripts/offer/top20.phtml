@@ -25,7 +25,7 @@ endif;
 
 $signUpWidgetForm = '';
 $signUpWidgetForm = $this->partial(
-    'store/signupwidget.phtml',
+    $partialViewPath.'_signupForm.phtml',
     array(
        'zendForm' => $this->sidebarWidgetForm,
        'SignupFormWidgetType'=> 'sidebarWidget',
