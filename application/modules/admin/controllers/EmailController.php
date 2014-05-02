@@ -2,44 +2,44 @@
 
 class Admin_EmailController extends Zend_Controller_Action
 {
-	
-	/**
-	 * check authentication before load the page
-	 * @see Zend_Controller_Action::preDispatch()
-	 * @author Amit Sharma
-	 * @version 1.0
-	 */
-	public function preDispatch()
-	{
-		$conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
-		$params = $this->_getAllParams();
-		if (!Auth_StaffAdapter::hasIdentity()) {
-			$referer = new Zend_Session_Namespace('referer');
-			$referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-			$this->_redirect('/admin/auth/index');
-		}
-		BackEnd_Helper_viewHelper::closeConnection($conn2);
-		$this->view->controllerName = $this->getRequest()->getParam('controller');
-		$this->view->action = $this->getRequest()->getParam('action');
-	
-	}
-	
-	public function init()
+
+    /**
+     * check authentication before load the page
+     * @see Zend_Controller_Action::preDispatch()
+     * @author Amit Sharma
+     * @version 1.0
+     */
+    public function preDispatch()
+    {
+        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $params = $this->_getAllParams();
+        if (!Auth_StaffAdapter::hasIdentity()) {
+            $referer = new Zend_Session_Namespace('referer');
+            $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+            $this->_redirect('/admin/auth/index');
+        }
+        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        $this->view->controllerName = $this->getRequest()->getParam('controller');
+        $this->view->action = $this->getRequest()->getParam('action');
+
+    }
+
+    public function init()
     {
         /* Initialize action controller here */
     }
-        
+
     /**
      * Load the data table
      * @author asharma
      */
     public function indexAction()
-    {   
-    	$flash = $this->_helper->getHelper('FlashMessenger');
+    {
+        $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-       
+
     }
 
     /**
@@ -47,24 +47,24 @@ class Admin_EmailController extends Zend_Controller_Action
      * @author asharma
      * @version 1.0
      */
-    public function getEmailsAction() {
-
+    public function getEmailsAction()
+    {
         $params = $this->_getAllParams();
         $emailData = Emails::getAllEmailsContent($params);
-    
+
         echo Zend_Json::encode($emailData);
         die();
     }
-    
+
 
     /**
      * Get template data
      * @author asharma
-     * @params template ID 
+     * @params template ID
      * @version 1.0
      */
-    public function editEmailsAction() {
-
+    public function editEmailsAction()
+    {
         $params = $this->_getAllParams();
         $this->view->offerId = $params['id'];
 
@@ -96,8 +96,7 @@ class Admin_EmailController extends Zend_Controller_Action
 
        $templateId = $this->getRequest()->getParam('templateId');
         # check tepmlete type
-        switch($this->getRequest()->getParam('template'))
-        {
+        switch($this->getRequest()->getParam('template')) {
             case 'email-header':
                 # update headet template content
                 Emails::updateHeaderContent($data, $templateId );
@@ -137,20 +136,16 @@ class Admin_EmailController extends Zend_Controller_Action
      * @author cbhopal
      * @version 1.0
      */
-    public function mandrillAction() {
-
-
-        if ($this->_request->isPost())
-        {
+    public function mandrillAction()
+    {
+        if ($this->_request->isPost()) {
             //add the flash mesage that the newsletter has been sent
             $flash = $this->_helper->getHelper('FlashMessenger');
 
             $isScheduled = $this->getRequest()->getParam("isScheduled" , false);
 
-            if($isScheduled)
-            {
-                if(Signupmaxaccount::saveScheduledNewsletter( $this->getRequest()))
-                {
+            if($isScheduled) {
+                if(Signupmaxaccount::saveScheduledNewsletter( $this->getRequest())) {
                     $flash->addMessage(array('success' => $this->view->translate('Newsletter has been successfully scheduled')));
                 } else {
                     $flash->addMessage(array('error' => $this->view->translate('There is some problem in your data') ));
@@ -162,8 +157,7 @@ class Admin_EmailController extends Zend_Controller_Action
             # update current scheduled status to sent
             Signupmaxaccount::updateNewsletterSchedulingStatus();
 
-            if(LOCALE == '')
-            {
+            if(LOCALE == '') {
                 $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND , '/') ."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
                 $siteName = "Kortingscode.nl";
             } else  {
@@ -183,7 +177,7 @@ class Admin_EmailController extends Zend_Controller_Action
 
             if($voucherflag){
 
-                # get 10 popular vouchercodes for news letter   
+                # get 10 popular vouchercodes for news letter
                 $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
                 $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
 
@@ -329,15 +323,14 @@ class Admin_EmailController extends Zend_Controller_Action
      */
     public function emailSettingsAction()
     {
-    	
+
         $params = $this->_getAllParams ();
-    	$emailSettingsData = EmailSettings::getEmailSettingsContent();
+        $emailSettingsData = EmailSettings::getEmailSettingsContent();
 
         echo "<pre>";print_r($emailSettingsData);
-    	die ();
+        die ();
     }
-    
-    
-    
-}
 
+
+
+}

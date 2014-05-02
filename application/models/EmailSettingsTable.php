@@ -8,11 +8,11 @@
 class EmailSettingsTable extends Doctrine_Table
 {
     /**
-	 * get all data of table
-	 * @version 1.0
-	 * @return array $data
-	 * @author asharma
-	 */
+     * get all data of table
+     * @version 1.0
+     * @return array $data
+     * @author asharma
+     */
     public static function getInstance()
     {
         return Doctrine_Core::getTable('emailsettings');

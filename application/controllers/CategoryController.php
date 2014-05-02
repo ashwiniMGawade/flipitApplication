@@ -1,12 +1,12 @@
 <?php
-class CategoryController extends Zend_Controller_Action {
-    
+class CategoryController extends Zend_Controller_Action
+{
     #####################################################
     ############# REFACORED CODE ########################
     #####################################################
     /**
      * Function show.
-     * 
+     *
      * get offer related to category.
      */
     public function showAction()
@@ -45,7 +45,7 @@ class CategoryController extends Zend_Controller_Action {
         $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
-    
+
     public function indexAction()
     {
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
@@ -81,28 +81,28 @@ class CategoryController extends Zend_Controller_Action {
      * @see Zend_Controller_Action::init()
      * @author Bhart
      */
-    public function init() {
-
+    public function init()
+    {
         $module   = strtolower($this->getRequest()->getParam('lang'));
         $controller = strtolower($this->getRequest()->getControllerName());
         $action     = strtolower($this->getRequest()->getActionName());
 
         # check module specific view exists or not
         if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-            
+
             # set module specific view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-        }
-        else{
-            
+        } else{
+
             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
     }
-	  public function clearcacheAction(){
-	  	$cache = Zend_Registry::get('cache');
-	  	$cache->clean();
-	  	echo 'cache is cleared';
-	  	exit;
-	  }
+      public function clearcacheAction()
+      {
+        $cache = Zend_Registry::get('cache');
+        $cache->clean();
+        echo 'cache is cleared';
+        exit;
+      }
 }

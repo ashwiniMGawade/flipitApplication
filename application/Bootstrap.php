@@ -87,7 +87,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         self::constantsForFacebookImageAndLocale();
     }
-    
+
     public function constantsForFacebookImageAndLocale()
     {
         if (LOCALE == '') {
@@ -248,7 +248,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             . dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->moduleDirectoryName) .'/'
         );
     }
-    
+
     public function constantsForDefaultModule()
     {
         define('LOCALE', '');
@@ -528,7 +528,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         if (!empty($splitPermalinkFromQueryString)) {
             $permalink = strstr($permalink, '?', true);
         }
-        
+
         return $permalink;
     }
 

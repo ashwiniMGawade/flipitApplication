@@ -9,10 +9,8 @@
  * @author     ##NAME## <##EMAIL##>
  * @version    SVN: $Id: Builder.php 7691 2011-02-04 15:43:29Z jwage $
  */
-class Shop extends BaseShop {
-
-
-
+class Shop extends BaseShop
+{
     public function __contruct($connectionName = false)
     {
         if (!$connectionName) {
@@ -28,7 +26,7 @@ class Shop extends BaseShop {
      *  @return array contain shop categories ids'
      *
      */
-    
+
     public static function returnShopCategories($id)
     {
         $categoryData = Doctrine_Query::create()
@@ -37,7 +35,7 @@ class Shop extends BaseShop {
         ->where('r.shopid=' . $id)
         ->fetchArray();
         $categories =  array();
-    
+
         foreach ($categoryData as $category) {
             $categories[] = $category['categoryId'] ;
         }
@@ -62,10 +60,10 @@ class Shop extends BaseShop {
             ->leftJoin('c.shop ss')
             ->leftJoin('ss.logo img')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
-        
+
         return self::removeDuplicateShops($relatedShops, $numberOfShops);
     }
-    
+
     protected static function removeDuplicateShops($relatedShops, $numberOfShops)
     {
         $similarShopsWithoutDuplicate = array();
@@ -87,7 +85,7 @@ class Shop extends BaseShop {
         }
         return $similarShopsWithoutDuplicate;
     }
-    
+
     /**
      * get popular store
     * @param $limit integer no of popular shops
@@ -110,17 +108,17 @@ class Shop extends BaseShop {
         ->where('s.deleted=0')
         ->addWhere('s.status=1')
         ->orderBy('p.position ASC');
-    
+
         if ($shopId) {
             $popularStoreData =  $popularStoreData->andWhere("s.id = ? ", $shopId);
         } else {
             $popularStoreData = $popularStoreData->limit($limit);
         }
-    
+
         $popularStoreData = $popularStoreData->fetchArray();
         return $popularStoreData;
     }
-    
+
     public static function getStoreDetails($shopId)
     {
         $currentDate = date('Y-m-d 00:00:00');
@@ -137,7 +135,7 @@ class Shop extends BaseShop {
         $allStoresDetail = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
         return $allStoresDetail;
     }
-   
+
     /**
      * getallStoresForFrontEnd get all store from database.
      * @version 0.1
@@ -233,9 +231,8 @@ class Shop extends BaseShop {
      * @return array
      * @author sp singh
      */
-    public function getAllShopNames($keyword){
-
-
+    public function getAllShopNames($keyword)
+    {
         return   Doctrine_Query::create()
                     ->select('s.name,s.permaLink,s.id')
                     ->from("Shop s")
@@ -256,8 +253,8 @@ class Shop extends BaseShop {
      * @author mkaur updated by kraj
      * @version 1.0
      */
- public static  function getshopList($params){
-
+ public static  function getshopList($params)
+ {
     $srh =  $params["searchText"]=='undefined' ? '' : $params["searchText"];
     $flag = @$params['flag'] ;
 
@@ -282,8 +279,8 @@ class Shop extends BaseShop {
      * @author kraj
      * @version 1.0
      */
-    public static function moveToTrash($id) {
-
+    public static function moveToTrash($id)
+    {
         if ($id) {
             //find record by id and apply sofdeleted (change status 0 to 1)
             $u = Doctrine_Core::getTable("Shop")->find($id);
@@ -313,8 +310,8 @@ class Shop extends BaseShop {
      * @author mkaur update by kuldeep
      * @version 1.0
      */
-    public static function permanentDeleteShop($id) {
-
+    public static function permanentDeleteShop($id)
+    {
         if ($id) {
 
             $shop = Doctrine_Core::getTable("Shop")->find($id);
@@ -333,9 +330,8 @@ class Shop extends BaseShop {
 
 
         # check if shop is deleted permanently
-        if($this->deleted == 1)
-        {
-        
+        if($this->deleted == 1) {
+
 
             $dela = Doctrine_Query::create()->delete()
              ->from('refShopCategory r')->where('r.shopid=' . $id)
@@ -380,8 +376,7 @@ class Shop extends BaseShop {
 
 
             # update chain if shop is associated with chain
-            if($this->chainItemId)
-            {
+            if($this->chainItemId) {
                 $chainItem = Doctrine_Core::getTable("ChainItem") ->findBySql(
                         'shopId = ? AND chainId = ?',
                         array($this->id,$this->chainId),
@@ -412,8 +407,8 @@ class Shop extends BaseShop {
      * @author kraj
      * @version 1.0
      */
-    public static function restoreShop($id) {
-
+    public static function restoreShop($id)
+    {
         if ($id) {
 
             $shop =  Doctrine_Core::getTable('Shop')->find($id);
@@ -446,8 +441,8 @@ class Shop extends BaseShop {
      * @author mkaur updateb by kraj
      * @version 1.0
      */
-    public static function searchKeyword($keyword, $flag) {
-
+    public static function searchKeyword($keyword, $flag)
+    {
         $data = Doctrine_Query::create()->select('s.name as name')
                 ->from("Shop s")
                 ->where('s.deleted= ?' , $flag )
@@ -471,8 +466,8 @@ class Shop extends BaseShop {
      * @author mkaur updateb by kraj
      * @version 1.0
      */
-    public static function searchsimilarStore($keyword, $flag, $selctedshop) {
-
+    public static function searchsimilarStore($keyword, $flag, $selctedshop)
+    {
         $data = Doctrine_Query::create()->select('s.name as name,s.id as id')
         ->from("Shop s")->where('s.deleted= ?' , $flag )
         ->andWhere("s.name LIKE ?", "$keyword%")
@@ -491,8 +486,8 @@ class Shop extends BaseShop {
      * @author kkumar
      * @version 1.0
      */
-    public function CreateNewShop($shopDetail) {
-
+    public function CreateNewShop($shopDetail)
+    {
         //echo "<pre>"; print_r($shopDetail);die;
         $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
         $this->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
@@ -565,17 +560,14 @@ class Shop extends BaseShop {
 
         if( isset( $shopDetail['onlineStatus'] )) {
 
-            if( $shopDetail['onlineStatus'] == 1)
-            {
+            if( $shopDetail['onlineStatus'] == 1) {
                 $this->status = 1;
                 $this->offlineSicne = null;
-            } else
-            {
+            } else {
 
                 $this->status = 0;
 
-                if( strlen($shopDetail['offlineSince'])  > 18  )
-                {
+                if( strlen($shopDetail['offlineSince'])  > 18  ) {
                     $this->offlineSicne = $shopDetail['offlineSince'] ;
                 } else {
                 $this->offlineSicne = date("Y-m-d h:m:s") ;
@@ -731,7 +723,7 @@ class Shop extends BaseShop {
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage_'. $this->id);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
 
-        if(!empty($shopDetail['id'])){
+        if(!empty($shopDetail['id'])) {
             $getcategory = Doctrine_Query::create()->select()->from('Shop')->where('id = '.$shopDetail['id'] )->fetchArray();
         }
         if(!empty($getcategory[0]['permaLink'])){
@@ -834,7 +826,8 @@ class Shop extends BaseShop {
      * upload image
      * @param $_FILES[index]  $file
      */
-    public function uploadImage($file,$path) {
+    public function uploadImage($file,$path)
+    {
         // generate upload path for images related to shop
         $uploadPath = $path;
         if (!file_exists(UPLOAD_IMG_PATH))
@@ -869,13 +862,11 @@ class Shop extends BaseShop {
         $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
         BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 132, 95, $path);
 
-        if($file=='bigLogoFile')
-        {
+        if($file=='bigLogoFile') {
             $path = ROOT_PATH . $uploadPath . "thum_bigLogoFile_" . $newName;
             BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 280, 197, $path);
         }
-        if($file=='smallLogoFile')
-        {
+        if($file=='smallLogoFile') {
             $path = ROOT_PATH . $uploadPath . "thum_smallLogoFile_" . $newName;
             BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 280, 100, $path);
         }
@@ -944,8 +935,8 @@ class Shop extends BaseShop {
      * @return array $shopList
      * @version 1.0
      */
-    public static function exportShopeList() {
-
+    public static function exportShopeList()
+    {
         $shopList = Doctrine_Query::create()->select('s.*,a.name as affname,c.name,rs.name')
                 ->from("Shop s")
                 ->leftJoin('s.affliatenetwork a')->leftJoin("s.category c")
@@ -970,7 +961,8 @@ class Shop extends BaseShop {
  * @version 1.0
  */
 
-    public static function  getOfferShopList(){
+    public static function getOfferShopList()
+    {
         $shopList = Doctrine_Query::create()
         ->select('s.name,s.logoId,l.name,l.path')
         ->from("Shop s")
@@ -986,8 +978,8 @@ class Shop extends BaseShop {
  * @param $shopId
  * @return shopDetail
  */
-public static function  getShopDetail ($shopId){
- 
+public static function getShopDetail($shopId)
+{
         $shopDetail = Doctrine_Query::create()
         ->select('s.notes,s.accountManagerName,s.deepLink,s.deeplinkstatus,s.strictConfirmation,a.name as affname,cat.*')
         ->from("Shop s")
@@ -1005,9 +997,8 @@ public static function  getShopDetail ($shopId){
   * @author Raman
   * @return shopDetail
   */
- public static function  getShopPermalinks(){
-
-
+ public static function getShopPermalinks()
+ {
     $permalinks = Doctrine_Query::create()
     ->select('s.permalink, s.howToUse')
     ->from("Shop s")
@@ -1023,9 +1014,8 @@ public static function  getShopDetail ($shopId){
   * @author Raman
   * @return shops permalinks
   */
- public static function  getAllShopPermalinks(){
-
-
+ public static function getAllShopPermalinks()
+ {
     $permalinks = Doctrine_Query::create()
     ->select('s.permalink')
     ->from("Shop s")
@@ -1047,8 +1037,8 @@ public static function  getShopDetail ($shopId){
   * @author sp singh
   * @version 1.0
   */
- public static function updateTotalViewCount(){
-
+ public static function updateTotalViewCount()
+ {
     $nowDate = date('Y-m-d 00:00:00');
     $data = Doctrine_Query::create()
     ->select('s.id')
@@ -1057,10 +1047,8 @@ public static function  getShopDetail ($shopId){
     ->fetchArray();
 
 
-    foreach ($data as $value)
-    {
-        if($value['clicks'])
-        {
+    foreach ($data as $value) {
+        if($value['clicks']) {
             $shopList = Doctrine_Query::create()
             ->update('Shop s')
             ->set('s.totalViewcount', $value['clicks'])
@@ -1145,8 +1133,8 @@ public static function  getShopDetail ($shopId){
   * @version 1.0
   * @return array $data
   */
- public static function getrecentstores($flag) {
-
+ public static function getrecentstores($flag)
+ {
     $shops = Doctrine_Query::create()->select('s.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
     ->from('Shop s')
     ->leftJoin('s.logo img')
@@ -1163,8 +1151,8 @@ public static function  getShopDetail ($shopId){
   * @return array $data
   * @version 1.0
   */
- public static function commonSearchStore($keyword,$limit) {
-
+ public static function commonSearchStore($keyword,$limit)
+ {
         $redirectKeywods = ExcludedKeyword::getExRedirectKeywordsList();
 
         $data = Doctrine_Query::create()
@@ -1188,8 +1176,8 @@ public static function  getShopDetail ($shopId){
 
   */
 
- public static function getAllStores() {
-
+ public static function getAllStores()
+ {
     $redirectKeywods = ExcludedKeyword::getExRedirectKeywordsList();
 
     $data = Doctrine_Query::create()
@@ -1211,7 +1199,8 @@ public static function  getShopDetail ($shopId){
   * @return array $data
   * @version 1.0
   */
- public static function commonSearchStoreForUserGenerated($keyword,$limit) {
+ public static function commonSearchStoreForUserGenerated($keyword,$limit)
+ {
     $data = Doctrine_Query::create()
     ->select('s.name as name,s.id as id,s.permaLink as permalink')
     ->from("Shop s")
@@ -1313,9 +1302,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
     return array('shop' => $shopname->name, 'flag' => $flag);
 
 }
-    public static function getAllShopDetails(){
-
-
+    public static function getAllShopDetails()
+    {
         $shopList = Doctrine_Query::create()
         ->select('s.name')
         ->from("Shop s")
@@ -1324,9 +1312,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
 
     }
 
-    public static function updateShop($name, $shop_text, $freDel, $delCost ){
-
-
+    public static function updateShop($name, $shop_text, $freDel, $delCost)
+    {
         $shopList = Doctrine_Query::create()
         ->update('Shop s')
         ->set('s.shoptext', '?1')
@@ -1341,8 +1328,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
 
     }
 
-    public static function deletechapters($id){
-
+    public static function deletechapters($id)
+    {
         $data = Doctrine_Query::create()
         ->delete('ShopHowToChapter s')
         ->where('s.id ='.$id)
@@ -1364,7 +1351,7 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @return array|boolean $data
      * @version 1.0
      */
-    public static function getStoreLinks($shopId , $checkRefUrl = false )
+    public static function getStoreLinks($shopId , $checkRefUrl = false)
     {
 
         $data = Doctrine_Query::create()->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
@@ -1374,11 +1361,9 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
 
         $network = Shop::getAffliateNetworkDetail( $shopId );
 
-        if($checkRefUrl)
-        {
+        if($checkRefUrl) {
             # retur false if s shop is not associated with any network
-            if(! isset($network['affliatenetwork']))
-            {
+            if(! isset($network['affliatenetwork'])) {
                 return false ;
             }
 
@@ -1394,10 +1379,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
         }
 
         $subid = "" ;
-        if( isset($network['affliatenetwork']) )
-        {
-            if(!empty($network['subid']) )
-            {
+        if( isset($network['affliatenetwork']) ) {
+            if(!empty($network['subid']) ) {
                  $subid = "&". $network['subid'] ;
 
 
@@ -1444,8 +1427,7 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
         $ip = ip2long($clientIP);
 
         # save conversion detail if an offer is associated with a network
-        if(Shop::getStoreLinks($id , true ))
-        {
+        if(Shop::getStoreLinks($id , true )) {
 
             # check for previous cnversion of same ip
             $data = Doctrine_Query::create()
@@ -1473,8 +1455,7 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
 
                 # update existing conversion detail
                 $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-                if($cnt)
-                {
+                if($cnt) {
                     $cnt->utma = $_COOKIE["__utma"];
                     $cnt->utmz = $_COOKIE["__utmz"];
                     $time = time();
@@ -1520,7 +1501,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @version 1.0
      */
 
-    public static function  getShopsExclusive($shopIds){
+    public static function getShopsExclusive($shopIds)
+    {
         $shopList = Doctrine_Query::create()
         ->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
         ->from("Shop s")
@@ -1563,7 +1545,7 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @author Surinderpal Singh
      * @return array array of urls
      */
-    public static  function getAllUrls($id)
+    public static function getAllUrls($id)
     {
         $shop  = Doctrine_Query::create()
                     ->select("s.id, s.permaLink,s.contentManagerId, s.howToUse,c.permaLink, o.extendedOffer, o.extendedUrl,")
@@ -1579,53 +1561,43 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
         $urlsArray = array();
 
         # check for related shop permalink
-        if(isset($shop['permaLink']))
-        {
+        if(isset($shop['permaLink'])) {
             $urlsArray[] = $shop['permaLink'];
         }
 
         # check for ho to use guide
-        if($shop['howToUse'])
-        {
+        if($shop['howToUse']) {
             # check for extende offer url
-            if( isset($shop['permaLink'])  && strlen( $shop['permaLink'] ) > 0 )
-            {
+            if( isset($shop['permaLink'])  && strlen( $shop['permaLink'] ) > 0 ) {
                 $urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'how-to') .'/'.$shop['permaLink'];
             }
         }
 
         # check if an editor  has permalink then add it into array
-        if(isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 )
-        {
+        if(isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 ) {
             $urlsArray[] = $redactie['permalink'] ;
         }
 
         # check an offerr has one or more categories
-        if(isset($shop['category']) && count($shop['category']) > 0)
-        {
+        if(isset($shop['category']) && count($shop['category']) > 0) {
 
             $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'categorieen') .'/' ;
 
             # traverse through all catgories
-            foreach($shop['category'] as $value)
-            {
+            foreach($shop['category'] as $value) {
                 # check if a category has permalink then add it into array
-                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 )
-                {
+                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
                     $urlsArray[] = $cetgoriesPage . $value['permaLink'] ;
                 }
             }
         }
 
         # check extended offer of this shop
-        if(isset($shop['offer']) && count($shop['offer']) > 0)
-        {
+        if(isset($shop['offer']) && count($shop['offer']) > 0) {
             # traverse through all offer
-            foreach( $shop['offer'] as $value)
-            {
+            foreach( $shop['offer'] as $value) {
                 # check the offer is extended or not
-                if(isset($value['extendedOffer']) && $value['extendedOffer']  )
-                {
+                if(isset($value['extendedOffer']) && $value['extendedOffer']  ) {
                     $urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'deals') .'/'. $value['extendedUrl'] ;
                 }
             }
@@ -1639,14 +1611,13 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @author blal
      * @version 1.0
      */
-    public static function changeStatus($params){
-
+    public static function changeStatus($params)
+    {
         $status = $params['status'] == 'offline' ? '0' : '1';
 
         $shop = Doctrine_Core::getTable("Shop")->find($params['id']);
 
-        if($params['status'] == 'offline')
-        {
+        if($params['status'] == 'offline') {
             $date = date('Y-m-d H:i:s')  ;
             $status = 0 ;
         } else {
@@ -1703,8 +1674,7 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
             $data = $this->getLastModified();
 
             # update chain if shop is associated with chain
-            if($this->chainItemId)
-            {
+            if($this->chainItemId) {
 
                 $chainItem = Doctrine_Core::getTable("ChainItem") ->findBySql(
                                     'shopId = ? AND id = ?',
@@ -1712,8 +1682,7 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
                                     Doctrine::HYDRATE_RECORD)->getData();
 
                 # verify a valid chain item exists
-                if(isset($chainItem[0]))
-                {
+                if(isset($chainItem[0])) {
                      $chainItem[0]->update($data,$this->toArray(false));
                 }
 
@@ -1738,8 +1707,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @version 1.0
      */
 
-    public static function getAmountShopsCreatedLastWeek(){
-
+    public static function getAmountShopsCreatedLastWeek()
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
@@ -1766,8 +1735,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @version 1.0
      */
 
-    public static function getTotalAmountOfShops(){
-
+    public static function getTotalAmountOfShops()
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
@@ -1787,8 +1756,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @version 1.0
      */
 
-    public static function getTotalAmountOfShopsCodeOnline(){
-
+    public static function getTotalAmountOfShopsCodeOnline()
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
@@ -1813,8 +1782,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @version 1.0
      */
 
-    public static function getTotalAmountOfShopsCodeOnlineThisWeek(){
-
+    public static function getTotalAmountOfShopsCodeOnlineThisWeek()
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         // - 7 days from today
@@ -1842,8 +1811,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @version 1.0
      */
 
-    public static function getTotalAmountOfShopsCodeOnlineLastWeek(){
-
+    public static function getTotalAmountOfShopsCodeOnlineLastWeek()
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
@@ -1872,8 +1841,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @return integer
      * @version 1.0
      */
-    public static function getDaysSinceShopWithoutOnlneOffers($shopId){
-
+    public static function getDaysSinceShopWithoutOnlneOffers($shopId)
+    {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
@@ -1936,8 +1905,8 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
      * @return integer
      * @version 1.0
      */
-    public static function getTimesShopFavourite($shopId) {
-
+    public static function getTimesShopFavourite($shopId)
+    {
         $data = Doctrine_Query::create()
                 ->select("count(*)")
                 ->from('FavoriteShop s')

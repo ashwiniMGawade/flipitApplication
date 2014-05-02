@@ -4,7 +4,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
     protected $moduleName = '';
     protected $localeDirectoryName ='';
     protected $frontController = '';
-    
+
     /**
      * This function is called once after router shutdown. It automatically
      * sets the layout for the default MVC or a module-specific layout. If
@@ -13,7 +13,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
      * set the layout in the controller itself.
      *
      * @param Zend_Controller_Request_Abstract $request
-     * 
+     *
      */
     public function routeShutdown(Zend_Controller_Request_Abstract $request)
     {
@@ -54,7 +54,7 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
         $layout->setLayoutPath(self::getLayoutPath());
         $layout->setLayout('layout');
     }
-    
+
     public function getLayoutPath()
     {
         if ($this->moduleName == 'default' || $this->moduleName == null) {

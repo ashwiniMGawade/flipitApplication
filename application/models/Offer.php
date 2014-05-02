@@ -190,7 +190,7 @@ class Offer extends BaseOffer
         endforeach;
         return $NewOfferOfRelatedCats;
     }
-    
+
     public static function sliceOfferByLimit($mergeOffers, $limit)
     {
         $offers = array();
@@ -204,7 +204,7 @@ class Offer extends BaseOffer
         $slicedOffer = array_slice($offers, 0, $limit);
         return $slicedOffer;
     }
-    
+
     public static function getTop20Offers()
     {
         $cachedKeyForTop20 =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
@@ -234,7 +234,7 @@ class Offer extends BaseOffer
         return $offers;
     }
     /**
-     * get top kortingscode same as home page but it displayed on shop 
+     * get top kortingscode same as home page but it displayed on shop
      * page(only used when a shop is no money with no offers)
      *
      * offers will be displayed only when an offer's category == shop's category
@@ -265,12 +265,12 @@ class Offer extends BaseOffer
         ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
         ->andWhere('s.deleted=0')
         ->andWhere('o.offline = 0');
-        
+
         if (!empty($shopCategories)) {
             $topCouponCodes = $topCouponCodes->leftJoin('s.refShopCategory sc')
             ->andWhereIn('sc.categoryId', $shopCategories);
         }
-        
+
         $topCouponCodes = $topCouponCodes->andWhere('s.status = 1')
             ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
             ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
@@ -282,14 +282,14 @@ class Offer extends BaseOffer
             ->fetchArray();
         return $topCouponCodes;
     }
-  
+
     /**
      * Get latest voucher codes for common function.
-     * 
+     *
      * @return array $data
      * @version 1.0
      */
-    
+
     public static function getNewestOffers($type, $limit, $shopId=0, $userId="")
     {
         $currentDateAndTime = date('Y-m-d H:i:s');
@@ -330,7 +330,7 @@ class Offer extends BaseOffer
         $newestCouponCodes = $newestCouponCodes->limit($limit)->fetchArray();
         return $newestCouponCodes;
     }
-    
+
     /**
      * update zend varnish when all codes got expired
      *
@@ -361,10 +361,10 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
     }
-    
+
     /**
      * Function getSpecialPageOffers
-     * 
+     *
      * get member only $specialOffers
      */
     public static function getSpecialPageOffers($specialPage)
@@ -560,8 +560,8 @@ class Offer extends BaseOffer
         $offersConstraintsQuery = self::notExclusiveCodeConstraint($offersConstraintsQuery);
         return $offersConstraintsQuery;
     }
-    
-    
+
+
     public static function noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery)
     {
         $offersConstraintsQuery = self::noEditorPicksCodeConstraint($offersConstraintsQuery);

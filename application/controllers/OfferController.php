@@ -69,7 +69,7 @@ class OfferController extends Zend_Controller_Action
             $facebookImage = 'flipit.png';
             $facebookLocale = LOCALE;
         }
-        
+
         $currentDate = date('Y-m-d');
         $topOfferFromStore = Offer::getrelatedOffers($couponDetails[0]['shopId'], $currentDate);
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularShopWidget();
@@ -81,7 +81,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->headTitle(trim($couponDetails[0]['extendedTitle']));
         $this->view->headMeta()->appendName('description', trim($couponDetails[0]['extendedMetaDescription']));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        
+
         $this->view->facebookTitle = $couponDetails[0]['title'];
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
         $this->view->facebookImage = $facebookImage;
@@ -98,7 +98,7 @@ class OfferController extends Zend_Controller_Action
 
     /**
      * override views based on modules if exists
-     * 
+     *
      */
     public function offerDetailAction()
     {
@@ -106,7 +106,7 @@ class OfferController extends Zend_Controller_Action
         $offerParameters = $this->_getAllParams();
         $this->view->params = $offerParameters;
         $offerObject = new Offer();
-        
+
         if (isset($offerParameters['imagePath']) && !empty($offerParameters['imagePath'])) {
             $offerImagePath = $offerParameters['imagePath'];
             $this->view->offerImagePath = $offerImagePath;
@@ -132,7 +132,7 @@ class OfferController extends Zend_Controller_Action
         } else {
             $this->view->couponCode = $offerDetail[0]['couponCode']  ;
         }
-    
+
     }
     /**
      * Get offer records from the database of by cache using backend key.
@@ -146,7 +146,7 @@ class OfferController extends Zend_Controller_Action
             $this->view->layout()->customHeader = "\n" . $offerPage->customHeader;
         }
         $params = $this->_getAllParams();
-        
+
         if (LOCALE == '') {
             $facebookImage = 'logo_og.png';
             $facebookLocale = '';
@@ -174,7 +174,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->facebookDescription = trim($offerPage->metaDescription);
         $this->view->facebookLocale = $facebookLocale;
         $this->view->twitterDescription = trim($offerPage->metaDescription);
-     
+
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
         $this->view->offersType = 'newestOffer';
@@ -190,27 +190,27 @@ class OfferController extends Zend_Controller_Action
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
-    
-    public function init() {
-    
+
+    public function init()
+    {
         $module   = strtolower($this->getRequest()->getParam('lang'));
         $controller = strtolower($this->getRequest()->getControllerName());
         $action     = strtolower($this->getRequest()->getActionName());
-    
+
         # check module specific view exists or not
         if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-    
+
             # set module specific view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-        }
-        else{
-    
+        } else{
+
             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
     }
-    
-    public function feedbackAction(){
+
+    public function feedbackAction()
+    {
         $params = $this->_getAllParams();
         $vote = new Vote();
         echo $votepercentage =  $vote->addfeedback($params);
@@ -224,15 +224,16 @@ class OfferController extends Zend_Controller_Action
    * @author kraj
    * @version 1.0
    */
-    public function sendiscountcouponAction() {
+    public function sendiscountcouponAction()
+    {
         $params = $this->_getAllParams ();
         $obj = new UserGeneratedOffer ();
         $obj->addOffer($params );
         die();
     }
 
-    public function mostpopularofferAction() {
-
+    public function mostpopularofferAction()
+    {
         ViewCount::generatePopularCode ();
 
         $popularOffer = FrontEnd_Helper_viewHelper::commonfrontendGetPopularCode ();
@@ -247,13 +248,12 @@ class OfferController extends Zend_Controller_Action
  * @author mkaur updated by kraj
  * @version 1.0
  */
-    public function popularofferAction() {
-
+    public function popularofferAction()
+    {
         $page = Page::getPageFromPageAttrInOffer(5);
         $this->view->pageTitle = @$page->pageTitle;
 
-        if(@$page->customHeader)
-        {
+        if(@$page->customHeader) {
             $this->view->layout()->customHeader = "\n" . @$page->customHeader;
         }
 
@@ -265,8 +265,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->fbtitle = @$page->pageTitle;
         $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('populair');
 
-        if(LOCALE == '' )
-        {
+        if(LOCALE == '' ) {
                 $fbImage = 'logo_og.png';
         }else{
                 $fbImage = 'flipit.png';
@@ -328,7 +327,8 @@ class OfferController extends Zend_Controller_Action
  * Varify existence of favorite shop in the table.
  * @author mkaur
  */
-    public function countshopAction(){
+    public function countshopAction()
+    {
         $params = $this->_getAllParams ();
     if($params){
         $countShop = Offer::countFavShop($params['id']);
@@ -341,7 +341,8 @@ class OfferController extends Zend_Controller_Action
  * Add the favorite shop in database
  * @author mkaur
  */
-    public function addtofavoriteAction(){
+    public function addtofavoriteAction()
+    {
         $params = $this->_getAllParams ();
         $add = Offer::addFavoriteShop($params['shopId'],$params['flag']);
         echo Zend_Json::encode($add);
@@ -351,22 +352,24 @@ class OfferController extends Zend_Controller_Action
  * Count Vote Percentage
  * @author mkaur
  */
-    public function countvotesAction(){
+    public function countvotesAction()
+    {
         $id = $this->getRequest()->getParam('id');
         $countVote = Offer::countVotes($id);
         echo Zend_Json::encode($countVote);
         die();
     }
 
-    public function clearcacheAction(){
+    public function clearcacheAction()
+    {
         $cache = Zend_Registry::get('cache');
         $cache->clean();
         echo 'cache is cleared';
         exit;
     }
 
-    public function deleteexpiredAction(){
-
+    public function deleteexpiredAction()
+    {
         set_time_limit(10000);
         $current_date = date('Y-m-d h:m:s',strtotime('1-1-2011'));
         $data = Doctrine_Query::create()

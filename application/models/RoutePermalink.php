@@ -11,48 +11,46 @@
  */
 class RoutePermalink extends BaseRoutePermalink
 {
-	/**
-	 * Retrieve permalink and exact link on the basis of REQUEST_URI
-	 * @author cbhopal
-	 * @version 1.0
-	 */
-	public static function getRoute($permalink){
+    /**
+     * Retrieve permalink and exact link on the basis of REQUEST_URI
+     * @author cbhopal
+     * @version 1.0
+     */
+    public static function getRoute($permalink)
+    {
+        $permalink= trim($permalink, '/');
+        $data = Doctrine_Query::create()
+                        ->select()
+                        ->from('RoutePermalink')
+                        ->where("permalink = ?", $permalink)
+                        ->fetchArray();
+        return $data;
+    }
+    public static function getPageProperties($permalink)
+    {
+        $permalink= trim($permalink, '/');
+        $data = Doctrine_Query::create()->select('p.*')
+        ->from('Page p')
+        ->where("permalink = ?", $permalink)
+        ->orderBy('id DESC')
+        ->limit(1)
+        ->fetchArray();
+        return $data;
+    }
+    public static function getPermalinks($exactLink)
+    {
+        $q = Doctrine_Query::create()
+        ->select('rp.permalink')->from('RoutePermalink rp')
+        ->where("rp.exactlink='?'" , $exactLink )->andWhere('deleted = 0')->fetchArray();
+        return $q;
+    }
 
-
-		$permalink= trim($permalink, '/');
-		$data = Doctrine_Query::create()
-						->select()
-						->from('RoutePermalink')
-						->where("permalink = ?", $permalink)
-						->fetchArray();
-		return $data;
-	}
-	public static function getPageProperties($permalink){
-
-		$permalink= trim($permalink, '/');
-		$data = Doctrine_Query::create()->select('p.*')
-		->from('Page p')
-		->where("permalink = ?", $permalink)
-		->orderBy('id DESC')
-		->limit(1)
-		->fetchArray();
-		return $data;
-	}
-	public static function getPermalinks($exactLink){
-
-		$q = Doctrine_Query::create()
-		->select('rp.permalink')->from('RoutePermalink rp')
-		->where("rp.exactlink='?'" , $exactLink )->andWhere('deleted = 0')->fetchArray();
-		return $q;
-	}
-
-	public static function getdefaultPageProperties($slug){
-
-		$data = Doctrine_Query::create()->select('p.*')
-		->from('Page p')
-		->where("slug = ?", $slug)
-		->fetchArray();
-		return $data;
-	}
+    public static function getdefaultPageProperties($slug)
+    {
+        $data = Doctrine_Query::create()->select('p.*')
+        ->from('Page p')
+        ->where("slug = ?", $slug)
+        ->fetchArray();
+        return $data;
+    }
 }
-?>

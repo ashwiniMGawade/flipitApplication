@@ -6,471 +6,467 @@
  * @author Surinderpal Singh
  *
  */
-class OfferExport {
+class OfferExport
+{
+    protected $_localePath = '/';
+    protected $_trans = null;
 
-	protected $_localePath = '/';
-	protected $_trans = null;
+
+    public function __construct()
+    {
+    /*
+    $domain1 = $_SERVER['HOSTNAME'];
+    $domain = 'http://www.'.$domain1;
+    */
 
+    // Define path to application directory
+    defined('APPLICATION_PATH')
+    || define('APPLICATION_PATH',
+            dirname(dirname(__FILE__)));
+
+    defined('LIBRARY_PATH')
+    || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
 
-	function __construct() {
+    defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+
+    // Define application environment
+    defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV',
+            (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
+                    : 'production'));
 
+
+    //Ensure library/ is on include_path
+    set_include_path(
+            implode(PATH_SEPARATOR,
+                    array(realpath(APPLICATION_PATH . '/../library'),
+                            get_include_path(),)));
+        set_include_path(
+                implode(PATH_SEPARATOR,
+                        array(realpath(DOCTRINE_PATH), get_include_path(),)));
 
-	/*
-	$domain1 = $_SERVER['HOSTNAME'];
-	$domain = 'http://www.'.$domain1;
-	*/
+        /** Zend_Application */
+        require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
+        require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
+        require_once (LIBRARY_PATH . '/Zend/Application.php');
+        require_once(DOCTRINE_PATH . '/Doctrine.php');
 
-	// Define path to application directory
-	defined('APPLICATION_PATH')
-	|| define('APPLICATION_PATH',
-			dirname(dirname(__FILE__)));
+        // Create application, bootstrap, and run
+        $application = new Zend_Application(APPLICATION_ENV,
+                APPLICATION_PATH . '/configs/application.ini');
 
-	defined('LIBRARY_PATH')
-	|| define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
+        $connections = $application->getOption('doctrine');
+        spl_autoload_register(array('Doctrine', 'autoload'));
 
-	defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
+        $manager = Doctrine_Manager::getInstance();
 
-	// Define application environment
-	defined('APPLICATION_ENV')
-	|| define('APPLICATION_ENV',
-			(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-					: 'production'));
+        $imbull = $connections['imbull'];
 
+        // cycle htoruh all site database
+        $DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
 
-	//Ensure library/ is on include_path
-	set_include_path(
-			implode(PATH_SEPARATOR,
-					array(realpath(APPLICATION_PATH . '/../library'),
-							get_include_path(),)));
-		set_include_path(
-				implode(PATH_SEPARATOR,
-						array(realpath(DOCTRINE_PATH), get_include_path(),)));
 
-		/** Zend_Application */
-		require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
-		require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
-		require_once (LIBRARY_PATH . '/Zend/Application.php');
-		require_once(DOCTRINE_PATH . '/Doctrine.php');
+        // cycle htoruh all site database
+        foreach ( $connections as $key => $connection ) {
+            // check database is being must be site
+            if ($key != 'imbull') {
+                try {
+
+                    $this->exportingShops( $connection ['dsn'], $key ,$imbull );
+                } catch ( Exception $e ) {
+
+                    echo $e->getMessage ();
+                    echo "\n\n";
+                }
+                echo "\n\n";
+            }
+
+        }
+
+
+        $manager->closeConnection($DMC1);
+    }
+
+    protected function exportingShops($dsn, $key,$imbull)
+    {
+        if ($key == 'en') {
+            $this->_localePath = '';
+            $suffix = "" ;
+        } else {
+            $this->_localePath = $key . "/";
+            $suffix = "_" . strtoupper($key) ;
+        }
+
+        defined('PUBLIC_PATH')
+        || define('PUBLIC_PATH',
+                dirname(dirname(dirname(__FILE__)))."/public/");
+
+        $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
+        spl_autoload_register(array('Doctrine', 'modelsAutoload'));
+
+        $manager = Doctrine_Manager::getInstance();
+        //Doctrine_Core::loadModels(APPLICATION_PATH . '/models/generated');
 
-		// Create application, bootstrap, and run
-		$application = new Zend_Application(APPLICATION_ENV,
-				APPLICATION_PATH . '/configs/application.ini');
+        $manager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING, Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
+        $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
+        $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
+        Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
+
+        $cutsomLocale = Signupmaxaccount::getAllMaxAccounts();
+        $cutsomLocale = !empty($cutsomLocale[0]['locale']) ? $cutsomLocale[0]['locale'] : 'nl_NL';
 
-		$connections = $application->getOption('doctrine');
-		spl_autoload_register(array('Doctrine', 'autoload'));
+        $this->_trans = new Zend_Translate(array(
+                'adapter' => 'gettext',
+                'disableNotices' => true));
 
-		$manager = Doctrine_Manager::getInstance();
+        $this->_trans->addTranslation(
+                array(
+                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $suffix . '.mo',
+                        'locale' => $cutsomLocale,
+                )
+        );
 
-		$imbull = $connections['imbull'];
+        $this->_trans->addTranslation(
+                array(
+                        'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $suffix . '.mo',
+                        'locale' => $cutsomLocale ,
+                )
+        );
 
-		// cycle htoruh all site database
-		$DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
 
+        $date = new Zend_Date();
+        $month = $date->get(Zend_Date::MONTH_NAME);
+        $year = $date->get(Zend_Date::YEAR);
+        $day = $date->get(Zend_Date::DAY);
 
-		// cycle htoruh all site database
-		foreach ( $connections as $key => $connection ) {
-			// check database is being must be site
-			if ($key != 'imbull') {
-				try {
 
-					$this->exportingShops( $connection ['dsn'], $key ,$imbull );
-				} catch ( Exception $e ) {
+        defined ( 'PUBLIC_PATH' ) || define ( 'PUBLIC_PATH', dirname ( dirname ( dirname ( __FILE__ ) ) ) . "/public/" );
 
-					echo $e->getMessage ();
-					echo "\n\n";
-				}
-				echo "\n\n";
-			}
 
-		}
+        ini_set('memory_limit', '-1');
 
+        //setting to no time limit,
+        set_time_limit(0);
 
-		$manager->closeConnection($DMC1);
-	}
+        //get all offer from database
+        $data = Offer::exportofferList();
 
-	protected function exportingShops($dsn, $key,$imbull) {
+        //echo "<pre>";
+        //print_r($data); die;
+        //create object of phpExcel
 
+        $objPHPExcel = new PHPExcel();
+        $objPHPExcel->setActiveSheetIndex(0);
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->_trans->translate('Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('B1', $this->_trans->translate('Shop'));
+        $objPHPExcel->getActiveSheet()->setCellValue('C1', $this->_trans->translate('Type'));
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', $this->_trans->translate('Visibility'));
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', $this->_trans->translate('Extended'));
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', $this->_trans->translate('Start'));
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', $this->_trans->translate('End'));
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', $this->_trans->translate('Clickouts'));
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', $this->_trans->translate('Author'));
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', $this->_trans->translate('Coupon Code'));
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', $this->_trans->translate('Ref URL'));
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', $this->_trans->translate('Exclusive'));
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', $this->_trans->translate('Editor Picks'));
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', $this->_trans->translate('User Generated'));
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', $this->_trans->translate('Approved'));
+        $objPHPExcel->getActiveSheet()->setCellValue('P1', $this->_trans->translate('Offline'));
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', $this->_trans->translate('Created At'));
+        $objPHPExcel->getActiveSheet()->setCellValue('R1', $this->_trans->translate('Deeplink'));
+        $objPHPExcel->getActiveSheet()->setCellValue('S1', $this->_trans->translate('Terms & Conditions'));
 
-		if ($key == 'en') {
-			$this->_localePath = '';
-			$suffix = "" ;
-		} else {
-			$this->_localePath = $key . "/";
-			$suffix = "_" . strtoupper($key) ;
-		}
+        $column = 2;
+        $row = 2;
 
-		defined('PUBLIC_PATH')
-		|| define('PUBLIC_PATH',
-				dirname(dirname(dirname(__FILE__)))."/public/");
+            // loop for each offer
+        foreach ($data as $offer) {
 
-		$DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
-		spl_autoload_register(array('Doctrine', 'modelsAutoload'));
+            // condition apply on offer
+            $title = '';
+            if ($offer['title'] == '' || $offer['title'] == 'undefined'
+                    || $offer['title'] == null || $offer['title'] == '0') {
 
-		$manager = Doctrine_Manager::getInstance();
-		//Doctrine_Core::loadModels(APPLICATION_PATH . '/models/generated');
-
-		$manager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING, Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
-		$manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
-		$manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
-		Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-
-		$cutsomLocale = Signupmaxaccount::getAllMaxAccounts();
-		$cutsomLocale = !empty($cutsomLocale[0]['locale']) ? $cutsomLocale[0]['locale'] : 'nl_NL';
-
-		$this->_trans = new Zend_Translate(array(
-				'adapter' => 'gettext',
-				'disableNotices' => true));
+                $title = '';
 
-		$this->_trans->addTranslation(
-				array(
-						'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $suffix . '.mo',
-						'locale' => $cutsomLocale,
-				)
-		);
-
-		$this->_trans->addTranslation(
-				array(
-						'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $suffix . '.mo',
-						'locale' => $cutsomLocale ,
-				)
-		);
+            } else {
 
+                $title = $offer['title'];
+            }
+            $shopname = '';
+            if (isset($offer['shop'])) {
 
-		$date = new Zend_Date();
-		$month = $date->get(Zend_Date::MONTH_NAME);
-		$year = $date->get(Zend_Date::YEAR);
-		$day = $date->get(Zend_Date::DAY);
+                if ($offer['shop']['name'] == ''
+                        || $offer['shop']['name'] == 'undefined'
+                        || $offer['shop']['name'] == null
+                        || $offer['shop']['name'] == '0') {
 
+                    $shopname = '';
 
-		defined ( 'PUBLIC_PATH' ) || define ( 'PUBLIC_PATH', dirname ( dirname ( dirname ( __FILE__ ) ) ) . "/public/" );
+                } else {
 
+                    $shopname = $offer['shop']['name'];
+                }
+            }
+            $type = '';
+            if ($offer['discountType'] == 'CD') {
 
-		ini_set('memory_limit', '-1');
+                $type = $this->_trans->translate('Coupon');
 
-		//setting to no time limit,
-		set_time_limit(0);
+            } elseif ($offer['discountType'] == 'SL') {
 
-		//get all offer from database
-		$data = Offer::exportofferList();
+                $type = $this->_trans->translate('Sale');
 
-		//echo "<pre>";
-		//print_r($data); die;
-    	//create object of phpExcel
+            } else {
 
-		$objPHPExcel = new PHPExcel();
-		$objPHPExcel->setActiveSheetIndex(0);
-		$objPHPExcel->getActiveSheet()->setCellValue('A1', $this->_trans->translate('Title'));
-		$objPHPExcel->getActiveSheet()->setCellValue('B1', $this->_trans->translate('Shop'));
-		$objPHPExcel->getActiveSheet()->setCellValue('C1', $this->_trans->translate('Type'));
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', $this->_trans->translate('Visibility'));
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', $this->_trans->translate('Extended'));
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', $this->_trans->translate('Start'));
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', $this->_trans->translate('End'));
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', $this->_trans->translate('Clickouts'));
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', $this->_trans->translate('Author'));
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', $this->_trans->translate('Coupon Code'));
-		$objPHPExcel->getActiveSheet()->setCellValue('K1', $this->_trans->translate('Ref URL'));
-		$objPHPExcel->getActiveSheet()->setCellValue('L1', $this->_trans->translate('Exclusive'));
-		$objPHPExcel->getActiveSheet()->setCellValue('M1', $this->_trans->translate('Editor Picks'));
-		$objPHPExcel->getActiveSheet()->setCellValue('N1', $this->_trans->translate('User Generated'));
-		$objPHPExcel->getActiveSheet()->setCellValue('O1', $this->_trans->translate('Approved'));
-		$objPHPExcel->getActiveSheet()->setCellValue('P1', $this->_trans->translate('Offline'));
-		$objPHPExcel->getActiveSheet()->setCellValue('Q1', $this->_trans->translate('Created At'));
-		$objPHPExcel->getActiveSheet()->setCellValue('R1', $this->_trans->translate('Deeplink'));
-		$objPHPExcel->getActiveSheet()->setCellValue('S1', $this->_trans->translate('Terms & Conditions'));
+                $type = $this->_trans->translate('Printable');
+            }
+            // get visability name from array
+            $Visability = '';
+            if ($offer['Visability'] == 'DE') {
 
-    	$column = 2;
-    	$row = 2;
+                $Visability = $this->_trans->translate('Default');
 
-			// loop for each offer
-		foreach ($data as $offer) {
+            } else {
 
-			// condition apply on offer
-			$title = '';
-			if ($offer['title'] == '' || $offer['title'] == 'undefined'
-					|| $offer['title'] == null || $offer['title'] == '0') {
+                $Visability = $this->_trans->translate('Members');
+            }
 
-				$title = '';
+            // get extended from array
+            $Extended = '';
+            if ($offer['extendedOffer'] == true) {
 
-			} else {
+                $Extended = $this->_trans->translate('Yes');
 
-				$title = $offer['title'];
-			}
-			$shopname = '';
-			if (isset($offer['shop'])) {
+            } else {
 
-				if ($offer['shop']['name'] == ''
-						|| $offer['shop']['name'] == 'undefined'
-						|| $offer['shop']['name'] == null
-						|| $offer['shop']['name'] == '0') {
+                $Extended = $this->_trans->translate('No');
+            }
 
-					$shopname = '';
+            // create start date format
+            $startDate = date("d-m-Y", strtotime($offer['startDate']));
+            // end date format
+            $endDate = date("d-m-Y", strtotime($offer['endDate']));
+            // get Clickouts from array
+            $Clickouts = $offer['Count'];
+            // get Author from array
+            $Author = '';
+            if (isset($offer['authorName'])) {
 
-				} else {
+                $Author = $offer['authorName'];
 
-					$shopname = $offer['shop']['name'];
-				}
-			}
-			$type = '';
-			if ($offer['discountType'] == 'CD') {
+            } else {
 
-				$type = $this->_trans->translate('Coupon');
+                $Author = '';
+            }
 
-			} else if ($offer['discountType'] == 'SL') {
+            $code = '';
+            if ($offer['couponCode'] == '' || $offer['couponCode'] == 'undefined'
+                    || $offer['couponCode'] == null) {
 
-				$type = $this->_trans->translate('Sale');
+                $code = '';
 
-			} else {
+            } else {
 
-				$type = $this->_trans->translate('Printable');
-			}
-			// get visability name from array
-			$Visability = '';
-			if ($offer['Visability'] == 'DE') {
+                $code = $offer['couponCode'];
+            }
 
-				$Visability = $this->_trans->translate('Default');
+            $refUrl = '';
+            if ($offer['refURL'] == '' || $offer['refURL'] == 'undefined'
+                    || $offer['refURL'] == null) {
 
-			} else {
+                $refUrl = '';
 
-				$Visability = $this->_trans->translate('Members');
-			}
+            } else {
 
-			// get extended from array
-			$Extended = '';
-			if ($offer['extendedOffer'] == true) {
+                $refUrl = $offer['refURL'];
+            }
 
-				$Extended = $this->_trans->translate('Yes');
+            $exclusive = '';
+            if ($offer['exclusiveCode'] == true) {
 
-			} else {
+                $exclusive = $this->_trans->translate('Yes');
 
-				$Extended = $this->_trans->translate('No');
-			}
+            } else {
 
-			// create start date format
-			$startDate = date("d-m-Y", strtotime($offer['startDate']));
-			// end date format
-			$endDate = date("d-m-Y", strtotime($offer['endDate']));
-			// get Clickouts from array
-			$Clickouts = $offer['Count'];
-			// get Author from array
-			$Author = '';
-			if (isset($offer['authorName'])) {
+                $exclusive = $this->_trans->translate('No');
+            }
 
-				$Author = $offer['authorName'];
+            $editor = '';
+            if ($offer['editorPicks'] == true) {
 
-			} else {
+                $editor = $this->_trans->translate('Yes');
 
-				$Author = '';
-			}
+            } else {
 
-			$code = '';
-			if ($offer['couponCode'] == '' || $offer['couponCode'] == 'undefined'
-					|| $offer['couponCode'] == null) {
+                $editor = $this->_trans->translate('No');
+            }
 
-				$code = '';
+            $usergenerated = '';
+            if ($offer['userGenerated'] == true) {
 
-			} else {
+                $usergenerated = $this->_trans->translate('Yes');
 
-				$code = $offer['couponCode'];
-			}
+            } else {
 
-			$refUrl = '';
-			if ($offer['refURL'] == '' || $offer['refURL'] == 'undefined'
-					|| $offer['refURL'] == null) {
+                $usergenerated = $this->_trans->translate('No');
+            }
 
-				$refUrl = '';
+            $approved = '';
+            if ($offer['approved'] == true) {
 
-			} else {
+                $approved = $this->_trans->translate('Yes');
 
-				$refUrl = $offer['refURL'];
-			}
+            } else {
 
-			$exclusive = '';
-			if ($offer['exclusiveCode'] == true) {
+                $approved = $this->_trans->translate('No');
+            }
 
-				$exclusive = $this->_trans->translate('Yes');
+            $offline = '';
+            if ($offer['offline'] == true) {
 
-			} else {
+                $offline = $this->_trans->translate('Yes');
 
-				$exclusive = $this->_trans->translate('No');
-			}
+            } else {
 
-			$editor = '';
-			if ($offer['editorPicks'] == true) {
+                $offline = $this->_trans->translate('No');
+            }
 
-				$editor = $this->_trans->translate('Yes');
+            $created_at = '';
+            if ($offer['created_at'] == '' || $offer['created_at'] == 'undefined'
+                    || $offer['created_at'] == null) {
 
-			} else {
+                $created_at = '';
 
-				$editor = $this->_trans->translate('No');
-			}
+            } else {
 
-			$usergenerated = '';
-			if ($offer['userGenerated'] == true) {
+                $created_at = date("d-m-Y", strtotime($offer['created_at']));
+            }
 
-				$usergenerated = $this->_trans->translate('Yes');
+            $deeplink = '';
+            if ($offer['shop']['deepLink'] == '' || $offer['shop']['deepLink'] == 'undefined'
+                    || $offer['shop']['deepLink'] == null) {
 
-			} else {
+                $deeplink = '';
 
-				$usergenerated = $this->_trans->translate('No');
-			}
+            } else {
 
-			$approved = '';
-			if ($offer['approved'] == true) {
+                $deeplink = $offer['shop']['deepLink'];
+            }
 
-				$approved = $this->_trans->translate('Yes');
+            $terms = '';
+            if (@$offer['termandcondition'][0]['content'] == '' || @$offer['termandcondition'][0]['content'] == 'undefined'
+                    || @$offer['termandcondition'][0]['content'] == null) {
 
-			} else {
+                $terms = '';
 
-				$approved = $this->_trans->translate('No');
-			}
+            } else {
 
-			$offline = '';
-			if ($offer['offline'] == true) {
+                $terms = @$offer['termandcondition'][0]['content'];
+            }
 
-				$offline = $this->_trans->translate('Yes');
+            // set value in column of excel
+            $objPHPExcel->getActiveSheet()->setCellValue('A' . $column, $title);
+            $objPHPExcel->getActiveSheet()->setCellValue('B' . $column, $shopname);
+            $objPHPExcel->getActiveSheet()->setCellValue('C' . $column, $type);
+            $objPHPExcel->getActiveSheet()->setCellValue('D' . $column, $Visability);
+            $objPHPExcel->getActiveSheet()->setCellValue('E' . $column, $Extended);
+            $objPHPExcel->getActiveSheet()->setCellValue('F' . $column, $startDate);
+            $objPHPExcel->getActiveSheet()->setCellValue('G' . $column, $endDate);
+            $objPHPExcel->getActiveSheet()->setCellValue('H' . $column, $Clickouts);
+            $objPHPExcel->getActiveSheet()->setCellValue('I' . $column, $Author);
+            $objPHPExcel->getActiveSheet()->setCellValue('J' . $column, $code);
+            $objPHPExcel->getActiveSheet()->setCellValue('K' . $column, $refUrl);
+            $objPHPExcel->getActiveSheet()->setCellValue('L' . $column, $exclusive);
+            $objPHPExcel->getActiveSheet()->setCellValue('M' . $column, $editor);
+            $objPHPExcel->getActiveSheet()->setCellValue('N' . $column, $usergenerated);
+            $objPHPExcel->getActiveSheet()->setCellValue('O' . $column, $approved);
+            $objPHPExcel->getActiveSheet()->setCellValue('P' . $column, $offline);
+            $objPHPExcel->getActiveSheet()->setCellValue('Q' . $column, $created_at);
+            $objPHPExcel->getActiveSheet()->setCellValue('R' . $column, $deeplink);
+            $objPHPExcel->getActiveSheet()->setCellValue('S' . $column, $terms);
 
-			} else {
+            // counter incriment by 1
+            $column++;
+            $row++;
 
-				$offline = $this->_trans->translate('No');
-			}
+        }
 
-			$created_at = '';
-			if ($offer['created_at'] == '' || $offer['created_at'] == 'undefined'
-					|| $offer['created_at'] == null) {
+        // FORMATING OF THE EXCELL
+        $headerStyle = array(
+                'fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,
+                        'color' => array('rgb' => '00B4F2')),
+                'font' => array('bold' => true));
+        $borderStyle = array(
+                'borders' => array(
+                        'outline' => array(
+                                'style' => PHPExcel_Style_Border::BORDER_THICK,
+                                'color' => array('argb' => '000000'))));
+        // HEADER COLOR
 
-				$created_at = '';
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S1')->applyFromArray($headerStyle);
 
-			} else {
+        // SET ALIGN OF TEXT
+        $objPHPExcel->getActiveSheet()->getStyle('A1:S1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('B2:S' . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
 
-				$created_at = date("d-m-Y", strtotime($offer['created_at']));
-			}
+        // BORDER TO CELL
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S1')->applyFromArray($borderStyle);
+        $borderColumn = (intval($column) - 1);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S' . $borderColumn)->applyFromArray($borderStyle);
 
-			$deeplink = '';
-			if ($offer['shop']['deepLink'] == '' || $offer['shop']['deepLink'] == 'undefined'
-					|| $offer['shop']['deepLink'] == null) {
+        // SET SIZE OF THE CELL
+        $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
 
-				$deeplink = '';
 
-			} else {
+        # define upload path for excell
+        defined('UPLOAD_EXCEL_PATH')
+            || define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
 
-				$deeplink = $offer['shop']['deepLink'];
-			}
 
-			$terms = '';
-			if (@$offer['termandcondition'][0]['content'] == '' || @$offer['termandcondition'][0]['content'] == 'undefined'
-					|| @$offer['termandcondition'][0]['content'] == null) {
+        $pathToFile = UPLOAD_EXCEL_PATH . strtolower($this->_localePath) . 'excels/' ;
 
-				$terms = '';
+        # create dir if not exists
+        if(!file_exists($pathToFile)) {
+            mkdir($pathToFile, 774, TRUE);
+        }
 
-			} else {
 
-				$terms = @$offer['termandcondition'][0]['content'];
-			}
+        //write to an xlsx file and upload to excel folder locale basis
 
-			// set value in column of excel
-			$objPHPExcel->getActiveSheet()->setCellValue('A' . $column, $title);
-			$objPHPExcel->getActiveSheet()->setCellValue('B' . $column, $shopname);
-			$objPHPExcel->getActiveSheet()->setCellValue('C' . $column, $type);
-			$objPHPExcel->getActiveSheet()->setCellValue('D' . $column, $Visability);
-			$objPHPExcel->getActiveSheet()->setCellValue('E' . $column, $Extended);
-			$objPHPExcel->getActiveSheet()->setCellValue('F' . $column, $startDate);
-			$objPHPExcel->getActiveSheet()->setCellValue('G' . $column, $endDate);
-			$objPHPExcel->getActiveSheet()->setCellValue('H' . $column, $Clickouts);
-			$objPHPExcel->getActiveSheet()->setCellValue('I' . $column, $Author);
-			$objPHPExcel->getActiveSheet()->setCellValue('J' . $column, $code);
-			$objPHPExcel->getActiveSheet()->setCellValue('K' . $column, $refUrl);
-			$objPHPExcel->getActiveSheet()->setCellValue('L' . $column, $exclusive);
-			$objPHPExcel->getActiveSheet()->setCellValue('M' . $column, $editor);
-			$objPHPExcel->getActiveSheet()->setCellValue('N' . $column, $usergenerated);
-			$objPHPExcel->getActiveSheet()->setCellValue('O' . $column, $approved);
-			$objPHPExcel->getActiveSheet()->setCellValue('P' . $column, $offline);
-			$objPHPExcel->getActiveSheet()->setCellValue('Q' . $column, $created_at);
-			$objPHPExcel->getActiveSheet()->setCellValue('R' . $column, $deeplink);
-			$objPHPExcel->getActiveSheet()->setCellValue('S' . $column, $terms);
+         $offerFile = $pathToFile."offerList.xlsx";
 
-			// counter incriment by 1
-			$column++;
-			$row++;
+        $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+        $objWriter->save($offerFile);
 
-		}
+        $manager->closeConnection($DMC);
 
-		// FORMATING OF THE EXCELL
-		$headerStyle = array(
-				'fill' => array('type' => PHPExcel_Style_Fill::FILL_SOLID,
-						'color' => array('rgb' => '00B4F2')),
-				'font' => array('bold' => true));
-		$borderStyle = array(
-				'borders' => array(
-						'outline' => array(
-								'style' => PHPExcel_Style_Border::BORDER_THICK,
-								'color' => array('argb' => '000000'))));
-		// HEADER COLOR
+        echo "\n";
+        print "$key - Offers have been exported successfully!!!";
 
-		$objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S1')->applyFromArray($headerStyle);
 
-		// SET ALIGN OF TEXT
-		$objPHPExcel->getActiveSheet()->getStyle('A1:S1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$objPHPExcel->getActiveSheet()->getStyle('B2:S' . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-
-		// BORDER TO CELL
-		$objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S1')->applyFromArray($borderStyle);
-		$borderColumn = (intval($column) - 1);
-		$objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S' . $borderColumn)->applyFromArray($borderStyle);
-
-		// SET SIZE OF THE CELL
-		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('N')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('O')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('P')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('Q')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('R')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('S')->setAutoSize(true);
-
-
-    	# define upload path for excell
-    	defined('UPLOAD_EXCEL_PATH')
-	    	|| define('UPLOAD_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
-
-
-    	$pathToFile = UPLOAD_EXCEL_PATH . strtolower($this->_localePath) . 'excels/' ;
-
-    	# create dir if not exists
-    	if(!file_exists($pathToFile)) {
-    		mkdir($pathToFile, 774, TRUE);
-		}
-
-
-    	//write to an xlsx file and upload to excel folder locale basis
-
- 		 $offerFile = $pathToFile."offerList.xlsx";
-
-    	$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-    	$objWriter->save($offerFile);
-
-    	$manager->closeConnection($DMC);
-
-		echo "\n";
-		print "$key - Offers have been exported successfully!!!";
-
-
-	}
+    }
 
 }
 
 
 new OfferExport();
-
-?>

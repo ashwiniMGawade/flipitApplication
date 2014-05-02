@@ -1,12 +1,12 @@
 <?php
 /**
  * this file contais all the keywords which we want to block
- * @author sp singh 
- *  
+ * @author sp singh
+ *
  */
 
 # shop,category, moneysaving and other urls
- 
+
 
 FrontEnd_Helper_viewHelper::__link('categorieen_url_block');
 FrontEnd_Helper_viewHelper::__link('bespaarwijzer_url_block');
@@ -40,6 +40,3 @@ FrontEnd_Helper_viewHelper::__link('directloginunsubscribe_url_block');
 FrontEnd_Helper_viewHelper::__link('dummy_url_block');
 FrontEnd_Helper_viewHelper::__link('how-to_url_block');
 FrontEnd_Helper_viewHelper::__link('inschrijven-vol_url_block');
-
-
-?>

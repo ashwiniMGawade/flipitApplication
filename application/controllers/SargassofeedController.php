@@ -13,28 +13,27 @@ class SargassofeedController extends Zend_Controller_Action
     public function indexAction()
     {
 
-    	# fetch top 20 Popular offers
-    	$voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
+        # fetch top 20 Popular offers
+        $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
 
-    	if($voucherflag){
+        if($voucherflag){
 
             # get top 20 vouchercodes
             $topVouchercodes = Offer::getTopCouponCodesForShopPage(array(),20);
             $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes ,20);
 
-    		FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVouchercodes);
+            FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVouchercodes);
 
-    	} else {
+        } else {
 
-    		$topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('top_20_popularvaouchercode_list');
-    	}
-
-
+            $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('top_20_popularvaouchercode_list');
+        }
 
 
-    	$this->view->topCode = $topVouchercodes;
+
+
+        $this->view->topCode = $topVouchercodes;
 
     }
 
 }
-
