@@ -311,7 +311,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getExpiredOfferMessage($endDate, $currentDate)
     {
         $expiredOfferMessage= '';
-        if ($endDate > $currentDate) {
+        if ($endDate < $currentDate) {
             $expiredOfferMessage = '<div class="warning-message">
             <div class="holder">
             <span class="ico-warning"></span>
