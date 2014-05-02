@@ -21,7 +21,7 @@
   left: -1px;
   width: 1px;
   height: 100%;
-  background: url(../images/border-s.png) repeat-y;
+  background: url(../../images/border-s.png) repeat-y;
 }
 .warning-message .holder:after {
   left: auto;
@@ -35,7 +35,7 @@
   top: -1px;
   width: 100%;
   height: 1px;
-  background: url(../images/border-b.png) repeat-x;
+  background: url(../../images/border-b.png) repeat-x;
 }
 .warning-message:after {
   top: auto;
@@ -44,7 +44,7 @@
 .warning-message .ico-warning {
   display: inline-block;
   vertical-align: middle;
-  background: url(../images/sprite.png) no-repeat -247px -221px;
+  background: url(../../images/sprite.png) no-repeat -247px -221px;
   width: 32px;
   height: 32px;
   margin: 0 13px 0 0;
@@ -61,7 +61,7 @@
   z-index: 2;
   right: -24px;
   top: 97%;
-  background: url(../images/sprite.png) no-repeat -322px -224px;
+  background: url(../../images/sprite.png) no-repeat -322px -224px;
   width: 23px;
   height: 87px;
 }

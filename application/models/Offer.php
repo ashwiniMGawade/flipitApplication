@@ -1992,7 +1992,7 @@ class Offer extends BaseOffer
      {
         $date = date('Y-m-d H:i:s');
         $relatedOffers = Doctrine_Query::create()
-                        ->select('t.*, o.*,s.*,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+                        ->select('t.*, o.*,s.*,s.permaLink as permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                         ->from('offer o')
                         ->leftJoin('o.shop s')
                         ->leftJoin('o.logo ologo')

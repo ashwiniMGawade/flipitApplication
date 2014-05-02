@@ -366,7 +366,7 @@ EOD;
         return $socialMedia;
     }
     
-    public static function getShopHeader($shop, $message, $offerTitle)
+    public function getShopHeader($shop, $expiredMessage, $offerTitle)
     {
         $bounceRate = "/out/shop/".$shop['id'];
         $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.$shop['id'];
@@ -383,12 +383,11 @@ EOD;
             $affliateClass = 'btn-disabled';
         endif;
         
-        return self::getHeaderBlockContent($affliateBounceRate, $affliateUrl, $affliateDisabled, $affliateClass, $shop, $message, $offerTitle);
+        return self::getHeaderBlockContent($affliateBounceRate, $affliateUrl, $affliateDisabled, $affliateClass, $shop, $expiredMessage, $offerTitle);
     }
     
-    public static function getHeaderBlockContent($affliateBounceRate, $affliateUrl, $affliateDisabled, $affliateClass, $shop, $message, $offerTitle)
+    public function getHeaderBlockContent($affliateBounceRate, $affliateUrl, $affliateDisabled, $affliateClass, $shop, $expiredMessage, $offerTitle)
     {
-        $trans = Zend_Registry::get('Zend_Translate');
         $divContent ='<div class="header-block header-block-2">
                 <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
                 <div class="icon">
@@ -397,12 +396,12 @@ EOD;
                     onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'"><img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path']. $shop['logo']['name']. '" alt="'.$shop['name'].'" width="176" height="89" />
                     </a>
                 </div> <div class="box">';
-        if ($message !='storeDetail') {
-         	$shop['subTitle'] = $trans->translate('Expired').' '.$shop['name'].' '.$trans->translate('copuon code');
+        if ($expiredMessage !='storeDetail') {
+         	$shop['subTitle'] = $this->zendTranslate->translate('Expired').' '.$shop['name'].' '.$this->zendTranslate->translate('copuon code');
         } else {
          	$shop['subTitle'] = $shop['subTitle'];
         }
-        if ($message !='') {
+        if ($expiredMessage !='') {
                 
                	$divContent .= '<h1>'.$shop['title'].'</h1>
                     <strong>'.$shop['subTitle'].'</strong>
@@ -417,7 +416,7 @@ EOD;
         return $divContent ;
     }
     
-    public static function getLoveAnchor($shopId)
+    public function getLoveAnchor($shopId)
     {
         $favouriteShopId = 0;
         if (Auth_VisitorAdapter::hasIdentity()):

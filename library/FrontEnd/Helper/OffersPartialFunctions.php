@@ -127,14 +127,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getCssClassNameForOffer($currentOffer, $offerType)
     {
         $className = 'code';
-        $className .= $offerType=='simple' ? ' code-2' : ' code-2';
-        if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $className .= ' purple';
-        } elseif ($currentOffer->discountType=='SL') {
-            $className .= ' red';
-        } elseif ($currentOffer->extendedOffer =='1') {
-            $className .= ' blue';
-        }
+        $className .= $offerType=='simple' || $offerType=='extendedOffer' ? '' : ' code-2';
         return $className;
     }
 
@@ -318,7 +311,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getExpiredOfferMessage($endDate, $currentDate)
     {
         $expiredOfferMessage= '';
-        if ($endDate < $currentDate) {
+        if ($endDate > $currentDate) {
             $expiredOfferMessage = '<div class="warning-message">
             <div class="holder">
             <span class="ico-warning"></span>
