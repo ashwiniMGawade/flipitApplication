@@ -131,8 +131,8 @@ endif;
     <aside id="sidebar" class="col-md-4 col-sm-4">
     <?php
     echo $this->partial(
-            $storeViewPartialPath. '_shop-sidebar.phtml',
-            array(
+        $storeViewPartialPath. '_shop-sidebar.phtml',
+        array(
                 'shopEditor' => $shopEditor,
                 'latestShopUpdates'=> $this->latestShopUpdates,
                 'shopChain' => $this->shopChain,
@@ -140,7 +140,7 @@ endif;
                 'popularStoresList'=> $this->popularStoresList,
                 'signUpWidgetForm' => $signUpWidgetForm
             )
-        );
+    );
     ?>
     </aside>
 </div>
