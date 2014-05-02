@@ -5,7 +5,7 @@ if ($this->pageMode == true) {
     if ($this->page['pageType'] == "offer") {
         if ($this->offercount > 0) {
             $pageContent = $this->partial(
-                'store/_offer.phtml',
+                'partials/_offer.phtml',
                 array(
                    'offers'=> $this->offersPaginator,
                    'offersType'=>'offerPage',

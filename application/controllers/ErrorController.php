@@ -16,7 +16,7 @@ class ErrorController extends Zend_Controller_Action
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
 
                 $pagePermalink = $this->getPageParmalink();
-                $pageNumber  = $this->getPageNumbering($pagePermalink);
+                $pageNumber = $this->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
                 if ($pageDetails) {
                     if (is_array($this->pagePermalink)) {
@@ -31,7 +31,7 @@ class ErrorController extends Zend_Controller_Action
 
                     $pageLogo  = Logo::getPageLogo($pageDetails['logoId']);
                     $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
-                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination($specialPageOffers, $pageNumber, 5, 3);
+                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination($specialPageOffers, $pageNumber, 30, 3);
                     $frontendViewHelper = new FrontEnd_Helper_viewHelper();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget($sidebarParameters = array(), rtrim($this->pagePermalink, '/'));
 
@@ -100,7 +100,7 @@ class ErrorController extends Zend_Controller_Action
     {
         if (intval($pageNumber) > 0) {
             $pagePermalink = explode('/'.$pageNumber, $pagePermalink);
-            $pagePermalink  = $this->getDefaultPermalink($pagePermalink);
+            $pagePermalink = $this->getDefaultPermalink($pagePermalink);
         } else {
             $pagePermalink = $this->getPermalinkForFlipit($pagePermalink);
         }
@@ -120,14 +120,14 @@ class ErrorController extends Zend_Controller_Action
         if (HTTP_PATH != "www.kortingscode.nl") {
             $splitParmalink = explode('/', $pagePermalink[0]);
             if(!empty($splitParmalink[1])):
-                 $specialPagePermailink = $splitParmalink[1];
+                 $pagePermalink = $splitParmalink[1];
             else:
-                 $specialPagePermailink = $splitParmalink[0];
+                 $pagePermalink = $splitParmalink[0];
             endif;
         } else {
-             $specialPagePermailink = $splitParmalink[0];
+             $pagePermalink = $splitParmalink[0];
         }
-        return  $specialPagePermailink;
+        return  $pagePermalink;
     }
 
     public function getPermalinkForFlipit($pagePermalink)
