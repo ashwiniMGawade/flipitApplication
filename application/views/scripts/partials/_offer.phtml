@@ -15,7 +15,15 @@ foreach ($this->offers as $offer) {
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
         <div class="holder">
-            <?php echo $offerPartial->getCommonRedirectUrlForOffer($offer, $urlToShow, $offerBounceRate, $this->offersType , 'offerImage'); ?>
+    <?php 
+    echo $offerPartial->getCommonRedirectUrlForOffer(
+        $offer,
+        $urlToShow,
+        $offerBounceRate,
+        $this->offersType,
+        'offerImage'
+    );
+    ?>
             <div class="box">
     <?php
     if ($offer->discountType == 'PR' || $offer->discountType == 'PA') {
@@ -28,12 +36,26 @@ foreach ($this->offers as $offer) {
     ?>
                 <div class="text">
                     <p> <?php echo $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
-                    <?php echo $offerPartial->getCommonRedirectUrlForOffer($offer, $urlToShow, $offerBounceRate, $offerTitle, 'offerTitle'); ?>
+                    <?php 
+                    echo $offerPartial->getCommonRedirectUrlForOffer(
+                        $offer,
+                        $urlToShow,
+                        $offerBounceRate,
+                        $offerTitle,
+                        'offerTitle'
+                    );
+                    ?>
                 </div>
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
-    echo $offerPartial->getCommonRedirectUrlForOffer($offer, $urlToShow, $offerBounceRate, $permalink, 'mainOfferClickoutButton');
+    echo $offerPartial->getCommonRedirectUrlForOffer(
+        $offer,
+        $urlToShow,
+        $offerBounceRate,
+        $permalink,
+        'mainOfferClickoutButton'
+    );
     echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
     ?>
                 </div>
@@ -63,7 +85,7 @@ foreach ($this->offers as $offer) {
             $style = 'style="display:block;"';
     }
     ?>
-        <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style; ?>>
+        <div class="offer-box" id="websiteOfferLink<?php echo $offer->id ;?>" <?php echo $style;?>>
             <hr class="alt2">
             <div class="offer">
                 <span><?php echo $this->translate('Grab this offer now:');?></span>
@@ -100,7 +122,9 @@ foreach ($this->offers as $offer) {
     endif;
 }
 if ($this->offersType!='extendedOffer') {
-    if ($this->offersType == 'newestOffer' || $this->offersType=='offerWithPagenation' || $this->offersType=='offerPage') {
+    if ($this->offersType == 'newestOffer'
+        || $this->offersType=='offerWithPagenation'
+        || $this->offersType=='offerPage') {
         echo $this->paginationControl($this->offers, 'Sliding', '/partials/_pagination.phtml');
     }
     if (isset($this->pageType) && $this->pageType == 'howToGuide') {
@@ -111,5 +135,6 @@ if ($this->offersType!='extendedOffer') {
             </a>';
     }
     ?>
-</section>
-<?php }?>
+    </section>
+    <?php 
+}
