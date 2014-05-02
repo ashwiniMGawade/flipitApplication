@@ -4,7 +4,7 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     $featuredCategorySpan = '';
     
     if (isset($categoryWithSpecialPage['featured_category']) && $categoryWithSpecialPage['featured_category'] != '') {
-        $featuredCategoryClass = "box-top"; 
+        $featuredCategoryClass = "box-top";
         $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
     }
 
