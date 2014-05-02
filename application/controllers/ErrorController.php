@@ -31,9 +31,17 @@ class ErrorController extends Zend_Controller_Action
 
                     $pageLogo  = Logo::getPageLogo($pageDetails['logoId']);
                     $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
-                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination($specialPageOffers, $pageNumber, 30, 3);
+                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
+                        $specialPageOffers,
+                        $pageNumber,
+                        30,
+                        3
+                    );
                     $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-                    $sidebarWidget = $frontendViewHelper->getSidebarWidget($sidebarParameters = array(), rtrim($this->pagePermalink, '/'));
+                    $sidebarWidget = $frontendViewHelper->getSidebarWidget(
+                        $sidebarParameters = array(),
+                        rtrim($this->pagePermalink, '/')
+                    );
 
                     $this->view->message = 'Page not found';
                     $this->view->pageTitle = $pageDetails['pageTitle'];
