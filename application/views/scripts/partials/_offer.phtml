@@ -88,7 +88,7 @@ foreach ($this->offers as $offer) {
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
             echo $this->partial(
-                'store/signupwidget.phtml',
+                'partials/_signupForm.phtml',
                 array(
                    'zendForm' => $this->zendForm,
                    'SignupFormWidgetType'=> 'widgetWithinOffers',

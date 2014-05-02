@@ -4,10 +4,11 @@ $categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon'
 $categoryPartial = new FrontEnd_Helper_CategoryPartialFunctions();
 echo $categoryPartial->getCategoryOrSpecialPageHeder($this->categoryDetail[0]['name'], $categoryFeaturedImage);
 
+$partialsViewPath = 'partials/';
 $offers = '';
 if (count($this->offersWithPagination)>0) {
     $offers = $this->partial(
-        'partials/_offer.phtml',
+        $partialsViewPath.'_offer.phtml',
         array(
         'offers'=> $this->offersWithPagination,
         'offersType'=>$this->offersType,
@@ -21,7 +22,7 @@ if (count($this->offersWithPagination)>0) {
     $offers ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
 }
 $signUpWidgetForm = $this->partial(
-    'store/signupwidget.phtml',
+    $partialsViewPath.'_signupForm.phtml',
     array(
         'zendForm' => $this->sidebarWidgetForm,
         'SignupFormWidgetType'=> 'sidebarWidget',

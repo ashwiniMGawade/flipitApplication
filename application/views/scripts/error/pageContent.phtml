@@ -1,11 +1,12 @@
 <?php
 if ($this->pageMode == true) {
     $sidebarWidgetHtml = '';
+    $partialsViewPath = 'partials/';
     $pageContent = '';
     if ($this->page['pageType'] == "offer") {
         if ($this->offercount > 0) {
             $pageContent = $this->partial(
-                'partials/_offer.phtml',
+                $partialsViewPath.'_offer.phtml',
                 array(
                    'offers'=> $this->offersPaginator,
                    'offersType'=>'offerPage',
@@ -18,7 +19,7 @@ if ($this->pageMode == true) {
             $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
         }
         $signUpWidgetForm = $this->partial(
-            'store/signupwidget.phtml',
+            $partialsViewPath.'_signupForm.phtml',
             array(
                'zendForm' => $this->sidebarWidgetForm,
                'SignupFormWidgetType'=> 'sidebarWidget',

@@ -1,9 +1,8 @@
 <?php
 echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/all-categoties-alt.css");
-$storeViewPartialPath = 'store/';
 $signUpWidgetForm = '';
 $signUpWidgetForm = $this->partial(
-    $storeViewPartialPath.'signupwidget.phtml',
+       'partials/_signupForm.phtml',
         array(
             'zendForm' => $this->sidebarWidgetForm,
             'SignupFormWidgetType' => 'categoryPageSignupForm',
