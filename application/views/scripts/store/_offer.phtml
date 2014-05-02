@@ -85,7 +85,7 @@ foreach ($this->offers as $offer) {
     $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shop);
 
     if($offerCounter == 1) :
-        if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'):
+        if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage' || $this->offersType=='offerWithPagenation'):
             echo $this->partial(
                 'store/signupwidget.phtml',
                 array(

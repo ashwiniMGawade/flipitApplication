@@ -20,7 +20,7 @@ if (count($this->offersWithPagination)>0) {
     $offers ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
 }
 $signUpWidgetForm = $this->partial(
-    $storeViewPartialPath.'signupwidget.phtml',
+    $storeViewPartialPath .'signupwidget.phtml',
     array(
         'zendForm' => $this->sidebarWidgetForm,
         'SignupFormWidgetType'=> 'sidebarWidget',
