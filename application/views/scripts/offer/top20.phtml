@@ -10,10 +10,9 @@ echo $this->partial(
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
 <?php 
-$storeViewPartialPath = 'store/';
 if(count($this->top20PopularOffers) > 0):
     echo $this->partial(
-        $storeViewPartialPath .'_offer.phtml',
+        $partialViewPath.'_offer.phtml',
         array(
             'offers' => $this->top20PopularOffers,
             'offersType'=>'top20',
@@ -26,7 +25,7 @@ endif;
 
 $signUpWidgetForm = '';
 $signUpWidgetForm = $this->partial(
-    $storeViewPartialPath.'signupwidget.phtml',
+    'store/signupwidget.phtml',
     array(
        'zendForm' => $this->sidebarWidgetForm,
        'SignupFormWidgetType'=> 'sidebarWidget',

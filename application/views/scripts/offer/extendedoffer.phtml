@@ -12,7 +12,7 @@ $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $expiredMessage = $offerPartial->getExpiredOfferMessage($offer->endDate, $currentDate);
 
 $extenderOffer = $this->partial(
-    'store/_offer.phtml',
+    $partialViewPath.'_offer.phtml',
     array(
     'offers' => array($expiredMessage=='' ? $this->couponDetails[0] : $this->topOfferFromStore[0]),
     'offersType'=>'extendedOffer',

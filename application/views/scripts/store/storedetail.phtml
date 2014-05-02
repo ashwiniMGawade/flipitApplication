@@ -1,9 +1,9 @@
 <?php
-$storeViewPartialPath = 'store/';
+$partialViewPath = 'partials/';
 $offers = '';
 if(count($this->offers) > 0):
     $offers = $this->partial(
-        $storeViewPartialPath. '_offer.phtml',
+        $partialViewPath. '_offer.phtml',
         array(
             'offers' => $this->offers,
             'offersType'=>'simple',
@@ -20,7 +20,7 @@ $similarOffers = '';
 if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
     $similarOffersHeader = $offerPartialClass->getSimilarShopHeader($this->currentStoreInformation[0]['name'], 'similar');
     $similarOffers = $this->partial(
-        $storeViewPartialPath.'_offer.phtml',
+        $partialViewPath.'_offer.phtml',
         array(
             'offers' => $this->similarShopsAndSimilarCategoriesOffers,
             'offersType' => 'similar',
@@ -30,6 +30,7 @@ if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
     );
 endif;
 
+$storeViewPartialPath = 'store/';
 $noMoneyNocodeMessage = '';
 if ($this->currentStoreInformation[0]['affliateProgram']!='1' && $offers=='') :
     $noMoneyNocodeMessage = $this->partial($storeViewPartialPath.'_noCodeNoMoneyMessage.phtml');
@@ -45,7 +46,6 @@ if(!empty($this->similarShops)):
 endif;
 
 $discussion = '';
-$partialViewPath = 'partials/';
 if($this->currentStoreInformation[0]['discussions'] == 1):
     $discussion = $this->partial(
         $partialViewPath.'_discussion.phtml',

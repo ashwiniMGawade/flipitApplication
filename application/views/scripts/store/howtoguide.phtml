@@ -64,7 +64,7 @@ echo $headerBlock;
             $signUpForm = $this->form; 
         }
         $storeFilteredOffers = $this->partial(
-                $storeViewPartialPath. '_offer.phtml',
+               'partials/_offer.phtml',
                 array(
                     'offers' => $offers[$i],
                     'offersType'=>'simple',
