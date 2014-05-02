@@ -1,5 +1,3 @@
-
-
 function checkFavorite(uId,id){
 	alert(uId+id);
 }

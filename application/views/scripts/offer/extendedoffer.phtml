@@ -71,11 +71,11 @@ echo $headerBlock = $frontEndViewHelper->getShopHeader($offer->shop, $expiredMes
     echo $extenderOffer;
 if ($expiredMessage != '') { ?>
          </section>
-    <?php
+    <div class="section">
+    <?php 
 }
 ?>
-<div class="section">
-<div class="code-details">
+    <div class="code-details">
 <?php
 if ($expiredMessage != '') {
     echo $this->partial(
@@ -98,6 +98,13 @@ if ($expiredMessage != '') {
     <?php
 }
 echo $howToUseOffer;
+?>
+    </div>
+<?php
+if ($expiredMessage != '') { ?>
+    </div>
+    <?php 
+}
 if ($expiredMessage == '') {
     ?>
          </section>
