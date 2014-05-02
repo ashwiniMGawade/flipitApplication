@@ -1,10 +1,4 @@
 <?php
-$this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/modalPopLite.min.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-
 $headerBlock = FrontEnd_Helper_viewHelper::getShopHeader($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
 $howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
 $actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
