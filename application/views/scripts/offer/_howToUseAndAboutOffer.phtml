@@ -1,23 +1,27 @@
 <div class="section">
     <div class="code-details">
-        <?php
-if($this->expiredMessage == 'false') { 
+<?php
+if($this->expiredMessage == 'false') {
       echo $this->partial(
-        'offer/_extendedExpiredCode.phtml',
-        array('expiredOffer'=>$this->expiredOffer)
-    );
+          'offer/_extendedExpiredCode.phtml',
+          array('expiredOffer'=>$this->expiredOffer)
+      );
 }
-        ?>
+?>
           <article class="box">
             <h2><?php echo $this->translate('About this voucher');?></h2>
             <p><?php echo $this->offerDescription;?></p>
         </article>
+<?php if (!empty($this->termAndCondition)) {?>
         <article class="box terms-block">
             <h2><?php echo $this->translate('Terms').' & '.$this->translate('Conditions');?></h2>
             <ol class="num-list">
             <?php echo $this->termAndCondition;?>
             </ol>
         </article>
+    <?php
+}
+?>
         <article class="box box-2">
             <h2><?php echo $this->translate('How to Use The Voucher Codes'); ?></h2>
             <p><?php echo $this->translate('Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapi bus lacus sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius.');?>

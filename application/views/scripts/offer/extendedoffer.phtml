@@ -57,7 +57,8 @@ if ($this->currentStoreInformation[0]['showSignupOption']) :
 endif;
 
 $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
-$termAndCondition = $this->partial(
+
+$howToUseAndAboutOffer = $this->partial(
     'offer/_howToUseAndAboutOffer.phtml',
     array(
         'termAndCondition' => $termsAndConditions,
@@ -77,7 +78,7 @@ if ($message != '') { ?>
          </section>
     <?php
 }
-    echo $termAndCondition;
+    echo $howToUseAndAboutOffer;
 if ($message == '') {
     ?>
          </section>
