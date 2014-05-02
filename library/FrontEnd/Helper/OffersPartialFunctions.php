@@ -127,7 +127,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getCssClassNameForOffer($currentOffer, $offerType)
     {
         $className = 'code';
-        $className .= $offerType=='simple' ? '' : ' code-2';
+        $className .= $offerType=='simple' ? ' code-2' : ' code-2';
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $className .= ' purple';
         } elseif ($currentOffer->discountType=='SL') {
