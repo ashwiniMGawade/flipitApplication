@@ -160,6 +160,7 @@ if($controller == 'error'){
 				$modulePath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
 				$view = new Zend_View();
 				$view->setBasePath(APPLICATION_PATH . '/views/');
+				$view->addHelperPath(APPLICATION_PATH . '/../library/Transl8/View/Helper/', 'Transl8_View_Helper_');
 				
 				if(file_exists($modulePath . 'scripts/partials/_header.phtml' ))
 				{
