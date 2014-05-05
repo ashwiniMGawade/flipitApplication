@@ -12,77 +12,59 @@
  */
 class Articlecategory extends BaseArticlecategory
 {
+    #################### Refactored Code Starts ######################################
     public function addcategory($params)
     {
-        //echo "<pre>"; print_r($params); die;
-        $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']);
-        $this->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
-        $this->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
-        $this->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaDescription']);
-        $this->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params['description']);
+       
+        $article->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']);
+        $article->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
+        $article->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
+        $article->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaDescription']);
+        $article->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params['description']);
 
-        //  upload small logo image for how to use page
         if ($_FILES['categoryIconNameHidden']['name']!=null) {
-
             $result = self::uploadImage('categoryIconNameHidden');
             if ($result['status'] == '200') {
-                $ext = BackEnd_Helper_viewHelper::getImageExtension(
+                $imageExtension = BackEnd_Helper_viewHelper::getImageExtension(
                         $result['fileName']);
-
-                $this->ArtCatIcon->ext = $ext;
-                $this->ArtCatIcon->path = $result['path'];
-                $this->ArtCatIcon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $article->ArtCatIcon->ext = $imageExtension;
+                $article->ArtCatIcon->path = $result['path'];
+                $article->ArtCatIcon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
             } else{
                 return false;
             }
         }
 
-        //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_articlecategory_list');
-
-        $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-        $this->ArtCatIcon->ext = $ext;
-
+        $imageExtension = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+        $article->ArtCatIcon->ext = $imageExtension;
         try {
-            $this->save();
-            $catId = $this->id ;
-
-/* 			$route = new RoutePermalink();
-            $route->permalink = 'bespaarwijzer/'.$params["permaLink"];
-            $route->type = 'ARTCAT';
-            $route->exactlink = 'bespaarwijzer/category/id/'.$this->id;
-            $route->save(); */
-
-            foreach ($params['selectedCategoryies'] as $relatedCategory) {
-                $refRelatedCategory = new RefArticlecategoryRelatedcategory();
-                $refRelatedCategory->articlecategoryid = $this->id;
-                $refRelatedCategory->relatedcategoryid = $relatedCategory;
-                $refRelatedCategory->save();
-            }
-            return $catId ;
-        }catch(Exception $e){
+                $article->save();
+                $categoryId = $article->id ;
+                foreach ($params['selectedCategoryies'] as $relatedCategory) {
+                    $refRelatedCategory = new RefArticlecategoryRelatedcategory();
+                    $refRelatedCategory->articlecategoryid = $article->id;
+                    $refRelatedCategory->relatedcategoryid = $relatedCategory;
+                    $refRelatedCategory->save();
+                }
+            return $categoryId ;
+        } catch (Exception $e) {
             return false;
         }
-
-
-
-
     }
-     public function deleteAllArticleAndRefArticleCategory()
-    {
 
+    public function deleteAllArticleAndRefArticleCategory()
+    {
         $deleteRefArticleCategory = Doctrine_Query::create()->delete()
-                                            ->from('RefArticlecategoryRelatedcategory r')
+                                            ->from('RefArticlecategoryRelatedcategory')
                                             ->execute();
 
         $deleteArticleCategory = Doctrine_Query::create()->delete()
                                            ->from('Articlecategory')
                                            ->execute();
-
         return true;                                   
-
     }                                       
-
+#################### Refactored Code Ends ######################################
     /**
      * upload image
      * @param $_FILES[index]  $file
