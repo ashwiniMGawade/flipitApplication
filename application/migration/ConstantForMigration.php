@@ -27,6 +27,10 @@ defined('UPLOAD_DATA_FOLDER_EXCEL_PATH')
 defined('UPLOAD_EXCEL_TMP_PATH')
 || define('UPLOAD_EXCEL_TMP_PATH', APPLICATION_PATH. '/../public/tmp/' );
 
+defined('PUBLIC_PATH')
+        || define('PUBLIC_PATH',
+                dirname(dirname(dirname(__FILE__)))."/public/");
+
 /** Zend_Application */
 require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
 require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
