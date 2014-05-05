@@ -53,7 +53,7 @@ class Articlecategory extends BaseArticlecategory
         }
     }
 
-    public function deleteAllArticleAndRefArticleCategory()
+    public static function deleteAllArticleAndRefArticleCategory()
     {
         $deleteRefArticleCategory = Doctrine_Query::create()->delete()
                                             ->from('RefArticlecategoryRelatedcategory')

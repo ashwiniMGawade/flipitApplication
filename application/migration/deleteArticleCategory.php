@@ -17,7 +17,7 @@ class deleteArticleCategory
         ini_set('memory_limit', '-1');
         set_time_limit(0);
         require_once('constantForMigration.php');
-        require_once('databseConnectionForMigrations.php');
+        require_once('databaseConnectionForMigrations.php');
     }
 
     protected function deleteArticleCategory($dsn, $key, $imbull)
