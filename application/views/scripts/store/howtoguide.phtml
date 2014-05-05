@@ -1,5 +1,6 @@
 <?php
-$headerBlock = FrontEnd_Helper_viewHelper::getShopHeader($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
+$frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+$headerBlock = $frontEndViewHelper->getShopHeader($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
 $howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
 $actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
 if (isset($actualUrlWithoutDoubleSlash[1])):

@@ -85,7 +85,8 @@ else:
     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
 endif;
 
-$headerBlock = FrontEnd_Helper_viewHelper::getShopHeader($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
+$frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+$headerBlock = $frontEndViewHelper->getShopHeader($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
 $shopEditor = '';
 if($this->shopEditor != null):
     $shopEditor = $this->partial(
