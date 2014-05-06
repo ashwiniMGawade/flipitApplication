@@ -322,12 +322,8 @@ EOD;
     public static function getsocialMediaUrl()
     {
         $controller = zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-        if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
-            $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'], '/');
-            $socialMediaUrl = self::generateSocialLink($socialMediaUrl);
-        else:
-            $socialMediaUrl = HTTP_PATH;
-        endif;
+        $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'], '/');
+        $socialMediaUrl = self::generateSocialLink($socialMediaUrl);
         return $socialMediaUrl;
     }
     

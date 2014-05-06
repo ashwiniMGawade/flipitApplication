@@ -2,6 +2,113 @@
 
 class SearchController extends Zend_Controller_Action
 {
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
+    public function indexAction()
+    {
+        $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($searchPermalink);
+        $this->pageDetail = Page::getPageFromPageAttribute(36);
+        $this->view->pageTitle = $this->pageDetail->pageTitle;
+
+        if ($this->pageDetail->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
+        }
+
+        $this->view->headTitle($this->pageDetail->metaTitle);
+        $this->view->headMeta()->setName('description', trim($this->pageDetail->metaDescription));
+        $searchedKeyword = $this->getRequest()->getParam('searchField');
+        
+        if ($searchedKeyword !="" || $searchedKeyword != null) {
+            $this->view->searchedKeyword = $searchedKeyword;
+        }
+
+        $shopsIds = "";
+        $shopsForSearchPage = '';
+        $shopsIds = $this->getExcludedShopIdsBySearchedKeyword($searchedKeyword);
+        $exclusiveShops = self::getExclusiveShopsByExcludedShopIds($shopsIds);
+        $popularShops = self::getPopularStores($searchedKeyword);
+        $shopsForSearchPage = self::getStoresForSearchResults($exclusiveShops, $popularShops);
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
+        $offers = Offer::searchOffers($this->_getAllParams(), $shopsIds, 12);
+        $this->view->offers = $offers;
+        $this->view->popularStores = $popularStores;
+        if (!empty($offers)) {
+            $this->view->popularStores = $shopsForSearchPage; 
+        }  
+        
+        $this->view->pageLogo = HTTP_PATH_LOCALE.'public/'.$this->pageDetail->logo->path.$this->pageDetail->logo->name;
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+
+    }
+
+    public function getExcludedShopIdsBySearchedKeyword($searchedKeyword)
+    {
+        $searchBarExcludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeyword);
+        $shopsIds = '';
+
+        if (!empty($searchBarExcludedKeywords)) :
+            if($searchBarExcludedKeywords[0]['action'] == 0):
+                $storeUrl = $searchBarExcludedKeywords[0]['url'];
+                $this->_redirect($storeUrl);
+                exit();
+            else:
+                $shopsIds = array();
+                foreach ($searchBarExcludedKeywords[0]['shops'] as $shops) :
+                    $shopsIds[] = $shops['shopsofKeyword'][0]['id'];
+                endforeach;
+            endif;
+        endif;
+
+        return $shopsIds;
+    }
+
+    public static function getExclusiveShopsByExcludedShopIds($shopsIds)
+    {
+        $exclusiveShopsForSearchPage = array();
+        $exclusiveShops = Shop::getExclusiveShops($shopsIds);
+
+        foreach ($exclusiveShops as $exclusiveShop) :
+            $exclusiveShopsForSearchPage[$exclusiveShop['id']] = $exclusiveShop;
+        endforeach;
+
+        return $exclusiveShopsForSearchPage;
+    }
+
+    public static function getPopularStores($searchedKeyword)
+    {
+        $popularStores = Shop::getStoresForSearchByKeyword($searchedKeyword, 8);
+        $popularStoresForSearchPage = array();
+
+        foreach ($popularStores as $popularStore) :
+            $popularStoresForSearchPage[$popularStore['id']] = $popularStore;
+        endforeach;
+
+        return $popularStoresForSearchPage;
+    }
+
+    public static function getStoresForSearchResults($exclusiveShops, $popularShops)
+    {
+        $shopsForSearchPage = '';
+        
+        if (!empty($exclusiveShops) && !empty($popularShops)) :
+            $shopsForSearchPage = array_merge($exclusiveShops, $popularShops);
+        else:
+            if (!empty($popularShops)) :
+                $shopsForSearchPage = $popularShops;
+            else:
+                $shopsForSearchPage = $exclusiveShops; 
+            endif;
+        endif;
+
+        return $shopsForSearchPage;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
     /**
      * override views based on modules if exists
      * @see Zend_Controller_Action::init()
@@ -15,118 +122,12 @@ class SearchController extends Zend_Controller_Action
 
         # check module specific view exists or not
         if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-
-            # set module specific view script path
+             # set module specific view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
         } else{
-
-            # set default module view script path
+             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
-    }
-
-    public function indexAction()
-    {
-        # get cononical link
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSearch($permalink) ;
-
-        $pageId = 36;
-        $this->pageDetail = Page::getPageFromPageAttribute($pageId);
-        $this->view->pageTitle = @$this->pageDetail->pageTitle;
-
-        if($this->pageDetail->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
-        }
-
-        $this->view->headTitle(@$this->pageDetail->metaTitle);
-        $this->view->headMeta()->setName('description', @trim($this->pageDetail->metaDescription));
-        //echo $this->getRequest()->getParam('searchField');
-        //die();
-        $this->view->flag=1;
-        $search = $this->getRequest()->getParam('searchField');
-        if($search=="" || $search==null){
-            $this->view->flag=0;
-        }else{
-            $this->view->keyword = $search;
-        }
-
-        $link =  explode('/',ltrim($_SERVER['REQUEST_URI'],'/'));
-        $this->view->searchtype = @$link[1];
-        $getMoneySaving = MoneySaving::getAllMoneySavingArticleForSearch($this->getRequest()->getParam('searchField'),6);
-
-        $suggestions = Offer::searchRelatedOffers($this->_getAllParams());
-
-        $searchBarExclusion =  ExcludedKeyword::getKeywordForFront($search);
-        if(!empty($searchBarExclusion)):
-
-            if($searchBarExclusion[0]['action'] == 0):
-
-                $url = $searchBarExclusion[0]['url'];
-                $this->_redirect($url);
-                exit();
-
-            else:
-                $shopsIds = array();
-                foreach($searchBarExclusion[0]['shops'] as $shops):
-
-                    $shopsIds[] = $shops['shopsofKeyword'][0]['id'];
-
-                endforeach;
-            endif;
-        endif;
-
-        if(!empty($shopsIds)):
-            $exclusiveShops = Shop::getShopsExclusive($shopsIds);
-            $exShops = array();
-            foreach($exclusiveShops as $eShops):
-
-                $exShops["'".$eShops['id']."'"] = $eShops;
-
-            endforeach;
-        endif;
-
-        $popularStore = Shop::getAllStoresForSearch($this->getRequest()->getParam('searchField'),8);
-        $popularShops = array();
-        foreach($popularStore as $popShops):
-
-            $popularShops["'".$popShops['id']."'"] = $popShops;
-
-        endforeach;
-
-        $newArrayShops = array();
-
-        if(!empty($exShops)):
-            if(!empty($popularShops)):
-                $newArrayShops = array_merge($exShops, $popularShops);
-            else:
-
-                $newArrayShops = $exShops;
-            endif;
-        else:
-            if(!empty($popularShops)):
-                $newArrayShops = $popularShops;
-            endif;
-        endif;
-
-        //make array usable for view
-        $newArrShops = array();
-
-        foreach($newArrayShops as $nas):
-
-            $newArrShops[] = $nas;
-
-        endforeach;
-
-        $lastFinalArrayShops = array_slice($newArrShops, 0,8);
-        $shopsIds = "";
-        $result = Offer::searchOffers($this->_getAllParams(),$shopsIds, 12);
-        $this->view->paginatorCodes = $result;
-        $this->view->popularstores  =@$lastFinalArrayShops;//show popular store
-        $this->view->suggestion = @$suggestions;
-        $this->view->gudes = @$getMoneySaving;
-        $this->view->controllerName = $this->getRequest()->getControllerName();
-        $this->view->param = $search;
     }
 
 /**

@@ -1,185 +1,76 @@
 <?php 
-	$breadcrumb = "<a href='".HTTP_PATH_LOCALE ."zoeken/".$this->keyword."' style='color:#6a6a6a'>".$this->translate('Search Results')."</a>";
-	echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
-	$getPermLinkShops = Page::getPageFromPageAttribute(7);
-	$getPermLinkCategory = Page::getPageFromPageAttribute(9);
-	if($this->flag == 1){
-	?>
-<?php 
-if(count($this->popularstores)){ 
-?> 
-<!-- Separator Starts -->
-<div class="separator">&nbsp;</div>
-<!-- Separator Ends -->
-
-<!-- Voucher Outer Starts -->
-<div class="new-outer">
-
- 	<div class="voucher-outer" >
-        <!-- Voucher Outer Left Starts -->
-       	<div class="voucher-outer-left" style="margin: 0px;">
-        <!-- Voucher Outer Left Col1 Starts -->
-         <div class="voucher-outer-left-col1">
-         	<div class="voucher-right ml-none">
-            	<div class="voucher-heading mt15">
-                	<h2><?php echo $this->translate('Winkels gerelateerd aan') ." '". $this->keyword . "'" ?></h2>
-                	
-                	<div class="merchants-outer" style='padding:0'>
-       	
-       					<div class="merchants-bot-allstores" style='margin:0'>
-		                	  <?php 
-				       	    
-				       	     if(count($this->popularstores)){
-				       	     	
-				       	     	 foreach ($this->popularstores as $pShop)
-				       	         {
-				       	         	
-				       	         		if(count($pShop['logo']) > 0)
-				       	            	{
-				       	            			
-				       	            			$img = PUBLIC_PATH_CDN.$pShop['logo']['imgpath']."thum_medium_".$pShop['logo']['imgname'];
-				       	            			
-				       	            		
-				       	            	}else {
-				       	            		
-				       	            		$img = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
-				       	            	
-				       	            	}
-				       	         		echo '<a href="' .HTTP_PATH_LOCALE. $pShop['permaLink']. '"><img src="' . $img . '"  alt="' .$pShop['name'] . '"/></a>';
-				       	      		}
-								}  
-				       	      ?>
-				       	</div>
-				     </div>
-                 </div>
+$partialViewPath = 'partials/';
+$offers = '';
+if(!empty($this->offers)):
+    $offers .= '<header class="heading-box">
+            <h2>'.$this->translate('Offers matching search results').'</h2>
+        </header>';
+    $offers .= $this->partial(
+        $partialViewPath. '_offer.phtml',
+        array(
+            'offers' => $this->offers,
+            'offersType'=>'similar',
+            'shopName' => '',
+            'shop' => '',
+            'zendForm'=>$this->form
+        )
+    );
+else:
+    $offers .= '<div class="message">
+            <div class="holder">
+                <span class="ico-warning"></span>
+                <span class="text">
+                    <span>'.$this->translate('Sorry, no vouchercodes found with the search input').'!</span>
+                </span>
             </div>
-       </div>
-       <!-- Voucher Outer Left Col1 Ends -->
-       </div>
-       <!-- Voucher Outer Left Ends -->
-       <!-- Voucher Outer Right Starts -->
-       <div class="voucher-outer-right">
-       </div>
-       <!-- Voucher Outer Right Ends -->
-   </div>
-  
-</div>
+        </div>';
+endif;
 
+$signUpWidgetForm = '';
+$signUpWidgetForm = $this->partial(
+    $partialViewPath.'_signupForm.phtml',
+    array(
+       'zendForm' => $this->sidebarWidgetForm,
+       'SignupFormWidgetType'=> 'sidebarWidget',
+       'shopId'=>'',
+       'shopLogoOrDefaultImage'=>''
+    )
+);
 
-	<!-- Separator Starts -->
-	<div class="separator mt20">&nbsp;</div>
-	<!-- Separator Ends -->
-<?php } ?>
-<?php  if(count($this->gudes) >0): ?>
-	<div class="white-bg">
-	
-	<div class="">
-	<!-- Merchants Outer Starts -->
-	<div class="merchants-outer">
-	<div class="common-div">
-		<h2 ><?php echo  $this->translate("Bespaarwijzers gerelateerd aan")." '". $this->keyword . "'";?></h2>
-		<?php echo $this->partialLoop('bespaarwijzer/readMoreCategory.phtml', $this->gudes); ?>
-	</div>     
-	</div>
-	<!-- Merchants Outer Ends -->
-	<div style="clear:both;"></div>
-	</div>
-	
-	<!-- Voucher Outer Ends -->
-	<!-- Separator Starts -->
-	<div class="separator mt20">&nbsp;</div>
-	<!-- Separator Ends -->
-	</div>
-	<?php endif;?>
- <!-- Merchants Outer Starts -->
+$popularStores = '';
+if(count($this->popularStores)){
+    $popularStores = $this->partial(
+        'search/_popular-stores.phtml',
+        array(
+           'popularStores' => $this->popularStores,
+           'offers' => count($this->offers)
+        )
+    );
+}
 
-
-
-
-<div class="white-bg">
-
-<!-- Voucher Outer Starts -->
-<div class="new-outer">
-<div class="voucher-outer">
-<?php if(count($this->paginatorCodes) > 0){ //offer div ?>  
-<h2><?php echo $this->translate("kortingscodes gerelateerd aan")." '". $this->keyword . "'";?></h2>     
-<!-- Voucher Outer Left Starts -->
-<div class="">
-<?php 
-$k = 0;
-foreach ($this->paginatorCodes as $paginatorCodes):
-$this->paginatorCodes[$k]['marginCounter'] = 4;
-$k++;
-endforeach;
-echo $this->partialLoop('partials/offer.phtml', $this->paginatorCodes); 
-
+$pageAction = 'search';
+if (LOCALE == '') :
+    $pageAction = 'zoeken';
+endif;
 ?>
-<!-- Voucher Col1 Ends -->
-</div> 
-<?php } else { //show warning if result empty?>
-
-<div class="voucher-outer-left text-black">
-<h3><strong><?php echo $this->translate('Sorry, we hebben geen kortingscode kunnen koppelen aan de zoekopdracht..') ?></strong></h3>
-<h5><?php echo $this->translate('Het is aan te raden te zoeken op winkelnaam. Let daarbij goed op de spelling.')?></h5>
-<h5><?php echo $this->translate('Probeer de zoekopdracht nogmaals in een andere verwoording of navigeer door ')?><a href="<?php echo HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('alle-winkels')?>" class="text-blue-link"><?php echo $this->translate('Winkels')?></a> <?php echo $this->translate('of') ?> <a  href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('categorieen')?>" class="text-blue-link"><?php echo $this->translate('Categorieen') ?></a>!</h5>
+<div class="banner-block">
+    <img class="image" src="<?php echo $this->pageLogo; ?>" alt="image description">
+    <div class="bar">
+        <span><?php echo $this->translate('Results for'); ?> '<?php echo $this->searchedKeyword; ?>'</span>
+        <a href="<?php echo HTTP_PATH_LOCALE.$pageAction.'/'; ?>" class="btn btn-default btn-xs btn-remove"><span class="glyphicon glyphicon-remove"></span> <?php echo $this->translate('Clear search'); ?></a>
+    </div>
 </div>
-<?php } ?> 
-<!-- Voucher Outer Left Ends -->
-<!-- Voucher Outer Right Starts -->
-<div class="voucher-outer-right ">
-<!-- AZ Outer Starts -->
-
-<!-- Righn Categorieen Ends -->
+<div class="row">
+    <div id="content" class="col-md-8 col-sm-8">
+        <?php
+        echo $popularStores;
+        echo $offers;
+        ?>
+    </div>
+    <aside id="sidebar" class="col-md-4 col-sm-4"> 
+        <?php
+        echo $signUpWidgetForm; 
+        echo FrontEnd_Helper_viewHelper::socialMediaWidget(); 
+        ?>
+    </aside>
 </div>
-<!-- Voucher Outer Right Ends -->
-</div>
-<!-- Voucher Outer Ends -->
-
-<!-- Separator Starts -->
-<div class="separator mt20">&nbsp;</div>
-<!-- Separator Ends -->
-
-</div>
-
-
-</div>
-
-
-
-<div class="new-outer">
-	<div class="merchants-outer mt20">
-       	  <div class="clr"><h2><?php echo $this->translate('Our Suggestions') ?></h2></div>
-        	<div class="merchants-bot" style='width: 102%;'>
-            <?php 
-                $k = 0;
-                $userlogin = false;
-                if(Auth_VisitorAdapter::hasIdentity()):
-                   $userlogin = true;
-                endif;
-                if(count($this->suggestion) > 0):
-                foreach ($this->suggestion as $suggestion):
-                    $this->suggestion[$k]['marginCounter'] = 4;
-                    $k++;
-                endforeach;
-                  echo $this->partialLoop('partials/offer.phtml', $this->suggestion ); 
-		 		else:
-            	$newshoplink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('alle-winkels');
-	            $popularshoplink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('populair');
-            ?>		
-		   <div class="voucher-outer-left text-black">
-		   		<h3><?php echo $this->translate('Sorry, we hebben geen suggesties te linken naar het zoeken..') ?></h3>
-				<p>&nbsp;</p>
-				<p>&nbsp;</p>
-				<h5><?php echo $this->translate('Het is aan te raden te zoeken op winkelnaam. Let daarbij goed op de spelling.')?></h5>
-				<p>&nbsp;</p>
-				<h5><?php echo $this->translate('Probeer de zoekopdracht nogmaals in een andere verwoording of navigeer door ')?><a class="text-blue-link" href="<?php echo $newshoplink?>"><?php echo $this->translate('Winkels')?></a><?php echo $this->translate('of') ?> <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen')?>"><?php echo $this->translate('Categorieen') ?></a>!</h5>
-		  </div>	
-          <?php endif; ?>    
-         </div>
-      </div>
-</div> 
-<?php }else{?>
-	<div style="text-align:center;"><?php echo $this->translate("No record found");?></div>
-<?php }?>
-<!-- Merchants Outer Ends -->
-        
