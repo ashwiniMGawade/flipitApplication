@@ -38,6 +38,12 @@ class SearchController extends Zend_Controller_Action
             $this->view->popularStores = $shopsForSearchPage; 
         }  
         
+        $this->view->facebookTitle =$this->pageDetail->pageTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $this->pageDetail->permaLink;
+        $this->view->facebookImage = FACEBOOK_IMAGE;
+        $this->view->facebookDescription =  trim($this->pageDetail->metaDescription);
+        $this->view->facebookLocale = FACEBOOK_LOCALE;
+        $this->view->twitterDescription =  trim($this->pageDetail->metaDescription);
         $this->view->pageLogo = HTTP_PATH_LOCALE.'public/'.$this->pageDetail->logo->path.$this->pageDetail->logo->name;
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
