@@ -112,7 +112,8 @@ class Offer extends BaseOffer
     public static function getOffersBySimilarCategories($date, $limit, $shopId)
     {
         $similarCategoriesIds = self::getCategoriesIdsForWhereIn($shopId);
-        if (count($similarCategoriesIds) > 0) {
+        $similarCategoriesOffer = array();
+        if (!empty($similarCategoriesIds)) {
             $similarCategoriesOffer = Doctrine_Query::create()
             ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
             ->from('Offer o')
@@ -136,8 +137,6 @@ class Offer extends BaseOffer
             ->orderBy('o.startdate DESC')
             ->limit($limit)
             ->fetchArray();
-        } else {
-            $similarCategoriesOffer = array();
         }
         return $similarCategoriesOffer;
     }
@@ -194,11 +193,9 @@ class Offer extends BaseOffer
     public static function sliceOfferByLimit($mergeOffers, $limit)
     {
         $offers = array();
-        if (count($mergeOffers) > 0) {
-            $o = 0;
+        if (!empty($mergeOffers)) {
             foreach($mergeOffers as $newOfShop):
-                $offers[$o] = @$newOfShop;
-                $o++;
+                $offers[] = $newOfShop;
             endforeach;
         }
         $slicedOffer = array_slice($offers, 0, $limit);
@@ -209,7 +206,7 @@ class Offer extends BaseOffer
     {
         $cachedKeyForTop20 =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
         if ($cachedKeyForTop20) {
-            $topVoucherCodes = self::getTopCouponCodesForShopPage(array(), 20);
+            $topVoucherCodes = self::getTopCouponCodes(array(), 20);
             // if top korting are less than 20 then add newest add in list
             if (count($topVoucherCodes) < 20) {
                 $newestCodesLimit = 20 - count($topVoucherCodes);
@@ -246,7 +243,7 @@ class Offer extends BaseOffer
      * @version 1.0
      * @return array $data
      */
-    public static function getTopCouponCodesForShopPage($shopCategories, $limit = 5)
+    public static function getTopCouponCodes($shopCategories, $limit = 5)
     {
         $currentDateAndTime = date('Y-m-d H:i:s');
         $topCouponCodes = Doctrine_Query::create()
