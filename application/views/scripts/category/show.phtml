@@ -2,7 +2,7 @@
 $categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path'].
                          "thum_large_".$this->categoryDetail[0]['categoryicon']['name'];
 $categoryPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $categoryPartial->getCategoryOrPageHeder($this->categoryDetail[0]['name'], $categoryFeaturedImage);
+echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetail[0]['name'], $categoryFeaturedImage);
 
 $partialsViewPath = 'partials/';
 $offers = '';

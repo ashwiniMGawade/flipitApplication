@@ -15,10 +15,14 @@ class PageAttribute extends BasePageAttribute
     #########################################################
     ############### REFACTORED CODE         ##################
     #########################################################
-    public static function getPageAttributeIdByName($name)
+    public static function getPageAttributeIdByName($attributeName)
     {
-        $data = Doctrine_Core::getTable('pageAttribute')->findOneBy('name', $name);
-        return $data->id;
+        $attribute = Doctrine_Query::create()
+        ->select('p.id')
+        ->from('pageAttribute p')
+        ->where('p.name="'.$attributeName.'"')
+        ->fetchOne();
+        return $attribute->id;
     }
     #########################################################
     ############# END REFACTORED CODE     ###################

@@ -4,16 +4,11 @@
 <?php
 foreach ($this->authors as $author) :
     $authorPicture = HTTP_PATH_CDN.ltrim($author['profileimage']['path'], "/")."thum_large_widget_".$author['profileimage']['name'];
-    if (strlen($author['firstName']) > 10) :
-        $authorFirstName = substr($author['firstName'], 0, 10)."...";
-    else :
-        $authorFirstName = $author['firstName'];
-    endif;
     ?>
             <li>
                 <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('redactie') .'/'. strtolower($author['slug']); ?>"
                 style="height: 275px;" class="same-height-left">
-                    <h1><?php echo $authorFirstName;?></h1>
+                    <h1><?php echo $author['firstName'];?></h1>
                     <img alt="<?php echo $author['profileimage']['name'];?>" 
                     src="<?php echo $authorPicture;?>" class="photo-image">
                     <strong class="status"><?php echo $this->translate('deal spotter');?></strong>

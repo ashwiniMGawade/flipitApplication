@@ -17,7 +17,7 @@ class User extends BaseUser
     ########### REFACTORED CODE ##############################
     ##########################################################
     /**
-     * Function getAllUsersDetail
+     * Function getAllUsersDetail.
      * 
      * Get users detail.
      * 

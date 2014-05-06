@@ -35,14 +35,9 @@ class AboutController extends Zend_Controller_Action
 
     public static function getWebsiteName()
     {
-        $splitSiteName = explode("//", HTTP_PATH_LOCALE);
-        $webSiteNameWithoutRightSlesh = rtrim($splitSiteName[1], '/');
-        if (strstr($webSiteNameWithoutRightSlesh, "www")) {
-            $siteNameWithLocale = "http://".$webSiteNameWithoutRightSlesh;
-        } else {
-            $siteNameWithLocale = "http://www.".$webSiteNameWithoutRightSlesh;
-        }
-        return $siteNameWithLocale;
+        $splitWebsiteName = explode("//", HTTP_PATH_LOCALE);
+        $webSiteNameWithoutRightSlash = rtrim($splitWebsiteName[1], '/');
+        return strstr($webSiteNameWithoutRightSlash, "www") ? "http://".$webSiteNameWithoutRightSlash : "http://www.".$webSiteNameWithoutRightSlash;
     }
     ##########################################################
     ########### REFACTORED CODE ##############################

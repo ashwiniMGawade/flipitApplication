@@ -76,33 +76,15 @@ class Page extends BasePage
 
     }
 
-    public static function getPageAttributeByName($name)
-    {
-        $pageAttribute = Doctrine_Query::create()
-        ->select('p.id, p.pageAttributeId')
-        ->from('Page p')
-        ->where("name = '". $name ."'")
-        ->andWhere('p.deleted=0')
-        ->fetchArray();
-        return $pageAttribute[0]['pageAttributeId'];
-    }
-    
-    
-    /**
-     * get page detail from permalink
-     * @author Raman
-     * @version 1.0
-     */
-    
     public static function getPageDetailFromPermalink($permalink)
     {
-        $q = Doctrine_Query::create()
+        $pageDetail = Doctrine_Query::create()
         ->select('p.content, p.pagetitle')
         ->from('Page p')
         ->where('p.permalink="'.$permalink.'"')
         ->andWhere('p.deleted=0')
         ->fetchArray();
-        return $q;
+        return $pageDetail;
     }
     
     ######################################################
