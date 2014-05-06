@@ -12,9 +12,11 @@ class AboutController extends Zend_Controller_Action
     {
         $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
         $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
+
         if ($pageDetail->customHeader) {
             $this->view->layout()->customHeader = "\n" . $pageDetail->customHeader;
         }
+
         $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
         $this->view->pageTitle = $pageDetail->pageTitle;
         $this->view->headTitle($pageDetail->metaTitle);
