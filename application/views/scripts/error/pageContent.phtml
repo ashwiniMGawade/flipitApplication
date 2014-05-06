@@ -33,8 +33,8 @@ if ($this->pageMode == true) {
         $pageContent="<h1>".$this->page['pageTitle']."</h1>".stripslashes($this->page['content']);
     }
     $pageIconPath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
-    $categoryPartial = new FrontEnd_Helper_CategoryPartialFunctions();
-    echo $categoryPartial->getCategoryOrSpecialPageHeder($this->page['pageTitle'], $pageIconPath);?>
+    $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+    echo $pageHeader->getCategoryOrPageHeder($this->page['pageTitle'], $pageIconPath);?>
     <div class="row">
         <div class="col-md-8 col-sm-8" id="content">
         <?php echo $pageContent;?>

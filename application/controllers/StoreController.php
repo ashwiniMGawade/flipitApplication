@@ -119,7 +119,7 @@ class StoreController extends Zend_Controller_Action
         if ($voucherCacheKeyCheck) {
             $shopCategories = Shop::returnShopCategories($shopId);
             FrontEnd_Helper_viewHelper::setInCache('all_categories_of_shoppage_'. $shopId, $shopCategories);
-            $topVoucherCodes = Offer::getTopCouponCodesForShopPage($shopCategories, 100);
+            $topVoucherCodes = Offer::getTopCouponCodes($shopCategories, 100);
             FrontEnd_Helper_viewHelper::setInCache('all_popularvouchercode_list_shoppage', $topVoucherCodes);
         } else {
             $shopCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_categories_of_shoppage_'. $shopId);

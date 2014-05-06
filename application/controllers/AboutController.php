@@ -5,6 +5,48 @@
  */
 class AboutController extends Zend_Controller_Action
 {
+    ##########################################################
+    ########### REFACTORED CODE ##############################
+    ##########################################################
+    public function indexAction()
+    {
+        $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
+        $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
+        if ($pageDetail->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $pageDetail->customHeader;
+        }
+        $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
+        $this->view->pageTitle = $pageDetail->pageTitle;
+        $this->view->headTitle($pageDetail->metaTitle);
+        $this->view->facebookImage = FACEBOOK_IMAGE ;
+        $this->view->facebookTitle = $pageDetail->pageTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('redactie');
+        $this->view->facebookDescription = trim($pageDetail->metaDescription);
+        $this->view->facebookLocale = FACEBOOK_LOCALE;
+        $this->view->twitterDescription = trim($pageDetail->metaDescription);
+        $allAuthorsDetail = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", User::getAllUsersDetail(self::getWebsiteName()));
+        $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination($allAuthorsDetail, $this->_getAllParams(), 20, 7);
+        $this->view->pageDetail = $pageDetail;
+ 
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+    }
+
+    public static function getWebsiteName()
+    {
+        $splitSiteName = explode("//", HTTP_PATH_LOCALE);
+        $webSiteNameWithoutRightSlesh = rtrim($splitSiteName[1], '/');
+        if (strstr($webSiteNameWithoutRightSlesh, "www")) {
+            $siteNameWithLocale = "http://".$webSiteNameWithoutRightSlesh;
+        } else {
+            $siteNameWithLocale = "http://www.".$webSiteNameWithoutRightSlesh;
+        }
+        return $siteNameWithLocale;
+    }
+    ##########################################################
+    ########### REFACTORED CODE ##############################
+    ##########################################################
     /**
      * override views based on modules if exists
      * @see Zend_Controller_Action::init()
@@ -26,96 +68,6 @@ class AboutController extends Zend_Controller_Action
             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
-    }
-
-    public function indexAction()
-    {
-            # get cononical link
-            $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-            //$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink);
-
-            $slug = 14;
-            $this->pageDetail = Page::getPageFromPageAttribute(14);
-            $this->view->pageTitle = @$this->pageDetail->pageTitle;
-            $this->view->headTitle(@$this->pageDetail->metaTitle);
-            $permalink = @$this->pageDetail->permaLink;
-
-
-            if($this->pageDetail->customHeader) {
-                $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
-            }
-
-
-            $this->view->headMeta()->setName('description', @trim($this->pageDetail->metaDescription));
-
-            //for facebook parameters
-            $this->view->fbtitle = @$this->pageDetail->pageTitle;
-            $this->view->fbshareUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('redactie');
-
-            if(LOCALE == '' ) {
-                    $fbImage = 'logo_og.png';
-            }else{
-                    $fbImage = 'flipit.png';
-
-            }
-            $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
-
-
-        /*
-         * Example to cache a result of a query ()
-        */
-        // get top categories (for now i just fetch the available category list)
-        $cache = Zend_Registry::get('cache');
-        $pagedatakey ="all_". "pagedata".$slug ."_list";
-            // no cache available, lets query.
-            $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pagedatakey);
-            //key not exist in cache
-            if($flag){
-
-                //get Page data from database and store in cache
-                $page = Page::getPageDetailFromPermalink($permalink);
-                FrontEnd_Helper_viewHelper::setInCache($pagedatakey, $page);
-                //echo  'FROM DATABASE';
-
-            } else {
-                //get from cache
-                $page = FrontEnd_Helper_viewHelper::getFromCacheByKey($pagedatakey);
-                //echo 'The result is comming from cache!!';
-            }
-
-            #get the sitename with locale
-            $site = explode("//", HTTP_PATH_LOCALE);
-
-            $site_name1 = rtrim( $site[1], '/');
-
-            if(strstr($site_name1,"www")){
-
-                $site_name = "http://".$site_name1;
-            }else {
-                $site_name = "http://www.".$site_name1;
-            }
-
-            $alluserkey ="all_about_pages_users_list";
-            $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($alluserkey);
-            //key not exist in cache
-            if($flag){
-
-                //get  data from database and store in cache
-                $allUserDetails = User::getAllUserDetail($site_name);
-                FrontEnd_Helper_viewHelper::setInCache($alluserkey, $allUserDetails);
-                //echo  'FROM DATABASE';
-
-            } else {
-                //get from cache
-                $allUserDetails = FrontEnd_Helper_viewHelper::getFromCacheByKey($alluserkey);
-                //echo 'The result is comming from cache!!';
-            }
-        $limit = 20;
-        $this->view->page = $page;
-        $paginator = FrontEnd_Helper_viewHelper::renderPagination($allUserDetails,$this->_getAllParams(),$limit,7);
-        $this->view->paginator = $paginator;
-        $this->view->pageDetail = $this->pageDetail;
-
     }
 
 

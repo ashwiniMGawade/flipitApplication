@@ -13,6 +13,35 @@
 class User extends BaseUser
 {
 
+    ##########################################################
+    ########### REFACTORED CODE ##############################
+    ##########################################################
+    /**
+     * Function getAllUsersDetail
+     * 
+     * Get users detail.
+     * 
+     * @return array $usersData
+     * @version 1.0
+     */
+    public static function getAllUsersDetail($websiteName)
+    {
+        $usersData = Doctrine_Query::create()
+        ->select("u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing, u.popularKortingscode, pi.name, pi.path")
+        ->from('User u')
+        ->leftJoin("u.profileimage pi")
+        ->leftJoin("u.refUserWebsite rfu")
+        ->leftJoin("rfu.Website w")
+        ->where("u.deleted = 0")
+        ->andWhere("u.showInAboutListing = 1")
+        ->andWhere("w.url ='".$websiteName."'")
+        ->fetchArray();
+        return $usersData;
+    }
+    ##########################################################
+    ########### END REFACTORED CODE ##########################
+    ##########################################################
+    
     //wwconst USER_SET_STATUS = 0;
 
     const INVALID_NEW_PASSWORD_STATUS = "-2";
@@ -1073,33 +1102,6 @@ class User extends BaseUser
 
       return $data;
   }
-
-  /**
-   * get users detail
-   * use in  normal list
-   * @return array userdetail
-   * @author Raman
-   * @version 1.0
-   */
-  public static function getAllUserDetail($site_name)
-  {
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing, pi.name, pi.path")
-    ->from('User u')
-    ->leftJoin("u.profileimage pi")
-    ->leftJoin("u.refUserWebsite rfu")
-    ->leftJoin("rfu.Website w")
-    ->where("u.deleted = 0")
-    ->andWhere("u.showInAboutListing = 1")
-    ->andWhere("w.url ='".$site_name."'")
-    ->fetchArray();
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
-
 
   /**
    * get user Interesting category on ID basis
