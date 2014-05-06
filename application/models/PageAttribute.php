@@ -12,7 +12,21 @@
  */
 class PageAttribute extends BasePageAttribute
 {
-
+    #########################################################
+    ############### REFACTORED CODE         ##################
+    #########################################################
+    public static function getPageAttributeIdByName($attributeName)
+    {
+        $pageAttribute = Doctrine_Query::create()
+        ->select('p.id')
+        ->from('pageAttribute p')
+        ->where('p.name="'.$attributeName.'"')
+        ->fetchOne();
+        return $pageAttribute->id;
+    }
+    #########################################################
+    ############# END REFACTORED CODE     ###################
+    #########################################################
 
     public function __contruct($connName = false)
     {

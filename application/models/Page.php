@@ -39,7 +39,6 @@ class Page extends BasePage
 
     public static function getPageFromPageAttribute($id)
     {
-
         $page = Doctrine_Query::create()->select('p.*,i.path,i.name')
         ->from('Page p')->leftJoin('p.logo i')
         ->where("pageAttributeId = ?", $id)
@@ -76,6 +75,18 @@ class Page extends BasePage
         return $pageDetails;
 
     }
+
+    public static function getPageDetailFromPermalink($permalink)
+    {
+        $pageDetail = Doctrine_Query::create()
+        ->select('p.content, p.pagetitle')
+        ->from('Page p')
+        ->where('p.permalink="'.$permalink.'"')
+        ->andWhere('p.deleted=0')
+        ->fetchArray();
+        return $pageDetail;
+    }
+    
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -1039,27 +1050,6 @@ public static function exportpagelist()
         ->fetchArray();
         return $q;
     }
-
-
-    /**
-     * get page detail from permalink
-     * @author Raman
-     * @version 1.0
-     */
-
-    public static function getPageDetailFromPermalink($permalink)
-    {
-        $q = Doctrine_Query::create()
-        ->select('p.content, p.pagetitle')
-        ->from('Page p')
-        ->where('p.permalink="'.$permalink.'"')
-        ->andWhere('p.deleted=0')
-        ->fetchArray();
-        return $q;
-    }
-
-
-
 
     /**
      *  Author Er.kundal

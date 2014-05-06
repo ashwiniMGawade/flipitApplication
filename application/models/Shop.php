@@ -67,18 +67,18 @@ class Shop extends BaseShop
     protected static function removeDuplicateShops($relatedShops, $numberOfShops)
     {
         $similarShopsWithoutDuplicate = array();
-        foreach ($relatedShops[0]['relatedshops'] as $value) {
+        foreach ($relatedShops[0]['relatedshops'] as $relatedShop) {
             if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-                $mergedRelatedShops[$value['id']] = $value;
+                $similarShopsWithoutDuplicate[$relatedShop['id']] = $relatedShop;
             }
         }
 
         if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
             // push shops related to same category which are not yet added
             foreach ($relatedShops[0]['category'] as $category) {
-                foreach ($category['shop'] as $value) {
-                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops && !in_array($value['id'], $similarShopsWithoutDuplicate)) {
-                        $similarShopsWithoutDuplicate[$value['id']] = $value ;
+                foreach ($category['shop'] as $relatedCategoryShop) {
+                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops && !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
+                        $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop ;
                     }
                 }
             }
