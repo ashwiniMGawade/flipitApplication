@@ -76,6 +76,18 @@ class Page extends BasePage
         return $pageDetails;
 
     }
+
+    public static function getDefaultPageProperties($permalink)
+    {
+        $pageProperties = Doctrine_Query::create()
+            ->select('p.*')
+            ->from('Page p')
+            ->where("permaLink = '". $permalink ."'")
+            ->andWhere('p.deleted=0')
+            ->fetchArray();
+        return $pageProperties;
+    }
+
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -1096,17 +1108,7 @@ public static function exportpagelist()
      *	Version: 1.0
      */
 
-    public static function getdefaultPageProperties($permalink)
-    {
-        $data = Doctrine_Query::create()
-        ->select('p.*')
-        ->from('Page p')
-        ->where("permaLink = '". $permalink ."'")
-        ->andWhere('p.deleted=0')
-        ->fetchArray();
-        return $data;
-    }
-
+  
     /**
      * get page attrubute from page table by id
      *

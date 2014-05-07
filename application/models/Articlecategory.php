@@ -12,49 +12,47 @@
  */
 class Articlecategory extends BaseArticlecategory
 {
-    #################### Refactored Code Starts ######################################
     public function addcategory($params)
     {
-       
-        $article->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']);
-        $article->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
-        $article->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
-        $article->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaDescription']);
-        $article->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params['description']);
+        $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']);
+        $this->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
+        $this->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
+        $this->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaDescription']);
+        $this->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params['description']);
 
         if ($_FILES['categoryIconNameHidden']['name']!=null) {
             $result = self::uploadImage('categoryIconNameHidden');
             if ($result['status'] == '200') {
-                $imageExtension = BackEnd_Helper_viewHelper::getImageExtension(
-                        $result['fileName']);
-                $article->ArtCatIcon->ext = $imageExtension;
-                $article->ArtCatIcon->path = $result['path'];
-                $article->ArtCatIcon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $extension = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+                $this->ArtCatIcon->ext = $extension;
+                $this->ArtCatIcon->path = $result['path'];
+                $this->ArtCatIcon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
             } else{
                 return false;
             }
         }
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_articlecategory_list');
-        $imageExtension = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-        $article->ArtCatIcon->ext = $imageExtension;
+        $extension = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+        $this->ArtCatIcon->ext = $extension;
         try {
-                $article->save();
-                $categoryId = $article->id ;
+                $this->save();
+                $catId = $this->id ;
                 foreach ($params['selectedCategoryies'] as $relatedCategory) {
                     $refRelatedCategory = new RefArticlecategoryRelatedcategory();
-                    $refRelatedCategory->articlecategoryid = $article->id;
+                    $refRelatedCategory->articlecategoryid = $this->id;
                     $refRelatedCategory->relatedcategoryid = $relatedCategory;
                     $refRelatedCategory->save();
                 }
-            return $categoryId ;
-        } catch (Exception $e) {
+        return $catId ;
+        } catch(Exception $e) {
             return false;
         }
     }
 
     public static function deleteAllArticleAndRefArticleCategory()
     {
+
         $deleteRefArticleCategory = Doctrine_Query::create()->delete()
                                             ->from('RefArticlecategoryRelatedcategory')
                                             ->execute();
@@ -63,8 +61,9 @@ class Articlecategory extends BaseArticlecategory
                                            ->from('Articlecategory')
                                            ->execute();
         return true;                                   
+
     }                                       
-#################### Refactored Code Ends ######################################
+
     /**
      * upload image
      * @param $_FILES[index]  $file

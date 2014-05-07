@@ -1,0 +1,23 @@
+<?php   
+//echo "<pre>";print_r($this->articles);die;
+$articles = $this->articles;
+$articleNumber = 0;
+foreach ($articles as $article) {
+	$image = PUBLIC_PATH_CDN.$article['articles']['thumbnail']['path'].'thum_article_samll_'. $article['articles']['thumbnail']['name'];
+	$articleId = $article['articles']['id'];
+if(strlen($article['articles']['title']) > 32):                      
+    $articleTitle =  substr($article['articles']['title'], 0,32).'..';                      
+else: 
+    $articleTitle =  $article['articles']['title'];                       
+endif;
+?>
+ <li>
+    <a class="same-height-left" style="height: 99px;" id="<?php echo $articleNumber; ?>" onClick="showArticle(this.id), viewCounter('onclick', 'article', <?php echo $articleId; ?>);">
+        <img class="ico" width="52" height="45" src="<?php echo $image; ?>" alt="<?php echo $articleTitle; ?>"/>
+        <span><?php echo $articleTitle; ?></span>
+    </a>
+</li>
+<?php
+$articleNumber++;
+}
+

@@ -1,3 +1,23 @@
+function showArticle(id) {
+    if(id == 0) {
+        $("#first").addClass("active");
+        $("#second").removeClass("active");
+        $("#third").removeClass("active");
+
+    } else if(id == 1) {
+        $("#second").addClass("active");
+        $("#first").removeClass("active");
+        $("#third").removeClass("active");
+
+    } else {
+        $("#third").addClass("active");
+        $("#first").removeClass("active");
+        $("#second").removeClass("active");
+    }
+
+}
+
+
 var validRules = {
     homeemail : ""
 };

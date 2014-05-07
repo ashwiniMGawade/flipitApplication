@@ -17,6 +17,50 @@ class Articles extends BaseArticles
     CONST ArticleStatusDraft = 0;
     CONST ArticleStatusPublished = 1;
 
+    ######################## Refactored Block ################################
+
+    public static function getArticleForFrontEnd($parameters)
+    {
+        $currentDateTime = date('Y-m-d H:i:s');
+        $articles = Doctrine_Query::create()->select()
+                    ->from("Articles a")
+                    ->leftJoin('a.relatedstores as stores')
+                    ->leftJoin('a.relatedcategory as related')
+                    ->leftJoin('related.articlecategory as category')
+                    ->leftJoin('a.chapters as chapter')
+                    ->leftJoin('a.ArtIcon')
+                    ->leftJoin('stores.shop')
+                    ->where('a.permalink="'.$parameters['permalink'].'"')
+                    ->andWhere('a.publish = "1"')
+                    ->andWhere("a.deleted= 0")
+                    ->andWhere('a.publishdate <= '."'$currentDateTime'")
+                    ->fetchArray();
+        return $articles;
+    }
+
+    public static function getAllArticles($params)
+    {
+        $currentDateTime = date('Y-m-d H:i:s');
+        $data = Doctrine_Query::create()->select()
+                ->from("Articles a")
+                ->leftJoin('a.relatedstores as stores')
+                ->leftJoin('a.relatedcategory as related')
+                ->leftJoin('a.thumbnail')
+                ->leftJoin('a.ArtIcon')
+                ->leftJoin('stores.shop')
+                ->leftJoin('a.chapters chap')
+                ->where('a.publish = "1"')
+                ->andWhere("a.deleted= 0")
+                ->andWhere('a.publishdate <= '."'$currentDateTime'")
+                ->fetchArray();
+        return $data;
+    }
+
+
+
+    ###################### Refactored Block ends #############################
+
+
     /**
      * This function is used to get author list to display
      * get value from database and display on home page
@@ -122,45 +166,8 @@ class Articles extends BaseArticles
 
     }
 
-    public static function getArticleDataFront($params)
-    {
-         //echo "<pre>";
-         //print_r($params); die;
-        $nowDate = date('Y-m-d H:i:s');
-        $data = Doctrine_Query::create()->select()
-                                        ->from("Articles a")
-                                        ->leftJoin('a.relatedstores as stores')
-                                        ->leftJoin('a.relatedcategory as related')
-                                        ->leftJoin('related.articlecategory as category')
-                                        ->leftJoin('a.chapters as chapter')
-                                        ->leftJoin('a.ArtIcon')
-                                        ->leftJoin('stores.shop')
-                                        ->where('a.permalink="'.$params['permalink'].'"')
-                                        ->andWhere('a.publish = "1"')
-                                        ->andWhere("a.deleted= 0")
-                                        ->andWhere('a.publishdate <= '."'$nowDate'")
-                                        ->fetchArray();
-        return $data;
-    }
+   
 
-    public static function getdynamicArticleDataFront($params)
-    {
-        $nowDate = date('Y-m-d H:i:s');
-        $data = Doctrine_Query::create()->select()
-        ->from("Articles a")
-        ->leftJoin('a.relatedstores as stores')
-        ->leftJoin('a.relatedcategory as related')
-        ->leftJoin('a.thumbnail')
-        ->leftJoin('a.ArtIcon')
-        ->leftJoin('stores.shop')
-        ->leftJoin('a.chapters chap')
-        ->where('a.publish = "1"')
-        ->andWhere("a.deleted= 0")
-        ->andWhere('a.publishdate <= '."'$nowDate'")
-        ->fetchArray();
-
-        return $data;
-    }
 
 
 

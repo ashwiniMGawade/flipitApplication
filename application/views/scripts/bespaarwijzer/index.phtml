@@ -1,221 +1,146 @@
 <?php 
-$this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/socialmedia.js" ); 
-     $page = $this->page;
-     echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => null)); 
-	 $permaLink = $this->permaLink;
-     if(!empty($page)){
-       ?>
-        <!-- Bespaarwijzer Starts -->
-        <div class="white-bg">
-          <div class="new-outer">
-            <div class="bespaarwijzer-outer">
-              <div class="bespaarwijzer-left">
-              	<div class="bespaarwijzer-left-heading">
-              	  <h1><?php  echo $page[0]['pageTitle']; ?></h1>
-              	</div>
-                <div class="bespaarwijzer-left-col1">
-                  <?php  
-                    
-                   	$pagelogo = PUBLIC_PATH_CDN.$page[0]['logo']['path'].'thum_extra_large_'.$page[0]['logo']['name'];
-                 	
-                       ?>
-                  <div class="bespaarwijzer-left-col1-left">
-                    <img class='radiusImg' src="<?php  echo $pagelogo;?>" alt="<?php echo $page[0]['pageTitle']; ?>"/>
-                  </div>
-                  <div class="bespaarwijzer-left-col1-right">
-                    <?php echo $page[0]['content']; ?>
-                  </div>
-
-                </div>
-              </div>
-            </div>
-          </div>
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/saving.css");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialMedia.js");
+$pageDetails = $this->pageDetails;
+$recentlyAddedArticles = $this->recentlyAddedArticles;
+$categoryWiseArticles = $this->categoryWiseArticles;
+?>
+<div class="banner-block">
+    <?php $pageImage = PUBLIC_PATH_CDN.$pageDetails[0]['logo']['path'].'thum_extra_large_'.$pageDetails[0]['logo']['name']; ?>
+    <img class="image" src="/public/images/banner-06.jpg" alt="image description">
+    <!--<img class='image' src="<?php  echo $pageImage;?>" alt="<?php echo $pageDetails[0]['pageTitle']; ?>"/>-->
+    <div class="frame-image">
+        <div class="container">
+            <h1 class="flipit-text"><?php $this->translate('Flipit plus');?></h1>
         </div>
-        <!-- Bespaarwijzer Ends -->
-        
-        <!-- Separator Starts -->
-        <div class="separator">&nbsp;</div>
-        <!-- Separator Ends -->
-        
-       <!-- Social Likes Starts -->
-       <div class="new-outer">
-       <?php
-          $url = ""; 
-          $title = $this->translate("Share Kortingscode.nl en maak kans op een waardebon t.w.v. &euro; 50!");
-          $socialMedia = new FrontEnd_Helper_viewHelper();
-       	  echo $socialMedia->socialmedia($url, $title, 'moneysavingguide');
-       ?>
+    </div>
+    <div class="container">
+        <div class="text-box">
+            <p>
+            <?php echo  $this->translate('Flipit.com Plus is our magazine in which we want to do one thing only: help out all the consumers out there in every way possible');?>
+            </p>
         </div>
-       <!-- Social Likes Ends -->
-        
-         <!-- Separator Starts -->
-        <div class="separator">&nbsp;</div>
-        <!-- Separator Ends -->
-        <?php 
-    	if(!empty($this->popularAtTheMoment)):
-    	?>
-        <!-- Common Div Starts -->
-        <div class="new-outer">
-         <div class="common-div">
-         	<div class="popular-kortings-heading mt20 clr">
-            <h2><?php echo $this->translate('POPULAIR OP DIT MOMENT');?></h2>
-            
-          </div>
-    			<div class="common-div">
-    			
-      			<!-- Iphone COl1 Starts -->
-       			<?php 
-       			foreach($this->popularAtTheMoment as $moments): 
-       			?>              
-				<div class="iphone-col1">
-                   		<div class="iphone-col1-left">
-                   			<div class="iphone-col1-none-left-img">
-                    		<?php  	
-                    		$linkArticle = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $moments['articles']['permalink'];
-						 		$img = PUBLIC_PATH_CDN.$moments['articles']['ArtIcon']['path']."thum_article_samll_".$moments['articles']['ArtIcon']['name'];
-						 	
-                   			?>
-                      			<a href="<?php echo $linkArticle; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $moments['articles']['id']; ?>);"><img src="<?php echo $img; ?>"/></a>
-                        	
-                   		    </div>
-                   			<?php 
-                   			$nameArr = explode(' ', $moments['articles']['authorname']);
-                   			
-                   			$linkAuthor = HTTP_PATH_LOCALE."about/profile/id/".$moments['articles']['authorid'];
-                   			$user =  User::getProfileImage($moments['articles']['authorid']);
-						 	$username = $user['firstName'];
-						 	$name = substr($username,0, 5);
-						 	?>
+        <div class="block">
+            <div class="caption"><span><?php echo $this->translate('Featured savings');?></span></div>
+            <div class="carousel">
+                <div class="holder">
+                    <div class="mask">
+                        <div class="slideset">
+                            <div class="slide active" id="first">
+                                <img class="aligncenter"  src="<?php echo PUBLIC_PATH_CDN.$this->mostReadArticles[0]['articles']['thumbnail']['path'].$this->mostReadArticles[0]['articles']['thumbnail']['name']; ?>" alt="<?php echo $this->mostReadArticles[0]['articles']['title'];  ?>">
+                                <h1><?php echo $this->mostReadArticles[0]['articles']['title']; ?></h1>
+                                <p>
+                                   <?php echo $this->mostReadArticles[0]['articles']['metadescription']; ?>
+                                </p>
+                            </div>
+                            <div class="slide"  id="second">
+                                <img class="aligncenter" src="<?php echo PUBLIC_PATH_CDN.$this->mostReadArticles[1]['articles']['thumbnail']['path'].$this->mostReadArticles[1]['articles']['thumbnail']['name']; ?>" alt="<?php echo $this->mostReadArticles[1]['articles']['title'];  ?>">
+                                <h1><?php echo $this->mostReadArticles[1]['articles']['title']; ?></h1>
+                                <p>
+                                    <?php echo $this->mostReadArticles[1]['articles']['metadescription']; ?>
+                                </p>
+                            </div>
+                            <div class="slide" id="third">
+                                <img class="aligncenter" src="<?php echo PUBLIC_PATH_CDN.$this->mostReadArticles[2]['articles']['thumbnail']['path'].$this->mostReadArticles[2]['articles']['thumbnail']['name']; ?>" alt="<?php echo $this->mostReadArticles[2]['articles']['title'];  ?>">
+                                <h1><?php echo $this->mostReadArticles[2]['articles']['title'];?></h1>
+                                <p>
+                                    <?php echo $this->mostReadArticles[2]['articles']['metadescription']; ?>
+                                </p>
+                            </div>
                         </div>
-                        <div class="iphone-col1-right">
-                        	<div class="iphone-col1-right-text1 text-blue">
-                            <h3>
-                              <a class="text-blue-link" href="<?php echo $linkArticle; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $moments['articles']['id']; ?>);"><?php echo $moments['articles']['title']; ?>
-                              </a>
-                            </h3>
-                        	</div>
-                            <div class="iphone-col1-right-text2">
-                                <?php 
-                                
-                                if(isset($this->chapters[0])){
-                                
-                                if($moments['chapters'][0]['content']!=null || $moments['chapters'][0]['content']!='undefined' || $moments['chapters'][0]['content']!=''){
-                                  $allowed_tags = '<h6>'; 
-                                  $description = $moments['articles']['chapters'][0]['content']; 
-                                  $only = strip_tags($description, $allowed_tags); 
-
-                                  if(strlen($only) > 110) { 
-                                    echo substr($only, 0,110).'...';
-                                  } else {
-                                    echo $only; 
-                                  	}
-							   }
-                                }else{
-							
-							}
-                                ?>
-                          </div>
-                       </div>
-				</div> 
-                <!-- Iphone COl1 Ends -->
- 				<?php 
- 				endforeach;
- 				?>
-            </div>
-         </div>
-         </div>
-         <?php 
-         endif;
-         ?>
-        <!-- Common Div Ends -->
-         
-         <!-- Blue Listing Outer Starts -->
-          <div class="white-bg">
-            <div class="new-outer">
-              <div class="blue-listing-outer">
-                <div class="popular-kortings-heading mt20 clr">
-                  <h2><?php echo $this->translate('CAT');?></h2>
-                </div>
-                 <?php 
-                    if(!empty($this->allMoneySavingArticles)){
-                  ?>
-                  <?php 
-                    $ms =  array();
-                    $ms = $this->allMoneySavingArticles[0]['moneysaving'];
-                    $ret = 1;
-                    for($i=0;$i < count($ms);$i++) {
-                  ?>
-                <!-- Blue Listing Inner Starts -->
-                <div class="blue-listing-inner">
-                  <div class="blue-listing-heading">
-                    <?php $link = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzercat').'/'. $ms[$i]['articlecategory'][0]['permalink']; ?>
-                    <h3>
-                      <a href="<?php echo $link; ?>"><?php echo $ms[$i]['articlecategory'][0]['name']; ?></a>
-                    </h3>
-                  </div>
-                  <div class="blue-listing">
-                    <ul>
-                    <?php 
-
-                    for($j=0;$j < count($ms[$i]['refarticlecategory']);$j++) {
-                    	
-                    	$artId = $ms[$i]['refarticlecategory'][$j]['articles']['id'];
-                    	$alink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $ms[$i]['refarticlecategory'][$j]['articles']['permalink'];
-                    ?>
-                      <li>
-                        <h3>
-                          <a href="<?php echo $alink; ?>" onClick="javascript:viewCounter('onclick', 'article', <?php echo $artId; ?>);"><?php echo $ms[$i]['refarticlecategory'][$j]['articles']['title']; ?>
-                          </a>
-                        </h3>
-                      </li>
-                    	<?php 
-                        }
-                    	?>
-                    </ul>
                     </div>
-                  </div>
-                  <?php if($ret%4 == 0){
-                  		?>
-                  		<br>
-                  <!-- Separator Starts -->
-                  	<div class="autosep">&nbsp;</div>
-                  <!-- Separator Ends --> 
-                  		<?php
-                  		}	
-                  ?>
-                  <!-- Blue Listing Inner Ends -->
-
-                  <?php $ret++; }
-                  } else {
-                  echo $this->translate("No Records Found");
-                  }
-                  ?>                
-              </div>
+                </div>
+                <ul class="switcher">
+                <?php
+                   if (!empty($this->mostReadArticles)) {
+                        echo $this->partial('partials/_mostReadArticles.phtml',array('articles'=>$this->mostReadArticles)); 
+                    } else {
+                    echo $this->translate("No Records Found");
+                    } 
+                ?>
+                </ul>
             </div>
-            
-            <!-- Separator Starts -->
-            <div class="separator mt20">&nbsp;</div>
-            <!-- Separator Ends --> 
-
-          <!-- white bg ends--> 
-          </div> 
-
-	       <!-- Common Div Starts -->
-          <div class="new-outer">
-            <div class="common-div">
-              <div class="popular-kortings-heading mt20 clr">
-                <h2><?php echo $this->translate('MEEST GELEZEN BESPAAR WIJZERS');?></h2>
-              </div>
-              <div class="common-div">
-              <?php 
-              if(!empty($this->mostRead)){
-              	echo $this->partialLoop('partials/mostReadAcls.phtml',$this->mostRead); 
-                } else {
-              	echo $this->translate("No Records Found");
-                }
-              ?>
-              </div>
+        </div>
+    </div>
+</div>
+<main role="main" id="main">
+    <div class="container content-box">
+        <header class="heading-bar">
+            <h2><?php echo $this->translate('Recently added');?></h2>
+        </header>
+        <div class="item-block">
+            <div class="holder">
+                 <?php foreach($recentlyAddedArticles as $recentlyAddedArticle) { ?>
+                <div class="item">
+                    <img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['ArtIcon']['path'].$recentlyAddedArticle['ArtIcon']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>">
+                    <div class="box">
+                        <div class="caption-area">
+                            <span class="caption">
+                            <?php echo $recentlyAddedArticle['title'];?>
+                            </span>
+                        </div>
+                        <a href="javascript:void(0);" onclick = "viewCounter('onclick', 'article', <?php echo $recentlyAddedArticle['id']; ?>);" class="link"><?php echo $this->translate('more');?> &#8250;</a>
+                    </div>
+                </div>
+                <?php } ?>          
             </div>
-          </div>
-     <!-- Common Div Ends -->
-     <?php } ?>
+        </div>
+        <header class="heading-bar">
+            <h2><?php echo $this->translate('From the blog');?></h2>
+        </header>
+        <div class="item-block">
+            <div class="holder">
+                <?php foreach($categoryWiseArticles['blog'] as $categoryWiseArticle) { ?>
+                <div class="item">
+                     <img src="<?php echo PUBLIC_PATH_CDN.$categoryWiseArticle['ArtIcon']['path'].$categoryWiseArticle['ArtIcon']['name'];?>" alt="<?php echo $categoryWiseArticle['title'];?>">
+                    <div class="box">
+                        <div class="caption-area">
+                            <span class="caption">
+                              <?php echo $categoryWiseArticle['title'];?>
+                            </span>
+                        </div>
+                        <a href="javascript:void(0);" onclick = "viewCounter('onclick', 'article', <?php echo $categoryWiseArticle['id']; ?>);" class="link"><?php echo $this->translate('More');?> &#8250;</a>
+                    </div>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+        <header class="heading-bar">
+            <h2><?php echo  $this->translate('Saving tips');?></h2>
+        </header>
+        <div class="item-block">
+            <div class="holder">
+                <?php foreach($categoryWiseArticles['savingtip'] as $categoryWiseArticle) { ?>
+                <div class="item">
+                    <img src="<?php echo PUBLIC_PATH_CDN.$categoryWiseArticle['ArtIcon']['path'].$categoryWiseArticle['ArtIcon']['name'];?>" alt="<?php echo $categoryWiseArticle['title'];?>">
+                    <div class="box">
+                        <div class="caption-area">
+                            <span class="caption">
+                             <?php echo $categoryWiseArticle['title'];?>
+                            </span>
+                        </div>
+                        <a href="javascript:void(0);" onclick = "viewCounter('onclick', 'article', <?php echo $categoryWiseArticle['id']; ?>);" class="link"><?php echo $this->translate('More');?> &#8250;</a>
+                    </div>
+                </div>
+                 <?php } ?>
+            </div>
+        </div>
+    </div>
+</main>
+<footer class="bottom-panel">
+    <div class="container">
+        <div class="holder">
+            <span class="text"><?php echo  $this->translate('Satisfied with the new Kortingscode.nl? Like us and win great prizes');?>
+            </span>
+            <ul class="share-list">
+                <?php
+               echo FrontEnd_Helper_viewHelper::socialMediaWidget('','article');
+               ?>
+            </ul>
+        </div>
+    </div>
+</footer>
+
+
+
+
