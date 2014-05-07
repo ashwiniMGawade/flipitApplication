@@ -50,23 +50,34 @@ class SearchController extends Zend_Controller_Action
 
     public function getExcludedShopIdsBySearchedKeyword($searchedKeyword)
     {
-        $searchBarExcludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeyword);
+        $excludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeyword);
         $shopIds = '';
 
-        if (!empty($searchBarExcludedKeywords)) :
-            if($searchBarExcludedKeywords[0]['action'] == 0):
-                $storeUrl = $searchBarExcludedKeywords[0]['url'];
-                $this->_redirect($storeUrl);
+        if (!empty($excludedKeywords[0])) :
+            if($excludedKeywords[0]['action'] == 0):
+                $this->getRedirectUrlForStore($excludedKeywords[0]);
                 exit();
             else:
-                $shopIds = array();
-                foreach ($searchBarExcludedKeywords[0]['shops'] as $shops) :
-                    $shopIds[] = $shops['shopsofKeyword'][0]['id'];
-                endforeach;
+                $shopIds = self::getShopIdsByExcludedKeywords($excludedKeywords[0]);
             endif;
         endif;
 
         return $shopIds;
+    }
+
+    public static function getShopIdsByExcludedKeywords($excludedKeywords)
+    {
+        $shopIds = array();
+        foreach ($excludedKeywords['shops'] as $shops) :
+            $shopIds[] = $shops['shopsofKeyword'][0]['id'];
+        endforeach;
+        return $shopIds;
+    }
+
+    public function getRedirectUrlForStore($excludedKeywords)
+    {
+        $storeUrl = $excludedKeywords[0]['url'];
+        $this->_redirect($storeUrl);      
     }
 
     public static function getshopsByExcludedShopIds($shopIds)
@@ -84,6 +95,12 @@ class SearchController extends Zend_Controller_Action
     public static function getPopularStores($searchedKeyword)
     {
         $popularStores = Shop::getStoresForSearchByKeyword($searchedKeyword, 8);
+        $popularStoresForSearchPage = self::getPopularStoresForSearchPage($popularStores);
+        return $popularStoresForSearchPage;
+    }
+
+    public static function getPopularStoresForSearchPage($popularStores)
+    {
         $popularStoresForSearchPage = array();
 
         foreach ($popularStores as $popularStore) :
@@ -100,11 +117,7 @@ class SearchController extends Zend_Controller_Action
         if (!empty($shopsByShopIds) && !empty($popularShops)) :
             $shopsForSearchPage = array_merge($shopsByShopIds, $popularShops);
         else:
-            if (!empty($popularShops)) :
-                $shopsForSearchPage = $popularShops;
-            else:
-                $shopsForSearchPage = $shopsByShopIds; 
-            endif;
+            $shopsForSearchPage = !empty($popularShops) ? $popularShops : $shopsByShopIds;
         endif;
 
         return $shopsForSearchPage;

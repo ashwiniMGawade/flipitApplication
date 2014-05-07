@@ -657,10 +657,16 @@ class Offer extends BaseOffer
 
     public static function searchOffers($searchParameters, $shopIds, $limit)
     {
-        $searchedOffersByIds = array();
-        $searchData = array();
         $searchKeyword = strtolower($searchParameters['searchField']);
         $currentDate = date('Y-m-d H:i:s');
+        $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
+        $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate, $limit, $searchedOffersByIds);
+        return $offersBySearchedKeywords;
+    }
+
+    public static function getOffersByShopIds($shopIds, $currentDate)
+    {
+        $searchedOffersByIds = array();
         if(!empty($shopIds)) :
             $shopIds = array_map("mysql_real_escape_string", $shopIds);
             $shopIds = ("'" . implode("', '", $shopIds) . "'");
@@ -688,7 +694,12 @@ class Offer extends BaseOffer
                 $searchedOffersByIds[$shopOffersByShopId['id']] = $shopOffersByShopId;
             endforeach;
         endif;
-        
+        return $searchedOffersByIds;
+    }
+
+    public static function getOffersBySearchedKeywords($searchKeyword, $currentDate, $limit, $searchedOffersByIds)
+    {
+        $offersBySearchedKeywords = array();
         $shopOffersBySearchedKeywords = Doctrine_Query::create()
         ->select('s.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId,t.*')
                 ->from('Offer o')
@@ -714,11 +725,10 @@ class Offer extends BaseOffer
             foreach($shopOffersBySearchedKeywords as $shopOffersBySearchedKeyword):
                 $searchedOffersByKeywords[$shopOffersBySearchedKeyword['id']] = $shopOffersBySearchedKeyword;
             endforeach;
-            $mergedSearchData = array_merge($searchedOffersByIds, $searchedOffersByKeywords);
-            $searchData = array_slice($mergedSearchData, 0, $limit);
+            $mergedOffersBySearchedKeywords = array_merge($searchedOffersByIds, $searchedOffersByKeywords);
+            $offersBySearchedKeywords = array_slice($mergedOffersBySearchedKeywords, 0, $limit);
         endif;
-
-        return $searchData;
+        return $offersBySearchedKeywords;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
