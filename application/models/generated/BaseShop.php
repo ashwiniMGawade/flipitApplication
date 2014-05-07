@@ -335,6 +335,9 @@ abstract class BaseShop extends Doctrine_Record
         		'type' => 'boolean',
         ));
         
+        $this->hasColumn('brandingcss', 'text', null, array(
+             'type' => 'text',
+        ));
        
     }
 
