@@ -1,10 +1,10 @@
 $(document).ready(function(){
 var cache = {};
 $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
-   var self = this;
+   var currentSelectedItem = this;
    $.each( items, function( index, item ) {
         if (index < 8)
-            {self._renderItem( ul, item );}
+            {currentSelectedItem._renderItem( ul, item );}
         });
 }
 $("input#searchFieldHeader").autocomplete({
@@ -32,7 +32,7 @@ $("input#searchFieldHeader").autocomplete({
     $("a#searchbuttonHeader").click(function(){
     if ($("input#searchFieldHeader")
         .val() == $(
-        "input#searchFieldHeaderHidden")
+        "input#searchedKeyword")
         .val() && $("input#searchFieldHeader").val()!='') {
         var autocomplete = $('input#searchFieldHeader').data("autocomplete");  
         var matcher = new RegExp("("+ $.ui.autocomplete.escapeRegex($('input#searchFieldHeader').val())+ ")", "ig");
@@ -55,26 +55,26 @@ $("input#searchFieldHeader").autocomplete({
                         'item' : item
                     });
         } else {
-            var value = $(
+            var searchedKeywordValue = $(
                     "input#searchFieldHeader")
                     .val();
-            if (value == 'Vind kortingscodes voor jouw favoriete winkels..') {
+            if (searchedKeywordValue == 'Vind kortingscodes voor jouw favoriete winkels..') {
                 return false;
             }
             window.location.href = HOST_PATH_LOCALE
-                    + __("zoeken") + '/' + value;
+                    + __("zoeken") + '/' + searchedKeywordValue;
         }
     }
     });
     
 $("input#searchFieldHeader").keyup(function(e){
     if(e.which != 37 && e.which != 38 && e.which != 39 && e.which != 40){
-        $("input#searchFieldHeaderHidden").val($(this).val());
+        $("input#searchedKeyword").val($(this).val());
     }
 });
     
 $("input#searchFieldHeader").keypress(function(event){
-if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searchFieldHeaderHidden").val() == $("input#searchFieldHeader").val()){
+if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searchedKeyword").val() == $("input#searchFieldHeader").val()){
     var autocomplete = $( this ).data( "autocomplete" );
     var matcher = new RegExp( "("+$.ui.autocomplete.escapeRegex($(this).val())+")", "ig"  );
     autocomplete.widget().children( ".ui-menu-item" ).each(function() {
@@ -88,14 +88,14 @@ if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searc
         item['permalink'] = autocomplete.selectedItem.permalink;
         autocomplete._trigger( "select", '', { 'item' : item } );
     } else {
-        var value = $("input#searchFieldHeader").val();
-        if(value == 'Vind kortingscodes voor jouw favoriete winkels..'){
+        var searchedKeywordValue = $("input#searchFieldHeader").val();
+        if(searchedKeywordValue == 'Vind kortingscodes voor jouw favoriete winkels..'){
             return false;
         }
         $('form').submit(function() {
           return false;
         });
-        window.location.href = HOST_PATH_LOCALE + __("zoeken") + '/' + value;
+        window.location.href = HOST_PATH_LOCALE + __("zoeken") + '/' + searchedKeywordValue;
     }
 }
 $('ul.ui-autocomplete').addClass('wd1');

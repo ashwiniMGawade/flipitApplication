@@ -11,7 +11,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($searchPermalink);
         $pageName = LOCALE == '' ? 'zoeken' : 'search';
         $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
-        $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
+        $pageDetail = Page::getPageFromPageAttribute(36);
         $this->view->pageTitle = $pageDetail->pageTitle;
 
         if ($pageDetail->customHeader) {
@@ -83,7 +83,7 @@ class SearchController extends Zend_Controller_Action
     public static function getshopsByExcludedShopIds($shopIds)
     {
         $shopsForSearchPage = array();
-        $shopsByShopIds = Shop::getExclusiveShops($shopIds);
+        $shopsByShopIds = Shop::getShopsByShopIds($shopIds);
 
         foreach ($shopsByShopIds as $shopsByShopId) :
             $shopsForSearchPage[$shopsByShopId['id']] = $shopsByShopId;

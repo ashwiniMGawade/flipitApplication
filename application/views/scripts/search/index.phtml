@@ -1,4 +1,5 @@
 <?php 
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $partialViewPath = 'partials/';
 $offers = '';
 if(!empty($this->offers)):
@@ -9,7 +10,7 @@ if(!empty($this->offers)):
         $partialViewPath. '_offer.phtml',
         array(
             'offers' => $this->offers,
-            'offersType'=>'similar',
+            'offersType'=>'searchedOffers',
             'shopName' => '',
             'shop' => '',
             'zendForm'=>$this->form

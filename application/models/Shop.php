@@ -208,16 +208,16 @@ class Shop extends BaseShop
         return $shopDetails;
     }
 
-    public static function getExclusiveShops($shopIds)
+    public static function getShopsByShopIds($shopIds)
     {
-        $exclusiveShops = Doctrine_Query::create()
+        $shopsInformation = Doctrine_Query::create()
             ->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
             ->from("Shop s")
             ->leftJoin("s.logo img")
             ->where('s.deleted=0')
             ->andWhereIn("s.id",$shopIds)
             ->orderBy("s.name")->fetchArray();
-        return $exclusiveShops;
+        return $shopsInformation;
     }
 
     public static function getStoresForSearchByKeyword($searchedKeyword, $limit)
