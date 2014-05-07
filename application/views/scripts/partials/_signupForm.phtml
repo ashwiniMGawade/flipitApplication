@@ -3,7 +3,7 @@ if ($this->zendForm!='' && $this->zendForm!=null) {
     $signUpForm = $this->partial(
         'partials/_signupwidget.phtml',
         array(
-            'SignupFormWidgetType'=>$this->SignupFormWidgetType,
+            'signupFormWidgetType'=>$this->signupFormWidgetType,
             'zendForm'=>$this->zendForm,
         )
     );
@@ -14,7 +14,7 @@ if ($this->zendForm!='' && $this->zendForm!=null) {
     endif;
     $shopId = $this->shopId=='' ? 0 : $this->shopId;
     if (Visitor::getFavoriteShopForUser($visitorId, $shopId)==false):
-        if ($this->SignupFormWidgetType== 'widgetWithinOffers') {?>
+        if ($this->signupFormWidgetType== 'widgetWithinOffers') {?>
             <div class="block block-form <?php echo $this->shop=='' ? 'block-form-2' : ''?>">
                 <div class="holder">
                     <div class="<?php echo $this->shopId=='' ? 'ico-box' : 'icon'?>">

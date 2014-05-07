@@ -30,7 +30,7 @@ $signUpWidgetForm = $this->partial(
     $partialViewPath.'_signupForm.phtml',
     array(
        'zendForm' => $this->sidebarWidgetForm,
-       'SignupFormWidgetType'=> 'sidebarWidget',
+       'signupFormWidgetType'=> 'sidebarWidget',
        'shopId'=>'',
        'shopLogoOrDefaultImage'=>''
     )
@@ -61,15 +61,9 @@ endif;
 </div>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-        <?php
-        echo $popularStores;
-        echo $offers;
-        ?>
+        <?php echo $popularStores.$offers; ?>
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4"> 
-        <?php
-        echo $signUpWidgetForm; 
-        echo FrontEnd_Helper_viewHelper::socialMediaWidget(); 
-        ?>
+        <?php echo $signUpWidgetForm.FrontEnd_Helper_viewHelper::socialMediaWidget(); ?>
     </aside>
 </div>
