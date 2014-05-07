@@ -217,7 +217,7 @@ EOD;
     {
         $mainMenu = menu::getFirstLevelMenu();
         $mainMenuCount = count($mainMenu);
-        $value = 1;
+        $value = 0;
         $navigationString ='<nav id="nav"><ul>';
         foreach ($mainMenu as $menu) {
             $permalink = RoutePermalink::getPermalinks($menu['url']);
@@ -249,7 +249,6 @@ EOD;
             $value++;
         }
         $navigationString .= '</ul></nav>';
-        
         return $navigationString;
     }
     
