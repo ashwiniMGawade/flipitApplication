@@ -15,6 +15,7 @@ class generateOfferFeeds
     protected $_logo = null ;
     protected $_method = null ;
     protected $_modules = null ;
+    protected $_public_cdn_path = '';
 
     public function __call($method, $args)
     {
@@ -103,12 +104,14 @@ class generateOfferFeeds
             $this->_hostName = "http://www.kortingscode.nl" ;
             $this->_logo = $this->_hostName . "/public/images/front_end/logo-popup.png";
             $suffix = "" ;
+            $this->_public_cdn_path = 'http://img.kortingscode.nl/public/';
         } else {
 
             $this->_localePath = $key."/" ;
             $this->_hostName = "http://www.flipit.com" . '/'.$key ;
             $this->_logo = "http://www.flipit.com" . "/public/images/front_end/flip-logo.png";
             $suffix = "_" . strtoupper($key) ;
+            $this->_public_cdn_path = 'http://img.flipit.com/public/'.$this->_localePath;
         }
 
         $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
@@ -151,28 +154,23 @@ class generateOfferFeeds
     }
     protected function newOffers()
     {
-
         $offers = Offer::getNewestOffersForRSS();
-
-        // Create array to store the RSS feed entries
         $entries = array();
 
-        // Cycle through the rankings, creating an array storing
-        // each, and push the array onto the $entries array
         foreach ($offers as  $offer) {
-
+            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'],'/').$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
+            $offerTermsWithShopImage = $offer['terms'].$shopImage;
             $entry = array(
-                            'title'       => $offer['title'] ,
-                            'link'        => $this->_hostName . '/' . $offer['permalink'],
-                            'description' => "{$offer['terms']}",
-                            'lastUpdate' =>  strtotime($offer['lastUpdate']),
-                            'guid' => $offer['id'] );
+                        'title'       => $offer['title'] ,
+                        'link'        => $this->_hostName . '/' . $offer['permalink'],
+                        'description' => "{$offerTermsWithShopImage}",
+                        'lastUpdate' =>  strtotime($offer['lastUpdate']),
+                        'guid' => $offer['id'] );
             if ($entry) {
                 array_push($entries, $entry);
             }
         }
 
-        // Create the RSS array
         $feedData = array(
                 'title'=> $this->_trans->translate('Newest offers') ,
                 'link'=> $this->_hostName ,
@@ -181,35 +179,21 @@ class generateOfferFeeds
                 'image'	=> $this->_logo,
                 'entries'=>$entries
         );
-
-        // create our feed object and import the data
         $feed = Zend_Feed::importArray ( $feedData, 'rss' );
-
-        # rss dirrectory path
-        $mainDir = PUBLIC_PATH. $this->_localePath ."rss/";
-
-        # generate translated file name
+        $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
         $fileName = $this->_trans->translate('newest-offers');
+        $offerXml = $rssDirectory. "{$fileName}.xml";
 
-        # complete path for offer rss feed file
-        $offerXml = $mainDir. "{$fileName}.xml";
+        if(!file_exists($rssDirectory))
+            mkdir($rssDirectory, 0775, TRUE);
 
-        # create dir if not exists
-        if(!file_exists($mainDir))
-            mkdir($mainDir, 0775, TRUE);
-
-        # delete old file
         if(file_exists($offerXml))
             unlink($offerXml);
 
-        # save rss as xml data
         $rssFeed = $feed->saveXML();
-
-        # write rss data into file
         $offerHandle = fopen($offerXml, 'w');
         fwrite($offerHandle, $rssFeed);
         fclose($offerHandle);
-
         print trim($this->_hostName, '/')." - RSS feed for newest offers has been created successfully!!!\n" ;
 
     }
@@ -217,29 +201,24 @@ class generateOfferFeeds
     protected function popularOffers()
     {
         $offers = Offer::getPopularOffersForRSS();
-
-        // Create array to store the RSS feed entries
         $entries = array();
 
-        // Cycle through the rankings, creating an array storing
-        // each, and push the array onto the $entries array
         foreach ($offers as  $offer) {
-
+            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'], '/').$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
             $terms = isset($offer['termandcondition'][0]) ? $offer['termandcondition'][0]['terms']
                          : '' ;
-
+            $offerTermsWithShopImage = $terms.$shopImage;
             $entry = array(
-                            'title'       => $offer['title'] ,
-                            'link'        => $this->_hostName . '/' . $offer['shop']['permalink'],
-                            'description' => "$terms" ,
-                            'lastUpdate' =>  strtotime($offer['lastUpdate']),
-                            'guid' => $offer['id'] );
+                        'title'       => $offer['title'] ,
+                        'link'        => $this->_hostName . '/' . $offer['shop']['permalink'],
+                        'description' => "$offerTermsWithShopImage" ,
+                        'lastUpdate' =>  strtotime($offer['lastUpdate']),
+                        'guid' => $offer['id'] );
             if ($entry) {
                 array_push($entries, $entry);
             }
         }
 
-        // Create the RSS array
         $feedData = array(
                 'title'=> $this->_trans->translate('Popular offers') ,
                 'link'=> $this->_hostName ,
@@ -248,37 +227,22 @@ class generateOfferFeeds
                 'image'	=> $this->_logo,
                 'entries'=>$entries
         );
-
-        // create our feed object and import the data
         $feed = Zend_Feed::importArray ( $feedData, 'rss' );
-
-        # rss dirrectory path
-        $mainDir = PUBLIC_PATH. $this->_localePath ."rss/";
-
-        # generate translated file name
+        $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
         $fileName = $this->_trans->translate('popular-offers');
+        $offerXml = $rssDirectory. "{$fileName}.xml";
 
-        # complete path for offer rss feed file
-        $offerXml = $mainDir. "{$fileName}.xml";
+        if(!file_exists($rssDirectory))
+            mkdir($rssDirectory, 0775, TRUE);
 
-        # create dir if not exists
-        if(!file_exists($mainDir))
-            mkdir($mainDir, 0775, TRUE);
-
-        # delete old file
         if(file_exists($offerXml))
             unlink($offerXml);
 
-        # save rss as xml data
         $rssFeed = $feed->saveXML();
-
-        # write rss data into file
         $offerHandle = fopen($offerXml, 'w');
         fwrite($offerHandle, $rssFeed);
         fclose($offerHandle);
-
         print print trim($this->_hostName, '/')." - RSS feed  for popular offers has been created successfully!!! \n";
-
     }
 
 }

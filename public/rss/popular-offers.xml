@@ -1,38 +1,41 @@
-<?xml version="1.0" encoding="utf8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
-    <title><![CDATA[nieuwste kortingscodes]]></title>
+    <title><![CDATA[Popular offers]]></title>
     <link>http://www.kortingscode.nl</link>
     <description><![CDATA[]]></description>
-    <pubDate>Thu, 13 Jun 2013 12:43:54 +0000</pubDate>
+    <pubDate>Wed, 07 May 2014 08:44:52 +0000</pubDate>
     <image>
       <url>http://www.kortingscode.nl/public/images/front_end/logo-popup.png</url>
-      <title><![CDATA[nieuwste kortingscodes]]></title>
+      <title><![CDATA[Popular offers]]></title>
       <link>http://www.kortingscode.nl</link>
     </image>
     <generator>Zend_Feed</generator>
-    <language>nl_NL</language>
+    <language>nl-NL</language>
     <docs>http://blogs.law.harvard.edu/tech/rss</docs>
     <item>
-      <title><![CDATA[svgfasd]]></title>
-      <link>http://www.kortingscode.nl/test-shop-by-me</link>
-      <guid isPermaLink="false">3218</guid>
-      <description><![CDATA[]]></description>
-      <pubDate>Tue, 11 Jun 2013 16:26:46 +0000</pubDate>
+      <title><![CDATA[Zalando kortingscode voor 10% korting op alle artikelen]]></title>
+      <link>http://www.kortingscode.nl/zalando</link>
+      <guid isPermaLink="false">22629</guid>
+      <description><![CDATA[<p>Geldig bij orders met een minimale bestelwaarde van &euro;80. Enkele merken kunnen uitgesloten zijn van deze actie. De kortingscode is niet geldig in combinatie met andere acties of kortingscodes en is niet inwisselbaar voor geld. De kortingscode geldt niet voor partnerartikelen. De kortingscode is niet geldig voor artikelen van de Zalando-lounge.</p>
+<img src="http://img.kortingscode.nl/public/images/upload/shop/1360890169_zalando.png" alt="1360890169_zalando.png">]]></description>
+      <pubDate>Thu, 01 May 2014 14:08:12 +0000</pubDate>
     </item>
     <item>
-      <title><![CDATA[Sawarn Singh]]></title>
-      <link>http://www.kortingscode.nl/112-supplies</link>
-      <guid isPermaLink="false">3210</guid>
-      <description><![CDATA[bxscvxcvxcvxcvsfasdsdfsdfasd dfdss]]></description>
-      <pubDate>Mon, 27 May 2013 17:17:57 +0000</pubDate>
+      <title><![CDATA[€9 korting met de Mini in the Box kortingscode]]></title>
+      <link>http://www.kortingscode.nl/mini-in-the-box</link>
+      <guid isPermaLink="false">18952</guid>
+      <description><![CDATA[<p>Bij een bestelling van minimaal &euro;90.</p>
+<img src="http://img.kortingscode.nl/public/images/upload/shop/1372933563_miniinthebox.png" alt="1372933563_miniinthebox.png">]]></description>
+      <pubDate>Mon, 30 Dec 2013 15:31:56 +0000</pubDate>
     </item>
     <item>
-      <title><![CDATA[At the value of € 0 op112 Supplies]]></title>
-      <link>http://www.kortingscode.nl/112-supplies</link>
-      <guid isPermaLink="false">3198</guid>
-      <description><![CDATA[]]></description>
-      <pubDate>Thu, 04 Apr 2013 15:49:39 +0000</pubDate>
+      <title><![CDATA[€25 kortingscode bij Center Parcs (buiten de schoolvakanties)]]></title>
+      <link>http://www.kortingscode.nl/center-parcs</link>
+      <guid isPermaLink="false">21231</guid>
+      <description><![CDATA[<p><span style="font-size: 14px;">Boek minimaal 60 dagen van tevoren jouw weekend, midweek of week vakantie. Boek je verblijf voor 30 juni&nbsp;2013.&nbsp;</span><span style="font-size: 14px;">De korting is geldig in combinatie met andere kortingen zoals Vroegboekkorting.</span></p>
+<img src="http://img.kortingscode.nl/public/images/upload/shop/1360890105_center-parcs.png" alt="1360890105_center-parcs.png">]]></description>
+      <pubDate>Wed, 05 Feb 2014 19:24:59 +0000</pubDate>
     </item>
   </channel>
 </rss>

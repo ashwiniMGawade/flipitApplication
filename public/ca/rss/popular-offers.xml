@@ -1,38 +1,52 @@
-<?xml version="1.0" encoding="utf8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
-    <title><![CDATA[nieuwste kortingscodes]]></title>
-    <link>http://www.kortingscode.nl</link>
+    <title><![CDATA[Popular offers]]></title>
+    <link>http://www.flipit.com/ca</link>
     <description><![CDATA[]]></description>
-    <pubDate>Thu, 13 Jun 2013 12:43:54 +0000</pubDate>
+    <pubDate>Wed, 07 May 2014 08:44:55 +0000</pubDate>
     <image>
-      <url>http://www.kortingscode.nl/public/images/front_end/logo-popup.png</url>
-      <title><![CDATA[nieuwste kortingscodes]]></title>
-      <link>http://www.kortingscode.nl</link>
+      <url>http://www.flipit.com/public/images/front_end/flip-logo.png</url>
+      <title><![CDATA[Popular offers]]></title>
+      <link>http://www.flipit.com/ca</link>
     </image>
     <generator>Zend_Feed</generator>
-    <language>nl_NL</language>
+    <language>en-CA</language>
     <docs>http://blogs.law.harvard.edu/tech/rss</docs>
     <item>
-      <title><![CDATA[svgfasd]]></title>
-      <link>http://www.kortingscode.nl/test-shop-by-me</link>
-      <guid isPermaLink="false">3218</guid>
-      <description><![CDATA[]]></description>
-      <pubDate>Tue, 11 Jun 2013 16:26:46 +0000</pubDate>
+      <title><![CDATA[Take 10% off any purchase at Stacy Adams]]></title>
+      <link>http://www.flipit.com/ca/stacy-adams</link>
+      <guid isPermaLink="false">202</guid>
+      <description><![CDATA[<img src="http://img.flipit.com/public/ca/images/upload/shop/1390386621_stacy-adams.png" alt="1390386621_stacy-adams.png">]]></description>
+      <pubDate>Wed, 22 Jan 2014 16:05:38 +0000</pubDate>
     </item>
     <item>
-      <title><![CDATA[Sawarn Singh]]></title>
-      <link>http://www.kortingscode.nl/112-supplies</link>
-      <guid isPermaLink="false">3210</guid>
-      <description><![CDATA[bxscvxcvxcvxcvsfasdsdfsdfasd dfdss]]></description>
-      <pubDate>Mon, 27 May 2013 17:17:57 +0000</pubDate>
+      <title><![CDATA[Enjoy 10% off on What A Bloom pick-up orders]]></title>
+      <link>http://www.flipit.com/ca/what-a-bloom</link>
+      <guid isPermaLink="false">210</guid>
+      <description><![CDATA[<img src="http://img.flipit.com/public/ca/images/upload/shop/1389712587_what-a-bloom.png" alt="1389712587_what-a-bloom.png">]]></description>
+      <pubDate>Wed, 22 Jan 2014 21:37:44 +0000</pubDate>
     </item>
     <item>
-      <title><![CDATA[At the value of € 0 op112 Supplies]]></title>
-      <link>http://www.kortingscode.nl/112-supplies</link>
-      <guid isPermaLink="false">3198</guid>
-      <description><![CDATA[]]></description>
-      <pubDate>Thu, 04 Apr 2013 15:49:39 +0000</pubDate>
+      <title><![CDATA[Get 60% off on all Photobook Canada debossed photobooks]]></title>
+      <link>http://www.flipit.com/ca/photobook</link>
+      <guid isPermaLink="false">197</guid>
+      <description><![CDATA[<img src="http://img.flipit.com/public/ca/images/upload/shop/1390316928_photobook.png" alt="1390316928_photobook.png">]]></description>
+      <pubDate>Wed, 22 Jan 2014 22:00:31 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Get 15% off you next Garage purchase + free shipping on orders over $50]]></title>
+      <link>http://www.flipit.com/ca/garage</link>
+      <guid isPermaLink="false">142</guid>
+      <description><![CDATA[<img src="http://img.flipit.com/public/ca/images/upload/shop/1389198457_garage.png" alt="1389198457_garage.png">]]></description>
+      <pubDate>Wed, 15 Jan 2014 16:56:10 +0000</pubDate>
+    </item>
+    <item>
+      <title><![CDATA[Save 15% off on Michael Todd True Organics]]></title>
+      <link>http://www.flipit.com/ca/michael-todd-true-organics</link>
+      <guid isPermaLink="false">281</guid>
+      <description><![CDATA[<img src="http://img.flipit.com/public/ca/images/upload/shop/1392121158_michael-todd.png" alt="1392121158_michael-todd.png">]]></description>
+      <pubDate>Tue, 11 Feb 2014 18:06:15 +0000</pubDate>
     </item>
   </channel>
 </rss>

@@ -1584,79 +1584,71 @@ class Offer extends BaseOffer
 	 }
 
 
-	 /**
-	  * get latest voucher codes for rss feeds
-	  * @author Suridnerpal Singh
-	  * @return array
-	  * @version 1.0
-	  */
+    /**
+    * get latest voucher codes for rss feeds
+    * @author Suridnerpal Singh
+    * @return array
+    * @version 1.0
+    */
+    public static function getNewestOffersForRSS()
+    {
+        $currentDate = date('Y-m-d H:i:s');
+        $newestOffersForRss = Doctrine_Query::create()
+            ->select('terms.content as terms,img.name as shopImageName,img.path as shopImagePath,o.id,o.title,s.permaLink as permalink,o.updated_at as lastUpdate')
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.logo ologo')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0' )
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.enddate > "'.$currentDate.'"')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability != "MEM"')
+            ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
+            ->orderBy('o.startdate DESC')
+            ->fetchArray();
+        return $newestOffersForRss;
+    }
 
-	 public static function getNewestOffersForRSS(){
+    /**
+    * get popular voucher codes for rss feeds
+    * @author Surinderpal Singh
+    * @return array
+    * @version 1.0
+    */
+    public static function getPopularOffersForRSS()
+    {
+        $currentDate = date('Y-m-d H:i:s');
+        $popularOffers = Doctrine_Query::create()
+            ->select('terms.content as terms,o.id,o.title,s.permaLink as permalink,p.id,o.updated_at as lastUpdate,img.name as shopImageName,img.path as shopImagePath')
+            ->from('PopularCode p')
+            ->leftJoin('p.offer o')
+            ->leftJoin('o.logo ologo')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere('o.enddate > "'.$currentDate.'"')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability!="MEM"')
+            ->andWhere('o.userGenerated=0')
+            ->orderBy('p.position ASC')->fetchArray();
+        $popularOfferForRss = array();
 
-	 	$date = date('Y-m-d H:i:s');
-
-	 	$data = Doctrine_Query::create()
-		 	->select('terms.content as terms,o.id,o.title,s.permaLink as permalink,o.updated_at as lastUpdate')
-		 	->from('Offer o')
-		 	->leftJoin('o.shop s')
-		 	->leftJoin('o.logo ologo')
-		 	->leftJoin('o.vote vot')
-		 	->leftJoin('s.logo img')
-		 	->leftJoin('s.favoriteshops fv')
-		 	->leftJoin('o.termandcondition terms')
-		 	->where('o.deleted = 0' )
-		 	->andWhere('s.deleted = 0')
-		 	->andWhere('o.enddate > "'.$date.'"')
-		 	->andWhere('o.startdate <= "'.$date.'"')
-		 	->andWhere('o.discountType != "NW"')
-		 	->andWhere('o.discounttype="CD"')
-		 	->andWhere('o.Visability != "MEM"')
-		 	->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
-		 	->orderBy('o.startdate DESC')
-		 	->fetchArray();
-	 	return $data;
-	 }
-
-
-	 /**
-	  * get popular voucher codes for rss feeds
-	  * @author Surinderpal Singh
-	  * @return array
-	  * @version 1.0
-	  */
-
-	 public static function getPopularOffersForRSS(){
-	 	$date = date('Y-m-d H:i:s');
-
-
-	 	$data = Doctrine_Query::create()
-	 							->select('terms.content as terms,o.id,o.title,s.permaLink as permalink,p.id,o.updated_at as lastUpdate')
-							 	->from('PopularCode p')
-								->leftJoin('p.offer o')
-							 	->leftJoin('o.logo ologo')
-							 	->leftJoin('o.shop s')
-							 	->leftJoin('o.vote vot')
-							 	->leftJoin('s.logo img')
-							 	->leftJoin('s.favoriteshops fv')
-							 	->leftJoin('o.termandcondition terms')
-							 	->where('o.deleted = 0')
-							 	->andWhere('o.enddate > "'.$date.'"')
-							 	->andWhere('o.startdate <= "'.$date.'"')
-							 	->andWhere('s.deleted = 0')
-							 	->andWhere('o.discounttype="CD"')
-							 	->andWhere('o.Visability!="MEM"')
-							 	->andWhere('o.userGenerated=0')
-							 	->orderBy('p.position ASC')->fetchArray();
-
-
-	 	$newData = array();
-
-	 	foreach($data as $res){
-
-	 		$newData[] = $res['offer'];
-	 	}
-	 	return $newData;
-	 }
+        foreach($popularOffers as $popularOffer){
+            $popularOfferForRss[] = $popularOffer['offer'];
+        }
+        return $popularOfferForRss;
+    }
 
 
 	 /**

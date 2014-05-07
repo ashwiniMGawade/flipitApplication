@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss xmlns:content="http://purl.org/rss/1.0/modules/content/" version="2.0">
   <channel>
-    <title><![CDATA[new coupons]]></title>
+    <title><![CDATA[新しいクーポン]]></title>
     <link>http://www.flipit.com/jp</link>
     <description><![CDATA[]]></description>
-    <pubDate>Mon, 07 Oct 2013 14:30:02 +0200</pubDate>
+    <pubDate>Wed, 07 May 2014 08:45:19 +0000</pubDate>
     <image>
       <url>http://www.flipit.com/public/images/front_end/flip-logo.png</url>
-      <title><![CDATA[new coupons]]></title>
+      <title><![CDATA[新しいクーポン]]></title>
       <link>http://www.flipit.com/jp</link>
     </image>
     <generator>Zend_Feed</generator>
