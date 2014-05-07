@@ -67,18 +67,18 @@ class Shop extends BaseShop
     protected static function removeDuplicateShops($relatedShops, $numberOfShops)
     {
         $similarShopsWithoutDuplicate = array();
-        foreach ($relatedShops[0]['relatedshops'] as $value) {
+        foreach ($relatedShops[0]['relatedshops'] as $relatedShop) {
             if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
-                $mergedRelatedShops[$value['id']] = $value;
+                $similarShopsWithoutDuplicate[$relatedShop['id']] = $relatedShop;
             }
         }
 
         if (count($similarShopsWithoutDuplicate) <= $numberOfShops) {
             // push shops related to same category which are not yet added
             foreach ($relatedShops[0]['category'] as $category) {
-                foreach ($category['shop'] as $value) {
-                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops && !in_array($value['id'], $similarShopsWithoutDuplicate)) {
-                        $similarShopsWithoutDuplicate[$value['id']] = $value ;
+                foreach ($category['shop'] as $relatedCategoryShop) {
+                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops && !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
+                        $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop ;
                     }
                 }
             }
@@ -206,6 +206,31 @@ class Shop extends BaseShop
         ->andWhere('s.status = 1')
         ->fetchArray();
         return $shopDetails;
+    }
+
+    public static function getShopsByShopIds($shopIds)
+    {
+        $shopsInformation = Doctrine_Query::create()
+            ->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+            ->from("Shop s")
+            ->leftJoin("s.logo img")
+            ->where('s.deleted=0')
+            ->andWhereIn("s.id",$shopIds)
+            ->orderBy("s.name")->fetchArray();
+        return $shopsInformation;
+    }
+
+    public static function getStoresForSearchByKeyword($searchedKeyword, $limit)
+    {
+        $storesByKeyword = Doctrine_Query::create()
+            ->select('s.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+            ->from('shop s')
+            ->leftJoin('s.logo img')
+            ->where('s.deleted=0')
+            ->addWhere('s.status=1')
+            ->andWhere("s.name LIKE ?", "%". $searchedKeyword."%")
+            ->limit($limit)->fetchArray();
+        return $storesByKeyword;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -1464,53 +1489,6 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
                 }
             }
         }
-    }
-
-
-
-    /**
-     * This function will return all the matching records from popular shop
-     * @author cbhopal
-     * @version 1.0
-     * @return $data array
-     * @param $keyword string
-     */
-
-    public static function getAllStoresForSearch($keyword,$limit)
-    {
-        $nowDate = date('Y-m-d 00:00:00');
-
-        $data = Doctrine_Query::create()
-        //->select('p.id,s.name, s.permaLink as permalink, s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, img.name as imgname')
-        ->select('s.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
-        ->from('shop s')
-        ->leftJoin('s.logo img')
-        ->where('s.deleted=0')
-        ->addWhere('s.status=1')
-        ->andWhere("s.name LIKE ?", "%". $keyword."%")
-        ->limit($limit)->fetchArray();
-        //echo "<pre>";
-        //print_r($data); die;
-        return $data;
-    }
-
-    /**
-     * get list of shop for Exclusive keywords
-     * @author Raman
-     * @return array $shopList
-     * @version 1.0
-     */
-
-    public static function getShopsExclusive($shopIds)
-    {
-        $shopList = Doctrine_Query::create()
-        ->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
-        ->from("Shop s")
-        ->leftJoin("s.logo img")
-        ->where('s.deleted=0')
-        ->andWhereIn("s.id",$shopIds)
-        ->orderBy("s.name")->fetchArray();
-        return $shopList;
     }
 
     /**

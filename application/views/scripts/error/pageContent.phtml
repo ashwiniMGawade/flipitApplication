@@ -22,7 +22,7 @@ if ($this->pageMode == true) {
             $partialsViewPath.'_signupForm.phtml',
             array(
                'zendForm' => $this->sidebarWidgetForm,
-               'SignupFormWidgetType'=> 'sidebarWidget',
+               'signupFormWidgetType'=> 'sidebarWidget',
                'shopId'=>'',
                'shopLogoOrDefaultImage'=>''
             )
@@ -32,9 +32,9 @@ if ($this->pageMode == true) {
     } else {
         $pageContent="<h1>".$this->page['pageTitle']."</h1>".stripslashes($this->page['content']);
     }
-    $pageIconPath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
-    $categoryPartial = new FrontEnd_Helper_CategoryPartialFunctions();
-    echo $categoryPartial->getCategoryOrSpecialPageHeder($this->page['pageTitle'], $pageIconPath);?>
+    $pageImagePath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
+    $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+    echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
     <div class="row">
         <div class="col-md-8 col-sm-8" id="content">
         <?php echo $pageContent;?>

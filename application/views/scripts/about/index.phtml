@@ -1,134 +1,45 @@
-<?php 
- 	 $headerSearch = new FrontEnd_Helper_viewHelper(); 
-     $page = $this->page;
-     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."about' style='color:#6a6a6a'>".$this->translate('About')."</a>";
-  	 echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
-	 ?>
-		<!-- About Outer Starts -->
-        <div class="white-bg">
-        <div class=" about-outer">
-        	<!-- About Top Starts -->
-        	<?php 
-        	if(!empty($this->page)){
-        	?>
-        		<div class="about-top">
-                	<!-- About Top Left Starts -->
-           		  <div class="about-top-left">
-                    	<div class="about-top-left-heading">
- 
-                    	  <h1><?php echo $this->pageTitle; ?></h1>
-                   	  </div>
-                        <div class="about-top-left-text1">
-                         <?php echo $page[0]['content']; ?>
-                        </div>
-                       
-                  </div>
-                  <!-- About Top Left Ends -->
-                  
-                   <!-- About Top Right Starts -->
-                	<div class="about-top-right">
-                    	<div class="about-top-right-heading">
-                          <h3 class="text-black"><?php echo $this->translate('Join Us!');?></h3>
-                        </div>
-                        <div class="about-top-right-text1"><?php echo $this->translate('Spot deals, send them in! Gain access to members only Deals and receive all the prime vouchercodes!');?></div>
-                        <div class="about-top-right-btn">
-                        <div class="blue-btn"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven')."/". FrontEnd_Helper_viewHelper::__link('stap1')?>" rel="nofollow"><span><?php echo $this->translate('Wordt GRATIS Member!');?></span></a></div></div>
-                    
-                    </div>
-                      <!-- About Top Right Ends -->
-            	</div>
-           </div>
-      </div>
-            <!-- About Top Ends -->
-            
-            <!-- Separator Starts -->
-        <div class="separator">&nbsp;</div>
-        <!-- Separator Ends -->
-       
-        	<div class="clr"></div>
-     	<div class="about-outer">
-            <div class="mt20"><h2><?php echo $this->translate('REDACTEURS');?></h2></div>
-            <!-- About Bot Starts -->
-        		<div class="about-bot">
-        			<div class="fl">
-                        <!-- About Col1 Starts -->
-                        <?php 
-                       	if(!empty($this->paginator)) {
-                        	
-	                        foreach($this->paginator as $alluser) {
-	                        	$link_url = strtolower($alluser['slug']);
-	                        	$allowed_tags = '<p>';
-	                        	$description = $alluser['mainText'];
-	                        	$only = strip_tags($description, $allowed_tags);
-	                        	$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('redactie') .'/'.$link_url;
-	                        	 ?>
-		                    	<div class="about-col1">
-		                    			<?php  	
-								 		
-								  			$img = HTTP_PATH_CDN.ltrim($alluser['profileimage']['path'],"/")."thum_large_widget_".$alluser['profileimage']['name'];
-								 		
-										?>
-		                        	<div class="white-box3"><a class="text-blue-link" href="<?php echo $profileLink; ?>"><img src="<?php echo $img; ?>"/></a></div>
-		                            <div class="about-col1-right">
-		                            <?php 
-		                            
-		                            	$onlyname = $alluser['firstName'];
-		                            	if(strlen($alluser['firstName']) > 10){
-		                            		$name = substr($onlyname, 0,10)."...";
-		                            	}else{ 
-		                            		$name = $onlyname;
-		                            	}
-		                           
-		                            ?>
-		                            	<div class="about-col1-heading text-black ml18" style='width : auto !important; margin-right : 10px;'>
-		                            	<h3><a class="text-black-link" href="<?php echo $profileLink; ?>"><?php echo $name;?></a></h3>
-		                            	</div>
-		                            	<div  class="about-col1-btn">
-		                            		<?php 
-											$view = new Zend_View();
-					                	  	$view->setScriptPath(APPLICATION_PATH . '/views/scripts/');
-					                	  	echo $view->render('partials/deal.phtml');
-											?>
-		                            	</div>
-		                            	<div class="about-col1-para text-black">
-		                                <?php 
-		                                	if(strlen($alluser['mainText']) > 135){ 
-		                         				echo substr($only, 0,135);
-		                     				}else{ 
-		                     					echo $only; 
-		                     				}
-		                     				?>
-		                     				<a class="text-blue-link" href="<?php echo $profileLink; ?>"><?php echo $this->translate('...View Profile');?></a>
-		                              </div>
-		                            </div>
-		                        </div>
-		                        <!-- About Col1 Ends -->
-								<?php 
-		                    }
-	                        ?>
-	                        <div class="voucher-paging-outer">
-	                          <div class="voucher-paging-inner">
-	                          <!--<div class="paging-leftarrow">&nbsp;</div> -->
-	                          <?php
-	                            echo $this->paginationControl($this->paginator, 'Sliding','/partials/_pagination.phtml');
-	                          ?>
-	                          </div>
-	                       </div>
-                        <?php                         
-                        } else {
-                        	echo $this->translate("No Records Found");
-                        }
-                        ?>
-					</div>
-                	
-            	</div>
-            <!-- About Bot Ends -->
-			<?php 
-        	} else {
-        		echo $this->translate("No Records Found");
-        	}
-        ?>
-        </div>
-        <!-- About Outer Ends -->
+<?php
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/authors.css");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 
-        
+$pageImage = PUBLIC_PATH_CDN.$this->pageDetail['logo']['path']."thum_large_".$this->pageDetail['logo']['name'];
+$pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+echo $pageHeader->getCategoryOrPageHeader($this->pageDetail['pageTitle'], $pageImage);
+
+$partialViewPath = 'partials/';
+$authorsList = '';
+if (!empty($this->authorsWithPagination)) {
+    $authorsList = $this->partial(
+        $partialViewPath.'_frontEndUsers.phtml',
+        array(
+           'authors' =>$this->authorsWithPagination,
+        )
+    );
+} else {
+    $authorsList = 'No Records Found';
+}
+$signUpWidgetForm = '';
+$signUpWidgetForm = $this->partial(
+    $partialViewPath.'_signupForm.phtml',
+    array(
+       'zendForm' => $this->sidebarWidgetForm,
+       'signupFormWidgetType'=> 'sidebarWidget',
+       'shopId'=>'',
+       'shopLogoOrDefaultImage'=>''
+    )
+);
+?>
+<div class="row">
+    <?php echo $authorsList;?>
+    <aside class="col-md-4 col-sm-4" id="sidebar">
+    <?php 
+    $frontendViewHelper = new FrontEnd_Helper_viewHelper();
+    echo $frontendViewHelper->popularCategoryWidget();
+    echo FrontEnd_Helper_viewHelper::socialMediaWidget();
+    echo FrontEnd_Helper_viewHelper::popularShopWidget();
+    echo $frontendViewHelper->browseByStoreWidget();
+    echo $signUpWidgetForm;
+    ?>
+    </aside>
+</div>

@@ -12,6 +12,23 @@
  */
 class ExcludedKeyword extends BaseExcludedKeyword
 {
+    ##############################################################################
+    ################## REFACTORED CODE ###########################################
+    ##############################################################################    
+    public static function getExcludedKeywords($keywordForSearch)
+    {
+        $excludedKeywords = Doctrine_Query::create()
+            ->select("k.*,es.id as keywordid,s.id as sid , s.name as name")
+            ->from("ExcludedKeyword k")
+            ->leftJoin('k.shops es')
+            ->leftJoin('es.shopsofKeyword s')
+            ->where("k.keyword = ?", $keywordForSearch)
+            ->fetchArray();
+        return $excludedKeywords;
+    }
+    ##############################################################################
+    ################## END REFACTORED CODE #######################################
+    ##############################################################################
     /**
      * add new keyword
      * @param posted form data
@@ -203,24 +220,6 @@ class ExcludedKeyword extends BaseExcludedKeyword
             $flag = $id;
         }
         return $flag;
-      }
-
-      /**
-       * @author Raman
-       * @param $keyword
-       * @return keywordDetail
-       */
-      public static function getKeywordForFront($keywordForSearch)
-      {
-
-        $getdata = Doctrine_Query::create()
-        ->select("k.*,es.id as keywordid,s.id as sid , s.name as name")
-        ->from("ExcludedKeyword k")
-        ->leftJoin('k.shops es')
-        ->leftJoin('es.shopsofKeyword s')
-        ->where("k.keyword = ?", $keywordForSearch)
-        ->fetchArray();
-        return $getdata;
       }
 
       /**
