@@ -1,3 +1,4 @@
+/////////////////////////////////////// Refactored start/////////////////////////////////////////////////////////////
 function showArticle(id) {
     if(id == 0) {
         $("#first").addClass("active");
@@ -17,6 +18,16 @@ function showArticle(id) {
 
 }
 
+function viewCounter(eventType, type, id) {
+    $.ajax({
+        type : "POST",
+        url : HOST_PATH_LOCALE + "viewcount/storecount/event/" + eventType + "/type/"
+            + type + "/id/" + id,
+        success : function() {
+        }
+    });
+}
+/////////////////////////////////////// Refactored End/////////////////////////////////////////////////////////////
 
 var validRules = {
     homeemail : ""
@@ -762,16 +773,7 @@ function getpageproperties(slug) {
  * @param id
  * @author Raman
  */
-function viewCounter(eventType, type, id) {
-        $.ajax({
-        type : "POST",
-        url : HOST_PATH_LOCALE + "viewcount/storecount/event/" + eventType + "/type/"
-                + type + "/id/" + id,
-        success : function() {
 
-        }
-    });
-}
 /**
  * count percentage of voting of user generated offers
  * @param offerId
