@@ -207,6 +207,31 @@ class Shop extends BaseShop
         ->fetchArray();
         return $shopDetails;
     }
+
+    public static function getShopsByShopIds($shopIds)
+    {
+        $shopsInformation = Doctrine_Query::create()
+            ->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+            ->from("Shop s")
+            ->leftJoin("s.logo img")
+            ->where('s.deleted=0')
+            ->andWhereIn("s.id",$shopIds)
+            ->orderBy("s.name")->fetchArray();
+        return $shopsInformation;
+    }
+
+    public static function getStoresForSearchByKeyword($searchedKeyword, $limit)
+    {
+        $storesByKeyword = Doctrine_Query::create()
+            ->select('s.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
+            ->from('shop s')
+            ->leftJoin('s.logo img')
+            ->where('s.deleted=0')
+            ->addWhere('s.status=1')
+            ->andWhere("s.name LIKE ?", "%". $searchedKeyword."%")
+            ->limit($limit)->fetchArray();
+        return $storesByKeyword;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1464,53 +1489,6 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
                 }
             }
         }
-    }
-
-
-
-    /**
-     * This function will return all the matching records from popular shop
-     * @author cbhopal
-     * @version 1.0
-     * @return $data array
-     * @param $keyword string
-     */
-
-    public static function getAllStoresForSearch($keyword,$limit)
-    {
-        $nowDate = date('Y-m-d 00:00:00');
-
-        $data = Doctrine_Query::create()
-        //->select('p.id,s.name, s.permaLink as permalink, s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, img.name as imgname')
-        ->select('s.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
-        ->from('shop s')
-        ->leftJoin('s.logo img')
-        ->where('s.deleted=0')
-        ->addWhere('s.status=1')
-        ->andWhere("s.name LIKE ?", "%". $keyword."%")
-        ->limit($limit)->fetchArray();
-        //echo "<pre>";
-        //print_r($data); die;
-        return $data;
-    }
-
-    /**
-     * get list of shop for Exclusive keywords
-     * @author Raman
-     * @return array $shopList
-     * @version 1.0
-     */
-
-    public static function getShopsExclusive($shopIds)
-    {
-        $shopList = Doctrine_Query::create()
-        ->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
-        ->from("Shop s")
-        ->leftJoin("s.logo img")
-        ->where('s.deleted=0')
-        ->andWhereIn("s.id",$shopIds)
-        ->orderBy("s.name")->fetchArray();
-        return $shopList;
     }
 
     /**
