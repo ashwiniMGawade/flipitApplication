@@ -13,6 +13,34 @@
 
 class MoneySaving extends BaseMoneySaving
 {
+    #####################################################
+    ############# REFACTORED CODE #######################
+    ####################################################
+    /**
+     * Function generate most read Articles.
+     * 
+     * @version 1.0
+     */
+    public static function getMostReadArticles($limit, $userId="")
+    {
+        $mostReadArticle = Doctrine_Query::create()->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.title, a.permalink, a.content, a.authorname, a.authorid, a.publishdate, ai.path, aai.name, aai.path, ai.name')
+        ->from('ArticleViewCount av')
+        ->leftJoin('av.articles a')
+        ->leftJoin('a.thumbnail ai')
+        ->leftJoin('a.chapters chap')
+        ->groupBy('av.articleid')
+        ->orderBy('pop DESC')
+        ->where('a.deleted = 0');
+        if(isset($userId)  && $userId!= "") {
+            $mostReadArticle->andWhere('a.authorId ='.$userId.'');
+        }
+        $mostReadArticle = $mostReadArticle->limit($limit)->fetchArray();
+        return $mostReadArticle;
+    
+    }
+    #####################################################
+    ############# REFACTORED CODE #######################
+    ####################################################
     /**
      * Get article for Money saving article from database
      * @author Raman
@@ -162,35 +190,6 @@ class MoneySaving extends BaseMoneySaving
         //print_r($papularArticle); die;
         return $papularArticle;
     }
-
-    /**
-     * generate most read Articles ever
-     * @author Raman
-     * @version 1.0
-     */
-
-    public static function generateMostReadArticle($id, $limit, $uId="")
-    {
-        $most = Doctrine_Query::create()->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.title, a.permalink, a.content, a.authorname, a.authorid, a.publishdate, ai.path, aai.name, aai.path, ai.name')
-        ->from('ArticleViewCount av')
-        ->leftJoin('av.articles a')
-        ->leftJoin('a.thumbnail ai')
-        ->leftJoin('a.chapters chap')
-        ->groupBy('av.articleid')
-        ->orderBy('pop DESC')
-        ->where('a.deleted = 0');
-        if(@$uId != ""){
-         $most->andWhere('a.authorId ='.$uId.'');
-        }
-        $most = $most->limit($limit)
-        ->fetchArray();
-    //	echo "<pre>";
-    //	print_r($most); die;
-        return $most;
-
-    }
-
-
     /**
      * generate MS Articles related to a shop
      * @author Raman

@@ -1,0 +1,47 @@
+<?php 
+$profileImage = HTTP_PATH_CDN. ltrim($this->autherDetail['profileimage']['path'],"/")."thum_large_widget_".$this->autherDetail['profileimage']['name'];
+$authorFullName = $this->autherDetail['firstName']. " " .$this->autherDetail['lastName'];
+$partialFunctions = new FrontEnd_Helper_AuthorPartialFunctions();
+
+$authorFavouriteShops = '';
+if(!empty($this->authorFavouriteShops)):
+$authorFavouriteShops = $this->partial(
+    'partials/_authorFavouriteShops.phtml',
+    array(
+       "authorFavouriteShops"=>$this->authorFavouriteShops,
+       "authorName"=>$this->autherDetail['firstName']
+    )
+);
+endif;
+?>
+<article class="section section-author">
+    <header class="heading">
+        <div class="icon">
+            <img width="87" height="87" src="<?php echo $profileImage;?>" alt="<?php echo $this->autherDetail['firstName'];?>">
+        </div>
+        <div class="box">
+            <h1><span><?php echo $authorFullName;?></span> <span class="status"><?php echo $this->translate('deal guru');?></span></h1>
+            <ul class="author-details">
+                <li>
+                    <img src="<?php echo PUBLIC_PATH?>images/ico-03.png" width="16" height="11" alt="image description">
+                    <span>Netherlands</span>
+                </li>
+                <?php echo $partialFunctions->authorSocialMediaLinks($this->autherDetail);?>
+            </ul>
+        </div>
+    </header>
+    <div class="text-block">
+    <?php echo $this->autherDetail['mainText'];?>
+    </div>
+    <div class="box-statistics">
+        <div class="col">
+            <span><?php echo $this->translate('Coupons placed');?></span>
+            <span class="add"><strong class="quantity"><?php echo $this->autherDetail['popularKortingscode'];?></strong><span><?php echo $this->translate('Popular codes');?></span></span>
+        </div>
+        <div class="col">
+            <span><?php echo $this->translate('Editor since');?></span>
+            <span class="add"><strong class="quantity"><?php echo $this->autherDetail['sinceDays'];?></strong> <span><?php echo $this->translate('days editor')?></span></span>
+        </div>
+    </div>
+    <?php echo $authorFavouriteShops;?>
+</article>

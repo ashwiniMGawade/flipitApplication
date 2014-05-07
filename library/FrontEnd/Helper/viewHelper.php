@@ -586,7 +586,7 @@ EOD;
                 $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
                 break;
             case 'newest':
-                $shopData = Offer::commongetnewestOffers($type, $limit, $shopId, $userId);
+                $shopData = Offer::getNewestOffers($type, $limit, $shopId, $userId);
                 break;
             case 'newestmemberonly':
                 $shopData = Offer::commongetMemberOnlyOffer($type, $limit);

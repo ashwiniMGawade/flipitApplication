@@ -93,7 +93,7 @@ class BespaarwijzerController extends Zend_Controller_Action
             if($flag){
 
                 //get  data from database and store in cache
-                $mostRead = MoneySaving::generateMostReadArticle($permalink, 6);
+                $mostRead = MoneySaving::getMostReadArticles(6);
                 FrontEnd_Helper_viewHelper::setInCache($msMRArticleKey, $mostRead);
                 //echo  'FROM DATABASE';
 

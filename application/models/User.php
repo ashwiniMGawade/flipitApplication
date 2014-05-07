@@ -38,6 +38,44 @@ class User extends BaseUser
         ->fetchArray();
         return $usersData;
     }
+
+    public static function getUserIdBySlugName($slug)
+    {
+        $userData = Doctrine_Query::create()->select("u.id")
+        ->from('User u')
+        ->where("u.slug = '$slug'")
+        ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+        return $userData['id'];
+    }
+
+    public static function getUserProfileDetail($userId)
+    {
+        $userDetail = Doctrine_Query::create()
+        ->select("u.* , w.id, pi.name, pi.path")
+        ->addSelect('DATEDIFF(NOW(), u.created_at) as sinceDays')
+        ->from('User u')
+        ->leftJoin("u.website w")
+        ->leftJoin("u.profileimage pi")
+        ->where("u.id = ?" , $userId)
+        ->andWhere("u.showInAboutListing = 1")
+        ->andWhere("u.deleted = 0")
+        ->fetchArray(null , Doctrine::HYDRATE_ARRAY);
+        return $userDetail;
+    }
+
+    public static function getUserFavouritesStore($userId)
+    {
+        $userFavouritesStore  = Doctrine_Query::create()
+        ->select('a.*,s.id as sid,s.name as name,s.permalink, img.*')
+        ->from('Adminfavoriteshop a')
+        ->leftJoin('a.shops s')
+        ->leftJoin('s.logo img')
+        ->where('userId='.$userId)
+        ->andWhere('s.deleted=0')
+        ->andWhere('s.status=1')
+        ->fetchArray();
+        return $userFavouritesStore;
+    }
     ##########################################################
     ########### END REFACTORED CODE ##########################
     ##########################################################
@@ -1037,28 +1075,6 @@ class User extends BaseUser
     return $userFevoriteCat;
   }
   /**
-   * get favorites store related currect user(admin)
-   * use in  normal list
-   * @param integer $id
-   * @param array $favShop
-   * @author kraj
-   * @version 1.0
-   */
-  public static function getUserFavoritesStore($id)
-  {
-    $favShop  = Doctrine_Query::create()
-    ->select('a.*,s.id as sid,s.name as name,s.permalink, img.*')
-    ->from('Adminfavoriteshop a')
-    ->leftJoin('a.shops s')
-    ->leftJoin('s.logo img')
-    ->where('userId='.$id)
-    ->andWhere('s.deleted=0')
-    ->andWhere('s.status=1')
-    ->fetchArray();
-    return $favShop;
-  }
-
-  /**
    * get user detail
    * use in  normal list
    * @param integer $id
@@ -1127,32 +1143,6 @@ class User extends BaseUser
 
     return $data;
   }
-
-
-
-  /**
-   * Find editor since on ID basis
-   * use in  normal list
-   * @param integer $uid
-   * @return array data
-   * @author Raman
-   * @version 1.0
-   */
-  public static function findEditorSince($uid)
-  {
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("DATEDIFF(NOW(), u.created_at) as sinceDays")
-    ->from('User u')
-    ->where("u.deleted = 0")
-    ->andWhere("u.id = ?" , $uid)
-    ->fetchArray(null , Doctrine::HYDRATE_ARRAY);
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
   //******font-end function ******//
   /**
    * get user detail
@@ -1206,60 +1196,6 @@ class User extends BaseUser
         }
 
         return false;
-  }
-
-
-
-  /**
-   * get user detail
-   * use in  normal list
-   * @param integer $id
-   * @return array $data
-   * @author Raman Kumar
-   * @version 1.0
-   */
-  public static function getUserprofileDetail($uId)
-  {
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.* , w.id, pi.name, pi.path")
-    ->from('User u')
-    ->leftJoin("u.website w")
-    ->leftJoin("u.profileimage pi")
-    ->where("u.id = ?" , $uId)
-    ->andWhere("u.showInAboutListing = 1")
-    ->andWhere("u.deleted = 0")
-    //->getSqlQuery();
-    ->fetchArray(null , Doctrine::HYDRATE_ARRAY);
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
-
-  /**
-   * get user ID
-   * use in  normal list
-   * @param char $fname, $lname
-   * @return  $id
-   * @author Raman
-   * @version 1.0
-   */
-  public static function getUserId($slug)
-  {
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.id")
-    ->from('User u')
-    ->where("u.slug = '$slug'")
-    //->andWhere("u.lastName = ?" , $lname)
-    //->getSqlQuery();
-    ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
   }
 
   /**

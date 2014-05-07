@@ -756,7 +756,7 @@ class Admin_UserController extends Zend_Controller_Action
             //get category list from category table
             $categoryList =  Category::getCategoryList() ;
             //get favorites store of currect user(admin)
-            $favShop  = User::getUserFavoritesStore($id);
+            $favShop  = User::getUserFavouritesStore($id);
             //get unterestng category of currecnt user(admin)
             $intCat = User::getUserInterestingCat($id);
             //print_r($favShop);

@@ -44,6 +44,37 @@ class AboutController extends Zend_Controller_Action
     ##########################################################
     ########### REFACTORED CODE ##############################
     ##########################################################
+    public function profileAction()
+    {
+        $authorNameSlug = $this->getRequest ()->getParam('slug');
+        $userId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorNameSlug) ."_list", User::getUserIdBySlugName($authorNameSlug), 0);
+        $userDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$userId ."_list", User::getUserProfileDetail($userId), 0);
+        $userDetails = $userDetails[0];
+        $userFavouriteShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$userId ."_list", User::getUserFavouritesStore($userId), 0);
+        $userMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$userId ."_list", MoneySaving::getMostReadArticles(6, $userId), 0);
+        $authorFullName = $userDetails['firstName']." ". $userDetails['lastName'];
+        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
+        $this->view->headTitle($authorFullName);
+        $this->view->facebookTitle = $authorFullName;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE.gettext("redactie") ."/".$userDetails['slug'];
+        $this->view->facebookImage = FACEBOOK_IMAGE ;
+        $this->view->facebookDescription = trim($userDetails['mainText']);
+        $this->view->facebookLocale = FACEBOOK_LOCALE;
+        $this->view->twitterDescription = trim($userDetails['mainText']);
+        $this->view->authorDetails = $userDetails;
+        $this->view->authorFavouriteShops = $userFavouriteShop;
+        $this->view->authorMostReadArticles = $userMostReadArticles;
+
+        if(empty($userDetails)){
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+    }
+
     /**
      * override views based on modules if exists
      * @see Zend_Controller_Action::init()
@@ -67,190 +98,6 @@ class AboutController extends Zend_Controller_Action
         }
     }
 
-
-
-    public function profileAction()
-    {
-        # get cononical link
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
-
-        /*
-         * Example to cache a result of a query ()
-        */
-        // get top categories (for now i just fetch the available category list)
-        $cache = Zend_Registry::get('cache');
-        $slug = "moneysaving";
-        $limit = 10;
-
-        $name = $this->getRequest ()->getParam('slug');
-
-        $cache_key = str_replace('-', '_', $name);
-
-
-        $key ="all_". "users". $cache_key ."_list";
-
-        // no cache available, lets query..
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-
-        //key not exist in cache
-        if($flag){
-
-            //get Page data from database and store in cache
-            $uidArray = User::getUserId($name);
-
-            $uid = $uidArray['id'];
-            FrontEnd_Helper_viewHelper::setInCache($key, $uid);
-            //echo  'FROM DATABASE';
-
-        } else {
-            //get from cache
-            $uid = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-            //echo 'The result is comming from cache!!';
-        }
-
-        $key ="all_". "users".$uid ."_list";
-
-        // no cache available, lets query..
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($key);
-
-        //key not exist in cache
-        if($flag){
-
-            //get Page data from database and store in cache
-            $userDetails = User::getUserprofileDetail($uid);
-
-            FrontEnd_Helper_viewHelper::setInCache($key, $userDetails);
-            //echo  'FROM DATABASE';
-
-        } else {
-            //get from cache
-            $userDetails = FrontEnd_Helper_viewHelper::getFromCacheByKey($key);
-            //echo 'The result is comming from cache!!';
-        }
-
-
-        $sinceKey ="all_". "since".$uid."_list";
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($sinceKey);
-        if($flag){
-
-            //get Page data from database and store in cache
-            $sinceDays = User::findEditorSince($uid);
-            FrontEnd_Helper_viewHelper::setInCache($sinceKey, $sinceDays);
-            //echo  'FROM DATABASE';
-
-        } else {
-            //get from cache
-            $sinceDays = FrontEnd_Helper_viewHelper::getFromCacheByKey($sinceKey);
-            //echo 'The result is comming from cache!!';
-        }
-
-
-        $interestkey ="all_". "interesting".$uid."_list";
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($interestkey);
-        if($flag){
-
-            //get Page data from database and store in cache
-            $interestCategory = User::getUserIntcategory($uid);
-            FrontEnd_Helper_viewHelper::setInCache($interestkey, $interestCategory);
-            //echo  'FROM DATABASE';
-
-        } else {
-            //get from cache
-            $interestCategory = FrontEnd_Helper_viewHelper::getFromCacheByKey($interestkey);
-            //echo 'The result is comming from cache!!';
-        }
-
-        $popularcodekey ="all_". "popularcode".$uid ."_list";
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($popularcodekey);
-        if($flag){
-
-            //get Page data from database and store in cache
-            $popularCode = FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', 4, 0, $uid);
-            FrontEnd_Helper_viewHelper::setInCache($popularcodekey, $popularCode);
-            //echo  'FROM DATABASE';
-
-        } else {
-            //get from cache
-            $popularCode  = FrontEnd_Helper_viewHelper::getFromCacheByKey($popularcodekey);
-            //echo 'The result is comming from cache!!';
-        }
-
-
-        $favouriteShopkey ="all_". "favouriteshop".$uid ."_list";
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($favouriteShopkey);
-        if($flag){
-
-            //get Page data from database and store in cache
-            $favouriteShop = User::getUserFavoritesStore($uid);
-            FrontEnd_Helper_viewHelper::setInCache($favouriteShopkey, $favouriteShop);
-            //echo  'FROM DATABASE';
-
-        } else {
-            //get from cache
-            $favouriteShop  = FrontEnd_Helper_viewHelper::getFromCacheByKey($favouriteShopkey);
-            //echo 'The result is comming from cache!!';
-        }
-
-
-        $newcodekey ="all_". "newestcode".$uid ."_list";
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($newcodekey);
-        if($flag){
-
-            //get Page data from database and store in cache
-            $newestCode = FrontEnd_Helper_viewHelper::commonfrontendGetCode('newest', 4, 0, $uid);
-            FrontEnd_Helper_viewHelper::setInCache($newcodekey, $newestCode);
-            //echo  'FROM DATABASE';
-
-        } else {
-            //get from cache
-            $newestCode  = FrontEnd_Helper_viewHelper::getFromCacheByKey($newcodekey);
-            //echo 'The result is comming from cache!!';
-        }
-
-        $mostreadkey ="all_". "mostread".$uid ."_list";
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($mostreadkey);
-        if($flag){
-
-            //get Page data from database and store in cache
-            $mostread = MoneySaving::generateMostReadArticle($slug, 6, $uid);
-            FrontEnd_Helper_viewHelper::setInCache($mostreadkey, $mostread);
-            //echo  'FROM DATABASE';
-
-        } else {
-            //get from cache
-            $mostread = FrontEnd_Helper_viewHelper::getFromCacheByKey($mostreadkey);
-            //echo 'The result is comming from cache!!';
-        }
-        $this->view->headTitle(@$userDetails[0]['firstName']." ". @$userDetails[0]['lastName']);
-        //for facebook parameters
-        $this->view->fbtitle = @$userDetails[0]['firstName']." ". @$userDetails[0]['lastName'];
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE.gettext("redactie") ."/".@$userDetails[0]['slug'];
-
-        if(LOCALE == '' ) {
-                $fbImage = 'logo_og.png';
-        }else{
-                $fbImage = 'flipit.png';
-
-        }
-        $this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
-
-
-        $this->view->userDetails = $userDetails;
-        $this->view->favouriteShops = $favouriteShop;
-        $this->view->interestCategory = $interestCategory;
-        $this->view->noOfTotalOffers = @$noOfTotalOffers;
-        $this->view->sinceDays = $sinceDays;
-        $this->view->popularCode = $popularCode;
-        $this->view->newestCode = $newestCode;
-        $this->view->mostread = $mostread;
-
-        if(empty($userDetails)){
-
-            throw new Zend_Controller_Action_Exception('', 404);
-        }
-
-    }
 
     public function clearcacheAction()
     {
