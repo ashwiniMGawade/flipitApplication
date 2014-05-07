@@ -111,9 +111,7 @@ class SearchController extends Zend_Controller_Action
     }
 
     public static function getStoresForSearchResults($shopsByShopIds, $popularShops)
-    {
-        $shopsForSearchPage = '';
-        
+    {        
         if (!empty($shopsByShopIds) && !empty($popularShops)) :
             $shopsForSearchPage = array_merge($shopsByShopIds, $popularShops);
         else:

@@ -1,9 +1,16 @@
 <?php 
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $partialViewPath = 'partials/';
-$offers = '';
+$offers = '<div class="message">
+            <div class="holder">
+                <span class="ico-warning"></span>
+                <span class="text">
+                    <span>'.$this->translate('Sorry, no vouchercodes found with the search input').'!</span>
+                </span>
+            </div>
+        </div>';
 if(!empty($this->offers)):
-    $offers .= '<header class="heading-box">
+    $offers = '<header class="heading-box">
             <h2>'.$this->translate('Offers matching search results').'</h2>
         </header>';
     $offers .= $this->partial(
@@ -16,15 +23,6 @@ if(!empty($this->offers)):
             'zendForm'=>$this->form
         )
     );
-else:
-    $offers .= '<div class="message">
-            <div class="holder">
-                <span class="ico-warning"></span>
-                <span class="text">
-                    <span>'.$this->translate('Sorry, no vouchercodes found with the search input').'!</span>
-                </span>
-            </div>
-        </div>';
 endif;
 
 $signUpWidgetForm = '';

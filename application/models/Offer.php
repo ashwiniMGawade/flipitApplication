@@ -660,13 +660,15 @@ class Offer extends BaseOffer
         $searchKeyword = strtolower($searchParameters['searchField']);
         $currentDate = date('Y-m-d H:i:s');
         $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
-        $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate, $limit, $searchedOffersByIds);
-        return $offersBySearchedKeywords;
+        $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
+        $mergedOffersBySearchedKeywords = array_merge($searchedOffersByIds, $offersBySearchedKeywords);
+        $searchedOffers = array_slice($mergedOffersBySearchedKeywords, 0, $limit);
+        return $searchedOffers;
     }
 
     public static function getOffersByShopIds($shopIds, $currentDate)
     {
-        $searchedOffersByIds = array();
+        $shopOffersByShopIds = array();
         if(!empty($shopIds)) :
             $shopIds = array_map("mysql_real_escape_string", $shopIds);
             $shopIds = ("'" . implode("', '", $shopIds) . "'");
@@ -689,17 +691,12 @@ class Offer extends BaseOffer
             ->andWhere("s.id IN(" . $shopIds .")" )
             ->orderBy("s.name ASC")
             ->fetchArray();
-            
-            foreach($shopOffersByShopIds as $shopOffersByShopId):
-                $searchedOffersByIds[$shopOffersByShopId['id']] = $shopOffersByShopId;
-            endforeach;
         endif;
-        return $searchedOffersByIds;
+        return $shopOffersByShopIds;
     }
 
-    public static function getOffersBySearchedKeywords($searchKeyword, $currentDate, $limit, $searchedOffersByIds)
+    public static function getOffersBySearchedKeywords($searchKeyword, $currentDate)
     {
-        $offersBySearchedKeywords = array();
         $shopOffersBySearchedKeywords = Doctrine_Query::create()
         ->select('s.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId,t.*')
                 ->from('Offer o')
@@ -718,17 +715,7 @@ class Offer extends BaseOffer
                 ->andWhere("s.name LIKE '%$searchKeyword%' or o.title LIKE '%$searchKeyword%'" , $searchKeyword, $searchKeyword )
                 ->orderBy("s.name ASC")
                 ->fetchArray();
-
-        $searchedOffersByKeywords = array();
-        
-        if(!empty($shopOffersBySearchedKeywords)) :
-            foreach($shopOffersBySearchedKeywords as $shopOffersBySearchedKeyword):
-                $searchedOffersByKeywords[$shopOffersBySearchedKeyword['id']] = $shopOffersBySearchedKeyword;
-            endforeach;
-            $mergedOffersBySearchedKeywords = array_merge($searchedOffersByIds, $searchedOffersByKeywords);
-            $offersBySearchedKeywords = array_slice($mergedOffersBySearchedKeywords, 0, $limit);
-        endif;
-        return $offersBySearchedKeywords;
+        return $shopOffersBySearchedKeywords;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
