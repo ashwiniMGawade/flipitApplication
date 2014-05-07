@@ -9,42 +9,39 @@ class SearchController extends Zend_Controller_Action
     {
         $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($searchPermalink);
-        $this->pageDetail = Page::getPageFromPageAttribute(36);
-        $this->view->pageTitle = $this->pageDetail->pageTitle;
+        $pageName = LOCALE == '' ? 'zoeken' : 'search';
+        $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
+        $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
+        $this->view->pageTitle = $pageDetail->pageTitle;
 
-        if ($this->pageDetail->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
+        if ($pageDetail->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $pageDetail->customHeader;
         }
 
-        $this->view->headTitle($this->pageDetail->metaTitle);
-        $this->view->headMeta()->setName('description', trim($this->pageDetail->metaDescription));
         $searchedKeyword = $this->getRequest()->getParam('searchField');
-        
-        if ($searchedKeyword !="" || $searchedKeyword != null) {
-            $this->view->searchedKeyword = $searchedKeyword;
-        }
-
-        $shopsIds = "";
-        $shopsForSearchPage = '';
-        $shopsIds = $this->getExcludedShopIdsBySearchedKeyword($searchedKeyword);
-        $exclusiveShops = self::getExclusiveShopsByExcludedShopIds($shopsIds);
+        $shopIds = "";
+        $shopIds = $this->getExcludedShopIdsBySearchedKeyword($searchedKeyword);
+        $shopsByShopIds = self::getshopsByExcludedShopIds($shopIds);
         $popularShops = self::getPopularStores($searchedKeyword);
-        $shopsForSearchPage = self::getStoresForSearchResults($exclusiveShops, $popularShops);
+        $shopsForSearchPage = self::getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
-        $offers = Offer::searchOffers($this->_getAllParams(), $shopsIds, 12);
-        $this->view->offers = $offers;
+        $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
+        $this->view->offers = $offersBySearchedKeywords;
         $this->view->popularStores = $popularStores;
-        if (!empty($offers)) {
+        if (!empty($offersBySearchedKeywords)) {
             $this->view->popularStores = $shopsForSearchPage; 
         }  
         
-        $this->view->facebookTitle =$this->pageDetail->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $this->pageDetail->permaLink;
+        $this->view->headTitle($pageDetail->metaTitle);
+        $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
+        $this->view->searchedKeyword = ($searchedKeyword !="" || $searchedKeyword != null) ? $searchedKeyword : '';
+        $this->view->facebookTitle =$pageDetail->pageTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $pageDetail->permaLink;
         $this->view->facebookImage = FACEBOOK_IMAGE;
-        $this->view->facebookDescription =  trim($this->pageDetail->metaDescription);
+        $this->view->facebookDescription =  trim($pageDetail->metaDescription);
         $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription =  trim($this->pageDetail->metaDescription);
-        $this->view->pageLogo = HTTP_PATH_LOCALE.'public/'.$this->pageDetail->logo->path.$this->pageDetail->logo->name;
+        $this->view->twitterDescription =  trim($pageDetail->metaDescription);
+        $this->view->pageLogo = HTTP_PATH_LOCALE.'public/'.$pageDetail->logo->path.$pageDetail->logo->name;
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
@@ -54,7 +51,7 @@ class SearchController extends Zend_Controller_Action
     public function getExcludedShopIdsBySearchedKeyword($searchedKeyword)
     {
         $searchBarExcludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeyword);
-        $shopsIds = '';
+        $shopIds = '';
 
         if (!empty($searchBarExcludedKeywords)) :
             if($searchBarExcludedKeywords[0]['action'] == 0):
@@ -62,26 +59,26 @@ class SearchController extends Zend_Controller_Action
                 $this->_redirect($storeUrl);
                 exit();
             else:
-                $shopsIds = array();
+                $shopIds = array();
                 foreach ($searchBarExcludedKeywords[0]['shops'] as $shops) :
-                    $shopsIds[] = $shops['shopsofKeyword'][0]['id'];
+                    $shopIds[] = $shops['shopsofKeyword'][0]['id'];
                 endforeach;
             endif;
         endif;
 
-        return $shopsIds;
+        return $shopIds;
     }
 
-    public static function getExclusiveShopsByExcludedShopIds($shopsIds)
+    public static function getshopsByExcludedShopIds($shopIds)
     {
-        $exclusiveShopsForSearchPage = array();
-        $exclusiveShops = Shop::getExclusiveShops($shopsIds);
+        $shopsForSearchPage = array();
+        $shopsByShopIds = Shop::getExclusiveShops($shopIds);
 
-        foreach ($exclusiveShops as $exclusiveShop) :
-            $exclusiveShopsForSearchPage[$exclusiveShop['id']] = $exclusiveShop;
+        foreach ($shopsByShopIds as $shopsByShopId) :
+            $shopsForSearchPage[$shopsByShopId['id']] = $shopsByShopId;
         endforeach;
 
-        return $exclusiveShopsForSearchPage;
+        return $shopsForSearchPage;
     }
 
     public static function getPopularStores($searchedKeyword)
@@ -96,17 +93,17 @@ class SearchController extends Zend_Controller_Action
         return $popularStoresForSearchPage;
     }
 
-    public static function getStoresForSearchResults($exclusiveShops, $popularShops)
+    public static function getStoresForSearchResults($shopsByShopIds, $popularShops)
     {
         $shopsForSearchPage = '';
         
-        if (!empty($exclusiveShops) && !empty($popularShops)) :
-            $shopsForSearchPage = array_merge($exclusiveShops, $popularShops);
+        if (!empty($shopsByShopIds) && !empty($popularShops)) :
+            $shopsForSearchPage = array_merge($shopsByShopIds, $popularShops);
         else:
             if (!empty($popularShops)) :
                 $shopsForSearchPage = $popularShops;
             else:
-                $shopsForSearchPage = $exclusiveShops; 
+                $shopsForSearchPage = $shopsByShopIds; 
             endif;
         endif;
 
