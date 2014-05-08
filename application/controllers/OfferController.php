@@ -20,7 +20,7 @@ class OfferController extends Zend_Controller_Action
             $facebookImage = 'flipit.png';
             $facebookLocale = LOCALE;
         }
-        $offers= Offer::getTop20Offers();
+        $offers= Offer::getTopOffers();
 
         $this->view->content = $page->content;
         $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($page->logo['path'].$page->logo['name']);

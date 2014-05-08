@@ -42,16 +42,18 @@ class Visitor extends BaseVisitor
      */
     public static function getFavoriteShopForUser($visitorId, $shopId)
     {
-        $favoriteShops = Doctrine_Query::create()->select("fv.id as id")
-        ->from("FavoriteShop fv")
-        ->where('fv.visitorId='.$visitorId)
-        ->andWhere('fv.shopId='.$shopId)
-        ->fetchArray();
-        if (count($favoriteShops) > 0) {
-            return true;
-        } else {
-            return false;
+        $favouriteShopsStatus = false;
+        if($shopId==0) {
+            $favoriteShops = Doctrine_Query::create()->select("fv.id as id")
+            ->from("FavoriteShop fv")
+            ->where('fv.visitorId='.$visitorId)
+            ->andWhere('fv.shopId='.$shopId)
+            ->fetchArray();
+            if (!empty($favoriteShops)) {
+                $favouriteShopsStatus = true;
+            } 
         }
+        return $favouriteShopsStatus;
     }
     #############################################################
     ######### END REFACTRED CODE ################################

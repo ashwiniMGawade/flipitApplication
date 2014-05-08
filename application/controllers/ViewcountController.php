@@ -55,7 +55,7 @@ class ViewcountController extends Zend_Controller_Action
             //key not exist in cache
             if($flag){
                 //get  data from database and store in cache
-                $allUserDetails = User::getAllUsersDetail();
+                $allUserDetails = User::getAllUsersDetails();
                 FrontEnd_Helper_viewHelper::setInCache($alluserkey, $allUserDetails);
             } else {
                 //get from cache

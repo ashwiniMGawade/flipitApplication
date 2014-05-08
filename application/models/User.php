@@ -24,7 +24,7 @@ class User extends BaseUser
      * @return array $usersData
      * @version 1.0
      */
-    public static function getAllUsersDetail($websiteName)
+    public static function getAllUsersDetails($websiteName)
     {
         $usersData = Doctrine_Query::create()
         ->select("u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing, u.popularKortingscode, pi.name, pi.path")

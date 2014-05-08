@@ -543,20 +543,25 @@ EOD;
      *
      * @return $browseByStoreWidget
      */
-    public function browseByStoreWidget($type='default', $postion=1)
+    public function browseByStoreWidget()
     {
-        $browseByStoreWidget = '<div class="block">
-        <div class="intro">
-        <h2>'.$this->zendTranslate->translate('Browse by Store') .'</h2>
-        </div>
-        <div class="alphabet-holder">
-        <ul class="alphabet">';
+        $browseByStoreWidget = 
+        '<div class="block">
+            <div class="intro">
+               <h2>'.$this->zendTranslate->translate('Browse by Store') .'</h2>
+            </div>
+            <div class="alphabet-holder">
+                <ul class="alphabet">';
         foreach (range('A','Z') as $oneCharacter) {
             $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
-            $browseByStoreWidget .= '<li><a href="' .$redirectUrl.'">'.$this->zendTranslate->translate($oneCharacter).'</a></li>';
+            $browseByStoreWidget .= 
+                    '<li>
+                        <a href="' .$redirectUrl.'">'.$this->zendTranslate->translate($oneCharacter).'</a>
+                    </li>';
         };
-        $browseByStoreWidget.= '</ul>
-        </div>
+        $browseByStoreWidget.= 
+                '</ul>
+            </div>
         </div>';
         return $browseByStoreWidget;
     }
