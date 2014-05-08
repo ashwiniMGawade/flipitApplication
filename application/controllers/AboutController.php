@@ -46,30 +46,32 @@ class AboutController extends Zend_Controller_Action
     ##########################################################
     public function profileAction()
     {
-        $authorNameSlug = $this->getRequest ()->getParam('slug');
-        $userId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorNameSlug) ."_list", User::getUserIdBySlugName($authorNameSlug), 0);
-        $userDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$userId ."_list", User::getUserProfileDetail($userId), 0);
-        $userDetails = $userDetails[0];
-        $userFavouriteShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$userId ."_list", User::getUserFavouritesStore($userId), 0);
-        $userMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$userId ."_list", MoneySaving::getMostReadArticles(6, $userId), 0);
-        $authorFullName = $userDetails['firstName']." ". $userDetails['lastName'];
+        $authorSlug = $this->getRequest()->getParam('slug');
+        $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorSlug) ."_list", User::getUserIdBySlugName($authorSlug), 0);
+        $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$authorId ."_list", User::getUserProfileDetail($authorId), 0);
+
+        if(empty($authorDetails)){
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
+
+        $authorDetails = $authorDetails[0];
+        $authorFavouriteShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$authorId ."_list", User::getUserFavouritesStore($authorId), 0);
+        $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$authorId ."_list", MoneySaving::getMostReadArticles(6, $authorId), 0);
+        $authorFullName = $authorDetails['firstName']." ". $authorDetails['lastName'];
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
 
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
         $this->view->headTitle($authorFullName);
         $this->view->facebookTitle = $authorFullName;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE.gettext("redactie") ."/".$userDetails['slug'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE.gettext("redactie") ."/".$authorDetails['slug'];
         $this->view->facebookImage = FACEBOOK_IMAGE ;
-        $this->view->facebookDescription = trim($userDetails['mainText']);
+        $this->view->facebookDescription = trim($authorDetails['mainText']);
         $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription = trim($userDetails['mainText']);
-        $this->view->authorDetails = $userDetails;
-        $this->view->authorFavouriteShops = $userFavouriteShop;
-        $this->view->authorMostReadArticles = $userMostReadArticles;
+        $this->view->twitterDescription = trim($authorDetails['mainText']);
+        $this->view->authorDetails = $authorDetails;
+        $this->view->authorFavouriteShops = $authorFavouriteShop;
+        $this->view->authorMostReadArticles = $authorMostReadArticles;
 
-        if(empty($userDetails)){
-            throw new Zend_Controller_Action_Exception('', 404);
-        }
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
