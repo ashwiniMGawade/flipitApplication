@@ -11,7 +11,7 @@ $partialViewPath = 'partials/';
 $authorsList = '';
 if (!empty($this->authorsWithPagination)) {
     $authorsList = $this->partial(
-        $partialViewPath.'_frontEndUsers.phtml',
+        $partialViewPath.'_authorsList.phtml',
         array(
            'authors' =>$this->authorsWithPagination,
         )

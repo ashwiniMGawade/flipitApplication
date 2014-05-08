@@ -26,8 +26,8 @@ class AboutController extends Zend_Controller_Action
         $this->view->facebookDescription = trim($pageDetails->metaDescription);
         $this->view->facebookLocale = FACEBOOK_LOCALE;
         $this->view->twitterDescription = trim($pageDetails->metaDescription);
-        $allAuthorsDetail = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", User::getAllUsersDetail(self::getWebsiteNameWithLocale()));
-        $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination($allAuthorsDetail, $this->_getAllParams(), 20, 7);
+        $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", User::getAllUsersDetails(self::getWebsiteNameWithLocale()));
+        $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination($allAuthorsDetails, $this->_getAllParams(), 20, 7);
         $this->view->pageDetails = $pageDetails;
  
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');

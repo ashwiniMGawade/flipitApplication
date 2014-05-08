@@ -202,7 +202,7 @@ class Offer extends BaseOffer
         return $slicedOffer;
     }
 
-    public static function getTop20Offers()
+    public static function getTopOffers()
     {
         $cachedKeyForTop20 =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
         if ($cachedKeyForTop20) {
