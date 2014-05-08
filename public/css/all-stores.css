@@ -187,7 +187,8 @@ margin-top:/* negative half from the height */
   z-index:9999; 
   background: #eee;
   border-right: 1px solid #ddd;
-  height:100%;
+  border-bottom: 1px solid #ddd;
+  height:120%;
   padding:10px;
 }
 #branding_panel td{
@@ -210,7 +211,7 @@ margin-top:/* negative half from the height */
   width: 100%;
   min-height: 100px;
 }
-#branding_panel button[type="submit"], #branding_panel button.preview {
+#branding_panel button[type="submit"], #branding_panel button.preview, #branding_panel button.reset {
   font-size: 14px;
   height: 39px;
   width: 99px;
@@ -220,4 +221,4 @@ margin-top:/* negative half from the height */
   border-radius: 2px;
   -webkit-border-radius: 2px;
 }
-
+ #branding_panel button.reset { width: 130px; }
