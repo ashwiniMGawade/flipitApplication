@@ -1,3 +1,9 @@
+<?php $session = new Zend_Session_Namespace('Branding'); ?>
+<?php if (empty($session->brandingActivated) && !empty($this->shopBranding)): ?>
+    <?php $this->headStyle()->appendStyle($this->shop()->brandingCss($this->shopBranding)); ?>
+    <?php $this->headScript()->appendScript($this->shop()->brandingJs($this->shopBranding)); ?>
+<?php endif; ?>
+
 <?php
 $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.expander.min.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/storeDetail.js");

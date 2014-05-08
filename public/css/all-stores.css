@@ -179,3 +179,46 @@ margin-left:-362px;
 margin-top:/* negative half from the height */
 -335px
 }
+
+#branding_panel{
+  left:0px;
+  width:299px; 
+  position:absolute; 
+  z-index:9999; 
+  background: #eee;
+  border-right: 1px solid #ddd;
+  height:100%;
+  padding:10px;
+}
+#branding_panel td{
+  padding: 5px 5px 0px 0px;
+}
+#branding_panel hr{
+  border: 0;
+  color: #ddd;
+  background-color: #ddd;
+  height: 5px;
+}
+#branding_panel h3{
+
+}
+#branding_panel label{
+  font-weight: normal;
+  font-size: 14px;
+}
+#branding_panel #overwrite{
+  width: 100%;
+  min-height: 100px;
+}
+#branding_panel button[type="submit"], #branding_panel button.preview {
+  float: left;
+  font-size: 14px;
+  height: 39px;
+  width: 99px;
+  min-width: 60px;
+  margin: 0 10px 0 0 ;
+  padding: 0;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
+}
+

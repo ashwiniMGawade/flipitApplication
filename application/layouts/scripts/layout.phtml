@@ -62,12 +62,16 @@ else:
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
+echo $this->headStyle();
 
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
+
 ?>
 
 </head>
 <body>
+
+    <?php echo $this->render('branding_menu.phtml'); ?>
     <div id="wrapper">
 	    <!-- hidden field for apply selected class on menu -->
 	    <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>

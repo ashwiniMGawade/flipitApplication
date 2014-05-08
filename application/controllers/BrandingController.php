@@ -23,7 +23,7 @@ class BrandingController extends Zend_Controller_Action {
 
     public function stopAction()
     {
-        $this->_helper->branding->stop();
-        $this->_redirect( 'http://www.flipit.com/admin' );
+        $redirectUrl = $this->_helper->branding->stop();
+        $this->_redirect( $redirectUrl );
     }
 }

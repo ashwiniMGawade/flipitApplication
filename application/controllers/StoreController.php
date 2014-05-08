@@ -64,6 +64,8 @@ class StoreController extends Zend_Controller_Action
             }
     
             $ShopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
+
+            $this->view->shopBranding = Shop::getShopBranding($shopId);
         } else {
             $urlToRedirect = HTTP_PATH_LOCALE. 'store/index';
             $this->_redirect($urlToRedirect);
