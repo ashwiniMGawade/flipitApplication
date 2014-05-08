@@ -7,8 +7,7 @@ $categoryWiseArticles = $this->categoryWiseArticles;
 ?>
 <div class="banner-block">
     <?php $pageImage = PUBLIC_PATH_CDN.$pageDetails[0]['logo']['path'].'thum_extra_large_'.$pageDetails[0]['logo']['name']; ?>
-    <img class="image" src="/public/images/banner-06.jpg" alt="image description">
-    <!--<img class='image' src="<?php  echo $pageImage;?>" alt="<?php echo $pageDetails[0]['pageTitle']; ?>"/>-->
+    <img class='image' src="<?php  echo $pageImage;?>" alt="<?php echo $pageDetails[0]['pageTitle']; ?>"/>
     <div class="frame-image">
         <div class="container">
             <h1 class="flipit-text"><?php $this->translate('Flipit plus');?></h1>
@@ -26,27 +25,10 @@ $categoryWiseArticles = $this->categoryWiseArticles;
                 <div class="holder">
                     <div class="mask">
                         <div class="slideset">
-                            <div class="slide active" id="first">
-                                <img class="" width = "632" height = "160"  src="<?php echo PUBLIC_PATH_CDN.$this->mostReadArticles[0]['articles']['thumbnail']['path'].$this->mostReadArticles[0]['articles']['thumbnail']['name']; ?>" alt="<?php echo $this->mostReadArticles[0]['articles']['title'];  ?>">
-                                <h1><?php echo $this->mostReadArticles[0]['articles']['title']; ?></h1>
-                                <p>
-                                   <?php echo $this->mostReadArticles[0]['articles']['metadescription']; ?>
-                                </p>
-                            </div>
-                            <div class="slide"  id="second">
-                                <img class="" width = "632" height = "160" src="<?php echo PUBLIC_PATH_CDN.$this->mostReadArticles[1]['articles']['thumbnail']['path'].$this->mostReadArticles[1]['articles']['thumbnail']['name']; ?>" alt="<?php echo $this->mostReadArticles[1]['articles']['title'];  ?>">
-                                <h1><?php echo $this->mostReadArticles[1]['articles']['title']; ?></h1>
-                                <p>
-                                    <?php echo $this->mostReadArticles[1]['articles']['metadescription']; ?>
-                                </p>
-                            </div>
-                            <div class="slide" id="third">
-                                <img class="" width = "632" height = "160" src="<?php echo PUBLIC_PATH_CDN.$this->mostReadArticles[2]['articles']['thumbnail']['path'].$this->mostReadArticles[2]['articles']['thumbnail']['name']; ?>" alt="<?php echo $this->mostReadArticles[2]['articles']['title'];  ?>">
-                                <h1><?php echo $this->mostReadArticles[2]['articles']['title'];?></h1>
-                                <p>
-                                    <?php echo $this->mostReadArticles[2]['articles']['metadescription']; ?>
-                                </p>
-                            </div>
+                            <?php 
+                            $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+                            echo $mostReadArticles = $frontEndViewHelper->getMostReadArticles($this->mostReadArticles);
+                            ?>
                         </div>
                     </div>
                 </div>
@@ -65,66 +47,11 @@ $categoryWiseArticles = $this->categoryWiseArticles;
 </div>
 <main role="main" id="main">
     <div class="container content-box">
-        <header class="heading-bar">
-            <h2><?php echo $this->translate('Recently added');?></h2>
-        </header>
-        <div class="item-block">
-            <div class="holder">
-                 <?php foreach($recentlyAddedArticles as $recentlyAddedArticle) { ?>
-                <div class="item">
-                    <img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['ArtIcon']['path'].$recentlyAddedArticle['ArtIcon']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>">
-                    <div class="box">
-                        <div class="caption-area">
-                            <span class="caption">
-                            <?php echo $recentlyAddedArticle['title'];?>
-                            </span>
-                        </div>
-                        <a href="javascript:void(0);" onclick = "viewCounter('onclick', 'article', <?php echo $recentlyAddedArticle['id']; ?>);" class="link"><?php echo $this->translate('more');?> &#8250;</a>
-                    </div>
-                </div>
-                <?php } ?>          
-            </div>
-        </div>
-        <header class="heading-bar">
-            <h2><?php echo $this->translate('From the blog');?></h2>
-        </header>
-        <div class="item-block">
-            <div class="holder">
-                <?php foreach($categoryWiseArticles['blog'] as $categoryWiseArticle) { ?>
-                <div class="item">
-                     <img src="<?php echo PUBLIC_PATH_CDN.$categoryWiseArticle['ArtIcon']['path'].$categoryWiseArticle['ArtIcon']['name'];?>" alt="<?php echo $categoryWiseArticle['title'];?>">
-                    <div class="box">
-                        <div class="caption-area">
-                            <span class="caption">
-                              <?php echo $categoryWiseArticle['title'];?>
-                            </span>
-                        </div>
-                        <a href="javascript:void(0);" onclick = "viewCounter('onclick', 'article', <?php echo $categoryWiseArticle['id']; ?>);" class="link"><?php echo $this->translate('More');?> &#8250;</a>
-                    </div>
-                </div>
-                <?php } ?>
-            </div>
-        </div>
-        <header class="heading-bar">
-            <h2><?php echo  $this->translate('Saving tips');?></h2>
-        </header>
-        <div class="item-block">
-            <div class="holder">
-                <?php foreach($categoryWiseArticles['savingtip'] as $categoryWiseArticle) { ?>
-                <div class="item">
-                    <img src="<?php echo PUBLIC_PATH_CDN.$categoryWiseArticle['ArtIcon']['path'].$categoryWiseArticle['ArtIcon']['name'];?>" alt="<?php echo $categoryWiseArticle['title'];?>">
-                    <div class="box">
-                        <div class="caption-area">
-                            <span class="caption">
-                             <?php echo $categoryWiseArticle['title'];?>
-                            </span>
-                        </div>
-                        <a href="javascript:void(0);" onclick = "viewCounter('onclick', 'article', <?php echo $categoryWiseArticle['id']; ?>);" class="link"><?php echo $this->translate('More');?> &#8250;</a>
-                    </div>
-                </div>
-                 <?php } ?>
-            </div>
-        </div>
+        <?php 
+            echo $recentlyAddedArticles = $frontEndViewHelper->getArticles('Recently added', $recentlyAddedArticles);
+            echo $blogWiseArticles = $frontEndViewHelper->getArticles('From Blog',$categoryWiseArticles['blog']);
+            echo $savingTipWiseArticles = $frontEndViewHelper->getArticles('Saving Tip',$categoryWiseArticles['savingtip']);
+        ?>
     </div>
 </main>
 <footer class="bottom-panel">

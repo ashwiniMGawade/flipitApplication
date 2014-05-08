@@ -31,7 +31,7 @@ class Articlecategory extends BaseArticlecategory
 
     public function addcategory($params)
     {
-        $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']);
+        $this->name = strtolower(BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']));
         $this->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
         $this->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
         $this->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaDescription']);

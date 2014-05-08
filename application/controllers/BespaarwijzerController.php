@@ -40,7 +40,7 @@ class BespaarwijzerController extends Zend_Controller_Action
         $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($pageKey, MoneySaving::getPageDetails($permalink));
 
         $mostReadArticleKey ="all_mostreadMsArticlePage_list";
-        $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($mostReadArticleKey, MoneySaving::getMostReadArticles($permalink, 3));
+        $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($mostReadArticleKey, MoneySaving::getMostReadArticles(3));
        
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
@@ -64,7 +64,7 @@ class BespaarwijzerController extends Zend_Controller_Action
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
-        
+       
         if (!empty($moneySavingPageDetails)) {
             $this->view->pageDetails = $moneySavingPageDetails;
         }else{

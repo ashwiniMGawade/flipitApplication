@@ -587,9 +587,9 @@ EOD;
     
     public static function getRealIpAddress()
     {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ip=$_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
         } else {
             $ip=$_SERVER['REMOTE_ADDR'];
@@ -613,9 +613,9 @@ EOD;
 
                 if ($article[0]['exists'] == 0) {
                     $articleViewCount  = new ArticleViewCount();
-                    $view = 1;
+                    $onClick = 1;
                     $articleViewCount->articleid = $id;
-                    $articleViewCount->onclick = $view;
+                    $articleViewCount->onclick = $onClick;
                     $articleViewCount->ip = $ip;
                     $articleViewCount->save();
                     $artcileExistsOrNot = "true";
@@ -633,9 +633,9 @@ EOD;
 
                 if ($article[0]['exists'] == 0) {
                     $articleViewCount  = new ArticleViewCount();
-                    $view = 1;
+                    $onLoad = 1;
                     $articleViewCount->articleid = $id;
-                    $articleViewCount->onload = $view;
+                    $articleViewCount->onload = $onLoad;
                     $articleViewCount->ip = $ip;
                     $articleViewCount->save();
                     $artcileExistsOrNot = "true";
@@ -645,6 +645,62 @@ EOD;
             break;
         }
         return $artcileExistsOrNot;
+    }
+
+    public function getArticles($headingType, $articles)
+    {
+        $relatedArticles = 
+            '<header class="heading-bar">
+                <h2>'.$this->zendTranslate->translate($headingType).'</h2>
+            </header>
+            <div class="item-block">
+                <div class="holder">';
+                    foreach($articles as $article) { 
+        $relatedArticles .=
+                '<div class="item">
+                    <img src="'.PUBLIC_PATH_CDN.$article['ArtIcon']['path'].$article['ArtIcon']['name'].'" alt="'.$article['title'].'">
+                    <div class="box">
+                        <div class="caption-area">
+                            <span class="caption">
+                            '.$article['title'].'
+                            </span>
+                        </div>
+                        <a href="javascript:void(0);" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
+                    </div>
+                </div>';
+            }           
+        $relatedArticles .=
+           '</div>
+        </div>';
+        return $relatedArticles;
+    }
+
+    public function getMostReadArticles($mostReadArticles)
+    {
+        $articleNumber = 1;
+        
+        foreach($mostReadArticles as $mostReadArticle) {
+            if($articleNumber == 1){
+                $id = 'first';
+                $class= 'slide active';
+            } else if ($articleNumber == 2) {
+                $id = 'second';
+                $class = 'slide';
+            } else {
+                $id = 'third';
+                $class = 'slide';
+            }
+            echo'<div class="'.$class.'" id="'.$id.'">
+                                <img class="" width = "632" height = "160"  src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].$mostReadArticle['articles']['thumbnail']['name'].'" 
+                                alt="'.$mostReadArticle['articles']['title'].'">
+                                <h1>'.$mostReadArticle['articles']['title'].'</h1>
+                                <p>
+                                   '.$mostReadArticle['articles']['content'].'
+                                </p>
+                        </div>';
+            $articleNumber++;                
+        }
+        
     }
     
     ##################################################################################

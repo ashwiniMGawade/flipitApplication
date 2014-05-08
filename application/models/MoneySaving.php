@@ -18,7 +18,7 @@ class MoneySaving extends BaseMoneySaving
 
     public static function getRecentlyAddedArticles()
     {
-        $recentlyAddedeArticles = Doctrine_Query::create()->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
+        $recentlyAddedArticles = Doctrine_Query::create()->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.ArtIcon aai')
@@ -28,10 +28,10 @@ class MoneySaving extends BaseMoneySaving
             ->orderBy('a.created_at DESC')
             ->limit(3)
             ->fetchArray();
-        return $recentlyAddedeArticles;
+        return $recentlyAddedArticles;
     }
 
-    public static function getMostReadArticles($id, $limit, $uId="")
+    public static function getMostReadArticles($limit)
     {
         $mostReadArticles = Doctrine_Query::create()->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.title, a.permalink, a.content, a.authorname, a.authorid, a.publishdate, ai.path, aai.name, aai.path, ai.name')
             ->from('ArticleViewCount av')
@@ -40,11 +40,8 @@ class MoneySaving extends BaseMoneySaving
             ->leftJoin('a.chapters chap')
             ->groupBy('av.articleid')
             ->orderBy('pop DESC')
-            ->where('a.deleted = 0');
-            if($uId != ""){
-                $mostReadArticles->andWhere('a.authorId ='.$uId.'');
-            }
-                $mostReadArticles = $mostReadArticles->limit($limit)
+            ->where('a.deleted = 0')
+            ->limit($limit)
             ->fetchArray();
         return $mostReadArticles;
     }
@@ -82,22 +79,29 @@ class MoneySaving extends BaseMoneySaving
 
     }
 
+    public static function getAllArticleCategories()
+    {
+        return $allArticleCategoryDetails = Doctrine_Query::create()->select('id, name')->from('Articlecategory ac')->where('ac.deleted=0')->fetchArray();
+    }
+
     public static function getCategoryWiseArticles()
     {
-        $blogCategoryArticles = self::getArticleCategoryId('blog');
-        $savingTipCategoryArticles =  self::getArticleCategoryId('savingtip');
-        $mergedArrayOfArticles =  array('blog'=>$blogCategoryArticles, 'savingtip'=>$savingTipCategoryArticles);
-        return $mergedArrayOfArticles;
+        $allCategoryDetails = self::getAllArticleCategories();
+        $categoryRelatedArticles = array();
+        foreach($allCategoryDetails as $categoryDetails) {
+            $categoryRelatedArticles[$categoryDetails['name']] = self::getArticlesRelatedToCategory($categoryDetails['id']);
+        }
+        return $categoryRelatedArticles;
     }
-    
-    public static function getArticleCategoryId($category)
+
+    public static function getArticlesRelatedToCategory($categoryId)
     {
-        $articleCategoryId = Doctrine_Query::create()->select('id')->from('Articlecategory ac')->where("ac.name ='".$category."'")->fetchArray();
-        $allArticlesRelatedToCategory = self:: getAllMoneySavingArticlesOfcategory($articleCategoryId[0]['id']);
+        
+        $allArticlesRelatedToCategory = self:: getAllMoneySavingArticlesOfCategory($categoryId);
         return $allArticlesRelatedToCategory;
     }
 
-    public static function getAllMoneySavingArticlesOfcategory($categoryId)
+    public static function getAllMoneySavingArticlesOfCategory($categoryId)
     {
         $articles = Doctrine_Query::create()->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
             ->from('Articles a')

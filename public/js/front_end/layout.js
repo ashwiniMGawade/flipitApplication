@@ -1,5 +1,5 @@
 /////////////////////////////////////// Refactored start/////////////////////////////////////////////////////////////
-function showArticle(id) {
+function showArticleOnClick(id) {
     if(id == 0) {
         $("#first").addClass("active");
         $("#second").removeClass("active");
