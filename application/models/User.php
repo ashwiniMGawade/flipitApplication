@@ -215,8 +215,8 @@ class User extends BaseUser
         $this->firstName = BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
         $this->email = BackEnd_Helper_viewHelper::stripSlashesFromString($params['email']);
         $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
-
-
+        $this->countryLocale = $params['locale'];
+ 
         if($this->isValidPassword($params['password'])) {
             self::setPassword($params['password']) ;
             $this->save();
@@ -440,7 +440,8 @@ class User extends BaseUser
         $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['dislike']);
         $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
-
+        $this->countryLocale = $params['locale'];
+        
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
 

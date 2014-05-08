@@ -31,4 +31,37 @@ class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper 
             .'</a>
         </li>';
     }
+    
+    public function getAuthorCountryName($locale)
+    {
+        $countryName = '';
+        if(!empty($locale)) :
+            $locale = new Zend_Locale($locale);
+            $countries = $locale->getTranslationList('Territory');
+            $countryName = ($countries[$locale->getRegion()]);
+        endif;
+        return $countryName;
+    }
+    public function getAuthorCountryFlagImage($authorCountryFlagName)
+    {
+        $autherCountryFlag = $authorCountryFlagName!='' ? PUBLIC_PATH ."images/front_end/flags/flag_" . $authorCountryFlagName .".jpg" : '';
+        return $autherCountryFlag;
+    }
+    
+    public function getAuthorCountryFlagWithCountryName($authorLocale)
+    {
+        $autherLocaleName = isset($authorLocale) ? $authorLocale : '';
+        $splitAutherLocaleName = explode('_' , $autherLocaleName);
+        $authorCountryFlagName = isset($splitAutherLocaleName[1]) ? $splitAutherLocaleName[1] : '';
+        $authorCountryName = $this->getAuthorCountryName($autherLocaleName);
+        $authorFlagImageLi = '';
+        if (!empty($authorCountryName)) {
+            $authorFlagImageLi = 
+                '<li>
+                     <img src="'.$this->getAuthorCountryFlagImage($authorCountryFlagName).' " width="16" height="11" alt="'. $authorCountryName.'">
+                     <span>' . $authorCountryName .'</span>
+                </li>';
+        }
+        return $authorFlagImageLi;
+    }
 }

@@ -2,7 +2,6 @@
 $profileImage = HTTP_PATH_CDN. ltrim($this->autherDetail['profileimage']['path'],"/")."thum_large_widget_".$this->autherDetail['profileimage']['name'];
 $authorFullName = $this->autherDetail['firstName']. " " .$this->autherDetail['lastName'];
 $partialFunctions = new FrontEnd_Helper_AuthorPartialFunctions();
-
 $authorFavouriteShops = '';
 if(!empty($this->authorFavouriteShops)):
 $authorFavouriteShops = $this->partial(
@@ -22,11 +21,9 @@ endif;
         <div class="box">
             <h1><span><?php echo $authorFullName;?></span> <span class="status"><?php echo $this->translate('deal guru');?></span></h1>
             <ul class="author-details">
-                <li>
-                    <img src="<?php echo PUBLIC_PATH?>images/ico-03.png" width="16" height="11" alt="image description">
-                    <span>Netherlands</span>
-                </li>
-                <?php echo $partialFunctions->authorSocialMediaLinks($this->autherDetail);?>
+               <?php 
+               echo $partialFunctions->getAuthorCountryFlagWithCountryName($this->autherDetail['countryLocale']);
+               echo $partialFunctions->authorSocialMediaLinks($this->autherDetail);?>
             </ul>
         </div>
     </header>

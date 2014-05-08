@@ -3,11 +3,11 @@ class AddCountryColumnUser extends Doctrine_Migration_Base
 {
     public function up()
     {
-        $this->addColumn('user', 'countryName', 'string', 100);
+        $this->addColumn('user', 'countryLocale', 'string', 10);
     }
 
     public function down()
     {
-        $this->removeColumn('user', 'countryName');
+        $this->removeColumn('user', 'countryLocale');
     }
 }

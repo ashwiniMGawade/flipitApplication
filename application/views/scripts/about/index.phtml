@@ -17,7 +17,7 @@ if (!empty($this->authorsWithPagination)) {
         )
     );
 } else {
-    $authorsList = 'No Records Found';
+    $authorsList = $this->translate('No Records Found');
 }
 $signUpWidgetForm = '';
 $signUpWidgetForm = $this->partial(
