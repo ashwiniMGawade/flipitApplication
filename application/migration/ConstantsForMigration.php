@@ -1,4 +1,4 @@
-<?php // Define path to application directory
+<?php
 defined('APPLICATION_PATH')
 || define('APPLICATION_PATH',
 		dirname(dirname(__FILE__)));
@@ -31,7 +31,6 @@ defined('PUBLIC_PATH')
         || define('PUBLIC_PATH',
                 dirname(dirname(dirname(__FILE__)))."/public/");
 
-/** Zend_Application */
 require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
 require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
 require_once (LIBRARY_PATH . '/Zend/Application.php');

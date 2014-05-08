@@ -49,7 +49,7 @@ class MoneySaving extends BaseMoneySaving
         return $mostReadArticles;
     }
 
-    public static function getPage($permalink)
+    public static function getPageDetails($permalink)
     {
         $pageDetails = Doctrine_Query::create()
             ->select('p.*, img.id, img.path, img.name')

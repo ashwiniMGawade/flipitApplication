@@ -37,49 +37,36 @@ class BespaarwijzerController extends Zend_Controller_Action
         $permalink= FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
         
         $pageKey ="all_moneysavingpage".$permalink."_list";
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pageKey);
-        
-        if($flag){
-            $pageDetails = MoneySaving::getPage($permalink);
-            FrontEnd_Helper_viewHelper::setInCache($pageKey, $pageDetails);
-        } else {
-            $pageDetails = FrontEnd_Helper_viewHelper::getFromCacheByKey($pageKey);
-        }
-   
-        $mostReadArticleKey ="all_mostreadMsArticlePage_list";
-        $ArticlesExistOrNot =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($mostReadArticleKey);
-        if ($ArticlesExistOrNot) {
-            $mostReadArticles = MoneySaving::getMostReadArticles($permalink, 3);
-            FrontEnd_Helper_viewHelper::setInCache($mostReadArticleKey, $mostReadArticles);
-        } else {
-            $mostReadArticles = FrontEnd_Helper_viewHelper::getFromCacheByKey($mostReadArticleKey);
-        }
+        $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($pageKey, MoneySaving::getPageDetails($permalink));
 
+        $mostReadArticleKey ="all_mostreadMsArticlePage_list";
+        $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($mostReadArticleKey, MoneySaving::getMostReadArticles($permalink, 3));
+       
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
 
-        $this->view->facebookDescription = trim($pageDetails[0]['metaDescription']);
+        $this->view->facebookDescription = trim($moneySavingPageDetails[0]['metaDescription']);
         $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->facebookTitle = $pageDetails[0]['pageTitle'];
+        $this->view->facebookTitle = $moneySavingPageDetails[0]['pageTitle'];
         $this->view->facebookShareUrl = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
         $this->view->facebookImage = HTTP_PATH."public/images/bespaarwijzer_og.png";
-        $this->view->twitterDescription = trim($pageDetails[0]['metaDescription']);
+        $this->view->twitterDescription = trim($moneySavingPageDetails[0]['metaDescription']);
         
-        $this->view->pageTitle = $pageDetails[0]['pageTitle'];
+        $this->view->pageTitle = $moneySavingPageDetails[0]['pageTitle'];
         $this->view->permaLink = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
-        $this->view->headTitle(trim($pageDetails[0]['metaTitle']));
-        $this->view->headMeta()->setName('description', trim($pageDetails[0]['metaDescription']));
+        $this->view->headTitle(trim($moneySavingPageDetails[0]['metaTitle']));
+        $this->view->headMeta()->setName('description', trim($moneySavingPageDetails[0]['metaDescription']));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
-        if($pageDetails[0]['customHeader']) {
-            $this->view->layout()->customHeader = "\n" . $pageDetails[0]['customHeader'];
+        if($moneySavingPageDetails[0]['customHeader']) {
+            $this->view->layout()->customHeader = "\n" . $moneySavingPageDetails[0]['customHeader'];
         }
 
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
         
-        if (!empty($pageDetails)) {
-            $this->view->pageDetails = $pageDetails;
+        if (!empty($moneySavingPageDetails)) {
+            $this->view->pageDetails = $moneySavingPageDetails;
         }else{
             $error_404 = 'HTTP/1.1 404 Not Found';
             $this->getResponse()->setRawHeader($error_404);
@@ -240,8 +227,9 @@ class BespaarwijzerController extends Zend_Controller_Action
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $parameters = $this->_getAllParams();
-        $currentArticleView = Articles::getArticleForFrontEnd($parameters);
-        $getAllArticles = Articles::getAllArticles($parameters);
+        $permalink = $parameters['permalink'];
+        $currentArticleView = Articles::getArticleForByPermalink($permalink);
+        $getAllArticles = Articles::getAllArticles();
         $ArNew =  array();
         $userInformationObject = new User();
         for ($i= 0; $i<count($getAllArticles); $i++) {

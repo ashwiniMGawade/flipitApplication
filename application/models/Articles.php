@@ -19,7 +19,7 @@ class Articles extends BaseArticles
 
     ######################## Refactored Block ################################
 
-    public static function getArticleForFrontEnd($parameters)
+    public static function getArticleForByPermalink($permalink)
     {
         $currentDateTime = date('Y-m-d H:i:s');
         $articles = Doctrine_Query::create()->select()
@@ -30,7 +30,7 @@ class Articles extends BaseArticles
                     ->leftJoin('a.chapters as chapter')
                     ->leftJoin('a.ArtIcon')
                     ->leftJoin('stores.shop')
-                    ->where('a.permalink="'.$parameters['permalink'].'"')
+                    ->where('a.permalink="'.$permalink.'"')
                     ->andWhere('a.publish = "1"')
                     ->andWhere("a.deleted= 0")
                     ->andWhere('a.publishdate <= '."'$currentDateTime'")
@@ -38,10 +38,10 @@ class Articles extends BaseArticles
         return $articles;
     }
 
-    public static function getAllArticles($params)
+    public static function getAllArticles()
     {
         $currentDateTime = date('Y-m-d H:i:s');
-        $data = Doctrine_Query::create()->select()
+        $allArticles = Doctrine_Query::create()->select()
                 ->from("Articles a")
                 ->leftJoin('a.relatedstores as stores')
                 ->leftJoin('a.relatedcategory as related')
@@ -53,7 +53,7 @@ class Articles extends BaseArticles
                 ->andWhere("a.deleted= 0")
                 ->andWhere('a.publishdate <= '."'$currentDateTime'")
                 ->fetchArray();
-        return $data;
+        return $allArticles;
     }
 
 

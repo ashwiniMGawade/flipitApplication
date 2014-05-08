@@ -90,15 +90,8 @@ class ViewcountController extends Zend_Controller_Action
         $type = $this->_getParam('type');
         $event = $this->_getParam('event');
         $id = $this->_getParam('id');
-        $count  = FrontEnd_Helper_viewHelper::viewCounter($type, $event, $id);
-
-        if($count == "false") {
-            echo Zend_Json::encode(false);
-
-        } else {
-            echo Zend_Json::encode(true);
-        }
-
+        $viewCountValue  = FrontEnd_Helper_viewHelper::viewCounter($type, $event, $id);
+        $viewCountValue == "false" ? echo Zend_Json::encode(false); : echo Zend_Json::encode(true);
         die();
     }
 

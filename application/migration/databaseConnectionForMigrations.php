@@ -6,10 +6,10 @@ spl_autoload_register(array('Doctrine', 'autoload'));
 $doctrineManager = Doctrine_Manager::getInstance();
 $imbull = $databaseConnections['imbull'];
 $doctrineManagerConnection = Doctrine_Manager::connection($databaseConnections['imbull'], 'doctrine');
-foreach ($databaseConnections as $key => $databaseConnection ) {
-    if ($key != 'imbull') {
+foreach ($databaseConnections as $databaseConnectionKey => $databaseConnection ) {
+    if ($databaseConnectionKey != 'imbull') {
         try {
-                $this->deleteArticleCategory($databaseConnection ['dsn'], $key, $imbull);
+                $this->deleteArticleCategories($databaseConnection ['dsn'], $databaseConnectionKey, $imbull);
             } catch (Exception $e) {
                 echo $e->getMessage ();
                 echo "\n\n";
