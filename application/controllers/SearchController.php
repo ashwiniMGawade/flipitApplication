@@ -9,20 +9,20 @@ class SearchController extends Zend_Controller_Action
     {
         $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($searchPermalink);
-        $pageName = LOCALE == '' ? 'zoeken' : 'search';
-        $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
-        $pageDetail = Page::getPageFromPageAttribute(36);
+        $pagePermalink = FrontEnd_Helper_viewHelper::__link('zoeken');
+        $pageAttributeId = Page::getPageAttributeByPermalink($pagePermalink);
+        $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
         $this->view->pageTitle = $pageDetail->pageTitle;
 
         if ($pageDetail->customHeader) {
             $this->view->layout()->customHeader = "\n" . $pageDetail->customHeader;
         }
 
-        $searchedKeyword = $this->getRequest()->getParam('searchField');
+        $searchedKeywords = $this->getRequest()->getParam('searchField');
         $shopIds = "";
-        $shopIds = $this->getExcludedShopIdsBySearchedKeyword($searchedKeyword);
+        $shopIds = $this->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
         $shopsByShopIds = self::getshopsByExcludedShopIds($shopIds);
-        $popularShops = self::getPopularStores($searchedKeyword);
+        $popularShops = self::getPopularStores($searchedKeywords);
         $shopsForSearchPage = self::getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
         $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
@@ -34,7 +34,7 @@ class SearchController extends Zend_Controller_Action
         
         $this->view->headTitle($pageDetail->metaTitle);
         $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
-        $this->view->searchedKeyword = ($searchedKeyword !="" || $searchedKeyword != null) ? $searchedKeyword : '';
+        $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
         $this->view->facebookTitle =$pageDetail->pageTitle;
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $pageDetail->permaLink;
         $this->view->facebookImage = FACEBOOK_IMAGE;
@@ -48,9 +48,9 @@ class SearchController extends Zend_Controller_Action
 
     }
 
-    public function getExcludedShopIdsBySearchedKeyword($searchedKeyword)
+    public function getExcludedShopIdsBySearchedKeywords($searchedKeywords)
     {
-        $excludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeyword);
+        $excludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeywords);
         $shopIds = '';
 
         if (!empty($excludedKeywords[0])) :
@@ -92,9 +92,9 @@ class SearchController extends Zend_Controller_Action
         return $shopsForSearchPage;
     }
 
-    public static function getPopularStores($searchedKeyword)
+    public static function getPopularStores($searchedKeywords)
     {
-        $popularStores = Shop::getStoresForSearchByKeyword($searchedKeyword, 8);
+        $popularStores = Shop::getStoresForSearchByKeyword($searchedKeywords, 8);
         $popularStoresForSearchPage = self::getPopularStoresForSearchPage($popularStores);
         return $popularStoresForSearchPage;
     }
@@ -143,31 +143,4 @@ class SearchController extends Zend_Controller_Action
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
     }
-
-/**
-
-* This is the suggestion action and is used to retrieve four search results from database
-
-* according to given search query
-
-* @return $suggestions array
-
-* @author cbhopal
-
-* @version 1.0
-
-*/
-
-public function suggestionAction()
-{
-    # get cononical link
-    $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-    $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSearch($permalink) ;
-
-
-    $this->view->suggestion = Offer::searchRelatedOffers($this->_getAllParams());
-
-    $this->view->controllerName = $this->getRequest()->getControllerName();
-}
-
 }
