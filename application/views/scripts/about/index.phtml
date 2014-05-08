@@ -3,9 +3,9 @@ $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/authors.css");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 
-$pageImage = PUBLIC_PATH_CDN.$this->pageDetail['logo']['path']."thum_large_".$this->pageDetail['logo']['name'];
+$pageImage = PUBLIC_PATH_CDN.$this->pageDetails['logo']['path']."thum_large_".$this->pageDetails['logo']['name'];
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $pageHeader->getCategoryOrPageHeader($this->pageDetail['pageTitle'], $pageImage);
+echo $pageHeader->getCategoryOrPageHeader($this->pageDetails['pageTitle'], $pageImage);
 
 $partialViewPath = 'partials/';
 $authorsList = '';
@@ -17,7 +17,7 @@ if (!empty($this->authorsWithPagination)) {
         )
     );
 } else {
-    $authorsList = 'No Records Found';
+    $authorsList = $this->translate('No Records Found');
 }
 $signUpWidgetForm = '';
 $signUpWidgetForm = $this->partial(

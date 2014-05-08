@@ -27,7 +27,8 @@ class Page extends BasePage
 
     public static function getPageFromPageAttributeFiltered($id)
     {
-        $pageAttributes = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
+        $pageAttributes = Doctrine_Query::create()
+        ->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
         ->from('Page p')
         ->where("pageAttributeId = ?", $id)
         ->andWhere('p.deleted=0')
@@ -39,7 +40,8 @@ class Page extends BasePage
 
     public static function getPageFromPageAttribute($id)
     {
-        $page = Doctrine_Query::create()->select('p.*,i.path,i.name')
+        $page = Doctrine_Query::create()
+        ->select('p.*,i.path,i.name')
         ->from('Page p')->leftJoin('p.logo i')
         ->where("pageAttributeId = ?", $id)
         ->andWhere('p.deleted=0')
