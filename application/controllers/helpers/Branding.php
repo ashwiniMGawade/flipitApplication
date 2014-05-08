@@ -14,21 +14,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         if (!empty($shopBranding)) {
             $session->data = $shopBranding;
         }else{
-            $session->data                                                  = array();
-
-            $session->data['link_color']['css-selector']                    = '.section .block .link';
-            $session->data['link_color']['css-property']                    = 'color';
-            $session->data['link_color']['value']                           = '#0077cc';
-
-            $session->data['store_title']['css-selector']                   = '.header-block h1';
-            $session->data['store_title']['css-property']                   = 'color';
-            $session->data['store_title']['value']                          = '#32383e';
-
-            $session->data['newsletter_background_color']['css-selector']   = '.section .block-form .holder';
-            $session->data['newsletter_background_color']['css-property']   = 'background-color';
-            $session->data['newsletter_background_color']['value']          = '#f6f6f6';
-
-            $session->data['overwrite']['value']                            = '';
+            $session->data = $this->defaultStyles();
         }
         
         if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'flipit.com')) {
@@ -78,8 +64,13 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 
         // save settings to store if not preview
         if (empty($_POST['preview'])) {
-            $shop =  Doctrine_Core::getTable("Shop")->find( (int)$_POST['shop_id'] );
-            $shop->brandingcss = serialize($session->data);
+            $shop =  Doctrine_Core::getTable("Shop")->find( $_POST['shop_id'] );
+            if (empty($_POST['reset'])) {
+                $shop->brandingcss =  serialize($session->data);
+            }else{
+                $shop->brandingcss  = null;
+                $session->data = $this->defaultStyles();
+            }
             $shop->save();
         }
     }   
@@ -91,5 +82,25 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         $session->brandingActivated = false;
         return 'http://www.flipit.com/admin';
     } 
+
+    private function defaultStyles(){
+       $defaultStyles                                                  = array();
+
+       $defaultStyles['link_color']['css-selector']                    = '.section .block .link';
+       $defaultStyles['link_color']['css-property']                    = 'color';
+       $defaultStyles['link_color']['value']                           = '#0077cc';
+
+       $defaultStyles['store_title']['css-selector']                   = '.header-block h1';
+       $defaultStyles['store_title']['css-property']                   = 'color';
+       $defaultStyles['store_title']['value']                          = '#32383e';
+
+       $defaultStyles['newsletter_background_color']['css-selector']   = '.section .block-form .holder';
+       $defaultStyles['newsletter_background_color']['css-property']   = 'background-color';
+       $defaultStyles['newsletter_background_color']['value']          = '#f6f6f6';
+
+       $defaultStyles['overwrite']['value']                            = '';       
+       
+       return $defaultStyles; 
+    }
 }
 ?>

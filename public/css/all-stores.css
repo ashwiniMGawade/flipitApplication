@@ -211,7 +211,6 @@ margin-top:/* negative half from the height */
   min-height: 100px;
 }
 #branding_panel button[type="submit"], #branding_panel button.preview {
-  float: left;
   font-size: 14px;
   height: 39px;
   width: 99px;

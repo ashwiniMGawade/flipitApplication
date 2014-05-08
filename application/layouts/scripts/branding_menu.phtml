@@ -16,6 +16,12 @@
                 $('#branding').submit();
             });
 
+            $('#reset_submit').click(function(){
+                $('#reset').val(1);
+                $('#branding').submit();
+            });
+            
+
         });
     </script>
 
@@ -27,6 +33,7 @@
         <hr>
         <form id="branding" action="<?php echo $session->saveUrl; ?>branding/save" method="post" enctype="multipart/form-data">
             <input type="hidden" name="preview" id="preview" value="0" />
+            <input type="hidden" name="reset" id="reset" value="0" />
             <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $this->currentStoreInformation[0]['id']; ?>" />
             <h3>Colors</h3>
             <table>
@@ -82,7 +89,10 @@
             <p>
                 <button id="save_form" type="submit" class="btn btn-sm blue btn-primary">Save</button>
             </p>
-             <button id="preview_submit" class="btn btn-sm btn-default preview">Preview</button>
+                <button id="preview_submit" class="btn btn-sm btn-default preview">Preview</button>
+                <hr>
+                <button id="reset_submit" class="btn btn-sm btn-default preview">Reset to defaults</button>
+                <div style="clear:both;"></div>
         </form>
     </div>
 
