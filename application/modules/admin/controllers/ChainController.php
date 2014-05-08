@@ -72,7 +72,7 @@ class Admin_ChainController extends Zend_Controller_Action
                 $localeId = $request->getParam('locale' , false);
 
                 # get selected locale detail
-                $website = Website::getWebsiteDetail($localeId);
+                $website = Website::getWebsiteDetails($localeId);
 
                 $localeData = explode('/', $website['name']);
                 $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
@@ -126,7 +126,7 @@ class Admin_ChainController extends Zend_Controller_Action
             if($id) {
                 # get selected locale and create
 
-                $website = Website::getWebsiteDetail($id);
+                $website = Website::getWebsiteDetails($id);
 
                 $localeData = explode('/', $website['name']);
 
@@ -139,7 +139,7 @@ class Admin_ChainController extends Zend_Controller_Action
 
                 $key = $this->getRequest()->getParam('keyword');
 
-
+                
                 # get shop data return an array
                 $shopsData = $shops->getAllShopNames($key);
 

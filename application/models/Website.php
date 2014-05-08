@@ -12,51 +12,29 @@
  */
 class Website extends BaseWebsite
 {
-
-
-    /**
-     * getAllwebSites
-     *
-     * returns all running websites for chain
-     * @return array
-     * @author sp singh
-     */
     public static function getAllwebSites()
     {
         $websites = Doctrine_Query::create()->select("id,name")
                     ->from("Website")
                     ->where("deleted=0")
                     ->fetchArray();
-        return BackEnd_Helper_viewHelper::msort($websites,"name",array("kortingscode.nl") );
+        return BackEnd_Helper_viewHelper::msort($websites,"name",array("kortingscode.nl"));
     }
 
-    /**
-     * getWebsiteDetail
-     *
-     * return website detail
-     * @param integer  $id website id
-     * @param string $name website name
-     */
-    public static function getWebsiteDetail($id = null,$name = null)
+    public static function getWebsiteDetails($websiteId = null,$websiteName = null)
     {
-        $id =  FrontEnd_Helper_viewHelper::sanitize($id);
-
+        $websiteId =  FrontEnd_Helper_viewHelper::sanitize($websiteId);
         $websites = Doctrine_Query::create()->select("id,name,url")
                         ->from("Website")
                         ->where("deleted=0");
 
-        if($name) {
-            $websites->andWhere("name = ? ", $name);
+        if($websiteName) {
+            $websites->andWhere("name = ? ", $websiteName);
         }else{
 
-            $websites->andWhere("id = ? ", $id);
+            $websites->andWhere("id = ? ", $websiteId);
         }
-
+        
         return  $websites->fetchOne(null,Doctrine::HYDRATE_ARRAY);
-
     }
-
-
-
-
 }

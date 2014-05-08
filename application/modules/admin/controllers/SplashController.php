@@ -39,10 +39,13 @@ class Admin_SplashController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $flash = $this->_helper->getHelper ( 'FlashMessenger' );
+        $splash = new Splash();
+        $currentOfferId = $splash->getOfferId();
+        $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages ();
-        $this->view->messageSuccess = isset ( $message [0] ['success'] ) ? $message [0] ['success'] : '';
-        $this->view->messageError = isset ( $message [0] ['error'] ) ? $message [0] ['error'] : '';
+        $this->view->messageSuccess = isset($message [0] ['success']) ? $message [0] ['success'] : '';
+        $this->view->messageError = isset($message [0] ['error']) ? $message [0] ['error'] : '';
+        $this->view->currentOffer = $currentOffer;
     }
 
 
@@ -50,65 +53,67 @@ class Admin_SplashController extends Zend_Controller_Action
     {
 
         $request = $this->getRequest();
-        $chianId = $request->getParam('chain' , false);
-     
+        $this->view->websites = Website::getAllwebSites();
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $flash->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
 
-            $this->view->websites = Website::getAllwebSites();
+        if ($this->_request->isPost()) {
+            $localeId = $request->getParam('locale' , false);
+            $websiteDetails = Website::getWebsiteDetails($localeId);
+            $localeData = explode('/', $websiteDetails['name']);
+            $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
+            $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
+            $signupMaxObject = new Signupmaxaccount($locale);
+            $languageLocale =  $signupMaxObject::getAllMaxAccounts();
+            $languageLocale = !empty($languageLocale[0]['locale']) ? $languageLocale[0]['locale'] : 'nl_NL';
+            Zend_Registry::set('db_locale', $locale ) ;
+            $splash = new Splash();
+            $returnedValue = $splash->saveOffer($request,$languageLocale);
 
-            $this->view->chainId = $chianId ;
-
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $flash->getMessages();
-            $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-            $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-
-
-            if ($this->_request->isPost()) {
-
-                $localeId = $request->getParam('locale' , false);
-
-                # get selected locale detail
-                $website = Website::getWebsiteDetail($localeId);
-
-                $localeData = explode('/', $website['name']);
-                $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
-
-                # connect to select locale database
-                $connObj = BackEnd_Helper_DatabaseManager::addConnection($locale);
-
-                $signMaxObj = new Signupmaxaccount($locale);
-                $langLocale =  $signMaxObj::getAllMaxAccounts();
-                $langLocale = !empty($langLocale[0]['locale']) ? $langLocale[0]['locale'] : 'nl_NL';
-
-
-                Zend_Registry::set('db_locale', $locale ) ;
-
-                # save new chain
-                $chain = new ChainItem();
-                $ret = $chain->saveChain($request,$langLocale);
-
-                # if chain is saved then refresh shop page in varnish
-                if($ret) {
-                    $message = $this->view->translate ( 'Shop has been added successfully' );
-                    $flash->addMessage ( array ('success' => $message ));
-                } else {
-
-                    $message = $this->view->translate ( 'This shop has been already added for this particulat locale' );
-                    $flash->addMessage ( array ('error' => $message ));
-                }
-
-
-                # close connection
-                $connObj = BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
-
-                Zend_Registry::set('db_locale', false ) ;
-
-                $this->_redirect ( HTTP_PATH . 'admin/chain/chain-item/chain/'. $chianId  );
+            if($returnedValue) {
+                $message = $this->view->translate('Offer has been added successfully');
+                $flash->addMessage(array('success' => $message));
+            } else {
+                $message = $this->view->translate('This offer has already been added for this particulat locale');
+                $flash->addMessage(array('error' => $message));
             }
-       
 
+            $connectionObject = BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
+            Zend_Registry::set('db_locale', false ) ;
+            $this->_redirect ( HTTP_PATH . 'admin/splash');
+        }
     }
 
-    
+    public function offersListAction()
+    {  
+        if ($this->_request->isXmlHttpRequest()) {
+            $localeId =  intval($this->getRequest()->getParam('locale', false ));
+            
+            if ($localeId) {
+                $websiteDetails = Website::getWebsiteDetails($localeId);
+                $localeData = explode('/', $websiteDetails['name']);
+                $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
+                $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
+                $offers = new Offer($connectionObject['connName']);
+                $keyword = $this->getRequest()->getParam('keyword');
+                $allOffers = $offers->getActiveOfferNames($keyword);
+                $connectionObject = BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
+                $offers = array();
 
+                if (sizeof($allOffers) > 0) {
+                    foreach ($allOffers as $offer) {
+                        $offers[] = array('name' => ucfirst($offer['title']),
+                                         'id' => $offer['id']);
+                    }
+                } else {
+                    $message = $this->view->translate('No Record Found');
+                    $offers[] = array('name' => $message);
+                }
+                $this->_helper->json($offers);
+            }
+        }
+        $this->_redirect ( '/admin' );
+    }
 }

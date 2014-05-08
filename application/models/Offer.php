@@ -655,6 +655,25 @@ class Offer extends BaseOffer
         return $specialOffersAfterMerging;
     }
 
+
+    public static function getActiveOfferNames($keyword)
+    {
+        $expiredTime = date("Y-m-d 00:00:00");
+        $allOffers = Doctrine_Query::create()
+        ->select('s.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer, o.extendedUrl, o.shopid')
+        ->from('Offer o')
+        ->leftJoin('o.shop s')
+        ->where('o.deleted=0')
+        ->andWhere('o.userGenerated=0')
+        ->andWhere("o.title LIKE ?", "$keyword%")
+        ->andWhere('o.enddate>'."'".$expiredTime."'")
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('s.deleted = 0')
+        ->orderBy('o.id DESC');
+        $allOffers = $allOffers->fetchArray();
+        return $allOffers;
+    }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -3079,17 +3098,7 @@ class Offer extends BaseOffer
     /**
      *
      */
-    public static function getAllOffers()
-    {
-        $offerList = Doctrine_Query::create()
-                                    ->select('o.id,o.title')
-                                    ->from("Offer o")
-                                    ->where("o.deleted= '0'")
-                                    ->andWhere("o.userGenerated = '0'")
-                                    ->fetchArray();
-
-        return $offerList;
-    }
+    
 
     /**
      * get No of offers created in last 7 days for dashboard
