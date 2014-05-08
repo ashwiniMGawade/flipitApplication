@@ -9,8 +9,7 @@ class SearchController extends Zend_Controller_Action
     {
         $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($searchPermalink);
-        $pagePermalink = FrontEnd_Helper_viewHelper::__link('zoeken');
-        $pageAttributeId = Page::getPageAttributeByPermalink($pagePermalink);
+        $pageAttributeId = Page::getPageAttributeByPermalink($searchPermalink);
         $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
         $this->view->pageTitle = $pageDetail->pageTitle;
 
