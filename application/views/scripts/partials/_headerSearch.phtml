@@ -1,13 +1,13 @@
 <?php
-$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
+echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
 $zendTranslate = Zend_Registry::get('Zend_Translate');
 ?>
 
 <div class="slide">
     <form role="form" class="search-form">
-        <input placeholder="<?php echo $zendTranslate->translate('Type in a Store e.g. Avis');?>" class="form-control" id='searchField' name='searchField' type='text'/>
-        <input id='searchHidden' name='searchHidden' type='hidden' />
-        <a href='javascript:void(0);' class="btn btn-default" id='searchbuttonHP'>
+        <input placeholder="<?php echo $zendTranslate->translate('Type in a Store e.g. Avis');?>" class="form-control" id='searchFieldHeader' name='searchFieldHeader' type='text'/>
+        <input id='searchedKeyword' name='searchedKeyword' type='hidden' />
+        <a href='javascript:void(0);' class="btn btn-default" id='searchbuttonHeader'>
             <span class="glyphicon glyphicon-search"></span>
         </a>
     </form>
