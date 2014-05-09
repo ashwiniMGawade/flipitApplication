@@ -19,7 +19,7 @@ class Articles extends BaseArticles
 
     ######################## Refactored Block ################################
 
-    public static function getArticleForByPermalink($permalink)
+    public static function getArticlesByPermalink($permalink)
     {
         $currentDateTime = date('Y-m-d H:i:s');
         $articles = Doctrine_Query::create()->select()

@@ -34,14 +34,9 @@ class BespaarwijzerController extends Zend_Controller_Action
     public function indexAction()
     {
         $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $permalink= FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
-        
-        $pageKey ="all_moneysavingpage".$permalink."_list";
-        $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($pageKey, MoneySaving::getPageDetails($permalink));
-
-        $mostReadArticleKey ="all_mostreadMsArticlePage_list";
-        $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($mostReadArticleKey, MoneySaving::getMostReadArticles(3));
-       
+        $permalink = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
+        $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_moneysavingpage".$permalink."_list", MoneySaving::getPageDetails($permalink));
+        $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
 
@@ -53,7 +48,7 @@ class BespaarwijzerController extends Zend_Controller_Action
         $this->view->twitterDescription = trim($moneySavingPageDetails[0]['metaDescription']);
         
         $this->view->pageTitle = $moneySavingPageDetails[0]['pageTitle'];
-        $this->view->permaLink = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
+        $this->view->permaLink = $permalink;
         $this->view->headTitle(trim($moneySavingPageDetails[0]['metaTitle']));
         $this->view->headMeta()->setName('description', trim($moneySavingPageDetails[0]['metaDescription']));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
@@ -68,8 +63,8 @@ class BespaarwijzerController extends Zend_Controller_Action
         if (!empty($moneySavingPageDetails)) {
             $this->view->pageDetails = $moneySavingPageDetails;
         }else{
-            $error_404 = 'HTTP/1.1 404 Not Found';
-            $this->getResponse()->setRawHeader($error_404);
+            $error404 = 'HTTP/1.1 404 Not Found';
+            $this->getResponse()->setRawHeader($error404);
         }
 
     }
@@ -228,7 +223,7 @@ class BespaarwijzerController extends Zend_Controller_Action
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $parameters = $this->_getAllParams();
         $permalink = $parameters['permalink'];
-        $currentArticleView = Articles::getArticleForByPermalink($permalink);
+        $currentArticleView = Articles::getArticleByPermalink($permalink);
         $getAllArticles = Articles::getAllArticles();
         $ArNew =  array();
         $userInformationObject = new User();

@@ -4,14 +4,10 @@ $mostReadArticleNumber = 0;
 foreach ($mostReadArticles as $mostReadArticle) {
 	$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].'thum_article_samll_'. $mostReadArticle['articles']['thumbnail']['name'];
 	$mostReadArticleId = $mostReadArticle['articles']['id'];
-if(strlen($mostReadArticle['articles']['title']) > 32):                      
-    $mostReadArticleTitle =  substr($mostReadArticle['articles']['title'], 0,32).'..';                      
-else: 
-    $mostReadArticleTitle =  $mostReadArticle['articles']['title'];                       
-endif;
+	$mostReadArticleTitle = strlen($mostReadArticle['articles']['title']) > 32 ? substr($mostReadArticle['articles']['title'], 0,32).'..' : $mostReadArticle['articles']['title'];
 ?>
  <li>
-    <a class="same-height-left" style="height: 99px;" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id), viewCounter('onclick', 'article', <?php echo $mostReadArticleId; ?>);">
+    <a class="same-height-left" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id), viewCounter('onclick', 'article', <?php echo $mostReadArticleId; ?>);">
         <img class="ico" width="52" height="45" src="<?php echo $mostReadArticleImage; ?>" alt="<?php echo $mostReadArticleTitle; ?>"/>
         <span><?php echo $mostReadArticleTitle; ?></span>
     </a>

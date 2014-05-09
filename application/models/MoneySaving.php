@@ -18,7 +18,8 @@ class MoneySaving extends BaseMoneySaving
 
     public static function getRecentlyAddedArticles()
     {
-        $recentlyAddedArticles = Doctrine_Query::create()->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
+        $recentlyAddedArticles = Doctrine_Query::create()
+        	->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.ArtIcon aai')

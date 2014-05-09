@@ -15,6 +15,18 @@ class deleteArticleCategory
         set_time_limit(0);
         require_once('constantsForMigration.php');
         require_once('databaseConnectionForMigrations.php');
+        foreach ($databaseConnections as $databaseConnectionKey => $databaseConnection ) {
+            if ($databaseConnectionKey != 'imbull') {
+                try {
+                    $this->deleteArticleCategories($databaseConnection ['dsn'], $databaseConnectionKey, $imbull);
+                } catch (Exception $e) {
+                    echo $e->getMessage ();
+                    echo "\n\n";
+                }
+                echo "\n\n";
+            }
+        }
+        $doctrineManager->closeConnection($doctrineManagerConnection);
     }
 
     protected function deleteArticleCategories($dsn, $localeKey, $imbull)
@@ -37,21 +49,21 @@ class deleteArticleCategory
         $doctrineManager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $doctrineManager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-        $customLocale = Signupmaxaccount::getAllMaxAccounts();
-        $customLocale = !empty($customLocale[0]['locale']) ? $customLocale[0]['locale'] : 'nl_NL';
+        $maxAccountTableValues = Signupmaxaccount::getAllMaxAccounts();
+        $currentLocale = !empty($maxAccountTableValues[0]['locale']) ? $maxAccountTableValues[0]['locale'] : 'nl_NL';
         $this->_translate = new Zend_Translate(array(
                 'adapter' => 'gettext',
                 'disableNotices' => true));
         $this->_translate->addTranslation(
                 array(
                         'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $locale . '.mo',
-                        'locale' => $customLocale,
+                        'locale' => $currentLocale,
                 )
         );
         $this->_translate->addTranslation(
                 array(
                         'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $locale . '.mo',
-                        'locale' => $customLocale ,
+                        'locale' => $currentLocale ,
                 )
         );
 
@@ -72,20 +84,14 @@ class deleteArticleCategory
         $deletedRelatedArticleCategories =  Articlecategory::deleteAllArticleCategoriesAndReferenceArticleCategories();
 
         if ($deletedRelatedArticleCategories) {
-
             echo "\n";
             print "$localeKey - Articles have been deleted successfully!!!";
         } else {
-
             echo "\n";
             print "$localeKey - Articles have not been deleted!!!";
-
         }
-
         $doctrineManager->closeConnection($doctrineManagerConnection);
-
     }
 
 }
-
 new DeleteArticleCategory();

@@ -217,7 +217,7 @@ EOD;
     {
         $mainMenu = menu::getFirstLevelMenu();
         $mainMenuCount = count($mainMenu);
-        $value = 0;
+        $mainMenuvalue = 0;
         $navigationString ='<nav id="nav"><ul>';
         foreach ($mainMenu as $menu) {
             $permalink = RoutePermalink::getPermalinks($menu['url']);
@@ -234,7 +234,7 @@ EOD;
                     }
                 }
             }
-            if ($value==$mainMenuCount) {
+            if ($mainMenuvalue==$mainMenuCount) {
                 $menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
                 $navigationString .= '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a></li>';
             } else {
@@ -246,7 +246,7 @@ EOD;
                     $navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a></li>';
                 }
             }
-            $value++;
+            $mainMenuvalue++;
         }
         $navigationString .= '</ul></nav>';
         return $navigationString;
