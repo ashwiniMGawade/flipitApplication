@@ -34,8 +34,8 @@ class BespaarwijzerController extends Zend_Controller_Action
     public function indexAction()
     {
         $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $permalink = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
-        $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_moneysavingpage".$permalink."_list", MoneySaving::getPageDetails($permalink));
+        $moneySavingPagePermalink = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
+        $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_moneysavingpage".$moneySavingPagePermalink."_list", MoneySaving::getPageDetails($moneySavingPagePermalink));
         $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
@@ -43,12 +43,12 @@ class BespaarwijzerController extends Zend_Controller_Action
         $this->view->facebookDescription = trim($moneySavingPageDetails[0]['metaDescription']);
         $this->view->facebookLocale = FACEBOOK_LOCALE;
         $this->view->facebookTitle = $moneySavingPageDetails[0]['pageTitle'];
-        $this->view->facebookShareUrl = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
+        $this->view->facebookShareUrl = $moneySavingPagePermalink;
         $this->view->facebookImage = HTTP_PATH."public/images/bespaarwijzer_og.png";
         $this->view->twitterDescription = trim($moneySavingPageDetails[0]['metaDescription']);
         
         $this->view->pageTitle = $moneySavingPageDetails[0]['pageTitle'];
-        $this->view->permaLink = $permalink;
+        $this->view->permaLink = $moneySavingPagePermalink;
         $this->view->headTitle(trim($moneySavingPageDetails[0]['metaTitle']));
         $this->view->headMeta()->setName('description', trim($moneySavingPageDetails[0]['metaDescription']));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
