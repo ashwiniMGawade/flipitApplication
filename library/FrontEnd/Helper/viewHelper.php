@@ -217,7 +217,7 @@ EOD;
     {
         $mainMenu = menu::getFirstLevelMenu();
         $mainMenuCount = count($mainMenu);
-        $value = 1;
+        $mainMenuvalue = 0;
         $navigationString ='<nav id="nav"><ul>';
         foreach ($mainMenu as $menu) {
             $permalink = RoutePermalink::getPermalinks($menu['url']);
@@ -234,7 +234,7 @@ EOD;
                     }
                 }
             }
-            if ($value==$mainMenuCount) {
+            if ($mainMenuvalue==$mainMenuCount) {
                 $menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
                 $navigationString .= '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a></li>';
             } else {
@@ -246,10 +246,9 @@ EOD;
                     $navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a></li>';
                 }
             }
-            $value++;
+            $mainMenuvalue++;
         }
         $navigationString .= '</ul></nav>';
-
         return $navigationString;
     }
     
@@ -343,6 +342,10 @@ EOD;
     {
         if($type == 'widget' || $type == 'popup'):
             $socialMedia=$facebookLikeWidget.$googlePlusOneWidget.$twitterLikeWidget;
+        elseif($type == 'article'):
+            $socialMedia = "<li>".$facebookLikeWidget."</li>
+                            <li>".$googlePlusOneWidget."</li>
+                            <li>".$twitterLikeWidget."</li>";
         else:
             $zendTranslate = Zend_Registry::get('Zend_Translate');
             $socialMediaTitle = "<h2>".$zendTranslate->translate('Share')."</h2>
@@ -565,6 +568,145 @@ EOD;
         </div>';
         return $browseByStoreWidget;
     }
+
+    public static function viewCounter($type, $eventType, $id)
+    {
+        $clientIP = self::getRealIpAddress();
+        $ip = ip2long($clientIP);
+        $counterValue = "false";
+        switch (strtolower($type)) {
+            case 'article':
+                $counterValue = self::checkIfThisArticleEntryExists($eventType, $id, $ip);
+                break;
+            case 'shop':
+                $counterValue = self::checkIfThisShopEntryExists($eventType, $id, $ip);
+                break;
+            case 'offer':
+                $counterValue = self::checkIfThisOfferEntryExists($eventType, $id, $ip);
+                break;
+            default:
+                break;
+        }
+        return $counterValue;
+    }
+    
+    public static function getRealIpAddress()
+    {
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ip=$_SERVER['HTTP_CLIENT_IP'];
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+        } else {
+            $ip=$_SERVER['REMOTE_ADDR'];
+        }
+        return $ip;
+    }
+
+    public static function checkIfThisArticleEntryExists($eventType, $id, $ip)
+    {
+        $artcileExistsOrNot = "false";
+        switch (strtolower($eventType)) {
+            case 'onclick':
+                $article = Doctrine_Query::create()
+                    ->select('count(*) as exists')
+                    ->from('ArticleViewCount')
+                    ->where('deleted=0')
+                    ->andWhere('onclick!=0')
+                    ->andWhere('articleid="'.$id.'"')
+                    ->andWhere('ip="'.$ip.'"')
+                    ->fetchArray();
+
+                if ($article[0]['exists'] == 0) {
+                    $articleViewCount  = new ArticleViewCount();
+                    $onClick = 1;
+                    $articleViewCount->articleid = $id;
+                    $articleViewCount->onclick = $onClick;
+                    $articleViewCount->ip = $ip;
+                    $articleViewCount->save();
+                    $artcileExistsOrNot = "true";
+                }
+            break;
+            case 'onload':
+                $article = Doctrine_Query::create()
+                    ->select('count(*) as exists')
+                    ->from('ArticleViewCount')
+                    ->where('deleted=0' )
+                    ->andWhere('onload!=0')
+                    ->andWhere('articleid="'.$id.'"')
+                    ->andWhere('ip="'.$ip.'"')
+                    ->fetchArray();
+
+                if ($article[0]['exists'] == 0) {
+                    $articleViewCount  = new ArticleViewCount();
+                    $onLoad = 1;
+                    $articleViewCount->articleid = $id;
+                    $articleViewCount->onload = $onLoad;
+                    $articleViewCount->ip = $ip;
+                    $articleViewCount->save();
+                    $artcileExistsOrNot = "true";
+                }
+            break;
+            default:
+            break;
+        }
+        return $artcileExistsOrNot;
+    }
+
+    public function getArticles($headingType, $articles)
+    {
+        $relatedArticles = 
+            '<header class="heading-bar">
+                <h2>'.$this->zendTranslate->translate($headingType).'</h2>
+            </header>
+            <div class="item-block">
+                <div class="holder">';
+                    foreach($articles as $article) { 
+        $relatedArticles .=
+                '<div class="item">
+                    <img src="'.PUBLIC_PATH_CDN.$article['ArtIcon']['path'].$article['ArtIcon']['name'].'" alt="'.$article['title'].'">
+                    <div class="box">
+                        <div class="caption-area">
+                            <span class="caption">
+                            '.$article['title'].'
+                            </span>
+                        </div>
+                        <a href="javascript:void(0);" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
+                    </div>
+                </div>';
+            }           
+        $relatedArticles .=
+           '</div>
+        </div>';
+        return $relatedArticles;
+    }
+
+    public function getMostReadArticles($mostReadArticles)
+    {
+        $articleNumber = 1;
+        
+        foreach($mostReadArticles as $mostReadArticle) {
+            if($articleNumber == 1){
+                $id = 'first';
+                $class= 'slide active';
+            } else if ($articleNumber == 2) {
+                $id = 'second';
+                $class = 'slide';
+            } else {
+                $id = 'third';
+                $class = 'slide';
+            }
+            echo'<div class="'.$class.'" id="'.$id.'">
+                                <img class="" width = "632" height = "160"  src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].$mostReadArticle['articles']['thumbnail']['name'].'" 
+                                alt="'.$mostReadArticle['articles']['title'].'">
+                                <h1>'.$mostReadArticle['articles']['title'].'</h1>
+                                <p>
+                                   '.$mostReadArticle['articles']['content'].'
+                                </p>
+                        </div>';
+            $articleNumber++;                
+        }
+        
+    }
     
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -614,12 +756,9 @@ EOD;
         $key = $key. '_' .LOCALE;
         $flag = false;
         $cache = Zend_Registry::get('cache');
-        if ( ($result = $cache->load($key)) === false ) {
-
+        if (($result = $cache->load($key)) === false ) {
             $flag = true;
-
         }
-
         return $flag;
     }
     /**
@@ -1459,19 +1598,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
    * @return array $data
    */
 
-  public static function getRealIpAddress()
-  {
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {   //check ip from share internet
-        $ip=$_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {   //to check ip is pass from proxy
-        $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
-    } else {
-        $ip=$_SERVER['REMOTE_ADDR'];
-    }
 
-    return $ip;
-
-  }
 
   /**
    * View counter common function
@@ -1479,34 +1606,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
    * @version 1.0
    * @return array $data
    */
-  public static function viewCounter($type, $eventType, $id)
-  {
-    $clientIP = self::getRealIpAddress();
-    $ip = ip2long($clientIP);
-
-    $data = "false";
-    switch (strtolower($type)) {
-
-            case 'article':
-                $data = self::checkIfThisArtEntryExists($eventType, $id, $ip);
-                break;
-
-            case 'shop':
-                $data = self::checkIfThisShopEntryExists($eventType, $id, $ip);
-                break;
-
-            case 'offer':
-
-                $data = self::checkIfThisOfferEntryExists($eventType, $id, $ip);
-                break;
-            default:
-                break;
-
-    }
-
-    return $data;
-
-  }
+  
   /**
    * Check if the an article id and ip exist in articleViewCount Table
    * @author Raman
@@ -1515,65 +1615,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
    * $ip ip address of local machine
    * @return array $data
    */
-  public static function checkIfThisArtEntryExists($eventType, $id, $ip)
-  {
-    $res = "false";
-    switch (strtolower($eventType)) {
-
-        case 'onclick':
-
-            $data = Doctrine_Query::create()
-                ->select('count(*) as exists')
-                ->from('ArticleViewCount')
-                ->where('deleted=0')
-                ->andWhere('onclick!=0')
-                ->andWhere('articleid="'.$id.'"')
-                ->andWhere('ip="'.$ip.'"')
-            ->fetchArray();
-
-            if ($data[0]['exists'] == 0) {
-
-                $cnt  = new ArticleViewCount();
-                $view = 1;
-                $cnt->articleid = $id;
-                $cnt->onclick = $view;
-                $cnt->ip = $ip;
-                $cnt->save();
-                $res = "true";
-            }
-            break;
-
-        case 'onload':
-
-            $data = Doctrine_Query::create()
-            ->select('count(*) as exists')
-            ->from('ArticleViewCount')
-            ->where('deleted=0' )
-            ->andWhere('onload!=0')
-            ->andWhere('articleid="'.$id.'"')
-            ->andWhere('ip="'.$ip.'"')
-            ->fetchArray();
-
-            if ($data[0]['exists'] == 0) {
-
-                $cnt  = new ArticleViewCount();
-                $view = 1;
-                $cnt->articleid = $id;
-                $cnt->onload = $view;
-                $cnt->ip = $ip;
-                $cnt->save();
-                $res = "true";
-            }
-
-            break;
-
-        default:
-        break;
-    }
-
-    return $res;
-
-  }
+ 
 
   /**
    * Check if the an Shop id and ip exist in shopViewCount Table

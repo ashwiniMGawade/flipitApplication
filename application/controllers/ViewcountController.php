@@ -88,19 +88,10 @@ class ViewcountController extends Zend_Controller_Action
     public function storecountAction()
     {
         $type = $this->_getParam('type');
-        $event = $this->_getParam('event');
+        $clickEvent = $this->_getParam('event');
         $id = $this->_getParam('id');
-
-        $cnt  = FrontEnd_Helper_viewHelper::viewCounter($type, $event, $id);
-
-        if($cnt == "false") {
-            echo Zend_Json::encode(false);
-
-        } else {
-
-            echo Zend_Json::encode(true);
-        }
-
+        $viewCountValue  = FrontEnd_Helper_viewHelper::viewCounter($type, $clickEvent, $id);
+        $viewCountValue == "false" ? echo Zend_Json::encode(false); : echo Zend_Json::encode(true);
         die();
     }
 
