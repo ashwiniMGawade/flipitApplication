@@ -15,4 +15,4 @@ modules:
         - WebHelper
     config:
         PhpBrowser:
-            url: 'http://www.flipit.nl/'
+            url: 'http://www.flipit.com'

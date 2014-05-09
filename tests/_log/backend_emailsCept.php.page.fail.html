@@ -12,7 +12,7 @@ window.onerror = function(){
 
 </script> 
 <meta http-equiv="Content-type" content="text/html; charset=UTF-8" >
-<meta name="robots" content="index, follow" ><title>Offers List</title><link href="http://www.flipit.com/public/css/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
+<meta name="robots" content="index, follow" ><title>Emails</title><link href="http://www.flipit.com/public/css/jquery-ui-1.8.16.custom.css" media="screen" rel="stylesheet" type="text/css" >
 <link href="http://www.flipit.com/public/css/select2.css" media="screen" rel="stylesheet" type="text/css" >
 <link href="http://www.flipit.com/public/css/back_end/style.css" media="screen" rel="stylesheet" type="text/css" >
 <link href="http://www.flipit.com/public/css/back_end/style1.css" media="screen" rel="stylesheet" type="text/css" >
@@ -42,7 +42,7 @@ var HOST_PATH_PUBLIC = "http://www.flipit.com/public/";    //-->
 <script type="text/javascript" src="http://www.flipit.com/public/js/common.js"></script>
 <script type="text/javascript" src="http://www.flipit.com/public//js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="http://www.flipit.com/public//js/dataTableComman.js"></script>
-<script type="text/javascript" src="http://www.flipit.com/public//js/back_end/offer.js"></script>
+<script type="text/javascript" src="http://www.flipit.com/public//js/back_end/emails.js"></script>
 <script type="text/javascript" src="http://www.flipit.com/public//js/back_end/bootbox.min.js"></script>
 <script type="text/javascript" src="http://www.flipit.com/public/js/back_end/select2.min.js"></script>
 <script type="text/javascript" src="http://www.flipit.com/public//js/jquery-ui-1.8.16.custom.min.js"></script>
@@ -59,12 +59,12 @@ var HOST_PATH_PUBLIC = "http://www.flipit.com/public/";    //-->
 <div class="logo"><a href="http://www.flipit.com/admin/index"><img src="http://www.flipit.com/public/images/back_end/logo.png" border="0" width="210" height="112" /></a></div>
 <div class="admin-sidebar-headings"><h2>Content</h2></div>
 	<ul id="adminmenu" role="navigation">
-	    <li  class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-offer menu-top-first"  id="menu-posts">
+	    <li  class="imbull-has-submenu imbull-not-current-submenu imbull-menu-open menu-top menu-icon-offer menu-top-first"  id="menu-posts">
 
 	        <div class="imbull-menu-image"><a href="http://www.flipit.com/admin/offer"><br></a></div>
 	        <div class=""><div></div></div>
 
-	        <a href="http://www.flipit.com/admin/offer" class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-offer menu-top-first" tabindex="1">Acties	        	<span class="arrow-down"></span>
+	        <a href="http://www.flipit.com/admin/offer" class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-offer menu-top-first" tabindex="1">Acties	        	<span  class="arrow-up" ></span>
 	        </a>
 
 	        <div class="imbull-submenu">
@@ -238,6 +238,26 @@ var HOST_PATH_PUBLIC = "http://www.flipit.com/public/";    //-->
 	        <a href="http://www.flipit.com/admin/visitor" class="imbull-has-submenu imbull-has-current-submenu imbull-menu-open menu-top menu-icon-widgets" tabindex="1">Bezoekers</a>
 	       </li>
 	      	 </ul>
+
+    <div class="admin-sidebar-headings"><h2>E-mail</h2></div>
+    <ul id="adminmenu" role="navigation">
+        
+       	<li  class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu"  id="menu-links">
+
+      	<div class="imbull-menu-image"><a href="http://www.flipit.com/admin/email/index"><br></a></div>
+	    <div class=""><div></div></div>
+	    <a style=color:#0088CC href="http://www.flipit.com/admin/email/index" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" >Emails</a>
+	 	</li>
+
+        <li  class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu"  id="menu-links">
+
+      	<div class="imbull-menu-image"><a href="http://www.flipit.com/admin/email/emailSettings"><br></a></div>
+	    <div class=""><div></div></div>
+	    <a  href="http://www.flipit.com/admin/email/email-settings" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" >Email Settings</a>
+	 	</li>
+
+        
+    </ul>
     <div class="admin-sidebar-headings"><h2>Template instellingen</h2></div>
     <ul id="adminmenu" role="navigation">
 	      <li  class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home"  id="menu-links">
@@ -418,7 +438,7 @@ var HOST_PATH_PUBLIC = "http://www.flipit.com/public/";    //-->
 	  	  </select>
 	</form>
   <a href='javascript:void(0)' onclick="showLightBox('refresh kc cache')" style="margin-left:10px;color:white;">refresh kc cache</a>
-     <p class="toplinks-outer" style="width:480px;"><span class="text">Welkom,</span> <a class="userFirstName" href="http://www.flipit.com/admin/user/profile">Kim</a> | &nbsp;&nbsp;Laatst ingelogd op:: 12:04 Mar 13th 2014&nbsp;&nbsp; | <a href="http://www.flipit.com/admin/Auth/logout" class="logout" ><img src="http://www.flipit.com/public/images/back_end/lock.png" border="0" />Uitloggen</a></p>
+     <p class="toplinks-outer" style="width:480px;"><span class="text">Welkom,</span> <a class="userFirstName" href="http://www.flipit.com/admin/user/profile">Kim</a> | &nbsp;&nbsp;Laatst ingelogd op:: 10:19 May 09th 2014&nbsp;&nbsp; | <a href="http://www.flipit.com/admin/Auth/logout" class="logout" ><img src="http://www.flipit.com/public/images/back_end/lock.png" border="0" />Uitloggen</a></p>
 </div>
 
 <div class="modal display-none popup-width" id="myModalLightBox" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -443,60 +463,25 @@ var HOST_PATH_PUBLIC = "http://www.flipit.com/public/";    //-->
 
 					<!-- layout content write here -->
 					
-           <!-- offerList starts -->
+           <!-- emailsList starts -->
        <div id="offerList">
         <div class="wrap columns-2">
 
         <div class='wrap columns-2'>
 				</div>
-          <h1 class="fl">Offers
-          <button onClick="window.location.href='http://www.flipit.com/admin/offer/addoffer'" class="btn ml10">Nieuwe Aanbieding</button></h1>
-                  <a href="http://www.flipit.com/admin/offer/trash" class="red trash-link"><strong>Prullebak</strong></a>
-		          	<div class="clear"></div>
-          	<p class="text-right"><a href='http://www.flipit.com/admin/offer/export-xlx'>Export Lijst</a></p>
-            <div class="mainpage-content-colorbox">
-                <form class="form-search" id="searchform">
-                	<div class="fl">
-                        <input type='hidden' id="searchOffer" name="searchOffer" style="width:300px;"/>
-					</div>
-                    <div class="fl ml15">
-                        <select id='couponType' name='couponType'>
-                        	<option value=''>All</option>
-                            <option value='CD'>Coupon</option>
-                            <option value='SL'>Sale</option>
-                            <option value='PA'>Printable</option>
-                        </select>
-                    </div>
-                    <div class="mainpage-content-searchbart">
-                        <div class="mainpage-content-right-searchbar-offer">
-                        <button type='button' onClick='searchByShop();' id='searchShopeButton' value='searchShopeButton' class="btn btn-primary">Zoeken</button></div>
-                        <div class="mainpage-content-right-inner-left-searchbar-other">
-                        	<input type="hidden" class="span3" id="searchShop" name="searchShop" style="width:35%;float:left;">
-                        </div>
-                        <div class="mainpage-content-right-inner-left-searchbar-other">
-                          <input type="hidden" class="span3" id="searchCoupon" name="searchCoupon" style="width:35%;float:left;">
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <table class="table table-bordered table-striped" id="offerListTable">
+         <h1 class="fl">Emails </h1>
+        
+            <table class="table table-bordered table-striped" id="emailsListTable">
                 <thead>
                   <tr>
-                  	                    <th>Titel</th>
-                    <th>Winkel</th>
-                    <th>Type</th>
-                    <th>Deeplinking</th>
-                    <th>Coupon Code</th>
-                    <th>Start</th>
-                    <th>Eind</th>
-                    <th>Clickouts</th>
-                    <th>Auteur</th>
-                    <th>Delete</th>
+                    <th>Naam</th>
+                    <th>Last Send Date</th>
+                    <th>Number of emails send</th>
                   </tr>
                 </thead>
              </table>
        </div>
-       <!-- offerList ends -->
+       <!-- emailsList ends -->
 	</div>
 
 					<div class="clear"></div>
