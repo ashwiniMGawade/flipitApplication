@@ -2,23 +2,36 @@
 echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/home.css");
 ?>
 <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+<script type="text/javascript">
+$(document).ready(function(){
+	$('.vouchers').hide();
+	$('.vouchers:eq(0)').show();
+});
+function showRelaedDiv(obj){
+	$('.vouchers').hide();
+	$('div#'+$(obj).attr('id')).show();
+	$('a#'+$(obj).attr('id')).addClass('active');
+
+}
+</script>
 <?php 
 $combinedArrayTopNewOffersCategoriesSpecialGuides = array(
     'topOffers'=>$this->topCode,
     'newOffers'=>$this->NewestOffer,
     'topCategories'=>$this->topCategories,
     'specialPages'=>$this->specialList,
-    'monetSavingGuides'=>$this->moneySaving
+    'specialPagesOffers'=>$this->splofferlists,
+    'moneySavingGuides'=>$this->moneySaving
 );
-$homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions($combinedArrayTopNewOffersCategoriesSpecialGuides);
+$homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions();
 ?>
 <div class="container best-items">
 	<header class="heading">
 		<h1>The Best of Flipit.com</h1>
 	</header>
 	<div class="columns">
-		<?php echo $homePagePartial->getLeftColumn();?>
-		<div class="vouchers">
+		<?php echo $homePagePartial->getLeftColumn($combinedArrayTopNewOffersCategoriesSpecialGuides);?>
+		<div id='topOffers' class="vouchers">
 			<a href="#" class="all">All New Codes</a>
 			<ul>
 				<li>
@@ -34,6 +47,24 @@ $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions($combinedArrayTo
 				</li>
 			</ul>
 		</div>
+		
+		<div id='newOffers' class="vouchers">
+			<a href="#" class="all">Amit Kathmandu</a>
+			<ul>
+				<li>
+					<a href="#">
+						<div class="logo-box">
+							<img src="<?php echo PUBLIC_PATH ?>images/logo-34.png" width="80" height="19" alt="image description">
+						</div>
+						<div class="box">
+							<h2><span>Brandkids</span> <strong class="exclusive"><span class="glyphicon glyphicon-star"></span> Exclusive</strong></h2>
+							<p>€10 korting op je bestelling met de Brandkids kortingscode...</p>
+						</div>
+					</a>
+				</li>
+			</ul>
+		</div>
+		
 	</div>
 </div>
 <div class="container our-shops">
