@@ -88,7 +88,14 @@ class MoneySaving extends BaseMoneySaving
     public static function getCategoryWiseArticles()
     {
         $allCategoryDetails = self::getAllArticleCategories();
-        $categoryRelatedArticles = array();
+        $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails);
+        return  $categoryRelatedArticles;
+        
+    }
+
+    public function getCategoryRelatedArticles ($allCategoryDetails)
+    {
+    	$categoryRelatedArticles = array();
         foreach($allCategoryDetails as $categoryDetails) {
             $categoryRelatedArticles[$categoryDetails['name']] = self::getArticlesRelatedToCategory($categoryDetails['id']);
         }
