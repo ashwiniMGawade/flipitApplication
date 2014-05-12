@@ -1,0 +1,29 @@
+<?php
+if (!empty($this->shopInformation[0]['bigimage'])) {
+    $howToGuideImage = "PUBLIC_PATH_CDN.$this->data[0]['bigimage']['path'].\"thum_bigLogoFile_\".$this->data[0]['bigimage']['name']";
+    $howToGuideImageAltText = $this->data[0]['bigimage']['name'];
+} elseif (!empty($this->shopInformation[0]['bigimage'])) {
+    $howToGuideImage = "PUBLIC_PATH_CDN.ltrim($this->data[0]['smallimage']['path'],"/").\"thum_smallLogoFile_\".$this->data[0]['smallimage']['name']";
+    $howToGuideImageAltText = $this->data[0]['smallimage']['name'];
+}
+?>
+<section id="code-lightbox">
+    <div id="popup1" class="lightbox lightbox-2">
+        <a class="glyphicon glyphicon-remove btn-close" href="#" onclick="customPopUpClose()"></a>
+        <header class="head">
+            <h1><?php echo $this->translate('How to guide').' '.$this->shopInformation[0]['name'].' '.$this->translate('coupon codes'); ?></h1>
+        </header>
+        <div class="text-block">
+            <?php echo $this->shopInformation[0]['howToIntroductionText']; ?>
+            <div class="visual-img">
+                <img src="<?php echo $howToGuideImage;?>" alt="<?php echo $howToGuideImageAltText;?>">
+            </div>
+        </div>
+        <?php if(!empty($this->howToGuideChapters)) : ?>
+        <a href="<?php echo HTTP_PATH_LOCALE.'how-to/'.$this->shopInformation[0]['permaLink']; ?>" class="link-box">
+            <hr class="alt2">
+            <span><?php echo $this->translate('Still having troubles using the code'); ?>?</span> <strong><?php echo $this->translate('Read more in our extensive guide'); ?></strong>
+        </a>
+        <?php endif; ?>
+    </div>
+</section>

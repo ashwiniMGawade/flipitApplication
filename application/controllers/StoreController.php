@@ -241,6 +241,23 @@ class StoreController extends Zend_Controller_Action
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
+
+    public function howToUseGuideLightboxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $howToGuideChapters = '';
+        $ShopList = $this->getRequest()->getParam('id').'_list';
+        $allShopDetailKey = 'all_shopdetail'.$ShopList;
+        $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetails($this->getRequest()->getParam('id')));
+
+        $howToGuides=Shop::getshopDetails($shopInformation[0]['permaLink']);
+        if (!empty($howToGuides[0]['howtochapter'])) :
+            $howToGuideChapters = $howToGuides[0]['howtochapter'];
+        endif;
+
+        $this->view->shopInformation = $shopInformation;
+        $this->view->howToGuideChapters = $howToGuideChapters;
+    }
     ######################################################
     ############### END REFACTORED CODE ##################
     ######################################################

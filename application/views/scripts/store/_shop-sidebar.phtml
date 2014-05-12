@@ -1,4 +1,5 @@
 <?php
+$this->minifyHeadScript()->prependFile("public/js/front_end/lightbox.js");
 echo $this->shopEditor;
 echo FrontEnd_Helper_viewHelper::socialMediaWidget($this->currentStoreInformation['affliateProgram'] =='' ? $this->currentStoreInformation['actualUrl'] : $this->currentStoreInformation['affliateProgram']);
 
