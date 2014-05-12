@@ -2,6 +2,126 @@
 
 class SearchController extends Zend_Controller_Action
 {
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
+    public function indexAction()
+    {
+        $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($searchPermalink);
+        $pageAttributeId = Page::getPageAttributeByPermalink($searchPermalink);
+        $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
+        $this->view->pageTitle = $pageDetail->pageTitle;
+
+        if ($pageDetail->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $pageDetail->customHeader;
+        }
+
+        $searchedKeywords = $this->getRequest()->getParam('searchField');
+        $shopIds = "";
+        $shopIds = $this->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
+        $shopsByShopIds = self::getshopsByExcludedShopIds($shopIds);
+        $popularShops = self::getPopularStores($searchedKeywords);
+        $shopsForSearchPage = self::getStoresForSearchResults($shopsByShopIds, $popularShops);
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
+        $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
+        $this->view->offers = $offersBySearchedKeywords;
+        $this->view->popularStores = $popularStores;
+        if (!empty($offersBySearchedKeywords)) {
+            $this->view->popularStores = $shopsForSearchPage; 
+        }  
+        
+        $this->view->headTitle($pageDetail->metaTitle);
+        $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
+        $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
+        $this->view->facebookTitle =$pageDetail->pageTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $pageDetail->permaLink;
+        $this->view->facebookImage = FACEBOOK_IMAGE;
+        $this->view->facebookDescription =  trim($pageDetail->metaDescription);
+        $this->view->facebookLocale = FACEBOOK_LOCALE;
+        $this->view->twitterDescription =  trim($pageDetail->metaDescription);
+        $this->view->pageLogo = HTTP_PATH_LOCALE.'public/'.$pageDetail->logo->path.$pageDetail->logo->name;
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+
+    }
+
+    public function getExcludedShopIdsBySearchedKeywords($searchedKeywords)
+    {
+        $excludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeywords);
+        $shopIds = '';
+
+        if (!empty($excludedKeywords[0])) :
+            if($excludedKeywords[0]['action'] == 0):
+                $this->getRedirectUrlForStore($excludedKeywords[0]);
+                exit();
+            else:
+                $shopIds = self::getShopIdsByExcludedKeywords($excludedKeywords[0]);
+            endif;
+        endif;
+
+        return $shopIds;
+    }
+
+    public static function getShopIdsByExcludedKeywords($excludedKeywords)
+    {
+        $shopIds = array();
+        foreach ($excludedKeywords['shops'] as $shops) :
+            $shopIds[] = $shops['shopsofKeyword'][0]['id'];
+        endforeach;
+        return $shopIds;
+    }
+
+    public function getRedirectUrlForStore($excludedKeywords)
+    {
+        $storeUrl = $excludedKeywords[0]['url'];
+        $this->_redirect($storeUrl);      
+    }
+
+    public static function getshopsByExcludedShopIds($shopIds)
+    {
+        $shopsForSearchPage = array();
+        $shopsByShopIds = Shop::getShopsByShopIds($shopIds);
+
+        foreach ($shopsByShopIds as $shopsByShopId) :
+            $shopsForSearchPage[$shopsByShopId['id']] = $shopsByShopId;
+        endforeach;
+
+        return $shopsForSearchPage;
+    }
+
+    public static function getPopularStores($searchedKeywords)
+    {
+        $popularStores = Shop::getStoresForSearchByKeyword($searchedKeywords, 8);
+        $popularStoresForSearchPage = self::getPopularStoresForSearchPage($popularStores);
+        return $popularStoresForSearchPage;
+    }
+
+    public static function getPopularStoresForSearchPage($popularStores)
+    {
+        $popularStoresForSearchPage = array();
+
+        foreach ($popularStores as $popularStore) :
+            $popularStoresForSearchPage[$popularStore['id']] = $popularStore;
+        endforeach;
+
+        return $popularStoresForSearchPage;
+    }
+
+    public static function getStoresForSearchResults($shopsByShopIds, $popularShops)
+    {        
+        if (!empty($shopsByShopIds) && !empty($popularShops)) :
+            $shopsForSearchPage = array_merge($shopsByShopIds, $popularShops);
+        else:
+            $shopsForSearchPage = !empty($popularShops) ? $popularShops : $shopsByShopIds;
+        endif;
+
+        return $shopsForSearchPage;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
     /**
      * override views based on modules if exists
      * @see Zend_Controller_Action::init()
@@ -15,144 +135,11 @@ class SearchController extends Zend_Controller_Action
 
         # check module specific view exists or not
         if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-
-            # set module specific view script path
+             # set module specific view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
         } else{
-
-            # set default module view script path
+             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
     }
-
-    public function indexAction()
-    {
-        # get cononical link
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSearch($permalink) ;
-
-        $pageId = 36;
-        $this->pageDetail = Page::getPageFromPageAttribute($pageId);
-        $this->view->pageTitle = @$this->pageDetail->pageTitle;
-
-        if($this->pageDetail->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
-        }
-
-        $this->view->headTitle(@$this->pageDetail->metaTitle);
-        $this->view->headMeta()->setName('description', @trim($this->pageDetail->metaDescription));
-        //echo $this->getRequest()->getParam('searchField');
-        //die();
-        $this->view->flag=1;
-        $search = $this->getRequest()->getParam('searchField');
-        if($search=="" || $search==null){
-            $this->view->flag=0;
-        }else{
-            $this->view->keyword = $search;
-        }
-
-        $link =  explode('/',ltrim($_SERVER['REQUEST_URI'],'/'));
-        $this->view->searchtype = @$link[1];
-        $getMoneySaving = MoneySaving::getAllMoneySavingArticleForSearch($this->getRequest()->getParam('searchField'),6);
-
-        $suggestions = Offer::searchRelatedOffers($this->_getAllParams());
-
-        $searchBarExclusion =  ExcludedKeyword::getKeywordForFront($search);
-        if(!empty($searchBarExclusion)):
-
-            if($searchBarExclusion[0]['action'] == 0):
-
-                $url = $searchBarExclusion[0]['url'];
-                $this->_redirect($url);
-                exit();
-
-            else:
-                $shopsIds = array();
-                foreach($searchBarExclusion[0]['shops'] as $shops):
-
-                    $shopsIds[] = $shops['shopsofKeyword'][0]['id'];
-
-                endforeach;
-            endif;
-        endif;
-
-        if(!empty($shopsIds)):
-            $exclusiveShops = Shop::getShopsExclusive($shopsIds);
-            $exShops = array();
-            foreach($exclusiveShops as $eShops):
-
-                $exShops["'".$eShops['id']."'"] = $eShops;
-
-            endforeach;
-        endif;
-
-        $popularStore = Shop::getAllStoresForSearch($this->getRequest()->getParam('searchField'),8);
-        $popularShops = array();
-        foreach($popularStore as $popShops):
-
-            $popularShops["'".$popShops['id']."'"] = $popShops;
-
-        endforeach;
-
-        $newArrayShops = array();
-
-        if(!empty($exShops)):
-            if(!empty($popularShops)):
-                $newArrayShops = array_merge($exShops, $popularShops);
-            else:
-
-                $newArrayShops = $exShops;
-            endif;
-        else:
-            if(!empty($popularShops)):
-                $newArrayShops = $popularShops;
-            endif;
-        endif;
-
-        //make array usable for view
-        $newArrShops = array();
-
-        foreach($newArrayShops as $nas):
-
-            $newArrShops[] = $nas;
-
-        endforeach;
-
-        $lastFinalArrayShops = array_slice($newArrShops, 0,8);
-        $shopsIds = "";
-        $result = Offer::searchOffers($this->_getAllParams(),$shopsIds, 12);
-        $this->view->paginatorCodes = $result;
-        $this->view->popularstores  =@$lastFinalArrayShops;//show popular store
-        $this->view->suggestion = @$suggestions;
-        $this->view->gudes = @$getMoneySaving;
-        $this->view->controllerName = $this->getRequest()->getControllerName();
-        $this->view->param = $search;
-    }
-
-/**
-
-* This is the suggestion action and is used to retrieve four search results from database
-
-* according to given search query
-
-* @return $suggestions array
-
-* @author cbhopal
-
-* @version 1.0
-
-*/
-
-public function suggestionAction()
-{
-    # get cononical link
-    $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-    $this->view->canonical = FrontEnd_Helper_viewHelper::generatCononicalForSearch($permalink) ;
-
-
-    $this->view->suggestion = Offer::searchRelatedOffers($this->_getAllParams());
-
-    $this->view->controllerName = $this->getRequest()->getControllerName();
-}
-
 }

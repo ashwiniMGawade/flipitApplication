@@ -15,6 +15,18 @@ class deleteArticleCategory
         set_time_limit(0);
         require_once('constantsForMigration.php');
         require_once('databaseConnectionForMigrations.php');
+        foreach ($databaseConnections as $databaseConnectionKey => $databaseConnection ) {
+            if ($databaseConnectionKey != 'imbull') {
+                try {
+                    $this->deleteArticleCategories($databaseConnection ['dsn'], $databaseConnectionKey, $imbull);
+                } catch (Exception $e) {
+                    echo $e->getMessage ();
+                    echo "\n\n";
+                }
+                echo "\n\n";
+            }
+        }
+        $doctrineManager->closeConnection($doctrineManagerConnection);
     }
 
     protected function deleteArticleCategories($dsn, $localeKey, $imbull)
@@ -39,6 +51,9 @@ class deleteArticleCategory
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
         $customLocale = Signupmaxaccount::getAllMaxAccounts();
         $customLocale = !empty($customLocale[0]['locale']) ? $customLocale[0]['locale'] : 'nl_NL';
+        $maxAccountTableValues = Signupmaxaccount::getAllMaxAccounts();
+        $currentLocale = !empty($maxAccountTableValues[0]['locale']) ? $maxAccountTableValues[0]['locale'] : 'nl_NL';
+
         $this->_translate = new Zend_Translate(array(
                 'adapter' => 'gettext',
                 'disableNotices' => true));
@@ -73,6 +88,7 @@ class deleteArticleCategory
 
         if ($deletedRelatedArticleCategories) {
 
+
             echo "\n";
             print "$localeKey - Articles have been deleted successfully!!!";
         } else {
@@ -87,5 +103,4 @@ class deleteArticleCategory
     }
 
 }
-
 new DeleteArticleCategory();

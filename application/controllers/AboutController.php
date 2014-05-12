@@ -11,31 +11,31 @@ class AboutController extends Zend_Controller_Action
     public function indexAction()
     {
         $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
-        $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
+        $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
 
-        if ($pageDetail->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $pageDetail->customHeader;
+        if ($pageDetails->customHeader) {
+            $this->view->layout()->customHeader = "\n" . $pageDetails->customHeader;
         }
 
-        $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
-        $this->view->pageTitle = $pageDetail->pageTitle;
-        $this->view->headTitle($pageDetail->metaTitle);
+        $this->view->headMeta()->setName('description', trim($pageDetails->metaDescription));
+        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->view->headTitle($pageDetails->metaTitle);
         $this->view->facebookImage = FACEBOOK_IMAGE ;
-        $this->view->facebookTitle = $pageDetail->pageTitle;
+        $this->view->facebookTitle = $pageDetails->pageTitle;
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('redactie');
-        $this->view->facebookDescription = trim($pageDetail->metaDescription);
+        $this->view->facebookDescription = trim($pageDetails->metaDescription);
         $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription = trim($pageDetail->metaDescription);
-        $allAuthorsDetail = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", User::getAllUsersDetail(self::getWebsiteName()));
-        $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination($allAuthorsDetail, $this->_getAllParams(), 20, 7);
-        $this->view->pageDetail = $pageDetail;
+        $this->view->twitterDescription = trim($pageDetails->metaDescription);
+        $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", User::getAllUsersDetails(self::getWebsiteNameWithLocale()));
+        $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination($allAuthorsDetails, $this->_getAllParams(), 20, 7);
+        $this->view->pageDetails = $pageDetails;
  
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
-    public static function getWebsiteName()
+    public static function getWebsiteNameWithLocale()
     {
         $splitWebsiteName = explode("//", HTTP_PATH_LOCALE);
         $webSiteNameWithoutRightSlash = rtrim($splitWebsiteName[1], '/');

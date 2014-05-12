@@ -221,7 +221,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         
         if ($currentOffer->discountType == "CD" ) {
             $onClick =  $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')";
+            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
             $offerLink = '<a id="'.$currentOffer->id.'" class="'.$class.'" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_self" onClick="'.$onClick.'">
             '.$offerAnchorTagContent.' </a>';
         } elseif ($currentOffer->discountType == "SL") {
@@ -229,7 +229,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $offerLink = '<a id="'.$currentOffer->id.'" class="'.$class.'" href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
             '.$offerAnchorTagContent.' </a>';
         } else {
-            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "OpenInNewTab('".$currentOffer->shop['permalink'].$popupLink."')" : HTTP_PATH_LOCALE."accountlogin" ;
+            $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')" : HTTP_PATH_LOCALE."accountlogin" ;
             $offerLink = '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'.$offerAnchorTagContent.'</a>';
         }
         return $offerLink;
