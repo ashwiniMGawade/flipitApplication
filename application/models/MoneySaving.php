@@ -93,7 +93,7 @@ class MoneySaving extends BaseMoneySaving
         
     }
 
-    public function getCategoryRelatedArticles ($allCategoryDetails)
+    public static function getCategoryRelatedArticles ($allCategoryDetails)
     {
     	$categoryRelatedArticles = array();
         foreach($allCategoryDetails as $categoryDetails) {

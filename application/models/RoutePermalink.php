@@ -29,13 +29,13 @@ class RoutePermalink extends BaseRoutePermalink
     public static function getPageProperties($permalink)
     {
         $permalink= trim($permalink, '/');
-        $data = Doctrine_Query::create()->select('p.*')
+        $pageDetails = Doctrine_Query::create()->select('p.*')
         ->from('Page p')
         ->where("permalink = ?", $permalink)
         ->orderBy('id DESC')
         ->limit(1)
         ->fetchArray();
-        return $data;
+        return $pageDetails;
     }
     public static function getPermalinks($exactLink)
     {

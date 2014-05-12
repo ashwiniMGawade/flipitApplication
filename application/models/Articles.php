@@ -56,8 +56,22 @@ class Articles extends BaseArticles
         return $allArticles;
     }
 
-
-
+    public static function generateArticlePermalinks($id)
+    {
+        $allMoneySavingArticle = Doctrine_Query::create()->select('p.id, m.id, ac.id, r.id, a.id, a.permalink, ac.permalink')
+            ->from('page p')
+            ->leftJoin('p.moneysaving m')
+            ->leftJoin('m.articlecategory ac')
+            ->leftJoin('m.refarticlecategory r')
+            ->leftJoin('r.articles a')
+            ->where('p.id =' . "'$id'")
+            ->andWhere('p.publish=1')
+            ->andWhere('p.deleted=0')
+            ->andWhere('a.deleted=0')
+            ->orderBy('ac.name')
+            ->fetchArray();
+        return $allMoneySavingArticle;
+    }
     ###################### Refactored Block ends #############################
 
 
@@ -951,25 +965,7 @@ class Articles extends BaseArticles
      * @return Article permalinks
      */
 
-    public static function generateArticlePermalinks($id)
-    {
-        $allMoneySavingArticle = Doctrine_Query::create()->select('p.id, m.id, ac.id, r.id, a.id, a.permalink, ac.permalink')
-        ->from('page p')
-        ->leftJoin('p.moneysaving m')
-        ->leftJoin('m.articlecategory ac')
-        ->leftJoin('m.refarticlecategory r')
-        ->leftJoin('r.articles a')
-        ->where('p.id =' . "'$id'")
-        ->andWhere('p.publish=1')
-        ->andWhere('p.deleted=0')
-        ->andWhere('a.deleted=0')
-        ->orderBy('ac.name')
-        ->fetchArray();
-
-
-        return $allMoneySavingArticle;
-
-    }
+    
 
 
     /**
