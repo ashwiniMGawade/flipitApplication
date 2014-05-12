@@ -1,0 +1,29 @@
+<?php
+$viewHelperObject = new FrontEnd_Helper_viewHelper();
+$howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopInformation[0]['bigimage']);
+$howToGuideSmallImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopInformation[0]['smallimage']);
+?>
+<section id="code-lightbox">
+    <div id="popup1" class="lightbox lightbox-2">
+        <a class="glyphicon glyphicon-remove btn-close" href="javascript:void(0);" onclick="customPopUpClose()"></a>
+        <header class="head">
+            <h1><?php echo $this->translate('How to guide').' '.$this->shopInformation[0]['name'].' '.$this->translate('coupon codes'); ?></h1>
+        </header>
+        <div class="text-block">
+            <?php echo $this->shopInformation[0]['howToIntroductionText'];
+
+            if(!empty($howToGuideBigImageDetails) && !empty($howToGuideSmallImageDetails)) :?>
+            <div class="visual-img">
+                <img src="<?php echo $howToGuideSmallImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideSmallImageDetails['howToGuideImageAltText'];?>">
+                <img src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php if(!empty($this->howToUseGuideChapters)) : ?>
+        <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('how-to/').$this->shopInformation[0]['permaLink']; ?>" class="link-box">
+            <hr class="alt2">
+            <span><?php echo $this->translate('Still having troubles using the code'); ?>?</span> <strong><?php echo $this->translate('Read more in our extensive guide'); ?></strong>
+        </a>
+        <?php endif; ?>
+    </div>
+</section>
