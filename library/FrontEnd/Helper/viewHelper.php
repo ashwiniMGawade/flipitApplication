@@ -708,6 +708,15 @@ EOD;
         
     }
     
+    public function getHowToGuidesImages($howToGuideImages)
+    {
+        $howToGuideImagePath = '';
+        if (!empty($howToGuideImages)) {
+            $howToGuideImagePath = PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'],"/")."thum_bigLogoFile_".$howToGuideImages['name'];
+            $howToGuideImageAltText = $howToGuideImages['name'];
+        }
+        return array('howToGuideImagePath' => $howToGuideImagePath, 'howToGuideImageAltText' => $howToGuideImageAltText);
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################

@@ -1,11 +1,7 @@
 <?php
-if (!empty($this->shopInformation[0]['bigimage'])) {
-    $howToGuideImage = "PUBLIC_PATH_CDN.$this->shopInformation[0]['bigimage']['path'].\"thum_bigLogoFile_\".$this->shopInformation[0]['bigimage']['name']";
-    $howToGuideImageAltText = $this->shopInformation[0]['bigimage']['name'];
-} elseif (!empty($this->shopInformation[0]['bigimage'])) {
-    $howToGuideImage = "PUBLIC_PATH_CDN.ltrim($this->shopInformation[0]['smallimage']['path'],"/").\"thum_smallLogoFile_\".$this->shopInformation[0]['smallimage']['name']";
-    $howToGuideImageAltText = $this->shopInformation[0]['smallimage']['name'];
-}
+$viewHelperObject = new FrontEnd_Helper_viewHelper();
+$howToGuideBigImageData = $viewHelperObject->getHowToGuidesImages($this->shopInformation[0]['bigimage']);
+$howToGuideSmallImageData = $viewHelperObject->getHowToGuidesImages($this->shopInformation[0]['smallimage']);
 ?>
 <section id="code-lightbox">
     <div id="popup1" class="lightbox lightbox-2">
@@ -14,10 +10,14 @@ if (!empty($this->shopInformation[0]['bigimage'])) {
             <h1><?php echo $this->translate('How to guide').' '.$this->shopInformation[0]['name'].' '.$this->translate('coupon codes'); ?></h1>
         </header>
         <div class="text-block">
-            <?php echo $this->shopInformation[0]['howToIntroductionText']; ?>
+            <?php echo $this->shopInformation[0]['howToIntroductionText'];
+
+            if(!empty($howToGuideBigImageData) && !empty($howToGuideSmallImageData)) :?>
             <div class="visual-img">
-                <img src="<?php echo $howToGuideImage;?>" alt="<?php echo $howToGuideImageAltText;?>">
+                <img src="<?php echo $howToGuideSmallImageData['howToGuideImagePath'];?>" alt="<?php echo $howToGuideSmallImageData['howToGuideImageAltText'];?>">
+                <img src="<?php echo $howToGuideBigImageData['howToGuideImagePath'];?>" alt="<?php echo $howToGuideBigImageData['howToGuideImageAltText'];?>">
             </div>
+            <?php endif; ?>
         </div>
         <?php if(!empty($this->howToGuideChapters)) : ?>
         <a href="<?php echo HTTP_PATH_LOCALE.'how-to/'.$this->shopInformation[0]['permaLink']; ?>" class="link-box">
