@@ -708,7 +708,7 @@ EOD;
         
     }
     
-    public function getHowToGuidesImages($howToGuideImages)
+    public function getHowToGuidesImage($howToGuideImages)
     {
         $howToGuideImagePath = '';
         if (!empty($howToGuideImages)) {

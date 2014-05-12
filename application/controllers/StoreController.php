@@ -245,18 +245,18 @@ class StoreController extends Zend_Controller_Action
     public function howToUseGuideLightboxAction()
     {
         $this->_helper->layout->disableLayout();
-        $howToGuideChapters = '';
+        $howToUseGuideChapters = '';
         $ShopList = $this->getRequest()->getParam('id').'_list';
-        $allShopDetailKey = 'all_shopdetail'.$ShopList;
-        $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetails($this->getRequest()->getParam('id')));
+        $allShopDetailsKey = 'all_shopdetail'.$ShopList;
+        $shopInformation = self::shopOffersBySetGetCache($allShopDetailsKey, Shop::getStoreDetails($this->getRequest()->getParam('id')));
 
-        $howToGuides=Shop::getshopDetails($shopInformation[0]['permaLink']);
-        if (!empty($howToGuides[0]['howtochapter'])) :
-            $howToGuideChapters = $howToGuides[0]['howtochapter'];
+        $howToGuide = Shop::getshopDetails($shopInformation[0]['permaLink']);
+        if (!empty($howToGuide[0]['howtochapter'])) :
+            $howToUseGuideChapters = $howToGuide[0]['howtochapter'];
         endif;
 
         $this->view->shopInformation = $shopInformation;
-        $this->view->howToGuideChapters = $howToGuideChapters;
+        $this->view->howToUseGuideChapters = $howToUseGuideChapters;
     }
     ######################################################
     ############### END REFACTORED CODE ##################
