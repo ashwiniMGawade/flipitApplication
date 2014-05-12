@@ -3,12 +3,11 @@ class Admin_SplashController extends Zend_Controller_Action
 {
     public function preDispatch()
     {
-        $databaseConnection = BackEnd_Helper_viewHelper::addConnection ();
-        $params = $this->_getAllParams ();
+        $databaseConnection = BackEnd_Helper_viewHelper::addConnection();
 
         if (! Auth_StaffAdapter::hasIdentity ()) {
-            $referer = new Zend_Session_Namespace('referer');
-            $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+            $pageReferer = new Zend_Session_Namespace('referer');
+            $pageReferer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect ( '/admin/auth/index' );
         }
 
@@ -18,17 +17,17 @@ class Admin_SplashController extends Zend_Controller_Action
         $sessionNamespace = new Zend_Session_Namespace();
 
         if($sessionNamespace->settings['rights']['administration']['rights'] != '1' && $sessionNamespace->settings['rights']['administration']['rights'] !='2' ) {
-            $flash = $this->_helper->getHelper('FlashMessenger');
+            $flashMessenger = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate ('You have no permission to access page');
-            $flash->addMessage(array('error' => $message));
+            $flashMessenger->addMessage(array('error' => $message));
             $this->_redirect('/admin');
         }
     }
 
     public function indexAction()
     {
-        $splash = new Splash();
-        $splashTableData = $splash::getSplashTableData();
+        $splashObject = new Splash();
+        $splashTableData = $splashObject->getSplashTableData();
      
         if (!empty($splashTableData)) {
             $splashOfferDetails = Doctrine_Core::getTable('Offer')->findOneBy('id', $splashTableData[0]['offerId']);
@@ -36,21 +35,21 @@ class Admin_SplashController extends Zend_Controller_Action
             $this->view->currentOfferLocale = $splashTableData[0]['locale'];
         }
 
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message [0] ['success'] ) ? $message [0] ['success'] : '';
-        $this->view->messageError = isset($message [0] ['error'] ) ? $message [0] ['error'] : '';
+        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessenger->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
 
     }
 
     public function addOfferAction()
     {
         $urlRequest = $this->getRequest();
-        $this->view->websites = Website::getAllwebSites();
-        $flash = $this->_helper->getHelper('FlashMessenger' );
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message [0] ['success'] ) ? $message [0] ['success'] : '';
-        $this->view->messageError = isset($message [0] ['error'] ) ? $message [0] ['error'] : '';
+        $this->view->websites = Website::getAllWebsites();
+        $flashMessenger = $this->_helper->getHelper('FlashMessenger' );
+        $message = $flashMessenger->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
 
         if ($this->_request->isPost()) {
             $localeId = $urlRequest->getParam('locale' , false);
@@ -88,13 +87,12 @@ class Admin_SplashController extends Zend_Controller_Action
                 $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
                 $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
                 $offers = new Offer($connectionObject['connName']);
-                $keyword = $this->getRequest()->getParam('keyword');
-                $allOffers = $offers->getActiveOfferNames($keyword);
-                $connectionObject = BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
-                $offers = array();
-
-                if (sizeof($allOffers) > 0) {
-                    foreach ($allOffers as $offer) {
+                $offerKeyword = $this->getRequest()->getParam('keyword');
+                $activeOffers = $offers->getActiveOfferDetails($offerKeyword);
+                BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
+                
+                if (sizeof($activeOffers) > 0) {
+                    foreach ($activeOffers as $offer) {
                         $offers[] = array('name' => ucfirst($offer['title']),
                                          'id' => $offer['id']);
                     }
@@ -111,18 +109,15 @@ class Admin_SplashController extends Zend_Controller_Action
     public function deleteOfferAction()
     {
         $this->_helper->layout->disableLayout();
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset ( $message [0] ['success'] ) ? $message [0] ['success'] : '';
-        $this->view->messageError = isset ( $message [0] ['error'] ) ? $message [0] ['error'] : '';
-        $splash = new Splash();
-        $deleted = $splash::deleteSplashoffer();
-        
-        if ($deleted) {
-            $message = $this->view->translate('Offer has been deleted successfully');
-            $flash->addMessage(array('success' => $message));
-            $this->_redirect ( HTTP_PATH . 'admin/splash');
-        }   
+        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessenger->getMessages();
+        $this->view->messageSuccess = isset ($message [0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset ($message [0]['error']) ? $message[0]['error'] : '';
+        $splashObject = new Splash();
+        $splashObject->deleteSplashoffer();
+        $message = $this->view->translate('Offer has been deleted successfully');
+        $flashMessenger->addMessage(array('success' => $message));
+        $this->_redirect ( HTTP_PATH . 'admin/splash');        
     }
 
 }

@@ -87,20 +87,13 @@ class deleteArticleCategory
         $deletedRelatedArticleCategories =  Articlecategory::deleteAllArticleCategoriesAndReferenceArticleCategories();
 
         if ($deletedRelatedArticleCategories) {
-
-
             echo "\n";
             print "$localeKey - Articles have been deleted successfully!!!";
         } else {
-
             echo "\n";
             print "$localeKey - Articles have not been deleted!!!";
-
         }
-
         $doctrineManager->closeConnection($doctrineManagerConnection);
-
     }
-
 }
 new DeleteArticleCategory();

@@ -2,7 +2,7 @@
 
 class Splash extends BaseSplash
 {
-   public static function getSplashTableData()
+   public function getSplashTableData()
    {
         $splashTableData = Doctrine_Query::create()
                 ->select('*')
@@ -10,9 +10,9 @@ class Splash extends BaseSplash
         return $splashTableData;
    }
 
-   public static function deleteSplashoffer()
+   public function deleteSplashoffer()
    {
-        $deleted = Doctrine_Query::create()->delete()->from('Splash')->execute();
+        Doctrine_Query::create()->delete()->from('Splash')->execute();
         return true;
    }
 }

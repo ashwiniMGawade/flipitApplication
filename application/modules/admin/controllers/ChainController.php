@@ -57,7 +57,7 @@ class Admin_ChainController extends Zend_Controller_Action
 
         if($chianId) {
 
-            $this->view->websites = Website::getAllwebSites();
+            $this->view->websites = Website::getAllWebsites();
 
             $this->view->chainId = $chianId ;
 

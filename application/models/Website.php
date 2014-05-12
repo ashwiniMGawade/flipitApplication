@@ -12,7 +12,7 @@
  */
 class Website extends BaseWebsite
 {
-    public static function getAllwebSites()
+    public static function getAllWebsites()
     {
         $websites = Doctrine_Query::create()->select("id,name")
                     ->from("Website")
@@ -31,10 +31,8 @@ class Website extends BaseWebsite
         if($websiteName) {
             $websites->andWhere("name = ? ", $websiteName);
         }else{
-
             $websites->andWhere("id = ? ", $websiteId);
-        }
-        
+        }      
         return  $websites->fetchOne(null,Doctrine::HYDRATE_ARRAY);
     }
 }

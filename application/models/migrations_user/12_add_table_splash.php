@@ -35,14 +35,11 @@ class AddSplashTable extends Doctrine_Migration_Base
 
 
         );
-
         $options = array(
                 'type'    => 'INNODB',
                 'charset' => 'utf8'
         );
-
         $this->createTable( 'splash', $columns, $options );
-
     }
 
     public function down()

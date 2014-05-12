@@ -657,9 +657,9 @@ class Offer extends BaseOffer
 
 
 
-    public static function getActiveOfferNames($keyword)
+    public static function getActiveOfferDetails($keyword)
     {
-        $expiredTime = date("Y-m-d 00:00:00");
+        $currentDateAndTime = date("Y-m-d 00:00:00");
         $allOffers = Doctrine_Query::create()
         ->select('s.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer, o.extendedUrl, o.shopid')
         ->from('Offer o')
@@ -667,11 +667,11 @@ class Offer extends BaseOffer
         ->where('o.deleted=0')
         ->andWhere('o.userGenerated=0')
         ->andWhere("o.title LIKE ?", "$keyword%")
-        ->andWhere('o.enddate>'."'".$expiredTime."'")
+        ->andWhere('o.enddate>'."'".$currentDateAndTime."'")
         ->andWhere('o.discounttype="CD"')
         ->andWhere('s.deleted = 0')
-        ->orderBy('o.id DESC');
-        $allOffers = $allOffers->fetchArray();
+        ->orderBy('o.id DESC')
+        ->fetchArray();
         return $allOffers;
     }
 
