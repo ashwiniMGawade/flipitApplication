@@ -102,8 +102,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public function constantForCacheDirectory()
     {
         define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
-        $environment = $this->getOption('ENV');
-        if ($environment == 'dev') {
+        if (APPLICATION_ENV == 'testing') {
             define('CACHE_DIRECTORY_PATH', $this->getOption['CACHE_DIRECTORY_PATH']);
         } else {
             define('CACHE_DIRECTORY_PATH', './tmp/');
