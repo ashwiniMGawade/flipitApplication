@@ -536,6 +536,7 @@ class Shop extends BaseShop
         $this->howtoMetaTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
         $this->howtoMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
         $this->customHeader = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
+        $this->howToIntroductionText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
 
         $this->showSimliarShops = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['similarShops']);
         $this->showChains = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['showChains']);
