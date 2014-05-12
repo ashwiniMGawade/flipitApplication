@@ -1,5 +1,5 @@
 <?php
-Doctrine_Manager::getInstance()->bindComponent('ChainItem', 'doctrine');
+Doctrine_Manager::getInstance()->bindComponent('Splash', 'doctrine');
 
 abstract class BaseSplash extends Doctrine_Record
 {
@@ -21,6 +21,10 @@ abstract class BaseSplash extends Doctrine_Record
         $this->hasColumn('offerId', 'integer', 11, array(
                 'type' => 'integer',
                 'length' => '11',
+        ));
+        $this->hasColumn('deleted', 'integer', 11, array(
+                'type' => 'integer',
+                'length' => '1',
         ));
     }
 
