@@ -8,8 +8,12 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
 $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
-//echo "<pre>";
-//print_r($this->DefaultPagesList); die;
+
+$howToIntroductionText = '';
+    $howToIntroductionText = $this->partial(
+        'shop/_how-to-introduction-text.phtml',
+        array('howToIntroductionText'=> '')
+    );
 ?>
 <?php echo $this->headTitle()->append('Create Shop');?>
 <div id="imbullbody-content" style="overflow: hidden;">
@@ -480,16 +484,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
 						</div>	 
 					 </div>
                 </div>
-                <div class="mainpage-content-line">
-                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Lightbox introduction text'); ?></strong></label></div>
-                     <div class="mainpage-content-right">
-                         <div class="mainpage-content-right-inner-right-other"></div>
-                        <div class="mainpage-content-right-inner-left-other">
-                             <textarea class="input-xlarge mbot bbot" id="content_1" name="howToIntroductionText" class="ckeditor required"></textarea>
-                        </div>   
-                     </div>
-                </div>
-
+                <?php echo $howToIntroductionText; ?>
                 <div class="mainpage-content">
 
 							<div class="mainpage-content-line mb10">

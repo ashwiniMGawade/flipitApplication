@@ -8,8 +8,14 @@
 	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
 	$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-?>
-<?php echo $this->headTitle()->append('Edit Shop');?>
+
+$howToIntroductionText = '';
+$howToIntroductionText = $this->partial(
+    'shop/_how-to-introduction-text.phtml',
+    array('howToIntroductionText'=> $this->data['howToIntroductionText'])
+);
+
+echo $this->headTitle()->append('Edit Shop');?>
 <div id="imbullbody-content" style="overflow: hidden;">
       
  
@@ -680,15 +686,7 @@
 						</div>	 
 					 </div>
                 </div>
-                <div class="mainpage-content-line">
-                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Lightbox introduction text'); ?></strong></label></div>
-                     <div class="mainpage-content-right">
-                         <div class="mainpage-content-right-inner-right-other"></div>
-                        <div class="mainpage-content-right-inner-left-other">
-                             <textarea class="input-xlarge mbot bbot" id="content_1" name="howToIntroductionText" class="ckeditor required"><?php echo $this->data['howToIntroductionText']; ?></textarea>
-                        </div>   
-                     </div>
-                </div>
+                <?php echo $howToIntroductionText; ?>
 
                 <div class="mainpage-content">
 
