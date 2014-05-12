@@ -1,10 +1,10 @@
 <?php
 if (!empty($this->shopInformation[0]['bigimage'])) {
-    $howToGuideImage = "PUBLIC_PATH_CDN.$this->data[0]['bigimage']['path'].\"thum_bigLogoFile_\".$this->data[0]['bigimage']['name']";
-    $howToGuideImageAltText = $this->data[0]['bigimage']['name'];
+    $howToGuideImage = "PUBLIC_PATH_CDN.$this->shopInformation[0]['bigimage']['path'].\"thum_bigLogoFile_\".$this->shopInformation[0]['bigimage']['name']";
+    $howToGuideImageAltText = $this->shopInformation[0]['bigimage']['name'];
 } elseif (!empty($this->shopInformation[0]['bigimage'])) {
-    $howToGuideImage = "PUBLIC_PATH_CDN.ltrim($this->data[0]['smallimage']['path'],"/").\"thum_smallLogoFile_\".$this->data[0]['smallimage']['name']";
-    $howToGuideImageAltText = $this->data[0]['smallimage']['name'];
+    $howToGuideImage = "PUBLIC_PATH_CDN.ltrim($this->shopInformation[0]['smallimage']['path'],"/").\"thum_smallLogoFile_\".$this->shopInformation[0]['smallimage']['name']";
+    $howToGuideImageAltText = $this->shopInformation[0]['smallimage']['name'];
 }
 ?>
 <section id="code-lightbox">
