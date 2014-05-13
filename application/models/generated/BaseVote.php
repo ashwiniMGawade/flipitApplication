@@ -10,8 +10,6 @@ Doctrine_Manager::getInstance()->bindComponent('Vote', 'doctrine_site');
  * @property enum $Visability
  * @property enum $discountType
  * @property string $couponCode
-
- *
  * @package    ##PACKAGE##
  * @subpackage ##SUBPACKAGE##
  * @author     ##RAMAN## <##rkumar1@seasiaconsulting.com##>

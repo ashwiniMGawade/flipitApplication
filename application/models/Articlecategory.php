@@ -12,24 +12,42 @@
  */
 class Articlecategory extends BaseArticlecategory
 {
+    ####################### Refactored ##############################
+
+    public static function deleteAllArticleCategoriesAndReferenceArticleCategories()
+    {
+        $deletedArticleCategory = self:: deleteArticleCategory();
+        $deletedReferenceArticleCategory =  self:: deleteReferenceArticleCategory();                              
+        return true;                                   
+
+    }
+    public static function deleteArticleCategory()
+    {
+        $deleteArticleCategory = Doctrine_Query::create()->delete()
+                                           ->from('Articlecategory')
+                                           ->execute();       
+    }   
+    public static function deleteReferenceArticleCategory()
+    {
+        $deleteReferenceArticleCategory = Doctrine_Query::create()->delete()
+                                            ->from('RefArticlecategoryRelatedcategory')
+                                            ->execute();       
+    }    
+    ####################### Refactored ##############################
+
     public function addcategory($params)
     {
-        //echo "<pre>"; print_r($params); die;
-        $this->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']);
+        $this->name = strtolower(BackEnd_Helper_viewHelper::stripSlashesFromString($params['categoryName']));
         $this->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString($params['permaLink']);
         $this->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
         $this->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaDescription']);
         $this->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params['description']);
 
-        //  upload small logo image for how to use page
         if ($_FILES['categoryIconNameHidden']['name']!=null) {
-
             $result = self::uploadImage('categoryIconNameHidden');
             if ($result['status'] == '200') {
-                $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        $result['fileName']);
-
-                $this->ArtCatIcon->ext = $ext;
+                $categoryImageExtension = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+                $this->ArtCatIcon->ext = $categoryImageExtension;
                 $this->ArtCatIcon->path = $result['path'];
                 $this->ArtCatIcon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
             } else{
@@ -37,37 +55,25 @@ class Articlecategory extends BaseArticlecategory
             }
         }
 
-        //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_articlecategory_list');
-
-        $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-        $this->ArtCatIcon->ext = $ext;
-
+        $categoryImageExtension = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+        $this->ArtCatIcon->ext = $categoryImageExtension;
         try {
-            $this->save();
-            $catId = $this->id ;
-
-/* 			$route = new RoutePermalink();
-            $route->permalink = 'bespaarwijzer/'.$params["permaLink"];
-            $route->type = 'ARTCAT';
-            $route->exactlink = 'bespaarwijzer/category/id/'.$this->id;
-            $route->save(); */
-
-            foreach ($params['selectedCategoryies'] as $relatedCategory) {
-                $refRelatedCategory = new RefArticlecategoryRelatedcategory();
-                $refRelatedCategory->articlecategoryid = $this->id;
-                $refRelatedCategory->relatedcategoryid = $relatedCategory;
-                $refRelatedCategory->save();
-            }
-            return $catId ;
-        }catch(Exception $e){
+                $this->save();
+                $categoryId = $this->id ;
+                foreach ($params['selectedCategoryies'] as $relatedCategory) {
+                    $refRelatedCategory = new RefArticlecategoryRelatedcategory();
+                    $refRelatedCategory->articlecategoryid = $this->id;
+                    $refRelatedCategory->relatedcategoryid = $relatedCategory;
+                    $refRelatedCategory->save();
+                }
+        return $categoryId ;
+        } catch(Exception $e) {
             return false;
         }
-
-
-
-
     }
+
+                                       
 
     /**
      * upload image

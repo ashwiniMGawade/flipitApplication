@@ -1,8 +1,15 @@
+<?php
+$viewHelperObject = new FrontEnd_Helper_viewHelper();
+$howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shop['bigimage']);
+$howToGuideSmallImageDetails = $viewHelperObject->getHowToGuidesImage($this->shop['smallimage']);
+?>
 <article class="box box-2">
     <h2><?php echo $this->translate('How to Use The Voucher Codes'); ?></h2>
-    <p><?php echo $this->translate('Cras sed lorem dignissim urna porta congue. Duis tincidunt orci vel varius dignissim. Vivamus dapibus erat dapi bus lacus sodales, eu porta velit dictum. Fusce et enim pharetra, commodo purus varius.');?>
-    </p>
+    <p><?php echo $this->shop['howToIntroductionText']; ?></p>
+    <?php if(!empty($howToGuideBigImageDetails) && !empty($howToGuideSmallImageDetails)) :?>
     <div class="visual-img">
-        <img src="<?php echo HTTP_PATH;?>public/images/img-02.jpg" width="700" height="200" alt="image description">
+        <img src="<?php echo $howToGuideSmallImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideSmallImageDetails['howToGuideImageAltText'];?>">
+        <img src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
     </div>
+    <?php endif; ?>
 </article>

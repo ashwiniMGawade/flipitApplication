@@ -39,9 +39,98 @@ class MoneySaving extends BaseMoneySaving
         return $mostReadArticleS;
     
     }
-    #####################################################
-    ############# REFACTORED CODE #######################
-    ####################################################
+    public static function getRecentlyAddedArticles()
+    {
+        $recentlyAddedArticles = Doctrine_Query::create()
+        	->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
+            ->from('Articles a')
+            ->leftJoin('a.thumbnail ai')
+            ->leftJoin('a.ArtIcon aai')
+            ->leftJoin('a.refarticlecategory r')
+            ->leftJoin('a.chapters chap')
+            ->andWhere('a.deleted=0')
+            ->orderBy('a.created_at DESC')
+            ->limit(3)
+            ->fetchArray();
+        return $recentlyAddedArticles;
+    }
+    public static function getPageDetails($permalink)
+    {
+        $pageDetails = Doctrine_Query::create()
+            ->select('p.*, img.id, img.path, img.name')
+            ->from('Page p')
+            ->leftJoin('p.logo img')
+            ->where("p.permaLink='".$permalink."'")
+            ->andWhere('p.publish=1')
+            ->andWhere('p.pagelock=0')
+            ->andWhere('p.deleted=0')
+            ->fetchArray();
+        return $pageDetails;
+    }
+
+    public static function getAllMoneySavingArticles($permalink)
+    {
+        $allMoneySavingArticles = Doctrine_Query::create()->select('p.pageAttributeId,m.pageid,m.categoryid,r.articleid,r.relatedcategoryid,a.title, ac.name,a.permalink, ac.permalink')
+            ->from('page p')
+            ->leftJoin('p.moneysaving m')
+            ->leftJoin('m.articlecategory ac')
+            ->leftJoin('m.refarticlecategory r')
+            ->leftJoin('r.articles a')
+            ->where("p.permaLink ='".$permalink."'")
+            ->andWhere('p.publish=1')
+            ->andWhere('p.deleted=0')
+            ->andWhere('a.deleted=0')
+            ->andWhere('a.publish=1')
+            ->orderBy('ac.name')
+            ->fetchArray();
+        return $allMoneySavingArticles;
+
+    }
+
+    public static function getAllArticleCategories()
+    {
+        return $allArticleCategoryDetails = Doctrine_Query::create()->select('id, name')->from('Articlecategory ac')->where('ac.deleted=0')->fetchArray();
+    }
+
+    public static function getCategoryWiseArticles()
+    {
+        $allCategoryDetails = self::getAllArticleCategories();
+        $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails);
+        return  $categoryRelatedArticles;
+        
+    }
+
+    public function getCategoryRelatedArticles ($allCategoryDetails)
+    {
+    	$categoryRelatedArticles = array();
+        foreach($allCategoryDetails as $categoryDetails) {
+            $categoryRelatedArticles[$categoryDetails['name']] = self::getArticlesRelatedToCategory($categoryDetails['id']);
+        }
+        return $categoryRelatedArticles;
+    }
+
+    public static function getArticlesRelatedToCategory($categoryId)
+    {
+        
+        $allArticlesRelatedToCategory = self:: getAllMoneySavingArticlesOfCategory($categoryId);
+        return $allArticlesRelatedToCategory;
+    }
+
+    public static function getAllMoneySavingArticlesOfCategory($categoryId)
+    {
+        $articles = Doctrine_Query::create()->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
+            ->from('Articles a')
+            ->leftJoin('a.thumbnail ai')
+            ->leftJoin('a.ArtIcon aai')
+            ->leftJoin('a.refarticlecategory r')
+            ->leftJoin('a.chapters chap')
+            ->where('r.relatedcategoryid =' . "'$categoryId'")
+            ->andWhere('a.deleted=0')
+            ->fetchArray();
+        return $articles;
+    }
+   
+ ################## REFACTORED #######################
     /**
      * Get article for Money saving article from database
      * @author Raman
@@ -70,56 +159,6 @@ class MoneySaving extends BaseMoneySaving
         return true;
 
     }
-
-
-    /**
-     * get front end page on page id basis
-     * @author Raman
-     * @version 1.0
-     */
-
-    public static function getPage($perma)
-    {
-        $q = Doctrine_Query::create()
-        ->select('p.*, img.id, img.path, img.name')
-        ->from('Page p')
-        ->leftJoin('p.logo img')
-        ->where("p.permaLink='".$perma."'")
-        ->andWhere('p.publish=1')
-        ->andWhere('p.pagelock=0')
-        ->andWhere('p.deleted=0')
-        ->fetchArray();
-        return $q;
-    }
-
-
-
-
-    /**
-     * All the money saving articles under all the categories on money saving page
-     * @author Raman
-     * @version 1.0
-     */
-    public static function generateAllMoneySavingArticle($id)
-    {
-        $allMoneySavingArticle = Doctrine_Query::create()->select('p.pageAttributeId,m.pageid,m.categoryid,r.articleid,r.relatedcategoryid,a.title, ac.name,a.permalink, ac.permalink')
-        ->from('page p')
-        ->leftJoin('p.moneysaving m')
-        ->leftJoin('m.articlecategory ac')
-        ->leftJoin('m.refarticlecategory r')
-        ->leftJoin('r.articles a')
-        ->where("p.permaLink ='".$id."'")
-        ->andWhere('p.publish=1')
-        ->andWhere('p.deleted=0')
-        ->andWhere('a.deleted=0')
-        ->andWhere('a.publish=1')
-        ->orderBy('ac.name')
-        ->fetchArray();
-
-        return $allMoneySavingArticle;
-
-    }
-
 
     /**
      * All the money saving articles under all the categories on money saving page
@@ -290,22 +329,5 @@ class MoneySaving extends BaseMoneySaving
      */
 
 
-    public static function generateAllMoneySavingArticlesOfcategory($catId)
-    {
-        $article = Doctrine_Query::create()->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name, chap.*')
-        ->from('Articles a')
-        ->leftJoin('a.thumbnail ai')
-        ->leftJoin('a.ArtIcon aai')
-        ->leftJoin('a.refarticlecategory r')
-        ->leftJoin('a.chapters chap')
-        ->where('r.relatedcategoryid =' . "'$catId'")
-        ->andWhere('a.deleted=0')
-        //->getSqlQuery();
-        //die;
-        ->fetchArray();
-        //echo "<pre>";
-        //print_r($article); die;
-        return $article;
-
-    }
+  
 }

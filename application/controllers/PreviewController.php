@@ -34,7 +34,7 @@ class PreviewController extends Zend_Controller_Action
     public function indexAction()
     {
             $pageId = $this->getRequest ()->getParam ('attachedpage');
-            $this->pageDetail = Page::getdefaultPageProperties($pageId);
+            $this->pageDetail = Page::getDefaultPageProperties($pageId);
             $this->view->pageTitle = @$this->pageDetail[0]['pageTitle'];
 
             if($this->pageDetail[0]['customHeader']) {

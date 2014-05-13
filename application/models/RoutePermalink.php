@@ -45,7 +45,7 @@ class RoutePermalink extends BaseRoutePermalink
         return $q;
     }
 
-    public static function getdefaultPageProperties($slug)
+    public static function getDefaultPageProperties($slug)
     {
         $data = Doctrine_Query::create()->select('p.*')
         ->from('Page p')

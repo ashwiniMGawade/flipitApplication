@@ -27,7 +27,8 @@ class Page extends BasePage
 
     public static function getPageFromPageAttributeFiltered($id)
     {
-        $pageAttributes = Doctrine_Query::create()->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
+        $pageAttributes = Doctrine_Query::create()
+        ->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')
         ->from('Page p')
         ->where("pageAttributeId = ?", $id)
         ->andWhere('p.deleted=0')
@@ -39,7 +40,8 @@ class Page extends BasePage
 
     public static function getPageFromPageAttribute($id)
     {
-        $page = Doctrine_Query::create()->select('p.*,i.path,i.name')
+        $page = Doctrine_Query::create()
+        ->select('p.*,i.path,i.name')
         ->from('Page p')->leftJoin('p.logo i')
         ->where("pageAttributeId = ?", $id)
         ->andWhere('p.deleted=0')
@@ -74,6 +76,17 @@ class Page extends BasePage
         ->andWhere('p.deleted=0')->fetchOne();
         return $pageDetails;
 
+    }
+
+    public static function getDefaultPageProperties($permalink)
+    {
+        $pageProperties = Doctrine_Query::create()
+            ->select('p.*')
+            ->from('Page p')
+            ->where("permaLink = '". $permalink ."'")
+            ->andWhere('p.deleted=0')
+            ->fetchArray();
+        return $pageProperties;
     }
 
     public static function getPageDetailFromPermalink($permalink)
@@ -1086,17 +1099,7 @@ public static function exportpagelist()
      *	Version: 1.0
      */
 
-    public static function getdefaultPageProperties($permalink)
-    {
-        $data = Doctrine_Query::create()
-        ->select('p.*')
-        ->from('Page p')
-        ->where("permaLink = '". $permalink ."'")
-        ->andWhere('p.deleted=0')
-        ->fetchArray();
-        return $data;
-    }
-
+  
     /**
      * get page attrubute from page table by id
      *

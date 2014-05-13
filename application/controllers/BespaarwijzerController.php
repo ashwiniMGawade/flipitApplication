@@ -30,117 +30,50 @@ class BespaarwijzerController extends Zend_Controller_Action
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
     }
-
+################ Refactored Starts #######################################
     public function indexAction()
     {
-        # get cononical link
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
+        $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $moneySavingPagePermalink = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
+        $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_moneysavingpage".$moneySavingPagePermalink."_list", MoneySaving::getPageDetails($moneySavingPagePermalink));
+        $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
+        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
+        $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
 
-        $permalink= FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
-        $this->pageDetail = Page::getdefaultPageProperties($permalink);
-        $this->view->pageTitle = @$this->pageDetail[0]['pageTitle'];
-        $this->view->permaLink = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
-        $this->view->headTitle(@trim($this->pageDetail[0]['metaTitle']));
-        $this->view->headMeta()->setName('description', @trim($this->pageDetail[0]['metaDescription']));
-
-        if( @$this->pageDetail[0]['customHeader']) {
-            $this->view->layout()->customHeader = "\n" . @$this->pageDetail[0]['customHeader'];
+        $this->view->facebookDescription = trim($moneySavingPageDetails[0]['metaDescription']);
+        $this->view->facebookLocale = FACEBOOK_LOCALE;
+        $this->view->facebookTitle = $moneySavingPageDetails[0]['pageTitle'];
+        $this->view->facebookShareUrl = $moneySavingPagePermalink;
+        $this->view->facebookImage = HTTP_PATH."public/images/bespaarwijzer_og.png";
+        $this->view->twitterDescription = trim($moneySavingPageDetails[0]['metaDescription']);
+        
+        $this->view->pageTitle = $moneySavingPageDetails[0]['pageTitle'];
+        $this->view->permaLink = $moneySavingPagePermalink;
+        $this->view->headTitle(trim($moneySavingPageDetails[0]['metaTitle']));
+        $this->view->headMeta()->setName('description', trim($moneySavingPageDetails[0]['metaDescription']));
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
+        if($moneySavingPageDetails[0]['customHeader']) {
+            $this->view->layout()->customHeader = "\n" . $moneySavingPageDetails[0]['customHeader'];
         }
 
+        $this->view->mostReadArticles = $mostReadArticles;
+        $this->view->categoryWiseArticles = $categoryWiseArticles;
+        $this->view->recentlyAddedArticles = $recentlyAddedArticles;
+       
+        if (!empty($moneySavingPageDetails)) {
+            $this->view->pageDetails = $moneySavingPageDetails;
 
-
-        $limit = 10;
-        /*
-         * Example to cache a result of a query ()
-        */
-        // get top categories (for now i just fetch the available category list)
-        $pageKey ="all_moneysavingpage".$permalink."_list";
-        // no cache available, lets query.
-        $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pageKey);
-        //key not exist in cache
-        if($flag){
-            //get Page data from database and store in cache
-            $page = MoneySaving::getPage($permalink);
-            FrontEnd_Helper_viewHelper::setInCache($pageKey, $page);
-              //echo  'FROM DATABASE';
-
-        } else {
-                //get from cache
-                $page = FrontEnd_Helper_viewHelper::getFromCacheByKey($pageKey);
-                //echo 'The result is comming from cache!!';
-
-            }
-            $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-            $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($mspopularKey);
-            //key not exist in cache
-            if($flag){
-
-                //get  data from database and store in cache
-                $popularAtTheMoment = MoneySaving::getMostpopularArticles($permalink, 3);
-                FrontEnd_Helper_viewHelper::setInCache($mspopularKey, $popularAtTheMoment);
-                //echo  'FROM DATABASE';
-
-            } else {
-                //get from cache
-                $popularAtTheMoment = FrontEnd_Helper_viewHelper::getFromCacheByKey($mspopularKey);
-                //echo 'The result is comming from cache!!';
-            }
-
-            $msMRArticleKey ="all_mostreadMsArticlePage_list";
-            $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($msMRArticleKey);
-            //key not exist in cache
-            if($flag){
-
-                //get  data from database and store in cache
-                $mostRead = MoneySaving::getMostReadArticles(6);
-                FrontEnd_Helper_viewHelper::setInCache($msMRArticleKey, $mostRead);
-                //echo  'FROM DATABASE';
-
-            } else {
-                //get from cache
-                $mostRead = FrontEnd_Helper_viewHelper::getFromCacheByKey($msMRArticleKey);
-                //echo 'The result is comming from cache!!';
-            }
-            $allMSArticleKey ="all_allMSArticle".$permalink."_list";
-            $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($allMSArticleKey);
-            //key not exist in cache
-            if($flag){
-
-                //get  data from database and store in cache
-                $allMoneySavingArticles = MoneySaving::generateAllMoneySavingArticle($permalink);
-                FrontEnd_Helper_viewHelper::setInCache($allMSArticleKey, $allMoneySavingArticles);
-                //echo  'FROM DATABASE';
-
-            } else {
-                //get from cache
-                $allMoneySavingArticles = FrontEnd_Helper_viewHelper::getFromCacheByKey($allMSArticleKey);
-                //echo 'The result is comming from cache!!';
-            }
-            //die();
-
-        //for facebook parameters
-        $this->view->fbtitle = @$page[0]['pageTitle'];
-        $this->view->fbshareUrl = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
-
-        $this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
-
-        $this->view->popularAtTheMoment = $popularAtTheMoment;
-        $this->view->mostRead = $mostRead;
-        $this->view->allMoneySavingArticles = $allMoneySavingArticles;
-
-        if(!empty($page)){
-            $this->view->page = $page;
         }else{
-            //$this->_redirect(HTTP_PATH . 'error');
-            $error_404 = 'HTTP/1.1 404 Not Found';
-            $this->getResponse()->setRawHeader($error_404);
+            $error404 = 'HTTP/1.1 404 Not Found';
+            $this->getResponse()->setRawHeader($error404);
         }
+
     }
 
-
+################ Refactored Ends #######################################
     public function categoryAction()
     {
+        
         // get top categories (for now i just fetch the available category list)
         $perma = $this->getRequest ()->getParam ('permalink');
         $permalinkForCanonical = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
@@ -288,48 +221,42 @@ class BespaarwijzerController extends Zend_Controller_Action
 
     public function guidedetailAction()
     {
-        # get cononical link
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
-
-
-        $params = $this->_getAllParams();
-
-        $view = Articles :: getArticleDataFront($params);
-        $getall = Articles :: getdynamicArticleDataFront($params);
-
+        $parameters = $this->_getAllParams();
+        $permalink = $parameters['permalink'];
+        $currentArticleView = Articles::getArticleByPermalink($permalink);
+        $getAllArticles = Articles::getAllArticles();
         $ArNew =  array();
-        $uobj = new User();
-        for($i= 0;$i<count($getall);$i++){
+        $userInformationObject = new User();
+        for ($i= 0; $i<count($getAllArticles); $i++) {
 
-            $autherImage  = $uobj->getProfileImage($getall[$i]['authorid']);
-            $img = HTTP_PATH.'public/' .$autherImage['profileimage']['path'] .'thum_medium_'. $autherImage['profileimage']['name'];
-
-
-            $ArNew[$i]['id']  = $getall[$i]['id'];
-            $ArNew[$i]['title']  = $getall[$i]['title'];
-            $ArNew[$i]['permalink']  = $getall[$i]['permalink'];
-            $ArNew[$i]['chapters']  = $getall[$i]['chapters'];
+            $autherImage  = $userInformationObject->getProfileImage($getAllArticles[$i]['authorid']);
+            $image = HTTP_PATH.'public/' .$autherImage['profileimage']['path'] .'thum_medium_'. $autherImage['profileimage']['name'];
 
 
-            if(! $getall[$i]['thumbnail']) {
-                $thumbnailSmall = $getall[$i]['ArtIcon'];
+            $ArNew[$i]['id']  = $getAllArticles[$i]['id'];
+            $ArNew[$i]['title']  = $getAllArticles[$i]['title'];
+            $ArNew[$i]['permalink']  = $getAllArticles[$i]['permalink'];
+            $ArNew[$i]['chapters']  = $getAllArticles[$i]['chapters'];
+
+
+            if(! $getAllArticles[$i]['thumbnail']) {
+                $thumbnailSmall = $getAllArticles[$i]['ArtIcon'];
             } else {
 
-                $thumbnailSmall = $getall[$i]['thumbnail'];
+                $thumbnailSmall = $getAllArticles[$i]['thumbnail'];
             }
             $ArNew[$i]['articleImageName']  = $thumbnailSmall['name'];
             $ArNew[$i]['articleImagePath']  = $thumbnailSmall['path'];
-            $ArNew[$i]['authorId']  = $getall[$i]['authorid'];
-            $ArNew[$i]['authorImage']  = $img;
+            $ArNew[$i]['authorId']  = $getAllArticles[$i]['authorid'];
+            $ArNew[$i]['authorImage']  = $image;
 
         }
 
-
         Zend_Session::start();
         $guideDetail = new Zend_Session_Namespace('nextPrevious');
-        for($key=0;$key<count($ArNew);$key++){
-             if($params['permalink'] == $ArNew[$key]['permalink']){
+        for($key=0; $key < count($ArNew); $key++) {
+            if ($parameters['permalink'] == $ArNew[$key]['permalink']) {
                     $despN = '';
                     $despP = '';
                     if(array_key_exists($key+1,$ArNew)){
@@ -394,22 +321,30 @@ class BespaarwijzerController extends Zend_Controller_Action
                 }
             }
 
-        if(count($view) > 0){
-            $this->view->articleview = @$view[0];
-            $this->view->headTitle(@trim($view[0]['metatitle']));
-            $this->view->headMeta()->setName('description', @trim($view[0]['metadescription']));
+        if (!empty($currentArticleView)) {
+            $this->view->currentArticle = $currentArticleView[0];
+            $this->view->headTitle(trim($currentArticleView[0]['metatitle']));
+            $this->view->headMeta()->setName('description', trim($currentArticleView[0]['metadescription']));
 
+            $mostReadArticleKey ="all_mostreadMsArticlePage_list";
+            $ArticlesExistOrNot =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($mostReadArticleKey);
 
-        //for facebook parameters
-        $this->view->fbtitle = @$view[0]['title'];
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE.@$view[0]['permalink'];
+            if ($ArticlesExistOrNot) {
+                $mostReadArticles = MoneySaving::getMostReadArticles($permalink, 3);
+                FrontEnd_Helper_viewHelper::setInCache($mostReadArticleKey, $mostReadArticles);
+            } else {
+                $mostReadArticles = FrontEnd_Helper_viewHelper::getFromCacheByKey($mostReadArticleKey);
+            }
+            $this->view->mostReadArticles = $mostReadArticles;
+            $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
+            $this->view->facebookDescription = trim($currentArticleView[0]['metadescription']);
+            $this->view->facebookLocale = FACEBOOK_LOCALE;
+            $this->view->facebookTitle = $currentArticleView[0]['title'];
+            $this->view->facebookShareUrl = HTTP_PATH_LOCALE.$currentArticleView[0]['permalink'];
+            $this->view->facebookImage = FACEBOOK_IMAGE;
+            $this->view->twitterDescription = trim($currentArticleView[0]['metadescription']);
 
-        $this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
-
-
-
-        $uobj = new User();
-        $this->view->udetails = $uobj->getProfileImage($this->view->articleview['authorid']);
+            $this->view->userDetails =  $userInformationObject->getProfileImage($currentArticleView[0]['authorid']);
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
         }

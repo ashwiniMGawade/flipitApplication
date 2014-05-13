@@ -202,7 +202,7 @@ class Offer extends BaseOffer
         return $slicedOffer;
     }
 
-    public static function getTop20Offers()
+    public static function getTopOffers()
     {
         $cachedKeyForTop20 =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
         if ($cachedKeyForTop20) {
@@ -653,6 +653,90 @@ class Offer extends BaseOffer
             }
         }
         return $specialOffersAfterMerging;
+    }
+
+
+
+    public static function getActiveOfferDetails($keyword)
+    {
+        $currentDateAndTime = date("Y-m-d 00:00:00");
+        $allOffers = Doctrine_Query::create()
+        ->select('s.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer, o.extendedUrl, o.shopid')
+        ->from('Offer o')
+        ->leftJoin('o.shop s')
+        ->where('o.deleted=0')
+        ->andWhere('o.userGenerated=0')
+        ->andWhere("o.title LIKE ?", "$keyword%")
+        ->andWhere('o.enddate>'."'".$currentDateAndTime."'")
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('s.deleted = 0')
+        ->orderBy('o.id DESC')
+        ->fetchArray();
+        return $allOffers;
+    }
+
+
+    public static function searchOffers($searchParameters, $shopIds, $limit)
+    {
+        $searchKeyword = strtolower($searchParameters['searchField']);
+        $currentDate = date('Y-m-d H:i:s');
+        $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
+        $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
+        $mergedOffersBySearchedKeywords = array_merge($searchedOffersByIds, $offersBySearchedKeywords);
+        $searchedOffers = array_slice($mergedOffersBySearchedKeywords, 0, $limit);
+        return $searchedOffers;
+    }
+
+    public static function getOffersByShopIds($shopIds, $currentDate)
+    {
+        $shopOffersByShopIds = array();
+        if(!empty($shopIds)) :
+            $shopIds = array_map("mysql_real_escape_string", $shopIds);
+            $shopIds = ("'" . implode("', '", $shopIds) . "'");
+            $shopOffersByShopIds = Doctrine_Query::create()
+            ->select('s.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId')
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin('o.tiles t')
+            ->where('o.deleted = 0' )
+            ->andWhere("o.userGenerated = 0")
+            ->andWhere('o.offline = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
+            ->andWhere('o.enddate > "'.$currentDate.'"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability != "MEM"')
+            ->andWhere("s.id IN(" . $shopIds .")" )
+            ->orderBy("s.name ASC")
+            ->fetchArray();
+        endif;
+        return $shopOffersByShopIds;
+    }
+
+    public static function getOffersBySearchedKeywords($searchKeyword, $currentDate)
+    {
+        $shopOffersBySearchedKeywords = Doctrine_Query::create()
+        ->select('s.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId,t.*')
+                ->from('Offer o')
+                ->leftJoin('o.shop s')
+                ->leftJoin('s.logo img')
+                ->leftJoin('s.favoriteshops fv')
+                ->leftJoin('o.termandcondition terms')
+                 ->leftJoin('o.tiles t')
+                ->where('o.deleted = 0' )
+                ->andWhere('o.offline = 0')
+                ->andWhere('s.deleted = 0')
+                ->andWhere('o.startdate <= "'.$currentDate.'"')
+                ->andWhere('o.enddate > "'.$currentDate.'"')
+                ->andWhere('o.discounttype="CD"')
+                ->andWhere('o.Visability != "MEM"')
+                ->andWhere("s.name LIKE '%$searchKeyword%' or o.title LIKE '%$searchKeyword%'" , $searchKeyword, $searchKeyword )
+                ->orderBy("s.name ASC")
+                ->fetchArray();
+        return $shopOffersBySearchedKeywords;
     }
 
     ##################################################################################
@@ -1828,97 +1912,6 @@ class Offer extends BaseOffer
 /******************functions to be used on frontend*******************/
 
     /**
-     * Search offers in the relative shops on the basis of keywords in the search field
-     * @author cbhopal modified by mkaur
-     * @version 1.0
-     * @return array $data
-     */
-
-    public static function searchOffers($params,$shopIds, $limit)
-    {
-        //array to string IDS
-        //$shopIds = '';
-        $shopIds = @array_map("mysql_real_escape_string", $shopIds);
-        $shopIds = @("'" . implode("', '", $shopIds) . "'");
-
-        $flag = 0;
-        $keyword = @strtolower($params['searchField']);
-        $date = date('Y-m-d H:i:s');
-
-        //this query is for all the connected shops offers
-        $data1 = Doctrine_Query::create()
-        ->select('s.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId')
-        ->from('Offer o')
-        ->leftJoin('o.shop s')
-        ->leftJoin('s.logo img')
-        ->leftJoin('s.favoriteshops fv')
-        ->leftJoin('o.termandcondition terms')
-        ->where('o.deleted = 0' )
-        ->andWhere("o.userGenerated = 0")
-        ->andWhere('o.offline = 0')
-        ->andWhere('s.deleted = 0')
-        ->andWhere('o.startdate <= "'.$date.'"')
-        ->andWhere('o.enddate > "'.$date.'"')
-        ->andWhere('o.discounttype="CD"')
-        ->andWhere('o.Visability != "MEM"')
-        ->andWhere("s.id IN(" . $shopIds .")" )
-        ->orderBy("s.name ASC")
-        ->fetchArray();
-
-        //for merge purpose
-        $data11 = array();
-        foreach($data1 as $d1):
-
-            $data11["'".$d1['id']."'"] = $d1;
-
-        endforeach;
-
-        //this query is for matching shops offers
-        $data2 = Doctrine_Query::create()
-        ->select('s.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId')
-                ->from('Offer o')
-                ->leftJoin('o.shop s')
-                ->leftJoin('s.logo img')
-                ->leftJoin('s.favoriteshops fv')
-                ->leftJoin('o.termandcondition terms')
-                ->where('o.deleted = 0' )
-                ->andWhere('o.offline = 0')
-                ->andWhere('s.deleted = 0')
-                ->andWhere('o.startdate <= "'.$date.'"')
-                ->andWhere('o.enddate > "'.$date.'"')
-                ->andWhere('o.discounttype="CD"')
-                ->andWhere('o.Visability != "MEM"')
-                ->andWhere("s.name LIKE '%?%' or o.title LIKE '%?%'" , $keyword, $keyword )
-                ->orderBy("s.name ASC")
-                ->fetchArray();
-
-        //merge purpose
-        $data21 = array();
-        foreach($data2 as $d2):
-
-            $data21["'".$d2['id']."'"] = $d2;
-
-        endforeach;
-
-        //Merge the connected shops offers with matched shops offers
-        $dataMerged = array_merge($data11, $data21);
-
-        //make array usable for view
-        $newArrData = array();
-
-        foreach($dataMerged as $datam):
-
-            $newArrData[] = $datam;
-
-        endforeach;
-
-        //apply the limit on the merged array
-        $dataFinal = array_slice($newArrData, 0, $limit);
-
-        return $dataFinal;
-    }
-
-    /**
      * Search related offers in the relative shops on the basis of keywords in the search field
      * @author cbhopal updated by kraj
      * @version 1.0
@@ -3079,17 +3072,7 @@ class Offer extends BaseOffer
     /**
      *
      */
-    public static function getAllOffers()
-    {
-        $offerList = Doctrine_Query::create()
-                                    ->select('o.id,o.title')
-                                    ->from("Offer o")
-                                    ->where("o.deleted= '0'")
-                                    ->andWhere("o.userGenerated = '0'")
-                                    ->fetchArray();
-
-        return $offerList;
-    }
+    
 
     /**
      * get No of offers created in last 7 days for dashboard
