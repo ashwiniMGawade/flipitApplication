@@ -1,6 +1,6 @@
 <?php
-$auhtorProfileImage = HTTP_PATH_CDN. ltrim($this->autherDetails['profileimage']['path'], "/")."thum_large_widget_".$this->autherDetails['profileimage']['name'];
-$authorFullName = $this->autherDetails['firstName']. " " .$this->autherDetails['lastName'];
+$auhtorProfileImage = HTTP_PATH_CDN. ltrim($this->authorDetails['profileimage']['path'], "/")."thum_large_widget_".$this->authorDetails['profileimage']['name'];
+$authorFullName = $this->authorDetails['firstName']. " " .$this->authorDetails['lastName'];
 $partialFunctions = new FrontEnd_Helper_AuthorPartialFunctions();
 $authorFavouriteShops = '';
 if (!empty($this->authorFavouriteShops)):
@@ -8,7 +8,7 @@ $authorFavouriteShops = $this->partial(
     'partials/_authorFavouriteShops.phtml',
     array(
        "authorFavouriteShops"=>$this->authorFavouriteShops,
-       "authorFirstName"=>$this->autherDetails['firstName']
+       "authorFirstName"=>$this->authorDetails['firstName']
     )
 );
 endif;
@@ -16,28 +16,28 @@ endif;
 <article class="section section-author">
     <header class="heading">
         <div class="icon">
-            <img width="87" height="87" src="<?php echo $auhtorProfileImage;?>" alt="<?php echo $this->autherDetails['firstName'];?>">
+            <img width="87" height="87" src="<?php echo $auhtorProfileImage;?>" alt="<?php echo $this->authorDetails['firstName'];?>">
         </div>
         <div class="box">
             <h1><span><?php echo $authorFullName;?></span> <span class="status"><?php echo $this->translate('deal guru');?></span></h1>
             <ul class="author-details">
                <?php 
-               echo $partialFunctions->getAuthorCountryFlagWithCountryName($this->autherDetails['countryLocale']);
-               echo $partialFunctions->authorSocialMediaLinks($this->autherDetails);?>
+               echo $partialFunctions->getAuthorCountryFlagWithCountryName($this->authorDetails['countryLocale']);
+               echo $partialFunctions->authorSocialMediaLinks($this->authorDetails);?>
             </ul>
         </div>
     </header>
     <div class="text-block">
-    <?php echo $this->autherDetails['mainText'];?>
+    <?php echo $this->authorDetails['mainText'];?>
     </div>
     <div class="box-statistics">
         <div class="col">
             <span><?php echo $this->translate('Coupons placed');?></span>
-            <span class="add"><strong class="quantity"><?php echo $this->autherDetails['popularKortingscode'];?></strong><span><?php echo $this->translate('Popular codes');?></span></span>
+            <span class="add"><strong class="quantity"><?php echo $this->authorDetails['popularKortingscode'];?></strong><span><?php echo $this->translate('Popular codes');?></span></span>
         </div>
         <div class="col">
             <span><?php echo $this->translate('Editor since');?></span>
-            <span class="add"><strong class="quantity"><?php echo $this->autherDetails['sinceDays'];?></strong> <span><?php echo $this->translate('days editor')?></span></span>
+            <span class="add"><strong class="quantity"><?php echo $this->authorDetails['sinceDays'];?></strong> <span><?php echo $this->translate('days editor')?></span></span>
         </div>
     </div>
     <?php echo $authorFavouriteShops;?>
