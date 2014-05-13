@@ -57,7 +57,7 @@ class PreviewController extends Zend_Controller_Action
         $view = Articles :: getArticleData($params);
         $this->view->articleview = $view[0];
         $uobj = new User();
-        $this->view->udetails = $uobj->getUserprofileDetail($this->view->articleview['authorid']);
+        $this->view->udetails = $uobj->getUserProfileDetails($this->view->articleview['authorid']);
     }
 
 }
