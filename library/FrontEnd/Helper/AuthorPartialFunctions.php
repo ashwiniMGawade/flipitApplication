@@ -52,8 +52,8 @@ class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper 
     public function getAuthorCountryFlagWithCountryName($authorLocale)
     {
         $authorLocaleName = isset($authorLocale) ? $authorLocale : '';
-        $splitAutherLocaleName = explode('_' , $authorLocaleName);
-        $authorCountryFlagName = isset($splitAutherLocaleName[1]) ? $splitAutherLocaleName[1] : '';
+        $splitAuthorLocaleName = explode('_' , $authorLocaleName);
+        $authorCountryFlagName = isset($splitAuthorLocaleName[1]) ? $splitAuthorLocaleName[1] : '';
         $authorCountryName = $this->getAuthorCountryName($authorLocaleName);
         $authorFlagImageLi = '';
         if (!empty($authorCountryName)) {
