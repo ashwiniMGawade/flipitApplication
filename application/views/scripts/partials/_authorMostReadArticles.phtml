@@ -1,0 +1,34 @@
+<header class="heading-box text-advice">
+    <h2><?php echo $this->translate('Saving guides by') .' ' . $this->authorFirstName; ?></h2>
+</header>
+<section class="section tips-section tips-section-2">
+<?php
+foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
+    $authorMostReadArticle = (object) $authorMostReadArticle;
+    $articleImage = !empty($authorMostReadArticle->articles['thumbnail']) ? PUBLIC_PATH_CDN.$authorMostReadArticle->articles['thumbnail']['path'].'thum_article_medium_'. $authorMostReadArticle->articles['thumbnail']['name'] : '';
+    $articleDetailLink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer'). '/' .$authorMostReadArticle->articles['permalink'];
+    $articleContent = '';
+    if (isset($authorMostReadArticle->articles['chapters'][0])) {
+        if ($authorMostReadArticle->articles['chapters'][0]['content']!=null || $authorMostReadArticle->articles['chapters'][0]['content']!='undefined' || $authorMostReadArticle->articles['chapters'][0]['content']!='') {
+            $articleContent = strip_tags($authorMostReadArticle->articles['chapters'][0]['content']);
+            if (strlen($articleContent) > 30) {
+                $articleContent =  substr($articleContent, 0, 300).'...';
+            }
+        }
+    }
+    ?>
+    <article class="block">
+        <a href="<?php echo  $articleDetailLink;?>">
+            <div class="image">
+                <img src="<?php echo $articleImage;?>" width="132" height="97" alt="<?php echo $authorMostReadArticle->articles['title'];?>">
+                <span class="title"><?php echo $authorMostReadArticle->articles['title'];?></span>
+            </div>
+            <div class="box">
+                <h2><?php echo $authorMostReadArticle->articles['title'];?></h2>
+                <?php echo $articleContent;?>
+            </div>
+        </a>
+    </article>
+<?php
+}?>
+</section>
