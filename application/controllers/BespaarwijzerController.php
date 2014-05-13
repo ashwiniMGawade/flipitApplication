@@ -39,21 +39,21 @@ class BespaarwijzerController extends Zend_Controller_Action
         $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
-
-        $this->view->facebookDescription = trim($moneySavingPageDetails[0]['metaDescription']);
+        
+        $this->view->facebookDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :'');
         $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->facebookTitle = $moneySavingPageDetails[0]['pageTitle'];
+        $this->view->facebookTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
         $this->view->facebookShareUrl = $moneySavingPagePermalink;
         $this->view->facebookImage = HTTP_PATH."public/images/bespaarwijzer_og.png";
-        $this->view->twitterDescription = trim($moneySavingPageDetails[0]['metaDescription']);
+        $this->view->twitterDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :'');
         
-        $this->view->pageTitle = $moneySavingPageDetails[0]['pageTitle'];
+        $this->view->pageTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
         $this->view->permaLink = $moneySavingPagePermalink;
-        $this->view->headTitle(trim($moneySavingPageDetails[0]['metaTitle']));
-        $this->view->headMeta()->setName('description', trim($moneySavingPageDetails[0]['metaDescription']));
+        $this->view->headTitle(trim(isset($moneySavingPageDetails[0]['metaTitle']) ? $moneySavingPageDetails[0]['metaTitle'] :''));
+        $this->view->headMeta()->setName('description', trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :''));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
-        if($moneySavingPageDetails[0]['customHeader']) {
-            $this->view->layout()->customHeader = "\n" . $moneySavingPageDetails[0]['customHeader'];
+        if(isset($moneySavingPageDetails[0]['customHeader'])) {
+            $this->view->layout()->customHeader = "\n" . isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
         }
 
         $this->view->mostReadArticles = $mostReadArticles;
