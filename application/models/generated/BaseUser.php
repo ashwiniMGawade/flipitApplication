@@ -27,6 +27,7 @@ Doctrine_Manager::getInstance()->bindComponent('User', 'doctrine');
  * @property timestamp $lastLogIn
  * @property ProfileImage $profileimage
  * @property User $user
+ * @property string $countryLocale
  * @property Doctrine_Collection $website
  * @property Doctrine_Collection $refUserWebsite
  *
@@ -135,6 +136,10 @@ abstract class BaseUser extends Doctrine_Record
         $this->hasColumn('lastLogIn', 'timestamp', null, array(
                 'type' => 'timestamp',
              ));
+        $this->hasColumn('countryLocale', 'string', 10, array(
+        		'type' => 'string',
+        ));
+
     }
 
     public function setUp()

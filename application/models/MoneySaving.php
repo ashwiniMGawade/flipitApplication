@@ -13,9 +13,32 @@
 
 class MoneySaving extends BaseMoneySaving
 {
+    #####################################################
+    ############# REFACTORED CODE #######################
+    ####################################################
+    /**
+     * Function generate most read Articles.
+     * 
+     * @version 1.0
+     */
+    public static function getMostReadArticles($limit, $userId = "")
+    {
+        $mostReadArticles = Doctrine_Query::create()
+        ->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.title, a.permalink, a.content, a.authorname, a.authorid, a.publishdate, ai.path, aai.name, aai.path, ai.name')
+        ->from('ArticleViewCount av')
+        ->leftJoin('av.articles a')
+        ->leftJoin('a.thumbnail ai')
+        ->leftJoin('a.chapters chap')
+        ->groupBy('av.articleid')
+        ->orderBy('pop DESC')
+        ->where('a.deleted = 0');
+        if (isset($userId)  && $userId!= "") {
+            $mostReadArticles->andWhere('a.authorId ='.$userId.'');
+        }
+        $mostReadArticles = $mostReadArticles->limit($limit)->fetchArray();
+        return $mostReadArticles;
     
-    ################## REFACTORED #######################
-
+    }
     public static function getRecentlyAddedArticles()
     {
         $recentlyAddedArticles = Doctrine_Query::create()
@@ -31,22 +54,6 @@ class MoneySaving extends BaseMoneySaving
             ->fetchArray();
         return $recentlyAddedArticles;
     }
-
-    public static function getMostReadArticles($limit)
-    {
-        $mostReadArticles = Doctrine_Query::create()->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.title, a.permalink, a.content, a.authorname, a.authorid, a.publishdate, ai.path, aai.name, aai.path, ai.name')
-            ->from('ArticleViewCount av')
-            ->leftJoin('av.articles a')
-            ->leftJoin('a.thumbnail ai')
-            ->leftJoin('a.chapters chap')
-            ->groupBy('av.articleid')
-            ->orderBy('pop DESC')
-            ->where('a.deleted = 0')
-            ->limit($limit)
-            ->fetchArray();
-        return $mostReadArticles;
-    }
-
     public static function getPageDetails($permalink)
     {
         $pageDetails = Doctrine_Query::create()
@@ -124,7 +131,6 @@ class MoneySaving extends BaseMoneySaving
     }
    
  ################## REFACTORED #######################
-
     /**
      * Get article for Money saving article from database
      * @author Raman
@@ -153,26 +159,6 @@ class MoneySaving extends BaseMoneySaving
         return true;
 
     }
-
-
-    /**
-     * get front end page on page id basis
-     * @author Raman
-     * @version 1.0
-     */
-
-    
-
-
-
-
-    /**
-     * All the money saving articles under all the categories on money saving page
-     * @author Raman
-     * @version 1.0
-     */
-   
-
 
     /**
      * All the money saving articles under all the categories on money saving page
@@ -244,9 +230,6 @@ class MoneySaving extends BaseMoneySaving
         //print_r($papularArticle); die;
         return $papularArticle;
     }
-
-  
-
     /**
      * generate MS Articles related to a shop
      * @author Raman

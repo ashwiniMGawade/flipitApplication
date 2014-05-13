@@ -47,21 +47,24 @@ class deleteArticleCategory
         $doctrineManager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $doctrineManager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
+        $databaseLocale = Signupmaxaccount::getAllMaxAccounts();
+        $databaseLocale = !empty($databaseLocale[0]['locale']) ? $databaseLocale[0]['locale'] : 'nl_NL';
         $maxAccountTableValues = Signupmaxaccount::getAllMaxAccounts();
         $currentLocale = !empty($maxAccountTableValues[0]['locale']) ? $maxAccountTableValues[0]['locale'] : 'nl_NL';
+
         $this->_translate = new Zend_Translate(array(
                 'adapter' => 'gettext',
                 'disableNotices' => true));
         $this->_translate->addTranslation(
                 array(
                         'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $locale . '.mo',
-                        'locale' => $currentLocale,
+                        'locale' => $databaseLocale,
                 )
         );
         $this->_translate->addTranslation(
                 array(
                         'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $locale . '.mo',
-                        'locale' => $currentLocale ,
+                        'locale' => $databaseLocale ,
                 )
         );
 
@@ -90,6 +93,5 @@ class deleteArticleCategory
         }
         $doctrineManager->closeConnection($doctrineManagerConnection);
     }
-
 }
 new DeleteArticleCategory();

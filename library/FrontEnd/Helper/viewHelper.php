@@ -708,6 +708,15 @@ EOD;
         
     }
     
+    public function getHowToGuidesImage($howToGuideImages)
+    {
+        $howToGuideImagePath = '';
+        if (!empty($howToGuideImages)) {
+            $howToGuideImagePath = PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'],"/")."thum_bigLogoFile_".$howToGuideImages['name'];
+            $howToGuideImageAltText = $howToGuideImages['name'];
+        }
+        return array('howToGuideImagePath' => $howToGuideImagePath, 'howToGuideImageAltText' => $howToGuideImageAltText);
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -729,7 +738,7 @@ EOD;
                 $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
                 break;
             case 'newest':
-                $shopData = Offer::commongetnewestOffers($type, $limit, $shopId, $userId);
+                $shopData = Offer::getNewestOffers($type, $limit, $shopId, $userId);
                 break;
             case 'newestmemberonly':
                 $shopData = Offer::commongetMemberOnlyOffer($type, $limit);

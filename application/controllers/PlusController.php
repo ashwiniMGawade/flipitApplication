@@ -62,11 +62,10 @@ class PlusController extends Zend_Controller_Action
        
         if (!empty($moneySavingPageDetails)) {
             $this->view->pageDetails = $moneySavingPageDetails;
-        }else{
+        } else {
             $error404 = 'HTTP/1.1 404 Not Found';
             $this->getResponse()->setRawHeader($error404);
         }
-
     }
 
 ################ Refactored Ends #######################################
