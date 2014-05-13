@@ -30,6 +30,10 @@ endif;
             </strong>
             <a href="javascript:void(0);" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
             <div class="nav-bar">
+<?php 
+$currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+if($currentControllerName != 'index') {
+?>     
                 <div class="search-box">
 <?php
 $localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
@@ -47,6 +51,7 @@ endif;
 ?>
                </div>
 <?php 
+}
 echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action);
 ?>
             </div>
