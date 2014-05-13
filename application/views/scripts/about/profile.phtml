@@ -3,9 +3,9 @@ $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/author.css");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 
-$autherDetail  = '';
+$autherDetails  = '';
 if(!empty($this->authorDetails)):
-$autherDetail = $this->partial(
+$autherDetails = $this->partial(
         'about/_authorTopContent.phtml',
         array(
             "authorFavouriteShops"=>$this->authorFavouriteShops,
@@ -28,7 +28,7 @@ endif;
 
 $discussion = $this->partial(
         $partialViewPath.'_discussion.phtml',
-        array('shopName' => $this->authorDetails['firstName'])
+        array('firstName' => $this->authorDetails['firstName'])
 );
 
 $signUpWidgetForm = '';
@@ -44,7 +44,7 @@ $signUpWidgetForm = $this->partial(
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-        <?php echo $autherDetail;?>
+        <?php echo $autherDetails;?>
         <?php echo $authorMostReadArticles.$discussion;?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">

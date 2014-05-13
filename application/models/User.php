@@ -64,7 +64,7 @@ class User extends BaseUser
         return $userDetails;
     }
 
-    public static function getUserFavouritesStores($userId)
+    public static function getUserFavouriteStores($userId)
     {
         $userFavouriteStores  = Doctrine_Query::create()
         ->select('a.*,s.id as sid,s.name as name,s.permalink, img.*')

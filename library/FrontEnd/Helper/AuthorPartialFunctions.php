@@ -45,16 +45,16 @@ class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper 
     }
     public function getAuthorCountryFlagImage($authorCountryFlagName)
     {
-        $autherCountryFlag = $authorCountryFlagName!='' ? PUBLIC_PATH ."images/front_end/flags/flag_" . $authorCountryFlagName .".jpg" : '';
-        return $autherCountryFlag;
+        $authorCountryFlag = $authorCountryFlagName!='' ? PUBLIC_PATH ."images/front_end/flags/flag_" . $authorCountryFlagName .".jpg" : '';
+        return $authorCountryFlag;
     }
     
     public function getAuthorCountryFlagWithCountryName($authorLocale)
     {
-        $autherLocaleName = isset($authorLocale) ? $authorLocale : '';
-        $splitAutherLocaleName = explode('_' , $autherLocaleName);
+        $authorLocaleName = isset($authorLocale) ? $authorLocale : '';
+        $splitAutherLocaleName = explode('_' , $authorLocaleName);
         $authorCountryFlagName = isset($splitAutherLocaleName[1]) ? $splitAutherLocaleName[1] : '';
-        $authorCountryName = $this->getAuthorCountryName($autherLocaleName);
+        $authorCountryName = $this->getAuthorCountryName($authorLocaleName);
         $authorFlagImageLi = '';
         if (!empty($authorCountryName)) {
             $authorFlagImageLi = 

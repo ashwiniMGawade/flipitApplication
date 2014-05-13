@@ -136,7 +136,6 @@ abstract class BaseUser extends Doctrine_Record
         $this->hasColumn('lastLogIn', 'timestamp', null, array(
                 'type' => 'timestamp',
              ));
-
         $this->hasColumn('countryLocale', 'string', 10, array(
         		'type' => 'string',
         ));

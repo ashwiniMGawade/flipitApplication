@@ -6,26 +6,25 @@
 foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
     $authorMostReadArticle = (object) $authorMostReadArticle;
     $articleImage = !empty($authorMostReadArticle->articles['thumbnail']) ? PUBLIC_PATH_CDN.$authorMostReadArticle->articles['thumbnail']['path'].'thum_article_medium_'. $authorMostReadArticle->articles['thumbnail']['name'] : '';
-    $articleDetailLink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer'). '/' .$authorMostReadArticle->articles['permalink'];
-    $articleContent = '';
+    $articleDetailsLink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer'). '/' .$authorMostReadArticle->articles['permalink'];
+    $articleContentwithoutTags = '';
     if (isset($authorMostReadArticle->articles['chapters'][0])) {
-        if ($authorMostReadArticle->articles['chapters'][0]['content']!=null || $authorMostReadArticle->articles['chapters'][0]['content']!='undefined' || $authorMostReadArticle->articles['chapters'][0]['content']!='') {
-            $articleContent = strip_tags($authorMostReadArticle->articles['chapters'][0]['content']);
-            if (strlen($articleContent) > 30) {
-                $articleContent =  substr($articleContent, 0, 300).'...';
-            }
+        if ($authorMostReadArticle->articles['chapters'][0]['content'] != null || $authorMostReadArticle->articles['chapters'][0]['content']!='undefined' || $authorMostReadArticle->articles['chapters'][0]['content']!='') {
+            $allowedTags = 'h5';
+            $articleContentwithoutTags = strip_tags($authorMostReadArticle->articles['chapters'][0]['content'], $allowedTags);
+            $articleContentwithoutTags = strlen($articleContentwithoutTags) > 300 ? substr($articleContentwithoutTags, 0, 300).'...' : $articleContentwithoutTags;
         }
     }
     ?>
     <article class="block">
-        <a href="<?php echo  $articleDetailLink;?>">
+        <a href="<?php echo  $articleDetailsLink;?>">
             <div class="image">
                 <img src="<?php echo $articleImage;?>" width="132" height="97" alt="<?php echo $authorMostReadArticle->articles['title'];?>">
                 <span class="title"><?php echo $authorMostReadArticle->articles['title'];?></span>
             </div>
             <div class="box">
                 <h2><?php echo $authorMostReadArticle->articles['title'];?></h2>
-                <?php echo $articleContent;?>
+                <?php echo $articleContentwithoutTags;?>
             </div>
         </a>
     </article>

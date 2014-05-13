@@ -89,10 +89,10 @@ class Admin_UserController extends Zend_Controller_Action
         /* get Category List*/
         $categoryList =  Category::getCategoryList();
         $this->view->categoryList = $categoryList['aaData'] ;
-        $this->view->countriesLocales = $this->getAllCountriesByLocales();
+        $this->view->countriesLocales = $this->getAllCountriesByLocaleNames();
     }
     
-    public function getAllCountriesByLocales()
+    public function getAllCountriesByLocaleNames()
     {
         $localesList = Zend_Locale::getLocaleList();
         $websiteLocales = $this->getWebsiteLocales();
@@ -111,7 +111,7 @@ class Admin_UserController extends Zend_Controller_Action
     
     public function getWebsiteLocales()
     {
-        $websites = Website::getAllwebSites();
+        $websites = Website::getAllWebsites();
         foreach ($websites as $website) {
             $spiltWebsite  = explode('/', $website['name']);
             $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
@@ -634,11 +634,11 @@ class Admin_UserController extends Zend_Controller_Action
     {
      $id = intval($this->getRequest()->getParam('id'));
      $this->view->qstring = $_SERVER['QUERY_STRING'];
-     $this->view->countriesLocales = $this->getAllCountriesByLocales();
+     $this->view->countriesLocales = $this->getAllCountriesByLocaleNames();
             //get category list from category table
              $categoryList =  Category::getCategoryList() ;
              //get favorites store of currect user(admin)
-             $favShop  = User::getUserFavouritesStores($id);
+             $favShop  = User::getUserFavouriteStores($id);
              //get unterestng category of currecnt user(admin)
              $intCat = User::getUserInterestingCat($id);
 
@@ -784,7 +784,7 @@ class Admin_UserController extends Zend_Controller_Action
             //get category list from category table
             $categoryList =  Category::getCategoryList() ;
             //get favorites store of currect user(admin)
-            $favShop  = User::getUserFavouritesStores($id);
+            $favShop  = User::getUserFavouriteStores($id);
             //get unterestng category of currecnt user(admin)
             $intCat = User::getUserInterestingCat($id);
             //print_r($favShop);
