@@ -1,8 +1,4 @@
 <?php
-/**
- * this class is used for about page
- * @author Raman
- */
 class AboutController extends Zend_Controller_Action
 {
     ##########################################################
@@ -41,9 +37,7 @@ class AboutController extends Zend_Controller_Action
         $webSiteNameWithoutRightSlash = rtrim($splitWebsiteName[1], '/');
         return strstr($webSiteNameWithoutRightSlash, "www") ? "http://".$webSiteNameWithoutRightSlash : "http://www.".$webSiteNameWithoutRightSlash;
     }
-    ##########################################################
-    ########### REFACTORED CODE ##############################
-    ##########################################################
+    
     public function profileAction()
     {
         $authorSlugName = $this->getRequest()->getParam('slug');
@@ -77,6 +71,9 @@ class AboutController extends Zend_Controller_Action
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
+    ##########################################################
+    ########### END REFACTORED CODE ##########################
+    ##########################################################
     /**
      * override views based on modules if exists
      * @see Zend_Controller_Action::init()
