@@ -9,8 +9,8 @@
 
 
 FrontEnd_Helper_viewHelper::__link('categorieen_url_block');
-FrontEnd_Helper_viewHelper::__link('bespaarwijzer_url_block');
-FrontEnd_Helper_viewHelper::__link('bespaarwijzercat_url_block');
+FrontEnd_Helper_viewHelper::__link('plus_url_block');
+FrontEnd_Helper_viewHelper::__link('pluscat_url_block');
 FrontEnd_Helper_viewHelper::__link('deals_url_block');
 FrontEnd_Helper_viewHelper::__link('redactie_url_block');
 

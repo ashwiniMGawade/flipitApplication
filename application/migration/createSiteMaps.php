@@ -75,7 +75,7 @@ class createSiteMaps
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
         $sitemap_main = $sitemaps.'_'.$main.'.xml';
-        $robotTextContent ="User-agent: *\r\nDisallow:/".$info."/\r\nDisallow:/".$rssfeed."/\r\nDisallow:/out/\r\nDisallow:/".$zoeken."/\r\nDisallow:/admin/\r\n\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_shops."\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_bespaarwijzer."\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_main;
+        $robotTextContent ="User-agent: *\r\nDisallow:/".$info."/\r\nDisallow:/".$rssfeed."/\r\nDisallow:/out/\r\nDisallow:/".$zoeken."/\r\nDisallow:/admin/\r\n\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_shops."\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_plus."\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_main;
         $robotTextFile = $pathToXMLFile."robots.txt";
         $robotTextHandle = fopen($robotTextFile, 'w');
         fwrite($robotTextHandle, $robotTextContent);

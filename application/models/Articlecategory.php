@@ -255,9 +255,9 @@ class Articlecategory extends BaseArticlecategory
                 $edit->save();
 
 /* 				if(!empty($updateRouteLink)){
-                    $updateRouteLink->permalink = 'bespaarwijzer/'.$params['permaLink'];
+                    $updateRouteLink->permalink = 'plus/'.$params['permaLink'];
                     $updateRouteLink->type = 'ARTCAT';
-                    $updateRouteLink->exactlink = 'bespaarwijzer/category/id/'.$edit->id;
+                    $updateRouteLink->exactlink = 'plus/category/id/'.$edit->id;
                     $updateRouteLink->save();
                 } */
                 $delArticleCategory = Doctrine_Query::create()->delete('RefArticlecategoryRelatedcategory')
@@ -420,7 +420,7 @@ class Articlecategory extends BaseArticlecategory
 
         $urlsArray = array();
 
-        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'bespaarwijzercat') .'/' ;
+        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'pluscat') .'/' ;
 
         # check for article permalink
         if(isset($data['permalink'])) {

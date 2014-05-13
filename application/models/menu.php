@@ -12,6 +12,20 @@
  */
 class menu extends Basemenu
 {
+    
+    ######################## Refactored #############################
+    public static function replaceBespaarwijzerWithPlus()
+    {
+        $updateMenu = Doctrine_Query::create()
+            ->update('Menu m')
+            ->set('m.name',"'Plus'")
+            ->set('m.url',"'plus'")
+            ->where('m.id=46')
+            ->execute();
+        return true;
+    }
+    ######################## Refactored #############################
+
     public static function getAllTree()
     {
             $treeObject     = Doctrine_Core::getTable('mainmenu')->getTree();

@@ -418,14 +418,14 @@ if($this->banner)
                     	
                     	?>
 
-                    	<a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$saving['article']['permalink'];  ?>"  >
+                    	<a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$saving['article']['permalink'];  ?>"  >
                             <img class='' src="<?php  echo  $img ; ?>" alt="<?php echo $saving['article']['title'];?>"/>
                         </a>
                     	</div>
                        <div class="popular-kortings-col1-text-outer bg-none">
-                        	<div class="popular-kortings-col1-text textW home-bespaarwijzer-title">
+                        	<div class="popular-kortings-col1-text textW home-plus-title">
                         	   <h3>
-                                    <a class="text-white-link" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$saving['article']['permalink'];  ?>"   >
+                                    <a class="text-white-link" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$saving['article']['permalink'];  ?>"   >
                                 		<?php
                                     		$str = $saving['article']['title'];
                                     		if( mb_strlen($saving['article']['title'], 'UTF-8') > 30 ){
@@ -437,7 +437,7 @@ if($this->banner)
                                 </h3>
                		     </div>
                        		 <div class="popular-kortings-col1-text2 textW">
-                        		<a class="text-light-grey" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$saving['article']['permalink'];  ?>"   >
+                        		<a class="text-light-grey" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$saving['article']['permalink'];  ?>"   >
                                     <?php
                                     if(isset($saving['article']['chapters'][0])){
 
@@ -469,7 +469,7 @@ if($this->banner)
                 <!-- Popular Kortings Mid Ends -->
                 <div class="popular-kortings-bot6-new">
                 <div class="button-grey-new text-light-grey"><?php echo $this->translate('All'); ?>
-                <a class="text-white-link" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer'); ?>"><?php echo $this->translate('Bespaarwijzers'); ?></a></div>
+                <a class="text-white-link" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus'); ?>"><?php echo $this->translate('pluss'); ?></a></div>
                 </div>
         	</div>
         	<!-- Popular Kortings Ends -->

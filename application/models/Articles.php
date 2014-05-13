@@ -278,7 +278,7 @@ class Articles extends BaseArticles
             /* $route = new RoutePermalink();
             $route->permalink =  $params['articlepermalink'];
             $route->type = 'ART';
-            $route->exactlink = 'bespaarwijzer/guidedetail/id/'.$data->id;
+            $route->exactlink = 'plus/guidedetail/id/'.$data->id;
             $route->save(); */
 
             if(!empty($params['title']) && !empty($params['content'])){
@@ -457,7 +457,7 @@ class Articles extends BaseArticles
 
 
             if(!empty($getRouteLink)){
-                $exactLink = 'bespaarwijzer/guidedetail/id/'.$data->id;
+                $exactLink = 'plus/guidedetail/id/'.$data->id;
 
             }
 
@@ -990,11 +990,11 @@ class Articles extends BaseArticles
 
         $urlsArray = array();
 
-        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'bespaarwijzercat') .'/' ;
+        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'pluscat') .'/' ;
 
         # check for article permalink
         if(isset($article['permalink'])) {
-            $urlsArray[] = FrontEnd_Helper_viewHelper::__link('bespaarwijzer') . '/'. $article['permalink'];
+            $urlsArray[] = FrontEnd_Helper_viewHelper::__link('plus') . '/'. $article['permalink'];
         }
 
         # check if an editor  has permalink then add it into array

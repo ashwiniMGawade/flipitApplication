@@ -108,11 +108,11 @@ msgid "...View Profile"
 msgstr "    Ga naar profiel"
 
 #: scripts/about/index.phtml:126 scripts/about/index.phtml:139
-#: scripts/bespaarwijzer/category.phtml:81
-#: scripts/bespaarwijzer/category.phtml:142
-#: scripts/bespaarwijzer/category.phtml:168
-#: scripts/bespaarwijzer/category.phtml:177
-#: scripts/bespaarwijzer/index.phtml:197 scripts/bespaarwijzer/index.phtml:221
+#: scripts/plus/category.phtml:81
+#: scripts/plus/category.phtml:142
+#: scripts/plus/category.phtml:168
+#: scripts/plus/category.phtml:177
+#: scripts/plus/index.phtml:197 scripts/plus/index.phtml:221
 msgid "No Records Found"
 msgstr "Niets gevonden :("
 
@@ -159,78 +159,78 @@ msgstr "Meest recente kortingscodes van"
 
 #: scripts/about/profile.phtml:230
 msgid "Meest gelezen bespaar wijzers by this editor"
-msgstr "Meest gelezen Bespaarwijzers van deze redacteur"
+msgstr "Meest gelezen pluss van deze redacteur"
 
-#: scripts/bespaarwijzer/category.phtml:7
-#: scripts/bespaarwijzer/guidedetail.phtml:14
+#: scripts/plus/category.phtml:7
+#: scripts/plus/guidedetail.phtml:14
 #: scripts/offer/deleteexpired.phtml:8 scripts/preview/articleinfo.phtml:9
 msgid "Bespaar Wijzer"
-msgstr "Bespaarwijzer"
+msgstr "plus"
 
-#: scripts/bespaarwijzer/category.phtml:58
-#: scripts/bespaarwijzer/index.phtml:48
+#: scripts/plus/category.phtml:58
+#: scripts/plus/index.phtml:48
 msgid "Share Kortingscode.nl en maak kans op een waardebon t.w.v. &euro; 50!"
 msgstr ""
 "Tevreden met de nieuwe Kortingscode.nl? Like ons en maak kans op leuke "
 "prijzen =)"
 
-#: scripts/bespaarwijzer/category.phtml:75
+#: scripts/plus/category.phtml:75
 msgid "MEEST GELEZEN BESPAAR WIJZERS IN "
-msgstr "MEEST GELEZEN BESPAARWIJZERS VAN: "
+msgstr "MEEST GELEZEN plusS VAN: "
 
-#: scripts/bespaarwijzer/category.phtml:97
+#: scripts/plus/category.phtml:97
 msgid "RELENVABTE KORTINGSCODE CATEGORIEEN"
 msgstr "RELEVANTE KORTINGSCODE CATEGORIE&Euml;N"
 
-#: scripts/bespaarwijzer/category.phtml:160
+#: scripts/plus/category.phtml:160
 #, fuzzy
 msgid "ALLE"
 msgstr "ALLE"
 
-#: scripts/bespaarwijzer/category.phtml:160
+#: scripts/plus/category.phtml:160
 msgid "BESPAAR WIJZERS"
-msgstr "BESPAARWIJZERS"
+msgstr "plusS"
 
-#: scripts/bespaarwijzer/guidedetail.phtml:57
+#: scripts/plus/guidedetail.phtml:57
 #, fuzzy
 msgid "category :"
 msgstr "per categorie"
 
-#: scripts/bespaarwijzer/guidedetail.phtml:66
+#: scripts/plus/guidedetail.phtml:66
 #, fuzzy
 msgid "Categorie: "
 msgstr "Artikel categorieën"
 
-#: scripts/bespaarwijzer/guidedetail.phtml:69 scripts/index/index.phtml:440
+#: scripts/plus/guidedetail.phtml:69 scripts/index/index.phtml:440
 #, fuzzy
-msgid "Bespaarwijzers"
-msgstr "Bespaarwijzer:"
+msgid "pluss"
+msgstr "plus:"
 
-#: scripts/bespaarwijzer/guidedetail.phtml:128
+#: scripts/plus/guidedetail.phtml:128
 #: scripts/store/howtoguide.phtml:193
 msgid "Go To Chapter"
 msgstr "Spring naar hoofdstuk"
 
-#: scripts/bespaarwijzer/guidedetail.phtml:153
-msgid "Deel deze Bespaarwijzer met vrienden!"
-msgstr "Deel deze Bespaarwijzer met jouw vrienden!"
+#: scripts/plus/guidedetail.phtml:153
+msgid "Deel deze plus met vrienden!"
+msgstr "Deel deze plus met jouw vrienden!"
 
-#: scripts/bespaarwijzer/guidedetail.phtml:243
+#: scripts/plus/guidedetail.phtml:243
 #, fuzzy
 msgid " Oops This Page Does Not Exist"
 msgstr "Dit artikel bestaat niet"
 
-#: scripts/bespaarwijzer/index.phtml:65
+#: scripts/plus/index.phtml:65
 msgid "POPULAIR OP DIT MOMENT"
 msgstr "POPULAIR OP DIT MOMENT"
 
-#: scripts/bespaarwijzer/index.phtml:144
+#: scripts/plus/index.phtml:144
 msgid "CATEGORIEEN"
 msgstr "CATEGORIE&Euml;N"
 
-#: scripts/bespaarwijzer/index.phtml:214
+#: scripts/plus/index.phtml:214
 msgid "MEEST GELEZEN BESPAAR WIJZERS"
-msgstr "MEEST GELEZEN BESPAARWIJZERS"
+msgstr "MEEST GELEZEN plusS"
 
 #: scripts/category/index.phtml:3 scripts/category/show.phtml:3
 #: scripts/error/error.phtml:3 scripts/store/howtoguide.phtml:30
@@ -299,8 +299,8 @@ msgstr "Nieuwkomers"
 
 #: scripts/error/error.phtml:169
 #, fuzzy
-msgid "Bespaarwijzer"
-msgstr "Bespaarwijzer:"
+msgid "plus"
+msgstr "plus:"
 
 #: scripts/error/error.phtml:170
 #, fuzzy
@@ -548,7 +548,7 @@ msgstr "Special"
 
 #: scripts/index/index.phtml:359
 msgid "Populaire Bespaar Wijzers"
-msgstr "Bespaarwijzers"
+msgstr "pluss"
 
 #: scripts/index/index.phtml:460 scripts/partials/_footerDynamic.phtml:23
 msgid "Welkom"
@@ -1156,8 +1156,8 @@ msgstr "kortingscode gebruiken?"
 
 #: scripts/search/index.phtml:84
 #, fuzzy
-msgid "Bespaarwijzers gerelateerd aan"
-msgstr "Bespaarwijzers waar"
+msgid "pluss gerelateerd aan"
+msgstr "pluss waar"
 
 #: scripts/search/index.phtml:109
 #, fuzzy
@@ -1407,7 +1407,7 @@ msgstr "Populairste categorieen"
 
 #: scripts/store/storedetail.phtml:415
 msgid "Guides"
-msgstr "Bespaarwijzers waar"
+msgstr "pluss waar"
 
 #: scripts/store/storedetail.phtml:415
 msgid "is mentioned in"
@@ -1534,7 +1534,7 @@ msgstr "Populairste kortingscodes"
 
 #: Helper/viewHelper.php:732
 msgid "Other Helpful Saving Tips"
-msgstr "Onze Bespaarwijzers"
+msgstr "Onze pluss"
 
 #: Helper/viewHelper.php:783
 #, fuzzy
@@ -1562,8 +1562,8 @@ msgstr "Lees meer"
 
 #: Helper/viewHelper.php:1009
 #, fuzzy
-msgid "Alle bespaarwijzers"
-msgstr "Bespaarwijzer"
+msgid "Alle pluss"
+msgstr "plus"
 
 #~ msgid "Copy code again"
 #~ msgstr "asdfsafsa fnbsa fjsa fjas jf sad vasd gsdj gsd "
@@ -1584,7 +1584,7 @@ msgstr "Bespaarwijzer"
 #~ msgstr "Kortingscodes"
 
 #~ msgid "guides"
-#~ msgstr "Bespaarwijzers"
+#~ msgstr "pluss"
 
 #, fuzzy
 #~ msgid "Onze suggesties voor favorieten winkels"
@@ -2046,7 +2046,7 @@ msgstr "Bespaarwijzer"
 #~ "! Dit zijn alle kortingen, webshops en Bespaar Wijzers die aansluiten op "
 #~ "jouw opgegeven interesses. Wil je jouw"
 #~ msgstr ""
-#~ "Dit zijn alle kortingen, webshops en Bespaarwijzers die aansluiten op "
+#~ "Dit zijn alle kortingen, webshops en pluss die aansluiten op "
 #~ "jouw opgegeven interesses. Wil je jouw"
 
 #~ msgid "persoonlijke voorkeuren en favorieten wijzigen? Ga dan naar jouw"
@@ -2207,7 +2207,7 @@ msgstr "Bespaarwijzer"
 
 #, fuzzy
 #~ msgid "GUIDES MARKS & SPENCERS IS MENTIONED IN"
-#~ msgstr "BESPAARWIJZERS WAAR (shopnaam) IN VOORKOMT"
+#~ msgstr "plusS WAAR (shopnaam) IN VOORKOMT"
 
 #~ msgid "Help With "
 #~ msgstr "Hulp met"
@@ -2403,7 +2403,7 @@ msgstr "Bespaarwijzer"
 
 #, fuzzy
 #~ msgid "Guides "
-#~ msgstr "Bespaarwijzers"
+#~ msgstr "pluss"
 
 #~ msgid "Expired offers and voucher codes"
 #~ msgstr "Helaas... Deze kortingscodes zijn verlopen=("
@@ -2415,10 +2415,10 @@ msgstr "Bespaarwijzer"
 #~ msgstr "Bekijk alle"
 
 #~ msgid "Guides where"
-#~ msgstr "Bespaarwijzers waar"
+#~ msgstr "pluss waar"
 
 #~ msgid "Guides Marks & Spencers is mentioned in"
-#~ msgstr "Lees deze Bespaarwijzers voor tips bij het online shoppen"
+#~ msgstr "Lees deze pluss voor tips bij het online shoppen"
 
 #~ msgid "Network has been created successfully"
 #~ msgstr "Netwerk is succesvol tot stand gebracht"
@@ -3171,7 +3171,7 @@ msgstr "Bespaarwijzer"
 #~ msgstr "Specials"
 
 #~ msgid "Money Saving Articles"
-#~ msgstr "Bespaarwijzer"
+#~ msgstr "plus"
 
 #~ msgid "As seen in"
 #~ msgstr "Gespot in: "
@@ -5994,7 +5994,7 @@ msgstr "Bespaarwijzer"
 #~ msgstr "LAATST TOEGEVOEGDE KORTINGSCODES VAN DEZE DEAL GURU"
 
 #~ msgid "MEEST GELEZEN BESPAAR WIJZERS BY THIS EDITOR "
-#~ msgstr "POPULAIRSTE BESPAARWIJZERS VAN DEZE DEAL GURU"
+#~ msgstr "POPULAIRSTE plusS VAN DEZE DEAL GURU"
 
 #, fuzzy
 #~ msgid "Teams & Conditions"
@@ -6020,7 +6020,7 @@ msgstr "Bespaarwijzer"
 #~ msgstr "POPULAIRE CATEGORIEEN"
 
 #~ msgid "POPULAIRSTE BESPAAR WIJZERS"
-#~ msgstr "POPULAIRSTE BESPAARWIJZERS"
+#~ msgstr "POPULAIRSTE plusS"
 
 #~ msgid "OUR MOST POPULAR STORES"
 #~ msgstr "ONZE POPULAIRSTE WINKELS"

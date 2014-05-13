@@ -8,7 +8,7 @@ if (!empty($main_urls)) {
         checkURL($url->loc);
     }
 }
-$bespaar_urls = simplexml_load_file(PUBLIC_PATH.'/sitemaps/sitemap_bespaarwijzer.xml');
+$bespaar_urls = simplexml_load_file(PUBLIC_PATH.'/sitemaps/sitemap_plus.xml');
 if (!empty($bespaar_urls)) {
     foreach ($bespaar_urls as $url) {
         checkURL($url->loc);
