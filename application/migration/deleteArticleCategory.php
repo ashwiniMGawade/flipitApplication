@@ -49,8 +49,8 @@ class deleteArticleCategory
         $doctrineManager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $doctrineManager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-        $customLocale = Signupmaxaccount::getAllMaxAccounts();
-        $customLocale = !empty($customLocale[0]['locale']) ? $customLocale[0]['locale'] : 'nl_NL';
+        $databaseLocale = Signupmaxaccount::getAllMaxAccounts();
+        $databaseLocale = !empty($databaseLocale[0]['locale']) ? $databaseLocale[0]['locale'] : 'nl_NL';
         $maxAccountTableValues = Signupmaxaccount::getAllMaxAccounts();
         $currentLocale = !empty($maxAccountTableValues[0]['locale']) ? $maxAccountTableValues[0]['locale'] : 'nl_NL';
 
@@ -60,13 +60,13 @@ class deleteArticleCategory
         $this->_translate->addTranslation(
                 array(
                         'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $locale . '.mo',
-                        'locale' => $customLocale,
+                        'locale' => $databaseLocale,
                 )
         );
         $this->_translate->addTranslation(
                 array(
                         'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $locale . '.mo',
-                        'locale' => $customLocale ,
+                        'locale' => $databaseLocale ,
                 )
         );
 
