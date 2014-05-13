@@ -3,9 +3,9 @@ $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/author.css");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 
-$autherDetails  = '';
+$authorDetails  = '';
 if(!empty($this->authorDetails)):
-$autherDetails = $this->partial(
+$authorDetails = $this->partial(
         'about/_authorTopContent.phtml',
         array(
             "authorFavouriteShops"=>$this->authorFavouriteShops,
@@ -44,7 +44,7 @@ $signUpWidgetForm = $this->partial(
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
-        <?php echo $autherDetails;?>
+        <?php echo $authorDetails;?>
         <?php echo $authorMostReadArticles.$discussion;?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
