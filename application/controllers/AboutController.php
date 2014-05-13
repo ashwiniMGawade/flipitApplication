@@ -46,30 +46,30 @@ class AboutController extends Zend_Controller_Action
     ##########################################################
     public function profileAction()
     {
-        $authorSlug = $this->getRequest()->getParam('slug');
-        $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorSlug) ."_list", User::getUserIdBySlugName($authorSlug), 0);
-        $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$authorId ."_list", User::getUserProfileDetail($authorId), 0);
+        $authorSlugName = $this->getRequest()->getParam('slug');
+        $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorSlugName) ."_list", User::getUserIdBySlugName($authorSlugName), 0);
+        $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$authorId ."_list", User::getUserProfileDetails($authorId), 0);
 
-        if(empty($authorDetails)){
+        if (empty($authorDetails)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
 
         $authorDetails = $authorDetails[0];
-        $authorFavouriteShop = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$authorId ."_list", User::getUserFavouritesStore($authorId), 0);
+        $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$authorId ."_list", User::getUserFavouritesStores($authorId), 0);
         $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$authorId ."_list", MoneySaving::getMostReadArticles(6, $authorId), 0);
         $authorFullName = $authorDetails['firstName']." ". $authorDetails['lastName'];
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
 
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $this->view->headTitle($authorFullName);
         $this->view->facebookTitle = $authorFullName;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE.gettext("redactie") ."/".$authorDetails['slug'];
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie") ."/".$authorDetails['slug'];
         $this->view->facebookImage = FACEBOOK_IMAGE ;
         $this->view->facebookDescription = trim($authorDetails['mainText']);
         $this->view->facebookLocale = FACEBOOK_LOCALE;
         $this->view->twitterDescription = trim($authorDetails['mainText']);
         $this->view->authorDetails = $authorDetails;
-        $this->view->authorFavouriteShops = $authorFavouriteShop;
+        $this->view->authorFavouriteShops = $authorFavouriteShops;
         $this->view->authorMostReadArticles = $authorMostReadArticles;
 
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');

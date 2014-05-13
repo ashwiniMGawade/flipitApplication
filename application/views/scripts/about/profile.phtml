@@ -9,19 +9,19 @@ $autherDetail = $this->partial(
         'about/_authorTopContent.phtml',
         array(
             "authorFavouriteShops"=>$this->authorFavouriteShops,
-            "autherDetail"=>$this->authorDetails,
+            "autherDetails"=>$this->authorDetails,
         )
 );
 endif;
 
 $partialViewPath = 'partials/';
-$authorMostReadArticle = '';
+$authorMostReadArticles = '';
 if(!empty($this->authorMostReadArticles)):
-    $authorMostReadArticle = $this->partial(
-        $partialViewPath.'_authorMostReadArticle.phtml', 
+    $authorMostReadArticles = $this->partial(
+        $partialViewPath.'_authorMostReadArticles.phtml', 
         array(
             "authorMostReadArticles"=>$this->authorMostReadArticles,
-            "authorName"=>$this->authorDetails['firstName']
+            "authorFirstName"=>$this->authorDetails['firstName']
         )
     );
 endif;
@@ -45,7 +45,7 @@ $signUpWidgetForm = $this->partial(
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
         <?php echo $autherDetail;?>
-        <?php echo $authorMostReadArticle.$discussion;?>
+        <?php echo $authorMostReadArticles.$discussion;?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php 

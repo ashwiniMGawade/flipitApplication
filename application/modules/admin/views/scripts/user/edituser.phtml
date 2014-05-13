@@ -204,26 +204,27 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.cust
                                 <div class="mainpage-content-right-inner-left-other"><input  value = "<?php echo $this->userDetail['popularKortingscode'];?>" type="text" name="popularKortingscode" id="popularKortingscode" placeholder="<?php echo $this->translate('populaire kortingscodes'); ?>" class="span3"></div>                        
                             </div>
                     </div>
-                    
+
                     <div class="mainpage-content-line">
                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Country Locale'); ?></strong></label></div>
-                            <div class="mainpage-content-right">
+                        <div class="mainpage-content-right">
                             <div class="mainpage-content-right-inner-right-other"></div>
-                               <div class="mainpage-content-right-inner-left-other">
-                                   <select name ="locale" id='locale' style='width:200px;'>
-                                        <option selected="selected" disabled="disabled" value="0">Select Country Locale</option>        
-                                        <?php
-                                        if($this->countryLocales) :
-                                            foreach($this->countryLocales as $localeName=>$countryNameWithWebsite):
-                                                $selected = $localeName == $this->userDetail['countryLocale'] ? 'selected' : '';
-                                                echo "<option $selected  value=". $localeName .">". $countryNameWithWebsite ."</option>";
-                                            endforeach;
-                                        endif;
-                                         ?>
-                                    </select>
-                                </div>
-                           </div>
+                            <div class="mainpage-content-right-inner-left-other">
+                                 <select name ="locale" id='locale' style='width:200px;'>
+                                     <option selected="selected" disabled="disabled" value="0"><?php $this->translate("Select Country Locale"); ?></option>        
+<?php
+if ($this->countriesLocales):
+    foreach ($this->countriesLocales as $localeName => $countryNameWithWebsite):
+        $selected = $localeName == $this->userDetail['countryLocale'] ? 'selected' : '';
+        echo "<option $selected  value=". $localeName .">". $countryNameWithWebsite ."</option>";
+    endforeach;
+endif;
+?>
+                                </select>
+                            </div>
+                      </div>
                     </div>
+
                </div>
                     
                 </div>

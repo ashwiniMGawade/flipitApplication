@@ -41,31 +41,32 @@ class User extends BaseUser
 
     public static function getUserIdBySlugName($slug)
     {
-        $userData = Doctrine_Query::create()->select("u.id")
+        $userDetails = Doctrine_Query::create()
+        ->select("u.id")
         ->from('User u')
         ->where("u.slug = '$slug'")
-        ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-        return $userData['id'];
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return !empty($userDetails) ? $userDetails['id'] : '';
     }
 
-    public static function getUserProfileDetail($userId)
+    public static function getUserProfileDetails($userId)
     {
-        $userDetail = Doctrine_Query::create()
+        $userDetails = Doctrine_Query::create()
         ->select("u.* , w.id, pi.name, pi.path")
         ->addSelect('DATEDIFF(NOW(), u.created_at) as sinceDays')
         ->from('User u')
         ->leftJoin("u.website w")
         ->leftJoin("u.profileimage pi")
-        ->where("u.id = ?" , $userId)
+        ->where("u.id = ?", $userId)
         ->andWhere("u.showInAboutListing = 1")
         ->andWhere("u.deleted = 0")
-        ->fetchArray(null , Doctrine::HYDRATE_ARRAY);
-        return $userDetail;
+        ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        return $userDetails;
     }
 
-    public static function getUserFavouritesStore($userId)
+    public static function getUserFavouritesStores($userId)
     {
-        $userFavouritesStore  = Doctrine_Query::create()
+        $userFavouriteStores  = Doctrine_Query::create()
         ->select('a.*,s.id as sid,s.name as name,s.permalink, img.*')
         ->from('Adminfavoriteshop a')
         ->leftJoin('a.shops s')
@@ -74,7 +75,7 @@ class User extends BaseUser
         ->andWhere('s.deleted=0')
         ->andWhere('s.status=1')
         ->fetchArray();
-        return $userFavouritesStore;
+        return $userFavouriteStores;
     }
     ##########################################################
     ########### END REFACTORED CODE ##########################

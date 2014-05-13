@@ -21,9 +21,10 @@ class MoneySaving extends BaseMoneySaving
      * 
      * @version 1.0
      */
-    public static function getMostReadArticles($limit, $userId="")
+    public static function getMostReadArticles($limit, $userId = "")
     {
-        $mostReadArticle = Doctrine_Query::create()->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.title, a.permalink, a.content, a.authorname, a.authorid, a.publishdate, ai.path, aai.name, aai.path, ai.name')
+        $mostReadArticleS = Doctrine_Query::create()
+        ->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.title, a.permalink, a.content, a.authorname, a.authorid, a.publishdate, ai.path, aai.name, aai.path, ai.name')
         ->from('ArticleViewCount av')
         ->leftJoin('av.articles a')
         ->leftJoin('a.thumbnail ai')
@@ -31,11 +32,11 @@ class MoneySaving extends BaseMoneySaving
         ->groupBy('av.articleid')
         ->orderBy('pop DESC')
         ->where('a.deleted = 0');
-        if(isset($userId)  && $userId!= "") {
-            $mostReadArticle->andWhere('a.authorId ='.$userId.'');
+        if (isset($userId)  && $userId!= "") {
+            $mostReadArticleS->andWhere('a.authorId ='.$userId.'');
         }
-        $mostReadArticle = $mostReadArticle->limit($limit)->fetchArray();
-        return $mostReadArticle;
+        $mostReadArticleS = $mostReadArticleS->limit($limit)->fetchArray();
+        return $mostReadArticleS;
     
     }
     #####################################################

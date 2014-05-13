@@ -87,37 +87,37 @@ class Admin_UserController extends Zend_Controller_Action
         $this->view->role = $u->roleId;
         $this->view->roles = Role::createUserPermission($u->roleId);
         /* get Category List*/
-        $categoryList =  Category::getCategoryList() ;
+        $categoryList =  Category::getCategoryList();
         $this->view->categoryList = $categoryList['aaData'] ;
-        $this->view->countryLocales = $this->getAllCountryByLocale();
+        $this->view->countriesLocales = $this->getAllCountriesByLocales();
     }
     
-    public function getAllCountryByLocale()
+    public function getAllCountriesByLocales()
     {
-        $localelist = Zend_Locale::getLocaleList();
+        $localesList = Zend_Locale::getLocaleList();
         $websiteLocales = $this->getWebsiteLocales();
-        foreach ($localelist as $localeIndex=>$localeFlag){
+        foreach ($localesList as $localeIndex => $localeFlag) {
             $localeRegion = explode('_', $localeIndex);
             $websiteLocale = isset($localeRegion[1]) ? $localeRegion[1] : '';
-            if(array_key_exists($websiteLocale, $websiteLocales)) {
+            if (array_key_exists($websiteLocale, $websiteLocales)) {
                 $locale = new Zend_Locale($localeIndex);
                 $countries = $locale->getTranslationList('Territory');
                 $countryName = ($countries[$locale->getRegion()]);
-                $countryWithLocale[$localeIndex] = $websiteLocales[$websiteLocale] ." (" . $countryName . ")";
+                $countriesWithLocales[$localeIndex] = $websiteLocales[$websiteLocale] ." (" . $countryName . ")";
             }
         }
-      return $countryWithLocale = array_unique($countryWithLocale);
+         return $countriesWithLocales = array_unique($countriesWithLocales);
     }
     
     public function getWebsiteLocales()
     {
-       $websites = Website::getAllwebSites();
-       foreach ($websites as $website) {
-          $spiltWebsite  = explode('/', $website['name']);
-          $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
-          $locales[strtoupper($locale)] = $website['name'];
-       }
-       return $locales;
+        $websites = Website::getAllwebSites();
+        foreach ($websites as $website) {
+            $spiltWebsite  = explode('/', $website['name']);
+            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+            $locales[strtoupper($locale)] = $website['name'];
+        }
+        return $locales;
     }
     /**
      * function use for getwebbsite acccording to useId and role
@@ -634,11 +634,11 @@ class Admin_UserController extends Zend_Controller_Action
     {
      $id = intval($this->getRequest()->getParam('id'));
      $this->view->qstring = $_SERVER['QUERY_STRING'];
-     $this->view->countryLocales = $this->getAllCountryByLocale();
+     $this->view->countriesLocales = $this->getAllCountriesByLocales();
             //get category list from category table
              $categoryList =  Category::getCategoryList() ;
              //get favorites store of currect user(admin)
-             $favShop  = User::getUserFavouritesStore($id);
+             $favShop  = User::getUserFavouritesStores($id);
              //get unterestng category of currecnt user(admin)
              $intCat = User::getUserInterestingCat($id);
 
@@ -784,7 +784,7 @@ class Admin_UserController extends Zend_Controller_Action
             //get category list from category table
             $categoryList =  Category::getCategoryList() ;
             //get favorites store of currect user(admin)
-            $favShop  = User::getUserFavouritesStore($id);
+            $favShop  = User::getUserFavouritesStores($id);
             //get unterestng category of currecnt user(admin)
             $intCat = User::getUserInterestingCat($id);
             //print_r($favShop);
