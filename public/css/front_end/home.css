@@ -4,7 +4,7 @@
   clear: both;
 }
 .logo {
-  background: url(../images/logo-home.png) no-repeat;
+  background: url(../../images/logo-home.png) no-repeat;
   width: 125px;
   height: 56px;
 }
@@ -337,7 +337,7 @@
   position: absolute;
   top: 50%;
   right: 30px;
-  background: url(../images/sprite.png) no-repeat -256px -350px;
+  background: url(../../images/sprite.png) no-repeat -256px -350px;
   width: 9px;
   height: 15px;
   margin: -9px 0 0;
@@ -417,7 +417,7 @@
   position: absolute;
   top: 50%;
   right: 24px;
-  background: url(../images/sprite.png) no-repeat -254px -388px;
+  background: url(../../images/sprite.png) no-repeat -254px -388px;
   width: 9px;
   height: 15px;
   margin: -8px 0 0;
@@ -672,7 +672,7 @@
   position: absolute;
   top: 0;
   left: 0;
-  background: url(../images/sprite.png) no-repeat -2px -371px;
+  background: url(../../images/sprite.png) no-repeat -2px -371px;
   width: 48px;
   height: 48px;
 }
@@ -734,7 +734,7 @@
   position: absolute;
   top: 50%;
   left: 50%;
-  background: url(../images/sprite.png) no-repeat -160px -383px;
+  background: url(../../images/sprite.png) no-repeat -160px -383px;
   width: 26px;
   height: 25px;
   margin: -13px 0 0 -12px;
@@ -779,7 +779,7 @@
 }
 #footer .language a {
   display: block;
-  background: url(../images/sprite.png) no-repeat -3px -455px;
+  background: url(../../images/sprite.png) no-repeat -3px -455px;
   width: 24px;
   height: 16px;
   text-indent: -9999px;
@@ -809,7 +809,7 @@
 #footer .logo {
   display: block;
   float: none;
-  background: url(../images/logo-footer.png) no-repeat;
+  background: url(../../images/logo-footer.png) no-repeat;
   width: 89px;
   height: 40px;
   margin: 0 auto 21px;
@@ -876,7 +876,7 @@
   }
   #footer .social ul .facebook:before,
   #footer .social ul .twitter:before {
-    background: url(../images/sprite.png) no-repeat -297px -372px;
+    background: url(../../images/sprite.png) no-repeat -297px -372px;
     width: 35px;
     height: 35px;
     top: 2px;

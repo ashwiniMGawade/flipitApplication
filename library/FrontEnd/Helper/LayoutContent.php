@@ -209,4 +209,23 @@ class FrontEnd_Helper_LayoutContent
 
         return $twitterMetaUrl;
     }
+    
+    public static function homePageBanner($homePageBanner)
+    {
+        $homePageBannerHtml = '';
+        if(!empty($homePageBanner)) {
+            $filePath = trim($homePageBanner['homepage_widget_banner_path'] . $homePageBanner['homepage_widget_banner_name'] );
+            $imgPath = PUBLIC_PATH .'images/banner-07.jpg';
+            //PUBLIC_PATH_CDN .$filePath
+            $homePageBannerHtml =
+                '<div class="block-image">
+                    <div class="image-holder">
+                        <div class="image-frame">
+                            <img src="' . $imgPath .'" alt="image description">
+                        </div>
+                    </div>
+                </div>';
+        }
+        return $homePageBannerHtml;
+    }
 }

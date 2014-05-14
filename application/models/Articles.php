@@ -14,6 +14,25 @@
 
 class Articles extends BaseArticles
 {
+    ##############################################
+    ####### REFACTORED CODE ######################
+    ##############################################
+    public static function getMoneySavingArticle($flag = 0)
+    {
+        $moneySavingGuides = Doctrine_Query::create()
+        ->from('MoneysavingArticle p')
+        ->leftJoin('p.article o')
+        ->leftJoin('o.thumbnail a')
+        ->leftJoin('o.chapters chap')
+        ->where('o.deleted = 0')
+        ->limit($flag)
+        ->orderBy('p.position ASC')->fetchArray();
+        return $moneySavingGuides;
+    }
+    ###############################################
+    ########## END REFACTORED CODE ################
+    ###############################################
+    
     CONST ArticleStatusDraft = 0;
     CONST ArticleStatusPublished = 1;
 
@@ -844,32 +863,6 @@ class Articles extends BaseArticles
 
 
     /*********************************************Front fuction for displaying articles********************************************/
-
-
-
-    /**
-     * Get article for Money saving article from database for front home page
-     * @author Er.Kundal
-     * @version 1.0
-     * @return array $data
-     */
-    public static function getmoneySavingArticle($flag)
-    {
-        $data = Doctrine_Query::create()
-        //->select('p.*,o.*,a.*,chap.*,')
-
-        ->from('MoneysavingArticle p')
-        ->leftJoin('p.article o')
-        ->leftJoin('o.thumbnail a')
-        ->leftJoin('o.chapters chap')
-        ->where('o.deleted = 0')
-        ->limit($flag)
-        ->orderBy('p.position ASC')->fetchArray();
-        //echo "<pre>";
-        //print_r($data); die;
-        return $data;
-    }
-
     public static function searchArticles($keyword, $flag,$limit)
     {
         $data = Doctrine_Query::create()->select()

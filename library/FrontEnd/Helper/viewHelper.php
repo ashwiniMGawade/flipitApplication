@@ -561,6 +561,28 @@ EOD;
         return $browseByStoreWidget;
     }
     
+    public static function getStoreForFrontEnd($storeType, $limit="")
+    {
+        $stores = '';
+        switch (strtolower($storeType)) {
+            case 'all':
+                //will be refactore in future 
+                $stores = Shop::getallStoresForFrontEnd();
+                break;
+                //will be refactore in future
+            case 'recent':
+                $stores = Shop::getrecentstores($limit);
+                break;
+                //refactored 
+            case 'popular':
+                $stores = Shop::getPopularStore($limit);
+                break;
+            default:
+                break;
+        }
+        return $stores;
+    }
+    
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -673,32 +695,6 @@ EOD;
             $cache->remove($newKey);
 
         }
-    }
-    /**
-     * get store from database according to type
-     * @author kraj modified by Raman
-     * @param  string  $storeType
-     * @param  integer $limit
-     * @return array   $data
-     */
-    public static function getStoreForFrontEnd($storeType, $limit="")
-    {
-        $data = '';
-        switch (strtolower($storeType)) {
-            case 'all':
-                $data = Shop::getallStoresForFrontEnd();
-                break;
-            case 'recent':
-                $data = Shop::getrecentstores($limit);
-            break;
-            case 'popular':
-                $data = Shop::getPopularStore($limit);
-                break;
-            default:
-            break;
-        }
-
-        return $data;
     }
     /**
     * get sidebar widgets for the page using permalink

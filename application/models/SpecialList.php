@@ -12,6 +12,25 @@
  */
 class SpecialList extends BaseSpecialList
 {
+    ######################################################
+    ################# REFACTORED CODE ####################
+    ######################################################
+    public static function getSpecialPages($limit)
+    {
+        $specialPages = Doctrine_Query::create()
+        ->select('sp.type,sp.position,sp.specialpageId,p.*,l.*')
+        ->from('SpecialList sp')
+        ->leftJoin('sp.page p')
+        ->leftJoin('p.logo l')
+        ->where('p.deleted = 0')
+        ->andWhere('p.publish = 1')
+        ->limit($limit)
+        ->orderBy('sp.position ASC')->fetchArray();
+        return $specialPages;
+    }
+    ####################################################
+    ############ END REFACTORED CODE ###################
+    ####################################################
 
     /**
      * Search to five offer
@@ -210,28 +229,5 @@ class SpecialList extends BaseSpecialList
             }
             return false ;
         }
-
-        /** get Special offer list from database
-         * @author Er.kundal
-         * @version 1.0
-         * @return array $data
-         */
-        public static function getfronendsplpage($flag)
-        {
-            $data = Doctrine_Query::create()
-            ->select('sp.type,sp.position,sp.specialpageId,p.*,l.*')
-            ->from('SpecialList sp')
-            ->leftJoin('sp.page p')
-            ->leftJoin('p.logo l')
-            ->where('p.deleted = 0')
-            ->andWhere('p.publish = 1')
-            ->limit($flag)
-            ->orderBy('sp.position ASC')->fetchArray();
-
-            return $data;
-        }
-
-
-
 
 }

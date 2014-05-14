@@ -4,153 +4,92 @@ echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/home.css"
 <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 <script type="text/javascript">
 $(document).ready(function(){
-	$('.vouchers').hide();
-	$('.vouchers:eq(0)').show();
+    $('.vouchers').hide();
+    $('.vouchers:eq(0)').show();
+    $('div.tab-content div:gt(0)').hide();
 });
 function showRelaedDiv(obj){
-	$('.vouchers').hide();
-	$('div#'+$(obj).attr('id')).show();
-	$('a#'+$(obj).attr('id')).addClass('active');
+    $('.vouchers').hide();
+    $('div#'+$(obj).attr('id')).show();
+    $('a#'+$(obj).attr('id')).addClass('active');
 
 }
+function nexttab(obj){
+    $('#services_'+obj)
+    .css({"display":"block","visibility":"visible"}).siblings()
+    .css({"display":"none","visibility":"hidden"});
+    $('div.container ul li').removeClass('active');
+    $('a#tab_'+obj).parents('li').addClass('active');
+}
+
 </script>
 <?php 
 $combinedArrayTopNewOffersCategoriesSpecialGuides = array(
-    'topOffers'=>$this->topCode,
-    'newOffers'=>$this->NewestOffer,
+    'topOffers'=>$this->topOffers,
+    'newOffers'=>$this->newOffers,
     'topCategories'=>$this->topCategories,
-    'specialPages'=>$this->specialList,
-    'specialPagesOffers'=>$this->splofferlists,
-    'moneySavingGuides'=>$this->moneySaving
+    'topCategoriesOffers'=>$this->topCategoriesOffers,
+    'specialPages'=>$this->specialListPages,
+    'specialPagesOffers'=>$this->specialPagesOffers,
+    'moneySavingGuides'=>$this->moneySavingGuides
 );
 $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions();
+$websiteName = explode('www.', HTTP_HOST);
+
+$indexViewPath = 'index/';
+$topStore = '';
+if(!empty($this->topStores)):
+    $topStore = $this->partial(
+        $indexViewPath. '_popularShops.phtml',
+        array(
+           'topStores' => $this->topStores,
+        )
+    );
+endif;
+
+$seein = '';
+if(!empty($this->seeninContents)):
+    $seein = $this->partial(
+        $indexViewPath.'_seeinContents.phtml',
+        array(
+           'seeninContents' => $this->seeninContents,
+        )
+    );
+endif;
+
+$aboutTabs = '';
+if(!empty($this->aboutTabs)):
+    $aboutTabs = $this->partial(
+        $indexViewPath.'_aboutTabs.phtml',
+        array(
+           'aboutTabs' => $this->aboutTabs,
+        )
+    );
+endif;
+
+$top9Stores = array_slice($this->topStores, 0, 9);
+$top9StoresContents = '';
+if(!empty($this->topStores)):
+    $top9StoresContents = $this->partial(
+        $indexViewPath.'_top9Stores.phtml',
+        array(
+            'top9Stores' => $top9Stores,
+        )
+    );
+endif;
+echo $top9StoresContents;
 ?>
+<main role="main" id="main">
 <div class="container best-items">
-	<header class="heading">
-		<h1>The Best of Flipit.com</h1>
-	</header>
-	<div class="columns">
-		<?php echo $homePagePartial->getLeftColumn($combinedArrayTopNewOffersCategoriesSpecialGuides);?>
-		<div id='topOffers' class="vouchers">
-			<a href="#" class="all">All New Codes</a>
-			<ul>
-				<li>
-					<a href="#">
-						<div class="logo-box">
-							<img src="<?php echo PUBLIC_PATH ?>images/logo-34.png" width="80" height="19" alt="image description">
-						</div>
-						<div class="box">
-							<h2><span>Brandkids</span> <strong class="exclusive"><span class="glyphicon glyphicon-star"></span> Exclusive</strong></h2>
-							<p>€10 korting op je bestelling met de Brandkids kortingscode...</p>
-						</div>
-					</a>
-				</li>
-			</ul>
-		</div>
-		
-		<div id='newOffers' class="vouchers">
-			<a href="#" class="all">Amit Kathmandu</a>
-			<ul>
-				<li>
-					<a href="#">
-						<div class="logo-box">
-							<img src="<?php echo PUBLIC_PATH ?>images/logo-34.png" width="80" height="19" alt="image description">
-						</div>
-						<div class="box">
-							<h2><span>Brandkids</span> <strong class="exclusive"><span class="glyphicon glyphicon-star"></span> Exclusive</strong></h2>
-							<p>€10 korting op je bestelling met de Brandkids kortingscode...</p>
-						</div>
-					</a>
-				</li>
-			</ul>
-		</div>
-		
-	</div>
+    <header class="heading">
+        <h1><?php echo $this->translate('The Best of') .' ' . $websiteName[1]; ?></h1>
+    </header>
+    <div class="columns">
+    <?php 
+    echo $homePagePartial->getLeftColumn($combinedArrayTopNewOffersCategoriesSpecialGuides);
+    echo $homePagePartial->getRightColumnOffersLis();
+    ?>
+    </div>
 </div>
-<div class="container our-shops">
-	<h2>Don’t miss out on one of our shops, more the  10.000 in total!</h2>
-	<div class="row">
-		<div class="col-md-2 col-sm-2 col-xs-6">
-			<ul>
-				<li><a href="#">Zalando</a></li>
-				<li><a href="#">Bol.com</a></li>
-				<li><a href="#">Centerparcs</a></li>
-				<li><a href="#">V&amp;D</a></li>
-			</ul>
-		</div>
-		<div class="col-md-2 col-sm-2 col-xs-6">
-			<ul>
-				<li><a href="#">Zooplus</a></li>
-				<li><a href="#">Vistaprint</a></li>
-				<li><a href="#">Bijenkorf</a></li>
-				<li><a href="#">Omada</a></li>
-			</ul>
-		</div>
-		<div class="col-md-2 col-sm-2 col-xs-6">
-			<ul>
-				<li><a href="#">Nelly</a></li>
-				<li><a href="#">Jeansonline</a></li>
-				<li><a href="#">Tommy Hilfiger</a></li>
-				<li><a href="#">Douglas</a></li>
-			</ul>
-		</div>
-		<div class="col-md-2 col-sm-2 col-xs-6">
-			<ul>
-				<li><a href="#">Zalando</a></li>
-				<li><a href="#">Bol.com</a></li>
-				<li><a href="#">Centerparcs</a></li>
-				<li><a href="#">V&amp;D</a></li>
-			</ul>
-		</div>
-		<div class="col-md-2 col-sm-2 col-xs-6">
-			<ul>
-				<li><a href="#">Zooplus</a></li>
-				<li><a href="#">Vistaprint</a></li>
-				<li><a href="#">Bijenkorf</a></li>
-				<li><a href="#">Omada</a></li>
-			</ul>
-		</div>
-		<div class="col-md-2 col-sm-2 col-xs-6">
-			<ul>
-				<li><a href="#">Nelly</a></li>
-				<li><a href="#">Jeansonline</a></li>
-				<li><a href="#">Tommy Hilfiger</a></li>
-				<li><a href="#">Douglas</a></li>
-			</ul>
-		</div>
-	</div>
-</div>
-<div class="area">
-	<div class="container logos-section">
-		<span>As seen in:</span>
-		<ul>
-			<li><img src="<?php echo PUBLIC_PATH ?>images/logo-28.png" width="118" height="23" alt="Twinkle"></li>
-			<li><img src="<?php echo PUBLIC_PATH ?>images/logo-29.png" width="122" height="35" alt="Metro"></li>
-			<li><img src="<?php echo PUBLIC_PATH ?>images/logo-30.png" width="109" height="36" alt="Glamorama"></li>
-			<li><img src="<?php echo PUBLIC_PATH ?>images/logo-31.png" width="124" height="23" alt="Marketingfacts"></li>
-			<li><img src="<?php echo PUBLIC_PATH ?>images/logo-32.png" width="124" height="27" alt="De Telegraaf"></li>
-			<li><img src="<?php echo PUBLIC_PATH ?>images/logo-33.png" width="41" height="37" alt="NU"></li>
-		</ul>
-	</div>
-</div>
-<div class="container">
-	<div class="section">
-		<ul class="tabset">
-			<li class="active"><a href="tab1">De voordelen van gratis Member worden</a></li>
-			<li><a href="tab2">Elke dag nieuwe codes</a></li>
-			<li><a href="tab3">Hoe werken kortingscodes?</a></li>
-			<li><a href="tab4">Wat zijn Bespaarwijzers?</a></li>
-		</ul>
-		<div class="tab-content">
-			<div id="tab1">
-				<h3>Exclusief voor Members</h3>
-				<p>Voor iedereen die nog meer van korting houdt! Online shoppen wordt nu nog leuker en voordeliger als Kortingscode.nl Member!</p>
-				<p>Op Kortingscode.nl vind je verschillende opties welke exclusief toegankelijk zijn voor Members. Zo ben je misschien al pagina's tegengekomen <br>waar verschillende Member Only Codes opstaan. Deze codes zijn exclusief zichtbaar als Member en geven een nog hogere korting bij jouw <br> favoriete webwinkels!</p>
-				<p>De mogelijkheden als Kortingscode Member worden steeds uitgebreider! Zo worden niet alleen dagelijks nieuwe Members Only codes toegevoegd <br> maar komen er in de toekomst leuke functies bij. Wordt dus ook Member en profiteer van al die extra voordelen.</p>
-				<h3>Gratis Member worden</h3>
-				<p>Kortingscode Member worden is vanzelfsprekend helemaal gratis. het enige wat jij hoeft te doen is een account aan te maken op Kortingscode.nl en je <br> krijgt direct toegang tot alle Member Only codes.</p>
-				<a href="#" class="link">Meld je nu hier direct aan!</a>
-			</div>
-		</div>
-	</div>
-</div>
+<?php echo $topStore.$seein.$aboutTabs;?>
+</main>

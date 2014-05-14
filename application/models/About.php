@@ -11,51 +11,40 @@
  */
 class About extends BaseAbout
 {
-
-
-    /**
-     *  @return mixed About content array or false if doesn't exists!
-     */
-    public static function getAboutContent($status="")
+    #####################################################
+    ######### REFACTORED CODE ###########################
+    #####################################################
+    public static function getAboutContent($status = "")
     {
-
-        $retVal = self::checkAboutContent1() ;
-
-        if($retVal) {
-        # create object of previous data
-
-        if($status == 1){
-            $status = array("1");
-        }else{
-            $status = array("1","0");
-        }
-
-        $result = array();
-        for($s=0;$s<count($retVal);$s++){
-            $result[$s] = $retVal[$s]['value'];
-        }
-
-        $about = Doctrine_Query::create()
+        $aboutContents =  false;
+        $aboutDetail = self::checkAboutContents();
+        if ($aboutDetail) {
+            if ($status == 1) {
+                $status = array("1");
+            } else {
+                $status = array("1", "0");
+            }
+            $aboutPageContents = array();
+            foreach ($aboutDetail as $aboutPageContent) {
+                $aboutPageContents[] = $aboutPageContent['value'];
+            }
+            $aboutContents = Doctrine_Query::create()
             ->select()
             ->from("About")
-            ->whereIn('status',$status)
-            ->whereIn('id',$result)
+            ->whereIn('status', $status)
+            ->whereIn('id', $aboutPageContents)
             ->fetchArray();
-
-        /* echo "<pre>";
-        print_r($about);
-        die; */
-
-
-        return $about ;
-
-
+        }
+        return $aboutContents;
     }
 
-    return false ;
-
+    public static function checkAboutContents()
+    {
+        return Settings::getaboutSettings("about_");
     }
-
+    #####################################################
+    ######### END  REFACTORED CODE ######################
+    #####################################################
     /**
      * delete about tab
      * @param integer $id
@@ -134,17 +123,6 @@ class About extends BaseAbout
     {
         return Settings::getSettings($name) ;
     }
-
-    public static function checkAboutContent1()
-    {
-        //$about = array();
-        $about = Settings::getaboutSettings("about_") ;
-        //$about[] = Settings::getaboutSettings("about_") ;
-        //$about[] = Settings::getaboutSettings("about_") ;
-
-        return $about ;
-    }
-
 
     /**
     *  save new special settings

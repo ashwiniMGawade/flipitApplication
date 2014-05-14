@@ -26,7 +26,20 @@ class Settings extends BaseSettings
     const SEENIN_4 = "seenin_4";
     const SEENIN_5 = "seenin_5";
     const SEENIN_6 = "seenin_6";
-
+    #####################################################
+    ######### REFACTORED CODE ###########################
+    #####################################################
+    public static function getaboutSettings($settingsName)
+    {
+        $aboutPageSettings = Doctrine_Query::create()->select('s.name,s.value')
+        ->from("Settings s")
+        ->andWhere("s.name LIKE ?", "$settingsName%")
+        ->fetchArray();
+        return $aboutPageSettings ;
+    }
+    #####################################################
+    ######### END REFACTORED CODE #######################
+    #####################################################
     /**
      * to get a particular setting by its
      * @param string settings name
@@ -43,32 +56,6 @@ class Settings extends BaseSettings
         // return $data ;
 
     }
-
-
-    /**
-     * to get all about particular setting by its
-     * @param string settings about
-     * @return mixed setting value or false
-     * @author Er.kundal
-     */
-
-    public static function getaboutSettings($name)
-    {
-
-        // $data = Doctrine_Core::getTable("Settings")->findOneBy('name',$name);
-        $data = Doctrine_Query::create()->select('s.name,s.value')
-        ->from("Settings s")
-        ->andWhere("s.name LIKE ?", "$name%")
-        ->fetchArray();
-
-        if($data)
-
-            //return $data->value;
-
-        return $data ;
-
-    }
-
 
     /**
      * delete about tab
