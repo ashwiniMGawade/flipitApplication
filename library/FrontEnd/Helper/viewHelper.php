@@ -438,7 +438,7 @@ EOD;
     */
     public static function renderPagination($totalRecordsForPagination, $paginationParameter, $itemCountPerPage, $paginationRange = 3)
     {
-        $currentPageNumber = intval($paginationParameter['page'] > 0 ) ? $paginationParameter['page'] : '1';
+        $currentPageNumber = !empty($paginationParameter['page']) ? $paginationParameter['page'] : '1';
         $pagination = Zend_Paginator::factory($totalRecordsForPagination);
         $pagination->setCurrentPageNumber($currentPageNumber);
         $pagination->setItemCountPerPage($itemCountPerPage);
@@ -1511,72 +1511,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         $third =menu::getLevelThird($id);
 
         return $third ;
-  }
-
-  /**
-   * Common function for social media
-   * @author Raman updated by kraj
-   * @version 1.0
-   * @version 1.1
-   * @param $url string
-   * @param $title string
-   * @param $controller string
-   * @param $type string
-   * @return string
-   */
-  public static function socialmedia($url, $title, $controller , $type = null)
-  {
-
-    if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
-        $url = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
-        $url = self::generateSocialLink($url);
-    else:
-        $url = HTTP_PATH;
-    endif;
-
-    if($type == 'widget'):
-    $string="<div class='flike-outer' style='width: 56px; overflow: hidden; margin: 0px;'>
-    <div id='fb-root' style='margin-top:-42px;'></div>
-    <div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-    </div>
-    </div>
-    <div class='flike-outer' style='margin : 0px; padding-right: 6px;'>
-    <a href='https://twitter.com/share' class='twitter-share-button' data-url='".$url."' data-lang='nl' data-count = 'none'></a>
-    </div>
-    <div class='flike-outer' style='margin : 0px;'><div class='g-plusone' data-size='medium' data-annotation='none'></div>
-    </div>";
-    elseif ($type == 'popup'):
-    $string="<div class='flike-outer' style='width: 52px; overflow: hidden; margin: 0px;'>
-    <div id='fb-root' style='margin-top:-41px;'></div>
-    <div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-    </div>
-    </div>
-    <div class='flike-outer' style='margin : 0px; padding-right: 6px;'>
-    <a href='https://twitter.com/share' data-url='".$url."' class='twitter-share-button'  data-lang='nl' data-count = 'none'></a>
-    </div>
-    <div class='flike-outer' style='margin : 0px;'><div class='g-plusone'  data-href='".$url."' data-size='medium' data-annotation='none'></div>
-    </div>";
-    else:
-    //<!-- Social Links Starts -->
-    $string="<div class='social-likes social-likes-new'>
-    <div class='social-likes-heading social-likes-heading-new'>
-    <p>".$title."</p>
-    </div>
-    <div class='flike-outer'>
-    <div id='fb-root'></div>
-    <div class='fb-like' data-href='".$url."' data-send='false' data-layout='button_count' data-width='50' data-show-faces='false'>&nbsp;
-    </div>
-    </div>
-    <div class='flike-outer'>
-    <a href='https://twitter.com/share' data-url='".$url."' class='twitter-share-button'  data-lang='" . LOCALE ."'></a>
-    </div>
-    <div class='flike-outer'><div class='g-plusone'  data-href='".$url."' data-size='medium' data-annotation='none'></div>
-    </div>
-    </div>";
-    endif;
-    //<!-- Social Links Ends -->
-    return $string;
-
   }
 
   /**
