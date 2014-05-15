@@ -1,6 +1,19 @@
 <?php
 class AboutController extends Zend_Controller_Action
 {
+
+    public function init()
+    {
+        $module   = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action     = strtolower($this->getRequest()->getActionName());
+        if (file_exists(APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")) {
+            $this->view->setScriptPath(APPLICATION_PATH . '/modules/'  . $module . '/views/scripts');
+        } else {
+            $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
+        }
+    }
+
     public function indexAction()
     {
         $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
@@ -66,17 +79,5 @@ class AboutController extends Zend_Controller_Action
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-    }
-
-    public function init()
-    {
-        $module   = strtolower($this->getRequest()->getParam('lang'));
-        $controller = strtolower($this->getRequest()->getControllerName());
-        $action     = strtolower($this->getRequest()->getActionName());
-        if (file_exists(APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")) {
-            $this->view->setScriptPath(APPLICATION_PATH . '/modules/'  . $module . '/views/scripts');
-        } else {
-            $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
-        }
     }
 }
