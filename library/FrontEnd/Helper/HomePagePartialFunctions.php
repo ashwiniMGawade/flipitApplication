@@ -24,7 +24,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     }
 
     public function getLeftColumnOffersHtml($offerType) {
-        $imageName = $offerType=='topOffers' ? PUBLIC_PATH ."images/img-08.png" : PUBLIC_PATH .'images/img-09.png';
+        $imageName = $offerType=='topOffers' ? HTTP_PATH ."public/images/img-08.png" : HTTP_PATH .'public/images/img-09.png';
         $headerText = $offerType=='topOffers' ? 'Our 10 best coupons' : 'New and Fresh Codes';
         return $leftColumnOffersHtml = $this->getLeftColumnContent($offerType, $imageName, $headerText, 36, $offerType);
     }

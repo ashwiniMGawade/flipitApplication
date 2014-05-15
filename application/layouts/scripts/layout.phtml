@@ -71,8 +71,13 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
     <div id="wrapper">
         <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
         <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
+<?php 
+if ($this->controllerName=='index'):
+    ?>
         <div class="section-top">
-<?php
+    <?php
+endif;
+
 $localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
 
 $baseViewPath = new Zend_View();
@@ -91,20 +96,18 @@ else:
 endif;
 echo FrontEnd_Helper_LayoutContent::homePageBanner($this->banner);
 echo FrontEnd_Helper_LayoutContent::homePageSearch();
-?>
+
+if ($this->controllerName=='index'):
+    ?>
         </div>
-<?php 
+   <?php
+endif;
 if ($this->controllerName!='index'):
     ?>
         <div id="main" class="container">
     <?php
 endif;
 
-if(file_exists($localePartialPath .  '_top_nav.phtml')):
-    echo $localePartialViewPath->render($partials.'_top_nav.phtml');
-else :
-    echo $baseViewPath->render($partials. '_top_nav.phtml');
-endif;
 echo $this->layout()->content;
 
 if ($this->controllerName!='index'):
