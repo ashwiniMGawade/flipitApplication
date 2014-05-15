@@ -209,7 +209,7 @@ class FrontEnd_Helper_LayoutContent
 
         return $twitterMetaUrl;
     }
-    
+
     public static function homePageBanner($homePageBanner)
     {
         $homePageBannerHtml = '';
@@ -227,5 +227,15 @@ class FrontEnd_Helper_LayoutContent
                 </div>';
         }
         return $homePageBannerHtml;
+    }
+    
+    public static function homePageSearch()
+    {
+        if (zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index') {
+            $baseViewPath = new Zend_View();
+            $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
+            echo $baseViewPath->render('index/_homePageSearch.phtml');
+        }
+        return;
     }
 }

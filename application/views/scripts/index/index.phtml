@@ -1,30 +1,7 @@
 <?php
-echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/home.css");
-?>
-<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
-<script type="text/javascript">
-$(document).ready(function(){
-    $('.vouchers').hide();
-    $('.vouchers:eq(0)').show();
-    $('div.tab-content div:gt(0)').hide();
-});
-function showRelaedDiv(obj){
-    $('.vouchers').hide();
-    $('div#'+$(obj).attr('id')).show();
-    $('a#'+$(obj).attr('id')).addClass('active');
-
-}
-function nexttab(obj){
-    $('#services_'+obj)
-    .css({"display":"block","visibility":"visible"}).siblings()
-    .css({"display":"none","visibility":"hidden"});
-    $('div.container ul li').removeClass('active');
-    $('a#tab_'+obj).parents('li').addClass('active');
-}
-
-</script>
-<?php 
-$combinedArrayTopNewOffersCategoriesSpecialGuides = array(
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/home.css");
+$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/home.js");
+$homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
     'topOffers'=>$this->topOffers,
     'newOffers'=>$this->newOffers,
     'topCategories'=>$this->topCategories,
@@ -33,8 +10,6 @@ $combinedArrayTopNewOffersCategoriesSpecialGuides = array(
     'specialPagesOffers'=>$this->specialPagesOffers,
     'moneySavingGuides'=>$this->moneySavingGuides
 );
-$homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions();
-$websiteName = explode('www.', HTTP_HOST);
 
 $indexViewPath = 'index/';
 $topStore = '';
@@ -78,6 +53,7 @@ if(!empty($this->topStores)):
     );
 endif;
 echo $top9StoresContents;
+$websiteName = explode('www.', HTTP_HOST);
 ?>
 <main role="main" id="main">
 <div class="container best-items">
@@ -86,8 +62,9 @@ echo $top9StoresContents;
     </header>
     <div class="columns">
     <?php 
-    echo $homePagePartial->getLeftColumn($combinedArrayTopNewOffersCategoriesSpecialGuides);
-    echo $homePagePartial->getRightColumnOffersLis();
+    $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions();
+    echo $homePagePartial->getHomePageLeftColumn($homePageTopNewOffersCategoriesAndSpecialGuidesData);
+    echo $homePagePartial->getHomePageRightColumnOffersList();
     ?>
     </div>
 </div>

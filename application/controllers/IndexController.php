@@ -18,7 +18,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->action = $this->getRequest()->getActionName();
         $pageAttributeId = Page::getPageAttributeByPermalink($this->getRequest()->getActionName());
         $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
-        
+
         if (!empty($pageDetails)) {
             if ($pageDetails->customHeader) {
                 $this->view->layout()->customHeader = "\n" . $pageDetails->customHeader;
@@ -42,8 +42,8 @@ class IndexController extends Zend_Controller_Action
         $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularcategory_list", Category::getPopularCategories(10));
         $this->view->topCategories = $topCategories;
         $topCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_hometocategoryoffers_list", Category::getCategoryVoucherCodes(self::getTopCategoriesIds($topCategories), 0, 'home'));
-        $this->view->topCategoriesOffers =self::getCategoriesOffers($topCategoriesOffers);
-        $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_list", SpecialList::getSpecialPages(3));
+        $this->view->topCategoriesOffers = self::getCategoriesOffers($topCategoriesOffers);
+        $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_list", SpecialList::getSpecialPages());
         $this->view->specialListPages = $specialListPages;
         $this->view->specialPagesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_count", self::getSpecialListPageOffers($specialListPages));
         $this->view->moneySavingGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homemanisaving_list", Articles::getMoneySavingArticle());

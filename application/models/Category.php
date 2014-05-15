@@ -86,6 +86,7 @@ class Category extends BaseCategory
         ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
         ->from('PopularCategory p')
         ->addSelect("(SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'".$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff")
+        ->addSelect("(SELECT  count(*) FROM refOfferCategory roc1 LEFT JOIN roc1.Offer off1 LEFT JOIN off1.shop s1  WHERE  off1.deleted = 0 and s1.deleted = 0 and roc1.categoryId = p.categoryId and off1.enddate >'".$currentDateAndTime."'  and off1.Visability!='MEM') as totalOffers")
         ->leftJoin('p.category o')
         ->leftJoin('o.categoryicon i')
         ->where('o.deleted=0')

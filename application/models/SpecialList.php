@@ -15,10 +15,13 @@ class SpecialList extends BaseSpecialList
     ######################################################
     ################# REFACTORED CODE ####################
     ######################################################
-    public static function getSpecialPages($limit)
+    public static function getSpecialPages($limit = 0)
     {
+        $currentDateAndTime = date('Y-m-d H:i:s');
         $specialPages = Doctrine_Query::create()
         ->select('sp.type,sp.position,sp.specialpageId,p.*,l.*')
+        ->addSelect("(SELECT count(*) FROM refOfferPage roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE roc.pageid = sp.specialpageId and off.deleted = 0 and s.deleted = 0 and off.enddate >'".$currentDateAndTime."' and off.startdate <= '".$currentDateAndTime."'  and off.discounttype='CD'  and off.Visability!='MEM') as totalCoupons")
+        ->addSelect("(SELECT count(*) FROM refOfferPage roc1 LEFT JOIN roc1.Offer off1 LEFT JOIN off1.shop s1  WHERE roc1.pageid = sp.specialpageId and off1.deleted = 0 and s1.deleted = 0 and off1.enddate >'".$currentDateAndTime."' and off1.startdate <= '".$currentDateAndTime."' and off1.Visability!='MEM') as totalOffers")
         ->from('SpecialList sp')
         ->leftJoin('sp.page p')
         ->leftJoin('p.logo l')

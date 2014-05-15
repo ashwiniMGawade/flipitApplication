@@ -58,7 +58,7 @@ else:
             $this->facebookLocale
         )
     );
- endif;
+endif;
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
@@ -69,10 +69,9 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 </head>
 <body>
     <div id="wrapper">
-	    <!-- hidden field for apply selected class on menu -->
-	    <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
-	    <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
-	    <div class="nav-bg"></div>
+        <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
+        <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
+        <div class="section-top">
 <?php
 $localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
 
@@ -91,36 +90,42 @@ else:
     echo $baseViewPath->render($partials.'_header.phtml');
 endif;
 echo FrontEnd_Helper_LayoutContent::homePageBanner($this->banner);
+echo FrontEnd_Helper_LayoutContent::homePageSearch();
 ?>
-<div id="main" class="container">	
- <?php
+        </div>
+<?php 
+if ($this->controllerName!='index'):
+    ?>
+        <div id="main" class="container">
+    <?php
+endif;
 
 if(file_exists($localePartialPath .  '_top_nav.phtml')):
     echo $localePartialViewPath->render($partials.'_top_nav.phtml');
 else :
     echo $baseViewPath->render($partials. '_top_nav.phtml');
 endif;
-
 echo $this->layout()->content;
+
+if ($this->controllerName!='index'):
+    ?>
+        </div>
+    <?php
+endif;
 ?>
-            </div>
+    </div>
 <?php
 if(file_exists($localePartialPath .  '_footer.phtml')):
     echo $localePartialViewPath->render($partials. '_footer.phtml');
 else:
     echo $baseViewPath->render($partials. '_footer.phtml');
 endif;
-?>
-        </div>
-    </div>
-<?php
+
 if(file_exists($localePartialPath . '_pop_up.phtml')):
     echo $localePartialViewPath->render($partials. '_pop_up.phtml');
 else :
     echo $baseViewPath->render($partials. '_pop_up.phtml');
 endif;
-
 ?>
-	    
 </body>
 </html>
