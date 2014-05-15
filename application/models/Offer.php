@@ -216,11 +216,11 @@ class Offer extends BaseOffer
                  );
             }
         }
-        $offers = array();
+        $topOffers = array();
         foreach ($topVoucherCodes as $value) {
-            $offers[] = $value['offer'];
+            $topOffers[] = $value['offer'];
         }
-        return $offers;
+        return $topOffers;
     }
     /**
      * get top kortingscode same as home page but it displayed on shop
