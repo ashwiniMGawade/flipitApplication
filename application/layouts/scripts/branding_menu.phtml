@@ -37,14 +37,14 @@
     <div id="branding_panel">
         <form id="branding" action="<?php echo $session->saveUrl; ?>branding/save" method="post" enctype="multipart/form-data">
             <div class="toolbar top">
-                <button id="save_form" type="submit" class="btn btn-sm blue btn-primary">Save</button>
-                <button id="preview_submit" class="btn btn-sm btn-default preview">Preview</button>
+                <h2>Shop Branding</h2>
                 <div id="close_branding"><a href="#">X</a></div>
-                <div style="clear:both;"></div>
             </div>
+            <div style="clear:both;"></div>
+            <br />
             <hr>
             <div class="branding_section">
-                <h4>Shop Branding</h4>
+                
                 <input type="hidden" name="preview" id="preview" value="0" />
                 <input type="hidden" name="reset" id="reset" value="0" />
                 <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $this->currentStoreInformation[0]['id']; ?>" />
@@ -53,27 +53,27 @@
                     <?php $item = 'link_color'; ?>
                     <tr>
                         <td><label for="<?php echo $item; ?>">Links</label></td>
-                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
                     </tr>
                     <?php $item = 'store_title'; ?>
                     <tr>
                         <td><label for="<?php echo $item; ?>">Store title</label></td>
-                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
                     </tr>
                     <?php $item = 'store_sub_title'; ?>
                     <tr>
                         <td><label for="<?php echo $item; ?>">Store sub title</label></td>
-                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
                     </tr>
                     <?php $item = 'newsletter_background_color'; ?>
                     <tr>
                         <td><label for="<?php echo $item; ?>">Newsletter background</label></td>
-                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
                     </tr>
                     <?php $item = 'newsletter_title_color'; ?>
                     <tr>
                         <td><label for="<?php echo $item; ?>">Newsletter title color</label></td>
-                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                        <td class="color_select"><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
                     </tr>
                 </table>
             </div>
@@ -88,7 +88,7 @@
                 <p>                    
                     <?php if(!empty($session->data[$item]['img'])): ?>   
                         <p>
-                            <img height="80" src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
+                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
                             <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
                         </p>
                     <?php endif; ?>      
@@ -99,7 +99,7 @@
                     <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />  
                     <?php if(!empty($session->data[$item]['img'])): ?>
                         <p>
-                            <img height="80" src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
+                            <img src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
                             <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
                         </p>
                     <?php endif; ?>         
@@ -114,9 +114,13 @@
                 </p>
             </div>
             <hr>
-
-            <div style="text-align:center;">
-                <button id="reset_submit" class="btn btn-sm btn-default reset">Reset to defaults</button>
+            <div class="toolbar bottom">
+                <button id="save_form" type="submit" class="btn btn-sm blue btn-primary">Save</button>
+                <button id="preview_submit" class="btn btn-sm btn-default preview">Preview</button>
+                <div style="clear:both;"></div>
+                <br />
+                <p><button id="reset_submit" >Reset to defaults</button> </p>
+                <br />
             </div>
         </form>
     </div>
