@@ -35,71 +35,89 @@
     <?php echo $this->headScript()->appendScript($this->shop()->brandingJs($session->data)); ?>
     <div id="show_branding"><a href="#">Branding panel ></a></div>
     <div id="branding_panel">
-        <div id="close_branding"><a href="#">X</a></div>
-        <h2>Shop Branding</h2>
-        <hr>
         <form id="branding" action="<?php echo $session->saveUrl; ?>branding/save" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="preview" id="preview" value="0" />
-            <input type="hidden" name="reset" id="reset" value="0" />
-            <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $this->currentStoreInformation[0]['id']; ?>" />
-            <h3>Colors</h3>
-            <table>
-                <?php $item = 'link_color'; ?>
-                <tr>
-                    <td><label for="<?php echo $item; ?>">Links</label></td>
-                    <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
-                </tr>
-                <?php $item = 'store_title'; ?>
-                <tr>
-                    <td><label for="<?php echo $item; ?>">Store titel</label></td>
-                    <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
-                </tr>
-                <?php $item = 'newsletter_background_color'; ?>
-                <tr>
-                    <td><label for="<?php echo $item; ?>">Newsletter background</label></td>
-                    <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
-                </tr>
-            </table>
+            <div class="toolbar top">
+                <button id="save_form" type="submit" class="btn btn-sm blue btn-primary">Save</button>
+                <button id="preview_submit" class="btn btn-sm btn-default preview">Preview</button>
+                <div id="close_branding"><a href="#">X</a></div>
+                <div style="clear:both;"></div>
+            </div>
             <hr>
-            <h3>Images</h3>
+            <div class="branding_section">
+                <h4>Shop Branding</h4>
+                <input type="hidden" name="preview" id="preview" value="0" />
+                <input type="hidden" name="reset" id="reset" value="0" />
+                <input type="hidden" name="shop_id" id="shop_id" value="<?php echo $this->currentStoreInformation[0]['id']; ?>" />
+                <h3>Colors</h3>
+                <table>
+                    <?php $item = 'link_color'; ?>
+                    <tr>
+                        <td><label for="<?php echo $item; ?>">Links</label></td>
+                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                    </tr>
+                    <?php $item = 'store_title'; ?>
+                    <tr>
+                        <td><label for="<?php echo $item; ?>">Store title</label></td>
+                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                    </tr>
+                    <?php $item = 'store_sub_title'; ?>
+                    <tr>
+                        <td><label for="<?php echo $item; ?>">Store sub title</label></td>
+                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                    </tr>
+                    <?php $item = 'newsletter_background_color'; ?>
+                    <tr>
+                        <td><label for="<?php echo $item; ?>">Newsletter background</label></td>
+                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                    </tr>
+                    <?php $item = 'newsletter_title_color'; ?>
+                    <tr>
+                        <td><label for="<?php echo $item; ?>">Newsletter title color</label></td>
+                        <td><input type="color" name="<?php echo $item; ?>" value="<?php echo $session->data[$item]['value'] ?>" data-css-selector="<?php echo $session->data[$item]['css-selector'] ?>" data-css-property="<?php echo $session->data[$item]['css-property'] ?>" /></td>
+                    </tr>
+                </table>
+            </div>
+            <hr>
+            <div class="branding_section">
+                <h3>Images</h3>
                 <?php $item = 'newsletter_store_logo'; ?>
                 <p>
                     <label for="<?php echo $item; ?>">Newsletter store logo</label>
                     <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />
                 </p>
-            <p>                    
-                <?php if(!empty($session->data[$item]['img'])): ?>   
-                    <p>
-                        <img height="80" src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
-                        <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
-                    </p>
-                <?php endif; ?>      
-            </p>
-            <p>
-                <?php $item = 'header_background'; ?>
-                <label for="<?php echo $item; ?>">Header Background</label>
-                <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />  
-                <?php if(!empty($session->data[$item]['img'])): ?>
-                    <p>
-                        <img height="80" src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
-                        <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
-                    </p>
-                <?php endif; ?>         
-            </p>
+                <p>                    
+                    <?php if(!empty($session->data[$item]['img'])): ?>   
+                        <p>
+                            <img height="80" src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
+                            <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
+                        </p>
+                    <?php endif; ?>      
+                </p>
+                <p>
+                    <?php $item = 'header_background'; ?>
+                    <label for="<?php echo $item; ?>">Header Background</label>
+                    <input type="file" name="<?php echo $item; ?>" accept="image/x-png, image/gif, image/jpeg, image/jpg" />  
+                    <?php if(!empty($session->data[$item]['img'])): ?>
+                        <p>
+                            <img height="80" src="<?php echo PUBLIC_PATH.$session->data[$item]['img'] ?>">
+                            <input type="checkbox" name="delete[]" value="<?php echo $item; ?>"> Delete?
+                        </p>
+                    <?php endif; ?>         
+                </p>
+            </div>
             <hr>
-            <p>
-                <?php $item = 'overwrite'; ?>
-                <label for="<?php echo $item; ?>">Overwrite css</label>
-                <textarea name="<?php echo $item; ?>" id="<?php echo $item; ?>"><?php echo $session->data[$item]['value'] ?></textarea>
-            </p>
+            <div class="branding_section">
+                <p>
+                    <?php $item = 'overwrite'; ?>
+                    <label for="<?php echo $item; ?>">Overwrite css</label>
+                    <textarea name="<?php echo $item; ?>" id="<?php echo $item; ?>"><?php echo $session->data[$item]['value'] ?></textarea>
+                </p>
+            </div>
             <hr>
-            <p>
-                <button id="save_form" type="submit" class="btn btn-sm blue btn-primary">Save</button>
-            </p>
-                <button id="preview_submit" class="btn btn-sm btn-default preview">Preview</button>
-                <hr>
+
+            <div style="text-align:center;">
                 <button id="reset_submit" class="btn btn-sm btn-default reset">Reset to defaults</button>
-                <div style="clear:both;"></div>
+            </div>
         </form>
     </div>
 

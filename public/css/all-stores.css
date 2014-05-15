@@ -183,13 +183,14 @@ margin-top:/* negative half from the height */
 #branding_panel{
   left:0px;
   width:299px; 
-  position:absolute; 
+  height: 100%;
+  position:fixed; 
   z-index:9999; 
-  background: #eee;
+  background: #fff;
   border-right: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  padding:10px;
   box-shadow: 0 1px #FFFFFF inset, 0 1px 3px rgba(34, 25, 25, 0.4);
+  overflow: scroll;
 }
 #branding_panel td{
   padding: 5px 5px 0px 0px;
@@ -198,7 +199,7 @@ margin-top:/* negative half from the height */
   border: 0;
   color: #ddd;
   background-color: #ddd;
-  height: 5px;
+  height: 1px;
 }
 #branding_panel h3{
 
@@ -229,11 +230,28 @@ margin-top:/* negative half from the height */
 }
 
 #show_branding{
-  position: absolute;
+  position: fixed;
   top:10px;
   bottom:10px;
   display: none;
   z-index:99999999999;
+  background-color: #eee;
+  padding: 0px 5px 4px 5px;
+  height: 20px;
+  border-radius: 2px;
+  -webkit-border-radius: 2px;
 }
-#show_branding a{ color:#fff; }
-#show_branding a:hover{ color:#fff; text-decoration: underline; }
+#show_branding a{ color:#000; }
+#show_branding a:hover{ color:#000; text-decoration: underline; }
+
+#branding_panel .toolbar{
+  height: 60px;
+  background: #eee;
+  position: absolute;
+  width: 100%;
+  padding: 10px;
+}
+#branding_panel .toolbar.bottom{ bottom: 0; }
+#branding_panel .toolbar.top{ top:0; }
+#branding_panel .branding_section{ padding: 0 10px; }
+#branding_panel #branding_panel_content{  }

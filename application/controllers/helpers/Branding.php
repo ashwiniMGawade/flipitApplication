@@ -94,9 +94,17 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
        $defaultStyles['store_title']['css-property']                   = 'color';
        $defaultStyles['store_title']['value']                          = '#32383e';
 
+       $defaultStyles['store_sub_title']['css-selector']               = '.header-block strong';
+       $defaultStyles['store_sub_title']['css-property']               = 'color';
+       $defaultStyles['store_sub_title']['value']                      = '#878a8d';
+
        $defaultStyles['newsletter_background_color']['css-selector']   = '.section .block-form .holder';
        $defaultStyles['newsletter_background_color']['css-property']   = 'background-color';
        $defaultStyles['newsletter_background_color']['value']          = '#f6f6f6';
+
+       $defaultStyles['newsletter_title_color']['css-selector']        = '.section .block-form h2';
+       $defaultStyles['newsletter_title_color']['css-property']        = 'color';
+       $defaultStyles['newsletter_title_color']['value']               = '#33383e';
 
        $defaultStyles['overwrite']['value']                            = '';       
        
