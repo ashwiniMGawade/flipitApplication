@@ -3,10 +3,21 @@
 <title>Flipit.com | Changing The Way We Save</title>
 <meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0" />
 <link href="http://www.flipit.com" rel="canonical" />
-<link href="<?php echo HTTP_PATH;?>public/flipit/css/style.css" rel="stylesheet" type="text/css" />
+<?php
+echo $this->HeadLink()->prependStylesheet("/public/css/front_end/all.css");
+echo $this->HeadLink()->prependStylesheet("/public/css/front_end/splash-page.css");
+
+?>
+<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-1.8.3.min.js"><\/script>')</script>
+<?php echo $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.main.js")
+    ->prependFile("public/front_end/js/bootstrap.min.js"); ?>
+<!--[if IE]>
+<link type="text/css" media="all" rel="stylesheet" href="<?php echo HTTP_PATH;?>public/front_end/css/ie.css">
+<script type="text/javascript" src="<?php echo HTTP_PATH;?>public/front_end/js/ie.js"></script>
+<![endif]-->
 <link href="<?php echo HTTP_PATH;?>public/flipit/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-<script type="text/javascript" src="http://use.typekit.com/shn5sjh.js"></script>
 <script type="text/javascript" src="<?php echo HTTP_PATH;?>public/js/front_end/socialmedia.js"></script>
 <meta name="msvalidate.01" content="44C2028411B932A2DCC28359FD20685F" />
 <meta property="og:title" content="Flipit.com">

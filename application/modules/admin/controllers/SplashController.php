@@ -58,7 +58,7 @@ class Admin_SplashController extends Zend_Controller_Action
             $locale = isset($localeName[1]) ?  $localeName[1] : "en" ;
             $offerId = $urlRequest->getParam('searchOfferId' , false);
             $splash = new Splash();
-            $splashTableData = $splash::getSplashTableData();
+            $splashTableData = $splash->getSplashTableData();
 
             if (!empty($splashTableData)) {
                 Doctrine_Query::create()->delete()->from('Splash')->execute();
@@ -69,7 +69,7 @@ class Admin_SplashController extends Zend_Controller_Action
             $splash->locale = $locale;         
             $splash->save();
             $message = $this->view->translate('Offer has been added successfully');
-            $flash->addMessage(array('success' => $message));
+            $flashMessenger->addMessage(array('success' => $message));
             $this->_redirect ( HTTP_PATH . 'admin/splash');
         }
             
@@ -90,7 +90,7 @@ class Admin_SplashController extends Zend_Controller_Action
                 $offerKeyword = $this->getRequest()->getParam('keyword');
                 $activeOffers = $offers->getActiveOfferDetails($offerKeyword);
                 BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
-                
+                $offers = array();
                 if (sizeof($activeOffers) > 0) {
                     foreach ($activeOffers as $offer) {
                         $offers[] = array('name' => ucfirst($offer['title']),

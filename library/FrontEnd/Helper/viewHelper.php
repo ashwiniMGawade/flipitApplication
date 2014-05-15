@@ -717,6 +717,43 @@ EOD;
         }
         return array('howToGuideImagePath' => $howToGuideImagePath, 'howToGuideImageAltText' => $howToGuideImageAltText);
     }
+
+    public static function getMostPopularCouponOnEarth()
+    {
+        $splashData = self::getSplashData();
+        $localeId = $splashData[0]['locale'];
+        $websiteDetails = Website::getWebsiteDetails($localeId);
+        $localeData = explode('/', $websiteDetails['name']);
+        $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
+        $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
+        $offers = new Offer($connectionObject['connName']);
+        $offerId = $splashData[0]['offerId'];
+        $mostPopularCoupon = $offers->getMostPopularCouponByOfferId($offerId);
+        BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
+        $offers = array();
+        return array('locale' => $localeId,'mostPopularCoupon' => $mostPopularCoupon);
+    }
+
+    public static function getSplashData()
+    {
+        $splashData = Doctrine_Query::create()
+            ->select('*')
+            ->from('Splash s')
+            ->fetchArray();
+        return $splashData;
+    }
+
+    public static function getCountryNameByLocale($locale)
+    {
+        $countryName = '';
+        if(!empty($locale)) :
+            $locale = $locale == 'en' ? 'nl' : $locale;
+            $locale = new Zend_Locale(strtoupper($locale));
+            $countries = $locale->getTranslationList('Territory');
+            $countryName = ($countries[$locale->getRegion()]);
+        endif;
+        return $countryName;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
