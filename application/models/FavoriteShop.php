@@ -114,7 +114,7 @@ class FavoriteShop extends BaseFavoriteShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
 
         return $shop->toArray();
@@ -211,7 +211,7 @@ class FavoriteShop extends BaseFavoriteShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
 
         return $shop->toArray();
