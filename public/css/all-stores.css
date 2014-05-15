@@ -188,8 +188,8 @@ margin-top:/* negative half from the height */
   background: #eee;
   border-right: 1px solid #ddd;
   border-bottom: 1px solid #ddd;
-  height:120%;
   padding:10px;
+  box-shadow: 0 1px #FFFFFF inset, 0 1px 3px rgba(34, 25, 25, 0.4);
 }
 #branding_panel td{
   padding: 5px 5px 0px 0px;
@@ -221,4 +221,19 @@ margin-top:/* negative half from the height */
   border-radius: 2px;
   -webkit-border-radius: 2px;
 }
- #branding_panel button.reset { width: 130px; }
+#branding_panel button.reset { width: 130px; }
+
+#branding_panel #close_branding{
+  text-align: right;
+  float: right;
+}
+
+#show_branding{
+  position: absolute;
+  top:10px;
+  bottom:10px;
+  display: none;
+  z-index:99999999999;
+}
+#show_branding a{ color:#fff; }
+#show_branding a:hover{ color:#fff; text-decoration: underline; }
