@@ -1,7 +1,6 @@
 <?php
 class AboutController extends Zend_Controller_Action
 {
-
     public function init()
     {
         $module   = strtolower($this->getRequest()->getParam('lang'));
@@ -47,7 +46,7 @@ class AboutController extends Zend_Controller_Action
         $webSiteNameWithoutRightSlash = rtrim($splitWebsiteName[1], '/');
         return strstr($webSiteNameWithoutRightSlash, "www") ? "http://".$webSiteNameWithoutRightSlash : "http://www.".$webSiteNameWithoutRightSlash;
     }
-    
+
     public function profileAction()
     {
         $authorSlugName = $this->getRequest()->getParam('slug');
