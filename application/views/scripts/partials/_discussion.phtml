@@ -1,12 +1,13 @@
 <header class="heading-box text-ask">
     <h2>
 <?php
-echo $this->translate('Ask a question about'). ' ' . $this->shopName;
+$headerName  = isset($this->shopName) ? $this->shopName : $this->firstName;
+echo $this->translate('Ask a question about'). ' ' . $headerName;
 ?>
     </h2>
     <strong>
 <?php
-echo $this->translate('Ask us anything about'). ' '. $this->shopName.' '. $this->translate('and their discounts');
+echo $this->translate('Ask us anything about'). ' '. $headerName.' '. $this->translate('and their discounts');
 ?>
     </strong>
 </header>

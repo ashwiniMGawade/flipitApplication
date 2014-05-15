@@ -38,6 +38,45 @@ class User extends BaseUser
         ->fetchArray();
         return $usersData;
     }
+
+    public static function getUserIdBySlugName($slug)
+    {
+        $userDetails = Doctrine_Query::create()
+        ->select("u.id")
+        ->from('User u')
+        ->where("u.slug = '$slug'")
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return !empty($userDetails) ? $userDetails['id'] : '';
+    }
+
+    public static function getUserProfileDetails($userId)
+    {
+        $userDetails = Doctrine_Query::create()
+        ->select("u.* , w.id, pi.name, pi.path")
+        ->addSelect('DATEDIFF(NOW(), u.created_at) as sinceDays')
+        ->from('User u')
+        ->leftJoin("u.website w")
+        ->leftJoin("u.profileimage pi")
+        ->where("u.id = ?", $userId)
+        ->andWhere("u.showInAboutListing = 1")
+        ->andWhere("u.deleted = 0")
+        ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        return $userDetails;
+    }
+
+    public static function getUserFavouriteStores($userId)
+    {
+        $userFavouriteStores  = Doctrine_Query::create()
+        ->select('a.*,s.id as sid,s.name as name,s.permalink, img.*')
+        ->from('Adminfavoriteshop a')
+        ->leftJoin('a.shops s')
+        ->leftJoin('s.logo img')
+        ->where('userId='.$userId)
+        ->andWhere('s.deleted=0')
+        ->andWhere('s.status=1')
+        ->fetchArray();
+        return $userFavouriteStores;
+    }
     ##########################################################
     ########### END REFACTORED CODE ##########################
     ##########################################################
@@ -177,8 +216,8 @@ class User extends BaseUser
         $this->firstName = BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
         $this->email = BackEnd_Helper_viewHelper::stripSlashesFromString($params['email']);
         $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
-
-
+        $this->countryLocale = $params['locale'];
+ 
         if($this->isValidPassword($params['password'])) {
             self::setPassword($params['password']) ;
             $this->save();
@@ -402,7 +441,8 @@ class User extends BaseUser
         $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['dislike']);
         $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
-
+        $this->countryLocale = $params['locale'];
+        
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
 
@@ -1037,28 +1077,6 @@ class User extends BaseUser
     return $userFevoriteCat;
   }
   /**
-   * get favorites store related currect user(admin)
-   * use in  normal list
-   * @param integer $id
-   * @param array $favShop
-   * @author kraj
-   * @version 1.0
-   */
-  public static function getUserFavoritesStore($id)
-  {
-    $favShop  = Doctrine_Query::create()
-    ->select('a.*,s.id as sid,s.name as name,s.permalink, img.*')
-    ->from('Adminfavoriteshop a')
-    ->leftJoin('a.shops s')
-    ->leftJoin('s.logo img')
-    ->where('userId='.$id)
-    ->andWhere('s.deleted=0')
-    ->andWhere('s.status=1')
-    ->fetchArray();
-    return $favShop;
-  }
-
-  /**
    * get user detail
    * use in  normal list
    * @param integer $id
@@ -1127,32 +1145,6 @@ class User extends BaseUser
 
     return $data;
   }
-
-
-
-  /**
-   * Find editor since on ID basis
-   * use in  normal list
-   * @param integer $uid
-   * @return array data
-   * @author Raman
-   * @version 1.0
-   */
-  public static function findEditorSince($uid)
-  {
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("DATEDIFF(NOW(), u.created_at) as sinceDays")
-    ->from('User u')
-    ->where("u.deleted = 0")
-    ->andWhere("u.id = ?" , $uid)
-    ->fetchArray(null , Doctrine::HYDRATE_ARRAY);
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
   //******font-end function ******//
   /**
    * get user detail
@@ -1206,60 +1198,6 @@ class User extends BaseUser
         }
 
         return false;
-  }
-
-
-
-  /**
-   * get user detail
-   * use in  normal list
-   * @param integer $id
-   * @return array $data
-   * @author Raman Kumar
-   * @version 1.0
-   */
-  public static function getUserprofileDetail($uId)
-  {
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.* , w.id, pi.name, pi.path")
-    ->from('User u')
-    ->leftJoin("u.website w")
-    ->leftJoin("u.profileimage pi")
-    ->where("u.id = ?" , $uId)
-    ->andWhere("u.showInAboutListing = 1")
-    ->andWhere("u.deleted = 0")
-    //->getSqlQuery();
-    ->fetchArray(null , Doctrine::HYDRATE_ARRAY);
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
-
-  /**
-   * get user ID
-   * use in  normal list
-   * @param char $fname, $lname
-   * @return  $id
-   * @author Raman
-   * @version 1.0
-   */
-  public static function getUserId($slug)
-  {
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.id")
-    ->from('User u')
-    ->where("u.slug = '$slug'")
-    //->andWhere("u.lastName = ?" , $lname)
-    //->getSqlQuery();
-    ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
   }
 
   /**
