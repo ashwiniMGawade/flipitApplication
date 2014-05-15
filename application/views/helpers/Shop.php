@@ -8,7 +8,6 @@ class Zend_View_Helper_Shop extends Zend_View_Helper_Abstract
     public function brandingCss($brandingCss)
     {
         $css = '';
-        //echo '<pre>'.print_r($brandingCss, true).'</pre>';
         foreach ($brandingCss as $cssStyle){
             if(!empty($cssStyle['css-selector'])){
                 $css .= $cssStyle['css-selector'].'{'.$cssStyle['css-property'].':'.$cssStyle['value']."}\r\n";

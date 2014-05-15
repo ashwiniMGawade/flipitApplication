@@ -7,8 +7,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         $hash       = $this->getRequest()->getParam('hash', false);
         $shopID     = $this->getRequest()->getParam('shopID', false);
 
-        $session = new Zend_Session_Namespace('Branding');
-
+        $session        = new Zend_Session_Namespace('Branding');
         $shopBranding   = Shop::getShopBranding($shopID);
 
         if (!empty($shopBranding)) {
@@ -31,7 +30,6 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
             echo "Error - This function can only be activated from the admin";
             exit;
         }
-
         return $storeUrl;
     }
 

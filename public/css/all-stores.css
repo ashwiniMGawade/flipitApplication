@@ -192,9 +192,7 @@ margin-top:/* negative half from the height */
   box-shadow: 0 1px #FFFFFF inset, 0 1px 3px rgba(34, 25, 25, 0.4);
   overflow: scroll;
 }
-#branding_panel td{
-  padding: 5px 5px 0px 0px;
-}
+#branding_panel td{ padding: 5px 5px 0px 0px; }
 #branding_panel table{ width: 100%; }
 #branding_panel hr{
   border: 0;
@@ -202,9 +200,7 @@ margin-top:/* negative half from the height */
   background-color: #ddd;
   height: 1px;
 }
-#branding_panel h3{
 
-}
 #branding_panel label{
   font-weight: normal;
   font-size: 14px;
