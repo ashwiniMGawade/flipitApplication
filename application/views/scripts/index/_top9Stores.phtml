@@ -6,7 +6,7 @@ foreach ($this->top9Stores as $top9StoreIndex => $top9Store):
     $storeImage = PUBLIC_PATH_CDN.ltrim($top9Store['imgpath'], "/") .'thum_small_'. $top9Store['imgname'];
 ?>
             <li>
-                <a href="<?php echo $top9Store['shop']['permaLink'];?>">
+                <a href="<?php echo HTTP_PATH_LOCALE. $top9Store['shop']['permaLink'];?>">
                    <img src="<?php echo $storeImage;?>" width="100" height="50" alt="<?php echo $top9Store['shop']['name'];?>">
                 </a>
             </li>
