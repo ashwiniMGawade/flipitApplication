@@ -107,7 +107,7 @@ class PopularVouchercodes extends BasePopularVouchercodes
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
         return $flag;
@@ -134,7 +134,7 @@ class PopularVouchercodes extends BasePopularVouchercodes
             ->where('p.position >' . $position)->execute();
             //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
 
@@ -172,7 +172,7 @@ class PopularVouchercodes extends BasePopularVouchercodes
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
 
@@ -207,7 +207,7 @@ class PopularVouchercodes extends BasePopularVouchercodes
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
 

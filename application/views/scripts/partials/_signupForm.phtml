@@ -13,9 +13,9 @@ if ($this->zendForm!='' && $this->zendForm!=null) {
         $visitorId = Auth_VisitorAdapter::getIdentity()->id;
     endif;
     $shopId = $this->shopId=='' ? 0 : $this->shopId;
-    if (Visitor::getFavoriteShopForUser($visitorId, $shopId)==false):
+    if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
         if ($this->signupFormWidgetType== 'widgetWithinOffers') {?>
-            <div class="block block-form <?php echo $this->shop=='' ? 'block-form-2' : ''?>">
+            <div class="block block-form <?php echo $shopId==0 ? 'block-form-2' : ''?>">
                 <div class="holder">
                     <div class="<?php echo $this->shopId=='' ? 'ico-box' : 'icon'?>">
                     <?php echo $this->shopLogoOrDefaultImage;?>

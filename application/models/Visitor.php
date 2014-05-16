@@ -33,25 +33,27 @@ class Visitor extends BaseVisitor
         return count($visitorInformation);
     }
     /**
-     * Fuction ngetFavoriteShopForUser.
+     * Fuction ngetFavoriteShopsForUser.
      *
      * This function checks the favorite shop of user on userid basis.
      *
      * @param integer $visitorId
      * @param integer $shopId
      */
-    public static function getFavoriteShopForUser($visitorId, $shopId)
+    public static function getFavoriteShopsForUser($visitorId, $shopId)
     {
-        $favoriteShops = Doctrine_Query::create()->select("fv.id as id")
-        ->from("FavoriteShop fv")
-        ->where('fv.visitorId='.$visitorId)
-        ->andWhere('fv.shopId='.$shopId)
-        ->fetchArray();
-        if (count($favoriteShops) > 0) {
-            return true;
-        } else {
-            return false;
+        $favouriteShopsStatus = false;
+        if($shopId==0) {
+            $favoriteShops = Doctrine_Query::create()->select("fv.id as id")
+            ->from("FavoriteShop fv")
+            ->where('fv.visitorId='.$visitorId)
+            ->andWhere('fv.shopId='.$shopId)
+            ->fetchArray();
+            if (!empty($favoriteShops)) {
+                $favouriteShopsStatus = true;
+            } 
         }
+        return $favouriteShopsStatus;
     }
     #############################################################
     ######### END REFACTRED CODE ################################

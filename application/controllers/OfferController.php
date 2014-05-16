@@ -13,15 +13,7 @@ class OfferController extends Zend_Controller_Action
         if ($page->customHeader) {
             $this->view->layout()->customHeader = "\n" . $page->customHeader;
         }
-        if (LOCALE == '') {
-            $facebookImage = 'logo_og.png';
-            $facebookLocale = '';
-        } else {
-            $facebookImage = 'flipit.png';
-            $facebookLocale = LOCALE;
-        }
-        $offers= Offer::getTop20Offers();
-
+        $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('top_20_offers_list', Offer::getTopOffers(20));
         $this->view->content = $page->content;
         $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($page->logo['path'].$page->logo['name']);
         $this->view->pageTitle = $page->pageTitle;
@@ -30,11 +22,11 @@ class OfferController extends Zend_Controller_Action
 
         $this->view->facebookTitle = $page->pageTitle;
         $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link($pageName);
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
+        $this->view->facebookImage = FACEBOOK_IMAGE;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
         $this->view->facebookDescription = trim($page->metaDescription);
-        $this->view->facebookLocale = $facebookLocale;
+        $this->view->facebookLocale = FACEBOOK_LOCALE;
         $this->view->twitterDescription = trim($page->metaDescription);
 
         $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');

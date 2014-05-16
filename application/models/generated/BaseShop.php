@@ -334,7 +334,9 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('addtosearch', 'boolean', null, array(
                 'type' => 'boolean',
         ));
-
+        $this->hasColumn('howToIntroductionText', 'blob', null, array(
+                'type' => 'blob',
+        ));
 
     }
 

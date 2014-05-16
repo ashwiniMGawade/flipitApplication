@@ -34,7 +34,7 @@ class PreviewController extends Zend_Controller_Action
     public function indexAction()
     {
             $pageId = $this->getRequest ()->getParam ('attachedpage');
-            $this->pageDetail = Page::getdefaultPageProperties($pageId);
+            $this->pageDetail = Page::getDefaultPageProperties($pageId);
             $this->view->pageTitle = @$this->pageDetail[0]['pageTitle'];
 
             if($this->pageDetail[0]['customHeader']) {
@@ -57,7 +57,7 @@ class PreviewController extends Zend_Controller_Action
         $view = Articles :: getArticleData($params);
         $this->view->articleview = $view[0];
         $uobj = new User();
-        $this->view->udetails = $uobj->getUserprofileDetail($this->view->articleview['authorid']);
+        $this->view->udetails = $uobj->getUserProfileDetails($this->view->articleview['authorid']);
     }
 
 }
