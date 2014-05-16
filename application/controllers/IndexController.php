@@ -75,12 +75,12 @@ class IndexController extends Zend_Controller_Action
 
     public function getSpecialListPagesOffers($specialListPages)
     {
-        $specialOfferslists = '';
+        $specialOfferslist = '';
         foreach ($specialListPages as $specialListPage) {
             foreach ($specialListPage['page'] as $page) {
-                $specialOfferslists[$page['permaLink']] = Offer::getSpecialPageOffers($page);
+                $specialOfferslist[$page['permaLink']] = Offer::getSpecialPageOffers($page);
             }
         }
-        return $specialOfferslists;
+        return $specialOfferslist;
     }
 }
