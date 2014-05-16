@@ -6,5 +6,5 @@ Disallow:/search/
 Disallow:/admin/
 
 Sitemap:http://www.flipit.com/public/in/sitemaps/sitemap_shops.xml
-Sitemap:http://www.flipit.com/public/in/sitemaps/sitemap_advantage.xml
+Sitemap:http://www.flipit.com/public/in/sitemaps/sitemap_plus.xml
 Sitemap:http://www.flipit.com/public/in/sitemaps/sitemap_main.xml

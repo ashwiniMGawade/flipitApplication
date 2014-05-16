@@ -49,9 +49,13 @@ $categoryWiseArticles = $this->categoryWiseArticles;
     <div class="container content-box">
         <?php 
             echo $recentlyAddedArticles = $frontEndViewHelper->getArticles('Recently added', $recentlyAddedArticles);
-            echo $blogWiseArticles = $frontEndViewHelper->getArticles('From Blog',$categoryWiseArticles['blog']);
-            echo $savingTipWiseArticles = $frontEndViewHelper->getArticles('Saving Tip',$categoryWiseArticles['savingtip']);
-        ?>
+            if (!empty($categoryWiseArticles['blog'])) {
+                echo $blogWiseArticles = $frontEndViewHelper->getArticles('From Blog',$categoryWiseArticles['blog']);
+            }
+            if (!empty($categoryWiseArticles['savingtip'])) {    
+                echo $savingTipWiseArticles = $frontEndViewHelper->getArticles('Saving Tip',$categoryWiseArticles['savingtip']);
+            }
+        ?>  
     </div>
 </main>
 <footer class="bottom-panel">

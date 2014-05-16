@@ -11,8 +11,6 @@ class deleteArticleCategory
 
     public function __construct()
     {
-        ini_set('memory_limit', '-1');
-        set_time_limit(0);
         require_once('constantsForMigration.php');
         require_once('databaseConnectionForMigrations.php');
         foreach ($databaseConnections as $databaseConnectionKey => $databaseConnection ) {

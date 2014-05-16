@@ -401,8 +401,8 @@ class Page extends BasePage
                         $route->exactlink = 'category/index/attachedpage/'.$this->id;
                     break;
                     case 13:
-                        //$route->permalink = "bespaarwijzer/".$params['pagepermalink'];
-                        $route->exactlink = 'bespaarwijzer/index/attachedpage/'.$this->id;
+                        //$route->permalink = "plus/".$params['pagepermalink'];
+                        $route->exactlink = 'plus/index/attachedpage/'.$this->id;
                     break;
                     case 14:
                         $route->exactlink = 'about/index/attachedpage/'.$this->id;
@@ -729,7 +729,7 @@ class Page extends BasePage
                     break;
                     case 13:
 
-                        $exactLink = 'bespaarwijzer/index/attachedpage/'.$this->id;
+                        $exactLink = 'plus/index/attachedpage/'.$this->id;
                         $updateRouteLink->set('permalink', "'".$params['pagepermalink']."'");
                         $updateRouteLink->set('exactlink',"'".$exactLink."'");
                         //$updateRouteLink->exactlink = 'moneysavingguide/index/attachedpage/'.$this->id;

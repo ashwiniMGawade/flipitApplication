@@ -353,7 +353,7 @@ public function validatepermalinkAction()
     {
         // Add urls to refresh in Varnish
         $varnishObj = new Varnish();
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND. FrontEnd_Helper_viewHelper::__link('bespaarwijzercat'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND. FrontEnd_Helper_viewHelper::__link('pluscat'));
 
         # get all the urls related to this Articlecategory
         $varnishUrls = Articlecategory::getAllUrls($id);

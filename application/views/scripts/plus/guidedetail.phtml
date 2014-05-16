@@ -12,9 +12,9 @@ if(!empty($articleview)) :
         <div class="new-outer">
         <div class="guide-outer-new">
         
-          <!-- Bespaarwijzer Left Starts -->
+          <!-- plus Left Starts -->
             <div>
-            <div class="bespaarwijzer-left-heading">
+            <div class="plus-left-heading">
                   <h1><?php echo $articleview['title'];?></strong></h1>
                   <div class="guide-detail">
                   <?php 
@@ -39,16 +39,16 @@ if(!empty($articleview)) :
                               '<br>'.$this->translate('category :') . ' ';
                               foreach ($articleview['relatedcategory'] as $category):
                                      if(++$i === $count):
-                                         $aTag .= "<a href='" . HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('bespaarwijzercat').'/'.$category['articlecategory']['permalink'] . "'>" .  $category['articlecategory']['name'] ."</a>";
+                                         $aTag .= "<a href='" . HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('pluscat').'/'.$category['articlecategory']['permalink'] . "'>" .  $category['articlecategory']['name'] ."</a>";
                                      else:
-                                         $aTag .= "<a href='" . HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('bespaarwijzercat').'/'.$category['articlecategory']['permalink'] . "'>" .  $category['articlecategory']['name'] ."</a> ,";
+                                         $aTag .= "<a href='" . HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('pluscat').'/'.$category['articlecategory']['permalink'] . "'>" .  $category['articlecategory']['name'] ."</a> ,";
                                     endif;
                                 endforeach;
                               endif;
                               $allCatLink = "<span style='margin:0 15px;'>|</span>" .  $this->translate('Categorie:') . " " . $aTag;
                               echo " - ".$date;
                     ?>
-                    <span style="margin:0 15px;">|</span><img src="/public/images/front_end/1361286131_coins.png"><?php echo $this->translate('Alle'); ?> <a class="text-blue-link bespaarwijzer" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer')?>"><?php echo $this->translate('Bespaarwijzers');?></a>
+                    <span style="margin:0 15px;">|</span><img src="/public/images/front_end/1361286131_coins.png"><?php echo $this->translate('Alle'); ?> <a class="text-blue-link plus" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus')?>"><?php echo $this->translate('pluss');?></a>
                     <?php echo $allCatLink;?>
                     
                     </div>
@@ -82,7 +82,7 @@ if(!empty($articleview)) :
             
             
           </div>
-          <!-- Bespaarwijzer Left Ends -->
+          <!-- plus Left Ends -->
           <div class="ct-content-outer">
             <div class="guide-content-new">
                 <div class="guide-chantal-right-bot">
@@ -129,7 +129,7 @@ if(!empty($articleview)) :
           
            
            <div class="guide-bottom-social">
-            <p><?php echo $this->translate('Deel deze Bespaarwijzer met vrienden!'); ?></p>
+            <p><?php echo $this->translate('Deel deze plus met vrienden!'); ?></p>
             <?php
               $url = "http://www.kortingscode.nl/"; 
               $title = "";
@@ -142,11 +142,11 @@ if(!empty($articleview)) :
            <div class="guide-next-prev-outer">
                 <?php 
                  /*   $this->headLink( array( //'rel' => 'prev',
-                                            'href' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$this->prevLink
+                                            'href' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus').'/'.$this->prevLink
                                           )
                                    ); */
                 ?>
-                <a class="left" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$this->prevLink; ?>">
+                <a class="left" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus').'/'.$this->prevLink; ?>">
                   <?php if($this->prevLink !=""){?>
                     <img class="arrow-left" src="<?php echo HTTP_PATH; ?>public/images/front_end/guide-arrows-prev.png" border="0">
                   <?php } ?>
@@ -166,11 +166,11 @@ if(!empty($articleview)) :
                 </a>
                 <?php 
                 /*    $this->headLink( array( //'rel' => 'next',
-                                            'href' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$this->nextLink
+                                            'href' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus').'/'.$this->nextLink
                                           )
                                    );*/
                 ?>
-                <a class="right" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $this->nextLink; ?>">
+                <a class="right" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus').'/'. $this->nextLink; ?>">
                 <img class="arrow-right" src="<?php echo  HTTP_PATH; ?>public/images/front_end/guide-arrows-next.png" border="0">
                         <div class="guide-next-img">
                            <?php if($this->nextImage !=""){?>

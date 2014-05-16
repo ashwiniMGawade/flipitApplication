@@ -6,7 +6,7 @@ if(!empty($articleview)) :
      
 	 $headerSearch = new FrontEnd_Helper_viewHelper(); 
      $page = $this->page;
-     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."bespaarwijzer' style='color:#6a6a6a'>".$this->translate('Bespaar Wijzer')."</a>";
+     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."plus' style='color:#6a6a6a'>".$this->translate('Bespaar Wijzer')."</a>";
   	 $headerSearch = new FrontEnd_Helper_viewHelper(); 
 	 echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
 	 
@@ -25,9 +25,9 @@ border-radius: 5px;
         <div class="new-outer">
         <div class="guide-outer-new">
         
-          <!-- Bespaarwijzer Left Starts -->
+          <!-- plus Left Starts -->
         	<div>
-            	<div class="bespaarwijzer-left-heading">
+            	<div class="plus-left-heading">
             	  <h1><strong><?php echo $articleview['title'];  ?></strong></h1>
                   <!-- <p class="mt5">Comparison and tips for all tariffs including iPhone 4S</p> -->
                   <h4 class="mt10"><?php echo $this->translate('Written by'); ?> <span class="text-blue"><?php echo @$articleview['authorname'];?></span></h4>
@@ -43,7 +43,7 @@ border-radius: 5px;
                <!-- Separator Starts -->
 		        <div class="separator mt10">&nbsp;</div>
 		        <!-- Separator Ends -->
-              <!-- Bespaarwijzer Right Starts -->
+              <!-- plus Right Starts -->
           <div class="fl">	
           	<!-- Last Update Starts -->
             	<div class="last-update">
@@ -67,7 +67,7 @@ border-radius: 5px;
               
 
           </div>
-          <!-- Bespaarwijzer Right Ends -->
+          <!-- plus Right Ends -->
             
             
               <!-- Quick Outer Starts -->
@@ -87,7 +87,7 @@ border-radius: 5px;
             
             
           </div>
-          <!-- Bespaarwijzer Left Ends -->
+          <!-- plus Left Ends -->
           <div class="ct-content-outer">
             <div class="guide-content-new">
             	<div class="guide-chantal-right-bot">

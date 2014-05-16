@@ -3,10 +3,14 @@ class Application_Form_SignUp extends Application_Form_Base
 {
     public $zendFormName = '';
     public $submitButtonLabel = '';
-    public function __construct($zendFormName, $submitButtonLabel)
+    public $zendFormClassName = '';
+    public $submitButtonClassName = '';
+    public function __construct($zendFormName, $submitButtonLabel, $zendFormClassName = '', $submitButtonClassName = '')
     {
         $this->zendFormName = $zendFormName;
         $this->submitButtonLabel = $submitButtonLabel;
+        $this->zendFormClassName = $zendFormClassName;
+        $this->submitButtonClassName = $submitButtonClassName;
         parent::__construct();
     }
 
@@ -44,7 +48,7 @@ class Application_Form_SignUp extends Application_Form_Base
         $submitButton->setAttrib('type', 'submit');
         $submitButton->setAttrib('id', 'Login');
         $submitButton->setLabel($this->submitButtonLabel);
-        $submitButton->setAttrib('class', 'btn blue btn-lg btn-primary');
+        $submitButton->setAttrib('class', 'btn blue btn-lg btn-primary '.$this->submitButtonClassName);
         $submitButton->setAttrib('onclick', 'setHiddenFieldValue(), signUpNewsLetter("' . $this->zendFormName .'")');
         $submitButton->setDecorators(array('ViewHelper'));
 
@@ -53,7 +57,7 @@ class Application_Form_SignUp extends Application_Form_Base
             ->addElement($hiddenFieldForShopId)
             ->setAttrib('id', $this->zendFormName)
             ->setAttrib('name', $this->zendFormName)
-            ->setAttrib('class', 'form-signin newsletter')
+            ->setAttrib('class', 'form-signin newsletter '. $this->zendFormClassName)
             ->setMethod('POST')
             ->setDecorators(array('FormElements','Form'));
     }

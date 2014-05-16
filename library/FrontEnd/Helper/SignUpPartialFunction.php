@@ -5,9 +5,9 @@ class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
     {
         self::checkFormIsValidOrNot($currentSubmittedForm, $singUpFormForStorePage, $signUpFormSidebarWidget);
     }
-    public static function createFormForSignUp($formName, $submitButtonLabel)
+    public static function createFormForSignUp($formName, $submitButtonLabel, $zendFormClassName, $submitButtonClassName)
     {
-        return new Application_Form_SignUp($formName, $submitButtonLabel);
+        return new Application_Form_SignUp($formName, $submitButtonLabel, $zendFormClassName, $submitButtonClassName);
     }
 
     public static function checkFormIsValidOrNot($currentSubmittedForm, $signUpFormForStorePage, $signUpFormSidebarWidget)
@@ -42,6 +42,12 @@ class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
         $signUpHeader='<h2 class="form-signin-heading">' .'
             <span>'.$this->zendTranslate->translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'
             .'</span></h2>';
+       }
+       else if($widgetType == 'footerSignupForm') {
+        $signUpHeader='<div class="text">
+                <h2>'.$this->zendTranslate->translate('Subscribe now').'</h2>
+                <span>'.$this->zendTranslate->translate('Become a saving superstar').'! '.'<br>'.$this->zendTranslate->translate('And get exclusive codes').'</span>
+            </div>';
        }
        else {
          $signUpHeader='<h2>'.$this->zendTranslate->translate('Receive weekly updates of the best offers?').'<br>'

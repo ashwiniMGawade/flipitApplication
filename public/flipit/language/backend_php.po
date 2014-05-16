@@ -1841,7 +1841,7 @@ msgstr "Specials"
 
 #: admin/views/scripts/homepage/index.phtml:328
 msgid "Money Saving Articles"
-msgstr "Bespaarwijzer"
+msgstr "plus"
 
 #: admin/views/scripts/homepage/index.phtml:396
 msgid "Popular Stores"
@@ -5087,10 +5087,10 @@ msgstr "Pas Widget Aan"
 #~ msgstr "Yeaaaaah! =) We sturen nog een linkje voor de laatste bevestiging! "
 
 #~ msgid "Bespaar Wijzer"
-#~ msgstr "Bespaarwijzer"
+#~ msgstr "plus"
 
 #~ msgid "MEEST GELEZEN BESPAAR WIJZERS IN "
-#~ msgstr "MEEST GELEZEN BESPAARWIJZERS IN "
+#~ msgstr "MEEST GELEZEN plusS IN "
 
 #~ msgid "No Records Found"
 #~ msgstr "Niets gevonden :("
@@ -5147,7 +5147,7 @@ msgstr "Pas Widget Aan"
 #~ msgstr "Meest recente kortingscodes van"
 
 #~ msgid "Meest gelezen bespaar wijzers by this editor"
-#~ msgstr "Meest gelezen bespaarwijzers van deze redacteur"
+#~ msgstr "Meest gelezen pluss van deze redacteur"
 
 #~ msgid "Written by"
 #~ msgstr "Geschreven door:"
@@ -5190,7 +5190,7 @@ msgstr "Pas Widget Aan"
 #~ "             \tnou precies?"
 
 #~ msgid "MEEST GELEZEN BESPAAR WIJZERS"
-#~ msgstr "MEEST GELEZEN BESPAARWIJZERS"
+#~ msgstr "MEEST GELEZEN plusS"
 
 #~ msgid "Gesorteerde lijsten"
 #~ msgstr "Gesorteerde lijsten"
@@ -5405,10 +5405,10 @@ msgstr "Pas Widget Aan"
 #~ msgstr "Bekijk alle"
 
 #~ msgid "Populaire Bespaar Wijzers"
-#~ msgstr "Onze Bespaarwijzers"
+#~ msgstr "Onze pluss"
 
 #~ msgid "Bespaar wijzers"
-#~ msgstr "Bespaarwijzers"
+#~ msgstr "pluss"
 
 #~ msgid "Onze Meest Populaire Winkels"
 #~ msgstr "Populaire Winkels -"
@@ -5684,7 +5684,7 @@ msgstr "Pas Widget Aan"
 #~ "! Dit zijn alle kortingen, webshops en Bespaar Wijzers die aansluiten op "
 #~ "jouw opgegeven interesses. Wil je jouw"
 #~ msgstr ""
-#~ "! Dit zijn alle kortingen, webshops en Bespaarwijzers die aansluiten op "
+#~ "! Dit zijn alle kortingen, webshops en pluss die aansluiten op "
 #~ "jouw opgegeven interesses. Wil je jouw"
 
 #~ msgid "persoonlijke voorkeuren en favorieten wijzigen? Ga dan naar jouw"
@@ -5945,7 +5945,7 @@ msgstr "Pas Widget Aan"
 #~ msgstr "KORTINGSCODES"
 
 #~ msgid "BESPAAR WIJZERS"
-#~ msgstr "BESPAARWIJZERS"
+#~ msgstr "plusS"
 
 #~ msgid ""
 #~ "Sorry, we hebben geen kortingscode kunnen koppelen aan de zoekopdracht.."
@@ -6136,7 +6136,7 @@ msgstr "Pas Widget Aan"
 
 #, fuzzy
 #~ msgid "GUIDES MARKS & SPENCERS IS MENTIONED IN"
-#~ msgstr "BESPAARWIJZERS WAAR (shopnaam) IN VOORKOMT"
+#~ msgstr "plusS WAAR (shopnaam) IN VOORKOMT"
 
 #~ msgid "Help With "
 #~ msgstr "Helpen met"
@@ -6413,7 +6413,7 @@ msgstr "Pas Widget Aan"
 #~ msgstr "NIEUWS"
 
 #~ msgid "Bespaar wijzer:"
-#~ msgstr "Bespaarwijzer:"
+#~ msgstr "plus:"
 
 #~ msgid "Financieel"
 #~ msgstr "Financieel"
@@ -6754,7 +6754,7 @@ msgstr "Pas Widget Aan"
 #~ msgstr "LAATST TOEGEVOEGDE KORTINGSCODES VAN DEZE DEAL GURU"
 
 #~ msgid "MEEST GELEZEN BESPAAR WIJZERS BY THIS EDITOR "
-#~ msgstr "POPULAIRSTE BESPAARWIJZERS VAN DEZE DEAL GURU"
+#~ msgstr "POPULAIRSTE plusS VAN DEZE DEAL GURU"
 
 #, fuzzy
 #~ msgid "Teams & Conditions"
@@ -6780,7 +6780,7 @@ msgstr "Pas Widget Aan"
 #~ msgstr "POPULAIRE CATEGORIEEN"
 
 #~ msgid "POPULAIRSTE BESPAAR WIJZERS"
-#~ msgstr "POPULAIRSTE BESPAARWIJZERS"
+#~ msgstr "POPULAIRSTE plusS"
 
 #~ msgid "OUR MOST POPULAR STORES"
 #~ msgstr "ONZE POPULAIRSTE WINKELS"
@@ -6792,7 +6792,7 @@ msgstr "Pas Widget Aan"
 #~ msgstr "BEKEND VAN"
 
 #~ msgid "Bespaar wijzer"
-#~ msgstr "Bespaarwijzer"
+#~ msgstr "plus"
 
 #~ msgid "How-to-guide"
 #~ msgstr "How-to-guide"
