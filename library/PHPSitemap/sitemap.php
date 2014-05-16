@@ -26,7 +26,7 @@ class PHPSitemap_sitemap
 
 ######################### Refactored ############################
 
-	public function generate_guides_sitemap($domain, $locale)
+	public function generateGuidesSitemap($domain, $locale)
 	{
  		
 		$pageDetails = RoutePermalink::getPageProperties(FrontEnd_Helper_viewHelper::__link('plus'));
@@ -53,21 +53,21 @@ class PHPSitemap_sitemap
 		http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
 		
 		if(!empty($newArticlePermalinks)):
-			foreach($newArticlePermalinks['articleCategoriesPermalink'] as $artpermalinks):
+			foreach($newArticlePermalinks['articleCategoriesPermalink'] as $articleCategoryPermalink):
 				
 				if($locale=='en'):
-					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('plusCategory').'/'.$artpermalinks.'</loc></url>';
+					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('plusCategory').'/'.$articleCategoryPermalink.'</loc></url>';
 				else:
-					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('plusCategory').'/'.$artpermalinks.'</loc></url>';
+					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('plusCategory').'/'.$articleCategoryPermalink.'</loc></url>';
 				endif;
 				
 			endforeach;
-			foreach($newArticlePermalinks['articlePermalinks'] as $permalinks):
+			foreach($newArticlePermalinks['articlePermalinks'] as $articlePermalink):
 			
 				if($locale=='en'):
-					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('plus').'/'.$permalinks.'</loc></url>';
+					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articlePermalink.'</loc></url>';
 				else:
-					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('plus').'/'.$permalinks.'</loc></url>';
+					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articlePermalink.'</loc></url>';
 				endif;	
 				
 			endforeach;

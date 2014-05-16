@@ -95,7 +95,7 @@ class createSiteMaps
         print "$key - Sitemap for Online shops has been created successfully!!!";
         fclose($shopHandle);
 
-        $guidemap = $sitemap->generate_guides_sitemap($this->_hostName, $key);
+        $guidemap = $sitemap->generateGuidesSitemap($this->_hostName, $key);
         $guideFile = $pathToXMLFile."sitemaps/".$sitemap_plus;
         $guideHandle = fopen($guideFile, 'w');
         fwrite($guideHandle, $guidemap);

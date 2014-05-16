@@ -69,7 +69,7 @@ class Admin_SitemapController extends Zend_Controller_Action
         fclose($shopHandle);
 
         //generating sitemap pluss
-        $guidemap = $sitemap->generate_guides_sitemap($locale);
+        $guidemap = $sitemap->generateGuidesSitemap($locale);
         $guideFile = $pathToXMLFile."sitemaps/sitemap_plus.xml";
 
         $guideHandle = fopen($guideFile, 'w');
