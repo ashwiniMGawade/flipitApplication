@@ -146,26 +146,26 @@ class LoginController extends Zend_Controller_Action {
 						'content'=>$imgLogoMail
 				),
 						array('name'=>'bestRegards',
-								'content'=>$this->view->translate('Beste').' '.$siteName.' '.$this->view->translate('Bezoeker,')
+								'content'=>FrontEnd_Helper_viewHelper::__email('Beste').' '.$siteName.' '.FrontEnd_Helper_viewHelper::__email('Bezoeker,')
 						),
 						array('name'=>'centerContent',
-								'content'=>$this->view->translate('Geen enkel probleem dat u uw wachtwoord heeft vergeten, via de volgende link kunt u deze opnieuw instellen:'). '<a href="'
+								'content'=>FrontEnd_Helper_viewHelper::__email('Geen enkel probleem dat u uw wachtwoord heeft vergeten, via de volgende link kunt u deze opnieuw instellen:'). '<a href="'
 											. HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('resetpassword').'/'.$resultuserid
-											. '">'.$this->view->translate('Klik hier').'</a>' 
+											. '">'.FrontEnd_Helper_viewHelper::__email('Klik hier').'</a>' 
 						),
 						array('name'=>'bottomContent',
-								'content'=> $this->view->translate('Groetjes').',<br><br>'. $this->view->translate('De redactie van Kortingscode.nl')
+								'content'=> FrontEnd_Helper_viewHelper::__email('Groetjes').',<br><br>'. FrontEnd_Helper_viewHelper::__email('De redactie van Kortingscode.nl')
 				
 						),
 						array('name'=>'copyright',
-								'content'=>$this->view->translate('Copyright &copy; 2013').' '.$siteName.'. '.$this->view->translate('All Rights Reserved.')
+								'content'=>FrontEnd_Helper_viewHelper::__email('Copyright &copy; 2013').' '.$siteName.'. '.FrontEnd_Helper_viewHelper::__email('All Rights Reserved.')
 						),
 						array('name'=>'address',
-								'content'=>$this->view->translate("U ontvangt deze nieuwsbrief omdat u ons uw toestemming heeft gegeven om u op de hoogte te houden van onze laatste").
-								'<br/>' . $this->view->translate("acties."). '<a href='.$siteUrl.' style="color:#ffffff; padding:0 2px;">'.$siteName.'</a>' . $this->view->translate('is een onderdeel van Imbull, Weteringschans 120, 1017XT Amsterdam - KvK 34339618')
+								'content'=>FrontEnd_Helper_viewHelper::__email("U ontvangt deze nieuwsbrief omdat u ons uw toestemming heeft gegeven om u op de hoogte te houden van onze laatste").
+								'<br/>' . FrontEnd_Helper_viewHelper::__email("acties."). '<a href='.$siteUrl.' style="color:#ffffff; padding:0 2px;">'.$siteName.'</a>' . FrontEnd_Helper_viewHelper::__email('is een onderdeel van Imbull, Weteringschans 120, 1017XT Amsterdam - KvK 34339618')
 						),
 						array('name'=>'logincontact',
-								'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;" href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'">'.$this->view->translate('Inloggen').'</a>'
+								'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;" href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'">'.FrontEnd_Helper_viewHelper::__email('Inloggen').'</a>'
 						));
 				 
 				$email_data = Signupmaxaccount::getemailmaxaccounts();
@@ -175,9 +175,9 @@ class LoginController extends Zend_Controller_Action {
     			$template_name = $this->getInvokeArg('passwordTemplate');
 				$template_content = $mailData;
 				$message = array(
-						'subject'    => $this->view->translate('Wachtwoord Wijziging'),
+						'subject'    => FrontEnd_Helper_viewHelper::__email('Wachtwoord Wijziging'),
 						'from_email' => $emailFrom,
-						'from_name'  => $this->view->translate('Forgot-Password'),
+						'from_name'  => FrontEnd_Helper_viewHelper::__email('Forgot-Password'),
 						'to'         => array(array('email'=>$this->getRequest()->getParam("email"),'name'=> 'Member')) ,
 						'inline_css' => true
 				);
