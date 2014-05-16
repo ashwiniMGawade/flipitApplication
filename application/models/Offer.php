@@ -667,24 +667,21 @@ class Offer extends BaseOffer
         return $allOffers;
     }
 
-    public static function getMostPopularCouponByOfferId($offerId)
+    public static function getSplashPagePopularCoupon($offerId)
     {
-        $mostPopularCoupon = Doctrine_Query::create()
+        $splashPagePopularCoupon = Doctrine_Query::create()
             ->select('s.id,s.name,
             s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
-            s.actualUrl,terms.content,
+            s.actualUrl,
             o.id,o.Visability,o.userGenerated,o.title,o.authorId,
             o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
             o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,
             o.discountType,o.startdate,o.endDate,
-            img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+            img.id, img.path, img.name,ologo.*')
             ->from('Offer o')
             ->leftJoin('o.shop s')
             ->leftJoin('o.logo ologo')
-            ->leftJoin('o.vote vot')
             ->leftJoin('s.logo img')
-            ->leftJoin('s.favoriteshops fv')
-            ->leftJoin('o.termandcondition terms')
             ->where('o.deleted = 0')
             ->andWhere('o.userGenerated=0')
             ->andWhere('o.id='.$offerId)
@@ -692,7 +689,7 @@ class Offer extends BaseOffer
             ->andWhere('s.deleted = 0')
             ->orderBy('o.id DESC')
             ->fetchArray();
-        return $mostPopularCoupon;
+        return $splashPagePopularCoupon;
     }
 
     public static function searchOffers($searchParameters, $shopIds, $limit)

@@ -23,10 +23,9 @@
 <body>
 <?php
 $mostPopularCoupon = FrontEnd_Helper_viewHelper::getMostPopularCouponOnEarth(); 
-$CountryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
-$domainName = $mostPopularCoupon['locale'] == 'en' ? 'http://www.kortingscode.nl' : 'http://www.flipit.com';
-$cdnPath = $mostPopularCoupon['locale'] == 'en' ? 'http://img.kortingscode.nl' : 'http://img.flipit.com';
-$locale = $mostPopularCoupon['locale'] == 'en' ? '' : $mostPopularCoupon['locale'].'/';
+$countryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
+$localeName = $mostPopularCoupon['locale'] == 'en' ? '' : $mostPopularCoupon['locale'].'/';
+$domainName = $mostPopularCoupon['locale'] == 'en' ? 'http://www.kortingscode.nl' : 'http://www.flipit.com/'.$localeName;
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($mostPopularCoupon['mostPopularCoupon'][0]['endDate']);
 $offerExpiryDate =  $offerPartial->getOfferDates((object) $mostPopularCoupon['mostPopularCoupon'][0], $daysTillOfferExpires)
@@ -37,7 +36,7 @@ $offerExpiryDate =  $offerPartial->getOfferDates((object) $mostPopularCoupon['mo
                 <strong class="logo-panel"><a href="http://www.flipit.com/">flipt Changing the way we save</a></strong>
                 <span class="alt-text">CHoose RegioN:</span>
                 <div class="region-box">
-                    <span class="flag"><img src="<?php echo PUBLIC_PATH;?>images/front_end/img-34.png" alt="image description" width="16" height="11" /></span><span class="text">Country Detected:  <a href="#">Sweden | Sverige</a></span>
+                    <span class="flag"><img src="<?php echo PUBLIC_PATH;?>images/front_end/img-34.png" alt="img-34" width="16" height="11" /></span><span class="text">Country Detected:  <a href="#">Sweden | Sverige</a></span>
                 </div>
                 <div class="links-cols">
                     <div class="row">
@@ -86,9 +85,9 @@ $offerExpiryDate =  $offerPartial->getOfferDates((object) $mostPopularCoupon['mo
                 </div>
                 <span class="alt-text">Most Popular Coupon ON EARTH</span>
                 <div class="sponsor-box">
-                    <span class="image"><img src="<?php echo $cdnPath.'/public/'.$locale.ltrim($mostPopularCoupon['mostPopularCoupon'][0]['shop']['logo']['path'], '/').$mostPopularCoupon['mostPopularCoupon'][0]['shop']['logo']['name']; ?>" alt="image description" width="86" height="44" /></span>
+                    <span class="image"><img src="<?php echo PUBLIC_PATH_CDN.$localeName.ltrim($mostPopularCoupon['mostPopularCoupon'][0]['shop']['logo']['path'], '/').$mostPopularCoupon['mostPopularCoupon'][0]['shop']['logo']['name']; ?>" alt="image description" width="86" height="44" /></span>
                     <div class="text-box">
-                        <strong>Flipit <?php echo $CountryName; ?> - <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['shop']['name']; ?> </strong>
+                        <strong>Flipit <?php echo $countryName; ?> - <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['shop']['name']; ?> </strong>
                         <p><span class="mark"><?php echo $offerExpiryDate; ?></span>
                             <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['exclusiveCode'] != '' ? 
                             '<span class="mark2">Exclusive</span>' : '' ; ?></p>
@@ -97,7 +96,7 @@ $offerExpiryDate =  $offerPartial->getOfferDates((object) $mostPopularCoupon['mo
                 </div>
             </div>
             <div class="bg-stretch">
-                <img src="<?php echo PUBLIC_PATH;?>images/front_end/img-33.jpg" alt="" />
+                <img src="<?php echo PUBLIC_PATH;?>images/front_end/img-33.jpg" alt="img-33" />
             </div>
         </div>
     </div>

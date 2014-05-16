@@ -734,27 +734,29 @@ EOD;
 
     public static function getMostPopularCouponOnEarth()
     {
-        $splashData = self::getSplashData();
-        $localeId = $splashData[0]['locale'];
-        $websiteDetails = Website::getWebsiteDetails($localeId);
-        $localeData = explode('/', $websiteDetails['name']);
-        $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
-        $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
-        $offers = new Offer($connectionObject['connName']);
-        $offerId = $splashData[0]['offerId'];
-        $mostPopularCoupon = $offers->getMostPopularCouponByOfferId($offerId);
-        BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
-        $offers = array();
-        return array('locale' => $localeId,'mostPopularCoupon' => $mostPopularCoupon);
+        $splashInformation = self::getSplashInformation();
+        $locale = $splashInformation[0]['locale'];
+        $websiteDetails = Website::getWebsiteDetails($locale);
+        $splitLocaleNameFromWebsiteName = explode('/', $websiteDetails['name']);
+        $localeName = isset($splitLocaleNameFromWebsiteName[1]) ?  $splitLocaleNameFromWebsiteName[1] : "en" ;
+        $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($localeName);
+        $offer = new Offer($connectionWithSiteDatabase['connName']);
+        $offerId = '';
+        if (isset($splashInformation[0]['offerId'])) :
+            $offerId = $splashInformation[0]['offerId'];
+        endif;
+        $mostPopularCoupon = $offer->getSplashPagePopularCoupon($offerId);
+        BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
+        return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
     }
 
-    public static function getSplashData()
+    public static function getSplashInformation()
     {
-        $splashData = Doctrine_Query::create()
+        $splashInformation = Doctrine_Query::create()
             ->select('*')
             ->from('Splash s')
             ->fetchArray();
-        return $splashData;
+        return $splashInformation;
     }
 
     public static function getCountryNameByLocale($locale)

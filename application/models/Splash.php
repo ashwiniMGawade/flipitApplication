@@ -2,12 +2,12 @@
 
 class Splash extends BaseSplash
 {
-   public function getSplashTableData()
+   public function getSplashInformation()
    {
-        $splashTableData = Doctrine_Query::create()
+        $splashInformation = Doctrine_Query::create()
                 ->select('*')
                 ->from('Splash')->fetchArray();
-        return $splashTableData;
+        return $splashInformation;
    }
 
    public function deleteSplashoffer()
