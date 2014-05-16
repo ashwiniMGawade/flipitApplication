@@ -2,9 +2,6 @@
 
 class SearchController extends Zend_Controller_Action
 {
-    ##################################################################################
-    ################## REFACTORED CODE ###############################################
-    ##################################################################################
     public function init()
     {
         $module   = strtolower($this->getRequest()->getParam('lang'));
@@ -69,8 +66,5 @@ class SearchController extends Zend_Controller_Action
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
 
-    }   
-    ##################################################################################
-    ################## END REFACTORED CODE ###########################################
-    ##################################################################################
+    }
 }
