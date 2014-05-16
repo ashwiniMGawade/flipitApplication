@@ -33,10 +33,10 @@ class SearchController extends Zend_Controller_Action
 
         $searchedKeywords = $this->getRequest()->getParam('searchField');
         $shopIds = "";
-        $shopIds = $this->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
-        $shopsByShopIds = self::getshopsByExcludedShopIds($shopIds);
-        $popularShops = self::getPopularStores($searchedKeywords);
-        $shopsForSearchPage = self::getStoresForSearchResults($shopsByShopIds, $popularShops);
+        $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
+        $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds);
+        $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
+        $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
         $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
 
@@ -69,80 +69,7 @@ class SearchController extends Zend_Controller_Action
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
 
-    }
-
-    public function getExcludedShopIdsBySearchedKeywords($searchedKeywords)
-    {
-        $excludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeywords);
-        $shopIds = '';
-
-        if (!empty($excludedKeywords[0])) :
-            if($excludedKeywords[0]['action'] == 0):
-                $this->getRedirectUrlForStore($excludedKeywords[0]);
-                exit();
-            else:
-                $shopIds = self::getShopIdsByExcludedKeywords($excludedKeywords[0]);
-            endif;
-        endif;
-
-        return $shopIds;
-    }
-
-    public static function getShopIdsByExcludedKeywords($excludedKeywords)
-    {
-        $shopIds = array();
-        foreach ($excludedKeywords['shops'] as $shops) :
-            $shopIds[] = $shops['shopsofKeyword'][0]['id'];
-        endforeach;
-        return $shopIds;
-    }
-
-    public function getRedirectUrlForStore($excludedKeywords)
-    {
-        $storeUrl = $excludedKeywords['url'];
-        return $this->_redirect($storeUrl);      
-    }
-
-    public static function getshopsByExcludedShopIds($shopIds)
-    {
-        $shopsForSearchPage = array();
-        $shopsByShopIds = Shop::getShopsByShopIds($shopIds);
-
-        foreach ($shopsByShopIds as $shopsByShopId) :
-            $shopsForSearchPage[$shopsByShopId['id']] = $shopsByShopId;
-        endforeach;
-
-        return $shopsForSearchPage;
-    }
-
-    public static function getPopularStores($searchedKeywords)
-    {
-        $popularStores = Shop::getStoresForSearchByKeyword($searchedKeywords, 8);
-        $popularStoresForSearchPage = self::getPopularStoresForSearchPage($popularStores);
-        return $popularStoresForSearchPage;
-    }
-
-    public static function getPopularStoresForSearchPage($popularStores)
-    {
-        $popularStoresForSearchPage = array();
-
-        foreach ($popularStores as $popularStore) :
-            $popularStoresForSearchPage[$popularStore['id']] = $popularStore;
-        endforeach;
-
-        return $popularStoresForSearchPage;
-    }
-
-    public static function getStoresForSearchResults($shopsByShopIds, $popularShops)
-    {        
-        if (!empty($shopsByShopIds) && !empty($popularShops)) :
-            $shopsForSearchPage = array_merge($shopsByShopIds, $popularShops);
-        else:
-            $shopsForSearchPage = !empty($popularShops) ? $popularShops : $shopsByShopIds;
-        endif;
-
-        return $shopsForSearchPage;
-    }
+    }   
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################

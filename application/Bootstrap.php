@@ -875,6 +875,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
         Zend_Registry::set('cache', $cache);
     }
+
+    protected function _initControllerHelpers()
+    {
+       Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH .'/controllers/helpers');
+    }
 }
 
 require_once 'Layout_Controller_Plugin_Layout.php';
