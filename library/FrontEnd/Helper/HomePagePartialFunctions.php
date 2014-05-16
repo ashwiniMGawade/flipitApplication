@@ -6,7 +6,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
         $this->homePageData = $homePageData;
         $leftBlockList = '
         <div class="categories-block">
-            <a href="' . HTTP_PATH. FrontEnd_Helper_viewHelper::__link('categorieen') .'" class="all">All Categories</a>
+            <a href="' . HTTP_PATH. FrontEnd_Helper_viewHelper::__link('categorieen') .'" class="all">'. $this->zendTranslate->translate('All Categories') .'</a>
             <ul>' 
                .$this->getHomePageLeftColumnList().
             '</ul>
