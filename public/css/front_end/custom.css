@@ -53,3 +53,7 @@
     line-height: 20px;
     padding: 5px 0 0;
 }
+
+#footer input[type="email"]{
+    margin-right: 0;
+}

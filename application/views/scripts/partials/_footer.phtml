@@ -1,19 +1,24 @@
 <?php 
+echo $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
+$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp ' , 'email-form form-inline', 'orange');
+FrontEnd_Helper_SignUpPartialFunction::validateZendForm(Zend_Controller_Front::getInstance(), '', $signUpForm);
+
+$signUpWidgetForm = '';
+$signUpWidgetForm = $this->partial(
+       'partials/_signupForm.phtml',
+        array(
+            'zendForm' => $signUpForm,
+            'signupFormWidgetType' => 'footerSignupForm',
+            'shopId' => '',
+            'shopLogoOrDefaultImage' => '',
+        )
+    );
 ?> 
 <footer id="footer">
 	<div class="bottom-panel">
-		<div class="container">
-			<div class="text">
-				<h2><?php echo $this->translate('Subscribe now'); ?></h2>
-				<span><?php echo $this->translate('Become a saving superstar'); ?>! <br><?php echo $this->translate('And get exclusive codes'); ?></span>
-			</div>
-			<form role="form" class="email-form form-inline">
-				<div class="form-group">
-					<input type="email" class="form-control" placeholder="Your Email Address">
-				</div>
-				<button type="submit" class="orange btn btn-default">submit</button>
-			</form>
+		<div class="container" id ="footer-signup-form">
+			<?php echo $signUpWidgetForm; ?>
 			<div class="social">
 				<?php echo $footer[0]['middleColumn1'];?>
 			</div>
