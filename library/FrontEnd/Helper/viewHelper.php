@@ -732,6 +732,45 @@ EOD;
         return array('howToGuideImagePath' => $howToGuideImagePath, 'howToGuideImageAltText' => $howToGuideImageAltText);
     }
 
+    public static function getMostPopularCouponOnEarth()
+    {
+        $splashInformation = self::getSplashInformation();
+        $locale = $splashInformation[0]['locale'];
+        $websiteDetails = Website::getWebsiteDetails($locale);
+        $splitLocaleNameFromWebsiteName = explode('/', $websiteDetails['name']);
+        $localeName = isset($splitLocaleNameFromWebsiteName[1]) ?  $splitLocaleNameFromWebsiteName[1] : "en" ;
+        $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($localeName);
+        $offer = new Offer($connectionWithSiteDatabase['connName']);
+        $offerId = '';
+        if (isset($splashInformation[0]['offerId'])) :
+            $offerId = $splashInformation[0]['offerId'];
+        endif;
+        $mostPopularCoupon = $offer->getSplashPagePopularCoupon($offerId);
+        BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
+        return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
+    }
+
+    public static function getSplashInformation()
+    {
+        $splashInformation = Doctrine_Query::create()
+            ->select('*')
+            ->from('Splash s')
+            ->fetchArray();
+        return $splashInformation;
+    }
+
+    public static function getCountryNameByLocale($locale)
+    {
+        $countryName = '';
+        if(!empty($locale)) :
+            $locale = $locale == 'en' ? 'nl' : $locale;
+            $locale = new Zend_Locale(strtoupper($locale));
+            $countries = $locale->getTranslationList('Territory');
+            $countryName = ($countries[$locale->getRegion()]);
+        endif;
+        return $countryName;
+    }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
