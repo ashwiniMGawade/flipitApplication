@@ -8,7 +8,7 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
 
         if (!empty($excludedKeywords[0])) :
             if($excludedKeywords[0]['action'] == 0):
-                $this->getRedirectUrlForStore($excludedKeywords[0]);
+                header('location: '.$excludedKeywords[0]['url']);
                 exit();
             else:
                 $shopIds = self::getShopIdsByExcludedKeywords($excludedKeywords[0]);
@@ -25,12 +25,6 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
             $shopIds[] = $shops['shopsofKeyword'][0]['id'];
         endforeach;
         return $shopIds;
-    }
-
-    public function getRedirectUrlForStore($excludedKeywords)
-    {
-        $storeUrl = $excludedKeywords['url'];
-        return $this->_redirect($storeUrl);      
     }
 
     public static function getshopsByExcludedShopIds($shopIds)
