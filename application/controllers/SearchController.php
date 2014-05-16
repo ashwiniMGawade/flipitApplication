@@ -63,7 +63,7 @@ class SearchController extends Zend_Controller_Action
         
         $this->view->pageLogo = '';
         if(isset($pageDetail->logo->path)) {
-            $this->view->pageLogo = HTTP_PATH_LOCALE.'public/'.$pageDetail->logo->path.$pageDetail->logo->name;
+            $this->view->pageLogo = PUBLIC_PATH_CDN.$pageDetail->logo->path.$pageDetail->logo->name;
         }
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);

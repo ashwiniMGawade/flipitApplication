@@ -57,3 +57,9 @@
 #footer input[type="email"]{
     margin-right: 0;
 }
+
+@media only screen and (max-width:767px) {
+    .how-to-showme-link{
+        display: none;
+    }
+}
