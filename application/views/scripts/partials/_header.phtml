@@ -36,7 +36,7 @@ endif
                 $localePartialViewPath = new Zend_View();
                 $localePartialViewPath->setScriptPath($localePartialPath);
                 $loadFile = '_headerSearch.phtml';
-                if(file_exists($localePartialPath . $loadFile)) :
+                if (file_exists($localePartialPath . $loadFile)) :
                     echo $localePartialViewPath->render($loadFile);
                 else:
                     echo $basePartialViewPath->render($loadFile);

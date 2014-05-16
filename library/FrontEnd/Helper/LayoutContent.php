@@ -214,13 +214,13 @@ class FrontEnd_Helper_LayoutContent
     {
         $homePageBannerHtml = '';
         if(!empty($homePageBanner)) {
-            $homePageWidgetBannerPath = PUBLIC_PATH_CDN. trim($homePageBanner['homepage_widget_banner_path'] . $homePageBanner['homepage_widget_banner_name'] );
+            $homePageWidgetBannerPath = PUBLIC_PATH_CDN. trim($homePageBanner['homepage_widget_banner_path'] . $homePageBanner['homepage_widget_banner_name']);
             $homePageWidgetBannerPath = PUBLIC_PATH .'images/banner-07.jpg';
             $homePageBannerHtml =
                 '<div class="block-image">
                     <div class="image-holder">
                         <div class="image-frame">
-                            <img src="' . $homePageWidgetBannerPath .'" alt="image description">
+                            <img src="' . $homePageWidgetBannerPath .'" alt="' . $homePageBanner['homepage_widget_banner_name'] .'">
                         </div>
                     </div>
                 </div>';

@@ -251,19 +251,11 @@ EOD;
         $navigationString .= '</ul></nav>';
         return $navigationString;
     }
-    
-    /**
-     * Get footer data
-     * @author Asharma
-     * @version 1.0
-     * @return array $data
-     */
+
     public static function getFooterData()
-    {
-        $footerData = Footer::getFooter();
-    
-        return $footerData;
-    
+    { 
+       $footerData = Footer::getFooter();
+       return $footerData;
     }
 
     public static function getHeadMeta($headMetaValue)
