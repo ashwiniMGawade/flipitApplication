@@ -24,15 +24,15 @@ class About extends BaseAbout
             } else {
                 $aboutStatus = array("1", "0");
             }
-            $aboutPageContents = array();
+            $aboutPageContentIds = array();
             foreach ($aboutDetail as $aboutPageContent) {
-                $aboutPageContents[] = $aboutPageContent['value'];
+                $aboutPageContentIds[] = $aboutPageContent['value'];
             }
             $aboutContent = Doctrine_Query::create()
             ->select()
             ->from("About")
             ->whereIn('status', $aboutStatus)
-            ->whereIn('id', $aboutPageContents)
+            ->whereIn('id', $aboutPageContentIds)
             ->fetchArray();
         }
         return $aboutContent;
