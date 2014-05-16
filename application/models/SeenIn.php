@@ -13,32 +13,39 @@
 class SeenIn extends BaseSeenIn
 {
 
-
-    /**
-     *  @return mixed SeeIn content array or false if doesn't exists!
-     */
-
+    #####################################################
+    ######### REFACTORED CODE #########
+    #####################################################
     public static function getSeenInContent()
     {
-
-        $retVal = array();
-        // This is getting value from Seenin section of homePage details from DB
-
-        $retVal = self::checkSeenInContent() ;
-
-        if($retVal) {
-            //$ids = implode(",", $retVal);
-
-            $seenIn = Doctrine_Query::create()
+        $seenInContents = '';
+        $seeInContentNames = self::checkSeenInContent();
+        if ($seeInContentNames) {
+            $seenInContents = Doctrine_Query::create()
             ->select()
             ->from("SeenIn s")
             ->leftJoin('s.logo l')
-            ->whereIn('s.id',$retVal)->fetchArray();
-
-            return $seenIn ;
+            ->whereIn('s.id', $seeInContentNames)
+            ->fetchArray();
         }
+        return $seenInContents;
     }
 
+    public static function checkSeenInContent()
+    {
+        $seenIn = array();
+        $seenIn[] = Settings::getSettings(Settings::SEENIN_1);
+        $seenIn[] = Settings::getSettings(Settings::SEENIN_2);
+        $seenIn[] = Settings::getSettings(Settings::SEENIN_3);
+        $seenIn[] = Settings::getSettings(Settings::SEENIN_4);
+        $seenIn[] = Settings::getSettings(Settings::SEENIN_5);
+        $seenIn[] = Settings::getSettings(Settings::SEENIN_6);
+        return $seenIn;
+    }
+    
+    #####################################################
+    ######### REFACTORED CODE #########
+    #####################################################
     /**
     *
     * @param array request array  saving SeeIn
@@ -122,19 +129,6 @@ class SeenIn extends BaseSeenIn
 
 
     }
-
-     public static function checkSeenInContent()
-     {
-        $seenIn = array();
-        $seenIn[] = Settings::getSettings(Settings::SEENIN_1) ;
-        $seenIn[] = Settings::getSettings(Settings::SEENIN_2) ;
-        $seenIn[] = Settings::getSettings(Settings::SEENIN_3) ;
-        $seenIn[] = Settings::getSettings(Settings::SEENIN_4) ;
-        $seenIn[] = Settings::getSettings(Settings::SEENIN_5) ;
-        $seenIn[] = Settings::getSettings(Settings::SEENIN_6) ;
-        return $seenIn;
-     }
-
     /**
     *  save new special settings
     *  @param $id integer special id

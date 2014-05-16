@@ -5,11 +5,25 @@ class SearchController extends Zend_Controller_Action
     ##################################################################################
     ################## REFACTORED CODE ###############################################
     ##################################################################################
+    public function init()
+    {
+        $module   = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action     = strtolower($this->getRequest()->getActionName());
+
+        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
+            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
+        } else{
+            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
+        }
+    }
+
     public function indexAction()
     {
         $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($searchPermalink);
-        $pageAttributeId = Page::getPageAttributeByPermalink($searchPermalink);
+        $pagePermalink = FrontEnd_Helper_viewHelper::__link('zoeken');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
+        $pageAttributeId = Page::getPageAttributeByPermalink($pagePermalink);
         $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
         $this->view->pageTitle = $pageDetail->pageTitle;
 
@@ -75,8 +89,8 @@ class SearchController extends Zend_Controller_Action
 
     public function getRedirectUrlForStore($excludedKeywords)
     {
-        $storeUrl = $excludedKeywords[0]['url'];
-        $this->_redirect($storeUrl);      
+        $storeUrl = $excludedKeywords['url'];
+        return $this->_redirect($storeUrl);      
     }
 
     public static function getshopsByExcludedShopIds($shopIds)
@@ -122,24 +136,4 @@ class SearchController extends Zend_Controller_Action
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
-    /**
-     * override views based on modules if exists
-     * @see Zend_Controller_Action::init()
-     * @author Bhart
-     */
-    public function init()
-    {
-        $module   = strtolower($this->getRequest()->getParam('lang'));
-        $controller = strtolower($this->getRequest()->getControllerName());
-        $action     = strtolower($this->getRequest()->getActionName());
-
-        # check module specific view exists or not
-        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-             # set module specific view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-        } else{
-             # set default module view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
-        }
-    }
 }

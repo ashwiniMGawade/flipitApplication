@@ -86,7 +86,6 @@ class Admin_UserController extends Zend_Controller_Action
         $this->view->id = $u->id;
         $this->view->role = $u->roleId;
         $this->view->roles = Role::createUserPermission($u->roleId);
-        /* get Category List*/
         $categoryList =  Category::getCategoryList();
         $this->view->categoryList = $categoryList['aaData'] ;
         $this->view->countriesLocales = $this->getAllCountriesByLocaleNames();
@@ -106,7 +105,7 @@ class Admin_UserController extends Zend_Controller_Action
                 $countriesWithLocales[$localeIndex] = $websiteLocales[$websiteLocale] ." (" . $countryName . ")";
             }
         }
-         return $countriesWithLocales = array_unique($countriesWithLocales);
+        return $countriesWithLocales = array_unique($countriesWithLocales);
     }
     
     public function getWebsiteLocales()

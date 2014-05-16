@@ -371,7 +371,7 @@ class Visitor extends BaseVisitor
         } else {return null;}
     }
 
-    public static function getuserdetail($visitorId)
+    public static function getUserDetail($visitorId)
     {
         $data = Doctrine_Query::create()->select("v.*,i.*")->
         from("Visitor v")

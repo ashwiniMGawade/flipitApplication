@@ -23,44 +23,54 @@ class Category extends BaseCategory
      * @return array $categoryOffers
      * @version 1.0
      */
-    public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0)
+    public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
     {
         $categoryOffers= array();
         $currentDateAndTime = date('Y-m-d H:i:s');
         $categoryOffersList = Doctrine_Query::create()
-            ->select(
-            "roc.offerId as oid,roc.categoryId as cid,o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,fv.shopId,fv.visitorId,fv.Id,terms.content"
-            )
-            ->from("refOfferCategory roc")
-            ->leftJoin("roc.Category c")
-            ->leftJoin("roc.Offer o")
-            ->leftJoin("o.shop s")
-            ->leftJoin('o.termandcondition terms')
-            ->leftJoin("s.logo l")
-            ->leftJoin('s.favoriteshops fv')
-            ->Where("categoryId =".$categoryId)
-            ->andWhere("c.deleted = 0")
-            ->andWhere("c.status= 1")
-            ->andWhere('o.discounttype="CD"')
-            ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-            ->andWhere("s.deleted = 0")
-            ->andWhere("s.status = 1")
-            ->andWhere("o.deleted = 0")
-            ->andWhere("o.userGenerated = 0")
-            ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
-            ->andWhere('o.startdate < "'.$currentDateAndTime.'"')
-            ->andWhere('o.discounttype="CD"')
-            ->andWhere('o.Visability!="MEM"')
-            ->orderBy('o.exclusiveCode DESC')
-            ->addOrderBy('o.startDate DESC')
-            ->limit($numberOfOffers)
-            ->fetchArray();
+        ->select(
+            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink, o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,fv.shopId,fv.visitorId,fv.Id,terms.content"
+        )
+        ->from("refOfferCategory roc")
+        ->leftJoin("roc.Category c")
+        ->leftJoin("roc.Offer o")
+        ->leftJoin("o.shop s")
+        ->leftJoin('o.termandcondition terms')
+        ->leftJoin("s.logo l")
+        ->leftJoin('s.favoriteshops fv');
+        if ($pageName=='home') {
+            $categoryId = implode(',', $categoryId);
+            $categoryOffersList->where("roc.categoryId IN ($categoryId)");
+        } else {
+            $categoryOffersList->Where("roc.categoryId =".$categoryId);
+        }
+        $categoryOffersList->andWhere("c.deleted = 0")
+        ->andWhere("c.status= 1")
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+        ->andWhere("s.deleted = 0")
+        ->andWhere("s.status = 1")
+        ->andWhere("o.deleted = 0")
+        ->andWhere("o.userGenerated = 0")
+        ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+        ->andWhere('o.startdate < "'.$currentDateAndTime.'"')
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('o.Visability!="MEM"')
+        ->orderBy('o.exclusiveCode DESC')
+        ->addOrderBy('o.startDate DESC')
+        ->limit($numberOfOffers);
+        $categoryOffersList = $categoryOffersList->fetchArray();
+        return $categoriesoffers = $pageName=='home' ? $categoryOffersList : self::changeDataAccordingToOfferHtml($categoryOffersList);
+
+    }
+
+    public static function changeDataAccordingToOfferHtml($categoryOffersList)
+    {
         foreach ($categoryOffersList as $offer) {
             $categoryOffers[] = $offer['Offer'];
         }
         return $categoryOffers;
     }
-
     /**
      * Function getPopularCategories.
      *
@@ -76,6 +86,7 @@ class Category extends BaseCategory
         ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
         ->from('PopularCategory p')
         ->addSelect("(SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'".$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff")
+        ->addSelect("(SELECT  count(*) FROM refOfferCategory roc1 LEFT JOIN roc1.Offer off1 LEFT JOIN off1.shop s1  WHERE  off1.deleted = 0 and s1.deleted = 0 and roc1.categoryId = p.categoryId and off1.enddate >'".$currentDateAndTime."'  and off1.Visability!='MEM') as totalOffers")
         ->leftJoin('p.category o')
         ->leftJoin('o.categoryicon i')
         ->where('o.deleted=0')
