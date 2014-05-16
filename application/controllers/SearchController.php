@@ -39,12 +39,18 @@ class SearchController extends Zend_Controller_Action
         $shopsForSearchPage = self::getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
         $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
-        $this->view->offers = $offersBySearchedKeywords;
-        $this->view->popularStores = $popularStores;
-        if (!empty($offersBySearchedKeywords)) {
-            $this->view->popularStores = $shopsForSearchPage; 
-        }  
-        
+
+        if($searchedKeywords == ''){
+            $this->view->popularStores = $popularStores;
+            $this->view->offers = array();
+        } else { 
+            $this->view->popularStores = $popularStores;
+            if (!empty($offersBySearchedKeywords)) {
+                $this->view->popularStores = $shopsForSearchPage; 
+            }
+            $this->view->offers = $offersBySearchedKeywords; 
+        }
+
         $this->view->headTitle($pageDetail->metaTitle);
         $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
@@ -54,7 +60,11 @@ class SearchController extends Zend_Controller_Action
         $this->view->facebookDescription =  trim($pageDetail->metaDescription);
         $this->view->facebookLocale = FACEBOOK_LOCALE;
         $this->view->twitterDescription =  trim($pageDetail->metaDescription);
-        $this->view->pageLogo = HTTP_PATH_LOCALE.'public/'.$pageDetail->logo->path.$pageDetail->logo->name;
+        
+        $this->view->pageLogo = '';
+        if(isset($pageDetail->logo->path)) {
+            $this->view->pageLogo = HTTP_PATH_LOCALE.'public/'.$pageDetail->logo->path.$pageDetail->logo->name;
+        }
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
