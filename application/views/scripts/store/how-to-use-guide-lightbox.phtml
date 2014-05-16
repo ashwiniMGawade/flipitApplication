@@ -1,7 +1,6 @@
 <?php
 $viewHelperObject = new FrontEnd_Helper_viewHelper();
 $howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopInformation[0]['bigimage']);
-$howToGuideSmallImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopInformation[0]['smallimage']);
 ?>
 <section id="code-lightbox">
     <div id="popup1" class="lightbox lightbox-2">
@@ -10,11 +9,12 @@ $howToGuideSmallImageDetails = $viewHelperObject->getHowToGuidesImage($this->sho
             <h1><?php echo $this->translate('How to guide').' '.$this->shopInformation[0]['name'].' '.$this->translate('coupon codes'); ?></h1>
         </header>
         <div class="text-block">
-            <?php echo $this->shopInformation[0]['howToIntroductionText'];
-
-            if(!empty($howToGuideBigImageDetails) && !empty($howToGuideSmallImageDetails)) :?>
+            <ol class="num-list">
+                <?php echo $this->shopInformation[0]['howToIntroductionText']; ?>
+            </ol>
+            <?php
+            if(!empty($howToGuideBigImageDetails)) :?>
             <div class="visual-img">
-                <img src="<?php echo $howToGuideSmallImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideSmallImageDetails['howToGuideImageAltText'];?>">
                 <img src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
             </div>
             <?php endif; ?>

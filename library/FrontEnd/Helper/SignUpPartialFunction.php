@@ -5,7 +5,7 @@ class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
     {
         self::checkFormIsValidOrNot($currentSubmittedForm, $singUpFormForStorePage, $signUpFormSidebarWidget);
     }
-    public static function createFormForSignUp($formName, $submitButtonLabel, $zendFormClassName, $submitButtonClassName)
+    public static function createFormForSignUp($formName, $submitButtonLabel, $zendFormClassName = '', $submitButtonClassName = '')
     {
         return new Application_Form_SignUp($formName, $submitButtonLabel, $zendFormClassName, $submitButtonClassName);
     }

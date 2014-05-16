@@ -38,7 +38,7 @@ if ($this->currentStoreInformation[0]['showSignupOption']) :
 endif;
 
 $howToGuides = '';
-if ($this->howToGuides) :
+if ($this->currentStoreInformation[0]['howToUse'] != '') :
     $howToGuides = $this->partial(
         $storeViewPartialPath.'_how-to-guide-chapters.phtml',
         array(
