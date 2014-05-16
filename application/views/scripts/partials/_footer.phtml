@@ -2,42 +2,73 @@
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
 ?> 
 <footer id="footer">
-    <div class="holder">
-        <div class="container">
-            <div class="row">
-                <div class="add-navigation">
-                    <nav class="box col-md-3 col-sm-4 col-xs-4">
-                        <h3><?php echo $this->translate('Kortingscode');?></h3>
-<?php
-echo $footer[0]['middleColumn1'];
-?>
-                    </nav>
-                    <nav class="box col-md-3 col-sm-4 col-xs-4">
-                        <h3><?php echo $this->translate('Help');?></h3>
-<?php
-echo $footer[0]['middleColumn2'];
-?>
-                    </nav>
-                    <nav class="box col-md-3 col-sm-4 col-xs-4">
-                        <h3><?php echo $this->translate('Over Flipit');?></h3>
-<?php 
-echo $footer[0]['middleColumn3'];
-?>
-                    </nav>
-                </div>
-                    <div class="box col-md-3 col-sm-12">
-<?php
-echo $footer[0]['middleColumn4'];
-?>
-                    </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-        <div class="bar">
-<?php
-echo $footer[0]['bottomFooter'];
-?>
-        </div>
-    </div>
+	<div class="bottom-panel">
+		<div class="container">
+			<div class="text">
+				<h2>Subscribe now</h2>
+				<span>Become a saving superstar! <br>And get exclusive codes</span>
+			</div>
+			<form role="form" class="email-form form-inline">
+				<div class="form-group">
+					<input type="email" class="form-control" placeholder="Your Email Address">
+				</div>
+				<button type="submit" class="orange btn btn-default">submit</button>
+			</form>
+			<div class="social">
+				<ul>
+					<li>
+						<a href="#" class="facebook">
+							<div class="box">
+								<h2>Facebook</h2>
+								<span>Like us on Facebook</span>
+							</div>
+						</a>
+					</li>
+					<li>
+						<a href="#" class="twitter">
+							<div class="box">
+								<h2>Twitter</h2>
+								<span>Follow us on Twitter</span>
+							</div>
+						</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="container bottom-nav">
+		<div class="row">
+			<nav class="col-md-2 col-sm-2 col-xs-6">
+				<?php echo $footer[0]['middleColumn1'];?>
+			</nav>
+			<nav class="col-md-2 col-sm-2 col-xs-6">
+				<?php echo $footer[0]['middleColumn2'];?>
+			</nav>
+			<nav class="col-md-2 col-sm-2 col-xs-6">
+				<?php echo $footer[0]['middleColumn3'];?>
+			</nav>
+			<nav class="col-md-2 col-sm-2 col-xs-6">
+				<h3><?php echo $this->translate('Over Flipit');?></h3>
+				<?php echo $footer[0]['middleColumn4'];?>
+			</nav>
+			<div class="col-md-2 col-sm-2 col-xs-6 ico">
+				<span class="ico-shop"></span>
+				<span class="add-text"><span class="num">5.500</span> Shops listed</span>
+			</div>
+			<nav class="col-md-2 col-sm-2 col-xs-6">
+				<h3>Stuff</h3>
+				<ul>
+					<li><a href="#">About Cookies</a></li>
+					<li><a href="#">Terms &amp; Conditions</a></li>
+					<li><a href="#">Privacy Policy</a></li>
+					<li><a href="#">Competitions terms</a></li>
+					<li><a href="#">Advertising</a></li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+
+	<div class="container add-block">
+	<?php echo $footer[0]['bottomFooter'];?>
+	</div>
 </footer>

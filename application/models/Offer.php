@@ -202,33 +202,25 @@ class Offer extends BaseOffer
         return $slicedOffer;
     }
 
-    public static function getTopOffers()
+    public static function getTopOffers($limit)
     {
-        $cachedKeyForTop20 =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
-        if ($cachedKeyForTop20) {
-            $topVoucherCodes = self::getTopCouponCodes(array(), 20);
-            // if top korting are less than 20 then add newest add in list
-            if (count($topVoucherCodes) < 20) {
-                $newestCodesLimit = 20 - count($topVoucherCodes);
-                $newestTopVouchercodes = self::getNewestOffers('newest', $newestCodesLimit);
-                foreach ($newestTopVouchercodes as $value) {
-                    $topVoucherCodes[] = array(
-                        'id'=> $value['shop']['id'],
-                        'permalink' => $value['shop']['permalink'],
-                        'offer' => $value
-                    );
-                }
+        $topVoucherCodes = self::getTopCouponCodes(array(), $limit);
+        if (count($topVoucherCodes) < $limit) {
+            $newestCodesLimit = $limit - count($topVoucherCodes);
+            $newestTopVouchercodes = self::getNewestOffers('newest', $newestCodesLimit);
+            foreach ($newestTopVouchercodes as $value) {
+                $topVoucherCodes[] = array(
+                    'id'=> $value['shop']['id'],
+                    'permalink' => $value['shop']['permalink'],
+                    'offer' => $value
+                 );
             }
-            FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVoucherCodes);
-        } else {
-            $topVoucherCodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('top_20_popularvaouchercode_list');
         }
-        // traverse  $topVoucherCodes array to make required array of offers html file
-        $offers = array();
+        $topOffers = array();
         foreach ($topVoucherCodes as $value) {
-            $offers[] = $value['offer'];
+            $topOffers[] = $value['offer'];
         }
-        return $offers;
+        return $topOffers;
     }
     /**
      * get top kortingscode same as home page but it displayed on shop
@@ -678,7 +670,11 @@ class Offer extends BaseOffer
 
     public static function searchOffers($searchParameters, $shopIds, $limit)
     {
-        $searchKeyword = strtolower($searchParameters['searchField']);
+        $searchKeyword = '';
+        if(isset($searchParameters['searchField'])) :
+         $searchKeyword = $searchParameters['searchField'];   
+        endif;
+        
         $currentDate = date('Y-m-d H:i:s');
         $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
         $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
@@ -2695,7 +2691,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
 
@@ -2715,7 +2711,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
 

@@ -1,53 +1,55 @@
-
-.fl-right {
-    float: right;
-}
-
-.store-header-link{
-  float: left;
-}
-#fade{
-    background: none repeat scroll 0 0 #000000;
-    color: #010000;
-    cursor: wait;
-    display: none;
-    height: 100%;
-    left: 0;
-    opacity: 0.6;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 900;
-}
-.input-error{
-   border: 1px solid red!important;
-}
-ul.errors{
-  display: none;
-
-.store-header-link{
-    float: left;
-}
-
-.no-record{
-    text-align:center;
-    font-size:14px;
-    font-weight:bold;
-}
-/* these lines will be remove when merge becouse these lines are duplicate */
 .newsletter input[type="submit"] {
-    float: left!important;
-    font-size: 14px!important;
-    height: 39px!important;
-    width: 99px!important;
-    min-width: 60px!important;
-    margin: 0 !important;
-    padding: 0!important;
-    border-radius: 2px!important;
-    -webkit-border-radius: 2px!important
+    border-radius: 2px;
+    float: left;
+    font-size: 14px;
+    height: 39px;
+    margin: 0;
+    min-width: 60px;
+    padding: 0;
+    width: 99px;
+}
+.newsletter input[type="email"] {
+    width: 68%!important;
+}
+#sidebar input[type="email"] {
+     width: 210px !important;
 }
 #sidebar input[type="submit"] {
-    width: 100%!important;
+     width: 99px !important;
 }
-
-/* end css */
+*:before, *:after {
+    box-sizing: border-box;
+}
+#sidebar .form-signin-heading:before {
+    background: url("../../images/sprite.png") no-repeat scroll -95px -130px rgba(0, 0, 0, 0);
+    content: "";
+    height: 68px;
+    left: -2px;
+    position: absolute;
+    top: 8px;
+    width: 68px;
+}
+#sidebar .form-signin-heading {
+    color: #363534;
+    font-size: 36px;
+    font-weight: normal;
+    line-height: 40px;
+    margin: 0 0 31px;
+    padding: 0 0 0 87px;
+    position: relative;
+}
+#sidebar h2 {
+    font-size: 20px;
+}
+#sidebar h2 {
+    font-size: 21px;
+    font-weight: bold;
+    line-height: 24px;
+    margin: 0 0 5px;
+}
+#sidebar .form-signin-heading span {
+    display: block;
+    font-size: 18px;
+    line-height: 20px;
+    padding: 5px 0 0;
+}

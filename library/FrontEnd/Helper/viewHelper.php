@@ -251,19 +251,11 @@ EOD;
         $navigationString .= '</ul></nav>';
         return $navigationString;
     }
-    
-    /**
-     * Get footer data
-     * @author Asharma
-     * @version 1.0
-     * @return array $data
-     */
+
     public static function getFooterData()
-    {
-        $footerData = Footer::getFooter();
-    
-        return $footerData;
-    
+    { 
+       $footerData = Footer::getFooter();
+       return $footerData;
     }
 
     public static function getHeadMeta($headMetaValue)
@@ -438,7 +430,7 @@ EOD;
     */
     public static function renderPagination($totalRecordsForPagination, $paginationParameter, $itemCountPerPage, $paginationRange = 3)
     {
-        $currentPageNumber = intval($paginationParameter['page'] > 0 ) ? $paginationParameter['page'] : '1';
+        $currentPageNumber = !empty($paginationParameter['page']) ? $paginationParameter['page'] : '1';
         $pagination = Zend_Paginator::factory($totalRecordsForPagination);
         $pagination->setCurrentPageNumber($currentPageNumber);
         $pagination->setItemCountPerPage($itemCountPerPage);
@@ -589,7 +581,29 @@ EOD;
         }
         return $counterValue;
     }
-    
+
+    public static function getStoreForFrontEnd($storeType, $limit="")
+    {
+        $stores = '';
+        switch (strtolower($storeType)) {
+            case 'all':
+                //will be refactore in future 
+                $stores = Shop::getallStoresForFrontEnd();
+                break;
+                //will be refactore in future
+            case 'recent':
+                $stores = Shop::getrecentstores($limit);
+                break;
+                //refactored 
+            case 'popular':
+                $stores = Shop::getPopularStore($limit);
+                break;
+            default:
+                break;
+        }
+        return $stores;
+    }
+
     public static function getRealIpAddress()
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -717,6 +731,7 @@ EOD;
         }
         return array('howToGuideImagePath' => $howToGuideImagePath, 'howToGuideImageAltText' => $howToGuideImageAltText);
     }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -826,32 +841,6 @@ EOD;
             $cache->remove($newKey);
 
         }
-    }
-    /**
-     * get store from database according to type
-     * @author kraj modified by Raman
-     * @param  string  $storeType
-     * @param  integer $limit
-     * @return array   $data
-     */
-    public static function getStoreForFrontEnd($storeType, $limit="")
-    {
-        $data = '';
-        switch (strtolower($storeType)) {
-            case 'all':
-                $data = Shop::getallStoresForFrontEnd();
-                break;
-            case 'recent':
-                $data = Shop::getrecentstores($limit);
-            break;
-            case 'popular':
-                $data = Shop::getPopularStore($limit);
-                break;
-            default:
-            break;
-        }
-
-        return $data;
     }
     /**
     * get sidebar widgets for the page using permalink
@@ -1124,7 +1113,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                 $result = $data = SpecialList::getfronendsplpage($flag);
                 break;
             case "moneySaving":
-                $result = Articles :: getmoneySavingArticle($flag);
+                $result = Articles :: getmoneySavingArticles($flag);
                 break;
             case "asseenin":
                 $result = SeenIn :: getSeenInContent();
@@ -1511,72 +1500,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         $third =menu::getLevelThird($id);
 
         return $third ;
-  }
-
-  /**
-   * Common function for social media
-   * @author Raman updated by kraj
-   * @version 1.0
-   * @version 1.1
-   * @param $url string
-   * @param $title string
-   * @param $controller string
-   * @param $type string
-   * @return string
-   */
-  public static function socialmedia($url, $title, $controller , $type = null)
-  {
-
-    if(strtolower($controller) == 'store' || strtolower($controller) == 'moneysavingguide'):
-        $url = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'],'/') ;
-        $url = self::generateSocialLink($url);
-    else:
-        $url = HTTP_PATH;
-    endif;
-
-    if($type == 'widget'):
-    $string="<div class='flike-outer' style='width: 56px; overflow: hidden; margin: 0px;'>
-    <div id='fb-root' style='margin-top:-42px;'></div>
-    <div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-    </div>
-    </div>
-    <div class='flike-outer' style='margin : 0px; padding-right: 6px;'>
-    <a href='https://twitter.com/share' class='twitter-share-button' data-url='".$url."' data-lang='nl' data-count = 'none'></a>
-    </div>
-    <div class='flike-outer' style='margin : 0px;'><div class='g-plusone' data-size='medium' data-annotation='none'></div>
-    </div>";
-    elseif ($type == 'popup'):
-    $string="<div class='flike-outer' style='width: 52px; overflow: hidden; margin: 0px;'>
-    <div id='fb-root' style='margin-top:-41px;'></div>
-    <div class='fb-like' data-href='".$url."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'>&nbsp;
-    </div>
-    </div>
-    <div class='flike-outer' style='margin : 0px; padding-right: 6px;'>
-    <a href='https://twitter.com/share' data-url='".$url."' class='twitter-share-button'  data-lang='nl' data-count = 'none'></a>
-    </div>
-    <div class='flike-outer' style='margin : 0px;'><div class='g-plusone'  data-href='".$url."' data-size='medium' data-annotation='none'></div>
-    </div>";
-    else:
-    //<!-- Social Links Starts -->
-    $string="<div class='social-likes social-likes-new'>
-    <div class='social-likes-heading social-likes-heading-new'>
-    <p>".$title."</p>
-    </div>
-    <div class='flike-outer'>
-    <div id='fb-root'></div>
-    <div class='fb-like' data-href='".$url."' data-send='false' data-layout='button_count' data-width='50' data-show-faces='false'>&nbsp;
-    </div>
-    </div>
-    <div class='flike-outer'>
-    <a href='https://twitter.com/share' data-url='".$url."' class='twitter-share-button'  data-lang='" . LOCALE ."'></a>
-    </div>
-    <div class='flike-outer'><div class='g-plusone'  data-href='".$url."' data-size='medium' data-annotation='none'></div>
-    </div>
-    </div>";
-    endif;
-    //<!-- Social Links Ends -->
-    return $string;
-
   }
 
   /**

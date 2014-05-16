@@ -14,7 +14,7 @@ class SargassofeedController extends Zend_Controller_Action
     {
 
         # fetch top 20 Popular offers
-        $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_popularvaouchercode_list');
+        $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('top_20_offers_list');
 
         if($voucherflag){
 
@@ -22,11 +22,11 @@ class SargassofeedController extends Zend_Controller_Action
             $topVouchercodes = Offer::getTopCouponCodes(array(),20);
             $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes ,20);
 
-            FrontEnd_Helper_viewHelper::setInCache('top_20_popularvaouchercode_list', $topVouchercodes);
+            FrontEnd_Helper_viewHelper::setInCache('top_20_offers_list', $topVouchercodes);
 
         } else {
 
-            $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('top_20_popularvaouchercode_list');
+            $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('top_20_offers_list');
         }
 
 

@@ -1,9 +1,18 @@
 <?php
 class AboutController extends Zend_Controller_Action
 {
-    ##########################################################
-    ########### REFACTORED CODE ##############################
-    ##########################################################
+    public function init()
+    {
+        $module = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action = strtolower($this->getRequest()->getActionName());
+        if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")) {
+            $this->view->setScriptPath(APPLICATION_PATH . '/modules/' . $module . '/views/scripts');
+        } else {
+            $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
+        }
+    }
+
     public function indexAction()
     {
         $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
@@ -37,7 +46,7 @@ class AboutController extends Zend_Controller_Action
         $webSiteNameWithoutRightSlash = rtrim($splitWebsiteName[1], '/');
         return strstr($webSiteNameWithoutRightSlash, "www") ? "http://".$webSiteNameWithoutRightSlash : "http://www.".$webSiteNameWithoutRightSlash;
     }
-    
+
     public function profileAction()
     {
         $authorSlugName = $this->getRequest()->getParam('slug');
@@ -69,83 +78,5 @@ class AboutController extends Zend_Controller_Action
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-    }
-
-    ##########################################################
-    ########### END REFACTORED CODE ##########################
-    ##########################################################
-    /**
-     * override views based on modules if exists
-     * @see Zend_Controller_Action::init()
-     * @author Bhart
-     */
-    public function init()
-    {
-        $module   = strtolower($this->getRequest()->getParam('lang'));
-        $controller = strtolower($this->getRequest()->getControllerName());
-        $action     = strtolower($this->getRequest()->getActionName());
-
-        # check module specific view exists or not
-        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-
-            # set module specific view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-        } else{
-
-            # set default module view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
-        }
-    }
-
-
-    public function clearcacheAction()
-    {
-        $cache = Zend_Registry::get('cache');
-        $cache->clean();
-        echo 'cache is cleared';
-        exit;
-    }
-
-    /**
-     * Find if an email id exists allready for newsletter
-     * @author Raman
-     * @version 1.0
-     */
-    public function checkuserAction()
-    {
-        $u =  new Newslettersub();
-        $cnt  = intval($u->checkDuplicateUser($this->_getParam('email')));
-
-        if($cnt > 0) {
-            echo Zend_Json::encode(false);
-
-        } else {
-
-            echo Zend_Json::encode(true);
-        }
-
-        die();
-    }
-
-    /**
-     * Find if an email id exists allready for newsletter
-     * @author Raman
-     * @version 1.0
-     */
-    public function registerAction()
-    {
-        $u =  new Newslettersub();
-        //echo $this->_getParam('email');
-        //die("Rajajk");
-        $cnt  = intval($u->registerUser($this->_getParam('email')));
-        if($cnt > 0) {
-            echo Zend_Json::encode(false);
-
-        } else {
-
-            echo Zend_Json::encode(true);
-        }
-
-        die();
     }
 }
