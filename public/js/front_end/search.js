@@ -17,7 +17,10 @@ $("input#searchFieldHeader").autocomplete({
               }) );
     },
     select: function(event, ui ) {
-            window.location.href = HOST_PATH_LOCALE + ui.item.permalink;
+        $('form').submit(function() {
+            return false;
+        });
+        window.location.href = HOST_PATH_LOCALE + ui.item.permalink;
     },
     focus: function( event, ui ) {
             $('li.wLi2').removeClass('select');
@@ -61,8 +64,12 @@ $("input#searchFieldHeader").autocomplete({
             if (searchedKeywordValue == 'Vind kortingscodes voor jouw favoriete winkels..') {
                 return false;
             }
-            window.location.href = HOST_PATH_LOCALE
-                    + __("zoeken") + '/' + searchedKeywordValue;
+            
+            $('form').submit(function() {
+                return false;
+            });
+            var searchUrl = HOST_PATH_LOCALE + __("zoeken") + '/' + encodeURIComponent(searchedKeywordValue);
+            window.location.href = searchUrl;
         }
     }
     });
@@ -73,7 +80,7 @@ $("input#searchFieldHeader").keyup(function(e){
     }
 });
     
-$("input#searchFieldHeader").keypress(function(event){
+$("input#searchFieldHeader").keypress(function(event){ console.log('asdasd');
 if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searchedKeyword").val() == $("input#searchFieldHeader").val()){
     var autocomplete = $( this ).data( "autocomplete" );
     var matcher = new RegExp( "("+$.ui.autocomplete.escapeRegex($(this).val())+")", "ig"  );
@@ -95,7 +102,9 @@ if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searc
         $('form').submit(function() {
           return false;
         });
-        window.location.href = HOST_PATH_LOCALE + __("zoeken") + '/' + searchedKeywordValue;
+
+        var searchUrl = HOST_PATH_LOCALE + __("zoeken") + '/' + encodeURIComponent(searchedKeywordValue);
+        window.location.href = searchUrl;
     }
 }
 $('ul.ui-autocomplete').addClass('wd1');

@@ -670,7 +670,11 @@ class Offer extends BaseOffer
 
     public static function searchOffers($searchParameters, $shopIds, $limit)
     {
-        $searchKeyword = strtolower($searchParameters['searchField']);
+        $searchKeyword = '';
+        if(isset($searchParameters['searchField'])) :
+         $searchKeyword = $searchParameters['searchField'];   
+        endif;
+        
         $currentDate = date('Y-m-d H:i:s');
         $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
         $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
