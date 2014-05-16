@@ -6,7 +6,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
         $this->homePageData = $homePageData;
         $leftBlockList = '
         <div class="categories-block">
-            <a href="' . HTTP_PATH. FrontEnd_Helper_viewHelper::__link('categorieen') .'" class="all">'. $this->zendTranslate->translate('All Categories') .'</a>
+            <a href="' . HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen') .'" class="all">'. $this->zendTranslate->translate('All Categories') .'</a>
             <ul>' 
                .$this->getHomePageLeftColumnList().
             '</ul>
@@ -92,8 +92,8 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     }
 
     public function getHomePageRightColumnOffersList() {
-        $topOffer = $this->getRightColumnOffersHtml('topOffers', HTTP_PATH. FrontEnd_Helper_viewHelper::__link('top20'), 'All Top Codes');
-        $newOffer = $this->getRightColumnOffersHtml('newOffers', HTTP_PATH. FrontEnd_Helper_viewHelper::__link('nieuw'), 'All New Codes');
+        $topOffer = $this->getRightColumnOffersHtml('topOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('top20'), 'All Top Codes');
+        $newOffer = $this->getRightColumnOffersHtml('newOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('nieuw'), 'All New Codes');
         $categories = $this->getRighColumnCategoriesHtml();
         $specialListPage = $this->getRightColumnSpicialListHtml();
         $savingGuides = $this->getRightColumnSavingGuidesListHtml();
@@ -101,7 +101,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     }
 
     public function getRightColumnSavingGuidesListHtml() {
-        return $this->getRightColumnOffersHtml('moneysaving', HTTP_PATH. FrontEnd_Helper_viewHelper::__link('bespaarwijzer') , 'All Saving Guides', 'moneysaving'); 
+        return $this->getRightColumnOffersHtml('moneysaving', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer') , 'All Saving Guides', 'moneysaving'); 
     }
 
     public function getRightColumnSpicialListHtml() {
@@ -115,7 +115,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
      public function getRighColumnCategoriesHtml() {
          $categegoriesHtml = '';
          foreach ($this->homePageData['topCategoriesOffers'] as $categoryId=>$topCategorieOffers) {
-           $categegoriesHtml .= $this->getRightColumnOffersHtml('categories', HTTP_PATH. FrontEnd_Helper_viewHelper::__link('categorieen') .'/'. $categoryId, 'All Category Codes', $categoryId);
+           $categegoriesHtml .= $this->getRightColumnOffersHtml('categories', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen') .'/'. $categoryId, 'All Category Codes', $categoryId);
          }
          return $categegoriesHtml;
     }
@@ -178,7 +178,8 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
 
     public function getToCategoryRightCoulumnList($dynamicDivId) {
         $categoryOffersRightHtml = '';
-        foreach ($this->homePageData['topCategoriesOffers'][$dynamicDivId] as $categoryOffer) {
+        $topTenCategoryOffers = array_slice($this->homePageData['topCategoriesOffers'][$dynamicDivId], 0, 10);
+        foreach ($topTenCategoryOffers as $categoryOffer) {
             $categoryOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($categoryOffer);
         }
        return $categoryOffersRightHtml;
@@ -186,7 +187,8 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
 
     public function getSpecialPageRightCoulumnList($dynamicDivId) {
         $specialOffersRightHtml = '';
-        foreach ($this->homePageData['specialPagesOffers'][$dynamicDivId] as $specialOffer) {
+        $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId] , 0, 10);
+        foreach ($topTenSpecialListPageOffers as $specialOffer) {
             $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer);
         }
         return $specialOffersRightHtml;
@@ -204,7 +206,8 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
 
     public function getMoneySavingGuidesRightCoulumnList($dynamicDivId) {
         $moneySavingGuidestHtml = '';
-        foreach ($this->homePageData['moneySavingGuides'] as $savingGuide) {
+        $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
+        foreach ($topTenMoneySavingGuides as $savingGuide) {
             $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/") .'thum_article_medium_'. $savingGuide['article']['thumbnail']['name'];
             $savingPermalink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$savingGuide['article']['permalink'];
             $savingTitle = $savingGuide['article']['title'];

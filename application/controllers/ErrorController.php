@@ -70,7 +70,6 @@ class ErrorController extends Zend_Controller_Action
         }
         if ($this->getInvokeArg('displayExceptions') == true) {
             echo $this->view->exception = $errors->exception;
-            die();
         }
 
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
