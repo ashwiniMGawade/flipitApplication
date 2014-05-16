@@ -25,7 +25,7 @@ class VisitorExport {
             // check if database is a site
             if ($key != 'imbull') {
                 try {
-                    $this->exportingShops( $connection ['dsn'], $key);
+                    $this->exportVisitors( $connection ['dsn'], $key);
                 } catch ( Exception $e ) {
                     echo $e->getMessage ()."\n\n";
                 }
@@ -33,7 +33,7 @@ class VisitorExport {
         }
     }
 
-    protected function exportingShops($dsn, $keyIn)
+    protected function exportVisitors($dsn, $keyIn)
     {
         try {
 
