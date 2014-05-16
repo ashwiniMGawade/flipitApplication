@@ -51,12 +51,12 @@ class Admin_RefreshvarnishController extends Zend_Controller_Action
 
         #translating sitemaps names
         $sitemaps = FrontEnd_Helper_viewHelper::__link('sitemap');
-        $bespaarwijzer = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
+        $plus = FrontEnd_Helper_viewHelper::__link('plus');
         $main = FrontEnd_Helper_viewHelper::__link('main');
         $shops = FrontEnd_Helper_viewHelper::__link('shops');
 
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
-        $sitemap_bespaarwijzer = $sitemaps.'_'.$bespaarwijzer.'.xml';
+        $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
         $sitemap_main = $sitemaps.'_'.$main.'.xml';
 
 
@@ -87,7 +87,7 @@ class Admin_RefreshvarnishController extends Zend_Controller_Action
         }
 
 
-        $bespaarFile = realpath(ROOT_PATH.'sitemaps/'.$sitemap_bespaarwijzer) ;
+        $bespaarFile = realpath(ROOT_PATH.'sitemaps/'.$sitemap_plus) ;
         if(file_exists( $bespaarFile)) {
             $bespaar_urls = simplexml_load_file($bespaarFile);
             if (!empty($bespaar_urls)) {

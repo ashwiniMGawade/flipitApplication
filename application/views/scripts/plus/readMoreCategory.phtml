@@ -13,7 +13,7 @@
         <?php  	
  			$img = PUBLIC_PATH_CDN.$this->thumbnail['path'].'thum_article_samll_'.$this->thumbnail['name'];
 		
-		$mlink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'. $this->permalink;
+		$mlink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus').'/'. $this->permalink;
 		$nameArr = explode(' ', $this->authorname);
 		$profileLink = HTTP_PATH_LOCALE."about/profile/id/".$this->authorid;
 		$name = substr($nameArr[0],0, 5);

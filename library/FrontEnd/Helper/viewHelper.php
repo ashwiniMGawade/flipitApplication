@@ -1288,8 +1288,8 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                 $img = PUBLIC_PATH_CDN.$articles[$i]['articles']['ArtIcon']['path']."thum_article_medium_".$articles[$i]['articles']['ArtIcon']['name'];
 
         $string.='<div class="mostpopular-col1">
-                    <div class="rediusnone1"><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . '<img src="' . $img . '"></a></div>
-                    <div><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . $articles[$i]['articles']['title'].'</a></div></div>';
+                    <div class="rediusnone1"><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . '<img src="' . $img . '"></a></div>
+                    <div><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . $articles[$i]['articles']['title'].'</a></div></div>';
         }
         $string.='<!-- Most Popular Col1 Ends -->
         </div>';
@@ -1333,10 +1333,10 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
 
         $string.='<div class="mostpopular-col1">
         <span class="mostpopular-col1-img1">
-            <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$articles[$i]['permalink'].'"><img  src="'.$img.'" alt="'.$articles[$i]['title'].'"></a>
+            <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['permalink'].'"><img  src="'.$img.'" alt="'.$articles[$i]['title'].'"></a>
         </span>
         <span class="mostpopular-col1-text">
-            <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$articles[$i]['permalink'].'">'.$articles[$i]['title'].'</a>
+            <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['permalink'].'">'.$articles[$i]['title'].'</a>
         </span>
         </div>';
         }
@@ -1480,7 +1480,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
 
                     }
         $mainUl .="<div class='clr'></div>";
-        $mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer')."'><img src='".HTTP_PATH."public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle bespaarwijzers')."</a> &raquo;</div>";
+        $mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus')."'><img src='".HTTP_PATH."public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle pluss')."</a> &raquo;</div>";
         $mainUl .="</div>";//close row
 
         $mainUl .="</div>";//close new-outer

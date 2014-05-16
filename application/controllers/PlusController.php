@@ -6,7 +6,7 @@
  * @author Raman pending by Romy
  *
  */
-class BespaarwijzerController extends Zend_Controller_Action
+class PlusController extends Zend_Controller_Action
 {
     /**
      * override views based on modules if exists
@@ -34,26 +34,26 @@ class BespaarwijzerController extends Zend_Controller_Action
     public function indexAction()
     {
         $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $moneySavingPagePermalink = FrontEnd_Helper_viewHelper::__link('bespaarwijzer');
+        $moneySavingPagePermalink = FrontEnd_Helper_viewHelper::__link('plus');
         $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_moneysavingpage".$moneySavingPagePermalink."_list", MoneySaving::getPageDetails($moneySavingPagePermalink));
         $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
-
-        $this->view->facebookDescription = trim($moneySavingPageDetails[0]['metaDescription']);
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->facebookTitle = $moneySavingPageDetails[0]['pageTitle'];
-        $this->view->facebookShareUrl = $moneySavingPagePermalink;
-        $this->view->facebookImage = HTTP_PATH."public/images/bespaarwijzer_og.png";
-        $this->view->twitterDescription = trim($moneySavingPageDetails[0]['metaDescription']);
         
-        $this->view->pageTitle = $moneySavingPageDetails[0]['pageTitle'];
+        $this->view->facebookDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :'');
+        $this->view->facebookLocale = FACEBOOK_LOCALE;
+        $this->view->facebookTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
+        $this->view->facebookShareUrl = $moneySavingPagePermalink;
+        $this->view->facebookImage = HTTP_PATH."public/images/plus_og.png";
+        $this->view->twitterDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :'');
+        
+        $this->view->pageTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
         $this->view->permaLink = $moneySavingPagePermalink;
-        $this->view->headTitle(trim($moneySavingPageDetails[0]['metaTitle']));
-        $this->view->headMeta()->setName('description', trim($moneySavingPageDetails[0]['metaDescription']));
+        $this->view->headTitle(trim(isset($moneySavingPageDetails[0]['metaTitle']) ? $moneySavingPageDetails[0]['metaTitle'] :''));
+        $this->view->headMeta()->setName('description', trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :''));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
-        if($moneySavingPageDetails[0]['customHeader']) {
-            $this->view->layout()->customHeader = "\n" . $moneySavingPageDetails[0]['customHeader'];
+        if(isset($moneySavingPageDetails[0]['customHeader'])) {
+            $this->view->layout()->customHeader = "\n" . isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
         }
 
         $this->view->mostReadArticles = $mostReadArticles;
@@ -157,7 +157,7 @@ class BespaarwijzerController extends Zend_Controller_Action
         $this->view->fbtitle = @$this->pageDetail[0]['name'];
         $this->view->fbshareUrl = HTTP_PATH_LOCALE.$this->pageDetail[0]['permalink'];;
 
-        $this->view->fbImg = HTTP_PATH."public/images/bespaarwijzer_og.png";
+        $this->view->fbImg = HTTP_PATH."public/images/plus_og.png";
 
         $this->view->category = $category;
         $this->view->mostReadArtOfcategory = $mostreadArtOfCategory;

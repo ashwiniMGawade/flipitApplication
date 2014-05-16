@@ -45,7 +45,7 @@ class Admin_SitemapController extends Zend_Controller_Action
                             Disallow:/admin/
                             Sitemap: http://www.kortingscode.nl/public/sitemaps/sitemap_main.xml
                             Sitemap: http://www.kortingscode.nl/public/sitemaps/sitemap_shops.xml
-                            Sitemap: http://www.kortingscode.nl/public/sitemaps/sitemap_bespaarwijzer.xml
+                            Sitemap: http://www.kortingscode.nl/public/sitemaps/sitemap_plus.xml
 
         ";
         $robotTextFile = $pathToXMLFile."robots.txt";
@@ -68,9 +68,9 @@ class Admin_SitemapController extends Zend_Controller_Action
         print "Sitemap for Online shops has been created successfully!!!";
         fclose($shopHandle);
 
-        //generating sitemap Bespaarwijzers
-        $guidemap = $sitemap->generate_guides_sitemap($locale);
-        $guideFile = $pathToXMLFile."sitemaps/sitemap_bespaarwijzer.xml";
+        //generating sitemap pluss
+        $guidemap = $sitemap->generateGuidesSitemap($locale);
+        $guideFile = $pathToXMLFile."sitemaps/sitemap_plus.xml";
 
         $guideHandle = fopen($guideFile, 'w');
         fwrite($guideHandle, $guidemap);

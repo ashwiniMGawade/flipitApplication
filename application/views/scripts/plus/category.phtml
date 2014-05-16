@@ -4,7 +4,7 @@
      $page = $this->page;
      $pageDetail = $this->pageDetail;
      
-     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."bespaarwijzer' style='color:#6a6a6a'>".$this->translate('Bespaar Wijzer')."</a>";
+     $breadcrumb = "<a href='".HTTP_PATH_LOCALE."plus' style='color:#6a6a6a'>".$this->translate('Bespaar Wijzer')."</a>";
 	 echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
 	 $category = $this->category;
 ?>
@@ -15,20 +15,20 @@
 	 if(!empty($category)){
 	 	$namebespaar = $category[0]['name'];
 	 ?> 
-        <!-- Bespaarwijzer Starts -->
+        <!-- plus Starts -->
         <div class="new-outer">
-        <div class="bespaarwijzer-outer">
+        <div class="plus-outer">
         
-        <!-- Bespaarwijzer Left Starts -->
-        	<div class="bespaarwijzer-left">
-            	<div class="bespaarwijzer-left-heading">
+        <!-- plus Left Starts -->
+        	<div class="plus-left">
+            	<div class="plus-left-heading">
             	  <h1><?php echo $namebespaar; ?></h1>
             	</div>
-            	<div class="bespaarwijzer-left-category">
+            	<div class="plus-left-category">
 					<?php echo $category[0]['description']; ?>                  
                 </div>
             </div>
-            <!-- Bespaarwijzer Left Ends -->
+            <!-- plus Left Ends -->
                    <?php  	
 						  	$img = PUBLIC_PATH_CDN.$category[0]['ArtCatIcon']['path']."thum_articleCategory_big_".$category[0]['ArtCatIcon']['name'];
 						 
@@ -39,7 +39,7 @@
             </div>
         </div>
         </div>
-        <!-- Bespaarwijzer Ends -->
+        <!-- plus Ends -->
         
         <!-- Separator Starts -->
         <div class="separator">&nbsp;</div>
@@ -151,7 +151,7 @@
 	    		<?php
 	    		 if(!empty($this->allMoneySavingArticles)) { 
 	    		 	
-	    		 	echo $this->partialLoop('bespaarwijzer/readMoreCategory.phtml',$this->allMoneySavingArticles);
+	    		 	echo $this->partialLoop('plus/readMoreCategory.phtml',$this->allMoneySavingArticles);
 	    		 	
 	    		 } else {
 	    		 	echo $this->translate("No Records Found");

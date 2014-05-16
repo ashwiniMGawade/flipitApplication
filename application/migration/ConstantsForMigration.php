@@ -1,4 +1,6 @@
 <?php
+ini_set('memory_limit', '-1');
+set_time_limit(0);
 defined('APPLICATION_PATH')
 || define('APPLICATION_PATH',
 		dirname(dirname(__FILE__)));

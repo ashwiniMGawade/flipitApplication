@@ -96,7 +96,7 @@ function getArticleCategory(iSearchText,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var value = obj.aData.permalink; 
-								value = value.replace("bespaarwijzer/", "");
+								value = value.replace("plus/", "");
 								return "<p class='word-wrap-without-margin' style='width:190px;'>"+value+"</p>";
 							 },
 							"bSearchable" : true,

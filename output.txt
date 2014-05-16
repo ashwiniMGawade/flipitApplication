@@ -4,7 +4,7 @@ Powered by PHPUnit 3.7.28 by Sebastian Bergmann.
 <head>
 <title>Kortingscode.nl - Exclusieve Kortingscodes en Aanbiedingen</title><link href="http://www.kortingscode.nl" rel="canonical" />
 <link href="http://www.kortingscode.nl/public/images/favicon.ico" rel="shortcut icon" type="image/x-icon" /><meta http-equiv="Content-type" content="text/html; charset=UTF-8" />
-<meta name="description" content="Kortingscodes voor al jouw online aankopen! Kijk op Kortingscode.nl voor de nieuwste gratis kortingscode en Bespaarwijzers en bespaar op al je online aankopen." />
+<meta name="description" content="Kortingscodes voor al jouw online aankopen! Kijk op Kortingscode.nl voor de nieuwste gratis kortingscode en pluss en bespaar op al je online aankopen." />
 <meta name="robots" content="index, follow" />
 <meta property="og:title" content="Kortingscode.nl - Exclusieve Kortingscodes en Aanbiedingen" />
 <meta property="og:type" content="website" />
@@ -66,13 +66,13 @@ var HOST_PATH = "http://www.kortingscode.nl/";    //]]>
                 });
             </script>
                             </div>
-            <div class="navigation"><ul><li><a id="top-20-codes" name="top-20-codes" class="" href="http://www.kortingscode.nl/top-20">Top 20 Codes</a></li><li><a id="alle-winkels" name="alle-winkels" class="" href="http://www.kortingscode.nl/alle-winkels">Alle winkels</a></li><li><a id="categorie&#235;n" name="categorie&#235;n" class="" href="http://www.kortingscode.nl/categorieen">Categorie&#235;n</a></li><li><a rel="toggel" id="bespaarwijzer" name="bespaarwijzer" class="show_hide1" href="javascript:void(0);">Bespaarwijzer</a></li></ul></div>        </div>
+            <div class="navigation"><ul><li><a id="top-20-codes" name="top-20-codes" class="" href="http://www.kortingscode.nl/top-20">Top 20 Codes</a></li><li><a id="alle-winkels" name="alle-winkels" class="" href="http://www.kortingscode.nl/alle-winkels">Alle winkels</a></li><li><a id="categorie&#235;n" name="categorie&#235;n" class="" href="http://www.kortingscode.nl/categorieen">Categorie&#235;n</a></li><li><a rel="toggel" id="plus" name="plus" class="show_hide1" href="javascript:void(0);">plus</a></li></ul></div>        </div>
     </div>
 </div>
 
 				<div class="content-section">
 
-	      		<div class="nav-container hide" style="display: none;"><div class="new-outer"><div class="row" id="links-submenu"><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/bespaarwijzercat/online-besparen" class="">Online Besparen</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/vergelijkingssites-online-besparen" class="">De beste vergelijkingssites</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/aanbiedingen-folders" class="">Geld besparen met folders</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/elektronica-shoppen" class="">Elektronica bestellen</a></li></ul><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/bespaarwijzercat/in-en-om-het-huis" class="">In en om het Huis</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/besparen-op-kleding" class="">Fashion voor budget prijzen</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/besparen-op-boodschappen" class="">Besparen op boodschappen</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/consuminderen" class="">Consuminderen</a></li></ul><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/bespaarwijzercat/goedkoper-reizen" class="">Goedkoper reizen</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/korting-in-het-openbaar-vervoer" class="">Korting op het OV</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/goedkoop-reizen" class="">Goedkoper reizen</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/besparen-op-brandstof" class="">Besparen op brandstof</a></li></ul><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/bespaarwijzercat/vaste-lasten-verlagen" class="">Vaste lasten verlagen</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/besparen-op-belkosten" class="">Besparen op belkosten</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/schulden" class="">Schulden voorkomen</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/triple-play" class="">Goedkoper TV & Internet</a></li></ul><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/bespaarwijzercat/trap-hier-niet-in" class="">Trap hier niet in</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/loterij-valkuilen" class="">Maakt de jackpot jou gelukkiger?</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/besparen-op-verzekeringen" class="">Welke verzekering heb je nodig?</a></li><li><a href="http://www.kortingscode.nl/bespaarwijzer/consumenten-rechten" class="">Jouw rechten als consument</a></li></ul><div class='clr'></div><div class='sub-nav-bot-link'><a href='http://www.kortingscode.nl/bespaarwijzer'><img src='http://www.kortingscode.nl/public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>Alle bespaarwijzers</a> &raquo;</div></div></div></div> 
+	      		<div class="nav-container hide" style="display: none;"><div class="new-outer"><div class="row" id="links-submenu"><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/pluscat/online-besparen" class="">Online Besparen</a></li><li><a href="http://www.kortingscode.nl/plus/vergelijkingssites-online-besparen" class="">De beste vergelijkingssites</a></li><li><a href="http://www.kortingscode.nl/plus/aanbiedingen-folders" class="">Geld besparen met folders</a></li><li><a href="http://www.kortingscode.nl/plus/elektronica-shoppen" class="">Elektronica bestellen</a></li></ul><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/pluscat/in-en-om-het-huis" class="">In en om het Huis</a></li><li><a href="http://www.kortingscode.nl/plus/besparen-op-kleding" class="">Fashion voor budget prijzen</a></li><li><a href="http://www.kortingscode.nl/plus/besparen-op-boodschappen" class="">Besparen op boodschappen</a></li><li><a href="http://www.kortingscode.nl/plus/consuminderen" class="">Consuminderen</a></li></ul><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/pluscat/goedkoper-reizen" class="">Goedkoper reizen</a></li><li><a href="http://www.kortingscode.nl/plus/korting-in-het-openbaar-vervoer" class="">Korting op het OV</a></li><li><a href="http://www.kortingscode.nl/plus/goedkoop-reizen" class="">Goedkoper reizen</a></li><li><a href="http://www.kortingscode.nl/plus/besparen-op-brandstof" class="">Besparen op brandstof</a></li></ul><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/pluscat/vaste-lasten-verlagen" class="">Vaste lasten verlagen</a></li><li><a href="http://www.kortingscode.nl/plus/besparen-op-belkosten" class="">Besparen op belkosten</a></li><li><a href="http://www.kortingscode.nl/plus/schulden" class="">Schulden voorkomen</a></li><li><a href="http://www.kortingscode.nl/plus/triple-play" class="">Goedkoper TV & Internet</a></li></ul><ul class="column_two"><li class="new_heading" ><a href="http://www.kortingscode.nl/pluscat/trap-hier-niet-in" class="">Trap hier niet in</a></li><li><a href="http://www.kortingscode.nl/plus/loterij-valkuilen" class="">Maakt de jackpot jou gelukkiger?</a></li><li><a href="http://www.kortingscode.nl/plus/besparen-op-verzekeringen" class="">Welke verzekering heb je nodig?</a></li><li><a href="http://www.kortingscode.nl/plus/consumenten-rechten" class="">Jouw rechten als consument</a></li></ul><div class='clr'></div><div class='sub-nav-bot-link'><a href='http://www.kortingscode.nl/plus'><img src='http://www.kortingscode.nl/public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>Alle pluss</a> &raquo;</div></div></div></div> 
 <!-- //Menu Outer-->
 				<script type="text/javascript">
     $(function() {
@@ -769,7 +769,7 @@ var HOST_PATH = "http://www.kortingscode.nl/";    //]]>
 
    			<!-- Popular Kortings Starts -->
         	<div class="popular-kortings-mid-new">
-       		    <h2 class="text-white">Bespaarwijzers</h2>
+       		    <h2 class="text-white">pluss</h2>
                 <!-- Popular Kortings Mid Starts -->
                 <div class="popular-kortings-mid">
 
@@ -777,19 +777,19 @@ var HOST_PATH = "http://www.kortingscode.nl/";    //]]>
                 	 <div class="popular-kortings-col6">
                     	<div class="popular-kortings-monetsaving-img rediusnone ">
                     	
-                    	<a href="http://www.kortingscode.nl/bespaarwijzer/goedkoop-wintersport"  >
+                    	<a href="http://www.kortingscode.nl/plus/goedkoop-wintersport"  >
                             <img class='' src="http://img.kortingscode.nl/public/images/upload/article/thum_article_medium_1381745113_wintersport.png" alt="Wintersport vakantie met een klein budget"/>
                         </a>
                     	</div>
                        <div class="popular-kortings-col1-text-outer bg-none">
-                        	<div class="popular-kortings-col1-text textW home-bespaarwijzer-title">
+                        	<div class="popular-kortings-col1-text textW home-plus-title">
                         	   <h3>
-                                    <a class="text-white-link" href="http://www.kortingscode.nl/bespaarwijzer/goedkoop-wintersport"   >
+                                    <a class="text-white-link" href="http://www.kortingscode.nl/plus/goedkoop-wintersport"   >
                                 		Wintersport vakantie met een k...                                    </a>
                                 </h3>
                		     </div>
                        		 <div class="popular-kortings-col1-text2 textW">
-                        		<a class="text-light-grey" href="http://www.kortingscode.nl/bespaarwijzer/goedkoop-wintersport"   >
+                        		<a class="text-light-grey" href="http://www.kortingscode.nl/plus/goedkoop-wintersport"   >
                                     Veel Nederlanders kijken al maanden van tevoren uit naar d&eacute...                                </a>
                        		 </div>
                         </div>
@@ -801,19 +801,19 @@ var HOST_PATH = "http://www.kortingscode.nl/";    //]]>
                 	 <div class="popular-kortings-col6 bdr-none">
                     	<div class="popular-kortings-monetsaving-img rediusnone ">
                     	
-                    	<a href="http://www.kortingscode.nl/bespaarwijzer/vliegtickets-boeken"  >
+                    	<a href="http://www.kortingscode.nl/plus/vliegtickets-boeken"  >
                             <img class='' src="http://img.kortingscode.nl/public/images/upload/article/thum_article_medium_1381763086_vliegtuigen.png" alt="Zoek & vind de goedkoopste vliegtickets"/>
                         </a>
                     	</div>
                        <div class="popular-kortings-col1-text-outer bg-none">
-                        	<div class="popular-kortings-col1-text textW home-bespaarwijzer-title">
+                        	<div class="popular-kortings-col1-text textW home-plus-title">
                         	   <h3>
-                                    <a class="text-white-link" href="http://www.kortingscode.nl/bespaarwijzer/vliegtickets-boeken"   >
+                                    <a class="text-white-link" href="http://www.kortingscode.nl/plus/vliegtickets-boeken"   >
                                 		Zoek & vind de goedkoopste vli...                                    </a>
                                 </h3>
                		     </div>
                        		 <div class="popular-kortings-col1-text2 textW">
-                        		<a class="text-light-grey" href="http://www.kortingscode.nl/bespaarwijzer/vliegtickets-boeken"   >
+                        		<a class="text-light-grey" href="http://www.kortingscode.nl/plus/vliegtickets-boeken"   >
                                     Een super goedkope vlucht vinden: iedereen wil het, maar niemand ...                                </a>
                        		 </div>
                         </div>
@@ -824,7 +824,7 @@ var HOST_PATH = "http://www.kortingscode.nl/";    //]]>
                                    </div>
                 <!-- Popular Kortings Mid Ends -->
                 <div class="popular-kortings-bot6-new">
-                <div class="button-grey-new text-light-grey">Alle                <a class="text-white-link" href="http://www.kortingscode.nl/bespaarwijzer">Bespaarwijzers</a></div>
+                <div class="button-grey-new text-light-grey">Alle                <a class="text-white-link" href="http://www.kortingscode.nl/plus">pluss</a></div>
                 </div>
         	</div>
         	<!-- Popular Kortings Ends -->
@@ -990,7 +990,7 @@ var HOST_PATH = "http://www.kortingscode.nl/";    //]]>
 				 </li>
 				                   <li>
 				    <a  class="" id="tab_3" onclick="nexttab('3');" href="javascript:void(this)">
-						<span id="about" class="service_nav_over" >Wat zijn Bespaarwijzers?</span>
+						<span id="about" class="service_nav_over" >Wat zijn pluss?</span>
 					</a>
 				 </li>
 				 
@@ -1056,15 +1056,15 @@ var HOST_PATH = "http://www.kortingscode.nl/";    //]]>
                          <div style="display: none; visibility: hidden;" id="services_3">
                  <div class="wt-kcode-txt">
 
-                  	<h3><strong>Maak gebruik van onze Bespaarwijzers!</strong></h3>
+                  	<h3><strong>Maak gebruik van onze pluss!</strong></h3>
 
-<p>Vraag jij je wel eens af hoe het toch komt dat sommige mensen overal korting op krijgen? In de BespaarWijzer staan supergedetailleerde guides die je helpen geld te besparen op al je vaste lasten en aankopen. Dit kunnen allerlei tips zijn, van de goedkoopste webshops&nbsp;die wij konden vinden tot creatieve manieren om je oude telefoon in te ruilen voor korting op de nieuwe.</p>
+<p>Vraag jij je wel eens af hoe het toch komt dat sommige mensen overal korting op krijgen? In de plus staan supergedetailleerde guides die je helpen geld te besparen op al je vaste lasten en aankopen. Dit kunnen allerlei tips zijn, van de goedkoopste webshops&nbsp;die wij konden vinden tot creatieve manieren om je oude telefoon in te ruilen voor korting op de nieuwe.</p>
 
-<p>In de BespaarWijzers plaatsen wij ook artikelen die je helpen veelvoorkomende valkuilen te vermijden. Hier leren we je wanneer een deal te goed is om waar te zijn, hoe mensen regelmatig online worden opgelicht en alle andere zaken&nbsp;waar je niet in moet trappen.</p>
+<p>In de pluss plaatsen wij ook artikelen die je helpen veelvoorkomende valkuilen te vermijden. Hier leren we je wanneer een deal te goed is om waar te zijn, hoe mensen regelmatig online worden opgelicht en alle andere zaken&nbsp;waar je niet in moet trappen.</p>
 
-<h3><strong>Help mee met de Bespaarwijzers</strong></h3>
+<h3><strong>Help mee met de pluss</strong></h3>
 
-<p>Wil jij een bijdrage leveren aan onze Bespaarwijzers? Neem dan <a href="http://kortingscode.nl/info/contact">contact</a> met ons op, alle hulp is namelijk welkom als het op besparen aankomt!</p>
+<p>Wil jij een bijdrage leveren aan onze pluss? Neem dan <a href="http://kortingscode.nl/info/contact">contact</a> met ons op, alle hulp is namelijk welkom als het op besparen aankomt!</p>
 
 <p>&nbsp;</p>
 

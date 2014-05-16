@@ -62,8 +62,22 @@ class Articles extends BaseArticles
         return $allArticles;
     }
 
-
-
+    public static function generateArticlePermalinks($id)
+    {
+        $allMoneySavingArticle = Doctrine_Query::create()->select('p.id, m.id, ac.id, r.id, a.id, a.permalink, ac.permalink')
+            ->from('page p')
+            ->leftJoin('p.moneysaving m')
+            ->leftJoin('m.articlecategory ac')
+            ->leftJoin('m.refarticlecategory r')
+            ->leftJoin('r.articles a')
+            ->where('p.id =' . "'$id'")
+            ->andWhere('p.publish=1')
+            ->andWhere('p.deleted=0')
+            ->andWhere('a.deleted=0')
+            ->orderBy('ac.name')
+            ->fetchArray();
+        return $allMoneySavingArticle;
+    }
     ###################### Refactored Block ends #############################
 
 
@@ -270,7 +284,7 @@ class Articles extends BaseArticles
             /* $route = new RoutePermalink();
             $route->permalink =  $params['articlepermalink'];
             $route->type = 'ART';
-            $route->exactlink = 'bespaarwijzer/guidedetail/id/'.$data->id;
+            $route->exactlink = 'plus/guidedetail/id/'.$data->id;
             $route->save(); */
 
             if(!empty($params['title']) && !empty($params['content'])){
@@ -449,7 +463,7 @@ class Articles extends BaseArticles
 
 
             if(!empty($getRouteLink)){
-                $exactLink = 'bespaarwijzer/guidedetail/id/'.$data->id;
+                $exactLink = 'plus/guidedetail/id/'.$data->id;
 
             }
 
@@ -931,25 +945,7 @@ class Articles extends BaseArticles
      * @return Article permalinks
      */
 
-    public static function generateArticlePermalinks($id)
-    {
-        $allMoneySavingArticle = Doctrine_Query::create()->select('p.id, m.id, ac.id, r.id, a.id, a.permalink, ac.permalink')
-        ->from('page p')
-        ->leftJoin('p.moneysaving m')
-        ->leftJoin('m.articlecategory ac')
-        ->leftJoin('m.refarticlecategory r')
-        ->leftJoin('r.articles a')
-        ->where('p.id =' . "'$id'")
-        ->andWhere('p.publish=1')
-        ->andWhere('p.deleted=0')
-        ->andWhere('a.deleted=0')
-        ->orderBy('ac.name')
-        ->fetchArray();
-
-
-        return $allMoneySavingArticle;
-
-    }
+    
 
 
     /**
@@ -974,11 +970,11 @@ class Articles extends BaseArticles
 
         $urlsArray = array();
 
-        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'bespaarwijzercat') .'/' ;
+        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'pluscat') .'/' ;
 
         # check for article permalink
         if(isset($article['permalink'])) {
-            $urlsArray[] = FrontEnd_Helper_viewHelper::__link('bespaarwijzer') . '/'. $article['permalink'];
+            $urlsArray[] = FrontEnd_Helper_viewHelper::__link('plus') . '/'. $article['permalink'];
         }
 
         # check if an editor  has permalink then add it into array
