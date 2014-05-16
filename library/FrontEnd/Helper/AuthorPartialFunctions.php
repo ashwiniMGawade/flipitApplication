@@ -17,7 +17,7 @@ class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper 
 
     public function authorSocialMediaLinks($authorDetails)
     {
-        $authorSocialMediaLinks = $authorDetails['twitter']!="" ? $this->getSocialMediaLink($authorDetails['twitter'], 'twitter.png', 'twitter') : '';
+        $authorSocialMediaLinks = $authorDetails['twitter']!="" ? $this->getSocialMediaLink($authorDetails['twitter'], 'ico-04.png', 'twitter') : '';
         $authorSocialMediaLinks .= $authorDetails['google']!="" ? $this->getSocialMediaLink($authorDetails['google'], 'plus.png', 'google plus') : '';
         $authorSocialMediaLinks .= $authorDetails['pinterest']!="" ? $this->getSocialMediaLink($authorDetails['pinterest'], 'p-icon.png', 'pinterest') : '';
         return $authorSocialMediaLinks;
@@ -28,7 +28,7 @@ class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper 
         return 
         '<li>
             <a href="'.$socialMediaLinkUrl.'" target="_blank">
-                <img src="' .PUBLIC_PATH ."images/front_end/". $socialMediaLinkImage .'" width="16" height="16" />' . $this->zendTranslate->translate($socialMediaLinkName)
+                <img src="' .HTTP_PATH ."public/images/front_end/". $socialMediaLinkImage .'" width="16" height="16" />' . $this->zendTranslate->translate($socialMediaLinkName)
             .'</a>
         </li>';
     }
