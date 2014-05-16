@@ -59,9 +59,10 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
     {
         if ($this->moduleName == 'default' || $this->moduleName == null) {
             $layoutPath = APPLICATION_PATH . '/layouts/scripts/';
+        } elseif ($this->moduleName=='admin') {
+            $layoutPath = APPLICATION_PATH . '/modules/'.$this->moduleName.'/layouts/scripts/';
         } else {
-            $layoutPath =
-            APPLICATION_PATH . '/modules/'.$this->moduleName.'/layouts/scripts/';
+            $layoutPath = APPLICATION_PATH . '/layouts/scripts/';
         }
 
         return $layoutPath;
