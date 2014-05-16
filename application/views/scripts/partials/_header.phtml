@@ -1,21 +1,3 @@
-<header id="header">
-    <div class="top-panel">
-        <div class="container">
-            <span class="slogan">
-<?php
-echo FrontEnd_Helper_viewHelper::replaceStringVariable($this->translate('Default header text'));
-?>
-            </span>
-            <a class="menu-account" href="javascript:void(0);">account menu</a>
-<?php
-$this->locale = LOCALE != 'en' ? LOCALE : '';
-$userMenuLink = $this->locale. '/login/usermenu';
-echo $this->esi($userMenuLink);
-?>
-        </div>
-    </div>
-    <div class="navigation">
-        <div class="container">
 <?php 
 if(LOCALE == ''):
     $logoCssClass = 'kortingscode-logo';
@@ -23,32 +5,48 @@ if(LOCALE == ''):
 else :
     $logoCssClass = 'logo';
     $siteName = 'FlipIt';
-endif;
-?>  
-            <strong class="<?php echo $logoCssClass; ?>">
-                <a href="<?php echo APPLICATION_PATH; ?>"><?php echo $siteName;?></a>
-            </strong>
-            <a href="javascript:void(0);" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
+endif
+?>
+<header id="header">
+    <div class="top-panel">
+        <div class="container">
+            <span class="slogan"><?php echo $siteName . ' : ' . $this->translate('save money with online discount codes and save pointers');?></span>
+            <a class="menu-account" href="javascript:void(0);"><?php echo $this->translate('account menu');?></a>
+            <nav class="account-box">
+                <?php
+                $this->locale = LOCALE != 'en' ? LOCALE : '';
+                $userMenuLink = $this->locale. '/login/usermenu';
+                echo $this->esi($userMenuLink);
+                ?>
+            </nav>
+        </div>
+    </div>
+    <div class="navigation">
+        <div class="container">
+            <strong class="<?php echo $logoCssClass; ?>"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('index');?>"><?php echo $siteName;?></a></strong>
             <div class="nav-bar">
+            <?php 
+            $currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+            if($currentControllerName != 'index') { ?>
                 <div class="search-box">
-<?php
-$localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
-$basePartialViewPath = new Zend_View();
-$basePartialViewPath->setScriptPath(APPLICATION_PATH . '/views/scripts/partials/');
-$localePartialViewPath = new Zend_View();
-$localePartialViewPath->setScriptPath($localePartialPath);
-$loadFile = '_headerSearch.phtml';
-
-if(file_exists($localePartialPath . $loadFile)) :
-    echo $localePartialViewPath->render($loadFile);
-else:
-    echo $basePartialViewPath->render($loadFile);
-endif;
-?>
-               </div>
-<?php 
-echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action);
-?>
+                <?php
+                $localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
+                $basePartialViewPath = new Zend_View();
+                $basePartialViewPath->setScriptPath(APPLICATION_PATH . '/views/scripts/partials/');
+                $localePartialViewPath = new Zend_View();
+                $localePartialViewPath->setScriptPath($localePartialPath);
+                $loadFile = '_headerSearch.phtml';
+                if (file_exists($localePartialPath . $loadFile)) :
+                    echo $localePartialViewPath->render($loadFile);
+                else:
+                    echo $basePartialViewPath->render($loadFile);
+                endif;
+                ?>
+                </div>
+                <?php 
+            }
+            echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action);
+            ?>
             </div>
         </div>
     </div>

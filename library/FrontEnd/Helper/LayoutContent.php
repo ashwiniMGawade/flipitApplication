@@ -209,4 +209,32 @@ class FrontEnd_Helper_LayoutContent
 
         return $twitterMetaUrl;
     }
+
+    public static function homePageBanner($homePageBanner)
+    {
+        $homePageBannerHtml = '';
+        if(!empty($homePageBanner)) {
+            $homePageWidgetBannerPath = PUBLIC_PATH_CDN. trim($homePageBanner['homepage_widget_banner_path'] . $homePageBanner['homepage_widget_banner_name']);
+            $homePageWidgetBannerPath = PUBLIC_PATH .'images/banner-07.jpg';
+            $homePageBannerHtml =
+                '<div class="block-image">
+                    <div class="image-holder">
+                        <div class="image-frame">
+                            <img src="' . $homePageWidgetBannerPath .'" alt="' . $homePageBanner['homepage_widget_banner_name'] .'">
+                        </div>
+                    </div>
+                </div>';
+        }
+        return $homePageBannerHtml;
+    }
+
+    public static function homePageSearch()
+    {
+        if (zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index') {
+            $baseViewPath = new Zend_View();
+            $baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
+            echo $baseViewPath->render('index/_homePageSearch.phtml');
+        }
+        return;
+    }
 }

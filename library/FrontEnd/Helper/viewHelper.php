@@ -251,19 +251,11 @@ EOD;
         $navigationString .= '</ul></nav>';
         return $navigationString;
     }
-    
-    /**
-     * Get footer data
-     * @author Asharma
-     * @version 1.0
-     * @return array $data
-     */
+
     public static function getFooterData()
-    {
-        $footerData = Footer::getFooter();
-    
-        return $footerData;
-    
+    { 
+       $footerData = Footer::getFooter();
+       return $footerData;
     }
 
     public static function getHeadMeta($headMetaValue)
@@ -589,7 +581,29 @@ EOD;
         }
         return $counterValue;
     }
-    
+
+    public static function getStoreForFrontEnd($storeType, $limit="")
+    {
+        $stores = '';
+        switch (strtolower($storeType)) {
+            case 'all':
+                //will be refactore in future 
+                $stores = Shop::getallStoresForFrontEnd();
+                break;
+                //will be refactore in future
+            case 'recent':
+                $stores = Shop::getrecentstores($limit);
+                break;
+                //refactored 
+            case 'popular':
+                $stores = Shop::getPopularStore($limit);
+                break;
+            default:
+                break;
+        }
+        return $stores;
+    }
+
     public static function getRealIpAddress()
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
@@ -717,6 +731,7 @@ EOD;
         }
         return array('howToGuideImagePath' => $howToGuideImagePath, 'howToGuideImageAltText' => $howToGuideImageAltText);
     }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -826,32 +841,6 @@ EOD;
             $cache->remove($newKey);
 
         }
-    }
-    /**
-     * get store from database according to type
-     * @author kraj modified by Raman
-     * @param  string  $storeType
-     * @param  integer $limit
-     * @return array   $data
-     */
-    public static function getStoreForFrontEnd($storeType, $limit="")
-    {
-        $data = '';
-        switch (strtolower($storeType)) {
-            case 'all':
-                $data = Shop::getallStoresForFrontEnd();
-                break;
-            case 'recent':
-                $data = Shop::getrecentstores($limit);
-            break;
-            case 'popular':
-                $data = Shop::getPopularStore($limit);
-                break;
-            default:
-            break;
-        }
-
-        return $data;
     }
     /**
     * get sidebar widgets for the page using permalink
@@ -1124,7 +1113,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                 $result = $data = SpecialList::getfronendsplpage($flag);
                 break;
             case "moneySaving":
-                $result = Articles :: getmoneySavingArticle($flag);
+                $result = Articles :: getmoneySavingArticles($flag);
                 break;
             case "asseenin":
                 $result = SeenIn :: getSeenInContent();

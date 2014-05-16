@@ -248,7 +248,7 @@ class FreesignupController extends Zend_Controller_Action
 
                 }
 
-                $userdetail = Visitor::getuserdetail($lastid);
+                $userdetail = Visitor::getUserDetail($lastid);
 
                 # get top 5 vouchercodes
                 $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 5) ;
