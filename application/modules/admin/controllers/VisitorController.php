@@ -135,207 +135,7 @@ class Admin_VisitorController extends Zend_Controller_Action
     	$this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
     	$this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
     }
-	/**
-     * Export user list in excel with users images
-     * @author mkaur
-     * @version 1.0
-     *
-     */
-    public function exportvisitorlistAction() {
 
-    	set_time_limit ( 10000 );
-    	ini_set('max_execution_time',115200);
-    	ini_set("memory_limit","1024M");
-
-		$role =   Zend_Auth::getInstance()->getIdentity()->roleId;
-		//get data from database (user table)
-				$data = Doctrine_Query::create()
-				->select('v.*,k.*,fv.shopId,sp.name')
-				->from("Visitor v")
-				->leftJoin('v.favoritevisitorshops fv')
-				->leftJoin('fv.shops sp')
-				->leftJoin('v.keywords k')
-				->where('v.deleted=0')
-				->orderBy("v.id DESC")->fetchArray();
-
-		//echo "<pre>"; print_r($data); die;
-		//CREATE A OBJECT OF PHPECEL CLASS
-		$objPHPExcel = new PHPExcel();
-		$objPHPExcel->setActiveSheetIndex(0);
-		$objPHPExcel->getActiveSheet()->setCellValue('A1', $this->view->translate('Name'));
-		$objPHPExcel->getActiveSheet()->setCellValue('B1', $this->view->translate('Email'));
-		$objPHPExcel->getActiveSheet()->setCellValue('C1', $this->view->translate('Gender'));
-		$objPHPExcel->getActiveSheet()->setCellValue('D1', $this->view->translate('DOB'));
-		$objPHPExcel->getActiveSheet()->setCellValue('E1', $this->view->translate('Postal Code'));
-		$objPHPExcel->getActiveSheet()->setCellValue('F1', $this->view->translate('Weekly Newsletter'));
-		$objPHPExcel->getActiveSheet()->setCellValue('G1', $this->view->translate('Fashion Newsletter'));
-		$objPHPExcel->getActiveSheet()->setCellValue('H1', $this->view->translate('Travel Newsletter'));
-		$objPHPExcel->getActiveSheet()->setCellValue('I1', $this->view->translate('Code Alert'));
-		$objPHPExcel->getActiveSheet()->setCellValue('J1', $this->view->translate('Active'));
-		$objPHPExcel->getActiveSheet()->setCellValue('K1', $this->view->translate('Keyword'));
-		$objPHPExcel->getActiveSheet()->setCellValue('L1', $this->view->translate('Favorite Shops'));
-		$objPHPExcel->getActiveSheet()->setCellValue('M1', $this->view->translate('Registration Date'));
-
-		$column = 2;
-		$row = 2;
-		foreach ($data as $visitor) {
-
-			$name  =  $visitor['firstName'] . " " . $visitor['lastName'];
-
-			$gender = '';
-			if($visitor['gender'] == 0){
-
-				$gender = 'Male';
-
-			}else{
-
-				$gender = 'Female';
-			}
-
-			$dob = '';
-			if($visitor['dateOfBirth'] != 'undefined'
-					|| $visitor['dateOfBirth'] != null
-					|| $visitor['dateOfBirth'] != '' ){
-				$dob = $visitor['dateOfBirth'];
-			}
-
-			$postal = '';
-			if($visitor['postalCode'] != 'undefined'
-					|| $visitor['postalCode'] != null
-					|| $visitor['postalCode'] != '' ){
-				$postal = $visitor['postalCode'];
-			}
-
-			$weekNews = '';
-			if($visitor['weeklyNewsLetter'] == 1 ){
-				$weekNews = $this->view->translate('Yes');
-			}else{
-				$weekNews = $this->view->translate('No');
-			}
-
-			$fashionNews = '';
-			if($visitor['fashionNewsLetter'] == 1 ){
-				$fashionNews = $this->view->translate('Yes');
-			}else{
-				$fashionNews = $this->view->translate('No');
-			}
-
-			$travelNews = '';
-			if($visitor['travelNewsLetter'] == 1 ){
-				$travelNews = $this->view->translate('Yes');
-			}else{
-				$travelNews = $this->view->translate('No');
-			}
-
-			$codeAlert = '';
-			if($visitor['codeAlert'] == 1 ){
-				$codeAlert = $this->view->translate('Yes');
-			}else{
-				$codeAlert = $this->view->translate('No');
-			}
-
-			$active = '';
-			if($visitor['active'] == 1 ){
-				$active = $this->view->translate('Yes');
-			}else{
-				$active = $this->view->translate('No');
-			}
-
-			$keywords = '';
-			if(!empty($visitor['keywords'])){
-				$prefix = '';
-				foreach ($visitor['keywords'] as $key)
-				{
-					$keywords .= $prefix  . $key['keyword'];
-					$prefix = ', ';
-				}
-			}
-
-			$favoritevisitorshops = '';
-			if(!empty($visitor['favoritevisitorshops'])){
-				$prefix = '';
-				foreach ($visitor['favoritevisitorshops'] as $fav)
-				{
-					$favoritevisitorshops .= $prefix  . $fav['shops'][0]['name'];
-					$prefix = ', ';
-				}
-			}
-
-			$created_at = $visitor['created_at'];
-
-			//SET VALUE IN CELL
-			$objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $name);
-			$objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $visitor['email']);
-			$objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $gender);
-			$objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $dob);
-			$objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $postal);
-			$objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $weekNews);
-			$objPHPExcel->getActiveSheet()->setCellValue('G'.$column, $fashionNews);
-			$objPHPExcel->getActiveSheet()->setCellValue('H'.$column, $travelNews);
-			$objPHPExcel->getActiveSheet()->setCellValue('I'.$column, $codeAlert);
-			$objPHPExcel->getActiveSheet()->setCellValue('J'.$column, $active);
-			$objPHPExcel->getActiveSheet()->setCellValue('K'.$column, $keywords);
-			$objPHPExcel->getActiveSheet()->setCellValue('L'.$column, $favoritevisitorshops);
-			$objPHPExcel->getActiveSheet()->setCellValue('M'.$column, $created_at);
-			//$objPHPExcel->getActiveSheet()->setCellValue('E'.$column, '35');
-
-
-			$column++;
-			$row++;
-		}
-		//FORMATING OF THE EXCELL
-		$headerStyle = array(
-				'fill' => array(
-						'type' => PHPExcel_Style_Fill::FILL_SOLID,
-						'color' => array('rgb'=>'00B4F2'),
-				),
-				'font' => array(
-						'bold' => true,
-				)
-		);
-		$borderStyle = array('borders' =>
-				array('outline' =>
-						array('style' => PHPExcel_Style_Border::BORDER_THICK,
-								'color' => array('argb' => '000000'),	),),);
-		//HEADER COLOR
-
-		$objPHPExcel->getActiveSheet()->getStyle('A1:'.'M1')->applyFromArray($headerStyle);
-
-		//SET ALIGN OF TEXT
-		$objPHPExcel->getActiveSheet()->getStyle('A1:M1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-		$objPHPExcel->getActiveSheet()->getStyle('B2:M'.$row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-
-		//BORDER TO CELL
-		//$objPHPExcel->getActiveSheet()->getStyle('A1:'.'E1')->applyFromArray($borderStyle);
-		$borderColumn =  (intval($column) -1 );
-		$objPHPExcel->getActiveSheet()->getStyle('A1:'.'M'.$borderColumn)->applyFromArray($borderStyle);
-
-		//SET SIZE OF THE CELL
-		$objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('D')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('F')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('G')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('H')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('I')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('J')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('K')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('L')->setAutoSize(true);
-		$objPHPExcel->getActiveSheet()->getColumnDimension('M')->setAutoSize(true);
-
-		//$objPHPExcel->getActiveSheet()->getColumnDimension('E')->setAutoSize(true);
-		// redirect output to client browser
-		$fileName =  $this->view->translate('VisitorList.xlsx');
-		header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-		header('Content-Disposition: attachment;filename='.$fileName);
-		header('Cache-Control: max-age=0');
-		$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
-		$objWriter->save('php://output');
-		die();
-
-    }
 
     /**
      * Restore visitor only change status of deleleted
@@ -720,7 +520,7 @@ class Admin_VisitorController extends Zend_Controller_Action
     public function exportXlxAction() {
 
     	# set fiel and its trnslattions
-    	$file =  UPLOAD_EXCEL_PATH . 'visitorList.xlsx' ;
+    	$file =  UPLOAD_EXCEL_PATH . 'visitorList.csv' ;
     	$fileName =  $this->view->translate($file);
 
     	$this->_helper->layout()->disableLayout();
@@ -729,9 +529,12 @@ class Admin_VisitorController extends Zend_Controller_Action
     	# set reponse headers and body
     	$this->getResponse()
     	->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
-    	->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    	->setHeader('Cache-Control', 'max-age=0')
+    	->setHeader('Content-type', 'text/csv')
+        ->setHeader('Cache-Control', 'max-age=0')
+        ->setHeader('Pragma', 'no-cache')
+    	->setHeader('Expires', '0')
     	->setBody(file_get_contents($fileName));
+
     }
 
 

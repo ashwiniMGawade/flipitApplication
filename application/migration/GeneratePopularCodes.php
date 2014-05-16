@@ -35,7 +35,7 @@ class GeneratePopularCodes
             }
         }
         
-        //uncommnet this line when you run for one locale
+        //uncomment this line when you run for one locale
         //$this->genereatePopularOffers($connections['be']['dsn'], 'be', $imbull);
         $manager->closeConnection($doctrineImbullDbConnection);
     }

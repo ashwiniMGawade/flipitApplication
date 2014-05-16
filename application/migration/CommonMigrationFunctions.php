@@ -103,4 +103,20 @@ class CommonMigrationFunctions
         ini_set('memory_limit', '-1');
         set_time_limit(0);
     }
+
+    public static function connectionToPDO($dsn)
+    {
+        $pdoCredentials             = parse_url($dsn);
+        $pdoCredentials['dbname']   = ltrim ($pdoCredentials['path'],'/');
+        return new PDO("mysql:host={$pdoCredentials['host']};dbname={$pdoCredentials['dbname']}", 
+                        $pdoCredentials['user'], $pdoCredentials['pass']);
+    }
+
+    public static function pathToExcelFolder($locale){
+
+        $localePath         = ($locale == 'en') ? '' : $locale.'/';
+        $pathToExcelFolder  = UPLOAD_EXCEL_TMP_PATH . strtolower($localePath) . 'excels/';
+        if(!file_exists($pathToExcelFolder)) mkdir($pathToExcelFolder, 0774, TRUE);
+        return $pathToExcelFolder;
+    }
 }
