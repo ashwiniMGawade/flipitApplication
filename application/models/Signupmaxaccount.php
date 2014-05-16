@@ -26,6 +26,16 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         return $data;
     }
 
+    public static function getHomepageImages()
+    {
+        $data = Doctrine_Query::create()
+        ->select('p.homepagebanner_path,p.homepagebanner_name,p.homepage_widget_banner_path,p.homepage_widget_banner_name')
+        ->from('Signupmaxaccount p')
+        ->where('id=1')
+        ->fetchOne(true,Doctrine::HYDRATE_ARRAY);
+        return $data;
+    }
+
     #################################################################
     #################### END REFACTOR CODE ##########################
     #################################################################
@@ -187,16 +197,6 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         ->from('Signupmaxaccount p')
         ->where('id=1')
         ->fetchArray();
-        return $data;
-    }
-
-    public static function getHomepageImages()
-    {
-        $data = Doctrine_Query::create()
-        ->select('p.homepagebanner_path,p.homepagebanner_name,p.homepage_widget_banner_path,p.homepage_widget_banner_name')
-        ->from('Signupmaxaccount p')
-        ->where('id=1')
-        ->fetchOne(true,Doctrine::HYDRATE_ARRAY);
         return $data;
     }
 
