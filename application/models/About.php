@@ -14,33 +14,33 @@ class About extends BaseAbout
     #####################################################
     ######### REFACTORED CODE ###########################
     #####################################################
-    public static function getAboutContent($status = "")
+    public static function getAboutContent($aboutStatus = "")
     {
-        $aboutContents =  false;
-        $aboutDetail = self::checkAboutContents();
+        $aboutContent =  false;
+        $aboutDetail = self::getAboutContentFromSettings();
         if ($aboutDetail) {
-            if ($status == 1) {
-                $status = array("1");
+            if ($aboutStatus == 1) {
+                $aboutStatus = array("1");
             } else {
-                $status = array("1", "0");
+                $aboutStatus = array("1", "0");
             }
             $aboutPageContents = array();
             foreach ($aboutDetail as $aboutPageContent) {
                 $aboutPageContents[] = $aboutPageContent['value'];
             }
-            $aboutContents = Doctrine_Query::create()
+            $aboutContent = Doctrine_Query::create()
             ->select()
             ->from("About")
-            ->whereIn('status', $status)
+            ->whereIn('status', $aboutStatus)
             ->whereIn('id', $aboutPageContents)
             ->fetchArray();
         }
-        return $aboutContents;
+        return $aboutContent;
     }
 
-    public static function checkAboutContents()
+    public static function getAboutContentFromSettings()
     {
-        return Settings::getaboutSettings("about_");
+        return Settings::getAboutSettings("about_");
     }
     #####################################################
     ######### END  REFACTORED CODE ######################

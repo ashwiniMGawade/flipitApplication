@@ -214,21 +214,20 @@ class FrontEnd_Helper_LayoutContent
     {
         $homePageBannerHtml = '';
         if(!empty($homePageBanner)) {
-            $filePath = trim($homePageBanner['homepage_widget_banner_path'] . $homePageBanner['homepage_widget_banner_name'] );
-            $imgPath = PUBLIC_PATH .'images/banner-07.jpg';
-            //PUBLIC_PATH_CDN .$filePath
+            $homePageWidgetBannerPath = PUBLIC_PATH_CDN. trim($homePageBanner['homepage_widget_banner_path'] . $homePageBanner['homepage_widget_banner_name'] );
+            $homePageWidgetBannerPath = PUBLIC_PATH .'images/banner-07.jpg';
             $homePageBannerHtml =
                 '<div class="block-image">
                     <div class="image-holder">
                         <div class="image-frame">
-                            <img src="' . $imgPath .'" alt="image description">
+                            <img src="' . $homePageWidgetBannerPath .'" alt="image description">
                         </div>
                     </div>
                 </div>';
         }
         return $homePageBannerHtml;
     }
-    
+
     public static function homePageSearch()
     {
         if (zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index') {

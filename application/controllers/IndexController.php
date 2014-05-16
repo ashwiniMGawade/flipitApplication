@@ -1,16 +1,19 @@
 <?php
-/**
- * this class is used for index (home ) of the site
- * get value from database and display on home page
- *
- * @author kraj
- *
- */
-
 class IndexController extends Zend_Controller_Action
 {
-    #################################################################
-    #################### REFACTORED CODE ##############################
+    public function init()
+    {
+        $module = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action = strtolower($this->getRequest()->getActionName());
+        if (file_exists(APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")) {
+            $this->view->setScriptPath(APPLICATION_PATH . '/modules/' . $module . '/views/scripts');
+        } else {
+            $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
+        }
+        $this->view->banner = Signupmaxaccount::getHomepageImages();
+    }
+
     public function indexAction()
     {
         $this->view->canonical = '';
@@ -23,7 +26,7 @@ class IndexController extends Zend_Controller_Action
             if ($pageDetails->customHeader) {
                 $this->view->layout()->customHeader = "\n" . $pageDetails->customHeader;
             }
-            
+
             $this->view->pageTitle = ucfirst($pageDetails->pageTitle);
             $this->view->headTitle(ucfirst(trim($pageDetails->metaTitle)));
             $this->view->headMeta()->setName('description', trim($pageDetails->metaDescription));
@@ -45,77 +48,39 @@ class IndexController extends Zend_Controller_Action
         $this->view->topCategoriesOffers = self::getCategoriesOffers($topCategoriesOffers);
         $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_list", SpecialList::getSpecialPages());
         $this->view->specialListPages = $specialListPages;
-        $this->view->specialPagesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_count", self::getSpecialListPageOffers($specialListPages));
-        $this->view->moneySavingGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homemanisaving_list", Articles::getMoneySavingArticle());
+        $this->view->specialPagesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_count", self::getSpecialListPagesOffers($specialListPages));
+        $this->view->moneySavingGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homemanisaving_list", Articles::getMoneySavingArticles());
         $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularshopForHomePage_list", FrontEnd_Helper_viewHelper::getStoreForFrontEnd("popular", 24));
         $this->view->seeninContents = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homeseenin_list", SeenIn::getSeenInContent(10));
-        $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_page", About::getAboutContent(0));
+        $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_page", About::getAboutContent(1));
     }
-    public function getSpecialListPageOffers($specialListPages)
-    {
-        $splofferlists = '';
-        foreach ($specialListPages as $specialListPage) {
-            foreach ($specialListPage['page'] as $page) {
-                $splofferlists[$page['permaLink']] = Offer::getSpecialPageOffers($page);
-            }
-        }
-        return $splofferlists;
-    }
-    
+
     public static function getTopCategoriesIds($topCategories)
     {
         $categoriesIds = '';
-        foreach ($topCategories as $topCategories) {
-            $categoriesIds[] = $topCategories['categoryId'];
+        foreach ($topCategories as $topCategory) {
+            $categoriesIds[] = $topCategory['categoryId'];
         }
         return $categoriesIds;
     }
-    
+
     public static function getCategoriesOffers($topCategoriesOffers)
     {
-        $topCategoriesOffersTest = '';
+        $topCategoriesOffersWithCategoriesPermalinkIndex = '';
         foreach ($topCategoriesOffers as $topCategoriesOffer) {
-            $topCategoriesOffersTest[$topCategoriesOffer['categoryPermalink']][] = $topCategoriesOffer['Offer'];
+            $topCategoriesOffersWithCategoriesPermalinkIndex[$topCategoriesOffer['categoryPermalink']][] = $topCategoriesOffer['Offer'];
         }
-        return $topCategoriesOffersTest;
+        return $topCategoriesOffersWithCategoriesPermalinkIndex;
     }
-    public function clearcacheAction()
+
+    public function getSpecialListPagesOffers($specialListPages)
     {
-        $cache = Zend_Registry::get('cache');
-        $cache->clean();
-        echo 'cache is cleared';
-        exit;
-    }
-    #################################################################
-
-    #################################################################
-    #################### END REFACTOR CODE ##########################
-    #################################################################
-    /**
-     * override views based on modules if exists
-     * @see Zend_Controller_Action::init()
-     * @author Bhart
-     */
-    public function init()
-    {
-        $module   = strtolower($this->getRequest()->getParam('lang'));
-        $controller = strtolower($this->getRequest()->getControllerName());
-        $action     = strtolower($this->getRequest()->getActionName());
-
-        # check module specific view exists or not
-        if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-
-            # set module specific view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-        } else{
-
-            # set default module view script path
-            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
+        $specialOfferslists = '';
+        foreach ($specialListPages as $specialListPage) {
+            foreach ($specialListPage['page'] as $page) {
+                $specialOfferslists[$page['permaLink']] = Offer::getSpecialPageOffers($page);
+            }
         }
-
-        $this->view->banner = Signupmaxaccount::getHomepageImages();
-
-
+        return $specialOfferslists;
     }
-
-  }
+}

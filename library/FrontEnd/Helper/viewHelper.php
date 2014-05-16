@@ -967,7 +967,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                 $result = $data = SpecialList::getfronendsplpage($flag);
                 break;
             case "moneySaving":
-                $result = Articles :: getmoneySavingArticle($flag);
+                $result = Articles :: getmoneySavingArticles($flag);
                 break;
             case "asseenin":
                 $result = SeenIn :: getSeenInContent();
