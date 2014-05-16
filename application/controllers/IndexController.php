@@ -40,7 +40,7 @@ class IndexController extends Zend_Controller_Action
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
         }
-        $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularvaouchercode_list", Offer::getTopCouponCodes(array(), 10));
+        $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularvaouchercode_list", Offer::getTopOffers(10));
         $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homenewoffer_list", Offer::getNewestOffers('newest', 10));
         $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularcategory_list", Category::getPopularCategories(10));
         $this->view->topCategories = $topCategories;

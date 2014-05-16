@@ -163,39 +163,23 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     public function getTopOffersRightCoulumnList() {
         $topOfferRightHtml = '';
         foreach ($this->homePageData['topOffers'] as $topOffer) {
-            $shopImage = PUBLIC_PATH_CDN.ltrim($topOffer['offer']['shop']['logo']['path'],"/") .'thum_small_'. $topOffer['offer']['shop']['logo']['name'];
-            $shopPermalink = $topOffer['offer']['shop']['permalink'];
-            $shopName = $topOffer['offer']['shop']['name'];
-            $offerTitle = $topOffer['offer']['title'];
-            $offerExclusiveText = $this->getOfferOptionText($topOffer['offer']['exclusiveCode']);
-            $topOfferRightHtml .= $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
+            $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
         }
         return $topOfferRightHtml;
     }
 
     public function getNewestOffersRightCoulumnList() {
         $newestOfferRightHtml = '';
-        foreach ($this->homePageData['newOffers'] as $topOffer) {
-            $shopImage = PUBLIC_PATH_CDN.ltrim($topOffer['shop']['logo']['path'],"/") .'thum_small_'. $topOffer['shop']['logo']['name'];
-            $shopPermalink = $topOffer['shop']['permaLink'];
-            $shopName = $topOffer['shop']['name'];
-            $offerTitle = $topOffer['title'];
-            $offerExclusiveText = $this->getOfferOptionText($topOffer['exclusiveCode']);
-            $newestOfferRightHtml .= $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
+        foreach ($this->homePageData['newOffers'] as $newOffer) {
+            $newestOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($newOffer);
         }
         return $newestOfferRightHtml;
     }
 
     public function getToCategoryRightCoulumnList($dynamicDivId) {
         $categoryOffersRightHtml = '';
-        foreach ($this->homePageData['topCategoriesOffers'][$dynamicDivId] as $categoryOffers)
-        {
-            $shopImage = PUBLIC_PATH_CDN.ltrim($categoryOffers['shop']['logo']['path'],"/") .'thum_small_'. $categoryOffers['shop']['logo']['name'];
-            $shopPermalink = $categoryOffers['shop']['permalink'];
-            $shopName = $categoryOffers['shop']['name'];
-            $offerTitle = $categoryOffers['title'];
-            $offerExclusiveText = $this->getOfferOptionText($categoryOffers['exclusiveCode']);
-            $categoryOffersRightHtml .= $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
+        foreach ($this->homePageData['topCategoriesOffers'][$dynamicDivId] as $categoryOffer) {
+            $categoryOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($categoryOffer);
         }
        return $categoryOffersRightHtml;
     }
@@ -203,14 +187,19 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     public function getSpecialPageRightCoulumnList($dynamicDivId) {
         $specialOffersRightHtml = '';
         foreach ($this->homePageData['specialPagesOffers'][$dynamicDivId] as $specialOffer) {
-            $shopImage = PUBLIC_PATH_CDN.ltrim($specialOffer['shop']['logo']['path'],"/") .'thum_small_'. $specialOffer['shop']['logo']['name'];
-            $shopPermalink = $specialOffer['shop']['permalink'];
-            $shopName = $specialOffer['shop']['name'];
-            $offerTitle = $specialOffer['title'];
-            $offerExclusiveText = $this->getOfferOptionText($specialOffer['exclusiveCode']);
-            $specialOffersRightHtml .= $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
+            $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer);
         }
         return $specialOffersRightHtml;
+    }
+
+    public function getRightColumnOffersHtmlForAllOffersTypes($offer)
+    {
+        $shopImage = PUBLIC_PATH_CDN.ltrim($offer['shop']['logo']['path'],"/") .'thum_small_'. $offer['shop']['logo']['name'];
+        $shopPermalink = $offer['shop']['permalink'];
+        $shopName = $offer['shop']['name'];
+        $offerTitle = $offer['title'];
+        $offerExclusiveText = $this->getOfferOptionText($offer['exclusiveCode']);
+        return $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
     }
 
     public function getMoneySavingGuidesRightCoulumnList($dynamicDivId) {
