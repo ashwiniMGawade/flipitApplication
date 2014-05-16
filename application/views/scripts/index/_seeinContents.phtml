@@ -6,7 +6,7 @@
 foreach ($this->seeninContents as $seeninContent):
     $seeinImage = PUBLIC_PATH_CDN.$seeninContent['logo']['path'] .'thum_SeenIn_large'. $seeninContent['logo']['name'];
     ?>
-            <li><img src="<?php echo $seeinImage;?>" title="<?php echo $seeninContent['toolltip']; ?>" width="118" height="23" alt="<?php echo $seeninContent['altText']; ?>"></li>
+            <li><img src="<?php echo $seeinImage;?>" title="<?php echo $seeninContent['altText']; ?>" width="118" height="23" alt="<?php echo $seeninContent['altText']; ?>"></li>
     <?php
 endforeach;
 ?>
