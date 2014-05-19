@@ -684,7 +684,7 @@ EOD;
                             '.$article['title'].'
                             </span>
                         </div>
-                        <a href="javascript:void(0);" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
+                        <a href="'.$article['title'].'" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
                     </div>
                 </div>';
             }           
