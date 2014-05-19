@@ -94,7 +94,7 @@ $("input#searchFieldHeader").keyup(function(e){
     }
 });
     
-$("input#searchFieldHeader").keypress(function(event){ console.log($( this ).data( "autocomplete" ));
+$("input#searchFieldHeader").keypress(function(event){
 if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searchedKeyword").val() == $("input#searchFieldHeader").val()){
     var autocomplete = $( this ).data( "autocomplete" );
     var matcher = new RegExp( "("+$.ui.autocomplete.escapeRegex($(this).val())+")", "ig"  );
