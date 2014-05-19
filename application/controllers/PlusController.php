@@ -31,42 +31,48 @@ class PlusController extends Zend_Controller_Action
         }
     }
 ################ Refactored Starts #######################################
-    public function indexAction()
-    {
-        $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $moneySavingPagePermalink = FrontEnd_Helper_viewHelper::__link('plus');
-        $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_moneysavingpage".$moneySavingPagePermalink."_list", MoneySaving::getPageDetails($moneySavingPagePermalink));
-        $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
-        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
-        $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
-        
-        $this->view->facebookDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :'');
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->facebookTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
-        $this->view->facebookShareUrl = $moneySavingPagePermalink;
-        $this->view->facebookImage = HTTP_PATH."public/images/plus_og.png";
-        $this->view->twitterDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :'');
-        
-        $this->view->pageTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
-        $this->view->permaLink = $moneySavingPagePermalink;
-        $this->view->headTitle(trim(isset($moneySavingPageDetails[0]['metaTitle']) ? $moneySavingPageDetails[0]['metaTitle'] :''));
-        $this->view->headMeta()->setName('description', trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :''));
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
-        if(isset($moneySavingPageDetails[0]['customHeader'])) {
-            $this->view->layout()->customHeader = "\n" . isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
-        }
-
-        $this->view->mostReadArticles = $mostReadArticles;
-        $this->view->categoryWiseArticles = $categoryWiseArticles;
-        $this->view->recentlyAddedArticles = $recentlyAddedArticles;
-       
-        if (!empty($moneySavingPageDetails)) {
-            $this->view->pageDetails = $moneySavingPageDetails;
-        } else {
-            $error404 = 'HTTP/1.1 404 Not Found';
-            $this->getResponse()->setRawHeader($error404);
-        }
+public function indexAction()
+{
+    $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+    $moneySavingPagePermalink = FrontEnd_Helper_viewHelper::__link('plus');
+    $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::
+        getRequestedDataBySetGetCache("all_moneysavingpage".$moneySavingPagePermalink."_list", MoneySaving::getPageDetails($moneySavingPagePermalink));
+    $mostReadArticles = FrontEnd_Helper_viewHelper::
+        getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
+    $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
+    $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
+    
+    $this->view->facebookDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
+        $moneySavingPageDetails[0]['metaDescription'] :'');
+    $this->view->facebookLocale = FACEBOOK_LOCALE;
+    $this->view->facebookTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? 
+        $moneySavingPageDetails[0]['pageTitle'] :'';
+    $this->view->facebookShareUrl = $moneySavingPagePermalink;
+    $this->view->facebookImage = HTTP_PATH."public/images/plus_og.png";
+    $this->view->twitterDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
+        $moneySavingPageDetails[0]['metaDescription'] :'');
+    $this->view->pageTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
+    $this->view->permaLink = $moneySavingPagePermalink;
+    $this->view->headTitle(trim(isset($moneySavingPageDetails[0]['metaTitle']) ? 
+        $moneySavingPageDetails[0]['metaTitle'] :''));
+    $this->view->headMeta()->setName('description', trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
+        $moneySavingPageDetails[0]['metaDescription'] :''));
+    $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
+    if(isset($moneySavingPageDetails[0]['customHeader'])) {
+        $this->view->layout()->customHeader = "\n" . isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
     }
+
+    $this->view->mostReadArticles = $mostReadArticles;
+    $this->view->categoryWiseArticles = $categoryWiseArticles;
+    $this->view->recentlyAddedArticles = $recentlyAddedArticles;
+   
+    if (!empty($moneySavingPageDetails)) {
+        $this->view->pageDetails = $moneySavingPageDetails;
+    } else {
+        $error404 = 'HTTP/1.1 404 Not Found';
+        $this->getResponse()->setRawHeader($error404);
+    }
+}
 
 ################ Refactored Ends #######################################
     public function categoryAction()
