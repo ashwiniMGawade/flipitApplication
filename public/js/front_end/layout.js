@@ -270,14 +270,7 @@ $(document)
 
                 });
 
-/**
- * autocomplete function
- * @author cbhopal
- */
-function __highlight(s, t) {
-    var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(t) + ")", "ig");
-    return s.replace(matcher, "<strong style='color:#0B7DC1'>$1</strong>");
-}
+
 var cache = {};
 function autocomplete() {
 
