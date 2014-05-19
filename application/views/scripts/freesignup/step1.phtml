@@ -1,64 +1,76 @@
-<?php 
-
-    $this->headScript ()->prependFile ( HTTP_PATH . "public/js/front_end/step1.js" ); 
-    //$title = $this->emailStepStatus==true ? 'Stap 1 van 4' : 'Stap 1 van 3';
-    //$this->headTitle()->append($this->translate($title));
-
-?>
-<div class='new-outer'>
-  <div class="new-signup-outer-round mt40">
-    	<div class="new-sigup-nav">
-    		<ul>
-            	<?php if($this->emailStepStatus):?>
-            	
-            	<li class="step1 sltd">1. <?php echo $this->translate('E-mailadres')?></li> 
-                <li class="step2">2. <?php echo $this->translate('Bevestiging e-mailadres')?></li>
-                <li class="step3">3. <?php echo $this->translate('Vertel ons wie je bent')?></li> 
-                <li class="step4">4. <?php echo $this->translate('Je bent nu klaar om te beginnen')?></li>
-                 
-          		<?php else: ?>
-          		
-          		<li class="step1 liWidth sltd">1. <?php echo $this->translate('E-mailadres')?></li> 
-    			<li class="step3 liWidth">2. <?php echo $this->translate('Vertel ons wie je bent')?></li> 
-                <li class="step4 last-li-width">3. <?php echo $this->translate('Je bent nu klaar om te beginnen')?></li>
-                 
-            	<?php endif;?>  
-            </ul>
-        </div>
-        
-    	
-        <h2 class="mt40 fl">
-        <?php echo $this->translate('Schrijf je vandaag nog in en krijg gratis toegang tot exclusieve kortingscodes, win acties en blijf op de hoogte van alle aanbiedingen van jouw favoriete winkels.')?>
-        </h2>
-        
-        <br class="clr"/>
-        <?php if(isset($this->messageError)){?>
-    		<div id="" class="yellow-box-error-box-code-2" ><strong><?php echo $this->messageError ;?></strong></div>
-    	<?php }?>
-         <form id='stepOneForm' method="post" action="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap2')?>">
-	       <div class="new-signup-form">
-	       		<h3 style="text-align:center;"></h3>
-	           
-		            <input type="text" placeholder="<?php echo $this->translate('Voer uw e-mailadres in')?>" id='emailAddress' name='emailAddress'/>
-		            <div class='errorAppend'></div> 
-		            
-		            <div id='changeWhenStep1' class="yellow_btn">
-		            	<input type='submit' name='submitStepOne' value='<?php echo $this->translate('aanmelden')?>' />
-		            </div>
-	           
-	            <div class="already-ac">
-	            	<?php echo $this->translate('Heeft u al een account?')?> <a href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('login')?>"><?php echo $this->translate('Klik hier om in te loggen')?></a>
-	            </div>
-	       
-	       </div> 
-        </form>
-    </div>
-
-	<?php if($this->testimonials[0]['showTestimonial']): 
-		       echo $this->render('login/login_footer_member.phtml') ;
-		  endif;
-	?>
-</div>
- 
-        
-    	
+<main role="main" id="main" class="container">
+			<section class="register-box">
+				<form action="#">
+					<fieldset>
+						<div class="row">
+							<div class="col-md-6">
+								<div class="image">
+									<img src="<?php echo PUBLIC_PATH;?>images/img-36.png" alt="image description" width="462" height="263" />
+									<div class="text">Flipit! Get ready to flip over a great deal!</div>
+								</div>
+							</div>
+							<div class="col-md-6">
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="text1">Email:</label>
+											<input type="text" id="text1" class="form-control" />
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="text4">Password</label>
+											<input type="password" id="text4" class="form-control" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="text2">First name</label>
+											<input type="text" id="text2" class="form-control" />
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="text5">Last name</label>
+											<input type="text" id="text5" class="form-control" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="text3">Date of birth</label>
+											<div class="row">
+												<div class="col-xs-4">
+													<input type="text" id="text3" class="form-control" />
+												</div>
+												<div class="col-xs-4">
+													<input type="text" class="form-control" />
+												</div>
+												<div class="col-xs-4">
+													<input type="text" class="form-control" />
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-6">
+										<div class="form-group">
+											<label for="text6">Gender</label>
+											<select id="text6" class="form-control">
+												<option>Female</option>
+												<option>Male</option>
+											</select>
+										</div>
+									</div>
+								</div>
+								<div class="form-group alt">
+									<button class="btn blue btn-lg btn-primary" type="submit">Create account</button>
+								</div>
+							</div>
+						</div>
+					</fieldset>
+				</form>
+			</section>
+		</main>
