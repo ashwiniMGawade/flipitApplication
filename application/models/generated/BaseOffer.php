@@ -1,5 +1,5 @@
 <?php
-Doctrine_Manager::getInstance()->bindComponent('Offer', 'doctrine_site');
+//Doctrine_Manager::getInstance()->bindComponent('Offer', 'doctrine_site');
 
 /**
  * BaseOffer
