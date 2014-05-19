@@ -1,6 +1,5 @@
 $(document).ready(function(){
 $('.header-search-autocomplete').hide();
-var cache = {};
 $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
    var currentSelectedItem = this;
    $.each( items, function( index, item ) {
