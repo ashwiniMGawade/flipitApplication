@@ -355,22 +355,23 @@
   display: table;
   width: 100%;
 }
-.best-items .categories-block ul li a:hover {
+.best-items .categories-block ul li a:hover , .best-items .categories-block ul li a.active-li{
   background: #ffffff;
   color: #878a8d;
   text-decoration: none;
+  outline: none;
 }
-.best-items .categories-block ul li a:hover h2 {
+.best-items .categories-block ul li a:hover h2, .best-items .categories-block ul li a.active-li h2 {
   color: #e49542;
 }
-.best-items .categories-block ul li a:hover .left-box {
+.best-items .categories-block ul li a:hover .left-box, .best-items .categories-block ul li a.active-li .left-box  {
   width: 36.5%;
 }
-.best-items .categories-block ul li a:hover .box {
+.best-items .categories-block ul li a:hover .box, .best-items .categories-block ul li a.active-li .box  {
   width: 63.5%;
   padding: 0 14px;
 }
-.best-items .categories-block ul li a:hover:before {
+.best-items .categories-block ul li a:hover:before,.best-items .categories-block ul li a.active-li:before {
   content: '';
   position: absolute;
   top: 50%;
@@ -380,7 +381,7 @@
   height: 15px;
   margin: -9px 0 0;
 }
-.best-items .categories-block ul li a:hover:after {
+.best-items .categories-block ul li a:hover:after,.best-items .categories-block ul li a.active-li:after {
   content: '';
   position: absolute;
   right: -1px;
@@ -895,6 +896,17 @@
   .logos-section ul li {
     margin: 0 10px;
   }
+  .best-items .categories-block .box {
+    width: 70.5%;
+    padding: 0 0 0 10px;
+  }
+  .best-items .categories-block .box h2 {
+    font-size: 16px;
+    line-height: 20px;
+  }
+  .best-items .categories-block .left-box {
+    width: 29.5%;
+  }
   #footer .bottom-panel .text {
     padding: 0;
   }
@@ -958,14 +970,6 @@
   .best-items .categories-block {
     font-size: 11px;
     line-height: 14px;
-  }
-  .best-items .categories-block .box {
-    width: 70.5%;
-    padding: 0 0 0 10px;
-  }
-  .best-items .categories-block .box h2 {
-    font-size: 16px;
-    line-height: 20px;
   }
   .best-items .categories-block ul li a {
     padding: 6px;
