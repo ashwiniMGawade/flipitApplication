@@ -1,4 +1,5 @@
 $(document).ready(function(){
+$('.header-search-autocomplete').hide();
 var cache = {};
 $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
    var currentSelectedItem = this;
@@ -7,9 +8,22 @@ $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
             {currentSelectedItem._renderItem( ul, item );}
         });
 }
+$('body').click(function(event){
+    var clickedId = event.target.id;
+    if (clickedId == "searchFieldHeader") {
+        return false;
+    }
+$('.header-search-autocomplete, .ajax-autocomplete').hide();
+});
+
+
 $("input#searchFieldHeader").autocomplete({
     delay: 0,
     minLength : 1,
+    search: function(event, ui) {
+        $('.header-search-autocomplete, .ajax-autocomplete').show();
+        $('.ajax-autocomplete ul').empty();
+    },
     source :  function( request, response ) {
                 var matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( request.term ), "i" );
                 response( $.grep( shopsJSON, function( item ){
@@ -29,8 +43,8 @@ $("input#searchFieldHeader").autocomplete({
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
         url = item.permalink;
         return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
-            $("<a href=' + url + '></a>").html('<div>' + (__highlight(item.label,$("input#searchFieldHeader").val())) + "</div>"))
-        .appendTo(ul);
+            $("<a href=" + url + "></a>").html((__highlight(item.label,$("input#searchFieldHeader").val()))))
+        .appendTo($('.ajax-autocomplete ul'));
      };  
     $("a#searchbuttonHeader").click(function(){
     if ($("input#searchFieldHeader")
@@ -80,7 +94,7 @@ $("input#searchFieldHeader").keyup(function(e){
     }
 });
     
-$("input#searchFieldHeader").keypress(function(event){
+$("input#searchFieldHeader").keypress(function(event){ console.log($( this ).data( "autocomplete" ));
 if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searchedKeyword").val() == $("input#searchFieldHeader").val()){
     var autocomplete = $( this ).data( "autocomplete" );
     var matcher = new RegExp( "("+$.ui.autocomplete.escapeRegex($(this).val())+")", "ig"  );
@@ -113,5 +127,5 @@ $('ul.ui-autocomplete').addClass('wd1');
 
 function __highlight(s, t) {
     var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(t) + ")", "ig");
-    return s.replace(matcher, '<strong class="abcText">$1</strong>');
+    return s.replace(matcher, '<span>$1</span>');
 }
