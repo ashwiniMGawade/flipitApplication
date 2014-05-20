@@ -122,10 +122,10 @@ class Category extends BaseCategory
         $category = new Category();
         self::getCategoryParameters($categoryParameter, $category);
         $category->status = '1';
-        $category->categoryIconId = $categoryParameter["categoryIconNameHidden"];
-        $category->categoryFeaturedImageId = $categoryParameter["categoryFeaturedImage"];
-        self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
-        self::setCategoryIcon($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+        $categoryIconId = self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+        $categoryFeaturedImageId = self::setCategoryIcon($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+        $category->categoryIconId = $categoryIconId;
+        $category->categoryFeaturedImageId = $categoryFeaturedImageId;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
 
