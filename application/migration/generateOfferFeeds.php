@@ -124,8 +124,9 @@ class generateOfferFeeds
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
 
-        $cutsomLocale = Signupmaxaccount::getallmaxaccounts();
-        $cutsomLocale = !empty($cutsomLocale[0]['locale']) ? $cutsomLocale[0]['locale'] : 'nl_NL';
+        $settings = Signupmaxaccount::getallmaxaccounts();
+
+        $cutsomLocale = !empty( $settings[0]['locale']) ? $settings[0]['locale'] : 'nl_NL';
 
         $this->_trans = new Zend_Translate(array(
                 'adapter' => 'gettext',
@@ -133,7 +134,14 @@ class generateOfferFeeds
 
         $this->_trans->addTranslation(
                 array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $suffix . '.mo',
+                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/fallback/frontend_php' . $suffix . '.mo',
+                       'locale' => $cutsomLocale,
+                )
+        );
+
+        $this->_trans->addTranslation(
+                array(
+                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/form' . $suffix . '.mo',
                         'locale' => $cutsomLocale,
                 )
         );
@@ -145,8 +153,8 @@ class generateOfferFeeds
                 )
         );
 
-        $cutsomLocale2 = new Zend_Locale( $cutsomLocale );
-        Zend_Registry::set('Zend_Locale', $cutsomLocale2);
+        Zend_Registry::set('Zend_Translate', $this->_trans);
+        Zend_Registry::set('Zend_Locale', $cutsomLocale);
 
         call_user_func( array($this, $this->_method));
 
@@ -172,7 +180,7 @@ class generateOfferFeeds
         }
 
         $feedData = array(
-                'title'=> $this->_trans->translate('Newest offers') ,
+                'title'=> FrontEnd_Helper_viewHelper::__form('Newest offers') ,
                 'link'=> $this->_hostName ,
                 'language' =>  str_replace('_', '-', Zend_Registry::get('Zend_Locale')) ,
                 'charset'=>'UTF-8',
@@ -181,7 +189,7 @@ class generateOfferFeeds
         );
         $feed = Zend_Feed::importArray ( $feedData, 'rss' );
         $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
-        $fileName = $this->_trans->translate('newest-offers');
+        $fileName = FrontEnd_Helper_viewHelper::__form('newest-offers');
         $offerXml = $rssDirectory. "{$fileName}.xml";
 
         if(!file_exists($rssDirectory))
@@ -220,7 +228,7 @@ class generateOfferFeeds
         }
 
         $feedData = array(
-                'title'=> $this->_trans->translate('Popular offers') ,
+                'title'=> FrontEnd_Helper_viewHelper::__form('Popular offers') ,
                 'link'=> $this->_hostName ,
                 'language' =>  str_replace('_', '-', Zend_Registry::get('Zend_Locale')) ,
                 'charset'=>'UTF-8',
@@ -229,7 +237,7 @@ class generateOfferFeeds
         );
         $feed = Zend_Feed::importArray ( $feedData, 'rss' );
         $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
-        $fileName = $this->_trans->translate('popular-offers');
+        $fileName = FrontEnd_Helper_viewHelper::__form('popular-offers');
         $offerXml = $rssDirectory. "{$fileName}.xml";
 
         if(!file_exists($rssDirectory))
