@@ -122,9 +122,11 @@ class Category extends BaseCategory
         self::getCategoryParameters($categoryParameter, $category);
         $category->status = '1';
         $category->categoryIconId = $categoryParameter["categoryIconNameHidden"];
-        $uploadedImage = self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden');
-        $categoryImageExtension = BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
-        $category->categoryicon->ext = $categoryImageExtension;
+        $category->categoryFeaturedImageId = $categoryParameter["categoryFeaturedImage"];
+        self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category);
+        self::setCategoryIcon($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category);
+        //$categoryImageExtension = BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
+        //$category->categoryicon->ext = $categoryImageExtension;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
 
@@ -193,6 +195,10 @@ class Category extends BaseCategory
                 $category->categoryicon->ext =  BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
                 $category->categoryicon->path = $uploadedImage['path'];
                 $category->categoryicon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
+
+                    $category->categoryfeaturedimage->ext =  BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
+                $category->categoryfeaturedimage->path = $uploadedImage['path'];
+                $category->categoryfeaturedimage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
             } else {
                 return false;
             }
