@@ -38,7 +38,7 @@ class PlusController extends Zend_Controller_Action
         $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_moneysavingpage".$moneySavingPagePermalink."_list", MoneySaving::getPageDetails($moneySavingPagePermalink));
         $mostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
-        $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
+        $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
         
         $this->view->facebookDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? $moneySavingPageDetails[0]['metaDescription'] :'');
         $this->view->facebookLocale = FACEBOOK_LOCALE;
@@ -65,6 +65,38 @@ class PlusController extends Zend_Controller_Action
         } else {
             $error404 = 'HTTP/1.1 404 Not Found';
             $this->getResponse()->setRawHeader($error404);
+        }
+    }
+
+    public function guidedetailAction()
+    {
+        $parameters = $this->_getAllParams();
+        $permalink = $parameters['permalink'];
+        $currentArticleDetails = Articles::getArticleByPermalink($permalink);
+        $currentArticleCategory = $currentArticleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
+        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
+        $articlesRelatedToCurrentCategory = $categoryWiseArticles[$currentArticleCategory]; 
+        $allArticles = Articles::getAllArticles();
+        $userInformationObject = new User();
+        
+        if (!empty($currentArticleDetails)) {
+            $this->view->headTitle(trim($currentArticleDetails[0]['metatitle']));
+            $this->view->headMeta()->setName('description', trim($currentArticleDetails[0]['metadescription']));
+            $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
+            $this->view->facebookDescription = trim($currentArticleDetails[0]['metadescription']);
+            $this->view->facebookLocale = FACEBOOK_LOCALE;
+            $this->view->facebookTitle = $currentArticleDetails[0]['title'];
+            $this->view->facebookShareUrl = HTTP_PATH_LOCALE.$currentArticleDetails[0]['permalink'];
+            $this->view->facebookImage = FACEBOOK_IMAGE;
+            $this->view->twitterDescription = trim($currentArticleDetails[0]['metadescription']);
+            $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
+                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
+            $this->view->currentArticle = $currentArticleDetails[0];
+            $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
+            $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
+            $this->view->userDetails =  $userInformationObject->getUseretails($currentArticleDetails[0]['authorid']);
+        } else {
+              throw new Zend_Controller_Action_Exception('', 404);
         }
     }
 
@@ -217,136 +249,7 @@ class PlusController extends Zend_Controller_Action
         die();
     }
 
-    public function guidedetailAction()
-    {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $parameters = $this->_getAllParams();
-        $permalink = $parameters['permalink'];
-        $currentArticleView = Articles::getArticleByPermalink($permalink);
-        $getAllArticles = Articles::getAllArticles();
-        $ArNew =  array();
-        $userInformationObject = new User();
-        for ($i= 0; $i<count($getAllArticles); $i++) {
 
-            $autherImage  = $userInformationObject->getProfileImage($getAllArticles[$i]['authorid']);
-            $image = HTTP_PATH.'public/' .$autherImage['profileimage']['path'] .'thum_medium_'. $autherImage['profileimage']['name'];
-
-
-            $ArNew[$i]['id']  = $getAllArticles[$i]['id'];
-            $ArNew[$i]['title']  = $getAllArticles[$i]['title'];
-            $ArNew[$i]['permalink']  = $getAllArticles[$i]['permalink'];
-            $ArNew[$i]['chapters']  = $getAllArticles[$i]['chapters'];
-
-
-            if(! $getAllArticles[$i]['thumbnail']) {
-                $thumbnailSmall = $getAllArticles[$i]['ArtIcon'];
-            } else {
-
-                $thumbnailSmall = $getAllArticles[$i]['thumbnail'];
-            }
-            $ArNew[$i]['articleImageName']  = $thumbnailSmall['name'];
-            $ArNew[$i]['articleImagePath']  = $thumbnailSmall['path'];
-            $ArNew[$i]['authorId']  = $getAllArticles[$i]['authorid'];
-            $ArNew[$i]['authorImage']  = $image;
-
-        }
-
-        Zend_Session::start();
-        $guideDetail = new Zend_Session_Namespace('nextPrevious');
-        for($key=0; $key < count($ArNew); $key++) {
-            if ($parameters['permalink'] == $ArNew[$key]['permalink']) {
-                    $despN = '';
-                    $despP = '';
-                    if(array_key_exists($key+1,$ArNew)){
-                            $imgNext = PUBLIC_PATH_CDN.$ArNew[$key+1]['articleImagePath'] .'thum_article_medium_'.  $ArNew[$key+1]['articleImageName'];
-
-                        $this->view->nextImage =  @$imgNext;
-                        $this->view->nextLink = $ArNew[$key+1]['permalink'];
-                        $this->view->nextTitle = $ArNew[$key+1]['title'];
-
-                        if(isset($ArNew[$key+1]['chapters'][0])) {
-                            if($ArNew[$key+1]['chapters'][0]['content']!=null  ||$ArNew[$key+1]['chapters'][0]['content']!=''){
-
-                                $despN = $ArNew[$key+1]['chapters'][0]['content'];
-                            }
-                        }
-                    }else{
-                        $firstElement = reset($ArNew);
-                            $imgNext = PUBLIC_PATH_CDN.$firstElement['articleImagePath'] .'thum_article_medium_'.  $firstElement['articleImageName'];
-
-                        $this->view->nextImage =  @$imgNext;
-                        $this->view->nextLink = $firstElement['permalink'];
-                        $this->view->nextTitle = $firstElement['title'];
-                        if(isset($firstElement['chapters'][0])) {
-                            if($firstElement['chapters'][0]['content']!=null  || $firstElement['chapters'][0]['content']!=''){
-
-                                $despN = $firstElement['chapters'][0]['content'];
-                            }
-                        }
-                    }
-                    $this->view->nextDesc = $despN;
-
-                    if(array_key_exists($key-1,$ArNew)){
-                            $imgPrev = PUBLIC_PATH_CDN. $ArNew[$key-1]['articleImagePath'] .'thum_article_medium_'.  $ArNew[$key-1]['articleImageName'];
-
-                        $this->view->prevImage = @$imgPrev;
-                        $this->view->prevLink = $ArNew[$key-1]['permalink'];
-                        $this->view->prevTitle = $ArNew[$key-1]['title'];
-
-                        if(isset($ArNew[$key-1]['chapters'][0])) {
-                            if($ArNew[$key-1]['chapters'][0]['content']!=null  ||$ArNew[$key-1]['chapters'][0]['content']!=''){
-
-                                $despP = $ArNew[$key-1]['chapters'][0]['content'];
-                            }
-                        }
-                     } else{
-                         $lastElement = end($ArNew);
-                             $imgPrev = PUBLIC_PATH_CDN.$lastElement['articleImagePath'] .'thum_article_medium_'.  $lastElement['articleImageName'];
-
-
-                         $this->view->prevImage = @$imgPrev;
-                         $this->view->prevLink = $lastElement['permalink'];
-                         $this->view->prevTitle = $lastElement['title'];
-
-                         if(isset($lastElement['chapters'][0])) {
-                             if($lastElement['chapters'][0]['content']!=null  ||$lastElement['chapters'][0]['content']!=''){
-
-                                 $despP = $lastElement['chapters'][0]['content'];
-                             }
-                         }
-                    }
-                    $this->view->prevDesc = $despP;
-                }
-            }
-
-        if (!empty($currentArticleView)) {
-            $this->view->currentArticle = $currentArticleView[0];
-            $this->view->headTitle(trim($currentArticleView[0]['metatitle']));
-            $this->view->headMeta()->setName('description', trim($currentArticleView[0]['metadescription']));
-
-            $mostReadArticleKey ="all_mostreadMsArticlePage_list";
-            $ArticlesExistOrNot =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($mostReadArticleKey);
-
-            if ($ArticlesExistOrNot) {
-                $mostReadArticles = MoneySaving::getMostReadArticles($permalink, 3);
-                FrontEnd_Helper_viewHelper::setInCache($mostReadArticleKey, $mostReadArticles);
-            } else {
-                $mostReadArticles = FrontEnd_Helper_viewHelper::getFromCacheByKey($mostReadArticleKey);
-            }
-            $this->view->mostReadArticles = $mostReadArticles;
-            $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
-            $this->view->facebookDescription = trim($currentArticleView[0]['metadescription']);
-            $this->view->facebookLocale = FACEBOOK_LOCALE;
-            $this->view->facebookTitle = $currentArticleView[0]['title'];
-            $this->view->facebookShareUrl = HTTP_PATH_LOCALE.$currentArticleView[0]['permalink'];
-            $this->view->facebookImage = FACEBOOK_IMAGE;
-            $this->view->twitterDescription = trim($currentArticleView[0]['metadescription']);
-
-            $this->view->userDetails =  $userInformationObject->getProfileImage($currentArticleView[0]['authorid']);
-        } else {
-              throw new Zend_Controller_Action_Exception('', 404);
-        }
-    }
 
 
 }

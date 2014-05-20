@@ -77,6 +77,17 @@ class User extends BaseUser
         ->fetchArray();
         return $userFavouriteStores;
     }
+
+    public static function getUseretails($uId)
+    {
+        $userDetails = Doctrine_Query::create()
+            ->select("u.id,u.firstName,u.lastName,u.addtosearch, u.mainText, u.slug, u.google, pi.name, pi.path")
+            ->from('User u')
+            ->leftJoin("u.profileimage pi")
+            ->where("u.id = ?" , $uId)
+            ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+        return $userDetails;
+  }
     ##########################################################
     ########### END REFACTORED CODE ##########################
     ##########################################################
@@ -1154,22 +1165,7 @@ class User extends BaseUser
    * @author kraj
    * @version 1.0
    */
-  public static function getProfileImage($uId)
-  {
-//      $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-//      BackEnd_Helper_viewHelper::closeConnection($connSite);
 
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.id,u.firstName,u.lastName,u.addtosearch, u.slug, u.google, pi.name, pi.path")
-    ->from('User u')
-    ->leftJoin("u.profileimage pi")
-    ->where("u.id = ?" , $uId)
-    ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    //$connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
 
   /**
    * returnEditorUrl
