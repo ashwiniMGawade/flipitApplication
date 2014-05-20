@@ -16,10 +16,14 @@
 	if(file_exists(ROOT_PATH.$this->categoryDetail[0]['categoryicon']['path'].$this->categoryDetail[0]['categoryicon']['name'])) {
 		$categoryPicturePath = PUBLIC_PATH_LOCALE.$this->categoryDetail[0]['categoryicon']['path'].$this->categoryDetail[0]['categoryicon']['name'];
 		$categoryPictureName = $this->categoryDetail[0]['categoryicon']['name'];
-	}else {
-		$categoryPicturePath = PUBLIC_PATH ."images/upload/no.jpg";
 	}
 
+    $featuredCategoryPicturePath = '';
+    $featuredCategoryPictureName = '';
+    if(file_exists(ROOT_PATH.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
+        $featuredCategoryPicturePath = PUBLIC_PATH_LOCALE.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'];
+        $featuredCategoryPictureName = $this->categoryDetail[0]['categoryfeaturedimage']['name'];
+    }
 ?>
 
 
@@ -107,21 +111,37 @@
 
 						<div class="mainpage-content-line">
 							<div class="mainpage-content-left">
-								<label><strong><?php echo $this->translate('Category Icon'); ?></strong></label>
+								<label><strong><?php echo $this->translate('Category Thumbnail'); ?></strong></label>
 							</div>
-
-							<img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $categoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image" style="margin-top:5px;">
+							<img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $categoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image">
 							<span class="ml15 img-name" title="<?php echo $categoryPictureName; ?>"  id="avtarName">
-                            	<?php echo strlen($categoryPictureName)< 60 ?  $categoryPictureName : substr($categoryPictureName, 0,60).'...'; ?>
+                            	<?php echo $categoryPictureName; ?>
                             </span>
 							<div class="mainpage-content-right control-group">
-								<div style='width : 275px; margin-right: 245px; margin-top: 2px !important;' class="mainpage-content-right-inner-right-other upload"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
+								<div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
 								<div class="mainpage-content-right-inner-left-other">
-									</br>
-									<input class="span3 ignore" style="margin-top:-11px;" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
+									<br>
+									<input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
 								</div>
 							</div>
 						</div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Category featured image'); ?></strong></label>
+                            </div>
+                            <img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $featuredCategoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image">
+                            <span class="ml15 img-name" title="<?php echo $featuredCategoryPictureName; ?>"  id="avtarName">
+                            <?php echo $featuredCategoryPictureName; ?>
+                            </span>
+                            <div class="mainpage-content-right control-group">
+                                <div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <br>
+                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryFeaturedImage" id="categoryFeaturedImage">
+                                </div>
+                            </div>
+                        </div>
 
 						<div class="mainpage-content-line">
 							<div class="mainpage-content-left">

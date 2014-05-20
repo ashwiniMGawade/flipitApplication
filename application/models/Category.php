@@ -99,9 +99,10 @@ class Category extends BaseCategory
 
     public static function getCategoryforFrontend($permalink)
     {
-        $categoryDetail = Doctrine_Query::create()->select("c.*,i.name,i.path")
+        $categoryDetail = Doctrine_Query::create()->select("c.*,i.name,i.path,categoryfeaturedimage.name, categoryfeaturedimage.path")
         ->from('Category c')
         ->LeftJoin("c.categoryicon i")
+        ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
         ->where("permalink = ?", $permalink)
         ->andWhere('c.deleted=0')
         ->andWhere('c.status= 1')
@@ -123,10 +124,8 @@ class Category extends BaseCategory
         $category->status = '1';
         $category->categoryIconId = $categoryParameter["categoryIconNameHidden"];
         $category->categoryFeaturedImageId = $categoryParameter["categoryFeaturedImage"];
-        self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category);
-        self::setCategoryIcon($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category);
-        //$categoryImageExtension = BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
-        //$category->categoryicon->ext = $categoryImageExtension;
+        self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+        self::setCategoryIcon($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
 
@@ -150,7 +149,11 @@ class Category extends BaseCategory
     {
         $category = Doctrine_Core::getTable('Category')->find( $categoryParameter['id']);
         self::getCategoryParameters($categoryParameter, $category);
-        $uploadedImage = self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category);
+        $category->categoryIconId = $categoryParameter["categoryIconNameHidden"];
+        $category->categoryFeaturedImageId = $categoryParameter["categoryFeaturedImage"];
+        self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+        self::setCategoryIcon($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+    
         $categoryInfo = self::getCategoryById($categoryParameter['id']);
 
         if (!empty($categoryInfo[0]['permaLink'])) {
@@ -159,8 +162,6 @@ class Category extends BaseCategory
             $updateRouteLink = new RoutePermalink();
         }
 
-        $categoryImageExtension = BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
-        $category->categoryicon->ext = $categoryImageExtension;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
         try {
@@ -176,7 +177,7 @@ class Category extends BaseCategory
 
     }
 
-    public function getCategoryParameters($categoryParameter, $category)
+    public static function getCategoryParameters($categoryParameter, $category)
     {
         $category->name = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["categoryName"]);
         $category->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["permaLink"]);
@@ -187,18 +188,20 @@ class Category extends BaseCategory
         return true;
     }
 
-    public static function setCategoryIcon($categoryIconFileName, $categoryIconName, $category)
+    public static function setCategoryIcon($categoryIconFileName, $categoryIconName, $category, $imageType)
     {
         if (isset($categoryIconFileName) && $categoryIconFileName != '') {
             $uploadedImage = self::uploadImage($categoryIconName);
             if ($uploadedImage['status'] == '200') {
-                $category->categoryicon->ext =  BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
-                $category->categoryicon->path = $uploadedImage['path'];
-                $category->categoryicon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
-
+                if($imageType == 'thumb') {
+                    $category->categoryicon->ext =  BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
+                    $category->categoryicon->path = $uploadedImage['path'];
+                    $category->categoryicon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
+                } else {
                     $category->categoryfeaturedimage->ext =  BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
-                $category->categoryfeaturedimage->path = $uploadedImage['path'];
-                $category->categoryfeaturedimage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
+                    $category->categoryfeaturedimage->path = $uploadedImage['path'];
+                    $category->categoryfeaturedimage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
+                }
             } else {
                 return false;
             }
@@ -270,9 +273,10 @@ class Category extends BaseCategory
      */
     public static function getCategory($id)
     {
-        $data = Doctrine_Query::create()->select("c.*,i.name,i.path")
+        $data = Doctrine_Query::create()->select("c.*,i.name,i.path,categoryfeaturedimage.name,categoryfeaturedimage.path")
         ->from('Category c')
         ->LeftJoin("c.categoryicon i")
+        ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
         ->where("id = ?", $id)
         ->andWhere('c.deleted=0')
         ->fetchArray();
