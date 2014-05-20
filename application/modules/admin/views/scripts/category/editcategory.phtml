@@ -109,22 +109,22 @@
 							</div>
 						</div>
 
-						<div class="mainpage-content-line">
-							<div class="mainpage-content-left">
-								<label><strong><?php echo $this->translate('Category Thumbnail'); ?></strong></label>
-							</div>
-							<img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $categoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image">
-							<span class="ml15 img-name" title="<?php echo $categoryPictureName; ?>"  id="avtarName">
-                            	<?php echo $categoryPictureName; ?>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Category Thumbnail'); ?></strong></label>
+                            </div>
+                            <img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $categoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image">
+                            <span class="ml15 img-name" title="<?php echo $categoryPictureName; ?>"  id="avtarName">
+                            <?php echo $categoryPictureName; ?>
                             </span>
-							<div class="mainpage-content-right control-group">
-								<div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
-								<div class="mainpage-content-right-inner-left-other">
-									<br>
-									<input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
-								</div>
-							</div>
-						</div>
+                            <div class="mainpage-content-right control-group">
+                                <div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <br>
+                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
+                                </div>
+                            </div>
+                        </div>
 
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left">
