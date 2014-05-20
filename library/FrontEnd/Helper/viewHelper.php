@@ -736,16 +736,9 @@ EOD;
     {
         $splashInformation = self::getSplashInformation();
         $locale = $splashInformation[0]['locale'];
-        $websiteDetails = Website::getWebsiteDetails($locale);
-        $splitLocaleNameFromWebsiteName = explode('/', $websiteDetails['name']);
-        $localeName = isset($splitLocaleNameFromWebsiteName[1]) ?  $splitLocaleNameFromWebsiteName[1] : "en" ;
-        $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($localeName);
+        $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
         $offer = new Offer($connectionWithSiteDatabase['connName']);
-        $offerId = '';
-        if (isset($splashInformation[0]['offerId'])) :
-            $offerId = $splashInformation[0]['offerId'];
-        endif;
-        $mostPopularCoupon = $offer->getSplashPagePopularCoupon($offerId);
+        $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
         BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
         return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
     }
