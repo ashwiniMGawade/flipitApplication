@@ -149,11 +149,13 @@ class Category extends BaseCategory
     {
         $category = Doctrine_Core::getTable('Category')->find( $categoryParameter['id']);
         self::getCategoryParameters($categoryParameter, $category);
-        $category->categoryIconId = $categoryParameter["categoryIconNameHidden"];
-        $category->categoryFeaturedImageId = $categoryParameter["categoryFeaturedImage"];
-        self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
-        self::setCategoryIcon($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
-    
+        if($_FILES['categoryIconNameHidden']['name'] != ''){
+            $categoryIconId = self::setCategoryIcon($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+            $category->categoryIconId = $categoryIconId;
+        }else if($_FILES['categoryFeaturedImage']['name'] != ''){
+            $categoryFeaturedImageId = self::setCategoryIcon($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+            $category->categoryFeaturedImageId = $categoryFeaturedImageId;
+        }
         $categoryInfo = self::getCategoryById($categoryParameter['id']);
 
         if (!empty($categoryInfo[0]['permaLink'])) {
@@ -193,15 +195,13 @@ class Category extends BaseCategory
         if (isset($categoryIconFileName) && $categoryIconFileName != '') {
             $uploadedImage = self::uploadImage($categoryIconName);
             if ($uploadedImage['status'] == '200') {
-                if($imageType == 'thumb') {
-                    $category->categoryicon->ext =  BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
-                    $category->categoryicon->path = $uploadedImage['path'];
-                    $category->categoryicon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
-                } else {
-                    $category->categoryfeaturedimage->ext =  BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
-                    $category->categoryfeaturedimage->path = $uploadedImage['path'];
-                    $category->categoryfeaturedimage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
-                }
+                $category = new CategoryIcon();
+                $category->ext =  BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
+                $category->path = $uploadedImage['path'];
+                $category->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
+                $category->save();
+                $categoryImageId = $category->id;
+                return $categoryImageId;
             } else {
                 return false;
             }
