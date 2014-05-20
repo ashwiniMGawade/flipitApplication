@@ -2,7 +2,6 @@
 echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
 $zendTranslate = Zend_Registry::get('Zend_Translate');
 ?>
-
 <div class="slide">
     <form role="form" class="search-form">
         <input placeholder="<?php echo $zendTranslate->translate('Type in a Store e.g. Avis');?>" class="form-control" id='searchFieldHeader' name='searchFieldHeader' type='text'/>
@@ -10,5 +9,9 @@ $zendTranslate = Zend_Registry::get('Zend_Translate');
         <a href='javascript:void(0);' class="btn btn-default" id='searchbuttonHeader'>
             <span class="glyphicon glyphicon-search"></span>
         </a>
+        <div class="header-search-autocomplete">
+            <div class="ajax-autocomplete"><ul></ul></div>
+        </div>
     </form>
 </div>
+
