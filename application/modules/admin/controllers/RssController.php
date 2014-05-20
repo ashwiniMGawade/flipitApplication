@@ -101,10 +101,10 @@ class Admin_RssController extends Zend_Controller_Action
         $mainDir = ROOT_PATH ."rss/";
 
         # generate translated file name
-        $fileName = FrontEnd_Helper_viewHelper::__form('newest-offers.xml');
+        $fileName = FrontEnd_Helper_viewHelper::__form('newest-offers');
 
         # complete path for offer rss feed file
-        $offerXml = $mainDir. "{$fileName}";
+        $offerXml = $mainDir. "{$fileName}.xml";
 
         # create dir if not exists
         if(!file_exists($mainDir))
@@ -180,10 +180,10 @@ class Admin_RssController extends Zend_Controller_Action
             $mainDir = ROOT_PATH ."rss/";
 
             # generate translated file name
-            $fileName = FrontEnd_Helper_viewHelper::__form('popular-offers.xml');
+            $fileName = FrontEnd_Helper_viewHelper::__form('popular-offers');
 
             # complete path for offer rss feed file
-            $offerXml = $mainDir. "{$fileName}";
+            $offerXml = $mainDir. "{$fileName}.xml";
 
             # create dir if not exists
             if(!file_exists($mainDir))
