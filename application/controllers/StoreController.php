@@ -59,10 +59,6 @@ class StoreController extends Zend_Controller_Action
                 }
             }
 
-            if ($shopInformation[0]['customHeader']) {
-                $this->view->layout()->customHeader = $this->view->layout()->customHeader . $shopInformation[0]['customHeader'] . "\n" ;
-            }
-
             $ShopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
         } else {
             $urlToRedirect = HTTP_PATH_LOCALE. 'store/index';
@@ -87,19 +83,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->storeImage = $ShopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
-        $this->view->headTitle($shopInformation[0]['overriteTitle']);
-        $this->view->headMeta()->setName('description', trim($shopInformation[0]['metaDescription']));
-        $this->view->facebookTitle = $shopInformation[0]['overriteTitle'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
-        $this->view->facebookImage = $ShopImage;
-        $this->view->facebookDescription =  trim($shopInformation[0]['metaDescription']);
-        if (LOCALE == '') {
-            $facebookLocale = '';
-        } else {
-            $facebookLocale = LOCALE;
-        }
-        $this->view->facebookLocale = $facebookLocale ;
-        $this->view->twitterDescription =  trim($shopInformation[0]['metaDescription']);
+        $this->getFacebookMetaTags((object) $shopInformation[0], $ShopImage);
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
@@ -182,11 +166,33 @@ class StoreController extends Zend_Controller_Action
         $this->view->facebookLocale = $facebookLocale;
         $this->view->facebookDescription =  trim($pageAttribute['metaDescription']);
         $this->view->twitterDescription =  trim($pageAttribute['metaDescription']);
+
+        $this->getFacebookMetaTags($requestedData, $ShopImage);
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
     }
+    public function getFacebookMetaTags($requestedData, $ShopImage)
+    {
+        $this->view->headTitle($requestedData->overriteTitle);
+        $this->view->headMeta()->setName('description', trim($requestedData->metaDescription));
+        $this->view->facebookTitle = $requestedData->overriteTitle;
+        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $requestedData->permaLink;
+        $this->view->facebookImage = $ShopImage;
+        $this->view->facebookDescription =  trim($requestedData->metaDescription);
+        if (LOCALE == '') {
+            $facebookLocale = '';
+        } else {
+            $facebookLocale = LOCALE;
+        }
+        $this->view->facebookLocale = $facebookLocale ;
+        $this->view->twitterDescription =  trim($requestedData->metaDescription);
 
+        if ($requestedData->customHeader) {
+            $this->view->layout()->customHeader = $this->view->layout()->customHeader . $requestedData->customHeader . "\n" ;
+        }
+        return $this;
+    }
     public function howtoguideAction()
     {
         $howToGuidePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
