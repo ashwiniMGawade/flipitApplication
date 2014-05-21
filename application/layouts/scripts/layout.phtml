@@ -67,7 +67,7 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 ?>
 
 </head>
-<body>
+<body<?php echo (!empty($this->pageCssClass) ? " class='$this->pageCssClass'" : ''); ?>>
     <div id="wrapper">
         <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
         <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
