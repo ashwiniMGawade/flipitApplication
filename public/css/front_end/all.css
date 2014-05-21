@@ -5915,7 +5915,7 @@ button.close {
   top: 17px;
   height: 68px;
   width: 68px;
-  background: url(../../../images/sprite.png) no-repeat -95px -130px;
+  background: url(../../images/sprite.png) no-repeat -95px -130px;
 }
 .all-categories-alt-page .section-newsletter .newsletter input[type="email"] {
   width: 73.4%;
@@ -6830,7 +6830,7 @@ button.close {
   z-index: 2;
   right: -24px;
   top: 97%;
-  background: url(../../../images/sprite.png) no-repeat -322px -224px;
+  background: url(../../images/sprite.png) no-repeat -322px -224px;
   width: 23px;
   height: 87px;
 }
@@ -6860,7 +6860,7 @@ button.close {
   }
 }
 .home-page .logo {
-  background: url(../../../images/logo-home.png) no-repeat;
+  background: url(../../images/logo-home.png) no-repeat;
   width: 125px;
   height: 56px;
 }
