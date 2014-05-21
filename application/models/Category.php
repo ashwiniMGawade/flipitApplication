@@ -261,30 +261,22 @@ class Category extends BaseCategory
             ->fetchArray();
         return $categoriesDetail;
     }
-    #####################################################
-    ############# ENd REFACORED CODE ####################
-    #####################################################
-    /**
-     * detail of editable category
-     * @param integer $id
-     * @return array $data
-     * @author blal
-     * @version 1.0
-     */
-    public static function getCategory($id)
+
+    public static function getCategory($categoryId)
     {
-        $data = Doctrine_Query::create()->select("c.*,i.name,i.path,categoryfeaturedimage.name,categoryfeaturedimage.path")
+        $categoryDetails = Doctrine_Query::create()->select("c.*,i.name,i.path,categoryfeaturedimage.name,categoryfeaturedimage.path")
         ->from('Category c')
         ->LeftJoin("c.categoryicon i")
         ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
-        ->where("id = ?", $id)
+        ->where("id = ?", $categoryId)
         ->andWhere('c.deleted=0')
         ->fetchArray();
-        return $data;
+        return $categoryDetails;
 
     }
-
-
+    #####################################################
+    ############# ENd REFACORED CODE ####################
+    #####################################################
     /**
      * upload image for category icon
      * @param array $params
