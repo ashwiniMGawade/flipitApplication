@@ -72,6 +72,8 @@ public function indexAction()
         $error404 = 'HTTP/1.1 404 Not Found';
         $this->getResponse()->setRawHeader($error404);
     }
+    $this->view->pageCssClass = 'saving-page';
+
 }
 
 ################ Refactored Ends #######################################

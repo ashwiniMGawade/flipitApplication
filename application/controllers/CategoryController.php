@@ -72,6 +72,7 @@ class CategoryController extends Zend_Controller_Action
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
         $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'all-categories-alt-page';
     }
     #####################################################
     ############# END REFACORED CODE ####################

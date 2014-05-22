@@ -86,6 +86,7 @@ class OfferController extends Zend_Controller_Action
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'flipit-expired-page';
     }
 
     /**
