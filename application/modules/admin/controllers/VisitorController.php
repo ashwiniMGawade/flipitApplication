@@ -320,7 +320,6 @@ class Admin_VisitorController extends Zend_Controller_Action
 
     public function importvisitorlistAction(){
 
-    	ini_set('max_execution_time',115200);
     	$params = $this->_getAllParams();
     	if($this->getRequest()->isPost ()){
     		//echo "<pre>"; print_r($_FILES); die;
@@ -328,21 +327,14 @@ class Admin_VisitorController extends Zend_Controller_Action
 
     			$RouteRedirectObj = new RouteRedirect();
     			$result = @$RouteRedirectObj->uploadExcel($_FILES['excelFile']['name'], true);
-                echo '<pre>'.print_r($result, true).'</pre>';
     			$excelFilePath = $result['path'];
 				$excelFile = $excelFilePath.$result['fileName'];
-                echo $excelFile;
-                exit;
-
     			if($result['status'] == 200){
-
-
-
 
 	    			$flash = $this->_helper->getHelper ( 'FlashMessenger' );
 	    			$message = $this->view->translate ('Visitors uploaded successfully');
 	    			$flash->addMessage ( array ('success' => $message ) );
-	    			$this->_redirect ( HTTP_PATH . 'admin/visitor' );
+	    			$this->_redirect ( HTTP_PATH . 'admin/visitor/importvisitorlist' );
     			}
 
 		    } else{
@@ -350,11 +342,18 @@ class Admin_VisitorController extends Zend_Controller_Action
 		    	$flash = $this->_helper->getHelper ( 'FlashMessenger' );
 	    		$message = $this->view->translate ('Problem in your file!!');
 	    		$flash->addMessage ( array ('error' => $message ) );
-	    		$this->_redirect ( HTTP_PATH . 'admin/visitor' );
-
-		    		//return false;
+	    		$this->_redirect ( HTTP_PATH . 'admin/visitor/importvisitorlist' );
 		    }
     	}
+
+        $importFolder = UPLOAD_EXCEL_PATH.'import/';
+        $xlsxFilesToProcess = array();
+        foreach (glob($importFolder."*.xlsx") as $xlsxToProcess) {
+            $xlsxFilesToProcess[] = $xlsxToProcess;
+        }
+        $this->view->xlsxFilesToProcess = $xlsxFilesToProcess;
+        $filename = $importFolder.'log.txt';
+        $this->view->importLog = (file_exists($filename)) ? file_get_contents($filename) : false;
     }
 
     /**

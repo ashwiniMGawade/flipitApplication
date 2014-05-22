@@ -25,7 +25,7 @@ class VisitorImport {
             // check if database is a site
             if ($key != 'imbull') {
                 try {
-                    $this->importShops( $connection ['dsn'], $key);
+                    $this->importVisitors( $connection ['dsn'], $key);
                 } catch ( Exception $e ) {
                     echo $e->getMessage ()."\n\n";
                 }
@@ -33,96 +33,52 @@ class VisitorImport {
         }
     }
 
-    protected function importShops($dsn, $keyIn)
+    protected function importVisitors($dsn, $keyIn)
     {
-        $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
-        spl_autoload_register(array('Doctrine', 'modelsAutoload'));
-        $manager = Doctrine_Manager::getInstance();
-        $manager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING, Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
-        $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
-        $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
-        Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
+        CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
+        CommonMigrationFunctions::loadDoctrineModels();
 
-        $localePath         = ($keyIn == 'en') ? '' : $keyIn.'/';
-        $pathToExcelFolder  = UPLOAD_DATA_FOLDER_EXCEL_PATH . strtolower($localePath) . 'excels/import/';
+        $localePath               = ($keyIn == 'en') ? '' : $keyIn.'/';
+        $pathToExcelImportFolder  = UPLOAD_DATA_FOLDER_EXCEL_PATH . strtolower($localePath) . 'excels/import/';
+        
+        foreach (glob($pathToExcelImportFolder."*.xlsx") as $xlsxDocument) {
+            
+            $logContent = date('Y-m-d H:m:i').' - import file: '.basename($xlsxDocument).' for locale: '.strtoupper($keyIn)."\n";
 
-        foreach (glob($pathToExcelFolder."*.xlsx") as $xlsxDocument) {
-            echo "\n\n";
-            echo 'Importing '.$xlsxDocument;
+            try {
+                $objReader      = PHPExcel_IOFactory::createReader('Excel2007');
+                $objPHPExcel    = $objReader->load($xlsxDocument);
+                $worksheet      = $objPHPExcel->getActiveSheet();
 
-            $objReader = PHPExcel_IOFactory::createReader('Excel2007');
-            $objPHPExcel = $objReader->load($xlsxDocument);
-            $worksheet = $objPHPExcel->getActiveSheet();
+                $data                   = array();
+                $emailArray             = array();
+                $countNewVisitors       = 0;
+                $countUpdatedVisitors   = 0;
 
-            $data =  array();
-            $emailArray = array();
-            $i = 0;
+                $insert = new Doctrine_Collection('Visitor');
+                foreach ($worksheet->getRowIterator() as $row) {
 
-            $insert = new Doctrine_Collection('Visitor');
+                    $cellIterator = $row->getCellIterator();
+                    $cellIterator->setIterateOnlyExistingCells(false);
 
-            foreach ($worksheet->getRowIterator() as $row) {
-
-                $cellIterator = $row->getCellIterator();
-                $cellIterator->setIterateOnlyExistingCells(false);
-
-                foreach ($cellIterator as $cell) {
-                    $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
-                }
-
-                if($i > 0){
-
-
-                    $email =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
-
-                    $firstName =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
-
-                    $lastName =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
-
-
-                    $gender = $data[$cell->getRow()]['D'];
-
-                    if( strtoupper($gender) == 'F' || strtoupper($gender) == 'FEMALE')
-                    {
-                        $gender = 1 ;
-                    } else {
-
-                        $gender = 0 ;
+                    foreach ($cellIterator as $cell) {
+                        $data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
                     }
 
-
-                    $dob =  PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['E'], "YYYY-MM-DD");
-                    $dob  = date('Y-m-d',strtotime($dob));
-
-
-
-                    $date = PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['F'], "YYYY-MM-DD h:mm:ss");
-
-
-                    if($date)
-                    {
-                        $created_at = date('Y-m-d H:i:s',strtotime($date));
-
-                    } else{
-
-                        $created_at = date('Y-m-d H:i:s');
-                    }
-
-
-                    $keywords = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
-
+                    $email      = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
+                    $firstName  = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
+                    $lastName   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
+                    $gender     = (strtoupper($data[$cell->getRow()]['D']) == 'F' || strtoupper($data[$cell->getRow()]['D']) == 'FEMALE') ? 1 : 0;
+                    $dob        = PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['E'], "YYYY-MM-DD");
+                    $dob        = date('Y-m-d',strtotime($dob));
+                    $date       = PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['F'], "YYYY-MM-DD h:mm:ss");
+                    $created_at = ($date) ? date('Y-m-d H:i:s',strtotime($date)) : date('Y-m-d H:i:s');
+                    $keywords   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
                     $emailExist = Doctrine_Core::getTable('Visitor')->findBy('email', $email)->toArray();
-
-
-                    //echo $firstName.' '.$lastName.' '.$email;
-                    //echo "\n\n";
-
+                    
+                    $keywordsArray = explode(',',$keywords);
                     if(empty($emailExist)){
-
-
-                        /**
-                         * use email as index to avoid duplicate email error in query
-                         * as email would be always unique
-                         */
+                        $countNewVisitors++;
                         $insert[$email]->firstName = $firstName;
                         $insert[$email]->lastName = $lastName;
                         $insert[$email]->created_at = $created_at;
@@ -132,18 +88,11 @@ class VisitorImport {
                         $insert[$email]->weeklyNewsLetter = 1;
                         $insert[$email]->password = BackEnd_Helper_viewHelper::randomPassword();
                         $insert[$email]->active = 1;
-
-                        $kw = explode(',',$keywords);
-                        foreach ($kw as $words){
-                            $insert[$email]->keywords[]->keyword = $words;
-                        }
+                        
+                        foreach ($keywordsArray as $words) $insert[$email]->keywords[]->keyword = $words;
 
                     } else {
-
-
-                        $insertKeyword = new Doctrine_Collection('VisitorKeyword');
-
-
+                        $countUpdatedVisitors++;
                         $updateWeekNews = Doctrine_Query::create()->update('Visitor')
                                                                   ->set('weeklyNewsLetter',1)
                                                                   ->set('firstName','?' , $firstName )
@@ -154,32 +103,37 @@ class VisitorImport {
                                                                   ->set('active','?',1)
                                                                   ->where('id = '.$emailExist[0]['id'])
                                                                   ->execute();
-                        $j = 0;
-                        $kw = explode(',',$keywords);
-                        foreach ($kw as $words) {
-
+                        $keywordCounter     = 0;
+                        $insertKeyword      = new Doctrine_Collection('VisitorKeyword');
+                        foreach ($keywordsArray as $words) {
                             $keywordExist = Doctrine_Query::create()->from('VisitorKeyword')
                                                                   ->where("keyword = '". $words ."'")
                                                                   ->andWhere('visitorId = '.$emailExist[0]['id'])
                                                                   ->fetchOne(null,Doctrine::HYDRATE_ARRAY);
 
                             if(empty($keywordExist)) {
-                                $insertKeyword[$j]->keyword = $words;
-                                $insertKeyword[$j]->visitorId = $emailExist[0]['id'];
+                                $insertKeyword[$keywordCounter]->keyword = $words;
+                                $insertKeyword[$keywordCounter]->visitorId = $emailExist[0]['id'];
                             }
-
-                            $j++;
+                            $keywordCounter++;
                         }
-
                         $insertKeyword->save();
                     }
                 }
-                $i++;
-
+                $logContent .= 'Total new users: '.$countNewVisitors."\n";
+                $logContent .= 'Total updated users: '.$countUpdatedVisitors."\n\n";
+                unlink($xlsxDocument);
+                $insert->save();
+            } catch (Exception $e) {
+                $logContent .= 'Error: '.$e."\n";
             }
-
-            unlink($xlsxDocument);
-            $insert->save();
+            $this->writeLogFile($logContent, $pathToExcelImportFolder);
         }
+    }
+
+    private function writeLogFile($logContent, $pathToExcelImportFolder){
+        $filename = $pathToExcelImportFolder.'log.txt';
+        $file_content = file_exists($filename) ? file_get_contents ($filename) : '';
+        file_put_contents($filename, $logContent . "\n" . $file_content);
     }
 }
