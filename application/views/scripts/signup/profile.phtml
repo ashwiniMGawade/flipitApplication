@@ -1,0 +1,83 @@
+<?php
+echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/profile.css");
+?>
+<section class="profile-box">
+	<div class="title">
+		<h1>Hi Jochem, How are you?</h1>
+		Want to change you personal setting then your free to do so below. Change name, email address, password and more
+	</div>
+	<div class="form-row">
+		<div class="row">
+			<div class="col-md-6">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-6">
+							<label for="text1">Voornaam</label>
+							<input type="text" id="text1" class="form-control" />
+						</div>
+						<div class="col-sm-6">
+							<label for="text2">Achternaam</label>
+							<input type="text" id="text2" class="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="text3">E-mailadres</label>
+					<input type="text" id="text3" class="form-control" />
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-6">
+							<label for="text4">Geslacht</label>
+							<input type="text" id="text4" class="form-control" />
+						</div>
+						<div class="col-sm-6">
+							<label for="text5">Geboortedatum</label>
+							<div class="row">
+								<div class="col-sm-4">
+									<input type="text" id="text5" class="form-control" />
+								</div>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" />
+								</div>
+								<div class="col-sm-4">
+									<input type="text" class="form-control" />
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-6">
+							<label for="text11">Change Password</label>
+							<input type="password" id="text11" class="form-control" />
+						</div>
+						<div class="col-sm-6">
+							<label for="text12">Confirm Password</label>
+							<input type="password" id="text12" class="form-control" />
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="row">
+						<div class="col-sm-6">
+							<label for="text13">Postcode</label>
+							<input type="text" id="text13" class="form-control" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="note-box">
+		<h2>E-mail & Nieuwsbrief instellingen:</h2>
+		<div class="form-group">
+			<input type="checkbox" id="checkbox" />
+			<label for="checkbox"><strong>Dé Kortingscode.nl wekelijkse nieuwsbrief</strong> De nieuwsbrief van Kortingscode.nl wordt de komende tijd vrijwel elke week verbeterd. Ons uiteindelijke doel: De gebruiker een persoonlijke kortingsoverzicht kunnen bieden met alleen maar shops waarin jij echt geinteresseerd bent.</label>
+		</div>
+	</div>
+	<button class="btn blue btn-lg btn-primary" type="submit">update your settings</button>
+</section>
