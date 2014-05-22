@@ -3,25 +3,25 @@
   display: block;
   clear: both;
 }
-.logo {
+.home-page .logo {
   background: url(../../images/logo-home.png) no-repeat;
   width: 125px;
   height: 56px;
 }
-.navigation .logo {
+.home-page .navigation .logo {
   margin: 24px 0 20px;
 }
-.section-top {
+.home-page .section-top {
   position: relative;
   height: 690px;
 }
-.section-top .text-block {
+.home-page .section-top .text-block {
   position: absolute;
   bottom: 74px;
   left: 0;
   width: 100%;
 }
-.section-top .block-image {
+.home-page .section-top .block-image {
   position: absolute;
   top: 0;
   left: 0;
@@ -30,24 +30,24 @@
   overflow: hidden;
   z-index: -1;
 }
-.section-top .block-image img {
+.home-page .section-top .block-image img {
   display: block;
   width: 100%;
   height: auto;
 }
-.section-top .block-image .image-holder {
+.home-page .section-top .block-image .image-holder {
   width: 1600px;
   position: relative;
   float: left;
   left: 50%;
 }
-.section-top .block-image .image-frame {
+.home-page .section-top .block-image .image-frame {
   width: 1600px;
   position: relative;
   float: left;
   left: -50%;
 }
-.section-top .ajax-autocomplete {
+.home-page .section-top .ajax-autocomplete {
   position: absolute;
   left: 0;
   right: 2px;
@@ -60,30 +60,30 @@
   -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
 }
-.section-top .ajax-autocomplete ul {
+.home-page .section-top .ajax-autocomplete ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.section-top .ajax-autocomplete ul li {
+.home-page .section-top .ajax-autocomplete ul li {
   border-top: 1px solid #c6c6c5;
 }
-.section-top .ajax-autocomplete ul li a {
+.home-page .section-top .ajax-autocomplete ul li a {
   display: block;
   color: #33383e;
   padding: 14px 12px;
   text-decoration: none;
 }
-.section-top .ajax-autocomplete ul li span {
+.home-page .section-top .ajax-autocomplete ul li span {
   color: #db862e;
 }
-.section-top .ajax-autocomplete ul li:hover {
+.home-page .section-top .ajax-autocomplete ul li:hover {
   background: #ececec;
 }
-.section-top .ajax-autocomplete ul li:first-child {
+.home-page .section-top .ajax-autocomplete ul li:first-child {
   border: 0;
 }
-.section-top .email-form {
+.home-page .section-top .email-form {
   max-width: 492px;
   background: #000;
   background: rgba(0, 0, 0, 0.4);
@@ -93,21 +93,21 @@
   -webkit-border-radius: 2px;
   margin: 0 0 0 14px;
 }
-.section-top .email-form h1 {
+.home-page .section-top .email-form h1 {
   color: #ffffff;
   font-size: 38px;
   line-height: 40px;
   font-weight: bold;
   margin: 0 0 8px;
 }
-.section-top .email-form h2 {
+.home-page .section-top .email-form h2 {
   color: #ffffff;
   font-size: 34px;
   line-height: 36px;
   font-weight: bold;
   margin: 0 0 20px;
 }
-.section-top .email-form .form-control {
+.home-page .section-top .email-form .form-control {
   color: #666;
   border-width: 1px;
   border-style: solid;
@@ -115,7 +115,7 @@
   border-radius: 2px 0 0 2px;
   -webkit-border-radius: 2px 0 0 2px;
 }
-.section-top .email-form .btn.orange {
+.home-page .section-top .email-form .btn.orange {
   border: none;
   border-width: 1px 1px 1px 0;
   border-style: solid;
@@ -123,79 +123,79 @@
   border-radius: 0 2px 2px 0;
   -webkit-border-radius: 0 2px 2px 0;
 }
-.section-top .email-form .holder {
+.home-page .section-top .email-form .holder {
   position: relative;
 }
-.section-top .email-form .holder:after {
+.home-page .section-top .email-form .holder:after {
   content: '';
   display: block;
   clear: both;
 }
-#header {
+.home-page #header {
   background: none;
 }
-.top-panel {
+.home-page .top-panel {
   background: #2d2c2c;
   background: rgba(32, 32, 32, 0.66);
 }
-.top-panel .container {
+.home-page .top-panel .container {
   padding-bottom: 0;
   padding-top: 0;
 }
-.top-panel .slogan {
+.home-page .top-panel .slogan {
   padding: 9px 0 11px;
 }
-.top-panel .account-box ul {
+.home-page .top-panel .account-box ul {
   -webkit-box-shadow: none;
   box-shadow: none;
   border: none;
 }
-.top-panel .account-box ul li {
+.home-page .top-panel .account-box ul li {
   -webkit-box-shadow: none;
   box-shadow: none;
   border: none;
   padding: 0;
 }
-.top-panel .account-box ul .active a {
+.home-page .top-panel .account-box ul .active a {
   background: #e49542;
 }
-.top-panel .account-box ul a {
+.home-page .top-panel .account-box ul a {
   display: block;
   padding: 11px 16px 11px;
 }
-.top-panel .account-box ul a:hover {
+.home-page .top-panel .account-box ul a:hover {
   background: #e49542;
   text-decoration: none;
 }
-.navigation {
+.home-page .navigation {
   background: #353534;
   background: rgba(0, 0, 0, 0.33);
   border: none;
 }
-.nav-bar #nav ul {
+.home-page .nav-bar #nav ul {
   border: none;
   -webkit-box-shadow: none;
   box-shadow: none;
 }
-.nav-bar #nav ul li {
+.home-page .nav-bar #nav ul li {
   border: none;
   -webkit-box-shadow: none;
   box-shadow: none;
   padding: 40px 0 42px;
   margin: 0 0 0 51px;
 }
-.nav-bar #nav ul li > a {
+.home-page .nav-bar #nav ul li > a {
   padding: 0;
 }
-.nav-bar #nav ul li > a:hover,
-.nav-bar #nav ul li > a:focus {
+.home-page .nav-bar #nav ul li > a:hover,
+.home-page .nav-bar #nav ul li > a:focus {
   background: none;
 }
-.email-form .form-group {
+.home-page .email-form .form-group {
   float: left;
   width: 81.2%;
 }
-.email-form .form-control {
+.home-page .email-form .form-control {
   display: block;
   width: 100% !important;
   font-size: 15px;
@@ -212,7 +212,7 @@
   -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16) inset;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16) inset;
 }
-.email-form .btn.orange {
+.home-page .email-form .btn.orange {
   float: left;
   font-size: 15px;
   line-height: 18px;
@@ -227,11 +227,11 @@
   height: 45px;
   padding: 8px 6px;
 }
-.email-form .btn.orange .glyphicon-search {
+.home-page .email-form .btn.orange .glyphicon-search {
   font-size: 15px;
   margin: 0 3px 0 0;
 }
-.logos-panel {
+.home-page .logos-panel {
   margin: 0 0 30px;
   width: 100%;
   position: relative;
@@ -245,47 +245,47 @@
   background: -ms-linear-gradient(top, #f3f3f3 0%, #f3f3f3 31%, #ffffff 72%, #ffffff 100%);
   background: linear-gradient(to bottom, #f3f3f3 0%, #f3f3f3 31%, #ffffff 72%, #ffffff 100%);
 }
-.logos-panel:after {
+.home-page .logos-panel:after {
   content: '';
   display: block;
   clear: both;
 }
-.logos-panel .container {
+.home-page .logos-panel .container {
   padding-bottom: 33px;
 }
-.shops {
+.home-page .shops {
   margin: -24px 0 0;
   padding: 0;
   text-align: center;
   overflow: visible;
 }
-.shops:after {
+.home-page .shops:after {
   content: '';
   display: block;
   clear: both;
 }
-.shops li {
+.home-page .shops li {
   float: none;
   display: inline-block;
   vertical-align: top;
   margin: 0 12px;
 }
-.shops li img {
+.home-page .shops li img {
   border: 1px solid #e1e1e1;
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
 }
-.shops li a {
+.home-page .shops li a {
   display: block;
 }
-.shops li a:hover {
+.home-page .shops li a:hover {
   margin: -10px 0 0;
 }
-.best-items {
+.home-page .best-items {
   margin-bottom: 39px;
 }
-.best-items .heading {
+.home-page .best-items .heading {
   border-width: 1px 1px 0;
   border-style: solid;
   border-color: #eaeaea;
@@ -294,17 +294,17 @@
   padding: 19px 28px 19px;
   background: #fafafa;
 }
-.best-items .heading h1 {
+.home-page .best-items .heading h1 {
   font-weight: bold;
   font-size: 21px;
   line-height: 22px;
   margin: 0;
 }
-.best-items .columns {
+.home-page .best-items .columns {
   padding: 0 0 40px;
   overflow: hidden;
 }
-.best-items .all {
+.home-page .best-items .all {
   position: absolute;
   right: -1px;
   top: 100%;
@@ -321,10 +321,10 @@
   border-style: solid;
   border-color: #e4e4e4;
 }
-.best-items .all:hover {
+.home-page .best-items .all:hover {
   color: #363535;
 }
-.best-items .categories-block {
+.home-page .best-items .categories-block {
   float: left;
   width: 33.1%;
   color: #878a8d;
@@ -338,16 +338,16 @@
   border-color: #e4e4e4 #cecece #e4e4e4 #e4e4e4;
   position: relative;
 }
-.best-items .categories-block ul {
+.home-page .best-items .categories-block ul {
   padding: 0;
   margin: 0;
   list-style: none;
 }
-.best-items .categories-block ul li img {
+.home-page .best-items .categories-block ul li img {
   display: block;
   margin: 0 auto;
 }
-.best-items .categories-block ul li a {
+.home-page .best-items .categories-block ul li a {
   border-top: 1px solid #e4e4e4;
   padding: 6px 28px;
   position: relative;
@@ -355,22 +355,22 @@
   display: table;
   width: 100%;
 }
-.best-items .categories-block ul li a:hover {
+.home-page .best-items .categories-block ul li a:hover {
   background: #ffffff;
   color: #878a8d;
   text-decoration: none;
 }
-.best-items .categories-block ul li a:hover h2 {
+.home-page .best-items .categories-block ul li a:hover h2 {
   color: #e49542;
 }
-.best-items .categories-block ul li a:hover .left-box {
+.home-page .best-items .categories-block ul li a:hover .left-box {
   width: 36.5%;
 }
-.best-items .categories-block ul li a:hover .box {
+.home-page .best-items .categories-block ul li a:hover .box {
   width: 63.5%;
   padding: 0 14px;
 }
-.best-items .categories-block ul li a:hover:before {
+.home-page .best-items .categories-block ul li a:hover:before {
   content: '';
   position: absolute;
   top: 50%;
@@ -380,7 +380,7 @@
   height: 15px;
   margin: -9px 0 0;
 }
-.best-items .categories-block ul li a:hover:after {
+.home-page .best-items .categories-block ul li a:hover:after {
   content: '';
   position: absolute;
   right: -1px;
@@ -389,32 +389,32 @@
   width: 1px;
   background: #fff;
 }
-.best-items .categories-block .left-box {
+.home-page .best-items .categories-block .left-box {
   width: 21.5%;
   display: table-cell;
   vertical-align: middle;
   text-align: center;
 }
-.best-items .categories-block .box {
+.home-page .best-items .categories-block .box {
   display: table-cell;
   vertical-align: middle;
   width: 79.5%;
   padding: 0 0 0 32px;
 }
-.best-items .categories-block .box h2 {
+.home-page .best-items .categories-block .box h2 {
   color: #33383e;
   font-size: 21px;
   line-height: 24px;
   margin: 0;
 }
-.discount-label {
+.home-page .discount-label {
   padding: 3px;
   color: #e49542;
   border-color: #e49542;
   max-width: 70px;
   margin: 0 auto;
 }
-.vouchers {
+.home-page .vouchers {
   float: left;
   width: 66.9%;
   background: #ffffff;
@@ -424,23 +424,23 @@
   border-color: #eaeaea;
   position: relative;
 }
-.vouchers ul {
+.home-page .vouchers ul {
   padding: 0;
   margin: 0;
   list-style: none;
 }
-.vouchers ul li:after {
+.home-page .vouchers ul li:after {
   content: '';
   display: block;
   clear: both;
 }
-.vouchers ul li:first-child a {
+.home-page .vouchers ul li:first-child a {
   border-color: #ffffff;
 }
-.vouchers ul li:first-child a:hover {
+.home-page .vouchers ul li:first-child a:hover {
   border-color: #e49542;
 }
-.vouchers ul a {
+.home-page .vouchers ul a {
   float: left;
   width: 100%;
   border-top: 1px solid #eaeaea;
@@ -450,7 +450,7 @@
   color: #878a8d;
   position: relative;
 }
-.vouchers ul a:before {
+.home-page .vouchers ul a:before {
   content: '';
   position: absolute;
   top: 50%;
@@ -460,16 +460,16 @@
   height: 15px;
   margin: -8px 0 0;
 }
-.vouchers ul a:hover {
+.home-page .vouchers ul a:hover {
   text-decoration: none;
   background: #fefdfb;
   border-color: #e49542;
   z-index: 2;
 }
-.vouchers ul a:hover:before {
+.home-page .vouchers ul a:hover:before {
   background-position: -256px -350px;
 }
-.vouchers ul a:hover:after {
+.home-page .vouchers ul a:hover:after {
   content: '';
   position: absolute;
   background: #e49542;
@@ -478,62 +478,62 @@
   bottom: -1px;
   left: 0;
 }
-.vouchers ul .logo-box {
+.home-page .vouchers ul .logo-box {
   float: left;
   width: 12%;
   margin: 9px 2.6% 0 0;
   text-align: center;
 }
-.vouchers ul .logo-box img {
+.home-page .vouchers ul .logo-box img {
   display: block;
 }
-.vouchers ul .box {
+.home-page .vouchers ul .box {
   overflow: hidden;
 }
-.vouchers ul h2 {
+.home-page .vouchers ul h2 {
   color: #0077cc;
   font-size: 18px;
   line-height: 22px;
   margin: 0 0 1px;
 }
-.vouchers ul h2 span {
+.home-page .vouchers ul h2 span {
   display: inline-block;
   vertical-align: middle;
 }
-.vouchers ul h2 .exclusive .glyphicon-star {
+.home-page .vouchers ul h2 .exclusive .glyphicon-star {
   vertical-align: top;
 }
-.vouchers ul h2 .exclusive {
+.home-page .vouchers ul h2 .exclusive {
   font-size: 12px;
   vertical-align: middle;
 }
-.vouchers ul p {
+.home-page .vouchers ul p {
   margin: 0;
 }
-.our-shops {
+.home-page .our-shops {
   border-top: 1px solid #d9d9d9;
   padding: 35px 15px 47px;
   font-size: 14px;
   line-height: 24px;
 }
-.our-shops h2 {
+.home-page .our-shops h2 {
   font-size: 33px;
   line-height: 36px;
   font-weight: bold;
   margin: 0 0 26px;
 }
-.our-shops ul {
+.home-page .our-shops ul {
   padding: 0;
   margin: 0;
   list-style: none;
 }
-.our-shops ul a {
+.home-page .our-shops ul a {
   color: #0077cc;
 }
-.our-shops ul a:hover {
+.home-page .our-shops ul a:hover {
   color: #363535;
 }
-.area {
+.home-page .area {
   width: 100%;
   background: #ffffff;
   border-width: 1px 0;
@@ -541,38 +541,38 @@
   border-color: #eaeaea;
   margin: 0 0 55px;
 }
-.logos-section {
+.home-page .logos-section {
   padding: 52px 15px 60px;
   color: #202020;
   font-size: 21px;
   line-height: 22px;
   text-align: center;
 }
-.logos-section span {
+.home-page .logos-section span {
   display: inline-block;
   vertical-align: middle;
   margin: 0 40px 0 0;
 }
-.logos-section ul {
+.home-page .logos-section ul {
   padding: 0;
   margin: 0;
   list-style: none;
   display: inline-block;
   vertical-align: middle;
 }
-.logos-section ul li {
+.home-page .logos-section ul li {
   display: inline-block;
   vertical-align: middle;
   margin: 0 22px;
 }
-.logos-section ul img {
+.home-page .logos-section ul img {
   display: inline-block;
   vertical-align: middle;
 }
-.section {
+.home-page .section {
   margin: 0 auto 5px;
 }
-.tabset {
+.home-page .tabset {
   background: #fafafa;
   padding: 0;
   margin: 0;
@@ -584,62 +584,62 @@
   border-radius: 2px 2px 0 0;
   -webkit-border-radius: 2px 2px 0 0;
 }
-.tabset:after {
+.home-page .tabset:after {
   content: '';
   display: block;
   clear: both;
 }
-.tabset li {
+.home-page .tabset li {
   float: left;
   border-width: 0 1px 0 0;
   border-style: solid;
   border-color: #eaeaea;
 }
-.tabset li a {
+.home-page .tabset li a {
   display: block;
   padding: 21px 29px;
   color: #a9abac;
   position: relative;
 }
-.tabset li a:hover {
+.home-page .tabset li a:hover {
   color: #333;
   text-decoration: none;
 }
-.tabset .active a {
+.home-page .tabset .active a {
   color: #333;
   background: #ffffff;
   margin: 0 0 -1px;
   padding-bottom: 22px;
 }
-.tab-content {
+.home-page .tab-content {
   color: #878a8d;
   padding: 10px 28px 25px;
   font-size: 14px;
   line-height: 24px;
 }
-.tab-content .link {
+.home-page .tab-content .link {
   color: #0077cc;
   text-decoration: underline;
 }
-.tab-content .link:hover {
+.home-page .tab-content .link:hover {
   color: #363535;
 }
-.tab-content h3 {
+.home-page .tab-content h3 {
   font-size: 14px;
   line-height: 24px;
   font-weight: bold;
   margin: 0;
 }
-.tab-content p {
+.home-page .tab-content p {
   margin: 0 0 24px;
 }
-#footer {
+.home-page #footer {
   text-shadow: none;
   background: none;
   font-size: 15px;
   line-height: 18px;
 }
-#footer .bottom-panel {
+.home-page #footer .bottom-panel {
   color: #878a8d;
   width: 100%;
   background: #ffffff;
@@ -648,64 +648,64 @@
   border-color: #e4e4e4;
   text-align: left;
 }
-#footer .bottom-panel .container {
+.home-page #footer .bottom-panel .container {
   padding-top: 45px;
   padding-bottom: 35px;
 }
-#footer .bottom-panel .text {
+.home-page #footer .bottom-panel .text {
   float: left;
   padding: 0 15px;
   width: 20%;
 }
-#footer .bottom-panel .text h2 {
+.home-page #footer .bottom-panel .text h2 {
   font-size: 21px;
   line-height: 24px;
   margin: 0;
 }
-#footer .email-form {
+.home-page #footer .email-form {
   float: left;
   width: 35.2%;
   padding: 10px 20px;
 }
-#footer .email-form .form-control {
+.home-page #footer .email-form .form-control {
   height: 49px;
   padding: 14px 18px;
 }
-#footer .email-form .form-group {
+.home-page #footer .email-form .form-group {
   width: 74.2%;
 }
-#footer .email-form .btn.orange {
+.home-page #footer .email-form .btn.orange {
   width: 25.8%;
   height: 49px;
 }
-#footer .social {
+.home-page #footer .social {
   float: left;
   padding: 10px 0 0 59px;
   width: 44%;
 }
-#footer .social ul {
+.home-page #footer .social ul {
   padding: 0;
   margin: 0 -65px 0 0;
   list-style: none;
 }
-#footer .social ul li {
+.home-page #footer .social ul li {
   float: left;
   margin: 0 0 0 65px;
 }
-#footer .social ul li:first-child {
+.home-page #footer .social ul li:first-child {
   margin: 0;
 }
-#footer .social ul a {
+.home-page #footer .social ul a {
   position: relative;
   display: block;
   padding: 0 0 0 70px;
   color: #878a8d;
 }
-#footer .social ul a:hover {
+.home-page #footer .social ul a:hover {
   text-decoration: none;
 }
-#footer .social ul .facebook:before,
-#footer .social ul .twitter:before {
+.home-page #footer .social ul .facebook:before,
+.home-page #footer .social ul .twitter:before {
   content: '';
   position: absolute;
   top: 0;
@@ -714,50 +714,50 @@
   width: 48px;
   height: 48px;
 }
-#footer .social ul .twitter:before {
+.home-page #footer .social ul .twitter:before {
   background-position: -76px -371px;
 }
-#footer .social ul .box {
+.home-page #footer .social ul .box {
   overflow: hidden;
   padding: 4px 0 0;
 }
-#footer .social ul h2 {
+.home-page #footer .social ul h2 {
   font-size: 21px;
   line-height: 24px;
   margin: 0;
 }
-#footer .bottom-nav {
+.home-page #footer .bottom-nav {
   padding: 41px 15px 54px;
   text-align: left;
   border-bottom: 1px solid #e4e4e4;
 }
-#footer .bottom-nav h3 {
+.home-page #footer .bottom-nav h3 {
   margin: 0 0 11px;
 }
-#footer .bottom-nav ul {
+.home-page #footer .bottom-nav ul {
   padding: 0;
   margin: 0;
   list-style: none;
   font-size: 13px;
   line-height: 24px;
 }
-#footer .bottom-nav .ico {
+.home-page #footer .bottom-nav .ico {
   line-height: 24px;
   text-align: center;
   padding-top: 6px;
 }
-#footer .bottom-nav .ico .num {
+.home-page #footer .bottom-nav .ico .num {
   display: block;
   font-size: 21px;
   line-height: 24px;
   margin: 0 0 3px;
 }
-#footer .bottom-nav .ico .add-text {
+.home-page #footer .bottom-nav .ico .add-text {
   display: block;
   max-width: 82px;
   margin: 0;
 }
-#footer .bottom-nav .ico-shop {
+.home-page #footer .bottom-nav .ico-shop {
   display: block;
   margin: 0 0 16px;
   width: 82px;
@@ -767,7 +767,7 @@
   -webkit-border-radius: 50%;
   position: relative;
 }
-#footer .bottom-nav .ico-shop:before {
+.home-page #footer .bottom-nav .ico-shop:before {
   content: '';
   position: absolute;
   top: 50%;
@@ -777,22 +777,22 @@
   height: 25px;
   margin: -13px 0 0 -12px;
 }
-#footer .add-block {
+.home-page #footer .add-block {
   padding: 40px 15px;
 }
-#footer .add-block .benefits {
+.home-page #footer .add-block .benefits {
   padding: 0;
   margin: 0 0 40px;
   list-style: none;
 }
-#footer .add-block .benefits li {
+.home-page #footer .add-block .benefits li {
   width: 20%;
   margin: 0 1%;
   display: inline-block;
   vertical-align: top;
   text-align: left;
 }
-#footer .title {
+.home-page #footer .title {
   font-size: 24px;
   line-height: 30px;
   color: #0077cc;
@@ -800,22 +800,22 @@
   text-align: center;
   margin: 0 0 44px;
 }
-#footer .title .glyphicon-ok {
+.home-page #footer .title .glyphicon-ok {
   font-size: 28px;
   vertical-align: top;
   margin: -2px 11px 0 0;
 }
-#footer .language {
+.home-page #footer .language {
   padding: 0;
   margin: 0 0 27px;
   list-style: none;
 }
-#footer .language li {
+.home-page #footer .language li {
   display: inline-block;
   vertical-align: top;
   margin: 0 3px;
 }
-#footer .language a {
+.home-page #footer .language a {
   display: block;
   background: url(../../images/sprite.png) no-repeat -3px -455px;
   width: 24px;
@@ -823,28 +823,28 @@
   text-indent: -9999px;
   overflow: hidden;
 }
-#footer .language .ico-2 {
+.home-page #footer .language .ico-2 {
   background-position: -37px -455px;
 }
-#footer .language .ico-3 {
+.home-page #footer .language .ico-3 {
   background-position: -71px -455px;
 }
-#footer .language .ico-4 {
+.home-page #footer .language .ico-4 {
   background-position: -106px -455px;
 }
-#footer .language .ico-5 {
+.home-page #footer .language .ico-5 {
   background-position: -139px -455px;
 }
-#footer .language .ico-6 {
+.home-page #footer .language .ico-6 {
   background-position: -173px -455px;
 }
-#footer .language .ico-7 {
+.home-page #footer .language .ico-7 {
   background-position: -207px -455px;
 }
-#footer .language .ico-8 {
+.home-page #footer .language .ico-8 {
   background-position: -241px -455px;
 }
-#footer .logo {
+.home-page #footer .logo {
   display: block;
   float: none;
   background: url(../../images/logo-footer.png) no-repeat;
@@ -852,374 +852,374 @@
   height: 40px;
   margin: 0 auto 21px;
 }
-#footer .copy {
+.home-page #footer .copy {
   font-size: 11px;
   line-height: 20px;
 }
 @media only screen and (min-width: 1600px) {
-  .section-top .block-image .image-holder,
-  .section-top .block-image .image-frame {
+  .home-page .section-top .block-image .image-holder,
+  .home-page .section-top .block-image .image-frame {
     width: 100%;
     position: static;
   }
 }
 @media only screen and (max-width: 1199px) {
-  .section-top {
+  .home-page .section-top {
     height: 570px;
   }
-  .navigation .logo {
+  .home-page .navigation .logo {
     margin: 5px 0 0;
   }
-  .nav-bar #nav ul li {
+  .home-page .nav-bar #nav ul li {
     padding: 24px 0 25px;
   }
-  .shops li {
+  .home-page .shops li {
     width: 10%;
     margin: 0;
   }
-  .vouchers ul .logo-box {
+  .home-page .vouchers ul .logo-box {
     width: 16%;
   }
-  .tabset {
+  .home-page .tabset {
     font-size: 13px;
   }
-  .tabset li a {
+  .home-page .tabset li a {
     padding: 21px 20px;
   }
-  .tab-content {
+  .home-page .tab-content {
     padding: 10px 20px 25px;
   }
-  .our-shops h2 {
+  .home-page .our-shops h2 {
     font-size: 31px;
   }
-  .logos-section ul li {
+  .home-page .logos-section ul li {
     margin: 0 10px;
   }
-  .best-items .categories-block .box {
+  .home-page .best-items .categories-block .box {
     width: 70.5%;
     padding: 0 0 0 10px;
   }
-  .best-items .categories-block .box h2 {
+  .home-page .best-items .categories-block .box h2 {
     font-size: 16px;
     line-height: 20px;
   }
-  .best-items .categories-block .left-box {
+  .home-page .best-items .categories-block .left-box {
     width: 29.5%;
   }
-  #footer .bottom-panel .text {
+  .home-page #footer .bottom-panel .text {
     padding: 0;
   }
-  #footer .email-form {
+  .home-page #footer .email-form {
     padding: 0 10px;
     width: 40%;
   }
-  #footer .social {
+  .home-page #footer .social {
     padding: 6px 0 0;
     width: 40%;
   }
-  #footer .social ul li {
+  .home-page #footer .social ul li {
     margin: 0 0 0 26px;
   }
-  #footer .social ul a {
+  .home-page #footer .social ul a {
     padding: 0 0 0 45px;
   }
-  #footer .social ul .facebook:before,
-  #footer .social ul .twitter:before {
+  .home-page #footer .social ul .facebook:before,
+  .home-page #footer .social ul .twitter:before {
     background: url(../../images/sprite.png) no-repeat -297px -372px;
     width: 35px;
     height: 35px;
     top: 2px;
   }
-  #footer .social ul .facebook .twitter:before,
-  #footer .social ul .twitter .twitter:before {
+  .home-page #footer .social ul .facebook .twitter:before,
+  .home-page #footer .social ul .twitter .twitter:before {
     background-position: -357px -373px;
   }
-  #footer .social ul .facebook .box,
-  #footer .social ul .twitter .box {
+  .home-page #footer .social ul .facebook .box,
+  .home-page #footer .social ul .twitter .box {
     padding: 0;
   }
 }
 @media only screen and (max-width: 979px) {
-  .logos-panel {
+  .home-page .logos-panel {
     margin: 0 0 15px;
   }
-  .logos-panel .container {
+  .home-page .logos-panel .container {
     padding-bottom: 16px;
   }
-  .shops {
+  .home-page .shops {
     margin: -17px 0 0;
   }
-  .logos-section {
+  .home-page .logos-section {
     padding: 21px 10px 25px;
   }
-  .logos-section span {
+  .home-page .logos-section span {
     display: block;
     margin: 0 0 10px;
   }
-  .logos-section ul {
+  .home-page .logos-section ul {
     margin: 0 0 -10px;
     overflow: hidden;
   }
-  .logos-section ul li {
+  .home-page .logos-section ul li {
     margin: 0 5px 10px;
   }
-  .best-items {
+  .home-page .best-items {
     padding: 0 8px;
   }
-  .best-items .categories-block {
+  .home-page .best-items .categories-block {
     font-size: 11px;
     line-height: 14px;
   }
-  .best-items .categories-block ul li a {
+  .home-page .best-items .categories-block ul li a {
     padding: 6px;
   }
-  .best-items .categories-block ul li a:hover {
+  .home-page .best-items .categories-block ul li a:hover {
     padding-right: 18px;
   }
-  .best-items .categories-block ul li a:hover:before {
+  .home-page .best-items .categories-block ul li a:hover:before {
     right: 6px;
   }
-  .best-items .categories-block ul li a:hover .box {
+  .home-page .best-items .categories-block ul li a:hover .box {
     padding: 0 0 0 10px;
   }
-  .best-items .categories-block .left-box {
+  .home-page .best-items .categories-block .left-box {
     width: 29.5%;
   }
-  .vouchers {
+  .home-page .vouchers {
     font-size: 11px;
     padding: 0 6px;
   }
-  .vouchers ul .logo-box img {
+  .home-page .vouchers ul .logo-box img {
     display: block;
     width: 100%;
     height: auto;
   }
-  .our-shops h2 {
+  .home-page .our-shops h2 {
     font-size: 24px;
   }
-  .tabset {
+  .home-page .tabset {
     border: none;
     margin: 0 0 0 -1px;
     overflow: hidden;
   }
-  .tabset li {
+  .home-page .tabset li {
     width: 50%;
     border-width: 0 0 1px 1px;
   }
-  .tabset .active a {
+  .home-page .tabset .active a {
     margin: 0;
     padding-bottom: 21px;
   }
-  .tab-content {
+  .home-page .tab-content {
     font-size: 13px;
     line-height: 18px;
   }
-  .tab-content h3 {
+  .home-page .tab-content h3 {
     font-size: 13px;
   }
-  #footer {
+  .home-page #footer {
     font-size: 12px;
   }
-  #footer .bottom-panel .text {
+  .home-page #footer .bottom-panel .text {
     text-align: center;
     float: none;
     width: 100%;
     margin: 0 0 10px;
   }
-  #footer .bottom-panel .text br {
+  .home-page #footer .bottom-panel .text br {
     display: none;
   }
-  #footer .bottom-panel .container {
+  .home-page #footer .bottom-panel .container {
     padding: 20px 10px;
   }
-  #footer .email-form {
+  .home-page #footer .email-form {
     width: 50%;
     padding: 0 10px 0 0;
   }
-  #footer .social {
+  .home-page #footer .social {
     width: 50%;
     margin: 0;
   }
-  #footer .bottom-nav {
+  .home-page #footer .bottom-nav {
     padding: 21px 15px 27px;
     font-size: 12px;
   }
-  #footer .bottom-nav nav {
+  .home-page #footer .bottom-nav nav {
     padding: 0 15px;
   }
-  #footer .bottom-nav ul {
+  .home-page #footer .bottom-nav ul {
     font-size: 12px;
   }
-  #footer .add-block {
+  .home-page #footer .add-block {
     padding: 25px 10px;
   }
-  #footer .title {
+  .home-page #footer .title {
     margin: 0 0 27px;
   }
 }
 @media only screen and (max-width: 767px) {
-  .navigation .logo {
+  .home-page .navigation .logo {
     margin: 0 auto;
   }
-  .nav-bar #nav ul li {
+  .home-page .nav-bar #nav ul li {
     padding: 0;
     margin: 0;
   }
-  .nav-bar #nav ul li > a {
+  .home-page .nav-bar #nav ul li > a {
     padding: 15px 20px;
   }
-  .nav-bar #nav ul li > a:hover,
-  .nav-bar #nav ul li > a:focus {
+  .home-page .nav-bar #nav ul li > a:hover,
+  .home-page .nav-bar #nav ul li > a:focus {
     background: #353534;
   }
-  .section-top .email-form {
+  .home-page .section-top .email-form {
     margin: 0 auto;
     padding: 15px 10px;
     text-align: center;
   }
-  .section-top .email-form h1 {
+  .home-page .section-top .email-form h1 {
     font-size: 22px;
     line-height: 24px;
   }
-  .section-top .email-form h2 {
+  .home-page .section-top .email-form h2 {
     font-size: 20px;
     line-height: 22px;
     margin: 0 0 12px;
   }
-  .section-top .email-form .form-control {
+  .home-page .section-top .email-form .form-control {
     border-radius: 2px;
     -webkit-border-radius: 2px;
   }
-  .section-top .email-form .holder {
+  .home-page .section-top .email-form .holder {
     border: none;
   }
-  .section-top .email-form .btn.orange {
+  .home-page .section-top .email-form .btn.orange {
     border-radius: 2px;
     -webkit-border-radius: 2px;
   }
-  .email-form .form-group {
+  .home-page .email-form .form-group {
     float: none;
     width: 100%;
     margin: 0 0 10px;
   }
-  .email-form .form-control {
+  .home-page .email-form .form-control {
     border-radius: 2px;
     -webkit-border-radius: 2px;
   }
-  .email-form .btn.orange {
+  .home-page .email-form .btn.orange {
     width: 100%;
     float: none;
     display: block;
     border-radius: 2px;
     -webkit-border-radius: 2px;
   }
-  .logos-panel {
+  .home-page .logos-panel {
     margin: 0;
   }
-  .logos-panel .container {
+  .home-page .logos-panel .container {
     padding: 20px 10px;
   }
-  .shops {
+  .home-page .shops {
     margin: 0;
   }
-  .shops li {
+  .home-page .shops li {
     width: 30.3%;
     margin: 0 1% 15px;
   }
-  .shops li a:hover {
+  .home-page .shops li a:hover {
     margin: 0;
   }
-  .best-items .heading {
+  .home-page .best-items .heading {
     display: none;
   }
-  .best-items .categories-block {
+  .home-page .best-items .categories-block {
     display: none;
   }
-  .best-items .vouchers {
+  .home-page .best-items .vouchers {
     float: none;
     width: 100%;
   }
-  .best-items .vouchers ul h2 {
+  .home-page .best-items .vouchers ul h2 {
     font-size: 16px;
   }
-  .best-items .vouchers ul a {
+  .home-page .best-items .vouchers ul a {
     height: auto;
     padding: 17px 20px 20px 12px;
   }
-  .best-items .vouchers ul a:before {
+  .home-page .best-items .vouchers ul a:before {
     right: 8px;
   }
-  .our-shops h2 {
+  .home-page .our-shops h2 {
     font-size: 18px;
     line-height: 22px;
   }
-  .logos-section ul li {
+  .home-page .logos-section ul li {
     width: 30%;
     margin: 0 1% 2%;
     text-align: center;
   }
-  .logos-section ul img {
+  .home-page .logos-section ul img {
     display: block;
     max-width: 100%;
     height: auto;
     margin: 0 auto;
   }
-  .tab-content p {
+  .home-page .tab-content p {
     margin: 0 0 14px;
   }
-  .tabset li {
+  .home-page .tabset li {
     float: none;
     display: block;
     width: 100%;
     border-width: 0 0 1px;
   }
-  .tabset li a {
+  .home-page .tabset li a {
     padding: 12px 15px;
   }
-  .tabset .active a {
+  .home-page .tabset .active a {
     padding: 12px 15px;
   }
-  #footer .email-form {
+  .home-page #footer .email-form {
     float: none;
     width: 100%;
     padding: 0;
   }
-  #footer .email-form .form-group {
+  .home-page #footer .email-form .form-group {
     width: 100%;
     float: none;
     display: block;
   }
-  #footer .email-form .btn.orange {
+  .home-page #footer .email-form .btn.orange {
     width: 100%;
   }
-  #footer .social {
+  .home-page #footer .social {
     padding: 10px 0 0;
     float: none;
     width: 100%;
   }
-  #footer .social ul a {
+  .home-page #footer .social ul a {
     padding: 0 0 0 40px;
   }
-  #footer .social ul li {
+  .home-page #footer .social ul li {
     margin: 0;
     padding: 0 5px 0 0;
     width: 50%;
   }
-  #footer .social ul li:first-child {
+  .home-page #footer .social ul li:first-child {
     margin: 0 0 10px;
   }
-  #footer .bottom-nav nav {
+  .home-page #footer .bottom-nav nav {
     margin: 0 0 15px;
   }
-  #footer .title {
+  .home-page #footer .title {
     font-size: 18px;
     margin: 0 0 12px;
   }
-  #footer .title .glyphicon-ok {
+  .home-page #footer .title .glyphicon-ok {
     font-size: 21px;
     margin: 2px 6px 0 0;
   }
-  #footer .add-block .benefits li {
+  .home-page #footer .add-block .benefits li {
     display: block;
     width: 100%;
     margin: 0 0 10px;
@@ -1227,14 +1227,14 @@
   }
 }
 @media only screen and (max-width: 479px) {
-  #footer .social ul {
+  .home-page #footer .social ul {
     font-size: 11px;
   }
-  #footer .social ul h2 {
+  .home-page #footer .social ul h2 {
     font-size: 17px;
     line-height: 22px;
   }
-  #footer .social ul li {
+  .home-page #footer .social ul li {
     width: 44%;
   }
 }

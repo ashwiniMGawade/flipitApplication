@@ -3,45 +3,45 @@
   display: block;
   clear: both;
 }
-.section-faq {
+.faq-page .section-faq {
   color: #878a8d;
   font-size: 15px;
 }
-.section-faq .page-header h1 {
+.faq-page .section-faq .page-header h1 {
   color: #33383e;
   font-size: 24px;
   line-height: 28px;
   margin: 0 0 4px;
 }
-.section-faq h2 {
+.faq-page .section-faq h2 {
   color: #33383e;
   font-size: 18px;
   line-height: 22px;
   margin: 0 0 19px;
 }
-.section-faq .block-questions {
+.faq-page .section-faq .block-questions {
   padding: 22px 30px 31px;
 }
-.section-faq .box-holder {
+.faq-page .section-faq .box-holder {
   margin: 0 0 32px;
   overflow: hidden;
 }
-.section-faq .box-holder .alt2 {
+.faq-page .section-faq .box-holder .alt2 {
   border-color: #ccc;
   margin: 0;
 }
-.section-faq .box .heading {
+.faq-page .section-faq .box .heading {
   padding: 17px 38px 18px 0;
   overflow: hidden;
 }
-.section-faq .box .opener {
+.faq-page .section-faq .box .opener {
   display: inline-block;
   vertical-align: top;
   color: #0077cc;
   position: relative;
   padding-left: 38px;
 }
-.section-faq .box .opener:before {
+.faq-page .section-faq .box .opener:before {
   content: '+';
   position: absolute;
   left: 0;
@@ -57,45 +57,45 @@
   border-radius: 2px;
   -webkit-border-radius: 2px;
 }
-.section-faq .box .slide {
+.faq-page .section-faq .box .slide {
   display: none;
   padding: 23px 0 35px;
   position: relative;
 }
-.section-faq .box .slide p {
+.faq-page .section-faq .box .slide p {
   margin: 0 0 26px;
 }
-.section-faq .box .slide .alt2 {
+.faq-page .section-faq .box .slide .alt2 {
   position: absolute;
   left: 0;
   top: 0;
   width: 100%;
 }
-.section-faq .box .slide .steps {
+.faq-page .section-faq .box .slide .steps {
   padding: 0;
   margin: 0 0 21px;
   list-style: none;
   overflow: hidden;
 }
-.section-faq .box .slide .steps li {
+.faq-page .section-faq .box .slide .steps li {
   margin: 0 0 7px;
 }
-.section-faq .box .slide .steps li strong {
+.faq-page .section-faq .box .slide .steps li strong {
   color: #33383e;
   margin: 0 1px 0 0;
 }
-.section-faq .box .slide .bottom-bar {
+.faq-page .section-faq .box .slide .bottom-bar {
   margin: 0;
   padding: 23px 25px 21px 19px;
 }
-.section-faq .active .opener:before {
+.faq-page .section-faq .active .opener:before {
   content: '-';
   padding: 3px 4px 5px;
 }
-.section-faq .active .slide {
+.faq-page .section-faq .active .slide {
   display: block;
 }
-.section-faq .bottom-bar {
+.faq-page .section-faq .bottom-bar {
   font-size: 13px;
   line-height: 16px;
   background: #e5f1fa;
@@ -105,53 +105,53 @@
   border-radius: 2px;
   -webkit-border-radius: 2px;
 }
-.section-faq .bottom-bar .left {
+.faq-page .section-faq .bottom-bar .left {
   float: left;
   margin: 0 5px 0 0;
 }
-.section-faq .bottom-bar .right {
+.faq-page .section-faq .bottom-bar .right {
   float: right;
   margin: 0 0 0 5px;
 }
-.section-faq .bottom-bar a {
+.faq-page .section-faq .bottom-bar a {
   color: #0077cc;
 }
 @media only screen and (max-width: 979px) {
-  .section-faq .block-questions {
+  .faq-page .section-faq .block-questions {
     padding-left: 15px;
     padding-right: 15px;
   }
-  .section-faq .bottom-bar {
+  .faq-page .section-faq .bottom-bar {
     margin: 55px 0 0;
   }
-  .section-faq .bottom-bar .left,
-  .section-faq .bottom-bar .right {
+  .faq-page .section-faq .bottom-bar .left,
+  .faq-page .section-faq .bottom-bar .right {
     float: none;
     display: block;
     margin: 0 0 5px;
   }
-  .section-faq .bottom-bar .right {
+  .faq-page .section-faq .bottom-bar .right {
     margin: 0;
   }
 }
 @media only screen and (max-width: 767px) {
-  .section-faq {
+  .faq-page .section-faq {
     font-size: 13px;
     line-height: 18px;
   }
-  .section-faq .block-questions {
+  .faq-page .section-faq .block-questions {
     padding: 15px 10px;
   }
-  .section-faq .box .opener {
+  .faq-page .section-faq .box .opener {
     padding-left: 32px;
   }
-  .section-faq .box .opener:before {
+  .faq-page .section-faq .box .opener:before {
     top: -3px;
   }
-  .section-faq .box .slide .bottom-bar {
+  .faq-page .section-faq .box .slide .bottom-bar {
     padding: 15px;
   }
-  .section-faq .bottom-bar {
+  .faq-page .section-faq .bottom-bar {
     margin: 0;
     padding: 15px;
   }

@@ -3,7 +3,7 @@
   display: block;
   clear: both;
 }
-.authors {
+.authors-page .authors {
   padding: 0;
   margin: 0 -2px -1px 0;
   list-style: none;
@@ -11,7 +11,7 @@
   font-size: 14px;
   overflow: hidden;
 }
-.authors li {
+.authors-page .authors li {
   display: table;
   float: left;
   width: 33.3%;
@@ -21,33 +21,33 @@
   border-style: solid;
   border-color: #eaeaea;
 }
-.authors li a {
+.authors-page .authors li a {
   padding: 10px;
   display: table-cell;
   vertical-align: middle;
 }
-.authors li a:hover,
-.authors li a:focus {
+.authors-page .authors li a:hover,
+.authors-page .authors li a:focus {
   text-decoration: none;
   background: #f8f8f8;
 }
-.authors li h1 {
+.authors-page .authors li h1 {
   font-size: 21px;
   line-height: 28px;
   font-weight: bold;
   margin: 0 0 10px;
 }
-.authors li span {
+.authors-page .authors li span {
   display: block;
 }
-.authors li .photo-image {
+.authors-page .authors li .photo-image {
   border-radius: 2px;
   -webkit-border-radius: 2px;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
   display: block;
   margin: 0 auto 12px;
 }
-.authors li .status {
+.authors-page .authors li .status {
   color: #ffffff;
   padding: 2px 13px;
   margin: 0 0 9px;
@@ -59,13 +59,13 @@
   font-size: 11px;
   text-transform: uppercase;
 }
-#sidebar h2 {
+.authors-page #sidebar h2 {
   margin: 0 0 12px;
 }
-#sidebar p {
+.authors-page #sidebar p {
   margin: 0 0 20px;
 }
-#sidebar .btn {
+.authors-page #sidebar .btn {
   font-size: 13px;
   padding: 14px 9px 13px;
   height: 41px;
@@ -73,7 +73,7 @@
   margin: 0 0 13px;
 }
 @media only screen and (max-width: 639px) {
-  .authors li {
+  .authors-page .authors li {
     width: 50%;
   }
 }

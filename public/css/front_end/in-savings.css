@@ -3,7 +3,7 @@
   display: block;
   clear: both;
 }
-.post-box {
+.in-savings-page .post-box {
   background: #fff;
   border: 1px solid #e4e4e4;
   padding: 18px 31px 1px;
@@ -12,10 +12,10 @@
   font-size: 14px;
   line-height: 21px;
 }
-.post-box p {
+.in-savings-page .post-box p {
   margin: 0 0 24px;
 }
-.post-box .meta {
+.in-savings-page .post-box .meta {
   padding: 0 0 19px;
   margin: 0 0 24px;
   color: #878a8d;
@@ -23,22 +23,22 @@
   line-height: 16px;
   border-bottom: 1px solid #eaeaea;
 }
-.post-box .meta a {
+.in-savings-page .post-box .meta a {
   color: #0077cc;
 }
-.post-box .meta p {
+.in-savings-page .post-box .meta p {
   margin: 0;
 }
-.post-box .meta h1 {
+.in-savings-page .post-box .meta h1 {
   margin: 0 0 15px;
   font-size: 33px;
   line-height: 40px;
   color: #33383e;
 }
-.news-block {
+.in-savings-page .news-block {
   margin: 0 0 29px;
 }
-.news-block .box {
+.in-savings-page .news-block .box {
   overflow: hidden;
   background: #fafafa;
   border: 1px solid #e5e5e5;
@@ -47,15 +47,15 @@
   font-size: 12px;
   line-height: 15px;
 }
-.news-block .box a {
+.in-savings-page .news-block .box a {
   color: #0077cc;
 }
-.news-block .box .image {
+.in-savings-page .news-block .box .image {
   float: left;
   border-right: 1px solid #e3e3e3;
   margin: 0 -1px 0 0;
 }
-.news-block .box .text-box {
+.in-savings-page .news-block .box .text-box {
   overflow: hidden;
   min-height: 109px;
   padding: 9px 0 0 15px;
@@ -64,22 +64,22 @@
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
 }
-.news-block .box p {
+.in-savings-page .news-block .box p {
   margin: 0 0 10px;
 }
-.news-block .box h1 {
+.in-savings-page .news-block .box h1 {
   font-size: 18px;
   line-height: 21px;
   color: #33383e;
   margin: 0 0 8px;
 }
-.news-block .box h1 a {
+.in-savings-page .news-block .box h1 a {
   color: #33383e;
 }
-.news-block .box:hover .more {
+.in-savings-page .news-block .box:hover .more {
   display: block;
 }
-.news-block .box .more {
+.in-savings-page .news-block .box .more {
   display: none;
   position: absolute;
   left: 0;
@@ -90,11 +90,11 @@
   background: #087bcd;
   text-decoration: none;
 }
-.news-block .box .more span {
+.in-savings-page .news-block .box .more span {
   position: relative;
   padding: 0 20px 0 0;
 }
-.news-block .box .more span:before {
+.in-savings-page .news-block .box .more span:before {
   position: absolute;
   right: 0;
   top: 3px;
@@ -105,7 +105,7 @@
   width: 11px;
   height: 8px;
 }
-.alt-list {
+.in-savings-page .alt-list {
   list-style: none;
   margin: 0 0 28px;
   padding: 0;
@@ -114,16 +114,16 @@
   border: 1px solid #e5e5e5;
   counter-reset: section;
 }
-.alt-list > li {
+.in-savings-page .alt-list > li {
   border-top: 1px solid #c6c6c6;
   background: #fafafa;
   counter-increment: section;
   position: relative;
 }
-.alt-list > li:first-child {
+.in-savings-page .alt-list > li:first-child {
   border: 0;
 }
-.alt-list > li:before {
+.in-savings-page .alt-list > li:before {
   content: counter(section) ".";
   position: absolute;
   left: 0;
@@ -135,20 +135,20 @@
   font-size: 15px;
   line-height: 17px;
 }
-.alt-list > li > a {
+.in-savings-page .alt-list > li > a {
   display: block;
   text-decoration: none;
   color: #878a8d;
   min-height: 76px;
   padding: 18px 10px 14px 40px;
 }
-.alt-list > li > a:hover {
+.in-savings-page .alt-list > li > a:hover {
   background: #f2f2f2;
 }
-.alt-list p {
+.in-savings-page .alt-list p {
   margin: 0;
 }
-.alt-list .title {
+.in-savings-page .alt-list .title {
   color: #0077cc;
   font-size: 15px;
   line-height: 17px;
@@ -156,18 +156,18 @@
   margin: 0 0 3px;
   font-weight: bold;
 }
-.alt-list .title mark {
+.in-savings-page .alt-list .title mark {
   font-weight: normal;
   background: none;
   color: #de8c17;
   font-style: italic;
   font-size: 13px;
 }
-.list-box {
+.in-savings-page .list-box {
   background: #fafafa;
   border: 1px solid #e5e5e5;
 }
-.list-box h1 {
+.in-savings-page .list-box h1 {
   margin: 0;
   background: #383e43;
   font-size: 21px;
@@ -176,7 +176,7 @@
   padding: 17px 23px 20px;
   font-weight: bold;
 }
-.list-box ol {
+.in-savings-page .list-box ol {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -185,14 +185,14 @@
   font-size: 12px;
   line-height: 14px;
 }
-.list-box ol p {
+.in-savings-page .list-box ol p {
   margin: 0;
 }
-.list-box ol mark {
+.in-savings-page .list-box ol mark {
   background: none;
   color: #0077cc;
 }
-.list-box ol a {
+.in-savings-page .list-box ol a {
   display: block;
   text-decoration: none;
   color: #878a8d;
@@ -200,7 +200,7 @@
   padding: 21px 10px 14px 45px;
   position: relative;
 }
-.list-box ol a:hover:before {
+.in-savings-page .list-box ol a:hover:before {
   position: absolute;
   left: 0;
   top: 0;
@@ -210,16 +210,16 @@
   border-left: 5px solid #0077cc;
   content: "";
 }
-.list-box ol li {
+.in-savings-page .list-box ol li {
   counter-increment: section;
   position: relative;
   border-top: 1px solid #c6c6c6;
   background: #fafafa;
 }
-.list-box ol li:first-child {
+.in-savings-page .list-box ol li:first-child {
   border: 0;
 }
-.list-box ol li:before {
+.in-savings-page .list-box ol li:before {
   content: counter(section) ".";
   position: absolute;
   left: 0;
@@ -231,7 +231,7 @@
   font-size: 15px;
   line-height: 17px;
 }
-.list-box .title {
+.in-savings-page .list-box .title {
   display: block;
   font-size: 15px;
   line-height: 17px;
@@ -239,138 +239,138 @@
   font-weight: normal;
   margin: 0 0 7px;
 }
-.share-box {
+.in-savings-page .share-box {
   background: #fff;
   border: 1px solid #e4e4e4;
   padding: 37px 30px 41px;
   margin: 0 0 29px;
 }
-.share-box:after {
+.in-savings-page .share-box:after {
   content: '';
   display: block;
   clear: both;
 }
-.share-box .txt {
+.in-savings-page .share-box .txt {
   float: left;
   margin: 3px 15px 0 0;
   font-size: 14px;
 }
-.share-box .social-box {
+.in-savings-page .share-box .social-box {
   float: left;
   list-style: none;
   margin: 4px 0 0;
   padding: 0;
 }
-.share-box .social-box li {
+.in-savings-page .share-box .social-box li {
   margin: 0 19px 0 0;
   float: left;
 }
-.share-box .social-box img {
+.in-savings-page .share-box .social-box img {
   vertical-align: top;
 }
-.about-box {
+.in-savings-page .about-box {
   background: #fff;
   border: 1px solid #e4e4e4;
   padding: 21px 40px 29px;
   margin: 0 0 25px;
 }
-.about-box .name {
+.in-savings-page .about-box .name {
   display: block;
   font: 30px/32px 'Cookie', cursive;
   text-align: center;
   color: #363635;
   margin: 0 0 10px;
 }
-.about-box .photo {
+.in-savings-page .about-box .photo {
   float: left;
   margin: 0 60px 0 0;
 }
-.about-box .text-box {
+.in-savings-page .about-box .text-box {
   overflow: hidden;
   padding: 17px 0 0;
   color: #878a8d;
   font-size: 14px;
   line-height: 20px;
 }
-.about-box .text-box strong {
+.in-savings-page .about-box .text-box strong {
   color: #33383e;
 }
-.about-box .text-box a {
+.in-savings-page .about-box .text-box a {
   color: #0077cc;
 }
-.about-box .text-box p {
+.in-savings-page .about-box .text-box p {
   margin: 0 0 20px;
 }
 @media only screen and (max-width: 1199px) {
-  .share-box {
+  .in-savings-page .share-box {
     padding: 27px 10px 21px;
     text-align: center;
   }
-  .share-box .txt {
+  .in-savings-page .share-box .txt {
     float: none;
     display: block;
     margin: 0 0 10px;
   }
-  .share-box .social-box {
+  .in-savings-page .share-box .social-box {
     float: none;
     text-align: center;
   }
-  .share-box .social-box li {
+  .in-savings-page .share-box .social-box li {
     float: none;
     display: inline-block;
     vertical-align: top;
     margin: 0 5px 7px;
   }
-  .news-block .box h1 {
+  .in-savings-page .news-block .box h1 {
     font-size: 16px;
     line-height: 19px;
     margin: 0 0 6px;
   }
 }
 @media only screen and (max-width: 991px) {
-  .news-block .box .image {
+  .in-savings-page .news-block .box .image {
     float: none;
     display: block;
     border: 0;
     margin: 0 0 10px;
   }
-  .news-block .box .image img {
+  .in-savings-page .news-block .box .image img {
     width: 100%;
     height: auto;
   }
-  .news-block .box .more {
+  .in-savings-page .news-block .box .more {
     position: static;
     display: block;
     margin: 0 -10px;
   }
-  .news-block .box .text-box {
+  .in-savings-page .news-block .box .text-box {
     min-height: 10px;
     padding: 9px 10px 0;
   }
-  .list-box h1 {
+  .in-savings-page .list-box h1 {
     text-align: center;
   }
 }
 @media only screen and (max-width: 767px) {
-  .post-box {
+  .in-savings-page .post-box {
     padding: 15px 10px 1px;
   }
-  .post-box .meta {
+  .in-savings-page .post-box .meta {
     margin: 0 0 15px;
     font-size: 12px;
   }
-  .post-box .meta h1 {
+  .in-savings-page .post-box .meta h1 {
     font-size: 22px;
     line-height: 24px;
     margin: 0 0 10px;
   }
-  .post-box p {
+  .in-savings-page .post-box p {
     margin: 0 0 15px;
   }
-  .about-box {
+  .in-savings-page .about-box {
     padding: 21px 20px 1px;
   }
-  .about-box .photo {
+  .in-savings-page .about-box .photo {
     float: none;
     display: block;
     margin: 0 0 20px;

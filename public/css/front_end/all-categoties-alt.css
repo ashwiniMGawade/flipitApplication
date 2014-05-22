@@ -3,34 +3,34 @@
   display: block;
   clear: both;
 }
-.section {
+.all-categories-alt-page .section {
   padding: 17px 19px;
 }
-.catigories {
+.all-categories-alt-page .catigories {
   margin: 0 -20px -16px 0;
   overflow: hidden;
 }
-.catigories .box {
+.all-categories-alt-page .catigories .box {
   float: left;
   text-align: center;
   margin: 0 17px 17px 0;
   position: relative;
 }
-.catigories .box a {
+.all-categories-alt-page .catigories .box a {
   display: block;
   position: relative;
   z-index: 1;
 }
-.catigories .box a:hover .text-box {
+.all-categories-alt-page .catigories .box a:hover .text-box {
   display: block;
 }
-.catigories .box a:hover .image:before {
+.all-categories-alt-page .catigories .box a:hover .image:before {
   background: rgba(56, 56, 55, 0.9);
 }
-.catigories .box a:hover .caption {
+.all-categories-alt-page .catigories .box a:hover .caption {
   background: rgba(32, 32, 32, 0.9);
 }
-.catigories .text-box {
+.all-categories-alt-page .catigories .text-box {
   display: none;
   position: absolute;
   left: 0;
@@ -43,33 +43,33 @@
   line-height: 18px;
   text-align: center;
 }
-.catigories .text-box .num {
+.all-categories-alt-page .catigories .text-box .num {
   font-size: 33px;
   line-height: 33px;
   margin: 0 0 7px;
 }
-.catigories .text-box span {
+.all-categories-alt-page .catigories .text-box span {
   display: block;
 }
-.catigories .box-top .caption {
+.all-categories-alt-page .catigories .box-top .caption {
   font-size: 21px;
   line-height: 25px;
   padding: 33px 10px 41px;
 }
-.catigories .box-top .text-box {
+.all-categories-alt-page .catigories .box-top .text-box {
   font-size: 18px;
   line-height: 22px;
   padding-top: 20%;
 }
-.catigories .box-top .text-box .num {
+.all-categories-alt-page .catigories .box-top .text-box .num {
   font-size: 44px;
   line-height: 44px;
 }
-.catigories .image {
+.all-categories-alt-page .catigories .image {
   position: relative;
   z-index: 1;
 }
-.catigories .image:before {
+.all-categories-alt-page .catigories .image:before {
   content: '';
   position: absolute;
   left: 0;
@@ -84,12 +84,12 @@
   background: -ms-linear-gradient(top, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, 0.65) 100%);
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 34%, rgba(0, 0, 0, 0.65) 100%);
 }
-.catigories img {
+.all-categories-alt-page .catigories img {
   display: block;
   position: relative;
   z-index: -1;
 }
-.catigories .caption {
+.all-categories-alt-page .catigories .caption {
   position: absolute;
   width: 100%;
   bottom: 0;
@@ -100,7 +100,7 @@
   font-size: 15px;
   line-height: 18px;
 }
-.catigories .caption .label {
+.all-categories-alt-page .catigories .caption .label {
   display: inline-block;
   vertical-align: top;
   margin: 0 0 10px;
@@ -113,27 +113,27 @@
   padding: 6px 10px;
   text-transform: uppercase;
 }
-.catigories .caption strong {
+.all-categories-alt-page .catigories .caption strong {
   display: block;
   text-shadow: 0 0 15px rgba(0, 0, 0, 0.75);
 }
-.catigories .box-2 .text-box {
+.all-categories-alt-page .catigories .box-2 .text-box {
   padding-top: 5%;
 }
-.catigories .box-2 .text-box .num {
+.all-categories-alt-page .catigories .box-2 .text-box .num {
   margin: 0;
 }
-.section-newsletter {
+.all-categories-alt-page .section-newsletter {
   padding: 31px 6.3% 38px;
 }
-.section-newsletter .newsletter {
+.all-categories-alt-page .section-newsletter .newsletter {
   padding: 0 0 0 14.6%;
   content: '';
   display: block;
   clear: both;
   position: relative;
 }
-.section-newsletter .newsletter:before {
+.all-categories-alt-page .section-newsletter .newsletter:before {
   content: "";
   position: absolute;
   left: 0;
@@ -142,138 +142,138 @@
   width: 68px;
   background: url(../../images/sprite.png) no-repeat -95px -130px;
 }
-.section-newsletter .newsletter input[type="email"] {
+.all-categories-alt-page .section-newsletter .newsletter input[type="email"] {
   width: 73.4%;
   margin: 0 2% 0 0;
   background: #fafafa;
   border-color: #d8d8d8;
 }
-.section-newsletter .newsletter .form-signin-heading {
+.all-categories-alt-page .section-newsletter .newsletter .form-signin-heading {
   font-size: 21px;
   line-height: 24px;
   margin: 0 0 31px;
 }
 @media only screen and (max-width: 1199px) {
-  .catigories .box {
+  .all-categories-alt-page .catigories .box {
     width: 168px;
     margin-bottom: 16px;
   }
-  .catigories .box .image img {
+  .all-categories-alt-page .catigories .box .image img {
     width: 100%;
     height: auto;
   }
-  .catigories .box-top {
+  .all-categories-alt-page .catigories .box-top {
     width: 352px;
   }
 }
 @media only screen and (max-width: 979px) {
-  .section {
+  .all-categories-alt-page .section {
     padding: 15px;
   }
-  .catigories .box {
+  .all-categories-alt-page .catigories .box {
     width: 164px;
     margin: 0 16px 16px 0;
   }
-  .catigories .box-top {
+  .all-categories-alt-page .catigories .box-top {
     width: 343px;
   }
-  .catigories .text-box {
+  .all-categories-alt-page .catigories .text-box {
     padding-top: 6%;
   }
-  .catigories .text-box .num {
+  .all-categories-alt-page .catigories .text-box .num {
     margin: 0;
     font-size: 30px;
     line-height: 30px;
   }
 }
 @media only screen and (max-width: 767px) {
-  .content-box {
+  .all-categories-alt-page .content-box {
     padding: 0 6px;
   }
-  .catigories {
+  .all-categories-alt-page .catigories {
     margin: 0 -6% -2% 0;
   }
-  .catigories .box {
+  .all-categories-alt-page .catigories .box {
     width: 22%;
     margin: 0 2% 2% 0;
   }
-  .catigories .box-top {
+  .all-categories-alt-page .catigories .box-top {
     width: 46%;
   }
-  .content-box {
+  .all-categories-alt-page .content-box {
     padding: 0;
   }
 }
 @media only screen and (max-width: 639px) {
-  .section {
+  .all-categories-alt-page .section {
     padding: 10px;
   }
-  .catigories {
+  .all-categories-alt-page .catigories {
     margin: 0 -2% -2% 0;
   }
-  .catigories .box {
+  .all-categories-alt-page .catigories .box {
     width: 31.3%;
     margin: 0 2% 2% 0;
   }
-  .catigories .text-box .num {
+  .all-categories-alt-page .catigories .text-box .num {
     font-size: 23px;
     line-height: 23px;
   }
-  .catigories .box-top .caption {
+  .all-categories-alt-page .catigories .box-top .caption {
     font-size: 15px;
     line-height: 18px;
     padding: 13px 10px 21px;
   }
-  .catigories .box-top .text-box {
+  .all-categories-alt-page .catigories .box-top .text-box {
     padding-top: 6%;
     font-size: 15px;
     line-height: 18px;
   }
-  .catigories .box-top .text-box .num {
+  .all-categories-alt-page .catigories .box-top .text-box .num {
     font-size: 23px;
     line-height: 23px;
   }
-  .section-newsletter {
+  .all-categories-alt-page .section-newsletter {
     padding-bottom: 12px;
   }
-  .section-newsletter .newsletter {
+  .all-categories-alt-page .section-newsletter .newsletter {
     padding: 0 0 0 68px;
   }
-  .section-newsletter .newsletter:before {
+  .all-categories-alt-page .section-newsletter .newsletter:before {
     left: -10px;
   }
-  .section-newsletter .newsletter .form-signin-heading {
+  .all-categories-alt-page .section-newsletter .newsletter .form-signin-heading {
     font-size: 18px;
     line-height: 22px;
     margin: 0 0 15px;
   }
-  .section-newsletter .newsletter input[type="email"] {
+  .all-categories-alt-page .section-newsletter .newsletter input[type="email"] {
     float: none;
     width: 100%;
     display: block;
     margin: 0 0 10px;
   }
-  .section-newsletter .newsletter button[type="submit"] {
+  .all-categories-alt-page .section-newsletter .newsletter button[type="submit"] {
     float: none;
     width: 100%;
     display: block;
   }
 }
 @media only screen and (max-width: 479px) {
-  .catigories .box {
+  .all-categories-alt-page .catigories .box {
     width: 48%;
     margin: 0 2% 2% 0;
   }
-  .catigories .text-box {
+  .all-categories-alt-page .catigories .text-box {
     padding-top: 7%;
   }
-  .catigories .box-2 .text-box {
+  .all-categories-alt-page .catigories .box-2 .text-box {
     padding-top: 7%;
   }
-  .catigories .caption {
+  .all-categories-alt-page .catigories .caption {
     padding: 10px 2px;
   }
-  .catigories .box-top .caption {
+  .all-categories-alt-page .catigories .box-top .caption {
     padding: 10px 2px;
   }
 }

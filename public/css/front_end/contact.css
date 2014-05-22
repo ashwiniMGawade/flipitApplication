@@ -3,134 +3,134 @@
   display: block;
   clear: both;
 }
-.contact-section {
+.contact-page .contact-section {
   color: #878a8d;
   font-size: 14px;
   line-height: 22px;
 }
-.contact-section .box {
+.contact-page .contact-section .box {
   border-top: 1px solid #eaeaea;
   padding: 39px 29px;
   overflow: hidden;
 }
-.contact-section .box .box-holder {
+.contact-page .contact-section .box .box-holder {
   margin: 0 0 -20px;
 }
-.contact-section .box h2 {
+.contact-page .contact-section .box h2 {
   font-size: 16px;
   line-height: 22px;
   margin: 0 0 10px;
 }
-.contact-section .box dl {
+.contact-page .contact-section .box dl {
   color: #33383e;
   margin: 0 0 22px;
   overflow: hidden;
 }
-.contact-section .box dl dt {
+.contact-page .contact-section .box dl dt {
   float: left;
   margin: 0 5px 0 0;
   color: #878a8d;
   font-weight: normal;
 }
-.contact-section .box dl dd {
+.contact-page .contact-section .box dl dd {
   display: block;
   margin: 0;
 }
-.contact-section .box dl a {
+.contact-page .contact-section .box dl a {
   color: #33383e;
 }
-.contact-section .box address {
+.contact-page .contact-section .box address {
   line-height: 22px;
   margin: 0 0 23px;
 }
-.contact-section .box address .name {
+.contact-page .contact-section .box address .name {
   color: #2181c0;
 }
-.contact-form {
+.contact-page .contact-form {
   padding: 41px 32px 37px 30px;
   overflow: hidden;
 }
-.contact-form label {
+.contact-page .contact-form label {
   font-weight: normal;
   display: inline-block;
   vertical-align: top;
   margin: 0 0 6px;
 }
-.contact-form .form-group {
+.contact-page .contact-form .form-group {
   margin: 0 0 22px;
 }
-.contact-form .form-group input,
-.contact-form .form-group textarea {
+.contact-page .contact-form .form-group input,
+.contact-page .contact-form .form-group textarea {
   display: block;
   width: 100%;
   background: #fcfcfc;
   border-color: #d8d8d8;
   padding: 10px 10px 11px;
 }
-.contact-form .form-group input {
+.contact-page .contact-form .form-group input {
   height: 39px;
 }
-.contact-form .form-group textarea {
+.contact-page .contact-form .form-group textarea {
   height: 240px;
   min-height: 70px;
   max-width: 100%;
   width: 100% !important;
 }
-.contact-form input.error {
+.contact-page .contact-form input.error {
   border-color: #f00;
 }
-.contact-form label.error {
+.contact-page .contact-form label.error {
   color: #f00;
 }
-.contact-form input.success {
+.contact-page .contact-form input.success {
   border-color: #2b8743;
 }
-.contact-form label.success {
+.contact-page .contact-form label.success {
   color: #2b8743;
 }
-.contact-form .btn.blue {
+.contact-page .contact-form .btn.blue {
   font-size: 14px;
   height: 42px;
   min-width: 101px;
   padding: 14px 12px;
 }
-.form-inline {
+.contact-page .form-inline {
   content: '';
   display: block;
   clear: both;
   margin: 0 -4% 0 0;
   padding: 0 0 16px;
 }
-.form-inline .form-group {
+.contact-page .form-inline .form-group {
   width: 46.4%;
   margin: 0 3% 0 0;
 }
-.form-inline .form-group input {
+.contact-page .form-inline .form-group input {
   display: block;
   width: 100%;
 }
 @media only screen and (max-width: 1199px) {
-  .contact-section .box {
+  .contact-page .contact-section .box {
     padding: 20px 15px;
   }
-  .contact-form {
+  .contact-page .contact-form {
     padding: 20px 15px;
   }
 }
 @media only screen and (max-width: 767px) {
-  .form-inline {
+  .contact-page .form-inline {
     margin: 0;
   }
-  .form-inline .form-group {
+  .contact-page .form-inline .form-group {
     margin: 0;
     width: 100%;
   }
 }
 @media only screen and (max-width: 479px) {
-  .contact-section .box {
+  .contact-page .contact-section .box {
     padding: 15px 10px;
   }
-  .contact-form {
+  .contact-page .contact-form {
     padding: 15px 10px;
   }
 }
