@@ -37,6 +37,7 @@ class SignupController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $this->view->pageCssClass = 'register-page';
         $registrationForm = new Application_Form_Register();
         $this->view->form = $registrationForm;
         if ($this->getRequest()->isPost()) {
