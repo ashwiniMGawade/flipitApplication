@@ -320,154 +320,23 @@ class Admin_VisitorController extends Zend_Controller_Action
 
     public function importvisitorlistAction(){
 
-
     	ini_set('max_execution_time',115200);
     	$params = $this->_getAllParams();
-    	if($this->getRequest ()->isPost ()){
+    	if($this->getRequest()->isPost ()){
     		//echo "<pre>"; print_r($_FILES); die;
     		if (isset($_FILES['excelFile']['name']) && @$_FILES['excelFile']['name'] != '') {
 
     			$RouteRedirectObj = new RouteRedirect();
-    			$result = @$RouteRedirectObj->uploadExcel($_FILES['excelFile']['name']);
+    			$result = @$RouteRedirectObj->uploadExcel($_FILES['excelFile']['name'], true);
+                echo '<pre>'.print_r($result, true).'</pre>';
     			$excelFilePath = $result['path'];
 				$excelFile = $excelFilePath.$result['fileName'];
-
-
+                echo $excelFile;
+                exit;
 
     			if($result['status'] == 200){
 
-    			$objReader = PHPExcel_IOFactory::createReader('Excel2007');
-    			$objPHPExcel = $objReader->load($excelFile);
-    			$worksheet = $objPHPExcel->getActiveSheet();
 
-    			$data =  array();
-    			$emailArray = array();
-    			$i = 0;
-
-
-    			$insert = new Doctrine_Collection('Visitor');
-
-
-    			foreach ($worksheet->getRowIterator() as $row) {
-
-
-		    			$cellIterator = $row->getCellIterator();
-		    			$cellIterator->setIterateOnlyExistingCells(false);
-
-		    			foreach ($cellIterator as $cell) {
-		    				$data[$cell->getRow()][$cell->getColumn()] = $cell->getCalculatedValue();
-		    			}
-
-		    			if($i > 0){
-
-
-			    			$email =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
-
-			    			$firstName =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
-
-			    			$lastName =  BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
-
-
-			    			$gender = $data[$cell->getRow()]['D'];
-
-			    			if( strtoupper($gender) == 'F' || strtoupper($gender) == 'FEMALE')
-			    			{
-			    				$gender = 1 ;
-			    			} else {
-
-			    				$gender = 0 ;
-			    			}
-
-
-			    			$dob =  PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['E'], "YYYY-MM-DD");
-			    			$dob  = date('Y-m-d',strtotime($dob));
-
-
-
-			    			$date = PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['F'], "YYYY-MM-DD h:mm:ss");
-
-
-			    			if($date)
-			    			{
-			    				$created_at = date('Y-m-d H:i:s',strtotime($date));
-
-			    			} else{
-
-			    				$created_at = date('Y-m-d H:i:s');
-			    			}
-
-
-			    			$keywords = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
-
-			    			$emailExist = Doctrine_Core::getTable('Visitor')->findBy('email', $email)->toArray();
-
-			    			if(empty($emailExist)){
-
-
-			    				/**
-			    				 * use email as index to avoid duplicate email error in query
-			    				 * as email would be always unique
-			    				 */
-	    						$insert[$email]->firstName = $firstName;
-	    						$insert[$email]->lastName = $lastName;
-	    						$insert[$email]->created_at = $created_at;
-	    						$insert[$email]->email = $email;
-	    						$insert[$email]->gender = $gender ;
-	    						$insert[$email]->dateOfBirth = $dob ;
-	    						$insert[$email]->weeklyNewsLetter = 1;
-	    						$insert[$email]->password = BackEnd_Helper_viewHelper::randomPassword();
-	    						$insert[$email]->active = 1;
-
-	    						$kw = explode(',',$keywords);
-	 			    			foreach ($kw as $words){
-	  			    				$insert[$email]->keywords[]->keyword = $words;
-	 				    		}
-
-			    			} else {
-
-
-			    				$insertKeyword = new Doctrine_Collection('VisitorKeyword');
-
-
-			    				$updateWeekNews = Doctrine_Query::create()->update('Visitor')
-			    														  ->set('weeklyNewsLetter',1)
-			    														  ->set('firstName','?' , $firstName )
-			    														  ->set('lastName', '?' ,$lastName)
-			    														  ->set('created_at', '?' , $created_at)
-			    														  ->set('dateOfBirth','?',$dob)
-			    														  ->set('gender', '?', $gender)
-			    														  ->set('active','?',1)
-			    				                                          ->where('id = '.$emailExist[0]['id'])
-			    														  ->execute();
-			    				$j = 0;
-			    				$kw = explode(',',$keywords);
-	 			    			foreach ($kw as $words) {
-
-			    					$keywordExist = Doctrine_Query::create()->from('VisitorKeyword')
-			    														  ->where("keyword = '". $words ."'")
-			    														  ->andWhere('visitorId = '.$emailExist[0]['id'])
-			    														  ->fetchOne(null,Doctrine::HYDRATE_ARRAY);
-
-			    					if(empty($keywordExist)) {
-		 			    				$insertKeyword[$j]->keyword = $words;
-		  			    				$insertKeyword[$j]->visitorId = $emailExist[0]['id'];
-			    					}
-
-			    					$j++;
-	  			    			}
-
-	  			    			$insertKeyword->save();
-			    			}
-		    			}
-		    			$i++;
-
-	    			}
-
-	    			//check for emails from DB to EXCEL.
-	    			$emailFromDb = Doctrine_Query::create()->select('email,created_at')->from('Visitor')->fetchArray();
-
-
-	    			$insert->save();
 
 
 	    			$flash = $this->_helper->getHelper ( 'FlashMessenger' );

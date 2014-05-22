@@ -133,7 +133,7 @@ class RouteRedirect extends BaseRouteRedirect
 	 * upload image
 	 * @param $_FILES[index]  $file
 	 */
-	public function uploadExcel($file) {
+	public function uploadExcel($file, $import = false) {
 
 		if (!file_exists(UPLOAD_EXCEL_PATH))
 			mkdir(UPLOAD_EXCEL_PATH,776, true);
@@ -141,10 +141,11 @@ class RouteRedirect extends BaseRouteRedirect
 
 		// generate upload path for images related to shop
 		$rootPath = UPLOAD_EXCEL_PATH;
+		if ($import) $rootPath .= 'import/';
 
 		// check upload directory exists, if no then create upload directory
 		if (!file_exists($rootPath))
-			mkdir($rootPath, 776, true);
+			mkdir($rootPath, 0755, true);
 
 		$adapter = new Zend_File_Transfer_Adapter_Http();
 		// set destination path and apply validations
@@ -175,7 +176,8 @@ class RouteRedirect extends BaseRouteRedirect
 		$adapter->receive($file);
 
 		// check is file is valid then
-
+		$messages = $adapter->getMessages();
+		echo '<pre>'.print_r($messages, true).'</pre>';
 		if ($adapter->isValid($newName)) {
 
 			return array("fileName" => $newName, "status" => "200",
