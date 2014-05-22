@@ -17,7 +17,7 @@ class createSiteMaps
     {
         require_once('constantsForMigration.php');
         require_once('databaseConnectionForMigrations.php');
-        foreach ( $connections as $key => $connection ) {
+        foreach ( $databaseConnections as $key => $connection ) {
        
             if ($key != 'imbull') {
                 try {

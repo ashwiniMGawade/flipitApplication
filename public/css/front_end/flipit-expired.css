@@ -1,1 +1,43 @@
-lessc: ENOENT, open '/Users/kimpellikaan/Sites/flipit.com/redesign/less/flipit-expired.css'
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.message .holder {
+  padding: 31px 30px 34px;
+}
+.message .text:after {
+  content: '';
+  position: absolute;
+  z-index: 2;
+  right: -24px;
+  top: 97%;
+  background: url(../../images/sprite.png) no-repeat -322px -224px;
+  width: 23px;
+  height: 87px;
+}
+.message .ico-warning {
+  vertical-align: middle;
+}
+@media only screen and (max-width: 979px) {
+  .message .holder {
+    padding: 15px;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .message .text:after {
+    background-position: -259px -269px;
+    width: 12px;
+    height: 45px;
+    top: 110%;
+    right: 0;
+  }
+}
+@media only screen and (max-width: 479px) {
+  .message .holder {
+    padding: 10px;
+  }
+  .message .text:after {
+    top: 97%;
+  }
+}
