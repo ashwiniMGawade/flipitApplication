@@ -11,7 +11,7 @@
   margin: 0;
   min-width: 60px;
   padding: 0;
-  width: 99px;
+  width: '99px';
 }
 .newsletter input[type="email"] {
   width: 68%!important;
@@ -26,7 +26,7 @@
   width: 210px !important;
 }
 #sidebar input[type="submit"] {
-  width: 99px !important;
+  width: '99px' !important;
 }
 #sidebar .form-signin-heading {
   color: #363534;
@@ -149,7 +149,7 @@ form .input-success {
   vertical-align: middle;
 }
 .best-items .categories-block ul li a.active-li h2 {
-  color: #e49542!important;
+  color: #e49542 !important;
 }
 .yellow-box-error-box-code {
   width: 800px;

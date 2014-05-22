@@ -1,15 +1,16 @@
 @import "custom-variables.less";
 @import "custom-mixins.less";
+@submitButtonWidth : '99px';
 .newsletter {
     input[type="submit"] {
-        border-radius: 2px;
+        border-radius: @input-border-radius;
         float: left;
         font-size: 14px;
         height: 39px;
         margin: 0;
         min-width: 60px;
         padding: 0;
-        width: 99px;
+        width: @submitButtonWidth;
     }
     input[type="email"] {
        width: 68%!important;
@@ -26,7 +27,7 @@
          width: 210px !important;
      }
      input[type="submit"] {
-         width: 99px !important;
+         width: @submitButtonWidth !important;
      }
    .form-signin-heading {
         color: #363534;
