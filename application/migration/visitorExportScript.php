@@ -39,8 +39,8 @@ class VisitorExport {
 
             $this->dbh = CommonMigrationFunctions::connectionToPDO($dsn);
 
-            $pathToExcelFolder = CommonMigrationFunctions::pathToExcelFolder($keyIn);
-            $visitorFile    = $pathToExcelFolder . "visitorList.csv";
+            $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($keyIn);
+            $visitorFile    = $pathToTempExcelFolder . "visitorList.csv";
             $fp             = fopen($visitorFile, 'w');
 
             print "Parse visitors data and save it into excel file\n";

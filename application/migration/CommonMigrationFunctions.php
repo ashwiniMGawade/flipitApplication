@@ -112,7 +112,7 @@ class CommonMigrationFunctions
                         $pdoCredentials['user'], $pdoCredentials['pass']);
     }
 
-    public static function pathToExcelFolder($locale){
+    public static function pathToTempExcelFolder($locale){
 
         $localePath         = ($locale == 'en') ? '' : $locale.'/';
         $pathToExcelFolder  = UPLOAD_EXCEL_TMP_PATH . strtolower($localePath) . 'excels/';
