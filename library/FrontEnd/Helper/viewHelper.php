@@ -283,7 +283,7 @@ EOD;
     public static function alphabetList()
     {
         $letterOrNumber = 0;
-        $alphabetList = "<ul class='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
+        $alphabetList = "<ul class='alphabet' id='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
         
         foreach (range('A', 'Z') as $letterOrNumber) {
             $lastAlphabetClass = $letterOrNumber=='Z' ? 'last' : '';

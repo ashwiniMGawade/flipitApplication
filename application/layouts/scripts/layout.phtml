@@ -104,7 +104,7 @@ if ($this->controllerName=='index'):
 endif;
 if ($this->controllerName!='index'):
     ?>
-        <div id="main" class="container">
+        <main id="main" role="main" class="container">
     <?php
 endif;
 
@@ -112,7 +112,7 @@ echo $this->layout()->content;
 
 if ($this->controllerName!='index'):
     ?>
-        </div>
+        </main>
     <?php
 endif;
 ?>

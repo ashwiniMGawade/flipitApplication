@@ -6,8 +6,8 @@ $zendTranslate = Zend_Registry::get('Zend_Translate');
     <form role="form" class="search-form">
         <input placeholder="<?php echo $zendTranslate->translate('Type in a Store e.g. Avis');?>" class="form-control" id='searchFieldHeader' name='searchFieldHeader' type='text'/>
         <input id='searchedKeyword' name='searchedKeyword' type='hidden' />
-        <a href='javascript:void(0);' class="btn btn-default" id='searchbuttonHeader'>
-            <span class="glyphicon glyphicon-search"></span>
+        <a href='javascript:void(0);'  id='searchbuttonHeader'>
+           <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
         </a>
         <div class="header-search-autocomplete">
             <div class="ajax-autocomplete"><ul></ul></div>

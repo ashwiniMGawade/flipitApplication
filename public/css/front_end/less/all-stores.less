@@ -28,22 +28,36 @@
 		font-size:19px;
 		padding:35px 15px 34px;
 		margin:0;
+		list-style:none;
+		text-transform:uppercase;
+		line-height:22px;
+		text-align:center;
+		overflow:hidden;
 		li{
 			float:none;
 			display:inline-block;
 			vertical-align:top;
 			width:auto;
 			padding:0 6px 0 5px;
-			margin:0 0 0 -4px;
+			border-left:1px solid #ddd;
 			&:first-child{
 				border:none;
 				margin-left:0;
 			}
+			a{
+				color:@light-blue;
+				&:hover,
+				&:focus{
+					color:@text-color;
+				}
+			}
 		}
 	}
+
 	.shop-name{
 		margin:0 -20px 0 0;
-		padding:0;		list-style:none;
+		padding:0;
+		list-style:none;
 		li{
 			margin:0 0 6px;
 			a{
