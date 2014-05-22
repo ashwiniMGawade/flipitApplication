@@ -12,18 +12,18 @@ class BrandingController extends Zend_Controller_Action {
         $session = new Zend_Session_Namespace('Branding');
         $session->saveUrl = 'http://www.kortingscode.nl/';
         $storeUrl = $this->_helper->branding->start();
-        $this->_redirect( $storeUrl );
+        $this->_redirect($storeUrl);
     }
 
     public function saveAction()
     {
         $this->_helper->branding->save();
-        $this->_redirect( $_SERVER['HTTP_REFERER'] );
+        $this->_redirect($_SERVER['HTTP_REFERER']);
     }
-
+    
     public function stopAction()
     {
         $redirectUrl = $this->_helper->branding->stop();
-        $this->_redirect( $redirectUrl );
+        $this->_redirect($redirectUrl);
     }
 }

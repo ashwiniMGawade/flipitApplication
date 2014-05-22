@@ -5,7 +5,6 @@
 
             $('form#branding :input').change(function(){
                 var cssElement    = $(this).data("css-selector");
-                // set css to given value with js to preview
                 if(cssElement) $(cssElement).css($(this).data("css-property"), this.value);
             });
 

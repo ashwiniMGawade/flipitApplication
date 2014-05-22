@@ -3,9 +3,9 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 {
     function start()
     {
-        $storeUrl   = $this->getRequest()->getParam('storeUrl', false);
-        $hash       = $this->getRequest()->getParam('hash', false);
-        $shopID     = $this->getRequest()->getParam('shopID', false);
+        $storeUrl             = $this->getRequest()->getParam('storeUrl', false);
+        $linkValidationHash   = $this->getRequest()->getParam('hash', false);
+        $shopID               = $this->getRequest()->getParam('shopID', false);
 
         $session        = new Zend_Session_Namespace('Branding');
         $shopBranding   = Shop::getShopBranding($shopID);
@@ -15,13 +15,13 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         }else{
             $session->data = $this->defaultStyles();
         }
-        
+
         if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'flipit.com')) {
-            $security = md5($shopID.date('Y').'-'.date('m').'-'.date('d').':'.date('H'));
-            if ($security == $hash) {
+            $securityCheckHash = md5($shopID.date('Y').'-'.date('m').'-'.date('d').':'.date('H'));
+            if ($securityCheckHash == $linkValidationHash) {
                 $session->brandingActivated = true;
             }else{
-                echo "Error - Wrong hash, please try the link again from Admin";
+                echo "Error - Wrong linkValidationHash, please try the link again from Admin";
                 exit;
             }
             
@@ -36,33 +36,31 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
     function save()
     {
         $session = new Zend_Session_Namespace('Branding');
-        foreach ($_POST as $key => $value) {
-            if(!empty($session->data[$key])) $session->data[$key]['value'] = $value;
+        foreach ($_POST as $cssSelector => $value) {
+            if(!empty($session->data[$cssSelector])) $session->data[$cssSelector]['value'] = $value;
         }
 
-        // unlink images?
         if (!empty($_POST['delete'])) {
-            foreach ($_POST['delete'] as $item) {
-                unlink(ROOT_PATH.$session->data[$item]['img']);
-                unset($session->data[$item]);
+            foreach ($_POST['delete'] as $brandingItem) {
+                unlink(ROOT_PATH.$session->data[$brandingItem]['img']);
+                unset($session->data[$brandingItem]);
             }
         }
 
         if (!empty($_FILES["newsletter_store_logo"]["tmp_name"])){
-            $logo = "images/upload/shop/".time().'_'.$_FILES["newsletter_store_logo"]["name"];
-            move_uploaded_file($_FILES["newsletter_store_logo"]["tmp_name"], ROOT_PATH.$logo);
-            $session->data['newsletter_store_logo']['img'] = $logo;
+            $newletterStoreLogo = "images/upload/shop/".time().'_'.$_FILES["newsletter_store_logo"]["name"];
+            move_uploaded_file($_FILES["newsletter_store_logo"]["tmp_name"], ROOT_PATH.$newletterStoreLogo);
+            $session->data['newsletter_store_logo']['img'] = $newletterStoreLogo;
         }
         
         if (!empty($_FILES["header_background"]["tmp_name"])){
-            $bg = "images/upload/shop/".time().'_'.$_FILES["header_background"]["name"];
-            move_uploaded_file($_FILES["header_background"]["tmp_name"], ROOT_PATH.$bg);
-            $session->data['header_background']['img'] = $bg;
+            $headerBackgroundImage = "images/upload/shop/".time().'_'.$_FILES["header_background"]["name"];
+            move_uploaded_file($_FILES["header_background"]["tmp_name"], ROOT_PATH.$headerBackgroundImage);
+            $session->data['header_background']['img'] = $headerBackgroundImage;
         }
 
-        // save settings to store if not preview
         if (empty($_POST['preview'])) {
-            $shop =  Doctrine_Core::getTable("Shop")->find( $_POST['shop_id'] );
+            $shop =  Doctrine_Core::getTable("Shop")->find($_POST['shop_id']);
             if (empty($_POST['reset'])) {
                 $shop->brandingcss =  serialize($session->data);
             }else{
@@ -82,31 +80,31 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
     } 
 
     private function defaultStyles(){
-       $defaultStyles                                                  = array();
+        $defaultStyles                                                  = array();
 
-       $defaultStyles['link_color']['css-selector']                    = '.section .block .link';
-       $defaultStyles['link_color']['css-property']                    = 'color';
-       $defaultStyles['link_color']['value']                           = '#0077cc';
+        $defaultStyles['link_color']['css-selector']                    = '.section .block .link';
+        $defaultStyles['link_color']['css-property']                    = 'color';
+        $defaultStyles['link_color']['value']                           = '#0077cc';
 
-       $defaultStyles['store_title']['css-selector']                   = '.header-block h1';
-       $defaultStyles['store_title']['css-property']                   = 'color';
-       $defaultStyles['store_title']['value']                          = '#32383e';
+        $defaultStyles['store_title']['css-selector']                   = '.header-block h1';
+        $defaultStyles['store_title']['css-property']                   = 'color';
+        $defaultStyles['store_title']['value']                          = '#32383e';
 
-       $defaultStyles['store_sub_title']['css-selector']               = '.header-block strong';
-       $defaultStyles['store_sub_title']['css-property']               = 'color';
-       $defaultStyles['store_sub_title']['value']                      = '#878a8d';
+        $defaultStyles['store_sub_title']['css-selector']               = '.header-block strong';
+        $defaultStyles['store_sub_title']['css-property']               = 'color';
+        $defaultStyles['store_sub_title']['value']                      = '#878a8d';
 
-       $defaultStyles['newsletter_background_color']['css-selector']   = '.section .block-form .holder';
-       $defaultStyles['newsletter_background_color']['css-property']   = 'background-color';
-       $defaultStyles['newsletter_background_color']['value']          = '#f6f6f6';
+        $defaultStyles['newsletter_background_color']['css-selector']   = '.section .block-form .holder';
+        $defaultStyles['newsletter_background_color']['css-property']   = 'background-color';
+        $defaultStyles['newsletter_background_color']['value']          = '#f6f6f6';
 
-       $defaultStyles['newsletter_title_color']['css-selector']        = '.section .block-form h2';
-       $defaultStyles['newsletter_title_color']['css-property']        = 'color';
-       $defaultStyles['newsletter_title_color']['value']               = '#33383e';
+        $defaultStyles['newsletter_title_color']['css-selector']        = '.section .block-form h2';
+        $defaultStyles['newsletter_title_color']['css-property']        = 'color';
+        $defaultStyles['newsletter_title_color']['value']               = '#33383e';
 
-       $defaultStyles['overwrite']['value']                            = '';       
-       
-       return $defaultStyles; 
+        $defaultStyles['overwrite']['value']                            = '';       
+
+        return $defaultStyles; 
     }
 }
 ?>

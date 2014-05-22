@@ -1987,15 +1987,13 @@ public static function shopAddInFavoriteInShopDetails($userid,$shopid)
     */
     public static function getShopBranding($shopID)
     {
-
-        $brandingcss = Doctrine_Query::create()
+        $brandingCss = Doctrine_Query::create()
         ->select('s.brandingcss')
         ->from("Shop s")
         ->where('s.id='.$shopID)
         ->fetchArray(Doctrine::HYDRATE_SINGLE_SCALAR);
 
-        return (!empty($brandingcss[0]['brandingcss'])) ? unserialize($brandingcss[0]['brandingcss']) : null;
-
+        return (!empty($brandingCss[0]['brandingcss'])) ? unserialize($brandingCss[0]['brandingcss']) : null;
     }
 
 }
