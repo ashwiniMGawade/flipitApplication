@@ -1,20 +1,10 @@
-/*Updated css*/
-.shop-name {
-  margin: 0;
-  padding: 0 15px 0 15px;
-  list-style: none;
-}
-.shop-name:nth-child(3) li:last-child{
-  border: none;    
-}
-/*Updated Css*/
 .after {
   content: '';
   display: block;
   clear: both;
 }
 .content-holder {
-  background: #fff;
+  background: #ffffff;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   border: 1px solid #d8d8d8;
@@ -42,30 +32,26 @@
   padding: 6px 0 8px;
 }
 .alphabet {
+  font-size: 19px;
   padding: 35px 15px 34px;
   margin: 0;
-  list-style: none;
-  text-transform: uppercase;
-  font-size: 19px;
-  line-height: 22px;
-  text-align: center;
 }
 .alphabet li {
+  float: none;
   display: inline-block;
   vertical-align: top;
-  border-left: 1px solid #eaeaea;
+  width: auto;
   padding: 0 6px 0 5px;
   margin: 0 0 0 -4px;
 }
 .alphabet li:first-child {
-  margin-left: 0;
   border: none;
+  margin-left: 0;
 }
-.alphabet li a {
-  color: #0077cc;
-}
-.alphabet li a:hover {
-  color: #33383e;
+.shop-name {
+  margin: 0 -20px 0 0;
+  padding: 0;
+  list-style: none;
 }
 .shop-name li {
   margin: 0 0 6px;
@@ -73,12 +59,14 @@
 .shop-name li a {
   color: #0077cc;
 }
-.shop-name li a:hover {
+.shop-name li a:hover,
+.shop-name li a:focus {
   color: #33383e;
 }
 .btn-top {
   display: inline-block;
   vertical-align: top;
+  color: #878a8d;
 }
 .btn-top:after {
   content: '';
@@ -89,7 +77,12 @@
   height: 7px;
   margin: 0 0 0 5px;
 }
-.btn-top:hover:after {
+.btn-top:hover,
+.btn-top:focus {
+  color: #878a8d;
+}
+.btn-top:hover:after,
+.btn-top:focus:after {
   background-position: -203px -156px;
 }
 @media only screen and (max-width: 1199px) {
@@ -168,14 +161,4 @@
   .btn-top {
     margin: 15px 0 5px;
   }
-}
-
-.popup_block {
-position:fixed;
-top:50%;
-left:50%;
-margin-left:-362px;
-/* negative half from the width */
-margin-top:/* negative half from the height */
--335px
 }

@@ -355,23 +355,22 @@
   display: table;
   width: 100%;
 }
-.best-items .categories-block ul li a:hover , .best-items .categories-block ul li a.active-li{
+.best-items .categories-block ul li a:hover {
   background: #ffffff;
   color: #878a8d;
   text-decoration: none;
-  outline: none;
 }
-.best-items .categories-block ul li a:hover h2, .best-items .categories-block ul li a.active-li h2 {
+.best-items .categories-block ul li a:hover h2 {
   color: #e49542;
 }
-.best-items .categories-block ul li a:hover .left-box, .best-items .categories-block ul li a.active-li .left-box  {
+.best-items .categories-block ul li a:hover .left-box {
   width: 36.5%;
 }
-.best-items .categories-block ul li a:hover .box, .best-items .categories-block ul li a.active-li .box  {
+.best-items .categories-block ul li a:hover .box {
   width: 63.5%;
   padding: 0 14px;
 }
-.best-items .categories-block ul li a:hover:before,.best-items .categories-block ul li a.active-li:before {
+.best-items .categories-block ul li a:hover:before {
   content: '';
   position: absolute;
   top: 50%;
@@ -381,7 +380,7 @@
   height: 15px;
   margin: -9px 0 0;
 }
-.best-items .categories-block ul li a:hover:after,.best-items .categories-block ul li a.active-li:after {
+.best-items .categories-block ul li a:hover:after {
   content: '';
   position: absolute;
   right: -1px;

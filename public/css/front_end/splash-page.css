@@ -30,7 +30,7 @@
 }
 .logo-panel {
   display: block;
-  background: url(../../images/front_end/logo-37.png) no-repeat;
+  background: url(../../images/logo-37.png) no-repeat;
   width: 269px;
   height: 124px;
   overflow: hidden;
@@ -56,7 +56,7 @@
   left: 0;
   top: 2px;
   content: "";
-  background: url(../../images/front_end/sprite.png) no-repeat -333px -71px;
+  background: url(../../images/sprite.png) no-repeat -333px -71px;
   width: 16px;
   height: 22px;
 }
@@ -167,7 +167,7 @@
   overflow: hidden;
   text-indent: -9999px;
   content: "";
-  background: url(../../images/front_end/sprite.png) no-repeat -358px -75px;
+  background: url(../../images/sprite.png) no-repeat -358px -75px;
   width: 9px;
   height: 9px;
 }
