@@ -53,10 +53,6 @@ input.input-error, select.input-error {
 input.input-success, select.input-success{
    border: 1px solid #6AC00E !important;
 }
-#register label.input-success, #register label.input-success
-{
-	/*display: none;*/
-}
 #sidebar .form-signin-heading span {
     display: block;
     font-size: 18px;
