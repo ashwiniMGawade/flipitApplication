@@ -17,7 +17,7 @@ class SignupController extends Zend_Controller_Action
         }
         die();
     }
-
+ 
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
