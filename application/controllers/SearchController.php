@@ -13,6 +13,7 @@ class SearchController extends Zend_Controller_Action
         } else{
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
@@ -23,11 +24,6 @@ class SearchController extends Zend_Controller_Action
         $pageAttributeId = Page::getPageAttributeByPermalink($pagePermalink);
         $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
         $this->view->pageTitle = $pageDetail->pageTitle;
-
-        if ($pageDetail->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $pageDetail->customHeader;
-        }
-
         $searchedKeywords = $this->getRequest()->getParam('searchField');
         $shopIds = "";
         $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
@@ -48,16 +44,10 @@ class SearchController extends Zend_Controller_Action
             $this->view->offers = $offersBySearchedKeywords; 
         }
 
-        $this->view->headTitle($pageDetail->metaTitle);
-        $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
-        $this->view->facebookTitle =$pageDetail->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $pageDetail->permaLink;
-        $this->view->facebookImage = FACEBOOK_IMAGE;
-        $this->view->facebookDescription =  trim($pageDetail->metaDescription);
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription =  trim($pageDetail->metaDescription);
-        
+        $customHeader = isset($pageDetail->customHeader) ? $pageDetail->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $pageDetail->pageTitle, $pageDetail->metaTitle, trim($pageDetail->metaDescription), $pageDetail->permaLink, FACEBOOK_IMAGE, $customHeader);
+
         $this->view->pageLogo = '';
         if(isset($pageDetail->logo->path)) {
             $this->view->pageLogo = PUBLIC_PATH_CDN.$pageDetail->logo->path.$pageDetail->logo->name;

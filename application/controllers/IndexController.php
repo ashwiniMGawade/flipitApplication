@@ -12,6 +12,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
         $this->view->banner = Signupmaxaccount::getHomepageImages();
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
@@ -23,20 +24,10 @@ class IndexController extends Zend_Controller_Action
         $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
 
         if (!empty($pageDetails)) {
-            if ($pageDetails->customHeader) {
-                $this->view->layout()->customHeader = "\n" . $pageDetails->customHeader;
-            }
+            $this->view->pageTitle = ucfirst($pageDetails->pageTitle);         
+            $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
+            $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->metaTitle, ucfirst(trim($pageDetails->metaTitle)), trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName()), FACEBOOK_IMAGE, $customHeader);
 
-            $this->view->pageTitle = ucfirst($pageDetails->pageTitle);
-            $this->view->headTitle(ucfirst(trim($pageDetails->metaTitle)));
-            $this->view->headMeta()->setName('description', trim($pageDetails->metaDescription));
-            
-            $this->view->facebookTitle = $pageDetails->metaTitle;
-            $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName());
-            $this->view->facebookImage = FACEBOOK_IMAGE;
-            $this->view->facebookDescription = trim($pageDetails->metaDescription);
-            $this->view->facebookLocale = FACEBOOK_LOCALE;
-            $this->view->twitterDescription = trim($pageDetails->metaDescription);
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
         }

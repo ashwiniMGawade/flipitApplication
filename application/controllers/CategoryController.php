@@ -19,23 +19,9 @@ class CategoryController extends Zend_Controller_Action
             $this->view->offersWithPagination = $offersWithPagination;
             $this->view->categoryDetail = $categoryDetail;
             $this->view->offersType = 'offerWithPagenation';
-            $this->view->headTitle(trim($categoryDetail[0]['metatitle']));
-            $this->view->headMeta()->setName('description', trim($categoryDetail[0]['metaDescription']));
+            $customHeader = '';
+            $this->viewHelperObject->getFacebookMetaTags($this, $categoryDetail[0]['name'], trim($categoryDetail[0]['metatitle']), trim($categoryDetail[0]['metaDescription']), FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetail[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
-            if (LOCALE == '') {
-                $facebookImage = 'logo_og.png';
-                $facebookLocale = LOCALE;
-            } else {
-                $facebookImage = 'flipit.png';
-                $facebookLocale = LOCALE;
-            }
-
-            $this->view->facebookTitle = $categoryDetail[0]['name'];
-            $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetail[0]['permaLink'];
-            $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
-            $this->view->facebookDescription = trim($categoryDetail[0]['metaDescription']);
-            $this->view->facebookLocale = $facebookLocale;
-            $this->view->twitterDescription = trim($categoryDetail[0]['metaDescription']);
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
         }
@@ -51,22 +37,13 @@ class CategoryController extends Zend_Controller_Action
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
         $this->pageDetail = Page::getPageFromPageAttribute(9);
-        $this->view->headTitle($this->pageDetail->metaTitle);
-        $this->view->headMeta()->setName('description', trim($this->pageDetail->metaDescription));
-
-        if ($this->pageDetail->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
-        }
-
         $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoriesDetail());
         $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialListPages());
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
-        $this->view->facebookTitle = $this->pageDetail->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen');
-        $this->view->facebookImage = FACEBOOK_IMAGE;
-        $this->view->facebookDescription = trim($this->pageDetail->metaDescription);
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription = trim($this->pageDetail->metaDescription);
+
+        $customHeader = isset($this->pageDetail->customHeader) ? $this->pageDetail->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $this->pageDetail->pageTitle, $this->pageDetail->metaTitle, trim($this->pageDetail->metaDescription), FrontEnd_Helper_viewHelper::__link('categorieen'), FACEBOOK_IMAGE, $customHeader);
+
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
@@ -97,6 +74,7 @@ class CategoryController extends Zend_Controller_Action
             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
       public function clearcacheAction()
       {

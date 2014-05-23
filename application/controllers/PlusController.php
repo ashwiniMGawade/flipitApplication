@@ -29,6 +29,7 @@ class PlusController extends Zend_Controller_Action
             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 ################ Refactored Starts #######################################
 public function indexAction()
@@ -41,26 +42,14 @@ public function indexAction()
         getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
     $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
     $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles();
-    
-    $this->view->facebookDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
-        $moneySavingPageDetails[0]['metaDescription'] :'');
-    $this->view->facebookLocale = FACEBOOK_LOCALE;
-    $this->view->facebookTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? 
-        $moneySavingPageDetails[0]['pageTitle'] :'';
-    $this->view->facebookShareUrl = $moneySavingPagePermalink;
-    $this->view->facebookImage = HTTP_PATH."public/images/plus_og.png";
-    $this->view->twitterDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
-        $moneySavingPageDetails[0]['metaDescription'] :'');
     $this->view->pageTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
     $this->view->permaLink = $moneySavingPagePermalink;
-    $this->view->headTitle(trim(isset($moneySavingPageDetails[0]['metaTitle']) ? 
-        $moneySavingPageDetails[0]['metaTitle'] :''));
-    $this->view->headMeta()->setName('description', trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
-        $moneySavingPageDetails[0]['metaDescription'] :''));
     $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
-    if(isset($moneySavingPageDetails[0]['customHeader'])) {
-        $this->view->layout()->customHeader = "\n" . isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
-    }
+    $customHeader = isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
+    $this->viewHelperObject->getFacebookMetaTags($this, isset($moneySavingPageDetails[0]['pageTitle']) ? 
+        $moneySavingPageDetails[0]['pageTitle'] :'', trim(isset($moneySavingPageDetails[0]['metaTitle']) ? 
+        $moneySavingPageDetails[0]['metaTitle'] :''), trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
+        $moneySavingPageDetails[0]['metaDescription'] :''), $moneySavingPagePermalink, HTTP_PATH."public/images/plus_og.png", $customHeader);
 
     $this->view->mostReadArticles = $mostReadArticles;
     $this->view->categoryWiseArticles = $categoryWiseArticles;
@@ -327,9 +316,6 @@ public function indexAction()
 
         if (!empty($currentArticleView)) {
             $this->view->currentArticle = $currentArticleView[0];
-            $this->view->headTitle(trim($currentArticleView[0]['metatitle']));
-            $this->view->headMeta()->setName('description', trim($currentArticleView[0]['metadescription']));
-
             $mostReadArticleKey ="all_mostreadMsArticlePage_list";
             $ArticlesExistOrNot =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($mostReadArticleKey);
 
@@ -341,12 +327,9 @@ public function indexAction()
             }
             $this->view->mostReadArticles = $mostReadArticles;
             $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
-            $this->view->facebookDescription = trim($currentArticleView[0]['metadescription']);
-            $this->view->facebookLocale = FACEBOOK_LOCALE;
-            $this->view->facebookTitle = $currentArticleView[0]['title'];
-            $this->view->facebookShareUrl = HTTP_PATH_LOCALE.$currentArticleView[0]['permalink'];
-            $this->view->facebookImage = FACEBOOK_IMAGE;
-            $this->view->twitterDescription = trim($currentArticleView[0]['metadescription']);
+            
+            $customHeader = '';
+            $this->viewHelperObject->getFacebookMetaTags($this, $currentArticleView[0]['title'], trim($currentArticleView[0]['metatitle']), trim($currentArticleView[0]['metadescription']), $currentArticleView[0]['permalink'], FACEBOOK_IMAGE, $customHeader);
 
             $this->view->userDetails =  $userInformationObject->getProfileImage($currentArticleView[0]['authorid']);
         } else {

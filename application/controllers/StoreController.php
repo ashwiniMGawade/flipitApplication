@@ -5,6 +5,7 @@ class StoreController extends Zend_Controller_Action
     #################################################
     ######## REFACTORED CODE ########################
     #################################################
+    public $viewHelperObject = '';
     public function addshopinfevoriteAction()
     {
         $shopId = $this->getRequest()->getParam("shopid");
@@ -83,7 +84,10 @@ class StoreController extends Zend_Controller_Action
         $this->view->storeImage = $ShopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
-        $this->getFacebookMetaTags((object) $shopInformation[0], $ShopImage);
+
+        $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $shopInformation[0]['overriteTitle'], '', trim($shopInformation[0]['metaDescription']), $shopInformation[0]['permaLink'], $ShopImage, $customHeader);
+
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
@@ -140,59 +144,19 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $pageAttribute =  Page::getPageFromPageAttributeFiltered(7);
         $this->view->pageTitle = $pageAttribute['pageTitle'];
-        $this->view->headTitle($pageAttribute['metaTitle']);
-        $this->view->headMeta()->setName('description', trim($pageAttribute['metaDescription']));
-
-        if ($pageAttribute['customHeader']) :
-            $this->view->layout()->customHeader = "\n" . $pageAttribute['customHeader'];
-        endif;
-
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $allStoresList = self::shopOffersBySetGetCache('all_shops_list', Shop::getallStoresForFrontEnd('all', null), true);
         $popularStores = self::shopOffersBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
         $storeSearchByAlphabet = self::shopOffersBySetGetCache('all_searchpanle_list', FrontEnd_Helper_viewHelper::alphabetList(), true);
-        $this->view->facebookTitle = $pageAttribute['pageTitle'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $pageAttribute['permaLink'];
 
-        if(LOCALE == '') {
-            $facebookImage = 'logo_og.png';
-            $facebookLocale = '';
-        }else{
-            $facebookImage = 'flipit.png';
-            $facebookLocale = LOCALE;
-        }
+        $customHeader = isset($pageAttribute['customHeader']) ? $pageAttribute['customHeader'] : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $pageAttribute['pageTitle'], $pageAttribute['metaTitle'], trim($pageAttribute['metaDescription']), $pageAttribute['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
-        $this->view->facebookLocale = $facebookLocale;
-        $this->view->facebookDescription =  trim($pageAttribute['metaDescription']);
-        $this->view->twitterDescription =  trim($pageAttribute['metaDescription']);
-
-        $this->getFacebookMetaTags($requestedData, $ShopImage);
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
     }
-    public function getFacebookMetaTags($requestedData, $ShopImage)
-    {
-        $this->view->headTitle($requestedData->overriteTitle);
-        $this->view->headMeta()->setName('description', trim($requestedData->metaDescription));
-        $this->view->facebookTitle = $requestedData->overriteTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $requestedData->permaLink;
-        $this->view->facebookImage = $ShopImage;
-        $this->view->facebookDescription =  trim($requestedData->metaDescription);
-        if (LOCALE == '') {
-            $facebookLocale = '';
-        } else {
-            $facebookLocale = LOCALE;
-        }
-        $this->view->facebookLocale = $facebookLocale ;
-        $this->view->twitterDescription =  trim($requestedData->metaDescription);
 
-        if ($requestedData->customHeader) {
-            $this->view->layout()->customHeader = $this->view->layout()->customHeader . $requestedData->customHeader . "\n" ;
-        }
-        return $this;
-    }
     public function howtoguideAction()
     {
         $howToGuidePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
@@ -219,28 +183,16 @@ class StoreController extends Zend_Controller_Action
         $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
         $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("topSixOffers", 6, $howToGuides[0]['id'], 0));
         $offers = array_chunk($offers, 3);
-
-
-        if(LOCALE == '') {
-            $facebookImage = 'logo_og.png';
-            $facebookLocale = '';
-        }else{
-            $facebookImage = 'flipit.png';
-            $facebookLocale = LOCALE;
-        }
-
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides=$howToGuides;
-        $this->view->facebookTitle = $howToGuides[0]['howtoTitle'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $howToGuides[0]['permaLink'];
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
-        $this->view->facebookLocale = $facebookLocale;
-        $this->view->facebookDescription =  trim($howToGuides[0]['howtoMetaDescription']);
-        $this->view->twitterDescription =  trim($howToGuides[0]['howtoMetaDescription']);
+
+        $customHeader = '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $howToGuides[0]['howtoTitle'], '', trim($howToGuides[0]['howtoMetaDescription']), $howToGuides[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
+
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
@@ -305,7 +257,7 @@ class StoreController extends Zend_Controller_Action
             $request->setActionName('error');
 
         }
-
+    $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function searchshopbycharAction()
