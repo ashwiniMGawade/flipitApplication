@@ -32,7 +32,12 @@ class SignupController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        self::getFleshMessage();
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $flash->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ?
+        $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ?
+        $message[0]['error'] : '';
     }
 
     public function indexAction()
@@ -71,16 +76,6 @@ class SignupController extends Zend_Controller_Action
         }
     }
 
-    public function getFleshMessage()
-    {
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ?
-        $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ?
-        $message[0]['error'] : '';
-    }
-
     public function showFleshMessage($message, $link, $messageType)
     {
         $flash = $this->_helper->getHelper('FlashMessenger');
@@ -90,7 +85,6 @@ class SignupController extends Zend_Controller_Action
 
     public function profileAction()
     {
-        echo $this->getRequest()->getParam('email');
-        die;
+        die('WELCOME');
     }
 }
