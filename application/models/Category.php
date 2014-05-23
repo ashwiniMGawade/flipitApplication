@@ -262,7 +262,7 @@ class Category extends BaseCategory
         return $categoriesDetail;
     }
 
-    public static function getCategory($categoryId)
+    public static function getCategoryInformation($categoryId)
     {
         $categoryDetails = Doctrine_Query::create()->select("c.*,i.name,i.path,categoryfeaturedimage.name,categoryfeaturedimage.path")
         ->from('Category c')
