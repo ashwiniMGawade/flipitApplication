@@ -47,17 +47,9 @@ class LoginController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             if ($loginForm->isValid($_POST)) {
                 $visitorInformation = $loginForm->getValues();
-                $username = $visitorInformation["emailAddress"];
-                $password = MD5($visitorInformation["password"]);
-                $data_adapter = new Auth_VisitorAdapter($username, $password);
-                $auth = Zend_Auth::getInstance();
-                $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
-                $result = $auth->authenticate($data_adapter);
+                $this->_helper->Login->setVisitorSession($visitorInformation);
                 if (Auth_VisitorAdapter::hasIdentity()) {
-                    $userid = Auth_VisitorAdapter::getIdentity()->id;
-                    $obj = new Visitor();
-                    $obj->updateLoginTime($userid);
-                    setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
+                    $this->_helper->Login->setUserCookies();
                     $this->_redirect(
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
                         FrontEnd_Helper_viewHelper::__link('profiel') .'/' .
@@ -79,8 +71,6 @@ class LoginController extends Zend_Controller_Action
 
     public function logoutAction()
     {
-        $headTitle = $this->view->translate("Members Only ");
-        $this->view->headTitle($headTitle);
         Auth_VisitorAdapter::clearIdentity();
         setcookie('kc_unique_user_id', "", time() - 3600, '/');
         unset($_COOKIE['kc_unique_user_id']);
