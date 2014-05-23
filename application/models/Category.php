@@ -196,12 +196,11 @@ class Category extends BaseCategory
             $uploadedImage = self::uploadImage($categoryIconName);
             if ($uploadedImage['status'] == '200') {
                 $category = new CategoryIcon();
-                $category->ext = BackEnd_Helper_viewHelper::getImageExtension( $uploadedImage['fileName']);
+                $category->ext = BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
                 $category->path = $uploadedImage['path'];
                 $category->name = BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
                 $category->save();
-                $categoryImageId = $category->id;
-                return $categoryImageId;
+                return $category->id;
             } else {
                 return false;
             }
