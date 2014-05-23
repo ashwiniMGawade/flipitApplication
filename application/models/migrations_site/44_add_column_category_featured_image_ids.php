@@ -10,7 +10,6 @@ class AddColumnCategoryFeaturedImageIds extends Doctrine_Migration_Base
         'foreignTable' => 'image',
         'onDelete'     => 'CASCADE',
     );
-
     $this->createForeignKey( 'category', 'categoryFeaturedImageId_foreign_key', $definition );
     }
 

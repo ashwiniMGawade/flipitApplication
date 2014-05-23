@@ -20,9 +20,11 @@
 
     $featuredCategoryPicturePath = '';
     $featuredCategoryPictureName = '';
-    if(file_exists(ROOT_PATH.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
-        $featuredCategoryPicturePath = PUBLIC_PATH_LOCALE.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'];
-        $featuredCategoryPictureName = $this->categoryDetail[0]['categoryfeaturedimage']['name'];
+    if(isset($this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
+        if(file_exists(ROOT_PATH.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
+            $featuredCategoryPicturePath = PUBLIC_PATH_LOCALE.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'];
+            $featuredCategoryPictureName = $this->categoryDetail[0]['categoryfeaturedimage']['name'];
+        }
     }
 ?>
 
