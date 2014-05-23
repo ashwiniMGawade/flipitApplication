@@ -55,11 +55,17 @@
 #sidebar h2 {
   font-size: 20px;
 }
-form .input-error {
-  border: '1px solid red';
+form input.input-error {
+  border: 1px solid red !important;
 }
-form .input-success {
-  border: 1px solid #6ac00e;
+form input.input-success {
+  border: 1px solid #6ac00e !important;
+}
+form select.input-error {
+  border: 1px solid red !important;
+}
+form select.input-success {
+  border: 1px solid #6ac00e !important;
 }
 #footer input[type="email"] {
   margin-right: 0;

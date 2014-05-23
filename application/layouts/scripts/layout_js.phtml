@@ -11,7 +11,9 @@ else:
 endif;
 
 
-echo $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.main.js")->prependFile("public/js/front_end/layout.js")
+echo $this->minifyHeadScript()
+    ///->prependFile("public/js/front_end/jquery.main.js")
+    ->prependFile("public/js/front_end/layout.js")
     ->prependFile("public/js/Gettext.js")
     ->prependFile("public/js/jquery-ui-1.8.16.custom.min.js")
     ->prependFile("public/js/back_end/jquery.validate.js")
