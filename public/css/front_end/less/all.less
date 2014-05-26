@@ -104,15 +104,22 @@ body{min-width:320px;}
 }
 .logo{
 	float:left;
-	background:url(../images/logo.png) no-repeat;
-	width:109px;
-	height:49px;
 	text-indent:-9999px;
 	overflow:hidden;
 	a{
 		display:block;
 		height:100%;
 	}
+}
+.logo.flipit{
+	background:url(../images/flipit-logo.png) no-repeat;
+	width:109px;
+	height:49px;
+} 
+.logo.kortingscode {
+	background:url(../images/kortingscode-logo.png) no-repeat;
+	width:308px;
+	height:50px;
 }
 .search-box{
 	float:left;
@@ -152,6 +159,9 @@ body{min-width:320px;}
 			border:none;
 			box-shadow:none;
 		}
+	}
+	input[type="text"].kortingscode{
+		width:190px;
 	}
 	input[type="text"]::-webkit-input-placeholder {color: @text-color;}
 	input[type="text"]:-moz-placeholder {color: @text-color;}

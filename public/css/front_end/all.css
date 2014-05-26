@@ -5906,15 +5906,22 @@ body {
 }
 .logo {
   float: left;
-  background: url(../../images/logo.png) no-repeat;
-  width: 109px;
-  height: 49px;
   text-indent: -9999px;
   overflow: hidden;
 }
 .logo a {
   display: block;
   height: 100%;
+}
+.logo.flipit {
+  background: url(../../images/flipit-logo.png) no-repeat;
+  width: 109px;
+  height: 49px;
+}
+.logo.kortingscode {
+  background: url(../../images/kortingscode-logo.png) no-repeat;
+  width: 308px;
+  height: 50px;
 }
 .search-box {
   float: left;
@@ -5958,6 +5965,9 @@ body {
 .search-form input[type="text"]:focus {
   border: none;
   box-shadow: none;
+}
+.search-form input[type="text"].kortingscode {
+  width: 190px;
 }
 .search-form input[type="text"]::-webkit-input-placeholder {
   color: #33383e;
