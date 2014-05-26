@@ -78,7 +78,7 @@ class User extends BaseUser
         return $userFavouriteStores;
     }
 
-    public static function getUseretails($uId)
+    public static function getUserDetails($uId)
     {
         $userDetails = Doctrine_Query::create()
             ->select("u.id,u.firstName,u.lastName,u.addtosearch, u.mainText, u.slug, u.google, pi.name, pi.path")

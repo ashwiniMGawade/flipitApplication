@@ -59,9 +59,7 @@ class PlusController extends Zend_Controller_Action
         $currentArticleCategory = $currentArticleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $articlesRelatedToCurrentCategory = $categoryWiseArticles[$currentArticleCategory]; 
-        $allArticles = Articles::getAllArticles();
-        $userInformationObject = new User();
-        
+                
         if (!empty($currentArticleDetails)) {
             $this->view->headTitle(trim($currentArticleDetails[0]['metatitle']));
             $this->view->headMeta()->setName('description', trim($currentArticleDetails[0]['metadescription']));
@@ -78,7 +76,8 @@ class PlusController extends Zend_Controller_Action
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
             $this->view->topPopularOffers = Offer::getTopOffers(5);
-            $this->view->userDetails =  $userInformationObject->getUseretails($currentArticleDetails[0]['authorid']);
+            $userInformationObject = new User();
+            $this->view->userDetails =  $userInformationObject->getUserDetails($currentArticleDetails[0]['authorid']);
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
         }
