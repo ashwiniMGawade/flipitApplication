@@ -83,8 +83,9 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription) {
         $imageTagOrSpan = '';
         if($listType =='special' || $listType =='savingGuide') {
-            $listType = $listType=='savingGuide' ? 'FLIP IT' : $listType;
-           $imageTagOrSpan = '<span class="discount-label" >' . $this->zendTranslate->translate($listType). '</span>' ;
+            $listType = $listType==$this->zendTranslate->translate('savingGuide') ?
+            $this->zendTranslate->translate('FLIPIT PLUS') : $listType;
+            $imageTagOrSpan = '<span class="discount-label" >' . $this->zendTranslate->translate($listType). '</span>' ;
         } else {
            $imageTagOrSpan = '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" alt="'. $imageDescription.'">';
         }
