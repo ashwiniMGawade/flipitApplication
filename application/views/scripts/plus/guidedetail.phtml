@@ -1,7 +1,9 @@
 <?php 
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/in-savings.css");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/moneySaving.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/stickyfloat.js");
 $articleview = $this->currentArticle;
-//echo "<pre>";print_r($articleview);die;
 $userview = $this->userDetails;
 $partialViewPath = 'partials/';
 $discussion = $this->partial(
@@ -30,27 +32,25 @@ if(!empty($articleview)) :
                         $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/".$link_url;
                         $articleUpdatedAt = date('d M Y', strtotime($articleview['updated_at']));
                     ?>
-                    <p>By <a href="<?php echo $profileLink; ?>"><?php echo $firstName . " " . $lastName;?></a> - <?php echo $articleUpdatedAt; ?> &nbsp;   | &nbsp;   <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus')?>"><?php echo $this->translate('Alle Plus');?></a></p>
+                    <p>By <a href="<?php echo $profileLink; ?>"><?php echo $firstName . " " . $lastName;?></a> - <?php echo $articleUpdatedAt; ?> &nbsp;   | &nbsp;   <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus')?>"><?php echo $this->translate('All Plus');?></a></p>
                 </header>
                 <?php  
-                    if (!empty($this->articleview['chapters'])) {
-                        foreach ($this->articleview['chapters'] as $chapter) :
+                    if (!empty($articleview['chapters'])) {
+                        foreach ($articleview['chapters'] as $chapter) :
                             $pattern = array('/\s/','/[\,+@#?$%^:&*!.();]+/', '/(\')/');                     
                             $replace = array("-","-","-");
                             $chapterTitle = preg_replace($pattern, $replace, $chapter['title']);
                             $chapterTitle = strtolower($chapterTitle);
+                            echo '<h2 id="'.$chapterTitle.'">'.$chapter['title'].'</h2>';
                             echo $chapter['content'];
                         endforeach;
                     }
                 ?> 
         </section>
         <div class="share-box">
-            <span class="txt">Share this tip</span>
+            <span class="txt"><?php echo $this->translate('Share this tip');?></span>
             <ul class="social-box">
-                <li><img src="<?php echo HTTP_PATH; ?>public/images/img-42.png" alt="image description" width="129" height="20" /></li>
-                <li><img src="<?php echo HTTP_PATH; ?>public/images/img-43.png" alt="image description" width="81" height="20" /></li>
-                <li><img src="<?php echo HTTP_PATH; ?>public/images/img-45.png" alt="image description" width="238" height="24" /></li>
-                <li><img src="<?php echo HTTP_PATH; ?>public/images/img-44.png" alt="image description" width="81" height="21" /></li>
+                <?php echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');?>            
             </ul>
         </div>
         <section class="about-box">
@@ -62,12 +62,12 @@ if(!empty($articleview)) :
                 <img width="120" height="120" alt="<?php echo $firstName; ?>" src="<?php echo $autorImage; ?>">
             </div>
             <div class="text-box">
-                <p><strong>About <?php echo $firstName; ?></strong>, <?php $userview['mainText'];?></p>
-                <p><a href="<?php echo $profileLink; ?>">Read more about <?php echo $firstName; ?></a></p>
+                <p><strong><?php echo $this->translate('About').' '.$firstName; ?></strong>, <?php $userview['mainText'];?></p>
+                <p><a href="<?php echo $profileLink; ?>"><?php echo $this->translate('Read more about'). ''.$firstName; ?></a></p>
             </div>
         </section>
         <header class="heading-box text-advice">
-            <h2>Saving guides</h2>
+            <h2><?php echo $this->translate('Saving guides');?></h2>
         </header>
         <section class="tips-section">
             <?php 
@@ -96,57 +96,64 @@ if(!empty($articleview)) :
         <section class="news-block">
             <?php 
                 if(!empty($this->recentlyAddedArticles)) {
+                    foreach($this->recentlyAddedArticles as $recentlyAddedArticle) :
+            ?>            
             <article class="box">
-                <span class="image"><img src="<?php echo HTTP_PATH; ?>public/images/img-38.jpg" alt="image description" width="118" height="118" /></span>
+                <span class="image"><img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['ArtIcon']['path'].$recentlyAddedArticle['ArtIcon']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>" width="118" height="118" /></span>
                 <div class="text-box">
-                    <h1><a href="#">Wonderhandelen - tover de prijs omlaag</a></h1>
-                    <p><em>by <a href="#">Kim Pelikaan</a>, posted Today</em></p>
-                    <a href="#" class="more"><span>Read More</span></a>
+                    <h1>
+                        <a href="<?php echo $recentlyAddedArticle['title'];?>"><?php echo $recentlyAddedArticle['title'];?></a>
+                    </h1>
+                    <p>
+                        <em>by <a href="<?php echo $profileLink; ?>"><?php echo $firstName . " " . $lastName;?></a>, <?php echo $articleUpdatedAt; ?></em>
+                    </p>
+                    <a href="<?php echo $recentlyAddedArticle['title'];?>" class="more">
+                        <span><?php echo $this->translate('Read More');?></span>
+                    </a>
                 </div>
             </article>
-            
+            <?php    
+                    endforeach;
+                }
+            ?>  
         </section>
             <ol class="alt-list">
+                <?php 
+                    if(!empty($this->topPopularOffers)) {
+                        foreach($this->topPopularOffers as $topPopularOffer) :
+                           $offerType = $topPopularOffer['exclusiveCode'] == 1 ? '<mark>Exclusief</mark>' : '';
+                           $redirectUrlToStore = LOCALE != '' ? HTTP_PATH_LOCALE : HTTP_PATH;  
+                ?> 
                 <li>
-                    <a href="#">
-                        <strong class="title">Zalando <mark>Exclusief</mark></strong>
-                        Zalando kortingscode voor 10% korting
-                    </a>
+                    <a href="<?php echo $redirectUrlToStore.$topPopularOffer['shop']['permalink']; ?>">
+                        <strong class="title"><?php echo $topPopularOffer['shop']['name'].' '.$offerType; ?></strong>
+                        <?php echo $topPopularOffer['title'];?>
+                    </a>    
                 </li>
-                <li>
-                    <a href="#">
-                        <strong class="title">Kwik-fit <mark>Exclusief</mark></strong>
-                        Kwik-fit kortingscode voor 30% korting op onderhoud
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <strong class="title">Center Parcs</strong>
-                        €25 kortingscode bij Center Parcs <br />(in de schoolvakanties)
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <strong class="title">Hunkemöller <mark>Exclusief</mark></strong>
-                        Hunkemöller kortingscode: 20% korting op alle geselecteerde items
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <strong class="title">Schuurman Schoenen <mark>Exclusief</mark></strong>
-                        Schuurman Schoenen kortingscode: ontvang €10 korting op schoenen
-                    </a>
-                </li>
+                <?php    
+                        endforeach;
+                    }
+                ?>  
             </ol>
-            <section class="list-box">
-                <h1>Read This List</h1>
+            <section class="list-box" id="floatDiv">
+                <h1><?php echo $this->translate('Read This List');?></h1>
                 <ol>
-                    <li>
-                        <a href="#">
-                            <strong class="title">Uren bellen met tante Truus, dat kan goedkoop</strong>
-                            <p><em>by <mark>Kim Pelikaan</mark></em></p>
-                        </a>
-                    </li>           
+                <?php  
+                    if (!empty($articleview['chapters'])) {
+                        foreach ($articleview['chapters'] as $chapter) :
+                ?>
+                <li>
+                    <a href="javascript:void(0);" rel = "<?php echo $chapter['title']; ?>" onclick="scrollByChapter(this)">
+                        <strong class="title"><?php echo $chapter['title'];?></strong>
+                        <p>
+                            <em><?php echo $this->translate('by');?> <mark><?php echo $firstName . " " . $lastName;?></mark></em>
+                        </p>
+                    </a>
+                </li>   
+                <?php          
+                        endforeach;
+                    }
+                ?>            
                 </ol>
             </section>
         </aside>
@@ -160,5 +167,4 @@ if(!empty($articleview)) :
         </h2>
     </div>
 </center>
-    
 <?php endif;?>

@@ -94,6 +94,7 @@ class PlusController extends Zend_Controller_Action
             $this->view->currentArticle = $currentArticleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
+            $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails =  $userInformationObject->getUseretails($currentArticleDetails[0]['authorid']);
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
