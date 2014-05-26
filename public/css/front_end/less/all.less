@@ -1,6 +1,21 @@
 @import "../less-bootstrap/bootstrap.less";
 @import "custom-variables.less";
-@import "custom-mixins.less";       
+@import "custom-mixins.less";
+@import "all-categoties-alt.less";
+@import "all-stores.less";
+@import "author.less";
+@import "authors.less";
+@import "contact.less";
+@import "faq.less";
+@import "flipit-expired.less";
+@import "home.less";
+@import "in-savings.less";
+@import "login.less";
+@import "profile.less";
+@import "register.less";
+@import "saving.less";
+@import "splash-page.less";
+@import "404.less";
 input[type="email"], input[type="tel"], input[type="search"], input[type="text"], input[type="password"], input[type="file"], input[type="submit"], textarea{-webkit-appearance:none;}
 body{min-width:320px;}
 #wrapper{
@@ -1918,6 +1933,35 @@ hr.alt2{
 .alphabet-holder{
 	overflow:hidden;
 }
+.alphabet{
+	padding:0;
+	margin:0 -8px 0 -1px;
+	list-style:none;
+	text-transform:uppercase;
+	font-size:18px;
+	line-height:22px;
+	text-align:center;
+	overflow:hidden;
+	li{
+		float:left;
+		border-left:1px solid #ddd;
+		width:29px;
+		margin:0 0 13px;
+		a{
+			color:@light-blue;
+			&:hover,
+			&:focus{
+				color:@text-color;
+			}
+		}
+		.active{
+			a{
+				color:@text-color;
+				text-decoration:underline;
+			}
+		}
+	}
+}
 .deal{
 	color:#32383e;
 	font-size:13px;
@@ -2139,7 +2183,7 @@ hr.alt2{
 		padding:11px 16px 10px;
 		.border-radius(2px 0 0 2px);
 	}
-	button[type="submit"]{
+	input[type="submit"]{
 		float:left;
 		font-size:14px;
 		margin:-1px;
@@ -2559,7 +2603,7 @@ input[type="submit"]::-moz-focus-inner{
 			width:100%;
 			margin:0 0 10px;
 		}
-		button[type="submit"]{
+		input[type="submit"]{
 			margin:0;
 			width:100%;
 			float:none;

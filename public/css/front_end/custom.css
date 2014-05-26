@@ -11,49 +11,16 @@
   margin: 0;
   min-width: 60px;
   padding: 0;
-  width: '99px';
+  width: 99px;
 }
 .newsletter input[type="email"] {
-  width: 68% !important;
+  width: 68%;
 }
 .newsletter h2 {
   font-size: 21px;
   font-weight: bold;
   line-height: 24px;
   margin: 0 0 5px;
-}
-#sidebar input[type="email"] {
-  width: 210px !important;
-}
-#sidebar input[type="submit"] {
-  width: '99px' !important;
-}
-#sidebar .form-signin-heading {
-  color: #363534;
-  font-size: 36px;
-  font-weight: normal;
-  line-height: 40px;
-  margin: 0 0 31px;
-  padding: 0 0 0 87px;
-  position: relative;
-}
-#sidebar .form-signin-heading :before {
-  background: url("../../../images/sprite.png") no-repeat scroll -95px -130px rgba(0, 0, 0, 0);
-  content: "";
-  height: 68px;
-  left: -2px;
-  position: absolute;
-  top: 8px;
-  width: 68px;
-}
-#sidebar .form-signin-heading span {
-  display: block;
-  font-size: 18px;
-  line-height: 20px;
-  padding: 5px 0 0;
-}
-#sidebar h2 {
-  font-size: 20px;
 }
 form .input-error {
   border: '1px solid red';
@@ -114,7 +81,7 @@ form .input-success {
   text-decoration: none;
 }
 .best-items .categories-block ul li a.active-li :before {
-  background: url("/public/images/sprite.png") no-repeat scroll -256px -350px rgba(0, 0, 0, 0);
+  background: url("../../images/sprite.png") no-repeat scroll -256px -350px rgba(0, 0, 0, 0);
   content: "";
   height: 15px;
   margin: -9px 0 0;
