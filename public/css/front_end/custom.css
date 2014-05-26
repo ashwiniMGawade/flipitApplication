@@ -171,3 +171,78 @@ form .input-success {
   margin: 20px auto 0 auto;
   width: 100%;
 }
+.countries li a.in {
+  background-position: -198px -488px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.sg {
+  background-position: -396px -244px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.au {
+  background-position: 0 -732px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.br {
+  background-position: 0 -1708px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.ca {
+  background-position: -66px -183px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.us {
+  background-position: -462px -305px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.at {
+  background-position: 0 -671px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.be {
+  background-position: 0 -1159px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.fr {
+  background-position: -132px -732px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.de {
+  background-position: -66px -1403px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.it {
+  background-position: -198px -793px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.pl {
+  background-position: -330px -976px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.es {
+  background-position: -132px -183px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.se {
+  background-position: -396px -183px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.ch {
+  background-position: -66px -549px;
+  width: '16px';
+  height: '11px';
+}
