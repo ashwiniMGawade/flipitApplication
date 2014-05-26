@@ -312,7 +312,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $expiredOfferMessage= '';
         if ($endDate < $currentDate) {
-            $expiredOfferMessage = '<div class="warning-message">
+            $expiredOfferMessage = '<div class="message">
             <div class="holder">
             <span class="ico-warning"></span>
             <span class="text">'.$this->zendTranslate->translate("Sorry, this coupon is already expired. Maybe the following coupon can help you"). '</span>
