@@ -7540,229 +7540,6 @@ button.close {
 .home-page .tab-content p {
   margin: 0 0 24px;
 }
-.home-page #footer {
-  text-shadow: none;
-  background: none;
-  font-size: 15px;
-  line-height: 18px;
-}
-.home-page #footer .bottom-panel {
-  color: #878a8d;
-  width: 100%;
-  background: #ffffff;
-  border-width: 1px 0;
-  border-style: solid;
-  border-color: #e4e4e4;
-  text-align: left;
-}
-.home-page #footer .bottom-panel .container {
-  padding-top: 45px;
-  padding-bottom: 35px;
-}
-.home-page #footer .bottom-panel .text {
-  float: left;
-  padding: 0 15px;
-  width: 20%;
-}
-.home-page #footer .bottom-panel .text h2 {
-  font-size: 21px;
-  line-height: 24px;
-  margin: 0;
-}
-.home-page #footer .email-form {
-  float: left;
-  width: 35.2%;
-  padding: 10px 20px;
-}
-.home-page #footer .email-form .form-control {
-  height: 49px;
-  padding: 14px 18px;
-}
-.home-page #footer .email-form .form-group {
-  width: 74.2%;
-}
-.home-page #footer .email-form .btn.orange {
-  width: 25.8%;
-  height: 49px;
-}
-.home-page #footer .social {
-  float: left;
-  padding: 10px 0 0 59px;
-  width: 44%;
-}
-.home-page #footer .social ul {
-  padding: 0;
-  margin: 0 -65px 0 0;
-  list-style: none;
-}
-.home-page #footer .social ul li {
-  float: left;
-  margin: 0 0 0 65px;
-}
-.home-page #footer .social ul li:first-child {
-  margin: 0;
-}
-.home-page #footer .social ul a {
-  position: relative;
-  display: block;
-  padding: 0 0 0 70px;
-  color: #878a8d;
-}
-.home-page #footer .social ul a:hover {
-  text-decoration: none;
-}
-.home-page #footer .social ul .facebook:before,
-.home-page #footer .social ul .twitter:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  background: url(../../images/sprite.png) no-repeat -2px -371px;
-  width: 48px;
-  height: 48px;
-}
-.home-page #footer .social ul .twitter:before {
-  background-position: -76px -371px;
-}
-.home-page #footer .social ul .box {
-  overflow: hidden;
-  padding: 4px 0 0;
-}
-.home-page #footer .social ul h2 {
-  font-size: 21px;
-  line-height: 24px;
-  margin: 0;
-}
-.home-page #footer .bottom-nav {
-  padding: 41px 15px 54px;
-  text-align: left;
-  border-bottom: 1px solid #e4e4e4;
-}
-.home-page #footer .bottom-nav h3 {
-  margin: 0 0 11px;
-}
-.home-page #footer .bottom-nav ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
-  font-size: 13px;
-  line-height: 24px;
-}
-.home-page #footer .bottom-nav .ico {
-  line-height: 24px;
-  text-align: center;
-  padding-top: 6px;
-}
-.home-page #footer .bottom-nav .ico .num {
-  display: block;
-  font-size: 21px;
-  line-height: 24px;
-  margin: 0 0 3px;
-}
-.home-page #footer .bottom-nav .ico .add-text {
-  display: block;
-  max-width: 82px;
-  margin: 0;
-}
-.home-page #footer .bottom-nav .ico-shop {
-  display: block;
-  margin: 0 0 16px;
-  width: 82px;
-  height: 80px;
-  border: 3px solid #0077cc;
-  border-radius: 50%;
-  -webkit-border-radius: 50%;
-  position: relative;
-}
-.home-page #footer .bottom-nav .ico-shop:before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  background: url(../../images/sprite.png) no-repeat -160px -383px;
-  width: 26px;
-  height: 25px;
-  margin: -13px 0 0 -12px;
-}
-.home-page #footer .add-block {
-  padding: 40px 15px;
-}
-.home-page #footer .add-block .benefits {
-  padding: 0;
-  margin: 0 0 40px;
-  list-style: none;
-}
-.home-page #footer .add-block .benefits li {
-  width: 20%;
-  margin: 0 1%;
-  display: inline-block;
-  vertical-align: top;
-  text-align: left;
-}
-.home-page #footer .title {
-  font-size: 24px;
-  line-height: 30px;
-  color: #0077cc;
-  font-weight: bold;
-  text-align: center;
-  margin: 0 0 44px;
-}
-.home-page #footer .title .glyphicon-ok {
-  font-size: 28px;
-  vertical-align: top;
-  margin: -2px 11px 0 0;
-}
-.home-page #footer .language {
-  padding: 0;
-  margin: 0 0 27px;
-  list-style: none;
-}
-.home-page #footer .language li {
-  display: inline-block;
-  vertical-align: top;
-  margin: 0 3px;
-}
-.home-page #footer .language a {
-  display: block;
-  background: url(../../images/sprite.png) no-repeat -3px -455px;
-  width: 24px;
-  height: 16px;
-  text-indent: -9999px;
-  overflow: hidden;
-}
-.home-page #footer .language .ico-2 {
-  background-position: -37px -455px;
-}
-.home-page #footer .language .ico-3 {
-  background-position: -71px -455px;
-}
-.home-page #footer .language .ico-4 {
-  background-position: -106px -455px;
-}
-.home-page #footer .language .ico-5 {
-  background-position: -139px -455px;
-}
-.home-page #footer .language .ico-6 {
-  background-position: -173px -455px;
-}
-.home-page #footer .language .ico-7 {
-  background-position: -207px -455px;
-}
-.home-page #footer .language .ico-8 {
-  background-position: -241px -455px;
-}
-.home-page #footer .logo {
-  display: block;
-  float: none;
-  background: url(../../images/logo-footer.png) no-repeat;
-  width: 89px;
-  height: 40px;
-  margin: 0 auto 21px;
-}
-.home-page #footer .copy {
-  font-size: 11px;
-  line-height: 20px;
-}
 @media only screen and (min-width: 1600px) {
   .home-page .section-top .block-image .image-holder,
   .home-page .section-top .block-image .image-frame {
@@ -7812,38 +7589,6 @@ button.close {
   }
   .home-page .best-items .categories-block .left-box {
     width: 29.5%;
-  }
-  .home-page #footer .bottom-panel .text {
-    padding: 0;
-  }
-  .home-page #footer .email-form {
-    padding: 0 10px;
-    width: 40%;
-  }
-  .home-page #footer .social {
-    padding: 6px 0 0;
-    width: 40%;
-  }
-  .home-page #footer .social ul li {
-    margin: 0 0 0 26px;
-  }
-  .home-page #footer .social ul a {
-    padding: 0 0 0 45px;
-  }
-  .home-page #footer .social ul .facebook:before,
-  .home-page #footer .social ul .twitter:before {
-    background: url(../../images/sprite.png) no-repeat -297px -372px;
-    width: 35px;
-    height: 35px;
-    top: 2px;
-  }
-  .home-page #footer .social ul .facebook .twitter:before,
-  .home-page #footer .social ul .twitter .twitter:before {
-    background-position: -357px -373px;
-  }
-  .home-page #footer .social ul .facebook .box,
-  .home-page #footer .social ul .twitter .box {
-    padding: 0;
   }
 }
 @media only screen and (max-width: 979px) {
@@ -7923,45 +7668,6 @@ button.close {
   }
   .home-page .tab-content h3 {
     font-size: 13px;
-  }
-  .home-page #footer {
-    font-size: 12px;
-  }
-  .home-page #footer .bottom-panel .text {
-    text-align: center;
-    float: none;
-    width: 100%;
-    margin: 0 0 10px;
-  }
-  .home-page #footer .bottom-panel .text br {
-    display: none;
-  }
-  .home-page #footer .bottom-panel .container {
-    padding: 20px 10px;
-  }
-  .home-page #footer .email-form {
-    width: 50%;
-    padding: 0 10px 0 0;
-  }
-  .home-page #footer .social {
-    width: 50%;
-    margin: 0;
-  }
-  .home-page #footer .bottom-nav {
-    padding: 21px 15px 27px;
-    font-size: 12px;
-  }
-  .home-page #footer .bottom-nav nav {
-    padding: 0 15px;
-  }
-  .home-page #footer .bottom-nav ul {
-    font-size: 12px;
-  }
-  .home-page #footer .add-block {
-    padding: 25px 10px;
-  }
-  .home-page #footer .title {
-    margin: 0 0 27px;
   }
 }
 @media only screen and (max-width: 767px) {
@@ -8085,64 +7791,6 @@ button.close {
   }
   .home-page .tabset .active a {
     padding: 12px 15px;
-  }
-  .home-page #footer .email-form {
-    float: none;
-    width: 100%;
-    padding: 0;
-  }
-  .home-page #footer .email-form .form-group {
-    width: 100%;
-    float: none;
-    display: block;
-  }
-  .home-page #footer .email-form .btn.orange {
-    width: 100%;
-  }
-  .home-page #footer .social {
-    padding: 10px 0 0;
-    float: none;
-    width: 100%;
-  }
-  .home-page #footer .social ul a {
-    padding: 0 0 0 40px;
-  }
-  .home-page #footer .social ul li {
-    margin: 0;
-    padding: 0 5px 0 0;
-    width: 50%;
-  }
-  .home-page #footer .social ul li:first-child {
-    margin: 0 0 10px;
-  }
-  .home-page #footer .bottom-nav nav {
-    margin: 0 0 15px;
-  }
-  .home-page #footer .title {
-    font-size: 18px;
-    margin: 0 0 12px;
-  }
-  .home-page #footer .title .glyphicon-ok {
-    font-size: 21px;
-    margin: 2px 6px 0 0;
-  }
-  .home-page #footer .add-block .benefits li {
-    display: block;
-    width: 100%;
-    margin: 0 0 10px;
-    text-align: center;
-  }
-}
-@media only screen and (max-width: 479px) {
-  .home-page #footer .social ul {
-    font-size: 11px;
-  }
-  .home-page #footer .social ul h2 {
-    font-size: 17px;
-    line-height: 22px;
-  }
-  .home-page #footer .social ul li {
-    width: 44%;
   }
 }
 .after {
@@ -13599,6 +13247,229 @@ input[type="submit"]::-moz-focus-inner {
   padding: 0;
   border: none;
 }
+#footer {
+  text-shadow: none;
+  background: none;
+  font-size: 15px;
+  line-height: 18px;
+}
+#footer .bottom-panel {
+  color: #878a8d;
+  width: 100%;
+  background: #ffffff;
+  border-width: 1px 0;
+  border-style: solid;
+  border-color: #e4e4e4;
+  text-align: left;
+}
+#footer .bottom-panel .container {
+  padding-top: 45px;
+  padding-bottom: 35px;
+}
+#footer .bottom-panel .text {
+  float: left;
+  padding: 0 15px;
+  width: 20%;
+}
+#footer .bottom-panel .text h2 {
+  font-size: 21px;
+  line-height: 24px;
+  margin: 0;
+}
+#footer .email-form {
+  float: left;
+  width: 35.2%;
+  padding: 10px 20px;
+}
+#footer .email-form .form-control {
+  height: 49px;
+  padding: 14px 18px;
+}
+#footer .email-form .form-group {
+  width: 74.2%;
+}
+#footer .email-form .btn.orange {
+  width: 25.8%;
+  height: 49px;
+}
+#footer .social {
+  float: left;
+  padding: 10px 0 0 59px;
+  width: 44%;
+}
+#footer .social ul {
+  padding: 0;
+  margin: 0 -65px 0 0;
+  list-style: none;
+}
+#footer .social ul li {
+  float: left;
+  margin: 0 0 0 65px;
+}
+#footer .social ul li:first-child {
+  margin: 0;
+}
+#footer .social ul a {
+  position: relative;
+  display: block;
+  padding: 0 0 0 70px;
+  color: #878a8d;
+}
+#footer .social ul a:hover {
+  text-decoration: none;
+}
+#footer .social ul .facebook:before,
+#footer .social ul .twitter:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: url(../../images/sprite.png) no-repeat -2px -371px;
+  width: 48px;
+  height: 48px;
+}
+#footer .social ul .twitter:before {
+  background-position: -76px -371px;
+}
+#footer .social ul .box {
+  overflow: hidden;
+  padding: 4px 0 0;
+}
+#footer .social ul h2 {
+  font-size: 21px;
+  line-height: 24px;
+  margin: 0;
+}
+#footer .bottom-nav {
+  padding: 41px 15px 54px;
+  text-align: left;
+  border-bottom: 1px solid #e4e4e4;
+}
+#footer .bottom-nav h3 {
+  margin: 0 0 11px;
+}
+#footer .bottom-nav ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-size: 13px;
+  line-height: 24px;
+}
+#footer .bottom-nav .ico {
+  line-height: 24px;
+  text-align: center;
+  padding-top: 6px;
+}
+#footer .bottom-nav .ico .num {
+  display: block;
+  font-size: 21px;
+  line-height: 24px;
+  margin: 0 0 3px;
+}
+#footer .bottom-nav .ico .add-text {
+  display: block;
+  max-width: 82px;
+  margin: 0;
+}
+#footer .bottom-nav .ico-shop {
+  display: block;
+  margin: 0 0 16px;
+  width: 82px;
+  height: 80px;
+  border: 3px solid #0077cc;
+  border-radius: 50%;
+  -webkit-border-radius: 50%;
+  position: relative;
+}
+#footer .bottom-nav .ico-shop:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: url(../../images/sprite.png) no-repeat -160px -383px;
+  width: 26px;
+  height: 25px;
+  margin: -13px 0 0 -12px;
+}
+#footer .add-block {
+  padding: 40px 15px;
+}
+#footer .add-block .benefits {
+  padding: 0;
+  margin: 0 0 40px;
+  list-style: none;
+}
+#footer .add-block .benefits li {
+  width: 20%;
+  margin: 0 1%;
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+}
+#footer .title {
+  font-size: 24px;
+  line-height: 30px;
+  color: #0077cc;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 44px;
+}
+#footer .title .glyphicon-ok {
+  font-size: 28px;
+  vertical-align: top;
+  margin: -2px 11px 0 0;
+}
+#footer .language {
+  padding: 0;
+  margin: 0 0 27px;
+  list-style: none;
+}
+#footer .language li {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 3px;
+}
+#footer .language a {
+  display: block;
+  background: url(../../images/sprite.png) no-repeat -3px -455px;
+  width: 24px;
+  height: 16px;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+#footer .language .ico-2 {
+  background-position: -37px -455px;
+}
+#footer .language .ico-3 {
+  background-position: -71px -455px;
+}
+#footer .language .ico-4 {
+  background-position: -106px -455px;
+}
+#footer .language .ico-5 {
+  background-position: -139px -455px;
+}
+#footer .language .ico-6 {
+  background-position: -173px -455px;
+}
+#footer .language .ico-7 {
+  background-position: -207px -455px;
+}
+#footer .language .ico-8 {
+  background-position: -241px -455px;
+}
+#footer .logo {
+  display: block;
+  float: none;
+  background: url(../../images/logo-footer.png) no-repeat;
+  width: 89px;
+  height: 40px;
+  margin: 0 auto 21px;
+}
+#footer .copy {
+  font-size: 11px;
+  line-height: 20px;
+}
 @media only screen and (min-width: 1200px) {
   .search-box .js-slide-hidden {
     position: static !important;
@@ -13753,8 +13624,79 @@ input[type="submit"]::-moz-focus-inner {
   .photo .text-box {
     left: 100%;
   }
+  #footer .bottom-panel .text {
+    padding: 0;
+  }
+  #footer .email-form {
+    padding: 0 10px;
+    width: 40%;
+  }
+  #footer .social {
+    padding: 6px 0 0;
+    width: 40%;
+  }
+  #footer .social ul li {
+    margin: 0 0 0 26px;
+  }
+  #footer .social ul a {
+    padding: 0 0 0 45px;
+  }
+  #footer .social ul .facebook:before,
+  #footer .social ul .twitter:before {
+    background: url(../../images/sprite.png) no-repeat -297px -372px;
+    width: 35px;
+    height: 35px;
+    top: 2px;
+  }
+  #footer .social ul .facebook .twitter:before,
+  #footer .social ul .twitter .twitter:before {
+    background-position: -357px -373px;
+  }
+  #footer .social ul .facebook .box,
+  #footer .social ul .twitter .box {
+    padding: 0;
+  }
 }
 @media only screen and (max-width: 979px) {
+  #footer {
+    font-size: 12px;
+  }
+  #footer .bottom-panel .text {
+    text-align: center;
+    float: none;
+    width: 100%;
+    margin: 0 0 10px;
+  }
+  #footer .bottom-panel .text br {
+    display: none;
+  }
+  #footer .bottom-panel .container {
+    padding: 20px 10px;
+  }
+  #footer .email-form {
+    width: 50%;
+    padding: 0 10px 0 0;
+  }
+  #footer .social {
+    width: 50%;
+    margin: 0;
+  }
+  #footer .bottom-nav {
+    padding: 21px 15px 27px;
+    font-size: 12px;
+  }
+  #footer .bottom-nav nav {
+    padding: 0 15px;
+  }
+  #footer .bottom-nav ul {
+    font-size: 12px;
+  }
+  #footer .add-block {
+    padding: 25px 10px;
+  }
+  #footer .title {
+    margin: 0 0 27px;
+  }
   .section .discount-label {
     position: static;
     display: inline-block;
@@ -14401,6 +14343,52 @@ input[type="submit"]::-moz-focus-inner {
   #code-lightbox .lightbox {
     padding: 25px 10px;
   }
+  #footer .email-form {
+    float: none;
+    width: 100%;
+    padding: 0;
+  }
+  #footer .email-form .form-group {
+    width: 100%;
+    float: none;
+    display: block;
+  }
+  #footer .email-form .btn.orange {
+    width: 100%;
+  }
+  #footer .social {
+    padding: 10px 0 0;
+    float: none;
+    width: 100%;
+  }
+  #footer .social ul a {
+    padding: 0 0 0 40px;
+  }
+  #footer .social ul li {
+    margin: 0;
+    padding: 0 5px 0 0;
+    width: 50%;
+  }
+  #footer .social ul li:first-child {
+    margin: 0 0 10px;
+  }
+  #footer .bottom-nav nav {
+    margin: 0 0 15px;
+  }
+  #footer .title {
+    font-size: 18px;
+    margin: 0 0 12px;
+  }
+  #footer .title .glyphicon-ok {
+    font-size: 21px;
+    margin: 2px 6px 0 0;
+  }
+  #footer .add-block .benefits li {
+    display: block;
+    width: 100%;
+    margin: 0 0 10px;
+    text-align: center;
+  }
 }
 @media only screen and (max-width: 479px) {
   .message {
@@ -14623,6 +14611,16 @@ input[type="submit"]::-moz-focus-inner {
   #code-lightbox .logo-box .logo-img {
     display: block;
     margin: 0 auto 5px;
+  }
+  #footer .social ul {
+    font-size: 11px;
+  }
+  #footer .social ul h2 {
+    font-size: 17px;
+    line-height: 22px;
+  }
+  #footer .social ul li {
+    width: 44%;
   }
 }
 @-ms-viewport {
