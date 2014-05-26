@@ -5,7 +5,7 @@ $howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shop[
 <article class="box box-2">
     <h2><?php echo $this->translate('How to Use The Voucher Codes'); ?></h2>
     <p><?php echo $this->shop['howToIntroductionText']; ?></p>
-    <?php if(!empty($howToGuideBigImageDetails)?>
+    <?php if(!empty($howToGuideBigImageDetails)) : ?>
     <div class="visual-img">
         <img src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
     </div>
