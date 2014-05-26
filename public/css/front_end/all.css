@@ -5927,7 +5927,7 @@ button.close {
   background: #fafafa;
   border-color: #d8d8d8;
 }
-.all-categories-alt-page .section-newsletter .form-signin-heading {
+.all-categories-alt-page .section-newsletter .newsletter .form-signin-heading {
   font-size: 21px;
   line-height: 24px;
   margin: 0 0 31px;
@@ -6021,7 +6021,7 @@ button.close {
   .all-categories-alt-page .section-newsletter .newsletter:before {
     left: -10px;
   }
-  .all-categories-alt-page .section-newsletter .form-signin-heading {
+  .all-categories-alt-page .section-newsletter .newsletter .form-signin-heading {
     font-size: 18px;
     line-height: 22px;
     margin: 0 0 15px;
@@ -13139,7 +13139,7 @@ hr.alt2 {
 }
 .countries li a {
   display: block;
-  background: url(../../images/front_end/countries-sprite.png) no-repeat 0 -39px;
+  background: url(../../images/sprite.png) no-repeat 0 -39px;
   width: 16px;
   height: 11px;
   text-indent: -9999px;
