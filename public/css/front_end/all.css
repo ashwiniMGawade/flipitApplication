@@ -13036,7 +13036,7 @@ hr.alt2 {
   float: left;
   border-left: 1px solid #ddd;
   width: 29px;
-  margin: 0 0 13px;
+  margin: 0;
 }
 .alphabet li a {
   color: #0077cc;
