@@ -33,9 +33,9 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
         $categoriesHtml = '';
         $categories = $this->homePageData['topCategories'];
         foreach ($categories as $category) {
-           $categoryImage = PUBLIC_PATH_CDN.$category['category']['categoryicon']['path']  .'thum_small_'. $category['category']['categoryicon']['name'];
-           $categoriesOffers = $category['totalOffers'] . ' ' . $this->zendTranslate->translate('Offers'). ' ' . $category['countOff'] . " " . $this->zendTranslate->translate('coupons');
-           $categoriesHtml .= $this->getLeftColumnContent('categories', $categoryImage, $category['category']['name'], 70, $category['category']['permaLink'], $categoriesOffers);
+            $categoryImage = PUBLIC_PATH_CDN.$category['category']['categoryicon']['path'] . $category['category']['categoryicon']['name'];
+            $categoriesOffers = $category['totalOffers'] . ' ' . $this->zendTranslate->translate('Offers'). ' ' . $category['countOff'] . " " . $this->zendTranslate->translate('coupons');
+            $categoriesHtml .= $this->getLeftColumnContent('categories', $categoryImage, $category['category']['name'], 70, $category['category']['permaLink'], $categoriesOffers);
         }
         return $categoriesHtml;
     }
@@ -43,7 +43,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     public function getLeftColumnSpicialListHtml() {
         $specialPageHtml = '';
         $specialListPages = $this->homePageData['specialPages'];
-        foreach ($specialListPages as $indexOfPage=>$specialListPage) {
+        foreach ($specialListPages as $indexOfPage => $specialListPage) {
             $totalCoupon = intval($specialListPage['totalCoupons']);
             $totalOffers = intval($specialListPage['totalOffers']);
             $totalCouponsCount = count($this->homePageData['specialPagesOffers'][$specialListPage['page'][0]['permaLink']]);
