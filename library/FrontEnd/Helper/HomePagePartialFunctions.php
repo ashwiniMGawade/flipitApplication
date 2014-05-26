@@ -224,7 +224,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
         <li>
             <a href="'.$shopPermalink.'">
                 <div class="logo-box">
-                    <img width="80" height="19" alt="' . $shopName .'" src="' . $shopImage .'">
+                    <img width="84" height="42" alt="' . $shopName .'" src="' . $shopImage .'">
                 </div>
                 <div class="box">
                     <h2>
