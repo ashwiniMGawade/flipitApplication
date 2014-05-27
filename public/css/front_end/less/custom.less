@@ -22,16 +22,22 @@
         margin: 0 0 5px;
     }
 }
-@redBorder: '1px solid red';
+@redBorder: 1px solid red;
 @greenBorder: 1px solid #6AC00E;
-form{
-	.input-error{
-		border:@redBorder;
-	}
-	.input-success{
-		border:@greenBorder;
-	}
+input.input-error{
+	border:@redBorder !important;
 }
+input.input-success{
+	border:@greenBorder !important;
+}
+
+select.input-error{
+    border:@redBorder !important;
+}
+select.input-success{
+    border:@greenBorder !important;
+}
+
 #footer{
     input[type="email"]{
         margin-right: 0;

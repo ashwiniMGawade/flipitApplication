@@ -1,14 +1,14 @@
 <?php
 $this->minifyHeadScript()->prependFile(HTTP_PATH. "public/js/front_end/login.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/login.css");
-$loginForm = $this->form;
+$form = $this->form;
 // Remove <dt> from label generation
-foreach ($loginForm->getElements() as $formElement) {
-    $formElement->getDecorator('label')->setOption('tag', null);
+foreach ($form->getElements() as $element) {
+    $element->getDecorator('label')->setOption('tag', null);
 }
-if($this->successMessage!='' || $this->errorMessage!='') : ?>
+if($this->messageSuccess!='' || $this->messageError!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
-        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
+       <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
     </div>
     <?php 
 endif;
@@ -18,27 +18,27 @@ $forgotPasswordLink =
     .FrontEnd_Helper_viewHelper::__link('forgotpassword');
 ?>
 <section class="login-box">
-    <h1><?php echo $this->translate('Welcome back, nice to see you again!');?></h1>
+    <h1><?php echo $this->translate('Welkom back, nice to see you again!');?></h1>
     <form action="" method="post" class="login-form" name="login" id='login'>
         <fieldset>
             <div class="form-group">
-            <?php echo $loginForm->emailAddress->renderLabel(). $loginForm->emailAddress->renderViewHelper();?>
+            <?php echo $form->emailAddress->renderLabel(). $form->emailAddress->renderViewHelper();?>
             </div>
             <div class="form-group">
                 <div class="link">
-                    <?php echo $loginForm->password->renderLabel();?>
+                    <?php echo $form->password->renderLabel();?>
                     <a href="<?php echo $forgotPasswordLink;?>"
                         class="right">
                         <?php echo $this->translate('Forgot password?');?>
                     </a>
                 </div>
-                <?php echo $loginForm->password->renderViewHelper();?>
+                <?php echo $form->password->renderViewHelper();?>
             </div>
             <div class="form-group">
             <?php 
             echo $this->formSubmit(
                 'submit',
-                $this->translate('sign in'),
+                'sign in',
                 array('class'=>'btn blue btn-lg btn-primary', 'id'=>'login')
             )
             ?>
