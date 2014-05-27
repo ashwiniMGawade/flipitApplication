@@ -3,7 +3,7 @@
   display: block;
   clear: both;
 }
-.newsletter input[type="submit"] {
+.row .newsletter input[type="submit"] {
   border-radius: 2px;
   float: left;
   font-size: 14px;
@@ -13,10 +13,10 @@
   padding: 0;
   width: 99px;
 }
-.newsletter input[type="email"] {
+.row .newsletter input[type="email"] {
   width: 68%;
 }
-.newsletter h2 {
+.row .newsletter h2 {
   font-size: 21px;
   font-weight: bold;
   line-height: 24px;
