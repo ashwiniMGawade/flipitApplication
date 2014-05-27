@@ -12991,6 +12991,46 @@ hr.alt2 {
   padding-top: 4px;
   margin: 0 0 13px;
 }
+#footer .email-form .form-group {
+  float: left;
+  width: 81.2%;
+}
+#footer .email-form .form-control {
+  display: block;
+  width: 100% !important;
+  font-size: 15px;
+  line-height: 18px;
+  padding: 12px 10px;
+  height: 45px;
+  color: #adaeb0;
+  border-width: 1px 0 1px 1px;
+  border-style: solid;
+  border-color: #dfdfdf;
+  background: #ffffff;
+  border-radius: 2px 0 0 2px;
+  -webkit-border-radius: 2px 0 0 2px;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16) inset;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.16) inset;
+}
+#footer .email-form .btn.orange {
+  float: left;
+  font-size: 15px;
+  line-height: 18px;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-width: 1px 1px 1px 0;
+  border-radius: 0 2px 2px 0;
+  -webkit-border-radius: 0 2px 2px 0;
+  width: 18.8%;
+  min-width: 60px;
+  margin: 0;
+  height: 45px;
+  padding: 8px 6px;
+}
+#footer .email-form .btn.orange .glyphicon-search {
+  font-size: 15px;
+  margin: 0 3px 0 0;
+}
 #footer .holder {
   width: 100%;
   color: #ffffff;
