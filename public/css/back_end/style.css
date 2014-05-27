@@ -3413,3 +3413,9 @@ div.wrap.newsletter-setting-container {
     vertical-align: top;
     float: left;
  }
+
+.category-image{
+    width: 275px;
+    margin-right: 245px;
+    margin-top: -2px !important;
+}

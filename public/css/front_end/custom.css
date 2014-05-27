@@ -3,7 +3,7 @@
   display: block;
   clear: both;
 }
-.newsletter input[type="submit"] {
+.row .newsletter input[type="submit"] {
   border-radius: 2px;
   float: left;
   font-size: 14px;
@@ -11,49 +11,16 @@
   margin: 0;
   min-width: 60px;
   padding: 0;
-  width: '99px';
+  width: 99px;
 }
-.newsletter input[type="email"] {
-  width: 68%!important;
+.row .newsletter input[type="email"] {
+  width: 68%;
 }
-.newsletter h2 {
+.row .newsletter h2 {
   font-size: 21px;
   font-weight: bold;
   line-height: 24px;
   margin: 0 0 5px;
-}
-#sidebar input[type="email"] {
-  width: 210px !important;
-}
-#sidebar input[type="submit"] {
-  width: '99px' !important;
-}
-#sidebar .form-signin-heading {
-  color: #363534;
-  font-size: 36px;
-  font-weight: normal;
-  line-height: 40px;
-  margin: 0 0 31px;
-  padding: 0 0 0 87px;
-  position: relative;
-}
-#sidebar .form-signin-heading :before {
-  background: url("../../images/sprite.png") no-repeat scroll -95px -130px rgba(0, 0, 0, 0);
-  content: "";
-  height: 68px;
-  left: -2px;
-  position: absolute;
-  top: 8px;
-  width: 68px;
-}
-#sidebar .form-signin-heading span {
-  display: block;
-  font-size: 18px;
-  line-height: 20px;
-  padding: 5px 0 0;
-}
-#sidebar h2 {
-  font-size: 20px;
 }
 form .input-error {
   border: '1px solid red';
@@ -114,7 +81,7 @@ form .input-success {
   text-decoration: none;
 }
 .best-items .categories-block ul li a.active-li :before {
-  background: url("/public/images/sprite.png") no-repeat scroll -256px -350px rgba(0, 0, 0, 0);
+  background: url("../../images/sprite.png") no-repeat scroll -256px -350px rgba(0, 0, 0, 0);
   content: "";
   height: 15px;
   margin: -9px 0 0;
@@ -159,7 +126,7 @@ form .input-success {
   padding: 15px;
   background: -webkit-gradient(linear, left top, left bottom, from(#f3dc97), to(#feebbc));
   background: -moz-linear-gradient(top, #f3dc97, #feebbc);
-  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#f3dc97', endColorstr='#feebbc');
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3dc97', endColorstr='#feebbc');
   border: 1px solid #e6d08c;
   -moz-border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -170,4 +137,24 @@ form .input-success {
   color: #000;
   margin: 20px auto 0 auto;
   width: 100%;
+}
+#fade {
+  background: none repeat scroll 0 0 #000000;
+  color: #010000;
+  cursor: wait;
+  display: none;
+  height: 100%;
+  left: 0;
+  opacity: 0.6;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 900;
+}
+.popup_block {
+  left: 50%;
+  margin-left: -362px;
+  margin-top: -335px;
+  position: fixed;
+  top: 50%;
 }

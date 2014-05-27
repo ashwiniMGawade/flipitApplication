@@ -1,9 +1,10 @@
 <?php
+$subTitle = $this->content;
+$pageLogo = $this->pageLogo;
 $partialsViewPath = 'partials/';
-echo $this->partial(
-    $partialsViewPath.'_default_page_header.phtml',
-    array('pageTitle' => $this->pageTitle, 'pageLogo'=> $this->pageLogo, 'subTitle'=> $this->content)
-);
+$pageHeaderPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
+echo $pageHeaderPartial->getCategoryOrPageHeader($subTitle, $pageLogo);
+
 $storeViewPartialPath = 'store/';
 $signUpWidgetForm = '';
     $signUpWidgetForm = $this->partial(

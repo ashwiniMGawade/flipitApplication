@@ -1,7 +1,7 @@
 @import "custom-variables.less";
 @import "custom-mixins.less";
-@submitButtonWidth : '99px';
-.newsletter {
+@submitButtonWidth : 99px;
+.row .newsletter {
     input[type="submit"] {
         border-radius: @input-border-radius;
         float: left;
@@ -13,7 +13,7 @@
         width: @submitButtonWidth;
     }
     input[type="email"] {
-       width: 68%!important;
+       width: 68%;
     }
     h2 {
         font-size: 21px;
@@ -21,42 +21,6 @@
         line-height: 24px;
         margin: 0 0 5px;
     }
-}
-#sidebar {
-     input[type="email"] {
-         width: 210px !important;
-     }
-     input[type="submit"] {
-         width: @submitButtonWidth !important;
-     }
-   .form-signin-heading {
-        color: #363534;
-        font-size: 36px;
-        font-weight: normal;
-        line-height: 40px;
-        margin: 0 0 31px;
-        padding: 0 0 0 87px;
-        position: relative;
-		:before {
-			background: url("../../images/sprite.png") no-repeat scroll -95px -130px rgba(0, 0, 0, 0);
-			content: "";
-			height: 68px;
-			left: -2px;
-			position: absolute;
-			top: 8px;
-			width: 68px;
-		}
-		span {
-			display: block;
-			font-size: 18px;
-			line-height: 20px;
-			padding: 5px 0 0;
-		}
-	}
-    h2 {
-        font-size: 20px;
-    }
-	
 }
 @redBorder: '1px solid red';
 @greenBorder: 1px solid #6AC00E;
@@ -123,7 +87,7 @@ form{
 		color: @link-color;
 		text-decoration: none;
 		:before {
-		    background: url("/public/images/sprite.png") no-repeat scroll -256px -350px rgba(0, 0, 0, 0);
+		    background: url("../images/sprite.png") no-repeat scroll -256px -350px rgba(0, 0, 0, 0);
 			content: "";
 			height: 15px;
 			margin: -9px 0 0;
@@ -163,7 +127,7 @@ form{
 	}
 }
 .yellow-box-error-box-code {
-	width: 800px;
+	width: 800px;     
 	margin:50px auto;
 	align:center;
 	text-align:center;
@@ -181,4 +145,24 @@ form{
     color: #000;
     margin: 20px auto 0 auto; 
     width: 100%
+}
+#fade {
+	background: none repeat scroll 0 0 #000000;
+	color: #010000;
+	cursor: wait;
+	display: none;
+	height: 100%;
+	left: 0;
+	opacity: 0.6;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 900;
+}
+.popup_block {
+    left: 50%;
+    margin-left: -362px;
+    margin-top: -335px;
+    position: fixed;
+    top: 50%;
 }
