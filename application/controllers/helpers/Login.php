@@ -14,9 +14,9 @@ class Zend_Controller_Action_Helper_Login extends Zend_Controller_Action_Helper_
 
     public static function setUserCookies()
     {
-        $userid = Auth_VisitorAdapter::getIdentity()->id;
+        $visitorId = Auth_VisitorAdapter::getIdentity()->id;
         $obj = new Visitor();
-        $obj->updateLoginTime($userid);
-        setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
+        $obj->updateLoginTime($visitorId);
+        setcookie('kc_unique_user_id', $visitorId, time() + 2592000, '/');
     }
 }

@@ -51,25 +51,31 @@ class LoginController extends Zend_Controller_Action
             if ($loginForm->isValid($_POST)) {
                 $visitorInformation = $loginForm->getValues();
                 $this->_helper->Login->setVisitorSession($visitorInformation);
-                if (Auth_VisitorAdapter::hasIdentity()) {
-                    $this->_helper->Login->setUserCookies();
-                    $this->_redirect(
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
-                        FrontEnd_Helper_viewHelper::__link('profiel') .'/' .
-                        base64_encode($visitorInformation['emailAddress'])
-                    );
-                } else {
-                    $flash = $this->_helper->getHelper('FlashMessenger');
-                    $flash->addMessage(array('error' => $this->view->translate('This user does not exist')));
-                    $this->_redirect(
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login')
-                    );
-                }
+                self::redirectAccordingToVisitorStatus($visitorInformation);
             } else {
                 $loginForm->highlightErrorElements();
             }
         }
         $this->view->pageCssClass = 'login-page';
+    }
+
+    public function redirectAccordingToVisitorStatus($visitorInformation)
+    {
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $this->_helper->Login->setUserCookies();
+            $this->_redirect(
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('profiel') .'/' .
+                base64_encode($visitorInformation['emailAddress'])
+            );
+        } else {
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $flash->addMessage(array('error' => $this->view->translate('This user does not exist')));
+            $this->_redirect(
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login')
+            );
+        }
+        return;
     }
 
     public function logoutAction()
