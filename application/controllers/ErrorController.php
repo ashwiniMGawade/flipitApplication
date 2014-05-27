@@ -4,6 +4,7 @@ class ErrorController extends Zend_Controller_Action
     protected $pagePermalink = '';
     public function errorAction()
     {
+        $this->_helper->layout()->disableLayout();
         $this->view->controller = $this->_request->getControllerName();
         $errors = $this->_getParam('error_handler');
         if (!$errors || !$errors instanceof ArrayObject) {
