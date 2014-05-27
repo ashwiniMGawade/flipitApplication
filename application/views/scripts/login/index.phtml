@@ -1,10 +1,10 @@
 <?php
 $this->minifyHeadScript()->prependFile(HTTP_PATH. "public/js/front_end/login.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/login.css");
-$form = $this->form;
+$loginFrom = $this->form;
 // Remove <dt> from label generation
-foreach ($form->getElements() as $element) {
-    $element->getDecorator('label')->setOption('tag', null);
+foreach ($loginFrom->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
 }
 if($this->messageSuccess!='' || $this->messageError!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
@@ -22,23 +22,23 @@ $forgotPasswordLink =
     <form action="" method="post" class="login-form" name="login" id='login'>
         <fieldset>
             <div class="form-group">
-            <?php echo $form->emailAddress->renderLabel(). $form->emailAddress->renderViewHelper();?>
+            <?php echo $loginFrom->emailAddress->renderLabel(). $loginFrom->emailAddress->renderViewHelper();?>
             </div>
             <div class="form-group">
                 <div class="link">
-                    <?php echo $form->password->renderLabel();?>
+                    <?php echo $loginFrom->password->renderLabel();?>
                     <a href="<?php echo $forgotPasswordLink;?>"
                         class="right">
                         <?php echo $this->translate('Forgot password?');?>
                     </a>
                 </div>
-                <?php echo $form->password->renderViewHelper();?>
+                <?php echo $loginFrom->password->renderViewHelper();?>
             </div>
             <div class="form-group">
             <?php 
             echo $this->formSubmit(
                 'submit',
-                'sign in',
+                $this->translate('sign in'),
                 array('class'=>'btn blue btn-lg btn-primary', 'id'=>'login')
             )
             ?>
