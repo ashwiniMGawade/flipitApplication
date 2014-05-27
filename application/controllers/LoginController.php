@@ -19,11 +19,11 @@ class LoginController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ?
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessage->getMessages();
+        $this->view->successMessage = isset($message[0]['success']) ?
         $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ?
+        $this->view->errorMessage = isset($message[0]['error']) ?
         $message[0]['error'] : '';
     }
 
@@ -49,9 +49,9 @@ class LoginController extends Zend_Controller_Action
         $this->view->form = $loginForm;
         if ($this->getRequest()->isPost()) {
             if ($loginForm->isValid($_POST)) {
-                $visitorInformation = $loginForm->getValues();
-                $this->_helper->Login->setVisitorSession($visitorInformation);
-                self::redirectAccordingToVisitorStatus($visitorInformation);
+                $visitorDetails = $loginForm->getValues();
+                $this->_helper->Login->setVisitorSession($visitorDetails);
+                self::redirectByVisitorStatus($visitorDetails);
             } else {
                 $loginForm->highlightErrorElements();
             }
@@ -59,18 +59,18 @@ class LoginController extends Zend_Controller_Action
         $this->view->pageCssClass = 'login-page';
     }
 
-    public function redirectAccordingToVisitorStatus($visitorInformation)
+    public function redirectByVisitorStatus($visitorDetails)
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->_helper->Login->setUserCookies();
             $this->_redirect(
                 HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
                 FrontEnd_Helper_viewHelper::__link('profiel') .'/' .
-                base64_encode($visitorInformation['emailAddress'])
+                base64_encode($visitorDetails['emailAddress'])
             );
         } else {
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $flash->addMessage(array('error' => $this->view->translate('This user does not exist')));
+            $flashMessage = $this->_helper->getHelper('FlashMessenger');
+            $flashMessage->addMessage(array('error' => $this->view->translate('User Does Not Exist')));
             $this->_redirect(
                 HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login')
             );

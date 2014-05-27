@@ -1,14 +1,14 @@
 <?php
 $this->minifyHeadScript()->prependFile(HTTP_PATH. "public/js/front_end/login.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/login.css");
-$loginFrom = $this->form;
+$loginForm = $this->form;
 // Remove <dt> from label generation
-foreach ($loginFrom->getElements() as $formElement) {
+foreach ($loginForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
 }
-if($this->messageSuccess!='' || $this->messageError!='') : ?>
+if($this->successMessage!='' || $this->errorMessage!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
-       <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
+       <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
     </div>
     <?php 
 endif;
@@ -18,21 +18,21 @@ $forgotPasswordLink =
     .FrontEnd_Helper_viewHelper::__link('forgotpassword');
 ?>
 <section class="login-box">
-    <h1><?php echo $this->translate('Welkom back, nice to see you again!');?></h1>
+    <h1><?php echo $this->translate('Welcome back, nice to see you again!');?></h1>
     <form action="" method="post" class="login-form" name="login" id='login'>
         <fieldset>
             <div class="form-group">
-            <?php echo $loginFrom->emailAddress->renderLabel(). $loginFrom->emailAddress->renderViewHelper();?>
+            <?php echo $loginForm->emailAddress->renderLabel(). $loginForm->emailAddress->renderViewHelper();?>
             </div>
             <div class="form-group">
                 <div class="link">
-                    <?php echo $loginFrom->password->renderLabel();?>
+                    <?php echo $loginForm->password->renderLabel();?>
                     <a href="<?php echo $forgotPasswordLink;?>"
                         class="right">
                         <?php echo $this->translate('Forgot password?');?>
                     </a>
                 </div>
-                <?php echo $loginFrom->password->renderViewHelper();?>
+                <?php echo $loginForm->password->renderViewHelper();?>
             </div>
             <div class="form-group">
             <?php 

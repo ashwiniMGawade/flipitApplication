@@ -14,10 +14,10 @@ class Application_Form_Base extends Zend_Form
     public function highlightErrorElements()
     {
         foreach ($this->getElements() as $element) {
-            $value = $element->getValue();
+            $elementValue = $element->getValue();
             if ($element->hasErrors()) {
                 $element->setAttrib('class', 'input-error form-control');
-            } elseif ($element->isValid($value)) {
+            } elseif ($element->isValid($elementValue)) {
                 $element->setAttrib('class', 'input-success form-control');
             }
         }
