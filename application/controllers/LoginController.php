@@ -35,7 +35,10 @@ class LoginController extends Zend_Controller_Action
             || $action == 'resetpassword'
             || $action == 'index')
         ) {
-            $this->_helper->redirector(null, FrontEnd_Helper_viewHelper::__link('mijn-favorieten'));
+            $this->_redirect(
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('profiel')
+            );
         }
     }
 
