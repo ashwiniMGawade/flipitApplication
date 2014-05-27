@@ -15,7 +15,7 @@ class Application_Form_Base extends Zend_Form
     {
         foreach ($this->getElements() as $element) {
             if ($element->hasErrors()) {
-                $element->setAttrib('class', 'input-error');
+                $element->setAttrib('class', 'form-control input-error');
             }
         }
     }

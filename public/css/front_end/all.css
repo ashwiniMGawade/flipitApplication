@@ -13280,6 +13280,1077 @@ hr.alt2 {
   -webkit-border-radius: 0 0 2px 2px;
 }
 .the-code {
+<<<<<<< HEAD
+	display: none
+}
+
+input[type="text"]:focus,input[type="email"]:focus,textarea:focus,select:focus,input[type="file"]:focus,input[type="password"]:focus
+	{
+	border: 1px solid #bbb;
+	box-shadow: 0 0 7px #bbb;
+	outline: medium none
+}
+
+button[type="submit"]::-moz-focus-inner,input[type="submit"]::-moz-focus-inner
+	{
+	padding: 0;
+	border: none
+}
+
+@media only screen and (min-width:1199px) {
+	.search-box .js-slide-hidden {
+		position: static !important;
+		display: block !important
+	}
+}
+
+@media only screen and (max-width:1199px) {
+	.navigation .logo {
+		margin: 8px 0
+	}
+	.buttons .btn {
+		width: 46%;
+		margin: 0 2% 0 0;
+		min-width: 60px
+	}
+	.buttons-2 .btn {
+		width: 56%;
+		margin: 0 3% 0 0
+	}
+	.buttons-2 .btn.btn-print {
+		min-width: 50px;
+		width: 36%
+	}
+	.search-box {
+		margin: 16px 28px 15px 0;
+		position: relative
+	}
+	.search-box .opener {
+		display: block;
+		padding: 9px;
+		font-size: 14px;
+		line-height: 14px;
+		margin: 0
+	}
+	.search-box .slide {
+		position: absolute;
+		right: 0;
+		top: 0;
+		width: 300px
+	}
+	.search-box.active .opener {
+		display: none
+	}
+	.search-form {
+		width: 100%;
+		float: left
+	}
+	.search-form input[type="text"] {
+		float: left;
+		padding: 9px 8px 8px;
+		width: 89%;
+		height: 32px;
+		font-size: 12px;
+		text-indent: 0
+	}
+	.search-form .btn {
+		float: left;
+		width: 11%;
+		padding: 8px 9px 8px 8px;
+		font-size: 14px;
+		line-height: 14px
+	}
+	.nav-bar #nav ul li>a {
+		padding: 24px 23px 23px 25px
+	}
+	.shops {
+		margin: 0 -7% -3% 0
+	}
+	.shops li {
+		width: 13%;
+		margin: 0 3% 3% 0
+	}
+	.shops li img {
+		max-width: 100%;
+		height: auto
+	}
+	.section .offer span {
+		width: 23%
+	}
+	.section .offer a {
+		width: 74%
+	}
+	.section .block-form-2 .newsletter input[type="email"] {
+		width: 69.2%
+	}
+	.section .holder-text .the-code .code-value {
+		font-size: 15px
+	}
+	.section-2 {
+		padding-left: 15px;
+		padding-right: 15px
+	}
+	.section-2 h2 {
+		font-size: 25px;
+		line-height: 30px
+	}
+	.the-code {
+		width: 95.2%
+	}
+	.the-code .code-value {
+		letter-spacing: 1px;
+		font-size: 18px
+	}
+	#sidebar {
+		font-size: 13px;
+		line-height: 18px
+	}
+	#sidebar h2 {
+		font-size: 20px
+	}
+	#sidebar .block,#sidebar .block.block-2 {
+		padding: 19px 19px 29px
+	}
+	#sidebar .block.block-image .box {
+		padding: 15px
+	}
+	#sidebar .intro-2 h1 {
+		font-size: 20px
+	}
+	#sidebar input[type="email"] {
+		display: block;
+		float: none;
+		width: 100%;
+		margin: 0 0 10px
+	}
+	#sidebar button[type="submit"] {
+		margin: 0;
+		width: 100%;
+		float: none;
+		display: block
+	}
+	.countries li {
+		padding: 0 3% 8px
+	}
+	.social-networks li {
+		padding: 0 1% 8px
+	}
+	.comment-list .comment {
+		font-size: 13px;
+		line-height: 18px
+	}
+	.section-module a {
+		padding: 12px
+	}
+	.section-module a .holder {
+		width: 79%
+	}
+	.section-module a .date {
+		width: 20%
+	}
+	.photo .text-box {
+		left: 100%
+	}
+}
+
+@media only screen and (max-width:979px) {
+	.section .discount-label {
+		position: static;
+		display: inline-block;
+		vertical-align: top;
+		margin: 0 0 2px
+	}
+	.add-navigation {
+		padding-bottom: 20px
+	}
+	.add-navigation:after {
+		content: '';
+		display: block;
+		clear: both
+	}
+	.top-panel .slogan {
+		font-size: 12px;
+		line-height: 20px
+	}
+	.top-panel .account-box ul li {
+		padding: 0 7px 0 8px
+	}
+	.nav-bar #nav ul li a {
+		padding: 24px 10px 23px 12px
+	}
+	.search-box .slide {
+		width: 180px
+	}
+	.search-form input[type="text"] {
+		width: 82%;
+		padding: 9px 4px 8px
+	}
+	.search-form .btn {
+		width: 18%
+	}
+	.top-panel {
+		font-size: 12px
+	}
+	.top-panel .account-box ul li {
+		padding: 0 6px 0 8px
+	}
+	#content {
+		margin-bottom: 25px
+	}
+	.header-block {
+		padding: 0
+	}
+	.header-block .icon {
+		width: 20%
+	}
+	.header-block .icon img {
+		display: block;
+		width: 100%;
+		height: auto
+	}
+	.header-block .icon.icon-small {
+		width: 12%
+	}
+	.header-block-2 {
+		width: 100%
+	}
+	.page-header {
+		padding: 20px 15px
+	}
+	.page-header h1 {
+		font-size: 18px;
+		line-height: 22px
+	}
+	.section .block .holder {
+		padding: 15px
+	}
+	.section .block-form .icon {
+		width: 20%;
+		margin-right: 15px
+	}
+	.section .block-form .icon img {
+		width: 100%;
+		height: auto
+	}
+	.section .block-form-2 .ico-box {
+		width: 100px;
+		margin: 15px 15px 0 0
+	}
+	.section .block-form-2 .newsletter input[type="email"] {
+		width: 63.2%
+	}
+	.section .code {
+		margin: 0 15px 0 0
+	}
+	.section .code-2 {
+		width: 102px
+	}
+	.section .code-2 .center {
+		padding: 0;
+		height: auto
+	}
+	.section .code-2 .center .code-holder {
+		height: auto
+	}
+	.section .code-2 .center img {
+		width: 100%;
+		height: auto
+	}
+	.section .offer {
+		font-size: 12px;
+		line-height: 16px;
+		padding: 15px 20px 15px 15px
+	}
+	.section .offer span {
+		width: 23%
+	}
+	.section .offer a {
+		width: 74%
+	}
+	.section .terms-block {
+		padding: 15px
+	}
+	.section-2 {
+		padding-left: 10px;
+		padding-right: 10px
+	}
+	.section-2 h2 {
+		font-size: 20px;
+		line-height: 24px
+	}
+	.btn.blue,.btn.orange,.btn.btn-print {
+		letter-spacing: 0
+	}
+	.buttons .btn {
+		font-size: 11px
+	}
+	.section .newsletter input[type="email"] {
+		width: 67%;
+		margin: 0 2% 0 0
+	}
+	.view-list li {
+		margin: 0 5px 0 0
+	}
+	.heading-box {
+		padding: 0 15px
+	}
+	.heading-box h2 {
+		font-size: 25px;
+		line-height: 30px
+	}
+	.text-coupon,.text-shop,.text-ask,.text-advice,.text-expired,.text-star,.text-guide
+		{
+		padding-left: 64px
+	}
+	.text-coupon:before,.text-shop:before,.text-ask:before,.text-advice:before,.text-expired:before,.text-star:before,.text-guide:before
+		{
+		left: 15px
+	}
+	.section-comments {
+		padding: 15px
+	}
+	.section-comments .bottom-box {
+		padding: 15px 0 0
+	}
+	.section-comments .bottom-box ul {
+		float: left;
+		margin: 0 0 10px;
+		overflow: hidden
+	}
+	.comment-form .avatar {
+		width: 9.5%
+	}
+	.comment-form .input {
+		width: 88.5%
+	}
+	.tips-section .block a .box {
+		padding: 8px 15px
+	}
+	.section-guide .holder {
+		padding: 15px
+	}
+	.section-guide .num-list h2 {
+		margin: 0 0 13px
+	}
+	.code-details {
+		font-size: 12px;
+		line-height: 18px
+	}
+	.code-details .box.head {
+		padding: 15px
+	}
+	.code-details .box.head h2 {
+		font-size: 18px
+	}
+	.code-details .box {
+		padding: 15px
+	}
+	.code-details .visual-img {
+		margin: 15px 0 5px
+	}
+	.the-code .code-value {
+		letter-spacing: 0;
+		font-size: 16px
+	}
+	#content {
+		padding: 0 0 0 6px
+	}
+	.link-box {
+		padding: 13px 35px 13px 15px
+	}
+	.message .holder {
+		padding: 15px
+	}
+	.message .text {
+		width: 89%
+	}
+	.banner-block {
+		margin-left: -10px;
+		margin-right: -10px
+	}
+	#sidebar {
+		padding-left: 3.8%;
+		padding-right: 6px
+	}
+	#sidebar .newsletter .form-signin-heading {
+		font-size: 32px;
+		line-height: 35px;
+		padding-left: 0;
+		margin: 0 0 21px;
+		text-align: center
+	}
+	#sidebar .newsletter .form-signin-heading:before {
+		background: none
+	}
+	#sidebar .add-info li {
+		padding-left: 0
+	}
+	#sidebar .add-info li:before {
+		background: none
+	}
+	#sidebar .block.block-image .box {
+		padding: 15px;
+		font-size: 16px;
+		line-height: 19px
+	}
+	#sidebar .block.block-image .box h2 {
+		font-size: 25px;
+		line-height: 28px
+	}
+	.share-list {
+		text-align: center
+	}
+	.share-list li {
+		width: 28%;
+		padding: 0 0 7px;
+		margin: 0 0 0 -4px;
+		vertical-align: middle
+	}
+	.share-list li a {
+		display: block;
+		padding: 0 2px 0 0
+	}
+	.share-list li img {
+		display: block;
+		max-width: 100%;
+		height: auto
+	}
+	.countries li {
+		padding: 0 1% 8px
+	}
+	.social-networks li {
+		padding: 0 4% 8px
+	}
+	.deal {
+		display: none
+	}
+	.section-module a {
+		padding: 12px
+	}
+	.section-module a .holder {
+		width: 82%
+	}
+	.section-module a .date {
+		width: 17%
+	}
+	#footer .holder .container .box p {
+		margin: 0
+	}
+	#footer .container .bar {
+		max-width: 100%
+	}
+	.img-code {
+		display: none
+	}
+	#code-lightbox .lightbox {
+		padding: 25px 20px
+	}
+	#code-lightbox .lightbox-2 .link-box {
+		margin: 0 -20px
+	}
+}
+
+@media only screen and (max-width:767px) {
+	#header {
+		position: relative
+	}
+	.top-panel .slogan {
+		display: none
+	}
+	.menu-account {
+		position: absolute;
+		top: 50%;
+		left: 15px;
+		margin: -7px 0 0;
+		display: block
+	}
+	.top-panel .container {
+		padding: 0
+	}
+	.top-panel .account-box {
+		display: none;
+		position: absolute;
+		float: none;
+		height: 100%;
+		left: 0;
+		top: 0;
+		width: 220px;
+		background: #3a3a3a
+	}
+	.top-panel .account-box ul {
+		float: none;
+		border: none;
+		box-shadow: none
+	}
+	.top-panel .account-box ul li {
+		float: none;
+		display: block;
+		padding: 13px 20px;
+		border-bottom: 1px solid #505050;
+		box-shadow: none
+	}
+	.top-panel .account-box ul li a,.top-panel .account-box ul li span {
+		display: inline-block;
+		vertical-align: middle
+	}
+	.top-panel .account-box ul li .glyphicon-user {
+		top: 0
+	}
+	.navigation {
+		border-width: 0 0 1px
+	}
+	.navigation .container {
+		padding-top: 20px;
+		padding-bottom: 20px
+	}
+	.navigation .logo {
+		float: none;
+		display: block;
+		margin: 0 auto
+	}
+	.menu-opener {
+		display: block
+	}
+	.nav-bar {
+		display: none;
+		position: absolute;
+		float: none;
+		height: 100%;
+		right: 0;
+		top: 0;
+		width: 220px;
+		background: #3a3a3a
+	}
+	.nav-bar #nav {
+		float: none
+	}
+	.nav-bar #nav ul {
+		float: none;
+		border: none;
+		box-shadow: none
+	}
+	.nav-bar #nav ul li {
+		float: none;
+		display: block;
+		border-bottom: 1px solid #505050;
+		box-shadow: none;
+		margin: 0
+	}
+	.nav-bar #nav ul li a {
+		display: block;
+		padding: 15px 20px
+	}
+	.search-box {
+		float: none;
+		margin: 0;
+		padding: 10px
+	}
+	.search-box .opener {
+		display: none
+	}
+	.search-box .slide {
+		width: 100%
+	}
+	.search-box .slide.js-slide-hidden {
+		position: static !important;
+		display: block !important
+	}
+	.search-form {
+		float: none;
+		width: 100%
+	}
+	.search-form:after {
+		content: '';
+		display: block;
+		clear: both
+	}
+	.search-form input[type="text"] {
+		width: 167px
+	}
+	.search-form .btn {
+		width: 31px
+	}
+	.page-header {
+		padding: 10px;
+		font-size: 13px;
+		line-height: 18px
+	}
+	.panel {
+		margin: 0 0 10px
+	}
+	.panel .panel-body {
+		padding: 10px
+	}
+	#main {
+		padding-bottom: 26px
+	}
+	.buttons {
+		width: 80%
+	}
+	.buttons .btn {
+		float: none;
+		display: block;
+		width: 100%;
+		margin: 0 0 5px
+	}
+	.buttons .btn-code {
+		display: none
+	}
+	.buttons-2 .btn,.buttons-2 .btn.btn-print {
+		float: none;
+		display: block;
+		width: 100%;
+		margin: 0 0 5px
+	}
+	#content {
+		padding: 0
+	}
+	.content-box {
+		padding: 0 6px
+	}
+	.header-block {
+		min-height: 50px;
+		margin: 0 -5px 24px;
+		padding: 0
+	}
+	.header-block .icon {
+		margin-right: 1%
+	}
+	.header-block {
+		padding: 0
+	}
+	.header-block .icon {
+		width: 20%
+	}
+	.header-block .icon img {
+		display: block;
+		width: 100%;
+		height: auto
+	}
+	.btn-sm,.btn-group-sm>.btn,.btn-group-sm>.btn,.btn-group-sm>.btn {
+		margin-right: 7px
+	}
+	.section .block .holder {
+		padding: 10px
+	}
+	.section .block-form-2 .ico-box {
+		width: 80px;
+		margin: 10px 10px 0 0
+	}
+	.section .block-form-2 .ico-mail {
+		background-position: -160px -264px;
+		width: 61px;
+		height: 60px
+	}
+	.section .block-form-2 .newsletter input[type="email"] {
+		width: 63.2%
+	}
+	.section .code {
+		font-size: 20px;
+		line-height: 20px;
+		margin: 0 10px 0 0;
+		width: 70px
+	}
+	.section .code .center {
+		padding: 5px
+	}
+	.section .code .center strong {
+		font-size: 30px;
+		line-height: 30px
+	}
+	.section .code .bottom {
+		padding: 5px
+	}
+	.section .code-2 {
+		width: 82px
+	}
+	.section .code-2 .center {
+		padding: 0;
+		height: auto
+	}
+	.section .code-2 .center .code-holder {
+		height: auto
+	}
+	.section .code.expired-code .center strong {
+		font-size: 12px
+	}
+	.section .offer {
+		padding: 10px
+	}
+	.section .offer span {
+		width: 25%;
+		margin: 0 1% 0 0
+	}
+	.section .offer a {
+		width: 73%
+	}
+	.section .terms-block {
+		padding: 10px
+	}
+	.code-details .box.head {
+		padding: 10px
+	}
+	.code-details .box {
+		padding: 10px
+	}
+	.share-list li {
+		padding: 0 7px 7px;
+		width: auto;
+		vertical-align: top
+	}
+	.social-networks li {
+		padding: 0 1% 8px
+	}
+	.the-code {
+		width: 80%
+	}
+	.the-code .instruction {
+		display: block;
+		width: 100%;
+		text-align: center;
+		border-radius: 5px 5px 0 0;
+		-webkit-border-radius: 5px 5px 0 0
+	}
+	.the-code .instruction strong {
+		padding: 12px
+	}
+	.the-code .instruction strong:after {
+		border: none
+	}
+	.the-code .code-value {
+		display: block;
+		width: 100%;
+		letter-spacing: 0;
+		font-size: 16px;
+		padding: 12px;
+		border-radius: 0 0 5px 5px;
+		-webkit-border-radius: 0 0 5px 5px;
+		border-width: 0 3px 3px
+	}
+	#main .banner-block {
+		margin: -28px -15px 24px
+	}
+	.banner-block {
+		margin: -1px -15px 24px
+	}
+	.banner-block .bar {
+		display: none
+	}
+	.banner-block .image {
+		width: 150%;
+		position: relative;
+		left: -50%
+	}
+	#sidebar {
+		padding: 0
+	}
+	#sidebar .block {
+		background: #fff
+	}
+	#sidebar .newsletter .form-signin-heading {
+		text-align: left;
+		padding-left: 87px
+	}
+	#sidebar .newsletter .form-signin-heading:before {
+		background: url(../../images/sprite.png) no-repeat -95px -130px
+	}
+	.message {
+		margin: 0 2px 28px;
+		font-size: 15px;
+		line-height: 20px
+	}
+	.message .holder {
+		padding: 10px
+	}
+	#footer {
+		font-size: 11px;
+		line-height: 16px
+	}
+	#footer .holder .container {
+		padding-top: 20px;
+		padding-bottom: 20px
+	}
+	#footer .container {
+		padding-top: 20px;
+		padding-bottom: 20px
+	}
+	.add-nav ul li+li:before {
+		content: "";
+		padding: 0 2px
+	}
+	.add-nav ul li:first-child {
+		padding: 0
+	}
+	.img-code {
+		display: block
+	}
+	#code-lightbox .lightbox {
+		padding: 25px 10px
+	}
+}
+
+@media only screen and (max-width:479px) {
+	.message {
+		margin: 0 2px 24px
+	}
+	.message .ico-warning {
+		margin: 0 5px 0 0
+	}
+	.message .text {
+		width: 84%
+	}
+	.pagination {
+		font-size: 13px;
+		padding: 10px;
+		margin: 0 0 -4px
+	}
+	.pagination li {
+		margin: 0 4px 4px 0;
+		text-align: center
+	}
+	.pagination li a {
+		padding: 6px 4px 3px;
+		width: 25px
+	}
+	#footer .holder .container {
+		padding: 10px
+	}
+	#footer .container {
+		padding: 10px
+	}
+	.buttons .btn {
+		width: 100%
+	}
+	.section .block-form h2 {
+		font-size: 15px;
+		line-height: 20px
+	}
+	.section .block-form .icon {
+		width: 23%;
+		margin-right: 10px
+	}
+	.section .block-form-2 .newsletter input[type="email"] {
+		width: 100%;
+		margin: 0 0 5px
+	}
+	.section .newsletter input[type="email"],.section .newsletter button[type="submit"]
+		{
+		display: block;
+		float: none;
+		width: 100%;
+		margin: 0 0 5px
+	}
+	.section .newsletter button[type="submit"] {
+		margin: 0
+	}
+	.section .offer span {
+		display: block;
+		width: 100%;
+		margin: 0 0 5px
+	}
+	.section .offer a {
+		width: auto
+	}
+	.heading-box {
+		text-align: center;
+		padding: 0 10px
+	}
+	.heading-box h2 {
+		font-size: 20px;
+		line-height: 24px
+	}
+	.text-coupon:before,.text-shop:before,.text-ask:before,.text-advice:before,.text-expired:before,.text-guide:before,.text-star:before
+		{
+		background: none
+	}
+	.link-box {
+		padding: 12px 30px 12px 10px
+	}
+	.section-guide .holder {
+		padding: 10px
+	}
+	.section-guide .num-list li:before {
+		font-size: 18px;
+		line-height: 22px;
+		margin: 0 3px 0 0
+	}
+	.section-guide .num-list h2 {
+		font-size: 18px;
+		line-height: 22px
+	}
+	.view-list {
+		font-size: 12px
+	}
+	.shops li {
+		width: 20%
+	}
+	.section-comments {
+		padding: 10px
+	}
+	.section-comments .bar .settings {
+		width: 100%;
+		padding: 0 0 15px
+	}
+	.section-comments .bar .tabs-list li {
+		padding: 0 12px 10px 11px
+	}
+	.section-comments .bar .tabs-list .active a:after {
+		right: -5px
+	}
+	.section-comments .bottom-box ul li {
+		margin: 0 10px 0 0
+	}
+	.section-comments .bottom-box ul li a {
+		padding: 0 0 0 20px
+	}
+	.comment-list .comment {
+		font-size: 12px;
+		line-height: 16px
+	}
+	.comment-list .comment .add-link {
+		font-size: 11px
+	}
+	.tips-section {
+		margin: 0 0 10px
+	}
+	.tips-section .block {
+		margin: 0 0 15px
+	}
+	.tips-section .block a {
+		font-size: 13px;
+		line-height: 18px;
+		padding: 5px
+	}
+	.tips-section .block a .image {
+		display: none
+	}
+	.tips-section .block a .box {
+		padding: 5px
+	}
+	.tips-section .block a .box h2 {
+		font-size: 18px;
+		line-height: 22px
+	}
+	.add-navigation .box {
+		float: none;
+		width: 100%
+	}
+	.section-module a {
+		text-align: right;
+		padding: 10px
+	}
+	.section-module a .holder {
+		float: none;
+		width: 100%;
+		margin: 0 0 5px;
+		text-align: left
+	}
+	.section-module a .date {
+		float: none;
+		width: 100%;
+		margin: 0
+	}
+	.header-block .icon.icon-small {
+		width: 18%
+	}
+	#sidebar .block,#sidebar .block.block-2 {
+		padding: 10px
+	}
+	.img-code {
+		display: none
+	}
+	#code-lightbox {
+		font-size: 12px;
+		line-height: 16px
+	}
+	#code-lightbox .lightbox {
+		padding: 25px 10px
+	}
+	#code-lightbox .icon {
+		display: none
+	}
+	#code-lightbox h1 {
+		font-size: 20px;
+		line-height: 26px
+	}
+	#code-lightbox .block {
+		padding: 10px
+	}
+	#code-lightbox form input[type="text"] {
+		font-size: 18px;
+		line-height: 18px;
+		width: 69%;
+		padding: 9px 2px
+	}
+	#code-lightbox form .holder {
+		padding: 2px
+	}
+	#code-lightbox form .holder .btn {
+		font-size: 12px;
+		width: 30%
+	}
+	#code-lightbox form .btn.blue {
+		font-size: 14px
+	}
+	#code-lightbox .terms {
+		float: none
+	}
+	#code-lightbox .logo-box {
+		text-align: center;
+		font-size: 15px;
+		padding: 5px 0 0;
+		float: none
+	}
+	#code-lightbox .logo-box .logo-img {
+		display: block;
+		margin: 0 auto 5px
+	}
+}
+
+@
+-ms-viewport {
+	width: auto !important
+}
+
+.fl-right {
+	float: right;
+}
+
+.store-header-link {
+	float: left;
+}
+
+#fade {
+	background: none repeat scroll 0 0 #000000;
+	color: #010000;
+	cursor: wait;
+	display: none;
+	height: 100%;
+	left: 0;
+	opacity: 0.6;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 900;
+}
+ul.errors {
+	display: none;
+	.
+	store-header-link
+	{
+	float
+	:
+	left;
+}
+
+.no-record {
+	text-align: center;
+	font-size: 14px;
+	font-weight: bold;
+}
+
+/* end css */
+=======
   display: none;
 }
 input[type="text"]:focus,
@@ -14676,3 +15747,4 @@ input[type="submit"]::-moz-focus-inner {
 @-ms-viewport {
   width: auto !important;
 }
+>>>>>>> sprint14
