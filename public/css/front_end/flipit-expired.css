@@ -3,59 +3,10 @@
   display: block;
   clear: both;
 }
-.warning-message {
-  font-size: 18px;
-  line-height: 22px;
-  background: #fff;
+.flipit-expired-page .message .holder {
   padding: 31px 30px 34px;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
-  margin: 0 0 28px;
-  position: relative;
 }
-.warning-message .holder:after,
-.warning-message .holder:before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -1px;
-  width: 1px;
-  height: 100%;
-  background: url(../../images/border-s.png) repeat-y;
-}
-.warning-message .holder:after {
-  left: auto;
-  right: -1px;
-}
-.warning-message:after,
-.warning-message:before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: -1px;
-  width: 100%;
-  height: 1px;
-  background: url(../../images/border-b.png) repeat-x;
-}
-.warning-message:after {
-  top: auto;
-  bottom: -1px;
-}
-.warning-message .ico-warning {
-  display: inline-block;
-  vertical-align: middle;
-  background: url(../../images/sprite.png) no-repeat -247px -221px;
-  width: 32px;
-  height: 32px;
-  margin: 0 13px 0 0;
-}
-.warning-message .text {
-  width: 90%;
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-}
-.warning-message .text:after {
+.flipit-expired-page .message .text:after {
   content: '';
   position: absolute;
   z-index: 2;
@@ -65,20 +16,16 @@
   width: 23px;
   height: 87px;
 }
+.flipit-expired-page .message .ico-warning {
+  vertical-align: middle;
+}
 @media only screen and (max-width: 979px) {
-  .warning-message {
+  .flipit-expired-page .message .holder {
     padding: 15px;
-  }
-  .warning-message .text {
-    width: 89%;
   }
 }
 @media only screen and (max-width: 767px) {
-  .warning-message {
-    margin: 0 2px 28px;
-    padding: 10px;
-  }
-  .warning-message .text:after {
+  .flipit-expired-page .message .text:after {
     background-position: -259px -269px;
     width: 12px;
     height: 45px;
@@ -87,16 +34,10 @@
   }
 }
 @media only screen and (max-width: 479px) {
-  .warning-message {
-    margin: 0 2px 24px;
+  .flipit-expired-page .message .holder {
+    padding: 10px;
   }
-  .warning-message .ico-warning {
-    margin: 0 5px 0 0;
-  }
-  .warning-message .text {
-    width: 84%;
-  }
-  .warning-message .text:after {
+  .flipit-expired-page .message .text:after {
     top: 97%;
   }
 }

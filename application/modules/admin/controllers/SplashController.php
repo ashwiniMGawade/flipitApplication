@@ -30,7 +30,9 @@ class Admin_SplashController extends Zend_Controller_Action
         $splashTableData = $splashObject->getSplashInformation();
      
         if (!empty($splashTableData)) {
+            $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
             $splashOfferDetails = Doctrine_Core::getTable('Offer')->findOneBy('id', $splashTableData[0]['offerId']);
+            BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
             $this->view->currentOfferTitle = $splashOfferDetails['title'];
             $this->view->currentOfferLocale = $splashTableData[0]['locale'];
         }

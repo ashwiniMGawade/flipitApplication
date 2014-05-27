@@ -1,9 +1,9 @@
 <?php 
 if(LOCALE == ''):
-    $logoCssClass = 'kortingscode-logo';
+    $logoCssClass = 'logo kortingscode';
     $siteName = 'kortingscode';
 else :
-    $logoCssClass = 'logo';
+    $logoCssClass = 'logo flipit';
     $siteName = 'FlipIt';
 endif
 ?>
@@ -23,12 +23,19 @@ endif
     </div>
     <div class="navigation">
         <div class="container">
-            <strong class="<?php echo $logoCssClass; ?>"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('index');?>"><?php echo $siteName;?></a></strong>
+            <strong class="<?php echo $logoCssClass; ?>">
+                <a href="<?php echo LOCALE == '' ? 
+                    'http://www.kortingscode.nl' : 'http://www.flipit.com' ;?>">
+                    <?php echo $siteName;?>
+                </a>
+            </strong>
+            <a href="#" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
             <div class="nav-bar">
             <?php 
             $currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
             if($currentControllerName != 'index') { ?>
                 <div class="search-box">
+                    <a href="#" class="opener"><span class="glyphicon glyphicon-search"></span></a>
                 <?php
                 $localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
                 $basePartialViewPath = new Zend_View();
