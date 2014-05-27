@@ -10,12 +10,12 @@ class Application_Form_Register extends Application_Form_Base
          $visitorEmail = new Zend_Form_Element_Text('emailAddress');
          $visitorEmail->setRequired(true);
          $visitorEmail->addValidator(
-            'EmailAddress',
-            true,
-            array(
-                'messages' => array(Zend_Validate_EmailAddress::INVALID_FORMAT=>'Please enter valid email address')
-            )
-        );
+             'EmailAddress',
+             true,
+             array(
+                 'messages' => array(Zend_Validate_EmailAddress::INVALID_FORMAT=>'Please enter valid email address')
+             )
+         );
          $visitorEmail->setAttrib('class', 'form-control');
          $visitorEmail->setLabel('Email');
 
