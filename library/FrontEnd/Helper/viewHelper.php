@@ -360,7 +360,8 @@ EOD;
     public function getShopHeader($shop, $expiredMessage, $offerTitle)
     {
         $bounceRate = "/out/shop/".$shop['id'];
-        $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.$shop['id'];
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        $shopUrl = $domainName.'out/shop/'.$shop['id'];
         $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
         if ($shop['affliateProgram']) :
             $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
