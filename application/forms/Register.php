@@ -7,17 +7,17 @@ class Application_Form_Register extends Application_Form_Base
     }
     public function init()
     {
-        $vistorEmail = new Zend_Form_Element_Text('emailAddress');
-        $vistorEmail->setRequired(true);
-        $vistorEmail->addValidator(
+         $visitorEmail = new Zend_Form_Element_Text('emailAddress');
+         $visitorEmail->setRequired(true);
+         $visitorEmail->addValidator(
             'EmailAddress',
             true,
             array(
                 'messages' => array(Zend_Validate_EmailAddress::INVALID_FORMAT=>'Please enter valid email address')
             )
         );
-        $vistorEmail->setAttrib('class', 'form-control');
-        $vistorEmail->setLabel('Email');
+         $visitorEmail->setAttrib('class', 'form-control');
+         $visitorEmail->setLabel('Email');
 
         $vistorPassword = new Zend_Form_Element_Password('password');
         $vistorPassword->setRequired(true);
@@ -67,7 +67,7 @@ class Application_Form_Register extends Application_Form_Base
         $vistorPostalCode->setLabel('Postcode');
         $this->addElements(
             array(
-                $vistorEmail,
+                $visitorEmail,
                 $vistorPassword,
                 $vistorFirstName,
                 $vistorLastName,

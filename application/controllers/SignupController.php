@@ -4,17 +4,14 @@ class SignupController extends Zend_Controller_Action
 {
     public function checkuserAction()
     {
-        $visiterInformation = intval(
+        $visitorInformation = intval(
             Visitor::checkDuplicateUser(
                 $this->_getParam('emailAddress'),
                 $this->_getParam('id')
             )
         );
-        if ($visiterInformation > 0) {
-            echo Zend_Json::encode(false);
-        } else {
-            echo Zend_Json::encode(true);
-        }
+        $visitorStatus = $visitorInformation > 0 ? false : true;
+        echo Zend_Json::encode($visitorStatus);
         die();
     }
 
@@ -49,26 +46,14 @@ class SignupController extends Zend_Controller_Action
             if ($registrationForm->isValid($_POST)) {
                 $visitorInformation = $registrationForm->getValues();
                 if (Visitor::checkDuplicateUser($visitorInformation['emailAddress']) > 0) {
-                    self::showFleshMessage(
+                    self::showFlashMessage(
                         $this->view->translate('Please change you E-mail address this user already exist'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
                         'error'
                     );
                 } else {
                     $visitorId = Visitor::addVisitor($visitorInformation);
-                    if (!$visitorId) {
-                        self::showFleshMessage(
-                            $this->view->translate('Please enter valid information'),
-                            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
-                            'error'
-                        );
-                    } else {
-                        $this->_redirect(
-                            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
-                            FrontEnd_Helper_viewHelper::__link('profiel') .'/' .
-                            base64_encode($visitorInformation['emailAddress'])
-                        );
-                    }
+                    self::redirectAccordingToUserStatus($visitorId, $visitorInformation);
                 }
             } else {
                 $registrationForm->highlightErrorElements();
@@ -76,11 +61,28 @@ class SignupController extends Zend_Controller_Action
         }
     }
 
-    public function showFleshMessage($message, $link, $messageType)
+    public function redirectAccordingToUserStatus($visitorId, $visitorInformation)
+    {
+        if (!$visitorId) {
+            self::showFlashMessage(
+                $this->view->translate('Please enter valid information'),
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
+                'error'
+            );
+        } else {
+            $this->_redirect(
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('profiel') .'/' .
+                base64_encode($visitorInformation['emailAddress'])
+            );
+        }
+    }
+
+    public function showFlashMessage($message, $redirectUrl, $messageType)
     {
         $flash = $this->_helper->getHelper('FlashMessenger');
         $flash->addMessage(array($messageType => $message));
-        $this->_redirect($link);
+        $this->_redirect($redirectUrl);
     }
 
     public function profileAction()
