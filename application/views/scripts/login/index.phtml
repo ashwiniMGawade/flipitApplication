@@ -8,7 +8,7 @@ foreach ($loginForm->getElements() as $formElement) {
 }
 if($this->successMessage!='' || $this->errorMessage!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
-       <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
+        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
     </div>
     <?php 
 endif;
