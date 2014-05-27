@@ -3,6 +3,20 @@
   display: block;
   clear: both;
 }
+<<<<<<< HEAD
+.top-panel {
+  background: #2d2c2c;
+  background: rgba(32, 32, 32, 0.66);
+}
+.top-panel .container {
+  padding-bottom: 0;
+  padding-top: 0;
+}
+.top-panel .slogan {
+  padding: 9px 0 11px;
+}
+.top-panel .account-box ul {
+=======
 .profile-page .top-panel {
   background: #2d2c2c;
   background: rgba(32, 32, 32, 0.66);
@@ -15,16 +29,38 @@
   padding: 9px 0 11px;
 }
 .profile-page .top-panel .account-box ul {
+>>>>>>> sprint14
   -webkit-box-shadow: none;
   box-shadow: none;
   border: none;
 }
+<<<<<<< HEAD
+.top-panel .account-box ul li {
+=======
 .profile-page .top-panel .account-box ul li {
+>>>>>>> sprint14
   -webkit-box-shadow: none;
   box-shadow: none;
   border: none;
   padding: 0;
 }
+<<<<<<< HEAD
+.top-panel .account-box ul .active a {
+  background: #e49542;
+}
+.top-panel .account-box ul a {
+  display: block;
+  padding: 11px 16px 11px;
+}
+.top-panel .account-box ul a:hover {
+  background: #e49542;
+  text-decoration: none;
+}
+#main {
+  padding-bottom: 43px;
+}
+.profile-box {
+=======
 .profile-page .top-panel .account-box ul .active a {
   background: #e49542;
 }
@@ -40,6 +76,7 @@
   padding-bottom: 43px;
 }
 .profile-page .profile-box {
+>>>>>>> sprint14
   background: #fff;
   border: 1px solid #e4e4e4;
   color: #878a8d;
@@ -47,6 +84,16 @@
   line-height: 22px;
   padding: 33px 0;
 }
+<<<<<<< HEAD
+.profile-box .title {
+  padding: 0 30px 28px;
+  border-bottom: 1px solid #eaeaea;
+}
+.profile-box p {
+  margin: 0;
+}
+.profile-box h1 {
+=======
 .profile-page .profile-box .title {
   padding: 0 30px 28px;
   border-bottom: 1px solid #eaeaea;
@@ -55,16 +102,31 @@
   margin: 0;
 }
 .profile-page .profile-box h1 {
+>>>>>>> sprint14
   margin: 0 0 6px;
   font-size: 21px;
   line-height: 23px;
   color: #33383e;
 }
+<<<<<<< HEAD
+.profile-box h2 {
+=======
 .profile-page .profile-box h2 {
+>>>>>>> sprint14
   font-size: 16px;
   line-height: 18px;
   margin: 0 0 23px;
 }
+<<<<<<< HEAD
+.profile-box p {
+  margin: 0 0 10px;
+}
+.profile-box .form-row {
+  padding: 45px 30px 25px;
+  position: relative;
+}
+.profile-box .form-row label {
+=======
 .profile-page .profile-box p {
   margin: 0 0 10px;
 }
@@ -73,6 +135,7 @@
   position: relative;
 }
 .profile-page .profile-box .form-row label {
+>>>>>>> sprint14
   display: block;
   color: #33383e;
   font-size: 13px;
@@ -80,18 +143,30 @@
   margin: 0 0 8px;
   font-weight: normal;
 }
+<<<<<<< HEAD
+.profile-box .form-row textarea.form-control,
+.profile-box .form-row input.form-control {
+=======
 .profile-page .profile-box .form-row textarea.form-control,
 .profile-page .profile-box .form-row input.form-control {
+>>>>>>> sprint14
   width: 100%;
   height: 39px;
   background: #fcfcfc;
   border: 1px solid #d8d8d8;
   padding: 9px 5px 9px;
 }
+<<<<<<< HEAD
+.profile-box .form-row .form-group {
+  margin: 0 0 21px;
+}
+.profile-box .form-row:before {
+=======
 .profile-page .profile-box .form-row .form-group {
   margin: 0 0 21px;
 }
 .profile-page .profile-box .form-row:before {
+>>>>>>> sprint14
   position: absolute;
   left: 50%;
   content: "";
@@ -100,12 +175,31 @@
   top: 70px;
   bottom: 45px;
 }
+<<<<<<< HEAD
+.profile-box .note-box {
+=======
 .profile-page .profile-box .note-box {
+>>>>>>> sprint14
   border: solid #eaeaea;
   border-width: 1px 0;
   padding: 28px 30px 15px;
   margin: 0 0 33px;
 }
+<<<<<<< HEAD
+.profile-box .note-box strong {
+  color: #33383e;
+  display: block;
+}
+.profile-box .note-box input[type="checkbox"] {
+  margin: 7px 13px 0 0;
+  float: left;
+}
+.profile-box .note-box label {
+  display: block;
+  overflow: hidden;
+}
+.profile-box .btn {
+=======
 .profile-page .profile-box .note-box strong {
   color: #33383e;
   display: block;
@@ -119,11 +213,16 @@
   overflow: hidden;
 }
 .profile-page .profile-box .btn {
+>>>>>>> sprint14
   margin: 0 0 4px 30px;
   padding: 10px 12px 9px;
   height: 40px;
 }
+<<<<<<< HEAD
+#footer {
+=======
 .profile-page #footer {
+>>>>>>> sprint14
   text-shadow: none;
   background: none;
   font-size: 15px;
@@ -131,11 +230,29 @@
   margin: 0 auto;
   line-height: 18px;
 }
+<<<<<<< HEAD
+#footer .email-form {
+=======
 .profile-page #footer .email-form {
+>>>>>>> sprint14
   float: left;
   width: 35.2%;
   padding: 10px 20px;
 }
+<<<<<<< HEAD
+#footer .email-form .form-control {
+  height: 49px;
+  padding: 14px 18px;
+}
+#footer .email-form .form-group {
+  width: 74.2%;
+}
+#footer .email-form .btn.orange {
+  width: 25.8%;
+  height: 49px;
+}
+#footer .social {
+=======
 .profile-page #footer .email-form .form-control {
   height: 49px;
   padding: 14px 18px;
@@ -148,15 +265,30 @@
   height: 49px;
 }
 .profile-page #footer .social {
+>>>>>>> sprint14
   float: left;
   padding: 10px 0 0 59px;
   width: 44%;
 }
+<<<<<<< HEAD
+#footer .social ul {
+=======
 .profile-page #footer .social ul {
+>>>>>>> sprint14
   padding: 0;
   margin: 0 -65px 0 0;
   list-style: none;
 }
+<<<<<<< HEAD
+#footer .social ul li {
+  float: left;
+  margin: 0 0 0 65px;
+}
+#footer .social ul li:first-child {
+  margin: 0;
+}
+#footer .social ul a {
+=======
 .profile-page #footer .social ul li {
   float: left;
   margin: 0 0 0 65px;
@@ -165,20 +297,43 @@
   margin: 0;
 }
 .profile-page #footer .social ul a {
+>>>>>>> sprint14
   position: relative;
   display: block;
   padding: 0 0 0 70px;
   color: #878a8d;
 }
+<<<<<<< HEAD
+#footer .social ul a:hover {
+  text-decoration: none;
+}
+#footer .social ul .facebook:before,
+#footer .social ul .twitter:before {
+=======
 .profile-page #footer .social ul a:hover {
   text-decoration: none;
 }
 .profile-page #footer .social ul .facebook:before,
 .profile-page #footer .social ul .twitter:before {
+>>>>>>> sprint14
   content: '';
   position: absolute;
   top: 0;
   left: 0;
+<<<<<<< HEAD
+  background: url(../images/sprite.png) no-repeat -2px -371px;
+  width: 48px;
+  height: 48px;
+}
+#footer .social ul .twitter:before {
+  background-position: -76px -371px;
+}
+#footer .social ul .box {
+  overflow: hidden;
+  padding: 4px 0 0;
+}
+#footer .social ul h2 {
+=======
   background: url(../../images/sprite.png) no-repeat -2px -371px;
   width: 48px;
   height: 48px;
@@ -191,43 +346,71 @@
   padding: 4px 0 0;
 }
 .profile-page #footer .social ul h2 {
+>>>>>>> sprint14
   font-size: 21px;
   line-height: 24px;
   margin: 0;
 }
+<<<<<<< HEAD
+#footer .bottom-nav {
+=======
 .profile-page #footer .bottom-nav {
+>>>>>>> sprint14
   padding: 41px 5px 54px;
   text-align: left;
   border-top: 1px solid #d9d9d9;
   border-bottom: 1px solid #e4e4e4;
 }
+<<<<<<< HEAD
+#footer .bottom-nav h3 {
+  margin: 0 0 11px;
+}
+#footer .bottom-nav ul {
+=======
 .profile-page #footer .bottom-nav h3 {
   margin: 0 0 11px;
 }
 .profile-page #footer .bottom-nav ul {
+>>>>>>> sprint14
   padding: 0;
   margin: 0;
   list-style: none;
   font-size: 13px;
   line-height: 24px;
 }
+<<<<<<< HEAD
+#footer .bottom-nav .ico {
+=======
 .profile-page #footer .bottom-nav .ico {
+>>>>>>> sprint14
   line-height: 24px;
   text-align: center;
   padding-top: 6px;
 }
+<<<<<<< HEAD
+#footer .bottom-nav .ico .num {
+=======
 .profile-page #footer .bottom-nav .ico .num {
+>>>>>>> sprint14
   display: block;
   font-size: 21px;
   line-height: 24px;
   margin: 0 0 3px;
 }
+<<<<<<< HEAD
+#footer .bottom-nav .ico .add-text {
+=======
 .profile-page #footer .bottom-nav .ico .add-text {
+>>>>>>> sprint14
   display: block;
   max-width: 82px;
   margin: 0;
 }
+<<<<<<< HEAD
+#footer .bottom-nav .ico-shop {
+=======
 .profile-page #footer .bottom-nav .ico-shop {
+>>>>>>> sprint14
   display: block;
   margin: 0 0 16px;
   width: 82px;
@@ -237,32 +420,55 @@
   -webkit-border-radius: 50%;
   position: relative;
 }
+<<<<<<< HEAD
+#footer .bottom-nav .ico-shop:before {
+=======
 .profile-page #footer .bottom-nav .ico-shop:before {
+>>>>>>> sprint14
   content: '';
   position: absolute;
   top: 50%;
   left: 50%;
+<<<<<<< HEAD
+  background: url(../images/sprite.png) no-repeat -160px -383px;
+=======
   background: url(../../images/sprite.png) no-repeat -160px -383px;
+>>>>>>> sprint14
   width: 26px;
   height: 25px;
   margin: -13px 0 0 -12px;
 }
+<<<<<<< HEAD
+#footer .add-block {
+  padding: 40px 5px;
+}
+#footer .add-block .benefits {
+=======
 .profile-page #footer .add-block {
   padding: 40px 5px;
 }
 .profile-page #footer .add-block .benefits {
+>>>>>>> sprint14
   padding: 0;
   margin: 0 0 40px;
   list-style: none;
 }
+<<<<<<< HEAD
+#footer .add-block .benefits li {
+=======
 .profile-page #footer .add-block .benefits li {
+>>>>>>> sprint14
   width: 20%;
   margin: 0 1%;
   display: inline-block;
   vertical-align: top;
   text-align: left;
 }
+<<<<<<< HEAD
+#footer .title {
+=======
 .profile-page #footer .title {
+>>>>>>> sprint14
   font-size: 24px;
   line-height: 30px;
   color: #0077cc;
@@ -270,29 +476,74 @@
   text-align: center;
   margin: 0 0 44px;
 }
+<<<<<<< HEAD
+#footer .title .glyphicon-ok {
+=======
 .profile-page #footer .title .glyphicon-ok {
+>>>>>>> sprint14
   font-size: 28px;
   vertical-align: top;
   margin: -2px 11px 0 0;
 }
+<<<<<<< HEAD
+#footer .language {
+=======
 .profile-page #footer .language {
+>>>>>>> sprint14
   padding: 0;
   margin: 0 0 27px;
   list-style: none;
 }
+<<<<<<< HEAD
+#footer .language li {
+=======
 .profile-page #footer .language li {
+>>>>>>> sprint14
   display: inline-block;
   vertical-align: top;
   margin: 0 3px;
 }
+<<<<<<< HEAD
+#footer .language a {
+  display: block;
+  background: url(../images/sprite.png) no-repeat -3px -455px;
+=======
 .profile-page #footer .language a {
   display: block;
   background: url(../../images/sprite.png) no-repeat -3px -455px;
+>>>>>>> sprint14
   width: 24px;
   height: 16px;
   text-indent: -9999px;
   overflow: hidden;
 }
+<<<<<<< HEAD
+#footer .language .ico-2 {
+  background-position: -37px -455px;
+}
+#footer .language .ico-3 {
+  background-position: -71px -455px;
+}
+#footer .language .ico-4 {
+  background-position: -106px -455px;
+}
+#footer .language .ico-5 {
+  background-position: -139px -455px;
+}
+#footer .language .ico-6 {
+  background-position: -173px -455px;
+}
+#footer .language .ico-7 {
+  background-position: -207px -455px;
+}
+#footer .language .ico-8 {
+  background-position: -241px -455px;
+}
+#footer .logo {
+  display: block;
+  float: none;
+  background: url(../images/logo-footer.png) no-repeat;
+=======
 .profile-page #footer .language .ico-2 {
   background-position: -37px -455px;
 }
@@ -318,22 +569,60 @@
   display: block;
   float: none;
   background: url(../../images/logo-footer.png) no-repeat;
+>>>>>>> sprint14
   width: 89px;
   height: 40px;
   margin: 0 auto 21px;
 }
+<<<<<<< HEAD
+#footer .copy {
+=======
 .profile-page #footer .copy {
+>>>>>>> sprint14
   font-size: 11px;
   line-height: 20px;
 }
 @media only screen and (min-width: 1600px) {
+<<<<<<< HEAD
+  .section-top .block-image .image-holder,
+  .section-top .block-image .image-frame {
+=======
   .profile-page .section-top .block-image .image-holder,
   .profile-page .section-top .block-image .image-frame {
+>>>>>>> sprint14
     width: 100%;
     position: static;
   }
 }
 @media only screen and (max-width: 1199px) {
+<<<<<<< HEAD
+  .section-top {
+    height: 570px;
+  }
+  .navigation .logo {
+    margin: 8px 0 0;
+  }
+  .nav-bar #nav ul li {
+    padding: 0;
+  }
+  #footer .email-form {
+    padding: 0 10px;
+    width: 40%;
+  }
+  #footer .social {
+    padding: 6px 0 0;
+    width: 40%;
+  }
+  #footer .social ul li {
+    margin: 0 0 0 26px;
+  }
+  #footer .social ul a {
+    padding: 0 0 0 45px;
+  }
+  #footer .social ul .facebook:before,
+  #footer .social ul .twitter:before {
+    background: url(../images/sprite.png) no-repeat -297px -372px;
+=======
   .profile-page .section-top {
     height: 570px;
   }
@@ -360,25 +649,66 @@
   .profile-page #footer .social ul .facebook:before,
   .profile-page #footer .social ul .twitter:before {
     background: url(../../images/sprite.png) no-repeat -297px -372px;
+>>>>>>> sprint14
     width: 35px;
     height: 35px;
     top: 2px;
   }
+<<<<<<< HEAD
+  #footer .social ul .facebook .twitter:before,
+  #footer .social ul .twitter .twitter:before {
+    background-position: -357px -373px;
+  }
+  #footer .social ul .facebook .box,
+  #footer .social ul .twitter .box {
+=======
   .profile-page #footer .social ul .facebook .twitter:before,
   .profile-page #footer .social ul .twitter .twitter:before {
     background-position: -357px -373px;
   }
   .profile-page #footer .social ul .facebook .box,
   .profile-page #footer .social ul .twitter .box {
+>>>>>>> sprint14
     padding: 0;
   }
 }
 @media only screen and (max-width: 991px) {
+<<<<<<< HEAD
+  .profile-box .form-row:before {
+=======
   .profile-page .profile-box .form-row:before {
+>>>>>>> sprint14
     display: none;
   }
 }
 @media only screen and (max-width: 979px) {
+<<<<<<< HEAD
+  #footer {
+    font-size: 12px;
+  }
+  #footer .email-form {
+    width: 50%;
+    padding: 0 10px 0 0;
+  }
+  #footer .social {
+    width: 50%;
+    margin: 0;
+  }
+  #footer .bottom-nav {
+    padding: 21px 15px 27px;
+    font-size: 12px;
+  }
+  #footer .bottom-nav nav {
+    padding: 0 15px;
+  }
+  #footer .bottom-nav ul {
+    font-size: 12px;
+  }
+  #footer .add-block {
+    padding: 25px 10px;
+  }
+  #footer .title {
+=======
   .profile-page #footer {
     font-size: 12px;
   }
@@ -404,10 +734,47 @@
     padding: 25px 10px;
   }
   .profile-page #footer .title {
+>>>>>>> sprint14
     margin: 0 0 27px;
   }
 }
 @media only screen and (max-width: 767px) {
+<<<<<<< HEAD
+  .profile-box {
+    padding: 20px 0;
+  }
+  .profile-box .form-row {
+    padding: 15px;
+  }
+  .profile-box .form-row:before {
+    display: none;
+  }
+  .profile-box .form-row .form-group {
+    margin: 0;
+  }
+  .profile-box textarea.form-control,
+  .profile-box input.form-control {
+    margin: 0 0 15px;
+  }
+  .profile-box .title {
+    padding: 0 15px 18px;
+  }
+  .profile-box .note-box {
+    padding: 28px 15px 5px;
+    margin: 0 0 15px;
+  }
+  .profile-box .btn {
+    margin: 0 0 0 30px;
+  }
+  .navigation .logo {
+    margin: 0 auto;
+  }
+  .nav-bar #nav ul {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+  .nav-bar #nav ul li {
+=======
   .profile-page .profile-box {
     padding: 20px 0;
   }
@@ -442,12 +809,23 @@
     box-shadow: none;
   }
   .profile-page .nav-bar #nav ul li {
+>>>>>>> sprint14
     border: none;
     -webkit-box-shadow: none;
     box-shadow: none;
     padding: 0;
     margin: 0;
   }
+<<<<<<< HEAD
+  .nav-bar #nav ul li > a {
+    padding: 15px 20px;
+  }
+  .nav-bar #nav ul li > a:hover,
+  .nav-bar #nav ul li > a:focus {
+    background: #353534;
+  }
+  #footer .email-form {
+=======
   .profile-page .nav-bar #nav ul li > a {
     padding: 15px 20px;
   }
@@ -456,31 +834,67 @@
     background: #353534;
   }
   .profile-page #footer .email-form {
+>>>>>>> sprint14
     float: none;
     width: 100%;
     padding: 0;
   }
+<<<<<<< HEAD
+  #footer .email-form .form-group {
+=======
   .profile-page #footer .email-form .form-group {
+>>>>>>> sprint14
     width: 100%;
     float: none;
     display: block;
   }
+<<<<<<< HEAD
+  #footer .email-form .btn.orange {
+    width: 100%;
+  }
+  #footer .social {
+=======
   .profile-page #footer .email-form .btn.orange {
     width: 100%;
   }
   .profile-page #footer .social {
+>>>>>>> sprint14
     padding: 10px 0 0;
     float: none;
     width: 100%;
   }
+<<<<<<< HEAD
+  #footer .social ul a {
+    padding: 0 0 0 40px;
+  }
+  #footer .social ul li {
+=======
   .profile-page #footer .social ul a {
     padding: 0 0 0 40px;
   }
   .profile-page #footer .social ul li {
+>>>>>>> sprint14
     margin: 0;
     padding: 0 5px 0 0;
     width: 50%;
   }
+<<<<<<< HEAD
+  #footer .social ul li:first-child {
+    margin: 0 0 10px;
+  }
+  #footer .bottom-nav nav {
+    margin: 0 0 15px;
+  }
+  #footer .title {
+    font-size: 18px;
+    margin: 0 0 12px;
+  }
+  #footer .title .glyphicon-ok {
+    font-size: 21px;
+    margin: 2px 6px 0 0;
+  }
+  #footer .add-block .benefits li {
+=======
   .profile-page #footer .social ul li:first-child {
     margin: 0 0 10px;
   }
@@ -496,6 +910,7 @@
     margin: 2px 6px 0 0;
   }
   .profile-page #footer .add-block .benefits li {
+>>>>>>> sprint14
     display: block;
     width: 100%;
     margin: 0 0 10px;
@@ -503,6 +918,16 @@
   }
 }
 @media only screen and (max-width: 479px) {
+<<<<<<< HEAD
+  #footer .social ul {
+    font-size: 11px;
+  }
+  #footer .social ul h2 {
+    font-size: 17px;
+    line-height: 22px;
+  }
+  #footer .social ul li {
+=======
   .profile-page #footer .social ul {
     font-size: 11px;
   }
@@ -511,6 +936,7 @@
     line-height: 22px;
   }
   .profile-page #footer .social ul li {
+>>>>>>> sprint14
     width: 44%;
   }
 }

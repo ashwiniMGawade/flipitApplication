@@ -384,7 +384,7 @@ EOD;
                 <div class="icon">
                     <a target="_blank" rel="nofollow" 
                     class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
-                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'"><img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path']. $shop['logo']['name']. '" alt="'.$shop['name'].'" width="176" height="89" />
+                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'"><img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . 'thum_large_' . $shop['logo']['name']. '" alt="'.$shop['name'].'" width="176" height="89" />
                     </a>
                 </div> <div class="box">';
         if ($expiredMessage !='storeDetail') {
@@ -725,6 +725,7 @@ EOD;
     public function getHowToGuidesImage($howToGuideImages)
     {
         $howToGuideImagePath = '';
+        $howToGuideImageAltText = '';
         if (!empty($howToGuideImages)) {
             $howToGuideImagePath = PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'],"/")."thum_bigLogoFile_".$howToGuideImages['name'];
             $howToGuideImageAltText = $howToGuideImages['name'];

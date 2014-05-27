@@ -1,6 +1,5 @@
 <?php
-$categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path'].
-                         "thum_large_".$this->categoryDetail[0]['categoryicon']['name'];
+$categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'];
 $categoryPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
 echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetail[0]['name'], $categoryFeaturedImage);
 
