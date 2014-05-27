@@ -307,7 +307,8 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     
     public function getViewAllCodeLink($shopName)
     {
-        return $viewAllLink ='<a href="' . $shopName . '">'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</a>';
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        return $viewAllLink ='<a href="'.$domainName.$shopName.'">'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</a>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)

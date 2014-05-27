@@ -2440,7 +2440,6 @@ input[type="button"].btn-block {
 }
 .glyphicon-remove:before {
   content: "\e014";
-  cursor:pointer;
 }
 .glyphicon-zoom-in:before {
   content: "\e015";
