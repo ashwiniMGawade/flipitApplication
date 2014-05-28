@@ -17,7 +17,12 @@ echo $this->minifyHeadLink()->prependStylesheet("public/css/front_end/style.css"
 
 <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 <?php
-echo $this->HeadLink()->prependStylesheet("/public/css/front_end/all.css");
-echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/custom.css");
+if (APPLICATION_ENV == 'development') {
+   $headLink =  $this->headLink();
+} else {
+   $headLink = $this->minifyHeadLink();
+}
+echo $this->headLink()->prependStylesheet("/public/css/front_end/all.css");
+echo $headLink->prependStylesheet("/public/css/front_end/custom.css");
 
 
