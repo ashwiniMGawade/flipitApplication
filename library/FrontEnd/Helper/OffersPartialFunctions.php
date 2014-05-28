@@ -35,9 +35,11 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getOfferTermsAndCondition($currentOffer)
     {
         $termsAndConditions = '';
-        if (count($currentOffer->termandcondition) > 0) {
-            $termsAndConditions = $currentOffer->termandcondition[0]['content'];
-        }
+        if(isset($currentOffer->termandcondition)) {
+            if (count($currentOffer->termandcondition) > 0) {
+                $termsAndConditions = $currentOffer->termandcondition[0]['content'];
+            }
+        }    
         return $termsAndConditions;
     }
 
@@ -172,7 +174,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $offerTypeText = $this->zendTranslate->translate('printable');
         } elseif ($currentOffer->discountType=='SL') {
             $offerTypeText = $this->zendTranslate->translate('sale');
-        } elseif ($currentOffer->extendedOffer =='1') {
+        } elseif (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : '') {
             $offerTypeText = $this->zendTranslate->translate('deal');
         } else {
             $offerTypeText = 'code';
@@ -281,7 +283,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
     {
         $termAndConditionLink ='';
-        if ($currentOffer->userGenerated ==0 &&  $termsAndConditions!='' && $termsAndConditions!=null) {
+        if (isset($currentOffer->userGenerated) ? $currentOffer->userGenerated == 0 : '' &&  $termsAndConditions!='' && $termsAndConditions!=null) {
             $termAndConditionLink = '
             <a id="termAndConditionLink'.$currentOffer->id .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
             href="javascript:void(0);">'. $this->zendTranslate->translate('Term') . '&amp;' .$this->zendTranslate->translate('Conditions').'</a>';
@@ -295,7 +297,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getExtendedOfferLink($currentOffer)
     {
         $extendedOfferLink = '';
-        if ($currentOffer->extendedOffer =='1'):
+        if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : ''):
             $extendedOfferLink ='<a class="text-blue-link"
             href="'.HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $currentOffer->extendedUrl.'">'
             .$this->zendTranslate->translate('More about this code').'</a>';
@@ -305,14 +307,15 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     
     public function getViewAllCodeLink($shopName)
     {
-        return $viewAllLink ='<a href="' . $shopName . '">'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</a>';
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        return $viewAllLink ='<a href="'.$domainName.$shopName.'">'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</a>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)
     {
         $expiredOfferMessage= '';
         if ($endDate < $currentDate) {
-            $expiredOfferMessage = '<div class="warning-message">
+            $expiredOfferMessage = '<div class="message">
             <div class="holder">
             <span class="ico-warning"></span>
             <span class="text">'.$this->zendTranslate->translate("Sorry, this coupon is already expired. Maybe the following coupon can help you"). '</span>

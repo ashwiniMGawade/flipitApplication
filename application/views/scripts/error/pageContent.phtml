@@ -32,7 +32,7 @@ if ($this->pageMode == true) {
     } else {
         $pageContent="<h1>".$this->page['pageTitle']."</h1>".stripslashes($this->page['content']);
     }
-    $pageImagePath = PUBLIC_PATH_CDN.$this->pageLogo['path']."thum_page_large_".$this->pageLogo['name'];
+    $pageImagePath = PUBLIC_PATH_CDN.$this->pageLogo['path'].$this->pageLogo['name'];
     $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
     echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
     <div class="row">
