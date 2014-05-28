@@ -4,7 +4,6 @@ class ErrorController extends Zend_Controller_Action
     protected $pagePermalink = '';
     public function errorAction()
     {
-        $this->_helper->layout()->disableLayout();
         $this->view->controller = $this->_request->getControllerName();
         $errors = $this->_getParam('error_handler');
         if (!$errors || !$errors instanceof ArrayObject) {
@@ -57,6 +56,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->pageMode = true;
                 } else {
                     $this->getResponse()->setHttpResponseCode(404);
+                    $this->_helper->layout()->disableLayout();
                     $this->view->popularShops = Shop::getPopularStore(10);
                     $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
                     $this->view->flipitLocales = $websitesWithLocales;
