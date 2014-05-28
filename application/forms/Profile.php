@@ -8,20 +8,22 @@ class Application_Form_Profile extends Application_Form_Base
     public function init()
     {
         $visitorEmail = new Zend_Form_Element_Text('emailAddress');
-        $visitorEmail->setAttribs(array('class' => 'form-control'));
         $visitorEmail->setLabel('Email');
+        $visitorEmail->setAttribs(
+            array('readonly' => 'readonly', 'class'=>'form-control', 'disabled'=> 'disabled')
+        );
 
         $vistorPassword = new Zend_Form_Element_Password('password');
         $vistorPassword->setRequired(true);
         $vistorPassword->setAttribs(
-            array('autocomplete', 'off', 'class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
+            array('autocomplete'=> 'off', 'class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
         );
         $vistorPassword->setLabel('Password');
 
         $vistorConfirmPassword = new Zend_Form_Element_Password('confirmPassword');
         $vistorConfirmPassword->setRequired(true);
         $vistorConfirmPassword->setAttribs(
-            array('autocomplete', 'off', 'class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
+            array('autocomplete'=> 'off', 'class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
         );
         $vistorConfirmPassword->setLabel('Confirm Password');
         $vistorConfirmPassword->addValidator('Identical', false, array('token' => 'password'));

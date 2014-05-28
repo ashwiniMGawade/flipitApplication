@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    validateRegistration();
+    validateProfile();
     $("input#profile").submit(function(){
         if($("form#profile").valid()){
           return true;
@@ -9,7 +9,7 @@ $(document).ready(function(){
     });
 });
 var validator =  null;
-function validateRegistration() {
+function validateProfile() {
     validator = $('form#profile')
     .validate({
         errorClass: 'input-error',
