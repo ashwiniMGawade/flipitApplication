@@ -597,7 +597,7 @@ EOD;
                 break;
                 //refactored 
             case 'popular':
-                $stores = Shop::getPopularStore($limit);
+                $stores = Shop::getPopularStores($limit);
                 break;
             default:
                 break;

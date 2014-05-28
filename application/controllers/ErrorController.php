@@ -57,7 +57,7 @@ class ErrorController extends Zend_Controller_Action
                 } else {
                     $this->getResponse()->setHttpResponseCode(404);
                     $this->_helper->layout()->disableLayout();
-                    $this->view->popularShops = Shop::getPopularStore(10);
+                    $this->view->popularShops = Shop::getPopularStores(10);
                     $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
                     $this->view->flipitLocales = $websitesWithLocales;
                 }
