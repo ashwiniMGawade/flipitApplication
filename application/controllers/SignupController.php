@@ -39,7 +39,13 @@ class SignupController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->pageCssClass = 'register-page';
+        $pageName = 'SignUp';
+        $pageId = PageAttribute::getPageAttributeIdByName($pageName);
+        $pageDetails =  Page::getPageFromPageAttributeFiltered($pageId);
+        $this->view->pageTitle = $pageDetails['pageTitle'];
+        $this->view->headTitle($pageDetails['metaTitle']);
+        $this->view->headMeta()->setName('description', trim($pageDetails['metaDescription']));
+
         $registrationForm = new Application_Form_Register();
         $this->view->form = $registrationForm;
         if ($this->getRequest()->isPost()) {
@@ -64,6 +70,11 @@ class SignupController extends Zend_Controller_Action
                 $registrationForm->highlightErrorElements();
             }
         }
+        $testimonials = Signupmaxaccount::getTestimonials();
+        $this->view->testimonial = isset($testimonials[0]['testimonial1']) ? $testimonials[0]['testimonial1'] : '';
+        $this->view->pageCssClass = 'register-page';
+        # set reponse header X-Nocache used for varnish
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
  
     public function showFlashMessage($message, $redirectUrl, $messageType)
@@ -129,6 +140,8 @@ class SignupController extends Zend_Controller_Action
         }
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
+        # set reponse header X-Nocache used for varnish
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
 
     public function addVisitor($visitorDetails)

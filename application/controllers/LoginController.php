@@ -57,6 +57,8 @@ class LoginController extends Zend_Controller_Action
             }
         }
         $this->view->pageCssClass = 'login-page';
+        # set reponse header X-Nocache used for varnish
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
 
     public function redirectByVisitorStatus($visitorDetails)
