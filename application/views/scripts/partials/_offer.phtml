@@ -114,7 +114,7 @@ foreach ($this->offers as $offer) {
                 array(
                    'zendForm' => $this->zendForm,
                    'signupFormWidgetType'=> 'widgetWithinOffers',
-                   'shopId'=>$this->shop['id'],
+                   'shopId'=>isset($this->shop['id']) ? $this->shop['id'] : '',
                    'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
                )
             );

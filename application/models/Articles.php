@@ -16,19 +16,10 @@ class Articles extends BaseArticles
         ->orderBy('p.position ASC')->fetchArray();
         return $moneySavingArticles;
     }
-    ###############################################
-    ########## END REFACTORED CODE ################
-    ###############################################
-    
-    CONST ArticleStatusDraft = 0;
-    CONST ArticleStatusPublished = 1;
 
-    ######################## Refactored Block ################################
-
-    public static function getArticlesByPermalink($permalink)
+    public static function getArticleByPermalink($permalink)
     {
-        $currentDateTime = date('Y-m-d H:i:s');
-        $articles = Doctrine_Query::create()->select()
+        $articleDetails = Doctrine_Query::create()->select()
                     ->from("Articles a")
                     ->leftJoin('a.relatedstores as stores')
                     ->leftJoin('a.relatedcategory as related')
@@ -39,9 +30,8 @@ class Articles extends BaseArticles
                     ->where('a.permalink="'.$permalink.'"')
                     ->andWhere('a.publish = "1"')
                     ->andWhere("a.deleted= 0")
-                    ->andWhere('a.publishdate <= '."'$currentDateTime'")
                     ->fetchArray();
-        return $articles;
+        return $articleDetails;
     }
 
     public static function getAllArticles()
@@ -78,8 +68,12 @@ class Articles extends BaseArticles
             ->fetchArray();
         return $allMoneySavingArticle;
     }
-    ###################### Refactored Block ends #############################
-
+    ###############################################
+    ########## END REFACTORED CODE ################
+    ###############################################
+    
+    CONST ArticleStatusDraft = 0;
+    CONST ArticleStatusPublished = 1;
 
     /**
      * This function is used to get author list to display

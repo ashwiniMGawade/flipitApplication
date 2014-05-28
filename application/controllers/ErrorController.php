@@ -56,6 +56,10 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->pageMode = true;
                 } else {
                     $this->getResponse()->setHttpResponseCode(404);
+                    $this->_helper->layout()->disableLayout();
+                    $this->view->popularShops = Shop::getPopularStores(10);
+                    $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+                    $this->view->flipitLocales = $websitesWithLocales;
                 }
                 break;
             default:
