@@ -42,6 +42,8 @@ function validateRegistration() {
             },
             password: {
                 required: true,
+                minlength : 1,
+                maxlength :20
             },
             dateOfBirthDay: {
                 required: true,
@@ -76,6 +78,8 @@ function validateRegistration() {
               },
               password: {
                   required: '',
+                  minlength : '',
+                  maxlength: ''
               },
               dateOfBirthDay: {
                   required: '',

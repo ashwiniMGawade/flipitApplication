@@ -60,11 +60,18 @@ class Visitor extends BaseVisitor
 
     public static function addVisitor($visitorInformation)
     {
-        $visitor = new Visitor();
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $visitorId = Auth_VisitorAdapter::getIdentity()->id;
+            $visitor = Doctrine_Core::getTable('Visitor')->find($visitorId);
+            $visitor->weeklyNewsLetter = $visitorInformation['weeklyNewsLetter'];
+        } else {
+            $visitor = new Visitor();
+            $visitor->weeklyNewsLetter = '1';
+            $visitor->email = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['emailAddress']);
+        }
         $visitor->firstName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['firstName']);
         $visitor->lastName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['lastName']);
         $visitor->gender = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['gender'] == 'M' ? 0 : 1);
-        $visitor->email = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['emailAddress']);
         $visitor->dateOfBirth =
             (
                 $visitorInformation['dateOfBirthYear'].'-'
@@ -78,9 +85,18 @@ class Visitor extends BaseVisitor
                 : ''
             );
         $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($visitorInformation['password']));
-        $visitor->weeklyNewsLetter = '1';
         $visitor->save();
         return $visitor->id;
+    }
+
+    public static function getUserDetails($visitorId)
+    {
+        $userDetails = Doctrine_Query::create()->select("v.*,i.*")
+        ->from("Visitor v")
+        ->where('v.id='.$visitorId)->leftJoin('v.visitorimage i')
+        ->andWhere('v.deleted=0')
+        ->fetchArray();
+        return $userDetails;
     }
     #############################################################
     ######### END REFACTRED CODE ################################
@@ -382,15 +398,6 @@ class Visitor extends BaseVisitor
         } else {return null;}
     }
 
-    public static function getUserDetail($visitorId)
-    {
-        $data = Doctrine_Query::create()->select("v.*,i.*")->
-        from("Visitor v")
-        ->where('v.id='.$visitorId)->leftJoin('v.visitorimage i')
-        ->andWhere('v.deleted=0')
-        ->fetchArray();
-        return $data;
-    }
     public static function getuserpwddetail($uemail)
     {
         $data = Doctrine_Query::create()->select("v.*")->

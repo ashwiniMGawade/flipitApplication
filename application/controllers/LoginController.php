@@ -65,8 +65,7 @@ class LoginController extends Zend_Controller_Action
             $this->_helper->Login->setUserCookies();
             $this->_redirect(
                 HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
-                FrontEnd_Helper_viewHelper::__link('profiel') .'/' .
-                base64_encode($visitorDetails['emailAddress'])
+                FrontEnd_Helper_viewHelper::__link('profiel')
             );
         } else {
             $flashMessage = $this->_helper->getHelper('FlashMessenger');

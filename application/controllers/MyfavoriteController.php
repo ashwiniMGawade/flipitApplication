@@ -70,7 +70,7 @@ class MyfavoriteController extends Zend_Controller_Action
         $favoriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
         $this->view->favShops = $favoriteShops;
 
-        $userdetail=Visitor::getUserDetail(Auth_VisitorAdapter::getIdentity()->id);
+        $userdetail=Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
         $this->view->userdetail = $userdetail[0];
 
         # set reponse header X-Nocache used for varnish
@@ -141,7 +141,7 @@ class MyfavoriteController extends Zend_Controller_Action
             $this->view->action 		= $this->getRequest()->getParam('action');
             $offers =  FrontEnd_Helper_viewHelper::commonfrontendGetCode("newestmemberonly",12);
             $this->view->offers = $offers;
-            $userdetail=Visitor::getUserDetail(Auth_VisitorAdapter::getIdentity()->id);
+            $userdetail=Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
             $this->view->userdetail = $userdetail[0];
 
         }else{
@@ -171,7 +171,7 @@ class MyfavoriteController extends Zend_Controller_Action
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $this->_redirect('/');
     }
-    $userdetail=Visitor::getUserDetail(Auth_VisitorAdapter::getIdentity()->id);
+    $userdetail=Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
     $this->view->userdetail = $userdetail[0];
 
     $flash = $this->_helper->getHelper('FlashMessenger');

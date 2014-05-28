@@ -21,7 +21,9 @@ class Application_Form_Register extends Application_Form_Base
 
         $vistorPassword = new Zend_Form_Element_Password('password');
         $vistorPassword->setRequired(true);
-        $vistorPassword->setAttrib('class', 'form-control');
+        $vistorPassword->setAttribs(
+            array('class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
+        );
         $vistorPassword->setLabel('Password');
         $vistorPassword->setAttrib('autocomplete', 'off');
 
