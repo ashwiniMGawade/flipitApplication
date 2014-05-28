@@ -766,6 +766,15 @@ EOD;
         return $countryName;
     }
 
+    public static function getWebsitesLocales($websites)
+    {
+        foreach ($websites as $website) {
+            $spiltWebsite  = explode('/', $website['name']);
+            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+            $locales[strtoupper($locale)] = $website['name'];
+        }
+        return $locales;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################

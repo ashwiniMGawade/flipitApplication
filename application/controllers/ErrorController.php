@@ -58,13 +58,8 @@ class ErrorController extends Zend_Controller_Action
                 } else {
                     $this->getResponse()->setHttpResponseCode(404);
                     $this->view->popularShops = Shop::getPopularStore(10);
-                    $websites = Website::getAllWebsites();
-                    foreach ($websites as $website) {
-                        $spiltWebsite  = explode('/', $website['name']);
-                        $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
-                        $locales[strtoupper($locale)] = $website['name'];
-                    }
-                    $this->view->flipitLocales = $locales;
+                    $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+                    $this->view->flipitLocales = $websitesWithLocales;
                 }
                 break;
             default:
