@@ -78,13 +78,13 @@ class User extends BaseUser
         return $userFavouriteStores;
     }
 
-    public static function getUserDetails($uId)
+    public static function getUserDetails($userId)
     {
         $userDetails = Doctrine_Query::create()
             ->select("u.id,u.firstName,u.lastName,u.addtosearch, u.mainText, u.slug, u.google, pi.name, pi.path")
             ->from('User u')
             ->leftJoin("u.profileimage pi")
-            ->where("u.id = ?" , $uId)
+            ->where("u.id = ?" , $userId)
             ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
         return $userDetails;
   }

@@ -3,168 +3,93 @@ $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/in-savings.css
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/moneySaving.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/stickyfloat.js");
-$articleview = $this->currentArticle;
-$userview = $this->userDetails;
+$articleDetails = $this->articleDetails;
+$userDetails = $this->userDetails;
+$editorName = $userDetails['slug'];
+$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/".$editorName;
+$firstName = str_replace(' ', '', $userDetails['firstName']);
+$lastName = str_replace(' ', '', $userDetails['lastName']);
+$articleUpdatedAtDate = date('d M Y', strtotime($articleDetails['updated_at']));
 $partialViewPath = 'partials/';
 $discussion = $this->partial(
     $partialViewPath.'_discussion.phtml',
     array('shopName' =>'')
 );
-
-if(!empty($articleview)) :
+$articleInformation = $this->partial(
+    'plus/_articleInformation.phtml',
+        array(
+           'artcileDetails' => $articleDetails,
+           'userDetails' => $userDetails,
+           'profileLink' => $profileLink,
+           'firstName' => $firstName,
+           'lastName' => $lastName,
+           'articleUpdatedAtDate'=> $articleUpdatedAtDate
+        )
+);
+$authorDetails = $this->partial(
+    'plus/_authorDetails.phtml',
+        array(
+            'userDetails' => $userDetails,
+            'profileLink' => $profileLink
+        )
+);
+$savingGuides = $this->partial(
+    'plus/_savingGuides.phtml',
+        array(
+            'articlesRelatedToCurrentCategory' => $this->articlesRelatedToCurrentCategory,
+        )
+);
+$recentlyAddedArticles = $this->partial(
+    'plus/_recentlyAddedArticles.phtml',
+        array(
+            'recentlyAddedArticles' => $this->recentlyAddedArticles,
+            'profileLink' => $profileLink,
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'articleUpdatedAtDate'=> $articleUpdatedAtDate
+        )
+);
+$topPopularOffers = $this->partial(
+    'plus/_topPopularOffers.phtml',
+        array(
+            'topPopularOffers' => $this->topPopularOffers,
+        )
+);
+$directChapterLinks = $this->partial(
+    'plus/_directChapterLinks.phtml',
+        array(
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'artcileDetails' => $articleDetails
+        )
+);
 ?>
 <main role="main" id="main" class="container">
     <div class="banner-block">
         <?php
-            $articleImage = PUBLIC_PATH_CDN.$articleview['ArtIcon']['path'].$articleview['ArtIcon']['name'];
+            $articleImage = PUBLIC_PATH_CDN.$articleDetails['ArtIcon']['path'].$articleDetails['ArtIcon']['name'];
         ?>
-        <img class="image" src="<?php echo $articleImage; ?>" alt="<?php echo $articleview['title'];?>">
+        <img class="image" src="<?php echo $articleImage; ?>" alt="<?php echo $articleDetails['title'];?>">
     </div>
     <div class="row">
         <div id="content" class="col-md-8 col-sm-8">
-            <section class="post-box">
-                <header class="meta">
-                    <h1><?php echo $articleview['title'];?></h1>
-                    <?php 
-                        $firstName = str_replace(' ', '', $userview['firstName']);
-                        $lastName = str_replace(' ', '', $userview['lastName']);
-                        $link_url = $userview['slug'];
-                        $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/".$link_url;
-                        $articleUpdatedAt = date('d M Y', strtotime($articleview['updated_at']));
-                    ?>
-                    <p><?php echo $this->translate('By');?> <a href="<?php echo $profileLink; ?>"><?php echo $firstName . " " . $lastName;?></a> - <?php echo $articleUpdatedAt; ?> &nbsp;   | &nbsp;   <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus')?>"><?php echo $this->translate('All Plus');?></a></p>
-                </header>
-                <?php  
-                    if (!empty($articleview['chapters'])) {
-                        foreach ($articleview['chapters'] as $chapter) :
-                            $pattern = array('/\s/','/[\,+@#?$%^:&*!.();]+/', '/(\')/');                     
-                            $replace = array("-","-","-");
-                            $chapterTitle = preg_replace($pattern, $replace, $chapter['title']);
-                            $chapterTitle = strtolower($chapterTitle);
-                            echo '<h2 id="'.$chapterTitle.'">'.$chapter['title'].'</h2>';
-                            echo $chapter['content'];
-                        endforeach;
-                    }
-                ?> 
-        </section>
-        <div class="share-box">
-            <span class="txt"><?php echo $this->translate('Share this tip');?></span>
-            <ul class="social-box">
-                <?php echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');?>            
-            </ul>
+            <?php echo $articleInformation; ?>
+            <div class="share-box">
+                <span class="txt"><?php echo $this->translate('Share this tip');?></span>
+                    <?php echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');?>            
+            </div>
+            <?php
+                echo $authorDetails;
+                echo $savingGuides;
+                echo $discussion;
+            ?>
         </div>
-        <section class="about-box">
-            <div class="photo">
-                <span class="name"><?php echo $firstName; ?></span>
-                <?php
-                    $autorImage = PUBLIC_PATH_CDN.$userview['profileimage']['path'] .'thum_medium_'. $userview['profileimage']['name'];
-                ?>
-                <img width="120" height="120" alt="<?php echo $firstName; ?>" src="<?php echo $autorImage; ?>">
-            </div>
-            <div class="text-box">
-                <p><strong><?php echo $this->translate('About').' '.$firstName; ?></strong>, <?php $userview['mainText'];?></p>
-                <p><a href="<?php echo $profileLink; ?>"><?php echo $this->translate('Read more about'). ''.$firstName; ?></a></p>
-            </div>
-        </section>
-        <header class="heading-box text-advice">
-            <h2><?php echo $this->translate('Saving guides');?></h2>
-        </header>
-        <section class="tips-section">
+        <aside id="sidebar" class="col-md-4 col-sm-4">
             <?php 
-                if (!empty($this->articlesRelatedToCurrentCategory)) {
-                    foreach($this->articlesRelatedToCurrentCategory as $articleRelatedToCurrentCategory) :
-            ?>        
-            <article class="block">
-                <a href="<?php echo $articleRelatedToCurrentCategory['title'];?>">
-                    <div class="image">
-                        <img width="216" height="129" alt="<?php echo $articleRelatedToCurrentCategory['title'];?>" src="<?php echo PUBLIC_PATH_CDN.$articleRelatedToCurrentCategory['ArtIcon']['path'].$articleRelatedToCurrentCategory['ArtIcon']['name'];?>" >
-                    </div>
-                    <div class="box">
-                        <h2><?php echo $articleRelatedToCurrentCategory['title'];?></h2>
-                        <p><?php echo $articleRelatedToCurrentCategory['content'];?></p>
-                    </div>
-                </a>
-            </article>
-            <?php    
-                    endforeach;
-                }
-            ?> 
-        </section>
-        <?php echo $discussion;?>
-    </div>
-    <aside id="sidebar" class="col-md-4 col-sm-4">
-        <section class="news-block">
-            <?php 
-                if(!empty($this->recentlyAddedArticles)) {
-                    foreach($this->recentlyAddedArticles as $recentlyAddedArticle) :
-            ?>            
-            <article class="box">
-                <span class="image"><img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['ArtIcon']['path'].$recentlyAddedArticle['ArtIcon']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>" width="118" height="118" /></span>
-                <div class="text-box">
-                    <h1>
-                        <a href="<?php echo $recentlyAddedArticle['title'];?>"><?php echo $recentlyAddedArticle['title'];?></a>
-                    </h1>
-                    <p>
-                        <em>by <a href="<?php echo $profileLink; ?>"><?php echo $firstName . " " . $lastName;?></a>, <?php echo $articleUpdatedAt; ?></em>
-                    </p>
-                    <a href="<?php echo $recentlyAddedArticle['title'];?>" class="more">
-                        <span><?php echo $this->translate('Read More');?></span>
-                    </a>
-                </div>
-            </article>
-            <?php    
-                    endforeach;
-                }
-            ?>  
-        </section>
-            <ol class="alt-list">
-                <?php 
-                    if(!empty($this->topPopularOffers)) {
-                        foreach($this->topPopularOffers as $topPopularOffer) :
-                           $offerType = $topPopularOffer['exclusiveCode'] == 1 ? '<mark>'. $this->translate('Exclusive').'</mark>' : '';
-                           $redirectUrlToStore = LOCALE != '' ? HTTP_PATH_LOCALE : HTTP_PATH;  
-                ?> 
-                <li>
-                    <a href="<?php echo $redirectUrlToStore.$topPopularOffer['shop']['permalink']; ?>">
-                        <strong class="title"><?php echo $topPopularOffer['shop']['name'].' '.$offerType; ?></strong>
-                        <?php echo $topPopularOffer['title'];?>
-                    </a>    
-                </li>
-                <?php    
-                        endforeach;
-                    }
-                ?>  
-            </ol>
-            <section class="list-box" id="floatDiv">
-                <h1><?php echo $this->translate('Read This List');?></h1>
-                <ol>
-                <?php  
-                    if (!empty($articleview['chapters'])) {
-                        foreach ($articleview['chapters'] as $chapter) :
-                ?>
-                <li>
-                    <a href="javascript:void(0);" rel = "<?php echo $chapter['title']; ?>" onclick="scrollByChapter(this)">
-                        <strong class="title"><?php echo $chapter['title'];?></strong>
-                        <p>
-                            <em><?php echo $this->translate('by');?> <mark><?php echo $firstName . " " . $lastName;?></mark></em>
-                        </p>
-                    </a>
-                </li>   
-                <?php          
-                        endforeach;
-                    }
-                ?>            
-                </ol>
-            </section>
+                echo $recentlyAddedArticles;
+                echo $topPopularOffers;
+                echo $directChapterLinks;
+            ?>    
         </aside>
     </div>
 </main>
-<?php else:?>        
-<center>
-    <div style='border:solid 1px gray'>
-        <h2>
-            <?php echo  $this->translate('Oops This Page Does Not Exist');?>
-        </h2>
-    </div>
-</center>
-<?php endif;?>

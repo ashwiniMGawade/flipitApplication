@@ -2,12 +2,12 @@
     <h2>
 <?php
 $headerName  = isset($this->shopName) ? $this->shopName : $this->firstName;
-echo $discussionHeader = $this->shopName!= ''?  $this->translate('Ask a question about'). ' ' . $headerName :  $this->translate('Ask a question about');
+echo $this->shopName!= ''?  $this->translate('Ask a question about'). ' ' . $headerName :  $this->translate('Ask a question about');
 ?>
     </h2>
     <strong>
 <?php
-echo $disscussionAbout = $this->shopName!= '' ? $this->translate('Ask us anything about'). ' '. $headerName.' '. $this->translate('and their discounts') : $this->translate('Ask us anything about'). ' '. $this->translate('discounts');
+echo $this->shopName!= '' ? $this->translate('Ask us anything about'). ' '. $headerName.' '. $this->translate('and their discounts') : $this->translate('Ask us anything about'). ' '. $this->translate('discounts');
 ?>
     </strong>
 </header>

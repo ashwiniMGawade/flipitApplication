@@ -55,29 +55,30 @@ class PlusController extends Zend_Controller_Action
     {
         $parameters = $this->_getAllParams();
         $permalink = $parameters['permalink'];
-        $currentArticleDetails = Articles::getArticleByPermalink($permalink);
-        $currentArticleCategory = $currentArticleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
+        $articleDetails = Articles::getArticleByPermalink($permalink);
+        $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $articlesRelatedToCurrentCategory = $categoryWiseArticles[$currentArticleCategory]; 
                 
-        if (!empty($currentArticleDetails)) {
-            $this->view->headTitle(trim($currentArticleDetails[0]['metatitle']));
-            $this->view->headMeta()->setName('description', trim($currentArticleDetails[0]['metadescription']));
+        if (!empty($articleDetails)) {
+            $this->view->headTitle(trim($articleDetails[0]['metatitle']));
+            $this->view->headMeta()->setName('description', trim($articleDetails[0]['metadescription']));
             $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
-            $this->view->facebookDescription = trim($currentArticleDetails[0]['metadescription']);
+            $this->view->facebookDescription = trim($articleDetails[0]['metadescription']);
             $this->view->facebookLocale = FACEBOOK_LOCALE;
-            $this->view->facebookTitle = $currentArticleDetails[0]['title'];
-            $this->view->facebookShareUrl = HTTP_PATH_LOCALE.$currentArticleDetails[0]['permalink'];
+            $this->view->facebookTitle = $articleDetails[0]['title'];
+            $this->view->facebookShareUrl = HTTP_PATH_LOCALE.$articleDetails[0]['permalink'];
             $this->view->facebookImage = FACEBOOK_IMAGE;
-            $this->view->twitterDescription = trim($currentArticleDetails[0]['metadescription']);
+            $this->view->twitterDescription = trim($articleDetails[0]['metadescription']);
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
-                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
-            $this->view->currentArticle = $currentArticleDetails[0];
+                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));    
+            $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $userInformationObject = new User();
-            $this->view->userDetails =  $userInformationObject->getUserDetails($currentArticleDetails[0]['authorid']);
+            $this->view->userDetails =  $userInformationObject->getUserDetails($articleDetails[0]['authorid']);
+            $this->view->pageCssClass = 'in-savings-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
         }

@@ -335,9 +335,11 @@ EOD;
         if($type == 'widget' || $type == 'popup'):
             $socialMedia=$facebookLikeWidget.$googlePlusOneWidget.$twitterLikeWidget;
         elseif($type == 'article'):
-            $socialMedia = "<li>".$facebookLikeWidget."</li>
+            $socialMedia = "<ul class='social-box'>
+                            <li>".$facebookLikeWidget."</li>
                             <li>".$googlePlusOneWidget."</li>
-                            <li>".$twitterLikeWidget."</li>";
+                            <li>".$twitterLikeWidget."</li>
+                            </ul>";
         else:
             $zendTranslate = Zend_Registry::get('Zend_Translate');
             $socialMediaTitle = "<h2>".$zendTranslate->translate('Share')."</h2>

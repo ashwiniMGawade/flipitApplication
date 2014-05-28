@@ -5,7 +5,7 @@ function init()
 	$('#floatDiv').stickyfloat( {duration: 0} );
 }
 
-function scrollByChapter(el){
-	var anchorTag = $("h2#"+ $(el).attr('rel'));
+function scrollByChapter(element){
+	var anchorTag = $("h2#"+ $(element).attr('rel'));
     $('html,body').animate({scrollTop: anchorTag.offset().top},'slow');  
 }
