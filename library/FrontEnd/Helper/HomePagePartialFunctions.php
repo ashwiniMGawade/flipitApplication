@@ -223,7 +223,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     public function getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText) {
         $rightColumnContent = '
         <li>
-            <a href="'.$shopPermalink.'">
+            <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">.
                 <div class="logo-box">
                     <img width="84" height="42" alt="' . $shopName .'" src="' . $shopImage .'">
                 </div>
