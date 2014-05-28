@@ -259,7 +259,7 @@ EOD;
     }
 
     public static function getHeadMeta($headMetaValue)
-    { //echo "<prE>"; print_r($headMetaValue);  die;
+    {
         $domainName = HTTP_HOST;
         if($domainName == "www.kortingscode.nl") {
             $site_name = "Kortingscode.nl";
