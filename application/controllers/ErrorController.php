@@ -58,6 +58,13 @@ class ErrorController extends Zend_Controller_Action
                 } else {
                     $this->getResponse()->setHttpResponseCode(404);
                     $this->view->popularShops = Shop::getPopularStore(10);
+                    $websites = Website::getAllWebsites();
+                    foreach ($websites as $website) {
+                        $spiltWebsite  = explode('/', $website['name']);
+                        $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+                        $locales[strtoupper($locale)] = $website['name'];
+                    }
+                    $this->view->flipitLocales = $locales;
                 }
                 break;
             default:
@@ -72,7 +79,6 @@ class ErrorController extends Zend_Controller_Action
         }
         if ($this->getInvokeArg('displayExceptions') == true) {
             echo $this->view->exception = $errors->exception;
-            die;
         }
 
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
