@@ -46,6 +46,18 @@ class Visitor extends BaseVisitor
         return $favouriteShopsStatus;
     }
 
+    public function updateLoginTime($visitorId)
+    {
+        $visitor = Doctrine_Core::getTable("Visitor")->find($visitorId);
+        if ($visitor->currentLogIn=='0000-00-00 00:00:00') {
+            $user->currentLogIn = date('Y-m-d H:i:s');
+        }
+        $visitor->lastLogIn = $visitor->currentLogIn;
+        $visitor->currentLogIn = date('Y-m-d H:i:s');
+        $visitor->active = 1 ;
+        $visitor->save();
+    }
+
     public static function addVisitor($visitorInformation)
     {
         $visitor = new Visitor();
@@ -70,7 +82,6 @@ class Visitor extends BaseVisitor
         $visitor->save();
         return $visitor->id;
     }
-
     #############################################################
     ######### END REFACTRED CODE ################################
     #############################################################
@@ -347,23 +358,7 @@ class Visitor extends BaseVisitor
             return false;
         }
     }
-    /**
-     * update user current login time and rteturn previous login time.
-     * @return true
-     * @author kkumar
-     * @version 1.0
-     */
-    public function updateLoginTime($id)
-    {
-        $user = Doctrine_Core::getTable("Visitor")->find($id);
-        if($user->currentLogIn=='0000-00-00 00:00:00'){
-            $user->currentLogIn = date('Y-m-d H:i:s');
-        }
-        $user->lastLogIn = $user->currentLogIn;
-        $user->currentLogIn = date('Y-m-d H:i:s');
-        $user->active = 1 ;
-        $user->save();
-    }
+
     /**
      * delete number of records of favorite shops
      * @param $params

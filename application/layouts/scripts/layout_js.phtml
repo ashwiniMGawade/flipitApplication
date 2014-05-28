@@ -11,6 +11,7 @@ else:
 endif;
 
 echo $this->minifyHeadScript()
+    ///->prependFile("public/js/front_end/jquery.main.js")
     ->prependFile("public/js/front_end/jquery.main.js")
     ->prependFile("public/js/front_end/layout.js")
     ->prependFile("public/js/Gettext.js")
