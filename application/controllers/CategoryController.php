@@ -12,7 +12,7 @@ class CategoryController extends Zend_Controller_Action
     public function showAction()
     {
         $categoryPermalink = $this->getRequest()->getParam('permalink');
-        $categoryDetail = Category::getCategoryforFrontend($categoryPermalink);
+        $categoryDetail = Category::getCategoryDetails($categoryPermalink);
         if (count($categoryDetail) > 0) {
             $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetail[0]['id'], 71);
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($categoryVoucherCodes, $this->_getAllParams(), 27, 3);
@@ -72,6 +72,7 @@ class CategoryController extends Zend_Controller_Action
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
         $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'all-categories-alt-page';
     }
     #####################################################
     ############# END REFACORED CODE ####################

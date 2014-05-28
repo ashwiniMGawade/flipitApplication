@@ -283,7 +283,7 @@ EOD;
     public static function alphabetList()
     {
         $letterOrNumber = 0;
-        $alphabetList = "<ul class='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
+        $alphabetList = "<ul class='alphabet' id='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
         
         foreach (range('A', 'Z') as $letterOrNumber) {
             $lastAlphabetClass = $letterOrNumber=='Z' ? 'last' : '';
@@ -362,7 +362,8 @@ EOD;
     public function getShopHeader($shop, $expiredMessage, $offerTitle)
     {
         $bounceRate = "/out/shop/".$shop['id'];
-        $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.$shop['id'];
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        $shopUrl = $domainName.'out/shop/'.$shop['id'];
         $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
         if ($shop['affliateProgram']) :
             $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
@@ -386,7 +387,7 @@ EOD;
                 <div class="icon">
                     <a target="_blank" rel="nofollow" 
                     class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
-                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'"><img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path']. $shop['logo']['name']. '" alt="'.$shop['name'].'" width="176" height="89" />
+                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'"><img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . 'thum_large_' . $shop['logo']['name']. '" alt="'.$shop['name'].'" width="176" height="89" />
                     </a>
                 </div> <div class="box">';
         if ($expiredMessage !='storeDetail') {
@@ -727,6 +728,7 @@ EOD;
     public function getHowToGuidesImage($howToGuideImages)
     {
         $howToGuideImagePath = '';
+        $howToGuideImageAltText = '';
         if (!empty($howToGuideImages)) {
             $howToGuideImagePath = PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'],"/")."thum_bigLogoFile_".$howToGuideImages['name'];
             $howToGuideImageAltText = $howToGuideImages['name'];
@@ -738,16 +740,9 @@ EOD;
     {
         $splashInformation = self::getSplashInformation();
         $locale = $splashInformation[0]['locale'];
-        $websiteDetails = Website::getWebsiteDetails($locale);
-        $splitLocaleNameFromWebsiteName = explode('/', $websiteDetails['name']);
-        $localeName = isset($splitLocaleNameFromWebsiteName[1]) ?  $splitLocaleNameFromWebsiteName[1] : "en" ;
-        $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($localeName);
+        $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
         $offer = new Offer($connectionWithSiteDatabase['connName']);
-        $offerId = '';
-        if (isset($splashInformation[0]['offerId'])) :
-            $offerId = $splashInformation[0]['offerId'];
-        endif;
-        $mostPopularCoupon = $offer->getSplashPagePopularCoupon($offerId);
+        $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
         BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
         return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
     }

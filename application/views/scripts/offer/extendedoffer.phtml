@@ -11,7 +11,7 @@ endif;
 $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
 $expiredMessage = $offerPartial->getExpiredOfferMessage($offer->endDate, $currentDate);
 
-$extenderOffer = $this->partial(
+$extendedOffer = $this->partial(
     $partialViewPath.'_offer.phtml',
     array(
     'offers' => array($expiredMessage=='' ? $this->couponDetails[0] : $this->topOfferFromStore[0]),
@@ -71,7 +71,7 @@ echo $headerBlock = $frontEndViewHelper->getShopHeader($offer->shop, $expiredMes
     <div id="content" class="col-md-8 col-sm-8">
     <?php 
     echo $expiredMessage;
-    echo $extenderOffer;
+    echo $extendedOffer;
 if ($expiredMessage != '') { ?>
          </section>
     <div class="section">

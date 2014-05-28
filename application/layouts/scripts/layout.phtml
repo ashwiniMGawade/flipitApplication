@@ -23,7 +23,7 @@ $language = $locale[0];
 
 <?php
 if(isset($this->canonical)):
-    $this->headLink(
+   $this->headLink(
         FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)
     );
 endif;
@@ -43,7 +43,7 @@ endif;
 
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
-echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+$this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
 
 # if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
 if(LOCALE=='') :
@@ -64,10 +64,11 @@ echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
 
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
+
 ?>
 
 </head>
-<body>
+<body<?php echo (!empty($this->pageCssClass) ? " class='$this->pageCssClass'" : ''); ?>>
     <div id="wrapper">
         <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
         <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
@@ -104,7 +105,7 @@ if ($this->controllerName=='index'):
 endif;
 if ($this->controllerName!='index'):
     ?>
-        <div id="main" class="container">
+        <main id="main" role="main" class="container">
     <?php
 endif;
 
@@ -112,7 +113,7 @@ echo $this->layout()->content;
 
 if ($this->controllerName!='index'):
     ?>
-        </div>
+        </main>
     <?php
 endif;
 ?>

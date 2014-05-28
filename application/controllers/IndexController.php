@@ -30,7 +30,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->pageTitle = ucfirst($pageDetails->pageTitle);
             $this->view->headTitle(ucfirst(trim($pageDetails->metaTitle)));
             $this->view->headMeta()->setName('description', trim($pageDetails->metaDescription));
-            
+
             $this->view->facebookTitle = $pageDetails->metaTitle;
             $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName());
             $this->view->facebookImage = FACEBOOK_IMAGE;
@@ -53,6 +53,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularshopForHomePage_list", FrontEnd_Helper_viewHelper::getStoreForFrontEnd("popular", 24));
         $this->view->seeninContents = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homeseenin_list", SeenIn::getSeenInContent(10));
         $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_page", About::getAboutContent(1));
+        $this->view->pageCssClass = 'home-page';
     }
 
     public static function getTopCategoriesIds($topCategories)
@@ -61,6 +62,7 @@ class IndexController extends Zend_Controller_Action
         foreach ($topCategories as $topCategory) {
             $categoriesIds[] = $topCategory['categoryId'];
         }
+
         return $categoriesIds;
     }
 
@@ -70,6 +72,7 @@ class IndexController extends Zend_Controller_Action
         foreach ($topCategoriesOffers as $topCategoriesOffer) {
             $topCategoriesOffersWithCategoriesPermalinkIndex[$topCategoriesOffer['categoryPermalink']][] = $topCategoriesOffer['Offer'];
         }
+
         return $topCategoriesOffersWithCategoriesPermalinkIndex;
     }
 
@@ -81,6 +84,7 @@ class IndexController extends Zend_Controller_Action
                 $specialOfferslist[$page['permaLink']] = Offer::getSpecialPageOffers($page);
             }
         }
+
         return $specialOfferslist;
     }
 }

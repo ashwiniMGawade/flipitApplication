@@ -1,4 +1,10 @@
 <?php
+if (APPLICATION_ENV == 'development') {
+   $headScript =  $this->headScript();
+} else {
+   $headScript = $this->minifyHeadScript();
+}
+
 $this->minifyHeadScript()->prependFile("public/js/common.js")
     ->prependFile("public/js/front_end/jquery-bigtext.js");
 
@@ -10,11 +16,13 @@ else:
        ->prependFile("public/js/front_end/json/shops.js");
 endif;
 
-
-echo $this->minifyHeadScript()->prependFile("public/js/front_end/layout.js")
+echo $headScript
+    ///->prependFile("public/js/front_end/jquery.main.js")
+    ->prependFile("public/js/front_end/jquery.main.js")
+    ->prependFile("public/js/front_end/layout.js")
     ->prependFile("public/js/Gettext.js")
     ->prependFile("public/js/jquery-ui-1.8.16.custom.min.js")
-    ->prependFile("public/js/back_end/jquery.validate.js")
+    ->prependFile("public/js/front_end/jquery.validate.js")
     ->prependFile("public/js/bootstrap.js")
     ->prependFile("public/js/jquery-1.7.2.min.js")
     ->prependScript('var HOST_PATH = "'.  HTTP_PATH .'";')

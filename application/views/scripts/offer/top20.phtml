@@ -2,10 +2,8 @@
 $subTitle = $this->content;
 $pageLogo = $this->pageLogo;
 $partialViewPath = 'partials/';
-echo $this->partial(
-    $partialViewPath.'_default_page_header.phtml',
-    array('pageTitle' => $this->pageTitle, 'pageLogo'=>$pageLogo ,'subTitle'=>$subTitle )
-);
+$pageHeaderPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
+echo $pageHeaderPartial->getCategoryOrPageHeader($subTitle, $pageLogo);
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">

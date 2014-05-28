@@ -17,11 +17,16 @@ class Application_Form_SignUp extends Application_Form_Base
     public function init()
     {
         $decoratorEmailAddress = new Application_Form_SimpleInput();
+
+        $emailDivWrapper = array();
+        if ($this->submitButtonClassName == 'orange') {
+            $emailDivWrapper = array('HtmlTag', array('tag' => 'div', 'class' => 'form-group'));
+        }
         $emailAddressTextBox = new Zend_Form_Element_Text(
             'emailAddress',
             array(
                 'decorators' => array(
-                   $decoratorEmailAddress,'Errors',
+                   $decoratorEmailAddress,'Errors', $emailDivWrapper
                 )
             )
         );
@@ -57,7 +62,7 @@ class Application_Form_SignUp extends Application_Form_Base
             ->addElement($hiddenFieldForShopId)
             ->setAttrib('id', $this->zendFormName)
             ->setAttrib('name', $this->zendFormName)
-            ->setAttrib('class', 'form-signin newsletter '. $this->zendFormClassName)
+            ->setAttrib('class', $this->zendFormClassName !='' ? 'email-form form-inline' : 'form-signin newsletter ')
             ->setMethod('POST')
             ->setDecorators(array('FormElements','Form'));
     }

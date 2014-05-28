@@ -1,0 +1,307 @@
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.page404 #footer {
+  text-shadow: none;
+  background: none;
+  font-size: 15px;
+  line-height: 18px;
+}
+.page404 #footer .bottom-panel {
+  color: #878a8d;
+  width: 100%;
+  background: #ffffff;
+  border-width: 1px 0;
+  border-style: solid;
+  border-color: #e4e4e4;
+  text-align: left;
+}
+.page404 #footer .bottom-panel .container {
+  padding-top: 45px;
+  padding-bottom: 35px;
+}
+.page404 #footer .bottom-panel .text {
+  float: left;
+  padding: 0 15px;
+  width: 20%;
+}
+.page404 #footer .bottom-panel .text h2 {
+  font-size: 21px;
+  line-height: 24px;
+  margin: 0;
+}
+.page404 #footer .add-block {
+  padding: 40px 15px;
+}
+.page404 #footer .add-block .benefits {
+  padding: 0;
+  margin: 0 0 40px;
+  list-style: none;
+}
+.page404 #footer .add-block .benefits li {
+  width: 20%;
+  margin: 0 1%;
+  display: inline-block;
+  vertical-align: top;
+  text-align: left;
+}
+.page404 #footer .title {
+  font-size: 24px;
+  line-height: 30px;
+  color: #0077cc;
+  font-weight: bold;
+  text-align: center;
+  margin: 0 0 44px;
+}
+.page404 #footer .title .glyphicon-ok {
+  font-size: 28px;
+  vertical-align: top;
+  margin: -2px 11px 0 0;
+}
+.page404 #footer .language {
+  padding: 0;
+  margin: 0 0 27px;
+  list-style: none;
+}
+.page404 #footer .language li {
+  display: inline-block;
+  vertical-align: top;
+  margin: 0 3px;
+}
+.page404 #footer .language a {
+  display: block;
+  background: url(../../images/sprite.png) no-repeat -3px -455px;
+  width: 24px;
+  height: 16px;
+  text-indent: -9999px;
+  overflow: hidden;
+}
+.page404 #footer .language .ico-2 {
+  background-position: -37px -455px;
+}
+.page404 #footer .language .ico-3 {
+  background-position: -71px -455px;
+}
+.page404 #footer .language .ico-4 {
+  background-position: -106px -455px;
+}
+.page404 #footer .language .ico-5 {
+  background-position: -139px -455px;
+}
+.page404 #footer .language .ico-6 {
+  background-position: -173px -455px;
+}
+.page404 #footer .language .ico-7 {
+  background-position: -207px -455px;
+}
+.page404 #footer .language .ico-8 {
+  background-position: -241px -455px;
+}
+.page404 #footer .logo {
+  display: block;
+  float: none;
+  background: url(../../images/logo-footer.png) no-repeat;
+  width: 89px;
+  height: 40px;
+  margin: 0 auto 21px;
+}
+.page404 #footer .copy {
+  font-size: 11px;
+  line-height: 20px;
+}
+.page404 .bg-stretch {
+  position: fixed;
+  z-index: -1;
+  margin: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+.page404 #footer .logo {
+  background: url(../../images/logo-footer-white.png) no-repeat;
+  width: 89px;
+  height: 40px;
+}
+.page404 #footer .copy,
+.page404 #footer .title,
+.page404 #footer .add-block .benefits,
+.page404 #footer h3 {
+  color: #fff;
+}
+.page404 .section404 {
+  max-width: 570px;
+  margin: 0 auto;
+  padding: 6px 0 36px;
+  text-align: center;
+}
+.page404 .section404 .row-block:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.page404 .section404 .logo {
+  float: none;
+  display: block;
+  margin: 0 auto 69px;
+}
+.page404 .section404 .text-block {
+  width: 571px;
+  margin: 0 auto;
+  color: #fff;
+  font-size: 13px;
+  line-height: 16px;
+}
+.page404 .section404 .text-block a {
+  text-decoration: underline;
+}
+.page404 .section404 .text-block a:hover {
+  text-decoration: none;
+}
+.page404 .section404 .text-block h1 {
+  font-size: 42px;
+  line-height: 44px;
+  color: #fff;
+  font-weight: bold;
+  margin: 0 0 11px;
+  letter-spacing: -1px;
+}
+.page404 .section404 .text-block a {
+  color: #fff;
+}
+.page404 .section404 .text-block p {
+  margin: 0 30px;
+}
+.page404 .section404 .text-block .search-box {
+  float: none;
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: top;
+  margin: 46px 0 41px;
+  width: 520px;
+}
+.page404 .section404 .search-form {
+  float: none;
+  overflow: hidden;
+  position: relative;
+  padding: 0 52px 0 0;
+}
+.page404 .section404 .search-form .btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+.page404 .section404 .search-form input[type="text"] {
+  width: 100%;
+  padding: 14px 16px 15px;
+}
+.page404 .section404 .sponsors-block {
+  width: 520px;
+  margin: 0 auto;
+  background: #000;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 2px;
+  padding: 20px 25px 1px;
+}
+.page404 .section404 .sponsors-block h2 {
+  font-size: 24px;
+  line-height: 27px;
+  color: #fff;
+  font-weight: bold;
+  margin: 0 auto 29px;
+  width: 250px;
+}
+.page404 .section404 .sponsors-block ul {
+  list-style: none;
+  margin: 0 -25px -2px 0;
+  padding: 0;
+  letter-spacing: -4px;
+  line-height: 0;
+}
+.page404 .section404 .sponsors-block img {
+  vertical-align: top;
+  border-radius: 1px;
+}
+.page404 .section404 .sponsors-block li {
+  list-style: none;
+  list-style-position: outside;
+  display: inline-block;
+  vertical-align: top;
+  letter-spacing: 0;
+  margin: 0 30px 29px 3px;
+}
+@media only screen and (max-width: 1199px) {
+  .page404 .section404 {
+    text-align: center;
+    padding: 0 0 2px;
+  }
+  .page404 .section404 .logo {
+    margin: 0 auto 5px;
+  }
+  .page404 .section404 .text-block {
+    float: none;
+    width: auto;
+    text-align: center;
+  }
+  .page404 .section404 .sponsors-block {
+    float: none;
+    width: auto;
+    margin: 0;
+    padding: 20px 15px 1px;
+  }
+  .page404 .section404 .search-form input[type="text"] {
+    padding: 9px 15px 8px;
+  }
+  .page404 .search-box {
+    float: none;
+    display: inline-block;
+    vertical-align: top;
+    margin: 15px 0 10px;
+    overflow: hidden;
+  }
+  .page404 .search-box .opener {
+    display: none;
+  }
+  .page404 .search-box .slide {
+    position: static !important;
+  }
+}
+@media only screen and (max-width: 979px) {
+  .page404 #footer {
+    font-size: 12px;
+  }
+  .page404 #footer .add-block {
+    padding: 25px 10px;
+  }
+  .page404 #footer .title {
+    margin: 0 0 27px;
+  }
+  .search-form .btn {
+    width: 41px !important;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .page404 #footer .add-block .benefits li {
+    display: block;
+    width: 100%;
+    margin: 0 0 10px;
+    text-align: center;
+  }
+  .page404 .section404 .text-block h1 {
+    font-size: 33px;
+    line-height: 36px;
+  }
+  .page404 .section404 .text-block p {
+    margin: 0;
+  }
+  .page404 .section404 .text-block .search-box {
+    width: auto;
+    display: block;
+    margin: 10px 0;
+  }
+  .page404 #footer .add-block {
+    padding: 1px 15px 20px;
+  }
+}
