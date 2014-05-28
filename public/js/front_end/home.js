@@ -1,8 +1,10 @@
 $(document).ready(function(){
+
     $('.vouchers').hide();
     $('.vouchers:eq(0)').show();
     $('div.tab-content div:gt(0)').hide();
     removeActiveClass();
+    $('#div_topOffers').addClass('active-li');
 });
 function showRelatedDiv(element){
 	removeActiveClass();
