@@ -57,6 +57,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->pageMode = true;
                 } else {
                     $this->getResponse()->setHttpResponseCode(404);
+                    $this->view->popularShops = Shop::getPopularStore(10);
                 }
                 break;
             default:
