@@ -54,10 +54,10 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
     }
 
     public static function forgotPassword($visitorEmail) {
-        $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail ( FrontEnd_Helper_viewHelper::sanitize($visitorEmail));
+        $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(FrontEnd_Helper_viewHelper::sanitize($visitorEmail));
         $visitor = false;
         if ($visitorDetails) {
-            $visitor =  array ('id' => $visitorDetails['id'], 'username' => $visitorDetails['firstName']);
+            $visitor = array('id' => $visitorDetails['id'], 'username' => $visitorDetails['firstName']);
         }
         return $visitor;
     }

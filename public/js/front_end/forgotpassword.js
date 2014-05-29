@@ -10,7 +10,7 @@ $(document).ready(function() {
     $("input").keypress(function(event) {
         if (event.which == 13) {
             if($("#forgotPassword").valid()==true){
-            return true;
+                return true;
             }else{
                 return false;
             }
