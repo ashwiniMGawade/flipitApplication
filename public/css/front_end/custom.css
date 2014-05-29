@@ -115,7 +115,7 @@ select.input-success {
 }
 .best-items .categories-block ul li a.active-li .box {
   padding: 0 14px;
- /* width: 63.5%;*/
+  /*width: 63.5%;*/
 }
 .best-items .categories-block ul li a.active-li .box {
   display: table-cell;
@@ -146,6 +146,7 @@ select.input-success {
 }
 .inner-section-wrapper {
   margin: 2%;
+}
 #fade {
   background: none repeat scroll 0 0 #000000;
   color: #010000;
