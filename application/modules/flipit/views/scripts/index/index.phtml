@@ -26,7 +26,7 @@ $mostPopularCoupon = FrontEnd_Helper_viewHelper::getMostPopularCouponOnEarth();
 if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
     $countryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
     $localeName = $mostPopularCoupon['locale'] == 'en' ? '' : $mostPopularCoupon['locale'].'/';
-    $domainName = $mostPopularCoupon['locale'] == 'en' ? 'http://www.kortingscode.nl' : 'http://www.flipit.com/'.$localeName;
+    $domainName = $mostPopularCoupon['locale'] == 'en' ? 'http://www.kortingscode.nl/' : 'http://www.flipit.com/'.$localeName;
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
     $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($mostPopularCoupon['mostPopularCoupon'][0]['endDate']);
     $offerExpiryDate =  $offerPartial->getOfferDates((object) $mostPopularCoupon['mostPopularCoupon'][0], $daysTillOfferExpires);
@@ -90,9 +90,15 @@ if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopul
                 ?>        
                 <span class="alt-text">Most Popular Coupon ON EARTH</span>
                 <div class="sponsor-box">
-                    <span class="image"><img src="<?php echo PUBLIC_PATH_CDN.$localeName.ltrim($mostPopularCoupon['mostPopularCoupon'][2]['path'], '/').$mostPopularCoupon['mostPopularCoupon'][2]['name']; ?>" alt="image description" width="86" height="44" /></span>
+                    <span class="image">
+                        <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
+                            <img src="<?php echo PUBLIC_PATH_CDN.$localeName.ltrim($mostPopularCoupon['mostPopularCoupon'][2]['path'], '/').$mostPopularCoupon['mostPopularCoupon'][2]['name']; ?>" alt="image description" width="86" height="44" />
+                        </a>    
+                    </span>
                     <div class="text-box">
-                        <strong>Flipit <?php echo $countryName; ?> - <?php echo $mostPopularCoupon['mostPopularCoupon'][1]['name']; ?> </strong>
+                         <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
+                            <strong>Flipit <?php echo $countryName; ?> - <?php echo $mostPopularCoupon['mostPopularCoupon'][1]['name']; ?> </strong>
+                        </a>
                         <p><span class="mark"><?php echo $offerExpiryDate; ?></span>
                             <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['exclusiveCode'] != '' ? 
                             '<span class="mark2">Exclusive</span>' : '' ; ?></p>
