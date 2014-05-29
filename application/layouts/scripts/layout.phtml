@@ -103,7 +103,7 @@ if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='in
     <?php
 endif;
 if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='index'
-    || zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus'
+    && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus'
 ) :
     ?>
         <main id="main" role="main" class="container">
@@ -112,8 +112,9 @@ endif;
 
 echo $this->layout()->content;
 
+
 if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='index'
-    || zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus'
+    && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus'
 ) :
     ?>
         </main>
