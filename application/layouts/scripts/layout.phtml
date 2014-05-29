@@ -93,6 +93,7 @@ if(file_exists($localePartialPath .  '_header.phtml')) :
 else:
     echo $baseViewPath->render($partials.'_header.phtml');
 endif;
+
 echo FrontEnd_Helper_LayoutContent::homePageBanner($this->banner);
 echo FrontEnd_Helper_LayoutContent::homePageSearch();
 

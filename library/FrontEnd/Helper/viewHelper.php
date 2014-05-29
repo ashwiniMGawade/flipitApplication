@@ -740,12 +740,16 @@ EOD;
     public static function getMostPopularCouponOnEarth()
     {
         $splashInformation = self::getSplashInformation();
-        $locale = $splashInformation[0]['locale'];
-        $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
-        $offer = new Offer($connectionWithSiteDatabase['connName']);
-        $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
-        BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
-        return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
+        if (!empty($splashInformation)) {
+            $locale = $splashInformation[0]['locale'];
+            $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
+            $offer = new Offer($connectionWithSiteDatabase['connName']);
+            $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
+            BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
+            return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
+        } else {
+            return array('locale' => '','mostPopularCoupon' => '');
+        }  
     }
 
     public static function getSplashInformation()
