@@ -69,13 +69,20 @@ class LoginController extends Zend_Controller_Action
                 base64_encode($visitorDetails['emailAddress'])
             );
         } else {
-            $flashMessage = $this->_helper->getHelper('FlashMessenger');
-            $flashMessage->addMessage(array('error' => $this->view->translate('User Does Not Exist')));
-            $this->_redirect(
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login')
+            $this->addFlashMessage(
+                'User Does Not Exist',
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login'),
+                'error'
             );
         }
         return;
+    }
+
+    public function addFlashMessage($message, $redirectLink, $errorType)
+    {
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $flashMessage->addMessage(array($errorType => $this->view->translate($message)));
+        $this->_redirect($redirectLink);
     }
 
     public function logoutAction()
@@ -88,183 +95,101 @@ class LoginController extends Zend_Controller_Action
         $module = $this->getRequest()->getParam('lang');
         $this->_helper->redirector('index');
     }
+
+    public function forgotpasswordAction()
+    {
+        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
+        $this->view->headTitle($this->view->translate("Members Only"));
+        $forgotPasswordForm = new Application_Form_ForgotPassword();
+        $this->view->form = $forgotPasswordForm;
+        if ($this->getRequest()->isPost()) {
+            if ($forgotPasswordForm->isValid($_POST)) {
+                $visitorDetails = Auth_VisitorAdapter::forgotPassword($forgotPasswordForm->getValue('emailAddress'));
+                if ($visitorDetails!= false) {
+                    $mandrilFrontEnd = new FrontEnd_Helper_MandrillMailFunctions();
+                    $mandrilFrontEnd->sendForgotPasswordMail(
+                        $visitorDetails['id'],
+                        $forgotPasswordForm->getValue('emailAddress'),
+                        $this
+                    );
+                    $this->addFlashMessage(
+                        'Please check you mail and click on reset password link',
+                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login') . '/'
+                        .FrontEnd_Helper_viewHelper::__link('forgotpassword'),
+                        'error'
+                    );
+                } else {
+                    $this->addFlashMessage(
+                        'Wrong Email address Please enter valid email address',
+                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login') . '/'
+                        .FrontEnd_Helper_viewHelper::__link('forgotpassword'),
+                        'error'
+                    );
+                }
+            } else {
+                $forgotPasswordForm->highlightErrorElements();
+            }
+        }
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $this->view->pageCssClass = 'login-page';
+    }
+
+    public function resetpasswordAction()
+    {
+        $this->view->headTitle($this->view->translate("Members Only"));
+        $visitorId  = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
+        $visitor = Doctrine_Core::getTable("Visitor")->find($visitorId);
+        $resetPasswordForm =  new Application_Form_ResetPassword();
+        $this->view->form = $resetPasswordForm;
+        if ($visitor['changepasswordrequest']) {
+            $this->view->resetLinkMessage = $this->view->translate('Password Reset Link has already been used!');
+            $this->view->linkAlreadyUsed = false;
+        } else {
+            $this->view->linkAlreadyUsed = true;
+        }
+        if ($this->getRequest()->isPost()) {
+            if ($resetPasswordForm->isValid($_POST)) {
+                self::resetPassword(
+                    $visitorId,
+                    $resetPasswordForm->getValue('password'),
+                    $this->_request->getParam("forgotid")
+                );
+            } else {
+                $resetPasswordForm->highlightErrorElements();
+            }
+        }
+        $this->view->pageCssClass = 'login-page';
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+    }
+
+    public function resetPassword($visitorId, $newPassword, $econdedVisitorId)
+    {
+        $passwordUpdated = Visitor::updateVisitorPassword($visitorId, $newPassword);
+        if ($passwordUpdated) {
+            if (!Auth_VisitorAdapter::hasIdentity()) {
+                Visitor::updatePasswordRequest($visitorId, 1);
+                $redirectLink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login');
+            } else {
+                Visitor::updatePasswordRequest($visitorId, 1);
+                $redirectLink =
+                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'). '/'
+                    .FrontEnd_Helper_viewHelper::__link('profiel');
+            }
+            $this->addFlashMessage('Your password has been changed.', $redirectLink, 'success');
+        } else {
+            $this->addFlashMessage(
+                'Invalid reset password url please confirm again.',
+                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'). '/'
+                .FrontEnd_Helper_viewHelper::__link('resetpassword') .'/' . $econdedVisitorId,
+                'success'
+            );
+        }
+        return true;
+    }
     ###########################################################
     ############## END REFACTORED CODE ########################
     ###########################################################
-    /**
-     * forget password by email
-     *
-     * @version 1.0
-     */
-    public function forgotpasswordAction()
-    {
-        $this->view->controllerName = $this->getRequest()->getControllerName();
-        $this->view->actionName = $this->getRequest()->getActionName();
-
-        # get cononical link
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
-
-        $headTitle = $this->view->translate("Members Only ");
-        $this->view->headTitle($headTitle);
-    }
-    /**
-     * send mail to user for reset password
-     *
-     * @version 1.0
-     */
-    public function forgotpwdAction()
-    {
-        $headTitle = $this->view->translate("Members Only ");
-        $this->view->headTitle($headTitle);
-        $params = $this->_request->getParams();
-
-        if ($this->getRequest()->isPost()) {
-
-            $email = $params["email"];
-            $result = Auth_VisitorAdapter::forgotPassword($email);
-
-            if ($result == true) {
-                $resultuserid = base64_encode($result["id"]);
-
-                $domain = $_SERVER['HTTP_HOST'];
-
-                $imgLogoMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
-
-                $siteName = "Flipit.com";
-
-                $siteUrl = HTTP_PATH_LOCALE;
-
-                if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl") {
-
-                    $imgLogoMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
-
-                    $siteName = "Kortingscode.nl";
-
-                }
-                $mailData = array(array('name'=>'headerWelcome',
-                        'content'=>$imgLogoMail
-                ),
-                        array('name'=>'bestRegards',
-                                'content'=>$this->view->translate('Beste').' '.$siteName.' '.$this->view->translate('Bezoeker,')
-                        ),
-                        array('name'=>'centerContent',
-                                'content'=>$this->view->translate('Geen enkel probleem dat u uw wachtwoord heeft vergeten, via de volgende link kunt u deze opnieuw instellen:'). '<a href="'
-                                            . HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('resetpassword').'/'.$resultuserid
-                                            . '">'.$this->view->translate('Klik hier').'</a>'
-                        ),
-                        array('name'=>'bottomContent',
-                                'content'=> $this->view->translate('Groetjes').',<br><br>'. $this->view->translate('De redactie van Kortingscode.nl')
-
-                        ),
-                        array('name'=>'copyright',
-                                'content'=>$this->view->translate('Copyright &copy; 2013').' '.$siteName.'. '.$this->view->translate('All Rights Reserved.')
-                        ),
-                        array('name'=>'address',
-                                'content'=>$this->view->translate("U ontvangt deze nieuwsbrief omdat u ons uw toestemming heeft gegeven om u op de hoogte te houden van onze laatste").
-                                '<br/>' . $this->view->translate("acties."). '<a href='.$siteUrl.' style="color:#ffffff; padding:0 2px;">'.$siteName.'</a>' . $this->view->translate('is een onderdeel van Imbull, Weteringschans 120, 1017XT Amsterdam - KvK 34339618')
-                        ),
-                        array('name'=>'logincontact',
-                                'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;" href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'">'.$this->view->translate('Inloggen').'</a>'
-                        ));
-
-                $email_data = Signupmaxaccount::getemailmaxaccounts();
-                $emailFrom  = $email_data[0]['emailperlocale'];
-
-                $mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
-                $template_name = $this->getInvokeArg('welcomeTemplate');
-                $template_content = $mailData;
-                $message = array(
-                        'subject'    => $this->view->translate('Wachtwoord Wijziging'),
-                        'from_email' => $emailFrom,
-                        'from_name'  => $this->view->translate('Forgot-Password'),
-                        'to'         => array(array('email'=>$this->getRequest()->getParam("email"),'name'=> 'Member')) ,
-                        'inline_css' => true
-                );
-                $mandrill->messages->sendTemplate($template_name, $template_content, $message);
-
-                //Update table visitor field flag = true
-                $v = Visitor::updatePasswordRequest($result["id"], 0);
-                echo "emailsent";
-                die();
-            } else {
-                echo "emailnotfound";
-                die();
-            }
-
-        }
-    }
-    /**
-     * reset password by email link
-     *
-     * @version 1.0
-     */
-    public function resetpasswordAction()
-    {
-        $headTitle = $this->view->translate("Members Only ");
-        $this->view->headTitle($headTitle);
-
-        $params = $this->_request->getParams();
-        $user_id = @(base64_decode($params["forgotid"]));
-
-
-        $user_id = FrontEnd_Helper_viewHelper::sanitize( $user_id) ;
-        // find visitor exist  based on $user_id
-        $visitor = Doctrine_Core::getTable("Visitor")->find($user_id);
-
-        if($visitor['changepasswordrequest']) {
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('Password Reset Link has already been used!');
-            $flash->addMessage(array('success' => $message));
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $flash->getMessages();
-            $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-            $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-            $this->view->flag = false;
-        }else{
-            $this->view->flag = true;
-        }
-        $this->view->forgotid = $user_id;
-
-    }
-
-    public function resetpwdAction()
-    {
-        $headTitle = $this->view->translate("Members Only ");
-        $this->view->headTitle($headTitle);
-
-        $params = $this->_request->getParams();
-        $user_id = $params["forgotid"];
-        if ($this->getRequest()->isPost()) {
-            $newpwd = $params["pwd"];
-            $res = Visitor::updatefrontendPassword($user_id, $newpwd);
-            if ($res) {
-
-                $flash = $this->_helper->getHelper('FlashMessenger');
-                $message = $this->view
-                        ->translate('Uw wachtwoord is gewijzigd.');
-                $flash->addMessage(array('success' => $message));
-
-                if (!Auth_VisitorAdapter::hasIdentity()) {
-
-                    echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login');
-                    //update visitor field flag true;
-                    $v = Visitor::updatePasswordRequest($user_id, 1);
-
-                } else {
-                    echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'). '/' .FrontEnd_Helper_viewHelper::__link('profiel');
-                    //update visitor field flag false;
-                    $v = Visitor::updatePasswordRequest($user_id, 1);
-                }
-                die;
-            } else {
-
-                echo "usernotfound";
-                die();
-
-            }
-        }
-    }
 
     /**
      * redirecttosignup

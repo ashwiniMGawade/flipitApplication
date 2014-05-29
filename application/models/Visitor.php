@@ -82,6 +82,30 @@ class Visitor extends BaseVisitor
         $visitor->save();
         return $visitor->id;
     }
+
+    public static function updatePasswordRequest($visitorId, $flag)
+    {
+         $visitor = Doctrine_Query::create()->update('Visitor')
+         ->set('changepasswordrequest', $flag)
+         ->where('id='. FrontEnd_Helper_viewHelper::sanitize($visitorId))
+         ->execute();
+         return;
+    }
+
+    public static function updateVisitorPassword($visitorId, $password)
+    {
+        $visitorId = FrontEnd_Helper_viewHelper::sanitize($visitorId);
+        $visitor = Doctrine_Core::getTable("Visitor")->find($visitorId);
+        if ($visitor) {
+            $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($password));
+            $visitor->pwd = FrontEnd_Helper_viewHelper::sanitize($password);
+            $visitor->save();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     #############################################################
     ######### END REFACTRED CODE ################################
     #############################################################
@@ -334,30 +358,6 @@ class Visitor extends BaseVisitor
         return false;
 
     }
-    /**
-     * update password in exist in database or not for the frontend
-     * @param string $passwordToBeModfified
-     * @author sunny patial
-     * @version 1.0
-     */
-    public static function updatefrontendPassword($visitorid,$password)
-    {
-        $visitorid = FrontEnd_Helper_viewHelper::sanitize($visitorid);
-
-        $visitor = Doctrine_Core::getTable("Visitor")->find($visitorid);
-
-        if($visitor){
-
-            $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($password));
-            $visitor->pwd = FrontEnd_Helper_viewHelper::sanitize( $password) ;
-            $val = $visitor->save();
-            return true;
-
-        } else {
-
-            return false;
-        }
-    }
 
     /**
      * delete number of records of favorite shops
@@ -608,18 +608,6 @@ public static function Visitortotal_acc()
     ->fetchArray();
     return $data;
 }*/
-    /**
-     * function used to update password request
-     * @param interger $vId
-     * @author blal
-     */
-    public static function updatePasswordRequest($vId,$flag)
-    {
-        $v = Doctrine_Query::create()->update('Visitor')
-            ->set('changepasswordrequest', $flag)
-            ->where('id='. FrontEnd_Helper_viewHelper::sanitize(  $vId) )
-        ->execute();
-    }
 
     /**
      * get No of Subscribers in last 7 days for dashboard
