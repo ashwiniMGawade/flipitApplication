@@ -35,6 +35,7 @@ class SignupController extends Zend_Controller_Action
         $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ?
         $message[0]['error'] : '';
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
@@ -43,9 +44,7 @@ class SignupController extends Zend_Controller_Action
         $pageId = PageAttribute::getPageAttributeIdByName($pageName);
         $pageDetails =  Page::getPageFromFilteredPageAttribute($pageId);
         $this->view->pageTitle = $pageDetails['pageTitle'];
-        $this->view->headTitle($pageDetails['metaTitle']);
-        $this->view->headMeta()->setName('description', trim($pageDetails['metaDescription']));
-
+        $this->viewHelperObject->getFacebookMetaTags($this);
         $registrationForm = new Application_Form_Register();
         $this->view->form = $registrationForm;
         if ($this->getRequest()->isPost()) {
@@ -140,6 +139,7 @@ class SignupController extends Zend_Controller_Action
         }
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
+        $this->viewHelperObject->getFacebookMetaTags($this);
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
