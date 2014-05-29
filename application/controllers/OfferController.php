@@ -10,7 +10,7 @@ class OfferController extends Zend_Controller_Action
         $pageName = 'top-20';
         $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
         $page = Page::getPageFromPageAttribute($pageAttributeId);
-        $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('top_20_offers_list', Offer::getTopOffers(20));
+        $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('top_20_offers_list', array('function' => 'Offer::getTopOffers', 'parameters' => array(20)));
         $this->view->content = $page->content;
         $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($page->logo['path'].$page->logo['name']);
         $this->view->pageTitle = $page->pageTitle;
@@ -36,10 +36,10 @@ class OfferController extends Zend_Controller_Action
         $couponDetails = Offer::getCouponDetails($extendedUrl);
         $ShopList = $couponDetails[0]['shop']['id'].'_list';
         $allShopDetailKey = 'all_shopdetail'.$ShopList;
-        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allShopDetailKey, Shop::getStoreDetails($couponDetails[0]['shop']['id']));
+        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allShopDetailKey, array('function' => 'Shop::getStoreDetails', 'parameters' => array($couponDetails[0]['shop']['id'])));
         $shopImage = PUBLIC_PATH_CDN.$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'. $couponDetails[0]['shop']['logo']['name'];
         $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
-        $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $couponDetails[0]['shop']['id']));
+        $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allLatestUpdatesInStoreKey, array('function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode', 'parameters' => array('latestupdates', 4, $couponDetails[0]['shop']['id'])));
 
         if (count($couponDetails)==0) {
             $this->_redirect(HTTP_PATH_LOCALE.'error');

@@ -521,6 +521,13 @@ EOD;
 
     public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '')
     {
+        
+        if ($relatedFunction['function'] == '') {
+            $function = $relatedFunction['parameters'];
+        } else {
+            $function = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
+        }
+
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
             if ($replaceStringArrayCheck == '') {

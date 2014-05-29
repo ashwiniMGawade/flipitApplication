@@ -37,8 +37,8 @@ class CategoryController extends Zend_Controller_Action
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
         $this->pageDetails = Page::getPageFromPageAttribute(9);
-        $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoriesDetail());
-        $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialListPages());
+        $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', array('function' => 'Category::getCategoriesDetail', 'parameters' => array()));
+        $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', array('function' => 'Page::getSpecialListPages', 'parameters' => array()));
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
 
         $customHeader = isset($this->pageDetails->customHeader) ? $this->pageDetails->customHeader : '';
