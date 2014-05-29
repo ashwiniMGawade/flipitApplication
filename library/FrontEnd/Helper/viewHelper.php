@@ -787,7 +787,7 @@ EOD;
         $currentObject->view->facebookLocale = $facebookLocale;
         $currentObject->view->twitterDescription = $metaDescription;
 
-        if ($requestedData->customHeader) {
+        if (isset($customHeader)) {
             $currentObject->view->layout()->customHeader = $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
         }
         return $currentObject;

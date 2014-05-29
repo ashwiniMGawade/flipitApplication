@@ -39,7 +39,7 @@ $("input#searchFieldHeader").autocomplete({
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
         url = item.permalink;
         return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
-            $("<a href=" + url + "></a>").html((__highlight(item.label,$("input#searchFieldHeader").val()))))
+            $("<a href=" + HOST_PATH_LOCALE + url + "></a>").html((__highlight(item.label,$("input#searchFieldHeader").val()))))
         .appendTo(ul);
      };  
     $("a#searchbuttonHeader").click(function(){
