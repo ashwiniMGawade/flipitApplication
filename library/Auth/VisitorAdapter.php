@@ -52,23 +52,18 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
         $visitoSession= new Zend_Auth_Storage_Session('front_login');
         return $visitoSession->clear();
     }
+
+    public static function forgotPassword($visitorEmail) {
+        $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(FrontEnd_Helper_viewHelper::sanitize($visitorEmail));
+        $visitor = false;
+        if ($visitorDetails) {
+            $visitor = array('id' => $visitorDetails['id'], 'username' => $visitorDetails['firstName']);
+        }
+        return $visitor;
+    }
     #############################################################
     ############# END REFACTORED CODE ###########################
     #############################################################
-	/**
-	 * forget password check by email from the database
-	 * @param $eMail string       	
-	 */
-	public static function forgotPassword($eMail) {
-		$result = Doctrine_Core::getTable ( 'Visitor' )->findOneByemail ( FrontEnd_Helper_viewHelper::sanitize($eMail ) );
-		if ($result) {
-			
-			return array ('id' => $result ['id'], 'username' => $result ['firstName'] );
-		} else {
-			return false;
-		
-		}
-	}
 	/**
 	 * generate new password for user
 	 * @param $length string       	
