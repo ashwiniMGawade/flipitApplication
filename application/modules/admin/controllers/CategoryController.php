@@ -126,7 +126,7 @@ class Admin_CategoryController extends Zend_Controller_Action
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         if ($id > 0) {
             // get edit category
-            $category = Category::getCategory ($id);
+            $category = Category::getCategoryInformation($id);
             $this->view->categoryDetail = $category;
         }
 

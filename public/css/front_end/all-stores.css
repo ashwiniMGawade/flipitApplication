@@ -1,20 +1,10 @@
-/*Updated css*/
-.shop-name {
-  margin: 0;
-  padding: 0 15px 0 15px;
-  list-style: none;
-}
-.shop-name:nth-child(3) li:last-child{
-  border: none;    
-}
-/*Updated Css*/
 .after {
   content: '';
   display: block;
   clear: both;
 }
-.content-holder {
-  background: #fff;
+.all-stores-page .content-holder {
+  background: #ffffff;
   border-radius: 2px;
   -webkit-border-radius: 2px;
   border: 1px solid #d8d8d8;
@@ -22,65 +12,75 @@
   margin: 0 0 25px;
   overflow: hidden;
 }
-.content-holder .block {
+.all-stores-page .content-holder .block {
   font-size: 14px;
   line-height: 18px;
   border-top: 1px solid #eaeaea;
   padding: 23px 29px;
 }
-.content-holder .block:after {
+.all-stores-page .content-holder .block:after {
   content: '';
   display: block;
   clear: both;
 }
-.content-holder .block h2 {
+.all-stores-page .content-holder .block h2 {
   font-size: 33px;
   line-height: 36px;
   margin: 0 0 19px;
 }
-.content-holder .block .shops {
+.all-stores-page .content-holder .block .shops {
   padding: 6px 0 8px;
 }
-.alphabet {
+.all-stores-page .alphabet {
+  font-size: 19px;
   padding: 35px 15px 34px;
   margin: 0;
   list-style: none;
   text-transform: uppercase;
-  font-size: 19px;
   line-height: 22px;
   text-align: center;
+  overflow: hidden;
 }
-.alphabet li {
+.all-stores-page .alphabet li {
+  float: none;
   display: inline-block;
   vertical-align: top;
-  border-left: 1px solid #eaeaea;
+  width: auto;
   padding: 0 6px 0 5px;
-  margin: 0 0 0 -4px;
+  border-left: 1px solid #ddd;
 }
-.alphabet li:first-child {
-  margin-left: 0;
+.all-stores-page .alphabet li:first-child {
   border: none;
+  margin-left: 0;
 }
-.alphabet li a {
+.all-stores-page .alphabet li a {
   color: #0077cc;
 }
-.alphabet li a:hover {
+.all-stores-page .alphabet li a:hover,
+.all-stores-page .alphabet li a:focus {
   color: #33383e;
 }
-.shop-name li {
+.all-stores-page .shop-name {
+  margin: 0 -20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.all-stores-page .shop-name li {
   margin: 0 0 6px;
 }
-.shop-name li a {
+.all-stores-page .shop-name li a {
   color: #0077cc;
 }
-.shop-name li a:hover {
+.all-stores-page .shop-name li a:hover,
+.all-stores-page .shop-name li a:focus {
   color: #33383e;
 }
-.btn-top {
+.all-stores-page .btn-top {
   display: inline-block;
   vertical-align: top;
+  color: #878a8d;
 }
-.btn-top:after {
+.all-stores-page .btn-top:after {
   content: '';
   display: inline-block;
   vertical-align: middle;
@@ -89,38 +89,43 @@
   height: 7px;
   margin: 0 0 0 5px;
 }
-.btn-top:hover:after {
+.all-stores-page .btn-top:hover,
+.all-stores-page .btn-top:focus {
+  color: #878a8d;
+}
+.all-stores-page .btn-top:hover:after,
+.all-stores-page .btn-top:focus:after {
   background-position: -203px -156px;
 }
 @media only screen and (max-width: 1199px) {
-  .content-holder .block {
+  .all-stores-page .content-holder .block {
     font-size: 13px;
   }
-  .alphabet {
+  .all-stores-page .alphabet {
     text-align: left;
   }
-  .alphabet li {
+  .all-stores-page .alphabet li {
     border-left: none;
     border-right: 1px solid #eaeaea;
     padding: 0 5px 0 6px;
   }
-  .alphabet li:first-child {
+  .all-stores-page .alphabet li:first-child {
     padding-left: 0;
   }
 }
 @media only screen and (max-width: 979px) {
-  .content-holder .block {
+  .all-stores-page .content-holder .block {
     padding: 13px 15px;
   }
-  .content-holder .block h2 {
+  .all-stores-page .content-holder .block h2 {
     font-size: 25px;
     line-height: 28px;
   }
-  .alphabet {
+  .all-stores-page .alphabet {
     margin: 0 -10px 0 0;
     padding: 35px 30px 34px;
   }
-  .alphabet li {
+  .all-stores-page .alphabet li {
     border: none;
     width: 50px;
     margin: 0 10px 10px 0;
@@ -129,53 +134,43 @@
   }
 }
 @media only screen and (max-width: 767px) {
-  .alphabet {
+  .all-stores-page .alphabet {
     text-align: center;
     padding: 10px;
     margin: 0;
   }
-  .content-holder {
+  .all-stores-page .content-holder {
     padding: 0;
     margin: 0 0 29px;
   }
-  .content-holder .block {
+  .all-stores-page .content-holder .block {
     padding: 10px;
   }
-  .content-holder .block .row {
+  .all-stores-page .content-holder .block .row {
     margin: 0 -10px;
     border-top: 1px solid #e8e8e8;
   }
-  .content-holder .block .box {
+  .all-stores-page .content-holder .block .box {
     text-align: center;
     padding: 0;
   }
-  .content-holder .block h2 {
+  .all-stores-page .content-holder .block h2 {
     font-size: 25px;
     line-height: 28px;
   }
-  .shop-name {
+  .all-stores-page .shop-name {
     margin: 0;
   }
-  .shop-name li {
+  .all-stores-page .shop-name li {
     margin: 0;
     border-bottom: 1px solid #e8e8e8;
   }
-  .shop-name li a {
+  .all-stores-page .shop-name li a {
     display: block;
     padding: 15px;
     text-align: center;
   }
-  .btn-top {
+  .all-stores-page .btn-top {
     margin: 15px 0 5px;
   }
-}
-
-.popup_block {
-position:fixed;
-top:50%;
-left:50%;
-margin-left:-362px;
-/* negative half from the width */
-margin-top:/* negative half from the height */
--335px
 }

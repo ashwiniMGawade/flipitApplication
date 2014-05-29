@@ -79,18 +79,28 @@
 								</div>
 							</div>
 						</div>
-						<div class="mainpage-content-line">
-							<div class="mainpage-content-left">
-								<label><strong><?php echo $this->translate('Category Icon'); ?></strong></label>
-							</div>
-							<div class="mainpage-content-right control-group">
-								<div style="width : 275px;margin-right: 245px; margin-top: -2px !important;" class="mainpage-content-right-inner-right-other upload"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
-								<div class="mainpage-content-right-inner-left-other">
-									<input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden">
-
-								</div>
-							</div>
-						</div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Category Thumbnail'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right control-group">
+                                <div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Category Featured Image'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right control-group">
+                                <div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryFeaturedImage">
+                                </div>
+                            </div>
+                        </div>
 						<div class="mainpage-content-line">
 							<div class="mainpage-content-left">
 								<label><strong><?php echo $this->translate('Description')?></strong></label>

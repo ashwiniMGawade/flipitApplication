@@ -29,6 +29,8 @@ class AboutController extends Zend_Controller_Action
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'authors-page';
+
     }
 
     public static function getWebsiteNameWithLocale()
@@ -64,5 +66,6 @@ class AboutController extends Zend_Controller_Action
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'author-page';
     }
 }

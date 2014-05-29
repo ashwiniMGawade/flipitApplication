@@ -155,6 +155,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
+        $this->view->pageCssClass = 'all-stores-page';
     }
 
     public function howtoguideAction()
