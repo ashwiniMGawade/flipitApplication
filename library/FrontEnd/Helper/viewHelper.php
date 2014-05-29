@@ -523,16 +523,16 @@ EOD;
     {
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
-    
             if ($replaceStringArrayCheck == '') {
-                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($relatedFunction);
+                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray(call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']));
             } else {
-                $requestedInformation = $relatedFunction;
+                $requestedInformation = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
             }
             FrontEnd_Helper_viewHelper::setInCache($dataKey, $requestedInformation);
         } else {
             $requestedInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($dataKey);
         }
+
         return $requestedInformation;
     }
     /**
