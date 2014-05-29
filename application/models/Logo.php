@@ -12,6 +12,13 @@
  */
 class Logo extends BaseLogo
 {
+    public function __contruct($connectionName = false)
+    {
+        if (!$connectionName) {
+            $connectionName = "doctrine_site" ;
+        }
+        Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
+    }
     #################################################
     ########### REFACTORED CODE #####################
     #################################################

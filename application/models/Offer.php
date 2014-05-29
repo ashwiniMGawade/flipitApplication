@@ -675,27 +675,47 @@ class Offer extends BaseOffer
 
     public static function getSplashPagePopularCoupon($offerId)
     {
-        $splashPagePopularCoupon = Doctrine_Query::create()
-            ->select('s.id,s.name,
-            s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
-            s.actualUrl,
-            o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+        $offerDetails = Doctrine_Query::create()
+            ->select('o.id,o.Visability,o.userGenerated,o.title,o.authorId,
             o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
             o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,
-            o.discountType,o.startdate,o.endDate,
-            img.id, img.path, img.name,ologo.*')
+            o.discountType,o.startdate,o.endDate, o.shopId')
             ->from('Offer o')
-            ->leftJoin('o.shop s')
-            ->leftJoin('o.logo ologo')
-            ->leftJoin('s.logo img')
             ->where('o.deleted = 0')
             ->andWhere('o.userGenerated=0')
             ->andWhere('o.id='.$offerId)
             ->andWhere('o.discounttype="CD"')
-            ->andWhere('s.deleted = 0')
             ->orderBy('o.id DESC')
             ->fetchArray();
+            //echo "<pre>";print_r($splashPagePopularCoupon);die;
+
+            $shopDetails = self::getShopDetailFromOffer($offerDetails[0]['shopId']);
+            $logoDetails = self::getShopLogo($shopDetails[0]['logoId']);
+            $splashPagePopularCoupon = array_merge($offerDetails, $shopDetails, $logoDetails);
         return $splashPagePopularCoupon;
+    }
+
+    public static function getShopDetailFromOffer($shopId)
+    {
+        $splashPagePopularCouponShopDetails = Doctrine_Query::create()
+            ->select('s.id,s.name,
+            s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
+            s.actualUrl,s.logoId')
+            ->from('Shop s')
+            ->where('s.id='.$shopId)
+            ->andWhere('s.deleted = 0')
+            ->fetchArray();
+        return $splashPagePopularCouponShopDetails;
+    }
+
+    public static function getShopLogo($logoId)
+    {
+        $splashPagePopularCouponLogo = Doctrine_Query::create()
+            ->select('l.name, l.path')
+            ->from('Logo l')
+            ->where('l.id='.$logoId)
+            ->fetchArray();
+        return $splashPagePopularCouponLogo;
     }
 
     public static function searchOffers($searchParameters, $shopIds, $limit)
