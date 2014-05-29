@@ -10,24 +10,15 @@ class OfferController extends Zend_Controller_Action
         $pageName = 'top-20';
         $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
         $page = Page::getPageFromPageAttribute($pageAttributeId);
-        if ($page->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $page->customHeader;
-        }
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('top_20_offers_list', Offer::getTopOffers(20));
         $this->view->content = $page->content;
         $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($page->logo['path'].$page->logo['name']);
         $this->view->pageTitle = $page->pageTitle;
-        $this->view->headTitle($page->metaTitle);
-        $this->view->headMeta()->setName('description', trim($page->metaDescription));
-
-        $this->view->facebookTitle = $page->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link($pageName);
-        $this->view->facebookImage = FACEBOOK_IMAGE;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
-        $this->view->facebookDescription = trim($page->metaDescription);
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription = trim($page->metaDescription);
+        
+        $customHeader = isset($page->customHeader) ? $page->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $page->pageTitle, $page->metaTitle, trim($page->metaDescription), FrontEnd_Helper_viewHelper::__link($pageName), FACEBOOK_IMAGE, $customHeader);
 
         $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
@@ -54,14 +45,6 @@ class OfferController extends Zend_Controller_Action
             $this->_redirect(HTTP_PATH_LOCALE.'error');
         }
 
-        if (LOCALE == '') {
-            $facebookImage = 'logo_og.png';
-            $facebookLocale = '';
-        } else {
-            $facebookImage = 'flipit.png';
-            $facebookLocale = LOCALE;
-        }
-
         $currentDate = date('Y-m-d');
         $topOfferFromStore = Offer::getrelatedOffers($couponDetails[0]['shopId'], $currentDate);
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularShopWidget();
@@ -70,17 +53,11 @@ class OfferController extends Zend_Controller_Action
         $this->view->couponDetails = $couponDetails;
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
-        $this->view->headTitle(trim($couponDetails[0]['extendedTitle']));
-        $this->view->headMeta()->appendName('description', trim($couponDetails[0]['extendedMetaDescription']));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
 
-        $this->view->facebookTitle = $couponDetails[0]['title'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'];
-        $this->view->facebookImage = $facebookImage;
+        $customHeader = '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $couponDetails[0]['title'], trim($couponDetails[0]['extendedTitle']), trim($couponDetails[0]['extendedMetaDescription']), FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'], FACEBOOK_IMAGE, $customHeader);
 
-        $this->view->facebookDescription = trim($couponDetails[0]['extendedMetaDescription']);
-        $this->view->facebookLocale = $facebookLocale;
-        $this->view->twitterDescription = trim($couponDetails[0]['extendedMetaDescription']);
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
@@ -107,23 +84,23 @@ class OfferController extends Zend_Controller_Action
             $this->view->offerImagePath = '';
         }
         $offerId = $offerParameters['id'];
-        $offerDetail = $offerObject->getOfferInfo($offerParameters['id']);
-        $this->view->offerdetail = $offerDetail;
+        $offerDetails = $offerObject->getOfferInfo($offerParameters['id']);
+        $this->view->offerdetail = $offerDetails;
         $this->view->vote = $offerParameters['vote'];
         $this->view->votepercentage = 0;
-        $this->view->headTitle($offerDetail[0]['title']);
-        $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'.
-        $offerDetail[0]['shop']['logo']['name'];
-        $this->view->facebookTitle = $offerDetail[0]['title'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $offerDetail[0]['shop']['permaLink'];
-        $this->view->facebookImage = $shopImage;
-        if ($offerDetail[0]['couponCodeType']  == 'UN') {
+        $shopImage = PUBLIC_PATH_CDN.$offerDetails[0]['shop']['logo']['path'].'thum_medium_store_'.
+        $offerDetails[0]['shop']['logo']['name'];
+
+        $customHeader = '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $offerDetails[0]['title'], '', '', $offerDetails[0]['shop']['permaLink'], $shopImage, $customHeader);
+
+        if ($offerDetails[0]['couponCodeType']  == 'UN') {
             $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerId);
             if ($getOfferUniqueCode) {
                 $this->view->couponCode = $getOfferUniqueCode['code'] ;
             }
         } else {
-            $this->view->couponCode = $offerDetail[0]['couponCode']  ;
+            $this->view->couponCode = $offerDetails[0]['couponCode']  ;
         }
 
     }
@@ -135,18 +112,7 @@ class OfferController extends Zend_Controller_Action
     public function indexAction()
     {
         $offerPage = Page::getPageFromPageAttribute(6);
-        if ($offerPage->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $offerPage->customHeader;
-        }
         $params = $this->_getAllParams();
-
-        if (LOCALE == '') {
-            $facebookImage = 'logo_og.png';
-            $facebookLocale = '';
-        } else {
-            $facebookImage = 'flipit.png';
-            $facebookLocale = LOCALE;
-        }
         $cacheKeyForNewsOffer =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         if ($cacheKeyForNewsOffer) {
             $offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
@@ -156,17 +122,11 @@ class OfferController extends Zend_Controller_Action
         }
         $this->view->content = $offerPage->content;
         $this->view->pageTitle = $offerPage->pageTitle;
-        $this->view->headTitle($offerPage->metaTitle);
-        $this->view->headMeta()->setName('description', trim($offerPage->metaDescription));
-        $this->view->facebookTitle = $offerPage->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('nieuw');
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
-        $this->view->facebookDescription = trim($offerPage->metaDescription);
-        $this->view->facebookLocale = $facebookLocale;
-        $this->view->twitterDescription = trim($offerPage->metaDescription);
+        $customHeader = isset($offerPage->customHeader) ? $offerPage->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $offerPage->pageTitle, $offerPage->metaTitle, trim($offerPage->metaDescription),FrontEnd_Helper_viewHelper::__link('nieuw'), FACEBOOK_IMAGE, $customHeader);
 
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
@@ -200,6 +160,7 @@ class OfferController extends Zend_Controller_Action
             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function feedbackAction()
