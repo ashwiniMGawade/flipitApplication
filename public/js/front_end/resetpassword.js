@@ -2,9 +2,9 @@ $(document).ready(function(){
     validateProfile();
     $("input#resetPassword").submit(function(){
         if($("form#resetPassword").valid()){
-          return true;
+            return true;
         } else{
-          return false;
+            return false;
         }
     });
 });
