@@ -66,13 +66,13 @@ class LoginController extends Zend_Controller_Action
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->_helper->Login->setUserCookies();
             $this->_redirect(
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
+                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
                 FrontEnd_Helper_viewHelper::__link('profiel')
             );
         } else {
             $this->addFlashMessage(
                 $this->view->translate('User Does Not Exist'),
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login'),
+                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'),
                 'error'
             );
         }
@@ -116,14 +116,14 @@ class LoginController extends Zend_Controller_Action
                     );
                     $this->addFlashMessage(
                         $this->view->translate('Please check you mail and click on reset password link'),
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login') . '/'
+                        HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') . '/'
                         .FrontEnd_Helper_viewHelper::__link('forgotpassword'),
                         'error'
                     );
                 } else {
                     $this->addFlashMessage(
                         $this->view->translate('Wrong Email address Please enter valid email address'),
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login') . '/'
+                        HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') . '/'
                         .FrontEnd_Helper_viewHelper::__link('forgotpassword'),
                         'error'
                     );
