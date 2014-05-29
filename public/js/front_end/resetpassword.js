@@ -1,74 +1,33 @@
 $(document).ready(function(){
     validateProfile();
-    $("input#profile").submit(function(){
-        if($("form#profile").valid()){
-          return true;
+    $("input#resetPassword").submit(function(){
+        if($("form#resetPassword").valid()){
+            return true;
         } else{
-          return false;
+            return false;
         }
     });
 });
 var validator =  null;
 function validateProfile() {
-    validator = $('form#profile')
+    validator = $('form#resetPassword')
     .validate({
         errorClass: 'input-error',
         validClass: 'input-success',
         rules: {
-            emailAddress : {
-                required: true,
-                email: true
-            },
-            firstName: {
-                required: true
-            },
-            lastName: {
-                required: true
-            },
-            gender: {
-                selectcheck: true
-            },
             password: {
                 required: true,
                 minlength : 1,
-                maxlength :20
+                maxlength :20,
             },
             confirmPassword: {
                 required: true,
                 minlength : 1,
                 maxlength :20,
                 equalTo : "#password"
-            },
-            dateOfBirthDay: {
-                required: true,
-                digits : true
-            },
-            dateOfBirthMonth: {
-                required: true,
-                digits : true
-            },
-            dateOfBirthYear: {
-                required: true,
-                digits : true
-            },
-            postCode : {
-                required: true
             }
         },
         messages : {
-             emailAddress : {
-                 required: '',
-                 email: ''
-              },
-              firstName: {
-                  required: ''
-               },
-              lastName: {
-                  required: ''
-               },
-              gender: {
-                  selectcheck: ''
-              },
               password: {
                   required: '',
                   minlength : '',
@@ -79,21 +38,6 @@ function validateProfile() {
                   minlength : '',
                   maxlength: '',
                   equalTo: ''
-              },
-              dateOfBirthDay: {
-                  required: '',
-                  digits :''
-              },
-              dateOfBirthMonth: {
-                  required: '',
-                  digits :''
-              },
-              dateOfBirthYear: {
-                  required: '',
-                  digits :''
-              },
-              postCode : {
-                  required: ''
               }
         },
         onfocusin : function(element) {

@@ -73,7 +73,7 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
         <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
         <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
 <?php 
-if ($this->controllerName=='index'):
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
     ?>
         <div class="section-top">
     <?php
@@ -98,12 +98,13 @@ endif;
 echo FrontEnd_Helper_LayoutContent::homePageBanner($this->banner);
 echo FrontEnd_Helper_LayoutContent::homePageSearch();
 
-if ($this->controllerName=='index'):
-    ?>
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):?>
         </div>
-   <?php
+    <?php
 endif;
-if ($this->controllerName!='index'):
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='index'
+    || zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus'
+) :
     ?>
         <main id="main" role="main" class="container">
     <?php
@@ -111,7 +112,9 @@ endif;
 
 echo $this->layout()->content;
 
-if ($this->controllerName!='index'):
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='index'
+    || zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus'
+) :
     ?>
         </main>
     <?php
