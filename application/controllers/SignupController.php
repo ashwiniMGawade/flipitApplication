@@ -115,8 +115,8 @@ class SignupController extends Zend_Controller_Action
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect('/');
         }
-        $visitorDetailsForForm = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-        $visitorDetailsForForm = $visitorDetailsForForm[0];
+        $visitorDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+        $visitorDetailsForForm = $visitorDetails[0];
         $profileForm = new Application_Form_Profile();
         $this->view->form = $profileForm;
         if ($this->getRequest()->isPost()) {
