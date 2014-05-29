@@ -167,7 +167,7 @@ abstract class BaseArticles extends Doctrine_Record
     {
         parent::setUp();
 
-        $this->hasOne('ArticlesIcon as ArtIcon', array(
+        $this->hasOne('ArticlesIcon as articleImage', array(
              'local' => 'thumbnailid',
              'foreign' => 'id'));
 

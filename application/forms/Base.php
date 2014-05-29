@@ -15,10 +15,12 @@ class Application_Form_Base extends Zend_Form
     {
         foreach ($this->getElements() as $element) {
             $elementValue = $element->getValue();
-            if ($element->hasErrors()) {
-                $element->setAttrib('class', 'input-error form-control');
-            } elseif ($element->isValid($elementValue)) {
-                $element->setAttrib('class', 'input-success form-control');
+            if ($element->getType()!= 'Zend_Form_Element_Checkbox') {
+                if ($element->hasErrors()) {
+                    $element->setAttrib('class', 'input-error form-control');
+                } elseif ($element->isValid($elementValue)) {
+                    $element->setAttrib('class', 'input-success form-control');
+                }
             }
         }
     }

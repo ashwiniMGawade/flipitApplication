@@ -12,8 +12,8 @@ class PlusController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
-
     public function indexAction()
     {
         $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
@@ -24,26 +24,15 @@ class PlusController extends Zend_Controller_Action
             getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
-        
-        $this->view->facebookDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
-            $moneySavingPageDetails[0]['metaDescription'] :'');
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->facebookTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? 
-            $moneySavingPageDetails[0]['pageTitle'] :'';
-        $this->view->facebookShareUrl = $moneySavingPagePermalink;
-        $this->view->facebookImage = HTTP_PATH."public/images/plus_og.png";
-        $this->view->twitterDescription = trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
-            $moneySavingPageDetails[0]['metaDescription'] :'');
+
         $this->view->pageTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
         $this->view->permaLink = $moneySavingPagePermalink;
-        $this->view->headTitle(trim(isset($moneySavingPageDetails[0]['metaTitle']) ? 
-            $moneySavingPageDetails[0]['metaTitle'] :''));
-        $this->view->headMeta()->setName('description', trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
-            $moneySavingPageDetails[0]['metaDescription'] :''));
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
-        if(isset($moneySavingPageDetails[0]['customHeader'])) {
-            $this->view->layout()->customHeader = "\n" . isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
-        }
+        $customHeader = isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, isset($moneySavingPageDetails[0]['pageTitle']) ? 
+        $moneySavingPageDetails[0]['pageTitle'] :'', trim(isset($moneySavingPageDetails[0]['metaTitle']) ? 
+        $moneySavingPageDetails[0]['metaTitle'] :''), trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
+        $moneySavingPageDetails[0]['metaDescription'] :''), $moneySavingPagePermalink, HTTP_PATH."public/images/plus_og.png", $customHeader);
 
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
@@ -56,8 +45,8 @@ class PlusController extends Zend_Controller_Action
             $this->getResponse()->setRawHeader($error404);
         }
         $this->view->pageCssClass = 'saving-page';
-
     }
+  
 
     public function guidedetailAction()
     {
@@ -69,15 +58,7 @@ class PlusController extends Zend_Controller_Action
         $articlesRelatedToCurrentCategory = $categoryWiseArticles[$currentArticleCategory]; 
                 
         if (!empty($articleDetails)) {
-            $this->view->headTitle(trim($articleDetails[0]['metatitle']));
-            $this->view->headMeta()->setName('description', trim($articleDetails[0]['metadescription']));
             $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
-            $this->view->facebookDescription = trim($articleDetails[0]['metadescription']);
-            $this->view->facebookLocale = FACEBOOK_LOCALE;
-            $this->view->facebookTitle = $articleDetails[0]['title'];
-            $this->view->facebookShareUrl = HTTP_PATH_LOCALE.$articleDetails[0]['permalink'];
-            $this->view->facebookImage = FACEBOOK_IMAGE;
-            $this->view->twitterDescription = trim($articleDetails[0]['metadescription']);
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));    
             $this->view->articleDetails = $articleDetails[0];
@@ -86,6 +67,8 @@ class PlusController extends Zend_Controller_Action
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $userInformationObject = new User();
             $this->view->userDetails =  $userInformationObject->getUserDetails($articleDetails[0]['authorid']);
+            $customHeader = '';
+            $this->viewHelperObject->getFacebookMetaTags($this, $articleDetails[0]['title'], trim($articleDetails[0]['metatitle']), trim($articleDetails[0]['metadescription']), $articleDetails[0]['permalink'], FACEBOOK_IMAGE, $customHeader);
             $this->view->pageCssClass = 'in-savings-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);

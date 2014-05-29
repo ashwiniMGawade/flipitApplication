@@ -92,6 +92,7 @@ EOD;
              $hrefLinks = "" ;
              $hasShops = false ;
              foreach ($chain as $chainInformation) {
+                
                  $hrefLinks .=  isset($chainInformation['headLink']) ? $chainInformation['headLink']. "\n" : '';
     
                  if (! empty($chainInformation['shops'])) {
@@ -99,12 +100,12 @@ EOD;
                      $chainInformation = $chainInformation['shops'];
                      $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
                      $string .= sprintf(
-                        "<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
+                        "<li><a class='".strtolower($chainInformation['locale'])."' href='%s' target='_blank'>".self::getCountryNameByLocale(strtolower($chainInformation['locale']))."</a></li>",
                          trim($chainInformation['url']),
                          $httpPath.'/public/'. $image
                         );
                  }
-             } 
+             }
                          $string .= <<<EOD
             </ul>
 EOD;
@@ -680,7 +681,7 @@ EOD;
                     foreach($articles as $article) { 
         $relatedArticles .=
                 '<div class="item">
-                    <img src="'.PUBLIC_PATH_CDN.$article['ArtIcon']['path'].$article['ArtIcon']['name'].'" alt="'.$article['title'].'">
+                    <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" alt="'.$article['title'].'">
                     <div class="box">
                         <div class="caption-area">
                             <span class="caption">
@@ -713,7 +714,7 @@ EOD;
                 $class = 'slide';
             }
             echo'<div class="'.$class.'" id="'.$id.'">
-                                <img class="" width = "632" height = "160"  src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].$mostReadArticle['articles']['thumbnail']['name'].'" 
+                                <img class="" width = "632" height = "160"  src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path'].$mostReadArticle['articles']['articleImage']['name'].'" 
                                 alt="'.$mostReadArticle['articles']['title'].'">
                                 <h1>'.$mostReadArticle['articles']['title'].'</h1>
                                 <p>
@@ -768,11 +769,36 @@ EOD;
         return $countryName;
     }
 
+    public function getFacebookMetaTags($currentObject, $title = '', $metaTitle = '', $metaDescription = '', $permaLink = '', $image = '', $customHeader = '')
+    {
+        if ($metaTitle == '') {
+            $metaTitle = $title;
+        }
+        $currentObject->view->headTitle($metaTitle);
+        $currentObject->view->headMeta()->setName('description', $metaDescription);
+        $currentObject->view->facebookTitle = $title;
+        $currentObject->view->facebookShareUrl = HTTP_PATH_LOCALE . $permaLink;
+        $currentObject->view->facebookImage = $image;
+        $currentObject->view->facebookDescription = $metaDescription;
+        if (LOCALE == '') {
+            $facebookLocale = '';
+        } else {
+            $facebookLocale = LOCALE;
+        }
+        $currentObject->view->facebookLocale = $facebookLocale;
+        $currentObject->view->twitterDescription = $metaDescription;
+
+        if (isset($customHeader)) {
+            $currentObject->view->layout()->customHeader = $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
+        }
+        return $currentObject;
+    }
+    
     public static function getWebsitesLocales($websites)
     {
         foreach ($websites as $website) {
-            $spiltWebsite  = explode('/', $website['name']);
-            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+            $splitWebsite  = explode('/', $website['name']);
+            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
             $locales[strtoupper($locale)] = $website['name'];
         }
         return $locales;
@@ -1330,7 +1356,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         for ($i=0;$i<count($articles);$i++) {
 
             $img = '';
-                $img = PUBLIC_PATH_CDN.$articles[$i]['articles']['ArtIcon']['path']."thum_article_medium_".$articles[$i]['articles']['ArtIcon']['name'];
+                $img = PUBLIC_PATH_CDN.$articles[$i]['articles']['articleImage']['path']."thum_article_medium_".$articles[$i]['articles']['articleImage']['name'];
 
         $string.='<div class="mostpopular-col1">
                     <div class="rediusnone1"><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . '<img src="' . $img . '"></a></div>

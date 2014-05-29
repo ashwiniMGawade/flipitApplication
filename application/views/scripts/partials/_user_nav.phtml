@@ -1,7 +1,7 @@
 <?php 
 if(Auth_VisitorAdapter::hasIdentity()) :
     $visitorId = Auth_VisitorAdapter::getIdentity()->id;
-    $visitorInformation = Visitor::getUserDetail($visitorId);
+    $visitorInformation = Visitor::getUserDetails($visitorId);
     ?>
 <ul>
     <li>

@@ -88,6 +88,15 @@ class User extends BaseUser
             ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
         return $userDetails;
   }
+    public static function getProfileImage($UserId)
+    {
+        $profileImage = Doctrine_Query::create()->select("u.id,u.firstName,u.lastName,u.addtosearch, u.slug, u.google, pi.name, pi.path")
+        ->from('User u')
+        ->leftJoin("u.profileimage pi")
+        ->where("u.id = ?" , $UserId)
+        ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+        return $profileImage;
+    }
     ##########################################################
     ########### END REFACTORED CODE ##########################
     ##########################################################
