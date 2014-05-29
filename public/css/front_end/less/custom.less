@@ -3,14 +3,20 @@
 @submitButtonWidth : 99px;
 .newsletter {
     input[type="submit"] {
-        border-radius: @input-border-radius;
+        border-radius:0px;
         float: left;
         font-size: 14px;
         height: 39px;
-        margin: 0;
+        margin: 0 0 0 -2px;
         min-width: 60px;
         padding: 0;
         width: @submitButtonWidth;
+        -webkit-border-top-right-radius: 3px;
+        -webkit-border-bottom-right-radius: 3px;
+        -moz-border-radius-topright: 3px;
+        -moz-border-radius-bottomright: 3px;
+        border-top-right-radius: 3px;
+        border-bottom-right-radius: 3px;
     }
     input[type="email"] {
        width: 68%;
