@@ -10,14 +10,14 @@
 .author-page .section-author .heading .icon {
   float: left;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
   margin: 4px 30px 0 0;
 }
 .author-page .section-author .heading .icon img {
   display: block;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 .author-page .section-author .heading .box {
   overflow: hidden;
@@ -37,8 +37,8 @@
   background: #2181c0;
   padding: 2px 7px;
   margin: 0 0 0 3px;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 .author-page .section-author .author-details {
   padding: 0;
@@ -118,8 +118,8 @@
 }
 .author-page .section-author .shops img {
   border: 1px solid #eaeaea;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 .author-page .tips-section {
   margin: 0 0 26px;
@@ -149,15 +149,15 @@
   width: 19%;
   border: 1px solid #ddd;
   position: relative;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 .author-page .tips-section .block a .image:after {
   background: none;
 }
 .author-page .tips-section .block a .image img {
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 .author-page .tips-section .block a .image .title {
   position: absolute;

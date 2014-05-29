@@ -3,6 +3,48 @@
   display: block;
   clear: both;
 }
+.home-page .newsletter {
+  margin: 0;
+}
+.home-page .newsletter input[type="email"] {
+  float: left;
+  color: #33383e;
+  font-size: 12px;
+  line-height: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+  border: 1px solid #ccc;
+  background: #ffffff;
+  padding: 11px 12px 10px;
+  margin: 0 4% 0 0;
+  height: 39px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  width: 68% !important;
+}
+.home-page .newsletter input[type="email"]::-webkit-input-placeholder {
+  color: #33383e;
+}
+.home-page .newsletter input[type="email"]:-moz-placeholder {
+  color: #33383e;
+}
+.home-page .newsletter input[type="email"]::-moz-placeholder {
+  color: #33383e;
+  opacity: 1;
+}
+.home-page .newsletter input[type="email"]:-ms-input-placeholder {
+  color: #33383e;
+}
+.home-page .newsletter button[type="submit"] {
+  float: left;
+  font-size: 14px;
+  height: 39px;
+  width: 99px;
+  min-width: 60px;
+  margin: 0 0 0 -2px;
+  padding: 0;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
 .home-page .logo {
   background: url(../../images/logo-home.png) no-repeat;
   width: 125px;
@@ -86,11 +128,11 @@
 .home-page .section-top .email-form {
   max-width: 492px;
   background: #000;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.6);
   color: #ffffff;
   padding: 20px 23px 23px;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
   margin: 0 0 0 14px;
 }
 .home-page .section-top .email-form h1 {
@@ -136,7 +178,7 @@
 }
 .home-page .top-panel {
   background: #2d2c2c;
-  background: rgba(32, 32, 32, 0.66);
+  background: rgba(0, 0, 0, 0.7);
 }
 .home-page .top-panel .container {
   padding-bottom: 0;
@@ -169,7 +211,7 @@
 }
 .home-page .navigation {
   background: #353534;
-  background: rgba(0, 0, 0, 0.33);
+  background: rgba(0, 0, 0, 0.6);
   border: none;
 }
 .home-page .nav-bar #nav ul {
@@ -223,7 +265,7 @@
   -webkit-border-radius: 0 2px 2px 0;
   width: 18.8%;
   min-width: 60px;
-  margin: 0;
+  margin: 0 0 0 -2px;
   height: 45px;
   padding: 8px 6px;
 }
@@ -271,13 +313,17 @@
   margin: 0 12px;
 }
 .home-page .shops li img {
-  border: 1px solid #e1e1e1;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   -moz-box-sizing: content-box;
   -webkit-box-sizing: content-box;
   box-sizing: content-box;
 }
 .home-page .shops li a {
   display: block;
+  -webkit-transition: all 0.3s ease-out;
+  -moz-transition: all 0.3s ease-out;
+  -o-transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out;
 }
 .home-page .shops li a:hover {
   margin: -10px 0 0;
@@ -793,15 +839,15 @@
     margin: 0 0 12px;
   }
   .home-page .section-top .email-form .form-control {
-    border-radius: 2px;
-    -webkit-border-radius: 2px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
   }
   .home-page .section-top .email-form .holder {
     border: none;
   }
   .home-page .section-top .email-form .btn.orange {
-    border-radius: 2px;
-    -webkit-border-radius: 2px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
   }
   .home-page .email-form .form-group {
     float: none;
@@ -809,15 +855,15 @@
     margin: 0 0 10px;
   }
   .home-page .email-form .form-control {
-    border-radius: 2px;
-    -webkit-border-radius: 2px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
   }
   .home-page .email-form .btn.orange {
     width: 100%;
     float: none;
     display: block;
-    border-radius: 2px;
-    -webkit-border-radius: 2px;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
   }
   .home-page .logos-panel {
     margin: 0;

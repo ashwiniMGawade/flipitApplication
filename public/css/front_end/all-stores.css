@@ -5,8 +5,8 @@
 }
 .all-stores-page .content-holder {
   background: #ffffff;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
   border: 1px solid #d8d8d8;
   padding: 0 0 44px;
   margin: 0 0 25px;
@@ -46,7 +46,7 @@
   display: inline-block;
   vertical-align: top;
   width: auto;
-  padding: 0 6px 0 5px;
+  padding: 0 6px 0 6px;
   border-left: 1px solid #ddd;
 }
 .all-stores-page .alphabet li:first-child {

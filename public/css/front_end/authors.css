@@ -41,8 +41,8 @@
   display: block;
 }
 .authors-page .authors li .photo-image {
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
   display: block;
   margin: 0 auto 12px;
@@ -51,8 +51,8 @@
   color: #ffffff;
   padding: 2px 13px;
   margin: 0 0 9px;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
   background: #2181c0;
   display: inline-block;
   vertical-align: top;

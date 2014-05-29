@@ -54,8 +54,8 @@
   padding: 4px;
   width: 24px;
   text-align: center;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 .faq-page .section-faq .box .slide {
   display: none;
@@ -102,8 +102,8 @@
   padding: 23px 14px 21px;
   margin: 75px 0 0;
   overflow: hidden;
-  border-radius: 2px;
-  -webkit-border-radius: 2px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
 }
 .faq-page .section-faq .bottom-bar .left {
   float: left;
