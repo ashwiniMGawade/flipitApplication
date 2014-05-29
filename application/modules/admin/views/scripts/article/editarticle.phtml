@@ -268,14 +268,18 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
                             <div class="mainpage-content-right">
                             <textarea class="input-xlarge mbot bbot ignore" id="articlemetaDesc" name="articlemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo trim($this->articleData[0]['metadescription']);?></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Artical meta description length '). strlen($this->articleData[0]['metadescription']). $this->translate(' characters') ;?>" id="metaDescriptionleft" class="input-xlarge disabled btop word-count">
-                            <!--<textarea class="input-xlarge" name="articlemetaDesc" id="articlemetaDesc" placeholder="<?php //echo $this->translate('Meta Description'); ?>" rows="3"><?php //echo trim($this->articleData[0]['metadescription']); ?></textarea></div>-->
+							             <input type="text" disabled="disabled" value="<?php echo $this->translate('Artical meta description length '). strlen($this->articleData[0]['metadescription']). $this->translate(' characters') ;?>" id="metaDescriptionleft" class="input-xlarge disabled btop word-count">
+                          </div>
+                          <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Introduction'); ?></strong></label></div>
+                          <div class="mainpage-content-right">
+                            <textarea class="input-xlarge" name="pageDesc" id="articlemetaDesc" placeholder="<?php echo $this->translate('page Content'); ?>" rows="3"><?php echo trim($this->articleData[0]['content']); ?></textarea>
+                          </div>  
                         </div>
                     </div>
                     </div>
                   
                     
-                	<textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php echo $this->translate('Article Description'); ?>" rows="3"><?php echo $this->articleData[0]['content']?></textarea>  
+                	<!--<textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php echo $this->translate('Article Description'); ?>" rows="3"><?php echo $this->articleData[0]['content']?></textarea> --> 
                 <br>
                 <div id="offerconstraint" class="display-none"> 
                 
