@@ -30,7 +30,7 @@ class SearchController extends Zend_Controller_Action
         $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds);
         $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
         $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
-        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)), true);
         $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
 
         if($searchedKeywords == ''){

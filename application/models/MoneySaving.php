@@ -87,17 +87,22 @@ class MoneySaving extends BaseMoneySaving
 
     }
 
-    public static function getAllArticleCategories()
-    {
-        return $allArticleCategoryDetails = Doctrine_Query::create()->select('id, name')->from('Articlecategory ac')->where('ac.deleted=0')->fetchArray();
-    }
-
     public static function getCategoryWiseArticles()
     {
         $allCategoryDetails = self::getAllArticleCategories();
         $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails);
         return  $categoryRelatedArticles;
         
+    }
+
+    public static function getAllArticleCategories()
+    {
+        $allArticleCategoryDetails = Doctrine_Query::create()
+        ->select('id, name')
+        ->from('Articlecategory ac')
+        ->where('ac.deleted=0')
+        ->fetchArray();
+        return $allArticleCategoryDetails;
     }
 
     public static function getCategoryRelatedArticles ($allCategoryDetails)

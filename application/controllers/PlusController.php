@@ -17,33 +17,26 @@ class PlusController extends Zend_Controller_Action
     public function indexAction()
     {
         $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $moneySavingPagePermalink = FrontEnd_Helper_viewHelper::__link('plus');
-        $moneySavingPageDetails  =  FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_moneysavingpage".$moneySavingPagePermalink."_list", MoneySaving::getPageDetails($moneySavingPagePermalink));
+        $articleOverviewPagePermalink = FrontEnd_Helper_viewHelper::__link('plus');
+        $articleOverviewPageDetails  =  FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache("all_moneysavingpage".$articleOverviewPagePermalink."_list", array('function' => 'MoneySaving::getPageDetails', 'parameters' => array($articleOverviewPagePermalink)));
         $mostReadArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
+            getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
 
-        $this->view->pageTitle = isset($moneySavingPageDetails[0]['pageTitle']) ? $moneySavingPageDetails[0]['pageTitle'] :'';
-        $this->view->permaLink = $moneySavingPagePermalink;
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($cannonicalPermalink);
-        $customHeader = isset($moneySavingPageDetails[0]['customHeader']) ? $moneySavingPageDetails[0]['customHeader'] : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, isset($moneySavingPageDetails[0]['pageTitle']) ? 
-        $moneySavingPageDetails[0]['pageTitle'] :'', trim(isset($moneySavingPageDetails[0]['metaTitle']) ? 
-        $moneySavingPageDetails[0]['metaTitle'] :''), trim(isset($moneySavingPageDetails[0]['metaDescription']) ? 
-        $moneySavingPageDetails[0]['metaDescription'] :''), $moneySavingPagePermalink, HTTP_PATH."public/images/plus_og.png", $customHeader);
+        $this->view->pageTitle = isset($articleOverviewPageDetails[0]['pageTitle']) ? $articleOverviewPageDetails[0]['pageTitle'] :'';
+        $this->view->permaLink = $articleOverviewPagePermalink;
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articleOverviewPagePermalink);
+        $customHeader = isset($articleOverviewPageDetails[0]['customHeader']) ? $articleOverviewPageDetails[0]['customHeader'] : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, isset($articleOverviewPageDetails[0]['pageTitle']) ? 
+        $articleOverviewPageDetails[0]['pageTitle'] :'', trim(isset($articleOverviewPageDetails[0]['metaTitle']) ? 
+        $articleOverviewPageDetails[0]['metaTitle'] :''), trim(isset($articleOverviewPageDetails[0]['metaDescription']) ? 
+        $articleOverviewPageDetails[0]['metaDescription'] :''), $articleOverviewPagePermalink, HTTP_PATH."public/images/plus_og.png", $customHeader);
 
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
-       
-        if (!empty($moneySavingPageDetails)) {
-            $this->view->pageDetails = $moneySavingPageDetails;
-        } else {
-            $error404 = 'HTTP/1.1 404 Not Found';
-            $this->getResponse()->setRawHeader($error404);
-        }
         $this->view->pageCssClass = 'saving-page';
     }
   
@@ -60,7 +53,7 @@ class PlusController extends Zend_Controller_Action
         if (!empty($articleDetails)) {
             $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
-                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));    
+                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));    
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);

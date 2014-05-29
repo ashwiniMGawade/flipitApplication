@@ -7,7 +7,7 @@ foreach ($mostReadArticles as $mostReadArticle) {
 	$mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? mb_substr($mostReadArticle['articles']['title'], 0,40).'..' : $mostReadArticle['articles']['title'];
 ?>
  <li>
-    <a class="same-height-left" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id), viewCounter('onclick', 'article', <?php echo $mostReadArticleId; ?>);">
+    <a class="same-height-left" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id);">
         <img class="ico" width="52" src="<?php echo $mostReadArticleImage; ?>" alt="<?php echo $mostReadArticleTitle; ?>"/>
         <span><?php echo $mostReadArticleTitle; ?></span>
     </a>

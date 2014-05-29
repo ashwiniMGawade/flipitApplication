@@ -22,7 +22,7 @@ class AboutController extends Zend_Controller_Action
         $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
         $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('redactie'), FACEBOOK_IMAGE, $customHeader);
 
-        $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", User::getAllUsersDetails(self::getWebsiteNameWithLocale()));
+        $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", array('function' => 'User::getAllUsersDetails', 'parameters' => self::getWebsiteNameWithLocale()));
         $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination($allAuthorsDetails, $this->_getAllParams(), 20, 7);
         $this->view->pageDetails = $pageDetails;
  
@@ -43,16 +43,16 @@ class AboutController extends Zend_Controller_Action
     public function profileAction()
     {
         $authorSlugName = $this->getRequest()->getParam('slug');
-        $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorSlugName) ."_list", User::getUserIdBySlugName($authorSlugName), 0);
-        $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$authorId ."_list", User::getUserProfileDetails($authorId), 0);
+        $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorSlugName) ."_list", array('function' => 'User::getUserIdBySlugName', 'parameters' => array($authorSlugName)), 0);
+        $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$authorId ."_list", array('function' => 'User::getUserProfileDetails', 'parameters' => array($authorId)), 0);
 
         if (empty($authorDetails)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
 
         $authorDetails = $authorDetails[0];
-        $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$authorId ."_list", User::getUserFavouriteStores($authorId), 0);
-        $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$authorId ."_list", MoneySaving::getMostReadArticles(6, $authorId), 0);
+        $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$authorId ."_list", array('function' => 'User::getUserFavouriteStores', 'parameters' => array($authorId)), 0);
+        $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$authorId ."_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(6, $authorId)), 0);
         $authorFullName = $authorDetails['firstName']." ". $authorDetails['lastName'];
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);

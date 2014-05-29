@@ -23,27 +23,38 @@ class IndexController extends Zend_Controller_Action
             $this->view->action = $this->getRequest()->getActionName();
             $pageAttributeId = Page::getPageAttributeByPermalink($this->getRequest()->getActionName());
             $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
-
             if (!empty($pageDetails)) {
-                $this->view->pageTitle = ucfirst($pageDetails->pageTitle);         
+                $this->view->pageTitle = ucfirst($pageDetails->pageTitle);
                 $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
                 $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->metaTitle, ucfirst(trim($pageDetails->metaTitle)), trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName()), FACEBOOK_IMAGE, $customHeader);
             } else {
                 throw new Zend_Controller_Action_Exception('', 404);
             }
-            $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularvaouchercode_list", Offer::getTopOffers(10));
-            $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homenewoffer_list", Offer::getNewestOffers('newest', 10));
-            $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularcategory_list", Category::getPopularCategories(10));
+            
+            $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularvaouchercode_list", array('function' => 'Offer::getTopOffers', 'parameters' => array(10)));
+            $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homenewoffer_list", array('function' => 'Offer::getNewestOffers', 'parameters' => array('newest', 10)));
+            $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularcategory_list", array('function' => 'Category::getPopularCategories', 'parameters' => array(10)));
             $this->view->topCategories = $topCategories;
-            $topCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_hometocategoryoffers_list", Category::getCategoryVoucherCodes(self::getTopCategoriesIds($topCategories), 0, 'home'));
+            $topCategoriesIds = self::getTopCategoriesIds($topCategories);
+            $topCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_hometocategoryoffers_list", array('function' => 'Category::getCategoryVoucherCodes', 'parameters' => array($topCategoriesIds, 0, 'home')));
             $this->view->topCategoriesOffers = self::getCategoriesOffers($topCategoriesOffers);
-            $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_list", SpecialList::getSpecialPages());
+            $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_list", array('function' => 'SpecialList::getSpecialPages', 'parameters' => array()));
             $this->view->specialListPages = $specialListPages;
-            $this->view->specialPagesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_speciallist_count", self::getSpecialListPagesOffers($specialListPages));
-            $this->view->moneySavingGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homemanisaving_list", Articles::getMoneySavingArticles());
-            $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularshopForHomePage_list", FrontEnd_Helper_viewHelper::getStoreForFrontEnd("popular", 24));
-            $this->view->seeninContents = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homeseenin_list", SeenIn::getSeenInContent(10));
-            $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_page", About::getAboutContent(1));
+
+            $specialListCountKey ="all_speciallist_count";
+            $cacheStatus =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($specialListCountKey);
+            if ($cacheStatus) {
+                $specialPagesOffers = self::getSpecialListPagesOffers($specialListPages);
+                FrontEnd_Helper_viewHelper::setInCache($specialListCountKey, $specialPagesOffers);
+            } else {
+                $specialPagesOffers  = FrontEnd_Helper_viewHelper::getFromCacheByKey($specialListCountKey);
+            }
+
+            $this->view->specialPagesOffers = $specialPagesOffers;
+            $this->view->moneySavingGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homemanisaving_list", array('function' => 'Articles::getMoneySavingArticles', 'parameters' => array()));
+            $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularshopForHomePage_list", array('function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd', 'parameters' => array("popular", 24)));
+            $this->view->seeninContents = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homeseenin_list", array('function' => 'SeenIn::getSeenInContent', 'parameters' => array(10)));
+            $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_page", array('function' => 'About::getAboutContent', 'parameters' => array(1)));
             $this->view->pageCssClass = 'home-page';
         }
     }

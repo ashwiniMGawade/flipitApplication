@@ -5777,6 +5777,11 @@ button.close {
   display: block;
   clear: both;
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .all-categories-alt-page .section {
   padding: 17px 19px;
 }
@@ -6051,6 +6056,11 @@ button.close {
     padding: 10px 2px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .all-stores-page .content-holder {
   background: #ffffff;
   border-radius: 2px;
@@ -6221,6 +6231,11 @@ button.close {
   .all-stores-page .btn-top {
     margin: 15px 0 5px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .author-page .section-author .heading {
   overflow: hidden;
@@ -6474,6 +6489,11 @@ button.close {
     padding: 0;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .authors-page .authors {
   padding: 0;
   margin: 0 -2px -1px 0;
@@ -6547,6 +6567,11 @@ button.close {
   .authors-page .authors li {
     width: 50%;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .contact-page .contact-section {
   color: #878a8d;
@@ -6678,6 +6703,11 @@ button.close {
   .contact-page .contact-form {
     padding: 15px 10px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .faq-page .section-faq {
   color: #878a8d;
@@ -6832,6 +6862,11 @@ button.close {
     padding: 15px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .flipit-expired-page .message .holder {
   padding: 31px 30px 34px;
 }
@@ -6869,6 +6904,11 @@ button.close {
   .flipit-expired-page .message .text:after {
     top: 97%;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .home-page .logo {
   background: url(../../images/logo-home.png) no-repeat;
@@ -7753,6 +7793,11 @@ button.close {
     padding: 12px 15px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .in-savings-page .post-box {
   background: #fff;
   border: 1px solid #e4e4e4;
@@ -8125,6 +8170,11 @@ button.close {
     display: block;
     margin: 0 0 20px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .login-page .login-box {
   background: #fff;
@@ -8526,6 +8576,11 @@ button.close {
     display: block;
     width: 89px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .profile-page .top-panel {
   background: #2d2c2c;
@@ -9038,6 +9093,11 @@ button.close {
     width: 44%;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .register-page .register-box {
   background: #fff;
   border: 1px solid #e4e4e4;
@@ -9485,6 +9545,11 @@ button.close {
   .register-page #footer .social ul li {
     width: 44%;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .saving-page #main {
   padding: 0;
@@ -9996,6 +10061,11 @@ button.close {
     line-height: 18px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .splash-page .bg-stretch {
   position: fixed;
   z-index: -1;
@@ -10189,6 +10259,11 @@ button.close {
     display: block;
     margin: 0 0 10px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .page404 #footer {
   text-shadow: none;

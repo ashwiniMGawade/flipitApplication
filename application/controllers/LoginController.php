@@ -25,6 +25,7 @@ class LoginController extends Zend_Controller_Action
         $message[0]['success'] : '';
         $this->view->errorMessage = isset($message[0]['error']) ?
         $message[0]['error'] : '';
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function preDispatch()
@@ -47,6 +48,7 @@ class LoginController extends Zend_Controller_Action
         $this->view->headTitle("Members Only");
         $loginForm = new Application_Form_Login();
         $this->view->form = $loginForm;
+        $this->viewHelperObject->getFacebookMetaTags($this);
         if ($this->getRequest()->isPost()) {
             if ($loginForm->isValid($_POST)) {
                 $visitorDetails = $loginForm->getValues();
@@ -134,6 +136,7 @@ class LoginController extends Zend_Controller_Action
         }
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $this->view->pageCssClass = 'login-page';
+        $this->viewHelperObject->getFacebookMetaTags($this);
     }
 
     public function resetpasswordAction()
@@ -162,6 +165,7 @@ class LoginController extends Zend_Controller_Action
         }
         $this->view->pageCssClass = 'login-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $this->viewHelperObject->getFacebookMetaTags($this);
     }
 
     public function resetPassword($visitorId, $newPassword, $encodedVisitorId)
