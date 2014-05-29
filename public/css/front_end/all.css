@@ -10438,11 +10438,17 @@ button.close {
 }
 .page404 .section404 .text-block .search-box {
   float: none;
-  overflow: hidden;
+  overflow: visible;
   display: inline-block;
   vertical-align: top;
   margin: 46px 0 41px;
   width: 520px;
+  text-align: left;
+  color: #000;
+}
+.page404 .section404 .text-block .search-box a {
+  color: #000;
+  text-decoration: none;
 }
 .page404 .section404 .search-form {
   float: none;
@@ -10521,7 +10527,7 @@ button.close {
     display: inline-block;
     vertical-align: top;
     margin: 15px 0 10px;
-    overflow: hidden;
+    overflow: visible;
   }
   .page404 .search-box .opener {
     display: none;

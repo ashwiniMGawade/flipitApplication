@@ -1,0 +1,24 @@
+<header class="heading-box text-advice">
+    <h2><?php echo $this->translate('Saving guides');?></h2>
+</header>
+<section class="tips-section">
+    <?php 
+        if (!empty($this->articlesRelatedToCurrentCategory)) {
+            foreach($this->articlesRelatedToCurrentCategory as $articleRelatedToCurrentCategory) :
+    ?>        
+    <article class="block">
+        <a href="<?php echo $articleRelatedToCurrentCategory['title'];?>">
+            <div class="image">
+                <img width="216" height="129" alt="<?php echo $articleRelatedToCurrentCategory['title'];?>" src="<?php echo PUBLIC_PATH_CDN.$articleRelatedToCurrentCategory['ArtIcon']['path'].$articleRelatedToCurrentCategory['ArtIcon']['name'];?>" >
+            </div>
+            <div class="box">
+                <h2><?php echo $articleRelatedToCurrentCategory['title'];?></h2>
+                <p><?php echo $articleRelatedToCurrentCategory['content'];?></p>
+            </div>
+        </a>
+    </article>
+    <?php    
+            endforeach;
+        }
+    ?> 
+</section>

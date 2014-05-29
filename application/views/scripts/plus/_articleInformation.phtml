@@ -1,0 +1,25 @@
+<?php 
+$articleDetails = $this->artcileDetails;
+$userDetails = $this->userDetails;
+$profileLink = $this->profileLink;
+$firstName = $this->firstName;
+$lastName = $this->lastName;
+$articleUpdatedAtDate = $this->articleUpdatedAtDate;
+?>
+<section class="post-box">
+    <header class="meta">
+        <h1><?php echo $articleDetails['title'];?></h1>
+        <p><?php echo $this->translate('By');?> <a href="<?php echo $profileLink; ?>"><?php echo $firstName . " " . $lastName;?></a> - <?php echo $articleUpdatedAtDate; ?> &nbsp;   | &nbsp;   <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('plus')?>"><?php echo $this->translate('All Plus');?></a>
+        </p>
+    </header>
+            <?php  
+                if (!empty($articleDetails['chapters'])) {
+                    foreach ($articleDetails['chapters'] as $articleChapter) :                    
+                        $chapterTitle = preg_replace(array('/\s/','/[\,+@#?$%^:&*!.();]+/', '/(\')/'), array("-","-","-"), $articleChapter['title']);
+                        $chapterTitle = strtolower($chapterTitle);
+                        echo '<h2 id="'.$chapterTitle.'">'.$articleChapter['title'].'</h2>';
+                        echo $articleChapter['content'];
+                    endforeach;
+                }
+            ?> 
+</section>

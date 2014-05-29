@@ -335,9 +335,11 @@ EOD;
         if($type == 'widget' || $type == 'popup'):
             $socialMedia=$facebookLikeWidget.$googlePlusOneWidget.$twitterLikeWidget;
         elseif($type == 'article'):
-            $socialMedia = "<li>".$facebookLikeWidget."</li>
+            $socialMedia = "<ul class='social-box'>
+                            <li>".$facebookLikeWidget."</li>
                             <li>".$googlePlusOneWidget."</li>
-                            <li>".$twitterLikeWidget."</li>";
+                            <li>".$twitterLikeWidget."</li>
+                            </ul>";
         else:
             $zendTranslate = Zend_Registry::get('Zend_Translate');
             $socialMediaTitle = "<h2>".$zendTranslate->translate('Share')."</h2>
@@ -597,7 +599,7 @@ EOD;
                 break;
                 //refactored 
             case 'popular':
-                $stores = Shop::getPopularStore($limit);
+                $stores = Shop::getPopularStores($limit);
                 break;
             default:
                 break;
@@ -685,7 +687,7 @@ EOD;
                             '.$article['title'].'
                             </span>
                         </div>
-                        <a href="plus/'.$article['title'].'" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
+                        <a href="'.$article['title'].'" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
                     </div>
                 </div>';
             }           
@@ -766,6 +768,40 @@ EOD;
         return $countryName;
     }
 
+    public function getFacebookMetaTags($currentObject, $title = '', $metaTitle = '', $metaDescription = '', $permaLink = '', $image = '', $customHeader = '')
+    {
+        if ($metaTitle == '') {
+            $metaTitle = $title;
+        }
+        $currentObject->view->headTitle($metaTitle);
+        $currentObject->view->headMeta()->setName('description', $metaDescription);
+        $currentObject->view->facebookTitle = $title;
+        $currentObject->view->facebookShareUrl = HTTP_PATH_LOCALE . $permaLink;
+        $currentObject->view->facebookImage = $image;
+        $currentObject->view->facebookDescription = $metaDescription;
+        if (LOCALE == '') {
+            $facebookLocale = '';
+        } else {
+            $facebookLocale = LOCALE;
+        }
+        $currentObject->view->facebookLocale = $facebookLocale;
+        $currentObject->view->twitterDescription = $metaDescription;
+
+        if ($requestedData->customHeader) {
+            $currentObject->view->layout()->customHeader = $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
+        }
+        return $currentObject;
+    }
+    
+    public static function getWebsitesLocales($websites)
+    {
+        foreach ($websites as $website) {
+            $spiltWebsite  = explode('/', $website['name']);
+            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+            $locales[strtoupper($locale)] = $website['name'];
+        }
+        return $locales;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
