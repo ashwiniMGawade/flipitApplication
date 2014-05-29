@@ -103,19 +103,25 @@ if ($this->controllerName=='index'):
         </div>
    <?php
 endif;
-if ($this->controllerName!='index'):
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'
+ || zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='plus') :
+    '';
+else:
     ?>
         <main id="main" role="main" class="container">
     <?php
-endif;
+endif;    
 
 echo $this->layout()->content;
 
-if ($this->controllerName!='index'):
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'
+ || zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='plus') :
+    '';
+else:
     ?>
         </main>
     <?php
-endif;
+endif;    
 ?>
     </div>
 <?php
