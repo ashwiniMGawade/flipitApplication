@@ -34,6 +34,7 @@ class PlusController extends Zend_Controller_Action
         $articleOverviewPageDetails[0]['metaTitle'] :''), trim(isset($articleOverviewPageDetails[0]['metaDescription']) ? 
         $articleOverviewPageDetails[0]['metaDescription'] :''), $articleOverviewPagePermalink, HTTP_PATH."public/images/plus_og.png", $customHeader);
 
+        $this->view->pageDetails = $articleOverviewPageDetails;
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
