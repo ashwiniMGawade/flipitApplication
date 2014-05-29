@@ -1,5 +1,5 @@
 <?php
-class Application_Form_Register extends Application_Form_Base
+class Application_Form_Profile extends Application_Form_Base
 {
     public function __construct()
     {
@@ -7,25 +7,26 @@ class Application_Form_Register extends Application_Form_Base
     }
     public function init()
     {
-         $visitorEmail = new Zend_Form_Element_Text('emailAddress');
-         $visitorEmail->setRequired(true);
-         $visitorEmail->addValidator(
-             'EmailAddress',
-             true,
-             array(
-                 'messages' => array(Zend_Validate_EmailAddress::INVALID_FORMAT=>'Please enter valid email address')
-             )
-         );
-         $visitorEmail->setAttrib('class', 'form-control');
-         $visitorEmail->setLabel('Email');
+        $visitorEmail = new Zend_Form_Element_Text('emailAddress');
+        $visitorEmail->setLabel('Email');
+        $visitorEmail->setAttribs(
+            array('readonly' => 'readonly', 'class'=>'form-control', 'disabled'=> 'disabled')
+        );
 
         $vistorPassword = new Zend_Form_Element_Password('password');
         $vistorPassword->setRequired(true);
         $vistorPassword->setAttribs(
-            array('class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
+            array('autocomplete'=> 'off', 'class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
         );
         $vistorPassword->setLabel('Password');
-        $vistorPassword->setAttrib('autocomplete', 'off');
+
+        $vistorConfirmPassword = new Zend_Form_Element_Password('confirmPassword');
+        $vistorConfirmPassword->setRequired(true);
+        $vistorConfirmPassword->setAttribs(
+            array('autocomplete'=> 'off', 'class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
+        );
+        $vistorConfirmPassword->setLabel('Confirm Password');
+        $vistorConfirmPassword->addValidator('Identical', false, array('token' => 'password'));
 
         $vistorFirstName = new Zend_Form_Element_Text('firstName');
         $vistorFirstName->setRequired(true);
@@ -67,10 +68,14 @@ class Application_Form_Register extends Application_Form_Base
         $vistorPostalCode->setRequired(true);
         $vistorPostalCode->setAttrib('class', 'form-control');
         $vistorPostalCode->setLabel('Postcode');
+
+        $vistorNewsLetterStatus = new Zend_Form_Element_Checkbox('weeklyNewsLetter');
+
         $this->addElements(
             array(
                 $visitorEmail,
                 $vistorPassword,
+                $vistorConfirmPassword,
                 $vistorFirstName,
                 $vistorLastName,
                 $vistorDateOfBirth,
@@ -78,7 +83,8 @@ class Application_Form_Register extends Application_Form_Base
                 $vistorDateOfBirthMonth,
                 $vistorDateOfBirthYear,
                 $vistorGender,
-                $vistorPostalCode
+                $vistorPostalCode,
+                $vistorNewsLetterStatus
             )
         );
         

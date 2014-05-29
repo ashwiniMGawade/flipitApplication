@@ -25,7 +25,7 @@ class Page extends BasePage
         return $pageAttribute[0]['pageAttributeId'];
     }
 
-    public static function getPageFromPageAttributeFiltered($id)
+    public static function getPageFromFilteredPageAttribute($id)
     {
         $pageAttributes = Doctrine_Query::create()
         ->select('p.id,p.pageTitle,p.metaTitle,p.metaDescription,p.permaLink,p.customHeader')

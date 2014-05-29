@@ -18,13 +18,7 @@ endif;
         <fieldset>
             <div class="row">
                 <div class="col-md-6">
-                    <div class="image">
-                        <img width="462" height="263" alt="register Image" 
-                            src="<?php echo PUBLIC_PATH;?>images/img-36.png">
-                        <div class="text">
-                        <?php echo $this->translate('Flipit! Get ready to flip over a great deal!');?>
-                        </div>
-                    </div>
+                 <?php echo $this->testimonial!='' ? $this->testimonial : FrontEnd_Helper_VisitorPartialFunctions::getTestimonialStaticImage();?>
                 </div>
                 <div class="col-md-6">
                     <div class="row">

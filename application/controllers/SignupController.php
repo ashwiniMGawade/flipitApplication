@@ -29,8 +29,8 @@ class SignupController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessage->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ?
         $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ?
@@ -39,7 +39,13 @@ class SignupController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->pageCssClass = 'register-page';
+        $pageName = 'SignUp';
+        $pageId = PageAttribute::getPageAttributeIdByName($pageName);
+        $pageDetails =  Page::getPageFromFilteredPageAttribute($pageId);
+        $this->view->pageTitle = $pageDetails['pageTitle'];
+        $this->view->headTitle($pageDetails['metaTitle']);
+        $this->view->headMeta()->setName('description', trim($pageDetails['metaDescription']));
+
         $registrationForm = new Application_Form_Register();
         $this->view->form = $registrationForm;
         if ($this->getRequest()->isPost()) {
@@ -53,40 +59,102 @@ class SignupController extends Zend_Controller_Action
                     );
                 } else {
                     $visitorId = Visitor::addVisitor($visitorInformation);
-                    self::redirectAccordingToUserStatus($visitorId, $visitorInformation);
+                    self::redirectAccordingToMessage(
+                        $visitorId,
+                        $this->view->translate('Please enter valid information'),
+                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
+                        'signup'
+                    );
                 }
             } else {
                 $registrationForm->highlightErrorElements();
             }
         }
+        $testimonials = Signupmaxaccount::getTestimonials();
+        $this->view->testimonial = isset($testimonials[0]['testimonial1']) ? $testimonials[0]['testimonial1'] : '';
+        $this->view->pageCssClass = 'register-page';
+        # set reponse header X-Nocache used for varnish
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+    }
+ 
+    public function showFlashMessage($message, $redirectUrl, $messageType)
+    {
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $flashMessage->addMessage(array($messageType => $message));
+        $this->_redirect($redirectUrl);
     }
 
-    public function redirectAccordingToUserStatus($visitorId, $visitorInformation)
+    public function redirectAccordingToMessage($visitorId, $message, $redirectLink, $pageName)
     {
         if (!$visitorId) {
             self::showFlashMessage(
-                $this->view->translate('Please enter valid information'),
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
+                $message,
+                $redirectLink,
                 'error'
             );
         } else {
-            $this->_redirect(
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
-                FrontEnd_Helper_viewHelper::__link('profiel') .'/' .
-                base64_encode($visitorInformation['emailAddress'])
-            );
+            if ($pageName!='signup') {
+                self::showFlashMessage(
+                    $message,
+                    $redirectLink,
+                    'success'
+                );
+            } else {
+                self::showFlashMessage(
+                    $this->view->translate('Please check your mail and confirm your email address'),
+                    HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login'),
+                    'success'
+                );
+            }
         }
-    }
-
-    public function showFlashMessage($message, $redirectUrl, $messageType)
-    {
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $flash->addMessage(array($messageType => $message));
-        $this->_redirect($redirectUrl);
     }
 
     public function profileAction()
     {
-        die('WELCOME');
+        if (!Auth_VisitorAdapter::hasIdentity()) {
+            $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+            $this->_redirect('/');
+        }
+        $visitorDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+        $visitorDetailsForForm = $visitorDetails[0];
+        $profileForm = new Application_Form_Profile();
+        $this->view->form = $profileForm;
+        if ($this->getRequest()->isPost()) {
+            if ($profileForm->isValid($_POST)) {
+                $visitorDetails = $profileForm->getValues();
+                self::addVisitor($visitorDetails);
+            } else {
+                $profileForm->highlightErrorElements();
+            }
+        } else {
+            $dateOfBirth = array_reverse(explode('-', $visitorDetailsForForm['dateOfBirth']));
+            $profileForm->getElement('firstName')->setValue($visitorDetailsForForm['firstName']);
+            $profileForm->getElement('lastName')->setValue($visitorDetailsForForm['lastName']);
+            $profileForm->getElement('emailAddress')->setValue($visitorDetailsForForm['email']);
+            $profileForm->getElement('gender')->setValue($visitorDetailsForForm['gender']);
+            $profileForm->getElement('dateOfBirthDay')->setValue($dateOfBirth[0]);
+            $profileForm->getElement('dateOfBirthMonth')->setValue($dateOfBirth[1]);
+            $profileForm->getElement('dateOfBirthYear')->setValue($dateOfBirth[2]);
+            $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
+            $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
+        }
+        $this->view->pageCssClass = 'profile-page';
+        $this->view->firstName = $visitorDetailsForForm['firstName'];
+        # set reponse header X-Nocache used for varnish
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+    }
+
+    public function addVisitor($visitorDetails)
+    {
+        $redirectLink =
+            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
+            FrontEnd_Helper_viewHelper::__link('profiel');
+        $visitorId = Visitor::addVisitor($visitorDetails);
+        if ($visitorId) {
+            $message = $this->view->translate('Your information has been updated successfully !.');
+        } else {
+            $message = $this->view->translate('Please enter valid information');
+        }
+        self::redirectAccordingToMessage($visitorId, $message, $redirectLink, 'profile');
     }
 }

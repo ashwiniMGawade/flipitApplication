@@ -142,7 +142,7 @@ class StoreController extends Zend_Controller_Action
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageAttributes =  Page::getPageFromPageAttributeFiltered(7);
+        $pageAttributes =  Page::getPageFromFilteredPageAttribute(7);
         $this->view->pageTitle = $pageAttributes['pageTitle'];
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $allStoresList = self::shopOffersBySetGetCache('all_shops_list', Shop::getallStoresForFrontEnd('all', null), true);
