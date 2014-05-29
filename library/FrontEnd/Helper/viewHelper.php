@@ -521,18 +521,25 @@ EOD;
 
     public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '')
     {
+        
+        if ($relatedFunction['function'] == '') {
+            $functionToBeCached = $relatedFunction['parameters'];
+        } else {
+            $functionToBeCached = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
+        }
+
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
-    
             if ($replaceStringArrayCheck == '') {
-                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($relatedFunction);
+                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($functionToBeCached);
             } else {
-                $requestedInformation = $relatedFunction;
+                $requestedInformation = $functionToBeCached;
             }
             FrontEnd_Helper_viewHelper::setInCache($dataKey, $requestedInformation);
         } else {
             $requestedInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($dataKey);
         }
+
         return $requestedInformation;
     }
     /**
