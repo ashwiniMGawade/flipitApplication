@@ -11,27 +11,18 @@ class AboutController extends Zend_Controller_Action
         } else {
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
     {
         $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
         $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
-
-        if ($pageDetails->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $pageDetails->customHeader;
-        }
-
-        $this->view->headMeta()->setName('description', trim($pageDetails->metaDescription));
         $this->view->pageTitle = $pageDetails->pageTitle;
-        $this->view->headTitle($pageDetails->metaTitle);
-        $this->view->facebookImage = FACEBOOK_IMAGE ;
-        $this->view->facebookTitle = $pageDetails->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('redactie');
-        $this->view->facebookDescription = trim($pageDetails->metaDescription);
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription = trim($pageDetails->metaDescription);
-        $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", User::getAllUsersDetails(self::getWebsiteNameWithLocale()));
+        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('redactie'), FACEBOOK_IMAGE, $customHeader);
+
+        $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", array('function' => 'User::getAllUsersDetails', 'parameters' => self::getWebsiteNameWithLocale()));
         $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination($allAuthorsDetails, $this->_getAllParams(), 20, 7);
         $this->view->pageDetails = $pageDetails;
  
@@ -52,27 +43,22 @@ class AboutController extends Zend_Controller_Action
     public function profileAction()
     {
         $authorSlugName = $this->getRequest()->getParam('slug');
-        $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorSlugName) ."_list", User::getUserIdBySlugName($authorSlugName), 0);
-        $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$authorId ."_list", User::getUserProfileDetails($authorId), 0);
+        $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users". str_replace('-', '_', $authorSlugName) ."_list", array('function' => 'User::getUserIdBySlugName', 'parameters' => array($authorSlugName)), 0);
+        $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "users".$authorId ."_list", array('function' => 'User::getUserProfileDetails', 'parameters' => array($authorId)), 0);
 
         if (empty($authorDetails)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }
 
         $authorDetails = $authorDetails[0];
-        $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$authorId ."_list", User::getUserFavouriteStores($authorId), 0);
-        $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$authorId ."_list", MoneySaving::getMostReadArticles(6, $authorId), 0);
+        $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$authorId ."_list", array('function' => 'User::getUserFavouriteStores', 'parameters' => array($authorId)), 0);
+        $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$authorId ."_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(6, $authorId)), 0);
         $authorFullName = $authorDetails['firstName']." ". $authorDetails['lastName'];
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $this->view->headTitle($authorFullName);
-        $this->view->facebookTitle = $authorFullName;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie") ."/".$authorDetails['slug'];
-        $this->view->facebookImage = FACEBOOK_IMAGE ;
-        $this->view->facebookDescription = trim($authorDetails['mainText']);
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription = trim($authorDetails['mainText']);
+        $customHeader = '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $authorFullName, '', trim($authorDetails['mainText']), FrontEnd_Helper_viewHelper::__link("redactie") ."/".$authorDetails['slug'], FACEBOOK_IMAGE, $customHeader);
+
         $this->view->authorDetails = $authorDetails;
         $this->view->authorFavouriteShops = $authorFavouriteShops;
         $this->view->authorMostReadArticles = $authorMostReadArticles;

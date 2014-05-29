@@ -13,6 +13,7 @@ class SearchController extends Zend_Controller_Action
         } else{
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function indexAction()
@@ -21,20 +22,15 @@ class SearchController extends Zend_Controller_Action
         $pagePermalink = FrontEnd_Helper_viewHelper::__link('zoeken');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $pageAttributeId = Page::getPageAttributeByPermalink($pagePermalink);
-        $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
-        $this->view->pageTitle = $pageDetail->pageTitle;
-
-        if ($pageDetail->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $pageDetail->customHeader;
-        }
-
+        $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
+        $this->view->pageTitle = $pageDetails->pageTitle;
         $searchedKeywords = $this->getRequest()->getParam('searchField');
         $shopIds = "";
         $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
         $shopsByShopIds = $this->_helper->Search->getshopsByExcludedShopIds($shopIds);
         $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
         $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
-        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)), true);
         $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
 
         if($searchedKeywords == ''){
@@ -48,19 +44,13 @@ class SearchController extends Zend_Controller_Action
             $this->view->offers = $offersBySearchedKeywords; 
         }
 
-        $this->view->headTitle($pageDetail->metaTitle);
-        $this->view->headMeta()->setName('description', trim($pageDetail->metaDescription));
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
-        $this->view->facebookTitle =$pageDetail->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $pageDetail->permaLink;
-        $this->view->facebookImage = FACEBOOK_IMAGE;
-        $this->view->facebookDescription =  trim($pageDetail->metaDescription);
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription =  trim($pageDetail->metaDescription);
-        
+        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), $pageDetails->permaLink, FACEBOOK_IMAGE, $customHeader);
+
         $this->view->pageLogo = '';
-        if(isset($pageDetail->logo->path)) {
-            $this->view->pageLogo = PUBLIC_PATH_CDN.$pageDetail->logo->path.$pageDetail->logo->name;
+        if(isset($pageDetails->logo->path)) {
+            $this->view->pageLogo = PUBLIC_PATH_CDN.$pageDetails->logo->path.$pageDetails->logo->name;
         }
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);

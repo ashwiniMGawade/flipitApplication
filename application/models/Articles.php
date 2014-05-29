@@ -16,32 +16,22 @@ class Articles extends BaseArticles
         ->orderBy('p.position ASC')->fetchArray();
         return $moneySavingArticles;
     }
-    ###############################################
-    ########## END REFACTORED CODE ################
-    ###############################################
-    
-    CONST ArticleStatusDraft = 0;
-    CONST ArticleStatusPublished = 1;
 
-    ######################## Refactored Block ################################
-
-    public static function getArticlesByPermalink($permalink)
+    public static function getArticleByPermalink($permalink)
     {
-        $currentDateTime = date('Y-m-d H:i:s');
-        $articles = Doctrine_Query::create()->select()
+        $articleDetails = Doctrine_Query::create()->select()
                     ->from("Articles a")
                     ->leftJoin('a.relatedstores as stores')
                     ->leftJoin('a.relatedcategory as related')
                     ->leftJoin('related.articlecategory as category')
                     ->leftJoin('a.chapters as chapter')
-                    ->leftJoin('a.ArtIcon')
+                    ->leftJoin('a.articleImage')
                     ->leftJoin('stores.shop')
                     ->where('a.permalink="'.$permalink.'"')
                     ->andWhere('a.publish = "1"')
                     ->andWhere("a.deleted= 0")
-                    ->andWhere('a.publishdate <= '."'$currentDateTime'")
                     ->fetchArray();
-        return $articles;
+        return $articleDetails;
     }
 
     public static function getAllArticles()
@@ -52,7 +42,7 @@ class Articles extends BaseArticles
                 ->leftJoin('a.relatedstores as stores')
                 ->leftJoin('a.relatedcategory as related')
                 ->leftJoin('a.thumbnail')
-                ->leftJoin('a.ArtIcon')
+                ->leftJoin('a.articleImage')
                 ->leftJoin('stores.shop')
                 ->leftJoin('a.chapters chap')
                 ->where('a.publish = "1"')
@@ -78,8 +68,12 @@ class Articles extends BaseArticles
             ->fetchArray();
         return $allMoneySavingArticle;
     }
-    ###################### Refactored Block ends #############################
-
+    ###############################################
+    ########## END REFACTORED CODE ################
+    ###############################################
+    
+    CONST ArticleStatusDraft = 0;
+    CONST ArticleStatusPublished = 1;
 
     /**
      * This function is used to get author list to display
@@ -170,7 +164,7 @@ class Articles extends BaseArticles
                                         ->leftJoin('a.relatedstores as stores')
                                         ->leftJoin('a.relatedcategory as related')
                                         ->leftJoin('a.chapters as chapter')
-                                        ->leftJoin('a.ArtIcon')
+                                        ->leftJoin('a.articleImage')
                                         ->leftJoin('a.thumbnail')
                                         ->leftJoin('stores.shop')
                                         ->where('id='.$params['id'])
@@ -238,9 +232,9 @@ class Articles extends BaseArticles
                 $ext = BackEnd_Helper_viewHelper::getImageExtension(
                         @$result['fileName']);
 
-                $data->ArtIcon->ext = @$ext;
-                $data->ArtIcon->path = @$result['path'];
-                $data->ArtIcon->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $data->articleImage->ext = @$ext;
+                $data->articleImage->path = @$result['path'];
+                $data->articleImage->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
             } else {
                 return false;
             }
@@ -262,7 +256,7 @@ class Articles extends BaseArticles
             }
         }
     /*	$ext = BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
-        $data->ArtIcon->ext = $ext;*/
+        $data->articleImage->ext = $ext;*/
 
         if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
             $data->publish = Articles::ArticleStatusDraft;
@@ -361,7 +355,7 @@ class Articles extends BaseArticles
         $data->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString ($params['articlemetaTitle']);
         $md = trim($params['articlemetaDesc']);
         $data->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($md);
-        //$data->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
+        $data->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
         $data->authorid = BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorList']);
         $data->authorname = BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']);
 
@@ -373,9 +367,9 @@ class Articles extends BaseArticles
                 $ext = BackEnd_Helper_viewHelper::getImageExtension(
                         $result['fileName']);
 
-                $data->ArtIcon->ext = $ext;
-                $data->ArtIcon->path = BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                $data->ArtIcon->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $data->articleImage->ext = $ext;
+                $data->articleImage->path = BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+                $data->articleImage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
 
             } else{
 
@@ -440,7 +434,7 @@ class Articles extends BaseArticles
         endforeach;
         /*
         $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-        $data->ArtIcon->ext = $ext;*/
+        $data->articleImage->ext = $ext;*/
 
         if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
             $data->publish = Articles::ArticleStatusDraft;
@@ -875,7 +869,7 @@ class Articles extends BaseArticles
     {
         $data = Doctrine_Query::create()->select()
                                         ->from("Articles art")
-                                        ->leftJoin("art.ArtIcon")
+                                        ->leftJoin("art.articleImage")
                                         ->where('art.deleted=' .$flag )
                                         ->andWhere("art.title LIKE '%$keyword%' or art.content LIKE '%$keyword%'")
                                         ->limit($limit)
@@ -897,7 +891,7 @@ class Articles extends BaseArticles
         $data = Doctrine_Query::create()
         ->select('a.*,img.*')
         ->from('Articles a')
-        ->leftJoin('a.ArtIcon img')
+        ->leftJoin('a.articleImage img')
         ->where('a.deleted= 0')
         ->limit('5')
         ->fetchArray();

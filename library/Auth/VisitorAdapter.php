@@ -1,109 +1,69 @@
 <?php
-/**
- * Check frontend visitor is authenticated or not 
- * @author cbhopal
- * @version 1.0
- */
 class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
-	protected $email = "";
-	protected $password = "";
-	
-	public function __construct($email, $password, $loginMode = null) {
-		$this->email = FrontEnd_Helper_viewHelper::sanitize( $email );
-		$this->password = FrontEnd_Helper_viewHelper::sanitize( $password );
-	
-	}
-	/**
-	 * (non-PHPdoc)
-	 * @see Zend_Auth_Adapter_Interface::authenticate()
-	 */
-	public function authenticate() {
-		
-	//	echo "<pre>";
-	//	print_r($this); die;
-		// echo $this->email;
-		// echo $password;
-		
-		$user = Doctrine_Query::create()->from("Visitor u" )->where("u.email="."'".$this->email."'")->andWhere("u.deleted=0")->fetchOne();
-		
-		if ($user) {
-			
-			
+    #############################################################
+    ############# REFACTORED CODE ###############################
+    #############################################################
+    protected $email = "";
+    protected $password = "";
 
-			if ($user->validatePassword ($this->password)) {
-				
-				return new Zend_Auth_Result ( Zend_Auth_Result::SUCCESS, $user );
-			
-			} else {
-				
-				return new Zend_Auth_Result ( Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $user, array ("Invalid Credentials" ) );
-				// throw new Zend_Auth_Adapter_Exception("Invalid Credentials",
-				// Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID );
-			}
-		} else {
-			return new Zend_Auth_Result ( Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, null, array ("User Does Not Exist" ) );
-			// throw new Zend_Auth_Adapter_Exception("User Does Not Exist",
-			// Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND );
-		}
-	}
-	
-	/**
-	 * 
-	 */
-	/**function __destruct() {
-		// TODO - Insert your code here
-	}
-	/**
-	 * Check Identity of the user in zend auth
-	 * 
-	 * @return boolean
-	 */
-	public static function hasIdentity() {
-		$sess = new Zend_Auth_Storage_Session('front_login');
-		//echo '<pre>'; print_r($sess->read()); die;
-		if ($sess->read()) {
-			$u = $sess->read();
-			$member = Doctrine_Core::getTable ( "Visitor" )->find ( $u->id );
-			if ($member) {
-				return true;
-			}
-		}
-		return false;
-	}
-	/**
-	 * Get Identity of the user in zend auth
-	 * $retunr object $member
-	 */
-	public static function getIdentity() {
-		$sess = new Zend_Auth_Storage_Session('front_login');
-		if ($sess->read()) {
-			$u = $sess->read();
-			$member = Doctrine_Core::getTable ( "Visitor" )->find ( $u->id );
-			return $member;
-		}
-		return false;
-	}
-	/**
-	 * clear the Identity fron the zend auth
-	 */
-	public static function clearIdentity() {
-		$sess= new Zend_Auth_Storage_Session('front_login');
-		return $sess->clear();   //Zend_Auth::getInstance ()->clearIdentity ();
-	}
-	/**
-	 * forget password check by email from the database
-	 * @param $eMail string       	
-	 */
-	public static function forgotPassword($eMail) {
-		$result = Doctrine_Core::getTable ( 'Visitor' )->findOneByemail ( FrontEnd_Helper_viewHelper::sanitize($eMail ) );
-		if ($result) {
-			
-			return array ('id' => $result ['id'], 'username' => $result ['firstName'] );
-		} else {
-			return false;
-		
-		}
-	}
+    public function __construct($email, $password, $loginMode = null) {
+        $this->email = FrontEnd_Helper_viewHelper::sanitize($email);
+        $this->password = FrontEnd_Helper_viewHelper::sanitize($password);
+    }
+
+    public function authenticate() {
+        $visitor = Doctrine_Query::create()->from("Visitor u")
+            ->where("u.email="."'".$this->email."'")
+            ->andWhere("u.deleted=0")->fetchOne();
+        if ($visitor) {
+            if ($visitor->validatePassword($this->password)) {
+                return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $visitor);
+            } else {
+                return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_CREDENTIAL_INVALID, $visitor, array("Invalid Credentials"));
+            }
+        } else {
+            return new Zend_Auth_Result(Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND, null, array("User Does Not Exist"));
+        }
+    }
+
+    public static function hasIdentity() {
+        $visitoSession = new Zend_Auth_Storage_Session('front_login');
+        if ($visitoSession->read()) {
+            $visitor = $visitoSession->read();
+            $visitorDetails = Doctrine_Core::getTable("Visitor")->find($visitor->id);
+            if ($visitorDetails) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function getIdentity() {
+        $visitoSession = new Zend_Auth_Storage_Session('front_login');
+        if ($visitoSession->read()) {
+            $visitor = $visitoSession->read();
+            $visitorDetails = Doctrine_Core::getTable("Visitor")->find($visitor->id);
+            return $visitorDetails;
+        }
+        return false;
+    }
+
+    public static function clearIdentity() {
+        $visitoSession= new Zend_Auth_Storage_Session('front_login');
+        return $visitoSession->clear();
+    }
+
+    public static function forgotPassword($visitorEmail) {
+        $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(FrontEnd_Helper_viewHelper::sanitize($visitorEmail));
+        $visitor = false;
+        if ($visitorDetails) {
+            $visitor = array('id' => $visitorDetails['id'], 'username' => $visitorDetails['firstName']);
+        }
+        return $visitor;
+    }
+    #############################################################
+    ############# END REFACTORED CODE ###########################
+    #############################################################
 	/**
 	 * generate new password for user
 	 * @param $length string       	

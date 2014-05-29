@@ -12,30 +12,16 @@ class CategoryController extends Zend_Controller_Action
     public function showAction()
     {
         $categoryPermalink = $this->getRequest()->getParam('permalink');
-        $categoryDetail = Category::getCategoryDetails($categoryPermalink);
-        if (count($categoryDetail) > 0) {
-            $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetail[0]['id'], 71);
+        $categoryDetails = Category::getCategoryDetails($categoryPermalink);
+        if (count($categoryDetails) > 0) {
+            $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetails[0]['id'], 71);
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($categoryVoucherCodes, $this->_getAllParams(), 27, 3);
             $this->view->offersWithPagination = $offersWithPagination;
-            $this->view->categoryDetail = $categoryDetail;
+            $this->view->categoryDetails = $categoryDetails;
             $this->view->offersType = 'offerWithPagenation';
-            $this->view->headTitle(trim($categoryDetail[0]['metatitle']));
-            $this->view->headMeta()->setName('description', trim($categoryDetail[0]['metaDescription']));
+            $customHeader = '';
+            $this->viewHelperObject->getFacebookMetaTags($this, $categoryDetails[0]['name'], trim($categoryDetails[0]['metatitle']), trim($categoryDetails[0]['metaDescription']), FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetails[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
-            if (LOCALE == '') {
-                $facebookImage = 'logo_og.png';
-                $facebookLocale = LOCALE;
-            } else {
-                $facebookImage = 'flipit.png';
-                $facebookLocale = LOCALE;
-            }
-
-            $this->view->facebookTitle = $categoryDetail[0]['name'];
-            $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetail[0]['permaLink'];
-            $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage ;
-            $this->view->facebookDescription = trim($categoryDetail[0]['metaDescription']);
-            $this->view->facebookLocale = $facebookLocale;
-            $this->view->twitterDescription = trim($categoryDetail[0]['metaDescription']);
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
         }
@@ -50,23 +36,14 @@ class CategoryController extends Zend_Controller_Action
     {
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
-        $this->pageDetail = Page::getPageFromPageAttribute(9);
-        $this->view->headTitle($this->pageDetail->metaTitle);
-        $this->view->headMeta()->setName('description', trim($this->pageDetail->metaDescription));
-
-        if ($this->pageDetail->customHeader) {
-            $this->view->layout()->customHeader = "\n" . $this->pageDetail->customHeader;
-        }
-
-        $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoriesDetail());
-        $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialListPages());
+        $this->pageDetails = Page::getPageFromPageAttribute(9);
+        $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', array('function' => 'Category::getCategoriesDetail', 'parameters' => array()));
+        $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', array('function' => 'Page::getSpecialListPages', 'parameters' => array()));
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
-        $this->view->facebookTitle = $this->pageDetail->pageTitle;
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen');
-        $this->view->facebookImage = FACEBOOK_IMAGE;
-        $this->view->facebookDescription = trim($this->pageDetail->metaDescription);
-        $this->view->facebookLocale = FACEBOOK_LOCALE;
-        $this->view->twitterDescription = trim($this->pageDetail->metaDescription);
+
+        $customHeader = isset($this->pageDetails->customHeader) ? $this->pageDetails->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $this->pageDetails->pageTitle, $this->pageDetails->metaTitle, trim($this->pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('categorieen'), FACEBOOK_IMAGE, $customHeader);
+
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
@@ -98,6 +75,7 @@ class CategoryController extends Zend_Controller_Action
             # set default module view script path
             $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
         }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
       public function clearcacheAction()
       {

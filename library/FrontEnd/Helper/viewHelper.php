@@ -92,6 +92,7 @@ EOD;
              $hrefLinks = "" ;
              $hasShops = false ;
              foreach ($chain as $chainInformation) {
+                
                  $hrefLinks .=  isset($chainInformation['headLink']) ? $chainInformation['headLink']. "\n" : '';
     
                  if (! empty($chainInformation['shops'])) {
@@ -99,12 +100,12 @@ EOD;
                      $chainInformation = $chainInformation['shops'];
                      $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
                      $string .= sprintf(
-                        "<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
+                        "<li><a class='".strtolower($chainInformation['locale'])."' href='%s' target='_blank'>".self::getCountryNameByLocale(strtolower($chainInformation['locale']))."</a></li>",
                          trim($chainInformation['url']),
                          $httpPath.'/public/'. $image
                         );
                  }
-             } 
+             }
                          $string .= <<<EOD
             </ul>
 EOD;
@@ -335,9 +336,11 @@ EOD;
         if($type == 'widget' || $type == 'popup'):
             $socialMedia=$facebookLikeWidget.$googlePlusOneWidget.$twitterLikeWidget;
         elseif($type == 'article'):
-            $socialMedia = "<li>".$facebookLikeWidget."</li>
+            $socialMedia = "<ul class='social-box'>
+                            <li>".$facebookLikeWidget."</li>
                             <li>".$googlePlusOneWidget."</li>
-                            <li>".$twitterLikeWidget."</li>";
+                            <li>".$twitterLikeWidget."</li>
+                            </ul>";
         else:
             $zendTranslate = Zend_Registry::get('Zend_Translate');
             $socialMediaTitle = "<h2>".$zendTranslate->translate('Share')."</h2>
@@ -360,7 +363,8 @@ EOD;
     public function getShopHeader($shop, $expiredMessage, $offerTitle)
     {
         $bounceRate = "/out/shop/".$shop['id'];
-        $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.$shop['id'];
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        $shopUrl = $domainName.'out/shop/'.$shop['id'];
         $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
         if ($shop['affliateProgram']) :
             $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
@@ -517,18 +521,25 @@ EOD;
 
     public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '')
     {
+        
+        if ($relatedFunction['function'] == '') {
+            $functionToBeCached = $relatedFunction['parameters'];
+        } else {
+            $functionToBeCached = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
+        }
+
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
-    
             if ($replaceStringArrayCheck == '') {
-                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($relatedFunction);
+                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($functionToBeCached);
             } else {
-                $requestedInformation = $relatedFunction;
+                $requestedInformation = $functionToBeCached;
             }
             FrontEnd_Helper_viewHelper::setInCache($dataKey, $requestedInformation);
         } else {
             $requestedInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($dataKey);
         }
+
         return $requestedInformation;
     }
     /**
@@ -596,7 +607,7 @@ EOD;
                 break;
                 //refactored 
             case 'popular':
-                $stores = Shop::getPopularStore($limit);
+                $stores = Shop::getPopularStores($limit);
                 break;
             default:
                 break;
@@ -677,14 +688,20 @@ EOD;
                     foreach($articles as $article) { 
         $relatedArticles .=
                 '<div class="item">
-                    <img src="'.PUBLIC_PATH_CDN.$article['ArtIcon']['path'].$article['ArtIcon']['name'].'" alt="'.$article['title'].'">
+                    <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'" class="link">
+                    <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" 
+                    alt="'.$article['title'].'">
+                    </a>
                     <div class="box">
                         <div class="caption-area">
+                        <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'" class="link">
                             <span class="caption">
                             '.$article['title'].'
                             </span>
+                        </a>    
                         </div>
-                        <a href="plus/'.$article['title'].'" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
+                        <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'" class="link">'
+                        .$this->zendTranslate->translate('more').' &#8250;</a>
                     </div>
                 </div>';
             }           
@@ -710,13 +727,17 @@ EOD;
                 $class = 'slide';
             }
             echo'<div class="'.$class.'" id="'.$id.'">
-                                <img class="" width = "632" height = "160"  src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].$mostReadArticle['articles']['thumbnail']['name'].'" 
-                                alt="'.$mostReadArticle['articles']['title'].'">
-                                <h1>'.$mostReadArticle['articles']['title'].'</h1>
-                                <p>
-                                   '.$mostReadArticle['articles']['content'].'
-                                </p>
-                        </div>';
+                <a href = "'.$mostReadArticle['articles']['title'].'">
+                    <img class="aligncenter" 
+                        src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path']
+                        .$mostReadArticle['articles']['articleImage']['name'].'" 
+                        alt="'.$mostReadArticle['articles']['title'].'">
+                    <h1>'.$mostReadArticle['articles']['title'].'</h1>
+                </a>
+                <p>
+                   '.$mostReadArticle['articles']['content'].'
+                </p>
+            </div>';
             $articleNumber++;                
         }
         
@@ -725,6 +746,7 @@ EOD;
     public function getHowToGuidesImage($howToGuideImages)
     {
         $howToGuideImagePath = '';
+        $howToGuideImageAltText = '';
         if (!empty($howToGuideImages)) {
             $howToGuideImagePath = PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'],"/")."thum_bigLogoFile_".$howToGuideImages['name'];
             $howToGuideImageAltText = $howToGuideImages['name'];
@@ -735,12 +757,16 @@ EOD;
     public static function getMostPopularCouponOnEarth()
     {
         $splashInformation = self::getSplashInformation();
-        $locale = $splashInformation[0]['locale'];
-        $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
-        $offer = new Offer($connectionWithSiteDatabase['connName']);
-        $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
-        BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
-        return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
+        if (!empty($splashInformation)) {
+            $locale = $splashInformation[0]['locale'];
+            $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
+            $offer = new Offer($connectionWithSiteDatabase['connName']);
+            $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
+            BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
+            return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
+        } else {
+            return array('locale' => '','mostPopularCoupon' => '');
+        }  
     }
 
     public static function getSplashInformation()
@@ -764,6 +790,40 @@ EOD;
         return $countryName;
     }
 
+    public function getFacebookMetaTags($currentObject, $title = '', $metaTitle = '', $metaDescription = '', $permaLink = '', $image = '', $customHeader = '')
+    {
+        if ($metaTitle == '') {
+            $metaTitle = $title;
+        }
+        $currentObject->view->headTitle($metaTitle);
+        $currentObject->view->headMeta()->setName('description', $metaDescription);
+        $currentObject->view->facebookTitle = $title;
+        $currentObject->view->facebookShareUrl = HTTP_PATH_LOCALE . $permaLink;
+        $currentObject->view->facebookImage = $image;
+        $currentObject->view->facebookDescription = $metaDescription;
+        if (LOCALE == '') {
+            $facebookLocale = '';
+        } else {
+            $facebookLocale = LOCALE;
+        }
+        $currentObject->view->facebookLocale = $facebookLocale;
+        $currentObject->view->twitterDescription = $metaDescription;
+
+        if (isset($customHeader)) {
+            $currentObject->view->layout()->customHeader = $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
+        }
+        return $currentObject;
+    }
+    
+    public static function getWebsitesLocales($websites)
+    {
+        foreach ($websites as $website) {
+            $splitWebsite  = explode('/', $website['name']);
+            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
+            $locales[strtoupper($locale)] = $website['name'];
+        }
+        return $locales;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1317,7 +1377,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         for ($i=0;$i<count($articles);$i++) {
 
             $img = '';
-                $img = PUBLIC_PATH_CDN.$articles[$i]['articles']['ArtIcon']['path']."thum_article_medium_".$articles[$i]['articles']['ArtIcon']['name'];
+                $img = PUBLIC_PATH_CDN.$articles[$i]['articles']['articleImage']['path']."thum_article_medium_".$articles[$i]['articles']['articleImage']['name'];
 
         $string.='<div class="mostpopular-col1">
                     <div class="rediusnone1"><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . '<img src="' . $img . '"></a></div>

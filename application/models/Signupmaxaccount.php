@@ -36,6 +36,17 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         return $data;
     }
 
+    public static function getTestimonials()
+    {
+        $testimonials = Doctrine_Query::create()
+        ->select('p.testemail,p.showTestimonial,p.testimonial1,p.testimonial2,p.testimonial3')
+        ->from('Signupmaxaccount p')
+        ->where('id=1')
+        ->fetchArray();
+        return $testimonials;
+    }
+    
+    
     #################################################################
     #################### END REFACTOR CODE ##########################
     #################################################################
@@ -205,20 +216,6 @@ class Signupmaxaccount extends BaseSignupmaxaccount
     {
         $data = Doctrine_Query::create()
         ->select('p.id, p.emailperlocale')
-        ->from('Signupmaxaccount p')
-        ->where('id=1')
-        ->fetchArray();
-        return $data;
-    }
-
-    /**
-     * getTestimonials
-     * @return array testimonials
-     */
-    public static function getTestimonials()
-    {
-        $data = Doctrine_Query::create()
-        ->select('p.testemail,p.showTestimonial,p.testimonial1,p.testimonial2,p.testimonial3')
         ->from('Signupmaxaccount p')
         ->where('id=1')
         ->fetchArray();

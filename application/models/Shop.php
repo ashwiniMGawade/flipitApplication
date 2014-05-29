@@ -93,7 +93,7 @@ class Shop extends BaseShop
     * @version 1.1
     * @return array $data
     */
-    public static function getPopularStore($limit, $shopId = null)
+    public static function getPopularStores($limit, $shopId = null)
     {
         $currentDate = date('Y-m-d 00:00:00');
         $popularStoreData = Doctrine_Query::create()

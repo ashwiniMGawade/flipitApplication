@@ -14,8 +14,13 @@ class Application_Form_Base extends Zend_Form
     public function highlightErrorElements()
     {
         foreach ($this->getElements() as $element) {
-            if ($element->hasErrors()) {
-                $element->setAttrib('class', 'input-error');
+            $elementValue = $element->getValue();
+            if ($element->getType()!= 'Zend_Form_Element_Checkbox') {
+                if ($element->hasErrors()) {
+                    $element->setAttrib('class', 'input-error form-control');
+                } elseif ($element->isValid($elementValue)) {
+                    $element->setAttrib('class', 'input-success form-control');
+                }
             }
         }
     }

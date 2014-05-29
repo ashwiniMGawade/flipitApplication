@@ -3,7 +3,7 @@
   display: block;
   clear: both;
 }
-.newsletter input[type="submit"] {
+.row .newsletter input[type="submit"] {
   border-radius: 2px;
   float: left;
   font-size: 14px;
@@ -13,20 +13,26 @@
   padding: 0;
   width: 99px;
 }
-.newsletter input[type="email"] {
+.row .newsletter input[type="email"] {
   width: 68%;
 }
-.newsletter h2 {
+.row .newsletter h2 {
   font-size: 21px;
   font-weight: bold;
   line-height: 24px;
   margin: 0 0 5px;
 }
-form .input-error {
-  border: '1px solid red';
+input.input-error {
+  border: 1px solid #ff0000 !important;
 }
-form .input-success {
-  border: 1px solid #6ac00e;
+input.input-success {
+  border: 1px solid #6ac00e !important;
+}
+select.input-error {
+  border: 1px solid #ff0000 !important;
+}
+select.input-success {
+  border: 1px solid #6ac00e !important;
 }
 #footer input[type="email"] {
   margin-right: 0;
@@ -36,10 +42,7 @@ form .input-success {
     display: none;
   }
 }
-.header-search-autocomplete {
-  position: relative;
-}
-.header-search-autocomplete .ajax-autocomplete {
+.ui-autocomplete {
   position: absolute;
   left: 0;
   right: 2px;
@@ -51,28 +54,26 @@ form .input-success {
   line-height: 17px;
   -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
-}
-.header-search-autocomplete .ajax-autocomplete ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.header-search-autocomplete .ajax-autocomplete ul li {
+.ui-autocomplete li {
   border-top: 1px solid #c6c6c5;
 }
-.header-search-autocomplete .ajax-autocomplete ul li a {
+.ui-autocomplete li a {
   display: block;
   color: #33383e;
   padding: 14px 12px;
   text-decoration: none;
 }
-.header-search-autocomplete .ajax-autocomplete ul li span {
+.ui-autocomplete li span {
   color: #db862e;
 }
-.header-search-autocomplete .ajax-autocomplete ul li :hover {
+.ui-autocomplete li :hover {
   background: #ececec;
 }
-.header-search-autocomplete .ajax-autocomplete ul li :first-child {
+.ui-autocomplete li :first-child {
   border: 0;
 }
 .best-items .categories-block ul li a.active-li {
@@ -138,6 +139,84 @@ form .input-success {
   margin: 20px auto 0 auto;
   width: 100%;
 }
+.countries li a.in {
+  background-position: -198px -488px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.sg {
+  background-position: -396px -244px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.au {
+  background-position: 0 -732px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.br {
+  background-position: 0 -1708px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.ca {
+  background-position: -66px -183px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.us {
+  background-position: -462px -305px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.at {
+  background-position: 0 -671px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.be {
+  background-position: 0 -1159px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.fr {
+  background-position: -132px -732px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.de {
+  background-position: -66px -1403px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.it {
+  background-position: -198px -793px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.pl {
+  background-position: -330px -976px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.es {
+  background-position: -132px -183px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.se {
+  background-position: -396px -183px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.ch {
+  background-position: -66px -549px;
+  width: '16px';
+  height: '11px';
+}
+.inner-section-wrapper {
+  margin: 2%;
+}
 #fade {
   background: none repeat scroll 0 0 #000000;
   color: #010000;
@@ -150,4 +229,17 @@ form .input-success {
   top: 0;
   width: 100%;
   z-index: 900;
+}
+.popup_block {
+  left: 50%;
+  margin-left: -362px;
+  margin-top: -335px;
+  position: fixed;
+  top: 50%;
+}
+.profile-page select#gender.form-control {
+  width: 100%;
+  border: 1px solid #d8d8d8;
+  height: 39px;
+  padding: 10px 5px 9px;
 }

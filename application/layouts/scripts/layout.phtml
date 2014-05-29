@@ -23,7 +23,7 @@ $language = $locale[0];
 
 <?php
 if(isset($this->canonical)):
-    $this->headLink(
+   $this->headLink(
         FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)
     );
 endif;
@@ -43,7 +43,7 @@ endif;
 
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
-echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+$this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
 
 # if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
 if(LOCALE=='') :
@@ -64,6 +64,7 @@ echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
 
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
+
 ?>
 
 </head>
@@ -72,10 +73,8 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
         <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
         <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
 <?php 
-if ($this->controllerName=='index'):
-    ?>
-        <div class="section-top">
-    <?php
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
+    echo '<div class="section-top">';
 endif;
 
 $localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
@@ -94,26 +93,22 @@ if(file_exists($localePartialPath .  '_header.phtml')) :
 else:
     echo $baseViewPath->render($partials.'_header.phtml');
 endif;
+
 echo FrontEnd_Helper_LayoutContent::homePageBanner($this->banner);
 echo FrontEnd_Helper_LayoutContent::homePageSearch();
 
-if ($this->controllerName=='index'):
-    ?>
-        </div>
-   <?php
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
+    echo "</div>";
 endif;
-if ($this->controllerName!='index'):
-    ?>
-        <main id="main" role="main" class="container">
-    <?php
+
+if (FrontEnd_Helper_LayoutContent::showMainContainerDiv()):
+    echo '<main id="main" role="main" class="container">';
 endif;
 
 echo $this->layout()->content;
 
-if ($this->controllerName!='index'):
-    ?>
-        </main>
-    <?php
+if (FrontEnd_Helper_LayoutContent::showMainContainerDiv()):
+    echo "</main>";
 endif;
 ?>
     </div>

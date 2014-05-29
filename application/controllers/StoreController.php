@@ -5,6 +5,7 @@ class StoreController extends Zend_Controller_Action
     #################################################
     ######## REFACTORED CODE ########################
     #################################################
+    public $viewHelperObject = '';
     public function addshopinfevoriteAction()
     {
         $shopId = $this->getRequest()->getParam("shopid");
@@ -30,15 +31,15 @@ class StoreController extends Zend_Controller_Action
             $currentDate = date('Y-m-d H:i:s');
             $ShopList = $shopId.'_list';
             $allShopDetailKey = 'all_shopdetail'.$ShopList;
-            $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetails($shopId));
+            $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allShopDetailKey, array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId)));
             $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
-            $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("all", 10, $shopId, 0));
+            $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allOffersInStoreKey, array('function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode', 'parameters' => array("all", 10, $shopId, 0)));
             $allExpiredOfferKey = 'all_expiredOfferInStore'.$ShopList;
-            $expiredOffers = self::shopOffersBySetGetCache($allExpiredOfferKey, FrontEnd_Helper_viewHelper::getShopCouponCode("expired", 12, $shopId));
+            $expiredOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allExpiredOfferKey, array('function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode', 'parameters' => array("expired", 12, $shopId)));
             $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
-            $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $shopId));
+            $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allLatestUpdatesInStoreKey, array('function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode', 'parameters' => array('latestupdates', 4, $shopId)));
             $expiredOffersInStoreKey = 'all_msArticleInStore'.$ShopList;
-            $moneySavingGuideArticle = self::shopOffersBySetGetCache('all_msArticleInStore'.$ShopList, FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle('moneysaving', 6, $shopId));
+            $moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_msArticleInStore'.$ShopList, array('function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle', 'parameters' => array('moneysaving', 6, $shopId)));
 
             if (sizeof($shopInformation) >0) {
             } else {
@@ -57,10 +58,6 @@ class StoreController extends Zend_Controller_Action
                 if ($shopChains['hasShops'] && isset($shopChains['string'])) {
                     $this->view->shopChain = $shopChains['string'] ;
                 }
-            }
-
-            if ($shopInformation[0]['customHeader']) {
-                $this->view->layout()->customHeader = $this->view->layout()->customHeader . $shopInformation[0]['customHeader'] . "\n" ;
             }
 
             $ShopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/").'thum_medium_store_'. $shopInformation[0]['logo']['name'];
@@ -87,19 +84,10 @@ class StoreController extends Zend_Controller_Action
         $this->view->storeImage = $ShopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
-        $this->view->headTitle($shopInformation[0]['overriteTitle']);
-        $this->view->headMeta()->setName('description', trim($shopInformation[0]['metaDescription']));
-        $this->view->facebookTitle = $shopInformation[0]['overriteTitle'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
-        $this->view->facebookImage = $ShopImage;
-        $this->view->facebookDescription =  trim($shopInformation[0]['metaDescription']);
-        if (LOCALE == '') {
-            $facebookLocale = '';
-        } else {
-            $facebookLocale = LOCALE;
-        }
-        $this->view->facebookLocale = $facebookLocale ;
-        $this->view->twitterDescription =  trim($shopInformation[0]['metaDescription']);
+
+        $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $shopInformation[0]['overriteTitle'], '', trim($shopInformation[0]['metaDescription']), $shopInformation[0]['permaLink'], $ShopImage, $customHeader);
+
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
@@ -133,55 +121,20 @@ class StoreController extends Zend_Controller_Action
         return $offers;
     }
 
-    public function shopOffersBySetGetCache($shopKey = '', $shopRelatedFunction = '', $replaceStringArrayCheck = '')
-    {
-        $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($shopKey);
-        if ($cacheStatusByKey) {
-
-            if ($replaceStringArrayCheck == '') {
-                $shopInformation = FrontEnd_Helper_viewHelper::replaceStringArray($shopRelatedFunction);
-            } else {
-                $shopInformation = $shopRelatedFunction;
-            }
-            FrontEnd_Helper_viewHelper::setInCache($shopKey, $shopInformation);
-        } else {
-            $shopInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($shopKey);
-        }
-        return $shopInformation;
-    }
-
     public function indexAction()
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageAttribute =  Page::getPageFromPageAttributeFiltered(7);
-        $this->view->pageTitle = $pageAttribute['pageTitle'];
-        $this->view->headTitle($pageAttribute['metaTitle']);
-        $this->view->headMeta()->setName('description', trim($pageAttribute['metaDescription']));
-
-        if ($pageAttribute['customHeader']) :
-            $this->view->layout()->customHeader = "\n" . $pageAttribute['customHeader'];
-        endif;
-
+        $pageAttributes =  Page::getPageFromFilteredPageAttribute(7);
+        $this->view->pageTitle = $pageAttributes['pageTitle'];
         $this->view->controllerName = $this->getRequest()->getParam('controller');
-        $allStoresList = self::shopOffersBySetGetCache('all_shops_list', Shop::getallStoresForFrontEnd('all', null), true);
-        $popularStores = self::shopOffersBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
-        $storeSearchByAlphabet = self::shopOffersBySetGetCache('all_searchpanle_list', FrontEnd_Helper_viewHelper::alphabetList(), true);
-        $this->view->facebookTitle = $pageAttribute['pageTitle'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $pageAttribute['permaLink'];
+        $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_shops_list', array('function' => 'Shop::getallStoresForFrontEnd', 'parameters' => array('all', null)), true);
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)), true);
+        $storeSearchByAlphabet = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_searchpanle_list', array('function' => 'FrontEnd_Helper_viewHelper::alphabetList', 'parameters' => array()), true);
 
-        if(LOCALE == '') {
-            $facebookImage = 'logo_og.png';
-            $facebookLocale = '';
-        }else{
-            $facebookImage = 'flipit.png';
-            $facebookLocale = LOCALE;
-        }
+        $customHeader = isset($pageAttributes['customHeader']) ? $pageAttributes['customHeader'] : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $pageAttributes['pageTitle'], $pageAttributes['metaTitle'], trim($pageAttributes['metaDescription']), $pageAttributes['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
-        $this->view->facebookLocale = $facebookLocale;
-        $this->view->facebookDescription =  trim($pageAttribute['metaDescription']);
-        $this->view->twitterDescription =  trim($pageAttribute['metaDescription']);
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
@@ -196,7 +149,7 @@ class StoreController extends Zend_Controller_Action
         $howToGuides=Shop::getshopDetails($parameters['permalink']);
         $ShopList = $howToGuides[0]['id'].'_list';
         $allShopDetailKey = 'all_shopdetail'.$ShopList;
-        $shopInformation = self::shopOffersBySetGetCache($allShopDetailKey, Shop::getStoreDetails($howToGuides[0]['id']));
+        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allShopDetailKey, array('function' => 'Shop::getStoreDetails', 'parameters' => array($howToGuides[0]['id'])));
 
         if ($shopInformation[0]['showChains']) {
             $shopChains = FrontEnd_Helper_viewHelper::sidebarChainWidget($shopInformation[0]['id'], $shopInformation[0]['name'], $shopInformation[0]['chainItemId']);
@@ -210,32 +163,20 @@ class StoreController extends Zend_Controller_Action
         }
 
         $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
-        $latestShopUpdates = self::shopOffersBySetGetCache($allLatestUpdatesInStoreKey, FrontEnd_Helper_viewHelper::getShopCouponCode('latestupdates', 4, $howToGuides[0]['id']));
+        $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allLatestUpdatesInStoreKey, array('function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode', 'parameters' => array('latestupdates', 4, $howToGuides[0]['id'])));
         $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
-        $offers = self::shopOffersBySetGetCache($allOffersInStoreKey, FrontEnd_Helper_viewHelper::commonfrontendGetCode("topSixOffers", 6, $howToGuides[0]['id'], 0));
+        $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allOffersInStoreKey, array('function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode', 'parameters' => array("topSixOffers", 6, $howToGuides[0]['id'], 0)));
         $offers = array_chunk($offers, 3);
-
-
-        if(LOCALE == '') {
-            $facebookImage = 'logo_og.png';
-            $facebookLocale = '';
-        }else{
-            $facebookImage = 'flipit.png';
-            $facebookLocale = LOCALE;
-        }
-
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
         $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides=$howToGuides;
-        $this->view->facebookTitle = $howToGuides[0]['howtoTitle'];
-        $this->view->facebookShareUrl = HTTP_PATH_LOCALE . $howToGuides[0]['permaLink'];
-        $this->view->facebookImage = HTTP_PATH."public/images/" .$facebookImage;
-        $this->view->facebookLocale = $facebookLocale;
-        $this->view->facebookDescription =  trim($howToGuides[0]['howtoMetaDescription']);
-        $this->view->twitterDescription =  trim($howToGuides[0]['howtoMetaDescription']);
+
+        $customHeader = '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $howToGuides[0]['howtoTitle'], '', trim($howToGuides[0]['howtoMetaDescription']), $howToGuides[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
+
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormForStorePage, $signUpFormSidebarWidget);
@@ -249,7 +190,7 @@ class StoreController extends Zend_Controller_Action
         $howToUseGuideChapters = '';
         $ShopList = $this->getRequest()->getParam('id').'_list';
         $allShopDetailsKey = 'all_shopdetail'.$ShopList;
-        $shopInformation = self::shopOffersBySetGetCache($allShopDetailsKey, Shop::getStoreDetails($this->getRequest()->getParam('id')));
+        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache($allShopDetailsKey, array('function' => 'Shop::getStoreDetails', 'parameters' => array($this->getRequest()->getParam('id'))));
 
         $howToGuide = Shop::getshopDetails($shopInformation[0]['permaLink']);
         if (!empty($howToGuide[0]['howtochapter'])) :
@@ -300,7 +241,7 @@ class StoreController extends Zend_Controller_Action
             $request->setActionName('error');
 
         }
-
+    $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
     public function searchshopbycharAction()

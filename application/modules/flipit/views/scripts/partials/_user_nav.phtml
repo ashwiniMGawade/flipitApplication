@@ -1,7 +1,7 @@
 <?php if (Auth_VisitorAdapter::hasIdentity()): ?>
     <?php
         $userid = Auth_VisitorAdapter::getIdentity()->id;
-        //$detail = Visitor::getuserdetail($userid);
+        //$detail = Visitor::getuserdetails($userid);
         $hash = md5($userid.microtime());
     ?>
     <div class="dropdown">

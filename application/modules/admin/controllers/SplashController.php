@@ -63,7 +63,7 @@ class Admin_SplashController extends Zend_Controller_Action
             $splashTableData = $splash->getSplashInformation();
 
             if (!empty($splashTableData)) {
-                Doctrine_Query::create()->delete()->from('Splash')->execute();
+                $splash->deleteSplashoffer();
             }
 
             $splash->id = 1;

@@ -24,10 +24,11 @@ class MoneySaving extends BaseMoneySaving
     public static function getMostReadArticles($limit, $userId = "")
     {
         $mostReadArticles = Doctrine_Query::create()
-        ->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.title, a.permalink, a.content, a.authorname, a.authorid, a.publishdate, ai.path, aai.name, aai.path, ai.name')
+        ->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.*, at.path, at.name, ai.name, ai.path')
         ->from('ArticleViewCount av')
         ->leftJoin('av.articles a')
-        ->leftJoin('a.thumbnail ai')
+        ->leftJoin('a.thumbnail at')
+        ->leftJoin('a.articleImage ai')
         ->leftJoin('a.chapters chap')
         ->groupBy('av.articleid')
         ->orderBy('pop DESC')
@@ -37,20 +38,19 @@ class MoneySaving extends BaseMoneySaving
         }
         $mostReadArticles = $mostReadArticles->limit($limit)->fetchArray();
         return $mostReadArticles;
-    
     }
-    public static function getRecentlyAddedArticles()
+    public static function getRecentlyAddedArticles($limit)
     {
         $recentlyAddedArticles = Doctrine_Query::create()
         	->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
-            ->leftJoin('a.ArtIcon aai')
+            ->leftJoin('a.articleImage aai')
             ->leftJoin('a.refarticlecategory r')
             ->leftJoin('a.chapters chap')
             ->andWhere('a.deleted=0')
             ->orderBy('a.created_at DESC')
-            ->limit(3)
+            ->limit($limit)
             ->fetchArray();
         return $recentlyAddedArticles;
     }
@@ -87,17 +87,22 @@ class MoneySaving extends BaseMoneySaving
 
     }
 
-    public static function getAllArticleCategories()
-    {
-        return $allArticleCategoryDetails = Doctrine_Query::create()->select('id, name')->from('Articlecategory ac')->where('ac.deleted=0')->fetchArray();
-    }
-
     public static function getCategoryWiseArticles()
     {
         $allCategoryDetails = self::getAllArticleCategories();
         $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails);
         return  $categoryRelatedArticles;
         
+    }
+
+    public static function getAllArticleCategories()
+    {
+        $allArticleCategoryDetails = Doctrine_Query::create()
+        ->select('id, name')
+        ->from('Articlecategory ac')
+        ->where('ac.deleted=0')
+        ->fetchArray();
+        return $allArticleCategoryDetails;
     }
 
     public static function getCategoryRelatedArticles ($allCategoryDetails)
@@ -121,7 +126,7 @@ class MoneySaving extends BaseMoneySaving
         $articles = Doctrine_Query::create()->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
-            ->leftJoin('a.ArtIcon aai')
+            ->leftJoin('a.articleImage aai')
             ->leftJoin('a.refarticlecategory r')
             ->leftJoin('a.chapters chap')
             ->where('r.relatedcategoryid =' . "'$categoryId'")
@@ -219,7 +224,7 @@ class MoneySaving extends BaseMoneySaving
         ->select('chap.*,av.articleid, a.permalink, ((sum(av.onclick)) / (DATEDIFF(NOW(),a.publishdate))) as pop, a.title,a.content, a.authorname, a.authorid,  a.publishdate, ai.path, ai.name')
         ->from('ArticleViewCount av')
         ->leftJoin('av.articles a')
-        ->leftJoin('a.ArtIcon ai')
+        ->leftJoin('a.articleImage ai')
         ->leftJoin('a.chapters chap')
         ->where('av.updated_at >=' . "'$start' AND av.updated_at <="."'$end'")
         ->limit($limit)
@@ -240,7 +245,7 @@ class MoneySaving extends BaseMoneySaving
     {
         $shopMoneySavingGuideArticle = Doctrine_Query::create()->select('chap.*,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name')
         ->from('Articles a')
-        ->leftJoin('a.ArtIcon ai')
+        ->leftJoin('a.articleImage ai')
         ->leftJoin('a.relatedstores rs')
         ->leftJoin('a.chapters chap')
         ->where('rs.storeid='.$shopId)

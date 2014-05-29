@@ -15,7 +15,7 @@
 @import "register.less";
 @import "saving.less";
 @import "splash-page.less";
-@import "404.less";
+@import "404.less";   
 input[type="email"], input[type="tel"], input[type="search"], input[type="text"], input[type="password"], input[type="file"], input[type="submit"], textarea{-webkit-appearance:none;}
 body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 #wrapper{
@@ -2101,7 +2101,7 @@ hr.alt2{
 		padding:0 4% 8px;
 		a{
 			display:block;
-			background:url(../images/sprite.png) no-repeat 0 -39px;
+			background:url(../images/front_end/countries-sprite.png) no-repeat 0 -39px;
 			width: 16px;
 			height: 11px;
 			text-indent:-9999px;
@@ -2277,6 +2277,46 @@ hr.alt2{
 		line-height:22px;
 		padding-top:4px;
 		margin:0 0 13px;
+	}
+	.email-form{
+		.form-group{
+			float:left;
+			width:81.2%;
+		}
+		.form-control{
+			display:block;
+			width:100% !important;
+			font-size:15px;
+			line-height:18px;
+			padding:12px 10px;
+			height:45px;
+			color:#adaeb0;
+			border-width:1px 0 1px 1px;
+			border-style:solid;
+			border-color:#dfdfdf;
+			background:@white-color;
+			.border-radius(2px 0 0 2px);
+			-webkit-box-shadow: 0 1px 3px rgba(0,0,0,.16) inset;
+			box-shadow: 0 1px 3px rgba(0,0,0,.16) inset;
+		}
+		.btn.orange{
+			float:left;
+			font-size:15px;
+			line-height:18px;
+			font-weight:bold;
+			text-transform:uppercase;
+			border-width:1px 1px 1px 0;
+			.border-radius (0 2px 2px 0);
+			width:18.8%;
+			min-width:60px;
+			margin:0;
+			height:45px;
+			padding: 8px 6px;
+			.glyphicon-search{
+				font-size:15px;
+				margin:0 3px 0 0;
+			}
+		}
 	}
 }
 #footer .holder{
