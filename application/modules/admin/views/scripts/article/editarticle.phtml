@@ -218,11 +218,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 					
 					                     	$ArticlePicture = PUBLIC_PATH.'images/upload/no.jpg';
 										 			 
-					                        if(isset( $this->articleData[0]['ArtIcon']['name'] ) && $this->articleData[0]['ArtIcon']['name'] != '' ) {
+					                        if(isset( $this->articleData[0]['articleImage']['name'] ) && $this->articleData[0]['articleImage']['name'] != '' ) {
 										  
-					                        	 if( file_exists ( ROOT_PATH .  $this->articleData[0]['ArtIcon']['path'] . $this->articleData[0]['ArtIcon']['name'] )) {
+					                        	 if( file_exists ( ROOT_PATH .  $this->articleData[0]['articleImage']['path'] . $this->articleData[0]['articleImage']['name'] )) {
 					                        	 	
-					                         		$ArticlePicture = PUBLIC_PATH_LOCALE .  $this->articleData[0]['ArtIcon']['path']  .'thum_'. $this->articleData[0]['ArtIcon']['name'] ;
+					                         		$ArticlePicture = PUBLIC_PATH_LOCALE .  $this->articleData[0]['articleImage']['path']  .'thum_'. $this->articleData[0]['articleImage']['name'] ;
 					                         
 					                         	}
 					                      	}	

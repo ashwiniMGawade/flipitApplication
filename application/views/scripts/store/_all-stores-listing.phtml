@@ -3,7 +3,7 @@ $storeClass = "<ul class='shop-name box col-md-4 col-sm-4'>";
 foreach ($this->storesInformation as $storesKey => $stores) :
     if ($stores != null) :
         $alphabetName = $storesKey =="abc" ? "0-9" : $storesKey;
-        echo '<div class="block" id="'.$alphabetName .'">'
+        echo '<div class="block" id="'.strtolower($alphabetName).'">'
             . '<h2>'. $alphabetName.'</h2>'
             . '<div class="row">';
         $totolStoredAsPerKey = (count($this->storesInformation[$storesKey]) / 3);

@@ -1,5 +1,4 @@
 $(document).ready(function(){
-$('.header-search-autocomplete').hide();
 $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
    var currentSelectedItem = this;
    $.each( items, function( index, item ) {
@@ -12,7 +11,6 @@ $('body').click(function(event){
     if (clickedId == "searchFieldHeader") {
         return false;
     }
-$('.header-search-autocomplete, .ajax-autocomplete').hide();
 });
 
 
@@ -20,7 +18,6 @@ $("input#searchFieldHeader").autocomplete({
     delay: 0,
     minLength : 1,
     search: function(event, ui) {
-        $('.header-search-autocomplete, .ajax-autocomplete').show();
         $('.ajax-autocomplete ul').empty();
     },
     source :  function( request, response ) {
@@ -42,8 +39,8 @@ $("input#searchFieldHeader").autocomplete({
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
         url = item.permalink;
         return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
-            $("<a href=" + url + "></a>").html((__highlight(item.label,$("input#searchFieldHeader").val()))))
-        .appendTo($('.ajax-autocomplete ul'));
+            $("<a href=" + HOST_PATH_LOCALE + url + "></a>").html((__highlight(item.label,$("input#searchFieldHeader").val()))))
+        .appendTo(ul);
      };  
     $("a#searchbuttonHeader").click(function(){
     if ($("input#searchFieldHeader")

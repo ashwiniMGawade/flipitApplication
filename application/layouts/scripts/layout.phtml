@@ -23,7 +23,7 @@ $language = $locale[0];
 
 <?php
 if(isset($this->canonical)):
-    $this->headLink(
+   $this->headLink(
         FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)
     );
 endif;
@@ -43,7 +43,7 @@ endif;
 
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
-echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+$this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
 
 # if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
 if(LOCALE=='') :
@@ -64,6 +64,7 @@ echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
 
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
+
 ?>
 
 </head>

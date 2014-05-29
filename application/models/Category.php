@@ -537,7 +537,7 @@ class Category extends BaseCategory
                         ->select('av.id, av.articleid, (sum(av.onclick)) as pop, a.title,a.content,a.permalink, a.authorname, a.authorid, a.publishdate, ai.path, ai.name')
                         ->from('ArticleViewCount av')
                         ->leftJoin('av.articles a')
-                        ->innerJoin('a.ArtIcon ai')
+                        ->innerJoin('a.articleImage ai')
                         ->where('a.deleted=0' )
                         ->orderBy('pop DESC')
                         ->limit(4)

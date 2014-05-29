@@ -1,0 +1,18 @@
+<ol class="alt-list">
+    <?php 
+        if(!empty($this->topPopularOffers)) {
+            foreach($this->topPopularOffers as $topPopularOffer) :
+                $offerType = $topPopularOffer['exclusiveCode'] == 1 ? '<mark>'. $this->translate('Exclusive').'</mark>' : '';
+                $redirectUrlToStore = LOCALE != '' ? HTTP_PATH_LOCALE : HTTP_PATH;  
+    ?> 
+    <li>
+        <a href="<?php echo $redirectUrlToStore.$topPopularOffer['shop']['permalink']; ?>">
+            <strong class="title"><?php echo $topPopularOffer['shop']['name'].' '.$offerType; ?></strong>
+            <?php echo $topPopularOffer['title'];?>
+        </a>    
+     </li>
+    <?php    
+            endforeach;
+        }
+    ?>  
+</ol>

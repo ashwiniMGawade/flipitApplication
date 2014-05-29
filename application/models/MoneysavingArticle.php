@@ -222,7 +222,7 @@ class MoneysavingArticle extends BaseMoneysavingArticle
         ->select('p.*,o.*,a.*')
         ->from('MoneysavingArticle p')
         ->leftJoin('p.article o')
-        ->leftJoin('o.ArtIcon a')
+        ->leftJoin('o.articleImage a')
         ->limit($flag)
         ->orderBy('p.position ASC')->fetchArray();
 
