@@ -92,6 +92,7 @@ EOD;
              $hrefLinks = "" ;
              $hasShops = false ;
              foreach ($chain as $chainInformation) {
+                
                  $hrefLinks .=  isset($chainInformation['headLink']) ? $chainInformation['headLink']. "\n" : '';
     
                  if (! empty($chainInformation['shops'])) {
@@ -99,12 +100,12 @@ EOD;
                      $chainInformation = $chainInformation['shops'];
                      $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
                      $string .= sprintf(
-                        "<li><a class='font14' href='%s' target='_blank'><span class='flag-cont'><img src='%s' /></span></a></li>",
+                        "<li><a class='".strtolower($chainInformation['locale'])."' href='%s' target='_blank'>".self::getCountryNameByLocale(strtolower($chainInformation['locale']))."</a></li>",
                          trim($chainInformation['url']),
                          $httpPath.'/public/'. $image
                         );
                  }
-             } 
+             }
                          $string .= <<<EOD
             </ul>
 EOD;
