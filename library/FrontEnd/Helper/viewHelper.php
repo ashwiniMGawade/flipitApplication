@@ -523,17 +523,17 @@ EOD;
     {
         
         if ($relatedFunction['function'] == '') {
-            $function = $relatedFunction['parameters'];
+            $functionToBeCached = $relatedFunction['parameters'];
         } else {
-            $function = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
+            $functionToBeCached = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
         }
 
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
             if ($replaceStringArrayCheck == '') {
-                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray(call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']));
+                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($functionToBeCached);
             } else {
-                $requestedInformation = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
+                $requestedInformation = $functionToBeCached;
             }
             FrontEnd_Helper_viewHelper::setInCache($dataKey, $requestedInformation);
         } else {
