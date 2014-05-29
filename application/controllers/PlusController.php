@@ -16,11 +16,12 @@ class PlusController extends Zend_Controller_Action
     }
     public function indexAction()
     {
+        $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $articleOverviewPagePermalink = FrontEnd_Helper_viewHelper::__link('plus');
         $articleOverviewPageDetails  =  FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_moneysavingpage".$articleOverviewPagePermalink."_list", MoneySaving::getPageDetails($articleOverviewPagePermalink));
+            getRequestedDataBySetGetCache("all_moneysavingpage".$articleOverviewPagePermalink."_list", array('function' => 'MoneySaving::getPageDetails', 'parameters' => array($articleOverviewPagePermalink)));
         $mostReadArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));
+            getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
 
@@ -52,7 +53,7 @@ class PlusController extends Zend_Controller_Action
         if (!empty($articleDetails)) {
             $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
-                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", MoneySaving::getMostReadArticles(3));    
+                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));    
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
