@@ -696,7 +696,7 @@ EOD;
                             '.$article['title'].'
                             </span>
                         </div>
-                        <a href="'.HTTP_PATH_LOCALE.$article['title'].'" class="link">'
+                        <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'" class="link">'
                         .$this->zendTranslate->translate('more').' &#8250;</a>
                     </div>
                 </div>';
