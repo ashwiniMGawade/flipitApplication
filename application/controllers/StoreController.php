@@ -142,15 +142,15 @@ class StoreController extends Zend_Controller_Action
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageAttribute =  Page::getPageFromPageAttributeFiltered(7);
-        $this->view->pageTitle = $pageAttribute['pageTitle'];
+        $pageAttributes =  Page::getPageFromPageAttributeFiltered(7);
+        $this->view->pageTitle = $pageAttributes['pageTitle'];
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $allStoresList = self::shopOffersBySetGetCache('all_shops_list', Shop::getallStoresForFrontEnd('all', null), true);
         $popularStores = self::shopOffersBySetGetCache('all_popularshop_list', Shop::getAllPopularStores(10), true);
         $storeSearchByAlphabet = self::shopOffersBySetGetCache('all_searchpanle_list', FrontEnd_Helper_viewHelper::alphabetList(), true);
 
-        $customHeader = isset($pageAttribute['customHeader']) ? $pageAttribute['customHeader'] : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $pageAttribute['pageTitle'], $pageAttribute['metaTitle'], trim($pageAttribute['metaDescription']), $pageAttribute['permaLink'], FACEBOOK_IMAGE, $customHeader);
+        $customHeader = isset($pageAttributes['customHeader']) ? $pageAttributes['customHeader'] : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $pageAttributes['pageTitle'], $pageAttributes['metaTitle'], trim($pageAttributes['metaDescription']), $pageAttributes['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;

@@ -12,15 +12,15 @@ class CategoryController extends Zend_Controller_Action
     public function showAction()
     {
         $categoryPermalink = $this->getRequest()->getParam('permalink');
-        $categoryDetail = Category::getCategoryDetails($categoryPermalink);
-        if (count($categoryDetail) > 0) {
-            $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetail[0]['id'], 71);
+        $categoryDetails = Category::getCategoryDetails($categoryPermalink);
+        if (count($categoryDetails) > 0) {
+            $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetails[0]['id'], 71);
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($categoryVoucherCodes, $this->_getAllParams(), 27, 3);
             $this->view->offersWithPagination = $offersWithPagination;
-            $this->view->categoryDetail = $categoryDetail;
+            $this->view->categoryDetails = $categoryDetails;
             $this->view->offersType = 'offerWithPagenation';
             $customHeader = '';
-            $this->viewHelperObject->getFacebookMetaTags($this, $categoryDetail[0]['name'], trim($categoryDetail[0]['metatitle']), trim($categoryDetail[0]['metaDescription']), FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetail[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
+            $this->viewHelperObject->getFacebookMetaTags($this, $categoryDetails[0]['name'], trim($categoryDetails[0]['metatitle']), trim($categoryDetails[0]['metaDescription']), FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetails[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
@@ -36,13 +36,13 @@ class CategoryController extends Zend_Controller_Action
     {
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
-        $this->pageDetail = Page::getPageFromPageAttribute(9);
+        $this->pageDetails = Page::getPageFromPageAttribute(9);
         $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_category_list', Category::getCategoriesDetail());
         $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_categoryspeciallist_list', Page::getSpecialListPages());
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
 
-        $customHeader = isset($this->pageDetail->customHeader) ? $this->pageDetail->customHeader : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $this->pageDetail->pageTitle, $this->pageDetail->metaTitle, trim($this->pageDetail->metaDescription), FrontEnd_Helper_viewHelper::__link('categorieen'), FACEBOOK_IMAGE, $customHeader);
+        $customHeader = isset($this->pageDetails->customHeader) ? $this->pageDetails->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $this->pageDetails->pageTitle, $this->pageDetails->metaTitle, trim($this->pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('categorieen'), FACEBOOK_IMAGE, $customHeader);
 
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');

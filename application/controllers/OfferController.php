@@ -84,23 +84,23 @@ class OfferController extends Zend_Controller_Action
             $this->view->offerImagePath = '';
         }
         $offerId = $offerParameters['id'];
-        $offerDetail = $offerObject->getOfferInfo($offerParameters['id']);
-        $this->view->offerdetail = $offerDetail;
+        $offerDetails = $offerObject->getOfferInfo($offerParameters['id']);
+        $this->view->offerdetail = $offerDetails;
         $this->view->vote = $offerParameters['vote'];
         $this->view->votepercentage = 0;
-        $shopImage = PUBLIC_PATH_CDN.$offerDetail[0]['shop']['logo']['path'].'thum_medium_store_'.
-        $offerDetail[0]['shop']['logo']['name'];
+        $shopImage = PUBLIC_PATH_CDN.$offerDetails[0]['shop']['logo']['path'].'thum_medium_store_'.
+        $offerDetails[0]['shop']['logo']['name'];
 
         $customHeader = '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $offerDetail[0]['title'], '', '', $offerDetail[0]['shop']['permaLink'], $shopImage, $customHeader);
+        $this->viewHelperObject->getFacebookMetaTags($this, $offerDetails[0]['title'], '', '', $offerDetails[0]['shop']['permaLink'], $shopImage, $customHeader);
 
-        if ($offerDetail[0]['couponCodeType']  == 'UN') {
+        if ($offerDetails[0]['couponCodeType']  == 'UN') {
             $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerId);
             if ($getOfferUniqueCode) {
                 $this->view->couponCode = $getOfferUniqueCode['code'] ;
             }
         } else {
-            $this->view->couponCode = $offerDetail[0]['couponCode']  ;
+            $this->view->couponCode = $offerDetails[0]['couponCode']  ;
         }
 
     }

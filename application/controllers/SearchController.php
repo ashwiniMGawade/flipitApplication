@@ -22,8 +22,8 @@ class SearchController extends Zend_Controller_Action
         $pagePermalink = FrontEnd_Helper_viewHelper::__link('zoeken');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $pageAttributeId = Page::getPageAttributeByPermalink($pagePermalink);
-        $pageDetail = Page::getPageFromPageAttribute($pageAttributeId);
-        $this->view->pageTitle = $pageDetail->pageTitle;
+        $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
+        $this->view->pageTitle = $pageDetails->pageTitle;
         $searchedKeywords = $this->getRequest()->getParam('searchField');
         $shopIds = "";
         $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
@@ -45,12 +45,12 @@ class SearchController extends Zend_Controller_Action
         }
 
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
-        $customHeader = isset($pageDetail->customHeader) ? $pageDetail->customHeader : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $pageDetail->pageTitle, $pageDetail->metaTitle, trim($pageDetail->metaDescription), $pageDetail->permaLink, FACEBOOK_IMAGE, $customHeader);
+        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
+        $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), $pageDetails->permaLink, FACEBOOK_IMAGE, $customHeader);
 
         $this->view->pageLogo = '';
-        if(isset($pageDetail->logo->path)) {
-            $this->view->pageLogo = PUBLIC_PATH_CDN.$pageDetail->logo->path.$pageDetail->logo->name;
+        if(isset($pageDetails->logo->path)) {
+            $this->view->pageLogo = PUBLIC_PATH_CDN.$pageDetails->logo->path.$pageDetails->logo->name;
         }
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
