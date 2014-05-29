@@ -41,7 +41,7 @@ class SignupController extends Zend_Controller_Action
     {
         $pageName = 'SignUp';
         $pageId = PageAttribute::getPageAttributeIdByName($pageName);
-        $pageDetails =  Page::getPageFromPageAttributeFiltered($pageId);
+        $pageDetails =  Page::getPageFromFilteredPageAttribute($pageId);
         $this->view->pageTitle = $pageDetails['pageTitle'];
         $this->view->headTitle($pageDetails['metaTitle']);
         $this->view->headMeta()->setName('description', trim($pageDetails['metaDescription']));
@@ -59,7 +59,7 @@ class SignupController extends Zend_Controller_Action
                     );
                 } else {
                     $visitorId = Visitor::addVisitor($visitorInformation);
-                    self::redirectWithSuccessOrErrorMessage(
+                    self::redirectAccordingToMessage(
                         $visitorId,
                         $this->view->translate('Please enter valid information'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
@@ -84,7 +84,7 @@ class SignupController extends Zend_Controller_Action
         $this->_redirect($redirectUrl);
     }
 
-    public function redirectWithSuccessOrErrorMessage($visitorId, $message, $redirectLink, $pageName)
+    public function redirectAccordingToMessage($visitorId, $message, $redirectLink, $pageName)
     {
         if (!$visitorId) {
             self::showFlashMessage(
@@ -155,6 +155,6 @@ class SignupController extends Zend_Controller_Action
         } else {
             $message = $this->view->translate('Please enter valid information');
         }
-        self::redirectWithSuccessOrErrorMessage($visitorId, $message, $redirectLink, 'profile');
+        self::redirectAccordingToMessage($visitorId, $message, $redirectLink, 'profile');
     }
 }

@@ -17,7 +17,7 @@ endif;
     <form id="profile" name="profile" method="POST" action="">
         <div class="title">
             <h1><?php echo $this->translate('Hi'). " " . $this->firstName .',' . " ". $this->translate('How are you?');?></h1>
-            <?php echo $this->translate('Want to change you personal setting then your free to do so below. Change name, email address, password and more');?>
+            <?php echo $this->translate('Want to change you personal setting then you are free to do so below. Change name, email address, password and more');?>
         </div>
         <div class="form-row">
             <div class="row">
@@ -46,11 +46,9 @@ endif;
                                         <div class="col-sm-4">
                                         <?php echo $profileForm->dateOfBirthDay->renderViewHelper();?>
                                         </div>
-                                        
                                         <div class="col-sm-4">
                                          <?php echo $profileForm->dateOfBirthMonth->renderViewHelper();?>
                                         </div>
-                                        
                                         <div class="col-sm-4">
                                          <?php echo $profileForm->dateOfBirthYear->renderViewHelper();?>
                                         </div>
@@ -81,7 +79,7 @@ endif;
             </div>
         </div>
         <div class="note-box">
-            <h2><?php echo $this->translate('E-mail & Nieuwsbrief instellingen') .':' ;?></h2>
+            <h2><?php echo $this->translate('Email and Newsletter Settings') .':' ;?></h2>
             <div class="form-group">
                 <?php echo $profileForm->weeklyNewsLetter->renderViewHelper();?>
                 <label for="checkbox">

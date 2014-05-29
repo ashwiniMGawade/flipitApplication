@@ -154,7 +154,7 @@ class StoreController extends Zend_Controller_Action
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageAttribute =  Page::getPageFromPageAttributeFiltered(7);
+        $pageAttribute =  Page::getPageFromFilteredPageAttribute(7);
         $this->view->pageTitle = $pageAttribute['pageTitle'];
         $this->view->headTitle($pageAttribute['metaTitle']);
         $this->view->headMeta()->setName('description', trim($pageAttribute['metaDescription']));

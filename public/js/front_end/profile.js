@@ -17,7 +17,7 @@ function validateProfile() {
         rules: {
             emailAddress : {
                 required: true,
-                email: true,
+                email: true
             },
             firstName: {
                 required: true
@@ -31,7 +31,7 @@ function validateProfile() {
             password: {
                 required: true,
                 minlength : 1,
-                maxlength :20,
+                maxlength :20
             },
             confirmPassword: {
                 required: true,
@@ -58,7 +58,7 @@ function validateProfile() {
         messages : {
              emailAddress : {
                  required: '',
-                 email: '',
+                 email: ''
               },
               firstName: {
                   required: ''
