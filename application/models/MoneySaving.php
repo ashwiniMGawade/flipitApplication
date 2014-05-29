@@ -39,7 +39,7 @@ class MoneySaving extends BaseMoneySaving
         return $mostReadArticles;
     
     }
-    public static function getRecentlyAddedArticles()
+    public static function getRecentlyAddedArticles($limit)
     {
         $recentlyAddedArticles = Doctrine_Query::create()
         	->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
@@ -50,7 +50,7 @@ class MoneySaving extends BaseMoneySaving
             ->leftJoin('a.chapters chap')
             ->andWhere('a.deleted=0')
             ->orderBy('a.created_at DESC')
-            ->limit(3)
+            ->limit($limit)
             ->fetchArray();
         return $recentlyAddedArticles;
     }

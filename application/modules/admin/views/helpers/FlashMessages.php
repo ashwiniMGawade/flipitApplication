@@ -1,12 +1,4 @@
 <?php
-
-/**
- *
- * @author spsingh
- *
- *
- */
-
 class Zend_View_Helper_FlashMessages extends Zend_View_Helper_Abstract
 {
     // TODO - Insert your code here

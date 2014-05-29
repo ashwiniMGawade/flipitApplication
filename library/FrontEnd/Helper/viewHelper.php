@@ -336,9 +336,11 @@ EOD;
         if($type == 'widget' || $type == 'popup'):
             $socialMedia=$facebookLikeWidget.$googlePlusOneWidget.$twitterLikeWidget;
         elseif($type == 'article'):
-            $socialMedia = "<li>".$facebookLikeWidget."</li>
+            $socialMedia = "<ul class='social-box'>
+                            <li>".$facebookLikeWidget."</li>
                             <li>".$googlePlusOneWidget."</li>
-                            <li>".$twitterLikeWidget."</li>";
+                            <li>".$twitterLikeWidget."</li>
+                            </ul>";
         else:
             $zendTranslate = Zend_Registry::get('Zend_Translate');
             $socialMediaTitle = "<h2>".$zendTranslate->translate('Share')."</h2>
@@ -361,7 +363,8 @@ EOD;
     public function getShopHeader($shop, $expiredMessage, $offerTitle)
     {
         $bounceRate = "/out/shop/".$shop['id'];
-        $shopUrl = HTTP_PATH_LOCALE.'out/shop/'.$shop['id'];
+        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+        $shopUrl = $domainName.'out/shop/'.$shop['id'];
         $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
         if ($shop['affliateProgram']) :
             $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
@@ -385,7 +388,7 @@ EOD;
                 <div class="icon">
                     <a target="_blank" rel="nofollow" 
                     class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
-                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'"><img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path']. $shop['logo']['name']. '" alt="'.$shop['name'].'" width="176" height="89" />
+                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'"><img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . 'thum_large_' . $shop['logo']['name']. '" alt="'.$shop['name'].'" width="176" height="89" />
                     </a>
                 </div> <div class="box">';
         if ($expiredMessage !='storeDetail') {
@@ -597,7 +600,7 @@ EOD;
                 break;
                 //refactored 
             case 'popular':
-                $stores = Shop::getPopularStore($limit);
+                $stores = Shop::getPopularStores($limit);
                 break;
             default:
                 break;
@@ -685,7 +688,7 @@ EOD;
                             '.$article['title'].'
                             </span>
                         </div>
-                        <a href="plus/'.$article['title'].'" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
+                        <a href="'.$article['title'].'" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
                     </div>
                 </div>';
             }           
@@ -726,6 +729,7 @@ EOD;
     public function getHowToGuidesImage($howToGuideImages)
     {
         $howToGuideImagePath = '';
+        $howToGuideImageAltText = '';
         if (!empty($howToGuideImages)) {
             $howToGuideImagePath = PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'],"/")."thum_bigLogoFile_".$howToGuideImages['name'];
             $howToGuideImageAltText = $howToGuideImages['name'];
@@ -765,6 +769,40 @@ EOD;
         return $countryName;
     }
 
+    public function getFacebookMetaTags($currentObject, $title = '', $metaTitle = '', $metaDescription = '', $permaLink = '', $image = '', $customHeader = '')
+    {
+        if ($metaTitle == '') {
+            $metaTitle = $title;
+        }
+        $currentObject->view->headTitle($metaTitle);
+        $currentObject->view->headMeta()->setName('description', $metaDescription);
+        $currentObject->view->facebookTitle = $title;
+        $currentObject->view->facebookShareUrl = HTTP_PATH_LOCALE . $permaLink;
+        $currentObject->view->facebookImage = $image;
+        $currentObject->view->facebookDescription = $metaDescription;
+        if (LOCALE == '') {
+            $facebookLocale = '';
+        } else {
+            $facebookLocale = LOCALE;
+        }
+        $currentObject->view->facebookLocale = $facebookLocale;
+        $currentObject->view->twitterDescription = $metaDescription;
+
+        if (isset($customHeader)) {
+            $currentObject->view->layout()->customHeader = $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
+        }
+        return $currentObject;
+    }
+    
+    public static function getWebsitesLocales($websites)
+    {
+        foreach ($websites as $website) {
+            $splitWebsite  = explode('/', $website['name']);
+            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
+            $locales[strtoupper($locale)] = $website['name'];
+        }
+        return $locales;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
