@@ -141,7 +141,7 @@ class LoginController extends Zend_Controller_Action
         $this->view->headTitle($this->view->translate("Members Only"));
         $visitorId = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
         $visitor = Visitor::getVisitorDetails($visitorId);
-        $resetPasswordForm =  new Application_Form_ResetPassword();
+        $resetPasswordForm = new Application_Form_ResetPassword();
         $this->view->form = $resetPasswordForm;
         if ($visitor['changepasswordrequest']) {
             $this->view->resetLinkMessage = $this->view->translate('Password Reset Link has already been used!');
@@ -164,7 +164,7 @@ class LoginController extends Zend_Controller_Action
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
 
-    public function resetPassword($visitorId, $newPassword, $econdedVisitorId)
+    public function resetPassword($visitorId, $newPassword, $encodedVisitorId)
     {
         $updatedPassword = Visitor::updateVisitorPassword($visitorId, $newPassword);
         if ($updatedPassword) {
@@ -182,7 +182,7 @@ class LoginController extends Zend_Controller_Action
             $this->addFlashMessage(
                 $this->view->translate('Invalid reset password url please confirm again.'),
                 HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'). '/'
-                .FrontEnd_Helper_viewHelper::__link('resetpassword') .'/' . $econdedVisitorId,
+                .FrontEnd_Helper_viewHelper::__link('resetpassword') .'/' . $encodedVisitorId,
                 'success'
             );
         }
