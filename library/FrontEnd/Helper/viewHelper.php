@@ -688,13 +688,13 @@ EOD;
                     foreach($articles as $article) { 
         $relatedArticles .=
                 '<div class="item">
-                    <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'" class="link">
+                    <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'">
                     <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" 
                     alt="'.$article['title'].'">
                     </a>
                     <div class="box">
                         <div class="caption-area">
-                        <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'" class="link">
+                        <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'">
                             <span class="caption">
                             '.$article['title'].'
                             </span>
