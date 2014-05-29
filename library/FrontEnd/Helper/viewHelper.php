@@ -771,8 +771,8 @@ EOD;
     public static function getWebsitesLocales($websites)
     {
         foreach ($websites as $website) {
-            $spiltWebsite  = explode('/', $website['name']);
-            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+            $splitWebsite  = explode('/', $website['name']);
+            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
             $locales[strtoupper($locale)] = $website['name'];
         }
         return $locales;

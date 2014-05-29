@@ -42,10 +42,7 @@ select.input-success {
     display: none;
   }
 }
-.header-search-autocomplete {
-  position: relative;
-}
-.header-search-autocomplete .ajax-autocomplete {
+.ui-autocomplete {
   position: absolute;
   left: 0;
   right: 2px;
@@ -57,28 +54,26 @@ select.input-success {
   line-height: 17px;
   -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
-}
-.header-search-autocomplete .ajax-autocomplete ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.header-search-autocomplete .ajax-autocomplete ul li {
+.ui-autocomplete li {
   border-top: 1px solid #c6c6c5;
 }
-.header-search-autocomplete .ajax-autocomplete ul li a {
+.ui-autocomplete li a {
   display: block;
   color: #33383e;
   padding: 14px 12px;
   text-decoration: none;
 }
-.header-search-autocomplete .ajax-autocomplete ul li span {
+.ui-autocomplete li span {
   color: #db862e;
 }
-.header-search-autocomplete .ajax-autocomplete ul li :hover {
+.ui-autocomplete li :hover {
   background: #ececec;
 }
-.header-search-autocomplete .ajax-autocomplete ul li :first-child {
+.ui-autocomplete li :first-child {
   border: 0;
 }
 .best-items .categories-block ul li a.active-li {
@@ -146,6 +141,7 @@ select.input-success {
 }
 .inner-section-wrapper {
   margin: 2%;
+}
 #fade {
   background: none repeat scroll 0 0 #000000;
   color: #010000;
