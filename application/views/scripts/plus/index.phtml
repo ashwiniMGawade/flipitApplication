@@ -6,7 +6,7 @@ $recentlyAddedArticles = $this->recentlyAddedArticles;
 $categoryWiseArticles = $this->categoryWiseArticles;
 ?>
 <div class="banner-block">
-    <?php $pageImage = PUBLIC_PATH_CDN.$pageDetails[0]['logo']['path'].'thum_extra_large_'.$pageDetails[0]['logo']['name']; ?>
+    <?php $pageImage = PUBLIC_PATH_CDN.$pageDetails[0]['logo']['path'].$pageDetails[0]['logo']['name'];?>
     <img class='image' src="<?php  echo $pageImage;?>" alt="<?php echo $pageDetails[0]['pageTitle']; ?>"/>
     <div class="frame-image">
         <div class="container">
