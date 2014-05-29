@@ -714,7 +714,7 @@ EOD;
                 $class = 'slide';
             }
             echo'<div class="'.$class.'" id="'.$id.'">
-                                <img class="" width = "632" height = "160"  src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path'].$mostReadArticle['articles']['articleImage']['name'].'" 
+                                <img class="aligncenter" src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path'].$mostReadArticle['articles']['articleImage']['name'].'" 
                                 alt="'.$mostReadArticle['articles']['title'].'">
                                 <h1>'.$mostReadArticle['articles']['title'].'</h1>
                                 <p>

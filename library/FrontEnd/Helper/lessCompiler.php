@@ -55,8 +55,8 @@ class FrontEnd_Helper_lessCompiler
 
     public function getLogFileDetails()
     {
-        $logFileRead = fopen($this->cssFrontEndPath.'less/log.txt', 'r');
-        $logFileContent = fread($logFileRead, filesize($this->cssFrontEndPath.'less/log.txt'));      
+        $logFileRead = fopen($this->cssFrontEndPath.'less/log.log', 'r');
+        $logFileContent = fread($logFileRead, filesize($this->cssFrontEndPath.'less/log.log'));      
         $logFileContentValues = explode('-',$logFileContent);
         return $logFileContentValues;
     }
@@ -74,7 +74,7 @@ class FrontEnd_Helper_lessCompiler
 
     public function writeLogFileWithUpdatedContent($updatedLessFilesContent)
     {
-        $fileHandler = fopen($this->cssFrontEndPath.'less/log.txt', 'w');
+        $fileHandler = fopen($this->cssFrontEndPath.'less/log.log', 'w');
         fwrite($fileHandler, implode('-', array_values($updatedLessFilesContent)));  
         fclose($fileHandler); 
     }
