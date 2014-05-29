@@ -110,7 +110,7 @@ select.input-success {
 }
 .best-items .categories-block ul li a.active-li .box {
   padding: 0 14px;
-  /*width: 63.5%;*/
+  width: 63.5%;
 }
 .best-items .categories-block ul li a.active-li .box {
   display: table-cell;
@@ -139,7 +139,6 @@ select.input-success {
   margin: 20px auto 0 auto;
   width: 100%;
 }
-
 .countries li a.in {
   background-position: -198px -488px;
   width: '16px';
@@ -214,7 +213,7 @@ select.input-success {
   background-position: -66px -549px;
   width: '16px';
   height: '11px';
-
+}
 .inner-section-wrapper {
   margin: 2%;
 }
