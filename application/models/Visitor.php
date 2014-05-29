@@ -13,12 +13,12 @@ class Visitor extends BaseVisitor
     #############################################################
     public static function checkDuplicateUser($email, $visitorId = null)
     {
-        $emailAddress =  FrontEnd_Helper_viewHelper::sanitize($email);
-        $visitorId =  FrontEnd_Helper_viewHelper::sanitize($visitorId);
+        $emailAddress = FrontEnd_Helper_viewHelper::sanitize($email);
+        $visitorId = FrontEnd_Helper_viewHelper::sanitize($visitorId);
         if ($visitorId!=null) {
-            $visitorInformation  = Doctrine_Core::getTable("Visitor")->find($visitorId)->toArray();
+            $visitorInformation = Doctrine_Core::getTable("Visitor")->find($visitorId)->toArray();
         } else {
-            $visitorInformation  = Doctrine_Core::getTable("Visitor")->findBy('email', $emailAddress)->toArray();
+            $visitorInformation = Doctrine_Core::getTable("Visitor")->findBy('email', $emailAddress)->toArray();
         }
         return count($visitorInformation);
     }
@@ -83,10 +83,10 @@ class Visitor extends BaseVisitor
         return $visitor->id;
     }
 
-    public static function updatePasswordRequest($visitorId, $flag)
+    public static function updatePasswordRequest($visitorId, $changePasswordStatus)
     {
          $visitor = Doctrine_Query::create()->update('Visitor')
-         ->set('changepasswordrequest', $flag)
+         ->set('changepasswordrequest', $changePasswordStatus)
          ->where('id='. FrontEnd_Helper_viewHelper::sanitize($visitorId))
          ->execute();
          return;
@@ -106,6 +106,10 @@ class Visitor extends BaseVisitor
         }
     }
 
+    public static function getVisitorDetails($visitorId)
+    {
+        return Doctrine_Core::getTable("Visitor")->find($visitorId);
+    }
     #############################################################
     ######### END REFACTRED CODE ################################
     #############################################################

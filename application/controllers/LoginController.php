@@ -70,7 +70,7 @@ class LoginController extends Zend_Controller_Action
             );
         } else {
             $this->addFlashMessage(
-                'User Does Not Exist',
+                $this->view->translate('User Does Not Exist'),
                 HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login'),
                 'error'
             );
@@ -81,7 +81,7 @@ class LoginController extends Zend_Controller_Action
     public function addFlashMessage($message, $redirectLink, $errorType)
     {
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
-        $flashMessage->addMessage(array($errorType => $this->view->translate($message)));
+        $flashMessage->addMessage(array($errorType => $message));
         $this->_redirect($redirectLink);
     }
 
@@ -114,14 +114,14 @@ class LoginController extends Zend_Controller_Action
                         $this
                     );
                     $this->addFlashMessage(
-                        'Please check you mail and click on reset password link',
+                        $this->view->translate('Please check you mail and click on reset password link'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login') . '/'
                         .FrontEnd_Helper_viewHelper::__link('forgotpassword'),
                         'error'
                     );
                 } else {
                     $this->addFlashMessage(
-                        'Wrong Email address Please enter valid email address',
+                        $this->view->translate('Wrong Email address Please enter valid email address'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login') . '/'
                         .FrontEnd_Helper_viewHelper::__link('forgotpassword'),
                         'error'
@@ -138,8 +138,8 @@ class LoginController extends Zend_Controller_Action
     public function resetpasswordAction()
     {
         $this->view->headTitle($this->view->translate("Members Only"));
-        $visitorId  = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
-        $visitor = Doctrine_Core::getTable("Visitor")->find($visitorId);
+        $visitorId = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
+        $visitor = Visitor::getVisitorDetails($visitorId);
         $resetPasswordForm =  new Application_Form_ResetPassword();
         $this->view->form = $resetPasswordForm;
         if ($visitor['changepasswordrequest']) {
@@ -165,8 +165,8 @@ class LoginController extends Zend_Controller_Action
 
     public function resetPassword($visitorId, $newPassword, $econdedVisitorId)
     {
-        $passwordUpdated = Visitor::updateVisitorPassword($visitorId, $newPassword);
-        if ($passwordUpdated) {
+        $updatedPassword = Visitor::updateVisitorPassword($visitorId, $newPassword);
+        if ($updatedPassword) {
             if (!Auth_VisitorAdapter::hasIdentity()) {
                 Visitor::updatePasswordRequest($visitorId, 1);
                 $redirectLink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login');
@@ -176,10 +176,10 @@ class LoginController extends Zend_Controller_Action
                     HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'). '/'
                     .FrontEnd_Helper_viewHelper::__link('profiel');
             }
-            $this->addFlashMessage('Your password has been changed.', $redirectLink, 'success');
+            $this->addFlashMessage($this->view->translate('Your password has been changed.'), $redirectLink, 'success');
         } else {
             $this->addFlashMessage(
-                'Invalid reset password url please confirm again.',
+                $this->view->translate('Invalid reset password url please confirm again.'),
                 HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'). '/'
                 .FrontEnd_Helper_viewHelper::__link('resetpassword') .'/' . $econdedVisitorId,
                 'success'

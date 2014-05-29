@@ -2,12 +2,12 @@
 class FrontEnd_Helper_MandrillMailFunctions extends FrontEnd_Helper_viewHelper {
     public function sendForgotPasswordMail($visitorId, $emailAddress, $currentController) {
         $imageLogoForMail = "<a href=".HTTP_PATH_LOCALE.">
-        <img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/>
+        <img alt='flipit-welcome' src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/>
         </a>";
         $siteName = "Flipit.com";
         $siteUrl = HTTP_PATH_LOCALE;
         if (HTTP_HOST == "www.kortingscode.nl") {
-            $imageLogoForMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
+            $imageLogoForMail = "<a href=".HTTP_PATH_LOCALE."><img alt='HeaderMail' src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
             $siteName = "Kortingscode.nl";
         }
         $mailData = array(
