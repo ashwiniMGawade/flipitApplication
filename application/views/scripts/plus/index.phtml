@@ -16,7 +16,9 @@ $categoryWiseArticles = $this->categoryWiseArticles;
     <div class="container">
         <div class="text-box">
             <p>
-            <?php echo  $this->translate('Flipit.com Plus is our magazine in which we want to do one thing only: help out all the consumers out there in every way possible');?>
+            <?php echo  
+            $this->translate('Flipit.com Plus magazine helps out all the consumers out there in every way possible');?>
+            
             </p>
         </div>
         <div class="block">
@@ -35,7 +37,8 @@ $categoryWiseArticles = $this->categoryWiseArticles;
                 <ul class="switcher">
                 <?php
                    if (!empty($this->mostReadArticles)) {
-                        echo $this->partial('partials/_mostReadArticles.phtml',array('articles'=>$this->mostReadArticles)); 
+                        echo $this->partial('partials/_mostReadArticles.phtml',
+                            array('articles'=>$this->mostReadArticles)); 
                     } else {
                     echo $this->translate("No Records Found");
                     } 
@@ -53,7 +56,8 @@ $categoryWiseArticles = $this->categoryWiseArticles;
                 echo $blogWiseArticles = $frontEndViewHelper->getArticles('From Blog',$categoryWiseArticles['blog']);
             }
             if (!empty($categoryWiseArticles['savingtip'])) {    
-                echo $savingTipWiseArticles = $frontEndViewHelper->getArticles('Saving Tip',$categoryWiseArticles['savingtip']);
+                echo $savingTipWiseArticles = $frontEndViewHelper->
+                getArticles('Saving Tip',$categoryWiseArticles['savingtip']);
             }
         ?>  
     </div>
@@ -61,7 +65,8 @@ $categoryWiseArticles = $this->categoryWiseArticles;
 <footer class="bottom-panel">
     <div class="container">
         <div class="holder">
-            <span class="text"><?php echo  $this->translate('Satisfied with the new Kortingscode.nl? Like us and win great prizes');?>
+            <span class="text">
+                <?php echo  $this->translate('Satisfied with the new Kortingscode.nl? Like us and win great prizes');?>
             </span>
             <ul class="share-list">
                 <?php

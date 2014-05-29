@@ -681,14 +681,16 @@ EOD;
                     foreach($articles as $article) { 
         $relatedArticles .=
                 '<div class="item">
-                    <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" alt="'.$article['title'].'">
+                    <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" 
+                    alt="'.$article['title'].'">
                     <div class="box">
                         <div class="caption-area">
                             <span class="caption">
                             '.$article['title'].'
                             </span>
                         </div>
-                        <a href="'.$article['title'].'" onclick = "viewCounter(\'onclick\', \'article\', '.$article['id'].');"  class="link">'.$this->zendTranslate->translate('more').' &#8250;</a>
+                        <a href="'.HTTP_PATH_LOCALE.$article['title'].'" class="link">'
+                        .$this->zendTranslate->translate('more').' &#8250;</a>
                     </div>
                 </div>';
             }           
@@ -714,13 +716,17 @@ EOD;
                 $class = 'slide';
             }
             echo'<div class="'.$class.'" id="'.$id.'">
-                                <img class="aligncenter" src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path'].$mostReadArticle['articles']['articleImage']['name'].'" 
-                                alt="'.$mostReadArticle['articles']['title'].'">
-                                <h1>'.$mostReadArticle['articles']['title'].'</h1>
-                                <p>
-                                   '.$mostReadArticle['articles']['content'].'
-                                </p>
-                        </div>';
+                <a href = "'.$mostReadArticle['articles']['title'].'">
+                    <img class="aligncenter" 
+                        src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path']
+                        .$mostReadArticle['articles']['articleImage']['name'].'" 
+                        alt="'.$mostReadArticle['articles']['title'].'">
+                    <h1>'.$mostReadArticle['articles']['title'].'</h1>
+                </a>
+                <p>
+                   '.$mostReadArticle['articles']['content'].'
+                </p>
+            </div>';
             $articleNumber++;                
         }
         
