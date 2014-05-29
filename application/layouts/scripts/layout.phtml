@@ -74,9 +74,7 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
         <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
 <?php 
 if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
-    ?>
-        <div class="section-top">
-    <?php
+    echo '<div class="section-top">';
 endif;
 
 $localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
@@ -98,27 +96,18 @@ endif;
 echo FrontEnd_Helper_LayoutContent::homePageBanner($this->banner);
 echo FrontEnd_Helper_LayoutContent::homePageSearch();
 
-if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):?>
-        </div>
-    <?php
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
+    echo "</div>";
 endif;
-if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='index'
-    && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus'
-) :
-    ?>
-        <main id="main" role="main" class="container">
-    <?php
+
+if (FrontEnd_Helper_LayoutContent::showMainContainerDiv()):
+    echo '<main id="main" role="main" class="container">';
 endif;
 
 echo $this->layout()->content;
 
-
-if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='index'
-    && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus'
-) :
-    ?>
-        </main>
-    <?php
+if (FrontEnd_Helper_LayoutContent::showMainContainerDiv()):
+    echo "</main>";
 endif;
 ?>
     </div>

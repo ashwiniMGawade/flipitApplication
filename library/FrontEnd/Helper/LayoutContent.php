@@ -236,4 +236,15 @@ class FrontEnd_Helper_LayoutContent
         }
         return;
     }
+    
+    public static function showMainContainerDiv()
+    {
+    	$divShow = false;
+    	if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='index'
+    	&& zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='plus')
+    	{
+    		$divShow = true;
+    	}
+    	return $divShow;
+    }
 }
