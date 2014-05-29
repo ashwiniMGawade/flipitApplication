@@ -681,7 +681,7 @@ EOD;
                     foreach($articles as $article) { 
         $relatedArticles .=
                 '<div class="item">
-                    <img src="'.PUBLIC_PATH_CDN.$article['ArtIcon']['path'].$article['ArtIcon']['name'].'" alt="'.$article['title'].'">
+                    <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" alt="'.$article['title'].'">
                     <div class="box">
                         <div class="caption-area">
                             <span class="caption">
@@ -714,7 +714,7 @@ EOD;
                 $class = 'slide';
             }
             echo'<div class="'.$class.'" id="'.$id.'">
-                                <img class="" width = "632" height = "160"  src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].$mostReadArticle['articles']['thumbnail']['name'].'" 
+                                <img class="" width = "632" height = "160"  src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path'].$mostReadArticle['articles']['articleImage']['name'].'" 
                                 alt="'.$mostReadArticle['articles']['title'].'">
                                 <h1>'.$mostReadArticle['articles']['title'].'</h1>
                                 <p>
@@ -1356,7 +1356,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         for ($i=0;$i<count($articles);$i++) {
 
             $img = '';
-                $img = PUBLIC_PATH_CDN.$articles[$i]['articles']['ArtIcon']['path']."thum_article_medium_".$articles[$i]['articles']['ArtIcon']['name'];
+                $img = PUBLIC_PATH_CDN.$articles[$i]['articles']['articleImage']['path']."thum_article_medium_".$articles[$i]['articles']['articleImage']['name'];
 
         $string.='<div class="mostpopular-col1">
                     <div class="rediusnone1"><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . '<img src="' . $img . '"></a></div>

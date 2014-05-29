@@ -1,4 +1,4 @@
-<?php $articleImage = PUBLIC_PATH_CDN.ltrim($this->ArtIcon['path'], "/") . 'thum_article_medium_'. $this->ArtIcon['name']; 
+<?php $articleImage = PUBLIC_PATH_CDN.ltrim($this->articleImage['path'], "/") . 'thum_article_medium_'. $this->articleImage['name']; 
 
 if ($this->partialCounter == 1) {
     $shopName = $this->partialLoop()->view->currentStoreInformation[0]['name'];
