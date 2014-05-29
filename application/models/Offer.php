@@ -687,8 +687,6 @@ class Offer extends BaseOffer
             ->andWhere('o.discounttype="CD"')
             ->orderBy('o.id DESC')
             ->fetchArray();
-            //echo "<pre>";print_r($splashPagePopularCoupon);die;
-
             $shopDetails = self::getShopDetailFromOffer($offerDetails[0]['shopId']);
             $logoDetails = self::getShopLogo($shopDetails[0]['logoId']);
             $splashPagePopularCoupon = array_merge($offerDetails, $shopDetails, $logoDetails);
