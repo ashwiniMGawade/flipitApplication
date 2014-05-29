@@ -70,9 +70,8 @@ class SignupController extends Zend_Controller_Action
             }
         }
         $testimonials = Signupmaxaccount::getTestimonials();
-        $this->view->testimonial = isset($testimonials[0]['testimonial1']) ? $testimonials[0]['testimonial1'] : '';
+        $this->view->testimonials = $testimonials;
         $this->view->pageCssClass = 'register-page';
-        # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
  
