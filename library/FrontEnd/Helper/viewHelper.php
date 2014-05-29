@@ -768,6 +768,31 @@ EOD;
         return $countryName;
     }
 
+    public function getFacebookMetaTags($currentObject, $title = '', $metaTitle = '', $metaDescription = '', $permaLink = '', $image = '', $customHeader = '')
+    {
+        if ($metaTitle == '') {
+            $metaTitle = $title;
+        }
+        $currentObject->view->headTitle($metaTitle);
+        $currentObject->view->headMeta()->setName('description', $metaDescription);
+        $currentObject->view->facebookTitle = $title;
+        $currentObject->view->facebookShareUrl = HTTP_PATH_LOCALE . $permaLink;
+        $currentObject->view->facebookImage = $image;
+        $currentObject->view->facebookDescription = $metaDescription;
+        if (LOCALE == '') {
+            $facebookLocale = '';
+        } else {
+            $facebookLocale = LOCALE;
+        }
+        $currentObject->view->facebookLocale = $facebookLocale;
+        $currentObject->view->twitterDescription = $metaDescription;
+
+        if ($requestedData->customHeader) {
+            $currentObject->view->layout()->customHeader = $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
+        }
+        return $currentObject;
+    }
+    
     public static function getWebsitesLocales($websites)
     {
         foreach ($websites as $website) {
