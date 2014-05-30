@@ -284,31 +284,31 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $termAndConditionLink ='';
         if (isset($currentOffer->userGenerated) ? $currentOffer->userGenerated == 0 : '' &&  $termsAndConditions!='' && $termsAndConditions!=null) {
-            $termAndConditionLink = '
+            $termAndConditionLink = '<li>
             <a id="termAndConditionLink'.$currentOffer->id .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
             href="javascript:void(0);">'. $this->zendTranslate->translate('Term') . '&amp;' .$this->zendTranslate->translate('Conditions').'</a>';
             if ($termsAndConditions!='' && $termsAndConditions!=null && $currentOffer->extendedOffer =='1') {
                 $termAndConditionLink.='&nbsp; | &nbsp;';
             }
         }
-        return $termAndConditionLink;
+        return $termAndConditionLink ."</li>";
     }
 
     public function getExtendedOfferLink($currentOffer)
     {
         $extendedOfferLink = '';
         if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : ''):
-            $extendedOfferLink ='<a class="text-blue-link"
+            $extendedOfferLink ='<li><a class="text-blue-link"
             href="'.HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $currentOffer->extendedUrl.'">'
-            .$this->zendTranslate->translate('More about this code').'</a>';
+            .$this->zendTranslate->translate('More about this code').'</a></li>';
         endif;
         return $extendedOfferLink;
     }
     
-    public function getViewAllCodeLink($shopName)
+    public function getViewAllCodeLink($shopName, $showHyphen)
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        return $viewAllLink ='<a href="'.$domainName.$shopName.'">'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</a>';
+        return $viewAllLink ='<li>'. $showHyphen.'<a href="'.$domainName.$shopName.'"> <span>'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</span></a></li>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)

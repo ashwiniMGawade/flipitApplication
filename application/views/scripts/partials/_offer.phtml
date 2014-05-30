@@ -65,18 +65,16 @@ foreach ($this->offers as $offer) {
                 </div>
     
                 <ul class="view-list">
-                    <li>
     <?php 
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
             echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
         }
+        $showHyphen = $termsAndConditions != '' || $offer->extendedOffer =='1' ? ' - ' : '';
         echo $offerPartial->getExtendedOfferLink($offer);
-    } else {
-        echo $offerPartial->getViewAllCodeLink($offer->shop['name']);
+        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $showHyphen);
     }
     ?>
-                    </li>
                 </ul>
             </div>
         </div>
