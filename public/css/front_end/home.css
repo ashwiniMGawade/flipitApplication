@@ -19,7 +19,6 @@
   height: 39px;
   border-radius: 3px;
   -webkit-border-radius: 3px;
-  width: 68% !important;
 }
 .home-page .newsletter input[type="email"]::-webkit-input-placeholder {
   color: #33383e;
