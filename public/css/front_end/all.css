@@ -13427,6 +13427,7 @@ input[type="submit"]::-moz-focus-inner {
   border-style: solid;
   border-color: #e4e4e4;
   text-align: left;
+  font-size: 15px;
 }
 #footer .bottom-panel .container {
   padding-top: 45px;
@@ -13435,6 +13436,7 @@ input[type="submit"]::-moz-focus-inner {
 #footer .bottom-panel .text {
   float: left;
   padding: 0 10px 0 0;
+  margin: 0;
   width: 18%;
 }
 #footer .bottom-panel .text h2 {
