@@ -1,9 +1,9 @@
 <?php 
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/saving.css");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialMedia.js");
+
 $pageImage = '';
 $pageTitle = '';
-
 if (!empty($this->pageDetails)):
     $pageImage = PUBLIC_PATH_CDN.$this->pageDetails[0]['logo']['path'].$this->pageDetails[0]['logo']['name'];
     $pageTitle = $this->pageDetails[0]['pageTitle'];
