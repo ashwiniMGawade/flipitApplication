@@ -66,13 +66,16 @@ foreach ($this->offers as $offer) {
     
                 <ul class="view-list">
     <?php 
+    $showHyphen = $termsAndConditions != '' || $offer->extendedOffer =='1' ? ' - ' : '';
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
             echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
         }
-        $showHyphen = $termsAndConditions != '' || $offer->extendedOffer =='1' ? ' - ' : '';
+        
         echo $offerPartial->getExtendedOfferLink($offer);
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $showHyphen);
+    } else {
+        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], '');
     }
     ?>
                 </ul>
