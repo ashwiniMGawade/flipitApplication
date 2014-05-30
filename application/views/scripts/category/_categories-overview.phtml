@@ -2,11 +2,13 @@
 foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     $featuredCategoryClass = '';
     $featuredCategorySpan = '';
+    if(isset($categoryWithSpecialPage['logo'])) {
+        $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
+    }
     $categoryImage = isset($categoryWithSpecialPage['categoryicon']) ? $categoryWithSpecialPage['categoryicon'] : $categoryWithSpecialPage['logo'];
 
     if (isset($categoryWithSpecialPage['featured_category']) && $categoryWithSpecialPage['featured_category'] != '') {
         $featuredCategoryClass = "box-top";
-        $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
         $categoryImage = isset($categoryWithSpecialPage['categoryfeaturedimage']) ? $categoryWithSpecialPage['categoryfeaturedimage'] : $categoryWithSpecialPage['logo'];
     }
     
