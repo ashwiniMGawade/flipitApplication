@@ -1,5 +1,7 @@
 @import "custom-variables.less";
 @import "custom-mixins.less";
+@flagWidth : '16px';
+@flagHeight : '11px';
 .page404 {
 	#footer{
 		text-shadow:none;
@@ -57,6 +59,17 @@
 				margin:-2px 11px 0 0;
 			}
 		}
+		.countries{
+			padding:0;
+			margin:0 0 27px;
+			list-style:none;
+			li{
+				padding: 0;
+				margin:0 3px;
+				display:inline-block;
+				vertical-align:top;
+			}
+		}
 		.language{
 			padding:0;
 			margin:0 0 27px;
@@ -68,7 +81,7 @@
 			}
 			a{
 				display:block;
-				background:url(../images/sprite.png) no-repeat -3px -455px;
+				background:url(../images/front_end/countries-sprite.png) no-repeat -3px -455px;
 				width: 24px;
 				height: 16px;
 				text-indent:-9999px;

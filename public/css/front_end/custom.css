@@ -219,6 +219,106 @@ select.input-success {
   width: '16px';
   height: '11px';
 }
+.countries li a.cl {
+  background-position: -66px -732px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.cn {
+  background-position: -66px -854px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.dk {
+  background-position: -66px -1525px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.fi {
+  background-position: -132px -427px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.hk {
+  background-position: -132px -1891px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.id {
+  background-position: -198px -305px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.ie {
+  background-position: -198px -366px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.jp {
+  background-position: -198px -976px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.kr {
+  background-position: -198px -1464px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.mx {
+  background-position: -264px -1526px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.my {
+  background-position: -264px -1648px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.no {
+  background-position: -330px -244px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.nz {
+  background-position: -330px -488px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.pt {
+  background-position: -330px -1281px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.ru {
+  background-position: -330px -1708px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.id {
+  background-position: -198px -305px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.sk {
+  background-position: -396px -488px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.tr {
+  background-position: -396px -1769px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.uk {
+  background-position: -132px -61px;
+  width: '16px';
+  height: '11px';
+}
+.countries li a.za {
+  background-position: -462px -1220px;
+  width: '16px';
+  height: '11px';
+}
 .inner-section-wrapper {
   margin: 2%;
 }
