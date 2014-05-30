@@ -3419,3 +3419,13 @@ div.wrap.newsletter-setting-container {
     margin-right: 245px;
     margin-top: -2px !important;
 }
+
+.select-width {
+    width: 400px!important;
+}
+.mb300{
+    margin-bottom: 400px;
+}
+.select-width ul.select2-results {
+    max-height: 300px;
+}
