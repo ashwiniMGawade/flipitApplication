@@ -294,7 +294,7 @@ class Offer extends BaseOffer
             s.actualUrl,terms.content,
             o.id,o.Visability,o.userGenerated,o.title,o.authorId,
             o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
-            o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,
+            o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
             o.discountType,o.startdate,o.endDate,
             img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
             )
@@ -655,10 +655,10 @@ class Offer extends BaseOffer
 
 
 
-    public static function getActiveOfferDetails($keyword)
+    public static function getActiveCoupons($keyword)
     {
         $currentDateAndTime = date("Y-m-d 00:00:00");
-        $allOffers = Doctrine_Query::create()
+        $activeCoupons = Doctrine_Query::create()
         ->select('s.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer, o.extendedUrl, o.shopid')
         ->from('Offer o')
         ->leftJoin('o.shop s')
@@ -670,7 +670,7 @@ class Offer extends BaseOffer
         ->andWhere('s.deleted = 0')
         ->orderBy('o.id DESC')
         ->fetchArray();
-        return $allOffers;
+        return $activeCoupons;
     }
 
     public static function getSplashPagePopularCoupon($offerId)

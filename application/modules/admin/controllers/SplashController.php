@@ -1,6 +1,8 @@
 <?php
 class Admin_SplashController extends Zend_Controller_Action
 {
+    public $flashMessenger = '';
+
     public function preDispatch()
     {
         $databaseConnection = BackEnd_Helper_viewHelper::addConnection();
@@ -22,57 +24,47 @@ class Admin_SplashController extends Zend_Controller_Action
             $flashMessenger->addMessage(array('error' => $message));
             $this->_redirect('/admin');
         }
+        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $this->splashObject = new Splash();
     }
 
     public function indexAction()
     {
-        $splashObject = new Splash();
-        $splashTableData = $splashObject->getSplashInformation();
+        $splashTableData = $this->splashObject->getSplashInformation();
      
         if (!empty($splashTableData)) {
             $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
-            $splashOfferDetails = Doctrine_Core::getTable('Offer')->findOneBy('id', $splashTableData[0]['offerId']);
+            $splashOfferDetails = $this->splashObject->getOfferById($splashTableData[0]['offerId']);
             BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
             $this->view->currentOfferTitle = $splashOfferDetails['title'];
             $this->view->currentOfferLocale = $splashTableData[0]['locale'];
         }
 
-        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $message = $flashMessenger->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-
+        $this->getFlashMessage();
     }
 
     public function addOfferAction()
     {
         $urlRequest = $this->getRequest();
         $this->view->websites = Website::getAllWebsites();
-        $flashMessenger = $this->_helper->getHelper('FlashMessenger' );
-        $message = $flashMessenger->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+        $this->getFlashMessage();
 
         if ($this->_request->isPost()) {
-            $localeId = $urlRequest->getParam('locale' , false);
-            $websiteDetails = Website::getWebsiteDetails($localeId);
-            $localeName = explode('/', $websiteDetails['name']);
-            $locale = isset($localeName[1]) ?  $localeName[1] : "en" ;
-            $offerId = $urlRequest->getParam('searchOfferId' , false);
-            $splash = new Splash();
-            $splashTableData = $splash->getSplashInformation();
+            $localeId = $urlRequest->getParam('locale', false);
+            $locale = BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
+            $offerId = $urlRequest->getParam('searchOfferId', false);
+            $splashTableData = $this->splashObject->getSplashInformation();
 
             if (!empty($splashTableData)) {
-                $splash->deleteSplashoffer();
+                $this->splashObject->deleteSplashoffer();
             }
 
-            $splash->id = 1;
-            $splash->offerId = $offerId;
-            $splash->locale = $locale;         
-            $splash->save();
-            $message = $this->view->translate('Offer has been added successfully');
-            $flashMessenger->addMessage(array('success' => $message));
-            $this->_redirect ( HTTP_PATH . 'admin/splash');
+            $this->splashObject->id = 1;
+            $this->splashObject->offerId = $offerId;
+            $this->splashObject->locale = $locale;         
+            $this->splashObject->save();
+            $this->setFlashMessage('Offer has been added successfully');
+            $this->_redirect(HTTP_PATH . 'admin/splash');
         }
             
         
@@ -81,45 +73,52 @@ class Admin_SplashController extends Zend_Controller_Action
     public function offersListAction()
     {  
         if ($this->_request->isXmlHttpRequest()) {
-            $localeId =  intval($this->getRequest()->getParam('locale', false ));
+            $localeId = intval($this->getRequest()->getParam('locale', false ));
             
             if ($localeId) {
-                $websiteDetails = Website::getWebsiteDetails($localeId);
-                $localeData = explode('/', $websiteDetails['name']);
-                $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
+                $locale = BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
                 $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
                 $offers = new Offer($connectionObject['connName']);
                 $offerKeyword = $this->getRequest()->getParam('keyword');
-                $activeOffers = $offers->getActiveOfferDetails($offerKeyword);
+                $activeCoupons = $offers->getActiveCoupons($offerKeyword);
                 BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
-                $offers = array();
-                if (!empty($activeOffers)) {
-                    foreach ($activeOffers as $offer) {
-                        $offers[] = array('name' => ucfirst($offer['title']),
-                                         'id' => $offer['id']);
+                $coupons = array();
+                if (!empty($activeCoupons)) {
+                    foreach ($activeCoupons as $activeCoupon) {
+                        $coupons[] = array('name' => ucfirst($activeCoupon['title']),
+                                         'id' => $activeCoupon['id']);
                     }
                 } else {
                     $message = $this->view->translate('No Record Found');
-                    $offers[] = array('name' => $message);
+                    $coupons[] = array('name' => $message);
                 }
-                $this->_helper->json($offers);
+                $this->_helper->json($coupons);
             }
         }
-        $this->_redirect ( '/admin' );
+        die();
     }
 
     public function deleteOfferAction()
     {
         $this->_helper->layout->disableLayout();
-        $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $message = $flashMessenger->getMessages();
-        $this->view->messageSuccess = isset ($message [0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset ($message [0]['error']) ? $message[0]['error'] : '';
-        $splashObject = new Splash();
-        $splashObject->deleteSplashoffer();
-        $message = $this->view->translate('Offer has been deleted successfully');
-        $flashMessenger->addMessage(array('success' => $message));
-        $this->_redirect ( HTTP_PATH . 'admin/splash');        
+        $this->getFlashMessage();
+        $this->splashObject->deleteSplashoffer();
+        $this->setFlashMessage('Offer has been deleted successfully');
+        $this->_redirect(HTTP_PATH . 'admin/splash');        
     }
 
+    public function getFlashMessage()
+    {
+        $message = $this->flashMessenger->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+        return $this;
+    }
+
+    public function setFlashMessage($messageText)
+    {
+        $message = $this->view->translate($messageText);
+        $this->flashMessenger->addMessage(array('success' => $message));
+        return $this;
+    }
 }
