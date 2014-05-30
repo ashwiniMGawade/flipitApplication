@@ -73,9 +73,9 @@ foreach ($this->offers as $offer) {
         }
         
         echo $offerPartial->getExtendedOfferLink($offer);
-        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $showHyphen);
+        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
     } else {
-        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], '');
+        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
     ?>
                 </ul>

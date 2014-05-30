@@ -305,10 +305,10 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         return $extendedOfferLink;
     }
     
-    public function getViewAllCodeLink($shopName, $showHyphen)
+    public function getViewAllCodeLink($shopName, $shopPermalink, $showHyphen)
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        return $viewAllLink ='<li>'. $showHyphen.'<a href="'.$domainName.$shopName.'"> <span>'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</span></a></li>';
+        return $viewAllLink ='<li>'. $showHyphen.'<a href="'.$domainName.$shopPermalink.'"> <span>'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</span></a></li>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)
