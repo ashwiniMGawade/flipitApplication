@@ -17,9 +17,9 @@ class PlusController extends Zend_Controller_Action
     public function indexAction()
     {
         $cannonicalPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $articleOverviewPagePermalink = FrontEnd_Helper_viewHelper::__link('plus');
+        $articleOverviewPagePermalink = 'plus';
         $articleOverviewPageDetails  =  FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_moneysavingpage".$articleOverviewPagePermalink."_list", array('function' => 'MoneySaving::getPageDetails', 'parameters' => array($articleOverviewPagePermalink)));
+            getRequestedDataBySetGetCache("all_moneysavingpage_list", array('function' => 'MoneySaving::getPageDetails', 'parameters' => array($articleOverviewPagePermalink)));
         $mostReadArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
@@ -29,9 +29,9 @@ class PlusController extends Zend_Controller_Action
         $this->view->permaLink = $articleOverviewPagePermalink;
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articleOverviewPagePermalink);
         $customHeader = isset($articleOverviewPageDetails[0]['customHeader']) ? $articleOverviewPageDetails[0]['customHeader'] : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, isset($articleOverviewPageDetails[0]['pageTitle']) ? 
-        $articleOverviewPageDetails[0]['pageTitle'] :'', trim(isset($articleOverviewPageDetails[0]['metaTitle']) ? 
-        $articleOverviewPageDetails[0]['metaTitle'] :''), trim(isset($articleOverviewPageDetails[0]['metaDescription']) ? 
+        $this->viewHelperObject->getFacebookMetaTags($this, isset($articleOverviewPageDetails[0]['pageTitle']) ?
+        $articleOverviewPageDetails[0]['pageTitle'] :'', trim(isset($articleOverviewPageDetails[0]['metaTitle']) ?
+        $articleOverviewPageDetails[0]['metaTitle'] :''), trim(isset($articleOverviewPageDetails[0]['metaDescription']) ?
         $articleOverviewPageDetails[0]['metaDescription'] :''), $articleOverviewPagePermalink, HTTP_PATH."public/images/plus_og.png", $customHeader);
 
         $this->view->pageDetails = $articleOverviewPageDetails;
@@ -49,12 +49,12 @@ class PlusController extends Zend_Controller_Action
         $articleDetails = Articles::getArticleByPermalink($permalink);
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
-        $articlesRelatedToCurrentCategory = $categoryWiseArticles[$currentArticleCategory]; 
+        $articlesRelatedToCurrentCategory = $categoryWiseArticles[$currentArticleCategory];
                 
         if (!empty($articleDetails)) {
-            $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink) ;
+            $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
-                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));    
+                getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
