@@ -1,8 +1,7 @@
 <?php
-$pageLogo = $this->pageLogo;
 $partialViewPath = 'partials/';
 $pageHeaderPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $pageHeaderPartial->getCategoryOrPageHeader($this->pageTitle, $pageLogo);
+echo $pageHeaderPartial->getCategoryOrPageHeader($this->pageTitle, $this->pageLogo);
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
