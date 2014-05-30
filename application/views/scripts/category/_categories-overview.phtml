@@ -12,7 +12,7 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     
     $categoryImageSource = '';
     if(isset($categoryImage['path'])) { 
-        $categoryImageSource = PUBLIC_PATH.$categoryImage['path']."".$categoryImage['name'];
+        $categoryImageSource = PUBLIC_PATH_CDN.$categoryImage['path']."".$categoryImage['name'];
     }
     ?>
     <article class="box <?php echo $featuredCategoryClass; ?>">
