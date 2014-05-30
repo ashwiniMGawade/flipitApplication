@@ -248,9 +248,9 @@ select.input-success {
   height: 39px;
   padding: 10px 5px 9px;
 }
-.saving-page div.item span:hover{
- text-decoration: underline;
+.saving-page div.item span:hover {
+  text-decoration: underline;
 }
-.saving-page ul.switcher li a.active{
-   color: #0077CC;
+.saving-page ul.switcher li a.active {
+  color: #0077CC;
 }

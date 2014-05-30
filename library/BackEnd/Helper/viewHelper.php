@@ -23,6 +23,14 @@ class BackEnd_Helper_viewHelper
             <button onclick="setOnOff(event,\'featured-category\',\'off\');" class="btn '.$featuredOffClass.'" type="button">'.$this->zendTranslate->translate('No').'</button>';
         return $featuredCategoryButton;
     }
+
+    public static function getLocaleByWebsite($localeId)
+    {
+        $websiteDetails = Website::getWebsiteDetails($localeId);
+        $localeName = explode('/', $websiteDetails['name']);
+        $locale = isset($localeName[1]) ?  $localeName[1] : "en";
+        return $locale;
+    }
     #####################################################
     ############# END REFACORED CODE ####################
     #####################################################
