@@ -68,7 +68,9 @@ foreach ($this->offers as $offer) {
                     <li>
     <?php 
     if ($this->offersType!='extendedOffer') {
-        echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
+        if ($termsAndConditions != '') {
+            echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
+        }
         echo $offerPartial->getExtendedOfferLink($offer);
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name']);
@@ -96,12 +98,14 @@ foreach ($this->offers as $offer) {
                 </a>
             </div>
         </div>
+        <?php if ($termsAndConditions != '') : ?>
         <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
             <h2><?php echo $this->translate('Terms');?> &amp; <?php echo $this->translate('Conditions')?></h2>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
             </ol>
         </div>
+        <?php endif; ?>
     </article>
     <?php
     $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shop);
