@@ -73,7 +73,9 @@ foreach ($this->offers as $offer) {
         }
         
         echo $offerPartial->getExtendedOfferLink($offer);
-        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
+        if($this->offersType!='simple'):
+            echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
+        endif;
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }

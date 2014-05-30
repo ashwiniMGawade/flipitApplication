@@ -102,13 +102,13 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     }
 
     public function getRightColumnSavingGuidesListHtml() {
-        return $this->getRightColumnOffersHtml('moneysaving', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer') , 'All Saving Guides', 'moneysaving'); 
+        return $this->getRightColumnOffersHtml('moneysaving', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('plus') , 'All Saving Guides', 'moneysaving'); 
     }
 
     public function getRightColumnSpicialListHtml() {
         $specialListHtml = '';
         foreach ($this->homePageData['specialPagesOffers'] as $pageId=>$specialPageOffers) {
-            $specialListHtml .= $this->getRightColumnOffersHtml('special', $pageId , 'All Special Codes', $pageId);
+            $specialListHtml .= $this->getRightColumnOffersHtml('special', HTTP_PATH_LOCALE.$pageId , 'All Special Codes', $pageId);
         }
         return $specialListHtml;
     }
@@ -210,7 +210,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
         $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
         foreach ($topTenMoneySavingGuides as $savingGuide) {
             $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/") .'thum_article_medium_'. $savingGuide['article']['thumbnail']['name'];
-            $savingPermalink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$savingGuide['article']['permalink'];
+            $savingPermalink = FrontEnd_Helper_viewHelper::__link('plus').'/'.$savingGuide['article']['permalink'];
             $savingTitle = $savingGuide['article']['title'];
             $allowed_tags = '';
             $guideDescription = strip_tags($savingGuide['article']['chapters'][0]['content'], $allowed_tags);

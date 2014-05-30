@@ -251,9 +251,10 @@ class Category extends BaseCategory
     public static function getCategoriesDetail()
     {
         $categoriesDetail = Doctrine_Query::create()
-            ->select('c.name,c.id,i.path,i.name,c.permaLink,c.featured_category')
+            ->select('c.name,c.id,i.path,i.name,c.permaLink,c.featured_category, categoryfeaturedimage.*')
             ->from("Category c")
             ->leftJoin("c.categoryicon i")
+            ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
             ->where("c.deleted=0" )
             ->andWhere("c.status= 1")
             ->orderBy("c.featured_category DESC")
