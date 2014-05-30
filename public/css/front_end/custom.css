@@ -252,3 +252,6 @@ select.input-success {
 .saving-page div.item span:hover{
  text-decoration: underline;
 }
+.saving-page ul.switcher li a.active{
+   color: #0077CC;
+}
