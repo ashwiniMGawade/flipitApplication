@@ -1,7 +1,7 @@
-<h2>
-<?php echo $this->translate('Latest news about').' '.$this->partialLoop()->view->currentStoreInformation[0]['name'];?>
-</h2>
 <section class="block">
+    <h2>
+<?php echo $this->translate('Latest news about').' '.$this->partialLoop()->view->currentStoreInformation[0]['name'];?>
+    </h2>
 <?php 
 foreach ($this->latestShopUpdates as $latestShopUpdate) {
     $latestShopUpdate = (object) $latestShopUpdate;

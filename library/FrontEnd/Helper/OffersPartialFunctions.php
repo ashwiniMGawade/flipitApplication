@@ -135,7 +135,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
 
     public function getOfferImage($currentOffer, $offersType)
     {
-         $offerImageDiv = '';
+        $offerImageDiv = '';
         if ($offersType == 'simple' || $offersType == 'extendedOffer') {
             $offerDiscountImage = self::getDiscountImage($currentOffer);
             $altAttributeText = $currentOffer->tiles['label'];
@@ -162,7 +162,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $imageTag ='<img width="130" height="68" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
             $imageTagForOffer = '<div class="center"><div class="code-holder">' . $imageTag . '</div></div>';
         } else {
-            $imageTagForOffer ='<img src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
+            $imageTagForOffer ='<img class="small-code" src="'.$offerDiscountImage.'" alt="'.$altAttributeText.'"/>';
         }
         return $imageTagForOffer;
     }
@@ -250,7 +250,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         $redirectUrl = '';
         switch ($type){
             case 'mainOfferClickoutButton':
-                $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $this->zendTranslate->translate('>Get code &amp; Open site'), "btn blue btn-primary");
+                $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $this->zendTranslate->translate('Get code &amp; Open site >'), "btn blue btn-primary");
             break;
             case 'offerTitle':
                 $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $offerAnchorTagContent, "link");
@@ -273,7 +273,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $buttonWithCodeforOffer = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$this->zendTranslate->translate('print now').'<span class="ico-print"></span></a>';
         } else if ($currentOffer->discountType=='CD') {
             $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate'),OpenInNewTab('". $permalink. "?popup=$currentOffer->id&type=code')";
-            $buttonWithCodeforOffer = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_self" onClick="'.$onClick.'">'.$this->zendTranslate->translate('Pack this offer').'</a>';
+            $buttonWithCodeforOffer = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_self" onClick="'.$onClick.'">'.$this->zendTranslate->translate('Get this offer').'</a>';
         } else if ($currentOffer->discountType == "SL") {
             $buttonWithCodeforOffer = '';
         }
