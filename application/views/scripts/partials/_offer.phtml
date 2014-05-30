@@ -73,7 +73,9 @@ foreach ($this->offers as $offer) {
         }
         
         echo $offerPartial->getExtendedOfferLink($offer);
-        echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
+        if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='store'):
+            echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
+        endif;
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
