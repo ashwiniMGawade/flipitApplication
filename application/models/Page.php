@@ -661,6 +661,7 @@ class Page extends BasePage
             }
             $pageKey ="all_moneysavingpage".$this->id."_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pageKey);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
