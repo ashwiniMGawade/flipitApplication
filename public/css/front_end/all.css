@@ -6560,7 +6560,6 @@ button.close {
   font-size: 13px;
   padding: 14px 9px 13px;
   height: 41px;
-  min-width: 179px;
   margin: 0 0 13px;
 }
 @media only screen and (max-width: 639px) {
@@ -13085,7 +13084,7 @@ hr.alt2 {
   font-size: 14px;
   margin: -1px;
   height: 41px;
-  width: 101px;
+  width: 99px;
   min-width: 60px;
   padding: 0;
 }
