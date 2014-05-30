@@ -381,7 +381,7 @@ class Offer extends BaseOffer
     public static function getOffersByPageId($pageId, $currentDateAndTime)
     {
         $specialPageOffers = Doctrine_Query::create()
-        ->select('op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
+        ->select('op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
         ->from('refOfferPage op')
         ->leftJoin('op.Offer o')
         ->leftJoin('o.logo ologo')
