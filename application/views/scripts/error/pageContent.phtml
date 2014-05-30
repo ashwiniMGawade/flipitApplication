@@ -3,6 +3,8 @@ if ($this->pageMode == true) {
     $sidebarWidgetHtml = '';
     $partialsViewPath = 'partials/';
     $pageContent = '';
+    $contentDivStart ='';
+    $contentDivEnd = '';
     if ($this->page['pageType'] == "offer") {
         if ($this->offercount > 0) {
             $pageContent = $this->partial(
@@ -29,18 +31,20 @@ if ($this->pageMode == true) {
         );
         $sidebarWidgets = $this->widget . FrontEnd_Helper_viewHelper::socialMediaWidget(). $signUpWidgetForm;
         $sidebarWidgetHtml = '<aside class="col-md-4 col-sm-4" id="sidebar">' . $sidebarWidgets . '</aside>';
+        $contentDivStart = '<div id="content" class="col-md-8 col-sm-8">';
+        $contentDivEnd = '</div>';
     } else {
-        $pageContent="<h1>".$this->page['pageTitle']."</h1>".stripslashes($this->page['content']);
+        $pageContent='<div class="inner-section-wrapper"><h1>'.$this->page['pageTitle'].'</h1>'.stripslashes($this->page['content']) .'</div>';
     }
-    $pageImagePath = PUBLIC_PATH_CDN.$this->pageLogo['path'].$this->pageLogo['name'];
+    $pageImagePath = PUBLIC_PATH_CDN.isset($this->pageLogo['path']).isset($this->pageLogo['name']);
     $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
-    echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
+    //echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
     <div class="row">
-        <div class="section">
-            <div class="inner-section-wrapper">
-            <?php echo $pageContent;?>
-            </div>
-        </div>
+         <?php echo $contentDivStart;?>
+             <div class="section">
+             <?php echo $pageContent; ?>
+             </div>
+         <?php echo $contentDivEnd . $sidebarWidgetHtml;?>
     </div>
     <?php 
 }

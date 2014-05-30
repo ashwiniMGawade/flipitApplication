@@ -49,7 +49,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->headMeta()->setName('description', trim($pageDetails['metaDescription']));
                     $this->view->matches = $pageNumber;
                     $this->view->page = $pageDetails;
-                    $this->view->pageLogo = $pageLogo[0];
+                    $this->view->pageLogo = isset($pageLogo[0]) ? $pageLogo[0] : '';
                     $this->view->offercount = count($specialPageOffers);
                     $this->view->offersPaginator = $specialOffersPaginator;
                     $this->view->widget = $sidebarWidget;
