@@ -46,7 +46,7 @@ class SearchController extends Zend_Controller_Action
 
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
         $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), $pageDetails->permaLink, FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), $pageDetails->permaLink, FACEBOOK_IMAGE, $customHeader);
 
         $this->view->pageLogo = '';
         if(isset($pageDetails->logo->path)) {

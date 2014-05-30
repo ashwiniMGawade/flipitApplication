@@ -44,7 +44,7 @@ class SignupController extends Zend_Controller_Action
         $pageId = PageAttribute::getPageAttributeIdByName($pageName);
         $pageDetails =  Page::getPageFromFilteredPageAttribute($pageId);
         $this->view->pageTitle = $pageDetails['pageTitle'];
-        $this->viewHelperObject->getFacebookMetaTags($this);
+        $this->viewHelperObject->getMetaTags($this);
         $registrationForm = new Application_Form_Register();
         $this->view->form = $registrationForm;
         if ($this->getRequest()->isPost()) {
@@ -138,7 +138,7 @@ class SignupController extends Zend_Controller_Action
         }
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
-        $this->viewHelperObject->getFacebookMetaTags($this);
+        $this->viewHelperObject->getMetaTags($this);
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }

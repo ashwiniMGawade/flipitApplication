@@ -29,7 +29,7 @@ class PlusController extends Zend_Controller_Action
         $this->view->permaLink = $articleOverviewPagePermalink;
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articleOverviewPagePermalink);
         $customHeader = isset($articleOverviewPageDetails[0]['customHeader']) ? $articleOverviewPageDetails[0]['customHeader'] : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, isset($articleOverviewPageDetails[0]['pageTitle']) ?
+        $this->viewHelperObject->getMetaTags($this, isset($articleOverviewPageDetails[0]['pageTitle']) ?
         $articleOverviewPageDetails[0]['pageTitle'] :'', trim(isset($articleOverviewPageDetails[0]['metaTitle']) ?
         $articleOverviewPageDetails[0]['metaTitle'] :''), trim(isset($articleOverviewPageDetails[0]['metaDescription']) ?
         $articleOverviewPageDetails[0]['metaDescription'] :''), $articleOverviewPagePermalink, HTTP_PATH."public/images/plus_og.png", $customHeader);
@@ -62,7 +62,7 @@ class PlusController extends Zend_Controller_Action
             $userInformationObject = new User();
             $this->view->userDetails =  $userInformationObject->getUserDetails($articleDetails[0]['authorid']);
             $customHeader = '';
-            $this->viewHelperObject->getFacebookMetaTags($this, $articleDetails[0]['title'], trim($articleDetails[0]['metatitle']), trim($articleDetails[0]['metadescription']), $articleDetails[0]['permalink'], FACEBOOK_IMAGE, $customHeader);
+            $this->viewHelperObject->getMetaTags($this, $articleDetails[0]['title'], trim($articleDetails[0]['metatitle']), trim($articleDetails[0]['metadescription']), $articleDetails[0]['permalink'], FACEBOOK_IMAGE, $customHeader);
             $this->view->pageCssClass = 'in-savings-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);

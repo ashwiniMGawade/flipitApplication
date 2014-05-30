@@ -724,7 +724,7 @@ EOD;
         return $countryName;
     }
 
-    public function getFacebookMetaTags($currentObject, $title = '', $metaTitle = '', $metaDescription = '', $permaLink = '', $image = '', $customHeader = '')
+    public function getMetaTags($currentObject, $title = '', $metaTitle = '', $metaDescription = '', $permaLink = '', $image = '', $customHeader = '')
     {
         if ($metaTitle == '') {
             $metaTitle = $title;

@@ -25,7 +25,7 @@ class IndexController extends Zend_Controller_Action
         if (!empty($pageDetails)) {
             $this->view->pageTitle = ucfirst($pageDetails->pageTitle);
             $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
-            $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->metaTitle, ucfirst(trim($pageDetails->metaTitle)), trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName()), FACEBOOK_IMAGE, $customHeader);
+            $this->viewHelperObject->getMetaTags($this, $pageDetails->metaTitle, ucfirst(trim($pageDetails->metaTitle)), trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName()), FACEBOOK_IMAGE, $customHeader);
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
         }

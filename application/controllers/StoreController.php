@@ -86,7 +86,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
 
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $shopInformation[0]['overriteTitle'], '', trim($shopInformation[0]['metaDescription']), $shopInformation[0]['permaLink'], $ShopImage, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $shopInformation[0]['overriteTitle'], '', trim($shopInformation[0]['metaDescription']), $shopInformation[0]['permaLink'], $ShopImage, $customHeader);
 
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
@@ -133,7 +133,7 @@ class StoreController extends Zend_Controller_Action
         $storeSearchByAlphabet = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_searchpanle_list', array('function' => 'FrontEnd_Helper_viewHelper::alphabetList', 'parameters' => array()), true);
 
         $customHeader = isset($pageAttributes['customHeader']) ? $pageAttributes['customHeader'] : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $pageAttributes['pageTitle'], $pageAttributes['metaTitle'], trim($pageAttributes['metaDescription']), $pageAttributes['permaLink'], FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $pageAttributes['pageTitle'], $pageAttributes['metaTitle'], trim($pageAttributes['metaDescription']), $pageAttributes['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
@@ -175,7 +175,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->howToGuides=$howToGuides;
 
         $customHeader = '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $howToGuides[0]['howtoTitle'], '', trim($howToGuides[0]['howtoMetaDescription']), $howToGuides[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $howToGuides[0]['howtoTitle'], '', trim($howToGuides[0]['howtoMetaDescription']), $howToGuides[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');

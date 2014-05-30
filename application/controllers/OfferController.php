@@ -17,7 +17,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->top20PopularOffers = $offers;
         
         $customHeader = isset($page->customHeader) ? $page->customHeader : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $page->pageTitle, $page->metaTitle, trim($page->metaDescription), FrontEnd_Helper_viewHelper::__link($pageName), FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $page->pageTitle, $page->metaTitle, trim($page->metaDescription), FrontEnd_Helper_viewHelper::__link($pageName), FACEBOOK_IMAGE, $customHeader);
 
         $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
@@ -55,7 +55,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
 
         $customHeader = '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $couponDetails[0]['title'], trim($couponDetails[0]['extendedTitle']), trim($couponDetails[0]['extendedMetaDescription']), FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'], FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $couponDetails[0]['title'], trim($couponDetails[0]['extendedTitle']), trim($couponDetails[0]['extendedMetaDescription']), FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'], FACEBOOK_IMAGE, $customHeader);
 
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
@@ -91,7 +91,7 @@ class OfferController extends Zend_Controller_Action
         $offerDetails[0]['shop']['logo']['name'];
 
         $customHeader = '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $offerDetails[0]['title'], '', '', $offerDetails[0]['shop']['permaLink'], $shopImage, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $offerDetails[0]['title'], '', '', $offerDetails[0]['shop']['permaLink'], $shopImage, $customHeader);
 
         if ($offerDetails[0]['couponCodeType']  == 'UN') {
             $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerId);
@@ -125,7 +125,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
         $customHeader = isset($offerPage->customHeader) ? $offerPage->customHeader : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $offerPage->pageTitle, $offerPage->metaTitle, trim($offerPage->metaDescription),FrontEnd_Helper_viewHelper::__link('nieuw'), FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $offerPage->pageTitle, $offerPage->metaTitle, trim($offerPage->metaDescription),FrontEnd_Helper_viewHelper::__link('nieuw'), FACEBOOK_IMAGE, $customHeader);
 
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];

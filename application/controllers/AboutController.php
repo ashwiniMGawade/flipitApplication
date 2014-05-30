@@ -20,7 +20,7 @@ class AboutController extends Zend_Controller_Action
         $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
         $this->view->pageTitle = $pageDetails->pageTitle;
         $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('redactie'), FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('redactie'), FACEBOOK_IMAGE, $customHeader);
 
         $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", array('function' => 'User::getAllUsersDetails', 'parameters' => array(self::getWebsiteNameWithLocale())));
 
@@ -58,7 +58,7 @@ class AboutController extends Zend_Controller_Action
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $customHeader = '';
-        $this->viewHelperObject->getFacebookMetaTags($this, $authorFullName, '', trim($authorDetails['mainText']), FrontEnd_Helper_viewHelper::__link("redactie") ."/".$authorDetails['slug'], FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $authorFullName, '', trim($authorDetails['mainText']), FrontEnd_Helper_viewHelper::__link("redactie") ."/".$authorDetails['slug'], FACEBOOK_IMAGE, $customHeader);
 
         $this->view->authorDetails = $authorDetails;
         $this->view->authorFavouriteShops = $authorFavouriteShops;
