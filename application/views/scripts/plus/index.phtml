@@ -1,13 +1,32 @@
 <?php 
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/saving.css");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialMedia.js");
-$pageDetails = $this->pageDetails;
-$recentlyAddedArticles = $this->recentlyAddedArticles;
+
 $categoryWiseArticles = $this->categoryWiseArticles;
+
+$pageImage = '';
+$pageTitle = '';
+if (!empty($this->pageDetails)):
+    $pageImage = PUBLIC_PATH_CDN.$this->pageDetails[0]['logo']['path'].$this->pageDetails[0]['logo']['name'];
+    $pageTitle = $this->pageDetails[0]['pageTitle'];
+endif;
+
+$partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+
+$mostReadArticles = '';
+if (!empty($this->mostReadArticles)) {
+    $mostReadArticles =
+        $this->partial(
+            'partials/_mostReadArticles.phtml',
+            array('articles'=>$this->mostReadArticles)
+        );
+} else {
+    $mostReadArticles = $this->translate("No Records Found");
+}
+
 ?>
 <div class="banner-block">
-    <?php $pageImage = PUBLIC_PATH_CDN.$pageDetails[0]['logo']['path'].$pageDetails[0]['logo']['name'];?>
-    <img class='image' src="<?php  echo $pageImage;?>" alt="<?php echo $pageDetails[0]['pageTitle']; ?>"/>
+    <img class='image' src="<?php echo $pageImage;?>" alt="<?php echo $pageTitle; ?>"/>
     <div class="frame-image">
         <div class="container">
             <h1 class="flipit-text"><?php $this->translate('Flipit plus');?></h1>
@@ -16,9 +35,9 @@ $categoryWiseArticles = $this->categoryWiseArticles;
     <div class="container">
         <div class="text-box">
             <p>
-            <?php echo  
-            $this->translate('Flipit.com Plus magazine helps out all the consumers out there in every way possible');?>
-            
+            <?php 
+            echo $this->translate('Flipit.com Plus magazine helps out all the consumers out there in every way possible');
+            ?>
             </p>
         </div>
         <div class="block">
@@ -27,22 +46,12 @@ $categoryWiseArticles = $this->categoryWiseArticles;
                 <div class="holder">
                     <div class="mask">
                         <div class="slideset">
-                            <?php 
-                            $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
-                            echo $mostReadArticles = $frontEndViewHelper->getMostReadArticles($this->mostReadArticles);
-                            ?>
+                        <?php echo $partialFunctions->getMostReadArticles($this->mostReadArticles);?>
                         </div>
                     </div>
                 </div>
                 <ul class="switcher">
-                <?php
-                   if (!empty($this->mostReadArticles)) {
-                        echo $this->partial('partials/_mostReadArticles.phtml',
-                            array('articles'=>$this->mostReadArticles)); 
-                    } else {
-                    echo $this->translate("No Records Found");
-                    } 
-                ?>
+                <?php echo $mostReadArticles;?>
                 </ul>
             </div>
         </div>
@@ -50,33 +59,28 @@ $categoryWiseArticles = $this->categoryWiseArticles;
 </div>
 <main role="main" id="main">
     <div class="container content-box">
-        <?php 
-            echo $recentlyAddedArticles = $frontEndViewHelper->getArticles('Recently added', $recentlyAddedArticles);
-            if (!empty($categoryWiseArticles['blog'])) {
-                echo $blogWiseArticles = $frontEndViewHelper->getArticles('From Blog',$categoryWiseArticles['blog']);
-            }
-            if (!empty($categoryWiseArticles['savingtip'])) {    
-                echo $savingTipWiseArticles = $frontEndViewHelper->
-                getArticles('Saving Tip',$categoryWiseArticles['savingtip']);
-            }
-        ?>  
+<?php 
+echo $partialFunctions->getArticles('Recently added', $this->recentlyAddedArticles);
+if (!empty($categoryWiseArticles['blog'])) {
+    echo $partialFunctions->getArticles('From Blog', $categoryWiseArticles['blog']);
+}
+if (!empty($categoryWiseArticles['savingtip'])) {
+    echo $partialFunctions->getArticles('Saving Tip', $categoryWiseArticles['savingtip']);
+}
+?>
     </div>
 </main>
 <footer class="bottom-panel">
     <div class="container">
         <div class="holder">
             <span class="text">
-                <?php echo  $this->translate('Satisfied with the new Kortingscode.nl? Like us and win great prizes');?>
+                <?php echo $this->translate('Satisfied with the new Kortingscode.nl? Like us and win great prizes');?>
             </span>
             <ul class="share-list">
-                <?php
-               echo FrontEnd_Helper_viewHelper::socialMediaWidget('','article');
-               ?>
+            <?php
+            echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');
+            ?>
             </ul>
         </div>
     </div>
 </footer>
-
-
-
-
