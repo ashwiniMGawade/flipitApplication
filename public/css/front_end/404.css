@@ -60,6 +60,17 @@
   vertical-align: top;
   margin: -2px 11px 0 0;
 }
+.page404 #footer .countries {
+  padding: 0;
+  margin: 0 0 27px;
+  list-style: none;
+}
+.page404 #footer .countries li {
+  padding: 0;
+  margin: 0 3px;
+  display: inline-block;
+  vertical-align: top;
+}
 .page404 #footer .language {
   padding: 0;
   margin: 0 0 27px;
@@ -72,7 +83,7 @@
 }
 .page404 #footer .language a {
   display: block;
-  background: url(../../images/sprite.png) no-repeat -3px -455px;
+  background: url(../../images/front_end/countries-sprite.png) no-repeat -3px -455px;
   width: 24px;
   height: 16px;
   text-indent: -9999px;
