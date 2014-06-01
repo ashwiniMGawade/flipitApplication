@@ -337,7 +337,11 @@ abstract class BaseShop extends Doctrine_Record
         $this->hasColumn('howToIntroductionText', 'blob', null, array(
                 'type' => 'blob',
         ));
-
+        
+        $this->hasColumn('brandingcss', 'text', null, array(
+             'type' => 'text',
+        ));
+       
     }
 
     public function setUp()
