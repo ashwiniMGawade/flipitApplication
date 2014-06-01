@@ -1,6 +1,6 @@
 <?php
-class BrandingController extends Zend_Controller_Action {
-
+class BrandingController extends Zend_Controller_Action
+{
     public function init()
     {
         $this->_helper->layout->disableLayout();
@@ -20,7 +20,7 @@ class BrandingController extends Zend_Controller_Action {
         $this->_helper->branding->save();
         $this->_redirect($_SERVER['HTTP_REFERER']);
     }
-    
+
     public function stopAction()
     {
         $redirectUrl = $this->_helper->branding->stop();

@@ -139,7 +139,7 @@ class Admin_ChainController extends Zend_Controller_Action
 
                 $key = $this->getRequest()->getParam('keyword');
 
-                
+
                 # get shop data return an array
                 $shopsData = $shops->getAllShopNames($key);
 

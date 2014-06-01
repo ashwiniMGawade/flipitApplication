@@ -16,7 +16,7 @@ class Splash extends BaseSplash
         return true;
     }
 
-    public function getOfferById($offerId) 
+    public function getOfferById($offerId)
     {
         return Doctrine_Core::getTable('Offer')->findOneBy('id', $offerId);
     }

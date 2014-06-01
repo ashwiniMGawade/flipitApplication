@@ -17,22 +17,22 @@ class Articlecategory extends BaseArticlecategory
     public static function deleteAllArticleCategoriesAndReferenceArticleCategories()
     {
         $deletedArticleCategory = self:: deleteArticleCategory();
-        $deletedReferenceArticleCategory =  self:: deleteReferenceArticleCategory();                              
-        return true;                                   
+        $deletedReferenceArticleCategory =  self:: deleteReferenceArticleCategory();
+        return true;
 
     }
     public static function deleteArticleCategory()
     {
         $deleteArticleCategory = Doctrine_Query::create()->delete()
                                            ->from('Articlecategory')
-                                           ->execute();       
-    }   
+                                           ->execute();
+    }
     public static function deleteReferenceArticleCategory()
     {
         $deleteReferenceArticleCategory = Doctrine_Query::create()->delete()
                                             ->from('RefArticlecategoryRelatedcategory')
-                                            ->execute();       
-    }    
+                                            ->execute();
+    }
     ####################### Refactored ##############################
 
     public function addcategory($params)
@@ -73,7 +73,7 @@ class Articlecategory extends BaseArticlecategory
         }
     }
 
-                                       
+
 
     /**
      * upload image

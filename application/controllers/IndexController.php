@@ -29,7 +29,7 @@ class IndexController extends Zend_Controller_Action
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
         }
-        
+
         if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') {
         } else {
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularvaouchercode_list", array('function' => 'Offer::getTopOffers', 'parameters' => array(10)));

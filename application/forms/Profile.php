@@ -87,6 +87,6 @@ class Application_Form_Profile extends Application_Form_Base
                 $vistorNewsLetterStatus
             )
         );
-        
+
     }
 }

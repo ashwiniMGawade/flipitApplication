@@ -38,4 +38,3 @@ class FeedsController extends  Zend_Controller_Action
         endif;
     }
 }
-

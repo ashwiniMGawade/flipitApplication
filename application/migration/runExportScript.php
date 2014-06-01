@@ -18,5 +18,5 @@ require 'generateAllShopsJsonForSearch.php';
 #run cretae translation json fiel for each locale (used for javascript translations)
 require 'generateJsonForJsTranlastion.php';
 
-#run create popular offers for all site 
+#run create popular offers for all site
 require 'GeneratePopularCodes.php';

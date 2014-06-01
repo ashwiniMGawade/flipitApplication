@@ -31,7 +31,7 @@ class Admin_SplashController extends Zend_Controller_Action
     public function indexAction()
     {
         $splashTableData = $this->splashObject->getSplashInformation();
-     
+
         if (!empty($splashTableData)) {
             $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
             $splashOfferDetails = $this->splashObject->getOfferById($splashTableData[0]['offerId']);
@@ -61,20 +61,20 @@ class Admin_SplashController extends Zend_Controller_Action
 
             $this->splashObject->id = 1;
             $this->splashObject->offerId = $offerId;
-            $this->splashObject->locale = $locale;         
+            $this->splashObject->locale = $locale;
             $this->splashObject->save();
             $this->setFlashMessage('Offer has been added successfully');
             $this->_redirect(HTTP_PATH . 'admin/splash');
         }
-            
-        
+
+
     }
 
     public function offersListAction()
-    {  
+    {
         if ($this->_request->isXmlHttpRequest()) {
             $localeId = intval($this->getRequest()->getParam('locale', false ));
-            
+
             if ($localeId) {
                 $locale = BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
                 $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
@@ -104,7 +104,7 @@ class Admin_SplashController extends Zend_Controller_Action
         $this->getFlashMessage();
         $this->splashObject->deleteSplashoffer();
         $this->setFlashMessage('Offer has been deleted successfully');
-        $this->_redirect(HTTP_PATH . 'admin/splash');        
+        $this->_redirect(HTTP_PATH . 'admin/splash');
     }
 
     public function getFlashMessage()

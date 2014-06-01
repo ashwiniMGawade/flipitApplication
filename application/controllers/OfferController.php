@@ -15,7 +15,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->pageTitle = $page->pageTitle;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
-        
+
         $customHeader = isset($page->customHeader) ? $page->customHeader : '';
         $this->viewHelperObject->getMetaTags($this, $page->pageTitle, $page->metaTitle, trim($page->metaDescription), FrontEnd_Helper_viewHelper::__link($pageName), FACEBOOK_IMAGE, $customHeader);
 

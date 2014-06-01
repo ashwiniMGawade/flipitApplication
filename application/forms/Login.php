@@ -19,7 +19,7 @@ class Application_Form_Login extends Application_Form_Base
         $vistorEmail->setAttrib('class', 'form-control');
         $vistorEmail->setAttrib('tabindex', '1');
         $vistorEmail->setLabel('Email address');
-        
+
         $vistorPassword = new Zend_Form_Element_Password('password');
         $vistorPassword->setRequired(true);
         $vistorPassword->setAttrib('class', 'form-control');

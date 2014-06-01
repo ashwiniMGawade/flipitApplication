@@ -18,7 +18,7 @@ class createSiteMaps
         require_once('constantsForMigration.php');
         require_once('databaseConnectionForMigrations.php');
         foreach ( $databaseConnections as $key => $connection ) {
-       
+
             if ($key != 'imbull') {
                 try {
 
@@ -34,7 +34,7 @@ class createSiteMaps
     }
 
     protected function generateMaps($dsn, $key,$imbull)
-    {       
+    {
         if ($key == 'en') {
             $this->_localePath = '';
             $this->_hostName = "http://www.kortingscode.nl";

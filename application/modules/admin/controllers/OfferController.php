@@ -121,15 +121,15 @@ class Admin_OfferController extends Zend_Controller_Action
     }
 
 
-    public function shopdetailAction(){
+    public function shopdetailAction()
+    {
+        $params = $this->_getAllParams();
+        $shopObj = new Shop();
+        $Getshopdetails = $shopObj->getShopDetail($params['shopId']);
+        $details = Zend_Json::encode($Getshopdetails);
 
-    	$params = $this->_getAllParams();
-    	$shopObj = new Shop();
-    	$Getshopdetails = $shopObj->getShopDetail($params['shopId']);
-    	$details = Zend_Json::encode($Getshopdetails);
-    	
-    	echo $details;
-    	die;
+        echo $details;
+        die;
     }
 
     public function saveofferAction()

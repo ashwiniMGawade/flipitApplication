@@ -41,7 +41,7 @@ class Visitor extends BaseVisitor
             ->fetchArray();
             if (!empty($favoriteShops)) {
                 $favouriteShopsStatus = true;
-            } 
+            }
         }
         return $favouriteShopsStatus;
     }

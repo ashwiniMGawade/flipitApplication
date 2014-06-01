@@ -74,7 +74,7 @@ class SignupController extends Zend_Controller_Action
         $this->view->pageCssClass = 'register-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
- 
+
     public function showFlashMessage($message, $redirectUrl, $messageType)
     {
         $flashMessage = $this->_helper->getHelper('FlashMessenger');

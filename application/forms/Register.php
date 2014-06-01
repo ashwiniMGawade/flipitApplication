@@ -81,6 +81,6 @@ class Application_Form_Register extends Application_Form_Base
                 $vistorPostalCode
             )
         );
-        
+
     }
 }

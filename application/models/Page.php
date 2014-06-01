@@ -99,7 +99,7 @@ class Page extends BasePage
         ->fetchArray();
         return $pageDetail;
     }
-    
+
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -1100,7 +1100,7 @@ public static function exportpagelist()
      *	Version: 1.0
      */
 
-  
+
     /**
      * get page attrubute from page table by id
      *

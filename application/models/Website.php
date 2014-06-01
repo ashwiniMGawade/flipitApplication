@@ -21,7 +21,7 @@ class Website extends BaseWebsite
             $websites->andWhere("name = ? ", $websiteName);
         } else {
             $websites->andWhere("id = ? ", $websiteId);
-        }      
+        }
         return  $websites->fetchOne(null, Doctrine::HYDRATE_ARRAY);
     }
 }

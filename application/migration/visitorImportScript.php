@@ -7,20 +7,20 @@
 
 new VisitorImport();
 
-class VisitorImport {
-
+class VisitorImport
+{
     protected $_localePath  = '/';
     protected $_trans       = null;
     private $dbh            = null;
 
-    function __construct()
+    public function __construct()
     {
         require_once('ConstantForMigration.php');
         require_once('CommonMigrationFunctions.php');
         CommonMigrationFunctions::setTimeAndMemoryLimit();
 
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
-        
+
         foreach ( $connections as $key => $connection ) {
             // check if database is a site
             if ($key != 'imbull') {
@@ -40,9 +40,9 @@ class VisitorImport {
 
         $localePath               = ($keyIn == 'en') ? '' : $keyIn.'/';
         $pathToExcelImportFolder  = UPLOAD_DATA_FOLDER_EXCEL_PATH . strtolower($localePath) . 'excels/import/';
-        
+
         foreach (glob($pathToExcelImportFolder."*.xlsx") as $xlsxDocument) {
-            
+
             $logContent = date('Y-m-d H:m:i').' - import file: '.basename($xlsxDocument).' for locale: '.strtoupper($keyIn)."\n";
 
             try {
@@ -75,7 +75,7 @@ class VisitorImport {
                     $created_at = ($date) ? date('Y-m-d H:i:s',strtotime($date)) : date('Y-m-d H:i:s');
                     $keywords   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
                     $emailExist = Doctrine_Core::getTable('Visitor')->findBy('email', $email)->toArray();
-                    
+
                     $keywordsArray = explode(',',$keywords);
                     if(empty($emailExist)){
                         $countNewVisitors++;
@@ -88,7 +88,7 @@ class VisitorImport {
                         $insert[$email]->weeklyNewsLetter = 1;
                         $insert[$email]->password = BackEnd_Helper_viewHelper::randomPassword();
                         $insert[$email]->active = 1;
-                        
+
                         foreach ($keywordsArray as $words) $insert[$email]->keywords[]->keyword = $words;
 
                     } else {
@@ -131,7 +131,8 @@ class VisitorImport {
         }
     }
 
-    private function writeLogFile($logContent, $pathToExcelImportFolder){
+    private function writeLogFile($logContent, $pathToExcelImportFolder)
+    {
         $filename = $pathToExcelImportFolder.'log.txt';
         $file_content = file_exists($filename) ? file_get_contents ($filename) : '';
         file_put_contents($filename, $logContent . "\n" . $file_content);

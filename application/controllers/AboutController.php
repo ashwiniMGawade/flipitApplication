@@ -15,7 +15,7 @@ class AboutController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    { 
+    {
         $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
         $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
         $this->view->pageTitle = $pageDetails->pageTitle;

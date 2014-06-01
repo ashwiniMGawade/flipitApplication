@@ -39,7 +39,7 @@ class deleteArticleCategory
             $this->_hostName = "http://www.flipit.com";
             $locale = "_" . strtoupper($localeKey) ;
         }
-      
+
         $doctrineManagerConnection = Doctrine_Manager::connection($dsn, 'doctrine_site');
         spl_autoload_register(array('Doctrine', 'modelsAutoload'));
         $doctrineManager = Doctrine_Manager::getInstance();

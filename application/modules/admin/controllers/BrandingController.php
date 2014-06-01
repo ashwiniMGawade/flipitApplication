@@ -1,6 +1,6 @@
 <?php
-class Admin_BrandingController extends Zend_Controller_Action {
-
+class Admin_BrandingController extends Zend_Controller_Action
+{
     public function init()
     {
         $this->_helper->layout->disableLayout();
@@ -27,4 +27,3 @@ class Admin_BrandingController extends Zend_Controller_Action {
         $this->_redirect( $redirectUrl );
     }
 }
-?>

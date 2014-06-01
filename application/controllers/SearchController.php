@@ -33,15 +33,15 @@ class SearchController extends Zend_Controller_Action
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('all_popularshop_list', array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)), true);
         $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
 
-        if($searchedKeywords == ''){
+        if($searchedKeywords == '') {
             $this->view->popularStores = $popularStores;
             $this->view->offers = array();
-        } else { 
+        } else {
             $this->view->popularStores = $popularStores;
             if (!empty($offersBySearchedKeywords)) {
-                $this->view->popularStores = $shopsForSearchPage; 
+                $this->view->popularStores = $shopsForSearchPage;
             }
-            $this->view->offers = $offersBySearchedKeywords; 
+            $this->view->offers = $offersBySearchedKeywords;
         }
 
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';

@@ -38,7 +38,7 @@ class replaceBespaarwijzerWithPlus
             $this->_hostName = "http://www.flipit.com";
             $locale = "_" . strtoupper($localeKey) ;
         }
-      
+
         $doctrineManagerConnection = Doctrine_Manager::connection($dsn, 'doctrine_site');
         spl_autoload_register(array('Doctrine', 'modelsAutoload'));
         $doctrineManager = Doctrine_Manager::getInstance();
@@ -81,7 +81,7 @@ class replaceBespaarwijzerWithPlus
         menu::replaceBespaarwijzerWithPlus();
         echo "\n";
         print "$localeKey - Replacement of Bespaarwijzers have been done successfully!!!";
-       
+
         $doctrineManager->closeConnection($doctrineManagerConnection);
     }
 

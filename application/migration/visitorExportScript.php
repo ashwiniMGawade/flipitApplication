@@ -9,13 +9,13 @@
 
 new VisitorExport();
 
-class VisitorExport {
-
+class VisitorExport
+{
     protected $_localePath  = '/';
     protected $_trans       = null;
     private $dbh            = null;
 
-    function __construct()
+    public function __construct()
     {
         require_once('ConstantForMigration.php');
         require_once('CommonMigrationFunctions.php');
@@ -64,9 +64,9 @@ class VisitorExport {
 
             $sql ='
                 SELECT
-                v.id, 
-                v.firstname, 
-                v.lastname, 
+                v.id,
+                v.firstname,
+                v.lastname,
                 v.email,
                 v.gender,
                 v.dateofbirth,
@@ -106,7 +106,7 @@ class VisitorExport {
                     $name           = $visitor['firstname'] . " " . $visitor['lastname'];
                     $gender         = ($visitor['gender'] == 0) ? 'Male': 'Female';
                     $weekNews       = ($visitor['weeklynewsletter'] == 1 ) ? 'Yes' : 'No';
-                    $fashionNews    = ($visitor['fashionnewsletter'] == 1 ) ? 'Yes' : 'No'; 
+                    $fashionNews    = ($visitor['fashionnewsletter'] == 1 ) ? 'Yes' : 'No';
                     $travelNews     = ($visitor['travelnewsletter'] == 1 ) ? 'Yes' : 'No';
                     $codeAlert      = ($visitor['codealert'] == 1 ) ? 'Yes' : 'No';
                     $active         = ($visitor['active'] == 1 ) ? 'Yes' : 'No';
@@ -137,7 +137,7 @@ class VisitorExport {
 
             CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn, UPLOAD_DATA_FOLDER_EXCEL_PATH.$keyIn);
             CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn);
-            
+
         } catch (Exception $e) {
             echo $e;
         }

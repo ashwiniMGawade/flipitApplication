@@ -720,9 +720,9 @@ class Offer extends BaseOffer
     {
         $searchKeyword = '';
         if(isset($searchParameters['searchField'])) :
-         $searchKeyword = $searchParameters['searchField'];   
+         $searchKeyword = $searchParameters['searchField'];
         endif;
-        
+
         $currentDate = date('Y-m-d H:i:s');
         $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
         $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
@@ -3111,7 +3111,7 @@ class Offer extends BaseOffer
     /**
      *
      */
-    
+
 
     /**
      * get No of offers created in last 7 days for dashboard

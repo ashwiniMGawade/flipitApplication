@@ -12,7 +12,7 @@
  */
 class menu extends Basemenu
 {
-    
+
     ######################## Refactored #############################
     public static function replaceBespaarwijzerWithPlus()
     {

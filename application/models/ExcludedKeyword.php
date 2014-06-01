@@ -14,7 +14,7 @@ class ExcludedKeyword extends BaseExcludedKeyword
 {
     ##############################################################################
     ################## REFACTORED CODE ###########################################
-    ##############################################################################    
+    ##############################################################################
     public static function getExcludedKeywords($keywordForSearch)
     {
         $excludedKeywords = Doctrine_Query::create()

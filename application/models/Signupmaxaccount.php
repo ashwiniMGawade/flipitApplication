@@ -45,8 +45,8 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         ->fetchArray();
         return $testimonials;
     }
-    
-    
+
+
     #################################################################
     #################### END REFACTOR CODE ##########################
     #################################################################
@@ -693,4 +693,3 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 
     }
 }
-

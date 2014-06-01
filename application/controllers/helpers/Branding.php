@@ -1,7 +1,7 @@
-<?php 
+<?php
 class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Helper_Abstract
 {
-    function start()
+    public function start()
     {
         $storeUrl             = $this->getRequest()->getParam('storeUrl', false);
         $linkValidationHash   = $this->getRequest()->getParam('hash', false);
@@ -24,7 +24,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
                 echo "Error - Wrong linkValidationHash, please try the link again from Admin";
                 exit;
             }
-            
+
         }else{
             $session->brandingActivated = false;
             echo "Error - This function can only be activated from the admin";
@@ -33,7 +33,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         return $storeUrl;
     }
 
-    function save()
+    public function save()
     {
         $session = new Zend_Session_Namespace('Branding');
         foreach ($_POST as $cssSelector => $value) {
@@ -52,7 +52,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
             move_uploaded_file($_FILES["newsletter_store_logo"]["tmp_name"], ROOT_PATH.$newletterStoreLogo);
             $session->data['newsletter_store_logo']['img'] = $newletterStoreLogo;
         }
-        
+
         if (!empty($_FILES["header_background"]["tmp_name"])){
             $headerBackgroundImage = "images/upload/shop/".time().'_'.$_FILES["header_background"]["name"];
             move_uploaded_file($_FILES["header_background"]["tmp_name"], ROOT_PATH.$headerBackgroundImage);
@@ -69,17 +69,19 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
             }
             $shop->save();
         }
-    }   
+    }
 
-    function stop(){
+    public function stop()
+    {
         setcookie('passCache', '1' , '1' , '/');
         $session = new Zend_Session_Namespace('Branding');
         $session->data = array();
         $session->brandingActivated = false;
         return 'http://www.flipit.com/admin';
-    } 
+    }
 
-    private function defaultStyles(){
+    private function defaultStyles()
+    {
         $defaultStyles                                                  = array();
 
         $defaultStyles['link_color']['css-selector']                    = '.section .block .link';
@@ -102,9 +104,8 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         $defaultStyles['newsletter_title_color']['css-property']        = 'color';
         $defaultStyles['newsletter_title_color']['value']               = '#33383e';
 
-        $defaultStyles['overwrite']['value']                            = '';       
+        $defaultStyles['overwrite']['value']                            = '';
 
-        return $defaultStyles; 
+        return $defaultStyles;
     }
 }
-?>

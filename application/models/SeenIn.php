@@ -42,7 +42,7 @@ class SeenIn extends BaseSeenIn
         $seenIn[] = Settings::getSettings(Settings::SEENIN_6);
         return $seenIn;
     }
-    
+
     #####################################################
     ######### REFACTORED CODE #########
     #####################################################

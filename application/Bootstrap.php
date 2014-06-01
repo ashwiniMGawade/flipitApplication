@@ -979,6 +979,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
         Zend_Registry::set('cache', $cache);
     }
- 
+
 }
 require_once 'Layout_Controller_Plugin_Layout.php';

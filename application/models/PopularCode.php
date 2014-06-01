@@ -69,7 +69,7 @@ class PopularCode extends BasePopularCode
         ->fetchArray();
         //->getSqlQuery();
         //echo $newPopularCodes; die;
-        
+
         return $newPopularCodes;
     }
     public static function deleteExpiredPopularCode($date, $flagForCache)

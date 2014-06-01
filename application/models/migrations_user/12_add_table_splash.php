@@ -14,7 +14,7 @@ class AddSplashTable extends Doctrine_Migration_Base
                 'locale' => array(
                         'type'   => 'string'
                 ),
-              
+
                 'offerId' => array(
                         'type'   => 'integer',
                         'length' => 11

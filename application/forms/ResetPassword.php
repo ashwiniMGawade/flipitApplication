@@ -27,6 +27,6 @@ class Application_Form_ResetPassword extends Application_Form_Base
                 $vistorConfirmPassword,
             )
         );
-        
+
     }
 }

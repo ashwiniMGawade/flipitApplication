@@ -18,7 +18,7 @@ class MoneySaving extends BaseMoneySaving
     ####################################################
     /**
      * Function generate most read Articles.
-     * 
+     *
      * @version 1.0
      */
     public static function getMostReadArticles($limit, $userId = "")
@@ -42,7 +42,7 @@ class MoneySaving extends BaseMoneySaving
     public static function getRecentlyAddedArticles($limit)
     {
         $recentlyAddedArticles = Doctrine_Query::create()
-        	->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
+            ->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
@@ -92,7 +92,7 @@ class MoneySaving extends BaseMoneySaving
         $allCategoryDetails = self::getAllArticleCategories();
         $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails);
         return  $categoryRelatedArticles;
-        
+
     }
 
     public static function getAllArticleCategories()
@@ -105,9 +105,9 @@ class MoneySaving extends BaseMoneySaving
         return $allArticleCategoryDetails;
     }
 
-    public static function getCategoryRelatedArticles ($allCategoryDetails)
+    public static function getCategoryRelatedArticles($allCategoryDetails)
     {
-    	$categoryRelatedArticles = array();
+        $categoryRelatedArticles = array();
         foreach($allCategoryDetails as $categoryDetails) {
             $categoryRelatedArticles[$categoryDetails['name']] = self::getArticlesRelatedToCategory($categoryDetails['id']);
         }
@@ -116,7 +116,7 @@ class MoneySaving extends BaseMoneySaving
 
     public static function getArticlesRelatedToCategory($categoryId)
     {
-        
+
         $allArticlesRelatedToCategory = self:: getAllMoneySavingArticlesOfCategory($categoryId);
         return $allArticlesRelatedToCategory;
     }
@@ -134,7 +134,7 @@ class MoneySaving extends BaseMoneySaving
             ->fetchArray();
         return $articles;
     }
-   
+
  ################## REFACTORED #######################
     /**
      * Get article for Money saving article from database
@@ -334,5 +334,5 @@ class MoneySaving extends BaseMoneySaving
      */
 
 
-  
+
 }

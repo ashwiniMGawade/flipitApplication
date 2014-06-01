@@ -90,7 +90,7 @@ class Admin_UserController extends Zend_Controller_Action
         $this->view->categoryList = $categoryList['aaData'] ;
         $this->view->countriesLocales = $this->getAllCountriesByLocaleNames();
     }
-    
+
     public function getAllCountriesByLocaleNames()
     {
         $localesList = Zend_Locale::getLocaleList();
@@ -107,7 +107,7 @@ class Admin_UserController extends Zend_Controller_Action
         }
         return $countriesWithLocales = array_unique($countriesWithLocales);
     }
-    
+
     public function getWebsiteLocales()
     {
         $websites = Website::getAllWebsites();

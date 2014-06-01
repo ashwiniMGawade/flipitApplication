@@ -137,7 +137,7 @@ abstract class BaseUser extends Doctrine_Record
                 'type' => 'timestamp',
              ));
         $this->hasColumn('countryLocale', 'string', 10, array(
-        		'type' => 'string',
+                'type' => 'string',
         ));
 
     }

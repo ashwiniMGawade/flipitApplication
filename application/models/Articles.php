@@ -71,7 +71,7 @@ class Articles extends BaseArticles
     ###############################################
     ########## END REFACTORED CODE ################
     ###############################################
-    
+
     CONST ArticleStatusDraft = 0;
     CONST ArticleStatusPublished = 1;
 
@@ -180,7 +180,7 @@ class Articles extends BaseArticles
 
     }
 
-   
+
 
 
 
@@ -939,7 +939,7 @@ class Articles extends BaseArticles
      * @return Article permalinks
      */
 
-    
+
 
 
     /**

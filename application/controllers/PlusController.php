@@ -40,7 +40,7 @@ class PlusController extends Zend_Controller_Action
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
         $this->view->pageCssClass = 'saving-page';
     }
-  
+
 
     public function guidedetailAction()
     {
@@ -50,7 +50,7 @@ class PlusController extends Zend_Controller_Action
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $articlesRelatedToCurrentCategory = $categoryWiseArticles[$currentArticleCategory];
-                
+
         if (!empty($articleDetails)) {
             $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::

@@ -18,9 +18,9 @@ class User extends BaseUser
     ##########################################################
     /**
      * Function getAllUsersDetail.
-     * 
+     *
      * Get users detail.
-     * 
+     *
      * @return array $usersData
      * @version 1.0
      */
@@ -100,7 +100,7 @@ class User extends BaseUser
     ##########################################################
     ########### END REFACTORED CODE ##########################
     ##########################################################
-    
+
     //wwconst USER_SET_STATUS = 0;
 
     const INVALID_NEW_PASSWORD_STATUS = "-2";
@@ -237,7 +237,7 @@ class User extends BaseUser
         $this->email = BackEnd_Helper_viewHelper::stripSlashesFromString($params['email']);
         $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
         $this->countryLocale = $params['locale'];
- 
+
         if($this->isValidPassword($params['password'])) {
             self::setPassword($params['password']) ;
             $this->save();
@@ -462,7 +462,7 @@ class User extends BaseUser
         $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
         $this->countryLocale = $params['locale'];
-        
+
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
 
