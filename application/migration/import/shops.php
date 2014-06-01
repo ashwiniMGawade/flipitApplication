@@ -155,12 +155,12 @@ while ($stmt_outer->fetch()) {
                 }
                 mkdir($logo_abs_path_parent);
             }
-        
+
             /* write the file */
             $fh = fopen($logo_abs_path, 'w');
             fwrite($fh, $var_data);
             fclose($fh);
-        
+
             /* put file path into database */
             $stmt_logo = $site_logo->prepare("
                 INSERT INTO image (
@@ -175,7 +175,7 @@ while ($stmt_outer->fetch()) {
             $stmt_logo->execute();
             $image_id = $site_logo->insert_id;
             $stmt_logo->close();
-        
+
 
         }
     }
@@ -229,7 +229,8 @@ $site->query("
 
 echo "Resolved relationships between offers and shops\n";
 
-function filter_val2($var_name, $var_field, $var_data) {
+function filter_val2($var_name, $var_field, $var_data)
+{
     // echo "name: $var_name, field: $var_field, data: $var_data\n";
 
     switch ($var_field) {

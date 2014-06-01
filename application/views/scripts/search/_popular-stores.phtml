@@ -1,0 +1,13 @@
+<article class="section section-2">
+    <h2><?php echo $this->offers  == 0 ? $this->translate('Popular Stores') : $this->translate('Stores matching search result'); ?></h2>
+    <ul class="shops shops-2">
+        <?php
+        foreach ($this->popularStores as $popularStore)
+        { 
+            $popularStore = isset($popularStore['shop']) ?  $popularStore['shop'] :  $popularStore;
+            $popularStoreImage = PUBLIC_PATH_CDN.ltrim($popularStore['logo']['imgpath'], '/')."thum_medium_".$popularStore['logo']['imgname'];            
+            echo '<li><a href="' .HTTP_PATH_LOCALE. $popularStore['permaLink']. '"><img src="' . $popularStoreImage . '"  alt="' .$popularStore['name'] . '"  width="122" height="62" /></a></li>';
+        }
+        ?>
+    </ul>
+</article>

@@ -20,18 +20,18 @@ abstract class BaseVarnish extends Doctrine_Record
         $this->hasColumn('status', 'string', 255, array(
              'type' => 'string',
              'length' => '255',
-             ));        
+             ));
     }
 
     public function setUp()
     {
         parent::setUp();
         $timestampable0 = new Doctrine_Template_Timestampable(array(
-             'created' => 
+             'created' =>
              array(
               'name' => 'created_at',
              ),
-             'updated' => 
+             'updated' =>
              array(
               'name' => 'updated_at',
              ),

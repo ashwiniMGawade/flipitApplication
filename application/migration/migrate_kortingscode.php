@@ -1,6 +1,6 @@
 <?php
 
-/* de map van met deze scripts moet in de public folder van je kortingscode 
+/* de map van met deze scripts moet in de public folder van je kortingscode
  * instantie staan, in verband met de images */
 
 require('../../public/migration/functions.phption/migration/functions.php');
@@ -37,4 +37,3 @@ require('editors.php');
 require('wrapup.php');
 
 close_db($db);
-

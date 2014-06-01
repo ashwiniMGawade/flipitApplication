@@ -1,0 +1,34 @@
+<header class="heading-box text-guide">
+    <h2><?php echo $this->translate('How to guide').' '.$this->shopName.' '.'<br>'.$this->translate('coupon codes'); ?></h2>
+</header>
+<section class="section section-guide">
+    <div class="holder">
+        <ul class="num-list">
+            <?php 
+            $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+            foreach($this->howToGuides as $howToGuides):
+                foreach ($howToGuides['howtochapter'] as $howToGuide) :
+                    preg_match_all('/<img.+src=[\'"](?P<src>.+)[\'"].*>/i', $howToGuide['chapterDescription'], $howToGuideImages);
+                    ?>
+                    <li>
+                        <h2><?php echo $howToGuide['chapterTitle']; ?></h2>
+                        <p><?php echo preg_replace("/<img[^>]+\>/i", "", $howToGuide['chapterDescription']); ?></p>
+                        <div class="visual-img">
+                            <?php
+                            foreach ($howToGuideImages['src'] as $howToGuideImageSource) {
+                                echo '<img src="'.$domainName.$howToGuideImageSource.'" alt="image description">';
+                            }
+                            ?>   
+                        </div>
+                    </li>
+                    <?php 
+                endforeach;
+            endforeach;
+            ?>
+        </ul>
+    </div>
+    <a class="link-box link-back" href="#">
+        <hr class="alt2">
+        <span><?php echo $this->translate('Back to top'); ?></span>
+    </a>
+</section>

@@ -1,0 +1,17 @@
+<ul class="add-info">
+    <li>
+        <h2><?php echo $this->translate('How to use code'); ?></h2>
+        <p>
+            <a href="javascript:void(0);" id="clicker" class="how-to-showme-link" onclick="showLightboxPopUp(<?php echo $this->shop['id']; ?>);"><?php echo $this->translate('Show me'); ?></a> 
+            <?php echo $this->translate('where to enter my').' '.$this->shop['name'].' '.$this->translate('code, or read our full'); ?> 
+            <a href="<?php echo HTTP_PATH_LOCALE.$this->howToUseGuidePermalink; ?>">
+            <?php echo $this->shop['name'].' '.$this->translate('Promotional Code'); ?>
+            </a>
+            <?php echo $this->translate('help guide'); ?>.
+        </p>
+    </li>
+    <li class="web">
+        <h2><?php echo $this->translate('Official website'); ?></h2>
+        <a href="<?php echo $this->shop['actualUrl']; ?>"><?php echo $this->actualUrl;?></a>
+    </li>
+</ul>

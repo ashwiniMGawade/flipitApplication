@@ -1,10 +1,10 @@
 <style type="text/css">
-p 
+p
 {
-	color : green;
-	line-height: 25px;
-	margin: 0px 15px;
-	
+    color : green;
+    line-height: 25px;
+    margin: 0px 15px;
+
 }
 </style>
 <?php
@@ -39,17 +39,17 @@ $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
 
 //echo "<b><pre>" ;
 
-echo "<p>Start generating models...</p>"; 
+echo "<p>Start generating models...</p>";
 
 //Doctrine_Core::generateModelsFromDb("C:/wamp/www/newmodels");
 
-	//Doctrine_Core::loadModels(realpath("../application/models"));
-	//Doctrine_Core::dumpData(realpath("../application/configs/data/fixture.yml"));
-	
+    //Doctrine_Core::loadModels(realpath("../application/models"));
+    //Doctrine_Core::dumpData(realpath("../application/configs/data/fixture.yml"));
 
-Doctrine_Core::generateModelsFromYaml(realpath("../application/configs/new.yml"), 
- 				realpath('C:/wamp/www/newmodels'), array('generateTableClasses' => true));
-	
+
+Doctrine_Core::generateModelsFromYaml(realpath("../application/configs/new.yml"),
+                realpath('C:/wamp/www/newmodels'), array('generateTableClasses' => true));
+
 
 
 
@@ -58,20 +58,20 @@ $tables = $DMC->import->listTables();
 echo "<p>No. of existing tables " .count($tables) . ".</p>";
 $i = 0;
 while (count($tables) > 0 && $i < 10) {
-	foreach ($tables as $tableName) {
-		try {
-		    $DMC->export->dropTable($tableName);
-		} catch(Doctrine_Exception $e) {
-			
-		}
-	}
+    foreach ($tables as $tableName) {
+        try {
+            $DMC->export->dropTable($tableName);
+        } catch(Doctrine_Exception $e) {
+
+        }
+    }
 $i++ ;
 $tables = $DMC->import->listTables();
 }
 */
 /*
 echo "<p>No. of tables not deleted " .count($tables). "</p>";
-echo "<p>Tables Deleted successfully.</p>";	
+echo "<p>Tables Deleted successfully.</p>";
 
 */
 

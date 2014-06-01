@@ -4,13 +4,14 @@
   $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/addCategory.js" );
   //$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/back_end/jquery.textareaCounter.plugin.js");
   $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
-  
+  $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/category-common.js");
+
 ?>
 <div class="wrap columns-2" id="createCategory">
 	<form action="<?php echo HTTP_PATH ;?>admin/category/addcategory" method="POST" id="saveCategoryForm" name="saveCategoryForm" enctype="multipart/form-data">
 	<input type="hidden" value="" name='iconId' id='iconId' />
 	<input type="hidden" value="" name='id' id='id' />
-	
+	<input type="hidden" name="featuredCategory" id="featuredCategory" value="0" />
 		<h1><?php echo $this->translate('Create Category'); ?><input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" /></h1>
 
 		<div id="poststuff" class="metabox-holder has-right-sidebar">
@@ -78,18 +79,28 @@
 								</div>
 							</div>
 						</div>
-						<div class="mainpage-content-line">
-							<div class="mainpage-content-left">
-								<label><strong><?php echo $this->translate('Category Icon'); ?></strong></label>
-							</div>
-							<div class="mainpage-content-right control-group">
-								<div style="width : 275px;margin-right: 245px; margin-top: -2px !important;" class="mainpage-content-right-inner-right-other upload"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
-								<div class="mainpage-content-right-inner-left-other">
-									<input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden">
-
-								</div>
-							</div>
-						</div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Category Thumbnail'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right control-group">
+                                <div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Category Featured Image'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right control-group">
+                                <div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryFeaturedImage">
+                                </div>
+                            </div>
+                        </div>
 						<div class="mainpage-content-line">
 							<div class="mainpage-content-left">
 								<label><strong><?php echo $this->translate('Description')?></strong></label>
@@ -108,6 +119,15 @@
 								</div>
 							</div>
 						</div>
+                        <div class="mainpage-content-line mb10">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Featured category'); ?></strong></label></div>
+                                <div class="mainpage-content-right">
+                                    <div class="btn-group" data-toggle="buttons-checkbox">
+                                    <button onclick="setOnOff(event,'featured-category','on');" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                                    <button onclick="setOnOff(event,'featured-category','off');" class="btn btn-primary default" type="button"><?php echo $this->translate('No'); ?></button> 
+                                </div>
+                            </div>
+                        </div>
 
 					</div>
 

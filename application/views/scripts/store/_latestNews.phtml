@@ -1,0 +1,47 @@
+<section class="block">
+    <h2>
+<?php echo $this->translate('Latest news about').' '.$this->partialLoop()->view->currentStoreInformation[0]['name'];?>
+    </h2>
+<?php 
+foreach ($this->latestShopUpdates as $latestShopUpdate) {
+    $latestShopUpdate = (object) $latestShopUpdate;
+    $datetime = strtotime($latestShopUpdate->startdate);
+    $date = date('d', $datetime);
+    $month = date('M', $datetime);
+    $year = date('Y', $datetime);
+    $httpStringPosition = 'http';
+
+    $content = '';
+    if ($latestShopUpdate->content!=""):
+        $content = $latestShopUpdate->content;
+    else:
+        $content = "No desc found";
+    endif;
+  
+    ?>
+    <div class="news-box">
+        <article class="box">
+            <em class="date"><?php echo $date.' '.$month.' '.$year; ?></em>
+            <h3><?php 
+    if ($latestShopUpdate->url!=null && $latestShopUpdate->url!='') :
+        ?>
+                <a href="
+        <?php
+        if (strpos($latestShopUpdate->url, $httpStringPosition) !== false) :
+            echo $latestShopUpdate->url;
+        else :
+            echo 'http://'.$latestShopUpdate->url;
+        endif;?>" target="_blank"><?php echo $latestShopUpdate->title;?>
+               </a>
+        <?php 
+    else :
+        echo $latestShopUpdate->title;
+    endif;?>
+            </h3>
+            <p>
+    <?php echo $content;?>
+            </p>
+        </article>
+    </div>
+<?php } ?>
+</section>

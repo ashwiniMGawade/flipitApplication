@@ -433,7 +433,6 @@ function resetBorders(el)
 	
 	});
 }
-
-
+ 
 
 

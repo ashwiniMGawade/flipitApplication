@@ -1,7 +1,37 @@
-<!-- Footer Section Starts -->
 <?php 
-	echo $this->render('partials/_footerDynamic.phtml'); 
-	echo $this->render('partials/_footerPageLink.phtml'); 
-?>
-</div>	
-<!-- Footer Section Ends -->
+echo $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
+$footer = FrontEnd_Helper_viewHelper::getFooterData();
+$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp ' , 'email-form form-inline', 'orange');
+// FrontEnd_Helper_SignUpPartialFunction::validateZendForm(Zend_Controller_Front::getInstance(), '', $signUpForm);
+$signUpWidgetForm = '';
+$signUpWidgetForm = $this->partial(
+       'partials/_signupForm.phtml',
+        array(
+            'zendForm' => $signUpForm,
+            'signupFormWidgetType' => 'footerSignupForm',
+            'shopId' => '',
+            'shopLogoOrDefaultImage' => '',
+        )
+    );
+?> 
+<footer id="footer">
+	<div class="bottom-panel">
+		<div class="container" id ="footer-signup-form">
+			<?php echo $signUpWidgetForm; ?>
+			<div class="social">
+				<?php echo $footer[0]['middleColumn1'];?>
+			</div>
+		</div>
+	</div>
+	<div class="container bottom-nav">
+		<div class="row">
+			<?php echo $footer[0]['middleColumn2'];?>
+			<?php echo $footer[0]['middleColumn3'];?>
+			<?php echo $footer[0]['middleColumn4'];?>
+		</div>
+	</div>
+
+	<div class="container add-block">
+	<?php echo $footer[0]['bottomFooter'];?>
+	</div>
+</footer>

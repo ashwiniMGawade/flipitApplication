@@ -1,0 +1,87 @@
+<?php 
+//$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/saving.css");
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialMedia.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/savingguides.js");
+$pageImage = '';
+$pageTitle = '';
+if (!empty($this->pageDetails)):
+    $pageImage = PUBLIC_PATH_CDN.$this->pageDetails[0]['logo']['path'].$this->pageDetails[0]['logo']['name'];
+    $pageTitle = $this->pageDetails[0]['pageTitle'];
+endif;
+
+$mostReadArticles = '';
+if (!empty($this->mostReadArticles)) {
+    $mostReadArticles =
+        $this->partial(
+            'partials/_mostReadArticles.phtml',
+            array('articles'=>$this->mostReadArticles)
+        );
+} else {
+    $mostReadArticles = $this->translate("No Records Found");
+}
+
+$flipitPlusHeaderText =
+    $this->translate('Flipit.com Plus magazine helps out all the consumers out there in every way possible');
+
+$categoryWiseArticles = $this->categoryWiseArticles;
+$partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+$categoryBlogArticles = '';
+$categorySavingtipArticles = '';
+if (!empty($categoryWiseArticles['blog'])) {
+    $categoryBlogArticles = $partialFunctions->getArticles('From Blog', $categoryWiseArticles['blog']);
+}
+if (!empty($categoryWiseArticles['savingtip'])) {
+    $categorySavingtipArticles = $partialFunctions->getArticles('Saving Tip', $categoryWiseArticles['savingtip']);
+}
+?>
+<div class="banner-block">
+    <img class='image' src="<?php echo $pageImage;?>" alt="<?php echo $pageTitle;?>"/>
+    <div class="frame-image">
+        <div class="container">
+            <h1 class="flipit-text"><?php $this->translate('Flipit plus');?></h1>
+        </div>
+    </div>
+    <div class="container">
+        <div class="text-box">
+            <p>
+            <?php echo $flipitPlusHeaderText;?>
+            </p>
+        </div>
+        <div class="block">
+            <div class="caption"><span><?php echo $this->translate('Featured savings');?></span></div>
+            <div class="carousel">
+                <div class="holder">
+                    <div class="mask">
+                        <div class="slideset">
+                        <?php echo $partialFunctions->getMostReadArticles($this->mostReadArticles);?>
+                        </div>
+                    </div>
+                </div>
+                <ul class="switcher">
+                <?php echo $mostReadArticles;?>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<main role="main" id="main">
+    <div class="container content-box">
+    <?php 
+    echo $partialFunctions->getArticles('Recently added', $this->recentlyAddedArticles);
+    echo $categoryBlogArticles;
+    echo $categorySavingtipArticles;
+    ?>
+    </div>
+</main>
+<footer class="bottom-panel">
+    <div class="container">
+        <div class="holder">
+            <span class="text">
+            <?php echo $this->translate('Satisfied with the new Kortingscode.nl? Like us and win great prizes');?>
+            </span>
+            <ul class="share-list">
+            <?php echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');?>
+            </ul>
+        </div>
+    </div>
+</footer>

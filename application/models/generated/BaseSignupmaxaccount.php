@@ -57,13 +57,13 @@ abstract class BaseSignupmaxaccount extends Doctrine_Record
              'autoincrement' => false,
              ));
         $this->hasColumn('max_account', 'string', 255, array(
-        		'type' => 'string',
-        		'length' => 255,
-        		'fixed' => false,
-        		'unsigned' => false,
-        		'primary' => false,
-        		'notnull' => true,
-        		'autoincrement' => false,
+                'type' => 'string',
+                'length' => 255,
+                'fixed' => false,
+                'unsigned' => false,
+                'primary' => false,
+                'notnull' => true,
+                'autoincrement' => false,
         ));
         $this->hasColumn('status', 'integer', 4, array(
              'type' => 'integer',
@@ -75,104 +75,104 @@ abstract class BaseSignupmaxaccount extends Doctrine_Record
              'autoincrement' => false,
              ));
         $this->hasColumn('email_confirmation', 'boolean', null, array(
-        		'default' => 0,
-        		'type' => 'boolean',
+                'default' => 0,
+                'type' => 'boolean',
         ));
         $this->hasColumn('showTestimonial', 'boolean', null, array(
-        		'default' => 0,
-        		'type' => 'boolean',
+                'default' => 0,
+                'type' => 'boolean',
         ));
         $this->hasColumn('locale', 'string', 50, array(
-        		'type' => 'string',
-        		'length' => 50,
-        		'fixed' => false,
-        		'unsigned' => false,
-        		'primary' => false,
-        		'notnull' => true,
-        		'autoincrement' => false,
+                'type' => 'string',
+                'length' => 50,
+                'fixed' => false,
+                'unsigned' => false,
+                'primary' => false,
+                'notnull' => true,
+                'autoincrement' => false,
         ));
         $this->hasColumn('sendername', 'string', 50, array(
-        		'type' => 'string',
-        		'length' => 50,
-        		'fixed' => false,
-        		'unsigned' => false,
-        		'primary' => false,
-        		'notnull' => true,
-        		'autoincrement' => false,
+                'type' => 'string',
+                'length' => 50,
+                'fixed' => false,
+                'unsigned' => false,
+                'primary' => false,
+                'notnull' => true,
+                'autoincrement' => false,
         ));
         $this->hasColumn('emailsubject', 'string', 50, array(
-        		'type' => 'string',
-        		'length' => 50,
-        		'fixed' => false,
-        		'unsigned' => false,
-        		'primary' => false,
-        		'notnull' => true,
-        		'autoincrement' => false,
+                'type' => 'string',
+                'length' => 50,
+                'fixed' => false,
+                'unsigned' => false,
+                'primary' => false,
+                'notnull' => true,
+                'autoincrement' => false,
         ));
         $this->hasColumn('emailperlocale', 'text',  array(
-        		'type' => 'text',
-        		'length' => 50,
-        		'fixed' => false,
-        		'unsigned' => false,
-        		'primary' => false,
-        		'notnull' => true,
-        		'autoincrement' => false,
+                'type' => 'text',
+                'length' => 50,
+                'fixed' => false,
+                'unsigned' => false,
+                'primary' => false,
+                'notnull' => true,
+                'autoincrement' => false,
         ));
         $this->hasColumn('email_header', 'blob', null, array(
-        		'type' => 'blob',
+                'type' => 'blob',
         ));
         $this->hasColumn('email_footer', 'blob', null, array(
-        		'type' => 'blob',
+                'type' => 'blob',
         ));
         $this->hasColumn('testimonial1', 'text', null, array(
-        		'type' => 'blob',
+                'type' => 'blob',
         ));
         $this->hasColumn('testimonial2', 'text', null, array(
-        		'type' => 'blob',
+                'type' => 'blob',
         ));
         $this->hasColumn('testimonial3', 'text', null, array(
-        		'type' => 'blob',
+                'type' => 'blob',
         ));
 
         $this->hasColumn('homepagebanner_name', 'string', 255, array(
-        		'type' => 'string',
+                'type' => 'string',
         ));
 
         $this->hasColumn('homepagebanner_path', 'string', 255, array(
-        		'type' => 'string',
+                'type' => 'string',
         ));
 
 
         $this->hasColumn('homepage_widget_banner_name', 'string', 255, array(
-        		'type' => 'string',
+                'type' => 'string',
         ));
 
         $this->hasColumn('homepage_widget_banner_path', 'string', 255, array(
-        		'type' => 'string',
-        		'default' => 0,
+                'type' => 'string',
+                'default' => 0,
         ));
 
         $this->hasColumn('timezone', 'string', 255, array(
-        		'type' => 'string'
+                'type' => 'string'
         ));
         $this->hasColumn('newletter_is_scheduled', 'boolean', 1, array(
-        		'type' => 'boolean',
-        		'notnull' => false ,
-        		'default' => 0,
-        		'length' => 1,
-        		'comment' => '1-scheduled ,0-manual'
+                'type' => 'boolean',
+                'notnull' => false ,
+                'default' => 0,
+                'length' => 1,
+                'comment' => '1-scheduled ,0-manual'
         ));
         $this->hasColumn('newletter_status', 'boolean', 20, array(
-        		'type' => 'boolean',
-        		'notnull' => false ,
-        		'default' => 0,
-        		'length' => 1,
-        		'comment' => '1-sent ,0-unsent, this is only used in case of scheduled newsletters'
+                'type' => 'boolean',
+                'notnull' => false ,
+                'default' => 0,
+                'length' => 1,
+                'comment' => '1-sent ,0-unsent, this is only used in case of scheduled newsletters'
         ));
         $this->hasColumn('newletter_scheduled_time', 'timestamp', 20, array(
-        		'default' => date("Y-m-d H:i:s"),
-        		'type'   => 'timestamp',
-        		'comment' => 'newsletter scheduled timestamp'
+                'default' => date("Y-m-d H:i:s"),
+                'type'   => 'timestamp',
+                'comment' => 'newsletter scheduled timestamp'
         ));
 
         $this->hasColumn('created_at', 'timestamp', null, array(
@@ -198,14 +198,14 @@ abstract class BaseSignupmaxaccount extends Doctrine_Record
         parent::setUp();
 
         $timestampable0 = new Doctrine_Template_Timestampable(array(
-        		'created' =>
-        		array(
-        				'name' => 'created_at',
-        		),
-        		'updated' =>
-        		array(
-        				'name' => 'updated_at',
-        		),
+                'created' =>
+                array(
+                        'name' => 'created_at',
+                ),
+                'updated' =>
+                array(
+                        'name' => 'updated_at',
+                ),
         ));
 
         $this->actAs($timestampable0);

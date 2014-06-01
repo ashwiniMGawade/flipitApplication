@@ -1,0 +1,49 @@
+<?php $articleImage = PUBLIC_PATH_CDN.ltrim($this->articleImage['path'], "/") . 'thum_article_medium_'. $this->articleImage['name']; 
+
+if ($this->partialCounter == 1) {
+    $shopName = $this->partialLoop()->view->currentStoreInformation[0]['name'];
+    ?>
+    <header class="heading-box text-advice">
+       <h2><?php echo $this->translate("General money saving advice &amp; tricks for shopping at"). " " . $shopName; ?></h2>
+    </header>
+   <?php
+} 
+?>
+<section class="tips-section">
+    <article class="block">
+        <a onClick="javascript:viewCounter('onclick', 'article', <?php echo $this->id ; ?>);" 
+        href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('plus').'/'.$this->permalink;?>"
+        title='<?php echo $this->title;?>'>
+            <div class="image">
+                <img id="<?php echo $this->articles['id']; ?>" alt="<?php echo $this->title;?>" src="<?php echo $articleImage;?>" width="216" height="129">
+            </div>
+            <div class="box">
+                <h2>
+<?php 
+if (strlen($this->title) > 35) {
+    echo substr($this->title, 0, 35).'..';
+} else {
+    echo $this->title;
+}
+?>
+                </h2>
+                <p>
+<?php 
+if (isset($this->chapters[0])) {
+    if ($this->chapters[0]['content']!=null || $this->chapters[0]['content']!='undefined' || $this->chapters[0]['content']!='') {
+        $allowedTags = '<p>';
+        $articleContent = $this->chapters[0]['content'];
+        $articleContent = strip_tags($articleContent);
+        if (strlen($articleContent) > 120) {
+            echo substr($articleContent, 0, 120).'...';
+        } else {
+            echo $articleContent;
+        }
+    }
+}
+?>
+                </p>
+            </div>
+        </a>
+    </article>
+</section>    

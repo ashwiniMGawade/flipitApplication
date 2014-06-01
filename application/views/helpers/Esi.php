@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Copyright (c) 2010, Bas de Nooijer
  * All rights reserved.
@@ -17,7 +17,7 @@
  *   * Neither the name of Raspberry nor the names of its contributors may be
  *     used to endorse or promote products derived from this software without
  *     specific prior written permission.
- 
+
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&quot;
  * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -34,13 +34,13 @@
  * @copyright   2010, raspberry.nl
  * @license     http://www.opensource.org/licenses/bsd-license.php
  */
- 
+
 /** Zend_Controller_Front */
 require_once 'Zend/Controller/Front.php';
- 
+
 /** Zend_View_Helper_Abstract.php */
 require_once 'Zend/View/Helper/Abstract.php';
- 
+
 /**
  * Helper for Varnish Edge Side Includes
  */
@@ -48,28 +48,28 @@ require_once 'Zend/View/Helper/Abstract.php';
 
 class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
 {
- 
+
     /**
      * Default ESI header name
      *
      * @var string
      */
     protected static $_varnishHeaderName = 'esi-enabled';
- 
+
     /**
      * Default ESI header value
      *
      * @var string
      */
     protected static $_varnishHeaderValue = '1';
- 
+
     /**
      * Has the Varnish header been sent?
      *
      * @var boolean
      */
     protected static $_varnishHeaderSent = false;
- 
+
     /**
      * Sets the ESI header settings (to match your Varnish VCL)
      *
@@ -81,7 +81,7 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
         self::$_varnishHeaderName = $name;
         self::$_varnishHeaderValue = $value;
     }
- 
+
     /**
      * Create an ESI tag for a given SRC.
      *
@@ -93,8 +93,7 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
 
         if(!empty($_SERVER['HTTP_X_VARNISH'])){
             // If the ESI headers have not been sent yet do it now
-            if(!self::$_varnishHeaderSent)
-            {
+            if(!self::$_varnishHeaderSent) {
                 $response = Zend_Controller_Front::getInstance()->getResponse();
                 $response->setHeader(self::$_varnishHeaderName, self::$_varnishHeaderValue);
                 self::$_varnishHeaderSent = true;
@@ -103,17 +102,17 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
        }else{
             // fetch with ajax. We still we wat to show the html
             $divID = rand(0,99999);
-            echo '<div id="'.$divID.'"></div>';
+            echo '<nav class="account-box" id="'.$divID.'"></nav>';
            ?>
             <script type="text/javascript">
-                $.get('<?php echo HTTP_PATH . ltrim($src , '/'); ?>', function(data) {
+                $.get('<?php echo HTTP_PATH . ltrim($src , '/'); ?>', function (data) {
                   $('#<?php echo $divID; ?>').html(data);
                   console.log('Load of <?php echo $src; ?> was performed with ajax.');
                 });
             </script>
             <?php
-         }     
+         }
 
     }
- 
+
 }

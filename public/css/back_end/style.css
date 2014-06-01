@@ -1677,7 +1677,8 @@ abbr.abbrNoFomatting
 #languageTable_filter label,
 #pageListTbl_filter label,
 div#chainTable_filter label,
-div#searchChainItemTable_filter label
+div#searchChainItemTable_filter label,
+#emailsListTable_filter label
 {
 	display: none;
 }
@@ -3412,3 +3413,19 @@ div.wrap.newsletter-setting-container {
     vertical-align: top;
     float: left;
  }
+
+.category-image{
+    width: 275px;
+    margin-right: 245px;
+    margin-top: -2px !important;
+}
+
+.select-width {
+    width: 400px!important;
+}
+.mb300{
+    margin-bottom: 400px;
+}
+.select-width ul.select2-results {
+    max-height: 300px;
+}

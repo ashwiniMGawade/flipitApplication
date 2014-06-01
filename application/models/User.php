@@ -13,6 +13,94 @@
 class User extends BaseUser
 {
 
+    ##########################################################
+    ########### REFACTORED CODE ##############################
+    ##########################################################
+    /**
+     * Function getAllUsersDetail.
+     * 
+     * Get users detail.
+     * 
+     * @return array $usersData
+     * @version 1.0
+     */
+    public static function getAllUsersDetails($websiteName)
+    {
+        $usersData = Doctrine_Query::create()
+        ->select("u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing, u.popularKortingscode, pi.name, pi.path")
+        ->from('User u')
+        ->leftJoin("u.profileimage pi")
+        ->leftJoin("u.refUserWebsite rfu")
+        ->leftJoin("rfu.Website w")
+        ->where("u.deleted = 0")
+        ->andWhere("u.showInAboutListing = 1")
+        ->andWhere("w.url ='".$websiteName."'")
+        ->fetchArray();
+        return $usersData;
+    }
+
+    public static function getUserIdBySlugName($slug)
+    {
+        $userDetails = Doctrine_Query::create()
+        ->select("u.id")
+        ->from('User u')
+        ->where("u.slug = '$slug'")
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        return !empty($userDetails) ? $userDetails['id'] : '';
+    }
+
+    public static function getUserProfileDetails($userId)
+    {
+        $userDetails = Doctrine_Query::create()
+        ->select("u.* , w.id, pi.name, pi.path")
+        ->addSelect('DATEDIFF(NOW(), u.created_at) as sinceDays')
+        ->from('User u')
+        ->leftJoin("u.website w")
+        ->leftJoin("u.profileimage pi")
+        ->where("u.id = ?", $userId)
+        ->andWhere("u.showInAboutListing = 1")
+        ->andWhere("u.deleted = 0")
+        ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        return $userDetails;
+    }
+
+    public static function getUserFavouriteStores($userId)
+    {
+        $userFavouriteStores  = Doctrine_Query::create()
+        ->select('a.*,s.id as sid,s.name as name,s.permalink, img.*')
+        ->from('Adminfavoriteshop a')
+        ->leftJoin('a.shops s')
+        ->leftJoin('s.logo img')
+        ->where('userId='.$userId)
+        ->andWhere('s.deleted=0')
+        ->andWhere('s.status=1')
+        ->fetchArray();
+        return $userFavouriteStores;
+    }
+
+    public static function getUserDetails($userId)
+    {
+        $userDetails = Doctrine_Query::create()
+            ->select("u.id,u.firstName,u.lastName,u.addtosearch, u.mainText, u.slug, u.google, pi.name, pi.path")
+            ->from('User u')
+            ->leftJoin("u.profileimage pi")
+            ->where("u.id = ?" , $userId)
+            ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+        return $userDetails;
+  }
+    public static function getProfileImage($UserId)
+    {
+        $profileImage = Doctrine_Query::create()->select("u.id,u.firstName,u.lastName,u.addtosearch, u.slug, u.google, pi.name, pi.path")
+        ->from('User u')
+        ->leftJoin("u.profileimage pi")
+        ->where("u.id = ?" , $UserId)
+        ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+        return $profileImage;
+    }
+    ##########################################################
+    ########### END REFACTORED CODE ##########################
+    ##########################################################
+    
     //wwconst USER_SET_STATUS = 0;
 
     const INVALID_NEW_PASSWORD_STATUS = "-2";
@@ -26,8 +114,8 @@ class User extends BaseUser
      * @author kraj
      * @version 1.0
      */
-    public function setPassword($password) {
-
+    public function setPassword($password)
+    {
             $this->_set('password', md5($password));
             $this->_set('passwordChangeTime', date("Y-m-d H:i:s"));
     }
@@ -37,8 +125,8 @@ class User extends BaseUser
      * @author kraj
      * @version 1.0
      */
-    public function validatePassword($passwordToBeVerified) {
-
+    public function validatePassword($passwordToBeVerified)
+    {
         if ($this->password == md5($passwordToBeVerified)) {
            return true;
         }
@@ -57,8 +145,7 @@ class User extends BaseUser
     public function isPasswordDifferent($newPassword)
     {
 
-        if($this->password === md5($newPassword))
-        {
+        if($this->password === md5($newPassword)) {
             return false;
         }
 
@@ -70,7 +157,8 @@ class User extends BaseUser
      * @author kraj
      * @version 1.0
      */
-    public function validateEmail($emailToBeVerified) {
+    public function validateEmail($emailToBeVerified)
+    {
         if ($this->email == ($emailToBeVerified)) {
             return true;
         }
@@ -85,8 +173,8 @@ class User extends BaseUser
      * @author kraj
      * @version 1.0
      */
-    public static function getWebsite($userId, $roleId) {
-
+    public static function getWebsite($userId, $roleId)
+    {
         switch ($roleId) {
             case '1':
                 $Q = Doctrine_Query::create()->from("Website");
@@ -106,8 +194,7 @@ class User extends BaseUser
         //restructure manual array for user website
         $newArray = array();
 
-        if($roleId=='1')
-        {
+        if($roleId=='1') {
 
             $websites = $ar ;
         } else {
@@ -117,8 +204,7 @@ class User extends BaseUser
 
         $websites = BackEnd_Helper_viewHelper::msort($websites, 'name','kortingscode.nl');
 
-        foreach ($websites as $website)
-        {
+        foreach ($websites as $website) {
             $newArray[] = array('id' => $website['id'], 'name' => $website['name']);
         }
 
@@ -133,8 +219,8 @@ class User extends BaseUser
      * @author kraj
      * @version 1.1  updated by spsingh
      */
-    public function addUser($params,$imageName) {
-
+    public function addUser($params,$imageName)
+    {
         //get extension of the file
         //echo "<pre>";
         //print_r($params); die("dddd");
@@ -150,10 +236,9 @@ class User extends BaseUser
         $this->firstName = BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
         $this->email = BackEnd_Helper_viewHelper::stripSlashesFromString($params['email']);
         $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
-
-
-        if($this->isValidPassword($params['password']))
-        {
+        $this->countryLocale = $params['locale'];
+ 
+        if($this->isValidPassword($params['password'])) {
             self::setPassword($params['password']) ;
             $this->save();
 
@@ -275,8 +360,8 @@ class User extends BaseUser
      * @author kkumar
      * @version 1.0
      */
-    public function updateLoginTime($id){
-
+    public function updateLoginTime($id)
+    {
         $user = Doctrine_Core::getTable("User")->find($id);
         if($user->currentLogIn=='0000-00-00 00:00:00'){
             $user->currentLogIn = date('Y-m-d H:i:s');
@@ -296,8 +381,7 @@ class User extends BaseUser
 
     public function getPermissions()
     {
-        if( intval($this->id) > 0 )
-        {
+        if( intval($this->id) > 0 ) {
              $perm = $genralPermission =  array();
              $perm['roles'] =    $this->role->toArray();
 
@@ -353,8 +437,8 @@ class User extends BaseUser
      * @param array $params
      * @author spsingh
      */
-    public function update($params,$imageName='') {
-
+    public function update($params,$imageName='')
+    {
         //echo "<pre>";
         //print_r($params); die("dddd");
         $addto = BackEnd_Helper_viewHelper::stripSlashesFromString(isset($params['addtosearch']) ? $params['addtosearch'] : '');
@@ -377,7 +461,8 @@ class User extends BaseUser
         $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['dislike']);
         $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
-
+        $this->countryLocale = $params['locale'];
+        
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
 
@@ -419,13 +504,11 @@ class User extends BaseUser
         if(isset($params['confirmNewPassword']) && ! empty($params['confirmNewPassword'])){
 
             # apply validation on password like it should strong enough and not same as previous one
-            if(! $this->isPasswordDifferent($params['confirmNewPassword']))
-            {
+            if(! $this->isPasswordDifferent($params['confirmNewPassword'])) {
                 return  array('error' => true, 'message' => 'New password can\'t be same as previous password');
             }
 
-            if($this->isValidPassword($params['confirmNewPassword']))
-            {
+            if($this->isValidPassword($params['confirmNewPassword'])) {
                 self::setPassword($params['confirmNewPassword']) ;
                 $this->save();
 
@@ -467,8 +550,7 @@ class User extends BaseUser
 
 
         // update session if profile is being updated
-        if($this->id == Auth_StaffAdapter::getIdentity()->id)
-        {
+        if($this->id == Auth_StaffAdapter::getIdentity()->id) {
                 new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this);
         }
 
@@ -570,8 +652,8 @@ class User extends BaseUser
      * @author kraj
      * @version 1.0
      */
-    function updateInDatabase($id, $fullName, $flag){
-
+    public function updateInDatabase($id, $fullName, $flag)
+    {
         $application = new Zend_Application(APPLICATION_ENV,
                 APPLICATION_PATH . '/configs/application.ini');
 
@@ -579,7 +661,7 @@ class User extends BaseUser
 
         foreach ( $connections as $key => $connection ) {
 
-            // check database is being must be site 
+            // check database is being must be site
             if ($key != 'imbull' && isset($connection ['dsn'])) {
 
                 # create a run tiem connection to all site to update editor data
@@ -588,7 +670,7 @@ class User extends BaseUser
 
 
                 if($flag==0){
-        
+
                     $o = Doctrine_Query::create($conn)->update('Offer')->set('authorName',"'$fullName'")
                         ->where('authorId=' . $id);
                     $o->execute();
@@ -631,7 +713,7 @@ class User extends BaseUser
                         $o = Doctrine_Query::create($conn)->update('Offer')->set('authorName',"'$fullName'")
                                 ->set('authorName',"'$fullName'")
                                 ->set('authorId',0)
-                                ->whereIn('id', $ids) 
+                                ->whereIn('id', $ids)
                                 ->execute();
 
                     }
@@ -685,7 +767,7 @@ class User extends BaseUser
                     $shops = Doctrine_Query::create($conn)
                         ->select('id,name')->from('Shop')
                         ->where('contentManagerId=' . $id)->fetchArray();
-                    
+
                     # check if there is atleast one shop exists in the array
                     if(count($shops) > 0){
 
@@ -717,7 +799,8 @@ class User extends BaseUser
     * @author kkumar
     * @version 1.0
     */
-    function setUserSession($uId,$token){
+    public function setUserSession($uId,$token)
+    {
         $q = Doctrine_Query::create()
         ->select('id')->from('UserSession')->orderBy('id desc')->limit(1)->fetchArray();
         $id = 1;
@@ -743,8 +826,8 @@ class User extends BaseUser
     }
 
 
-    public static function getManagersLists($site_name){
-
+    public static function getManagersLists($site_name)
+    {
         $conn2=BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         /* Initialize action controller here */
 
@@ -782,7 +865,8 @@ class User extends BaseUser
     * @author kraj
     * @version 1.0
     */
-  public static function getTopFiveForAutoComp($for,$param){
+  public static function getTopFiveForAutoComp($for,$param)
+  {
         $data = Doctrine_Query::create()
         ->select('u.firstName as firstName')
         ->from("User u")
@@ -793,8 +877,7 @@ class User extends BaseUser
         ->orderBy("u.firstName ASC")->limit(5)->fetchArray();
         $ar =  array();
         if(sizeof($data) > 0){
-        foreach ($data as $d)
-        {
+        foreach ($data as $d) {
             $ar[] =  $d['firstName'];
 
         }
@@ -812,7 +895,8 @@ class User extends BaseUser
    * @author kraj
    * @version 1.0
    */
-  public static function getUserList($params){
+  public static function getUserList($params)
+  {
     $role = $params['role'];
     $srh = $params['searchtext'];
 
@@ -822,8 +906,7 @@ class User extends BaseUser
         ->from("User u")->leftJoin('u.profileimage p')
         ->where('u.deleted=0')
         ->addWhere('u.roleId >='.Auth_StaffAdapter::getIdentity()->roleId);
-    if((intval($role)) > 0)
-    {
+    if((intval($role)) > 0) {
         //add role search
         $data->addWhere('u.roleId='.$role);
     }
@@ -861,8 +944,7 @@ class User extends BaseUser
     ->from("User u")->leftJoin('u.profileimage p')
     ->where('u.deleted=1')
     ->addWhere('u.roleId >='.Auth_StaffAdapter::getIdentity()->roleId);
-    if((intval($role)) > 0)
-    {
+    if((intval($role)) > 0) {
         //add role search
         $data->addWhere('u.roleId='.$role);
     }
@@ -881,8 +963,8 @@ class User extends BaseUser
                     array(
                     )));
  }
- function getPageAutor($site_name){
-
+ function getPageAutor($site_name)
+ {
     $data = Doctrine_Query::create()
     ->select('u.id,u.firstName as fname,u.lastName as lname')
     ->from("User u")
@@ -901,8 +983,8 @@ class User extends BaseUser
    * @version 1.0
    * @return integer $flag
    */
-  public static function addStoreInList($name) {
-
+  public static function addStoreInList($name)
+  {
     $connUser = BackEnd_Helper_viewHelper::addConnection();
     BackEnd_Helper_viewHelper::closeConnection($connUser);
     $connSite = BackEnd_Helper_viewHelper::addConnectionSite();//connection generate with second database
@@ -959,7 +1041,8 @@ class User extends BaseUser
    * @author kraj
    * @version 1.0
    */
-  public static function searchTopTenStore($keyword,$selctedshop) {
+  public static function searchTopTenStore($keyword,$selctedshop)
+  {
     $SP = $selctedshop!='' ? $selctedshop: 0;
     $data = Doctrine_Query::create()
         ->select('s.name as name,s.id as id')
@@ -1014,28 +1097,6 @@ class User extends BaseUser
     return $userFevoriteCat;
   }
   /**
-   * get favorites store related currect user(admin)
-   * use in  normal list
-   * @param integer $id
-   * @param array $favShop
-   * @author kraj
-   * @version 1.0
-   */
-  public static function getUserFavoritesStore($id)
-  {
-    $favShop  = Doctrine_Query::create()
-    ->select('a.*,s.id as sid,s.name as name,s.permalink, img.*')
-    ->from('Adminfavoriteshop a')
-    ->leftJoin('a.shops s')
-    ->leftJoin('s.logo img')
-    ->where('userId='.$id)
-    ->andWhere('s.deleted=0')
-    ->andWhere('s.status=1')
-    ->fetchArray();
-    return $favShop;
-  }
-
-  /**
    * get user detail
    * use in  normal list
    * @param integer $id
@@ -1043,8 +1104,8 @@ class User extends BaseUser
    * @author kkumar
    * @version 1.0
    */
-  public static function getUserDetail($uId){
-
+  public static function getUserDetail($uId)
+  {
     $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
     BackEnd_Helper_viewHelper::closeConnection($connSite);
     $connUser = BackEnd_Helper_viewHelper::addConnection();
@@ -1081,32 +1142,6 @@ class User extends BaseUser
   }
 
   /**
-   * get users detail
-   * use in  normal list
-   * @return array userdetail
-   * @author Raman
-   * @version 1.0
-   */
-  public static function getAllUserDetail($site_name){
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing, pi.name, pi.path")
-    ->from('User u')
-    ->leftJoin("u.profileimage pi")
-    ->leftJoin("u.refUserWebsite rfu")
-    ->leftJoin("rfu.Website w")
-    ->where("u.deleted = 0")
-    ->andWhere("u.showInAboutListing = 1")
-    ->andWhere("w.url ='".$site_name."'")
-    ->fetchArray();
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
-
-
-  /**
    * get user Interesting category on ID basis
    * use in  normal list
    * @param integer $id
@@ -1114,8 +1149,8 @@ class User extends BaseUser
    * @author Raman
    * @version 1.0
    */
-  public static function getUserIntcategory($uId){
-
+  public static function getUserIntcategory($uId)
+  {
     $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
     BackEnd_Helper_viewHelper::closeConnection($connSite);
     $connUser = BackEnd_Helper_viewHelper::addConnection();
@@ -1130,31 +1165,6 @@ class User extends BaseUser
 
     return $data;
   }
-
-
-
-  /**
-   * Find editor since on ID basis
-   * use in  normal list
-   * @param integer $uid
-   * @return array data
-   * @author Raman
-   * @version 1.0
-   */
-  public static function findEditorSince($uid){
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("DATEDIFF(NOW(), u.created_at) as sinceDays")
-    ->from('User u')
-    ->where("u.deleted = 0")
-    ->andWhere("u.id = ?" , $uid)
-    ->fetchArray(null , Doctrine::HYDRATE_ARRAY);
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
   //******font-end function ******//
   /**
    * get user detail
@@ -1164,22 +1174,7 @@ class User extends BaseUser
    * @author kraj
    * @version 1.0
    */
-  public static function getProfileImage($uId){
 
-//      $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-//      BackEnd_Helper_viewHelper::closeConnection($connSite);
-
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.id,u.firstName,u.lastName,u.addtosearch, u.slug, u.google, pi.name, pi.path")
-    ->from('User u')
-    ->leftJoin("u.profileimage pi")
-    ->where("u.id = ?" , $uId)
-    ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    //$connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
 
   /**
    * returnEditorUrl
@@ -1192,8 +1187,7 @@ class User extends BaseUser
   public static function returnEditorUrl($id)
   {
         # check for valid user id
-        if(intval($id) > 0)
-        {
+        if(intval($id) > 0) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
             $data = Doctrine_Query::create()->select("u.slug")
                     ->from('User u')
@@ -1211,59 +1205,6 @@ class User extends BaseUser
         return false;
   }
 
-
-
-  /**
-   * get user detail
-   * use in  normal list
-   * @param integer $id
-   * @return array $data
-   * @author Raman Kumar
-   * @version 1.0
-   */
-  public static function getUserprofileDetail($uId){
-
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.* , w.id, pi.name, pi.path")
-    ->from('User u')
-    ->leftJoin("u.website w")
-    ->leftJoin("u.profileimage pi")
-    ->where("u.id = ?" , $uId)
-    ->andWhere("u.showInAboutListing = 1")
-    ->andWhere("u.deleted = 0")
-    //->getSqlQuery();
-    ->fetchArray(null , Doctrine::HYDRATE_ARRAY);
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
-
-  /**
-   * get user ID
-   * use in  normal list
-   * @param char $fname, $lname
-   * @return  $id
-   * @author Raman
-   * @version 1.0
-   */
-  public static function getUserId($slug){
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    BackEnd_Helper_viewHelper::closeConnection($connSite);
-    $connUser = BackEnd_Helper_viewHelper::addConnection();
-    $data = Doctrine_Query::create()->select("u.id")
-    ->from('User u')
-    ->where("u.slug = '$slug'")
-    //->andWhere("u.lastName = ?" , $lname)
-    //->getSqlQuery();
-    ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-
-    BackEnd_Helper_viewHelper::closeConnection($connUser);
-    $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-    return $data;
-  }
-
   /**
    * get users permalinks
    * use in  normal list
@@ -1271,8 +1212,8 @@ class User extends BaseUser
    * @author Raman
    * @version 1.0
    */
-  public static function getAllUserPermalinks($site_name){
-
+  public static function getAllUserPermalinks($site_name)
+  {
     $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
     BackEnd_Helper_viewHelper::closeConnection($connSite);
     $connUser = BackEnd_Helper_viewHelper::addConnection();
@@ -1298,8 +1239,8 @@ class User extends BaseUser
    * @author Raman
    * @version 1.0
    */
-  public static function getUserName($uId){
-
+  public static function getUserName($uId)
+  {
     $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
     BackEnd_Helper_viewHelper::closeConnection($connSite);
     $connUser = BackEnd_Helper_viewHelper::addConnection();
@@ -1324,8 +1265,8 @@ class User extends BaseUser
    * @author kraj
    * @version 1.0
    */
-  public static function getAllUser(){
-
+  public static function getAllUser()
+  {
     $data =  Doctrine_Query::create()->select('id,firstName,lastName,deleted')->from('User')->fetchArray();
     return $data;
   }
@@ -1341,26 +1282,22 @@ class User extends BaseUser
   {
 
 
-        if($this->validatePassword($params['curPassword']))
-        {
+        if($this->validatePassword($params['curPassword'])) {
 
             // check user want to update password or not based upon old password
             if(isset($params['newPassword']) && isset($params['confirmPassword'])){
 
-                if($params['newPassword'] !== $params['confirmPassword'])
-                {
+                if($params['newPassword'] !== $params['confirmPassword']) {
                     return  'New password and confrim don\'t matched';
                 }
 
 
-                if(! $this->isPasswordDifferent($params['confirmPassword']))
-                {
+                if(! $this->isPasswordDifferent($params['confirmPassword'])) {
                     return  'New password can\'t be same as previous password';
                 }
 
 
-                if($this->isValidPassword($params['confirmPassword']))
-                {
+                if($this->isValidPassword($params['confirmPassword'])) {
                             // encrypt new passsword
                     self::setPassword($params['confirmPassword']) ;
                     $this->save();

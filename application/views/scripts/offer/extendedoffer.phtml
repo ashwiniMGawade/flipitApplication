@@ -1,0 +1,135 @@
+<?php
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/flipit-expired.css");
+$currentDate = date('Y-m-d h:i:s ');
+$offer = (object) $this->couponDetails[0];
+$shopDiscussion = '';
+$partialViewPath = 'partials/';
+if($offer->shop['discussions'] == 1):
+    $shopDiscussion = $this->partial($partialViewPath.'_discussion.phtml', array('shopName' => $offer->shop['name']));
+endif;
+
+$offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$expiredMessage = $offerPartial->getExpiredOfferMessage($offer->endDate, $currentDate);
+
+$extendedOffer = $this->partial(
+    $partialViewPath.'_offer.phtml',
+    array(
+    'offers' => array($expiredMessage=='' ? $this->couponDetails[0] : $this->topOfferFromStore[0]),
+    'offersType'=>'extendedOffer',
+    'shopName' =>'',
+    'shop' =>'',
+    'zendForm'=>$this->form
+    )
+);
+$storeViewPartialPath = 'store/';
+$howToUseGuidePermalink= "how-to/".$this->currentStoreInformation[0]['permaLink'];
+$actualUrlWithoutDoubleSlash = explode("//", $this->currentStoreInformation[0]['actualUrl']);
+if (isset($actualUrlWithoutDoubleSlash[1])):
+    $actualUrl = $actualUrlWithoutDoubleSlash[1];
+else:
+    $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
+endif;
+
+$shopEditor = '';
+if($this->shopEditor != null):
+    $shopEditor = $this->partial(
+        $storeViewPartialPath.'_storeEditor.phtml',
+        array(
+           'shopEditor' => $this->shopEditor,
+           'shop' => $this->currentStoreInformation[0],
+           'howToUseGuidePermalink'=>$howToUseGuidePermalink,
+           'actualUrl'=>$actualUrl
+        )
+    );
+endif;
+
+$signUpWidgetForm = '';
+if ($this->currentStoreInformation[0]['showSignupOption']) :
+    $signUpWidgetForm = $this->partial(
+        $partialViewPath.'_signupForm.phtml',
+        array(
+           'zendForm' => $this->sidebarWidgetForm,
+           'signupFormWidgetType'=> 'sidebarWidget',
+           'shopId'=>$this->currentStoreInformation[0]['id'],
+           'shopLogoOrDefaultImage'=>''
+        )
+    );
+endif;
+
+$termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
+
+$howToUseOffer = $this->partial(
+    'offer/_howToUseOffer.phtml',
+        array(
+           'shop' => $this->currentStoreInformation[0]
+        )
+);
+$frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+echo $headerBlock = $frontEndViewHelper->getShopHeader($offer->shop, $expiredMessage, $offer->title);
+?>
+<div class="row">
+    <div id="content" class="col-md-8 col-sm-8">
+    <?php 
+    echo $expiredMessage;
+    echo $extendedOffer;
+if ($expiredMessage != '') { ?>
+         </section>
+    <div class="section">
+    <?php 
+}
+?>
+    <div class="code-details">
+<?php
+if ($expiredMessage != '') {
+    echo $this->partial(
+        'offer/_extendedExpiredCode.phtml',
+        array('expiredOffer'=>$this->couponDetails[0])
+    );
+}
+?>
+          <article class="box">
+            <h2><?php echo $this->translate('About this voucher');?></h2>
+            <p><?php echo $offer->extendedFullDescription;?></p>
+        </article>
+<?php if (!empty($termsAndConditions)) {?>
+        <article class="box terms-block">
+            <h2><?php echo $this->translate('Terms').' & '.$this->translate('Conditions');?></h2>
+            <ol class="num-list">
+            <?php echo $termsAndConditions;?>
+            </ol>
+        </article>
+    <?php
+}
+echo $howToUseOffer;
+?>
+    </div>
+<?php
+if ($expiredMessage != '') { ?>
+    </div>
+    <?php 
+}
+if ($expiredMessage == '') {
+    ?>
+         </section>
+    <?php 
+}
+        echo $shopDiscussion;
+    
+    ?>
+    </div>
+    <aside class="col-md-4 col-sm-4" id="sidebar">
+    <?php
+    echo $this->partial(
+        'store/_shop-sidebar.phtml',
+        array(
+            'shopEditor' => $shopEditor,
+            'latestShopUpdates'=> $this->latestShopUpdates,
+            'shopChain' => $this->shopChain,
+            'shop' => $this->currentStoreInformation[0],
+            'popularStoresList'=> $this->popularStoresList,
+            'signUpWidgetForm' => $signUpWidgetForm
+        )
+    );
+    ?>
+    </aside>
+</div>

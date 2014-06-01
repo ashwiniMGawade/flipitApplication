@@ -1,0 +1,257 @@
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.author-page .section-author .heading {
+  overflow: hidden;
+  padding: 26px 30px 32px;
+}
+.author-page .section-author .heading .icon {
+  float: left;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  margin: 4px 30px 0 0;
+}
+.author-page .section-author .heading .icon img {
+  display: block;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.author-page .section-author .heading .box {
+  overflow: hidden;
+}
+.author-page .section-author .heading h1 {
+  font-size: 40px;
+  line-height: 42px;
+  margin: 0 0 4px;
+}
+.author-page .section-author .heading .status {
+  display: inline-block;
+  vertical-align: middle;
+  text-transform: uppercase;
+  color: #ffffff;
+  font-size: 12px;
+  line-height: 14px;
+  background: #2181c0;
+  padding: 2px 7px;
+  margin: 0 0 0 3px;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.author-page .section-author .author-details {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.author-page .section-author .author-details li {
+  margin: 0 24px 0 0;
+}
+.author-page .section-author .author-details li,
+.author-page .section-author .author-details img,
+.author-page .section-author .author-details span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.author-page .section-author .author-details img {
+  margin: 0 4px 0 0;
+}
+.author-page .section-author .text-block {
+  font-size: 14px;
+  line-height: 24px;
+  overflow: hidden;
+  padding: 23px 27px 4px;
+  border-top: 1px solid #eaeaea;
+}
+.author-page .section-author .text-block p {
+  margin: 0 0 24px;
+}
+.author-page .section-author .box-statistics {
+  border-width: 1px 0;
+  border-style: solid;
+  border-color: #eaeaea;
+  overflow: hidden;
+}
+.author-page .section-author .box-statistics .col {
+  float: left;
+  width: 50%;
+  font-size: 33px;
+  line-height: 36px;
+  border-left: 1px solid #eaeaea;
+  padding: 30px 10px 40px;
+  text-align: center;
+}
+.author-page .section-author .box-statistics .add {
+  display: block;
+  padding: 14px 0 0;
+  color: #0077cc;
+}
+.author-page .section-author .box-statistics .add span {
+  display: inline-block;
+  vertical-align: middle;
+  font-size: 14px;
+  line-height: 18px;
+  color: #33383e;
+  margin: 0 0 0 4px;
+}
+.author-page .section-author .box-statistics .quantity {
+  font-weight: normal;
+  display: inline-block;
+  vertical-align: middle;
+}
+.author-page .section-author .box-statistics:first-child {
+  border: none;
+}
+.author-page .section-author .bottom {
+  padding: 26px 27px;
+  overflow: hidden;
+}
+.author-page .section-author .bottom h2 {
+  font-size: 21px;
+  line-height: 25px;
+  font-weight: normal;
+  margin: 0 0 29px;
+}
+.author-page .section-author .shops {
+  margin-right: -13.5%;
+}
+.author-page .section-author .shops img {
+  border: 1px solid #eaeaea;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.author-page .tips-section {
+  margin: 0 0 26px;
+}
+.author-page .tips-section .block {
+  padding: 30px 29px;
+  margin: 0;
+}
+.author-page .tips-section .block a {
+  border: none;
+}
+.author-page .tips-section .block a .box {
+  padding: 2px 30px;
+}
+.author-page .tips-section .block a .box h2 {
+  font-size: 16px;
+  color: #0077cc;
+  text-decoration: underline;
+  margin: 0 0 7px;
+}
+.author-page .tips-section .block a:hover,
+.author-page .tips-section .block a:focus {
+  color: #878a8d;
+  background: none;
+}
+.author-page .tips-section .block a .image {
+  width: 19%;
+  border: 1px solid #ddd;
+  position: relative;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.author-page .tips-section .block a .image:after {
+  background: none;
+}
+.author-page .tips-section .block a .image img {
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+}
+.author-page .tips-section .block a .image .title {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  bottom: 0;
+  text-align: center;
+  font-size: 12px;
+  padding: 3px 2px;
+  text-transform: uppercase;
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.6);
+  border-radius: 0 0 2px 2px;
+  -webkit-border-radius: 0 0 2px 2px;
+}
+.author-page .section.section-author {
+  margin: 0 0 28px;
+}
+@media only screen and (max-width: 1199px) {
+  .author-page .section-author .shops {
+    margin-right: -5.5%;
+  }
+}
+@media only screen and (max-width: 979px) {
+  .author-page .section-author .heading {
+    padding: 11px 15px 17px;
+  }
+  .author-page .section-author .heading h1 {
+    font-size: 36px;
+    line-height: 40px;
+  }
+  .author-page .section-author .text-block {
+    font-size: 13px;
+    line-height: 18px;
+    padding: 11px 15px 0;
+  }
+  .author-page .section-author .text-block p {
+    margin: 0 0 14px;
+  }
+  .author-page .section-author .box-statistics .col {
+    font-size: 26px;
+    line-height: 26px;
+  }
+  .author-page .section-author .box-statistics .add span {
+    font-size: 13px;
+    line-height: 18px;
+  }
+  .author-page .section-author .bottom {
+    padding: 14px 15px;
+  }
+  .author-page .tips-section .block {
+    padding: 15px;
+  }
+  .author-page .tips-section .block a .box {
+    padding: 2px 15px;
+  }
+}
+@media only screen and (max-width: 479px) {
+  .author-page .section-author .heading {
+    padding: 10px;
+  }
+  .author-page .section-author .heading .icon {
+    margin-right: 15px;
+  }
+  .author-page .section-author .heading h1 {
+    font-size: 26px;
+    line-height: 30px;
+  }
+  .author-page .section-author .heading h1 span {
+    display: block;
+  }
+  .author-page .section-author .author-details img {
+    margin: 0;
+  }
+  .author-page .section-author .author-details li {
+    margin: 0 4px 0 0;
+  }
+  .author-page .section-author .box-statistics .col {
+    font-size: 20px;
+    line-height: 24px;
+  }
+  .author-page .section-author .box-statistics .quantity {
+    display: block;
+  }
+  .author-page .section-author .text-block {
+    padding: 10px;
+  }
+  .author-page .section-author .bottom {
+    padding: 8px 10px;
+  }
+  .author-page .tips-section .block {
+    padding: 5px;
+  }
+  .author-page .tips-section .block a .box {
+    padding: 0;
+  }
+}

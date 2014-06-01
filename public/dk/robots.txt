@@ -2,9 +2,9 @@ User-agent: *
 Disallow:/info/
 Disallow:/rssfeed/
 Disallow:/out/
-Disallow:/search/
+Disallow:/sog/
 Disallow:/admin/
 
-Sitemap:http://www.flipit.com/dk/sitemaps/sitemap_shops.xml
-Sitemap:http://www.flipit.com/dk/sitemaps/sitemap_saving-guides.xml
-Sitemap:http://www.flipit.com/dk/sitemaps/sitemap_main.xml
+Sitemap:http://www.flipit.com/public/dk/sitemaps/sitemap_shops.xml
+Sitemap:http://www.flipit.com/public/dk/sitemaps/sitemap_plus.xml
+Sitemap:http://www.flipit.com/public/dk/sitemaps/sitemap_main.xml

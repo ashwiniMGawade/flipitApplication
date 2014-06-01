@@ -1,0 +1,204 @@
+<?php
+$this->minifyHeadScript()->prependFile (HTTP_PATH."public/js/front_end/stickyfloat.js");
+$headerSearch = new FrontEnd_Helper_viewHelper();
+echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>null));
+	
+        	if(count($this->shopdetail['logo'])!=0) :
+        			$shopimg=ltrim($this->shopdetail['logo']['path'],"/"). 'thum_medium_store_'. $this->shopdetail['logo']['name'];
+        		
+        	else :
+        		$shopimg="images/NoImage/NoImage_200x100.jpg";
+        	endif;
+        	
+        	if($this->shopdetail['howtoTitle'] != "") :
+        	
+        		$pageTitle = $this->shopdetail['howtoTitle'];
+        	endif;
+        	
+        	if(count($this->coupons)>0) :
+        	
+        		$offerString = $this->partialLoop('partials/offer.phtml', $this->coupons);
+        	else :
+        		
+        		$offerString = '<div class="yellow-box2 mt20 clr" style="width:704px;">
+        		        					<div class="yellow-box2-img"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/icon19.png" width="32" height="32" /></div>
+        		        					<div class="yellow-box2-text text-black"><strong>'. $this->translate('Sorry, we dont have any amazing ') . $this->shopdetail['name'] . $this->translate(' offers right now!') . '</strong><br />
+        		        					<p>' .$this->translate('Check out the'). '<a class="text-blue-link" href="'. $this->shopdetail['affliateProgram']['name']=='' ? $this->shopdetail['actualUrl'] : $this->shopdetail['affliateProgram']['name']. '">'. $this->shopdetail['name'] . $this->translate(' website') . '</a>' . $this->translate(' to see what direct offers are available. Our deal team are working hard to bring you more great discounts soon.') . '</p>
+        		        					<p>'. $this->translate('However, you might also like these vouchercodes we have selected for you! Dont forget to have a look at or'). '<a class="text-blue-link" href="' .HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen').'">'.$this->translate('Categories').'</a>'. $this->translate('or Stores overview.') . '</p>
+        		        					</div>
+        		        					</div>';
+        	endif;
+        	
+        	if($this->shopdetail['name']!="") :
+        	   $nameString = $this->shopdetail['name'];
+        	endif;
+        	
+        	if($this->profileImage['profileimage']):
+        			$img = PUBLIC_PATH_CDN.ltrim($this->profileImage['profileimage']['path'],"/")."thum_".$this->profileImage['profileimage']['name'];
+        		
+        	else:
+        			$img = HTTP_PATH ."public/images/NoImage/NoImage_200x100.jpg";
+        	endif;
+        	
+        	if($this->shopdetail['shopText']!="") :
+        		$shopText = $this->shopdetail['shopText'];
+        	else :
+        		$shopText = "No Description found";
+        	endif;
+        	
+        	if(isset($this->shopdetail['deepLink']) && $this->shopdetail['deepLink']!=null):
+        		$url = $this->shopdetail['deepLink'];
+        	elseif(isset($this->shopdetail['refUrl']) && $this->shopdetail['refUrl']!=null):
+        		$url = $this->shopdetail['refUrl'];
+        	elseif(isset($this->shopdetail['actualUrl']) && $this->shopdetail['actualUrl']!=null):
+        		$url = $this->shopdetail['actualUrl'];
+        	else:
+        		$url = HTTP_PATH_LOCALE.@$this->shopdetail['permalink'];
+        	endif;
+        	
+        	$pathLink = $this->translate('out/shop/');
+        	$urlToShow = HTTP_PATH_LOCALE.$pathLink.@$this->shopdetail['id'];
+ ?>
+<script>
+$(document).ready(function(){
+	$('#floatDiv').stickyfloat( {duration: 0} );
+});
+function scrollbyChapter(el){
+	
+    var aTag = $("#"+ $(el).attr('rel') );
+    $('html,body').animate({scrollTop: aTag.offset().top},'slow');
+ }
+</script>
+    
+        <!-- Alle Winkels Starts -->
+        <div class="white-bg">
+                	
+	        <div class="alle-winkels-outer">
+	        
+	        	<!-- Alle Winkels Left Starts -->
+	        	<div class="alle-winkels-left">
+	        	<!-- conditons start -->
+		        	
+			        	<div class="mark-spencer-left">
+        	            	<div class="ms-grey-col-left">
+        	            	   <?php if( @$this->shopdetail['affliateProgram']):?>
+	        	            	   <a target="_blank" rel="nofollow,noindex" class="text-blue-link"  href="<?php echo $urlToShow;?>">
+	        	            	   	<img class="radiusImg" src="<?php echo PUBLIC_PATH_CDN.$shopimg;?>" alt="<?php echo @$this->shopdetail['name']; ?>"/>
+	        	            	   </a>
+        	            	   <?php else: ?>
+									<img class="radiusImg" src="<?php echo PUBLIC_PATH_CDN.$shopimg;?>" alt="<?php echo @$this->shopdetail['name']; ?>"/>
+								<?php endif;?>
+        	            	</div>
+        	            </div>
+        	            <div class="mark-spencer-right mt10">
+	        	            <h1><?php echo @$pageTitle; ?></h1>
+        	            <div class="storedetail-subtitle"><?php echo '' . $this->shopdetail['howtoSubtitle'];?></div>
+		             		<div>
+		             			<?php if( @$this->shopdetail['affliateProgram']):?>
+				             		<a target="_blank" rel="nofollow,noindex" class="btn text-blue-link" rel1='<?php echo $url;?>' onclick="cloakingLink(event, this);" href="<?php echo $urlToShow;?>">
+				             		<img alt='weblogo' class="weblogo" src="<?php echo  HTTP_PATH; ?>public/images/front_end/weblogo.png"/>
+				              			<?php  
+				              			   $h = explode("//",$this->shopdetail['actualUrl']);
+				              			   if(isset($h[1])):
+				              			   	echo $h[1];
+				              			   else :
+				              			   	echo $this->shopdetail['actualUrl'];
+				              			   endif;
+				              			?>
+				              		</a>
+			              		<?php endif;?>
+			              		
+			              		<a class="btn text-blue-link fav-btn"  href="<?php echo HTTP_PATH_LOCALE.$this->shopdetail['permaLink'];?>" >
+								  <?php echo $this->translate('back to') . " " . $this->shopdetail['name'];?> 
+								</a>
+								
+			              	</div>
+              			</div>
+		        	  </div>
+		            <!-- Alle Winkels Left Ends -->	
+	            
+	           <!-- Alle Winkels Right Starts -->
+	            <div class="alle-winkels-right">
+	            	<?php
+	          			//$url = "http://www.kortingscode.nl/"; 
+	        		    $url = HTTP_PATH;
+	          			$title = "";
+	          			$socialMedia = new FrontEnd_Helper_viewHelper();
+	       	  			echo $socialMedia->socialmediaSmall($url, $title,'moneysavingguide');
+	       			?>
+	            </div>
+	         	<!-- Alle Winkels Right Ends -->
+	        </div>
+	       
+         
+         <div class="clr"></div>  
+         <div class="alle-winkels-outer mt20">
+        	
+        	<?php if($this->showguide=="howtoguide") : ?>
+        	
+        		<div class="common-div"><?php echo $offerString; ?></div>
+        		
+        	<?php  elseif($this->showguide=="howtoguide1") : ?>
+        	
+	            <div class="common-div"><?php echo $offerString; ?></div>
+	            
+        	<?php elseif($this->showguide=="howtoguide2") : ?>
+        	
+        	    <div class="common-div"> <?php echo $offerString;?> </div>
+        	    
+        	<?php elseif($this->showguide=="howtoguideno") : ?> 
+        	
+        	    <div class="clr mt20">&nbsp;</div>
+        	    
+        	<?php endif; ?>
+       
+        </div>
+        <!-- Alle Winkels Ends -->
+        <!-- Separator Starts -->
+        <div class="separator">&nbsp;</div>
+    	<!-- Separator Ends --> 
+         
+    </div>   
+     	                	         
+     <div class="alle-winkels-outer">
+          <div class="guide-outer-new mt20ct-content-outer">
+        	<div class="ct-content-outer">
+                 <div class="guide-content-new">
+            		<?php 
+        			foreach ($this->shopdetail['howtochapter'] as $howtochapter) :
+	        			$pattern = array ('/\s/','/[\,+@#?$%^:&*!.]+/', '/(\')/');
+	        				 
+	        			$replace = array ("-","-");
+	        			$title = preg_replace ( $pattern, $replace, $howtochapter['chapterTitle'] );
+	        				 
+	        			$title = strtolower($title);
+	    				?>
+		        		<div class="guide-chantal-right-bot">
+			        	   <h2 id="<?php echo $title; ?>"><?php echo $howtochapter['chapterTitle']; ?></h2>
+		                   <p><?php echo $howtochapter['chapterDescription']; ?></p>
+				       	</div>
+					<?php endforeach;?>
+                        
+    		        	<div class="guide-content-new-right-scroll" id="floatDiv">
+    		            	<h4><?php echo $this->translate('Go To Chapter')?></h4>
+    		            	<ul>
+    		            		<?php 
+    		        				foreach ($this->shopdetail['howtochapter'] as $howtochapter) :
+    			        				$pattern = array ('/\s/','/[\,+@#?$%^:&*!.]+/', '/(\')/');
+    			        				 
+    			        				$replace = array ("-","-");
+    			        				$title = preg_replace ( $pattern, $replace, $howtochapter['chapterTitle'] );
+    			        				 
+    			        				$title = strtolower($title);
+    			        				
+    		        					?>
+    		            				<li><a href="javascript:void();" rel = "<?php echo $title; ?>" onclick="scrollbyChapter(this)"><?php echo $howtochapter['chapterTitle']; ?></a></li>
+    		            		<?php endforeach; ?>
+    		            	</ul>
+    		            	<div class="side-cor"></div>
+    		            </div>
+                    </div>
+	            </div>
+            </div>
+        </div>
+     

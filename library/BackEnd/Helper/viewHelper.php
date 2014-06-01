@@ -1,7 +1,40 @@
 <?php
 class BackEnd_Helper_viewHelper
 {
-	/**
+    #####################################################
+    ############# REFACORED CODE ########################
+    #####################################################	
+    public $zendTranslate = '';
+    public function __construct() {
+        $this->zendTranslate =Zend_Registry::get('Zend_Translate');
+    }
+
+    public function getOnOffButtonsForFeaturedCategory($featuredCategory)
+    {
+        if($featuredCategory == 1) {
+            $featuredOnClass = 'btn-primary default';
+            $featuredOffClass = '';
+        } else {
+            $featuredOnClass = '';
+            $featuredOffClass = 'btn-primary default';
+        }
+
+        $featuredCategoryButton = '<button onclick="setOnOff(event,\'featured-category\',\'on\');" class="btn '.$featuredOnClass.'" type="button">'.$this->zendTranslate->translate('Yes').'</button>                     
+            <button onclick="setOnOff(event,\'featured-category\',\'off\');" class="btn '.$featuredOffClass.'" type="button">'.$this->zendTranslate->translate('No').'</button>';
+        return $featuredCategoryButton;
+    }
+
+    public static function getLocaleByWebsite($localeId)
+    {
+        $websiteDetails = Website::getWebsiteDetails($localeId);
+        $localeName = explode('/', $websiteDetails['name']);
+        $locale = isset($localeName[1]) ?  $localeName[1] : "en";
+        return $locale;
+    }
+    #####################################################
+    ############# END REFACORED CODE ####################
+    #####################################################
+    /**
 	 * Mail sent ot the user registration and forgot password etc
 	 * @param array $recipents
 	 * @param string $subject
@@ -813,6 +846,37 @@ class BackEnd_Helper_viewHelper
 					 'shopPermalink' => $shopPermalink,
 					 'expDate' => $expDate,
 					 'dataOfferName' =>  $dataOfferName );
+	}
+
+
+	/**
+	 * getTemplateId
+	 * get template id
+	 * @param type of template
+	 * @author asharma
+	 */
+
+	public static function getTemplateId($type)
+	{
+		$id = Emails::getTemplateId($type);
+		return $id;
+		
+	}
+
+
+	/**
+	 * insertTemplateData
+	 * insert Template Data for inserting send date, counter
+	 * @param id of template
+	 * @author asharma
+	 */
+
+	public static function insertTemplateData($id)
+	{
+		$sendCounter =  Emails::getSendCounter($id);
+		$newCounterValue = $sendCounter + 1;
+		Emails::updateDateCounter($newCounterValue , $id);
+		
 	}
 
 }

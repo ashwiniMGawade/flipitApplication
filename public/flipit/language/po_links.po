@@ -69,37 +69,37 @@ msgstr "categorieen"
 
 #: modules/admin/controllers/ArticlecategoryController.php:354
 #: modules/admin/controllers/ArticleController.php:598
-#: views/scripts/bespaarwijzer/index.phtml:158
-#: views/scripts/bespaarwijzer/guidedetail.phtml:60
-#: views/scripts/bespaarwijzer/guidedetail.phtml:62
-msgid "bespaarwijzercat"
-msgstr "bespaarwijzercat"
+#: views/scripts/plus/index.phtml:158
+#: views/scripts/plus/guidedetail.phtml:60
+#: views/scripts/plus/guidedetail.phtml:62
+msgid "pluscat"
+msgstr "pluscat"
 
 #: modules/admin/controllers/UserController.php:954
-#: views/scripts/bespaarwijzer/guidedetail.phtml:42 models/User.php:962
+#: views/scripts/plus/guidedetail.phtml:42 models/User.php:962
 msgid "redactie"
 msgstr "redactie"
 
-#: controllers/BespaarwijzerController.php:19
-#: controllers/BespaarwijzerController.php:22
-#: controllers/BespaarwijzerController.php:98
+#: controllers/plusController.php:19
+#: controllers/plusController.php:22
+#: controllers/plusController.php:98
 #: views/scripts/partials/mostReadAcls.phtml:22
 #: views/scripts/store/msArticle.phtml:31 views/scripts/index/index.phtml:380
 #: views/scripts/index/index.phtml:387 views/scripts/index/index.phtml:399
 #: views/scripts/index/index.phtml:431
-#: views/scripts/bespaarwijzer/index.phtml:78
-#: views/scripts/bespaarwijzer/index.phtml:170
-#: views/scripts/bespaarwijzer/guidedetail.phtml:69
-#: views/scripts/bespaarwijzer/guidedetail.phtml:166
-#: views/scripts/bespaarwijzer/guidedetail.phtml:170
-#: views/scripts/bespaarwijzer/guidedetail.phtml:190
-#: views/scripts/bespaarwijzer/guidedetail.phtml:194
-#: views/scripts/bespaarwijzer/readMoreCategory.phtml:19
+#: views/scripts/plus/index.phtml:78
+#: views/scripts/plus/index.phtml:170
+#: views/scripts/plus/guidedetail.phtml:69
+#: views/scripts/plus/guidedetail.phtml:166
+#: views/scripts/plus/guidedetail.phtml:170
+#: views/scripts/plus/guidedetail.phtml:190
+#: views/scripts/plus/guidedetail.phtml:194
+#: views/scripts/plus/readMoreCategory.phtml:19
 #: Helper/viewHelper.php:696 Helper/viewHelper.php:697
 #: Helper/viewHelper.php:744 Helper/viewHelper.php:747
 #: Helper/viewHelper.php:1009
-msgid "bespaarwijzer"
-msgstr "bespaarwijzer"
+msgid "plus"
+msgstr "plus"
 
 #: controllers/OfferController.php:179 views/scripts/store/offer.phtml:258
 msgid "deals"
@@ -174,7 +174,7 @@ msgid "memberonlycodes"
 msgstr "membersonlycodes"
 
 #: views/scripts/myfavorite/leftpanel.phtml:19
-#: views/scripts/bespaarwijzer/category.phtml:117
+#: views/scripts/plus/category.phtml:117
 #: views/scripts/freesignup/step3.phtml:34
 msgid "compleet"
 msgstr "compleet"

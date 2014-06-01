@@ -1,0 +1,55 @@
+
+<script type="text/javascript">
+
+//google plus button
+
+window.___gcfg = {lang: 'en-US'};
+
+(function() {
+  var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+  po.src = 'https://apis.google.com/js/plusone.js';
+  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+})();
+
+//google plus button ends here 
+
+</script>	
+<?php 
+$dayDifference = FrontEnd_Helper_OfferPartialFunctions::getDaysDifference($this->offerdetail[0]['endDate']);
+
+?>
+<section id="code-lightbox">
+    <div id="popup1" class="lightbox">
+    <a class="glyphicon glyphicon-remove btn-close" onclick="custompopupClose()"></a>
+		<header class="head">
+			<div class="icon">
+				<img  src="<?php echo $logo; ?>" width="176" height="89" alt='<?php echo $this->offerdetail[0]['shop']['name']; ?>'>
+			</div>
+			<div class="box">
+				<div class="text">
+					<p><?php echo FrontEnd_Helper_OfferPartialFunctions::dateStringFormat($this->offerdetail[0], $dayDifference);?></p>
+					<h1><?php echo $this->offerdetail[0]['title']; ?></h1>
+				</div>
+			</div>
+				</header>
+				<div class="block">
+					<form role="form">
+						<fieldset>
+							<div class="holder">
+								<input class="default form-control" type="text" value="<?php echo $this->code; ?>">
+								<button class="btn orange btn-warning">Copy Code</button>
+							</div>
+							<a href="#" class="btn blue btn-primary"><?php echo $this->translate('VOER DEZE CODE IN TIJDENS DE BESTELLING'); ?></a>
+						</fieldset>
+					</form>
+				</div>
+				<footer class="bottom">
+					<a href="#" class="terms">Terms &amp; Conditions</a>
+					<div class="logo-box">
+						<img class="logo" width="109" height="49" alt="image description">
+						<span><?php echo $this->translate('Exclusive discount codes and deals');?></span>
+					</div>
+				</footer>
+			</div>
+</section>
+

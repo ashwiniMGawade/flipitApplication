@@ -1,0 +1,50 @@
+<?php
+if ($this->pageMode == true) {
+    $sidebarWidgetHtml = '';
+    $partialsViewPath = 'partials/';
+    $pageContent = '';
+    $contentDivStart ='';
+    $contentDivEnd = '';
+    if ($this->page['pageType'] == "offer") {
+        if ($this->offercount > 0) {
+            $pageContent = $this->partial(
+                $partialsViewPath.'_offer.phtml',
+                array(
+                   'offers'=> $this->offersPaginator,
+                   'offersType'=>'offerPage',
+                   'shopName'=> '',
+                   'shop'=>'',
+                   'zendForm'=>$this->form,
+               )
+            );
+        } else {
+            $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
+        }
+        $signUpWidgetForm = $this->partial(
+            $partialsViewPath.'_signupForm.phtml',
+            array(
+               'zendForm' => $this->sidebarWidgetForm,
+               'signupFormWidgetType'=> 'sidebarWidget',
+               'shopId'=>'',
+               'shopLogoOrDefaultImage'=>''
+            )
+        );
+        $sidebarWidgets = $this->widget . FrontEnd_Helper_viewHelper::socialMediaWidget(). $signUpWidgetForm;
+        $sidebarWidgetHtml = '<aside class="col-md-4 col-sm-4" id="sidebar">' . $sidebarWidgets . '</aside>';
+        $contentDivStart = '<div id="content" class="col-md-8 col-sm-8">';
+        $contentDivEnd = '</div>';
+    } else {
+        $pageContent='<div class="inner-section-wrapper"><h1>'.$this->page['pageTitle'].'</h1>'.stripslashes($this->page['content']) .'</div>';
+    }
+    $pageImagePath = PUBLIC_PATH_CDN.isset($this->pageLogo['path']).isset($this->pageLogo['name']);
+    $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+    //echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
+    <div class="row">
+         <?php echo $contentDivStart;?>
+             <div class="section">
+             <?php echo $pageContent; ?>
+             </div>
+         <?php echo $contentDivEnd . $sidebarWidgetHtml;?>
+    </div>
+    <?php 
+}

@@ -6,7 +6,7 @@ ini_set("memory_limit","1024M");
 // Define path to application directory
 defined('APPLICATION_PATH')
 || define('APPLICATION_PATH',
-		dirname(dirname(__FILE__)));
+        dirname(dirname(__FILE__)));
 
 defined('LIBRARY_PATH')
 || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
@@ -16,21 +16,21 @@ defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
 // Define application environment
 defined('APPLICATION_ENV')
 || define('APPLICATION_ENV',
-		(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-				: 'production'));
+        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
+                : 'production'));
 
 
 //Ensure library/ is on include_path
 set_include_path(
-		implode(PATH_SEPARATOR,
-				array(realpath(APPLICATION_PATH . '/../library'),
-						get_include_path(),)));
+        implode(PATH_SEPARATOR,
+                array(realpath(APPLICATION_PATH . '/../library'),
+                        get_include_path(),)));
 set_include_path(
-		implode(PATH_SEPARATOR,
-				array(realpath(DOCTRINE_PATH), get_include_path(),)));
+        implode(PATH_SEPARATOR,
+                array(realpath(DOCTRINE_PATH), get_include_path(),)));
 
 /** Zend_Application */
-//echo APPLICATION_PATH; 
+//echo APPLICATION_PATH;
 //echo LIBRARY_PATH;
 //echo DOCTRINE_PATH;
 //die;
@@ -39,7 +39,7 @@ require_once(DOCTRINE_PATH . '/Doctrine.php');
 
 // Create application, bootstrap, and run
 $application = new Zend_Application(APPLICATION_ENV,
-		APPLICATION_PATH . '/configs/application.ini');
+        APPLICATION_PATH . '/configs/application.ini');
 
 $connections = $application->getOption('doctrine');
 
@@ -70,33 +70,31 @@ $data = Doctrine_Query::create()->select('name,permaLink')->from('Shop')->fetchA
 $newArray = array();
 $i = 0;
 //echo "<pre>"; print_r($data); die;
-foreach ($data as $d)
-{
-	
-		$updatePermalink = Doctrine_Core::getTable('Shop')->find($d['id']);
-		$updatePermalink->permaLink = strtolower(preg_replace ( $pattern, $replace, $d['name'] ));
-		$updatePermalink->save();
-	
+foreach ($data as $d) {
+
+        $updatePermalink = Doctrine_Core::getTable('Shop')->find($d['id']);
+        $updatePermalink->permaLink = strtolower(preg_replace ( $pattern, $replace, $d['name'] ));
+        $updatePermalink->save();
+
 }
 
 $newArray = Doctrine_Query::create()->select('permaLink')->from('Shop')->fetchArray();
 
-foreach ($newArray as $new){	
+foreach ($newArray as $new){
 
-	/*$getRoutePermalink = Doctrine_Query::create()->select()
-	->from('RoutePermalink')
-	->where('permalink = "'.$new['permaLink'].'"')
-	->fetchArray();
-	
-	if(count($getRoutePermalink) == 0){*/
-		$updateRp = new RoutePermalink();
-		$updateRp->permalink = $new['permaLink'];
-		$updateRp->type = 'SHP';
-		$updateRp->exactlink = 'store/storedetail/id/'.$new['id'];
-		$updateRp->save();
+    /*$getRoutePermalink = Doctrine_Query::create()->select()
+    ->from('RoutePermalink')
+    ->where('permalink = "'.$new['permaLink'].'"')
+    ->fetchArray();
+
+    if(count($getRoutePermalink) == 0){*/
+        $updateRp = new RoutePermalink();
+        $updateRp->permalink = $new['permaLink'];
+        $updateRp->type = 'SHP';
+        $updateRp->exactlink = 'store/storedetail/id/'.$new['id'];
+        $updateRp->save();
 //	}
-	
+
 }
 
 echo 'done';
-?>

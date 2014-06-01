@@ -1,0 +1,176 @@
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.all-stores-page .content-holder {
+  background: #ffffff;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border: 1px solid #d8d8d8;
+  padding: 0 0 44px;
+  margin: 0 0 25px;
+  overflow: hidden;
+}
+.all-stores-page .content-holder .block {
+  font-size: 14px;
+  line-height: 18px;
+  border-top: 1px solid #eaeaea;
+  padding: 23px 29px;
+}
+.all-stores-page .content-holder .block:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.all-stores-page .content-holder .block h2 {
+  font-size: 33px;
+  line-height: 36px;
+  margin: 0 0 19px;
+}
+.all-stores-page .content-holder .block .shops {
+  padding: 6px 0 8px;
+}
+.all-stores-page .alphabet {
+  font-size: 19px;
+  padding: 35px 15px 34px;
+  margin: 0;
+  list-style: none;
+  text-transform: uppercase;
+  line-height: 22px;
+  text-align: center;
+  overflow: hidden;
+}
+.all-stores-page .alphabet li {
+  float: none;
+  display: inline-block;
+  vertical-align: top;
+  width: auto;
+  padding: 0 6px 0 6px;
+  border-left: 1px solid #ddd;
+}
+.all-stores-page .alphabet li:first-child {
+  border: none;
+  margin-left: 0;
+}
+.all-stores-page .alphabet li a {
+  color: #0077cc;
+}
+.all-stores-page .alphabet li a:hover,
+.all-stores-page .alphabet li a:focus {
+  color: #33383e;
+}
+.all-stores-page .shop-name {
+  margin: 0 -20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.all-stores-page .shop-name li {
+  margin: 0 0 6px;
+}
+.all-stores-page .shop-name li a {
+  color: #0077cc;
+}
+.all-stores-page .shop-name li a:hover,
+.all-stores-page .shop-name li a:focus {
+  color: #33383e;
+}
+.all-stores-page .btn-top {
+  display: inline-block;
+  vertical-align: top;
+  color: #878a8d;
+}
+.all-stores-page .btn-top:after {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  background: url(../../images/sprite.png) no-repeat -203px -125px;
+  width: 12px;
+  height: 7px;
+  margin: 0 0 0 5px;
+}
+.all-stores-page .btn-top:hover,
+.all-stores-page .btn-top:focus {
+  color: #878a8d;
+}
+.all-stores-page .btn-top:hover:after,
+.all-stores-page .btn-top:focus:after {
+  background-position: -203px -156px;
+}
+@media only screen and (max-width: 1199px) {
+  .all-stores-page .content-holder .block {
+    font-size: 13px;
+  }
+  .all-stores-page .alphabet {
+    text-align: left;
+  }
+  .all-stores-page .alphabet li {
+    border-left: none;
+    border-right: 1px solid #eaeaea;
+    padding: 0 5px 0 6px;
+  }
+  .all-stores-page .alphabet li:first-child {
+    padding-left: 0;
+  }
+}
+@media only screen and (max-width: 979px) {
+  .all-stores-page .content-holder .block {
+    padding: 13px 15px;
+  }
+  .all-stores-page .content-holder .block h2 {
+    font-size: 25px;
+    line-height: 28px;
+  }
+  .all-stores-page .alphabet {
+    margin: 0 -10px 0 0;
+    padding: 35px 30px 34px;
+  }
+  .all-stores-page .alphabet li {
+    border: none;
+    width: 50px;
+    margin: 0 10px 10px 0;
+    padding: 0;
+    text-align: center;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .all-stores-page .alphabet {
+    text-align: center;
+    padding: 10px;
+    margin: 0;
+  }
+  .all-stores-page .content-holder {
+    padding: 0;
+    margin: 0 0 29px;
+  }
+  .all-stores-page .content-holder .block {
+    padding: 10px;
+  }
+  .all-stores-page .content-holder .block .row {
+    margin: 0 -10px;
+    border-top: 1px solid #e8e8e8;
+  }
+  .all-stores-page .content-holder .block .box {
+    text-align: center;
+    padding: 0;
+  }
+  .all-stores-page .content-holder .block h2 {
+    font-size: 25px;
+    line-height: 28px;
+  }
+  .all-stores-page .shop-name {
+    margin: 0;
+  }
+  .all-stores-page .shop-name li {
+    margin: 0;
+    border-bottom: 1px solid #e8e8e8;
+  }
+  .all-stores-page .shop-name li a {
+    display: block;
+    padding: 15px;
+    text-align: center;
+  }
+  .all-stores-page .btn-top {
+    margin: 15px 0 5px;
+  }
+}
