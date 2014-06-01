@@ -362,7 +362,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $localePath = '/' ;
         }
 
-        $locale = Signupmaxaccount::getallmaxaccounts();
+        $locale = Signupmaxaccount::getAllMaxAccounts();
         $locale = !empty($locale[0]['locale']) ? $locale[0]['locale'] : 'nl_NL';
 
         return array('locale' => $locale, 'localePath' => $localePath, 'suffix' => $suffix);

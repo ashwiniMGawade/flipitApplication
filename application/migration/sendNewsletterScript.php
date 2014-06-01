@@ -145,7 +145,7 @@ class SendNewsletter {
 
 		try {
 
-			$settings = Signupmaxaccount::getallmaxaccounts();
+			$settings = Signupmaxaccount::getAllMaxAccounts();
 
 			# check if newsletter is scheduled and still not sent then proceed with  newsletter sending
 			if($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {

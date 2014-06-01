@@ -203,7 +203,7 @@ class Admin_EmailController extends Zend_Controller_Action
 
 
             //Start get email locale basis
-            $email_data = Signupmaxaccount::getallmaxaccounts();
+            $email_data = Signupmaxaccount::getAllMaxAccounts();
             $emailFrom  = $email_data[0]['emailperlocale'];
             $emailSubject  = $email_data[0]['emailsubject'];
             $senderName  = $email_data[0]['sendername'];
