@@ -4,6 +4,8 @@ Disallow:/rssfeed/
 Disallow:/out/
 Disallow:/zoeken/
 Disallow:/admin/
+Disallow:/login/
+Disallow:/inschrijven/
 
 Sitemap:http://www.kortingscode.nl/public/sitemaps/sitemap_shops.xml
 Sitemap:http://www.kortingscode.nl/public/sitemaps/sitemap_plus.xml
