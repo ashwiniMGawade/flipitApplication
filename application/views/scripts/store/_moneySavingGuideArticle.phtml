@@ -23,18 +23,12 @@ if ($this->partialCounter == 1) {
                 </h2>
                 <p>
 <?php 
-if (isset($this->chapters[0])) {
-    if ($this->chapters[0]['content']!=null || $this->chapters[0]['content']!='undefined' || $this->chapters[0]['content']!='') {
-        $allowedTags = '<p>';
-        $articleContent = $this->chapters[0]['content'];
-        $articleContent = strip_tags($articleContent);
-        if (strlen($articleContent) > 120) {
-            echo substr($articleContent, 0, 120).'...';
-        } else {
-            echo $articleContent;
-        }
+    $articleContent = strip_tags($this->content);
+    if (strlen($articleContent) > 120) {
+        echo substr($articleContent, 0, 120).'...';
+    } else {
+        echo $articleContent;
     }
-}
 ?>
                 </p>
             </div>
