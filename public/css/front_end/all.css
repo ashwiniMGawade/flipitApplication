@@ -5777,6 +5777,11 @@ button.close {
   display: block;
   clear: both;
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .all-categories-alt-page .section {
   padding: 17px 19px;
 }
@@ -5916,7 +5921,8 @@ button.close {
   width: 68px;
   background: url(../../images/sprite.png) no-repeat -95px -130px;
 }
-.all-categories-alt-page .section-newsletter .newsletter input[type="email"] {
+.all-categories-alt-page .section-newsletter .newsletter input[type="email"],
+.all-categories-alt-page .section-newsletter .newsletter input[type="text"] {
   width: 73.4%;
   margin: 0 2% 0 0;
   background: #fafafa;
@@ -6021,13 +6027,15 @@ button.close {
     line-height: 22px;
     margin: 0 0 15px;
   }
-  .all-categories-alt-page .section-newsletter .newsletter input[type="email"] {
+  .all-categories-alt-page .section-newsletter .newsletter input[type="email"],
+  .all-categories-alt-page .section-newsletter .newsletter input[type="text"] {
     float: none;
     width: 100%;
     display: block;
     margin: 0 0 10px;
   }
-  .all-categories-alt-page .section-newsletter .newsletter button[type="submit"] {
+  .all-categories-alt-page .section-newsletter .newsletter button[type="submit"],
+  .all-categories-alt-page .section-newsletter .newsletter input[type="submit"] {
     float: none;
     width: 100%;
     display: block;
@@ -6050,6 +6058,11 @@ button.close {
   .all-categories-alt-page .catigories .box-top .caption {
     padding: 10px 2px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .all-stores-page .content-holder {
   background: #ffffff;
@@ -6221,6 +6234,11 @@ button.close {
   .all-stores-page .btn-top {
     margin: 15px 0 5px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .author-page .section-author .heading {
   overflow: hidden;
@@ -6474,6 +6492,11 @@ button.close {
     padding: 0;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .authors-page .authors {
   padding: 0;
   margin: 0 -2px -1px 0;
@@ -6547,6 +6570,11 @@ button.close {
   .authors-page .authors li {
     width: 50%;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .contact-page .contact-section {
   color: #878a8d;
@@ -6678,6 +6706,11 @@ button.close {
   .contact-page .contact-form {
     padding: 15px 10px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .faq-page .section-faq {
   color: #878a8d;
@@ -6832,6 +6865,11 @@ button.close {
     padding: 15px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .flipit-expired-page .message .holder {
   padding: 31px 30px 34px;
 }
@@ -6869,6 +6907,11 @@ button.close {
   .flipit-expired-page .message .text:after {
     top: 97%;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .in-savings-page .post-box {
   background: #fff;
@@ -7242,6 +7285,11 @@ button.close {
     display: block;
     margin: 0 0 20px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .login-page .login-box {
   background: #fff;
@@ -7643,6 +7691,11 @@ button.close {
     display: block;
     width: 89px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .profile-page .top-panel {
   background: #2d2c2c;
@@ -8155,6 +8208,11 @@ button.close {
     width: 44%;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .register-page .register-box {
   background: #fff;
   border: 1px solid #e4e4e4;
@@ -8602,6 +8660,11 @@ button.close {
   .register-page #footer .social ul li {
     width: 44%;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .saving-page #main {
   padding: 0;
@@ -9113,6 +9176,11 @@ button.close {
     line-height: 18px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .splash-page .bg-stretch {
   position: fixed;
   z-index: -1;
@@ -9310,6 +9378,11 @@ button.close {
     display: block;
     margin: 0 0 10px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .page404 #footer {
   text-shadow: none;
@@ -10592,6 +10665,10 @@ a.pop:focus {
   height: 79px;
 }
 .section .block-form-2 .newsletter input[type="email"] {
+  width: 76.2%;
+  margin: 0 -3% 0 0;
+}
+.section .block-form-2 .newsletter input[type="text"] {
   width: 76.2%;
   margin: 0 -3% 0 0;
 }
@@ -12017,7 +12094,8 @@ hr.alt2 {
 .newsletter {
   margin: 0;
 }
-.newsletter input[type="email"] {
+.newsletter input[type="email"],
+.newsletter input[type="text"] {
   float: left;
   color: #33383e;
   font-size: 12px;
@@ -12032,17 +12110,21 @@ hr.alt2 {
   -webkit-border-radius: 3px;
   width: 68% !important;
 }
-.newsletter input[type="email"]::-webkit-input-placeholder {
+.newsletter input[type="email"]::-webkit-input-placeholder,
+.newsletter input[type="text"]::-webkit-input-placeholder {
   color: #33383e;
 }
-.newsletter input[type="email"]:-moz-placeholder {
+.newsletter input[type="email"]:-moz-placeholder,
+.newsletter input[type="text"]:-moz-placeholder {
   color: #33383e;
 }
-.newsletter input[type="email"]::-moz-placeholder {
+.newsletter input[type="email"]::-moz-placeholder,
+.newsletter input[type="text"]::-moz-placeholder {
   color: #33383e;
   opacity: 1;
 }
-.newsletter input[type="email"]:-ms-input-placeholder {
+.newsletter input[type="email"]:-ms-input-placeholder,
+.newsletter input[type="text"]:-ms-input-placeholder {
   color: #33383e;
 }
 .newsletter button[type="submit"] {
@@ -12080,7 +12162,8 @@ hr.alt2 {
   width: 68px;
   height: 68px;
 }
-#sidebar input[type="email"] {
+#sidebar input[type="email"],
+#sidebar input[type="text"] {
   float: left;
   font-size: 13px;
   border: 1px solid #d8d8d8;
@@ -12845,7 +12928,8 @@ input[type="submit"]::-moz-focus-inner {
   .section .offer a {
     width: 74%;
   }
-  .section .block-form-2 .newsletter input[type="email"] {
+  .section .block-form-2 .newsletter input[type="email"],
+  .section .block-form-2 .newsletter input[type="text"] {
     width: 69.2%;
   }
   .section .holder-text .the-code .code-value {
@@ -12883,7 +12967,8 @@ input[type="submit"]::-moz-focus-inner {
   #sidebar .intro-2 h1 {
     font-size: 20px;
   }
-  #sidebar input[type="email"] {
+  #sidebar input[type="email"],
+  #sidebar input[type="text"] {
     display: block;
     float: none;
     width: 100%;
@@ -13074,7 +13159,8 @@ input[type="submit"]::-moz-focus-inner {
     width: 100px;
     margin: 15px 15px 0 0;
   }
-  .section .block-form-2 .newsletter input[type="email"] {
+  .section .block-form-2 .newsletter input[type="email"],
+  .section .block-form-2 .newsletter input[type="text"] {
     width: 63.2%;
   }
   .section .code {
@@ -13124,7 +13210,8 @@ input[type="submit"]::-moz-focus-inner {
   .buttons .btn {
     font-size: 11px;
   }
-  .section .newsletter input[type="email"] {
+  .section .newsletter input[type="email"],
+  .section .newsletter input[type="text"] {
     width: 67%;
     margin: 0 2% 0 0;
   }
@@ -13498,7 +13585,8 @@ input[type="submit"]::-moz-focus-inner {
     width: 61px;
     height: 60px;
   }
-  .section .block-form-2 .newsletter input[type="email"] {
+  .section .block-form-2 .newsletter input[type="email"],
+  .section .block-form-2 .newsletter input[type="text"] {
     width: 63.2%;
   }
   .section .code {
@@ -13728,11 +13816,13 @@ input[type="submit"]::-moz-focus-inner {
     width: 18%;
     margin-right: 10px;
   }
-  .section .block-form-2 .newsletter input[type="email"] {
+  .section .block-form-2 .newsletter input[type="email"],
+  .section .block-form-2 .newsletter input[type="text"] {
     width: 100%;
     margin: 0 0 5px;
   }
   .section .newsletter input[type="email"],
+  .section .newsletter input[type="text"],
   .section .newsletter button[type="submit"] {
     display: block;
     float: none;

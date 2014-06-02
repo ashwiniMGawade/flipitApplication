@@ -59,8 +59,8 @@ class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper 
         if (!empty($authorCountryName)) {
             $authorFlagImageLi = 
                 '<li>
-                     <img src="'.$this->getAuthorCountryFlagImage($authorCountryFlagName).' " width="16" height="11" alt="'. $authorCountryName.'">
-                     <span>' . $authorCountryName .'</span>
+                    <span class="country-flags '.$splitAuthorLocaleName[0].'"></span>
+                    <span>' . $authorCountryName .'</span>
                 </li>';
         }
         return $authorFlagImageLi;

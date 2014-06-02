@@ -57,15 +57,19 @@ class ErrorController extends Zend_Controller_Action
                 } else {
                     $this->getResponse()->setHttpResponseCode(404);
                     $this->_helper->layout()->disableLayout();
-                    $this->view->popularShops = Shop::getPopularStores(10);
+                    $this->view->popularShops = Shop::getPopularStores(12);
                     $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
                     $this->view->flipitLocales = $websitesWithLocales;
                 }
                 break;
             default:
+                $this->_helper->layout()->disableLayout();
                 $this->getResponse()->setHttpResponseCode(500);
                 $priority = Zend_Log::CRIT;
                 $this->view->message = 'Application error';
+                $this->view->popularShops = Shop::getPopularStores(12);
+                $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+                $this->view->flipitLocales = $websitesWithLocales;
                 break;
         }
         if ($log = $this->getLog()) {
