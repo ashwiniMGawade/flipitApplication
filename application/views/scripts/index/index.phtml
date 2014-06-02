@@ -1,7 +1,7 @@
 <?php
 $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/home.js");
 $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
-$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/home.css");
+echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/home.css");
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
     'topOffers'=>$this->topOffers,
     'newOffers'=>$this->newOffers,
