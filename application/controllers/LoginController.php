@@ -105,7 +105,7 @@ class LoginController extends Zend_Controller_Action
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $module = $this->getRequest()->getParam('lang');
-        $this->_helper->redirector('index');
+        $this->_redirect(HTTP_PATH_LOCALE);
     }
 
     public function forgotpasswordAction()
