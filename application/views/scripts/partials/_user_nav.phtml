@@ -3,28 +3,22 @@ if(Auth_VisitorAdapter::hasIdentity()) :
     $visitorId = Auth_VisitorAdapter::getIdentity()->id;
     $visitorInformation = Visitor::getUserDetails($visitorId);
     ?>
-<ul>
-    <li>
-       <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('mijn-favorieten');?>"><?php echo $this->translate('Your offers');?></a>
-    </li>
-    <li>
-        <a href="javascript:void(0);"><?php echo $this->translate('Your brands'); ?></a>
-    </li>
-    <li><span><?php echo $this->translate('Welcome');?></span> <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('mijn-favorieten');?>" class="name"><?php echo $visitorInformation[0]['firstName'];?></a></li>
-    <li>
-        <a href=" <?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout'); ?>">
-        <?php echo $this->translate('Sign Out');?>
-        </a>
-    </li>
-</ul>
+    <ul>
+        <li><span class="glyphicon glyphicon-user"></span><span><?php echo $this->translate('Welcome') . " ";?></span><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') . "/" . FrontEnd_Helper_viewHelper::__link('profiel');?>" class="name"><?php echo $visitorInformation[0]['firstName'];?></a></li>
+        <li>
+            <a href=" <?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout'); ?>">
+            <?php echo $this->translate('Sign Out');?>
+            </a>
+        </li>
+    </ul>
     <?php
 else:
     ?>
-<ul>
-    <li><a href="#"><?php echo $this->translate('Help'); ?></a></li>
-    <li><a href="#"><?php echo $this->translate('Most Wanted'); ?></a></li>
-    <li><a rel="nofollow" href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>"><?php echo $this->translate('Sign In'); ?></a></li>
-    <li class=""><a href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') ?>"><?php echo $this->translate('Sign Up'); ?></a></li>
-</ul>
+    <ul>
+        <li><a href="#"><?php echo $this->translate('Help'); ?></a></li>
+        <li><a href="#"><?php echo $this->translate('Most Wanted'); ?></a></li>
+        <li><a rel="nofollow" href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>"><?php echo $this->translate('Sign In'); ?></a></li>
+        <li class=""><a href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') ?>"><?php echo $this->translate('Sign Up'); ?></a></li>
+    </ul>
     <?php
 endif;
