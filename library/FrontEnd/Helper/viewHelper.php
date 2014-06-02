@@ -451,7 +451,7 @@ EOD;
             $permalink = explode('/'.$permalinkMatches[0], $permalink);
             $permalink = $permalink[0];
         elseif (intval($permalinkMatches[0]) > 3) :
-            header('location:'.HTTP_PATH_LOCALE.'error');
+            throw new Zend_Controller_Action_Exception('', 404);
         else:
             $permalink = $permalink;
         endif;

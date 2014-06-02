@@ -2425,7 +2425,7 @@ class Offer extends BaseOffer
 
     public static function getAllOfferOnShop($id , $limit = null , $getExclusiveOnly = false , $includingOffline = false)
     {
-        $nowDate = date('Y-m-d H:i:s');
+        $nowDate = date('Y-m-d 00:00:00');
         $data = Doctrine_Query::create()
 
         ->select('o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
@@ -2471,9 +2471,7 @@ class Offer extends BaseOffer
         }
 
         $data = $data->fetchArray();
-        //var_dump($data); die;
         return $data;
-
     }
 
     /**
