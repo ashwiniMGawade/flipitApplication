@@ -389,4 +389,6 @@ select.input-success {
 header#header div.top-panel div.container nav.account-box ul li a {
   display: inline-block;
 }
-
+div.form-group label.input-error {
+    display:none;
+ }
