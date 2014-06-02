@@ -9,15 +9,10 @@ $articleDetails = $this->artcileDetails;
     <?php  
         if (!empty($articleDetails['chapters'])) {
             foreach ($articleDetails['chapters'] as $articleChapter) :
-                $partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
-                $chapterTitle = $partialFunctions->getSpacesFilledWithHiphenOfChapterTitle($articleChapter['title']);
     ?>
         <li>
-            <a href="javascript:void(0);" rel="<?php echo $chapterTitle; ?>" onclick="scrollByChapter(this)">
+            <a href="javascript:void(0);" rel="<?php echo $articleChapter['id']; ?>" onclick="scrollByChapter(this)">
                 <strong class="title"><?php echo $articleChapter['title'];?></strong>
-                <p>
-                    <em><?php echo $this->translate('by');?> <mark><?php echo $firstName . " " . $lastName;?></mark></em>
-                </p>
             </a>
         </li>   
     <?php          

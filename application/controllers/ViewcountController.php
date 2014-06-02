@@ -92,7 +92,7 @@ class ViewcountController extends Zend_Controller_Action
         $id = $this->_getParam('id');
         $viewCountValue  = FrontEnd_Helper_viewHelper::viewCounter($type, $clickEvent, $id);
         $viewCountValue == "false" ? echo Zend_Json::encode(false); : echo Zend_Json::encode(true);
-        die();
+        exit();
     }
 
 }

@@ -2,13 +2,21 @@
 $mostReadArticles = $this->articles;
 $mostReadArticleNumber = 0;
 foreach ($mostReadArticles as $mostReadArticle) {
-	$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].'thum_article_samll_'. $mostReadArticle['articles']['thumbnail']['name'];
+	if (!empty($mostReadArticle['articles']['thumbnail'])) {
+		$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].'thum_article_samll_'. 
+			$mostReadArticle['articles']['thumbnail']['name'];
+	} else {
+		$mostReadArticleImage = '';
+	}
 	$mostReadArticleId = $mostReadArticle['articles']['id'];
-	$mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? mb_substr($mostReadArticle['articles']['title'], 0,40).'..' : $mostReadArticle['articles']['title'];
+	$mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? 
+		mb_substr($mostReadArticle['articles']['title'], 0,40).'..' : $mostReadArticle['articles']['title'];
 ?>
  <li>
-    <a class="same-height-left" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id);" href="javascript:void(0);">
-        <img class="ico" width="52" src="<?php echo $mostReadArticleImage; ?>" alt="<?php echo $mostReadArticleTitle; ?>"/>
+    <a class="same-height-left" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id);" 
+    		href="javascript:void(0);">
+        <img class="ico" width="52" src="<?php echo $mostReadArticleImage; ?>" 
+        alt="<?php echo $mostReadArticleTitle; ?>"/>
         <span><?php echo $mostReadArticleTitle; ?></span>
     </a>
 </li>

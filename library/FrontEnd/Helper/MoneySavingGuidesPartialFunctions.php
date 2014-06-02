@@ -67,10 +67,4 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends FrontEnd_Helper_
         return $relatedArticles;
     }
 
-    public function getSpacesFilledWithHiphenOfChapterTitle($chapterTitle)
-    {
-         $chapterTitleWithHiphens = strtolower(preg_replace(array('/\s/','/[\,+@#?$%^:&*!.();]+/', '/(\')/'), 
-                            array("-","-","-"), $chapterTitle));
-        return $chapterTitleWithHiphens;
-    }
 }

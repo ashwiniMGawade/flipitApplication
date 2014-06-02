@@ -7,9 +7,11 @@
             foreach($this->articlesRelatedToCurrentCategory as $articleRelatedToCurrentCategory) :
     ?>        
     <article class="block">
-        <a href="<?php echo $articleRelatedToCurrentCategory['title'];?>">
+        <a href="<?php echo HTTP_PATH_LOCALE . $articleRelatedToCurrentCategory['permalink'];?>">
             <div class="image">
-                <img width="216" height="129" alt="<?php echo $articleRelatedToCurrentCategory['title'];?>" src="<?php echo PUBLIC_PATH_CDN.$articleRelatedToCurrentCategory['articleImage']['path'].$articleRelatedToCurrentCategory['articleImage']['name'];?>" >
+                <img width="216" height="129" alt="<?php echo $articleRelatedToCurrentCategory['title'];?>" 
+                src="<?php echo PUBLIC_PATH_CDN.$articleRelatedToCurrentCategory['articleImage']['path'].
+                $articleRelatedToCurrentCategory['articleImage']['name'];?>" >
             </div>
             <div class="box">
                 <h2><?php echo $articleRelatedToCurrentCategory['title'];?></h2>
