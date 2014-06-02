@@ -89,7 +89,9 @@ class Visitor extends BaseVisitor
                 ? $visitorInformation['postCode']
                 : ''
             );
-        $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($visitorInformation['password']));
+        if (!empty($visitorInformation['password'])) {
+            $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($visitorInformation['password']));
+        }
         $visitor->save();
         return $visitor->id;
     }
@@ -109,7 +111,6 @@ class Visitor extends BaseVisitor
         $visitor = Doctrine_Core::getTable("Visitor")->find($visitorId);
         if ($visitor) {
             $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($password));
-            $visitor->pwd = FrontEnd_Helper_viewHelper::sanitize($password);
             $visitor->save();
             return true;
         } else {
