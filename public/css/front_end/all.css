@@ -11177,6 +11177,9 @@ hr.alt2 {
 #code-lightbox .bottom {
   overflow: hidden;
 }
+#code-lightbox .terms-block {
+  margin-top: 10px;
+}
 #code-lightbox .logo-box {
   float: right;
   font-size: 18px;
