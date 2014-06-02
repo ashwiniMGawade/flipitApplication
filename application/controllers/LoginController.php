@@ -192,6 +192,34 @@ class LoginController extends Zend_Controller_Action
         }
         return true;
     }
+
+    public function confirmemailAction()
+    {
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $visitorEmail = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("email"))));
+        $visitor = Visitor::getVisitorDetailsByEmail($visitorEmail);
+        if (!empty($visitor)) {
+            if (Visitor::updateVisitorStatus($visitor[0]['id'])) {
+                $this->addFlashMessage(
+                    $this->view->translate('Your email address has been confirm please login'),
+                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'),
+                    'success'
+                );
+            } else {
+                $this->addFlashMessage(
+                    $this->view->translate('your email address already confirmed'),
+                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'),
+                    'error'
+                );
+            }
+        } else {
+            $this->addFlashMessage(
+                $this->view->translate('Invalid confirmation link'),
+                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'),
+                'error'
+            );
+        }
+    }
     ###########################################################
     ############## END REFACTORED CODE ########################
     ###########################################################
