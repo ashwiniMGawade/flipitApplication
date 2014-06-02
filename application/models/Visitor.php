@@ -58,7 +58,7 @@ class Visitor extends BaseVisitor
         $visitor->save();
     }
 
-    public static function addVisitor($visitorInformation)
+    public static function addVisitor($visitorInformation, $vistorConfirmation)
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
@@ -68,6 +68,11 @@ class Visitor extends BaseVisitor
             $visitor = new Visitor();
             $visitor->weeklyNewsLetter = '1';
             $visitor->email = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['emailAddress']);
+            if (Signupmaxaccount::getemailConfirmationStatus()) {
+                $visitor->active = false;
+            } else {
+                $visitor->active = true;
+            }
         }
         $visitor->firstName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['firstName']);
         $visitor->lastName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['lastName']);
@@ -116,6 +121,7 @@ class Visitor extends BaseVisitor
     {
         return Doctrine_Core::getTable("Visitor")->find($visitorId);
     }
+
     public static function getUserDetails($visitorId)
     {
         $userDetails = Doctrine_Query::create()->select("v.*,i.*")
@@ -124,6 +130,27 @@ class Visitor extends BaseVisitor
         ->andWhere('v.deleted=0')
         ->fetchArray();
         return $userDetails;
+    }
+
+    public static function getVisitorDetailsByEmail($visitorEmail)
+    {
+        $visitorDetails = Doctrine_Query::create()->select("v.*")->
+        from("Visitor v")
+        ->where('v.email='."'$visitorEmail'")
+        ->fetchArray();
+        return $visitorDetails;
+    }
+    
+    public static function updateVisitorStatus($visitorId)
+    {
+        $visitorConrmationStatus = false;
+        $visitor = Doctrine_Core::getTable("Visitor")->find($visitorId);
+        if ($visitor->active==false) {
+            $visitor->active  =  true;
+            $visitor->save();
+            $visitorConrmationStatus = true;
+        }
+        return $visitorConrmationStatus;
     }
     #############################################################
     ######### END REFACTRED CODE ################################
@@ -401,14 +428,6 @@ class Visitor extends BaseVisitor
         } else {return null;}
     }
 
-    public static function getuserpwddetail($uemail)
-    {
-        $data = Doctrine_Query::create()->select("v.*")->
-        from("Visitor v")
-        ->where('v.email='."'$uemail'")
-        ->fetchArray();
-        return $data;
-    }
     public static function updatefrontVisitor($params,$userid)
     {
         // working pending here
