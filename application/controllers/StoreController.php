@@ -33,10 +33,7 @@ class StoreController extends Zend_Controller_Action
             $allShopDetailKey = 'all_shopdetail'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 $allShopDetailKey,
-                array(
-                    'function' => 'Shop::getStoreDetails',
-                    'parameters' => array($shopId)
-                )
+                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
             );
             $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
             $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -120,11 +117,7 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
         $this->view->countPopularOffers = count(
-            FrontEnd_Helper_viewHelper::commonfrontendGetCode(
-                'popular',
-                $shopRecordsLimit,
-                $currentShopId
-            )
+            FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId)
         );
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $ShopImage;
@@ -195,18 +188,12 @@ class StoreController extends Zend_Controller_Action
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_shops_list',
-            array(
-                'function' => 'Shop::getallStoresForFrontEnd',
-                'parameters' => array('all', null)
-                ),
+            array('function' => 'Shop::getallStoresForFrontEnd', 'parameters' => array('all', null)),
             true
         );
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_popularshop_list',
-            array(
-                'function' => 'Shop::getAllPopularStores',
-                'parameters' => array(10)
-                ),
+            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)),
             true
         );
         $storeSearchByAlphabet = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
