@@ -40,6 +40,9 @@ select.input-error {
 select.input-success {
   border: 1px solid #6ac00e !important;
 }
+div.form-group label.input-error {
+  display: none;
+}
 #footer input[type="email"] {
   margin-right: 0;
 }
@@ -131,18 +134,16 @@ select.input-success {
   align: center;
   text-align: center;
   padding: 15px;
-  background: -webkit-gradient(linear, left top, left bottom, from(#f3dc97), to(#feebbc));
-  background: -moz-linear-gradient(top, #f3dc97, #feebbc);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f3dc97', endColorstr='#feebbc');
-  border: 1px solid #e6d08c;
-  -moz-border-radius: 5px;
-  -webkit-border-radius: 5px;
-  border-radius: 5px;
-  box-shadow: 1px 2px 2px #dddddd;
+  background: #fff;
+  border: 1px dashed #ccc;
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  box-shadow: 0px 1px 3px #eee;
 }
 .myprofile-messagebox {
-  color: #000;
-  margin: 20px auto 0 auto;
+  color: #33383e;
+  margin: 0 auto 30px auto;
   width: 100%;
 }
 .country-flags {
@@ -338,6 +339,7 @@ select.input-success {
 }
 .inner-section-wrapper {
   margin: 2%;
+  display: inline-block;
 }
 #fade {
   background: none repeat scroll 0 0 #000000;
@@ -385,10 +387,3 @@ select.input-success {
   width: 170px;
   z-index: 900;
 }
-
-header#header div.top-panel div.container nav.account-box ul li a {
-  display: inline-block;
-}
-div.form-group label.input-error {
-    display:none;
- }
