@@ -24,7 +24,7 @@ class MoneySaving extends BaseMoneySaving
     public static function getMostReadArticles($limit, $userId = "")
     {
         $mostReadArticles = Doctrine_Query::create()
-        ->select('chap.*,av.id, av.articleid, (sum(av.onclick)) as pop, a.*, at.path, at.name, ai.name, ai.path')
+        ->select('chap.*,av.id, av.articleid, (sum(av.onload)) as pop, a.*, at.path, at.name, ai.name, ai.path')
         ->from('ArticleViewCount av')
         ->leftJoin('av.articles a')
         ->leftJoin('a.thumbnail at')
@@ -42,7 +42,8 @@ class MoneySaving extends BaseMoneySaving
     public static function getRecentlyAddedArticles($limit)
     {
         $recentlyAddedArticles = Doctrine_Query::create()
-            ->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,  ai.path, ai.name,aai.path, aai.name')
+            ->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,  ai.path,
+                ai.name,aai.path, aai.name')
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
@@ -70,7 +71,8 @@ class MoneySaving extends BaseMoneySaving
 
     public static function getAllMoneySavingArticles($permalink)
     {
-        $allMoneySavingArticles = Doctrine_Query::create()->select('p.pageAttributeId,m.pageid,m.categoryid,r.articleid,r.relatedcategoryid,a.title, ac.name,a.permalink, ac.permalink')
+        $allMoneySavingArticles = Doctrine_Query::create()->select('p.pageAttributeId,m.pageid,m.categoryid,r.articleid,
+            r.relatedcategoryid,a.title, ac.name,a.permalink, ac.permalink')
             ->from('page p')
             ->leftJoin('p.moneysaving m')
             ->leftJoin('m.articlecategory ac')
