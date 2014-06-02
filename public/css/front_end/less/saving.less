@@ -54,7 +54,9 @@
 			display:inline-block;
 			vertical-align:top;
 			background:@white-color;
-			border-width:1px 1px 0 1px;			border-style:solid;			border-color:#cbcbcb;
+			border-width:1px 1px 0 1px;
+			border-style:solid;
+			border-color:#fff;
 			.border-radius(3px 3px 0 0);
 			box-shadow: 0 1px 5px rgba(0,0,0,.1);
 			position:relative;
@@ -72,7 +74,7 @@
 			line-height:20px;
 			position: relative;
 			background:@white-color;
-			border:1px solid #cbcbcb;
+			border:1px solid #fff;
 			box-shadow: 0 0 4px rgba(0,0,0,0.1);
 			.border-radius(0 3px 3px 3px);
 			.holder{
@@ -110,10 +112,12 @@
 			p{margin:0;}
 		}
 		.switcher{
-			padding:0;			margin:0;
+			padding:0;
+			margin:0;
 			font-size:13px;
 			line-height:16px;
-			font-weight:bold;			list-style:none;
+			font-weight:bold;
+			list-style:none;
 			overflow:hidden;
 			li{
 				float:left;
@@ -211,7 +215,8 @@
 	}
 	.item-block{
 		margin:0 0 31px;
-		overflow:hidden;		.holder{
+		overflow:hidden;
+		.holder{
 			margin:0 -6.7% -2.8% 0;
 			overflow:hidden;
 		}
@@ -220,6 +225,9 @@
 			width:29.1%;
 			position:relative;
 			margin:0 3.2% 2.8% 0;
+			-webkit-border-radius: 3px;
+			border: 1px solid rgba(0, 0, 0, 0.1);
+			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 			img{
 				display:block;
 				width:100%;
@@ -237,10 +245,11 @@
 			.caption{
 				display:inline-block;
 				vertical-align:top;
-				padding:9px 15px 12px;
+				padding:10px 15px;
 				color:@white-color;
-				font-size:21px;
-				line-height:24px;
+				font-size:15px;
+				line-height:18px;
+				font-weight: 600;
 				background:rgba(0,0,0,.8);
 			}
 			.link{
