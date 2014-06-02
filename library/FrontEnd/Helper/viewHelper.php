@@ -100,7 +100,7 @@ EOD;
                      $chainInformation = $chainInformation['shops'];
                      $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
                      $string .= sprintf(
-                        "<li><a class='".strtolower($chainInformation['locale'])."' href='%s' target='_blank'>".self::getCountryNameByLocale(strtolower($chainInformation['locale']))."</a></li>",
+                        "<li><a class='country-flags ".strtolower($chainInformation['locale'])."' href='%s' target='_blank'>".self::getCountryNameByLocale(strtolower($chainInformation['locale']))."</a></li>",
                          trim($chainInformation['url']),
                          $httpPath.'/public/'. $image
                         );

@@ -103,6 +103,7 @@ class SignupController extends Zend_Controller_Action
                     $message = $this->view->translate('Please check your mail and confirm your email address');
                     $this->sendConfirmationMail($visitorEmail);
                 } else {
+                    Visitor::setVisitorLoggedIn($visitorId);
                     $message = $this->view->translate('Thanks for registration now enjoy the more coupons');
                     $mandrillFunctions = new FrontEnd_Helper_MandrillMailFunctions();
                     $mandrillFunctions->sendWelcomeMail($visitorId, $this);
