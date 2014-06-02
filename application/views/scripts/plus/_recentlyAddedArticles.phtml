@@ -6,7 +6,7 @@
                 $userDetails =  $userInformationObject->getUserDetails($recentlyAddedArticle['authorid']);
                 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
                 $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['updated_at']);
-                $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_MEDIUM);
+                $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
     ?>            
     <article class="box">
         <span class="image">
@@ -20,9 +20,22 @@
                     <?php echo $recentlyAddedArticle['title'];?></a>
             </h1>
             <p>
-                <em><?php echo $this->translate('by ');?>
-                    <a href="<?php echo $profileLink; ?>"><?php echo $userDetails['slug'];?></a>, 
-                    <?php echo $articleUpdatedAtDate; ?>
+                <?php
+                    if(empty($recentlyAddedArticle['authorname'])) {
+                        $byAuthorName = '';
+                        $authorRedirectLink =  '';
+                    } else {
+                        $byAuthorName = $recentlyAddedArticle['authorname'];
+                        $authorRedirectLink =  '<a href="'.$profileLink.'">
+                        '.$recentlyAddedArticle['authorname'].'</a>,';
+                    }
+                ?>
+                <em>
+                    <?php 
+                        echo empty($byAuthorName) ? '' : $this->translate('by ');
+                        echo $authorRedirectLink;
+                        echo $articleUpdatedAtDate; 
+                    ?>
                 </em>
             </p>
             <a href="<?php echo  HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>" class="more">

@@ -2,13 +2,14 @@
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/moneySaving.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/stickyfloat.js");
+$this->headLink()->prependStylesheet("/public/css/front_end/in-savings.css");
 $articleDetails = $this->articleDetails;
 $userDetails = $this->userDetails;
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
 $firstName = str_replace(' ', '', $userDetails['firstName']);
 $lastName = str_replace(' ', '', $userDetails['lastName']);
 $articleUpdatedAtDate = new Zend_Date($articleDetails['updated_at']);
-$articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_MEDIUM);
+$articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
 $plusViewPath = 'plus/';
 $discussion = $this->partial(
     'partials/_discussion.phtml',
@@ -32,12 +33,15 @@ $authorDetails = $this->partial(
             'profileLink' => $profileLink
         )
 );
+$savingGuides = '';
+if (!empty($this->articlesRelatedToCurrentCategory)) : 
 $savingGuides = $this->partial(
     $plusViewPath.'_savingGuides.phtml',
         array(
             'articlesRelatedToCurrentCategory' => $this->articlesRelatedToCurrentCategory
         )
 );
+endif;
 $recentlyAddedArticles = $this->partial(
     $plusViewPath.'_recentlyAddedArticles.phtml',
         array(

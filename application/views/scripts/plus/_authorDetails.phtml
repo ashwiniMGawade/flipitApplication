@@ -7,8 +7,8 @@ $profileLink = $this->profileLink;
     <div class="photo">
         <span class="name"><?php echo $firstName; ?></span>
             <?php
-                $authorImage = PUBLIC_PATH_CDN.$userDetails['profileimage']['path'] .'thum_medium_'.
-                 $userDetails['profileimage']['name'];
+                $authorImage = HTTP_PATH_CDN . ltrim($userDetails['profileimage']['path'], "/") .'thum_medium_' .
+                    $userDetails['profileimage']['name'];
             ?>
         <img width="120" height="120" alt="<?php echo $firstName; ?>" src="<?php echo $authorImage; ?>">
     </div>
