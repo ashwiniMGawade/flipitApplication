@@ -1,8 +1,13 @@
 <?php   
 $mostReadArticles = $this->articles;
+//echo "<pre>";print_r($mostReadArticles);die;
 $mostReadArticleNumber = 0;
 foreach ($mostReadArticles as $mostReadArticle) {
-	$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].'thum_article_samll_'. $mostReadArticle['articles']['thumbnail']['name'];
+	if (!empty($mostReadArticle['articles']['thumbnail'])) {
+		$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].'thum_article_samll_'. $mostReadArticle['articles']['thumbnail']['name'];
+	} else {
+		$mostReadArticleImage = '';
+	}
 	$mostReadArticleId = $mostReadArticle['articles']['id'];
 	$mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? mb_substr($mostReadArticle['articles']['title'], 0,40).'..' : $mostReadArticle['articles']['title'];
 ?>
