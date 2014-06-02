@@ -7,8 +7,6 @@ $userDetails = $this->userDetails;
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
 $firstName = str_replace(' ', '', $userDetails['firstName']);
 $lastName = str_replace(' ', '', $userDetails['lastName']);
-//$articleUpdatedAtDate = date('d M Y', strtotime($articleDetails['updated_at']));
-
 $articleUpdatedAtDate = new Zend_Date($articleDetails['updated_at']);
 $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_MEDIUM);
 $plusViewPath = 'plus/';
@@ -60,8 +58,8 @@ $directChapterLinks = $this->partial(
             'artcileDetails' => $articleDetails
         )
 );
-$sidebarHtml = '<aside id="sidebar" class="col-md-4 col-sm-4">' . $recentlyAddedArticles . $topPopularOffers . $directChapterLinks 
-."</aside>";
+$sidebarHtml = '<aside id="sidebar" class="col-md-4 col-sm-4">' . $recentlyAddedArticles . $topPopularOffers . 
+    $directChapterLinks ."</aside>";
 $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$articleDetails['articleImage']['name'];
 ?>
 <main role="main" id="main" class="container">
@@ -73,7 +71,24 @@ $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$article
             <?php echo $articleInformation; ?>
             <div class="share-box">
                 <span class="txt"><?php echo $this->translate('Share this tip');?></span>
-                <?php echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');?>            
+                <ul class="social-box">
+                    <li>
+                        <img src="<?php echo HTTP_PATH.'public/images/img-42.png';?>" alt="image description" 
+                        width="129" height="20" />
+                    </li>
+                    <li>
+                        <img src="<?php echo HTTP_PATH.'public/images/img-43.png';?>" alt="image description" 
+                            width="81" height="20" />
+                    </li>
+                    <li>
+                        <img src="<?php echo HTTP_PATH.'public/images/img-45.png';?>" alt="image description" 
+                            width="238" height="24" />
+                    </li>
+                    <li>
+                        <img src="<?php echo HTTP_PATH.'public/images/img-44.png';?>" alt="image description"
+                            width="81" height="21" />
+                    </li>
+                </ul>           
             </div>
             <?php echo $authorDetails. $savingGuides. $discussion;?>
         </div>
