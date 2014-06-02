@@ -45,9 +45,15 @@ class LoginController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $this->view->headTitle("Members Only");
+        $emailAddressFromMemory = '';
+        $emailAddressSpace = new Zend_Session_Namespace('emailAddressSpace');
+        if (isset($emailAddressSpace->emailAddressSpace)) {
+            $emailAddressFromMemory = $emailAddressSpace->emailAddressSpace;
+            $emailAddressSpace->loginUser = '';
+        }
         $loginForm = new Application_Form_Login();
         $this->view->form = $loginForm;
+        $loginForm->getElement('emailAddress')->setValue($emailAddressFromMemory);
         $this->viewHelperObject->getMetaTags($this);
         if ($this->getRequest()->isPost()) {
             if ($loginForm->isValid($_POST)) {
@@ -58,6 +64,7 @@ class LoginController extends Zend_Controller_Action
                 $loginForm->highlightErrorElements();
             }
         }
+        $this->view->headTitle("Members Only");
         $this->view->pageCssClass = 'login-page';
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
@@ -72,6 +79,8 @@ class LoginController extends Zend_Controller_Action
                 FrontEnd_Helper_viewHelper::__link('profiel')
             );
         } else {
+            $visitorEmail = new Zend_Session_Namespace('emailAddressSpace');
+            $visitorEmail->emailAddressSpace = $visitorDetails['emailAddress'];
             $this->addFlashMessage(
                 $this->view->translate('User Does Not Exist'),
                 HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'),
