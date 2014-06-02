@@ -19,13 +19,7 @@ if ($this->partialCounter == 1) {
             </div>
             <div class="box">
                 <h2>
-<?php 
-if (strlen($this->title) > 35) {
-    echo substr($this->title, 0, 35).'..';
-} else {
-    echo $this->title;
-}
-?>
+<?php echo $this->title; ?>
                 </h2>
                 <p>
 <?php 
