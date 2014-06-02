@@ -12,13 +12,11 @@ endif
         <div class="container">
             <span class="slogan"><?php echo $siteName . ' : ' . $this->translate('save money with online discount codes and save pointers');?></span>
             <a class="menu-account" href="javascript:void(0);"><?php echo $this->translate('account menu');?></a>
-            <nav class="account-box">
                 <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
                 $userMenuLink = $this->locale. '/login/usermenu';
                 echo $this->esi($userMenuLink);
                 ?>
-            </nav>
         </div>
     </div>
     <div class="navigation">
