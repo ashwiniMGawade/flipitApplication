@@ -153,187 +153,199 @@ select.input-success{
     width: 100%
 }
 
-@flagWidth : '16px';
-@flagHeight : '11px';
-.countries{
-    li{
-            a.in{
-                background-position: -198px -488px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.sg{
-                background-position: -396px -244px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.au{
-                background-position: 0 -732px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.br{
-                background-position: 0 -1708px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.ca{
-                background-position: -66px -183px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.us{
-                background-position: -462px -305px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.at{
-                background-position: 0 -671px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.be{
-                background-position: 0 -1159px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.fr{
-                background-position: -132px -732px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.de{
-                background-position: -66px -1403px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.it{
-                background-position: -198px -793px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.pl{
-                background-position: -330px -976px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.es{
-                background-position: -132px -183px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.se{
-                background-position: -396px -183px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.ch{
-                background-position: -66px -549px;
-                width: @flagWidth;
-                height: @flagHeight;
-            }
-            a.cl{
-                background-position: -66px -732px; 
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.cn{
-                background-position: -66px -854px; 
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.dk{
-                background-position: -66px -1525px; 
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.fi{
-                background-position: -132px -427px; 
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.hk{
-                background-position: -132px -1891px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.id{
-                background-position: -198px -305px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.ie{
-                background-position: -198px -366px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.jp{
-                background-position: -198px -976px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.kr{
-                background-position: -198px -1464px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.mx{
-                background-position: -264px -1526px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.my{
-                background-position: -264px -1648px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.no{
-                background-position: -330px -244px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.nz{
-                background-position: -330px -488px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.pt{
-                background-position: -330px -1281px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.ru{
-                background-position: -330px -1708px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.id{
-                background-position: -198px -305px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.sk{
-                background-position: -396px -488px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.tr{
-                background-position: -396px -1769px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.uk{
-                background-position: -132px -61px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
-            a.za{
-                background-position: -462px -1220px;
-                width: @flagWidth;
-                height: @flagHeight; 
-            }
+@flagWidth : 16px;
+@flagHeight : 11px;
+.country-flags{
+    display:block;
+    background:url(../images/front_end/countries-sprite.png) no-repeat 0 -39px;
+    width: 16px;
+    height: 11px;
+        &.nl{
+            background-position: -330px -183px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.in{
+            background-position: -198px -488px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.sg{
+            background-position: -396px -244px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.ar{
+            background-position: 0 -549px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.au{
+            background-position: 0 -732px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.br{
+            background-position: 0 -1708px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.ca{
+            background-position: -66px -183px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.us{
+            background-position: -462px -305px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.at{
+            background-position: 0 -671px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.be{
+            background-position: 0 -1159px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.fr{
+            background-position: -132px -732px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.de{
+            background-position: -66px -1403px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.it{
+            background-position: -198px -793px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.pl{
+            background-position: -330px -976px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.es{
+            background-position: -132px -183px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.se{
+            background-position: -396px -183px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.ch{
+            background-position: -66px -549px;
+            width: @flagWidth;
+            height: @flagHeight;
+        }
+        &.cl{
+            background-position: -66px -732px; 
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.cn{
+            background-position: -66px -854px; 
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.dk{
+            background-position: -66px -1525px; 
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.fi{
+            background-position: -132px -427px; 
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.hk{
+            background-position: -132px -1891px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.id{
+            background-position: -198px -305px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.ie{
+            background-position: -198px -366px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.jp{
+            background-position: -198px -976px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.kr{
+            background-position: -198px -1464px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.mx{
+            background-position: -264px -1526px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.my{
+            background-position: -264px -1648px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.no{
+            background-position: -330px -244px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.nz{
+            background-position: -330px -488px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.pt{
+            background-position: -330px -1281px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.ru{
+            background-position: -330px -1708px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.id{
+            background-position: -198px -305px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.sk{
+            background-position: -396px -488px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.tr{
+            background-position: -396px -1769px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.uk{
+            background-position: -132px -61px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
+        &.za{
+            background-position: -462px -1220px;
+            width: @flagWidth;
+            height: @flagHeight; 
+        }
     }
-}
 .inner-section-wrapper{
     margin: 2%;
 }

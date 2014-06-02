@@ -1,8 +1,34 @@
 <div class="<?php echo $this->signupFormWidgetType== 'sidebarWidget' ? 'block block-2' : 'box' ;?>">
 <?php 
 $signUpPartial = new FrontEnd_Helper_SignUpPartialFunction();
-echo $signUpPartial->getSignUpWidgetHeader($this->signupFormWidgetType);
-echo $this->zendForm;
-?>
-</div>
+$signUpHeader= $signUpPartial->getSignUpWidgetHeader($this->signupFormWidgetType);
 
+if ($this->zendForm->submitButtonClassName == 'orange') {
+    echo $signUpHeader;
+}
+
+foreach ($this->zendForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+?>
+<form action="" method="post" class="<?php echo $this->zendForm->zendFormClassName !='' ? 'email-form form-inline' : 'form-signin newsletter '; ?>" name="<?php echo $this->zendForm->zendFormName; ?>" id="<?php echo $this->zendForm->zendFormName; ?>">
+    <?php
+    if ($this->zendForm->submitButtonClassName != 'orange') {
+        echo $signUpHeader.$this->zendForm->emailAddress->renderViewHelper();
+    } else { ?>
+        <div class="form-group">
+            <?php echo $this->zendForm->emailAddress->renderViewHelper();?>
+        </div>
+        <?php
+    }
+    ?>
+    <input type="hidden" name="shopId" value="" id="shopId" />
+    <?php  
+    echo $this->formSubmit(
+        'submit',
+        $this->translate('Sign up'),
+        array('class'=>'btn blue btn-lg btn-primary '.$this->zendForm->submitButtonClassName, 'id'=>'Login' ,'onclick' => 'setHiddenFieldValue(), signUpNewsLetter("' . $this->zendForm->zendFormName .'")')
+    )
+    ?>
+</form>
+</div>

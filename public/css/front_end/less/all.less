@@ -10,7 +10,7 @@
 @import "home.less";
 @import "in-savings.less";
 @import "login.less";
-@import "profile.less";
+@import "profile.less"; 
 @import "register.less";
 @import "saving.less";
 @import "splash-page.less";
@@ -860,6 +860,10 @@ a.pop{
 		}
 		.newsletter{
 			input[type="email"]{
+				width:76.2%;
+				margin:0 -3% 0 0;
+			}
+			input[type="text"]{
 				width:76.2%;
 				margin:0 -3% 0 0;
 			}
@@ -2174,7 +2178,7 @@ hr.alt2{
 }
 .newsletter{
 	margin:0;
-	input[type="email"]{
+	input[type="email"], input[type="text"]{
 		float:left;
 		color:@text-color;
 		font-size:12px;
@@ -2187,13 +2191,13 @@ hr.alt2{
 		height:39px;
 		.border-radius;
 	}
-	input[type="email"]::-webkit-input-placeholder {color: @text-color;}
-	input[type="email"]:-moz-placeholder {color: @text-color;}
-	input[type="email"]::-moz-placeholder {
+	input[type="email"]::-webkit-input-placeholder,input[type="text"]::-webkit-input-placeholder{color: @text-color;}
+	input[type="email"]:-moz-placeholder, input[type="text"]:-moz-placeholder {color: @text-color;}
+	input[type="email"]::-moz-placeholder, input[type="text"]::-moz-placeholder {
 		color: @text-color;
 		opacity: 1;
 	}
-	input[type="email"]:-ms-input-placeholder {color: @text-color;}
+	input[type="email"]:-ms-input-placeholder,input[type="text"]:-ms-input-placeholder  {color: @text-color;}
 	button[type="submit"]{
 		float:left;
 		font-size:14px;
@@ -2230,7 +2234,7 @@ hr.alt2{
 				height: 68px
 			}
 		}
-	input[type="email"]{
+	input[type="email"],input[type="text"]{
 		float:left;
 		font-size:13px;
 		border:1px solid #d8d8d8;
@@ -2977,7 +2981,7 @@ input[type="submit"]::-moz-focus-inner{
 		}
 		.block-form-2{
 			.newsletter{
-				input[type="email"]{
+				input[type="email"],input[type="text"]{
 					width:69.2%;
 				}
 			}
@@ -3020,7 +3024,7 @@ input[type="submit"]::-moz-focus-inner{
 		.intro-2{
 			h1{font-size:20px;}
 		}
-		input[type="email"]{
+		input[type="email"],input[type="text"]{
 			display:block;
 			float:none;
 			width:100%;
@@ -3233,7 +3237,7 @@ input[type="submit"]::-moz-focus-inner{
 				margin:15px 15px 0 0;
 			}
 			.newsletter{
-				input[type="email"]{
+				input[type="email"],input[type="text"]{
 					width:63.2%;
 				}
 			}
@@ -3288,7 +3292,7 @@ input[type="submit"]::-moz-focus-inner{
 	}
 	.section{
 		.newsletter{
-			input[type="email"]{
+			input[type="email"],input[type="text"]{
 				width:67%;
 				margin:0 2% 0 0;
 			}
@@ -3656,7 +3660,7 @@ input[type="submit"]::-moz-focus-inner{
 				height: 60px;
 			}
 			.newsletter{
-				input[type="email"]{
+				input[type="email"],input[type="text"]{
 					width:63.2%;
 				}
 			}
@@ -3914,14 +3918,14 @@ input[type="submit"]::-moz-focus-inner{
 		}
 		.block-form-2{
 			.newsletter{
-				input[type="email"]{
+				input[type="email"],input[type="text"]{
 					width:100%;
 					margin:0 0 5px;
 				}
 			}
 		}
 		.newsletter{
-			input[type="email"],
+			input[type="email"],input[type="text"],
 			button[type="submit"]{
 				display:block;
 				float:none;

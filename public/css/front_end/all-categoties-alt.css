@@ -142,7 +142,8 @@
   width: 68px;
   background: url(../../images/sprite.png) no-repeat -95px -130px;
 }
-.all-categories-alt-page .section-newsletter .newsletter input[type="email"] {
+.all-categories-alt-page .section-newsletter .newsletter input[type="email"],
+.all-categories-alt-page .section-newsletter .newsletter input[type="text"] {
   width: 73.4%;
   margin: 0 2% 0 0;
   background: #fafafa;
@@ -247,13 +248,15 @@
     line-height: 22px;
     margin: 0 0 15px;
   }
-  .all-categories-alt-page .section-newsletter .newsletter input[type="email"] {
+  .all-categories-alt-page .section-newsletter .newsletter input[type="email"],
+  .all-categories-alt-page .section-newsletter .newsletter input[type="text"] {
     float: none;
     width: 100%;
     display: block;
     margin: 0 0 10px;
   }
-  .all-categories-alt-page .section-newsletter .newsletter button[type="submit"] {
+  .all-categories-alt-page .section-newsletter .newsletter button[type="submit"],
+  .all-categories-alt-page .section-newsletter .newsletter input[type="submit"] {
     float: none;
     width: 100%;
     display: block;
