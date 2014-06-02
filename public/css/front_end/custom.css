@@ -386,5 +386,5 @@ select.input-success {
   z-index: 900;
 }
 header#header div.top-panel div.container nav.account-box ul li a {
-    display: inline-block;
+  display: inline-block;
 }
