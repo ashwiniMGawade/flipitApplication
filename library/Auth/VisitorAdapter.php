@@ -14,7 +14,8 @@ class Auth_VisitorAdapter implements Zend_Auth_Adapter_Interface {
     public function authenticate() {
         $visitor = Doctrine_Query::create()->from("Visitor u")
             ->where("u.email="."'".$this->email."'")
-            ->andWhere("u.deleted=0")->fetchOne();
+            ->andWhere('u.active = 1')
+            ->andWhere("u.deleted = 0")->fetchOne();
         if ($visitor) {
             if ($visitor->validatePassword($this->password)) {
                 return new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $visitor);
