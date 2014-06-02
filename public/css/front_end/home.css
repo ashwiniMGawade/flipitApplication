@@ -19,6 +19,7 @@
   height: 39px;
   border-radius: 3px;
   -webkit-border-radius: 3px;
+  width: 68% !important;
 }
 .home-page .newsletter input[type="email"]::-webkit-input-placeholder {
   color: #33383e;
@@ -408,13 +409,6 @@
 .home-page .best-items .categories-block ul li a:hover h2 {
   color: #e49542;
 }
-.home-page .best-items .categories-block ul li a:hover .left-box {
-  width: 36.5%;
-}
-.home-page .best-items .categories-block ul li a:hover .box {
-  width: 63.5%;
-  padding: 0 14px;
-}
 .home-page .best-items .categories-block ul li a:hover:before {
   content: '';
   position: absolute;
@@ -448,7 +442,7 @@
 }
 .home-page .best-items .categories-block .box h2 {
   color: #33383e;
-  font-size: 21px;
+  font-size: 18px;
   line-height: 24px;
   margin: 0;
 }
@@ -525,12 +519,15 @@
 }
 .home-page .vouchers ul .logo-box {
   float: left;
-  width: 12%;
-  margin: 9px 2.6% 0 0;
+  width: 16%;
+  margin: 3px 0 0 0;
   text-align: center;
 }
 .home-page .vouchers ul .logo-box img {
   display: block;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
 }
 .home-page .vouchers ul .box {
   overflow: hidden;
@@ -539,6 +536,7 @@
   color: #0077cc;
   font-size: 18px;
   line-height: 22px;
+  font-weight: 500;
   margin: 0 0 1px;
 }
 .home-page .vouchers ul h2 span {
@@ -783,6 +781,9 @@
     display: block;
     width: 100%;
     height: auto;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
   }
   .home-page .our-shops h2 {
     font-size: 24px;
