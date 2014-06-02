@@ -15,7 +15,7 @@
         </span>
         <div class="text-box">
             <h1>
-                <a href="<?php echo $recentlyAddedArticle['title'];?>"><?php echo $recentlyAddedArticle['title'];?></a>
+                <a href="<?php echo HTTP_PATH_LOCALE. $recentlyAddedArticle['title'];?>"><?php echo $recentlyAddedArticle['title'];?></a>
             </h1>
             <p>
                 <em><?php echo $this->translate('by ');?>
@@ -23,7 +23,7 @@
                     <?php echo $articleUpdatedAtDate; ?>
                 </em>
             </p>
-            <a href="<?php echo $recentlyAddedArticle['title'];?>" class="more">
+            <a href="<?php echo  HTTP_PATH_LOCALE. $recentlyAddedArticle['title'];?>" class="more">
                 <span><?php echo $this->translate('Read More');?></span>
             </a>
         </div>
