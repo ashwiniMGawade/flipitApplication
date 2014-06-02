@@ -16,7 +16,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends FrontEnd_Helper_
                 $class = 'slide';
             }
             echo'<div class="'.$class.'" id="'.$id.'">
-                <a href = "'.$mostReadArticle['articles']['title'].'">
+                <a href="'.HTTP_PATH_LOCALE.'plus/'.$mostReadArticle['articles']['permalink'].'">
                     <img class="aligncenter" 
                         src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path']
                         .$mostReadArticle['articles']['articleImage']['name'].'" 
@@ -43,19 +43,19 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends FrontEnd_Helper_
                     foreach($articles as $article) { 
         $relatedArticles .=
                 '<div class="item">
-                    <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'">
+                    <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
                         <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" 
                         alt="'.$article['title'].'">
                     </a>
                     <div class="box">
                         <div class="caption-area">
-                            <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'">
+                            <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
                                 <span class="caption">
                                 '.$article['title'].'
                                 </span>
                             </a>    
                         </div>
-                        <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['title'].'" class="link">'
+                        <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'" class="link">'
                             .$this->zendTranslate->translate('more').' &#8250;
                         </a>
                     </div>

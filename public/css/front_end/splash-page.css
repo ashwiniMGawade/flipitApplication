@@ -64,8 +64,9 @@
   background: #fff;
   display: inline-block;
   vertical-align: top;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-  webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
   padding: 7px 11px 7px;
   color: #282828;
   margin: 0 0 47px;
@@ -125,6 +126,9 @@
 }
 .splash-page .sponsor-box .image img {
   vertical-align: top;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
 }
 .splash-page .sponsor-box .text-box {
   overflow: hidden;

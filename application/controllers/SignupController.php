@@ -62,7 +62,8 @@ class SignupController extends Zend_Controller_Action
                         $visitorId,
                         $this->view->translate('Please enter valid information'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
-                        'signup'
+                        'signup',
+                        $visitorInformation['emailAddress']
                     );
                 }
             } else {
@@ -82,7 +83,7 @@ class SignupController extends Zend_Controller_Action
         $this->_redirect($redirectUrl);
     }
 
-    public function redirectAccordingToMessage($visitorId, $message, $redirectLink, $pageName)
+    public function redirectAccordingToMessage($visitorId, $message, $redirectLink, $pageName, $visitorEmail = '')
     {
         if (!$visitorId) {
             self::showFlashMessage(
@@ -98,13 +99,35 @@ class SignupController extends Zend_Controller_Action
                     'success'
                 );
             } else {
+                if (Signupmaxaccount::getemailConfirmationStatus()) {
+                    $message = $this->view->translate('Please check your mail and confirm your email address');
+                    $this->sendConfirmationMail($visitorEmail);
+                } else {
+                    $message = $this->view->translate('Thanks for registration now enjoy the more coupons');
+                    $mandrillFunctions = new FrontEnd_Helper_MandrillMailFunctions();
+                    $mandrillFunctions->sendWelcomeMail($visitorId, $this);
+                }
                 self::showFlashMessage(
-                    $this->view->translate('Please check your mail and confirm your email address'),
+                    $message,
                     HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login'),
                     'success'
                 );
             }
         }
+        return;
+    }
+
+    public function sendConfirmationMail($visitoremailMail)
+    {
+        $html = new Zend_View();
+        $html->setScriptPath(APPLICATION_PATH . '/views/scripts/signup');
+        $html->assign('email', $visitoremailMail);
+        $bodyText = $html->render('confirmemail.phtml');
+        $recipents = array("to" => $visitoremailMail);
+        $subject = $this->view->translate("Welcome to Kortingscode.nl");
+        $body = $bodyText;
+        $sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents, $subject, $body);
+        return true;
     }
 
     public function profileAction()

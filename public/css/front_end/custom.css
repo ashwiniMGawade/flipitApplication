@@ -50,22 +50,23 @@ select.input-success {
 }
 .ui-autocomplete {
   position: absolute;
-  left: 0;
-  right: 2px;
+  left: 3px;
+  right: 0px;
   z-index: 10;
   top: 100%;
   background: #fff;
-  border: 1px solid #c6c6c5;
+  border: 1px solid rgba(0, 0, 0, 0.16);
   font-size: 15px;
   line-height: 17px;
   -webkit-box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
   box-shadow: 0 0 3px rgba(0, 0, 0, 0.16);
   list-style: none;
+  width: 19.1%;
   margin: 0;
   padding: 0;
 }
 .ui-autocomplete li {
-  border-top: 1px solid #c6c6c5;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.16);
 }
 .ui-autocomplete li a {
   display: block;
@@ -107,7 +108,7 @@ select.input-success {
   width: 1px;
 }
 .best-items .categories-block ul li a.active-li .left-box {
-  width: 36.5%;
+  width: 40%;
 }
 .best-items .categories-block ul li a.active-li .left-box {
   display: table-cell;
@@ -115,7 +116,7 @@ select.input-success {
   vertical-align: middle;
 }
 .best-items .categories-block ul li a.active-li .box {
-  padding: 0 14px;
+  padding: 0;
 }
 .best-items .categories-block ul li a.active-li .box {
   display: table-cell;

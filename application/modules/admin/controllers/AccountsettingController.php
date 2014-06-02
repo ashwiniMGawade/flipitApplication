@@ -387,7 +387,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
         if(isset($send) && $send == 'test'){
 
-            $getTestEmaildata =  Visitor::getuserpwddetail($testEmail);
+            $getTestEmaildata =  Visitor::getVisitorDetailsByEmail($testEmail);
 
             $key = 0;
             $visitorData[$key]['rcpt'] = $testEmail;

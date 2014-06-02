@@ -1,29 +1,31 @@
-<?php
-$userDetails = $this->userDetails;
-$profileLink = $this->profileLink;
-$firstName = $this->firstName;
-$lastName = $this->lastName;
-$articleUpdatedAtDate = $this->articleUpdatedAtDate;
-?>
 <section class="news-block">
     <?php 
         if(!empty($this->recentlyAddedArticles)) {
             foreach($this->recentlyAddedArticles as $recentlyAddedArticle) :
+                $userInformationObject = new User();
+                $userDetails =  $userInformationObject->getUserDetails($recentlyAddedArticle['authorid']);
+                $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
+                $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['updated_at']);
+                $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_MEDIUM);
     ?>            
     <article class="box">
         <span class="image">
-            <img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['articleImage']['path'].$recentlyAddedArticle['articleImage']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>" width="118" height="118" />
+            <img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['articleImage']['path'].
+                $recentlyAddedArticle['articleImage']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>" 
+            width="118" height="118" />
         </span>
         <div class="text-box">
             <h1>
-                <a href="<?php echo $recentlyAddedArticle['title'];?>"><?php echo $recentlyAddedArticle['title'];?></a>
+                <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>">
+                    <?php echo $recentlyAddedArticle['title'];?></a>
             </h1>
             <p>
                 <em><?php echo $this->translate('by ');?>
-                    <a href="<?php echo $profileLink; ?>"><?php echo $firstName . " " . $lastName;?></a>, <?php echo $articleUpdatedAtDate; ?>
+                    <a href="<?php echo $profileLink; ?>"><?php echo $userDetails['slug'];?></a>, 
+                    <?php echo $articleUpdatedAtDate; ?>
                 </em>
             </p>
-            <a href="<?php echo $recentlyAddedArticle['title'];?>" class="more">
+            <a href="<?php echo  HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>" class="more">
                 <span><?php echo $this->translate('Read More');?></span>
             </a>
         </div>
