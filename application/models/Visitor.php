@@ -152,6 +152,24 @@ class Visitor extends BaseVisitor
         }
         return $visitorConrmationStatus;
     }
+    
+    public static function setVisitorLoggedIn($visitorId)
+    {
+        $visitorLoginStatus = false;
+        $visitorDetails = Visitor::getUserDetails($visitorId);
+        $dataAdapter = new Auth_VisitorAdapter($visitorDetails[0]["email"], $visitorDetails[0]["password"]);
+        $visitorZendAuth = Zend_Auth::getInstance();
+        $visitorZendAuth->setStorage(new Zend_Auth_Storage_Session('front_login'));
+        $visitorZendAuth->authenticate($dataAdapter);
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $visitorId = Auth_VisitorAdapter::getIdentity()->id;
+            $vistor = new Visitor();
+            $vistor->updateLoginTime($visitorId);
+            setcookie('kc_unique_user_id', $visitorId, time() + 1800, '/');
+            $visitorLoginStatus = true;
+        }
+        return $visitorLoginStatus;
+    }
     #############################################################
     ######### END REFACTRED CODE ################################
     #############################################################

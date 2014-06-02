@@ -5,10 +5,8 @@
 <?php 
 foreach ($this->latestShopUpdates as $latestShopUpdate) {
     $latestShopUpdate = (object) $latestShopUpdate;
-    $datetime = strtotime($latestShopUpdate->startdate);
-    $date = date('d', $datetime);
-    $month = date('M', $datetime);
-    $year = date('Y', $datetime);
+    $newsStartDateObject = new Zend_Date($latestShopUpdate->startdate);
+    $newsStartDate = $newsStartDateObject->get(Zend_Date::DATE_MEDIUM);
     $httpStringPosition = 'http';
 
     $content = '';
@@ -21,7 +19,7 @@ foreach ($this->latestShopUpdates as $latestShopUpdate) {
     ?>
     <div class="news-box">
         <article class="box">
-            <em class="date"><?php echo $date.' '.$month.' '.$year; ?></em>
+            <em class="date"><?php echo $newsStartDate;?></em>
             <h3><?php 
     if ($latestShopUpdate->url!=null && $latestShopUpdate->url!='') :
         ?>
