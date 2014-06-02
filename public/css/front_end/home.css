@@ -395,7 +395,7 @@
 }
 .home-page .best-items .categories-block ul li a {
   border-top: 1px solid #e4e4e4;
-  padding: 6px 28px;
+  padding: 6px 27px;
   position: relative;
   height: 83px;
   display: table;
@@ -429,7 +429,7 @@
   background: #fff;
 }
 .home-page .best-items .categories-block .left-box {
-  width: 21.5%;
+  width: 22%;
   display: table-cell;
   vertical-align: middle;
   text-align: center;
