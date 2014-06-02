@@ -5,7 +5,8 @@
                 $userInformationObject = new User();
                 $userDetails =  $userInformationObject->getUserDetails($recentlyAddedArticle['authorid']);
                 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
-                $articleUpdatedAtDate = date('d M Y', strtotime($recentlyAddedArticle['updated_at']));
+                $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['updated_at']);
+                $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_MEDIUM);
     ?>            
     <article class="box">
         <span class="image">
@@ -15,7 +16,8 @@
         </span>
         <div class="text-box">
             <h1>
-                <a href="<?php echo HTTP_PATH_LOCALE. $recentlyAddedArticle['title'];?>"><?php echo $recentlyAddedArticle['title'];?></a>
+                <a href="<?php echo HTTP_PATH_LOCALE. $recentlyAddedArticle['title'];?>">
+                    <?php echo $recentlyAddedArticle['title'];?></a>
             </h1>
             <p>
                 <em><?php echo $this->translate('by ');?>

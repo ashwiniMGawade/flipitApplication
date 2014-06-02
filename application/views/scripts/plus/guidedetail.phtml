@@ -7,7 +7,10 @@ $userDetails = $this->userDetails;
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
 $firstName = str_replace(' ', '', $userDetails['firstName']);
 $lastName = str_replace(' ', '', $userDetails['lastName']);
-$articleUpdatedAtDate = date('d M Y', strtotime($articleDetails['updated_at']));
+//$articleUpdatedAtDate = date('d M Y', strtotime($articleDetails['updated_at']));
+
+$articleUpdatedAtDate = new Zend_Date($articleDetails['updated_at']);
+$articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_MEDIUM);
 $plusViewPath = 'plus/';
 $discussion = $this->partial(
     'partials/_discussion.phtml',
