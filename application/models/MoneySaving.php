@@ -42,7 +42,7 @@ class MoneySaving extends BaseMoneySaving
     public static function getRecentlyAddedArticles($limit)
     {
         $recentlyAddedArticles = Doctrine_Query::create()
-            ->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
+            ->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,  ai.path, ai.name,aai.path, aai.name')
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')

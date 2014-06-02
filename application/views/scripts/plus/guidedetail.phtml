@@ -1,22 +1,21 @@
 <?php 
-$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/in-savings.css");
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/moneySaving.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/stickyfloat.js");
+//echo "<pre>";print_r($this->recentlyAddedArticles);die;
 $articleDetails = $this->articleDetails;
 $userDetails = $this->userDetails;
-$editorName = $userDetails['slug'];
-$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/".$editorName;
+$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
 $firstName = str_replace(' ', '', $userDetails['firstName']);
 $lastName = str_replace(' ', '', $userDetails['lastName']);
 $articleUpdatedAtDate = date('d M Y', strtotime($articleDetails['updated_at']));
-$partialViewPath = 'partials/';
+$plusViewPath = 'plus/';
 $discussion = $this->partial(
-    $partialViewPath.'_discussion.phtml',
+    'partials/_discussion.phtml',
     array('shopName' =>'')
 );
 $articleInformation = $this->partial(
-    'plus/_articleInformation.phtml',
+    $plusViewPath.'_articleInformation.phtml',
         array(
            'artcileDetails' => $articleDetails,
            'userDetails' => $userDetails,
@@ -27,48 +26,44 @@ $articleInformation = $this->partial(
         )
 );
 $authorDetails = $this->partial(
-    'plus/_authorDetails.phtml',
+    $plusViewPath.'_authorDetails.phtml',
         array(
             'userDetails' => $userDetails,
             'profileLink' => $profileLink
         )
 );
 $savingGuides = $this->partial(
-    'plus/_savingGuides.phtml',
+    $plusViewPath.'_savingGuides.phtml',
         array(
-            'articlesRelatedToCurrentCategory' => $this->articlesRelatedToCurrentCategory,
+            'articlesRelatedToCurrentCategory' => $this->articlesRelatedToCurrentCategory
         )
 );
 $recentlyAddedArticles = $this->partial(
-    'plus/_recentlyAddedArticles.phtml',
+    $plusViewPath.'_recentlyAddedArticles.phtml',
         array(
-            'recentlyAddedArticles' => $this->recentlyAddedArticles,
-            'profileLink' => $profileLink,
-            'firstName' => $firstName,
-            'lastName' => $lastName,
-            'articleUpdatedAtDate'=> $articleUpdatedAtDate
+            'recentlyAddedArticles' => $this->recentlyAddedArticles
         )
 );
 $topPopularOffers = $this->partial(
-    'plus/_topPopularOffers.phtml',
+    $plusViewPath.'_topPopularOffers.phtml',
         array(
             'topPopularOffers' => $this->topPopularOffers,
         )
 );
 $directChapterLinks = $this->partial(
-    'plus/_directChapterLinks.phtml',
+    $plusViewPath.'_directChapterLinks.phtml',
         array(
             'firstName' => $firstName,
             'lastName' => $lastName,
             'artcileDetails' => $articleDetails
         )
 );
+$sidebarHtml = '<aside id="sidebar" class="col-md-4 col-sm-4">' . $recentlyAddedArticles . $topPopularOffers . $directChapterLinks 
+."</aside>";
+$articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$articleDetails['articleImage']['name'];
 ?>
 <main role="main" id="main" class="container">
     <div class="banner-block">
-        <?php
-            $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$articleDetails['articleImage']['name'];
-        ?>
         <img class="image" src="<?php echo $articleImage; ?>" alt="<?php echo $articleDetails['title'];?>">
     </div>
     <div class="row">
@@ -76,20 +71,10 @@ $directChapterLinks = $this->partial(
             <?php echo $articleInformation; ?>
             <div class="share-box">
                 <span class="txt"><?php echo $this->translate('Share this tip');?></span>
-                    <?php echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');?>            
+                <?php echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');?>            
             </div>
-            <?php
-                echo $authorDetails;
-                echo $savingGuides;
-                echo $discussion;
-            ?>
+            <?php echo $authorDetails. $savingGuides. $discussion;?>
         </div>
-        <aside id="sidebar" class="col-md-4 col-sm-4">
-            <?php 
-                echo $recentlyAddedArticles;
-                echo $topPopularOffers;
-                echo $directChapterLinks;
-            ?>    
-        </aside>
+        <?php echo $sidebarHtml; ?>
     </div>
 </main>
