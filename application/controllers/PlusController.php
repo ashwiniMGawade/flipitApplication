@@ -55,7 +55,9 @@ class PlusController extends Zend_Controller_Action
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $articlesRelatedToCurrentCategory = !empty($categoryWiseArticles[$currentArticleCategory]) ? 
             $categoryWiseArticles[$currentArticleCategory] : '';
-
+        $incrementArticleViewCountValue  = FrontEnd_Helper_viewHelper::
+            viewCounter('article', 'onload', $articleDetails[0]['id']);
+            
         if (!empty($articleDetails)) {
             $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical(
                 $this->getRequest()->getParam('permalink'));

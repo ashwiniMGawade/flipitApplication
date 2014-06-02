@@ -8,6 +8,7 @@ $articleUpdatedAtDate = $this->articleUpdatedAtDate;
 ?>
 <section class="post-box">
     <header class="meta">
+        <input type = "hidden" id = "" value = "<?php echo $articleDetails['id']; ?>"/>
         <h1><?php echo $articleDetails['title'];?></h1>
         <p><?php echo $this->translate('By');?>
             <a href="<?php echo $profileLink; ?>">
@@ -19,9 +20,8 @@ $articleUpdatedAtDate = $this->articleUpdatedAtDate;
             <?php  
                 if (!empty($articleDetails['chapters'])) {
                     foreach ($articleDetails['chapters'] as $articleChapter) :                    
-                        $chapterTitle = preg_replace(array('/\s/','/[\,+@#?$%^:&*!.();]+/', '/(\')/'), 
-                            array("-","-","-"), $articleChapter['title']);
-                        $chapterTitle = strtolower($chapterTitle);
+                        $partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+                        $chapterTitle = $partialFunctions->getSpacesFilledWithHiphenOfChapterTitle($articleChapter['title']);
                         echo '<h2 id="'.$chapterTitle.'">'.$articleChapter['title'].'</h2>';
                         echo $articleChapter['content'];
                     endforeach;
