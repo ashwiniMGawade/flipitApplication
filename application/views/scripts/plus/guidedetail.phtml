@@ -2,7 +2,6 @@
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/moneySaving.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/stickyfloat.js");
-//echo "<pre>";print_r($this->recentlyAddedArticles);die;
 $articleDetails = $this->articleDetails;
 $userDetails = $this->userDetails;
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
