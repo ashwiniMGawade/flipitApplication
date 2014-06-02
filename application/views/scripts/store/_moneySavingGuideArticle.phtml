@@ -23,12 +23,7 @@ if ($this->partialCounter == 1) {
                 </h2>
                 <p>
 <?php 
-    $articleContent = strip_tags($this->content);
-    if (strlen($articleContent) > 120) {
-        echo substr($articleContent, 0, 120).'...';
-    } else {
-        echo $articleContent;
-    }
+    echo $articleContent;
 ?>
                 </p>
             </div>
