@@ -289,47 +289,29 @@ EOD;
      */
     public function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
-        $socialMediaUrl = self::getsocialMediaUrl();
-        $facebookLikeWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'facebook');
-        $twitterLikeWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'twitter');
-        $googlePlusOneWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'google');
+        $facebookLikeWidget = self::getSocialMediaLikeButtons('facebook.com', 'facebook');
+        $twitterLikeWidget = self::getSocialMediaLikeButtons('twitter.com', 'twitter');
+        $googlePlusOneWidget = self::getSocialMediaLikeButtons('plus.google.com', 'google');
         $socialMedia = self::getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget);
         return $socialMedia;
     }
 
-    public static function getsocialMediaUrl()
-    {
-        $controller = zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-        $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'], '/');
-        $socialMediaUrl = self::generateSocialLink($socialMediaUrl);
-        return $socialMediaUrl;
-    }
-    
     public static function getSocialMediaLikeButtons($socialMediaUrl, $type)
     {
         if ($type == 'facebook') {
-            $socialMediaLikeButtons = "<div id='fb-root'></div><div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'></div>";
+            $socialMediaLikeButtons = "<a hreaf='".$socialMediaUrl."'><img src='' ></a>";
         } elseif ($type == 'twitter') {
-            $socialMediaLikeButtons = "<div class='g-plus' data-href='".$socialMediaUrl."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>";
+            $socialMediaLikeButtons = "<a hreaf='".$socialMediaUrl."'><img src='' ></a>";
         } elseif ($type == 'google') {
-            $socialMediaLikeButtons = "<a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button' data-lang='".LOCALE."'></a>";
+            $socialMediaLikeButtons = "<a hreaf='".$socialMediaUrl."'><img src='' ></a>";
         }
         return $socialMediaLikeButtons;
     }
 
     public function getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget)
     {
-        if($type == 'widget' || $type == 'popup'):
-            $socialMedia=$facebookLikeWidget.$googlePlusOneWidget.$twitterLikeWidget;
-        elseif($type == 'article'):
-            $socialMedia = "<ul class='social-box'>
-                            <li>".$facebookLikeWidget."</li>
-                            <li>".$googlePlusOneWidget."</li>
-                            <li>".$twitterLikeWidget."</li>
-                            </ul>";
-        else:
-            $socialMediaTitle = "<h2>".$this->translate('Share')."</h2>
-                <span>".$this->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+
+            $socialMediaTitle = "<h2>".$this->translate('Follow us')."</h2>";
             $socialMedia = "
                 <article class='block'>
                     <div class='social-likes'>
@@ -338,10 +320,10 @@ EOD;
                             <li>".$facebookLikeWidget."</li>
                             <li>".$googlePlusOneWidget."</li>
                             <li>".$twitterLikeWidget."</li>
+                            <li class='share-text'>".$this->translate('Follow usfor the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
                         </ul>
                     </div>
                 </article>";
-        endif;
         return $socialMedia;
     }
     
