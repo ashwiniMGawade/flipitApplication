@@ -93,7 +93,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends FrontEnd_Helper_viewHelpe
     }
 
     public function getHomePageRightColumnOffersList() {
-        $topOffer = $this->getRightColumnOffersHtml('topOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('top20'), 'All Top Codes');
+        $topOffer = $this->getRightColumnOffersHtml('topOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('top-20'), 'All Top Codes');
         $newOffer = $this->getRightColumnOffersHtml('newOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('nieuw'), 'All New Codes');
         $categories = $this->getRighColumnCategoriesHtml();
         $specialListPage = $this->getRightColumnSpicialListHtml();
