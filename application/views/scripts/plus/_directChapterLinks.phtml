@@ -11,7 +11,7 @@ $articleDetails = $this->artcileDetails;
             foreach ($articleDetails['chapters'] as $articleChapter) :
     ?>
         <li>
-            <a href="javascript:void(0);" rel="<?php echo $articleChapter['id']; ?>" onclick="scrollByChapter(this)">
+            <a href="#<?php echo $articleChapter['id']; ?>" rel="<?php echo $articleChapter['id']; ?>">
                 <strong class="title"><?php echo $articleChapter['title'];?></strong>
             </a>
         </li>   
