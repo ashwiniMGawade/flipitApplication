@@ -519,9 +519,8 @@ EOD;
         return $categorySidebarWodget;
     }
 
-    public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '')
+    public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '1')
     {
-        
         if ($relatedFunction['function'] == '') {
             $functionToBeCached = $relatedFunction['parameters'];
         } else {
@@ -530,7 +529,7 @@ EOD;
 
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
-            if ($replaceStringArrayCheck == '') {
+            if ($replaceStringArrayCheck == '1') {
                 $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($functionToBeCached);
             } else {
                 $requestedInformation = $functionToBeCached;
