@@ -10751,7 +10751,11 @@ hr.alt2 {
 .share-list li {
   display: inline-block;
   vertical-align: top;
-  padding: 0 30px 7px 0;
+  padding: 0 7px 7px 0;
+}
+.share-list li.share-text {
+    width : 200px;
+    float:right;
 }
 .share-list li img {
   vertical-align: top;
