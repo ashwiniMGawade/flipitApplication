@@ -34,14 +34,9 @@ if ($this->offer->userGenerated ==0 &&  $this->termsAndConditions!='' && $this->
     }
 }
 ?>
-    <div class="logo-box">
-        <?php echo $this->siteImage;?>
-        <span><?php echo $this->translate('Exclusive discount codes and deals');?></span>
+    <div class="terms-block" id='termAndConditionsPopup<?php echo $this->offer->id ;?>' style = "display:none;">
+        <ol class="num-list">
+            <?php echo $this->termsAndConditions;?>
+        </ol>
     </div>
-</footer>
-<div class="terms-block" id='termAndConditionsPopup<?php echo $this->offer->id ;?>' style = "display:none;">
-    <ol class="num-list">
-        <?php echo $this->termsAndConditions;?>
-    </ol>
-</div>
-      
+</footer>      

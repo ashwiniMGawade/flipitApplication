@@ -67,7 +67,7 @@
   background: #ffffff;
   border-width: 1px 1px 0 1px;
   border-style: solid;
-  border-color: #cbcbcb;
+  border-color: #fff;
   border-radius: 3px 3px 0 0;
   -webkit-border-radius: 3px 3px 0 0;
   box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
@@ -86,7 +86,7 @@
   line-height: 20px;
   position: relative;
   background: #ffffff;
-  border: 1px solid #cbcbcb;
+  border: 1px solid #fff;
   box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
   border-radius: 0 3px 3px 3px;
   -webkit-border-radius: 0 3px 3px 3px;
@@ -244,6 +244,9 @@
   width: 29.1%;
   position: relative;
   margin: 0 3.2% 2.8% 0;
+  -webkit-border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 .saving-page .item-block .item img {
   display: block;
@@ -262,10 +265,11 @@
 .saving-page .item-block .item .caption {
   display: inline-block;
   vertical-align: top;
-  padding: 9px 15px 12px;
+  padding: 10px 15px;
   color: #ffffff;
-  font-size: 21px;
-  line-height: 24px;
+  font-size: 15px;
+  line-height: 18px;
+  font-weight: 600;
   background: rgba(0, 0, 0, 0.8);
 }
 .saving-page .item-block .item .link {
