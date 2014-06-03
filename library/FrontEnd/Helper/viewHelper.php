@@ -299,11 +299,11 @@ EOD;
     public static function getSocialMediaLikeButtons($socialMediaUrl, $type)
     {
         if ($type == 'facebook') {
-            $socialMediaLikeButtons = "<a hreaf='".$socialMediaUrl."'><img src='' ></a>";
+            $socialMediaLikeButtons = "<a class='facebook' hreaf='".$socialMediaUrl."'></a>";
         } elseif ($type == 'twitter') {
-            $socialMediaLikeButtons = "<a hreaf='".$socialMediaUrl."'><img src='' ></a>";
+            $socialMediaLikeButtons = "<a class='twitter' hreaf='".$socialMediaUrl."'></a>";
         } elseif ($type == 'google') {
-            $socialMediaLikeButtons = "<a hreaf='".$socialMediaUrl."'><img src='' ></a>";
+            $socialMediaLikeButtons = "<a class='google' hreaf='".$socialMediaUrl."'></a>";
         }
         return $socialMediaLikeButtons;
     }
@@ -314,7 +314,7 @@ EOD;
             $socialMediaTitle = "<h2>".$this->translate('Follow us')."</h2>";
             $socialMedia = "
                 <article class='block'>
-                    <div class='social-likes'>
+                    <div class='social-networks'>
                         <div class='intro'>".$socialMediaTitle."</div>
                         <ul class='share-list'>
                             <li>".$facebookLikeWidget."</li>
