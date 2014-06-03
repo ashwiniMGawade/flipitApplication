@@ -35,7 +35,8 @@ if (count($this->offersWithPagination)>0) {
     <aside class="col-md-4 col-sm-4" id="sidebar">
         <?php
         echo $signUpWidgetForm;
-        echo FrontEnd_Helper_viewHelper::socialMediaWidget(strtolower($this->actionName));
+        $frontendViewHelper = new FrontEnd_Helper_viewHelper();
+        echo $frontendViewHelper->socialMediaWidget(strtolower($this->actionName));
         ?>
     </aside>
 </div>

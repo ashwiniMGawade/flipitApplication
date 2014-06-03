@@ -58,7 +58,7 @@ class Visitor extends BaseVisitor
         $visitor->save();
     }
 
-    public static function addVisitor($visitorInformation, $vistorConfirmation)
+    public static function addVisitor($visitorInformation)
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;

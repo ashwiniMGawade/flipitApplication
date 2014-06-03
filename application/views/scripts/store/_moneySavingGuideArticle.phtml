@@ -11,20 +11,18 @@ if ($this->partialCounter == 1) {
 ?>
 <section class="tips-section">
     <article class="block">
-        <a onClick="javascript:viewCounter('onclick', 'article', <?php echo $this->id ; ?>);" 
-        href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('plus').'/'.$this->permalink;?>"
+        <a href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('plus').'/'.$this->permalink;?>"
         title='<?php echo $this->title;?>'>
             <div class="image">
-                <img id="<?php echo $this->articles['id']; ?>" alt="<?php echo $this->title;?>" src="<?php echo $articleImage;?>" width="216" height="129">
+                <img id="<?php echo $this->articles['id']; ?>" alt="<?php echo $this->title;?>" 
+                    src="<?php echo $articleImage;?>" width="216" height="129">
             </div>
             <div class="box">
                 <h2>
 <?php echo $this->title; ?>
                 </h2>
                 <p>
-<?php 
-    echo $articleContent;
-?>
+<?php echo $this->content; ?>
                 </p>
             </div>
         </a>

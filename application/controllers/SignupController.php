@@ -155,9 +155,9 @@ class SignupController extends Zend_Controller_Action
             $profileForm->getElement('lastName')->setValue($visitorDetailsForForm['lastName']);
             $profileForm->getElement('emailAddress')->setValue($visitorDetailsForForm['email']);
             $profileForm->getElement('gender')->setValue($visitorDetailsForForm['gender']);
-            $profileForm->getElement('dateOfBirthDay')->setValue($dateOfBirth[0]);
-            $profileForm->getElement('dateOfBirthMonth')->setValue($dateOfBirth[1]);
-            $profileForm->getElement('dateOfBirthYear')->setValue($dateOfBirth[2]);
+            $profileForm->getElement('dateOfBirthDay')->setValue($dateOfBirth[0]=='00' ? '' : $dateOfBirth[0]);
+            $profileForm->getElement('dateOfBirthMonth')->setValue($dateOfBirth[1]=='00' ? '' : $dateOfBirth[1]);
+            $profileForm->getElement('dateOfBirthYear')->setValue($dateOfBirth[2]=='0000' ? '' : $dateOfBirth[2]);
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
         }

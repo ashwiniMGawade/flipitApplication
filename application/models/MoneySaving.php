@@ -245,9 +245,10 @@ class MoneySaving extends BaseMoneySaving
 
     public static function generateShopMoneySavingGuideArticle($slug, $limit, $shopId)
     {
-        $shopMoneySavingGuideArticle = Doctrine_Query::create()->select('chap.*,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name')
+        $shopMoneySavingGuideArticle = Doctrine_Query::create()->select('chap.*,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name, at.path, at.name')
         ->from('Articles a')
         ->leftJoin('a.articleImage ai')
+        ->leftJoin('a.thumbnail at')
         ->leftJoin('a.relatedstores rs')
         ->leftJoin('a.chapters chap')
         ->where('rs.storeid='.$shopId)

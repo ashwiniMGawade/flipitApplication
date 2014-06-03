@@ -76,8 +76,8 @@ class StoreController extends Zend_Controller_Action
             }
 
             if ($shopInformation[0]['showChains']) {
-
-                $shopChains = FrontEnd_Helper_viewHelper::sidebarChainWidget(
+                $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+                $shopChains = $frontEndViewHelper->sidebarChainWidget(
                     $shopInformation[0]['id'],
                     $shopInformation[0]['name'],
                     $shopInformation[0]['chainItemId']
@@ -138,7 +138,8 @@ class StoreController extends Zend_Controller_Action
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
-        $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularShopWidget();
+        $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+        $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
 
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
@@ -155,6 +156,7 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'author-page';
     }
 
     public function topStorePopularOffers($shopId, $offers)
@@ -233,7 +235,8 @@ class StoreController extends Zend_Controller_Action
         );
 
         if ($shopInformation[0]['showChains']) {
-            $shopChains = FrontEnd_Helper_viewHelper::sidebarChainWidget(
+            $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+            $shopChains = $frontEndViewHelper->sidebarChainWidget(
                 $shopInformation[0]['id'],
                 $shopInformation[0]['name'],
                 $shopInformation[0]['chainItemId']
@@ -267,7 +270,8 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
-        $this->view->popularStoresList = FrontEnd_Helper_viewHelper::PopularShopWidget();
+        $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+        $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides=$howToGuides;
 

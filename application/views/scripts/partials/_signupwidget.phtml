@@ -26,7 +26,7 @@ foreach ($this->zendForm->getElements() as $formElement) {
     <?php  
     echo $this->formSubmit(
         'submit',
-        $this->translate('Sign up'),
+        FrontEnd_Helper_viewHelper::__form('Sign up'),
         array('class'=>'btn blue btn-lg btn-primary '.$this->zendForm->submitButtonClassName, 'id'=>'Login' ,'onclick' => 'setHiddenFieldValue(), signUpNewsLetter("' . $this->zendForm->zendFormName .'")')
     )
     ?>

@@ -97,7 +97,9 @@ else:
 endif;
 
 echo FrontEnd_Helper_LayoutContent::homePageBanner($this->banner);
-echo FrontEnd_Helper_LayoutContent::homePageSearch();
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index') {
+    echo $this->render('index/_homePageSearch.phtml');
+}
 
 if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
     echo "</div>";

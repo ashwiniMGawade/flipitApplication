@@ -238,29 +238,14 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 								return name = "<p editId='" + obj.aData.id + "' class='editId colorAsLink word-wrap-without-margin-offer'><a href='javascript:void(0)' >"+ucfirst(obj.aData.title)+"</a></p>";
 						},
 							"sWidth": "542px"
-								//"bVisible":    false ,
-
-								//"bSortable" : false,
-								//"sType": 'numeric'
-								
 						},
-						/*{
-							"fnRender" : function(obj) {
-								var tag = "<p editId='" + obj.aData.id + "' class='editId colorAsLink word-wrap-without-margin-offer'><a href='javascript:void(0)'>"+ucfirst(obj.aData.title)+"</a></p>"; 
-								return tag;
-							 },
-							"bSearchable" : true,
-							"bSortable" : true
-						},*/
 						{
 							"fnRender" : function(obj) {
 								var tag='';
 								if(obj.aData.shop!=undefined && obj.aData.shop!=null && obj.aData.shop!='') {
 									if(obj.aData.shop.name!=undefined && obj.aData.shop.name!=null && obj.aData.shop.name!='')
 									{
-										//if(obj.aData.shop!=undefined && obj.aData.shop!='' && obj.aData.shop!=null){
-											tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"+ucfirst(obj.aData.shop.name)+"</a></p>";
-										//	}
+										tag = "<p class='word-wrap-without-margin-offer'><a href='javascript:void(0)'>"+ucfirst(obj.aData.shop.name)+"</a></p>";
 									}else {
 										
 										
@@ -392,10 +377,10 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 						{
 						"fnRender" : function(obj) {
 							 
-								
+								var tag = '';
 								if(obj.aData.authorName!='' && obj.aData.authorName != null && obj.aData.authorName!=undefined){
 									
-									var tag = "<p class='word-wrap-without-margin-offer'>"+obj.aData.authorName+"</p>";
+									tag = "<p class='word-wrap-without-margin-offer'>"+obj.aData.authorName+"</p>";
 								}
 								
 								return "<a href='javascript:void(0)'>" + tag + "</a>";
