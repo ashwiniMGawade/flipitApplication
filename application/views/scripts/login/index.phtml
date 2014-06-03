@@ -22,11 +22,11 @@ $forgotPasswordLink =
     <form action="" method="post" class="login-form" name="login" id='login'>
         <fieldset>
             <div class="form-group">
-            <?php echo $loginForm->emailAddress->renderLabel(). $loginForm->emailAddress->renderViewHelper();?>
+            <?php echo $this->translate($loginForm->emailAddress->renderLabel()). $loginForm->emailAddress->renderViewHelper();?>
             </div>
             <div class="form-group">
                 <div class="link">
-                    <?php echo $loginForm->password->renderLabel();?>
+                    <?php echo $this->translate($loginForm->password->renderLabel());?>
                     <a href="<?php echo $forgotPasswordLink;?>"
                         class="right">
                         <?php echo $this->translate('Forgot password?');?>

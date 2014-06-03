@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper {
+class FrontEnd_Helper_AuthorPartialFunctions extends Transl8_View_Helper_Translate {
     public static function getShopLogos($shops) {
         $shopLogos = '';
         foreach ($shops as $shop):
@@ -28,7 +28,7 @@ class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper 
         return 
         '<li>
             <a href="'.$socialMediaLinkUrl.'" target="_blank">
-                <img src="' .HTTP_PATH ."public/images/front_end/". $socialMediaLinkImage .'" width="16" height="16" />' . $this->zendTranslate->translate($socialMediaLinkName)
+                <img src="' .HTTP_PATH ."public/images/front_end/". $socialMediaLinkImage .'" width="16" height="16" />' . $this->translate($socialMediaLinkName)
             .'</a>
         </li>';
     }

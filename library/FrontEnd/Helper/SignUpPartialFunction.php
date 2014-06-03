@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
+class FrontEnd_Helper_SignUpPartialFunction extends Transl8_View_Helper_Translate
 {
     public static function validateZendForm($currentSubmittedForm, $singUpFormForStorePage, $signUpFormSidebarWidget)
     {
@@ -35,23 +35,23 @@ class FrontEnd_Helper_SignUpPartialFunction extends FrontEnd_Helper_viewHelper
     public function getSignUpWidgetHeader($widgetType)
     {
        if ($widgetType== 'sidebarWidget') {
-        $signUpHeader='<h2 class="form-signin-heading">' .$this->zendTranslate->translate('Sign up').'
-            <span>'.$this->zendTranslate->translate('and join over').'<br>' .$this->zendTranslate->translate('10 million people')
+        $signUpHeader='<h2 class="form-signin-heading">' .$this->translate('Sign up').'
+            <span>'.$this->translate('and join over').'<br>' .$this->translate('10 million people')
             .'</span></h2>';
        } else if($widgetType == 'categoryPageSignupForm') {
         $signUpHeader='<h2 class="form-signin-heading">' .'
-            <span>'.$this->zendTranslate->translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'
+            <span>'.$this->translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'
             .'</span></h2>';
        }
        else if($widgetType == 'footerSignupForm') {
         $signUpHeader='<div class="text">
-                <h2>'.$this->zendTranslate->translate('Subscribe now').'</h2>
-                <span>'.$this->zendTranslate->translate('Become a saving superstar').'! '.'<br>'.$this->zendTranslate->translate('And get exclusive codes').'</span>
+                <h2>'.$this->translate('Subscribe now').'</h2>
+                <span>'.$this->translate('Become a saving superstar').'! '.'<br>'.$this->translate('And get exclusive codes').'</span>
             </div>';
        }
        else {
-         $signUpHeader='<h2>'.$this->zendTranslate->translate('Receive weekly updates of the best offers?').'<br>'
-         .$this->zendTranslate->translate('Sign up for our newsletter!').'</h2>';
+         $signUpHeader='<h2>'.$this->translate('Receive weekly updates of the best offers?').'<br>'
+         .$this->translate('Sign up for our newsletter!').'</h2>';
        }
        return $signUpHeader;
     }

@@ -51,8 +51,8 @@ $signUpWidgetForm = $this->partial(
     <?php 
     $frontendViewHelper = new FrontEnd_Helper_viewHelper();
     echo $frontendViewHelper->popularCategoryWidget();
-    echo FrontEnd_Helper_viewHelper::socialMediaWidget();
-    echo FrontEnd_Helper_viewHelper::popularShopWidget();
+    echo $frontendViewHelper->socialMediaWidget();
+    echo $frontendViewHelper->popularShopWidget();
     echo $frontendViewHelper->browseByStoreWidget();
     echo $signUpWidgetForm;
     ?>

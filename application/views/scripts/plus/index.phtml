@@ -80,7 +80,9 @@ if (!empty($categoryWiseArticles['savingtip'])) {
             <?php echo $this->translate('Satisfied with the new Kortingscode.nl? Like us and win great prizes');?>
             </span>
             <ul class="share-list">
-            <?php echo FrontEnd_Helper_viewHelper::socialMediaWidget('', 'article');?>
+            <?php 
+            $frontendHelper = new FrontEnd_Helper_viewHelper();
+            echo $frontendHelper->socialMediaWidget('', 'article');?>
             </ul>
         </div>
     </div>
