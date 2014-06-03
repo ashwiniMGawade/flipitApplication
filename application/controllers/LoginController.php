@@ -105,7 +105,7 @@ class LoginController extends Zend_Controller_Action
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $module = $this->getRequest()->getParam('lang');
-        $this->_helper->redirector('index');
+        $this->_redirect(HTTP_PATH_LOCALE);
     }
 
     public function forgotpasswordAction()
@@ -133,7 +133,7 @@ class LoginController extends Zend_Controller_Action
                     );
                 } else {
                     $this->addFlashMessage(
-                        $this->view->translate('Wrong Email address Please enter valid email address'),
+                        $this->view->translate('Wrong Email address. Please enter valid email address'),
                         HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') . '/'
                         .FrontEnd_Helper_viewHelper::__link('forgotpassword'),
                         'error'
@@ -156,7 +156,7 @@ class LoginController extends Zend_Controller_Action
         $resetPasswordForm = new Application_Form_ResetPassword();
         $this->view->form = $resetPasswordForm;
         if ($visitor['changepasswordrequest']) {
-            $this->view->resetLinkMessage = $this->view->translate('Password Reset Link has already been used!');
+            $this->view->resetLinkMessage = $this->view->translate('This password reset link has already been used!');
             $this->view->linkAlreadyUsed = false;
         } else {
             $this->view->linkAlreadyUsed = true;
@@ -210,13 +210,13 @@ class LoginController extends Zend_Controller_Action
         if (!empty($visitor)) {
             if (Visitor::updateVisitorStatus($visitor[0]['id'])) {
                 $this->addFlashMessage(
-                    $this->view->translate('Your email address has been confirm please login'),
+                    $this->view->translate('Your email address has been confirmed please login'),
                     HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'),
                     'success'
                 );
             } else {
                 $this->addFlashMessage(
-                    $this->view->translate('your email address already confirmed'),
+                    $this->view->translate('Your email address is already confirmed'),
                     HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'),
                     'error'
                 );

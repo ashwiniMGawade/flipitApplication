@@ -1,6 +1,7 @@
 <?php 
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialMedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/savingguides.js");
+$this->headLink()->prependStylesheet("/public/css/front_end/saving.css");
 $pageImage = '';
 $pageTitle = '';
 if (!empty($this->pageDetails)):
