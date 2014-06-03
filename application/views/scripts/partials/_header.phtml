@@ -1,4 +1,12 @@
 <?php 
+$translateSession = new Zend_Session_Namespace('Transl8');
+if (!empty($translateSession->onlineTranslationActivated)): ?>
+    <div class="inline-translation-bar">
+        Inline translation active! <a href="<?php echo HTTP_PATH; ?>trans/stopinlinetranslation">Stop inline translation and return to Admin</a>
+    </div>
+<?php 
+endif;
+ 
 if(LOCALE == ''):
     $logoCssClass = 'logo kortingscode';
     $siteName = 'kortingscode';
@@ -10,7 +18,7 @@ endif
 <header id="header">
     <div class="top-panel">
         <div class="container">
-            <span class="slogan"><?php echo $siteName . ' : ' . $this->translate('save money with online discount codes and save pointers');?></span>
+            <span class="slogan"><?php echo $this->translate('save money with online discount codes and save pointers');?></span>
             <a class="menu-account" href="javascript:void(0);"><?php echo $this->translate('account menu');?></a>
                 <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
