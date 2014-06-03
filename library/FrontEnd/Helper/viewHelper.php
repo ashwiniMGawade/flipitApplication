@@ -404,7 +404,7 @@ EOD;
         endif;
         return '<a onclick="storeAddToFeborite('.$favouriteShopId.','.$shopId.')" class="pop btn btn-sm btn-default" href="javascript:void(0)">
             <span class="glyphicon glyphicon-heart"></span>'.
-            $this->translate('Love'); 
+            $this->translate('Love').
         '</a>';
     }
 
