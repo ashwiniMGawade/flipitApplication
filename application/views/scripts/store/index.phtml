@@ -1,6 +1,5 @@
 <?php
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$this->HeadLink()->prependStylesheet("/public/css/front_end/all-stores.css");
 $storeViewPath = 'store/';
 $popularStores = '';
 if (count($this->popularStores)) :
@@ -40,7 +39,8 @@ echo $storesInformation;
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
 <?php
 echo $this->esi($this->locale.$storeViewPath.'signupwidget');
-echo FrontEnd_Helper_viewHelper::socialMediaWidget();
+$frontendHelper = new FrontEnd_Helper_viewHelper();
+echo $frontendHelper->socialMediaWidget();
 ?>
     </aside>
 </div>

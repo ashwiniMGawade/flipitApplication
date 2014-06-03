@@ -1,6 +1,6 @@
 <?php
 
-class FrontEnd_Helper_viewHelper
+class FrontEnd_Helper_viewHelper extends Transl8_View_Helper_Translate
 {
     ##################################################################################
     ################## REFACTORED CODE ###############################################
@@ -54,20 +54,7 @@ EOD;
         }
     }
 
-
-    /**
-     * sideChainWidget
-     *
-     * create sidebar chain widegt on shop page which show a chain related to that country
-     *
-     * @param integer $id          shop id
-     * @param integer $chainItemId chain item id to fetch chain
-     * @param string  $shopName    shop name
-     *
-     *
-     * @return string
-     */
-    public static function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
+    public function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
     {
         if ($shopName) {
             $chain = Chain::returnChainData($chainItemId, $id);
@@ -77,9 +64,8 @@ EOD;
 
             $httpPathLocale = trim(HTTP_PATH_LOCALE, '/');
             $httpPath = trim(HTTP_PATH, '/');
-            $getTranslate = Zend_Registry::get('Zend_Translate');
-            $shopHeader = $getTranslate->translate("is an international shop");
-            $widgetText = $getTranslate->translate("Check out the coupons and discounts from other countries when you're interested:");
+            $shopHeader = $this->translate("is an international shop");
+            $widgetText = $this->translate("Check out the coupons and discounts from other countries when you're interested:");
             $string = <<<EOD
              <div class="intro">
                 <h2>
@@ -301,62 +287,43 @@ EOD;
      * @param $type string
      * @return socialMedia
      */
-    public static function socialMediaWidget($socialMediaUrl = '', $type = null)
+    public function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
-        $socialMediaUrl = self::getsocialMediaUrl();
-        $facebookLikeWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'facebook');
-        $twitterLikeWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'twitter');
-        $googlePlusOneWidget = self::getSocialMediaLikeButtons($socialMediaUrl, 'google');
+        $facebookLikeWidget = self::getSocialMediaLikeButtons('facebook.com', 'facebook');
+        $twitterLikeWidget = self::getSocialMediaLikeButtons('twitter.com', 'twitter');
+        $googlePlusOneWidget = self::getSocialMediaLikeButtons('plus.google.com', 'google');
         $socialMedia = self::getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget);
         return $socialMedia;
     }
 
-    public static function getsocialMediaUrl()
-    {
-        $controller = zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-        $socialMediaUrl = HTTP_PATH . ltrim($_SERVER['REQUEST_URI'], '/');
-        $socialMediaUrl = self::generateSocialLink($socialMediaUrl);
-        return $socialMediaUrl;
-    }
-    
     public static function getSocialMediaLikeButtons($socialMediaUrl, $type)
     {
         if ($type == 'facebook') {
-            $socialMediaLikeButtons = "<div id='fb-root'></div><div class='fb-like' data-href='".$socialMediaUrl."' data-send='false' data-width='44' data-layout='box_count' data-show-faces='false'></div>";
+            $socialMediaLikeButtons = "<a class='facebook' hreaf='".$socialMediaUrl."'></a>";
         } elseif ($type == 'twitter') {
-            $socialMediaLikeButtons = "<div class='g-plus' data-href='".$socialMediaUrl."' data-action='share' data-annotation='vertical-bubble' data-height='60'></div>";
+            $socialMediaLikeButtons = "<a class='twitter' hreaf='".$socialMediaUrl."'></a>";
         } elseif ($type == 'google') {
-            $socialMediaLikeButtons = "<a href='https://twitter.com/share' data-url='".$socialMediaUrl."' data-count='vertical' class='twitter-share-button' data-lang='".LOCALE."'></a>";
+            $socialMediaLikeButtons = "<a class='google' hreaf='".$socialMediaUrl."'></a>";
         }
         return $socialMediaLikeButtons;
     }
 
-    public static function getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget)
+    public function getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget)
     {
-        if($type == 'widget' || $type == 'popup'):
-            $socialMedia=$facebookLikeWidget.$googlePlusOneWidget.$twitterLikeWidget;
-        elseif($type == 'article'):
-            $socialMedia = "<ul class='social-box'>
-                            <li>".$facebookLikeWidget."</li>
-                            <li>".$googlePlusOneWidget."</li>
-                            <li>".$twitterLikeWidget."</li>
-                            </ul>";
-        else:
-            $zendTranslate = Zend_Registry::get('Zend_Translate');
-            $socialMediaTitle = "<h2>".$zendTranslate->translate('Share')."</h2>
-                <span>".$zendTranslate->translate('And receive cool discounts and useful actions through google+, twitter and Facebook')."</span>";
+
+            $socialMediaTitle = "<h2>".$this->translate('Follow us')."</h2>";
             $socialMedia = "
                 <article class='block'>
-                    <div class='social-likes'>
+                    <div class='social-networks'>
                         <div class='intro'>".$socialMediaTitle."</div>
                         <ul class='share-list'>
                             <li>".$facebookLikeWidget."</li>
                             <li>".$googlePlusOneWidget."</li>
                             <li>".$twitterLikeWidget."</li>
+                            <li class='share-text'>".$this->translate('Follow usfor the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
                         </ul>
                     </div>
                 </article>";
-        endif;
         return $socialMedia;
     }
     
@@ -392,7 +359,7 @@ EOD;
                     </a>
                 </div> <div class="box">';
         if ($expiredMessage !='storeDetail') {
-            $shop['subTitle'] = $this->zendTranslate->translate('Expired').' '.$shop['name'].' '.$this->zendTranslate->translate('copuon code');
+            $shop['subTitle'] = $this->translate('Expired').' '.$shop['name'].' '.$this->translate('copuon code');
         } else {
             $shop['subTitle'] = $shop['subTitle'];
         }
@@ -418,9 +385,9 @@ EOD;
              $favouriteShopId=Auth_VisitorAdapter::getIdentity()->id;
         endif;
         return '<a onclick="storeAddToFeborite('.$favouriteShopId.','.$shopId.')" class="pop btn btn-sm btn-default" href="javascript:void(0)">
-            <span class="glyphicon glyphicon-heart"></span>
-            Love 
-        </a>';
+            <span class="glyphicon glyphicon-heart"></span>'.
+            $this->translate('Love').
+        '</a>';
     }
 
     /**
@@ -510,7 +477,7 @@ EOD;
     {
         $allPopularCategories = Category::getPopularCategories();
         $categorySidebarWodget = '<div class="block"><div class="intro">
-        <h2 class="sidebar-heading">'. $this->zendTranslate->translate('All Categories').'</h2></div>
+        <h2 class="sidebar-heading">'. $this->translate('All Categories').'</h2></div>
         <ul class="tags">';
         for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
             $categorySidebarWodget.='<li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name'].'</li>';
@@ -553,7 +520,7 @@ EOD;
         $browseByStoreWidget = 
         '<div class="block">
             <div class="intro">
-               <h2>'.$this->zendTranslate->translate('Browse by Store') .'</h2>
+               <h2>'.$this->translate('Browse by Store') .'</h2>
             </div>
             <div class="alphabet-holder">
                 <ul class="alphabet">';
@@ -561,7 +528,7 @@ EOD;
             $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
             $browseByStoreWidget .= 
                     '<li>
-                        <a href="' .$redirectUrl.'">'.$this->zendTranslate->translate($oneCharacter).'</a>
+                        <a href="' .$redirectUrl.'">'.$this->translate($oneCharacter).'</a>
                     </li>';
         };
         $browseByStoreWidget.= 
@@ -1089,13 +1056,12 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         return $data;
 
     }
-    public static function popularShopWidget()
+    public function popularShopWidget()
     {
-        $zendTranslate = Zend_Registry::get('Zend_Translate');
         $popularStores = self::getStoreForFrontEnd('popular', 25);
         $popularStoresContent = '<div class="block"><div class="intro">
-                   <h2>'.$zendTranslate->translate('Populaire Winkels').'</h2>
-                   <span>'.$zendTranslate->translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
+                   <h2>'.$this->translate('Populaire Winkels').'</h2>
+                   <span>'.$this->translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
                  </div><ul class="tags">';
 
         for ($i=0; $i<count($popularStores); $i++) {

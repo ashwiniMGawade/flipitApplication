@@ -18,7 +18,9 @@ endif
 <header id="header">
     <div class="top-panel">
         <div class="container">
-            <span class="slogan"><?php echo $this->translate('save money with online discount codes and save pointers');?></span>
+            <span class="slogan"><?php 
+            $translation = new Transl8_View_Helper_Translate();
+            echo $translation->translate('save money with online discount codes and save pointers');?></span>
             <a class="menu-account" href="javascript:void(0);"><?php echo $this->translate('account menu');?></a>
                 <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
