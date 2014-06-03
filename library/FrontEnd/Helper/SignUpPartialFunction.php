@@ -28,7 +28,7 @@ class FrontEnd_Helper_SignUpPartialFunction extends Transl8_View_Helper_Translat
     {
         $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
         $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
-        $signUpStep2Url= HTTP_PATH_LOCALE.self::__link('inschrijven') . '/' . self::__link('stap2') . '/' . base64_encode($emailAddress);
+        $signUpStep2Url= HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven');
         return $signUpStep2Url;
     }
 
