@@ -1,4 +1,7 @@
-$(document).ready(function(){
+var date = new Date();
+var fullYear = date.getFullYear();
+$(document).ready(function() {
+    console.log(fullYear);
     validateProfile();
     $("input#profile").submit(function(){
         if($("form#profile").valid()){
@@ -39,15 +42,19 @@ function validateProfile() {
             },
             dateOfBirthDay: {
                 required: true,
-                digits : true
+                digits : true,
+                range: [1, 31]
             },
             dateOfBirthMonth: {
                 required: true,
-                digits : true
+                digits : true,
+                minlength : 1,
+                range: [1, 12]
             },
             dateOfBirthYear: {
                 required: true,
-                digits : true
+                digits : true,
+                range: [1900, fullYear]
             },
             postCode : {
                 required: true
@@ -80,15 +87,18 @@ function validateProfile() {
               },
               dateOfBirthDay: {
                   required: '',
-                  digits :''
+                  digits :'',
+                  range :''
               },
               dateOfBirthMonth: {
                   required: '',
-                  digits :''
+                  digits :'',
+                  range :''
               },
               dateOfBirthYear: {
                   required: '',
-                  digits :''
+                  digits :'',
+                  range :''
               },
               postCode : {
                   required: ''
