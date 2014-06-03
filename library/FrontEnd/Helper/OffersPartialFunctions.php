@@ -74,17 +74,17 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         $offerOption = '';
         if ($currentOffer->exclusiveCode == '1'):
-            $offerOption = self::getOfferOption($this->zendTranslate->translate('Exclusive'));
+            $offerOption = self::getOfferOption($this->translate('Exclusive'));
         elseif ($currentOffer->editorPicks =='1'):
-        $offerOption = self::getOfferOption($this->zendTranslate->translate('Editor'));
+        $offerOption = self::getOfferOption($this->translate('Editor'));
         endif;
         return $offerOption;
     }
 
     public function getOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $stringAdded = $this->zendTranslate->translate('Added');
-        $stringOnly = $this->zendTranslate->translate('Only');
+        $stringAdded = $this->translate('Added');
+        $stringOnly = $this->translate('Only');
         $startDate = new Zend_Date(strtotime($currentOffer->startDate));
         $offerDates = '';
         if($currentOffer->discountType == "CD"):
@@ -98,20 +98,20 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $offerDates .= '&nbsp;';
             $offerDates .= $daysTillOfferExpires;
             $offerDates .= '&nbsp;';
-            $offerDates .= $this->zendTranslate->translate('days valid!');
+            $offerDates .= $this->translate('days valid!');
 
         } elseif ($daysTillOfferExpires == 1) {
             $offerDates .= $stringOnly;
             $offerDates .= '&nbsp;';
             $offerDates .= $daysTillOfferExpires;
             $offerDates .= '&nbsp;';
-            $offerDates .= $this->zendTranslate->translate('day only!');
+            $offerDates .= $this->translate('day only!');
 
         } elseif ($daysTillOfferExpires == 0) {
-                $offerDates .= $this->zendTranslate->translate('Expires today');
+                $offerDates .= $this->translate('Expires today');
         } else {
                 $endDate = new Zend_Date(strtotime($currentOffer->endDate));
-                $offerDates .= $this->zendTranslate->translate('Expires on').': ';
+                $offerDates .= $this->translate('Expires on').': ';
                 $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
         } elseif ($currentOffer->discountType == "PR" || $currentOffer->discountType == "SL" || $currentOffer->discountType == "PA"):
             $offerDates .= $stringAdded;
@@ -144,7 +144,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $offerDiscountImage = self::getShopLogoForOffer($currentOffer);
             $altAttributeText = $currentOffer->shop['name'];
             $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
-            $offerImageDiv = $imageTag . '<footer class="bottom">' . self::getOfferTypeText($currentOffer) . '</footer>';
+            $offerImageDiv = $imageTag . '<footer class="bottom">' . $this->translate(self::getOfferTypeText($currentOffer)) . '</footer>';
         }
       
         return $offerImageDiv;
@@ -171,11 +171,11 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     {
         
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $offerTypeText = $this->zendTranslate->translate('printable');
+            $offerTypeText = $this->translate('printable');
         } elseif ($currentOffer->discountType=='SL') {
-            $offerTypeText = $this->zendTranslate->translate('sale');
+            $offerTypeText = $this->translate('sale');
         } elseif (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : '') {
-            $offerTypeText = $this->zendTranslate->translate('deal');
+            $offerTypeText = $this->translate('deal');
         } else {
             $offerTypeText = 'code';
         }
@@ -187,8 +187,8 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         $similarShopHeader = '';
         if ($offersType == 'similar') {
             $similarShopHeader = '<header class="heading-box text-coupon">
-            <h2>'.$this->zendTranslate->translate('Coupon codes for similar stores').'</h2>
-            <strong>'.$this->zendTranslate->translate('Similar vouchers and discounts for'). ' ' . $shopName .'</strong>
+            <h2>'.$this->translate('Coupon codes for similar stores').'</h2>
+            <strong>'.$this->translate('Similar vouchers and discounts for'). ' ' . $shopName .'</strong>
             </header>';
         }
         return $similarShopHeader;
@@ -250,7 +250,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         $redirectUrl = '';
         switch ($type){
             case 'mainOfferClickoutButton':
-                $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $this->zendTranslate->translate('Get code &amp; Open site'), "btn blue btn-primary");
+                $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $this->translate('Get code &amp; Open site'), "btn blue btn-primary");
             break;
             case 'offerTitle':
                 $redirectUrl = self::getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $offerAnchorTagContent, "link");
@@ -270,10 +270,10 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         $buttonWithCodeforOffer = '';
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : "printIt('$urlToShow');";
-            $buttonWithCodeforOffer = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$this->zendTranslate->translate('print now').'<span class="ico-print"></span></a>';
+            $buttonWithCodeforOffer = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.$this->translate('print now').'<span class="ico-print"></span></a>';
         } else if ($currentOffer->discountType=='CD') {
             $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate'),OpenInNewTab('". $permalink. "?popup=$currentOffer->id&type=code')";
-            $buttonWithCodeforOffer = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_self" onClick="'.$onClick.'">'.$this->zendTranslate->translate('Get this offer').'</a>';
+            $buttonWithCodeforOffer = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_self" onClick="'.$onClick.'">'.$this->translate('Get this offer').'</a>';
         } else if ($currentOffer->discountType == "SL") {
             $buttonWithCodeforOffer = '';
         }
@@ -286,7 +286,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         if (isset($currentOffer->userGenerated) ? $currentOffer->userGenerated == 0 : '' &&  $termsAndConditions!='' && $termsAndConditions!=null) {
             $termAndConditionLink = '<li>
             <a id="termAndConditionLink'.$currentOffer->id .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
-            href="javascript:void(0);">'. $this->zendTranslate->translate('Term') . '&amp;' .$this->zendTranslate->translate('Conditions').'</a>';
+            href="javascript:void(0);">'. $this->translate('Term') . '&amp;' .$this->translate('Conditions').'</a>';
             if ($termsAndConditions!='' && $termsAndConditions!=null && $currentOffer->extendedOffer =='1') {
                 $termAndConditionLink.='&nbsp; | &nbsp;';
             }
@@ -300,7 +300,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
         if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : ''):
             $extendedOfferLink ='<li><a class="text-blue-link"
             href="'.HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $currentOffer->extendedUrl.'">'
-            .$this->zendTranslate->translate('More about this code').'</a></li>';
+            .$this->translate('More about this code').'</a></li>';
         endif;
         return $extendedOfferLink;
     }
@@ -308,7 +308,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
     public function getViewAllCodeLink($shopName, $shopPermalink, $showHyphen)
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        return $viewAllLink ='<li>'. $showHyphen.'<a href="'.$domainName.$shopPermalink.'"> <span>'. $this->zendTranslate->translate("View all ") . $shopName . $this->zendTranslate->translate(" Voucher Codes").'</span></a></li>';
+        return $viewAllLink ='<li>'. $showHyphen.'<a href="'.$domainName.$shopPermalink.'"> <span>'. $this->translate("View all ") . $shopName . $this->translate(" Voucher Codes").'</span></a></li>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)
@@ -318,7 +318,7 @@ class FrontEnd_Helper_OffersPartialFunctions extends FrontEnd_Helper_viewHelper
             $expiredOfferMessage = '<div class="message">
             <div class="holder">
             <span class="ico-warning"></span>
-            <span class="text">'.$this->zendTranslate->translate("Sorry, this coupon is already expired. Maybe the following coupon can help you"). '</span>
+            <span class="text">'.$this->translate("Sorry, this coupon is already expired. Maybe the following coupon can help you"). '</span>
             </div>
             </div>';
         }

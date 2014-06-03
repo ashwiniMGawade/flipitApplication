@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends FrontEnd_Helper_viewHelper {
+class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends Transl8_View_Helper_Translate {
     public function getMostReadArticles($mostReadArticles)
     {
         $articleNumber = 1;
@@ -36,7 +36,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends FrontEnd_Helper_
     {
         $relatedArticles = 
             '<header class="heading-bar">
-                <h2>'.$this->zendTranslate->translate($headingType).'</h2>
+                <h2>'.$this->translate($headingType).'</h2>
             </header>
             <div class="item-block">
                 <div class="holder">';
@@ -56,7 +56,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends FrontEnd_Helper_
                             </a>    
                         </div>
                         <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'" class="link">'
-                            .$this->zendTranslate->translate('more').' &#8250;
+                            .$this->translate('more').' &#8250;
                         </a>
                     </div>
                 </div>';

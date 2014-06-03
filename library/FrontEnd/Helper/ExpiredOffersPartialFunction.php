@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_ExpiredOffersPartialFunction extends FrontEnd_Helper_viewHelper{
+class FrontEnd_Helper_ExpiredOffersPartialFunction extends Transl8_View_Helper_Translate{
     
     public function getExpiredOfferUrl($offer) {
         if($offer->extendedOffer == 1):
@@ -34,7 +34,7 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction extends FrontEnd_Helper_viewH
     
     public function getExpiredOnDate($offerEndDate) {
         $offerExpiredOn = '';
-        $offerExpiredOn =  $this->zendTranslate->translate('Expired on:');
+        $offerExpiredOn =  $this->translate('Expired on:');
         $expiredOfferDate = new Zend_Date($offerEndDate);
         $offerExpiredOn = $offerExpiredOn.ucwords($expiredOfferDate->get(Zend_Date::DATE_MEDIUM));
         return $offerExpiredOn;
@@ -43,8 +43,8 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction extends FrontEnd_Helper_viewH
     public function getExpiredOffersHeader($shopName) {
         $offerHeader = '';
         $offerHeader = '<header class="heading-box text-expired">
-        <h2>' . $this->zendTranslate->translate('Expired').' '. $shopName .' '.$this->zendTranslate->translate("vouchers and discounts"). '</h2>
-        <strong>'. $this->zendTranslate->translate('Unfortunately ... These discount codes from').' '.$shopName.' '.$this->zendTranslate->translate("you’ve missed") .'</strong>
+        <h2>' . $this->translate('Expired').' '. $shopName .' '.$this->translate("vouchers and discounts"). '</h2>
+        <strong>'. $this->translate('Unfortunately ... These discount codes from').' '.$shopName.' '.$this->translate("you’ve missed") .'</strong>
         </header>';
         return $offerHeader;
     }

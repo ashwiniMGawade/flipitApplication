@@ -29,7 +29,8 @@ if ($this->pageMode == true) {
                'shopLogoOrDefaultImage'=>''
             )
         );
-        $sidebarWidgets = $this->widget . FrontEnd_Helper_viewHelper::socialMediaWidget(). $signUpWidgetForm;
+        $frontendViewHelper = new FrontEnd_Helper_viewHelper();
+        $sidebarWidgets = $this->widget . $frontendViewHelper->socialMediaWidget(). $signUpWidgetForm;
         $sidebarWidgetHtml = '<aside class="col-md-4 col-sm-4" id="sidebar">' . $sidebarWidgets . '</aside>';
         $contentDivStart = '<div id="content" class="col-md-8 col-sm-8">';
         $contentDivEnd = '</div>';
