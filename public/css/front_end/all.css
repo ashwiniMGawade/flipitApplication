@@ -5777,11 +5777,6 @@ button.close {
   display: block;
   clear: both;
 }
-.after {
-  content: '';
-  display: block;
-  clear: both;
-}
 .all-categories-alt-page .section {
   padding: 17px 19px;
 }
@@ -6059,11 +6054,6 @@ button.close {
     padding: 10px 2px;
   }
 }
-.after {
-  content: '';
-  display: block;
-  clear: both;
-}
 .all-stores-page .content-holder {
   background: #ffffff;
   border-radius: 3px;
@@ -6235,11 +6225,6 @@ button.close {
     margin: 15px 0 5px;
   }
 }
-.after {
-  content: '';
-  display: block;
-  clear: both;
-}
 .contact-page .contact-section {
   color: #878a8d;
   font-size: 14px;
@@ -6370,11 +6355,6 @@ button.close {
   .contact-page .contact-form {
     padding: 15px 10px;
   }
-}
-.after {
-  content: '';
-  display: block;
-  clear: both;
 }
 .faq-page .section-faq {
   color: #878a8d;
@@ -6529,11 +6509,6 @@ button.close {
     padding: 15px;
   }
 }
-.after {
-  content: '';
-  display: block;
-  clear: both;
-}
 .flipit-expired-page .message .holder {
   padding: 31px 30px 34px;
 }
@@ -6571,11 +6546,6 @@ button.close {
   .flipit-expired-page .message .text:after {
     top: 97%;
   }
-}
-.after {
-  content: '';
-  display: block;
-  clear: both;
 }
 .login-page .login-box {
   background: #fff;
@@ -6977,11 +6947,6 @@ button.close {
     display: block;
     width: 89px;
   }
-}
-.after {
-  content: '';
-  display: block;
-  clear: both;
 }
 .profile-page .top-panel {
   background: #2d2c2c;
@@ -7494,11 +7459,6 @@ button.close {
     width: 44%;
   }
 }
-.after {
-  content: '';
-  display: block;
-  clear: both;
-}
 .register-page .register-box {
   background: #fff;
   border: 1px solid #e4e4e4;
@@ -7947,11 +7907,6 @@ button.close {
     width: 44%;
   }
 }
-.after {
-  content: '';
-  display: block;
-  clear: both;
-}
 .splash-page .bg-stretch {
   position: fixed;
   z-index: -1;
@@ -8149,11 +8104,6 @@ button.close {
     display: block;
     margin: 0 0 10px;
   }
-}
-.after {
-  content: '';
-  display: block;
-  clear: both;
 }
 .page404 #footer {
   text-shadow: none;
@@ -11624,6 +11574,56 @@ input[type="submit"]::-moz-focus-inner {
 }
 .color_select {
   text-align: right;
+}
+.ui-dialog {
+  background-color: #eeeeee;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 6px;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  color: #000;
+  z-index: 99999999 !important;
+}
+.ui-dialog a {
+  color: #c43d3a;
+  font-weight: bold;
+}
+.ui-front {
+  z-index: 99999999 !important;
+}
+.ui-widget-header {
+  font-size: 18px;
+  cursor: move;
+  margin-bottom: 5px;
+}
+.ui-dialog-titlebar-close {
+  float: right;
+  font-size: 12px;
+}
+#transl8-form-container {
+  margin-top: 10px;
+}
+#transl8-form-container dd {
+  margin-left: 0px;
+}
+.inline-translation-bar {
+  color: #fff;
+  background-color: #000;
+  position: fixed;
+  z-index: 99999999;
+  padding: 10px;
+}
+.transl8-text {
+  border: 1px dotted red;
+}
+.transl8-link {
+  font-style: italic;
+  font-size: 12px;
+  color: red;
+}
+.transl8-link img {
+  width: 14px;
+  padding-left: 5px;
 }
 @media only screen and (min-width: 1200px) {
   .search-box .js-slide-hidden {
