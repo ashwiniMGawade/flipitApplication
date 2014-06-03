@@ -6,7 +6,6 @@
 foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
     $authorMostReadArticle = (object) $authorMostReadArticle;
     $articleImage = !empty($authorMostReadArticle->articles['thumbnail']) ? PUBLIC_PATH_CDN.$authorMostReadArticle->articles['thumbnail']['path'].'thum_article_medium_'. $authorMostReadArticle->articles['thumbnail']['name'] : '';
-    $articleDetailsLink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('bespaarwijzer'). '/' .$authorMostReadArticle->articles['permalink'];
     $articleContentwithoutTags = '';
     if (isset($authorMostReadArticle->articles['chapters'][0])) {
         if ($authorMostReadArticle->articles['chapters'][0]['content'] != null || $authorMostReadArticle->articles['chapters'][0]['content']!='undefined' || $authorMostReadArticle->articles['chapters'][0]['content']!='') {
@@ -17,7 +16,7 @@ foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
     }
     ?>
     <article class="block">
-        <a href="<?php echo  $articleDetailsLink;?>">
+        <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$authorMostReadArticle->articles['permalink']?>">
             <div class="image">
                 <img src="<?php echo $articleImage;?>" width="132" height="97" alt="<?php echo $authorMostReadArticle->articles['title'];?>">
                 <span class="title"><?php echo $authorMostReadArticle->articles['title'];?></span>
