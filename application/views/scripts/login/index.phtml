@@ -38,7 +38,7 @@ $forgotPasswordLink =
             <?php 
             echo $this->formSubmit(
                 'submit',
-                $this->translate('sign in'),
+                FrontEnd_Helper_viewHelper::__form('sign in'),
                 array('class'=>'btn blue btn-lg btn-primary', 'id'=>'login')
             )
             ?>
