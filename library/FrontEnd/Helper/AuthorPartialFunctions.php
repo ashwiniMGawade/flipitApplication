@@ -59,7 +59,7 @@ class FrontEnd_Helper_AuthorPartialFunctions extends FrontEnd_Helper_viewHelper 
         if (!empty($authorCountryName)) {
             $authorFlagImageLi = 
                 '<li>
-                    <span class="country-flags '.$splitAuthorLocaleName[0].'"></span>
+                    <span class="country-flags '.strtolower($splitAuthorLocaleName[1]).'"></span>
                     <span>' . $authorCountryName .'</span>
                 </li>';
         }

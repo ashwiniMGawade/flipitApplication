@@ -3,15 +3,12 @@
 @import "custom-mixins.less";
 @import "all-categoties-alt.less";
 @import "all-stores.less";
-@import "author.less";
-@import "authors.less";
 @import "contact.less";
 @import "faq.less";
 @import "flipit-expired.less";
 @import "login.less";
 @import "profile.less"; 
 @import "register.less";
-@import "saving.less";
 @import "splash-page.less";
 @import "404.less";
 input[type="email"], input[type="tel"], input[type="search"], input[type="text"], input[type="password"], input[type="file"], input[type="submit"], textarea{-webkit-appearance:none;}
@@ -816,7 +813,7 @@ a.pop{
 				padding:1px 0 0;
 			}
 		}
-		.bottom{background:@link-color;}
+		.bottom{background:@link-color;width: 100%;border:none;}
 	}
 	.icon{
 		float:left;
@@ -951,7 +948,7 @@ a.pop{
 .shops-2{
 	li{
 		margin-right:3.5%;
-		img{box-shadow:none;}
+		img{box-shadow:none;border: 1px solid rgba(0, 0, 0, 0.1);box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);border-radius: 3px;}
 	}
 }
 div.line {border-bottom: 1px dashed #e0e0e0;}
@@ -977,7 +974,7 @@ div.line:last-child {border-bottom: none;}
 				img{
 					display:block;
 					width: 220px;
-					height: 110px!important;
+					height: 122px!important;
 					height:auto;
 					position:relative;
 					z-index:-1;
@@ -1787,7 +1784,7 @@ hr.alt2{
 		.glyphicon-remove{
 			font-size:10px;
 			line-height:10px;
-			margin:0 8px 0 0;
+			margin:-6px 8px 0 0;
 		}
 	}
 }
@@ -2514,6 +2511,9 @@ hr.alt2{
 	}
 	.bottom{
 		overflow:hidden;
+	}
+	.terms-block {
+		margin-top: 10px;
 	}
 	.logo-box{
 		float:right;
