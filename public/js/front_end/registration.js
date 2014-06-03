@@ -1,3 +1,5 @@
+var date = new Date();
+var fullYear = date.getFullYear();
 $(document).ready(function(){
     validateRegistration();
     $("input#register").submit(function(){
@@ -32,10 +34,10 @@ function validateRegistration() {
                 }}
             },
             firstName: {
-                required: true,
+                required: true
             },
             lastName: {
-                required: true,
+                required: true
             },
             gender: {
                 selectcheck: true
@@ -47,34 +49,37 @@ function validateRegistration() {
             },
             dateOfBirthDay: {
                 required: true,
-                digits : true
+                digits : true,
+                range: [1, 31]
             },
             dateOfBirthMonth: {
                 required: true,
-                digits : true
+                digits : true,
+                range: [1, 12]
             },
             dateOfBirthYear: {
                 required: true,
-                digits : true
+                digits : true,
+                range: [1900, fullYear]
             },
             postCode : {
-                required: true,
+                required: true
             }
         },
         messages : {
              emailAddress : {
                  required: '',
                  email: '',
-                 remote:'',
+                 remote:''
               },
               firstName: {
-                  required:'',
+                  required:''
                },
               lastName: {
-                  required:'',
+                  required:''
                },
               gender: {
-                  selectcheck: '',
+                  selectcheck: ''
               },
               password: {
                   required: '',
@@ -83,18 +88,21 @@ function validateRegistration() {
               },
               dateOfBirthDay: {
                   required: '',
-                  digits :''
+                  digits :'',
+                  range :''
               },
               dateOfBirthMonth: {
                   required: '',
-                  digits :''
+                  digits :'',
+                  range:''
               },
               dateOfBirthYear: {
                   required: '',
-                  digits :''
+                  digits :'',
+                  range :''
               },
               postCode : {
-                  required: '',
+                  required: ''
               }
         },
         onfocusin : function(element) {

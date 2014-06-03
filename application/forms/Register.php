@@ -45,18 +45,34 @@ class Application_Form_Register extends Application_Form_Base
         $vistorDateOfBirthDay->setRequired(true);
         $vistorDateOfBirthDay->setAttribs(array('class'=>'form-control', 'size'=> 2, 'maxlength' => 2));
         $vistorDateOfBirthDay->addValidator('Digits');
-
+        
+        $validator = new Zend_Validate_LessThan(32);
+        $vistorDateOfBirthDay->addValidator($validator, true);
+        $validator = new Zend_Validate_GreaterThan(0);
+        $vistorDateOfBirthDay->addValidator($validator, true);
+        
         $vistorDateOfBirthMonth = new Zend_Form_Element_Text('dateOfBirthMonth');
         $vistorDateOfBirthMonth->setRequired(true);
         $vistorDateOfBirthMonth->setAttribs(array('class'=>'form-control', 'size'=> 2, 'maxlength' => 2));
         $vistorDateOfBirthMonth->addValidator('Digits');
-
+        
+        $validator = new Zend_Validate_LessThan(13);
+        $vistorDateOfBirthMonth->addValidator($validator, true);
+        $validator = new Zend_Validate_GreaterThan(0);
+        $vistorDateOfBirthMonth->addValidator($validator, true);
+        
         $vistorDateOfBirthYear = new Zend_Form_Element_Text('dateOfBirthYear');
         $vistorDateOfBirthYear->setRequired(true);
         $vistorDateOfBirthYear->setAttrib('class', 'form-control');
         $vistorDateOfBirthYear->setAttribs(array('class'=>'form-control', 'size'=> 4, 'maxlength' => 4));
         $vistorDateOfBirthYear->addValidator('Digits');
-
+        
+        $yearFormat = date('Y') + 1;
+        $validator = new Zend_Validate_LessThan($yearFormat);
+        $vistorDateOfBirthYear->addValidator($validator, true);
+        $validator = new Zend_Validate_GreaterThan(1900);
+        $vistorDateOfBirthYear->addValidator($validator, true);
+        
         $vistorGender = new Zend_Form_Element_Select('gender');
         $vistorGender->setRequired(true);
         $vistorGender->setAttrib('class', 'form-control');

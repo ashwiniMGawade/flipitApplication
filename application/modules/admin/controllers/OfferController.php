@@ -1,6 +1,20 @@
 <?php
 class Admin_OfferController extends Zend_Controller_Action
 {
+
+    ############################################################
+    ############### REFACTORED CODE ############################
+    ############################################################
+    public function getofferAction()
+    {
+        $parameters = $this->_getAllParams();
+        $offerList = Offer::getOfferList($parameters);
+        echo Zend_Json::encode($offerList);
+        die();
+    }
+    ############################################################
+    ################ END REFACTORED CODE #######################
+    ############################################################
     /**
      * check authentication before load the page
      * @see Zend_Controller_Action::preDispatch()
@@ -183,22 +197,6 @@ class Admin_OfferController extends Zend_Controller_Action
 
     }
 
-
-    /**
-     * Get offer list from database by flag
-     * flag (1 deleted  or 0 not deleted )
-     * @author kraj
-     * @version 1.0
-     */
-    public function getofferAction()
-    {
-        $params = $this->_getAllParams();
-        //cal to getofferlist function from offer model class
-        $offerList = Offer::getofferList($params);
-        //echo "<pre>";print_r($offerList);die;
-        echo Zend_Json::encode($offerList);
-        die();
-    }
     /**
      * record move in trash
      * @author kraj
