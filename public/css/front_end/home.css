@@ -45,11 +45,6 @@
   border-radius: 3px;
   -webkit-border-radius: 3px;
 }
-.home-page .logo {
-  background: url(../../images/logo-home.png) no-repeat;
-  width: 125px;
-  height: 56px;
-}
 .home-page .navigation .logo {
   margin: 24px 0 20px;
 }

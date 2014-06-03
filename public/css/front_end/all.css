@@ -5777,6 +5777,11 @@ button.close {
   display: block;
   clear: both;
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .all-categories-alt-page .section {
   padding: 17px 19px;
 }
@@ -6054,6 +6059,11 @@ button.close {
     padding: 10px 2px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .all-stores-page .content-holder {
   background: #ffffff;
   border-radius: 3px;
@@ -6225,6 +6235,11 @@ button.close {
     margin: 15px 0 5px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .contact-page .contact-section {
   color: #878a8d;
   font-size: 14px;
@@ -6355,6 +6370,11 @@ button.close {
   .contact-page .contact-form {
     padding: 15px 10px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .faq-page .section-faq {
   color: #878a8d;
@@ -6509,6 +6529,11 @@ button.close {
     padding: 15px;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .flipit-expired-page .message .holder {
   padding: 31px 30px 34px;
 }
@@ -6546,6 +6571,11 @@ button.close {
   .flipit-expired-page .message .text:after {
     top: 97%;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .login-page .login-box {
   background: #fff;
@@ -6947,6 +6977,11 @@ button.close {
     display: block;
     width: 89px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .profile-page .top-panel {
   background: #2d2c2c;
@@ -7459,6 +7494,11 @@ button.close {
     width: 44%;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .register-page .register-box {
   background: #fff;
   border: 1px solid #e4e4e4;
@@ -7907,6 +7947,11 @@ button.close {
     width: 44%;
   }
 }
+.after {
+  content: '';
+  display: block;
+  clear: both;
+}
 .splash-page .bg-stretch {
   position: fixed;
   z-index: -1;
@@ -8104,6 +8149,11 @@ button.close {
     display: block;
     margin: 0 0 10px;
   }
+}
+.after {
+  content: '';
+  display: block;
+  clear: both;
 }
 .page404 #footer {
   text-shadow: none;
