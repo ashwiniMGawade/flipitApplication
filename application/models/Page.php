@@ -355,6 +355,7 @@ class Page extends BasePage
         //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryspeciallist_list');
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             //$getPage = Doctrine_Core::getTable ( 'Page' )->findOneBy ( "permalink", $params['pagepermalink'] );
@@ -664,6 +665,7 @@ class Page extends BasePage
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryspeciallist_list');
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
