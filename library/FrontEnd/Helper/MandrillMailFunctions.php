@@ -15,7 +15,6 @@ class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translat
                 </a>";
             $this->siteName = "Kortingscode.nl";
         }
-        parent::__construct();
     }
     public function sendForgotPasswordMail($visitorId, $emailAddress, $currentController) {
         $mailData = array(
