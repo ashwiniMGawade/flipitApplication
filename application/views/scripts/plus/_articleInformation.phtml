@@ -7,7 +7,7 @@ $lastName = $this->lastName;
 $articleUpdatedAtDate = $this->articleUpdatedAtDate;
 $byAuthorName[0] = '';
 $byAuthorName[1] = '';
-if (empty($firstName) || empty($lastName)) {
+if (!empty($firstName) || !empty($lastName)) {
     $byAuthorName[0] = $this->translate('By');
     $byAuthorName[1] = $firstName . ' ' . $lastName;
 }
