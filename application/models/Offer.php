@@ -783,74 +783,48 @@ class Offer extends BaseOffer
         return $shopOffersBySearchedKeywords;
     }
 
+    public static function getOfferList($parameters)
+    {
+        $userRole           = Auth_StaffAdapter::getIdentity()->roleId;
+        $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
+        $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
+        $searchCoupon       = $parameters["shopCoupon"]!='undefined' ? $parameters["shopCoupon"] : '';
+        $searchCouponType   = $parameters["couponType"]!='undefined' ? $parameters["couponType"] : '';
+        $deletedStatus      = $parameters['flag'];
+        $getOffersQuery = Doctrine_Query::create()
+            ->select('o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL,o.couponcode')
+            ->from("Offer o")
+            ->leftJoin('o.shop s')
+            ->where("o.deleted="."'$deletedStatus'")
+            ->andWhere("o.userGenerated = '0'");
+        if ($userRole=='4') {
+            $getOffersQuery->andWhere("o.Visability='DE'");
+        }
+        if ($searchOffer != '') {
+            $getOffersQuery->andWhere("o.title LIKE ?", "%$searchOffer%");
+        }
+        if ($searchShop!='') {
+            $getOffersQuery->andWhere("s.name LIKE ?", "%$searchShop%");
+        }
+        if ($searchCoupon!='') {
+            $getOffersQuery->andWhere("o.couponcode LIKE ?", "%$searchCoupon%");
+        }
+        if ($searchCouponType!='') {
+            $getOffersQuery->andWhere("o.discountType="."'$searchCouponType'");
+        }
+        $offersList = DataTable_Helper::generateDataTableResponse(
+            $getOffersQuery,
+            $parameters,
+            array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate','o.endDate', 'clicks','authorName'),
+            array(),
+            array()
+        );
+        return $offersList;
+
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
-
-    /**
-     * getofferList(deleted and non deleted by flag) fetches all record from database
-     * also search according to keyword if present.
-     * @param  array $params
-     * @return array $offerList
-     * @version 1.0
-     * @author mkaur update by kraj
-     */
-    public static function getofferList($params)
-    {
-        $role =  Auth_StaffAdapter::getIdentity()->roleId;
-
-        $srhOffer   =   @$params["offerText"]!='undefined' ? $params["offerText"] : '';
-        $srhShop    =   @$params["shopText"]!='undefined' ? $params["shopText"] : '';
-        $srhCoupon  =   @$params["shopCoupon"]!='undefined' ? $params["shopCoupon"] : '';
-        $type       =   @$params["couponType"]!='undefined' ? $params["couponType"] : '';
-        //get offer deleted or other by flag flag (1 or 0)
-        $flag = @$params['flag'];
-
-        //echo 'O ' . $srhOffer ;
-        //echo 'S ' . $srhShop ;
-        //echo 'T ' . $type ;
-
-        $offerList = Doctrine_Query::create()
-            ->select('o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL,o.couponcode')
-            ->from("Offer o")
-        /// ->addSelect("(SELECT sum(onClick) FROM ViewCount WHERE offerId = o.id ) as clicks")
-            ->leftJoin('o.shop s')
-            ->where("o.deleted="."'$flag'")
-            ->andWhere("o.userGenerated = '0'");
-        //->orderBy('o.startDate DESC');
-
-        //condition for editor
-        if ($role=='4') {
-            $offerList->andWhere("o.Visability='DE'");
-
-        }
-
-        if ($srhOffer != '') {
-            $offerList->andWhere("o.title LIKE ?", "%$srhOffer%");
-        }
-        if ($srhShop!='') {
-            $offerList->andWhere("s.name LIKE ?", "%$srhShop%");
-        }
-        if ($srhCoupon!='') {
-            $offerList->andWhere("o.couponcode LIKE ?", "%$srhCoupon%");
-        }
-        if ($type!='') {
-            $offerList->andWhere("o.discountType="."'$type'");
-        }
-
-        //$offerList->orderBy("o.id DESC");
-        //$offerList->limit(10);
-        //print_r($offerList->getSqlQuery()); die;
-        $result =   DataTable_Helper::generateDataTableResponse($offerList,
-                $params,
-                array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.Visability','o.couponcode','o.extendedOffer','o.startDate','o.endDate', 'clicks','authorName'),
-                array(),
-                array());
-        //echo "<pre>";
-        //print_r($result); die;
-        return $result;
-
-    }
 
     /**
      * Move record in trash.
