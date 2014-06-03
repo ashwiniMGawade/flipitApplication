@@ -73,7 +73,7 @@ class PlusController extends Zend_Controller_Action
             $this->viewHelperObject->getMetaTags($this, $articleDetails[0]['title'], 
                 trim($articleDetails[0]['metatitle']), trim($articleDetails[0]['metadescription']), 
                     $articleDetails[0]['permalink'], FACEBOOK_IMAGE, '');
-            $this->view->pageCssClass = 'in-savings-page';
+            $this->view->pageCssClass = 'in-savings-page author-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
         }

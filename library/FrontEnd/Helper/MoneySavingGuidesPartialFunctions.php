@@ -17,7 +17,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends FrontEnd_Helper_
             }
             echo'<div class="'.$class.'" id="'.$id.'">
                 <a href="'.HTTP_PATH_LOCALE.'plus/'.$mostReadArticle['articles']['permalink'].'">
-                    <img class="aligncenter" 
+                    <img width="632" height="160" class="aligncenter" 
                         src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path']
                         .$mostReadArticle['articles']['articleImage']['name'].'" 
                         alt="'.$mostReadArticle['articles']['title'].'">
@@ -44,8 +44,8 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends FrontEnd_Helper_
         $relatedArticles .=
                 '<div class="item">
                     <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
-                        <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" 
-                        alt="'.$article['title'].'">
+                        <img src="'.PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'].'" 
+                        width="363" height="198" alt="'.$article['title'].'">
                     </a>
                     <div class="box">
                         <div class="caption-area">

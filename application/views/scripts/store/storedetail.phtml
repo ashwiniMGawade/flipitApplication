@@ -4,7 +4,7 @@ if (empty($session->brandingActivated) && !empty($this->shopBranding)):
     $this->headStyle()->appendStyle($this->shop()->brandingCss($this->shopBranding));
     $this->headScript()->appendScript($this->shop()->brandingJs($this->shopBranding));
 endif;
-
+$this->headLink()->prependStylesheet("/public/css/front_end/author.css");
 $partialViewPath = 'partials/';
 $offers = '';
 if(count($this->offers) > 0):
@@ -60,8 +60,14 @@ if($this->currentStoreInformation[0]['discussions'] == 1):
 endif;
 
 $moneySavingGuide = '';
-if(count($this->moneySavingGuideArticle) >0):
-    $moneySavingGuide = $this->partialLoop($storeViewPartialPath.'_moneySavingGuideArticle.phtml', $this->moneySavingGuideArticle);
+if(!empty($this->moneySavingGuideArticle)):
+    $moneySavingGuide = $this->partial(
+        $partialViewPath.'_authorMostReadArticles.phtml', 
+        array(
+            "authorMostReadArticles"=>$this->moneySavingGuideArticle,
+            "authorFirstName"=> ''
+        )
+    );
 endif;
 
 $expiredOffers ='';

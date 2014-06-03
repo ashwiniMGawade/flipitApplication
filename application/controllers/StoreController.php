@@ -155,6 +155,7 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        $this->view->pageCssClass = 'author-page';
     }
 
     public function topStorePopularOffers($shopId, $offers)

@@ -3,7 +3,7 @@ $mostReadArticles = $this->articles;
 $mostReadArticleNumber = 0;
 foreach ($mostReadArticles as $mostReadArticle) {
 	if (!empty($mostReadArticle['articles']['thumbnail'])) {
-		$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path'].'thum_article_samll_'. 
+		$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path']. 
 			$mostReadArticle['articles']['thumbnail']['name'];
 	} else {
 		$mostReadArticleImage = '';
