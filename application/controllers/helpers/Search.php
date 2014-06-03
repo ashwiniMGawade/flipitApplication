@@ -60,7 +60,7 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
     public static function getStoresForSearchResults($shopsByShopIds, $popularShops)
     {
         if (!empty($shopsByShopIds) && !empty($popularShops)) :
-            $shopsForSearchPage = array_merge($shopsByShopIds, $popularShops);
+            $shopsForSearchPage = $shopsByShopIds + $popularShops;
         else:
             $shopsForSearchPage = !empty($popularShops) ? $popularShops : $shopsByShopIds;
         endif;
