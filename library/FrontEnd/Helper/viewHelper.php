@@ -447,13 +447,19 @@ EOD;
     public function popularCategoryWidget()
     {
         $allPopularCategories = Category::getPopularCategories();
-        $categorySidebarWodget = '<div class="block"><div class="intro">
-        <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
-        <ul class="tags">';
+        $categorySidebarWodget = 
+        '<div class="block">
+            <div class="intro">
+            <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
+                <ul class="tags">';
         for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
-            $categorySidebarWodget.='<li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name'].'</li>';
+            $categorySidebarWodget.=
+                    '<li>
+                        <a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name']
+                    .'</li>';
         }
-        $categorySidebarWodget.='</ul></div>'; 
+        $categorySidebarWodget.=
+                '</ul></div>'; 
         return $categorySidebarWodget;
     }
 
