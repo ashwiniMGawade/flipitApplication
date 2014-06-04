@@ -2781,6 +2781,7 @@ input[type="submit"]::-moz-focus-inner{
 	margin-top:/* negative half from the height */
 	-335px
 }
+
 #branding_panel{
   left:0px;
   width:299px; 
@@ -2813,7 +2814,7 @@ input[type="submit"]::-moz-focus-inner{
   		min-height: 100px;
   		color:#000;
 	}
-	button[type="submit"] {
+	button[type="submit"], button.preview, button.reset {
 		font-size: 14px;
 		height: 39px;
 		width: 99px;
@@ -2822,9 +2823,6 @@ input[type="submit"]::-moz-focus-inner{
 		padding: 0;
 		border-radius: 2px;
 		-webkit-border-radius: 2px;	
-		.reset {
-			width: 130px;
-		}
 	}
 	h2 {
 		float: left;
@@ -2834,22 +2832,6 @@ input[type="submit"]::-moz-focus-inner{
 	#close_branding{
 		float: right;
 		width: 20px;
-	}
-	.toolbar{
-		height: 40px;
-		background: #eee;
-		position: fixed;
-		width: 100%;
-		padding: 10px;
-		width: 299px;
-		.bottom{ 
-			bottom: 0;
-			text-align: center;
-			height: 100px; 
-		}
-		.top{
-			top:0;
-		}
 	}
 	.branding_section{ 
 		padding: 0 10px;
@@ -2866,6 +2848,10 @@ input[type="submit"]::-moz-focus-inner{
 		border-bottom:1px solid #444;
 	}	
 } 
+
+.toolbar{height:40px;background:#eee;position:fixed;width:100%;padding:10px;width:299px}
+#branding_panel .toolbar.bottom{bottom:0;text-align:center;height:100px}
+#branding_panel .toolbar.top{top:0}
 
 #show_branding{
 	position: fixed;
