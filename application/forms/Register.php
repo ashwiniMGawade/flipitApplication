@@ -83,6 +83,7 @@ class Application_Form_Register extends Application_Form_Base
         $vistorPostalCode->setRequired(true);
         $vistorPostalCode->setAttrib('class', 'form-control');
         $vistorPostalCode->setLabel('Postcode');
+        $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
         $this->addElements(
             array(
                 $visitorEmail,
@@ -94,7 +95,8 @@ class Application_Form_Register extends Application_Form_Base
                 $vistorDateOfBirthMonth,
                 $vistorDateOfBirthYear,
                 $vistorGender,
-                $vistorPostalCode
+                $vistorPostalCode,
+                $shopIdHiddenField
             )
         );
 

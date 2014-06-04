@@ -2,13 +2,6 @@
 function setHiddenFieldValue(){
     $('input#shopId').val($('input#currentShop').val());
 };
-
-var validRules = {
-    homeemail : ""
-};
-var focusRules = {
-    homeemail : ""
-};
 function signUpNewsLetter(formName){ 
     var formName = 'form#' + formName;
     validateSignUpNewsLetter(formName);
@@ -28,7 +21,7 @@ function validateSignUpNewsLetter(formName) {
                         email : true,
                         remote : {
                             url : HOST_PATH_LOCALE
-                                 + "freesignup/checkuser",
+                                 + "signup/checkuser",
                             type : "post",
                             beforeSend : function(xhr) {
                             },

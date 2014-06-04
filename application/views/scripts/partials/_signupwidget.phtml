@@ -22,7 +22,7 @@ foreach ($this->zendForm->getElements() as $formElement) {
         <?php
     }
     ?>
-    <input type="hidden" name="shopId" value="" id="shopId" />
+    <?php echo $this->zendForm->shopId->renderViewHelper();?>
     <?php  
     echo $this->formSubmit(
         'submit',

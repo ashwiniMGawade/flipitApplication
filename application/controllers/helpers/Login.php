@@ -20,8 +20,4 @@ class Zend_Controller_Action_Helper_Login extends Zend_Controller_Action_Helper_
         $visitor->updateLoginTime($visitorId);
         setcookie('kc_unique_user_id', $visitorId, time() + 2592000, '/');
     }
-    
-    public function test(){
-    	echo $this->translate('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
-    }
 }

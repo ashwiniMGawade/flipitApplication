@@ -2,19 +2,6 @@
 require_once 'Zend/Controller/Action.php';
 class SignupController extends Zend_Controller_Action
 {
-    public function checkuserAction()
-    {
-        $visitorInformation = intval(
-            Visitor::checkDuplicateUser(
-                $this->_getParam('emailAddress'),
-                $this->_getParam('id')
-            )
-        );
-        $visitorStatus = $visitorInformation > 0 ? false : true;
-        echo Zend_Json::encode($visitorStatus);
-        die();
-    }
-
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -38,15 +25,52 @@ class SignupController extends Zend_Controller_Action
         $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
+    public function checkuserAction()
+    {
+        $visitorInformation = intval(
+            Visitor::checkDuplicateUser(
+                $this->_getParam('emailAddress'),
+                $this->_getParam('id')
+            )
+        );
+        $visitorStatus = $visitorInformation > 0 ? false : true;
+        echo Zend_Json::encode($visitorStatus);
+        die();
+    }
+
+
     public function indexAction()
     {
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $this->_redirect(
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('profiel')
+            );
+        }
         $pageName = 'SignUp';
         $pageId = PageAttribute::getPageAttributeIdByName($pageName);
         $pageDetails =  Page::getPageFromFilteredPageAttribute($pageId);
         $this->view->pageTitle = $pageDetails['pageTitle'];
         $this->viewHelperObject->getMetaTags($this);
+        
+        $emailAddressFromMemory = '';
+        $emailAddressSpace = new Zend_Session_Namespace('emailAddressSignup');
+        if (isset($emailAddressSpace->emailAddressSignup)) {
+            $emailAddressFromMemory = $emailAddressSpace->emailAddressSignup;
+            //$emailAddressSpace->emailAddressSignup = '';
+        }
+        
+        $shopId = '';
+        $shopIdNameSpace = new Zend_Session_Namespace('shopId');
+        if (isset($shopIdNameSpace->shopId)) {
+            $shopId = $shopIdNameSpace->shopId;
+            //$shopIdNameSpace->shopId = '';
+        }
+        
         $registrationForm = new Application_Form_Register();
         $this->view->form = $registrationForm;
+        $registrationForm->getElement('emailAddress')->setValue($emailAddressFromMemory);
+        $registrationForm->getElement('shopId')->setValue($shopId);
         if ($this->getRequest()->isPost()) {
             if ($registrationForm->isValid($_POST)) {
                 $visitorInformation = $registrationForm->getValues();
@@ -58,6 +82,9 @@ class SignupController extends Zend_Controller_Action
                     );
                 } else {
                     $visitorId = Visitor::addVisitor($visitorInformation);
+                    if ($visitorId) {
+                        Shop::shopAddInFavourite($visitorId, base64_decode($visitorInformation['shopId']));
+                    }
                     self::redirectAccordingToMessage(
                         $visitorId,
                         $this->view->translate('Please enter valid information'),
@@ -106,7 +133,6 @@ class SignupController extends Zend_Controller_Action
                 } else {
                     Visitor::setVisitorLoggedIn($visitorId);
                     $message = $this->view->translate('Thanks for registration now enjoy the more coupons');
-                    
                     $mandrillFunctions->sendWelcomeMail($visitorId, $this);
                 }
                 self::showFlashMessage(
