@@ -1,9 +1,15 @@
 <?php
 class Zend_View_Helper_Shop extends Zend_View_Helper_Abstract
 {
+    public $view;
+
     public function shop()
     {
         return $this;
+    }
+    public function __invoke() {
+        $this->view = $this->getView();
+        $this->view->translate();
     }
 
     public function brandingCss($brandingCss)
@@ -39,5 +45,9 @@ class Zend_View_Helper_Shop extends Zend_View_Helper_Abstract
             $js .= '});';
         }
         return $js;
+    }
+
+    public function transtest(){
+        echo "Dit moet ook inline trans zijn ".$this->view->translate('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa').' is het dat ook?';
     }
 }

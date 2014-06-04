@@ -1,7 +1,6 @@
 var date = new Date();
 var fullYear = date.getFullYear();
 $(document).ready(function() {
-    console.log(fullYear);
     validateProfile();
     $("input#profile").submit(function(){
         if($("form#profile").valid()){

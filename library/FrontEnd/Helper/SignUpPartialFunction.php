@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_SignUpPartialFunction extends Transl8_View_Helper_Translate
+class FrontEnd_Helper_SignUpPartialFunction
 {
     public static function validateZendForm($currentSubmittedForm, $singUpFormForStorePage, $signUpFormSidebarWidget)
     {
@@ -27,7 +27,11 @@ class FrontEnd_Helper_SignUpPartialFunction extends Transl8_View_Helper_Translat
     public static function signUp2RedirectLink($signUpNewsLetterform)
     {
         $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
+        $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
+        $visitorEmail->emailAddressSignup = $emailAddress;
         $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
+        $visitorShopId = new Zend_Session_Namespace('shopId');
+        $visitorShopId->shopId = $addToFavoriteShopId;
         $signUpStep2Url= HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven');
         return $signUpStep2Url;
     }
@@ -35,23 +39,23 @@ class FrontEnd_Helper_SignUpPartialFunction extends Transl8_View_Helper_Translat
     public function getSignUpWidgetHeader($widgetType)
     {
        if ($widgetType== 'sidebarWidget') {
-        $signUpHeader='<h2 class="form-signin-heading">' .$this->translate('Sign up').'
-            <span>'.$this->translate('and join over').'<br>' .$this->translate('10 million people')
+        $signUpHeader='<h2 class="form-signin-heading">' .FrontEnd_Helper_viewHelper::__translate('Sign up').'
+            <span>'.FrontEnd_Helper_viewHelper::__translate('and join over').'<br>' .FrontEnd_Helper_viewHelper::__translate('10 million people')
             .'</span></h2>';
        } else if($widgetType == 'categoryPageSignupForm') {
         $signUpHeader='<h2 class="form-signin-heading">' .'
-            <span>'.$this->translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'
+            <span>'.FrontEnd_Helper_viewHelper::__translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'
             .'</span></h2>';
        }
        else if($widgetType == 'footerSignupForm') {
         $signUpHeader='<div class="text">
-                <h2>'.$this->translate('Subscribe now').'</h2>
-                <span>'.$this->translate('Become a saving superstar').'! '.'<br>'.$this->translate('And get exclusive codes').'</span>
+                <h2>'.FrontEnd_Helper_viewHelper::__translate('Subscribe now').'</h2>
+                <span>'.FrontEnd_Helper_viewHelper::__translate('Become a saving superstar').'! '.'<br>'.FrontEnd_Helper_viewHelper::__translate('And get exclusive codes').'</span>
             </div>';
        }
        else {
-         $signUpHeader='<h2>'.$this->translate('Receive weekly updates of the best offers?').'<br>'
-         .$this->translate('Sign up for our newsletter!').'</h2>';
+         $signUpHeader='<h2>'.FrontEnd_Helper_viewHelper::__translate('Receive weekly updates of the best offers?').'<br>'
+         .FrontEnd_Helper_viewHelper::__translate('Sign up for our newsletter!').'</h2>';
        }
        return $signUpHeader;
     }
