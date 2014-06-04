@@ -210,7 +210,7 @@ EOD;
         $mobileMenuHeader = '';
         if ($menuType == 'mobile') {
             $menuNavId = 'menu';
-            $mobileMenuHeader = '<h1>'.$this->__translate('Korting pakken').'</h1>';
+            $mobileMenuHeader = '<h1>Korting pakken</h1>';
         }
         $navigationString ='<nav id="'.$menuNavId.'"><ul>'.$mobileMenuHeader;
         foreach ($mainMenu as $menu) {
