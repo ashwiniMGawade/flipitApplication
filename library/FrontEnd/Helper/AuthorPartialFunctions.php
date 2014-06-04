@@ -28,7 +28,7 @@ class FrontEnd_Helper_AuthorPartialFunctions {
         return 
         '<li>
             <a href="'.$socialMediaLinkUrl.'" target="_blank">
-                <img src="' .HTTP_PATH ."public/images/front_end/". $socialMediaLinkImage .'" width="16" height="16" />' .FrontEnd_Helper_viewHelper::__translate($socialMediaLinkName)
+                <img src="' .HTTP_PATH ."public/images/front_end/". $socialMediaLinkImage .'" width="16" height="16" />' .$socialMediaLinkName
             .'</a>
         </li>';
     }
