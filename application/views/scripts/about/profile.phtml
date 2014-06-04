@@ -17,10 +17,10 @@ $partialViewPath = 'partials/';
 $authorMostReadArticles = '';
 if(!empty($this->authorMostReadArticles)):
     $authorMostReadArticles = $this->partial(
-        $partialViewPath.'_authorMostReadArticles.phtml', 
+        $partialViewPath.'_authorMostReadArticles.phtml',
         array(
             "authorMostReadArticles"=>$this->authorMostReadArticles,
-            "authorFirstName"=>$this->authorDetails['firstName']
+            "moneySavingGuideHeader"=>$this->translate('Saving guides by') . " " . $this->authorDetails['firstName']
         )
     );
 endif;

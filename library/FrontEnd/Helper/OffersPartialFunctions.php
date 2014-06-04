@@ -272,7 +272,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             $onClick =  self::getUserIsLoggedInOrNot() == "true" ? "printIt('$urlToShow');" : "printIt('$urlToShow');";
             $buttonWithCodeforOffer = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'.FrontEnd_Helper_viewHelper::__translate('print now').'<span class="ico-print"></span></a>';
         } else if ($currentOffer->discountType=='CD') {
-            $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate'),OpenInNewTab('". $permalink. "?popup=$currentOffer->id&type=code')";
+            $onClick = "showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate'),OpenInNewTab('".HTTP_PATH_LOCALE. $permalink. "?popup=$currentOffer->id&type=code')";
             $buttonWithCodeforOffer = '<a id="'.$currentOffer->id.'" class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" rel="nofollow" target="_self" onClick="'.$onClick.'">'.FrontEnd_Helper_viewHelper::__translate('Get this offer').'</a>';
         } else if ($currentOffer->discountType == "SL") {
             $buttonWithCodeforOffer = '';
