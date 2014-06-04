@@ -99,10 +99,12 @@ class Category extends BaseCategory
 
     public static function getCategoryDetails($permalink)
     {
-        $categoryDetails = Doctrine_Query::create()->select("c.*,i.name,i.path,categoryfeaturedimage.name, categoryfeaturedimage.path")
+        $categoryDetails = Doctrine_Query::create()
+        ->select("c.*,i.name,i.path, categoryfeaturedimage.name, categoryfeaturedimage.path, categoryheaderimage.name, categoryheaderimage.path")
         ->from('Category c')
         ->LeftJoin("c.categoryicon i")
         ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
+        ->LeftJoin("c.categoryheaderimage categoryheaderimage")
         ->where("permalink = ?", $permalink)
         ->andWhere('c.deleted=0')
         ->andWhere('c.status= 1')
@@ -122,10 +124,15 @@ class Category extends BaseCategory
         $category = new Category();
         self::getCategoryParameters($categoryParameter, $category);
         $category->status = '1';
-        $categoryIconId = self::setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
-        $categoryFeaturedImageId = self::setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+        $categoryIconId = self::
+            setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+        $categoryFeaturedImageId = self::
+            setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+        $categoryHeaderImageId = self::
+            setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
         $category->categoryIconId = $categoryIconId;
         $category->categoryFeaturedImageId = $categoryFeaturedImageId;
+        $category->categoryHeaderImageId = $categoryHeaderImageId;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
 
@@ -149,12 +156,55 @@ class Category extends BaseCategory
     {
         $category = Doctrine_Core::getTable('Category')->find( $categoryParameter['id']);
         self::getCategoryParameters($categoryParameter, $category);
-        if($_FILES['categoryIconNameHidden']['name'] != ''){
-            $categoryIconId = self::setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+       
+        if($_FILES['categoryIconNameHidden']['name'] != ''
+            && $_FILES['categoryFeaturedImage']['name'] != '' 
+            && $_FILES['categoryHeaderImage']['name'] != '' ){
+            $categoryIconId = self::
+                setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
             $category->categoryIconId = $categoryIconId;
-        }else if($_FILES['categoryFeaturedImage']['name'] != ''){
-            $categoryFeaturedImageId = self::setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+            $categoryFeaturedImageId = self::
+                setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
             $category->categoryFeaturedImageId = $categoryFeaturedImageId;
+            $categoryHeaderImageId = self::
+                setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
+            $category->categoryHeaderImageId = $categoryHeaderImageId;
+        }else if($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != ''){
+            $categoryIconId = self::
+                setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+            $category->categoryIconId = $categoryIconId;
+            $categoryFeaturedImageId = self::
+                setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+            $category->categoryFeaturedImageId = $categoryFeaturedImageId;    
+        }else if($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryHeaderImage']['name'] != ''){
+            $categoryIconId = self::
+                setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+            $category->categoryIconId = $categoryIconId;
+            $categoryHeaderImageId = self::
+                setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
+            $category->categoryHeaderImageId = $categoryHeaderImageId;
+        }else if($_FILES['categoryHeaderImage']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '' ){
+            $categoryHeaderImageId = self::
+                setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
+            $category->categoryHeaderImageId = $categoryHeaderImageId;
+            $categoryFeaturedImageId = self::
+                setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+            $category->categoryFeaturedImageId = $categoryFeaturedImageId;
+        }elseif($_FILES['categoryIconNameHidden']['name'] != '' &&  $_FILES['categoryFeaturedImage']['name'] == '' &&
+            $_FILES['categoryHeaderImage']['name'] == '' ) {
+            $categoryIconId = self::
+                setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+            $category->categoryIconId = $categoryIconId;
+        }elseif($_FILES['categoryFeaturedImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' && 
+            $_FILES['categoryHeaderImage']['name'] == '') {
+            $categoryFeaturedImageId = self::
+                setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+            $category->categoryFeaturedImageId = $categoryFeaturedImageId;
+        }elseif($_FILES['categoryHeaderImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
+            $_FILES['categoryFeaturedImage']['name'] == '') {
+            $categoryHeaderImageId = self::
+                setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
+            $category->categoryHeaderImageId = $categoryHeaderImageId;
         }
         $categoryInfo = self::getCategoryById($categoryParameter['id']);
 
@@ -264,10 +314,12 @@ class Category extends BaseCategory
 
     public static function getCategoryInformation($categoryId)
     {
-        $categoryDetails = Doctrine_Query::create()->select("c.*,i.name,i.path,categoryfeaturedimage.name,categoryfeaturedimage.path")
+        $categoryDetails = Doctrine_Query::create()
+        ->select("c.*,i.name,i.path,categoryfeaturedimage.name,categoryfeaturedimage.path, categoryheaderimage.name,categoryheaderimage.path")
         ->from('Category c')
         ->LeftJoin("c.categoryicon i")
         ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
+        ->LeftJoin("c.categoryheaderimage categoryheaderimage")
         ->where("id = ?", $categoryId)
         ->andWhere('c.deleted=0')
         ->fetchArray();

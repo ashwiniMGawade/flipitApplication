@@ -17,10 +17,12 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends Transl8_View_Hel
             }
             echo'<div class="'.$class.'" id="'.$id.'">
                 <a href="'.HTTP_PATH_LOCALE.'plus/'.$mostReadArticle['articles']['permalink'].'">
-                    <img class="aligncenter" 
+                    <div class="mostread-image">
+                        <img width="632" class="aligncenter" 
                         src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path']
                         .$mostReadArticle['articles']['articleImage']['name'].'" 
                         alt="'.$mostReadArticle['articles']['title'].'">
+                    </div>
                     <h1>'.$mostReadArticle['articles']['title'].'</h1>
                 </a>
                 <p>
@@ -44,8 +46,10 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends Transl8_View_Hel
         $relatedArticles .=
                 '<div class="item">
                     <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
-                        <img src="'.PUBLIC_PATH_CDN.$article['articleImage']['path'].$article['articleImage']['name'].'" 
-                        alt="'.$article['title'].'">
+                        <div class="related-image-wrapper">
+                            <img src="'.PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'].'" 
+                            width="363" alt="'.$article['title'].'">
+                        </div>
                     </a>
                     <div class="box">
                         <div class="caption-area">

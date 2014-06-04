@@ -9,11 +9,11 @@
                 $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
     ?>            
     <article class="box">
-        <span class="image">
+        <span class="image recent-images-wrapper">
             <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>">
-                <img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['articleImage']['path'].
-                $recentlyAddedArticle['articleImage']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>" 
-                width="118" height="118" />
+                <img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['thumbnail']['path'].
+                $recentlyAddedArticle['thumbnail']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>" 
+                height="118" />
             </a>    
         </span>
         <div class="text-box">

@@ -35,6 +35,11 @@
 		.border-radius;
 	    }
     }
+	.logo{
+		background:url(../../images/logo-home.png) no-repeat;
+		width:125px;
+		height:56px;
+	}
 	.navigation{
 		.logo{margin:24px 0 20px;}
 	}
@@ -271,7 +276,7 @@
 		&:after{.after;}
 		margin:-24px 0 0;
 		padding:0;
-		text-align:center; 
+		text-align:center;
 		overflow:visible;
 		li{
 			float:none;
@@ -500,6 +505,12 @@
 					border-radius: 3px;
 				}
 			}
+			.saving-guides{
+				height: 50px;
+			    margin: 3px 4% 0 0;
+			    overflow: hidden;
+			    width: 70px;
+			}
 			.box{overflow:hidden;}
 			h2{
 				color:#0077cc;
@@ -654,7 +665,7 @@
 @media only screen and (max-width: 1199px){
 	.home-page {
 		.section-top{
-			height:570px;
+			height:500px;
 		}
 		.navigation{
 			.logo{margin:5px 0 0;}
@@ -679,6 +690,8 @@
 			ul{
 				.logo-box{
 					width:16%;
+					min-width: 80px;
+					margin: 3px 20px 0 0;
 				}
 			}
 		}
@@ -697,6 +710,10 @@
 			}
 		}
 		.logos-section{
+			span {
+				margin-bottom: 20px;
+				display: block;
+			}
 			ul{
 				li{margin:0 10px;}
 			}
@@ -731,11 +748,7 @@
 			margin:-17px 0 0;
 		}
 		.logos-section{
-			padding:21px 10px 25px;
-			span{
-				display:block;
-				margin:0 0 10px;
-			}
+			padding:30px;
 			ul{
 				margin:0 0 -10px;
 				overflow:hidden;
@@ -743,7 +756,7 @@
 			}
 		}
 		.best-items{
-			padding:0 8px;
+			padding:0px;
 			.categories-block{
 				font-size:11px;
 				line-height:14px;
@@ -785,6 +798,8 @@
 			}
 		}
 		.our-shops{
+			padding: 30px;
+			text-align: center;
 			h2{
 				font-size:24px;
 			}
@@ -837,9 +852,12 @@
 				}
 			}
 		}
+		.area {
+			margin-bottom: 15px;
+		}
 		.section-top{
 			.email-form{
-				margin:0 auto;
+				margin:30px;
 				padding:15px 10px;
 				text-align:center;
 				h1{
@@ -878,28 +896,27 @@
 		}
 		.logos-panel{
 			margin:0;
-			.container{
-				padding:20px 10px;
-			}
 		}
 		.shops{
-			margin:0;
+			margin:10px 0;
 			li{
-				width:30.3%;
-				margin:0 1% 15px;
+				width:25%;
+				margin:5px;
 				a{
 					&:hover{margin:0;}
 				}
 			}
 		}
 		.best-items{
-			.heading{display:none;}
+			.heading{}
 			.categories-block{
 				display:none;
 			}
 			.vouchers{
 				float:none;
 				width:100%;
+				padding:0px;
+				border-left: 1px solid #EAEAEA;
 				ul{
 					h2{
 						font-size:16px;
@@ -910,6 +927,9 @@
 						&:before{
 							right:8px;
 						}
+					}
+					.logo-box{
+						margin: 3px 15px 0 0;
 					}
 				}
 			}
@@ -923,8 +943,8 @@
 		.logos-section{
 			ul{
 				li{
-					width:30%;
-					margin:0 1% 2%;
+					width:35%;
+					margin:0 6% 8%;
 					text-align:center;
 				}
 				img{
