@@ -1,13 +1,14 @@
 <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 <?php
-    $lessCssPath = "/public/css/front_end/";
 	if (APPLICATION_ENV == 'development') {
+        $lessCssPath = "/public/css/front_end/";
 ?>
 <link rel="stylesheet/less" type="text/css" href="<?php echo $lessCssPath;?>all.less"/>
 <link rel="stylesheet/less" type="text/css" href="<?php echo $lessCssPath;?>ie.less"/>
+<link type="text/css" rel="stylesheet" href="<?php echo $lessCssPath;?>jquery.mmenu.css" />
 <?php
 	} else {
-   		echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/all.css");
+   		echo $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/all.css")->prependStylesheet("/public/css/front_end/jquery.mmenu.css");
 	}
 ?>
-<link type="text/css" rel="stylesheet" href="<?php echo $lessCssPath;?>jquery.mmenu.css" />
+
