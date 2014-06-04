@@ -209,23 +209,28 @@ class FrontEnd_Helper_HomePagePartialFunctions extends Transl8_View_Helper_Trans
         $moneySavingGuidestHtml = '';
         $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
         foreach ($topTenMoneySavingGuides as $savingGuide) {
-            $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/") .'thum_article_medium_'. $savingGuide['article']['thumbnail']['name'];
+            $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/") . $savingGuide['article']['thumbnail']['name'];
             $savingPermalink = FrontEnd_Helper_viewHelper::__link('plus').'/'.$savingGuide['article']['permalink'];
             $savingTitle = $savingGuide['article']['title'];
             $allowed_tags = '';
             $guideDescription = strip_tags($savingGuide['article']['chapters'][0]['content'], $allowed_tags);
             $savingContent = mb_strlen($guideDescription, 'UTF-8') > 50 ? mb_substr($guideDescription, 0, 50, 'UTF-8') . "..." : $guideDescription;
-            $moneySavingGuidestHtml .= $this->getRighColumnContent($savingImage, $savingPermalink, $savingTitle, $savingContent, '');
+            $moneySavingGuidestHtml .= $this->getRighColumnContent($savingImage, $savingPermalink, $savingTitle, $savingContent, '', 'saving-guides');
         }
         return $moneySavingGuidestHtml;
     }
 
-    public function getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText) {
+    public function getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText, $dynamicDivId = '') { 
+        $imageDimensions = 'width="84" height="42"';
+        if($dynamicDivId == 'saving-guides') {
+            $imageDimensions = 'width="70"';
+        }
+
         $rightColumnContent = '
         <li>
             <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">
-                <div class="logo-box">
-                    <img width="84" height="42" alt="' . $shopName .'" src="' . $shopImage .'">
+                <div class="logo-box '.$dynamicDivId.'">
+                    <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'">
                 </div>
                 <div class="box">
                     <h2>
