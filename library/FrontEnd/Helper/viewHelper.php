@@ -279,47 +279,18 @@ EOD;
         $alphabetList .="</ul>";
         return $alphabetList;
     }
-    
-    /**
-     * Common function for social media.
-     * @version 1.0
-     * @param $url string
-     * @param $type string
-     * @return socialMedia
-     */
+
     public function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
-        $facebookLikeWidget = self::getSocialMediaLikeButtons('facebook.com', 'facebook');
-        $twitterLikeWidget = self::getSocialMediaLikeButtons('twitter.com', 'twitter');
-        $googlePlusOneWidget = self::getSocialMediaLikeButtons('plus.google.com', 'google');
-        $socialMedia = self::getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget);
-        return $socialMedia;
-    }
-
-    public static function getSocialMediaLikeButtons($socialMediaUrl, $type)
-    {
-        if ($type == 'facebook') {
-            $socialMediaLikeButtons = "<a class='facebook' hreaf='".$socialMediaUrl."'></a>";
-        } elseif ($type == 'twitter') {
-            $socialMediaLikeButtons = "<a class='twitter' hreaf='".$socialMediaUrl."'></a>";
-        } elseif ($type == 'google') {
-            $socialMediaLikeButtons = "<a class='google' hreaf='".$socialMediaUrl."'></a>";
-        }
-        return $socialMediaLikeButtons;
-    }
-
-    public function getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget)
-    {
-
             $socialMediaTitle = "<h2>".$this->__translate('Follow us')."</h2>";
             $socialMedia = "
                 <article class='block'>
                     <div class='social-networks'>
                         <div class='intro'>".$socialMediaTitle."</div>
                         <ul class='share-list'>
-                            <li>".$facebookLikeWidget."</li>
-                            <li>".$googlePlusOneWidget."</li>
-                            <li>".$twitterLikeWidget."</li>
+                            <li><a class='facebook' href='#'></a></li>
+                            <li><a class='twitter' href='#'></a></li>
+                            <li><a class='google' href='#'></a></li>
                             <li class='share-text'>".$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
                         </ul>
                     </div>
@@ -476,13 +447,19 @@ EOD;
     public function popularCategoryWidget()
     {
         $allPopularCategories = Category::getPopularCategories();
-        $categorySidebarWodget = '<div class="block"><div class="intro">
-        <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
-        <ul class="tags">';
+        $categorySidebarWodget = 
+        '<div class="block">
+            <div class="intro">
+            <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
+                <ul class="tags">';
         for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
-            $categorySidebarWodget.='<li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name'].'</li>';
+            $categorySidebarWodget.=
+                    '<li>
+                        <a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name']
+                    .'</li>';
         }
-        $categorySidebarWodget.='</ul></div>'; 
+        $categorySidebarWodget.=
+                '</ul></div>'; 
         return $categorySidebarWodget;
     }
 
