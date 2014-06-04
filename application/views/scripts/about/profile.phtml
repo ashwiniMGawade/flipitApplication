@@ -49,11 +49,11 @@ $signUpWidgetForm = $this->partial(
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php 
     $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-    echo $frontendViewHelper->popularCategoryWidget();
-    echo $frontendViewHelper->socialMediaWidget();
-    echo $frontendViewHelper->popularShopWidget();
-    echo $frontendViewHelper->browseByStoreWidget();
-    echo $signUpWidgetForm;
+    echo $frontendViewHelper->popularCategoryWidget().
+    $frontendViewHelper->popularShopWidget().
+    $frontendViewHelper->browseByStoreWidget().
+    $frontendViewHelper->socialMediaWidget().
+    $signUpWidgetForm;
     ?>
     </aside>
 </div>

@@ -35,7 +35,7 @@ if ($this->pageMode == true) {
         $contentDivStart = '<div id="content" class="col-md-8 col-sm-8">';
         $contentDivEnd = '</div>';
     } else {
-        $pageContent='<div class="inner-section-wrapper"><h1>'.$this->page['pageTitle'].'</h1>'.stripslashes($this->page['content']) .'</div>';
+        $pageContent='<div class="section"><div class="inner-section-wrapper"><h1>'.$this->page['pageTitle'].'</h1>'.stripslashes($this->page['content']) .'</div></div>';
     }
     $imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
     $imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
@@ -44,9 +44,7 @@ if ($this->pageMode == true) {
     echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
     <div class="row">
          <?php echo $contentDivStart;?>
-             <div class="section">
-             <?php echo $pageContent; ?>
-             </div>
+         <?php echo $pageContent; ?>
          <?php echo $contentDivEnd . $sidebarWidgetHtml;?>
     </div>
     <?php 
