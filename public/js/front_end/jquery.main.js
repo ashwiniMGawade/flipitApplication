@@ -748,7 +748,6 @@ jQuery.onFontResize = (function($) {
 			convertToArray(document.getElementsByName('searchFieldHeader'))
 		);
 		for(var i = 0; i < inputs.length; i++) {
-			console.log(inputs[i]);
 			if(inputs[i].className.indexOf(opt.skipClass) < 0) {
 				var inputType = getInputType(inputs[i]);
 				var placeholderValue = inputs[i].getAttribute('placeholder');
