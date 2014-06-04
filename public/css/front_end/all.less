@@ -2172,6 +2172,10 @@ hr.alt2{
 		}
 	}
 }
+
+.form-signin.newsletter input[type="email"], .form-signin.newsletter input[type="text"]{
+	width:68% !important;
+}
 .newsletter{
 	margin:0;
 	input[type="email"], input[type="text"]{
@@ -2186,7 +2190,6 @@ hr.alt2{
 		margin:0 -3% 0 0;
 		height:39px;
 		.border-radius;
-		width:68%!important;
 	}
 	input[type="email"]::-webkit-input-placeholder,input[type="text"]::-webkit-input-placeholder{color: @text-color;}
 	input[type="email"]:-moz-placeholder, input[type="text"]:-moz-placeholder {color: @text-color;}
@@ -3141,6 +3144,10 @@ input[type="submit"]::-moz-focus-inner{
 }
 }
 @media only screen and (max-width: 979px){
+
+.row .newsletter input[type="submit"]{
+	width:100% !important;
+}
 img.logo.kortingscode{
 	width:260px;
 }
@@ -3368,7 +3375,6 @@ img.logo.kortingscode{
 		}
 	}
 	.section-comments{
-		margin:15px;
 		.bottom-box{
 			padding:15px 0 0;
 			ul{
@@ -3698,9 +3704,6 @@ img.logo.kortingscode{
 	.section{
 		img.small-code{
 			width:65px;
-		}
-		.block-form {
-			padding:15px;
 		}
 		.block{
 			.holder{padding:3% 5%;}
