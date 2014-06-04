@@ -35,6 +35,8 @@ class Visitor extends BaseVisitor
             if (!empty($favoriteShops)) {
                 $favouriteShopsStatus = true;
             }
+        } elseif ($visitorId!=0) {
+            $favouriteShopsStatus = true;
         }
         return $favouriteShopsStatus;
     }
