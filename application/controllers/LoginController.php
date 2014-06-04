@@ -49,7 +49,7 @@ class LoginController extends Zend_Controller_Action
         $emailAddressSpace = new Zend_Session_Namespace('emailAddressSpace');
         if (isset($emailAddressSpace->emailAddressSpace)) {
             $emailAddressFromMemory = $emailAddressSpace->emailAddressSpace;
-            $emailAddressSpace->loginUser = '';
+            $emailAddressSpace->emailAddressSpace = '';
         }
         $loginForm = new Application_Form_Login();
         $this->view->form = $loginForm;

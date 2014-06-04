@@ -28,8 +28,8 @@ class ErrorController extends Zend_Controller_Action
                     if ($pageDetails['customHeader']) {
                         $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
                     }
-
                     $pageLogo  = Logo::getPageLogo($pageDetails['logoId']);
+                    $pageHeaderImage  = Logo::getPageLogo($pageDetails['pageHeaderImageId']);
                     $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
                     $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
@@ -50,6 +50,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->matches = $pageNumber;
                     $this->view->page = $pageDetails;
                     $this->view->pageLogo = isset($pageLogo[0]) ? $pageLogo[0] : '';
+                    $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
                     $this->view->offercount = count($specialPageOffers);
                     $this->view->offersPaginator = $specialOffersPaginator;
                     $this->view->widget = $sidebarWidget;

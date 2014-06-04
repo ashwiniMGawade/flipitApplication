@@ -1,12 +1,12 @@
 <?php
-class FrontEnd_Helper_HomePagePartialFunctions extends Transl8_View_Helper_Translate{
+class FrontEnd_Helper_HomePagePartialFunctions{
 
     public $homePageData = '';
     public function getHomePageLeftColumn($homePageData) {
         $this->homePageData = $homePageData;
         $leftBlockList = '
         <div class="categories-block">
-            <a href="' . HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen') .'" class="all">'. $this->translate('All Categories') .'</a>
+            <a href="' . HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen') .'" class="all">'. FrontEnd_Helper_viewHelper::__translate('All Categories') .'</a>
             <ul>' 
                .$this->getHomePageLeftColumnList().
             '</ul>
@@ -26,7 +26,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends Transl8_View_Helper_Trans
     public function getLeftColumnOffersHtml($offerType) {
         $imageName = $offerType=='topOffers' ? HTTP_PATH ."public/images/img-08.png" : HTTP_PATH .'public/images/img-09.png';
         $headerText = $offerType=='topOffers' ? 'Our 10 best coupons' : 'New and Fresh Codes';
-        return $leftColumnOffersHtml = $this->getLeftColumnContent($offerType, $imageName, $this->translate($headerText), 36, $offerType);
+        return $leftColumnOffersHtml = $this->getLeftColumnContent($offerType, $imageName, FrontEnd_Helper_viewHelper::__translate($headerText), 36, $offerType);
     }
 
     public function getLeftColumnCategoriesHtml() {
@@ -34,7 +34,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends Transl8_View_Helper_Trans
         $categories = $this->homePageData['topCategories'];
         foreach ($categories as $category) {
             $categoryImage = PUBLIC_PATH_CDN.$category['category']['categoryicon']['path'] . $category['category']['categoryicon']['name'];
-            $categoriesOffers = $category['totalOffers'] . ' ' . $this->translate('Offers'). ' ' . $category['countOff'] . " " . $this->translate('coupons');
+            $categoriesOffers = $category['totalOffers'] . ' ' . FrontEnd_Helper_viewHelper::__translate('Offers'). ' ' . $category['countOff'] . " " . FrontEnd_Helper_viewHelper::__translate('coupons');
             $categoriesHtml .= $this->getLeftColumnContent('categories', $categoryImage, $category['category']['name'], 70, $category['category']['permaLink'], $categoriesOffers);
         }
         return $categoriesHtml;
@@ -48,15 +48,15 @@ class FrontEnd_Helper_HomePagePartialFunctions extends Transl8_View_Helper_Trans
             $totalOffers = intval($specialListPage['totalOffers']);
             $totalCouponsCount = count($this->homePageData['specialPagesOffers'][$specialListPage['page'][0]['permaLink']]);
             $totalOffersOfSpecialPage = (intval($totalCouponsCount) - $totalCoupon) + $totalOffers;
-            $specialListPageOffers = $totalOffersOfSpecialPage . ' ' . $this->translate('Offers'). ' ' . $totalCouponsCount . " " . $this->translate('coupons');
+            $specialListPageOffers = $totalOffersOfSpecialPage . ' ' . FrontEnd_Helper_viewHelper::__translate('Offers'). ' ' . $totalCouponsCount . " " . FrontEnd_Helper_viewHelper::__translate('coupons');
             $specialPageHtml .= $this->getLeftColumnContent('special', '', $specialListPage['page'][0]['pageTitle'], 70, $specialListPage['page'][0]['permaLink'], $specialListPageOffers);
         }
         return $specialPageHtml;
     }
 
     public function getLeftColumnSavingGuidesListHtml() {
-        $savingGuideOffers = count($this->homePageData['moneySavingGuides']) . " " . $this->translate('articles worth your time');
-        return $this->getLeftColumnContent('savingGuide', '', $this->translate('Smarter shopping'), 70, 'moneysaving', $savingGuideOffers);
+        $savingGuideOffers = count($this->homePageData['moneySavingGuides']) . " " . FrontEnd_Helper_viewHelper::__translate('articles worth your time');
+        return $this->getLeftColumnContent('savingGuide', '', FrontEnd_Helper_viewHelper::__translate('Smarter shopping'), 70, 'moneysaving', $savingGuideOffers);
     }
 
     public function getLeftColumnContent($LisDescription, $imageName, $headerText, $imageSize, $imageDescription, $numberOfOffersContent = '') {
@@ -83,9 +83,9 @@ class FrontEnd_Helper_HomePagePartialFunctions extends Transl8_View_Helper_Trans
     public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription) {
         $imageTagOrSpan = '';
         if($listType =='special' || $listType =='savingGuide') {
-            $listType = $listType==$this->translate('savingGuide') ?
-            $this->translate('FLIPIT PLUS') : $listType;
-            $imageTagOrSpan = '<span class="discount-label" >' . $this->translate($listType). '</span>' ;
+            $listType = $listType==FrontEnd_Helper_viewHelper::__translate('savingGuide') ?
+            FrontEnd_Helper_viewHelper::__translate('FLIPIT PLUS') : $listType;
+            $imageTagOrSpan = '<span class="discount-label" >' . FrontEnd_Helper_viewHelper::__translate($listType). '</span>' ;
         } else {
            $imageTagOrSpan = '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" alt="'. $imageDescription.'">';
         }
@@ -125,7 +125,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends Transl8_View_Helper_Trans
         $divId = $offerDivName=='categories' || $offerDivName=='special' ? $dynamicDivId : $offerDivName;
         $rightOfferColumnHtml = 
         '<div id="div_' . $divId .'" class="vouchers">
-            <a href="'. $goToAllLink.'" class="all">'.$this->translate($linkText).'</a>
+            <a href="'. $goToAllLink.'" class="all">'.FrontEnd_Helper_viewHelper::__translate($linkText).'</a>
             <ul>'.
             $this->getRightColumnOffersList($offerDivName, $dynamicDivId).
            '</ul>
@@ -244,7 +244,7 @@ class FrontEnd_Helper_HomePagePartialFunctions extends Transl8_View_Helper_Trans
     }
 
     public function getOfferOptionText($offerExclusive) {
-        $exclusiveText = $offerExclusive==1 ? '<strong class="exclusive"><span class="glyphicon glyphicon-star"></span>'. $this->translate('Exclusive'). '</strong>'  : '';
+        $exclusiveText = $offerExclusive==1 ? '<strong class="exclusive"><span class="glyphicon glyphicon-star"></span>'. FrontEnd_Helper_viewHelper::__translate('Exclusive'). '</strong>'  : '';
         return $exclusiveText;
     }
 }

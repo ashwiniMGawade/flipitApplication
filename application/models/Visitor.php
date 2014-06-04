@@ -22,18 +22,11 @@ class Visitor extends BaseVisitor
         }
         return count($visitorInformation);
     }
-    /**
-     * Fuction ngetFavoriteShopsForUser.
-     *
-     * This function checks the favorite shop of user on userid basis.
-     *
-     * @param integer $visitorId
-     * @param integer $shopId
-     */
+
     public static function getFavoriteShopsForUser($visitorId, $shopId)
     {
         $favouriteShopsStatus = false;
-        if($shopId==0) {
+        if ($shopId!=0) {
             $favoriteShops = Doctrine_Query::create()->select("fv.id as id")
             ->from("FavoriteShop fv")
             ->where('fv.visitorId='.$visitorId)
@@ -42,6 +35,8 @@ class Visitor extends BaseVisitor
             if (!empty($favoriteShops)) {
                 $favouriteShopsStatus = true;
             }
+        } elseif ($visitorId!=0) {
+            $favouriteShopsStatus = true;
         }
         return $favouriteShopsStatus;
     }
@@ -73,6 +68,10 @@ class Visitor extends BaseVisitor
             } else {
                 $visitor->active = true;
             }
+            $shopIdNameSpace = new Zend_Session_Namespace('shopId');
+            isset($shopIdNameSpace->shopId) ? $shopIdNameSpace->shopId = '' : '';
+            $emailAddressSpace = new Zend_Session_Namespace('emailAddressSignup');
+            isset($emailAddressSpace->emailAddressSignup) ? $emailAddressSpace->emailAddressSignup = '' : '';
         }
         $visitor->firstName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['firstName']);
         $visitor->lastName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['lastName']);

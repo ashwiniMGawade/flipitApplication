@@ -9,19 +9,18 @@ endif;
  
 if(LOCALE == ''):
     $logoCssClass = 'logo kortingscode';
-    $siteName = 'kortingscode';
+    $logoPath = HTTP_PATH.'public/images/kortingscode-logo.png';
 else :
     $logoCssClass = 'logo flipit';
-    $siteName = 'FlipIt';
+    $logoPath = HTTP_PATH.'public/images/flipit-logo.png';
 endif
 ?>
 <header id="header">
     <div class="top-panel">
         <div class="container">
             <span class="slogan"><?php 
-            $translation = new Transl8_View_Helper_Translate();
-            echo $translation->translate('save money with online discount codes and save pointers');?></span>
-            <a class="menu-account" href="#menu"><?php echo $this->translate('account menu');?></a>
+            echo FrontEnd_Helper_viewHelper::__translate('save money with online discount codes and save pointers');?></span>
+            <a class="menu-account" href="#menu"><?php echo FrontEnd_Helper_viewHelper::__translate('account menu');?></a>
                 <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
                 $userMenuLink = $this->locale. '/login/usermenu';
@@ -31,10 +30,10 @@ endif
     </div>
     <div class="navigation">
         <div class="container">
-            <strong class="<?php echo $logoCssClass; ?>">
+            <strong>
                 <a href="<?php echo LOCALE == '' ? 
                     'http://www.kortingscode.nl' : 'http://www.flipit.com/'.LOCALE ;?>">
-                    <?php echo $siteName;?>
+                    <img class="<?php echo $logoCssClass;?>"src="<?php echo $logoPath;?>"/>
                 </a>
             </strong>
             <a href="#" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>

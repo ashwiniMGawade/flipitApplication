@@ -122,7 +122,7 @@ class Admin_CategoryController extends Zend_Controller_Action
     public function editcategoryAction()
     {
         $this->view->role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
-        $id = $this->getRequest ()->getParam ( 'id' );
+        $id = $this->getRequest()->getParam ( 'id' );
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         if ($id > 0) {
             // get edit category

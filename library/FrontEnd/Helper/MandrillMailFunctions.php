@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translate {
+class FrontEnd_Helper_MandrillMailFunctions {
     public $imageLogoForMail = '';
     public $siteName = '';
     public function __construct() {
@@ -23,41 +23,41 @@ class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translat
                 'content'=>$this->imageLogoForMail),
             array('name'=>'bestRegards',
                 'content'=>
-                    $this->translate('Best').' '.$this->siteName.' '
-                    .$this->translate('visitor,')
+                    FrontEnd_Helper_viewHelper::__translate('Best').' '.$this->siteName.' '
+                    .FrontEnd_Helper_viewHelper::__translate('visitor,')
             ),
             array(
                 'name'=> 'centerContent',
                 'content'=>
-                    $this->translate('No problem you have forgotten your password, use the following link you can set it up again:').
+                    FrontEnd_Helper_viewHelper::__translate('No problem you have forgotten your password, use the following link you can set it up again:').
                     '<a href="'
                     . HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'
                     .FrontEnd_Helper_viewHelper::__link('resetpassword').'/'
                     .base64_encode($visitorId)
-                    . '">'.$this->translate('Click Here').'</a>'
+                    . '">'.FrontEnd_Helper_viewHelper::__translate('Click Here').'</a>'
             ),
             array(
                 'name'=> 'bottomContent',
-                'content'=> $this->translate('Greetings').',<br><br>'
-                    . $this->translate('The editors of Kortingscode.nl')
+                'content'=> FrontEnd_Helper_viewHelper::__translate('Greetings').',<br><br>'
+                    . FrontEnd_Helper_viewHelper::__translate('The editors of Kortingscode.nl')
             ),
             array(
                 'name'=> 'copyright',
-                'content'=>$this->translate('Copyright &copy; 2013').' '.$this->siteName.'. '
-                    .$this->translate('All Rights Reserved.')
+                'content'=>FrontEnd_Helper_viewHelper::__translate('Copyright &copy; 2013').' '.$this->siteName.'. '
+                    .FrontEnd_Helper_viewHelper::__translate('All Rights Reserved.')
             ),
             array(
                 'name'=> 'address',
-                'content'=>$this->translate("You receive this newsletter because you have given to you to keep abreast of our latest us your consent").
-                    '<br/>' . $this->translate("Offers.")
+                'content'=>FrontEnd_Helper_viewHelper::__translate("You receive this newsletter because you have given to you to keep abreast of our latest us your consent").
+                    '<br/>' . FrontEnd_Helper_viewHelper::__translate("Offers.")
                     . '<a href='.HTTP_PATH_LOCALE.' style="color:#ffffff; padding:0 2px;">'.$this->siteName.'</a>'
-                    . $this->translate('is part of Imbull, Weteringschans 120, 1017 XT Amsterdam - Chamber of Commerce 34,339,618')
+                    . FrontEnd_Helper_viewHelper::__translate('is part of Imbull, Weteringschans 120, 1017 XT Amsterdam - Chamber of Commerce 34,339,618')
             ),
             array(
                 'name'=> 'logincontact',
                 'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;"
                     href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'">'
-                    .$this->translate('login').'</a>'
+                    .FrontEnd_Helper_viewHelper::__translate('login').'</a>'
             )
         );
         $emailData = Signupmaxaccount::getemailmaxaccounts();
@@ -67,10 +67,10 @@ class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translat
             'welcomeTemplate',
             $mailData,
             $emailFrom,
-            $this->translate('Forgot-Password'),
+            FrontEnd_Helper_viewHelper::__translate('Forgot-Password'),
             $emailAddress,
-            $this->translate('Member'),
-            $this->translate('Password Change')
+            FrontEnd_Helper_viewHelper::__translate('Member'),
+            FrontEnd_Helper_viewHelper::__translate('Password Change')
         );
         Visitor::updatePasswordRequest($visitorId, 0);
         return true;
@@ -87,35 +87,35 @@ class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translat
             ),
             array(
                 'name'=>'bestRegards',
-                'content'=>$this->translate('Best news reader, ')
+                'content'=>FrontEnd_Helper_viewHelper::__translate('Best news reader, ')
             ),
             array(
                 'name'=>'centerContent',
-                'content'=>$this->translate('From now on you will receive our weekly newsletter with the best discount codes.')
+                'content'=>FrontEnd_Helper_viewHelper::__translate('From now on you will receive our weekly newsletter with the best discount codes.')
             ),
             array(
                 'name'=>'bottomContent',
-                'content'=>$this->translate('Thanks').', <br/>'.$this->siteName
+                'content'=>FrontEnd_Helper_viewHelper::__translate('Thanks').', <br/>'.$this->siteName
             ),
             array(
                 'name'=>'copyright',
-                'content'=>$this->translate('Copyright &copy; 2013').' '.$this->siteName.'. '
-                    .$this->translate('All Rights Reserved.')
+                'content'=>FrontEnd_Helper_viewHelper::__translate('Copyright &copy; 2013').' '.$this->siteName.'. '
+                    .FrontEnd_Helper_viewHelper::__translate('All Rights Reserved.')
             ),
             array(
                 'name'=>'address',
                 'content'=>
-                    $this->translate("You receive this newsletter because you have given to you to keep abreast of our latest us your consent").
-                    '<br/>' . $this->translate("Offers.")
+                    FrontEnd_Helper_viewHelper::__translate("You receive this newsletter because you have given to you to keep abreast of our latest us your consent").
+                    '<br/>' . FrontEnd_Helper_viewHelper::__translate("Offers.")
                     . '<a href='.HTTP_PATH_LOCALE.' style="color:#ffffff; padding:0 2px;">'.$this->siteName.'</a>' 
-                    . $this->translate('is part of Imbull, Weteringschans 120, 1017 XT Amsterdam - Chamber of Commerce 34,339,618')
+                    . FrontEnd_Helper_viewHelper::__translate('is part of Imbull, Weteringschans 120, 1017 XT Amsterdam - Chamber of Commerce 34,339,618')
             ),
             array(
                 'name'=>'logincontact',
                 'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;" 
                     href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'
                     .FrontEnd_Helper_viewHelper::__link('directlogin'). "/" . base64_encode($visitorDetails[0]['email']) 
-                    ."/". $visitorDetails[0]['password'].'">'.$this->translate('My Profile').'</a>'
+                    ."/". $visitorDetails[0]['password'].'">'.FrontEnd_Helper_viewHelper::__translate('My Profile').'</a>'
             )
         );
         $staticContent = array(
@@ -125,13 +125,13 @@ class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translat
             ),
            array(
                'name' => 'moreOffers',
-               'content' => $this->translate('See more of our top offers') . ' >'
+               'content' => FrontEnd_Helper_viewHelper::__translate('See more of our top offers') . ' >'
            )
         );
         $poupularTitle = array(
             array(
                 'name' => 'poupularTitle',
-                'content' => $this->translate('Top 5 Discount Codes:')
+                'content' => FrontEnd_Helper_viewHelper::__translate('Top 5 Discount Codes:')
             )
         );
         $mendrilMailData =
@@ -151,10 +151,10 @@ class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translat
             'welcomeTemplate',
             $mendrilMailData,
             $emailFrom,
-            $this->translate('welcome'),
+            FrontEnd_Helper_viewHelper::__translate('welcome'),
             $visitorDetails[0]['email'],
-            !empty($visitorDetails[0]['firstName']) ? $visitorDetails[0]['firstName'] :$this->translate('Member'),
-            $this->translate('Welcome e-mail subject')
+            !empty($visitorDetails[0]['firstName']) ? $visitorDetails[0]['firstName'] :FrontEnd_Helper_viewHelper::__translate('Member'),
+            FrontEnd_Helper_viewHelper::__translate('Welcome e-mail subject')
         );
     }
 
@@ -166,39 +166,39 @@ class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translat
                 'content'=>$this->imageLogoForMail),
             array('name'=>'bestRegards',
                 'content'=>
-                    $this->translate('Dear visitor Kortingscode.nl,')
+                    FrontEnd_Helper_viewHelper::__translate('Dear visitor Kortingscode.nl,')
             ),
             array(
                 'name'=> 'centerContent',
                 'content'=>
-                    $this->translate('You are receiving this email because you have indicated to keep abreast of the best discount codes and actions Kortingscode.nl.:')
-                   ."<br/>". $this->translate('Met de volgende stap bevestig je dat je deze e-mail hebt ontvangen, klik daarvoor op onderstaande link:').
+                    FrontEnd_Helper_viewHelper::__translate('You are receiving this email because you have indicated to keep abreast of the best discount codes and actions Kortingscode.nl.:')
+                   ."<br/>". FrontEnd_Helper_viewHelper::__translate('Met de volgende stap bevestig je dat je deze e-mail hebt ontvangen, klik daarvoor op onderstaande link:').
                     '<a href="'
                     . HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('confirmemail').'/'. base64_encode($visitoremailMail)
-                    . '">'.$this->translate('Klik hier om je e-mail adres te bevestigen').'</a>'
+                    . '">'.FrontEnd_Helper_viewHelper::__translate('Klik hier om je e-mail adres te bevestigen').'</a>'
             ),
             array(
                 'name'=> 'bottomContent',
-                'content'=> $this->translate('Thanks').',<br><br>'
-                    . $this->translate('Kortingscode.nl')
+                'content'=> FrontEnd_Helper_viewHelper::__translate('Thanks').',<br><br>'
+                    . FrontEnd_Helper_viewHelper::__translate('Kortingscode.nl')
             ),
             array(
                 'name'=> 'copyright',
-                'content'=>$this->translate('Copyright &copy; 2013').' '.$this->siteName.'. '
-                    .$this->translate('All Rights Reserved.')
+                'content'=>FrontEnd_Helper_viewHelper::__translate('Copyright &copy; 2013').' '.$this->siteName.'. '
+                    .FrontEnd_Helper_viewHelper::__translate('All Rights Reserved.')
             ),
             array(
                 'name'=> 'address',
-                'content'=>$this->translate("You receive this newsletter because you have given to you to keep abreast of our latest us your consent").
-                    '<br/>' . $this->translate("Offers.")
+                'content'=>FrontEnd_Helper_viewHelper::__translate("You receive this newsletter because you have given to you to keep abreast of our latest us your consent").
+                    '<br/>' . FrontEnd_Helper_viewHelper::__translate("Offers.")
                     . '<a href='.HTTP_PATH_LOCALE.' style="color:#ffffff; padding:0 2px;">'.$this->siteName.'</a>'
-                    . $this->translate('is part of Imbull, Weteringschans 120, 1017 XT Amsterdam - Chamber of Commerce 34,339,618')
+                    . FrontEnd_Helper_viewHelper::__translate('is part of Imbull, Weteringschans 120, 1017 XT Amsterdam - Chamber of Commerce 34,339,618')
             ),
             array(
                 'name'=> 'logincontact',
                 'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;"
                     href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'">'
-                    .$this->translate('login').'</a>'
+                    .FrontEnd_Helper_viewHelper::__translate('login').'</a>'
             )
         );
         $emailData = Signupmaxaccount::getemailmaxaccounts();
@@ -208,10 +208,10 @@ class FrontEnd_Helper_MandrillMailFunctions extends Transl8_View_Helper_Translat
                 'welcomeTemplate',
                 $mailData,
                 $emailFrom,
-                $this->translate('Email confirmation'),
+                FrontEnd_Helper_viewHelper::__translate('Email confirmation'),
                 $visitoremailMail,
-                $this->translate('Member'),
-                $this->translate('Email your confirmation')
+                FrontEnd_Helper_viewHelper::__translate('Member'),
+                FrontEnd_Helper_viewHelper::__translate('Email your confirmation')
         );
         return true;
     }

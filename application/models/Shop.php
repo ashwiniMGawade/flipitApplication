@@ -231,6 +231,40 @@ class Shop extends BaseShop
             ->limit($limit)->fetchArray();
         return $storesByKeyword;
     }
+
+    public static function shopAddInFavourite($visitorId, $shopId)
+    {
+        $addedStatus = 0;
+        $favouriteShops  = Doctrine_Query::create()->from('FavoriteShop s')
+        ->where('s.visitorId='.$visitorId)
+        ->andWhere('s.shopId='.$shopId)->fetchOne();
+        if ($favouriteShops) {
+            $deleteAddedFavouriteShops = Doctrine_Query::create()->delete()
+                ->from('FavoriteShop fs')
+                ->where("fs.shopId=" . $shopId)
+                ->andWhere('fs.visitorId='.$visitorId)
+                ->execute();
+            $addedStatus = 1;
+        } else {
+            $favouriteShops = new FavoriteShop();
+        }
+        $favouriteShops->visitorId = $visitorId;
+        $favouriteShops->shopId = $shopId;
+        $favouriteShops->save();
+
+        $shopName = Doctrine_Core::getTable("Shop")->findOneBy('id', $shopId);
+        $cacheKeyShopDetails = 'all_shopdetail'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
+        $cacheKeyRelatedShop = 'all_relatedShopInStore'  . $shopId  . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyRelatedShop);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+        return array('shop' => $shopName->name, 'flag' => $addedStatus);
+    
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1238,95 +1272,6 @@ public static function getShopDetail($shopId)
     return $data;
  }
 
-public static function shopAddInFavorite($userid,$shopid)
-{
-       $flag = 0;
-        $pc  = Doctrine_Query::create()->from('FavoriteShop s')
-            ->where('s.visitorId='.$userid)
-            ->andWhere('s.shopId='.$shopid)->fetchOne();
-        if($pc) {
-
-            $d3 = Doctrine_Query::create()->delete()
-                ->from('FavoriteShop fs')
-                ->where("fs.shopId=" . $shopid)
-                ->andWhere('fs.visitorId='.$userid)
-                ->execute();
-            $flag  =1;
-
-        }else {
-
-            $pc = new FavoriteShop();
-        }
-
-        $pc->visitorId = $userid;
-        $pc->shopId = $shopid;
-        $pc->save();
-
-        $shopname = Doctrine_Core::getTable("Shop")->findOneBy('id', $shopid);
-
-        $key = 'all_shopdetail'  . $shopid . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $key = 'all_relatedShopInStore'  . $shopid  . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-
-        return array('shop' => $shopname->toArray() , 'flag' => $flag);
-
-}
-/**
- * add shop in favorites
- *
- * @author kraj
- * @param integer $userid
- * @param integer $shopid
- * @return multitype:number json
- * @version 1.0
- */
-public static function shopAddInFavoriteInShopDetails($userid,$shopid)
-{
-    $flag = 0;
-    $pc  = Doctrine_Query::create()->from('FavoriteShop s')
-    ->where('s.visitorId='.$userid)
-    ->andWhere('s.shopId='.$shopid)->fetchOne();
-    if($pc) {
-
-        $d3 = Doctrine_Query::create()->delete()
-        ->from('FavoriteShop fs')
-        ->where("fs.shopId=" . $shopid)
-        ->andWhere('fs.visitorId='.$userid)
-        ->execute();
-        $flag  =1;
-
-    }else {
-
-        $pc = new FavoriteShop();
-    }
-
-    $pc->visitorId =$userid;
-    $pc->shopId = $shopid;
-    $pc->save();
-
-    //get shop by id
-    $shopname = Doctrine_Core::getTable("Shop")->findOneBy('id', $shopid);
-    $key = 'all_shopdetail'  . $shopid . '_list';
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-    $key = 'all_relatedShopInStore'  . $shopid  . '_list';
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-
-
-    //return only shop name for selection or add to favorite
-    return array('shop' => $shopname->name, 'flag' => $flag);
-
-}
     public static function getAllShopDetails()
     {
         $shopList = Doctrine_Query::create()

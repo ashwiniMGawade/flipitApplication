@@ -1,8 +1,7 @@
 <?php
-$categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryfeaturedimage']['path'].$this->categoryDetails[0]['categoryfeaturedimage']['name'];
+$categoryHeaderImage = PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryheaderimage']['path'].$this->categoryDetails[0]['categoryheaderimage']['name'];
 $categoryPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
-//echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetails[0]['name'], $categoryFeaturedImage);
-
+echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetails[0]['name'], $categoryHeaderImage);
 $partialsViewPath = 'partials/';
 $offers = '';
 if (count($this->offersWithPagination)>0) {

@@ -17,10 +17,10 @@ $partialViewPath = 'partials/';
 $authorMostReadArticles = '';
 if(!empty($this->authorMostReadArticles)):
     $authorMostReadArticles = $this->partial(
-        $partialViewPath.'_authorMostReadArticles.phtml', 
+        $partialViewPath.'_authorMostReadArticles.phtml',
         array(
             "authorMostReadArticles"=>$this->authorMostReadArticles,
-            "authorFirstName"=>$this->authorDetails['firstName']
+            "moneySavingGuideHeader"=>$this->translate('Saving guides by') . " " . $this->authorDetails['firstName']
         )
     );
 endif;
@@ -49,11 +49,11 @@ $signUpWidgetForm = $this->partial(
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php 
     $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-    echo $frontendViewHelper->popularCategoryWidget();
-    echo $frontendViewHelper->socialMediaWidget();
-    echo $frontendViewHelper->popularShopWidget();
-    echo $frontendViewHelper->browseByStoreWidget();
-    echo $signUpWidgetForm;
+    echo $frontendViewHelper->popularCategoryWidget().
+    $frontendViewHelper->popularShopWidget().
+    $frontendViewHelper->browseByStoreWidget().
+    $frontendViewHelper->socialMediaWidget().
+    $signUpWidgetForm;
     ?>
     </aside>
 </div>

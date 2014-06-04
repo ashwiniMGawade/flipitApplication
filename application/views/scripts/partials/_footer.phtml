@@ -2,7 +2,7 @@
 echo $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
 $signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp ' , 'email-form form-inline', 'orange');
-// FrontEnd_Helper_SignUpPartialFunction::validateZendForm(Zend_Controller_Front::getInstance(), '', $signUpForm);
+FrontEnd_Helper_SignUpPartialFunction::validateZendForm(Zend_Controller_Front::getInstance(), '', $signUpForm);
 $signUpWidgetForm = '';
 $signUpWidgetForm = $this->partial(
        'partials/_signupForm.phtml',

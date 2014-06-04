@@ -1,6 +1,23 @@
 @import "less-bootstrap/bootstrap.less";
 @import "custom-variables.less";
 @import "custom-mixins.less";
+@import "all-stores.less";
+@import "contact.less";
+@import "faq.less";
+@import "flipit-expired.less";
+@import "login.less";
+@import "profile.less";
+@import "register.less";
+@import "splash-page.less";
+@import "404.less";
+@import "all-categoties-alt.less";
+@import "in-savings.less";
+@import "home.less";
+@import "saving.less";
+@import "custom.less";
+@import "author.less";
+@import "authors.less";
+
 input[type="email"], input[type="tel"], input[type="search"], input[type="text"], input[type="password"], input[type="file"], input[type="submit"], textarea{-webkit-appearance:none;}
 body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 #wrapper{
@@ -112,14 +129,11 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 	}
 }
 .logo.flipit{
-	background:url(../../images/flipit-logo.png) no-repeat;
 	width:109px;
 	height:49px;
 } 
-.logo.kortingscode {
-	background:url(../../images/kortingscode-logo.png) no-repeat;
-	width:308px;
-	height:50px;
+img.logo.kortingscode{
+	width:300px;
 }
 .search-box{
 	float:left;
@@ -2175,6 +2189,10 @@ hr.alt2{
 		}
 	}
 }
+
+.form-signin.newsletter input[type="email"], .form-signin.newsletter input[type="text"]{
+	width:68% !important;
+}
 .newsletter{
 	margin:0;
 	input[type="email"], input[type="text"]{
@@ -2189,7 +2207,6 @@ hr.alt2{
 		margin:0 -3% 0 0;
 		height:39px;
 		.border-radius;
-		width:68%!important;
 	}
 	input[type="email"]::-webkit-input-placeholder,input[type="text"]::-webkit-input-placeholder{color: @text-color;}
 	input[type="email"]:-moz-placeholder, input[type="text"]:-moz-placeholder {color: @text-color;}
@@ -2781,6 +2798,7 @@ input[type="submit"]::-moz-focus-inner{
 	margin-top:/* negative half from the height */
 	-335px
 }
+
 #branding_panel{
   left:0px;
   width:299px; 
@@ -2813,7 +2831,7 @@ input[type="submit"]::-moz-focus-inner{
   		min-height: 100px;
   		color:#000;
 	}
-	button[type="submit"] {
+	button[type="submit"], button.preview, button.reset {
 		font-size: 14px;
 		height: 39px;
 		width: 99px;
@@ -2822,9 +2840,6 @@ input[type="submit"]::-moz-focus-inner{
 		padding: 0;
 		border-radius: 2px;
 		-webkit-border-radius: 2px;	
-		.reset {
-			width: 130px;
-		}
 	}
 	h2 {
 		float: left;
@@ -2834,22 +2849,6 @@ input[type="submit"]::-moz-focus-inner{
 	#close_branding{
 		float: right;
 		width: 20px;
-	}
-	.toolbar{
-		height: 40px;
-		background: #eee;
-		position: fixed;
-		width: 100%;
-		padding: 10px;
-		width: 299px;
-		.bottom{ 
-			bottom: 0;
-			text-align: center;
-			height: 100px; 
-		}
-		.top{
-			top:0;
-		}
 	}
 	.branding_section{ 
 		padding: 0 10px;
@@ -2866,6 +2865,10 @@ input[type="submit"]::-moz-focus-inner{
 		border-bottom:1px solid #444;
 	}	
 } 
+
+.toolbar{height:40px;background:#eee;position:fixed;width:100%;padding:10px;width:299px}
+#branding_panel .toolbar.bottom{bottom:0;text-align:center;height:100px}
+#branding_panel .toolbar.top{top:0}
 
 #show_branding{
 	position: fixed;
@@ -2949,7 +2952,7 @@ input[type="submit"]::-moz-focus-inner{
 @media only screen and (max-width: 1199px){
 	.navigation{
 		.logo{
-			margin:8px 0;
+			margin:10px 0;
 		}
 	}
 	.buttons{
@@ -3158,6 +3161,13 @@ input[type="submit"]::-moz-focus-inner{
 }
 }
 @media only screen and (max-width: 979px){
+
+.row .newsletter input[type="submit"]{
+	width:100% !important;
+}
+img.logo.kortingscode{
+	width:260px;
+}
 #footer{
 	font-size:12px;
 	.container{
@@ -3344,7 +3354,6 @@ input[type="submit"]::-moz-focus-inner{
 	.btn.btn-print{
 		letter-spacing:0;
 		border-radius: 3px!important;
-		width: 90%!important;
 	}
 	.buttons {
 		.btn{
@@ -3356,7 +3365,7 @@ input[type="submit"]::-moz-focus-inner{
 			input[type="email"],input[type="text"]{
 				margin-left: -2px!important;
 				margin-bottom: 15px;
-				width: 90%!important;
+				width: 100%!important;
 			}
 		}
 	}
@@ -3383,7 +3392,6 @@ input[type="submit"]::-moz-focus-inner{
 		}
 	}
 	.section-comments{
-		margin:15px;
 		.bottom-box{
 			padding:15px 0 0;
 			ul{
@@ -3714,9 +3722,6 @@ input[type="submit"]::-moz-focus-inner{
 		img.small-code{
 			width:65px;
 		}
-		.block-form {
-			padding:15px;
-		}
 		.block{
 			.holder{padding:3% 5%;}
 			.link{font-size: 1.4em;padding-right: 10px; text-decoration: underline;}
@@ -3733,7 +3738,7 @@ input[type="submit"]::-moz-focus-inner{
 			}
 			.newsletter{
 				input[type="email"],input[type="text"]{
-					width: 90%!important;
+					width: 100%!important;
 				}
 			}
 		}
@@ -4013,7 +4018,7 @@ input[type="submit"]::-moz-focus-inner{
 			button[type="submit"]{
 				display:block;
 				float:none;
-				width:90%!important;
+				width:100%!important;
 				margin:0 0 5px;
 			}
 			button[type="submit"]{
@@ -4233,8 +4238,7 @@ input[type="submit"]::-moz-focus-inner{
 	width: 100%;
 }
 .mostread-image{
-	overflow: hidden; 
-	height: 160px; 
+	overflow: hidden;
 	width: 100%;
 }
 @-ms-viewport{width:auto !important;}

@@ -1,6 +1,6 @@
 <?php
 
-class FrontEnd_Helper_viewHelper extends Transl8_View_Helper_Translate
+class FrontEnd_Helper_viewHelper
 {
     ##################################################################################
     ################## REFACTORED CODE ###############################################
@@ -64,8 +64,8 @@ EOD;
 
             $httpPathLocale = trim(HTTP_PATH_LOCALE, '/');
             $httpPath = trim(HTTP_PATH, '/');
-            $shopHeader = $this->translate("is an international shop");
-            $widgetText = $this->translate("Check out the coupons and discounts from other countries when you're interested:");
+            $shopHeader = $this->__translate("is an international shop");
+            $widgetText = $this->__translate("Check out the coupons and discounts from other countries when you're interested:");
             $string = <<<EOD
              <div class="intro">
                 <h2>
@@ -286,48 +286,19 @@ EOD;
         $alphabetList .="</ul>";
         return $alphabetList;
     }
-    
-    /**
-     * Common function for social media.
-     * @version 1.0
-     * @param $url string
-     * @param $type string
-     * @return socialMedia
-     */
+
     public function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
-        $facebookLikeWidget = self::getSocialMediaLikeButtons('facebook.com', 'facebook');
-        $twitterLikeWidget = self::getSocialMediaLikeButtons('twitter.com', 'twitter');
-        $googlePlusOneWidget = self::getSocialMediaLikeButtons('plus.google.com', 'google');
-        $socialMedia = self::getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget);
-        return $socialMedia;
-    }
-
-    public static function getSocialMediaLikeButtons($socialMediaUrl, $type)
-    {
-        if ($type == 'facebook') {
-            $socialMediaLikeButtons = "<a class='facebook' hreaf='".$socialMediaUrl."'></a>";
-        } elseif ($type == 'twitter') {
-            $socialMediaLikeButtons = "<a class='twitter' hreaf='".$socialMediaUrl."'></a>";
-        } elseif ($type == 'google') {
-            $socialMediaLikeButtons = "<a class='google' hreaf='".$socialMediaUrl."'></a>";
-        }
-        return $socialMediaLikeButtons;
-    }
-
-    public function getSocialMediaContent($type, $facebookLikeWidget, $twitterLikeWidget, $googlePlusOneWidget)
-    {
-
-            $socialMediaTitle = "<h2>".$this->translate('Follow us')."</h2>";
+            $socialMediaTitle = "<h2>".$this->__translate('Follow us')."</h2>";
             $socialMedia = "
                 <article class='block'>
                     <div class='social-networks'>
                         <div class='intro'>".$socialMediaTitle."</div>
                         <ul class='share-list'>
-                            <li>".$facebookLikeWidget."</li>
-                            <li>".$googlePlusOneWidget."</li>
-                            <li>".$twitterLikeWidget."</li>
-                            <li class='share-text'>".$this->translate('Follow usfor the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
+                            <li><a class='facebook' href='#'></a></li>
+                            <li><a class='twitter' href='#'></a></li>
+                            <li><a class='google' href='#'></a></li>
+                            <li class='share-text'>".$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
                         </ul>
                     </div>
                 </article>";
@@ -366,7 +337,7 @@ EOD;
                     </a>
                 </div> <div class="box">';
         if ($expiredMessage !='storeDetail') {
-            $shop['subTitle'] = $this->translate('Expired').' '.$shop['name'].' '.$this->translate('copuon code');
+            $shop['subTitle'] = $this->__translate('Expired').' '.$shop['name'].' '.$this->__translate('copuon code');
         } else {
             $shop['subTitle'] = $shop['subTitle'];
         }
@@ -393,7 +364,7 @@ EOD;
         endif;
         return '<a onclick="storeAddToFeborite('.$favouriteShopId.','.$shopId.')" class="pop btn btn-sm btn-default" href="javascript:void(0)">
             <span class="glyphicon glyphicon-heart"></span>'.
-            $this->translate('Love').
+            $this->__translate('Love').
         '</a>';
     }
 
@@ -483,13 +454,19 @@ EOD;
     public function popularCategoryWidget()
     {
         $allPopularCategories = Category::getPopularCategories();
-        $categorySidebarWodget = '<div class="block"><div class="intro">
-        <h2 class="sidebar-heading">'. $this->translate('All Categories').'</h2></div>
-        <ul class="tags">';
+        $categorySidebarWodget = 
+        '<div class="block">
+            <div class="intro">
+            <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
+                <ul class="tags">';
         for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
-            $categorySidebarWodget.='<li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name'].'</li>';
+            $categorySidebarWodget.=
+                    '<li>
+                        <a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name']
+                    .'</li>';
         }
-        $categorySidebarWodget.='</ul></div>'; 
+        $categorySidebarWodget.=
+                '</ul></div>'; 
         return $categorySidebarWodget;
     }
 
@@ -527,7 +504,7 @@ EOD;
         $browseByStoreWidget = 
         '<div class="block">
             <div class="intro">
-               <h2>'.$this->translate('Browse by Store') .'</h2>
+               <h2>'.$this->__translate('Browse by Store') .'</h2>
             </div>
             <div class="alphabet-holder">
                 <ul class="alphabet">';
@@ -535,7 +512,7 @@ EOD;
             $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
             $browseByStoreWidget .= 
                     '<li>
-                        <a href="' .$redirectUrl.'">'.$this->translate($oneCharacter).'</a>
+                        <a href="' .$redirectUrl.'">'.$this->__translate($oneCharacter).'</a>
                     </li>';
         };
         $browseByStoreWidget.= 
@@ -755,6 +732,12 @@ EOD;
     $variable = $trans->translate(_($variable));
 
     return $variable;
+    }
+
+    public static function __translate($variable) {
+        $translation =  new Transl8_View_Helper_Translate();
+        $variable = $translation->translate($variable);
+        return $variable;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -1067,8 +1050,8 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
     {
         $popularStores = self::getStoreForFrontEnd('popular', 25);
         $popularStoresContent = '<div class="block"><div class="intro">
-                   <h2>'.$this->translate('Populaire Winkels').'</h2>
-                   <span>'.$this->translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
+                   <h2>'.$this->__translate('Populaire Winkels').'</h2>
+                   <span>'.$this->__translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
                  </div><ul class="tags">';
 
         for ($i=0; $i<count($popularStores); $i++) {

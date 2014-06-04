@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends Transl8_View_Helper_Translate {
+class FrontEnd_Helper_MoneySavingGuidesPartialFunctions {
     public function getMostReadArticles($mostReadArticles)
     {
         $articleNumber = 1;
@@ -38,7 +38,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends Transl8_View_Hel
     {
         $relatedArticles = 
             '<header class="heading-bar">
-                <h2>'.$this->translate($headingType).'</h2>
+                <h2>'.FrontEnd_Helper_viewHelper::__translate($headingType).'</h2>
             </header>
             <div class="item-block">
                 <div class="holder">';
@@ -60,7 +60,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions extends Transl8_View_Hel
                             </a>    
                         </div>
                         <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'" class="link">'
-                            .$this->translate('more').' &#8250;
+                            .FrontEnd_Helper_viewHelper::__translate('more').' &#8250;
                         </a>
                     </div>
                 </div>';

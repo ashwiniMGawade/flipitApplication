@@ -271,6 +271,31 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             </div>
                               <div class="mainpage-content-right" id="imagerrorDiv" style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;"></div> 
                         </div>  
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Header Image'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                            <?php 
+                            $headerImage = '';
+                            if($this->pageDetail['pageheaderimage']){
+                              
+                              if(isset($this->pageDetail['pageheaderimage']['name']) && $this->pageDetail['pageheaderimage']['name']!=''){
+                                
+                                if(file_exists(ROOT_PATH.$this->pageDetail['pageheaderimage']['path'].$this->pageDetail['pageheaderimage']['name'])){
+                                  $headerImage = PUBLIC_PATH_LOCALE.$this->pageDetail['pageheaderimage']['path'].'thum_'.$this->pageDetail['pageheaderimage']['name'];
+                                  
+                                }
+                              }
+                              ?>
+                            <img src="<?php echo $headerImage;?>"  alt="pageHeaderImage" align="top">
+                            <a  class="red" onclick="deleteImage(<?php echo $this->pageDetail['pageheaderimage']['id']; ?>,<?php echo $this->pageDetail['id']; ?>)" href="javascript:void(0);" id="deleteButton"><strong>DELETE</strong></a>
+                            
+                            <?php }?>
+                            <input type="file" onchange="checkFileType(event)" class="ignore" name="headerFile" id="pageHeaderImage"><span><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 0.75)'); ?></span>
+                            </div>
+                              <div class="mainpage-content-right" id="imagerrorDiv" style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;"></div> 
+                        </div> 
+
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->pageDetail['metaTitle']; ?>"/>
