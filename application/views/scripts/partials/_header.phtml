@@ -9,10 +9,10 @@ endif;
  
 if(LOCALE == ''):
     $logoCssClass = 'logo kortingscode';
-    $siteName = 'kortingscode';
+    $logoPath = HTTP_PATH.'public/images/kortingscode-logo.png';
 else :
     $logoCssClass = 'logo flipit';
-    $siteName = 'FlipIt';
+    $logoPath = HTTP_PATH.'public/images/flipit-logo.png';
 endif
 ?>
 <header id="header">
@@ -30,10 +30,10 @@ endif
     </div>
     <div class="navigation">
         <div class="container">
-            <strong class="<?php echo $logoCssClass; ?>">
+            <strong>
                 <a href="<?php echo LOCALE == '' ? 
                     'http://www.kortingscode.nl' : 'http://www.flipit.com/'.LOCALE ;?>">
-                    <?php echo $siteName;?>
+                    <img class="<?php echo $logoCssClass;?>"src="<?php echo $logoPath;?>"/>
                 </a>
             </strong>
             <a href="#" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
