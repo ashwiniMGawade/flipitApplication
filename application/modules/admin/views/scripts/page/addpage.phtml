@@ -163,6 +163,23 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <div class="mainpage-content-right"><input type="file" onchange="checkFileType(event)" class="ignore"   name="logoFile" id="pageImage"><span><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 0.75)'); ?></span></div>
                         <div class="mainpage-content-right" id="imagerrorDiv" style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 511px;"></div>
                         </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                    <strong><?php echo $this->translate('Header Image'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <input type="file" onchange="checkFileType(event)" class="ignore"   name="headerFile" id="headerImage">
+                                <span>
+                                    <?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 0.75)'); ?>
+                                </span>
+                            </div>
+                            <div class="mainpage-content-right" id="imagerrorDiv" style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 511px;"></div>
+                        </div>
+
+
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore"/>

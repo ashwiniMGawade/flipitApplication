@@ -37,9 +37,9 @@ if ($this->pageMode == true) {
     } else {
         $pageContent='<div class="inner-section-wrapper"><h1>'.$this->page['pageTitle'].'</h1>'.stripslashes($this->page['content']) .'</div>';
     }
-    $pageImagePath = PUBLIC_PATH_CDN.isset($this->pageLogo['path']).isset($this->pageLogo['name']);
+    $pageImagePath = PUBLIC_PATH_CDN.$this->pageHeaderImage['path'].$this->pageHeaderImage['name'];
     $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
-    //echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
+    echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
     <div class="row">
          <?php echo $contentDivStart;?>
              <div class="section">

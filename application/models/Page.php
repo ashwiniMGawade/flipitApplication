@@ -309,7 +309,19 @@ class Page extends BasePage
             }
         }
 
-
+        if (isset($_FILES['headerFile']['name']) && $_FILES['headerFile']['name'] != '') {
+            $result = self::uploadImage('headerFile');
+            $this->pageHeaderImageId = 0;
+            if ($result['status'] == '200') {
+                $ext = BackEnd_Helper_viewHelper::getImageExtension(
+                        $result['fileName']);
+                $this->pageheaderimage->ext = $ext;
+                $this->pageheaderimage->path = $result['path'];
+                $this->pageheaderimage->name = $result['fileName'];
+            } else {
+                return false;
+            }
+        }
 
         if(isset($params['publishDate']) && $params['publishDate']!=''){
         $this->publishDate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh'])) ;
@@ -359,6 +371,7 @@ class Page extends BasePage
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             //$getPage = Doctrine_Core::getTable ( 'Page' )->findOneBy ( "permalink", $params['pagepermalink'] );
+          
             $page = $this->save();
             $pageId =  $this->id;
 
@@ -457,14 +470,16 @@ class Page extends BasePage
 
     public function getPageDetail($pageId)
     {
-        $q = Doctrine_Query::create()
-        ->select('p.*,w.*,logo.*,artcatg.pageid,artcatg.categoryid')->from('Page p')
+        $pageDetails = Doctrine_Query::create()
+        ->select('p.*,w.*,logo.*, pageheaderimage.*, artcatg.pageid,artcatg.categoryid')
+        ->from('Page p')
         ->leftJoin('p.widget w')
         ->leftJoin("p.logo logo")
+        ->leftJoin("p.pageheaderimage pageheaderimage")
         ->leftJoin("p.moneysaving artcatg")
         ->where('p.id='.$pageId.'')
         ->fetchArray();
-        return $q;
+        return $pageDetails;
     }
 
 
@@ -582,6 +597,23 @@ class Page extends BasePage
                 $this->logo->ext = $ext;
                 $this->logo->path = $result['path'];
                 $this->logo->name = $result['fileName'];
+            }else {
+                return false;
+            }
+        }
+
+        if (isset($_FILES['headerFile']['name']) && $_FILES['headerFile']['name'] != '') {
+
+            $result = self::uploadImage('headerFile');
+
+
+
+            if ($result['status'] == '200') {
+                $ext = BackEnd_Helper_viewHelper::getImageExtension(
+                        $result['fileName']);
+                $this->pageheaderimage->ext = $ext;
+                $this->pageheaderimage->path = $result['path'];
+                $this->pageheaderimage->name = $result['fileName'];
             }else {
                 return false;
             }

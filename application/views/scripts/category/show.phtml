@@ -1,6 +1,4 @@
 <?php
-//$categoryFeaturedImage = PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryfeaturedimage']['path'].$this->categoryDetails[0]['categoryfeaturedimage']['name'];
-//echo "<pre>";print_r($this->categoryDetails[0]);die;
 $categoryHeaderImage = PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryheaderimage']['path'].$this->categoryDetails[0]['categoryheaderimage']['name'];
 $categoryPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
 echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetails[0]['name'], $categoryHeaderImage);

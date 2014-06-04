@@ -86,7 +86,6 @@ class Admin_PageController extends Zend_Controller_Action
         $this->view->pageId = $params['id'];
         $pageObj = new Page();
         $pageDetail = $pageObj->getPageDetail($params['id']);
-
         $this->view->pageDetail = $pageDetail['0'] ;
 
         $artcatg = Articlecategory :: getartCategories();
