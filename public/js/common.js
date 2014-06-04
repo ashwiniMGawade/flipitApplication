@@ -124,14 +124,14 @@ jQuery(document).ready(function() {
 		$("nav#menu").mmenu({
 			counters    : true
 		});
-		function mmenuw() {
-			var wi = $(window).width();
-			if(wi >= '767') {
+		function mobileMenu() {
+			var windowWidth = $(window).width();
+			if(windowWidth >= 767) {
 				$('nav#menu').trigger('close');
 			}
 		}
-		mmenuw();
-		$(window).resize(function() { mmenuw(); });
+		mobileMenu();
+		$(window).resize(function() { mobileMenu(); });
 	});
 
 	if(jQuery("div.coupon-code").length > 0)
