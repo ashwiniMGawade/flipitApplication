@@ -27,11 +27,9 @@ function validateSignUpNewsLetter(formName) {
                             },
                             complete : function(data) {
                                 if (data.responseText == 'true') {
-                                    $(formName + " input#emailAddress").removeClass('input-error')
-                                      .addClass('input-success');
+                                    $(formName + " input#emailAddress").addClass('input-success').removeClass('input-error');
                                 } else {
-                                    $(formName + " input#emailAddress").removeClass('input-success')
-                                        .addClass('input-error');
+                                    $(formName + " input#emailAddress").addClass('input-error').removeClass('input-success');
                                 }
                             }
                         }
@@ -45,31 +43,34 @@ function validateSignUpNewsLetter(formName) {
                   }
                 },
                 onfocusin : function(element) {
-                        if($(element).attr('type') == 'text') {
-                            var label = this.errorsFor(element);
-                             if( $( label).attr('hasError')) {
-                                 if($( label).attr('remote-validated') != "true") {
-                                        $(element).removeClass('input-error input-success input-error input-success');
-                                     }
-                             } else {
-                                $(element).removeClass('input-error input-success input-error input-success');
-                             }
-                        }
-                        else{
-                            $(element).removeClass('input-error input-success input-error input-success');
-                            
-                        }
+                    if($(element).valid() == 0){
+                        $(element).removeClass('input-error').removeClass('input-success');
+                        $(element).next('label').hide();
+                    } else {
+                        $(element).removeClass('input-error').addClass('input-success');
+                        $(element).next('label').hide();
+                    }
                 },
-                highlight : function(element,
-                        errorClass, validClass) {
-                        $(element).removeClass('input-success')
-                        .addClass('input-error input-error');
+                onfocusout :function(element) {
+                    if($(element).valid() == 0){
+                        $(element).removeClass('input-success').addClass('input-error');
+                        $(element).next('label').hide();
+                    } else {
+                        $(element).removeClass('input-error').addClass('input-success');
+                        $(element).next('label').hide();
+                    }
+                 },
+                highlight : function(element, errorClass, validClass) {
+                    $(element).addClass(errorClass).removeClass(validClass);
+                    $(element).next('label').hide();
                 },
-                success: function(label , element) {
-                        $(element).removeClass('input-error')
-                          .addClass('input-success input-success');
-                        $(label).removeClass('input-error help-inline')
-                        .html('').addClass('input-success');
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).removeClass(errorClass);
+                    $(element).next('label').hide();
+                },
+                success: function(element, errorClass, validClass) {
+                    $(element).removeClass(errorClass).addClass(validClass);
+                    $(element).next('label').hide();
                 }
             });
 }
