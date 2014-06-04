@@ -77,6 +77,12 @@ abstract class BaseCategory extends Doctrine_Record
             'comment' => 'FK to image.id',
             'length' => '20',
          ));
+        $this->hasColumn('categoryHeaderImageId', 'integer', 20, array(
+            'unique' => true,
+            'type' => 'integer',
+            'comment' => 'FK to image.id',
+            'length' => '20',
+         ));
     }
 
     public function setUp()
@@ -87,6 +93,9 @@ abstract class BaseCategory extends Doctrine_Record
              'foreign' => 'id'));
         $this->hasOne('CategoryIcon as categoryfeaturedimage', array(
              'local' => 'categoryFeaturedImageId',
+             'foreign' => 'id'));
+        $this->hasOne('CategoryIcon as categoryheaderimage', array(
+             'local' => 'categoryHeaderImageId',
              'foreign' => 'id'));
         $this->hasMany('Shop as shop', array(
              'refClass' => 'refShopCategory',
