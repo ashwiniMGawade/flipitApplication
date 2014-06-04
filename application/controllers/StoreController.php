@@ -10,7 +10,7 @@ class StoreController extends Zend_Controller_Action
     {
         $shopId = $this->getRequest()->getParam("shopid");
         $userId = $this->getRequest()->getParam("uId");
-        $shopInformation = Shop::shopAddInFavoriteInShopDetails($shopId, $userId);
+        $shopInformation = Shop::shopAddInFavourite($shopId, $userId);
         echo Zend_Json::encode($shopInformation);
         die();
     }

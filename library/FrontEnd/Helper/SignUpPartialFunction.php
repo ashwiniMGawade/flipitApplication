@@ -27,7 +27,11 @@ class FrontEnd_Helper_SignUpPartialFunction extends Transl8_View_Helper_Translat
     public static function signUp2RedirectLink($signUpNewsLetterform)
     {
         $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
+        $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
+        $visitorEmail->emailAddressSignup = $emailAddress;
         $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
+        $visitorShopId = new Zend_Session_Namespace('shopId');
+        $visitorShopId->shopId = $addToFavoriteShopId;
         $signUpStep2Url= HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven');
         return $signUpStep2Url;
     }
