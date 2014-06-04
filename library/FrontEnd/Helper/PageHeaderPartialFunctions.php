@@ -1,5 +1,5 @@
 <?php
-class FrontEnd_Helper_PageHeaderPartialFunctions extends FrontEnd_Helper_viewHelper {
+class FrontEnd_Helper_PageHeaderPartialFunctions {
     public function getCategoryOrPageHeader($headerText,  $headerImage) {
         $header = '<div class="banner-block">
             <img alt="' . $headerText . '" src="' .  $headerImage . '" class="image">
