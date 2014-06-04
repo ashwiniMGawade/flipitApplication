@@ -200,12 +200,19 @@ EOD;
      * @version 1.0
      */
 
-    public static function generateMainMenu()
-    {
+    public static function generateMainMenu($menuType = '')
+    { 
         $mainMenu = menu::getFirstLevelMenu();
         $mainMenuCount = count($mainMenu);
         $mainMenuvalue = 0;
-        $navigationString ='<nav id="nav"><ul>';
+
+        $menuNavId = 'nav';
+        $mobileMenuHeader = '';
+        if ($menuType == 'mobile') {
+            $menuNavId = 'menu';
+            $mobileMenuHeader = '<h1>Korting pakken</h1>';
+        }
+        $navigationString ='<nav id="'.$menuNavId.'"><ul>'.$mobileMenuHeader;
         foreach ($mainMenu as $menu) {
             $permalink = RoutePermalink::getPermalinks($menu['url']);
 

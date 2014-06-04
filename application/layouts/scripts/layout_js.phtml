@@ -18,6 +18,7 @@ else:
 endif;
 
 echo $headScript
+    ->prependFile("/public/js/front_end/jquery.mmenu.min.js")
     ->prependFile("/public/js/front_end/search.js")
     ->prependFile("/public/js/front_end/jquery.main.js")
     ->prependFile("/public/js/front_end/layout.js")
@@ -27,3 +28,4 @@ echo $headScript
     ->prependFile("/public/js/bootstrap.js")
     ->prependFile("/public/js/jquery-1.7.2.min.js")
     ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
+    ?>
