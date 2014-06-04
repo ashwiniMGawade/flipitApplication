@@ -120,6 +120,20 @@ function localeSettingCMS(obj)
 }
 
 jQuery(document).ready(function() {
+	$(function() {
+		$("nav#menu").mmenu({
+			counters    : true
+		});
+		function mmenuw() {
+			var wi = $(window).width();
+			if(wi >= '767') {
+				$('nav#menu').trigger('close');
+			}
+		}
+		mmenuw();
+		$(window).resize(function() { mmenuw(); });
+	});
+
 	if(jQuery("div.coupon-code").length > 0)
 	{
 		jQuery("div.coupon-code").bigText({'maximumFontSize': 20});

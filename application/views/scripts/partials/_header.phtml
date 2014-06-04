@@ -21,7 +21,7 @@ endif
             <span class="slogan"><?php 
             $translation = new Transl8_View_Helper_Translate();
             echo $translation->translate('save money with online discount codes and save pointers');?></span>
-            <a class="menu-account" href="javascript:void(0);"><?php echo $this->translate('account menu');?></a>
+            <a class="menu-account" href="#menu"><?php echo $this->translate('account menu');?></a>
                 <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
                 $userMenuLink = $this->locale. '/login/usermenu';
@@ -60,9 +60,10 @@ endif
                 </div>
                 <?php 
             }
-            echo FrontEnd_Helper_viewHelper::generateMainMenu($this->controllerName, $this->action);
+            echo FrontEnd_Helper_viewHelper::generateMainMenu();
             ?>
             </div>
         </div>
     </div>
 </header>
+<?php echo FrontEnd_Helper_viewHelper::generateMainMenu('mobile'); ?></a>
