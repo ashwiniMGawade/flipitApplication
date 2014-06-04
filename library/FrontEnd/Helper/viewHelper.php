@@ -320,7 +320,7 @@ EOD;
                             <li>".$facebookLikeWidget."</li>
                             <li>".$googlePlusOneWidget."</li>
                             <li>".$twitterLikeWidget."</li>
-                            <li class='share-text'>".$this->__translate('Follow usfor the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
+                            <li class='share-text'>".$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
                         </ul>
                     </div>
                 </article>";
