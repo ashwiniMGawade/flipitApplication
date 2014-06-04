@@ -62,10 +62,10 @@ endif;
 $moneySavingGuide = '';
 if(!empty($this->moneySavingGuideArticle)):
     $moneySavingGuide = $this->partial(
-        $partialViewPath.'_authorMostReadArticles.phtml', 
+        $partialViewPath.'_authorMostReadArticles.phtml',
         array(
             "authorMostReadArticles"=>$this->moneySavingGuideArticle,
-            "authorFirstName"=> ''
+            "moneySavingGuideHeader"=>$this->translate('General money saving advice & tricks for shopping at') . " " . $this->currentStoreInformation[0]['name']
         )
     );
 endif;
