@@ -13,24 +13,19 @@ $signUpWidgetForm = '';
            'shopLogoOrDefaultImage'=>''
         )
     );
-?>
-<div class="row">
-    <div id="content" class="col-md-8 col-sm-8">
-<?php
+
+$newestOffers = ' <div class = "no-record">'.$this->translate('No record found') .'</div>';
 if (count($this->offersWithPagination)>0) {
-    echo $this->partial(
+$newestOffers = $this->partial(
         $partialsViewPath.'_offer.phtml',
         array('offers'=> $this->offersWithPagination,
          'offersType'=>$this->offersType, 'shopName'=> '', 'shop'=>'', 'zendForm'=>$this->form)
     );
-} else {
-    ?>
-        <div class = "no-record">
-        <?php echo $this->translate('No record found');?>
-        </div>
-    <?php
-}
-?>        
+} 
+?>
+<div class="row">
+    <div id="content" class="col-md-8 col-sm-8">
+     <?php echo $newestOffers''; ?>  
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
         <?php
