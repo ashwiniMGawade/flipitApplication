@@ -1,5 +1,4 @@
-// refactored code
-$(document).ready(function(){
+$(document).ready(function() {
     if (getQueryStringParams("popup")) {
         showCodePopUp('popupOnLoad');
         if (getQueryStringParams("type") == 'code') {
@@ -7,29 +6,24 @@ $(document).ready(function(){
        }
     }
 });
-function OpenInNewTab(url)
-{
+function OpenInNewTab(url) {
     var windowObject=window.open(url, '_blank');
     windowObject.focus();
 }
-function showTermAndConditions(id)
-{
+function showTermAndConditions(id) {
     $('div#termAndConditions'+id).slideToggle();
     $('a#termAndConditionLink'+id).toggleClass('uparrow'); 
 }
-function showPopupTermAndConditions(id)
-{
+function showPopupTermAndConditions(id) {
     $('div#termAndConditionsPopup'+id).slideToggle();
     $('a#termAndConditionLinkPopup'+id).toggleClass('uparrow'); 
 }
-function showCodeInformation(id)
-{
+function showCodeInformation(id) {
     $('div#offerCodeDiv'+id).show();
     $('div#websiteOfferLink'+id).show();
     $('div#offerButton'+id).hide();
 }
-function printIt(urlToShow) 
-{
+function printIt(urlToShow) {
     var windowObject = window.open();
     self.focus();
     windowObject.document.open();
@@ -41,8 +35,7 @@ function printIt(urlToShow)
     windowObject.close();
 }
 
-function getQueryStringParams(popupParameter)
-{
+function getQueryStringParams(popupParameter) {
     var popupPageUrl = window.location.search.substring(1);
     var popupUrlVariables = popupPageUrl.split('&');
     for (var i = 0; i < popupUrlVariables.length; i++)
@@ -56,7 +49,7 @@ function getQueryStringParams(popupParameter)
 }
 
 function showCodePopUp(event) {
-    if(event == 'popupOnLoad'){
+    if(event == 'popupOnLoad') {
         var offerId = getQueryStringParams("popup");
         var offerVote = 0;
         var offerUrl = getQueryStringParams("printable");
@@ -67,11 +60,10 @@ function showCodePopUp(event) {
     }
     
     $('#element_to_pop_up').html('');
-    
     if(! ( /(iPod|iPhone|iPad)/i.test(navigator.userAgent) )) {
     customPopUp('element_to_pop_up');
             $.ajax({
-                url : HOST_PATH_LOCALE + "offer/offer-Detail",
+                url : HOST_PATH_LOCALE + "offer/offer-detail",
                 method : "post",
                 data : {
                     'id' : offerId,
@@ -88,7 +80,6 @@ function showCodePopUp(event) {
 }
 
 function customPopUp(id) {
-
     var popupId = id; 
     $('#' + popupId).css({
         "z-index" : 999999
@@ -97,17 +88,16 @@ function customPopUp(id) {
     $('#fade').css({
         'filter' : 'alpha(opacity=80)'
     }).fadeIn();
-
     return false;
 }
 
 function copyToClipboard(text) {
-      window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
 }
 
 function customPopUpClose() {
     $('#fade , .popup_block, .popup_block_signup').fadeOut('9000', function() {
-    $('#fade').remove(); 
+        $('#fade').remove(); 
     });
     return false;
 }

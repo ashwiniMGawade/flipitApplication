@@ -6,8 +6,8 @@ $("#div").bigText({
     padding: {Number},
     rotateText: {Number},
     fontSizeFactor: {Number},
-	maximumFontSize: {Number},
-	limitingDimension: {String}
+    maximumFontSize: {Number},
+    limitingDimension: {String}
 });
 
 https://github.com/DanielHoffmann/jquery-bigtext
@@ -36,7 +36,7 @@ Copyright (C) 2013 Daniel Hoffmann Bernardes, Icaro Technologies
         rotateText: null,
         padding: null,
         fontSizeFactor: 0.8,
-		maximumFontSize: 30,
+        maximumFontSize: 30,
         limitingDimension: "both"
     }
     
@@ -56,8 +56,8 @@ Copyright (C) 2013 Daniel Hoffmann Bernardes, Icaro Technologies
             $this.css('padding', 0);
             $this.css('margin', 0);
             
-			$this.parent().css("overflow", "hidden");
-			
+            $this.parent().css("overflow", "hidden");
+            
             if (options.padding !== null) {
                 if (typeof options.padding === "number") {
                     options.padding = options.padding;
@@ -66,8 +66,8 @@ Copyright (C) 2013 Daniel Hoffmann Bernardes, Icaro Technologies
                 }
                 $this.parent().css("padding", options.padding + "px");
             }
-			
-			
+            
+            
             var box = {};
             if (options.rotateText !== null) {
                 if (typeof options.rotateText !== "number") {
@@ -101,23 +101,23 @@ Copyright (C) 2013 Daniel Hoffmann Bernardes, Icaro Technologies
             var foo = ($this.parent().innerWidth() - padding.left - padding.right) / box.width;
             var bar = ($this.parent().innerHeight() - padding.top - padding.bottom) / box.height;
             var lineHeight;
-			
-			if (options.limitingDimension.toLowerCase() === "width") {
+            
+            if (options.limitingDimension.toLowerCase() === "width") {
                 lineHeight = Math.floor(foo * 1000);
-				$this.parent().height(lineHeight);
-			} else if (options.limitingDimension.toLowerCase() === "height") {
+                $this.parent().height(lineHeight);
+            } else if (options.limitingDimension.toLowerCase() === "height") {
                 lineHeight = Math.floor(bar * 1000);
-			} else if (foo < bar) {
-                lineHeight = Math.floor(foo * 1000);		
-			} else if (foo >= bar) {
+            } else if (foo < bar) {
+                lineHeight = Math.floor(foo * 1000);        
+            } else if (foo >= bar) {
                 lineHeight = Math.floor(bar * 1000);
-			}
-			
-			var fontSize= lineHeight * options.fontSizeFactor;
-			if (options.maximumFontSize !== null && fontSize > options.maximumFontSize) {
-				fontSize= options.maximumFontSize;
-				lineHeight= fontSize / options.fontSizeFactor;
-			}
+            }
+            
+            var fontSize= lineHeight * options.fontSizeFactor;
+            if (options.maximumFontSize !== null && fontSize > options.maximumFontSize) {
+                fontSize= options.maximumFontSize;
+                lineHeight= fontSize / options.fontSizeFactor;
+            }
             $this.css('font-size', fontSize  + "px");
             $this.css('line-height', lineHeight  + "px");
             //centralizing text, top and left are defined as 50% on the CSS
@@ -125,9 +125,9 @@ Copyright (C) 2013 Daniel Hoffmann Bernardes, Icaro Technologies
             $this.css('margin-top', (-$this.height() / 2) + "px");
             $this.css('margin-right', 0);
             $this.css('margin-bottom', 0);
-			if (options.limitingDimension.toLowerCase() === "height") {
-				$this.parent().width($this.width());
-			}
+            if (options.limitingDimension.toLowerCase() === "height") {
+                $this.parent().width($this.width());
+            }
         });
     } 
 })(jQuery);

@@ -12,7 +12,7 @@ echo $this->HeadLink()->prependStylesheet("/public/css/front_end/splash-page.css
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type="text/javascript">window.jQuery || document.write('<script src="js/jquery-1.8.3.min.js"><\/script>')</script>
 <?php echo $this->minifyHeadScript()->prependFile("public/js/front_end/jquery.main.js")
-    ->prependFile("public/front_end/js/bootstrap.min.js"); ?>
+    ->prependFile("public/js/bootstrap.min.js"); ?>
 <!--[if IE]>
 <link type="text/css" media="all" rel="stylesheet" href="<?php echo HTTP_PATH;?>public/front_end/css/ie.css">
 <script type="text/javascript" src="<?php echo HTTP_PATH;?>public/front_end/js/ie.js"></script>
