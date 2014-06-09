@@ -5,14 +5,17 @@ if (APPLICATION_ENV == 'development') {
 } else {
     $headScript = $this->minifyHeadScript();
 }
-$this->minifyHeadScript()->prependFile("/public/js/common.js")
+$this->minifyHeadScript()
+    ->prependFile("/public/js/common.js")
     ->prependFile("/public/js/front_end/jquery-bigtext.js");
 if(LOCALE !='') :
-    $this->minifyHeadScript()->prependFile("/public/" . LOCALE ."/js/front_end/json/translation.js")
+    $this->minifyHeadScript()
+        ->prependFile("/public/" . LOCALE ."/js/front_end/json/translation.js")
         ->prependFile("/public/" . LOCALE ."/js/front_end/json/shops.js");
 else:
-    $this->minifyHeadScript()->prependFile("public/js/front_end/json/translation.js")
-       ->prependFile("/public/js/front_end/json/shops.js");
+    $this->minifyHeadScript()
+        ->prependFile("public/js/front_end/json/translation.js")
+        ->prependFile("/public/js/front_end/json/shops.js");
 endif;
 
 echo $headScript
