@@ -286,7 +286,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if (isset($currentOffer->userGenerated) ? $currentOffer->userGenerated == 0 : '' &&  $termsAndConditions!='' && $termsAndConditions!=null) {
             $termAndConditionLink = '<li>
             <a id="termAndConditionLink'.$currentOffer->id .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
-            href="javascript:void(0);">'. FrontEnd_Helper_viewHelper::__translate('Term') . '&amp;' .FrontEnd_Helper_viewHelper::__translate('Conditions').'</a>';
+            href="javascript:void(0);">'. FrontEnd_Helper_viewHelper::__translate('Term &amp; Conditions') . '</a>';
             if ($termsAndConditions!='' && $termsAndConditions!=null && $currentOffer->extendedOffer =='1') {
                 $termAndConditionLink.='&nbsp; | &nbsp;';
             }
