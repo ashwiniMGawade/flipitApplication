@@ -16,6 +16,16 @@ if ($this->storesInformation != '' && $this->storesInformation != null) :
         array('storesInformation' => $this->storesInformation)
     );
 endif;
+
+$signUpWidgetForm = $this->partial(
+    'partials/_signupForm.phtml',
+    array(
+       'zendForm' => $this->sidebarWidgetForm,
+       'signupFormWidgetType'=> 'sidebarWidget',
+       'shopId'=> '',
+       'shopLogoOrDefaultImage'=>''
+    )
+);
 ?>
 <div class="header-block">
     <div class="icon icon-small">
@@ -38,7 +48,7 @@ echo $storesInformation;
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
 <?php
-echo $this->esi($this->locale.$storeViewPath.'signupwidget');
+echo $signUpWidgetForm;
 $frontendHelper = new FrontEnd_Helper_viewHelper();
 echo $frontendHelper->socialMediaWidget();
 ?>

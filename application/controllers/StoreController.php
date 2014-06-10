@@ -215,6 +215,17 @@ class StoreController extends Zend_Controller_Action
             $customHeader
         );
 
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+            'formSignupSidebarWidget',
+            'SignUp '
+        );
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm(
+            $this,
+            '',
+            $signUpFormSidebarWidget
+        );
+        
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;

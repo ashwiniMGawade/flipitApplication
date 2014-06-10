@@ -739,6 +739,58 @@ EOD;
         $variable = $translation->translate($variable);
         return $variable;
     }
+
+    public function getSidebarWidget($array = array(), $page = '')
+    {
+        $pageWidgets = Doctrine_Query::create()
+            ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
+            ->leftJoin('p.widget w')
+            ->leftJoin('w.refPageWidget refpage')
+            ->where("p.permalink="."'$page'")
+            ->andWhere('w.status=1')
+            ->andWhere('w.deleted=0')
+            ->fetchArray();
+        
+        $sidebarWidgets = '';
+        if (count($pageWidgets) > 0) {
+            for ($i=0; $i<count($pageWidgets[0]['widget']); $i++) {
+            }
+        }
+
+        return $sidebarWidgets;
+    }
+    
+    public function popularShopWidget()
+    {
+        $popularStores = self::getStoreForFrontEnd('popular', 25);
+        $popularStoresContent = '<div class="block"><div class="intro">
+                   <h2>'.$this->__translate('Populaire Winkels').'</h2>
+                   <span>'.$this->__translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
+                 </div><ul class="tags">';
+
+        for ($i=0; $i<count($popularStores); $i++) {
+            $class ='';
+            if ($i%2==0) {
+                $class = 'class="none"';
+            }
+
+            if ($popularStores[$i]['shop']['deepLink']!=null) {
+                $popularStoreUrl = $popularStores[$i]['shop']['deepLink'];
+            } elseif ($popularStores[$i]['shop']['refUrl']!=null) {
+                $popularStoreUrl = $popularStores[$i]['shop']['refUrl'];
+            } elseif ($popularStores[$i]['shop']['actualUrl']) {
+                $popularStoreUrl = $popularStores[$i]['shop']['actualUrl'];
+            } else {
+                $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
+            }
+
+            $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
+            $popularStoresContent .='<li '.$class.'><a title='.$popularStores[$i]['shop']['name'].' href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'], 200)).'</a></li>';
+        }
+        $popularStoresContent .='</ul></div>';
+
+        return $popularStoresContent;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -849,195 +901,6 @@ EOD;
 
         }
     }
-    /**
-    * get sidebar widgets for the page using permalink
-     * @param  string $page
-     * @author kkumar
-     * @return widget html
-     * @version 1.0
-     */
-
-    public function getSidebarWidget($arr=array(),$page='')
-    {
-        $pageWidgets = Doctrine_Query::create()
-        ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
-        ->leftJoin('p.widget w')
-        ->leftJoin('w.refPageWidget refpage')
-        ->where("p.permalink="."'$page'")
-        ->andWhere('w.status=1')
-        ->andWhere('w.deleted=0')
-        ->fetchArray();
-        $sidebarWidgets = '';
-        if (count($pageWidgets)>0) {
-        for ($i=0;$i<count($pageWidgets[0]['widget']);$i++) {
-        if ($pageWidgets[0]['widget'][$i]['slug']=='win_a_voucher') {
-         $sidebarWidgets .= self::WinVoucherWidget($arr);
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='stuur_een') {
-            $sidebarWidgets .= self::DiscountCodeWidget();
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='popular_stores') {
-            $sidebarWidgets .= self::popularShopWidget();
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='popular_category') {
-            $sidebarWidgets .= $this->PopularCategoryWidget();
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='popular_editor') {
-            $sidebarWidgets .= self::PopularEditorWidget(@$arr['userId'],$page);
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='most _popular_fashion') {
-            $sidebarWidgets .= self::MostPopularFashionGuideWidget();
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='browse' && $page!='search_result') {
-            $sidebarWidgets .= self::browseByStoreWidget('default',$pageWidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='browse' && $page=='search_result') {
-            $sidebarWidgets .= self::browseByStoreWidget('search',$pageWidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='other_helpful_tips') {
-        $sidebarWidgets .= self::otherhelpfullSavingTipsWidget();
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='join_us') {
-            $sidebarWidgets .= self::joinUsWidget();
-        } elseif ($pageWidgets[0]['widget'][$i]['slug']=='social_media') {
-            $sidebarWidgets .= self::socialmedia('','','','widget');
-        } 
-      }
-    }
-
-    return $sidebarWidgets;
-}
-
-public static function getSidebarWidgetViaId($pageId,$page='default')
-{
-    $pagewidgets = Doctrine_Query::create()
-    ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
-    ->leftJoin('p.widget w')
-    ->leftJoin('w.refPageWidget refpage')
-    ->where('p.pageAttributeId="'.$pageId.'"')
-    ->andWhere('w.status=1')
-    ->andWhere('w.deleted=0')
-    ->andWhere('p.deleted=0')
-    ->fetchArray();
-    $string = '';
-    if (count($pagewidgets)>0) {
-
-        for ($i=0;$i<count($pagewidgets[0]['widget']);$i++) {
-
-            if ($pagewidgets[0]['widget'][$i]['slug']=='win_a_voucher') {
-                $string .= self::WinVoucherWidget(@$arr);
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='stuur_een') {
-                $string .= self::DiscountCodeWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_stores') {
-                $string .= self::popularShopWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_category') {
-                $string .= self::PopularCategoryWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='most _popular_fashion') {
-                $string .= self::MostPopularFashionGuideWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_editor') {
-                $string .= self::PopularEditorWidget(@$arr['userId'],$page);
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page!='search_result') {
-                $string .= self::browseByStoreWidget('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page=='search_result') {
-                $string .= self::browseByStoreWidget('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='other_helpful_tips') {
-                $string .= self::otherhelpfullSavingTipsWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='join_us') {
-                $string .= self::joinUsWidget();
-            } else {
-                $string .= str_replace( '<br />', '', $pagewidgets[0]['widget'][$i]['content'] );
-            }
-        }
-
-    }
-
-    return $string;
-}
-
-public static function getSidebarWidgetViaPageId($pageId,$page='default')
-{
-    $pagewidgets = Doctrine_Query::create()
-    ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
-    ->leftJoin('p.widget w')
-    ->leftJoin('w.refPageWidget refpage')
-    ->where('p.id="'.$pageId.'"')
-    ->andWhere('w.status=1')
-    ->andWhere('w.deleted=0')
-    ->andWhere('p.deleted=0')
-    ->fetchArray();
-    $string = '';
-
-    if (count($pagewidgets)>0) {
-
-        for ($i=0;$i<count($pagewidgets[0]['widget']);$i++) {
-            if ($pagewidgets[0]['widget'][$i]['slug']=='win_a_voucher') {
-                $string .= self::WinVoucherWidget(@$arr);
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='stuur_een') {
-                $string .= self::DiscountCodeWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_stores') {
-                $string .= self::popularShopWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_category') {
-                $string .= self::PopularCategoryWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='most _popular_fashion') {
-                $string .= self::MostPopularFashionGuideWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='popular_editor') {
-                $string .= self::PopularEditorWidget(@$arr['userId'],$page);
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page!='search_result') {
-                $string .= self::browseByStoreWidget('default',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='browse' && $page=='search_result') {
-                $string .= self::browseByStoreWidget('search',$pagewidgets[0]['widget'][$i]['refPageWidget'][0]['position']);
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='other_helpful_tips') {
-                $string .= self::otherhelpfullSavingTipsWidget();
-            } elseif ($pagewidgets[0]['widget'][$i]['slug']=='join_us') {
-                $string .= self::joinUsWidget();
-            } else {
-                $string .= str_replace( '<br />', '', html_entity_decode($pagewidgets[0]['widget'][$i]['content'],ENT_QUOTES,'UTF-8') );
-            }
-        }
-    }
-
-    return $string;
-}
-
-    public static function WinVoucherWidget($arr)
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-
-        $string = '<div class="waardebon sidebar">
-        <h4 class="sidebar-heading"><center>'.$trans->translate('Win een scooter').'</center></h4>
-        <p><center>'.$trans->translate('Share Kortingscode.nl om kans te maken op deze VETTE prijs').'</center></p>
-        <div class="tweet-right-outer clr" style="height: 18px;">'.self::socialmedia('','',$arr ['controllerName'],'widget').'</div>
-        </div>';
-
-        return $string;
-    }
-
-    public static function DiscountCodeWidget()
-    {
-        //$trans = Zend_Registry::get('Zend_Translate');
-        //@$string .= '';
-        //return $string;
-    }
-    /**
-     * get widget html for store page..
-     * @author Sunny patial
-     * @version 1.0
-     * @return array $data
-     */
-    public static function Storecodeofferwidget()
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $str='<form name="discount_code" id="discount_code" action="#" method="POST" novalidate="novalidate"><div class="mark-spencer-bot-col1-mid-heading text-black">
-                    <h2>'.$trans->translate('Stuur een kortingscode op!').'</h2>
-                    </div>
-                    <div class="mark-spencer-bot-col1-mid-textbox1">
-                    <input style="width:195px;"  placeholder ="Zalando" name="offer_name" id="offer_name" type="text" />
-                    <input id="offer_nameHidden"  name="offer_nameHidden" type="hidden"/>
-                     <input id="shopId"  name="shopId" type="hidden"/>
-                    </div>
-
-                    <div class="mark-spencer-bot-col1-mid-textbox1">
-                    <input style="width:195px;" placeholder ="'.$trans->translate('Vul de code in').'" name="offer_code" id="offer_code" type="text" />
-                    </div>
-
-                    <div class="mark-spencer-bot-col1-mid-textbox1">
-                    <textarea name="offer_desc" id="offer_desc" class="textarea" style="width:195px; height:105px" cols="0" rows=""></textarea>
-                    </div>
-                    <div class="mark-spencer-bot-col1-mid-textbox1" style="margin-bottom:4px!important"> <a href="javascript:;" onClick="sendiscountCoupon()"><img src="'.HTTP_PATH.'public/images/front_end/btn-deel-de-korting.png" width="196" height="37" /></a></div></form>';
-
-        return $str;
-    }
 
     public static function getallrelatedshopsid($shopId)
     {
@@ -1046,37 +909,7 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
         return $data;
 
     }
-    public function popularShopWidget()
-    {
-        $popularStores = self::getStoreForFrontEnd('popular', 25);
-        $popularStoresContent = '<div class="block"><div class="intro">
-                   <h2>'.$this->__translate('Populaire Winkels').'</h2>
-                   <span>'.$this->__translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
-                 </div><ul class="tags">';
 
-        for ($i=0; $i<count($popularStores); $i++) {
-            $class ='';
-            if ($i%2==0) {
-                $class = 'class="none"';
-            }
-
-            if ($popularStores[$i]['shop']['deepLink']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['deepLink'];
-            } elseif ($popularStores[$i]['shop']['refUrl']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['refUrl'];
-            } elseif ($popularStores[$i]['shop']['actualUrl']) {
-                $popularStoreUrl = $popularStores[$i]['shop']['actualUrl'];
-            } else {
-                $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
-            }
-
-            $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
-            $popularStoresContent .='<li '.$class.'><a title='.$popularStores[$i]['shop']['name'].' href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'], 200)).'</a></li>';
-        }
-        $popularStoresContent .='</ul></div>';
-
-        return $popularStoresContent;
-    }
     public static function substring($text,$length)
     {
         if (strlen($text)>$length) {
@@ -1138,122 +971,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
     }
 
     /**
-     * get login wedget for front end
-     * @author Er.Kundal
-     * @version 1.0
-     * @return array $data
-     */
-    public static function getloginwedget()
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $logindiv = '
-        <h4 class="text-white">' . $trans->translate('Doe mee met kortingscode.nl') . '</h4>
-        <p class="text-light-grey text-center mt10">' . $trans->translate('Krijg gratis toegang tot exclusieve Members-Only codes en kortingen!') . '</p>
-        <div class="log-direct-icon">
-            <img src="'.HTTP_PATH .'public/images/front_end/img-id-new.png" width="48" height="42" alt="New Icon" />
-        </div>';
-        if (Auth_VisitorAdapter::hasIdentity()) {
-            $logindiv .='<a class="direct-login-btn-ftr"  href="' .HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('logout').'">' . $trans->translate('UITLOGGEN') .'</a>
-            <span class="text-light-grey">
-                <a class="text-white-link" href="' .HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('logout').'">' . $trans->translate('Logout') . '</a>
-            </span>
-            ';
-
-        } else {
-
-        $logindiv .='<a class="direct-login-btn-ftr" href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1').'" rel="nofollow">' .  $trans->translate('DIRECT ACCOUNT AANMAKEN') .'</a>
-        <span class="text-light-grey">
-            ' . $trans->translate('Al member?') . ' <a class="text-white-link" href= "'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'" rel="nofollow">' . $trans->translate('Inloggen') . '</a>
-        </span>
-        ';
-
-        }
-
-        return $logindiv;
-    }
-
-    /**
-     * get login wedget for footer
-     * @author blal
-     * @version 1.0
-     * @return array $data
-     */
-    public static function getloginwidgetFooter()
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $logindiv = '
-        <h4>' . $trans->translate('Met Ã©Ã©n click nog meer voordeel!') . '</h4>
-        <p class="text-gray text-center mt15">' . $trans->translate('Geen goede kortingscode gevonden? Bekijk de Members-Only kortingscodes! ') . '</p>';
-        if (Auth_VisitorAdapter::hasIdentity()) {
-
-            $logindiv .='<a class="direct-login-btn-ftr2" href="' .HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('logout').'">' . $trans->translate('UITLOGGEN') .'</a>
-            <span class="text-gray text-center">
-                <a  href="' .HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('logout').'">' . $trans->translate('Logout') . '</a>
-            </span>
-            ';
-
-        } else {
-
-        $logindiv .= '<a class="direct-login-btn-ftr2" href="' .HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1').'" rel="nofollow">' . $trans->translate('DIRECT ACCOUNT AANMAKEN') .'</a>
-        <span class="text-gray text-center">
-        ' . $trans->translate('Al member?') . ' <a href='.HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login') . ' rel="nofollow">' . $trans->translate('Inloggen') . '</a>
-        </span>
-        ';
-        }
-
-        return $logindiv;
-    }
-    /********************** End Front end home page *************************************/
-
-    /**
-     * Get popular Editor list from database for fronthome page
-     * @author kkumar
-     * @version 1.0
-     * @return array $data
-     */
-    public static function PopularEditorWidget($uId = null,$page)
-    {
-        $editorId = self::getMostPublishedArticlesEditor();
-
-        $trans = Zend_Registry::get('Zend_Translate');
-        $editorDetail = self :: getFamousEditorDetail($editorId);
-        $userPicture = HTTP_PATH.'public/images/NoImage/NoImage_142_90.jpg';
-        if (isset($editorDetail[0]['profileimage']['name']) && $editorDetail[0]['profileimage']['name']!='') {
-                $userPicture = PUBLIC_PATH_CDN .$editorDetail[0]['profileimage']['path'].'thum_large_widget_'.$editorDetail[0]['profileimage']['name'];
-
-        }
-        $view = new Zend_View();
-        $view->setScriptPath(APPLICATION_PATH . '/views/scripts/');
-
-        $string = '<div class="popularist-outer sidebar">
-        <div class="popularist-heading text-black">
-        <h4 class="sidebar-heading">'.$trans->translate('Populairste Editor').'</h4>
-        </div>
-        <div class="popularist-left">
-        <img src="'.$userPicture.'">
-        </div>
-        <div class="popularist-right">
-        <div class="popularist-right-top text-black">
-        <h4><strong title="'.ucfirst(strtolower(@$editorDetail[0]['firstName'])).' '.ucfirst(strtolower(@$editorDetail[0]['lastName'])).'">'.self::substring(ucfirst(strtolower(@$editorDetail[0]['firstName'])).' '.ucfirst(strtolower(@$editorDetail[0]['lastName'])),11).'</strong></h4>
-        </div>
-        <div class="popularist-right-top">' . $view->render('partials/deal.phtml') .'</div>
-
-
-        <div class="popularist-right-bot">
-        <ul>';
-        $popcate = Category::getPouparCategory();
-        for ($i=0;$i<count($popcate);$i++) {
-            $string .='<li><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('categorieen').'/'.$popcate[$i]['category']['permaLink'].'">'.$popcate[$i]['category']['name'].'</a></li>';}
-
-        $string .='</ul>
-        </div>
-        </div>
-        </div>';
-
-        return $string;
-    }
-
-    /**
      * This function returns the identity of editor who has most published articles
      * @author cbhopal
      * @version 1.0
@@ -1272,152 +989,6 @@ public static function getSidebarWidgetViaPageId($pageId,$page='default')
                                           ->fetchOne(array(), Doctrine_Core::HYDRATE_ARRAY);
 
         return $editor['authorid'];
-    }
-
-    /**
-     * Most popular Fashion Guide Widget for fronthome page
-     * @author mkaur
-     * @version 1.0
-     * @return array $data
-     */
-    public static function MostPopularFashionGuideWidget()
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $articles = Category:: generateMostReadArticle();
-        $string ='<div class="mostpopular-outer sidebar">
-        <div class="mostpopular-heading text-black">
-        <h4 class="sidebar-heading">'.$trans->translate('Most popular Fashion Guides').'</h4>
-        </div>
-        <!-- Most Popular Col1 Starts -->';
-        for ($i=0;$i<count($articles);$i++) {
-
-            $img = '';
-                $img = PUBLIC_PATH_CDN.$articles[$i]['articles']['articleImage']['path']."thum_article_medium_".$articles[$i]['articles']['articleImage']['name'];
-
-        $string.='<div class="mostpopular-col1">
-                    <div class="rediusnone1"><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . '<img src="' . $img . '"></a></div>
-                    <div><a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['articles']['permalink'].'" class="popular_article">' . $articles[$i]['articles']['title'].'</a></div></div>';
-        }
-        $string.='<!-- Most Popular Col1 Ends -->
-        </div>';
-
-        return $string;
-    }
-
-    /**
-     * Most popular Fashion Guide article fronthome page
-     * @author kkumar
-     * @version 1.0
-     * @return array $data
-     */
-
-     public static function MostPopularFashionGuide()
-     {
-            $data = Articles::MostPopularFashionGuide();
-
-            return $data;
-    }
-
-    /**
-     * Other helpful money saving Widget for fronthome page
-     * @author kkumar
-     * @version 1.0
-     * @return array $data
-     */
-
-    public static function otherhelpfullSavingTipsWidget()
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $articles = self::otherhelpfullSavingTips();
-
-        $string ='<div class="mostpopular-outer sidebar">
-        <h4 class="sidebar-heading">'.$trans->translate('Other Helpful Saving Tips').'</h4>
-        <!-- Most Popular Col1 Starts -->';
-
-      for ($i=0;$i<count($articles);$i++) {
-
-        $img = PUBLIC_PATH_CDN.$articles[$i]['thumbnail']['path']."thum_article_samll_".$articles[$i]['thumbnail']['name'];
-
-        $string.='<div class="mostpopular-col1">
-        <span class="mostpopular-col1-img1">
-            <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['permalink'].'"><img  src="'.$img.'" alt="'.$articles[$i]['title'].'"></a>
-        </span>
-        <span class="mostpopular-col1-text">
-            <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus').'/'.$articles[$i]['permalink'].'">'.$articles[$i]['title'].'</a>
-        </span>
-        </div>';
-        }
-        $string.='<!-- Most Popular Col1 Ends -->
-        </div>';
-
-        return $string;
-    }
-
-    /**
-     * Other helpful money saving fronthome page
-     * @author kkumar
-     * @version 1.0
-     * @return array $data
-     */
-
-    public static function otherhelpfullSavingTips()
-    {
-        $data = Articles::otherhelpfullSavingTips();
-
-        return $data;
-    }
-
-    /**
-     * join us widget
-     * @param  char  $char
-     * @author kkumar
-     * @return mixed $string
-     * @version 1.0
-     */
-
-    public static function joinUsWidget()
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $string = '
-        <div class="join-us sidebar">
-            <h4 class="sidebar-heading">'.$trans->translate('Join Us!').'</h4>
-            <p>'.$trans->translate('Spot deals, send them in, earn Flips and become the best Deal Hunter of the Universe!').'</p>
-
-
-            <span class="blue-btn">
-                <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1').'" rel="nofollow">
-                    <span><strong>'.$trans->translate('Sign up!').'</strong></span>
-                </a>
-            </span>
-        </div>';
-
-        return $string;
-    }
-
-        /**
-     * Welcome rocket
-     * @param  char  $char
-     * @author kkumar
-     * @return mixed $string
-     * @version 1.0
-     */
-
-    public static function welcomeRocket()
-    {
-        $trans = Zend_Registry::get('Zend_Translate');
-        $string = '
-        <div class="join-us sidebar">
-            <p>
-                <img alt="" src="/public/images/upload/ckeditor/images/welkom.png" style="width: 214px; height: 200px; margin: 8px;">
-            </p>
-            <span class="blue-btn">
-                <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1').'" rel="nofollow">
-                    <span>'.$trans->translate('Gratis Inschrijven!').'</span>
-                </a>
-            </span>
-        </div>';
-
-        return $string;
     }
 
     public static function getEditorDetail($uId)
