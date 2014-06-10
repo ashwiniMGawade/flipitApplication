@@ -1,5 +1,4 @@
-// refactored code 
-function setHiddenFieldValue(){
+function setHiddenFieldValue() {
     $('input#shopId').val($('input#currentShop').val());
 };
 function signUpNewsLetter(formName){ 
