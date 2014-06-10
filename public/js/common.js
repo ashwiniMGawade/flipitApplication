@@ -19,6 +19,25 @@ function ___removeOverLay() {
 	return true ;
 }
 
+function addOverLay()
+{
+
+
+	/*if( jQuery("div#overlay").length == 0)
+
+	{
+
+		var overlay = jQuery("<div id='overlay'><img id='img-load' src='" +  HOST_PATH_PUBLIC + "/images/back_end/ajax-loader.gif'/></div>");
+		overlay.appendTo(document.body);
+		jQueryt = jQuery(document.body); // CHANGE it to the table's id you have
+		jQuery("#img-load").css({
+		  top  : (jQueryt.height() / 2),
+		  left : (jQueryt.width() / 2)
+		});
+	} */
+
+}
+
 function removeOverLay() {
 	jQuery('div#overlay').remove();
 	return true ;
