@@ -286,7 +286,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if (isset($currentOffer->userGenerated) ? $currentOffer->userGenerated == 0 : '' &&  $termsAndConditions!='' && $termsAndConditions!=null) {
             $termAndConditionLink = '<li>
             <a id="termAndConditionLink'.$currentOffer->id .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
-            href="javascript:void(0);">'. FrontEnd_Helper_viewHelper::__translate('Term') . '&amp;' .FrontEnd_Helper_viewHelper::__translate('Conditions').'</a>';
+            href="javascript:void(0);">'. FrontEnd_Helper_viewHelper::__translate('Term &amp; Conditions') . '</a>';
             if ($termsAndConditions!='' && $termsAndConditions!=null && $currentOffer->extendedOffer =='1') {
                 $termAndConditionLink.='&nbsp; | &nbsp;';
             }
@@ -308,7 +308,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getViewAllCodeLink($shopName, $shopPermalink, $showHyphen)
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        return $viewAllLink ='<li>'. $showHyphen.'<span>'. FrontEnd_Helper_viewHelper::__translate("View all ") .'</span> <a href="'.$domainName.$shopPermalink.'">'. $shopName . FrontEnd_Helper_viewHelper::__translate(" Voucher Codes").'</a></li>';
+        return $viewAllLink = $showHyphen.'<li>'. FrontEnd_Helper_viewHelper::__translate("View all") .' <a href="'.$domainName.$shopPermalink.'">'. $shopName . ' ' . FrontEnd_Helper_viewHelper::__translate("Voucher Codes").'</a></li>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)
