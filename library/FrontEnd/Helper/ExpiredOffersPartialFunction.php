@@ -5,7 +5,7 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction{
         if($offer->extendedOffer == 1):
             $expiredOfferUrl = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('deals').'/'.$offer->extendedUrl;
         else:
-            $expiredOfferUrl = HTTP_PATH_LOCALE."out/exoffer/".$offer->id;
+            $expiredOfferUrl = HTTP_PATH_LOCALE."out/extendedoffer/".$offer->id;
         endif;
         return $expiredOfferUrl;
     }

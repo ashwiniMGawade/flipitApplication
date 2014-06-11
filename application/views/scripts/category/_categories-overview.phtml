@@ -9,7 +9,10 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
 
     if (isset($categoryWithSpecialPage['featured_category']) && $categoryWithSpecialPage['featured_category'] != '') {
         $featuredCategoryClass = "box-top";
-        $categoryImage = isset($categoryWithSpecialPage['categoryfeaturedimage']) ? $categoryWithSpecialPage['categoryfeaturedimage'] : $categoryWithSpecialPage['logo'];
+        $categoryImage =
+           isset($categoryWithSpecialPage['categoryfeaturedimage']) 
+           ? $categoryWithSpecialPage['categoryfeaturedimage'] 
+           : $categoryWithSpecialPage['logo'];
     }
     
     $categoryImageSource = '';
@@ -19,7 +22,10 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     ?>
     <article class="box <?php echo $featuredCategoryClass; ?>">
         <?php 
-        $permalink = isset($categoryWithSpecialPage['categoryicon']) ? FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $categoryWithSpecialPage['permaLink'] : $categoryWithSpecialPage['permaLink'];
+        $permalink =
+            isset($categoryWithSpecialPage['categoryicon']) 
+            ? FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $categoryWithSpecialPage['permaLink'] 
+            : $categoryWithSpecialPage['permaLink'];
         ?>
         <a href="<?php echo HTTP_PATH_LOCALE .  $permalink?>">
             <div class="image">

@@ -421,9 +421,6 @@ class Page extends BasePage
                     case 14:
                         $route->exactlink = 'about/index/attachedpage/'.$this->id;
                     break;
-                    case 16:
-                        $route->exactlink = 'myfavorite/index/attachedpage/'.$this->id;
-                    break;
                     case 17:
                         $route->exactlink = 'login/index/attachedpage/'.$this->id;
                     break;
@@ -773,12 +770,6 @@ class Page extends BasePage
                         $exactLink = 'about/index/attachedpage/'.$this->id;
                         $updateRouteLink->set('exactlink',"'".$exactLink."'");
                         //$updateRouteLink->exactlink = 'about/index/attachedpage/'.$this->id;
-                    break;
-                    case 16:
-
-                        $exactLink = 'myfavorite/index/attachedpage/'.$this->id;
-                        $updateRouteLink->set('exactlink',"'".$exactLink."'");
-                        //$updateRouteLink->exactlink = 'myfavorite/index/attachedpage/'.$this->id;
                     break;
                     case 17:
                         $exactLink = 'login/index/attachedpage/'.$this->id;
