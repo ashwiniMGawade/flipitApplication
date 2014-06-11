@@ -6,7 +6,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         $this->homePageData = $homePageData;
         $leftBlockList = '
         <div class="categories-block">
-            <a href="' . HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'" class="all">'. FrontEnd_Helper_viewHelper::__translate('All Categories') .'</a>
+            <a href="' . HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'" class="all">'. FrontEnd_Helper_viewHelper::__form('form_All Categories') .'</a>
             <ul>' 
                .$this->getHomePageLeftColumnList().
             '</ul>
