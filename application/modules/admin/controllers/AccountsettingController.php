@@ -236,13 +236,13 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                                             'content' => $siteName
                                     ),
                                     array('name' => 'unsubscribe',
-                                            'content' => FrontEnd_Helper_viewHelper::__email('Uitschrijven')
+                                            'content' => FrontEnd_Helper_viewHelper::__email('email_Uitschrijven')
                                     ),
                                     array('name' => 'editProfile',
-                                            'content' => FrontEnd_Helper_viewHelper::__email('Wijzigen profiel')
+                                            'content' => FrontEnd_Helper_viewHelper::__email('email_Wijzigen profiel')
                                     ),
                                     array('name' => 'contact',
-                                            'content' => FrontEnd_Helper_viewHelper::__email('Contact')
+                                            'content' => FrontEnd_Helper_viewHelper::__email('email_Contact')
                                     ),
                                     array('name' => 'contactLink',
                                             'content' => HTTP_PATH_FRONTEND . 'info/contact'
@@ -251,7 +251,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                                             'content' => HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_populair')
                                     ),
                                     array('name' => 'moreOffers',
-                                            'content' => FrontEnd_Helper_viewHelper::__email('Bekijk meer van onze top aanbiedingen') . ' >'
+                                            'content' => FrontEnd_Helper_viewHelper::__email('email_Bekijk meer van onze top aanbiedingen') . ' >'
                                     )
                             );
 
@@ -325,10 +325,10 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                                       'content' => "<a style='color:#333333; text-decoration:none;' href='$permalinkCatMainEmail'><img src='".$img."'/></a>"
                                 ),
                                 array('name' => 'categoryName',
-                                        'content' => FrontEnd_Helper_viewHelper::__email('Populairste categorie:') ." <a style='color:#333333; text-decoration:none;' href='$permalinkCatMainEmail'>". $topCategories[0]['category']['name'] ."</a>"
+                                        'content' => FrontEnd_Helper_viewHelper::__email('email_Populairste categorie:') ." <a style='color:#333333; text-decoration:none;' href='$permalinkCatMainEmail'>". $topCategories[0]['category']['name'] ."</a>"
                                 ),
                                 array('name' => 'categoryNameMore',
-                                      'content' => '<a href="'.$permalinkCatMainEmail.'" style="font-size:12px; text-decoration:none; color:#0B7DC1;" >' . FrontEnd_Helper_viewHelper::__email('Bekijk meer van onze') ." ". $topCategories[0]['category']['name'] ." ". FrontEnd_Helper_viewHelper::__email('aanbiedingen') . ' > </a>'
+                                      'content' => '<a href="'.$permalinkCatMainEmail.'" style="font-size:12px; text-decoration:none; color:#0B7DC1;" >' . FrontEnd_Helper_viewHelper::__email('email_Bekijk meer van onze') ." ". $topCategories[0]['category']['name'] ." ". FrontEnd_Helper_viewHelper::__email('email_aanbiedingen') . ' > </a>'
                                 ));
 
         //get three voucher codes in top one category from homepage
@@ -359,7 +359,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             //set the expiry date for offer in this category in $expDateCat array
             $expiryDate = new Zend_Date($value['endDate']);
             $this->expDateCat[$key]['name'] = 'expDateCat_'.($key+1);
-            $this->expDateCat[$key]['content'] = FrontEnd_Helper_viewHelper::__email('Verloopt op:') ." ". $expiryDate->get(Zend_Date::DATE_MEDIUM);
+            $this->expDateCat[$key]['content'] = FrontEnd_Helper_viewHelper::__email('email_Verloopt op:') ." ". $expiryDate->get(Zend_Date::DATE_MEDIUM);
 
             //set the permalink for shop in this category in $shopPermalinkCat array
             $this->shopPermalinkCat[$key]['name'] = 'shopPermalinkCat_'.($key+1);
