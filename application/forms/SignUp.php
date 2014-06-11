@@ -29,9 +29,9 @@ class Application_Form_SignUp extends Application_Form_Base
          )
         );
         $emailAddressTextBox->setAttrib('class', 'form-control');
-        $emailAddressTextBox->setAttrib('placeholder', 'Email address');
+        $emailAddressTextBox->setAttrib('placeholder', 'email_address');
         $emailAddressTextBox->setAttrib('type', 'email');
-        $emailAddressTextBox->setLabel('Email address');
+        $emailAddressTextBox->setLabel('email_address');
         
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
         $this->addElements(array($emailAddressTextBox, $shopIdHiddenField));

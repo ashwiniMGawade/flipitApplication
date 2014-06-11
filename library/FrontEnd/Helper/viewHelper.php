@@ -220,9 +220,9 @@ EOD;
                 $link = $permalink[0]['permalink'];
             } else {
                 $link = $menu['url'];
-                if ($menu['url']== FrontEnd_Helper_viewHelper::__link('inschrijven')) {
+                if ($menu['url']== FrontEnd_Helper_viewHelper::__link('link_inschrijven')) {
                     if (Auth_VisitorAdapter::hasIdentity()) {
-                        $link = FrontEnd_Helper_viewHelper::__link('mijn-favorieten');
+                        $link = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
                     } else {
                         $link = $menu['url'];
                     }
@@ -462,7 +462,7 @@ EOD;
         for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
             $categorySidebarWodget.=
                     '<li>
-                        <a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name']
+                        <a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_categorieen'). '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.$allPopularCategories[$categoryIndex]['category']['name']
                     .'</li>';
         }
         $categorySidebarWodget.=
@@ -1058,7 +1058,7 @@ EOD;
 
                     }
         $mainUl .="<div class='clr'></div>";
-        $mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('plus')."'><img src='".HTTP_PATH."public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle pluss')."</a> &raquo;</div>";
+        $mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus')."'><img src='".HTTP_PATH."public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle pluss')."</a> &raquo;</div>";
         $mainUl .="</div>";//close row
 
         $mainUl .="</div>";//close new-outer

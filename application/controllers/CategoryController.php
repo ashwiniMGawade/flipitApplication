@@ -20,7 +20,7 @@ class CategoryController extends Zend_Controller_Action
             $this->view->categoryDetails = $categoryDetails;
             $this->view->offersType = 'offerWithPagenation';
             $customHeader = '';
-            $this->viewHelperObject->getMetaTags($this, $categoryDetails[0]['name'], trim($categoryDetails[0]['metatitle']), trim($categoryDetails[0]['metaDescription']), FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetails[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
+            $this->viewHelperObject->getMetaTags($this, $categoryDetails[0]['name'], trim($categoryDetails[0]['metatitle']), trim($categoryDetails[0]['metaDescription']), FrontEnd_Helper_viewHelper::__link('link_categorieen') . '/' .$categoryDetails[0]['permaLink'], FACEBOOK_IMAGE, $customHeader);
 
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
@@ -42,7 +42,7 @@ class CategoryController extends Zend_Controller_Action
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
 
         $customHeader = isset($this->pageDetails->customHeader) ? $this->pageDetails->customHeader : '';
-        $this->viewHelperObject->getMetaTags($this, $this->pageDetails->pageTitle, $this->pageDetails->metaTitle, trim($this->pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('categorieen'), FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $this->pageDetails->pageTitle, $this->pageDetails->metaTitle, trim($this->pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('link_categorieen'), FACEBOOK_IMAGE, $customHeader);
 
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');

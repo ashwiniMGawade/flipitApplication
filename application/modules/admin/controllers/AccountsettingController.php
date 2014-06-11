@@ -248,7 +248,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                                             'content' => HTTP_PATH_FRONTEND . 'info/contact'
                                     ),
                                     array('name' => 'moreOffersLink',
-                                            'content' => HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('populair')
+                                            'content' => HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_populair')
                                     ),
                                     array('name' => 'moreOffers',
                                             'content' => FrontEnd_Helper_viewHelper::__email('Bekijk meer van onze top aanbiedingen') . ' >'
@@ -320,7 +320,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         else:
             $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_70x60.png";
         endif;
-        $permalinkCatMainEmail = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('categorieen') .'/'. $topCategories[0]['category']['permaLink'] . '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y');
+        $permalinkCatMainEmail = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $topCategories[0]['category']['permaLink'] . '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y');
         $this->category = array(array('name' => 'categoryImage',
                                       'content' => "<a style='color:#333333; text-decoration:none;' href='$permalinkCatMainEmail'><img src='".$img."'/></a>"
                                 ),
@@ -392,9 +392,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $key = 0;
             $visitorData[$key]['rcpt'] = $testEmail;
             $visitorData[$key]['vars'][0]['name'] = 'loginLink';
-            $visitorData[$key]['vars'][0]['content'] =  HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directlogin") . "/" . base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
+            $visitorData[$key]['vars'][0]['content'] =  HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin") . "/" . base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
             $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
-            $visitorData[$key]['vars'][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directloginunsubscribe") . "/" . base64_encode($testEmail) ."/". $dummyPass;
+            $visitorData[$key]['vars'][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe") . "/" . base64_encode($testEmail) ."/". $dummyPass;
 
             $toVisitorArray[$key]['email'] = $testEmail;
             $toVisitorArray[$key]['name'] = 'Member';
@@ -444,10 +444,10 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     $visitorMetaData[$key]['values']['referrer'] = trim($keywords) ;
                    // $visitorMetaData[$key]['values']['url'] = '';
 
-                    $visitorData[$key]['vars'][0]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directlogin") . "/" . base64_encode($value['email']) ."/". $value['password'];
+                    $visitorData[$key]['vars'][0]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin") . "/" . base64_encode($value['email']) ."/". $value['password'];
 
                     $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
-                    $visitorData[$key]['vars'][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directloginunsubscribe") . "/" . base64_encode($value['email']) ."/". $value['password'];
+                    $visitorData[$key]['vars'][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe") . "/" . base64_encode($value['email']) ."/". $value['password'];
 
                     $toVisitorArray[$key]['email'] = $value['email'];
                     $toVisitorArray[$key]['name'] = !empty($value['firstName']) ? $value['firstName'] : 'Member';

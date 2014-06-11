@@ -299,7 +299,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $extendedOfferLink = '';
         if (isset($currentOffer->extendedOffer) ? $currentOffer->extendedOffer =='1' : ''):
             $extendedOfferLink ='<li><a class="text-blue-link"
-            href="'.HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $currentOffer->extendedUrl.'">'
+            href="'.HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('link_deals').'/'. $currentOffer->extendedUrl.'">'
             .FrontEnd_Helper_viewHelper::__translate('More about this code').'</a></li>';
         endif;
         return $extendedOfferLink;

@@ -43,8 +43,8 @@ class SignupController extends Zend_Controller_Action
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->_redirect(
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
-                FrontEnd_Helper_viewHelper::__link('profiel')
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('link_profiel')
             );
         }
         $pageName = 'SignUp';
@@ -77,7 +77,7 @@ class SignupController extends Zend_Controller_Action
                 if (Visitor::checkDuplicateUser($visitorInformation['emailAddress']) > 0) {
                     self::showFlashMessage(
                         $this->view->translate('Please change you E-mail address this user already exist'),
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
+                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'error'
                     );
                 } else {
@@ -88,7 +88,7 @@ class SignupController extends Zend_Controller_Action
                     self::redirectAccordingToMessage(
                         $visitorId,
                         $this->view->translate('Please enter valid information'),
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
+                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'signup',
                         $visitorInformation['emailAddress']
                     );
@@ -137,7 +137,7 @@ class SignupController extends Zend_Controller_Action
                 }
                 self::showFlashMessage(
                     $message,
-                    HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login'),
+                    HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'),
                     'success'
                 );
             }
@@ -197,8 +197,8 @@ class SignupController extends Zend_Controller_Action
     public function addVisitor($visitorDetails)
     {
         $redirectLink =
-            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
-            FrontEnd_Helper_viewHelper::__link('profiel');
+            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+            FrontEnd_Helper_viewHelper::__link('link_profiel');
         $visitorId = Visitor::addVisitor($visitorDetails);
         if ($visitorId) {
             $message = $this->view->translate('Your information has been updated successfully !.');

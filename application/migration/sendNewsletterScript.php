@@ -264,7 +264,7 @@ class SendNewsletter
                         'content' => $this->_linkPath . 'info/contact'
                 ),
                 array('name' => 'moreOffersLink',
-                        'content' => $this->_linkPath . FrontEnd_Helper_viewHelper::__link('populair')
+                        'content' => $this->_linkPath . FrontEnd_Helper_viewHelper::__link('link_populair')
                 ),
                 array('name' => 'moreOffers',
                         'content' => FrontEnd_Helper_viewHelper::__email('Bekijk meer van onze top aanbiedingen') . ' >'
@@ -367,7 +367,7 @@ class SendNewsletter
             //set $expDate array with the expiry date of offer
             $expiryDate = new Zend_Date($value['offer']['endDate']);
             $expDate[$key]['name'] = 'expDate_'.($key+1);
-            $expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
+            $expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('link_Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
 
 
             //set $shopPermalink array with the permalink of shop
@@ -409,7 +409,7 @@ class SendNewsletter
             $img = $this->_publicPath."/images/NoImage/NoImage_70x60.png";
         endif;
 
-        $permalinkCatMainEmail = $this->_linkPath . FrontEnd_Helper_viewHelper::__link('categorieen') .'/'. $topCategories[0]['category']['permaLink'] . '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y');
+        $permalinkCatMainEmail = $this->_linkPath . FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $topCategories[0]['category']['permaLink'] . '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y');
         $category = array(array('name' => 'categoryImage',
                 'content' => "<a style='color:#333333; text-decoration:none;' href='$permalinkCatMainEmail'><img src='".$img."'/></a>"
         ),
@@ -515,10 +515,10 @@ class SendNewsletter
                 $visitorMetaData[$key]['values']['referrer'] = trim($keywords);
                 // $visitorMetaData[$key]['values']['url'] = '';
 
-                $visitorData[$key]['vars'][0]['content'] = $this->_linkPath . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directlogin") . "/" . base64_encode($value['email']) ."/". $value['password'];
+                $visitorData[$key]['vars'][0]['content'] = $this->_linkPath . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin") . "/" . base64_encode($value['email']) ."/". $value['password'];
 
                 $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
-                $visitorData[$key]['vars'][1]['content'] = $this->_linkPath . FrontEnd_Helper_viewHelper::__link("login") . "/" .FrontEnd_Helper_viewHelper::__link("directloginunsubscribe") . "/" . base64_encode($value['email']) ."/". $value['password'];
+                $visitorData[$key]['vars'][1]['content'] = $this->_linkPath . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe") . "/" . base64_encode($value['email']) ."/". $value['password'];
 
                 $toVisitorArray[$key]['email'] = $value['email'];
                 $toVisitorArray[$key]['name'] = !empty($value['firstName']) ? $value['firstName'] : 'Member';

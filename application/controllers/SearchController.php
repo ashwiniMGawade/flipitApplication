@@ -19,7 +19,7 @@ class SearchController extends Zend_Controller_Action
     public function indexAction()
     {
         $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $pagePermalink = FrontEnd_Helper_viewHelper::__link('zoeken');
+        $pagePermalink = FrontEnd_Helper_viewHelper::__link('link_zoeken');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $pageAttributeId = Page::getPageAttributeByPermalink($pagePermalink);
         $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);

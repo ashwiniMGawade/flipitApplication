@@ -834,7 +834,7 @@ class BackEnd_Helper_viewHelper
 			//set $expDate array with the expiry date of offer
 			$expiryDate = new Zend_Date($value['offer']['endDate']);
 			$expDate[$key]['name'] = 'expDate_'.($key+1);
-			$expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
+			$expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('link_Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
 
 			//set $shopPermalink array with the permalink of shop
 			$shopPermalink[$key]['name'] = 'shopPermalink_'.($key+1);

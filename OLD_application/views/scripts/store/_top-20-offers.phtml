@@ -319,7 +319,7 @@ if(count($this->termandcondition) > 0){
 
 								<div class="new-blue-btn-20" id="<?php echo $this->id ;?>" >
 									<a class="text-white-link" href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
-										<?php echo FrontEnd_Helper_viewHelper:: __form('PAK DEZE AANBIEDING1') ; ?>
+										<?php echo FrontEnd_Helper_viewHelper:: __form('form_PAK DEZE AANBIEDING1') ; ?>
 									</a>
 								</div>
 
@@ -327,7 +327,7 @@ if(count($this->termandcondition) > 0){
 							?>
 									<div class="new-blue-btn-20" id="<?php echo $this->id ; ?>">
 										<a class="text-white-link" href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="viewCounter('onclick', 'offer', <?php echo $this->id; ?>), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
-											<?php echo FrontEnd_Helper_viewHelper:: __form('PAK DEZE AANBIEDING2') ; ?>
+											<?php echo FrontEnd_Helper_viewHelper:: __form('form_PAK DEZE AANBIEDING2') ; ?>
 										</a>
 									</div>
 
@@ -404,7 +404,7 @@ if(count($this->termandcondition) > 0){
 							<a class="text-white-link" id="<?php echo $this->id ; ?>" vote='0' href="<?php echo $urlToShow;?>"  rel="nofollow"   target="_blank" onClick="showCode1(this), ga('send', 'event', 'aff','<?php echo $bounceRate; ?>');">
 								<!--<a class="text-white-link" id="<?php echo $this->id ; ?>" vote='0' href="<?php //echo $url; ?>" target="_blank" onclick="showCode1(this)">-->
 								<div class="new-blue-btn-20 ml20" id="<?php echo $this->id ; ?>" vote='0'>
-									<?php echo FrontEnd_Helper_viewHelper:: __form('PAK DEZE AANBIEDING') ; ?>
+									<?php echo FrontEnd_Helper_viewHelper:: __form('form_PAK DEZE AANBIEDING') ; ?>
 								</div>
 							</a>
 
@@ -440,7 +440,7 @@ if(count($this->termandcondition) > 0){
 	               		<?php  }
 
 	               		if($this->userGenerated ==0 &&  $termandcondition!='' && $termandcondition!=null) { ?>
-							<span class="fl arrow-down"><a  onclick="showTeamAndCondition(<?php echo $this->id; ?>)" class="text-blue-link" href="javascript:void(0);"><?php echo FrontEnd_Helper_viewHelper:: __form('Voorwaarden'); ?></a></span>
+							<span class="fl arrow-down"><a  onclick="showTeamAndCondition(<?php echo $this->id; ?>)" class="text-blue-link" href="javascript:void(0);"><?php echo FrontEnd_Helper_viewHelper:: __form('form_Voorwaarden'); ?></a></span>
 							<?php
 	                         if($termandcondition!='' && $termandcondition!=null && $this->extendedOffer =='1'){?>
 	                         <span class="fl">&nbsp;|&nbsp;</span>
@@ -453,7 +453,7 @@ if(count($this->termandcondition) > 0){
 						<div class="voucher-col2-mid-bot-new shoptext-new<?php echo $this->id ;?>">
 						<?php if($this->extendedOffer =='1'):?>
 	                    	<span class="fl">
-	                    		<a class="text-blue-link"  href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('deals').'/'. $this->extendedUrl;?>"><?php echo $this->translate('Meer over deze code'); ?></a>
+	                    		<a class="text-blue-link"  href="<?php echo HTTP_PATH_LOCALE .FrontEnd_Helper_viewHelper::__link('link_deals').'/'. $this->extendedUrl;?>"><?php echo $this->translate('Meer over deze code'); ?></a>
 							</span>
 	                    <?php endif;?>
 							<span class="fl">

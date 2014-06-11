@@ -20,7 +20,7 @@ $howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopI
             <?php endif; ?>
         </div>
         <?php if(!empty($this->howToUseGuideChapters)) : ?>
-        <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('how-to/').$this->shopInformation[0]['permaLink']; ?>#guide" class="link-box">
+        <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_how-to/').$this->shopInformation[0]['permaLink']; ?>#guide" class="link-box">
             <hr class="alt2">
             <span><?php echo $this->translate('Still having troubles using the code'); ?>?</span> <strong><?php echo $this->translate('Read more in our extensive guide'); ?></strong>
         </a>

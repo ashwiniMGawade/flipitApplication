@@ -3,7 +3,7 @@ $this->headLink()->prependStylesheet("/public/css/front_end/in-savings.css");
 $this->headLink()->prependStylesheet("/public/css/front_end/author.css");
 $articleDetails = $this->articleDetails;
 $userDetails = $this->userDetails;
-$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
+$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/". $userDetails['slug'];
 $firstName = str_replace(' ', '', $userDetails['firstName']);
 $lastName = str_replace(' ', '', $userDetails['lastName']);
 $articleUpdatedAtDate = new Zend_Date($articleDetails['created_at']);

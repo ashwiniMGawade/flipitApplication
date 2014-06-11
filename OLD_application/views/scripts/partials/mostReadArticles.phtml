@@ -15,7 +15,7 @@
               
                 $img = PUBLIC_PATH_CDN.$this->articles['thumbnail']['path'].'thum_article_samll_'. $this->articles['thumbnail']['name'];
           
-             $mlink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('plus'). '/' .$this->articles['permalink'];
+             $mlink = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_plus'). '/' .$this->articles['permalink'];
              $nameArr = explode(' ', $this->articles['authorname']);
              $profileLink = HTTP_PATH_LOCALE."about/profile/id/".$this->articles['authorid'];
              $user =  User::getProfileImage($this->articles['authorid']);
