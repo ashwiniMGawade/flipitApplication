@@ -22,8 +22,7 @@
 if ($this->offer->userGenerated ==0 &&  $this->termsAndConditions!='' && $this->termsAndConditions!=null) { ?>
             <a id="termAndConditionLinkPopup<?php echo $this->offer->id ;?>" 
                 onclick="showPopupTermAndConditions(<?php echo $this->offer->id; ?>)" class="terms"
-                            href="javascript:void(0);"><?php echo $this->translate('Term'); ?> &amp;
-                            <?php echo $this->translate('Conditions'); ?>
+                            href="javascript:void(0);"><?php echo $this->translate('Term &amp; Conditions'); ?> 
             </a>
         </li>
     </ul>
