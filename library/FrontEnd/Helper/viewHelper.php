@@ -289,15 +289,19 @@ EOD;
 
     public function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
+        $linkFacebook  = (empty(LOCALE)) ? '#' : 'http://facebook.com/flipitcom';
+        $linkTwitter   = (empty(LOCALE)) ? '#' : 'http://twitter.com/flipit';
+        $linkGoogle    = (empty(LOCALE)) ? '#' : '#';
+
             $socialMediaTitle = "<h2>".$this->__translate('Follow us')."</h2>";
             $socialMedia = "
                 <article class='block'>
                     <div class='social-networks'>
                         <div class='intro'>".$socialMediaTitle."</div>
                         <ul class='share-list'>
-                            <li><a class='facebook' href='#'></a></li>
-                            <li><a class='twitter' href='#'></a></li>
-                            <li><a class='google' href='#'></a></li>
+                            <li><a class='facebook' href='".$linkFacebook."'></a></li>
+                            <li><a class='twitter' href='".$linkTwitter."'></a></li>
+                            <li><a class='google' href='".$linkGoogle."'></a></li>
                             <li class='share-text'>".$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
                         </ul>
                     </div>
