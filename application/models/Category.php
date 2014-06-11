@@ -300,12 +300,21 @@ class Category extends BaseCategory
 
     public static function getCategoriesDetail()
     {
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoriesDetail = Doctrine_Query::create()
             ->select('c.name,c.id,i.path,i.name,c.permaLink,c.featured_category, categoryfeaturedimage.*')
             ->from("Category c")
+            ->addSelect(
+                "(
+                    SELECT count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  
+                        WHERE  off.deleted = 0 and s.deleted = 0 and roc.categoryId = c.id and off.enddate >
+                '".$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM'
+                ) 
+            as totalCoupons"
+            )
             ->leftJoin("c.categoryicon i")
             ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
-            ->where("c.deleted=0" )
+            ->where("c.deleted=0")
             ->andWhere("c.status= 1")
             ->orderBy("c.featured_category DESC")
             ->fetchArray();

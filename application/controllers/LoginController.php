@@ -170,7 +170,7 @@ class LoginController extends Zend_Controller_Action
                 );
             } else {
                 $resetPasswordForm->highlightErrorElements();
-            }
+            } 
         }
         $this->view->pageCssClass = 'login-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
