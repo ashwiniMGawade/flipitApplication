@@ -117,7 +117,8 @@ EOD;
                         .'&utmt=tran&utmtid='.$orderId.'&utmtst='.$storeName
                         .'&utmtto='.$utmipr.'&utmttx='.$utmttx.'&utmtsp='.$utmtsp.'&utmtci='.$utmtci
                         .'&utmtrg='.$utmtrg.'&utmtco='.$utmtco
-                        .'&utmcc=__utma%3D'.$utma.'%3B%2B__utmz%3D'.$utmz.'%3B' .'&utmac='.$googleAnalysticsId.'&utmhn='.$websiteName;
+                        .'&utmcc=__utma%3D'.$utma.'%3B%2B__utmz%3D'.$utmz.'%3B' .'&utmac='
+                        .$googleAnalysticsId.'&utmhn='.$websiteName;
 
             $itemUrl = 'http://www.google-analytics.com/__utm.gif?utmwv=4.6.5&utmn='.$var_utmn2
                         .'&utmt=item&utmtid='.$orderId.'&utmipc='.$utmipc
