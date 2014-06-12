@@ -13,7 +13,18 @@ class FrontEnd_Helper_SignUpPartialFunction
     public static function checkFormIsValidOrNot($currentSubmittedForm, $signUpFormForStorePage, $signUpFormSidebarWidget)
     {
         if ($currentSubmittedForm->getRequest()->isPost()) {
-            $whichFormIsPostForValidation = $currentSubmittedForm->getRequest()->getParam('SignUp')=='SignUp' ? $signUpFormForStorePage : $signUpFormSidebarWidget;
+            $whichFormIsPostForValidation  ='';
+            switch ($currentSubmittedForm->getRequest()->getParam('formName')) {
+                case 'largeSignupForm':
+                    $whichFormIsPostForValidation = $signUpFormForStorePage;
+                    break;
+                case 'formSignupSidebarWidget':
+                    $whichFormIsPostForValidation = $signUpFormSidebarWidget;
+                    break;
+                default:
+                    return;
+                break;
+            }
             if ($whichFormIsPostForValidation->isValid($currentSubmittedForm->getRequest()->getPost())) {
                 $signUpStep2Url = self::signUp2RedirectLink($whichFormIsPostForValidation);
                 header('location:'. $signUpStep2Url);

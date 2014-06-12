@@ -20,7 +20,7 @@ function validateSignUpNewsLetter(formName) {
                         email : true,
                         remote : {
                             url : HOST_PATH_LOCALE
-                                 + "signup/checkuser",
+                                 + "login/checkuser",
                             type : "post",
                             beforeSend : function(xhr) {
                             },
