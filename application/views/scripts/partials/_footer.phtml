@@ -4,7 +4,7 @@ $footer = FrontEnd_Helper_viewHelper::getFooterData();
 $signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('footerLargeSignUpForm', 'SignUp' , 'email-form form-inline', 'orange');
 if (zend_Controller_Front::getInstance()->getRequest()->isPost() && zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
     if ($signUpForm->isValid(zend_Controller_Front::getInstance()->getRequest()->getPost())) {
-        $signUpStep2Url = FrontEnd_Helper_SignUpPartialFunction::signUp2RedirectLink($signUpForm);
+        $signUpStep2Url = FrontEnd_Helper_SignUpPartialFunction::signUpRedirectLink($signUpForm);
         header('location:'. $signUpStep2Url);
     } else {
         $signUpForm->highlightErrorElements();

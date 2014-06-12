@@ -26,7 +26,7 @@ class FrontEnd_Helper_SignUpPartialFunction
                 break;
             }
             if ($whichFormIsPostForValidation->isValid($currentSubmittedForm->getRequest()->getPost())) {
-                $signUpStep2Url = self::signUp2RedirectLink($whichFormIsPostForValidation);
+                $signUpStep2Url = self::signUpRedirectLink($whichFormIsPostForValidation);
                 header('location:'. $signUpStep2Url);
             } else {
                 $whichFormIsPostForValidation->highlightErrorElements();
@@ -35,7 +35,7 @@ class FrontEnd_Helper_SignUpPartialFunction
         return true;
     }
 
-    public static function signUp2RedirectLink($signUpNewsLetterform)
+    public static function signUpRedirectLink($signUpNewsLetterform)
     {
         $emailAddress = $signUpNewsLetterform->getValue('emailAddress');
         $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
