@@ -964,7 +964,7 @@ class Admin_UserController extends Zend_Controller_Action
         $varnishObj = new Varnish();
 
         # redatice page
-        $editor = FrontEnd_Helper_viewHelper::__link("redactie"). "/" ;
+        $editor = FrontEnd_Helper_viewHelper::__link("link_redactie"). "/" ;
 
         #user page
         $userPage = $editor . $userPage ;

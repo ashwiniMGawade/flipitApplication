@@ -41,7 +41,7 @@ if (LOCALE == '') {
                                 if (HTTP_PATH != 'www.flipit.com' && $_SERVER['REQUEST_URI'] != '/') : ?>
                                 <div class="slide search-box">
                                     <form role="form" class="search-form">
-                                        <input placeholder="<?php echo $this->translate('Type in a Store e.g. Avis');?>" class="form-control <?php echo $searchBoxCssClass;?>" id='searchFieldHeader' name='searchFieldHeader' type='text'/>
+                                        <input placeholder="<?php echo FrontEnd_Helper_viewHelper::__form('form_Type in a Store e.g. Avis');?>" class="form-control <?php echo $searchBoxCssClass;?>" id='searchFieldHeader' name='searchFieldHeader' type='text'/>
                                         <input id='searchedKeyword' name='searchedKeyword' type='hidden'/>
                                             <a id="searchbuttonHeader" href="javascript:void(0);">
                                                 <button type="submit" class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>

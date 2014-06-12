@@ -134,10 +134,10 @@ class SitemapRefreshVarnish
         Zend_Registry::set('Zend_Translate', $this->_trans);
 
         #translating sitemaps names
-        $sitemaps = FrontEnd_Helper_viewHelper::__link('sitemap');
-        $plus = FrontEnd_Helper_viewHelper::__link('plus');
-        $main = FrontEnd_Helper_viewHelper::__link('main');
-        $shops = FrontEnd_Helper_viewHelper::__link('shops');
+        $sitemaps = FrontEnd_Helper_viewHelper::__link('link_sitemap');
+        $plus = FrontEnd_Helper_viewHelper::__link('link_plus');
+        $main = FrontEnd_Helper_viewHelper::__link('link_main');
+        $shops = FrontEnd_Helper_viewHelper::__link('link_shops');
 
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';

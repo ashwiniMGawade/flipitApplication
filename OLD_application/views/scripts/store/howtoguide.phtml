@@ -24,7 +24,7 @@ echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb'=>null));
         		        					<div class="yellow-box2-img"><img src="<?php echo HTTP_PATH; ?>public/images/front_end/icon19.png" width="32" height="32" /></div>
         		        					<div class="yellow-box2-text text-black"><strong>'. $this->translate('Sorry, we dont have any amazing ') . $this->shopdetail['name'] . $this->translate(' offers right now!') . '</strong><br />
         		        					<p>' .$this->translate('Check out the'). '<a class="text-blue-link" href="'. $this->shopdetail['affliateProgram']['name']=='' ? $this->shopdetail['actualUrl'] : $this->shopdetail['affliateProgram']['name']. '">'. $this->shopdetail['name'] . $this->translate(' website') . '</a>' . $this->translate(' to see what direct offers are available. Our deal team are working hard to bring you more great discounts soon.') . '</p>
-        		        					<p>'. $this->translate('However, you might also like these vouchercodes we have selected for you! Dont forget to have a look at or'). '<a class="text-blue-link" href="' .HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen').'">'.$this->translate('Categories').'</a>'. $this->translate('or Stores overview.') . '</p>
+        		        					<p>'. $this->translate('However, you might also like these vouchercodes we have selected for you! Dont forget to have a look at or'). '<a class="text-blue-link" href="' .HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen').'">'.$this->translate('Categories').'</a>'. $this->translate('or Stores overview.') . '</p>
         		        					</div>
         		        					</div>';
         	endif;

@@ -19,7 +19,7 @@ foreach ($this->storesInformation as $storesKey => $stores) :
             endforeach;
             echo "</ul>";
             if(count($numberOfstores) == ($storesIndex + 1 )) :
-                echo '<a href="#" class="btn-top">Back to top</a>';
+                echo '<a href="#" class="btn-top">'.$this->translate('Back to top').'</a>';
             endif;
             echo "</div>";
            
@@ -27,3 +27,5 @@ foreach ($this->storesInformation as $storesKey => $stores) :
         echo "</div></div>";
     endif;
 endforeach;
+
+?>

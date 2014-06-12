@@ -19,7 +19,7 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     ?>
     <article class="box <?php echo $featuredCategoryClass; ?>">
         <?php 
-        $permalink = isset($categoryWithSpecialPage['categoryicon']) ? FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $categoryWithSpecialPage['permaLink'] : $categoryWithSpecialPage['permaLink'];
+        $permalink = isset($categoryWithSpecialPage['categoryicon']) ? FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'. $categoryWithSpecialPage['permaLink'] : $categoryWithSpecialPage['permaLink'];
         ?>
         <a href="<?php echo HTTP_PATH_LOCALE .  $permalink?>">
             <div class="image">

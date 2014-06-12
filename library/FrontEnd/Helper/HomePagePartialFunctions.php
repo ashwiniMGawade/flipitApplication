@@ -6,7 +6,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         $this->homePageData = $homePageData;
         $leftBlockList = '
         <div class="categories-block">
-            <a href="' . HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen') .'" class="all">'. FrontEnd_Helper_viewHelper::__translate('All Categories') .'</a>
+            <a href="' . HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'" class="all">'. FrontEnd_Helper_viewHelper::__form('form_All Categories') .'</a>
             <ul>' 
                .$this->getHomePageLeftColumnList().
             '</ul>
@@ -93,8 +93,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
     }
 
     public function getHomePageRightColumnOffersList() {
-        $topOffer = $this->getRightColumnOffersHtml('topOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('top-20'), 'All Top Codes');
-        $newOffer = $this->getRightColumnOffersHtml('newOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('nieuw'), 'All New Codes');
+        $topOffer = $this->getRightColumnOffersHtml('topOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_top-20'), 'All Top Codes');
+        $newOffer = $this->getRightColumnOffersHtml('newOffers', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_nieuw'), 'All New Codes');
         $categories = $this->getRighColumnCategoriesHtml();
         $specialListPage = $this->getRightColumnSpicialListHtml();
         $savingGuides = $this->getRightColumnSavingGuidesListHtml();
@@ -102,7 +102,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
     }
 
     public function getRightColumnSavingGuidesListHtml() {
-        return $this->getRightColumnOffersHtml('moneysaving', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('plus') , 'All Saving Guides', 'moneysaving'); 
+        return $this->getRightColumnOffersHtml('moneysaving', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_plus') , 'All Saving Guides', 'moneysaving'); 
     }
 
     public function getRightColumnSpicialListHtml() {
@@ -116,7 +116,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
      public function getRighColumnCategoriesHtml() {
          $categegoriesHtml = '';
          foreach ($this->homePageData['topCategoriesOffers'] as $categoryId=>$topCategorieOffers) {
-           $categegoriesHtml .= $this->getRightColumnOffersHtml('categories', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen') .'/'. $categoryId, 'All Category Codes', $categoryId);
+           $categegoriesHtml .= $this->getRightColumnOffersHtml('categories', HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $categoryId, 'All Category Codes', $categoryId);
          }
          return $categegoriesHtml;
     }
@@ -210,7 +210,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
         foreach ($topTenMoneySavingGuides as $savingGuide) {
             $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/") . $savingGuide['article']['thumbnail']['name'];
-            $savingPermalink = FrontEnd_Helper_viewHelper::__link('plus').'/'.$savingGuide['article']['permalink'];
+            $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['article']['permalink'];
             $savingTitle = $savingGuide['article']['title'];
             $allowed_tags = '';
             $guideDescription = strip_tags($savingGuide['article']['chapters'][0]['content'], $allowed_tags);

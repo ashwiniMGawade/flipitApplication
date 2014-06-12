@@ -334,7 +334,7 @@ class Admin_CategoryController extends Zend_Controller_Action
         # Add urls to refresh in Varnish
         $varnishObj = new Varnish();
 
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('categorieen'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
 
         # get all the urls related to this category
         $varnishUrls = Category::getAllUrls($id);

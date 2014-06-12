@@ -56,7 +56,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
 
         $customHeader = '';
-        $this->viewHelperObject->getMetaTags($this, $couponDetails[0]['title'], trim($couponDetails[0]['extendedTitle']), trim($couponDetails[0]['extendedMetaDescription']), FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'], FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $couponDetails[0]['title'], trim($couponDetails[0]['extendedTitle']), trim($couponDetails[0]['extendedMetaDescription']), FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $couponDetails[0]['extendedUrl'], FACEBOOK_IMAGE, $customHeader);
 
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
@@ -126,7 +126,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
         $customHeader = isset($offerPage->customHeader) ? $offerPage->customHeader : '';
-        $this->viewHelperObject->getMetaTags($this, $offerPage->pageTitle, $offerPage->metaTitle, trim($offerPage->metaDescription),FrontEnd_Helper_viewHelper::__link('nieuw'), FACEBOOK_IMAGE, $customHeader);
+        $this->viewHelperObject->getMetaTags($this, $offerPage->pageTitle, $offerPage->metaTitle, trim($offerPage->metaDescription),FrontEnd_Helper_viewHelper::__link('link_nieuw'), FACEBOOK_IMAGE, $customHeader);
 
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
@@ -217,7 +217,7 @@ class OfferController extends Zend_Controller_Action
 
         //for facebook parameters
         $this->view->fbtitle = @$page->pageTitle;
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('populair');
+        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_populair');
 
         if(LOCALE == '' ) {
                 $fbImage = 'logo_og.png';
@@ -229,7 +229,7 @@ class OfferController extends Zend_Controller_Action
 
         //for facebook parameters
         $this->view->fbtitle = @$page->pageTitle;
-        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('populair');
+        $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_populair');
 
         $this->view->shopId = '';
         $shopId = '';

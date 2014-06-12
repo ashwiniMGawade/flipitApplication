@@ -32,7 +32,7 @@ class FrontEnd_Helper_SignUpPartialFunction
         $addToFavoriteShopId = $signUpNewsLetterform->getValue('shopId');
         $visitorShopId = new Zend_Session_Namespace('shopId');
         $visitorShopId->shopId = $addToFavoriteShopId;
-        $signUpStep2Url= HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven');
+        $signUpStep2Url= HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven');
         return $signUpStep2Url;
     }
 

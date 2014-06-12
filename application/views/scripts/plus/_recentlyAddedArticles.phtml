@@ -4,7 +4,7 @@
             foreach($this->recentlyAddedArticles as $recentlyAddedArticle) :
                 $userInformationObject = new User();
                 $userDetails =  $userInformationObject->getUserDetails($recentlyAddedArticle['authorid']);
-                $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
+                $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/". $userDetails['slug'];
                 $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['updated_at']);
                 $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
     ?>            

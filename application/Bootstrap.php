@@ -470,6 +470,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 )
         );
 
+
+        $csvTranslation = array(
+            'adapter'   => 'Transl8_Translate_Adapter_Csv',
+            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
+            'content'   => $inlineTranslationFolder . '/' . $locale,
+            'locale'    => $locale
+        );
+
+        $csvTranslate = new Zend_Translate($csvTranslation);
+        $poTrans->addTranslation($csvTranslate);
+
         $poTrans->addTranslation(
                 array(
                         'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/form' . $suffix . '.mo',
@@ -490,16 +501,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                         'locale'    => $locale
                 )
         );
-
-        $csvTranslation = array(
-            'adapter'   => 'Transl8_Translate_Adapter_Csv',
-            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
-            'content'   => $inlineTranslationFolder . '/' . $locale,
-            'locale'    => $locale
-        );
-
-        $csvTranslate = new Zend_Translate($csvTranslation);
-        $poTrans->addTranslation($csvTranslate);
 
         Zend_Registry::set('Zend_Locale', $locale);
         Zend_Registry::set('Zend_Translate', $poTrans);

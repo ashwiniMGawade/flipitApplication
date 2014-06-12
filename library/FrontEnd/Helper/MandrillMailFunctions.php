@@ -31,8 +31,8 @@ class FrontEnd_Helper_MandrillMailFunctions {
                 'content'=>
                     FrontEnd_Helper_viewHelper::__translate('No problem you have forgotten your password, use the following link you can set it up again:').
                     '<a href="'
-                    . HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'
-                    .FrontEnd_Helper_viewHelper::__link('resetpassword').'/'
+                    . HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login').'/'
+                    .FrontEnd_Helper_viewHelper::__link('link_resetpassword').'/'
                     .base64_encode($visitorId)
                     . '">'.FrontEnd_Helper_viewHelper::__translate('Click Here').'</a>'
             ),
@@ -56,7 +56,7 @@ class FrontEnd_Helper_MandrillMailFunctions {
             array(
                 'name'=> 'logincontact',
                 'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;"
-                    href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'">'
+                    href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login').'">'
                     .FrontEnd_Helper_viewHelper::__translate('login').'</a>'
             )
         );
@@ -113,15 +113,15 @@ class FrontEnd_Helper_MandrillMailFunctions {
             array(
                 'name'=>'logincontact',
                 'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;" 
-                    href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'
-                    .FrontEnd_Helper_viewHelper::__link('directlogin'). "/" . base64_encode($visitorDetails[0]['email']) 
+                    href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login').'/'
+                    .FrontEnd_Helper_viewHelper::__link('link_directlogin'). "/" . base64_encode($visitorDetails[0]['email']) 
                     ."/". $visitorDetails[0]['password'].'">'.FrontEnd_Helper_viewHelper::__translate('My Profile').'</a>'
             )
         );
         $staticContent = array(
             array(
                 'name' => 'moreOffersLink',
-                'content' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('populair')
+                'content' => HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_populair')
             ),
            array(
                'name' => 'moreOffers',
@@ -174,7 +174,7 @@ class FrontEnd_Helper_MandrillMailFunctions {
                     FrontEnd_Helper_viewHelper::__translate('You are receiving this email because you have indicated to keep abreast of the best discount codes and actions Kortingscode.nl.:')
                    ."<br/>". FrontEnd_Helper_viewHelper::__translate('Met de volgende stap bevestig je dat je deze e-mail hebt ontvangen, klik daarvoor op onderstaande link:').
                     '<a href="'
-                    . HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('confirmemail').'/'. base64_encode($visitoremailMail)
+                    . HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login').'/'.FrontEnd_Helper_viewHelper::__link('link_confirmemail').'/'. base64_encode($visitoremailMail)
                     . '">'.FrontEnd_Helper_viewHelper::__translate('Klik hier om je e-mail adres te bevestigen').'</a>'
             ),
             array(
@@ -197,7 +197,7 @@ class FrontEnd_Helper_MandrillMailFunctions {
             array(
                 'name'=> 'logincontact',
                 'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;"
-                    href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'">'
+                    href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login').'">'
                     .FrontEnd_Helper_viewHelper::__translate('login').'</a>'
             )
         );
@@ -249,7 +249,7 @@ class FrontEnd_Helper_MandrillMailFunctions {
           $expiryDate = new Zend_Date($offer['endDate']);
           $expireDate[$offerIndex]['name'] = 'expDate_'.($offerIndex+1);
           $expireDate[$offerIndex]['content'] = 
-              FrontEnd_Helper_viewHelper::__link('Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
+              FrontEnd_Helper_viewHelper::__link('link_Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
           $shopPermalink[$offerIndex]['name'] = 'shopPermalink_'.($offerIndex+1);
           $shopPermalink[$offerIndex]['content'] = $permalinkEmail;
        }
