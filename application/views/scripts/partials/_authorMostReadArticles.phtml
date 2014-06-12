@@ -6,7 +6,10 @@
 foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
     $authorMostReadArticle = (object) $authorMostReadArticle;
     $authorMostReadArticle = isset($authorMostReadArticle->articles) ? $authorMostReadArticle->articles : (array) $authorMostReadArticle;
-    $articleImage = !empty($authorMostReadArticle['thumbnail']) ? PUBLIC_PATH_CDN.$authorMostReadArticle['thumbnail']['path']. $authorMostReadArticle['thumbnail']['name'] : '';
+    $articleImage =
+        !empty($authorMostReadArticle['thumbnail']) 
+        ? PUBLIC_PATH_CDN.$authorMostReadArticle['thumbnail']['path']. $authorMostReadArticle['thumbnail']['name'] 
+        : '';
     ?>
     <article class="block">
         <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$authorMostReadArticle['permalink']?>">

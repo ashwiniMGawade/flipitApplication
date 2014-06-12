@@ -6,13 +6,18 @@ foreach ($this->authors as $author) :
     $authorPicture = !empty($author['profileimage']) ? HTTP_PATH_CDN.ltrim($author['profileimage']['path'], "/")."thum_large_widget_".$author['profileimage']['name'] : '';
     ?>
             <li>
-                <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('redactie') .'/'. strtolower($author['slug']); ?>"
+                <a 
+                href="<?php echo HTTP_PATH_LOCALE
+                    .FrontEnd_Helper_viewHelper::__link('redactie') .'/'
+                    . strtolower($author['slug']); ?>"
                 style="height: 275px;" class="same-height-left">
                     <h1><?php echo $author['firstName'];?></h1>
                     <img width="87" height="87" alt="<?php echo isset($author['profileimage']['name']) ? $author['profileimage']['name'] : '';?>" 
                     src="<?php echo $authorPicture;?>" class="photo-image">
                     <strong class="status"><?php echo $this->translate('deal spotter');?></strong>
-                    <span><?php echo $author['popularKortingscode'];?><?php echo ' ' . $this->translate('offers');?></span>
+                    <span>
+                    <?php echo $author['popularKortingscode'];?><?php echo ' ' . $this->translate('offers');?>
+                    </span>
                 </a>
             </li>
     <?php 

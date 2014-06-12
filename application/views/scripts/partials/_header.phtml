@@ -2,7 +2,8 @@
 $translateSession = new Zend_Session_Namespace('Transl8');
 if (!empty($translateSession->onlineTranslationActivated)): ?>
     <div class="inline-translation-bar">
-        Inline translation active! <a href="<?php echo HTTP_PATH; ?>trans/stopinlinetranslation">Stop inline translation and return to Admin</a>
+        Inline translation active!
+        <a href="<?php echo HTTP_PATH; ?>trans/stopinlinetranslation">Stop inline translation and return to Admin</a>
     </div>
 <?php 
 endif;
@@ -19,8 +20,10 @@ endif
     <div class="top-panel">
         <div class="container">
             <span class="slogan"><?php 
-            echo FrontEnd_Helper_viewHelper::__translate('save money with online discount codes and save pointers');?></span>
-            <a class="menu-account" href="#menu"><?php echo FrontEnd_Helper_viewHelper::__translate('account menu');?></a>
+            echo FrontEnd_Helper_viewHelper::__translate('save money with online discount codes and save pointers');?>
+            </span>
+            <a class="menu-account" href="#menu"><?php echo FrontEnd_Helper_viewHelper::__translate('account menu');?>
+            </a>
                 <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
                 $userMenuLink = $this->locale. '/login/usermenu';
