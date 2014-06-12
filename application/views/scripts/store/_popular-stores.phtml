@@ -16,7 +16,12 @@ foreach ($this->popularStores as $popularStore) :
         $popularStoreImage = HTTP_PATH . "public/images/NoImage/storeLogo100_50.jpg";
     endif;
 
-    echo '<li><a href="'.HTTP_PATH_LOCALE.$popularStore['shop']['permaLink'].'"><img src="' . $popularStoreImage . '"  alt="' .$popularStore['shop']['name'] . '" width="92" height="47" /></a></li>';
+    echo '<li>
+        <a href="'.HTTP_PATH_LOCALE.$popularStore['shop']['permaLink'].'">
+            <img src="' . $popularStoreImage . '"  
+            alt="' .$popularStore['shop']['name'] . '" width="92" height="47" />
+        </a>
+    </li>';
 endforeach;
 ?>
         </ul>

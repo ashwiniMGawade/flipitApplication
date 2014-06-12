@@ -24,7 +24,10 @@ $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
 $similarOffersHeader = '';
 $similarOffers = '';
 if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
-    $similarOffersHeader = $offerPartialClass->getSimilarShopHeader($this->currentStoreInformation[0]['name'], 'similar');
+    $similarOffersHeader =$offerPartialClass->getSimilarShopHeader(
+        $this->currentStoreInformation[0]['name'],
+        'similar'
+    );
     $similarOffers = $this->partial(
         $partialViewPath.'_offer.phtml',
         array(
@@ -65,7 +68,8 @@ if(!empty($this->moneySavingGuideArticle)):
         $partialViewPath.'_authorMostReadArticles.phtml',
         array(
             "authorMostReadArticles"=>$this->moneySavingGuideArticle,
-            "moneySavingGuideHeader"=>$this->translate('General money saving advice & tricks for shopping at') . " " . $this->currentStoreInformation[0]['name']
+            "moneySavingGuideHeader"=>$this->translate('General money saving advice & tricks for shopping at') . " " 
+            . $this->currentStoreInformation[0]['name']
         )
     );
 endif;
@@ -98,7 +102,11 @@ else:
 endif;
 
 $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
-$headerBlock = $frontEndViewHelper->getShopHeader($this->currentStoreInformation[0], $message = 'storeDetail', $offerTitle = 'storeDetail');
+$headerBlock = $frontEndViewHelper->getShopHeader(
+    $this->currentStoreInformation[0],
+    $message = 'storeDetail',
+    $offerTitle = 'storeDetail'
+);
 $shopEditor = '';
 if($this->shopEditor != null):
     $shopEditor = $this->partial(
@@ -126,7 +134,8 @@ if ($this->currentStoreInformation[0]['showSignupOption']) :
 endif;
 
 ?>
-<input type="hidden" name="currentShop" id="currentShop" value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
+<input type="hidden" name="currentShop" id="currentShop" 
+value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <?php echo $headerBlock; ?>
 <div class="row"> 
     <div id="content" class="col-md-8 col-sm-8">
@@ -146,12 +155,12 @@ endif;
     echo $this->partial(
         $storeViewPartialPath. '_shop-sidebar.phtml',
         array(
-                'shopEditor' => $shopEditor,
-                'latestShopUpdates'=> $this->latestShopUpdates,
-                'shopChain' => $this->shopChain,
-                'shop' => $this->currentStoreInformation[0],
-                'popularStoresList'=> $this->popularStoresList,
-                'signUpWidgetForm' => $signUpWidgetForm
+            'shopEditor' => $shopEditor,
+            'latestShopUpdates'=> $this->latestShopUpdates,
+            'shopChain' => $this->shopChain,
+            'shop' => $this->currentStoreInformation[0],
+            'popularStoresList'=> $this->popularStoresList,
+            'signUpWidgetForm' => $signUpWidgetForm
             )
     );
     ?>
