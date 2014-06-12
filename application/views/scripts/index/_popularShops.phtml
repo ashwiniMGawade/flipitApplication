@@ -6,7 +6,11 @@ foreach ($this->topStores as $topStores):
     ?>
         <div class="col-md-2 col-sm-2 col-xs-6">
             <ul>
-                <li><a href="<?php echo HTTP_PATH_LOCALE. $topStores['shop']['permaLink'];?>"><?php echo $topStores['shop']['name']; ?></a></li>
+                <li>
+                     <a href="<?php echo HTTP_PATH_LOCALE. $topStores['shop']['permaLink'];?>">
+                     <?php echo $topStores['shop']['name']; ?>
+                     </a>
+                </li>
             </ul>
         </div>
     <?php 

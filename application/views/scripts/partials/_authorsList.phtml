@@ -7,10 +7,10 @@ foreach ($this->authors as $author) :
     ?>
             <li>
                 <a 
-                href="<?php echo HTTP_PATH_LOCALE
+                    href="<?php echo HTTP_PATH_LOCALE
                     .FrontEnd_Helper_viewHelper::__link('redactie') .'/'
                     . strtolower($author['slug']); ?>"
-                style="height: 275px;" class="same-height-left">
+                    style="height: 275px;" class="same-height-left">
                     <h1><?php echo $author['firstName'];?></h1>
                     <img width="87" height="87" alt="<?php echo isset($author['profileimage']['name']) ? $author['profileimage']['name'] : '';?>" 
                     src="<?php echo $authorPicture;?>" class="photo-image">

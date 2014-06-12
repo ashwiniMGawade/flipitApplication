@@ -24,11 +24,11 @@ endif
             </span>
             <a class="menu-account" href="#menu"><?php echo FrontEnd_Helper_viewHelper::__translate('account menu');?>
             </a>
-                <?php
+            <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
                 $userMenuLink = $this->locale. '/login/usermenu';
                 echo $this->esi($userMenuLink);
-                ?>
+            ?>
         </div>
     </div>
     <div class="navigation">

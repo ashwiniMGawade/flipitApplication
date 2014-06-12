@@ -39,7 +39,9 @@ if ($this->pageMode == true) {
         $rowId = 'page-contents';
         $pageContent=
             '<div class="section">
-                <div class="inner-section-wrapper"><h1>'.$this->page['pageTitle'].'</h1>'.stripslashes($this->page['content']) .'</div>
+                <div class="inner-section-wrapper">
+                   <h1>'.$this->page['pageTitle'].'</h1>'.stripslashes($this->page['content']) 
+                .'</div>
             </div>';
     }
     $imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
