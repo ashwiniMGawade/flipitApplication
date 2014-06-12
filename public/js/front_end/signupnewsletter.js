@@ -27,10 +27,10 @@ function validateSignUpNewsLetter(formName) {
                             complete : function(data) {
                                 if (data.responseText == 'true') {
                                     $(formName + " input#emailAddress").addClass('input-success').removeClass('input-error');
-                                    $(element).next('label').remove();
+                                    $(formName + " input#emailAddress").next('label').remove();
                                 } else {
                                     $(formName + " input#emailAddress").addClass('input-error').removeClass('input-success');
-                                    $(element).next('label').remove();
+                                    $(formName + " input#emailAddress").next('label').remove();
                                 }
                             }
                         }

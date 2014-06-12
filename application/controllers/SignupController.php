@@ -25,8 +25,18 @@ class SignupController extends Zend_Controller_Action
         $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
 
-   
-
+    public function checkuserAction()
+    {
+        $visitorInformation = intval(
+            Visitor::checkDuplicateUser(
+                $this->_getParam('emailAddress'),
+                $this->_getParam('id')
+            )
+        );
+        $visitorStatus = $visitorInformation > 0 ? false : true;
+        echo Zend_Json::encode($visitorStatus);
+        die();
+    }
 
     public function indexAction()
     {
