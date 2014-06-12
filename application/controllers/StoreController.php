@@ -27,6 +27,7 @@ class StoreController extends Zend_Controller_Action
         }
         $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
+
     public function addshopinfevoriteAction()
     {
         $shopId = $this->getRequest()->getParam("shopid");
@@ -122,10 +123,10 @@ class StoreController extends Zend_Controller_Action
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->offers = $offers;
 
-        if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0):
-            $offers = self::topStorePopularOffers($shopId, $offers);
+        if ($this->view->currentStoreInformation[0]['affliateProgram']==0 && count($this->view->offers) <=0) {
+            $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
             $this->view->topPopularOffers = $offers;
-        endif;
+        }
 
         $this->view->expiredOffers = $expiredOffers;
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
@@ -175,28 +176,6 @@ class StoreController extends Zend_Controller_Action
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
         $this->view->pageCssClass = 'author-page';
-    }
-
-    public function topStorePopularOffers($shopId, $offers)
-    {
-        $voucherCacheKeyCheck =
-            FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvouchercode_list_shoppage');
-        $shopCategories = Shop::returnShopCategories($shopId);
-        if ($voucherCacheKeyCheck) {
-            $shopCategories = Shop::returnShopCategories($shopId);
-            FrontEnd_Helper_viewHelper::setInCache('all_categories_of_shoppage_'. $shopId, $shopCategories);
-            $topVoucherCodes = Offer::getTopCouponCodes($shopCategories, 100);
-            FrontEnd_Helper_viewHelper::setInCache('all_popularvouchercode_list_shoppage', $topVoucherCodes);
-        } else {
-            $shopCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_categories_of_shoppage_'. $shopId);
-            $topVoucherCodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvouchercode_list_shoppage');
-        }
-        $offers = array();
-        $storeOfferIds = array();
-        foreach ($topVoucherCodes as $topVouchercodeskey => $topVoucherCode) {
-            $offers[] = $topVoucherCode['offer'];
-        }
-        return $offers;
     }
 
     public function indexAction()
