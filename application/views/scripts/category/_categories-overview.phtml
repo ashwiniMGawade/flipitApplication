@@ -25,6 +25,10 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
             <div class="image">
                 <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $categoryWithSpecialPage['name'];?>" />
             </div>
+            <div class="text-box">
+                <span class="num"><?php echo $categoryWithSpecialPage['totalCoupons']; ?></span>
+                <span><?php echo $this->translate('Coupons inside'); ?></span>
+            </div>
             <div class="caption">
                 <?php echo $featuredCategorySpan; ?>
                 <strong><?php echo $categoryWithSpecialPage['name']; ?></strong>

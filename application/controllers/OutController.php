@@ -2,21 +2,16 @@
 
 class OutController extends Zend_Controller_Action
 {
-    /**
-     * Get offer links for cloaking purpose
-     *
-     * @author Raman
-     * @version 1.0
-     */
+
     public function offerAction()
     {
-           $offer_id = $this->getRequest()->getParam('id');
-           FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offer_id);
-           FrontEnd_Helper_viewHelper::viewCounter('offer', 'onload', $offer_id);
-           Offer::addConversion($offer_id);
-           $link  = Offer::getcloakLink($offer_id , false );
-           $this->_helper->redirector->setCode(301);
-        $this->_redirect($link);
+       $offerId = $this->getRequest()->getParam('id');
+       FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offerId);
+       FrontEnd_Helper_viewHelper::viewCounter('offer', 'onload', $offerId);
+       Offer::addConversion($offerId);
+       $link  = Offer::getCloakLink($offerId , false );
+       $this->_helper->redirector->setCode(301);
+       $this->_redirect($link);
     }
 
     /**
@@ -28,7 +23,7 @@ class OutController extends Zend_Controller_Action
     public function exofferAction()
     {
         $offer_id = $this->getRequest()->getParam('id');
-        $link  = Offer::getcloakLink($offer_id , false );
+        $link  = Offer::getCloakLink($offer_id , false );
         $this->_helper->redirector->setCode(301);
         $this->_redirect($link);
     }

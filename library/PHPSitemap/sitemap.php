@@ -400,7 +400,7 @@ class PHPSitemap_sitemap
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
 		//echo FrontEnd_Helper_viewHelper::__link('link_categorieen');
 		//categories links
-		$category = Category::getCategoriesDetail();
+		$category = Category::getCategoriesInformation();
 		
 		if($locale=='en'):
 			$xml .= '<url><loc>'.$domain.'</loc></url>';

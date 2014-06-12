@@ -289,9 +289,9 @@ EOD;
 
     public function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
-        $linkFacebook  = (empty(LOCALE)) ? '#' : 'http://facebook.com/flipitcom';
-        $linkTwitter   = (empty(LOCALE)) ? '#' : 'http://twitter.com/flipit';
-        $linkGoogle    = (empty(LOCALE)) ? '#' : '#';
+        $linkFacebook  = (LOCALE == '') ? 'https://www.facebook.com/kortingsbonnen' : 'https://facebook.com/flipitcom';
+        $linkTwitter   = (LOCALE == '') ? 'https://twitter.com/codekorting' : 'https://twitter.com/flipit';
+        $linkGoogle    = (LOCALE == '') ? 'https://plus.google.com/+KortingscodeNl' : 'https://plus.google.com/104667362431888724932/about';
 
             $socialMediaTitle = "<h2>".$this->__translate('Follow us')."</h2>";
             $socialMedia = "
