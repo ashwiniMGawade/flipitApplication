@@ -41,7 +41,7 @@ class CategoryController extends Zend_Controller_Action
             getRequestedDataBySetGetCache(
                 'all_category_list',
                 array(
-                    'function' => 'Category::getCategoriesDetail', 'parameters' => array()
+                    'function' => 'Category::getCategoriesInformation', 'parameters' => array()
                 )
             );
         $specialPagesList = FrontEnd_Helper_viewHelper::

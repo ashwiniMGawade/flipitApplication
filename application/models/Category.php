@@ -298,7 +298,7 @@ class Category extends BaseCategory
         return true;
     }
 
-    public static function getCategoriesDetail()
+    public static function getCategoriesInformation()
     {
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoriesDetail = Doctrine_Query::create()
