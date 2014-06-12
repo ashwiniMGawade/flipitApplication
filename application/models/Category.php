@@ -301,7 +301,7 @@ class Category extends BaseCategory
     public static function getCategoriesInformation()
     {
         $currentDateAndTime = date('Y-m-d 00:00:00');
-        $categoriesDetail = Doctrine_Query::create()
+        $CategoriesInformation = Doctrine_Query::create()
             ->select('c.name,c.id,i.path,i.name,c.permaLink,c.featured_category, categoryfeaturedimage.*')
             ->from("Category c")
             ->addSelect(
@@ -318,7 +318,7 @@ class Category extends BaseCategory
             ->andWhere("c.status= 1")
             ->orderBy("c.featured_category DESC")
             ->fetchArray();
-        return $categoriesDetail;
+        return $CategoriesInformation;
     }
 
     public static function getCategoryInformation($categoryId)
