@@ -1,9 +1,16 @@
 <?php 
 echo $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
-$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp ' , 'email-form form-inline', 'orange');
-FrontEnd_Helper_SignUpPartialFunction::validateZendForm(Zend_Controller_Front::getInstance(), '', $signUpForm);
-$signUpWidgetForm = '';
+$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('footerLargeSignUpForm', 'SignUp' , 'email-form form-inline', 'orange');
+if (zend_Controller_Front::getInstance()->getRequest()->isPost() && zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
+    if ($signUpForm->isValid(zend_Controller_Front::getInstance()->getRequest()->getPost())) {
+        $signUpStep2Url = FrontEnd_Helper_SignUpPartialFunction::signUpRedirectLink($signUpForm);
+        header('location:'. $signUpStep2Url);
+    } else {
+        $signUpForm->highlightErrorElements();
+    }
+}
+$signUpWidgetForm = ''; 
 $signUpWidgetForm = $this->partial(
        'partials/_signupForm.phtml',
         array(
@@ -13,7 +20,7 @@ $signUpWidgetForm = $this->partial(
             'shopLogoOrDefaultImage' => '',
         )
     );
-?> 
+?>
 <footer id="footer">
 <?php 
 if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='login'

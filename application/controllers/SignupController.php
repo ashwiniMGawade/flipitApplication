@@ -38,7 +38,6 @@ class SignupController extends Zend_Controller_Action
         die();
     }
 
-
     public function indexAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
