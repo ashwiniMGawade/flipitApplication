@@ -331,7 +331,8 @@ class Admin_VisitorController extends Zend_Controller_Action
 				$excelFile = $excelFilePath.$result['fileName'];
     			if($result['status'] == 200){
 
-	    			$flash = $this->_helper->getHelper ( 'FlashMessenger' );
+	    			chmod($excelFile, 0775);
+                    $flash = $this->_helper->getHelper ( 'FlashMessenger' );
 	    			$message = $this->view->translate ('Visitors uploaded successfully');
 	    			$flash->addMessage ( array ('success' => $message ) );
 	    			$this->_redirect ( HTTP_PATH . 'admin/visitor/importvisitorlist' );
