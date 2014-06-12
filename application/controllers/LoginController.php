@@ -117,14 +117,22 @@ class LoginController extends Zend_Controller_Action
         $this->view->form = $forgotPasswordForm;
         if ($this->getRequest()->isPost()) {
             if ($forgotPasswordForm->isValid($_POST)) {
-                $visitorDetails = Auth_VisitorAdapter::forgotPassword($forgotPasswordForm->getValue('emailAddress'));
+                $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress')));
                 if ($visitorDetails!= false) {
-                    $mandrilFrontEnd = new FrontEnd_Helper_MandrillMailFunctions();
-                    $mandrilFrontEnd->sendForgotPasswordMail(
-                        $visitorDetails['id'],
-                        $forgotPasswordForm->getValue('emailAddress'),
-                        $this
-                    );
+
+                    $mailer  = new FrontEnd_Helper_Mailer();
+                    $content = array(
+                                    'name'    => 'content',
+                                    'content' => $this->view->partial('emails/forgotpassword.phtml', array('resetPasswordLink' => 'http://www.kc.nl/passreset'))
+                                );
+                    $fullName = $visitorDetails['firstName'].' '.$visitorDetails['lastName'];
+
+                    $mailer->send($fullName, $visitorDetails['email'], 'Forgot Password', $content);
+
+                    echo $this->view->partial('emails/forgotpassword.phtml', array('resetPasswordLink' => 'http://www.kc.nl/passreset'));
+                    exit;
+
+
                     $this->addFlashMessage(
                         $this->view->translate('Please check you mail and click on reset password link'),
                         HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
