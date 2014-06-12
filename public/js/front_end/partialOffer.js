@@ -11,7 +11,7 @@ function OpenInNewTab(url) {
     windowObject.focus();
 }
 function showTermAndConditions(id) {
-    $('div#termAndConditions'+id).slideToggle();
+    $('#termAndConditions'+id).toggle();
     $('a#termAndConditionLink'+id).toggleClass('uparrow'); 
 }
 function showPopupTermAndConditions(id) {

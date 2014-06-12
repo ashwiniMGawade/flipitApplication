@@ -108,14 +108,21 @@ class StoreController extends Zend_Controller_Action
             $offers = self::topStorePopularOffers($shopId, $offers);
             $this->view->topPopularOffers = $offers;
         endif;
-
         $this->view->expiredOffers = $expiredOffers;
+
+        // comments: 
+        // Cache result?
+        // Why not direct assing the result to: $this->view->similarShopsAndSimilarCategoriesOffers?
+        // Clients 
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
             'similarStoresAndSimilarCategoriesOffers',
             4,
             $shopId
         );
         $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
+
+        // --- end comments
+
         $this->view->countPopularOffers = count(
             FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId)
         );
