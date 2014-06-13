@@ -1,5 +1,4 @@
-<?php 
-echo $this->minifyHeadScript()->prependFile(HTTP_PATH. "public/js/front_end/signupnewsletter.js");
+<?php
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
 $signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('footerLargeSignUpForm', 'SignUp' , 'email-form form-inline', 'orange');
 if (zend_Controller_Front::getInstance()->getRequest()->isPost() && zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
@@ -26,6 +25,7 @@ $signUpWidgetForm = $this->partial(
 if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='login'
     && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='signup'
 ):
+$this->minifyHeadScript()->appendFile("public/js/front_end/signupnewsletter.js");
 ?>
     <div class="bottom-panel">
         <div class="container" id ="footer-signup-form">
@@ -49,4 +49,12 @@ endif;
     <div class="container add-block">
     <?php echo $footer[0]['bottomFooter'];?>
     </div>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+} else {
+    $headScript = $this->minifyHeadScript();
+}
+echo $headScript;
+?>
 </footer>

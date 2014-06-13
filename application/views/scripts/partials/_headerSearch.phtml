@@ -1,5 +1,5 @@
 <?php
-$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/search.js");
 $searchBoxCssClass = LOCALE == '' ? 'kortingscode' : '';
 ?>
 <div class="slide">
