@@ -30,8 +30,7 @@ class IndexController extends Zend_Controller_Action
             throw new Zend_Controller_Action_Exception('', 404);
         }
 
-        if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') {
-        } else {
+        if (FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularvaouchercode_list", array('function' => 'Offer::getTopOffers', 'parameters' => array(10)));
             $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homenewoffer_list", array('function' => 'Offer::getNewestOffers', 'parameters' => array('newest', 10)));
             $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularcategory_list", array('function' => 'Category::getPopularCategories', 'parameters' => array(10)));
@@ -57,6 +56,8 @@ class IndexController extends Zend_Controller_Action
             $this->view->seeninContents = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homeseenin_list", array('function' => 'SeenIn::getSeenInContent', 'parameters' => array(10)));
             $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_page", array('function' => 'About::getAboutContent', 'parameters' => array(1)));
             $this->view->pageCssClass = 'home-page';
+        } else {
+            $this->_helper->viewRenderer->setNoRender(TRUE);
         }
     }
 
