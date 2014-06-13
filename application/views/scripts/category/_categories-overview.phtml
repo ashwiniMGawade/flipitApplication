@@ -27,7 +27,7 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
             </div>
             <div class="text-box">
                 <span class="num"><?php echo $categoryWithSpecialPage['totalCoupons']; ?></span>
-                <span><?php echo $this->translate('Coupons inside'); ?></span>
+                <span><?php echo FrontEnd_Helper_viewHelper::__email('email_Coupons inside'); ?></span>
             </div>
             <div class="caption">
                 <?php echo $featuredCategorySpan; ?>
