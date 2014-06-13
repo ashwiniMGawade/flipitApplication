@@ -83,7 +83,7 @@
                     </div>
                     </div>
                 </div>
-                <?php 
+                <?php
                     if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
                 ?>        
                 <span class="alt-text">Most Popular Coupon ON EARTH</span>
@@ -112,26 +112,22 @@
             </div>
         </div>
     </div>
+<?php
+$availableLanguages = FrontEnd_Helper_viewHelper::getLocalesInformation();
+
+foreach ($availableLanguages as $availableLanguagesKey => $availableLanguagesValue) {
+    $localeData = explode('-', $availableLanguagesValue);
+    $availableLocaleName = explode('/', $localeData[1]);
+    $availableLocaleName = isset($availableLocaleName[1]) ? $availableLocaleName[1] : 'nl';
+    $availableCountryName = $localeData[2];
+    $availableLanguage = $localeData[0];
+    $availableLanguagesInformation[$availableLocaleName] = $availableCountryName." | ".$availableLanguage;
+}
+?>
     <script type="text/javascript">
 
         $(function(){
-            var availableLanguages = {
-                'in' : 'India',
-                'sg' : 'Singapore',
-                'au' : 'Australia',
-                'br' : 'Brazil | Brasil',
-                'ca' : 'Canada',
-                'us' : 'United States',
-                'at' : 'Austria | Österreich',
-                'be' : 'Belgium | België',
-                'fr' : 'France',
-                'de' : 'Germany | Deutschland',
-                'it' : 'Italy | Italia',
-                'pl' : 'Poland | Polska',
-                'es' : 'Spain | España',
-                'se' : 'Sweden | Sverige',
-                'ch' : 'Switzerland | Schweiz'
-            };
+            var availableLanguages = <?php echo json_encode($availableLanguagesInformation);?>;
 
             $.get("http://ipinfo.io", function(response) {
                 if(response.country.toLowerCase() in availableLanguages){

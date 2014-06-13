@@ -80,7 +80,9 @@ if (LOCALE == '') {
                             if ($localeStatus == 'online') :
                         ?>
                         <li>
-                            <a href="<?php echo 'http://'.$websiteName; ?>" class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $websiteName; ?></a>
+                            <a href="<?php echo 'http://'.$websiteName; ?>"
+                                class="country-flags <?php echo strtolower($flipitLocaleKey); ?>">
+                                <?php echo $websiteName; ?></a>
                         </li>
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -88,7 +90,8 @@ if (LOCALE == '') {
                     <strong class="logo <?php echo $websiteLogo; ?>">
                         <a href="<?php echo $localeHomePageUrl;?>"><?php echo $websiteName; ?></a>
                     </strong>
-                    <span class="copy"><?php echo $this->translate('Copyright &copy; 2009').'-'.date('Y').' '.$this->translate('Imbull BV'); ?>.</span>
+                    <span class="copy"><?php echo $this->translate('Copyright &copy; 2009').
+                    '-'.date('Y').' '.$this->translate('Imbull BV'); ?>.</span>
                 </div>
             </footer>
             <?php endif; ?>

@@ -800,6 +800,54 @@ EOD;
 
         return $popularStoresContent;
     }
+     public static function getWebsiteLocales()
+    {
+        $websites = Website::getAllWebsites();
+        foreach ($websites as $website) {
+            if ($website['status'] == 'online') {
+                $spiltWebsite  = explode('/', $website['name']);
+                $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+                $locales[strtoupper($locale)] = $website['name'];
+            }
+        }
+        return $locales;
+    }
+
+    public static function getCountryNameAndLanguageByLocale()
+    { 
+        $localesList = Zend_Locale::getLocaleList();
+        $websiteLocales = self::getWebsiteLocales();
+           
+        foreach ($localesList as $localeIndex => $localeFlag) {
+            $localeRegion = explode('_', $localeIndex);
+            $websiteLocale = isset($localeRegion[1]) ? $localeRegion[1] : '';
+            if (array_key_exists($websiteLocale, $websiteLocales)) {
+                $locale = new Zend_Locale($localeIndex);
+                $countries = $locale->getTranslationList('Territory');
+                $countryName = ($countries[$locale->getRegion()]);
+                $countriesWithLocales[$localeIndex] = $websiteLocales[$websiteLocale].'-';
+                $countriesWithLocales[$localeIndex] .= $countryName;
+            }
+        }
+        
+        return $countriesWithLocales = array_unique($countriesWithLocales);
+    }
+
+    public static function getLocalesInformation()
+    {
+        $countryNameAndLanguageByLocale = self::getCountryNameAndLanguageByLocale();
+
+        foreach ($countryNameAndLanguageByLocale as
+            $countryNameAndLanguageByLocaleKey => $countryNameAndLanguageByLocaleValue) {
+            $localeName = explode('_', $countryNameAndLanguageByLocaleKey);
+            $translationList = Zend_Locale::getTranslationList('language', $countryNameAndLanguageByLocaleKey);
+            
+            if (array_key_exists($localeName[0], $translationList)) {
+                $localesInformation[] = $translationList[$localeName[0]] .'-'. $countryNameAndLanguageByLocaleValue; 
+            }
+        }
+        return $localesInformation;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
