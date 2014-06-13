@@ -19,10 +19,15 @@ class SearchController extends Zend_Controller_Action
     public function indexAction()
     {
         $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $pagePermalink = FrontEnd_Helper_viewHelper::__link('link_zoeken');
+        $splitSearchPermalink = explode('/', $searchPermalink);
+        $pagePermalink = isset($splitSearchPermalink[2]) ? $splitSearchPermalink[1] : $splitSearchPermalink[0];
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $pageAttributeId = Page::getPageAttributeByPermalink($pagePermalink);
         $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
+
+        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+
         $this->view->pageTitle = $pageDetails->pageTitle;
         $searchedKeywords = $this->getRequest()->getParam('searchField');
         $shopIds = "";
@@ -48,10 +53,6 @@ class SearchController extends Zend_Controller_Action
         $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), $pageDetails->permaLink, FACEBOOK_IMAGE, $customHeader);
 
-        $this->view->pageLogo = '';
-        if(isset($pageDetails->logo->path)) {
-            $this->view->pageLogo = PUBLIC_PATH_CDN.$pageDetails->logo->path.$pageDetails->logo->name;
-        }
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;

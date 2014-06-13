@@ -192,8 +192,12 @@ class StoreController extends Zend_Controller_Action
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageAttributes =  Page::getPageFromFilteredPageAttribute(7);
-        $this->view->pageTitle = $pageAttributes['pageTitle'];
+
+        $pageDetails = Page::getPageFromPageAttribute(7);
+        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+        
+        $this->view->pageTitle = $pageDetails->pageTitle;
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_shops_list',
@@ -211,13 +215,13 @@ class StoreController extends Zend_Controller_Action
             true
         );
 
-        $customHeader = isset($pageAttributes['customHeader']) ? $pageAttributes['customHeader'] : '';
+        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            $pageAttributes['pageTitle'],
-            $pageAttributes['metaTitle'],
-            trim($pageAttributes['metaDescription']),
-            $pageAttributes['permaLink'],
+            $pageDetails->pageTitle,
+            $pageDetails->metaTitle,
+            trim($pageDetails->metaDescription),
+            $pageDetails->permaLink,
             FACEBOOK_IMAGE,
             $customHeader
         );
