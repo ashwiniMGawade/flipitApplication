@@ -31,7 +31,7 @@ $this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/signupnews
         <div class="container" id ="footer-signup-form">
             <?php echo $signUpWidgetForm; ?>
             <div class="social">
-                <?php echo $footer[0]['middleColumn1'];?>
+                <?php echo $footer[0]['topFooter'];?>
             </div>
         </div>
     </div>
@@ -40,13 +40,14 @@ endif;
 ?>
     <div class="container bottom-nav">
         <div class="row">
+            <?php echo $footer[0]['middleColumn1'];?>
             <?php echo $footer[0]['middleColumn2'];?>
             <?php echo $footer[0]['middleColumn3'];?>
-            <?php echo $footer[0]['middleColumn4'];?>
         </div>
     </div>
 
     <div class="container add-block">
+        <?php echo $footer[0]['middleColumn4'];?>
         <ul class="countries">
             <?php
             $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
@@ -59,7 +60,7 @@ endif;
             ?>
             <li>
                 <a href="<?php echo 'http://'.$websiteName; ?>"
-                class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $flipitLocaleValue; ?></a>
+                class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $websiteName; ?></a>
             </li>
                 <?php endif; ?>
             <?php endforeach; ?>
