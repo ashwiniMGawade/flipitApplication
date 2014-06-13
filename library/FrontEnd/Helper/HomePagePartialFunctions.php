@@ -247,6 +247,14 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         $exclusiveText = $offerExclusive==1 ? '<strong class="exclusive"><span class="glyphicon glyphicon-star"></span>'. FrontEnd_Helper_viewHelper::__translate('Exclusive'). '</strong>'  : '';
         return $exclusiveText;
     }
+
+    public static function checkDomainName() {
+        if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') {
+                return false;
+        } else {
+                return true;
+        }    
+    }
 }
 
 ?>

@@ -30,8 +30,7 @@ class IndexController extends Zend_Controller_Action
             throw new Zend_Controller_Action_Exception('', 404);
         }
 
-        if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') {
-        } else {
+        if (FrontEnd_Helper_HomePagePartialFunctions:: checkDomainName()) {
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularvaouchercode_list", array('function' => 'Offer::getTopOffers', 'parameters' => array(10)));
             $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_homenewoffer_list", array('function' => 'Offer::getNewestOffers', 'parameters' => array('newest', 10)));
             $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_popularcategory_list", array('function' => 'Category::getPopularCategories', 'parameters' => array(10)));
