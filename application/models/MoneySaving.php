@@ -71,8 +71,11 @@ class MoneySaving extends BaseMoneySaving
 
     public static function getAllMoneySavingArticles($permalink)
     {
-        $allMoneySavingArticles = Doctrine_Query::create()->select('p.pageAttributeId,m.pageid,m.categoryid,r.articleid,
-            r.relatedcategoryid,a.title, ac.name,a.permalink, ac.permalink')
+        $allMoneySavingArticles = Doctrine_Query::create()
+            ->select(
+                'p.pageAttributeId,m.pageid,m.categoryid,r.articleid,
+                r.relatedcategoryid,a.title, ac.name,a.permalink, ac.permalink'
+            )
             ->from('page p')
             ->leftJoin('p.moneysaving m')
             ->leftJoin('m.articlecategory ac')
@@ -89,10 +92,10 @@ class MoneySaving extends BaseMoneySaving
 
     }
 
-    public static function getCategoryWiseArticles()
+    public static function getCategoryWiseArticles($limit = 0)
     {
         $allCategoryDetails = self::getAllArticleCategories();
-        $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails);
+        $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails, $limit);
         return  $categoryRelatedArticles;
 
     }
@@ -107,23 +110,30 @@ class MoneySaving extends BaseMoneySaving
         return $allArticleCategoryDetails;
     }
 
-    public static function getCategoryRelatedArticles($allCategoryDetails)
+    public static function getCategoryRelatedArticles($allCategoryDetails, $limit)
     {
         $categoryRelatedArticles = array();
-        foreach($allCategoryDetails as $categoryDetails) {
-            $categoryRelatedArticles[$categoryDetails['name']] = self::getArticlesRelatedToCategory($categoryDetails['id']);
+        foreach ($allCategoryDetails as $categoryDetails) {
+            $categoryRelatedArticles[$categoryDetails['name']] =
+                self::getArticlesRelatedToCategory($categoryDetails['id'], $limit);
         }
         return $categoryRelatedArticles;
     }
 
-    public static function getArticlesRelatedToCategory($categoryId)
+    public static function getArticlesRelatedToCategory($categoryId, $limit)
     {
 
-        $allArticlesRelatedToCategory = self:: getAllMoneySavingArticlesOfCategory($categoryId);
+        $allArticlesRelatedToCategory = $limit == 0 ?
+        self:: getAllMoneySavingArticlesOfCategory($categoryId) :
+            self:: getTopMoneySavingArticlesOfCategory($categoryId, $limit) ;
         return $allArticlesRelatedToCategory;
     }
 
-    public static function getAllMoneySavingArticlesOfCategory($categoryId)
+    public static function getTopMoneySavingArticlesOfCategory($categoryId, $limit)
+    {
+        return  self::getAllMoneySavingArticlesOfCategory($categoryId, $limit);
+    }
+    public static function getAllMoneySavingArticlesOfCategory($categoryId, $limit = 0)
     {
         $articles = Doctrine_Query::create()
             ->select(
@@ -135,12 +145,14 @@ class MoneySaving extends BaseMoneySaving
             ->leftJoin('a.articleImage aai')
             ->leftJoin('a.refarticlecategory r')
             ->leftJoin('a.chapters chap')
-            ->where('r.relatedcategoryid =' $categoryId)
+            ->where('r.relatedcategoryid ='.  "'$categoryId'")
             ->andWhere('a.deleted=0')
-            ->limit(4)
+            ->limit($limit)
             ->fetchArray();
         return $articles;
     }
+
+
 
  ################## REFACTORED #######################
     /**
