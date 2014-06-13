@@ -477,7 +477,7 @@ EOD;
                     . $category['category']['permaLink'].'">'.$category['category']['name']
                     .'</a>
                 </li>';
-        }
+        } 
         $categorySidebarWodget.=
             '</ul>
         </div>';
