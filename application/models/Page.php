@@ -22,7 +22,7 @@ class Page extends BasePage
         ->where("permaLink = '". $permalink ."'")
         ->andWhere('p.deleted=0')
         ->fetchArray();
-        return $pageAttribute[0]['pageAttributeId'];
+        return isset($pageAttribute[0]['pageAttributeId']) ? $pageAttribute[0]['pageAttributeId'] : '';
     }
 
     public static function getPageFromFilteredPageAttribute($id)
