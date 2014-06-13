@@ -64,7 +64,6 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 				}
 				.name{
 					color:@blue-color;
-					text-decoration:underline;
 				}
 				.name:hover,
 				.name:focus{text-decoration:none;}
@@ -518,10 +517,9 @@ input[type="password"]:-ms-input-placeholder {color: #a2a2a2;}
 }
 a.pop{
 	color:#353535;
-	text-decoration:underline;
 	margin-bottom: 10px;
 	&:hover,
-	&:focus{text-decoration:none;background: white;}
+	&:focus{text-decoration:underline;background: white;}
 }
 .btn .glyphicon-heart{
 	color:#fc0d1b;
@@ -2289,6 +2287,9 @@ hr.alt2{
 			margin:0 auto;
 			p{margin:0 0 15px;}
 		}
+	}
+	.countries li{
+		padding: 0;
 	}
 	h3{
 		color:@light-blue;
@@ -4252,3 +4253,6 @@ img.logo.kortingscode{
     padding-left: 15px;
     padding-right: 15px;
 } 
+#wrapper label.input-error {
+   display: none !important;
+}

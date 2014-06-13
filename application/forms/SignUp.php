@@ -34,6 +34,8 @@ class Application_Form_SignUp extends Application_Form_Base
         $emailAddressTextBox->setLabel('email_address');
         
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
-        $this->addElements(array($emailAddressTextBox, $shopIdHiddenField));
+        $formNameIdHiddenField =  new Zend_Form_Element_Hidden('formName');
+        $formNameIdHiddenField->setValue($this->zendFormName);
+        $this->addElements(array($emailAddressTextBox, $shopIdHiddenField,  $formNameIdHiddenField));
     }
 }

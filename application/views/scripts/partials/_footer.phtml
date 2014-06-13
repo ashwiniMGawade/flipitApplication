@@ -1,9 +1,15 @@
-<?php 
-echo $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
+<?php
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
-$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp ' , 'email-form form-inline', 'orange');
-FrontEnd_Helper_SignUpPartialFunction::validateZendForm(Zend_Controller_Front::getInstance(), '', $signUpForm);
-$signUpWidgetForm = '';
+$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('footerLargeSignUpForm', 'SignUp' , 'email-form form-inline', 'orange');
+if (zend_Controller_Front::getInstance()->getRequest()->isPost() && zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
+    if ($signUpForm->isValid(zend_Controller_Front::getInstance()->getRequest()->getPost())) {
+        $signUpStep2Url = FrontEnd_Helper_SignUpPartialFunction::signUpRedirectLink($signUpForm);
+        header('location:'. $signUpStep2Url);
+    } else {
+        $signUpForm->highlightErrorElements();
+    }
+}
+$signUpWidgetForm = ''; 
 $signUpWidgetForm = $this->partial(
        'partials/_signupForm.phtml',
         array(
@@ -13,18 +19,19 @@ $signUpWidgetForm = $this->partial(
             'shopLogoOrDefaultImage' => '',
         )
     );
-?> 
+?>
 <footer id="footer">
 <?php 
 if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='login'
     && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='signup'
 ):
+$this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/signupnewsletter.js");
 ?>
     <div class="bottom-panel">
         <div class="container" id ="footer-signup-form">
             <?php echo $signUpWidgetForm; ?>
             <div class="social">
-                <?php echo $footer[0]['middleColumn1'];?>
+                <?php echo $footer[0]['topFooter'];?>
             </div>
         </div>
     </div>
@@ -33,13 +40,39 @@ endif;
 ?>
     <div class="container bottom-nav">
         <div class="row">
+            <?php echo $footer[0]['middleColumn1'];?>
             <?php echo $footer[0]['middleColumn2'];?>
             <?php echo $footer[0]['middleColumn3'];?>
-            <?php echo $footer[0]['middleColumn4'];?>
         </div>
     </div>
 
     <div class="container add-block">
+        <?php echo $footer[0]['middleColumn4'];?>
+        <ul class="countries">
+            <?php
+            $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+            
+            foreach ($websitesWithLocales as $flipitLocaleKey => $flipitLocaleValue) : 
+                $explodedLocaleValue = explode('=',$flipitLocaleValue);
+                $localeStatus = $explodedLocaleValue[1];
+                $websiteName = $explodedLocaleValue[0];
+                if ($localeStatus == 'online') :
+            ?>
+            <li>
+                <a href="<?php echo 'http://'.$websiteName; ?>"
+                class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $websiteName; ?></a>
+            </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
     <?php echo $footer[0]['bottomFooter'];?>
     </div>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+} else {
+    $headScript = $this->minifyHeadScript();
+}
+echo $headScript;
+?>
 </footer>

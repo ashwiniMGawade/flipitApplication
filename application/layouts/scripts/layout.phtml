@@ -8,7 +8,7 @@ if(LOCALE=='') :
     echo $flipitHomePage['htmlPath']!='' ? die : '';
 endif;
 
-echo $this->doctype("XHTML1_RDFA");
+echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
 $localeName = Signupmaxaccount::getLocaleName();

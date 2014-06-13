@@ -1,4 +1,6 @@
 <?php
+if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') :
+else:
 $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/home.js");
 $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
@@ -70,3 +72,5 @@ $websiteName = explode('www.', HTTP_HOST);
 </div>
 <?php echo $topStore.$seein.$aboutTabs;?>
 </main>
+<?php
+endif;

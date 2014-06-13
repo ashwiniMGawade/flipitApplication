@@ -1,3 +1,4 @@
+<script type="text/javascript" src="/public/js/jquery-1.7.2.min.js"></script>
 <?php
 if (APPLICATION_ENV == 'development') {
     $headScript =  $this->HeadScript();
@@ -18,14 +19,12 @@ else:
         ->prependFile("/public/js/front_end/json/shops.js");
 endif;
 
-echo $headScript
+    $headScript
     ->prependFile("/public/js/front_end/jquery.mmenu.min.js")
-    ->prependFile("/public/js/front_end/search.js")
     ->prependFile("/public/js/front_end/jquery.main.js")
     ->prependFile("/public/js/front_end/layout.js")
     ->prependFile("/public/js/Gettext.js")
     ->prependFile("/public/js/jquery-ui-1.8.16.custom.min.js")
     ->prependFile("/public/js/front_end/jquery.validate.js")
     ->prependFile("/public/js/bootstrap.js")
-    ->prependFile("/public/js/jquery-1.7.2.min.js")
     ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
