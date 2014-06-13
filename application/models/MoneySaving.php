@@ -125,13 +125,17 @@ class MoneySaving extends BaseMoneySaving
 
     public static function getAllMoneySavingArticlesOfCategory($categoryId)
     {
-        $articles = Doctrine_Query::create()->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname,  ai.path, ai.name,aai.path, aai.name')
+        $articles = Doctrine_Query::create()
+            ->select(
+                'DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, 
+                    a.authorname,  ai.path, ai.name,aai.path, aai.name'
+            )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
             ->leftJoin('a.refarticlecategory r')
             ->leftJoin('a.chapters chap')
-            ->where('r.relatedcategoryid =' . "'$categoryId'")
+            ->where('r.relatedcategoryid =' $categoryId)
             ->andWhere('a.deleted=0')
             ->limit(4)
             ->fetchArray();
