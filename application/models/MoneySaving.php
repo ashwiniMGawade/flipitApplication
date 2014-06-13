@@ -133,6 +133,7 @@ class MoneySaving extends BaseMoneySaving
             ->leftJoin('a.chapters chap')
             ->where('r.relatedcategoryid =' . "'$categoryId'")
             ->andWhere('a.deleted=0')
+            ->limit(4)
             ->fetchArray();
         return $articles;
     }
@@ -245,7 +246,8 @@ class MoneySaving extends BaseMoneySaving
 
     public static function generateShopMoneySavingGuideArticle($slug, $limit, $shopId)
     {
-        $shopMoneySavingGuideArticle = Doctrine_Query::create()->select('chap.*,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name, at.path, at.name')
+        $shopMoneySavingGuideArticle = Doctrine_Query::create()
+        ->select('chap.*,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name, at.path, at.name')
         ->from('Articles a')
         ->leftJoin('a.articleImage ai')
         ->leftJoin('a.thumbnail at')
