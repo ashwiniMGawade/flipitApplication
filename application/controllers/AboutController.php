@@ -53,7 +53,7 @@ class AboutController extends Zend_Controller_Action
 
         $authorDetails = $authorDetails[0];
         $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "favouriteshop".$authorId ."_list", array('function' => 'User::getUserFavouriteStores', 'parameters' => array($authorId)), 0);
-        $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$authorId ."_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(6, $authorId)), 0);
+        $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_". "mostread".$authorId ."_list", array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)), 0);
         $authorFullName = $authorDetails['firstName']." ". $authorDetails['lastName'];
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
