@@ -248,7 +248,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $exclusiveText;
     }
 
-    public static function checkDomainName() {
+    public static function getFlipitHomePageStatus() {
         if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') {
                 return false;
         } else {
