@@ -13,19 +13,6 @@
             echo $this->headLink()
                 ->prependStylesheet("/public/css/front_end/all.css");
         }
-        
-        if (APPLICATION_ENV == 'development') {
-            $headScript =  $this->HeadScript();
-            $headScript->prependFile("/public/js/front_end/less/dist/less-1.7.0.js");
-        } else {
-            $headScript = $this->minifyHeadScript();
-        }
-
-        echo $headScript
-            ->prependFile("/public/js/front_end/jquery.main.js")
-            ->prependFile("/public/js/bootstrap.js")
-            ->prependFile("/public/js/jquery-1.7.2.min.js")
-            ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
         ?>
     </head>
     <body class="page404">
@@ -47,5 +34,6 @@
                 </div>
             </main>
         </div>
+<?php echo $this->render('partials/_js.phtml'); ?>
     </body>
 </html>

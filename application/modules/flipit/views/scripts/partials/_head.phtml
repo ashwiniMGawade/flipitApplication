@@ -12,18 +12,6 @@ if (APPLICATION_ENV == 'development') {
     echo $this->headLink()
         ->prependStylesheet("/public/css/front_end/all.css");
 }
-if (APPLICATION_ENV == 'development') {
-    $headScript =  $this->HeadScript();
-    $headScript->prependFile("/public/js/front_end/less/dist/less-1.7.0.js");
-} else {
-    $headScript = $this->minifyHeadScript();
-}
-
-echo $headScript
-    ->prependFile("/public/js/front_end/jquery.main.js")
-    ->prependFile("/public/js/bootstrap.js")
-    ->prependFile("/public/js/jquery-1.7.2.min.js")
-    ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
 ?>
 <link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
 <!--[if IE]>
@@ -31,7 +19,6 @@ echo $headScript
 <script type="text/javascript" src="<?php echo HTTP_PATH;?>public/front_end/js/ie.js"></script>
 <![endif]-->
 <link href="<?php echo HTTP_PATH;?>public/flipit/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<script type="text/javascript" src="<?php echo HTTP_PATH;?>public/js/front_end/socialmedia.js"></script>
 <meta name="msvalidate.01" content="44C2028411B932A2DCC28359FD20685F" />
 <meta property="og:title" content="Flipit.com">
 <meta property="og:description" content="Changing The Way We Save" />

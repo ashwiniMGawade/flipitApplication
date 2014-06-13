@@ -80,7 +80,7 @@ if (LOCALE == '') {
                             if ($localeStatus == 'online') :
                         ?>
                         <li>
-                            <a href="<?php echo 'http://'.$websiteName; ?>" class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $flipitLocaleValue; ?></a>
+                            <a href="<?php echo 'http://'.$websiteName; ?>" class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $websiteName; ?></a>
                         </li>
                             <?php endif; ?>
                         <?php endforeach; ?>
@@ -93,5 +93,13 @@ if (LOCALE == '') {
             </footer>
             <?php endif; ?>
         </div>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+} else {
+    $headScript = $this->minifyHeadScript();
+}
+echo $headScript;
+?>
     </body>
 </html>
