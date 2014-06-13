@@ -270,6 +270,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         $this->view->locale = Signupmaxaccount::getAllMaxAccounts();
 
         $this->view->timezones_list = Signupmaxaccount::$timezones;
+        $this->view->localeStatus = Website::getLocaleStatus($_COOKIE['site_name']);
 
     }
 
@@ -976,6 +977,15 @@ class Admin_HomepageController extends Zend_Controller_Action
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('Locale has been changed successfully.');
         $flash->addMessage(array('success' => $message ));
+        die;
+    }
+
+    public function savelocalestatusAction()
+    {
+        Website::setLocaleStatus($this->getRequest()->getParam('localeStatus'), $_COOKIE['site_name']);
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $this->view->translate('Locale Status has been changed successfully.');
+        $flash->addMessage(array('success' => $message));
         die;
     }
 

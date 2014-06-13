@@ -9,7 +9,7 @@ if (APPLICATION_ENV == 'development') {
     $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'all.less'));
     echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'ie.less'));
 } else {
-    echo $this->minifyHeadLink()
+    echo $this->headLink()
         ->prependStylesheet("/public/css/front_end/all.css");
 }
 if (APPLICATION_ENV == 'development') {
@@ -20,6 +20,7 @@ if (APPLICATION_ENV == 'development') {
 }
 
 echo $headScript
+    ->prependFile("/public/js/front_end/jquery.main.js")
     ->prependFile("/public/js/bootstrap.js")
     ->prependFile("/public/js/jquery-1.7.2.min.js")
     ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');

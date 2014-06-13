@@ -47,6 +47,23 @@ endif;
     </div>
 
     <div class="container add-block">
+        <ul class="countries">
+            <?php
+            $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+            
+            foreach ($websitesWithLocales as $flipitLocaleKey => $flipitLocaleValue) : 
+                $explodedLocaleValue = explode('=',$flipitLocaleValue);
+                $localeStatus = $explodedLocaleValue[1];
+                $websiteName = $explodedLocaleValue[0];
+                if ($localeStatus == 'online') :
+            ?>
+            <li>
+                <a href="<?php echo 'http://'.$websiteName; ?>"
+                class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $flipitLocaleValue; ?></a>
+            </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
     <?php echo $footer[0]['bottomFooter'];?>
     </div>
 </footer>
