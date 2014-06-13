@@ -154,7 +154,7 @@ if (APPLICATION_ENV == 'development') {
     $headScript =  $this->HeadScript();
     $headScript->prependFile("/public/js/front_end/less/dist/less-1.7.0.js");
 } else {
-    $headScript = $this->minifyHeadScript();
+    $headScript = $this->HeadScript();
 }
 
 echo $headScript
