@@ -76,7 +76,7 @@ function showCodePopUp(event) {
                     $('#code-lightbox').show();
                     $("#bigtextPopupShopLink").bigtext();
                     $('#couponCode').click(function() {
-                        jQuery(this).focus().select();
+                        $(this).focus().select();
                     });
                 }
             });
