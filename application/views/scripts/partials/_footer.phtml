@@ -1,5 +1,5 @@
 <?php 
-echo $this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
+echo $this->minifyHeadScript()->prependFile(HTTP_PATH. "public/js/front_end/signupnewsletter.js");
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
 $signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('footerLargeSignUpForm', 'SignUp' , 'email-form form-inline', 'orange');
 if (zend_Controller_Front::getInstance()->getRequest()->isPost() && zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
