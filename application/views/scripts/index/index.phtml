@@ -1,6 +1,4 @@
 <?php
-if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') :
-else:
 $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/home.js");
 $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
@@ -63,8 +61,8 @@ $websiteName = explode('www.', HTTP_HOST);
         <h1><?php echo $this->translate('The Best of') .' ' . $websiteName[1]; ?></h1>
     </header>
     <div class="columns">
-    <?php 
-    $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions();
+    <?php
+    $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions(); 
     echo $homePagePartial->getHomePageLeftColumn($homePageTopNewOffersCategoriesAndSpecialGuidesData);
     echo $homePagePartial->getHomePageRightColumnOffersList();
     ?>
@@ -73,4 +71,3 @@ $websiteName = explode('www.', HTTP_HOST);
 <?php echo $topStore.$seein.$aboutTabs;?>
 </main>
 <?php
-endif;

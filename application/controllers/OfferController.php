@@ -10,6 +10,10 @@ class OfferController extends Zend_Controller_Action
         $pageName = 'top-20';
         $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
         $page = Page::getPageFromPageAttribute($pageAttributeId);
+
+        $pageHeaderImage = Logo::getPageLogo($page->pageHeaderImageId);
+        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('top_20_offers_list', array('function' => 'Offer::getTopOffers', 'parameters' => array(20)));
         $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($page->logo['path'].$page->logo['name']);
         $this->view->pageTitle = $page->pageTitle;
@@ -120,7 +124,10 @@ class OfferController extends Zend_Controller_Action
         } else {
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
-        $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($offerPage->logo['path'].$offerPage->logo['name']);
+
+        $pageHeaderImage = Logo::getPageLogo($offerPage->pageHeaderImageId);
+        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+
         $this->view->pageTitle = $offerPage->pageTitle;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
