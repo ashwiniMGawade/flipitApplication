@@ -52,8 +52,11 @@ class Shop extends BaseShop
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
-            ->select("s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink, c.id,ss.name, ss.permaLink")
+            ->select("s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink, 
+                c.id,ss.name, ss.permaLink")
             ->where("s.id = ?", $shopId)
+            ->andWhere("s.deleted = 0")
+            ->andWhere("s.status = 1")
             ->leftJoin("s.relatedshops rs")
             ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
