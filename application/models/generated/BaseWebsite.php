@@ -36,6 +36,10 @@ abstract class BaseWebsite extends Doctrine_Record
              'type' => 'string',
              'length' => '255',
              ));
+        $this->hasColumn('status', 'string', 10, array(
+             'type' => 'string',
+             'length' => '10',
+             ));
     }
 
     public function setUp()

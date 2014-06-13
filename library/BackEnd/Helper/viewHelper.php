@@ -31,6 +31,25 @@ class BackEnd_Helper_viewHelper
         $locale = isset($localeName[1]) ?  $localeName[1] : "en";
         return $locale;
     }
+    public function getLocaleStatusButtons($localeStatus)
+    {
+        if ($localeStatus == 'online') {
+            $localeOnClass = 'btn-primary default';
+            $localeOffClass = '';
+        } else {
+            $localeOnClass = '';
+            $localeOffClass = 'btn-primary default';
+        }
+
+        $localeStatusButton = '<button onclick="LocaleStatusToggle(this);"
+            class="btn '.$localeOnClass.'"
+            data-status="online"
+            type="button">'.$this->zendTranslate->translate('Online').'</button>                     
+            <button onclick="LocaleStatusToggle(this);" class="btn '.$localeOffClass.'"
+            data-status="offline"
+            type="button">'.$this->zendTranslate->translate('Offline').'</button>';
+        return $localeStatusButton;
+    }
     #####################################################
     ############# END REFACORED CODE ####################
     #####################################################

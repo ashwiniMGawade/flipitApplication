@@ -25,7 +25,7 @@ $signUpWidgetForm = $this->partial(
 if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='login'
     && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='signup'
 ):
-$this->minifyHeadScript()->appendFile("public/js/front_end/signupnewsletter.js");
+$this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/signupnewsletter.js");
 ?>
     <div class="bottom-panel">
         <div class="container" id ="footer-signup-form">
@@ -47,6 +47,23 @@ endif;
     </div>
 
     <div class="container add-block">
+        <ul class="countries">
+            <?php
+            $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+            
+            foreach ($websitesWithLocales as $flipitLocaleKey => $flipitLocaleValue) : 
+                $explodedLocaleValue = explode('=',$flipitLocaleValue);
+                $localeStatus = $explodedLocaleValue[1];
+                $websiteName = $explodedLocaleValue[0];
+                if ($localeStatus == 'online') :
+            ?>
+            <li>
+                <a href="<?php echo 'http://'.$websiteName; ?>"
+                class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $flipitLocaleValue; ?></a>
+            </li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
     <?php echo $footer[0]['bottomFooter'];?>
     </div>
 <?php
