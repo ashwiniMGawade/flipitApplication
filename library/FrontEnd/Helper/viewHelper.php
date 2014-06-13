@@ -333,11 +333,15 @@ EOD;
     public function getHeaderBlockContent($affliateBounceRate, $affliateUrl, $affliateDisabled, $affliateClass, $shop, $expiredMessage, $offerTitle)
     {
         $divContent ='<div class="header-block header-block-2">
-                <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;"><strong></strong></div>
+                <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;">
+                    <strong></strong>
+                </div>
                 <div class="icon">
                     <a target="_blank" rel="nofollow" 
                     class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
-                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'"><img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . $shop['logo']['name']. '" alt="'.$shop['name'].'" width="176" height="89" />
+                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">
+                    <img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . $shop['logo']['name']. '" 
+                    alt="'.$shop['name'].'" width="176" height="89" />
                     </a>
                 </div> <div class="box">';
         if ($expiredMessage !='storeDetail') {
@@ -350,7 +354,8 @@ EOD;
                 $divContent .= '<h1>'.$shop['title'].'</h1>
                     <strong>'.$shop['subTitle'].'</strong>
                         <a target="_blank" rel="nofollow" 
-                        class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '.$affliateDisabled.'
+                        class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" 
+                        '.$affliateDisabled.'
                         onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shop['actualUrl'].'
                         </a>';
         } else {
