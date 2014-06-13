@@ -4,7 +4,6 @@ if (empty($session->brandingActivated) && !empty($this->shopBranding)):
     $this->headStyle()->appendStyle($this->shop()->brandingCss($this->shopBranding));
     $this->headScript()->appendScript($this->shop()->brandingJs($this->shopBranding));
 endif;
-$this->headLink()->prependStylesheet("/public/css/front_end/author.css");
 $partialViewPath = 'partials/';
 $offers = '';
 if(count($this->offers) > 0):
