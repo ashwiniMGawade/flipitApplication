@@ -73,10 +73,16 @@ if (LOCALE == '') {
             <footer id="footer">
                 <div class="container add-block">
                     <ul class="countries">
-                        <?php foreach ($this->flipitLocales as $flipitLocaleKey => $flipitLocaleValue) : ?>
+                        <?php foreach ($this->flipitLocales as $flipitLocaleKey => $flipitLocaleValue) : 
+                            $explodedLocaleValue = explode('=',$flipitLocaleValue);
+                            $localeStatus = $explodedLocaleValue[1];
+                            $websiteName = $explodedLocaleValue[0];
+                            if ($localeStatus == 'online') :
+                        ?>
                         <li>
-                            <a href="<?php echo 'http://'.$flipitLocaleValue; ?>" class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $flipitLocaleValue; ?></a>
+                            <a href="<?php echo 'http://'.$websiteName; ?>" class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $websiteName; ?></a>
                         </li>
+                            <?php endif; ?>
                         <?php endforeach; ?>
                     </ul>
                     <strong class="logo <?php echo $websiteLogo; ?>">
@@ -87,5 +93,13 @@ if (LOCALE == '') {
             </footer>
             <?php endif; ?>
         </div>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+} else {
+    $headScript = $this->minifyHeadScript();
+}
+echo $headScript;
+?>
     </body>
 </html>

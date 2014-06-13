@@ -5,7 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title><?php echo $this->translate('404 error - Page does not exist');?></title>
         <?php
-        echo $this->headLink()->appendStylesheet(HTTP_PATH."public/css/front_end/all.css")->appendStylesheet(HTTP_PATH."public/css/front_end/custom.css");
+        if (APPLICATION_ENV == 'development') {
+            $lessCssPath = "/public/css/front_end/";
+            $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'all.less'));
+            echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'ie.less'));
+        } else {
+            echo $this->headLink()
+                ->prependStylesheet("/public/css/front_end/all.css");
+        }
         ?>
     </head>
     <body class="page404">
@@ -27,5 +34,6 @@
                 </div>
             </main>
         </div>
+<?php echo $this->render('partials/_js.phtml'); ?>
     </body>
 </html>
