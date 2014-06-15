@@ -208,11 +208,13 @@ EOD;
 
         $menuNavId = 'nav';
         $mobileMenuHeader = '';
+        $menuStyle = '';
         if ($menuType == 'mobile') {
             $menuNavId = 'menu';
+            $menuStyle = 'style="display:none;"';
             $mobileMenuHeader = '<h1>Korting pakken</h1>';
         }
-        $navigationString ='<nav id="'.$menuNavId.'"><ul>'.$mobileMenuHeader;
+        $navigationString ='<nav id="'.$menuNavId.'"'.$menuStyle.'><ul>'.$mobileMenuHeader;
         foreach ($mainMenu as $menu) {
             $permalink = RoutePermalink::getPermalinks($menu['url']);
 
