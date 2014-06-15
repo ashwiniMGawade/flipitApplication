@@ -526,7 +526,7 @@ EOD;
             $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
             $browseByStoreWidget .= 
                     '<li>
-                        <a href="' .$redirectUrl.'">'.$this->__translate($oneCharacter).'</a>
+                        <a href="' .$redirectUrl.'">'.$oneCharacter.'</a>
                     </li>';
         };
         $browseByStoreWidget.= 
