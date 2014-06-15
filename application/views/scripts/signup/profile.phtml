@@ -25,20 +25,20 @@ endif;
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6">
-                                <?php echo $this->translate($profileForm->firstName->renderLabel()) . $profileForm->firstName->renderViewHelper();?>
+                                <?php echo FrontEnd_Helper_viewHelper::__form($profileForm->firstName->renderLabel()) . $profileForm->firstName->renderViewHelper();?>
                             </div>
                             <div class="col-sm-6">
-                                <?php echo $this->translate($profileForm->lastName->renderLabel()) . $profileForm->lastName->renderViewHelper();?>
+                                <?php echo FrontEnd_Helper_viewHelper::__form($profileForm->lastName->renderLabel()) . $profileForm->lastName->renderViewHelper();?>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
-                        <?php echo $this->translate($profileForm->emailAddress->renderLabel()). $profileForm->emailAddress->renderViewHelper();?>
+                        <?php echo FrontEnd_Helper_viewHelper::__form($profileForm->emailAddress->renderLabel()). $profileForm->emailAddress->renderViewHelper();?>
                     </div>
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6">
-                                <?php echo $this->translate($profileForm->gender->renderLabel()). $profileForm->gender->renderViewHelper();?>
+                                <?php echo FrontEnd_Helper_viewHelper::__form($profileForm->gender->renderLabel()). $profileForm->gender->renderViewHelper();?>
                             </div>
                             <div class="col-sm-6">
                                 <?php echo $profileForm->dateOfBirth->renderLabel();?>
@@ -61,17 +61,17 @@ endif;
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6">
-                                <?php echo $this->translate($profileForm->password->renderLabel()). $profileForm->password->renderViewHelper();?>
+                                <?php echo FrontEnd_Helper_viewHelper::__form($profileForm->password->renderLabel()). $profileForm->password->renderViewHelper();?>
                             </div>
                             <div class="col-sm-6">
-                                <?php echo $this->translate($profileForm->confirmPassword->renderLabel()). $profileForm->confirmPassword->renderViewHelper();?>
+                                <?php echo FrontEnd_Helper_viewHelper::__form($profileForm->confirmPassword->renderLabel()). $profileForm->confirmPassword->renderViewHelper();?>
                             </div>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="row">
                             <div class="col-sm-6">
-                                <?php echo $this->translate($profileForm->postCode->renderLabel()). $profileForm->postCode->renderViewHelper();?>
+                                <?php echo FrontEnd_Helper_viewHelper::__form($profileForm->postCode->renderLabel()). $profileForm->postCode->renderViewHelper();?>
                             </div>
                         </div>
                     </div>

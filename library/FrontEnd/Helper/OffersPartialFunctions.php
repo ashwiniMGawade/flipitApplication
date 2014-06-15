@@ -98,14 +98,14 @@ class FrontEnd_Helper_OffersPartialFunctions
             $offerDates .= '&nbsp;';
             $offerDates .= $daysTillOfferExpires;
             $offerDates .= '&nbsp;';
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('days valid!');
+            $offerDates .= FrontEnd_Helper_viewHelper::__translate('days left!');
 
         } elseif ($daysTillOfferExpires == 1) {
             $offerDates .= $stringOnly;
             $offerDates .= '&nbsp;';
             $offerDates .= $daysTillOfferExpires;
             $offerDates .= '&nbsp;';
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('day only!');
+            $offerDates .= FrontEnd_Helper_viewHelper::__translate('day left!');
 
         } elseif ($daysTillOfferExpires == 0) {
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires today');
@@ -286,7 +286,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if (isset($currentOffer->userGenerated) ? $currentOffer->userGenerated == 0 : '' &&  $termsAndConditions!='' && $termsAndConditions!=null) {
             $termAndConditionLink = '<li>
             <a id="termAndConditionLink'.$currentOffer->id .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
-            href="javascript:void(0);">'. FrontEnd_Helper_viewHelper::__translate('Term &amp; Conditions') . '</a>';
+            href="javascript:void(0);">'. FrontEnd_Helper_viewHelper::__translate('Terms &amp; Conditions') . '</a>';
             if ($termsAndConditions!='' && $termsAndConditions!=null && $currentOffer->extendedOffer =='1') {
                 $termAndConditionLink.='&nbsp; | &nbsp;';
             }
