@@ -64,7 +64,7 @@ class LoginController extends Zend_Controller_Action
                 $loginForm->highlightErrorElements();
             }
         }
-        $this->view->headTitle("Members Only");
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
         $this->view->pageCssClass = 'login-page';
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
@@ -112,7 +112,7 @@ class LoginController extends Zend_Controller_Action
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $this->view->headTitle($this->view->translate("Members Only"));
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
         $forgotPasswordForm = new Application_Form_ForgotPassword();
         $this->view->form = $forgotPasswordForm;
         if ($this->getRequest()->isPost()) {
@@ -158,7 +158,7 @@ class LoginController extends Zend_Controller_Action
 
     public function resetpasswordAction()
     {
-        $this->view->headTitle($this->view->translate("Members Only"));
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
         $visitorId = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
         $visitor = Visitor::getVisitorDetails($visitorId);
         $resetPasswordForm = new Application_Form_ResetPassword();
@@ -252,7 +252,7 @@ class LoginController extends Zend_Controller_Action
      */
     public function redirecttosignupAction()
     {
-        $headTitle = $this->view->translate("Members Only ");
+        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
         $this->view->headTitle($headTitle);
 
         $this->_helper->layout()->disableLayout();
@@ -269,7 +269,7 @@ class LoginController extends Zend_Controller_Action
      */
     public function updateuserdataAction()
     {
-        $headTitle = $this->view->translate("Members Only ");
+        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
         $this->view->headTitle($headTitle);
 
         if (Auth_VisitorAdapter::hasIdentity()) {
@@ -412,7 +412,7 @@ class LoginController extends Zend_Controller_Action
     {
         $this->view->layout()->robotKeywords = 'noindex, nofollow' ;
 
-        $headTitle = $this->view->translate("Members Only ");
+        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
         $this->view->headTitle($headTitle);
         $this->_helper->layout()->disableLayout();
     }
