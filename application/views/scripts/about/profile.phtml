@@ -1,7 +1,5 @@
 <?php 
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
-
+$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
 $authorDetails  = '';
 if(!empty($this->authorDetails)):
 $authorDetails = $this->partial(

@@ -59,7 +59,7 @@ class Chain extends BaseChain
 
 
         $list = DataTable_Helper::generateDataTableResponse($chainList,
-        $params,array("__identifier" => 'c.id','c.id','name','totalShops'),
+        $params,array("__identifier" => 'c.id', 'name', 'totalShops'),
         array(),array());
 
         return $list;

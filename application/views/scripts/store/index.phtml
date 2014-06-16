@@ -1,5 +1,5 @@
 <?php
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
 
 //print_r($this->pageHeaderImage); die;
 $imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';

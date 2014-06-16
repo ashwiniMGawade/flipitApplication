@@ -1,6 +1,6 @@
 <?php
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/register.css");
-echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/registration.js");
+echo $this->minifyHeadScript()->appendFile(HTTP_PATH."public/js/front_end/registration.js");
 $registerForm = $this->form;
 // Remove <dt> from label generation
 foreach ($registerForm->getElements() as $formElement) {
