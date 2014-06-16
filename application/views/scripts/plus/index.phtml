@@ -4,8 +4,8 @@ $this->minifyHeadScript()->prependFile("public/js/front_end/savingguides.js");
 $pageImage = '';
 $pageTitle = '';
 if (!empty($this->pageDetails)):
-    $pageImage = PUBLIC_PATH_CDN.$this->pageDetails[0]['logo']['path'].$this->pageDetails[0]['logo']['name'];
-    $pageTitle = $this->pageDetails[0]['pageTitle'];
+    $pageImage = PUBLIC_PATH_CDN.$this->pageDetails->logo['path'].$this->pageDetails->logo['name'];
+    $pageTitle = $this->pageDetails->pageTitle;
 endif;
 
 $mostReadArticles = '';
