@@ -162,10 +162,7 @@ function getArticleCategory(iSearchText,iStart,iSortCol,iSortDir) {
 							$(aTrs[i]).find('td').addClass('row_selected');
 						}
 					}
-					
-					var top = $('td.row_selected').offset().top;
-					var windowHeight = $(window).height() / 2 - 50;
-					window.scrollTo(0, top - windowHeight);
+
 				 },
 				
 				"fnInitComplete" : function(obj) {
