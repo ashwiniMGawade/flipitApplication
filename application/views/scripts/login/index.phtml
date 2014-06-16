@@ -1,5 +1,5 @@
 <?php
-$this->minifyHeadScript()->prependFile(HTTP_PATH. "public/js/front_end/login.js");
+$this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/login.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/login.css");
 $loginForm = $this->form;
 // Remove <dt> from label generation
