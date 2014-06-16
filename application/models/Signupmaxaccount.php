@@ -46,7 +46,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         return $testimonials;
     }
     
-    public static function getMAndrillFromEmail()
+    public static function getEmailAddress()
     {
         $email = Doctrine_Query::create()
         ->select('s.emailperlocale')
