@@ -147,7 +147,19 @@ class LoginController extends Zend_Controller_Action
                         $content,
                         FrontEnd_Helper_viewHelper::__email('email_Forgot password header')
                     );
-
+echo $this->view->partial(
+                                        'emails/forgotpassword.phtml',
+                                        array(
+                                            'resetPasswordLink' => HTTP_PATH_LOCALE .
+                                            FrontEnd_Helper_viewHelper::__email('email_login').'/'
+                                            .FrontEnd_Helper_viewHelper::__email('email_resetpassword').'/'
+                                            .base64_encode($visitorDetails['id'])
+                                            )
+                                    );
+                                    echo $this->view->partial(
+                                        'emails/footer.phtml'
+                                    );
+                                     die;
                     $this->addFlashMessage(
                         $this->view->translate('Please check you mail and click on reset password link'),
                         HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
