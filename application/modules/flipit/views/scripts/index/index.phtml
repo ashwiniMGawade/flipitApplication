@@ -112,22 +112,11 @@
             </div>
         </div>
     </div>
-<?php
-$availableLanguages = FrontEnd_Helper_viewHelper::getLocalesInformation();
-
-foreach ($availableLanguages as $availableLanguagesKey => $availableLanguagesValue) {
-    $localeData = explode('-', $availableLanguagesValue);
-    $availableLocaleName = explode('/', $localeData[1]);
-    $availableLocaleName = isset($availableLocaleName[1]) ? $availableLocaleName[1] : 'nl';
-    $availableCountryName = $localeData[2];
-    $availableLanguage = $localeData[0];
-    $availableLanguagesInformation[$availableLocaleName] = $availableCountryName." | ".$availableLanguage;
-}
-?>
     <script type="text/javascript">
 
         $(function(){
-            var availableLanguages = <?php echo json_encode($availableLanguagesInformation);?>;
+            var availableLanguages = <?php echo json_encode(
+                FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
 
             $.get("http://ipinfo.io", function(response) {
                 if(response.country.toLowerCase() in availableLanguages){
@@ -135,8 +124,13 @@ foreach ($availableLanguages as $availableLanguagesKey => $availableLanguagesVal
                     var countryCode = response.country.toLowerCase(),
                         countryName = availableLanguages[countryCode];
 
+                    var countryUrl = '/'+countryCode;
+                    if(countryName == 'Netherlands') {
+                        countryUrl = 'http://kortingscode.nl';
+                    }
                     var htmlContent = '<span class="flag"><span class="country-flags '+ countryCode +'"></span></span>';
-                        htmlContent+= '<span class="text">Country Detected:  <a href="/'+countryCode+'">'+ countryName +'</a></span>';
+                        htmlContent+= '<span class="text">Country Detected:  <a href="'+countryUrl+'">'+ countryName
+                        +'</a></span>';
 
                     $('#selectedByIP').html(htmlContent).show();
                 }

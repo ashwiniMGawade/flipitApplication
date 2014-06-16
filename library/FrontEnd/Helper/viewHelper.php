@@ -805,53 +805,47 @@ EOD;
 
         return $popularStoresContent;
     }
-     public static function getWebsiteLocales()
+    
+    public static function getWebsiteLocales($frontend = '')
     {
         $websites = Website::getAllWebsites();
         foreach ($websites as $website) {
-            if ($website['status'] == 'online') {
-                $spiltWebsite  = explode('/', $website['name']);
-                $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+            $spiltWebsite  = explode('/', $website['name']);
+            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+           
+            if ($frontend == 'true') {
+                if ($website['status'] == 'online') {
+                    $locales[strtoupper($locale)] = $website['name'];
+                }
+            } else {
                 $locales[strtoupper($locale)] = $website['name'];
             }
         }
         return $locales;
     }
 
-    public static function getCountryNameAndLanguageByLocale()
-    { 
+    public static function getAllCountriesByLocaleNames($frontend = '')
+    {
         $localesList = Zend_Locale::getLocaleList();
-        $websiteLocales = self::getWebsiteLocales();
-           
-        foreach ($localesList as $localeIndex => $localeFlag) {
-            $localeRegion = explode('_', $localeIndex);
-            $websiteLocale = isset($localeRegion[1]) ? $localeRegion[1] : '';
+        $websiteLocales = self::getWebsiteLocales($frontend);
+
+        foreach ($localesList as $localeIndex => $localeValue) {
+            $localeName = explode('_', $localeIndex);
+            $websiteLocale = isset($localeName[1]) ? $localeName[1] : '';
+            
             if (array_key_exists($websiteLocale, $websiteLocales)) {
                 $locale = new Zend_Locale($localeIndex);
-                $countries = $locale->getTranslationList('Territory');
-                $countryName = ($countries[$locale->getRegion()]);
-                $countriesWithLocales[$localeIndex] = $websiteLocales[$websiteLocale].'-';
-                $countriesWithLocales[$localeIndex] .= $countryName;
+                $countries = $locale->getTranslationList('Territory', 'en');
+                if ($frontend == 'true') {
+                    $countriesWithLocales[strtolower($localeName[1])] = ($countries[$locale->getRegion()]);
+                } else {
+                    $countriesWithLocales[$localeIndex] = $websiteLocales[$websiteLocale] ." ("
+                        . ($countries[$locale->getRegion()]) . ")";
+                }
             }
         }
         
         return $countriesWithLocales = array_unique($countriesWithLocales);
-    }
-
-    public static function getLocalesInformation()
-    {
-        $countryNameAndLanguageByLocale = self::getCountryNameAndLanguageByLocale();
-
-        foreach ($countryNameAndLanguageByLocale as
-            $countryNameAndLanguageByLocaleKey => $countryNameAndLanguageByLocaleValue) {
-            $localeName = explode('_', $countryNameAndLanguageByLocaleKey);
-            $translationList = Zend_Locale::getTranslationList('language', $countryNameAndLanguageByLocaleKey);
-            
-            if (array_key_exists($localeName[0], $translationList)) {
-                $localesInformation[] = $translationList[$localeName[0]] .'-'. $countryNameAndLanguageByLocaleValue;
-            }
-        }
-        return $localesInformation;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
