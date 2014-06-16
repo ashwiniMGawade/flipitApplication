@@ -12,22 +12,28 @@ class FrontEnd_Helper_Mailer {
         $this->_view    = Zend_Layout::getMvcInstance()->getView();
     }
 
-    public function send($fromName, $fromEmail, $subject, $content)
+    public function send($fromName, $fromEmail, $visitorName, $visitorEmail, $subject, $content, $headerText)
     {
         $message = array(
                         'subject'    => $subject,
                         'from_email' => $fromEmail,
                         'from_name'  => $fromName,
-                        'to'         => array(array('email'=> $fromEmail, 'name'=> $fromName)),
+                        'to'         => array(array('email'=> $visitorEmail, 'name'=> $visitorName)),
                         'inline_css' => true
                     );
 
+        $emailHeader = array(
+                        'name'    => 'header',
+                        'content' => $headerText
+                        );
         $footer = array(
                         'name'    => 'footer',
-                        'content' => $this->_view->partial('emails/footer.phtml', array('siteUrl' => 'Kortingscode.nl'))
-                    );
+                        'content' => $this->_view->partial('emails/footer.phtml'),
+                            array(
+                                'siteUrl' => HTTP_PATH_LOCALE
+                            )
+                );
 
-        $result = $this->mandrill->messages->sendTemplate('main', array($content, $footer), $message);
-        // echo '<pre>'.print_r($result, true).'</pre>';
+        $result = $this->mandrill->messages->sendTemplate('main', array($content, $footer, $emailHeader), $message);
     }
 }

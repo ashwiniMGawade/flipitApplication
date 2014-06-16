@@ -118,20 +118,33 @@ class LoginController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             if ($forgotPasswordForm->isValid($_POST)) {
                 $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress')));
+                $FromEmail = Signupmaxaccount::getMAndrillFromEmail();
                 if ($visitorDetails!= false) {
 
                     $mailer  = new FrontEnd_Helper_Mailer();
                     $content = array(
                                     'name'    => 'content',
-                                    'content' => $this->view->partial('emails/forgotpassword.phtml', array('resetPasswordLink' => 'http://www.kc.nl/passreset'))
+                                    'content' => $this->view->partial(
+                                        'emails/forgotpassword.phtml',
+                                        array(
+                                            'resetPasswordLink' => HTTP_PATH_LOCALE .
+                                            FrontEnd_Helper_viewHelper::__email('login').'/'
+                                            .FrontEnd_Helper_viewHelper::__email('resetpassword').'/'
+                                            .base64_encode($visitorDetails['id'])
+                                            )
+                                    )
                                 );
-                    $fullName = $visitorDetails['firstName'].' '.$visitorDetails['lastName'];
+                    $VisitorName = $visitorDetails['firstName'].' '.$visitorDetails['lastName'];
 
-                    $mailer->send($fullName, $visitorDetails['email'], 'Forgot Password', $content);
-
-                    echo $this->view->partial('emails/forgotpassword.phtml', array('resetPasswordLink' => 'http://www.kc.nl/passreset'));
-                    exit;
-
+                    $mailer->send(
+                        FrontEnd_Helper_viewHelper::__email('email_sitename'),
+                        $FromEmail[0]['emailperlocale'],
+                        $VisitorName,
+                        $visitorDetails['email'],
+                        FrontEnd_Helper_viewHelper::__email('email_Forgot Password'),
+                        $content,
+                        FrontEnd_Helper_viewHelper::__email('email_Forgot password header')
+                    );
 
                     $this->addFlashMessage(
                         $this->view->translate('Please check you mail and click on reset password link'),

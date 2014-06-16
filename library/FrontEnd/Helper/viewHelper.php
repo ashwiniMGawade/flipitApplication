@@ -847,6 +847,12 @@ EOD;
         
         return $countriesWithLocales = array_unique($countriesWithLocales);
     }
+
+    public static function getWebsiteName()
+    {
+        $siteName = LOCALE != '' ? 'Flipit' : 'Kortingscode';
+        return $siteName;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
