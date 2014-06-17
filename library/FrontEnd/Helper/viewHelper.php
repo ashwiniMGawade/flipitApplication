@@ -632,6 +632,7 @@ EOD;
                     $articleViewCount->articleid = $id;
                     $articleViewCount->onload = $onLoad;
                     $articleViewCount->ip = $ip;
+                    $articleViewCount->onclick = 0;
                     $articleViewCount->save();
                     $artcileExistsOrNot = "true";
                 }

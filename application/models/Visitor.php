@@ -50,6 +50,7 @@ class Visitor extends BaseVisitor
         $visitor->lastLogIn = $visitor->currentLogIn;
         $visitor->currentLogIn = date('Y-m-d H:i:s');
         $visitor->active = 1 ;
+        $visitor->active_codeid = '';
         $visitor->save();
     }
 
@@ -62,6 +63,9 @@ class Visitor extends BaseVisitor
         } else {
             $visitor = new Visitor();
             $visitor->weeklyNewsLetter = '1';
+            $visitor->currentLogIn = '0000-00-00';
+            $visitor->lastLogIn = '0000-00-00';
+            $visitor->active_codeid = '';
             $visitor->email = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['emailAddress']);
             if (Signupmaxaccount::getemailConfirmationStatus()) {
                 $visitor->active = false;
