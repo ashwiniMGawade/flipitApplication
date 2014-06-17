@@ -12,7 +12,7 @@ class StoreController extends Zend_Controller_Action
         $userId = $this->getRequest()->getParam("uId");
         $shopInformation = Shop::shopAddInFavourite($shopId, $userId);
         echo Zend_Json::encode($shopInformation);
-        die();
+        exit();
     }
     /**
     * show all details of one store
@@ -32,37 +32,37 @@ class StoreController extends Zend_Controller_Action
             $ShopList = $shopId.'_list';
             $allShopDetailKey = 'all_shopdetail'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                $allShopDetailKey,
-                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
+                (string)$allShopDetailKey,
+                (array)array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
             );
             $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
             $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                $allOffersInStoreKey,
-                array(
+                (string)$allOffersInStoreKey,
+                (array)array(
                     'function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
                     'parameters' => array("all", 10, $shopId, 0)
                 )
             );
             $allExpiredOfferKey = 'all_expiredOfferInStore'.$ShopList;
             $expiredOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                $allExpiredOfferKey,
-                array(
+                (string)$allExpiredOfferKey,
+                (array)array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
                     'parameters' => array("expired", 12, $shopId)
                 )
             );
             $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
             $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                $allLatestUpdatesInStoreKey,
-                array(
+                (string)$allLatestUpdatesInStoreKey,
+                (array)array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
                     'parameters' => array('latestupdates', 4, $shopId)
                 )
             );
             $expiredOffersInStoreKey = 'all_msArticleInStore'.$ShopList;
             $moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                'all_msArticleInStore'.$ShopList,
-                array(
+                (string)'all_msArticleInStore'.$ShopList,
+                (array)array(
                     'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
                     'parameters' => array('moneysaving', 6, $shopId)
                 )

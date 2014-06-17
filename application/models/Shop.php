@@ -52,8 +52,13 @@ class Shop extends BaseShop
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
-            ->select("s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink, c.id,ss.name, ss.permaLink")
+            ->select(
+                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink,
+                c.id,ss.name, ss.permaLink"
+            )
             ->where("s.id = ?", $shopId)
+            ->andWhere("s.deleted = 0")
+            ->andWhere("s.status = 1")
             ->leftJoin("s.relatedshops rs")
             ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
@@ -76,7 +81,8 @@ class Shop extends BaseShop
             // push shops related to same category which are not yet added
             foreach ($relatedShops[0]['category'] as $category) {
                 foreach ($category['shop'] as $relatedCategoryShop) {
-                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops && !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
+                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops &&
+                            !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
                         $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop ;
                     }
                 }
@@ -96,11 +102,21 @@ class Shop extends BaseShop
     {
         $currentDate = date('Y-m-d 00:00:00');
         $popularStoreData = Doctrine_Query::create()
-        ->select('o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, img.name as imgname')
+        ->select(
+            'o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,
+            s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, 
+            img.name as imgname'
+        )
         ->from('PopularShop p')
-        ->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$currentDate')) as exclusiveCount")
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND
+            (o.exclusiveCode=1 AND o.endDate > '$currentDate')) as exclusiveCount"
+        )
         ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
-        ->addSelect("(SELECT COUNT(*) FROM Offer active WHERE (active.shopId = s.id AND o.endDate > '$currentDate')) as activeCount")
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer active WHERE
+            (active.shopId = s.id AND o.endDate > '$currentDate')) as activeCount"
+        )
         ->leftJoin('p.shop s')
         ->leftJoin('s.offer o')
         ->leftJoin('s.logo img')
@@ -145,7 +161,10 @@ class Shop extends BaseShop
         $storeInformation = Doctrine_Query::create()
         ->select('o.id,s.id, s.name, s.permaLink as permalink')
         ->from('Shop s')
-        ->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount")
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND
+                (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount"
+        )
         ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
         ->leftJoin('s.offer o')
         ->leftJoin('s.logo img')
@@ -214,7 +233,7 @@ class Shop extends BaseShop
             ->from("Shop s")
             ->leftJoin("s.logo img")
             ->where('s.deleted=0')
-            ->andWhereIn("s.id",$shopIds)
+            ->andWhereIn("s.id", $shopIds)
             ->orderBy("s.name")->fetchArray();
         return $shopsInformation;
     }
@@ -294,7 +313,7 @@ class Shop extends BaseShop
         return   Doctrine_Query::create()
                     ->select('s.name,s.permaLink,s.id')
                     ->from("Shop s")
-                    ->where('s.deleted = ?',0)
+                    ->where('s.deleted = ?', 0)
                     ->andWhere("s.status=1")
                     ->andWhere("s.name LIKE ?", "$keyword%")
                     ->fetchArray();
