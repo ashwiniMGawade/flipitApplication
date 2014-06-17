@@ -459,56 +459,64 @@ echo $this->headTitle()->append('Edit Shop');?>
             <div class="mainpage-content">
             	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Logo'); ?></strong></label></div>
-                    <div class="mainpage-content-right ">
+                    <div class="mainpage-content-right">
                     	<div class="mainpage-content-right-inner-right-other"></div>
-                     <?php       
-					     
-	                     	$shopPicture = PUBLIC_PATH.'images/upload/no.jpg';
-	                        if(isset( $this->data['logo']['name'] ) && $this->data['logo']['name'] != '' ) {
-						  		
-	                        	 if( file_exists ( ROOT_PATH .  $this->data['logo']['path'] .'thum_large_'. $this->data['logo']['name'] )) {
-	                        	 	
-	                         		$shopPicture = PUBLIC_PATH_LOCALE.  $this->data['logo']['path']  .'thum_large_'. $this->data['logo']['name'] ;
-	                         
-	                         	}
-	                      	}	
-						  
-                      ?>
-                        
-                        <img alt="<?php echo $this->translate('Shop logo'); ?>" src="<?php echo $shopPicture ; ?>">
-                    	<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-						</br>
-                    	<input data-max-size="2097152" type="file" name="logoFile" onchange="checkFileType(event)" class="ignore" />
-                    		<span class="ml15 help-inline" style="display: inline-block; padding-bottom: 5px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB , Ratio 2:01)'); ?></span>
+                        <?php       
+                        $shopPicture = '';
+                        if(isset( $this->data['logo']['name'] ) && $this->data['logo']['name'] != '' ) {
+                            $shopPicture = PUBLIC_PATH_CDN.  $this->data['logo']['path']  .'thum_large_'. $this->data['logo']['name'] ;
+                            }				  
+                        ?> 
+                        <div class='browse-container'>    
+                            <img class='image-container' 
+                            alt="<?php echo $this->translate('Shop logo'); ?>" 
+                            src="<?php echo $shopPicture ; ?>">
+                        </div>
+                    	<div class="mainpage-content-right-inner-left-other">
+                            <div>
+                        	   <input data-max-size="2097152" type="file" name="logoFile" 
+                               onchange="checkFileType(event)" class="ignore" />
+                           </div>
+                    		<div 
+                            class="help-inline">
+                            <?php echo $this->translate('Image Size: 300px x 150px (*.jpg or *.png file only)'); 
+                            ?>
+                            </div>
 						</div>
                     </div>
                 </div>
                 
                    <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Website Screenshot'); ?></strong></label></div>
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Website Screenshot'); ?></strong>
+                        </label>
+                    </div>
                     <div class="mainpage-content-right">
                      <div class="mainpage-content-right-inner-right-other"></div>
                       <?php       
-					
-	                     	$shopPicture = PUBLIC_PATH.'images/upload/no.jpg';
-						 			 
-	                        if(isset( $this->data['screenshot']['name'] ) && $this->data['screenshot']['name'] != '' ) {
-						  
-	                        	 if( file_exists ( ROOT_PATH .  $this->data['screenshot']['path'] .'thum_large_'. $this->data['screenshot']['name'] )) {
-	                        	 	
-	                         		$shopPicture = PUBLIC_PATH_LOCALE.  $this->data['screenshot']['path']  .'thum_large_'. $this->data['screenshot']['name'] ;
-	                         
-	                         	}
-	                      	}	
-						  
+                        $shopPicture = '';
+                        if(
+                            isset($this->data['screenshot']['name'] ) && $this->data['screenshot']['name'] != ''
+                            ) {
+                            $shopPicture = 
+                                PUBLIC_PATH_CDN
+                                .$this->data['screenshot']['path'] 
+                                .'thum_large_'. $this->data['screenshot']['name'];
+                        }	
                       ?>
-                        
-                        <img alt="<?php echo $this->translate('Shop screen shot'); ?>" src="<?php echo $shopPicture ; ?>">
-                    	
-                      	<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-                      	</br>
-                        	<input  data-max-size="2097152" type="file" name="websitescreenshot" onchange="checkFileType(event)" class="ignore" />
-				        	<span id="logo_file_message" class="ml15 help-inline" style="display: inline-block; padding-bottom: 5px;" ><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB,Width:450px)'); ?></span>
+                        <div class='browse-container'>
+                            <img class='image-container' 
+                            alt="<?php echo $this->translate('Shop screen shot'); ?>" src="<?php echo $shopPicture ; ?>">
+                    	</div>
+                      	<div class="mainpage-content-right-inner-left-other">
+                            <div>
+                        	<input  data-max-size="2097152" type="file" name="websitescreenshot" 
+                            onchange="checkFileType(event)" class="ignore" />
+                            </div>
+				        	<div id="logo_file_message" class="help-inline">
+                            <?php echo $this->translate('Image Size: min width 450px (*.jpg or *.png file only)'); ?>
+                            </span>
                     	</div>
                     </div>
                 </div>
