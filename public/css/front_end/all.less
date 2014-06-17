@@ -2338,73 +2338,74 @@ hr.alt2{
 			}
 		}
 	}
-}
-#footer .holder{
-	width:100%;
-	color:@white-color;
-	text-align:left;
-	background:#343433;
-	border-bottom:1px solid #3f3f3e;
-	.container{
-		padding-top:46px;
-		padding-bottom:38px;
-		.box p{
-			margin:0 0 23px;
-			a{color:@white-color;}
+	.holder{
+		width:100%;
+		color:@white-color;
+		text-align:left;
+		background:#343433;
+		border-bottom:1px solid #3f3f3e;
+		.container{
+			padding-top:46px;
+			padding-bottom:38px;
+			.box p{
+				margin:0 0 23px;
+				a{color:@white-color;}
+			}
 		}
-	}
-	ul{
-		padding:0;
-		margin:0;
-		list-style:none;
-		li{
-			margin:0 0 10px;
-			a{color:@white-color;}
+		ul{
+			padding:0;
+			margin:0;
+			list-style:none;
+			li{
+				margin:0 0 10px;
+				a{color:@white-color;}
+			}
 		}
-	}
-	.logo{
-		float:none;
-		display:block;
-		background:url(../../images/logo-2.png) no-repeat;
-		width:89px;
-		height:40px;
-		margin:0 0 4px;
-	}
-	.add-list li{
-		display:inline;
-		vertical-align:top;
-		margin:0;
-		&:first-child{padding:0;}
-		&+ li:before{
-			content: "| ";
-			color:@white-color;
-			padding: 0 3px;
+		.logo{
+			float:none;
+			display:block;
+			background:url(../../images/logo-2.png) no-repeat;
+			width:89px;
+			height:40px;
+			margin:0 0 4px;
 		}
-		a{
-			color:@light-blue;
-			text-decoration:underline;
-		}
-		a:hover,
-		&:focus{text-decoration:none;}
-	}
-}
-.add-nav{
-	ul{
-		padding:0;
-		margin:0;
-		list-style:none;
-		li{
-			display:inline-block;
+		.add-list li{
+			display:inline;
 			vertical-align:top;
-			a{color:#888887;}
+			margin:0;
+			&:first-child{padding:0;}
+				&+ li:before{
+					content: "| ";
+					color:@white-color;
+					padding: 0 3px;
+				}
+				a{
+					color:@light-blue;
+					text-decoration:underline;
+				}
+			a:hover,
+			&:focus{text-decoration:none;}
 		}
-		li + li:before{
-			content: "| ";
-			color:#888887;
-			padding: 0 3px;
-		}
-		li:first-child{padding:0;}
 	}
+	.add-nav{
+		ul{
+			padding:0;
+			margin:0;
+			list-style:none;
+			li{
+				display:inline-block;
+				vertical-align:top;
+				a{color:#888887;}
+			}
+			li + li:before{
+				content: "| ";
+				color:#888887;
+				padding: 0 3px;
+			}
+			li:first-child{padding:0;}
+		}
+	}
+
 }
 #code-lightbox {
 	display:none;

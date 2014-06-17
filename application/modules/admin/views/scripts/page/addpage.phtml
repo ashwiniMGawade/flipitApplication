@@ -36,7 +36,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 <div class="meta-box-sortables ui-sortable" id="side-sortables">
                   <div class="postbox " id="submitdiv">
                     <div class="sidebar-heading">
-	                    <p><?php echo $this->translate('Publish'); ?></p>
+                        <p><?php echo $this->translate('Publish'); ?></p>
                     </div>
                     <div class="sidebar-content-box">
                         <button class="btn" type="submit" onClick="$('#savePage').val('draft')" href="#" id="saveDraftbtn" ><?php echo $this->translate('Save Draft'); ?></button>
@@ -60,7 +60,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                   </div>
                   <div class="postbox " id="submitdiv">
                     <div class="sidebar-heading">
-	                    <p><?php echo $this->translate('Page Attributes');?></p>
+                        <p><?php echo $this->translate('Page Attributes');?></p>
                     </div>
       <div class="sidebar-content-box">
                         <p><?php echo $this->translate('Template'); ?></p>
@@ -68,7 +68,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <option value=""><?php echo $this->translate('Select Template'); ?></option>
                             <?php
                             foreach($this->pageattr as $pageattr){ ?>
-                             <option value="<?php echo $pageattr['id'];?>"><?php echo $pageattr['name'];?></option>	
+                             <option value="<?php echo $pageattr['id'];?>"><?php echo $pageattr['name'];?></option> 
                              <?php     }  ?>
                             </select>
                     
@@ -77,14 +77,14 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 <div class="web-address-list multiselect">
                     <ul style=" width: 217px;" >
                         <?php foreach($this->artcategory as $atrcatg){ ?>
-                        	<li class="list_<?php echo $atrcatg['id']; ?>" >
-                        		<input  type="checkbox"  name="artcatgs[]" value="<?php echo $atrcatg['id']; ?>" style="display:none;" />
-                        		<?php echo $atrcatg['name'];?>
-                        	</li>
+                            <li class="list_<?php echo $atrcatg['id']; ?>" >
+                                <input  type="checkbox"  name="artcatgs[]" value="<?php echo $atrcatg['id']; ?>" style="display:none;" />
+                                <?php echo $atrcatg['name'];?>
+                            </li>
                         <?php } ?>
-           			</ul>
-           		</div>  
-           	</div>	
+                    </ul>
+                </div>  
+            </div>  
                             
       </div>
                <?php if($this->roleId=='1' || $this->roleId=='2'){ ?>
@@ -101,10 +101,10 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                   </div>
                   <div class="postbox " id="submitdiv">
                     <div class="sidebar-heading">
-	                    <p><?php echo $this->translate('Sidebar');?></p>
+                        <p><?php echo $this->translate('Sidebar');?></p>
                     </div>
                     <div class="sidebar-content-box" >
-                    	<div class="sidebar-content-box-left" style="overflow-y:scroll;height:50px;" id='storesDiv'>
+                        <div class="sidebar-content-box-left" style="overflow-y:scroll;height:50px;" id='storesDiv'>
                          <ul id="widgetListul-li">
                             <?php /*
                             $i=0;
@@ -113,7 +113,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             if($i%2 != 0){
                             $class = 'grid-line2';
                             }
-                            	?>
+                                ?>
                             <li class="<?php echo $class; ?>" value="<?php echo $widgetList['id'];?>" type="<?php echo $i; ?>"><?php echo $widgetList['title'];?></li>
                             <?php 
                             $i++;
@@ -121,7 +121,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                              </ul> 
                              <input type="hidden" id="selectedWigetForPage" name="selectedWigetForPage" value="">
                        </div>
-                    	<div class="sidebar-content-box-right">
+                        <div class="sidebar-content-box-right">
                             <button type = "button" class="btn addwidget" href="#"><?php echo $this->translate('Add Widgets'); ?></button>
                             <button type = "button" class="btn deletewidget" href="#"><?php echo $this->translate('Delete'); ?></button>
                             <button type = "button" class="btn up" href="#"><?php echo $this->translate('Move Up');?></button>
@@ -143,12 +143,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 </div>
               </div>
               <div id="post-body">
-              	<div id="post-body-content">
-              		<div class="mainpage-content">
-                    	<div class="mainpage-content-line">
+                <div id="post-body-content">
+                    <div class="mainpage-content">
+                        <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>"></div>
-                        	<div class="mainpage-content-right" style="height : 20px;"></div>
+                            <div class="mainpage-content-right" style="height : 20px;"></div>
                         </div>
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Permalink'); ?></strong></label></div>
@@ -159,9 +159,23 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             </div>
                        </div>
                          <div class="mainpage-content-line">
-                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Image'); ?></strong></label></div>
-                            <div class="mainpage-content-right"><input type="file" onchange="checkFileType(event)" class="ignore"   name="logoFile" id="pageImage"><span><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 0.75)'); ?></span></div>
-                        <div class="mainpage-content-right" id="imagerrorDiv" style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 511px;"></div>
+                            <div class="mainpage-content-left">
+                              <label>
+                                <strong><?php echo $this->translate('Thumbnail'); ?></strong>
+                              </label>
+                            </div>
+                           <div class="mainpage-content-right control-group">
+                                <div>
+                                    <input type="file" onchange="checkFileType(event)" 
+                                    class="ignore"   name="logoFile" id="pageImage">
+                                </div>
+                                <div>
+                                <?php echo $this->translate('Image Size: 175px x 175px (*.jpg or *.png file only)'); ?>
+                                </div>
+                                <div class="mainpage-content-right" id="imagerrorDiv" 
+                                style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 511px;">
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mainpage-content-line">
@@ -170,21 +184,28 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                     <strong><?php echo $this->translate('Header Image'); ?></strong>
                                 </label>
                             </div>
-                            <div class="mainpage-content-right">
-                                <input type="file" onchange="checkFileType(event)" class="ignore"   name="headerFile" id="headerImage">
-                                <span>
-                                    <?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 0.75)'); ?>
-                                </span>
+                            <div class="mainpage-content-right control-group">
+                                <div>
+                                    <input type="file" onchange="checkFileType(event)" 
+                                    class="ignore"   name="headerFile" id="headerImage">
+                                </div>
+                                <div>
+                                <?php 
+                                echo $this->translate('Image Size: 1170px x 304px (*.jpg or *.png file only)'); 
+                                ?>
+                                </div>
+                                <div class="mainpage-content-right" id="imagerrorDiv" 
+                                style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 511px;">
+                                </div>
                             </div>
-                            <div class="mainpage-content-right" id="imagerrorDiv" style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 511px;"></div>
                         </div>
 
 
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore"/>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Page meta title length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
-							<!--<span id="metaTextLeft" class="nobel" style="width:504px;"></span>-->
+                            <input type="text" disabled="disabled" value="<?php echo $this->translate('Page meta title length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
+                            <!--<span id="metaTextLeft" class="nobel" style="width:504px;"></span>-->
                             
                             <!--<input type="text" class="span3" placeholder="<?php //echo $this->translate('Meta Title'); ?>" name="pagemetaTitle" maxlength="68" id="pagemetaTitle">-->
                             </div>
@@ -192,26 +213,26 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                       <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
                             <div class="mainpage-content-right"><textarea class="input-xlarge mbot bbot ignore" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Page meta description length 0 characters');?>" id="metaDescLeft" class="input-xlarge disabled btop word-count">
-							<!--<span id="metaDescLeft" class="nobel" style="width:504px;"></span>-->
+                            <input type="text" disabled="disabled" value="<?php echo $this->translate('Page meta description length 0 characters');?>" id="metaDescLeft" class="input-xlarge disabled btop word-count">
+                            <!--<span id="metaDescLeft" class="nobel" style="width:504px;"></span>-->
                             
                             <!--<textarea class="input-xlarge mbot bbot ignore" name="pagemetaDesc" id="pagemetaDesc" placeholder="<?php //echo $this->translate('Meta Description'); ?>"  rows="3"></textarea>
                             <input type="text" class="input-xlarge disabled btop word-count"  id="metaTextLeft" value = "Characters Left: 160" placeholder="Word Count: 28" disabled="disabled">-->
                             </div>
                         </div>
-						<div class="mainpage-content-line">
+                        <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Custom Header Text'); ?></strong></label></div>
                             <div class="mainpage-content-right"><textarea class="input-xlarge mbot bbot ignore" id="pageCustomHeader" name="pageCustomHeader" placeholder="<?php echo $this->translate ( 'Custom Header Text' );?>" rows="3"></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Page custom header length 0 characters');?>" id="pageCustomHeaderLeft" class="input-xlarge disabled btop word-count">
-							</div>
+                            <input type="text" disabled="disabled" value="<?php echo $this->translate('Page custom header length 0 characters');?>" id="pageCustomHeaderLeft" class="input-xlarge disabled btop word-count">
+                            </div>
                         </div>
                         
                     </div>
-                	<textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php echo $this->translate('Page Description'); ?>" rows="3"></textarea>
+                    <textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php echo $this->translate('Page Description'); ?>" rows="3"></textarea>
                   <br><div id="offerconstraint" class="display-none"> 
                 
                 <div class="mainpage-content">
-                    	<div class="mainpage-content-line">
+                        <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Maximum Offers on Page'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="maxOffer" id="maxOffer" class="span3" placeholder="<?php echo $this->translate('Maximum Offer'); ?>"></div>
                         </div>
@@ -225,14 +246,14 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                         </div>
                  </div>
                     <div class="edit-page-box-new">
-                    	<div class="mainpage-content-line">
-                        	<label class="checkbox">
+                        <div class="mainpage-content-line">
+                            <label class="checkbox">
                                 <input type="checkbox" value="1" onClick="constraint(event,'time')" id="timeCostraintchk" name="timeCostraintchk"> <strong><?php echo $this->translate('Enable time constraint');?></strong>
                             </label>
                             <div class="line"></div>
                             <div class="edit-page-feilds display-none" id="showTimeConstraint">
-                            	<div class="fl">
-                            	<select id="postwithin" name="postwithin">
+                                <div class="fl">
+                                <select id="postwithin" name="postwithin">
                                     <option value="1"><?php echo $this->translate('Posted within'); ?></option>
                                     <option value="2"><?php echo $this->translate('Expires in'); ?></option>
                                  </select>
@@ -298,7 +319,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 <div class="mainpage-content">
                         <strong><?php echo $this->translate('Show offer types'); ?></strong>                               
                         <div class="line"></div>
-                    	<div class="mainpage-content-line mb10">
+                        <div class="mainpage-content-line mb10">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Coupon'); ?></strong></label></div>
                             <div class="mainpage-content-right">
                                 <div class="btn-group" data-toggle="buttons-checkbox">
@@ -343,11 +364,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     
                     
                     <div style="height:28px;" class="mainpage-content">
-                    	<div class="mainpage-content-line m10">
-                        	<div class="fl">
-                            	<strong><?php echo $this->translate('Show as page when creating offers?'); ?></strong>
+                        <div class="mainpage-content-line m10">
+                            <div class="fl">
+                                <strong><?php echo $this->translate('Show as page when creating offers?'); ?></strong>
                             </div>
-                        	<label class="checkbox fl ml15">
+                            <label class="checkbox fl ml15">
                                  <input type="radio" name="showPage" value = "1"><sup>  <?php echo $this->translate('Yes'); ?> </sup>
                             </label>
                             <label class="checkbox fl ml15">

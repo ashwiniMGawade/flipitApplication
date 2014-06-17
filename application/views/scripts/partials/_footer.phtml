@@ -25,7 +25,6 @@ $signUpWidgetForm = $this->partial(
 if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='login'
     && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='signup'
 ):
-$this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/signupnewsletter.js");
 ?>
     <div class="bottom-panel">
         <div class="container" id ="footer-signup-form">

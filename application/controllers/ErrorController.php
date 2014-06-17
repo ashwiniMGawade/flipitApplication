@@ -82,13 +82,23 @@ class ErrorController extends Zend_Controller_Action
         }
 
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::
+            createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
+        $currentUrlParameters = $this->_request->getParams();
 
+        if ($currentUrlParameters['controller'] == 'info' &&  $currentUrlParameters['action'] == 'faq') {
+            $this->view->pageCssClass = 'faq-page';
+        } else if ($currentUrlParameters['controller'] == 'info' &&  $currentUrlParameters['action'] == 'contact') {
+            $this->view->pageCssClass = 'contact-page';
+        } else {
+            $this->view->pageCssClass = 'flipit-expired-page';
+        }
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;
         $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        
     }
 
     public function getLog()

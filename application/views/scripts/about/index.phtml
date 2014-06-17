@@ -1,7 +1,7 @@
 <?php
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/authors.css");
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/signupnewsletter.js");
 
 $pageImage = PUBLIC_PATH_CDN.$this->pageDetails['logo']['path'].$this->pageDetails['logo']['name'];
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
