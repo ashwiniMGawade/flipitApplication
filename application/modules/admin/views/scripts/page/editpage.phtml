@@ -320,7 +320,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     </div>
                    
                 <div id="mainpage-content">    
-                	<textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php echo $this->translate('Page Description'); ?>" rows="3"><?php echo $this->pageDetail['content']; ?></textarea>
+                	<textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php echo $this->translate('Page Description'); ?>" rows="3"><?php echo htmlspecialchars($this->pageDetail['content']); ?></textarea>
                 </div>  
                 <br><div id="offerconstraint" <?php if($this->pageDetail['pageType']=='default'){?>class="display-none" <?php }?>> 
                    

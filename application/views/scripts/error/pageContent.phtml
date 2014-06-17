@@ -1,4 +1,7 @@
 <?php
+if ($this->pageCssClass == 'faq-page') {
+    $this->minifyHeadScript()->appendFile("/public/js/front_end/faq.js");
+}
 if ($this->pageMode == true) {
     $sidebarWidgetHtml = '';
     $partialsViewPath = 'partials/';
@@ -35,7 +38,7 @@ if ($this->pageMode == true) {
         $sidebarWidgetHtml = '<aside class="col-md-4 col-sm-4" id="sidebar">' . $sidebarWidgets . '</aside>';
         $contentDivStart = '<div id="content" class="col-md-8 col-sm-8">';
         $contentDivEnd = '</div>';
-    } else {
+    }  else {
         $rowId = 'page-contents';
         $pageContent=
             '<div class="section">
