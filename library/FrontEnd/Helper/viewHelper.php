@@ -182,18 +182,6 @@ EOD;
     }
 
     /**
-     * generate MoneySaving Articles related to a shop
-    * @version 1.0
-    * @return array $data
-    */
-    public static function generateShopMoneySavingGuideArticle($slug, $limit, $id)
-    {
-        $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
-
-        return $ShopMoneySavingGuideArticle;
-    }
-
-    /**
      * generate main menu like home etc
      * @author asharma
      * @return mixed $string

@@ -63,7 +63,7 @@ class StoreController extends Zend_Controller_Action
             $moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 'all_msArticleInStore'.$ShopList,
                 array(
-                    'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
+                    'function' => 'MoneySaving::generateShopMoneySavingGuideArticle',
                     'parameters' => array('moneysaving', 4, $shopId)
                 )
             );
