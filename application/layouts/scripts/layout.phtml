@@ -28,18 +28,13 @@ if(isset($this->canonical)):
     );
 endif;
 
-if($this->serverUrl() == 'http://admin.kortingscode.nl') :
-    $this->headMeta()->appendName('robots', 'noindex, nofollow');
-    header("Location: http://admin.kortingscode.nl/admin");
-else :
-    $this->headMeta()->appendName(
-        'robots',
-        FrontEnd_Helper_LayoutContent::loadRobots(
-            $this->param,
-            $this->layout()->robotKeywords
-        )
-    );
-endif;
+$this->headMeta()->appendName(
+    'robots',
+    FrontEnd_Helper_LayoutContent::loadRobots(
+        $this->param,
+        $this->layout()->robotKeywords
+    )
+);
 
 echo $this->headTitle();
 echo $this->layout()->customHeader ;

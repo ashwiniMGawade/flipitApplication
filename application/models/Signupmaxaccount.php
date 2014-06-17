@@ -45,7 +45,16 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         ->fetchArray();
         return $testimonials;
     }
-
+    
+    public static function getEmailAddress()
+    {
+        $email = Doctrine_Query::create()
+        ->select('s.emailperlocale')
+        ->from('Signupmaxaccount s')
+        ->where('id=1')
+        ->fetchArray();
+        return $email;
+    }
 
     #################################################################
     #################### END REFACTOR CODE ##########################

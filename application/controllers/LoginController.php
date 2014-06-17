@@ -64,7 +64,7 @@ class LoginController extends Zend_Controller_Action
                 $loginForm->highlightErrorElements();
             }
         }
-        $this->view->headTitle("Members Only");
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
         $this->view->pageCssClass = 'login-page';
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
@@ -112,27 +112,54 @@ class LoginController extends Zend_Controller_Action
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $this->view->headTitle($this->view->translate("Members Only"));
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
         $forgotPasswordForm = new Application_Form_ForgotPassword();
         $this->view->form = $forgotPasswordForm;
         if ($this->getRequest()->isPost()) {
             if ($forgotPasswordForm->isValid($_POST)) {
-                $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress')));
+                $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(
+                    FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress'))
+                );
+                $FromEmail = Signupmaxaccount::getEmailAddress();
                 if ($visitorDetails!= false) {
 
                     $mailer  = new FrontEnd_Helper_Mailer();
                     $content = array(
                                     'name'    => 'content',
-                                    'content' => $this->view->partial('emails/forgotpassword.phtml', array('resetPasswordLink' => 'http://www.kc.nl/passreset'))
+                                    'content' => $this->view->partial(
+                                        'emails/forgotpassword.phtml',
+                                        array(
+                                            'resetPasswordLink' => HTTP_PATH_LOCALE .
+                                            FrontEnd_Helper_viewHelper::__email('email_login').'/'
+                                            .FrontEnd_Helper_viewHelper::__email('email_resetpassword').'/'
+                                            .base64_encode($visitorDetails['id'])
+                                            )
+                                    )
                                 );
-                    $fullName = $visitorDetails['firstName'].' '.$visitorDetails['lastName'];
+                    $VisitorName = $visitorDetails['firstName'].' '.$visitorDetails['lastName'];
 
-                    $mailer->send($fullName, $visitorDetails['email'], 'Forgot Password', $content);
-
-                    echo $this->view->partial('emails/forgotpassword.phtml', array('resetPasswordLink' => 'http://www.kc.nl/passreset'));
-                    exit;
-
-
+                    $mailer->send(
+                        FrontEnd_Helper_viewHelper::__email('email_sitename'),
+                        $FromEmail[0]['emailperlocale'],
+                        $VisitorName,
+                        $visitorDetails['email'],
+                        FrontEnd_Helper_viewHelper::__email('email_Forgot Password'),
+                        $content,
+                        FrontEnd_Helper_viewHelper::__email('email_Forgot password header')
+                    );
+echo $this->view->partial(
+                                        'emails/forgotpassword.phtml',
+                                        array(
+                                            'resetPasswordLink' => HTTP_PATH_LOCALE .
+                                            FrontEnd_Helper_viewHelper::__email('email_login').'/'
+                                            .FrontEnd_Helper_viewHelper::__email('email_resetpassword').'/'
+                                            .base64_encode($visitorDetails['id'])
+                                            )
+                                    );
+                                    echo $this->view->partial(
+                                        'emails/footer.phtml'
+                                    );
+                                     die;
                     $this->addFlashMessage(
                         $this->view->translate('Please check you mail and click on reset password link'),
                         HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
@@ -158,7 +185,7 @@ class LoginController extends Zend_Controller_Action
 
     public function resetpasswordAction()
     {
-        $this->view->headTitle($this->view->translate("Members Only"));
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
         $visitorId = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
         $visitor = Visitor::getVisitorDetails($visitorId);
         $resetPasswordForm = new Application_Form_ResetPassword();
@@ -252,7 +279,7 @@ class LoginController extends Zend_Controller_Action
      */
     public function redirecttosignupAction()
     {
-        $headTitle = $this->view->translate("Members Only ");
+        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
         $this->view->headTitle($headTitle);
 
         $this->_helper->layout()->disableLayout();
@@ -269,7 +296,7 @@ class LoginController extends Zend_Controller_Action
      */
     public function updateuserdataAction()
     {
-        $headTitle = $this->view->translate("Members Only ");
+        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
         $this->view->headTitle($headTitle);
 
         if (Auth_VisitorAdapter::hasIdentity()) {
@@ -412,7 +439,7 @@ class LoginController extends Zend_Controller_Action
     {
         $this->view->layout()->robotKeywords = 'noindex, nofollow' ;
 
-        $headTitle = $this->view->translate("Members Only ");
+        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
         $this->view->headTitle($headTitle);
         $this->_helper->layout()->disableLayout();
     }

@@ -83,7 +83,7 @@
                     </div>
                     </div>
                 </div>
-                <?php 
+                <?php
                     if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
                 ?>        
                 <span class="alt-text">Most Popular Coupon ON EARTH</span>
@@ -115,23 +115,8 @@
     <script type="text/javascript">
 
         $(function(){
-            var availableLanguages = {
-                'in' : 'India',
-                'sg' : 'Singapore',
-                'au' : 'Australia',
-                'br' : 'Brazil | Brasil',
-                'ca' : 'Canada',
-                'us' : 'United States',
-                'at' : 'Austria | Österreich',
-                'be' : 'Belgium | België',
-                'fr' : 'France',
-                'de' : 'Germany | Deutschland',
-                'it' : 'Italy | Italia',
-                'pl' : 'Poland | Polska',
-                'es' : 'Spain | España',
-                'se' : 'Sweden | Sverige',
-                'ch' : 'Switzerland | Schweiz'
-            };
+            var availableLanguages = <?php echo json_encode(
+                FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
 
             $.get("http://ipinfo.io", function(response) {
                 if(response.country.toLowerCase() in availableLanguages){
@@ -139,8 +124,13 @@
                     var countryCode = response.country.toLowerCase(),
                         countryName = availableLanguages[countryCode];
 
+                    var countryUrl = '/'+countryCode;
+                    if(countryName == 'Netherlands') {
+                        countryUrl = 'http://kortingscode.nl';
+                    }
                     var htmlContent = '<span class="flag"><span class="country-flags '+ countryCode +'"></span></span>';
-                        htmlContent+= '<span class="text">Country Detected:  <a href="/'+countryCode+'">'+ countryName +'</a></span>';
+                        htmlContent+= '<span class="text">Country Detected:  <a href="'+countryUrl+'">'+ countryName
+                        +'</a></span>';
 
                     $('#selectedByIP').html(htmlContent).show();
                 }

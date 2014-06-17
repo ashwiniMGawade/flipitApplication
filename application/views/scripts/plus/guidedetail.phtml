@@ -62,8 +62,6 @@ $directChapterLinks = $this->partial(
             'artcileDetails' => $articleDetails
         )
 );
-$sidebarHtml = '<aside id="sidebar" class="col-md-4 col-sm-4">' . $recentlyAddedArticles . $topPopularOffers . 
-    $directChapterLinks ."</aside>";
 $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$articleDetails['articleImage']['name'];
 ?>
 <main role="main" id="main" class="container">
@@ -96,6 +94,8 @@ $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$article
             </div>
             <?php echo $authorDetails. $savingGuides. $discussion;?>
         </div>
-        <?php echo $sidebarHtml; ?>
+        <aside id="sidebar" class="col-md-4 col-sm-4">
+            <?php echo $recentlyAddedArticles . $topPopularOffers . $directChapterLinks;?>
+        </aside>    
     </div>
 </main>

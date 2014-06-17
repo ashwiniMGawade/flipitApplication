@@ -208,11 +208,13 @@ EOD;
 
         $menuNavId = 'nav';
         $mobileMenuHeader = '';
+        $menuStyle = '';
         if ($menuType == 'mobile') {
             $menuNavId = 'menu';
+            $menuStyle = 'style="display:none;"';
             $mobileMenuHeader = '<h1>Korting pakken</h1>';
         }
-        $navigationString ='<nav id="'.$menuNavId.'"><ul>'.$mobileMenuHeader;
+        $navigationString ='<nav id="'.$menuNavId.'"'.$menuStyle.'><ul>'.$mobileMenuHeader;
         foreach ($mainMenu as $menu) {
             $permalink = RoutePermalink::getPermalinks($menu['url']);
 
@@ -463,25 +465,23 @@ EOD;
     public function popularCategoryWidget()
     {
         $allPopularCategories = Category::getPopularCategories();
-        $categorySidebarWodget =
-        '<div class="block">
-            <div class="intro">
-                <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2>
-            </div>
+        $categorySidebarWidget = '
+        <div class="block">
+            <div class="intro"><h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
             <ul class="tags">';
-        foreach ($allPopularCategories as $category) {
-            $categorySidebarWodget.=
-                '<li>
-                    <a href="'
-                    .HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_categorieen'). '/'
-                    . $category['category']['permaLink'].'">'.$category['category']['name']
-                    .'</a>
-                </li>';
-        } 
-        $categorySidebarWodget.=
-            '</ul>
+        for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
+            $categorySidebarWidget.= 
+                '
+                <li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_categorieen').
+                    '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.
+                    $allPopularCategories[$categoryIndex]['category']['name'].'</a>'
+                .'</li>';
+        }
+        $categorySidebarWidget.=
+                '
+            </ul>
         </div>';
-        return $categorySidebarWodget;
+        return $categorySidebarWidget;
     }
 
     public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '1')
@@ -526,7 +526,7 @@ EOD;
             $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
             $browseByStoreWidget .= 
                     '<li>
-                        <a href="' .$redirectUrl.'">'.$this->__translate($oneCharacter).'</a>
+                        <a href="' .$redirectUrl.'">'.$oneCharacter.'</a>
                     </li>';
         };
         $browseByStoreWidget.= 
@@ -804,6 +804,54 @@ EOD;
         $popularStoresContent .='</ul></div>';
 
         return $popularStoresContent;
+    }
+    
+    public static function getWebsiteLocales($frontend = '')
+    {
+        $websites = Website::getAllWebsites();
+        foreach ($websites as $website) {
+            $spiltWebsite  = explode('/', $website['name']);
+            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+           
+            if ($frontend == 'true') {
+                if ($website['status'] == 'online') {
+                    $locales[strtoupper($locale)] = $website['name'];
+                }
+            } else {
+                $locales[strtoupper($locale)] = $website['name'];
+            }
+        }
+        return $locales;
+    }
+
+    public static function getAllCountriesByLocaleNames($frontend = '')
+    {
+        $localesList = Zend_Locale::getLocaleList();
+        $websiteLocales = self::getWebsiteLocales($frontend);
+
+        foreach ($localesList as $localeIndex => $localeValue) {
+            $localeName = explode('_', $localeIndex);
+            $websiteLocale = isset($localeName[1]) ? $localeName[1] : '';
+            
+            if (array_key_exists($websiteLocale, $websiteLocales)) {
+                $locale = new Zend_Locale($localeIndex);
+                $countries = $locale->getTranslationList('Territory', 'en');
+                if ($frontend == 'true') {
+                    $countriesWithLocales[strtolower($localeName[1])] = ($countries[$locale->getRegion()]);
+                } else {
+                    $countriesWithLocales[$localeIndex] = $websiteLocales[$websiteLocale] ." ("
+                        . ($countries[$locale->getRegion()]) . ")";
+                }
+            }
+        }
+        
+        return $countriesWithLocales = array_unique($countriesWithLocales);
+    }
+
+    public static function getWebsiteName()
+    {
+        $siteName = LOCALE != '' ? 'Flipit' : 'Kortingscode';
+        return $siteName;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################

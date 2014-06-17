@@ -29,7 +29,7 @@ class Application_Form_SignUp extends Application_Form_Base
          )
         );
         $emailAddressTextBox->setAttrib('class', 'form-control');
-        $emailAddressTextBox->setAttrib('placeholder', 'email_address');
+        $emailAddressTextBox->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_email_address'));
         $emailAddressTextBox->setAttrib('type', 'email');
         $emailAddressTextBox->setLabel('email_address');
         
