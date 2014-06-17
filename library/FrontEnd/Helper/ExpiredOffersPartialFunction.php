@@ -27,7 +27,7 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction{
             if (strlen($offerCouponCode) > 40):
                 $expiredOfferCouponCode = substr($offerCouponCode, 0, 40) . '...';
             endif;
-                $OfferSpan = '<span class="mark">' . $expiredOfferCouponCode. '</span>';
+                $OfferSpan = '<span class="mark"><s>' . $expiredOfferCouponCode. '</s></span>';
             endif;
         return $OfferSpan;
     }
