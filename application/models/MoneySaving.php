@@ -137,7 +137,7 @@ class MoneySaving extends BaseMoneySaving
     {
         $articles = Doctrine_Query::create()
             ->select(
-                'DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, 
+                'chap.*, a.id, a.title, a.permalink, a.content, a.authorid, 
                     a.authorname,  ai.path, ai.name,aai.path, aai.name'
             )
             ->from('Articles a')
