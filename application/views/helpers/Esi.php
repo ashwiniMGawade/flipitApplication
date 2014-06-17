@@ -105,9 +105,9 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
             echo '<nav class="account-box" id="'.$divID.'"></nav>';
             ?>
             <script type="text/javascript">
-            var divId = "<?php echo $divID; ?>";
-            var link = "<?php echo $src; ?>";
-            var http = "<?php echo HTTP_PATH . ltrim($src, '/'); ?>";
+                var divId = "<?php echo $divID; ?>";
+                var link = "<?php echo $src; ?>";
+                var http = "<?php echo HTTP_PATH . ltrim($src, '/'); ?>";
             </script>
             <?php
         }
