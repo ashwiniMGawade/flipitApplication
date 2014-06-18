@@ -21,7 +21,8 @@ endif;
             echo $this->translate('Hi'). " " . $this->firstName .',' . " ". $this->translate('How are you?');
             ?>
             </h1>
-            <?php echo $this->translate('Want to change you personal setting then you are free to do so below. Change name, email address, password and more');?>
+            <?php echo 
+            $this->translate('Want to change you personal setting then you are free to do so below. Change name, email address, password and more');?>
         </div>
         <div class="form-row">
             <div class="row">
@@ -116,7 +117,7 @@ endif;
         <?php 
         echo $this->formSubmit(
             'submit',
-            FrontEnd_Helper_viewHelper::__form('update your settings'),
+            FrontEnd_Helper_viewHelper::__form('form_update your settings'),
             array('class'=>'btn blue btn-lg btn-primary', 'id'=>'register')
         ) ?>
     </form>

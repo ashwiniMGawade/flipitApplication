@@ -1,7 +1,7 @@
 <div class="text-block">
     <div class="container">
         <form 
-        action="<?php echo HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('search'); ?>" role="form" 
+        action="<?php echo HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_search'); ?>" role="form" 
         class="email-form form-inline">
             <fieldset>
                 <h1><?php echo $this->translate('Searching for Coupons?');?></h1>
@@ -10,14 +10,16 @@
                     <div class="form-group">
                          <input type="search" 
                          placeholder="
-                         <?php echo FrontEnd_Helper_viewHelper::__email('What deal are you looking for?');?>"
+                         <?php echo FrontEnd_Helper_viewHelper::__form('form_What deal are you looking for?');?>"
                          id='searchFieldHeader'
                          name='searchFieldHeader'
                          label='searchField' type="search"  class="form-control" />
                          <input type='hidden' name='searchedKeyword' label='searchHidden' id='searchedKeyword' />
                     </div>
                     <a href="javascript:void(0);" id='searchbuttonHeader'>
-                        <button id='searchbuttonHP' class="orange btn btn-default searchbutton"><span class="glyphicon glyphicon-search"></span><?php echo FrontEnd_Helper_viewHelper::__form('Find');?>
+                        <button id='searchbuttonHP' class="orange btn btn-default searchbutton">
+                        <span class="glyphicon glyphicon-search"></span>
+                        <?php echo FrontEnd_Helper_viewHelper::__form('form_Find');?>
                         </button>
                     </a>
                 </div>

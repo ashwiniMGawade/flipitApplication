@@ -52,8 +52,11 @@ class Shop extends BaseShop
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
-            ->select("s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink, c.id,ss.name, ss.permaLink")
+            ->select("s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink, 
+                c.id,ss.name, ss.permaLink")
             ->where("s.id = ?", $shopId)
+            ->andWhere("s.deleted = 0")
+            ->andWhere("s.status = 1")
             ->leftJoin("s.relatedshops rs")
             ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
@@ -235,35 +238,36 @@ class Shop extends BaseShop
     public static function shopAddInFavourite($visitorId, $shopId)
     {
         $addedStatus = 0;
-        $favouriteShops  = Doctrine_Query::create()->from('FavoriteShop s')
-        ->where('s.visitorId='.$visitorId)
-        ->andWhere('s.shopId='.$shopId)->fetchOne();
-        if ($favouriteShops) {
-            $deleteAddedFavouriteShops = Doctrine_Query::create()->delete()
-                ->from('FavoriteShop fs')
-                ->where("fs.shopId=" . $shopId)
-                ->andWhere('fs.visitorId='.$visitorId)
-                ->execute();
-            $addedStatus = 1;
-        } else {
-            $favouriteShops = new FavoriteShop();
-        }
-        $favouriteShops->visitorId = $visitorId;
-        $favouriteShops->shopId = $shopId;
-        $favouriteShops->save();
-
-        $shopName = Doctrine_Core::getTable("Shop")->findOneBy('id', $shopId);
-        $cacheKeyShopDetails = 'all_shopdetail'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
-        $cacheKeyRelatedShop = 'all_relatedShopInStore'  . $shopId  . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyRelatedShop);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-        return array('shop' => $shopName->name, 'flag' => $addedStatus);
-    
+        if ($shopId!='') {
+            $favouriteShops  = Doctrine_Query::create()->from('FavoriteShop s')
+            ->where('s.visitorId='.$visitorId)
+            ->andWhere('s.shopId='.$shopId)->fetchOne();
+            if ($favouriteShops) {
+                $deleteAddedFavouriteShops = Doctrine_Query::create()->delete()
+                    ->from('FavoriteShop fs')
+                    ->where("fs.shopId=" . $shopId)
+                    ->andWhere('fs.visitorId='.$visitorId)
+                    ->execute();
+                $addedStatus = 1;
+            } else {
+                $favouriteShops = new FavoriteShop();
+            }
+            $favouriteShops->visitorId = $visitorId;
+            $favouriteShops->shopId = $shopId;
+            $favouriteShops->save();
+            $shopName = Doctrine_Core::getTable("Shop")->findOneBy('id', $shopId);
+            $cacheKeyShopDetails = 'all_shopdetail'  . $shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
+            $cacheKeyRelatedShop = 'all_relatedShopInStore'  . $shopId  . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyRelatedShop);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+            return array('shop' => $shopName->name, 'flag' => $addedStatus);
+       }
+       return;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################

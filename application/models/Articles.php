@@ -968,7 +968,7 @@ class Articles extends BaseArticles
 
         # check for article permalink
         if(isset($article['permalink'])) {
-            $urlsArray[] = FrontEnd_Helper_viewHelper::__link('plus') . '/'. $article['permalink'];
+            $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_plus') . '/'. $article['permalink'];
         }
 
         # check if an editor  has permalink then add it into array

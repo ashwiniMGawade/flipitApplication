@@ -820,8 +820,111 @@ class Offer extends BaseOffer
             array()
         );
         return $offersList;
-
     }
+
+    public static function addConversion($offerId)
+    {
+
+        $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());
+
+        if (Offer:: getCloakLink($id, true )) {
+                $offerData = Doctrine_Query::create()
+                        ->select('count(c.id) as exists,c.id')
+                        ->from('Conversions c')
+                        ->andWhere('c.offerId="'.$offerId.'"')
+                        ->andWhere('c.IP="'.$clientIP.'"')
+                        ->andWhere("c.converted=0")
+                        ->groupBy('c.id')
+                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+
+            if (!$offerData['exists']) {
+                $offerCount  = new Conversions();
+                $offerCount->offerId = $offerId;
+                $offerCount->IP = $clientIP;
+                $offerCount->utma = $_COOKIE["__utma"];
+                $offerCount->utmz = $_COOKIE["__utmz"];
+                $time = time();
+                $offerCount->subid = md5(time()*rand(1,999));
+                $offerCount->save();
+
+            } else {
+                $offerCount = Doctrine_Core::getTable("Conversions")->find($offerData['id']);
+                if ($offerCount) {
+                    $offerCount->utma = $_COOKIE["__utma"];
+                    $offerCount->utmz = $_COOKIE["__utmz"];
+                    $time = time();
+                    $offerCount->subid = md5(time()*rand(1,999));
+                    $offerCount->save();
+                }
+            }
+        }
+    }
+
+    public static function getCloakLink($offerId , $checkRefUrl = false)
+   {
+    $data = Doctrine_Query::create()
+    ->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl')
+    ->from('Offer o')
+    ->leftJoin('o.shop s')
+    ->where('o.id = "'.$offerId.'"')
+    ->fetchOne(null,Doctrine::HYDRATE_ARRAY );
+
+    $network = Shop::getAffliateNetworkDetail( @$data['shop']['id'] );
+
+        if ($checkRefUrl) {
+            # retur false if s shop is not associated with any network
+            if (! isset($network['affliatenetwork'])) {
+                return false ;
+            }
+
+            if (@$data['refURL'] != "") {
+                return true ;
+
+            } elseif (@$data['shop']['refUrl'] != "") {
+                return true ;
+            } else {
+                return true ;
+            }
+        }
+
+        $subid = "" ;
+        if ( isset($network['affliatenetwork']) ) {
+            if (!empty($network['subid']) ) {
+                 $subid = "&". $network['subid'] ;
+                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
+                 $ip = ip2long($clientIP);
+
+                 # get click detail and replcae A2ASUBID click subid
+                 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'offer') ;
+
+                 $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
+            }
+
+        }
+
+        if (@$data['refURL'] != "") {
+
+            $url = @$data['refURL'];
+
+            $url .= $subid ;
+
+        } elseif (@$data['shop']['refUrl'] != "") {
+
+            $url = @$data['shop']['refUrl'];
+            $url .=  $subid ;
+
+        } elseif (@$data['shop']['actualUrl'] != "") {
+
+            $url = @$data['shop']['actualUrl'];
+        } else {
+
+            $urll = @$data['shop']['permalink'];
+            $url = HTTP_PATH_LOCALE.$urll;
+        }
+
+        return $url ;
+
+   }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -2848,71 +2951,7 @@ class Offer extends BaseOffer
     * @version 1.0
     */
 
-   public static function getcloakLink($offerId , $checkRefUrl = false)
-   {
-    $data = Doctrine_Query::create()
-    ->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl')
-    ->from('Offer o')
-    ->leftJoin('o.shop s')
-    ->where('o.id = "'.$offerId.'"')
-    ->fetchOne(null,Doctrine::HYDRATE_ARRAY );
-
-    $network = Shop::getAffliateNetworkDetail( @$data['shop']['id'] );
-
-        if ($checkRefUrl) {
-            # retur false if s shop is not associated with any network
-            if (! isset($network['affliatenetwork'])) {
-                return false ;
-            }
-
-            if (@$data['refURL'] != "") {
-                return true ;
-
-            } elseif (@$data['shop']['refUrl'] != "") {
-                return true ;
-            } else {
-                return true ;
-            }
-        }
-
-        $subid = "" ;
-        if ( isset($network['affliatenetwork']) ) {
-            if (!empty($network['subid']) ) {
-                 $subid = "&". $network['subid'] ;
-                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $ip = ip2long($clientIP);
-
-                 # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'offer') ;
-
-                 $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
-            }
-
-        }
-
-        if (@$data['refURL'] != "") {
-
-            $url = @$data['refURL'];
-
-            $url .= $subid ;
-
-        } elseif (@$data['shop']['refUrl'] != "") {
-
-            $url = @$data['shop']['refUrl'];
-            $url .=  $subid ;
-
-        } elseif (@$data['shop']['actualUrl'] != "") {
-
-            $url = @$data['shop']['actualUrl'];
-        } else {
-
-            $urll = @$data['shop']['permalink'];
-            $url = HTTP_PATH_LOCALE.$urll;
-        }
-
-        return $url ;
-
-   }
+   
 
    /**
     * get all extended  voucher codes
@@ -3035,50 +3074,7 @@ class Offer extends BaseOffer
     * @param integeter $id offerId
     * @auther Surinderpal Singh
     */
-   public static function addConversion($id)
-   {
-
-        $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-        $ip = ip2long($clientIP);
-
-        # save conversion detail if an offer is associated with a network
-        if (Offer:: getcloakLink($id , true )) {
-                # check for previous cnversion of same ip
-                $data = Doctrine_Query::create()
-                        ->select('count(c.id) as exists,c.id')
-                        ->from('Conversions c')
-                        ->andWhere('c.offerId="'.$id.'"')
-                        ->andWhere('c.IP="'.$ip.'"')
-                        ->andWhere("c.converted=0")
-                        ->groupBy('c.id')
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-            if (! $data['exists']) {
-
-                # save conversion detail if an offer is associated with a network
-                $cnt  = new Conversions();
-                $cnt->offerId = $id;
-                $cnt->IP = $ip;
-                $cnt->utma = $_COOKIE["__utma"];
-                $cnt->utmz = $_COOKIE["__utmz"];
-                $time = time();
-                $cnt->subid = md5(time()*rand(1,999));
-                $cnt->save();
-
-            } else {
-
-                # update existing conversion detail
-                $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-                if ($cnt) {
-                    $cnt->utma = $_COOKIE["__utma"];
-                    $cnt->utmz = $_COOKIE["__utmz"];
-                    $time = time();
-                    $cnt->subid = md5(time()*rand(1,999));
-                    $cnt->save();
-                }
-            }
-        }
-    }
+   
 
     /**
      *

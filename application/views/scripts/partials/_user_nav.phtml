@@ -6,16 +6,18 @@ if(Auth_VisitorAdapter::hasIdentity()) :
     <ul>
         <li>
            <span class="glyphicon glyphicon-user"></span>
-           <span><?php echo $this->translate('Welcome') . " ";?></span>
+           <span><?php echo FrontEnd_Helper_viewHelper::__form('form_Welcome') . " ";?></span>
            <a href="<?php echo HTTP_PATH_LOCALE 
-               . FrontEnd_Helper_viewHelper::__link('inschrijven') . "/" 
-               . FrontEnd_Helper_viewHelper::__link('profiel');?>" class="name">
+               . FrontEnd_Helper_viewHelper::__link('link_inschrijven') . "/" 
+               . FrontEnd_Helper_viewHelper::__link('link_profiel');?>" class="name">
                <?php echo $visitorInformation[0]['firstName'];?>
            </a>
         </li>
         <li>
-            <a href=" <?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout'); ?>">
-              <?php echo $this->translate('Sign Out');?>
+            <a href=" <?php echo HTTP_PATH_LOCALE 
+            . FrontEnd_Helper_viewHelper::__link('link_login') .'/'
+            . FrontEnd_Helper_viewHelper::__link('link_logout'); ?>">
+              <?php echo FrontEnd_Helper_viewHelper::__form('from_Sign Out');?>
             </a>
         </li>
     </ul>
@@ -24,12 +26,12 @@ else:
     ?>
     <ul>
         <li>
-            <a rel="nofollow" href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>">
+            <a rel="nofollow" href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') ?>">
             <?php echo $this->translate('Sign In'); ?>
             </a>
         </li>
         <li class="">
-            <a href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven') ?>">
+            <a href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_inschrijven') ?>">
             <?php echo $this->translate('Sign Up'); ?>
             </a>
         </li>

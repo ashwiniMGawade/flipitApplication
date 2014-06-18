@@ -171,7 +171,10 @@ class OfferController extends Zend_Controller_Action
         } else {
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
-        $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($offerPage->logo['path'].$offerPage->logo['name']);
+
+        $pageHeaderImage = Logo::getPageLogo($offerPage->pageHeaderImageId);
+        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+
         $this->view->pageTitle = $offerPage->pageTitle;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();

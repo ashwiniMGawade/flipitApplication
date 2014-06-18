@@ -223,6 +223,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             dirname($_SERVER['SCRIPT_FILENAME']) . '/' . $localeAbbreviation
         );
         self::constantsImagesForAdminModule($localeAbbreviation);
+        self::constantsCdnForAdminModule();
     }
 
     public function constantsImagesForAdminModule($localeAbbreviation)
@@ -253,6 +254,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
     }
 
+    public function constantsCdnForAdminModule()
+    {
+        $localePath = LOCALE =='' ? '/' : '/'. strtolower(LOCALE) .'/';
+        if (isset($this->cdnUrl) && isset($this->cdnUrl[HTTP_HOST])) {
+            define(
+                'PUBLIC_PATH_CDN',
+                trim('http://'. $this->cdnUrl[HTTP_HOST] .$localePath)
+            );
+        } else {
+            define(
+                'PUBLIC_PATH_CDN',
+                trim('http://' . HTTP_HOST . $localePath)
+            );
+        }
+    }
+    
     public function constantsForDefaultModule()
     {
         define('LOCALE', '');
@@ -470,6 +487,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 )
         );
 
+
+        $csvTranslation = array(
+            'adapter'   => 'Transl8_Translate_Adapter_Csv',
+            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
+            'content'   => $inlineTranslationFolder . '/' . $locale,
+            'locale'    => $locale
+        );
+
+        $csvTranslate = new Zend_Translate($csvTranslation);
+        $poTrans->addTranslation($csvTranslate);
+
         $poTrans->addTranslation(
                 array(
                         'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/form' . $suffix . '.mo',
@@ -490,16 +518,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                         'locale'    => $locale
                 )
         );
-
-        $csvTranslation = array(
-            'adapter'   => 'Transl8_Translate_Adapter_Csv',
-            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
-            'content'   => $inlineTranslationFolder . '/' . $locale,
-            'locale'    => $locale
-        );
-
-        $csvTranslate = new Zend_Translate($csvTranslation);
-        $poTrans->addTranslation($csvTranslate);
 
         Zend_Registry::set('Zend_Locale', $locale);
         Zend_Registry::set('Zend_Translate', $poTrans);

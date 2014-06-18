@@ -1,29 +1,44 @@
 <?php
-$storeClass = "<ul class='shop-name box col-md-4 col-sm-4'>";
 foreach ($this->storesInformation as $storesKey => $stores) :
     if ($stores != null) :
         $alphabetName = $storesKey =="abc" ? "0-9" : $storesKey;
-        echo '<div class="block" id="'.strtolower($alphabetName).'">'
-            . '<h2>'. $alphabetName.'</h2>'
-            . '<div class="row">';
-        $totolStoredAsPerKey = (count($this->storesInformation[$storesKey]) / 3);
-        $numberOfstores = array_chunk($this->storesInformation[$storesKey], $totolStoredAsPerKey + 1);
-        foreach ($numberOfstores as $storesIndex => $storeForOneDiv):
-               echo "<div class='box col-md-4 col-sm-4'>
-                    <ul class='shop-name'>";
-            foreach ($storeForOneDiv as $store):
-                echo $storeName =
-                    "<li>
-                        <a href='".HTTP_PATH_LOCALE.$store['permaLink']."'>".$store['name']."</a>
-                    </li>";
+?>
+    <div class="block" id="<?php echo strtolower($alphabetName);?>">
+        <h2><?php echo $alphabetName;?></h2>
+        <div class="row">
+        <?php
+            $totolStoredAsPerKey = (count($this->storesInformation[$storesKey]) / 3);
+            $numberOfstores = array_chunk($this->storesInformation[$storesKey], $totolStoredAsPerKey + 1);
+            foreach ($numberOfstores as $storesIndex => $storeForOneDiv):
+        ?>
+            <div class="box col-md-4 col-sm-4">
+                <ul class="shop-name">
+        <?php
+                    foreach ($storeForOneDiv as $store):
+        ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH_LOCALE.$store['permaLink'];?>">
+                            <?php echo $store['name'];?>
+                            </a>
+                        </li>
+        <?php
+                    endforeach;
+        ?>    
+                </ul>
+        <?php        
+                if(count($numberOfstores) == ($storesIndex + 1 )) :
+        ?>        
+                    <a href="#" class="btn-top"><?php echo $this->translate('Back to top');?></a>
+        <?php
+                endif;
+        ?>    
+            </div>
+        <?php   
             endforeach;
-            echo "</ul>";
-            if(count($numberOfstores) == ($storesIndex + 1 )) :
-                echo '<a href="#" class="btn-top">Back to top</a>';
-            endif;
-            echo "</div>";
-           
-        endforeach;
-        echo "</div></div>";
+        ?>    
+        </div>
+    </div>
+<?php    
     endif;
 endforeach;
+

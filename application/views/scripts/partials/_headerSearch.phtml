@@ -1,11 +1,11 @@
 <?php
-echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
 $searchBoxCssClass = LOCALE == '' ? 'kortingscode' : '';
 ?>
 <div class="slide">
     <form role="form" class="search-form">
         <input 
-            placeholder="<?php echo FrontEnd_Helper_viewHelper::__email('Type in a Store e.g. Avis');?>" 
+            placeholder="<?php echo FrontEnd_Helper_viewHelper::__form('form_Type in a Store e.g. Avis');?>" 
             class="form-control <?php echo $searchBoxCssClass;?>" id='searchFieldHeader' 
             name='searchFieldHeader' type='text'/>
         <input id='searchedKeyword' name='searchedKeyword' type='hidden'/>

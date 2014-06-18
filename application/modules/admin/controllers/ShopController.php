@@ -385,7 +385,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $category = new Category();
 
 
-        $this->view->categoryList = $category->getCategoriesDetail();
+        $this->view->categoryList = $category->getCategoriesInformation();
 
 
 
@@ -463,7 +463,7 @@ class Admin_ShopController extends Zend_Controller_Action
         /* get Category List*/
         $arr['status'] = '1';
         $category = new Category();
-        $this->view->categoryList = $category->getCategoriesDetail();
+        $this->view->categoryList = $category->getCategoriesInformation();
 
         $site_name = "";
         if(isset($_COOKIE['site_name'])){
@@ -1044,10 +1044,10 @@ class Admin_ShopController extends Zend_Controller_Action
         // Add urls to refresh in Varnish
         $varnishObj = new Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('nieuw'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('populair'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('alle-winkels'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_populair'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels'));
 
 
 

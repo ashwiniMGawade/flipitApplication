@@ -14,7 +14,7 @@ foreach ($this->offers as $offer) {
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
-        <div class="holder">
+        <div class="holder" id="<?php echo $offer->id; ?>">
     <?php 
     echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
@@ -73,7 +73,7 @@ foreach ($this->offers as $offer) {
     } else {
         $extendedOffer = 0;
     }
-    $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '|' : '';
+    $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '<li>|</li>' : '';
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
             echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
@@ -110,7 +110,7 @@ foreach ($this->offers as $offer) {
         </div>
         <?php if ($termsAndConditions != '') : ?>
         <div  class="terms-block" id='termAndConditions<?php echo $offer->id ;?>'>
-            <h2><?php echo $this->translate('Terms');?> &amp; <?php echo $this->translate('Conditions')?></h2>
+            <h2><?php echo $this->translate('Terms &amp; Conditions');?></h2>
             <ol class="num-list">
             <?php echo $termsAndConditions;?>
             </ol>

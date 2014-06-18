@@ -82,7 +82,7 @@ EOD;
         $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
         return $ShopMoneySavingGuideArticle;
     }
-
+    
     public static function getFooterData()
     {
         return Footer::getFooter();
@@ -125,6 +125,7 @@ EOD;
         $alphabetList .="</ul>";
         return $alphabetList;
     }
+
 
     public static function renderPagination(
         $totalRecordsForPagination,
@@ -229,7 +230,6 @@ EOD;
         return $requestedInformation;
     }
 
-
     public static function viewCounter($type, $eventType, $id)
     {
         $clientIP = self::getRealIpAddress();
@@ -315,6 +315,7 @@ EOD;
                     $articleViewCount->articleid = $id;
                     $articleViewCount->onload = $onLoad;
                     $articleViewCount->ip = $ip;
+                    $articleViewCount->onclick = 0;
                     $articleViewCount->save();
                     $artcileExistsOrNot = "true";
                 }
@@ -393,7 +394,7 @@ EOD;
         }
         return $currentObject;
     }
-    
+   
     public static function __link($variable)
     {
         $trans = Zend_Registry::get('Zend_Translate');
@@ -422,6 +423,54 @@ EOD;
         return $variable;
     }
 
+    public static function getWebsiteLocales($frontend = '')
+    {
+        $websites = Website::getAllWebsites();
+        foreach ($websites as $website) {
+            $spiltWebsite  = explode('/', $website['name']);
+            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+           
+            if ($frontend == 'true') {
+                if ($website['status'] == 'online') {
+                    $locales[strtoupper($locale)] = $website['name'];
+                }
+            } else {
+                $locales[strtoupper($locale)] = $website['name'];
+            }
+        }
+        return $locales;
+    }
+
+    public static function getAllCountriesByLocaleNames($frontend = '')
+    {
+        $localesList = Zend_Locale::getLocaleList();
+        $websiteLocales = self::getWebsiteLocales($frontend);
+
+        foreach ($localesList as $localeIndex => $localeValue) {
+            $localeName = explode('_', $localeIndex);
+            $websiteLocale = isset($localeName[1]) ? $localeName[1] : '';
+            
+            if (array_key_exists($websiteLocale, $websiteLocales)) {
+                $locale = new Zend_Locale($localeIndex);
+                $countries = $locale->getTranslationList('Territory', 'en');
+                if ($frontend == 'true') {
+                    $countriesWithLocales[strtolower($localeName[1])] = ($countries[$locale->getRegion()]);
+                } else {
+                    $countriesWithLocales[$localeIndex] = $websiteLocales[$websiteLocale] ." ("
+                        . ($countries[$locale->getRegion()]) . ")";
+                }
+            }
+        }
+        
+        return $countriesWithLocales = array_unique($countriesWithLocales);
+    }
+
+    public static function getWebsiteName()
+    {
+        $siteName = LOCALE != '' ? 'Flipit' : 'Kortingscode';
+        return $siteName;
+    }
+  
     public static function commonfrontendGetCode($type, $limit = 10, $shopId = 0, $userId = "")
     {
         switch (strtolower($type)) {
@@ -588,6 +637,7 @@ EOD;
 
     public static function checkIfThisOfferEntryExists($eventType, $id, $ip)
     {
+
         $res = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
@@ -609,29 +659,9 @@ EOD;
                     $res = "true";
                 }
                 break;
-
-            case 'onload':
-                $data = Doctrine_Query::create()
-                ->select('count(*) as exists')
-                ->from('ViewCount')
-                ->where('onLoad!=0')
-                ->andWhere('offerId="'.$id.'"')
-                ->andWhere('IP="'.$ip.'"')
-                ->fetchArray();
-                if ($data[0]['exists'] == 0) {
-                    $cnt  = new ViewCount();
-                    $view = 1;
-                    $cnt->offerId = $id;
-                    $cnt->onLoad = $view;
-                    $cnt->IP = $ip;
-                    $cnt->save();
-                    $res = "true";
-                }
-                break;
-            default:
-                break;
-        }
-        return $res;
+         }
+        $obj = new User();
+        return $obj->getFamousUserDetail($eId);
     }
 
     public static function getAuthorId($offerId)
@@ -775,5 +805,14 @@ EOD;
         }
         $xml->endDocument();
         $xml->flush();
+    }
+    public static function getWebsitesLocales($websites)
+    {
+        foreach ($websites as $website) {
+            $splitWebsite  = explode('/', $website['name']);
+            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
+            $locales[strtoupper($locale)] = $website['name'];
+        }
+        return $locales;
     }
 }

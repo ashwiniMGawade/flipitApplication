@@ -22,7 +22,7 @@ class Page extends BasePage
         ->where("permaLink = '". $permalink ."'")
         ->andWhere('p.deleted=0')
         ->fetchArray();
-        return $pageAttribute[0]['pageAttributeId'];
+        return isset($pageAttribute[0]['pageAttributeId']) ? $pageAttribute[0]['pageAttributeId'] : '';
     }
 
     public static function getPageFromFilteredPageAttribute($id)
@@ -53,9 +53,18 @@ class Page extends BasePage
 
     public static function getSpecialListPages()
     {
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $specialListPages = Doctrine_Query::create()
             ->select('p.id,p.pageTitle as name,p.permaLink,i.path,i.name')
             ->from('Page p')
+            ->addSelect(
+                "(
+                    SELECT count(*) FROM refOfferPage roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  
+                    WHERE roc.pageid = p.id and off.deleted = 0 and s.deleted = 0 and off.enddate >
+                    '".$currentDateAndTime."' and off.startdate <= '".$currentDateAndTime."'  and off.discounttype='CD'
+                      and off.Visability!='MEM'
+                ) as totalCoupons"
+            )
             ->leftJoin('p.logo i')
             ->where("pageType = ?", 'offer')
             ->andWhere('p.deleted=0')

@@ -81,7 +81,7 @@
 	               	</li>
 	               	<li><?php if($controller == 'category') { $class = "num-blueAffiliate"; }else { $class = "num-greyAffiliate";} ?>
 
-	               		<a href="<?php echo HTTP_PATH?>admin/category" class="<?php echo $class;?>" tabindex="1"><?php echo $this->translate('Category');?></a>
+	               		<a href="<?php echo HTTP_PATH?>admin/category/index" class="<?php echo $class;?>" tabindex="1"><?php echo $this->translate('Category');?></a>
 	               	</li>
 
 	               	<?php if($sessionNamespace->settings['rights']['administration']['rights']=='1' || $sessionNamespace->settings['rights']['administration']['rights']=='2' ){?>
@@ -216,7 +216,7 @@
 	      <?php } ?>
 	 </ul>
 
-    <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Email');?></h2></div>
+<!--     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Email');?></h2></div>
     <ul id="adminmenu" role="navigation">
         <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ){?>
 
@@ -236,7 +236,7 @@
 
         <?php } ?>
 
-    </ul>
+    </ul> -->
     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Template Settings');?></h2></div>
     <ul id="adminmenu" role="navigation">
 	      <li <?php if($controller == 'homepage') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php }?> id="menu-links">

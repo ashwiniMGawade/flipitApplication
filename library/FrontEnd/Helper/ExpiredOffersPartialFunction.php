@@ -3,7 +3,8 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction{
     
     public function getExpiredOfferUrl($offer) {
         if($offer->extendedOffer == 1):
-            $expiredOfferUrl = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('deals').'/'.$offer->extendedUrl;
+            $expiredOfferUrl =
+        		HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_deals').'/'.$offer->extendedUrl;
         else:
             $expiredOfferUrl = HTTP_PATH_LOCALE."out/extendedoffer/".$offer->id;
         endif;
@@ -27,7 +28,7 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction{
             if (strlen($offerCouponCode) > 40):
                 $expiredOfferCouponCode = substr($offerCouponCode, 0, 40) . '...';
             endif;
-                $OfferSpan = '<span class="mark">' . $expiredOfferCouponCode. '</span>';
+                $OfferSpan = '<span class="mark"><s>' . $expiredOfferCouponCode. '</s></span>';
             endif;
         return $OfferSpan;
     }
@@ -43,8 +44,13 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction{
     public function getExpiredOffersHeader($shopName) {
         $offerHeader = '';
         $offerHeader = '<header class="heading-box text-expired">
-        <h2>' . FrontEnd_Helper_viewHelper::__translate('Expired').' '. $shopName .' '.FrontEnd_Helper_viewHelper::__translate("vouchers and discounts"). '</h2>
-        <strong>'. FrontEnd_Helper_viewHelper::__translate('Unfortunately ... These discount codes from').' '.$shopName.' '.FrontEnd_Helper_viewHelper::__translate("you’ve missed") .'</strong>
+        <h2>' 
+        . FrontEnd_Helper_viewHelper::__translate('Expired').' '. $shopName .' '
+        .FrontEnd_Helper_viewHelper::__translate("vouchers and discounts")
+        . '</h2>
+        <strong>'
+        . FrontEnd_Helper_viewHelper::__translate('Unfortunately ... These discount codes from').' '.$shopName.' '
+        .FrontEnd_Helper_viewHelper::__translate("you’ve missed") .'</strong>
         </header>';
         return $offerHeader;
     }

@@ -5,7 +5,10 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
     if(isset($categoryWithSpecialPage['logo'])) {
         $featuredCategorySpan = '<span class="label">'.$this->translate('special').'</span>';
     }
-    $categoryImage = isset($categoryWithSpecialPage['categoryicon']) ? $categoryWithSpecialPage['categoryicon'] : $categoryWithSpecialPage['logo'];
+    $categoryImage = 
+    	isset($categoryWithSpecialPage['categoryicon']) 
+    	? $categoryWithSpecialPage['categoryicon'] 
+    	: $categoryWithSpecialPage['logo'];
 
     if (isset($categoryWithSpecialPage['featured_category']) && $categoryWithSpecialPage['featured_category'] != '') {
         $featuredCategoryClass = "box-top";
@@ -24,12 +27,16 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
         <?php 
         $permalink =
             isset($categoryWithSpecialPage['categoryicon']) 
-            ? FrontEnd_Helper_viewHelper::__link('categorieen').'/'. $categoryWithSpecialPage['permaLink'] 
+            ? FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'. $categoryWithSpecialPage['permaLink'] 
             : $categoryWithSpecialPage['permaLink'];
         ?>
         <a href="<?php echo HTTP_PATH_LOCALE .  $permalink?>">
             <div class="image">
                 <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $categoryWithSpecialPage['name'];?>" />
+            </div>
+            <div class="text-box">
+                <span class="num"><?php echo $categoryWithSpecialPage['totalCoupons']; ?></span>
+                <span><?php echo FrontEnd_Helper_viewHelper::__form('form_Coupons inside'); ?></span>
             </div>
             <div class="caption">
                 <?php echo $featuredCategorySpan; ?>

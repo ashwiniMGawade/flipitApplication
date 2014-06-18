@@ -25,10 +25,11 @@ name="<?php echo $this->zendForm->zendFormName; ?>" id="<?php echo $this->zendFo
     }
     ?>
     <?php echo $this->zendForm->shopId->renderViewHelper();?>
+    <?php echo $this->zendForm->formName->renderViewHelper();?>
     <?php  
     echo $this->formSubmit(
         'submit',
-        FrontEnd_Helper_viewHelper::__form('Sign up'),
+        FrontEnd_Helper_viewHelper::__form('form_Sign up'),
         array(
             'class'=>'btn blue btn-lg btn-primary '.$this->zendForm->submitButtonClassName,
             'id'=>'Login',

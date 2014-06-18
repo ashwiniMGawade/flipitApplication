@@ -65,7 +65,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $shopObj = new Shop();
         $this->view->shopList=$shopObj->getOfferShopList();
         $catObj = new Category();
-        $this->view->catList = $catObj->getCategoriesDetail();
+        $this->view->catList = $catObj->getCategoriesInformation();
         $pageObj = new Page();
         $this->view->pages = $pageObj->getPagesOffer();
 
@@ -98,7 +98,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $this->view->shopList=$shopObj->getOfferShopList();
 
         $catObj = new Category();
-        $this->view->catList=$catObj->getCategoriesDetail();
+        $this->view->catList=$catObj->getCategoriesInformation();
 
         $pageObj = new Page();
         $this->view->pages = $pageObj->getPagesOffer();
@@ -1099,9 +1099,9 @@ class Admin_OfferController extends Zend_Controller_Action
         // Add urls to refresh in Varnish
         $varnishObj = new Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('nieuw'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('top-20'));
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('populair'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_populair'));
 
         # make markplaatfeed url's get refreashed only in case of kortingscode
         iF(LOCALE == '')

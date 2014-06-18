@@ -31,6 +31,25 @@ class BackEnd_Helper_viewHelper
         $locale = isset($localeName[1]) ?  $localeName[1] : "en";
         return $locale;
     }
+    public function getLocaleStatusButtons($localeStatus)
+    {
+        if ($localeStatus == 'online') {
+            $localeOnClass = 'btn-primary default';
+            $localeOffClass = '';
+        } else {
+            $localeOnClass = '';
+            $localeOffClass = 'btn-primary default';
+        }
+
+        $localeStatusButton = '<button onclick="LocaleStatusToggle(this);"
+            class="btn '.$localeOnClass.'"
+            data-status="online"
+            type="button">'.$this->zendTranslate->translate('Online').'</button>                     
+            <button onclick="LocaleStatusToggle(this);" class="btn '.$localeOffClass.'"
+            data-status="offline"
+            type="button">'.$this->zendTranslate->translate('Offline').'</button>';
+        return $localeStatusButton;
+    }
     #####################################################
     ############# END REFACORED CODE ####################
     #####################################################
@@ -834,7 +853,7 @@ class BackEnd_Helper_viewHelper
 			//set $expDate array with the expiry date of offer
 			$expiryDate = new Zend_Date($value['offer']['endDate']);
 			$expDate[$key]['name'] = 'expDate_'.($key+1);
-			$expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
+			$expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('link_Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
 
 			//set $shopPermalink array with the permalink of shop
 			$shopPermalink[$key]['name'] = 'shopPermalink_'.($key+1);

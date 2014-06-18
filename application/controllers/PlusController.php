@@ -69,7 +69,7 @@ class PlusController extends Zend_Controller_Action
     {
         $articleDetails = Articles::getArticleByPermalink($this->getRequest()->getParam('permalink'));
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
-        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
+        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles(4);
         $articlesRelatedToCurrentCategory =
             !empty($categoryWiseArticles[$currentArticleCategory])
             ? $categoryWiseArticles[$currentArticleCategory]

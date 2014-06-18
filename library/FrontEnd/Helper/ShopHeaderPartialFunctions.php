@@ -66,7 +66,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                         class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
                         .$affliateDisabled.'
                         onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shop['actualUrl'].'
-                        </a>'.self::getLoveAnchor($shop['id']);
+                        </a>';
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }

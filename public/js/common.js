@@ -19,6 +19,10 @@ function ___removeOverLay() {
 	return true ;
 }
 
+function addOverLay() {
+
+}
+
 function removeOverLay() {
 	jQuery('div#overlay').remove();
 	return true ;

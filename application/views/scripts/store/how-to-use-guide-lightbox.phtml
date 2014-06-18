@@ -18,12 +18,16 @@ $howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopI
             <?php
             if(!empty($howToGuideBigImageDetails)) :?>
             <div class="visual-img">
-                <img src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
+                <img 
+                src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" 
+                alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
             </div>
             <?php endif; ?>
         </div>
         <?php if(!empty($this->howToUseGuideChapters)) : ?>
-        <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('how-to/').$this->shopInformation[0]['permaLink']; ?>#guide" class="link-box">
+        <a 
+        href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_how-to/')
+        .$this->shopInformation[0]['permaLink']; ?>#guide" class="link-box">
             <hr class="alt2">
             <span>
             <?php echo $this->translate('Still having troubles using the code'); ?>?

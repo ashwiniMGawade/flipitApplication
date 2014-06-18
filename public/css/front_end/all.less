@@ -64,7 +64,6 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 				}
 				.name{
 					color:@blue-color;
-					text-decoration:underline;
 				}
 				.name:hover,
 				.name:focus{text-decoration:none;}
@@ -386,7 +385,6 @@ textarea{
 	width:auto;
 	margin:0;
 	border:1px solid #acb1b6;
-	color:#a2a2a2;
 	padding:8px 5px 9px;
 	text-indent: 5px;
 	.border-radius;
@@ -518,10 +516,9 @@ input[type="password"]:-ms-input-placeholder {color: #a2a2a2;}
 }
 a.pop{
 	color:#353535;
-	text-decoration:underline;
 	margin-bottom: 10px;
 	&:hover,
-	&:focus{text-decoration:none;background: white;}
+	&:focus{text-decoration:underline;background: white;}
 }
 .btn .glyphicon-heart{
 	color:#fc0d1b;
@@ -1430,7 +1427,7 @@ hr.alt2{
 	line-height:16px;
 	li{
 		display:inline;
-		margin:0 27px 0 0;
+		margin:0 15px 0 0;
 		a{
 			display:inline;
 			position:relative;
@@ -1736,6 +1733,7 @@ hr.alt2{
 		display:inline-block;
 		vertical-align:middle;
 		position:relative;
+		margin-top: 4px;
 		a{
 			color:@light-blue;
 			text-decoration:none;
@@ -2290,6 +2288,9 @@ hr.alt2{
 			p{margin:0 0 15px;}
 		}
 	}
+	.countries li{
+		padding: 0;
+	}
 	h3{
 		color:@light-blue;
 		font-size:16px;
@@ -2337,73 +2338,74 @@ hr.alt2{
 			}
 		}
 	}
-}
-#footer .holder{
-	width:100%;
-	color:@white-color;
-	text-align:left;
-	background:#343433;
-	border-bottom:1px solid #3f3f3e;
-	.container{
-		padding-top:46px;
-		padding-bottom:38px;
-		.box p{
-			margin:0 0 23px;
-			a{color:@white-color;}
+	.holder{
+		width:100%;
+		color:@white-color;
+		text-align:left;
+		background:#343433;
+		border-bottom:1px solid #3f3f3e;
+		.container{
+			padding-top:46px;
+			padding-bottom:38px;
+			.box p{
+				margin:0 0 23px;
+				a{color:@white-color;}
+			}
 		}
-	}
-	ul{
-		padding:0;
-		margin:0;
-		list-style:none;
-		li{
-			margin:0 0 10px;
-			a{color:@white-color;}
+		ul{
+			padding:0;
+			margin:0;
+			list-style:none;
+			li{
+				margin:0 0 10px;
+				a{color:@white-color;}
+			}
 		}
-	}
-	.logo{
-		float:none;
-		display:block;
-		background:url(../../images/logo-2.png) no-repeat;
-		width:89px;
-		height:40px;
-		margin:0 0 4px;
-	}
-	.add-list li{
-		display:inline;
-		vertical-align:top;
-		margin:0;
-		&:first-child{padding:0;}
-		&+ li:before{
-			content: "| ";
-			color:@white-color;
-			padding: 0 3px;
+		.logo{
+			float:none;
+			display:block;
+			background:url(../../images/logo-2.png) no-repeat;
+			width:89px;
+			height:40px;
+			margin:0 0 4px;
 		}
-		a{
-			color:@light-blue;
-			text-decoration:underline;
-		}
-		a:hover,
-		&:focus{text-decoration:none;}
-	}
-}
-.add-nav{
-	ul{
-		padding:0;
-		margin:0;
-		list-style:none;
-		li{
-			display:inline-block;
+		.add-list li{
+			display:inline;
 			vertical-align:top;
-			a{color:#888887;}
+			margin:0;
+			&:first-child{padding:0;}
+				&+ li:before{
+					content: "| ";
+					color:@white-color;
+					padding: 0 3px;
+				}
+				a{
+					color:@light-blue;
+					text-decoration:underline;
+				}
+			a:hover,
+			&:focus{text-decoration:none;}
 		}
-		li + li:before{
-			content: "| ";
-			color:#888887;
-			padding: 0 3px;
-		}
-		li:first-child{padding:0;}
 	}
+	.add-nav{
+		ul{
+			padding:0;
+			margin:0;
+			list-style:none;
+			li{
+				display:inline-block;
+				vertical-align:top;
+				a{color:#888887;}
+			}
+			li + li:before{
+				content: "| ";
+				color:#888887;
+				padding: 0 3px;
+			}
+			li:first-child{padding:0;}
+		}
+	}
+
 }
 #code-lightbox {
 	display:none;
@@ -2514,7 +2516,6 @@ hr.alt2{
 		.btn.blue{
 			display:block;
 			width:100%;
-			font-size:20px;
 			line-height:20px;
 			text-transform:uppercase;
 			margin:0;
@@ -2602,8 +2603,9 @@ input[type="submit"]::-moz-focus-inner{
 		}
 		.text{
 			float:left;
-			padding:0 10px 0 0;
+			padding:4px 10px 0 0;
 			width:18%;
+			margin-top: 4px;
 			h2{
 				font-size:21px;
 				line-height:24px;
@@ -2631,7 +2633,7 @@ input[type="submit"]::-moz-focus-inner{
 	}
 	.social{
 		float:left;
-		padding: 10px 0 0 29px;
+		padding: 5px 0 0 29px;
 		width: 40%;
 		ul{
 			padding:0;
@@ -3678,7 +3680,6 @@ img.logo.kortingscode{
 		}
 	}
 	#main{
-		padding-top: 0px;
 		padding-bottom: 26px;
 	}
 	.buttons{
@@ -4228,9 +4229,9 @@ img.logo.kortingscode{
 }
 
 .saving-guide-image-wrapper{
-	width: 216px; 
+	width: 135px; 
 	overflow: hidden; 
-	height: 129px;
+	height: 100px;
 }
 .recent-images-wrapper{
 	width: 100%; 
@@ -4251,3 +4252,6 @@ img.logo.kortingscode{
     padding-left: 15px;
     padding-right: 15px;
 } 
+#wrapper label.input-error {
+   display: none !important;
+}

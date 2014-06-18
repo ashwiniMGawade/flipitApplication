@@ -1198,7 +1198,7 @@ class User extends BaseUser
 
             BackEnd_Helper_viewHelper::closeConnection($connUser);
 
-            $editor = FrontEnd_Helper_viewHelper::__link("redactie"). "/" ;
+            $editor = FrontEnd_Helper_viewHelper::__link("link_redactie"). "/" ;
             $url = HTTP_PATH. $editor . $data['slug'];
             return array('url' => $url , 'permalink' => $editor . $data['slug'] );
         }

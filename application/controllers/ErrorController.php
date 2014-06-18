@@ -59,7 +59,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->getResponse()->setHttpResponseCode(404);
                     $this->_helper->layout()->disableLayout();
                     $this->view->popularShops = Shop::getPopularStores(12);
-                    $websitesWithLocales = $this->_helper->Error->getWebsitesLocales(Website::getAllWebsites());
+                    $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
                     $this->view->flipitLocales = $websitesWithLocales;
                 }
                 break;
@@ -69,7 +69,7 @@ class ErrorController extends Zend_Controller_Action
                 $priority = Zend_Log::CRIT;
                 $this->view->message = 'Application error';
                 $this->view->popularShops = Shop::getPopularStores(12);
-                $websitesWithLocales = $this->_helper->Error->getWebsitesLocales(Website::getAllWebsites());
+                $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
                 $this->view->flipitLocales = $websitesWithLocales;
                 break;
         }
@@ -85,11 +85,25 @@ class ErrorController extends Zend_Controller_Action
         $signUpFormSidebarWidget =
             FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
+        $currentUrlParameters = $this->_request->getParams();
 
+        if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
+                (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'faq')) {
+            $this->view->pageCssClass = 'faq-page';
+        } else if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
+                (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'contact')) {
+            $flashMessage = $this->_helper->getHelper('FlashMessenger');
+            $message = $flashMessage->getMessages();
+            $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
+            $this->view->pageCssClass = 'contact-page';
+        } else {
+            $this->view->pageCssClass = 'flipit-expired-page';
+        }
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;
         $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+        
     }
 
     public function getLog()

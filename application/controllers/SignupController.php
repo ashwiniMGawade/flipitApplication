@@ -38,13 +38,12 @@ class SignupController extends Zend_Controller_Action
         die();
     }
 
-
     public function indexAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->_redirect(
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
-                FrontEnd_Helper_viewHelper::__link('profiel')
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('link_profiel')
             );
         }
         $pageName = 'SignUp';
@@ -77,7 +76,7 @@ class SignupController extends Zend_Controller_Action
                 if (Visitor::checkDuplicateUser($visitorInformation['emailAddress']) > 0) {
                     self::showFlashMessage(
                         $this->view->translate('Please change you E-mail address this user already exist'),
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
+                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'error'
                     );
                 } else {
@@ -88,7 +87,7 @@ class SignupController extends Zend_Controller_Action
                     self::redirectAccordingToMessage(
                         $visitorId,
                         $this->view->translate('Please enter valid information'),
-                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'),
+                        HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'signup',
                         $visitorInformation['emailAddress']
                     );
@@ -133,18 +132,43 @@ class SignupController extends Zend_Controller_Action
                 } else {
                     Visitor::setVisitorLoggedIn($visitorId);
                     $message = $this->view->translate('Thanks for registration now enjoy the more coupons');
-                    $mandrillFunctions->sendWelcomeMail($visitorId, $this);
+                    $this->sendWelcomeMail($visitorId);
                 }
                 self::showFlashMessage(
                     $message,
-                    HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('login'),
+                    HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'),
                     'success'
                 );
             }
         }
         return;
     }
-
+    public function sendWelcomeMail($visitorId)
+    {
+        $visitorDetails = Visitor::getUserDetails($visitorId);
+        $FromEmail = Signupmaxaccount::getEmailAddress();
+        $mailer  = new FrontEnd_Helper_Mailer();
+        $content = array(
+                        'name'    => 'content',
+                        'content' => $this->view->partial(
+                            'emails/welcome.phtml',
+                            array(
+                                'topOffers' => Offer::getTopOffers(5)
+                                )
+                        )
+                    );
+        $VisitorName = $visitorDetails[0]['firstName'].' '.$visitorDetails[0]['lastName'];
+        $mailer->send(
+            FrontEnd_Helper_viewHelper::__email('email_sitename'),
+            $FromEmail[0]['emailperlocale'],
+            $VisitorName,
+            $visitorDetails[0]['email'],
+            FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
+            $content,
+            FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header')
+        );
+        return true;
+    }
     public function sendConfirmationMail($visitoremailMail)
     {
         $html = new Zend_View();
@@ -197,8 +221,8 @@ class SignupController extends Zend_Controller_Action
     public function addVisitor($visitorDetails)
     {
         $redirectLink =
-            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven'). '/' .
-            FrontEnd_Helper_viewHelper::__link('profiel');
+            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+            FrontEnd_Helper_viewHelper::__link('link_profiel');
         $visitorId = Visitor::addVisitor($visitorDetails);
         if ($visitorId) {
             $message = $this->view->translate('Your information has been updated successfully !.');

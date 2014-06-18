@@ -88,7 +88,7 @@ class Admin_RssController extends Zend_Controller_Action
 
         // Create the RSS array
         $feedData = array(
-                'title'=> FrontEnd_Helper_viewHelper::__form('Newest offers') ,
+                'title'=> FrontEnd_Helper_viewHelper::__form('form_Newest offers') ,
                 'link'=> $domainPath ,
                 'charset'=>'UTF-8',
                 'entries'=>$entries
@@ -101,7 +101,7 @@ class Admin_RssController extends Zend_Controller_Action
         $mainDir = ROOT_PATH ."rss/";
 
         # generate translated file name
-        $fileName = FrontEnd_Helper_viewHelper::__form('newest-offers');
+        $fileName = FrontEnd_Helper_viewHelper::__form('form_newest-offers');
 
         # complete path for offer rss feed file
         $offerXml = $mainDir. "{$fileName}.xml";
@@ -118,7 +118,7 @@ class Admin_RssController extends Zend_Controller_Action
         fwrite($offerHandle, $rssFeed);
         fclose($offerHandle);
 
-        $message = FrontEnd_Helper_viewHelper::__form('RSS feed  for newest offers has been created successfully!!!');
+        $message = FrontEnd_Helper_viewHelper::__form('form_RSS feed  for newest offers has been created successfully!!!');
         $flash = $this->_helper->getHelper('FlashMessenger');
         $flash->addMessage(array('success' => $message));
         $this->_helper->redirector(index , 'rss' , null ) ;
@@ -167,7 +167,7 @@ class Admin_RssController extends Zend_Controller_Action
 
         // Create the RSS array
         $feedData = array(
-            'title'=> FrontEnd_Helper_viewHelper::__form('Popular offers') ,
+            'title'=> FrontEnd_Helper_viewHelper::__form('form_Popular offers') ,
             'link'=> $domainPath ,
             'charset'=>'UTF-8',
             'entries'=>$entries
@@ -180,7 +180,7 @@ class Admin_RssController extends Zend_Controller_Action
             $mainDir = ROOT_PATH ."rss/";
 
             # generate translated file name
-            $fileName = FrontEnd_Helper_viewHelper::__form('popular-offers');
+            $fileName = FrontEnd_Helper_viewHelper::__form('form_popular-offers');
 
             # complete path for offer rss feed file
             $offerXml = $mainDir. "{$fileName}.xml";
@@ -197,7 +197,7 @@ class Admin_RssController extends Zend_Controller_Action
             fwrite($offerHandle, $rssFeed);
             fclose($offerHandle);
 
-            $message = FrontEnd_Helper_viewHelper::__form('RSS feed  for popular offers has been created successfully!!!');
+            $message = FrontEnd_Helper_viewHelper::__form('form_RSS feed  for popular offers has been created successfully!!!');
             $flash = $this->_helper->getHelper('FlashMessenger');
             $flash->addMessage(array('success' => $message));
             $this->_helper->redirector(index , 'rss' , null ) ;

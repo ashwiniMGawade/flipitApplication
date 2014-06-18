@@ -116,7 +116,6 @@ class Admin_PageController extends Zend_Controller_Action
     public function updatepageAction()
     {
         $params = $this->_getAllParams();
-
         if(@$params['pageTemplate'] == 15){
             $pageObj = new Page();
             $checkfooterpages = $pageObj->checkFotterpages(@$params['pageTemplate']);
