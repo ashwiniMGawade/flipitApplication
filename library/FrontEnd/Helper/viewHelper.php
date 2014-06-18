@@ -34,54 +34,6 @@ EOD;
         }
     }
 
-    public function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
-    {
-        if ($shopName) {
-            $chain = Chain::returnChainData($chainItemId, $id);
-            if (! $chain) {
-                return false;
-            }
-            $httpPathLocale = trim(HTTP_PATH_LOCALE, '/');
-            $httpPath = trim(HTTP_PATH, '/');
-            $shopHeader = $this->__translate("is an international shop");
-            $widgetText =
-                $this->__translate("Check out the coupons and discounts from other countries when you're interested:");
-            $string = <<<EOD
-             <div class="intro">
-                <h2>
-                     {$shopName}
-                 </h2>
-                 <span>$widgetText</span>
-            </div>
-            <ul class="countries">
-EOD;
-            $hrefLinks = "" ;
-            $hasShops = false ;
-            foreach ($chain as $chainInformation) {
-                $hrefLinks .=  isset($chainInformation['headLink']) ? $chainInformation['headLink']. "\n" : '';
-                if (!empty($chainInformation['shops'])) {
-                    $hasShops = true ;
-                    $chainInformation = $chainInformation['shops'];
-                    $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
-                    $string .= sprintf(
-                        "<li>
-                        <a class='country-flags ".strtolower($chainInformation['locale'])."' 
-                        href='%s' target='_blank'>"
-                        .self::getCountryNameByLocale(strtolower($chainInformation['locale']))."</a>
-                        </li>",
-                        trim($chainInformation['url']),
-                        $httpPath.'/public/'. $image
-                    );
-                }
-            }
-            $string .= <<<EOD
-            </ul>
-EOD;
-            return array('string' => $string, 'headLink' => $hrefLinks, 'hasShops' => $hasShops);
-        }
-        return false;
-    }
-
     public static function getShopCouponCode($type, $limit, $shopId = 0)
     {
         $shopCouponCodes = '';
@@ -131,58 +83,6 @@ EOD;
         return $ShopMoneySavingGuideArticle;
     }
 
-    public static function generateMainMenu($menuType = '')
-    {
-        $mainMenu = menu::getFirstLevelMenu();
-        $mainMenuCount = count($mainMenu);
-        $mainMenuvalue = 0;
-        $menuNavId = 'nav';
-        $mobileMenuHeader = '';
-        if ($menuType == 'mobile') {
-            $menuNavId = 'menu';
-            $mobileMenuHeader = '<h1>Korting pakken</h1>';
-        }
-        $navigationString ='<nav id="'.$menuNavId.'"><ul>'.$mobileMenuHeader;
-        foreach ($mainMenu as $menu) {
-            $permalink = RoutePermalink::getPermalinks($menu['url']);
-            if (count($permalink) > 0) {
-                $link = $permalink[0]['permalink'];
-            } else {
-                $link = $menu['url'];
-                if ($menu['url']== FrontEnd_Helper_viewHelper::__link('inschrijven')) {
-                    if (Auth_VisitorAdapter::hasIdentity()) {
-                        $link = FrontEnd_Helper_viewHelper::__link('mijn-favorieten');
-                    } else {
-                        $link = $menu['url'];
-                    }
-                }
-            }
-            if ($mainMenuvalue == $mainMenuCount) {
-                $menuName = str_replace(' ', '-', trim(strtolower($menu["name"])));
-                $navigationString .=
-                    '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" 
-                    class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a>
-                    </li>';
-            } else {
-                $menuName = str_replace(' ', '-', trim(strtolower($menu["name"])));
-                preg_match('/http:\/\//', $menu['url'], $matches);
-                if (count($matches) > 0) {
-                    $navigationString .=
-                        '<li><a id="'. $menuName. '" name="'. $menuName. '" 
-                        class="" href="'.  $menu['url'] . '">' . $menu["name"] . '</a></li>';
-                } else {
-                    $navigationString .=
-                        '<li><a id="'. $menuName. '" name="'. $menuName. '" 
-                        class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a>
-                        </li>';
-                }
-            }
-            $mainMenuvalue++;
-        }
-        $navigationString .= '</ul></nav>';
-        return $navigationString;
-    }
-
     public static function getFooterData()
     {
         return Footer::getFooter();
@@ -224,108 +124,6 @@ EOD;
         }
         $alphabetList .="</ul>";
         return $alphabetList;
-    }
-
-    public function socialMediaWidget($socialMediaUrl = '', $type = null)
-    {
-            $socialMediaTitle = "<h2>".$this->__translate('Follow us')."</h2>";
-            $socialMedia = "
-                <article class='block'>
-                    <div class='social-networks'>
-                        <div class='intro'>".$socialMediaTitle."</div>
-                        <ul class='share-list'>
-                            <li><a class='facebook' href='#'></a></li>
-                            <li><a class='twitter' href='#'></a></li>
-                            <li><a class='google' href='#'></a></li>
-                            <li class='share-text'>"
-                            .$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')
-                            ."</li>
-                        </ul>
-                    </div>
-                </article>";
-        return $socialMedia;
-    }
-    
-    public function getShopHeader($shop, $expiredMessage, $offerTitle)
-    {
-        $bounceRate = "/out/shop/".$shop['id'];
-        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        $shopUrl = $domainName.'out/shop/'.$shop['id'];
-        $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
-        if ($shop['affliateProgram']) :
-            $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
-            $affliateUrl = $shopUrl;
-            $affliateDisabled = '';
-            $affliateClass = '';
-        else:
-            $affliateBounceRate = '';
-            $affliateUrl = '#';
-            $affliateDisabled = 'disabled="disabled"';
-            $affliateClass = 'btn-disabled';
-        endif;
-        return self::getHeaderBlockContent(
-            $affliateBounceRate,
-            $affliateUrl,
-            $affliateDisabled,
-            $affliateClass,
-            $shop,
-            $expiredMessage,
-            $offerTitle
-        );
-    }
-    
-    public function getHeaderBlockContent(
-        $affliateBounceRate,
-        $affliateUrl,
-        $affliateDisabled,
-        $affliateClass,
-        $shop,
-        $expiredMessage,
-        $offerTitle
-    ) {
-        $divContent ='<div class="header-block header-block-2">
-                <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;">
-                <strong></strong></div>
-                <div class="icon">
-                    <a target="_blank" rel="nofollow" 
-                    class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
-                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">
-                    <img class="radiusImg" 
-                    src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . $shop['logo']['name']. '" 
-                    alt="'.$shop['name'].'" width="176" height="89" />
-                    </a>
-                </div> <div class="box">';
-        if ($expiredMessage !='storeDetail') {
-            $shop['subTitle'] = $this->__translate('Expired').' '.$shop['name'].' '.$this->__translate('copuon code');
-        } else {
-            $shop['subTitle'] = $shop['subTitle'];
-        }
-        if ($expiredMessage !='') {
-                $divContent .= '<h1>'.$shop['title'].'</h1>
-                    <strong>'.$shop['subTitle'].'</strong>
-                        <a target="_blank" rel="nofollow" 
-                        class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
-                        .$affliateDisabled.'
-                        onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shop['actualUrl'].'
-                        </a>'.self::getLoveAnchor($shop['id']);
-        } else {
-            $divContent .= '<h1>'.$offerTitle.'</h1>';
-        }
-                $divContent .='</div></div>';
-        return $divContent ;
-    }
-    
-    public function getLoveAnchor($shopId)
-    {
-        $favouriteShopId = 0;
-        if (Auth_VisitorAdapter::hasIdentity()):
-             $favouriteShopId=Auth_VisitorAdapter::getIdentity()->id;
-        endif;
-        return '<a onclick="storeAddToFeborite('.$favouriteShopId.','.$shopId.')" 
-            class="pop btn btn-sm btn-default" href="javascript:void(0)">
-            <span class="glyphicon glyphicon-heart"></span>'.
-            $this->__translate('Love').
-        '</a>';
     }
 
     public static function renderPagination(
@@ -407,28 +205,6 @@ EOD;
         endif;
     }
 
-    public function popularCategoryWidget()
-    {
-        $allPopularCategories = Category::getPopularCategories();
-        $categorySidebarWodget =
-        '<div class="block">
-            <div class="intro">
-            <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
-                <ul class="tags">';
-        for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
-            $categorySidebarWodget.=
-                    '<li>
-                        <a href="'.HTTP_PATH_LOCALE
-                        . FrontEnd_Helper_viewHelper::__link('categorieen'). '/'
-                        . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'
-                        .$allPopularCategories[$categoryIndex]['category']['name']
-                    .'</li>';
-        }
-        $categorySidebarWodget.=
-                '</ul></div>';
-        return $categorySidebarWodget;
-    }
-
     public static function getRequestedDataBySetGetCache(
         $dataKey = '',
         $relatedFunction = '',
@@ -453,28 +229,6 @@ EOD;
         return $requestedInformation;
     }
 
-    public function browseByStoreWidget()
-    {
-        $browseByStoreWidget =
-        '<div class="block">
-            <div class="intro">
-               <h2>'.$this->__translate('Browse by Store') .'</h2>
-            </div>
-            <div class="alphabet-holder">
-                <ul class="alphabet">';
-        foreach (range('A', 'Z') as $oneCharacter) {
-            $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
-            $browseByStoreWidget .=
-                    '<li>
-                        <a href="' .$redirectUrl.'">'.$this->__translate($oneCharacter).'</a>
-                    </li>';
-        };
-        $browseByStoreWidget.=
-                '</ul>
-            </div>
-        </div>';
-        return $browseByStoreWidget;
-    }
 
     public static function viewCounter($type, $eventType, $id)
     {
@@ -586,21 +340,6 @@ EOD;
         );
     }
 
-    public static function getMostPopularCouponOnEarth()
-    {
-        $splashInformation = self::getSplashInformation();
-        if (!empty($splashInformation)) {
-            $locale = $splashInformation[0]['locale'];
-            $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
-            $offer = new Offer($connectionWithSiteDatabase['connName']);
-            $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
-            BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
-            return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
-        } else {
-            return array('locale' => '','mostPopularCoupon' => '');
-        }
-    }
-
     public static function getSplashInformation()
     {
         $splashInformation = Doctrine_Query::create()
@@ -655,16 +394,6 @@ EOD;
         return $currentObject;
     }
     
-    public static function getWebsitesLocales($websites)
-    {
-        foreach ($websites as $website) {
-            $splitWebsite  = explode('/', $website['name']);
-            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
-            $locales[strtoupper($locale)] = $website['name'];
-        }
-        return $locales;
-    }
-
     public static function __link($variable)
     {
         $trans = Zend_Registry::get('Zend_Translate');
@@ -691,58 +420,6 @@ EOD;
         $translation =  new Transl8_View_Helper_Translate();
         $variable = $translation->translate($variable);
         return $variable;
-    }
-
-    public function getSidebarWidget($array = array(), $page = '')
-    {
-        $pageWidgets = Doctrine_Query::create()
-            ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
-            ->leftJoin('p.widget w')
-            ->leftJoin('w.refPageWidget refpage')
-            ->where("p.permalink="."'$page'")
-            ->andWhere('w.status=1')
-            ->andWhere('w.deleted=0')
-            ->fetchArray();
-        $sidebarWidgets = '';
-        if (count($pageWidgets) > 0) {
-            for ($i=0; $i<count($pageWidgets[0]['widget']); $i++) {
-            }
-        }
-        return $sidebarWidgets;
-    }
-    
-    public function popularShopWidget()
-    {
-        $popularStores = self::getStoreForFrontEnd('popular', 25);
-        $popularStoresContent = '<div class="block"><div class="intro">
-                   <h2>'.$this->__translate('Populaire Winkels').'</h2>
-                   <span>'
-                   .$this->__translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
-                 </div><ul class="tags">';
-        for ($i=0; $i<count($popularStores); $i++) {
-            $class ='';
-            if ($i%2==0) {
-                $class = 'class="none"';
-            }
-            if ($popularStores[$i]['shop']['deepLink']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['deepLink'];
-            } elseif ($popularStores[$i]['shop']['refUrl']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['refUrl'];
-            } elseif ($popularStores[$i]['shop']['actualUrl']) {
-                $popularStoreUrl = $popularStores[$i]['shop']['actualUrl'];
-            } else {
-                $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
-            }
-            $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
-            $popularStoresContent .=
-                '<li '.$class.'>
-                    <a title='.$popularStores[$i]['shop']['name'].' 
-                    href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'], 200))
-                    .'</a>
-                </li>';
-        }
-        $popularStoresContent .='</ul></div>';
-        return $popularStoresContent;
     }
 
     public static function commonfrontendGetCode($type, $limit = 10, $shopId = 0, $userId = "")
@@ -855,9 +532,6 @@ EOD;
             case "about":
                 $status = 1;
                 $result = About :: getAboutContent($status);
-                break;
-            case "loginwedget":
-                $result = self :: getloginwedget();
                 break;
         }
         return $result;

@@ -49,8 +49,8 @@ echo $storesInformation;
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
 <?php
 echo $signUpWidgetForm;
-$frontendHelper = new FrontEnd_Helper_viewHelper();
-echo $frontendHelper->socialMediaWidget();
+$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+echo $frontendSidebarHelper->socialMediaWidget();
 ?>
     </aside>
 </div>

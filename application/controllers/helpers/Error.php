@@ -50,4 +50,14 @@ class Zend_Controller_Action_Helper_Error extends Zend_Controller_Action_Helper_
         }
         return $pagePermalink;
     }
+
+    public static function getWebsitesLocales($websites)
+    {
+        foreach ($websites as $website) {
+            $splitWebsite  = explode('/', $website['name']);
+            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
+            $locales[strtoupper($locale)] = $website['name'];
+        }
+        return $locales;
+    }
 }

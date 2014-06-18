@@ -95,7 +95,7 @@ class StoreController extends Zend_Controller_Action
             }
 
             if ($shopInformation[0]['showChains']) {
-                $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+                $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
                 $shopChains = $frontEndViewHelper->sidebarChainWidget(
                     $shopInformation[0]['id'],
                     $shopInformation[0]['name'],
@@ -157,8 +157,8 @@ class StoreController extends Zend_Controller_Action
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = Shop::getSimilarShops($shopId, 11);
         }
-        $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
-        $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
+        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+        $this->view->popularStoresList = $frontendSidebarHelper->PopularShopWidget();
 
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
@@ -243,7 +243,7 @@ class StoreController extends Zend_Controller_Action
         );
 
         if ($shopInformation[0]['showChains']) {
-            $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+            $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
             $shopChains = $frontEndViewHelper->sidebarChainWidget(
                 $shopInformation[0]['id'],
                 $shopInformation[0]['name'],

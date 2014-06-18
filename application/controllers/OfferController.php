@@ -83,8 +83,8 @@ class OfferController extends Zend_Controller_Action
 
         $currentDate = date('Y-m-d');
         $topOfferFromStore = Offer::getrelatedOffers($couponDetails[0]['shopId'], $currentDate);
-        $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
-        $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
+        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+        $this->view->popularStoresList = $frontendSidebarHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->topOfferFromStore = $topOfferFromStore;
         $this->view->couponDetails = $couponDetails;

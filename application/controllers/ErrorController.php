@@ -37,7 +37,7 @@ class ErrorController extends Zend_Controller_Action
                         30,
                         3
                     );
-                    $frontendViewHelper = new FrontEnd_Helper_viewHelper();
+                    $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),
                         rtrim($this->pagePermalink, '/')
@@ -59,7 +59,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->getResponse()->setHttpResponseCode(404);
                     $this->_helper->layout()->disableLayout();
                     $this->view->popularShops = Shop::getPopularStores(12);
-                    $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+                    $websitesWithLocales = $this->_helper->Error->getWebsitesLocales(Website::getAllWebsites());
                     $this->view->flipitLocales = $websitesWithLocales;
                 }
                 break;
@@ -69,7 +69,7 @@ class ErrorController extends Zend_Controller_Action
                 $priority = Zend_Log::CRIT;
                 $this->view->message = 'Application error';
                 $this->view->popularShops = Shop::getPopularStores(12);
-                $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+                $websitesWithLocales = $this->_helper->Error->getWebsitesLocales(Website::getAllWebsites());
                 $this->view->flipitLocales = $websitesWithLocales;
                 break;
         }

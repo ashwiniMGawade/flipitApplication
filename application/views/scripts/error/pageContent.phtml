@@ -30,8 +30,8 @@ if ($this->pageMode == true) {
                'shopLogoOrDefaultImage'=>''
             )
         );
-        $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-        $sidebarWidgets = $this->widget . $frontendViewHelper->socialMediaWidget(). $signUpWidgetForm;
+        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+        $sidebarWidgets = $this->widget . $frontendSidebarHelper->socialMediaWidget(). $signUpWidgetForm;
         $sidebarWidgetHtml = '<aside class="col-md-4 col-sm-4" id="sidebar">' . $sidebarWidgets . '</aside>';
         $contentDivStart = '<div id="content" class="col-md-8 col-sm-8">';
         $contentDivEnd = '</div>';

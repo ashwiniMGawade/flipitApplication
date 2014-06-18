@@ -101,8 +101,8 @@ else:
     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
 endif;
 
-$frontEndViewHelper = new FrontEnd_Helper_viewHelper();
-$headerBlock = $frontEndViewHelper->getShopHeader(
+$frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
+$headerBlock = $frontShopHeaderHelper->getShopHeader(
     $this->currentStoreInformation[0],
     $message = 'storeDetail',
     $offerTitle = 'storeDetail'
