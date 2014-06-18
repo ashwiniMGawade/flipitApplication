@@ -3,30 +3,30 @@ class OutController extends Zend_Controller_Action
 {
     public function offerAction()
     {
-        $offer_id = $this->getRequest()->getParam('id');
-        FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offer_id);
-        FrontEnd_Helper_viewHelper::viewCounter('offer', 'onload', $offer_id);
-        Offer::addConversion($offer_id);
-        $link  = Offer::getcloakLink($offer_id, false);
+        $offerId = $this->getRequest()->getParam('id');
+        FrontEnd_Helper_viewHelper::viewCounter('offer', 'onclick', $offerId);
+        FrontEnd_Helper_viewHelper::viewCounter('offer', 'onload', $offerId);
+        Offer::addConversion($offerId);
+        $redirectUrl  = Offer::getcloakLink($offerId, false);
         $this->_helper->redirector->setCode(301);
-        $this->_redirect($link);
+        $this->_redirect($redirectUrl);
     }
 
     public function extendedofferAction()
     {
-        $offer_id = $this->getRequest()->getParam('id');
-        $link  = Offer::getcloakLink($offer_id, false);
+        $offerId = $this->getRequest()->getParam('id');
+        $redirectUrl  = Offer::getcloakLink($offerId, false);
         $this->_helper->redirector->setCode(301);
-        $this->_redirect($link);
+        $this->_redirect($redirectUrl);
     }
 
     public function shopAction()
     {
-        $shop_id = $this->getRequest()->getParam('id');
-        FrontEnd_Helper_viewHelper::viewCounter('shop', 'onclick', $shop_id);
-        Shop::addConversion($shop_id);
-        $link = Shop::getStoreLinks($shop_id, false);
+        $shopId = $this->getRequest()->getParam('id');
+        FrontEnd_Helper_viewHelper::viewCounter('shop', 'onclick', $shopId);
+        Shop::addConversion($shopId);
+        $redirectUrl = Shop::getStoreLinks($shopId, false);
         $this->_helper->redirector->setCode(301);
-        $this->_redirect($link);
+        $this->_redirect($redirectUrl);
     }
 }
