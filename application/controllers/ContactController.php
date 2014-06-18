@@ -1,7 +1,24 @@
 <?php
-# we set a passcache cookie for Flipit and Kortingscode.nl so that admin can bypass varnish
+
 class ContactController extends Zend_Controller_Action
 {
+
+    public function init()
+    {
+        $module   = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action     = strtolower($this->getRequest()->getActionName());
+        if (
+            file_exists(
+                APPLICATION_PATH. '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
+            )
+        ) {
+            $this->view->setScriptPath(APPLICATION_PATH . '/modules/'  . $module . '/views/scripts');
+        } else {
+            $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
+        }
+            $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+    }
 
     public function getcontactformdetailsAction()
     {
@@ -10,7 +27,6 @@ class ContactController extends Zend_Controller_Action
         $visitorEmail = FrontEnd_Helper_viewHelper::sanitize($parameters['email']);
         $subject = $parameters['subject'];
         $message = $parameters['message'];
-
         self::sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message);
     }
 
