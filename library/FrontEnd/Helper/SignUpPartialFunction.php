@@ -61,7 +61,7 @@ class FrontEnd_Helper_SignUpPartialFunction
        else if($widgetType == 'footerSignupForm') {
         $signUpHeader='<div class="text">
                 <h2>'.FrontEnd_Helper_viewHelper::__translate('Subscribe now').'</h2>
-                <span>'.FrontEnd_Helper_viewHelper::__translate('Become a saving superstar').'! '.'<br>'.FrontEnd_Helper_viewHelper::__translate('And get exclusive codes').'</span>
+                <span>'.FrontEnd_Helper_viewHelper::__translate('Become a saving superstar&#33;').'<br>'.FrontEnd_Helper_viewHelper::__translate('And get exclusive codes').'</span>
             </div>';
        }
        else {
