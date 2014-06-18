@@ -33,8 +33,8 @@ $newestOffers = $this->partial(
     <aside class="col-md-4 col-sm-4" id="sidebar">
         <?php
         echo $signUpWidgetForm;
-        $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-        echo $frontendViewHelper->socialMediaWidget(strtolower($this->actionName));
+        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+        echo $frontendSidebarHelper->socialMediaWidget(strtolower($this->actionName));
         ?>
     </aside>
 </div>

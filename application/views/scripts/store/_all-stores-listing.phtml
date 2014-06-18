@@ -17,7 +17,9 @@ foreach ($this->storesInformation as $storesKey => $stores) :
                     foreach ($storeForOneDiv as $store):
         ?>
                         <li>
-                            <a href="<?php echo HTTP_PATH_LOCALE.$store['permaLink'];?>"><?php echo $store['name'];?></a>
+                            <a href="<?php echo HTTP_PATH_LOCALE.$store['permaLink'];?>">
+                            <?php echo $store['name'];?>
+                            </a>
                         </li>
         <?php
                     endforeach;

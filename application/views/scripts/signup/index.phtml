@@ -1,6 +1,6 @@
 <?php
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/register.css");
-echo $this->minifyHeadScript()->appendFile(HTTP_PATH."public/js/front_end/registration.js");
+echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/registration.js");
 $registerForm = $this->form;
 // Remove <dt> from label generation
 foreach ($registerForm->getElements() as $formElement) {
@@ -26,31 +26,42 @@ endif;
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <?php echo FrontEnd_Helper_viewHelper::__form($registerForm->emailAddress->renderLabel()). $registerForm->emailAddress->renderViewHelper();?>
+                            <?php 
+                            echo $this->translate($registerForm->emailAddress->renderLabel())
+                            . $registerForm->emailAddress->renderViewHelper();
+                            ?>
                             </div>
                         </div>
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <?php echo FrontEnd_Helper_viewHelper::__form($registerForm->password->renderLabel()). $registerForm->password->renderViewHelper();?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                            <?php echo FrontEnd_Helper_viewHelper::__form($registerForm->firstName->renderLabel()) . $registerForm->firstName->renderViewHelper();?>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                            <?php echo FrontEnd_Helper_viewHelper::__form($registerForm->lastName->renderLabel()). $registerForm->lastName->renderViewHelper();?>
+                            <?php 
+                            echo $this->translate($registerForm->password->renderLabel())
+                            . $registerForm->password->renderViewHelper();
+                            ?>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <?php echo FrontEnd_Helper_viewHelper::__form($registerForm->dateOfBirth->renderLabel());?>
+                            <?php 
+                            echo $this->translate($registerForm->firstName->renderLabel()) 
+                            . $registerForm->firstName->renderViewHelper();?>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $this->translate($registerForm->lastName->renderLabel())
+                            . $registerForm->lastName->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php echo $this->translate($registerForm->dateOfBirth->renderLabel());?>
                                 <div class="row">
                                     <div class="col-xs-4">
                                     <?php echo $registerForm->dateOfBirthDay->renderViewHelper();?>
@@ -69,14 +80,20 @@ endif;
                         
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <?php echo FrontEnd_Helper_viewHelper::__form($registerForm->gender->renderLabel()). $registerForm->gender->renderViewHelper();?>
+                            <?php 
+                            echo $this->translate($registerForm->gender->renderLabel())
+                            . $registerForm->gender->renderViewHelper();
+                            ?>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="form-group">
-                            <?php echo FrontEnd_Helper_viewHelper::__form($registerForm->postCode->renderLabel()). $registerForm->postCode->renderViewHelper();?>
+                            <?php 
+                            echo $this->translate($registerForm->postCode->renderLabel())
+                            . $registerForm->postCode->renderViewHelper();
+                            ?>
                             </div>
                         </div>
                     </div>

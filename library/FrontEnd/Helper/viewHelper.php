@@ -1,112 +1,39 @@
 <?php
-
 class FrontEnd_Helper_viewHelper
 {
-    ##################################################################################
-    ################## REFACTORED CODE ###############################################
-    ##################################################################################
-    public $zendTranslate = '';
-    public function __construct() {
-        $this->zendTranslate =Zend_Registry::get('Zend_Translate');
-    }
-    /**
-     *
-    * @param string $message message to write into log file
-    * @param string  $logfile complete filepath
-    * @return array regarding data saved or not
-    */
     public static function writeLog($message, $logfile = '')
     {
         if ($logfile == '') {
             $logDir = APPLICATION_PATH . "../logs/";
-
-            if (!file_exists( $logDir))
-                mkdir( $logDir , 0776, TRUE);
+            if (!file_exists($logDir)) {
+                mkdir($logDir, 0776, true);
+            }
             $fileName = "default" ;
             $logfile = $logDir . $fileName;
         }
-
-        if ( ($time = $_SERVER['REQUEST_TIME']) == '') {
+        if (($time = $_SERVER['REQUEST_TIME']) == '') {
             $time = time();
         }
-
-        if ( ($remote_addr = $_SERVER['REMOTE_ADDR']) == '') {
+        if (($remote_addr = $_SERVER['REMOTE_ADDR']) == '') {
             $remote_addr = "REMOTE_ADDR_UNKNOWN";
         }
-
         $date = date("M d, Y H:i:s", $time);
-
         if ($fd = @fopen($logfile, "a")) {
-
             $str = <<<EOD
             $date; $remote_addr; $message
 EOD;
             $result = fwrite($fd, $str .PHP_EOL);
             fclose($fd);
-
-            if($result > 0)
-
+            if ($result > 0) {
                 return array('status' => true);
-            else
+            } else {
                 return array('status' => false, 'message' => 'Unable to write to '.$logfile.'!');
+            }
         } else {
             return array('status' => false, 'message' => 'Unable to open log '.$logfile.'!');
         }
     }
 
-    public function sidebarChainWidget($id, $shopName = false, $chainItemId = false)
-    {
-        if ($shopName) {
-            $chain = Chain::returnChainData($chainItemId, $id);
-            if (! $chain) {
-                return false;
-            }
-
-            $httpPathLocale = trim(HTTP_PATH_LOCALE, '/');
-            $httpPath = trim(HTTP_PATH, '/');
-            $shopHeader = $this->__translate("is an international shop");
-            $widgetText = $this->__translate("Check out the coupons and discounts from other countries when you're interested:");
-            $string = <<<EOD
-             <div class="intro">
-                <h2>
-                     {$shopName}
-                 </h2>
-                 <span>$widgetText</span>
-            </div>
-            <ul class="countries">
-EOD;
-             $hrefLinks = "" ;
-             $hasShops = false ;
-             foreach ($chain as $chainInformation) {
-                
-                 $hrefLinks .=  isset($chainInformation['headLink']) ? $chainInformation['headLink']. "\n" : '';
-    
-                 if (! empty($chainInformation['shops'])) {
-                     $hasShops = true ;
-                     $chainInformation = $chainInformation['shops'];
-                     $image   = ltrim(sprintf("images/front_end/flags/flag_%s.jpg", $chainInformation['locale']));
-                     $string .= sprintf(
-                        "<li><a class='country-flags ".strtolower($chainInformation['locale'])."' href='%s' target='_blank'>".self::getCountryNameByLocale(strtolower($chainInformation['locale']))."</a></li>",
-                         trim($chainInformation['url']),
-                         $httpPath.'/public/'. $image
-                        );
-                 }
-             }
-                         $string .= <<<EOD
-            </ul>
-EOD;
-
-          return array('string' => $string , 'headLink' => $hrefLinks, 'hasShops' => $hasShops );
-        }
-
-        return false;
-    }
-
-    /**
-     * get Newest offer list for Store page from database.
-     * @version 1.0
-     * @return array $data
-     */
     public static function getShopCouponCode($type, $limit, $shopId = 0)
     {
         $shopCouponCodes = '';
@@ -114,65 +41,34 @@ EOD;
             case 'expired':
                 $shopCouponCodes = Offer::getExpiredOffers($type, $limit, $shopId);
                 break;
-            case 'popular':
-            //to be refactored in future
-                $shopCouponCodes = Offer::commongetpopularOffers($type, $limit, $shopId = 0);
-                break;
-            case 'newest':
-            //to be refactored in future
-                $shopCouponCodes = Offer::getNewestOffers($type, $limit, $shopId);
-                break;
-            case 'extended':
-            //to be refactored in future
-                $shopCouponCodes = Offer::commongetextendedOffers($type, $limit, $shopId);
-                break;
-            case 'relatedshops':
-            //to be refactored in future
-                $shopCouponCodes = Offer::commongetrelatedshops($type, $limit, $shopId);
-                break;
             case 'similarstoresandsimilarcategoriesoffers':
                 $shopCouponCodes = Offer::similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId);
                 break;
             case 'latestupdates':
-            //to be refactored in future
                 $shopCouponCodes = Offer::getLatestUpdates($type, $limit, $shopId);
                 break;
             default:
                 break;
         }
-
         return $shopCouponCodes;
     }
 
-    /**
-     * Generate cononical link
-     *
-     * generate cononical from link and split
-     *
-     * @param string $link
-     * @version 1.0
-     */
     public static function generateCononical($permalink)
     {
         preg_match("/^[\d]+$/", $permalink, $matches);
-
         if (isset($matches[0]) && intval($matches[0]) > 0) {
             $permalink = explode('/'.$matches[0], $permalink);
             $permalink = $permalink[0];
         }
-
         $permalinkWithoutQueryString = explode('?', $permalink);
-
         if (!empty($permalinkWithoutQueryString)) {
             $permalink = $permalinkWithoutQueryString[0];
         }
-
         if (LOCALE!='en') {
             $frontEndControllers = Zend_Controller_Front::getInstance();
             $frontEndControllerDirectory = $frontEndControllers->getControllerDirectory();
             $moduleNames = array_keys($frontEndControllerDirectory);
             $moduleNameOrPermalink = explode('/', $permalink);
-
             if (in_array($moduleNameOrPermalink[0], $moduleNames)) {
                 $permalink = ltrim($permalink, $moduleNameOrPermalink[0]);
                 $permalink = ltrim($permalink, '/');
@@ -181,203 +77,62 @@ EOD;
         return rtrim($permalink, '/');
     }
 
-    /**
-     * generate main menu like home etc
-     * @author asharma
-     * @return mixed $string
-     * @version 1.0
-     */
-
-    public static function generateMainMenu($menuType = '')
-    { 
-        $mainMenu = menu::getFirstLevelMenu();
-        $mainMenuCount = count($mainMenu);
-        $mainMenuvalue = 0;
-
-        $menuNavId = 'nav';
-        $mobileMenuHeader = '';
-        $menuStyle = '';
-        if ($menuType == 'mobile') {
-            $menuNavId = 'menu';
-            $menuStyle = 'style="display:none;"';
-            $mobileMenuHeader = '<h1>Korting pakken</h1>';
-        }
-        $navigationString ='<nav id="'.$menuNavId.'"'.$menuStyle.'><ul>'.$mobileMenuHeader;
-        foreach ($mainMenu as $menu) {
-            $permalink = RoutePermalink::getPermalinks($menu['url']);
-
-            if (count($permalink) > 0) {
-                $link = $permalink[0]['permalink'];
-            } else {
-                $link = $menu['url'];
-                if ($menu['url']== FrontEnd_Helper_viewHelper::__link('link_inschrijven')) {
-                    if (Auth_VisitorAdapter::hasIdentity()) {
-                        $link = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
-                    } else {
-                        $link = $menu['url'];
-                    }
-                }
-            }
-            if ($mainMenuvalue==$mainMenuCount) {
-                $menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
-                $navigationString .= '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a></li>';
-            } else {
-                $menuName = str_replace(' ','-',trim(strtolower($menu["name"])));
-                preg_match('/http:\/\//', $menu['url'],$matches);
-                if (count($matches) > 0) {
-                    $navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'.  $menu['url'] . '">' . $menu["name"] . '</a></li>';
-                } else {
-                    $navigationString .= '<li><a id="'. $menuName. '" name="'. $menuName. '" class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a></li>';
-                }
-            }
-            $mainMenuvalue++;
-        }
-        $navigationString .= '</ul></nav>';
-        return $navigationString;
+    public static function generateShopMoneySavingGuideArticle($slug, $limit, $id)
+    {
+        $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
+        return $ShopMoneySavingGuideArticle;
     }
-
+    
     public static function getFooterData()
-    { 
-       $footerData = Footer::getFooter();
-       return $footerData;
+    {
+        return Footer::getFooter();
     }
 
     public static function getHeadMeta($headMetaValue)
     {
         $domainName = HTTP_HOST;
-        if($domainName == "www.kortingscode.nl") {
+        if ($domainName == "www.kortingscode.nl") {
             $site_name = "Kortingscode.nl";
         } else {
             $site_name = "Flipit.com";
         }
-        $socialMediaValue = array('og:title'=>$headMetaValue->facebookTitle, 'og:type'=>'website', 'og:url'=> $headMetaValue->facebookShareUrl,
-            'og:description'=>$headMetaValue->facebookDescription, 'og:locale'=>$headMetaValue->facebookLocale, 
-            'og:image'=>$headMetaValue->facebookImage, 'og:site_name'=>$site_name, 'twitter:description'=>$headMetaValue->twitterDescription,
-            'twitter:site'=>$site_name
+        $socialMediaValue =
+            array(
+                'og:title'=>$headMetaValue->facebookTitle,
+                'og:type'=>'website',
+                'og:url'=> $headMetaValue->facebookShareUrl,
+                'og:description'=>$headMetaValue->facebookDescription,
+                'og:locale'=>$headMetaValue->facebookLocale,
+                'og:image'=>$headMetaValue->facebookImage,
+                'og:site_name'=>$site_name,
+                'twitter:description'=>$headMetaValue->twitterDescription,
+                'twitter:site'=>$site_name
         );
         return $socialMediaValue;
     }
     
-    /**
-     * generate search panle for searching in all store page
-     * @param  char  $char
-     * @return mixed $string
-     * @version 1.0
-     */
     public static function alphabetList()
     {
         $letterOrNumber = 0;
         $alphabetList = "<ul class='alphabet' id='alphabet'><li><a id='0' class='' href='#0-9'>0-9</a></li>";
-        
         foreach (range('A', 'Z') as $letterOrNumber) {
             $lastAlphabetClass = $letterOrNumber=='Z' ? 'last' : '';
-            $alphabetList .="<li><a id='" . $letterOrNumber . "'  href='#".strtolower($letterOrNumber)."' class='".$lastAlphabetClass."'>$letterOrNumber</a></li>";
+            $alphabetList .=
+                "<li><a id='" . $letterOrNumber . "'  
+                href='#".strtolower($letterOrNumber)."' class='".$lastAlphabetClass."'>$letterOrNumber</a>
+                </li>";
         }
         $alphabetList .="</ul>";
         return $alphabetList;
     }
 
-    public function socialMediaWidget($socialMediaUrl = '', $type = null)
-    {
-        $linkFacebook  = (LOCALE == '') ? 'https://www.facebook.com/kortingsbonnen' : 'https://facebook.com/flipitcom';
-        $linkTwitter   = (LOCALE == '') ? 'https://twitter.com/codekorting' : 'https://twitter.com/flipit';
-        $linkGoogle    = (LOCALE == '') ? 'https://plus.google.com/+KortingscodeNl' : 'https://plus.google.com/104667362431888724932/about';
 
-            $socialMediaTitle = "<h2>".$this->__translate('Follow us')."</h2>";
-            $socialMedia = "
-                <article class='block'>
-                    <div class='social-networks'>
-                        <div class='intro'>".$socialMediaTitle."</div>
-                        <ul class='share-list'>
-                            <li><a class='facebook' href='".$linkFacebook."'></a></li>
-                            <li><a class='twitter' href='".$linkTwitter."'></a></li>
-                            <li><a class='google' href='".$linkGoogle."'></a></li>
-                            <li class='share-text'>".$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')."</li>
-                        </ul>
-                    </div>
-                </article>";
-        return $socialMedia;
-    }
-    
-    public function getShopHeader($shop, $expiredMessage, $offerTitle)
-    {
-        $bounceRate = "/out/shop/".$shop['id'];
-        $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-        $shopUrl = $domainName.'out/shop/'.$shop['id'];
-        $affliateProgramUrl = $shop['affliateProgram'] =='' ? $shop['actualUrl'] : $shop['affliateProgram'];
-        if ($shop['affliateProgram']) :
-            $affliateBounceRate = "ga('send', 'event', 'aff','$bounceRate');";
-            $affliateUrl = $shopUrl;
-            $affliateDisabled = '';
-            $affliateClass = '';
-        else:
-            $affliateBounceRate = '';
-            $affliateUrl = '#';
-            $affliateDisabled = 'disabled="disabled"';
-            $affliateClass = 'btn-disabled';
-        endif;
-        
-        return self::getHeaderBlockContent($affliateBounceRate, $affliateUrl, $affliateDisabled, $affliateClass, $shop, $expiredMessage, $offerTitle);
-    }
-    
-    public function getHeaderBlockContent($affliateBounceRate, $affliateUrl, $affliateDisabled, $affliateClass, $shop, $expiredMessage, $offerTitle)
-    {
-        $divContent ='<div class="header-block header-block-2">
-                <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;">
-                    <strong></strong>
-                </div>
-                <div class="icon">
-                    <a target="_blank" rel="nofollow" 
-                    class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
-                    onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">
-                    <img class="radiusImg" src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . $shop['logo']['name']. '" 
-                    alt="'.$shop['name'].'" width="176" height="89" />
-                    </a>
-                </div> <div class="box">';
-        if ($expiredMessage !='storeDetail') {
-            $shop['subTitle'] = $this->__translate('Expired').' '.$shop['name'].' '.$this->__translate('copuon code');
-        } else {
-            $shop['subTitle'] = $shop['subTitle'];
-        }
-        if ($expiredMessage !='') {
-                
-                $divContent .= '<h1>'.$shop['title'].'</h1>
-                    <strong>'.$shop['subTitle'].'</strong>
-                        <a target="_blank" rel="nofollow" 
-                        class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" 
-                        '.$affliateDisabled.'
-                        onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shop['actualUrl'].'
-                        </a>';
-        } else {
-            $divContent .= '<h1>'.$offerTitle.'</h1>';
-        }
-                $divContent .='</div></div>';
-        return $divContent ;
-    }
-    
-    public function getLoveAnchor($shopId)
-    {
-        $favouriteShopId = 0;
-        if (Auth_VisitorAdapter::hasIdentity()):
-             $favouriteShopId=Auth_VisitorAdapter::getIdentity()->id;
-        endif;
-        return '<a onclick="storeAddToFeborite('.$favouriteShopId.','.$shopId.')" class="pop btn btn-sm btn-default" href="javascript:void(0)">
-            <span class="glyphicon glyphicon-heart"></span>'.
-            $this->__translate('Love').
-        '</a>';
-    }
-
-    /**
-    * render pagination links
-    * @param $totalRecordsForPagination array
-    * @param $paginationParameter array
-    * @param $itemCountPerPage integer
-    * @param $paginationRange integer
-    * @version 1.0
-    * @return object $pagination
-    */
-    public static function renderPagination($totalRecordsForPagination, $paginationParameter, $itemCountPerPage, $paginationRange = 3)
-    {
+    public static function renderPagination(
+        $totalRecordsForPagination,
+        $paginationParameter,
+        $itemCountPerPage,
+        $paginationRange = 3
+    ) {
         $currentPageNumber = !empty($paginationParameter['page']) ? $paginationParameter['page'] : '1';
         $pagination = Zend_Paginator::factory($totalRecordsForPagination);
         $pagination->setCurrentPageNumber($currentPageNumber);
@@ -395,15 +150,13 @@ EOD;
             $permalink = explode('/'.$permalinkMatches[0], $permalink);
             $permalink = $permalink[0];
         elseif (intval($permalinkMatches[0]) > 3) :
-           throw new Exception('Error occured');
+            throw new Exception('Error occured');
         else:
             $permalink = $permalink;
         endif;
-
         $permalinkAfterQueryString = explode('?', $permalink);
         $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
         $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($permalinkAfterQueryString[0])));
-
         if ($pageCount > 1) :
             if ($currentPage - 1 != 0) :
                 if ($currentPage==2) :
@@ -413,7 +166,6 @@ EOD;
                 endif;
                 $view->headLink(array('rel' => 'prev', 'href' => $previousPermalink));
             endif;
-
             if ($currentPage <= 2) :
                 if ($currentPage == 1) :
                     $permalinkAfterQueryString = explode('?', $permalink);
@@ -423,10 +175,9 @@ EOD;
                     $view->headLink(array('rel' => 'next', 'href' => HTTP_PATH . $permalink .'/'. ($currentPage + 1)));
                 endif;
             endif;
-
             echo '<ul class="pagination">';
-            foreach ($pagesInRange as $pageNumber) :
-                if ($pageNumber < 4 ) :
+            foreach ($pagesInRange as $pageNumber):
+                if ($pageNumber < 4):
                     $pageNumberAfterSlash = '';
                     if ($pageNumber > 1) :
                         $pageNumberAfterSlash = "/".$pageNumber;
@@ -435,14 +186,19 @@ EOD;
                     <li class="<?php echo ($pageNumber == $currentPage) ? "active" : "" ?>">
                         <a href="<?php echo HTTP_PATH . $permalink . $pageNumberAfterSlash; ?>">
                         <?php echo $pageNumber;?> 
-                        <?php if ($pageNumber == $currentPage) : ?>
+                        <?php 
+                    if ($pageNumber == $currentPage) : ?>
                         <span class="sr-only">(current)</span>
-                        <?php endif; ?>
+                        <?php 
+                    endif;
+                    ?>
                         </a>
                     </li>
                     <?php
                 elseif (isset($nextPage) && $pageNumber < 4) : ?>
-                    <li class="next"> <a href="<?php echo HTTP_PATH . $permalink . $pageNumberAfterSlash ?>">&gt;</a></li>
+                    <li class="next">
+                        <a href="<?php echo HTTP_PATH . $permalink . $pageNumberAfterSlash ?>">&gt;</a>
+                    </li>
                     <?php
                 endif;
             endforeach;
@@ -450,36 +206,16 @@ EOD;
         endif;
     }
 
-    public function popularCategoryWidget()
-    {
-        $allPopularCategories = Category::getPopularCategories();
-        $categorySidebarWidget = '
-        <div class="block">
-            <div class="intro"><h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
-            <ul class="tags">';
-        for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
-            $categorySidebarWidget.= 
-                '
-                <li><a href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_categorieen').
-                    '/' . $allPopularCategories[$categoryIndex]['category']['permaLink'].'">'.
-                    $allPopularCategories[$categoryIndex]['category']['name'].'</a>'
-                .'</li>';
-        }
-        $categorySidebarWidget.=
-                '
-            </ul>
-        </div>';
-        return $categorySidebarWidget;
-    }
-
-    public static function getRequestedDataBySetGetCache($dataKey = '', $relatedFunction = '', $replaceStringArrayCheck = '1')
-    {
+    public static function getRequestedDataBySetGetCache(
+        $dataKey = '',
+        $relatedFunction = '',
+        $replaceStringArrayCheck = '1'
+    ) {
         if ($relatedFunction['function'] == '') {
             $functionToBeCached = $relatedFunction['parameters'];
         } else {
             $functionToBeCached = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
         }
-
         $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
             if ($replaceStringArrayCheck == '1') {
@@ -491,37 +227,7 @@ EOD;
         } else {
             $requestedInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($dataKey);
         }
-
         return $requestedInformation;
-    }
-    /**
-     * Function browseByStoreWidget.
-     *
-     * Common function to render sidebar widget of alphanumeric categories.
-     *
-     * @return $browseByStoreWidget
-     */
-    public function browseByStoreWidget()
-    {
-        $browseByStoreWidget = 
-        '<div class="block">
-            <div class="intro">
-               <h2>'.$this->__translate('Browse by Store') .'</h2>
-            </div>
-            <div class="alphabet-holder">
-                <ul class="alphabet">';
-        foreach (range('A','Z') as $oneCharacter) {
-            $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
-            $browseByStoreWidget .= 
-                    '<li>
-                        <a href="' .$redirectUrl.'">'.$oneCharacter.'</a>
-                    </li>';
-        };
-        $browseByStoreWidget.= 
-                '</ul>
-            </div>
-        </div>';
-        return $browseByStoreWidget;
     }
 
     public static function viewCounter($type, $eventType, $id)
@@ -545,19 +251,10 @@ EOD;
         return $counterValue;
     }
 
-    public static function getStoreForFrontEnd($storeType, $limit="")
+    public static function getStoreForFrontEnd($storeType, $limit = "")
     {
         $stores = '';
         switch (strtolower($storeType)) {
-            case 'all':
-                //will be refactore in future 
-                $stores = Shop::getallStoresForFrontEnd();
-                break;
-                //will be refactore in future
-            case 'recent':
-                $stores = Shop::getrecentstores($limit);
-                break;
-                //refactored 
             case 'popular':
                 $stores = Shop::getPopularStores($limit);
                 break;
@@ -573,7 +270,7 @@ EOD;
             $ip=$_SERVER['HTTP_CLIENT_IP'];
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ipRange=$_SERVER['HTTP_X_FORWARDED_FOR'];
-            $ip=current(array_slice(explode(",", $ipRange), 0, 1)); // if proxy returns multiple ip's. Only use the first.
+            $ip=current(array_slice(explode(",", $ipRange), 0, 1));
         } else {
             $ip=$_SERVER['REMOTE_ADDR'];
         }
@@ -593,7 +290,6 @@ EOD;
                     ->andWhere('articleid="'.$id.'"')
                     ->andWhere('ip="'.$ip.'"')
                     ->fetchArray();
-
                 if ($article[0]['exists'] == 0) {
                     $articleViewCount  = new ArticleViewCount();
                     $onClick = 1;
@@ -603,17 +299,16 @@ EOD;
                     $articleViewCount->save();
                     $artcileExistsOrNot = "true";
                 }
-            break;
+                break;
             case 'onload':
                 $article = Doctrine_Query::create()
                     ->select('count(*) as exists')
                     ->from('ArticleViewCount')
-                    ->where('deleted=0' )
+                    ->where('deleted=0')
                     ->andWhere('onload!=0')
                     ->andWhere('articleid="'.$id.'"')
                     ->andWhere('ip="'.$ip.'"')
                     ->fetchArray();
-
                 if ($article[0]['exists'] == 0) {
                     $articleViewCount  = new ArticleViewCount();
                     $onLoad = 1;
@@ -624,9 +319,9 @@ EOD;
                     $articleViewCount->save();
                     $artcileExistsOrNot = "true";
                 }
-            break;
+                break;
             default:
-            break;
+                break;
         }
         return $artcileExistsOrNot;
     }
@@ -636,25 +331,14 @@ EOD;
         $howToGuideImagePath = '';
         $howToGuideImageAltText = '';
         if (!empty($howToGuideImages)) {
-            $howToGuideImagePath = PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'],"/")."thum_bigLogoFile_".$howToGuideImages['name'];
+            $howToGuideImagePath =
+                PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'], "/")."thum_bigLogoFile_".$howToGuideImages['name'];
             $howToGuideImageAltText = $howToGuideImages['name'];
         }
-        return array('howToGuideImagePath' => $howToGuideImagePath, 'howToGuideImageAltText' => $howToGuideImageAltText);
-    }
-
-    public static function getMostPopularCouponOnEarth()
-    {
-        $splashInformation = self::getSplashInformation();
-        if (!empty($splashInformation)) {
-            $locale = $splashInformation[0]['locale'];
-            $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
-            $offer = new Offer($connectionWithSiteDatabase['connName']);
-            $mostPopularCoupon = $offer->getSplashPagePopularCoupon($splashInformation[0]['offerId']);
-            BackEnd_Helper_DatabaseManager::closeConnection($connectionWithSiteDatabase['adapter']);
-            return array('locale' => $locale,'mostPopularCoupon' => $mostPopularCoupon);
-        } else {
-            return array('locale' => '','mostPopularCoupon' => '');
-        }  
+        return array(
+            'howToGuideImagePath' => $howToGuideImagePath,
+            'howToGuideImageAltText' => $howToGuideImageAltText
+        );
     }
 
     public static function getSplashInformation()
@@ -678,8 +362,15 @@ EOD;
         return $countryName;
     }
 
-    public function getMetaTags($currentObject, $title = '', $metaTitle = '', $metaDescription = '', $permaLink = '', $image = '', $customHeader = '')
-    {
+    public function getMetaTags(
+        $currentObject,
+        $title = '',
+        $metaTitle = '',
+        $metaDescription = '',
+        $permaLink = '',
+        $image = '',
+        $customHeader = ''
+    ) {
         if ($metaTitle == '') {
             $metaTitle = $title;
         }
@@ -698,103 +389,40 @@ EOD;
         $currentObject->view->twitterDescription = $metaDescription;
 
         if (isset($customHeader)) {
-            $currentObject->view->layout()->customHeader = $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
+            $currentObject->view->layout()->customHeader =
+                $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
         }
         return $currentObject;
     }
-    
-    public static function getWebsitesLocales($websites)
-    {
-        foreach ($websites as $website) {
-            $splitWebsite  = explode('/', $website['name']);
-            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
-            $locales[strtoupper($locale)] = $website['name'].'='.$website['status'];
-        }
-        return $locales;
-    }
-
+   
     public static function __link($variable)
     {
-    $trans = Zend_Registry::get('Zend_Translate');
-    $variable = $trans->translate(_($variable));
-
-    return $variable;
+        $trans = Zend_Registry::get('Zend_Translate');
+        $variable = $trans->translate(_($variable));
+        return $variable;
     }
 
     public static function __form($variable)
     {
-    $trans = Zend_Registry::get('Zend_Translate');
-    $variable = $trans->translate(_($variable));
-
-    return $variable;
+        $trans = Zend_Registry::get('Zend_Translate');
+        $variable = $trans->translate(_($variable));
+        return $variable;
     }
 
     public static function __email($variable)
     {
-    $trans = Zend_Registry::get('Zend_Translate');
-    $variable = $trans->translate(_($variable));
-
-    return $variable;
+        $trans = Zend_Registry::get('Zend_Translate');
+        $variable = $trans->translate(_($variable));
+        return $variable;
     }
 
-    public static function __translate($variable) {
+    public static function __translate($variable)
+    {
         $translation =  new Transl8_View_Helper_Translate();
         $variable = $translation->translate($variable);
         return $variable;
     }
 
-    public function getSidebarWidget($array = array(), $page = '')
-    {
-        $pageWidgets = Doctrine_Query::create()
-            ->select('p.id,p.slug,w.*,refpage.position')->from('Page p')
-            ->leftJoin('p.widget w')
-            ->leftJoin('w.refPageWidget refpage')
-            ->where("p.permalink="."'$page'")
-            ->andWhere('w.status=1')
-            ->andWhere('w.deleted=0')
-            ->fetchArray();
-        
-        $sidebarWidgets = '';
-        if (count($pageWidgets) > 0) {
-            for ($i=0; $i<count($pageWidgets[0]['widget']); $i++) {
-            }
-        }
-
-        return $sidebarWidgets;
-    }
-    
-    public function popularShopWidget()
-    {
-        $popularStores = self::getStoreForFrontEnd('popular', 25);
-        $popularStoresContent = '<div class="block"><div class="intro">
-                   <h2>'.$this->__translate('Populaire Winkels').'</h2>
-                   <span>'.$this->__translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
-                 </div><ul class="tags">';
-
-        for ($i=0; $i<count($popularStores); $i++) {
-            $class ='';
-            if ($i%2==0) {
-                $class = 'class="none"';
-            }
-
-            if ($popularStores[$i]['shop']['deepLink']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['deepLink'];
-            } elseif ($popularStores[$i]['shop']['refUrl']!=null) {
-                $popularStoreUrl = $popularStores[$i]['shop']['refUrl'];
-            } elseif ($popularStores[$i]['shop']['actualUrl']) {
-                $popularStoreUrl = $popularStores[$i]['shop']['actualUrl'];
-            } else {
-                $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
-            }
-
-            $popularStoreUrl = HTTP_PATH_LOCALE .$popularStores[$i]['shop']['permaLink'];
-            $popularStoresContent .='<li '.$class.'><a title='.$popularStores[$i]['shop']['name'].' href='.$popularStoreUrl.'>'.ucfirst(self::substring($popularStores[$i]['shop']['name'], 200)).'</a></li>';
-        }
-        $popularStoresContent .='</ul></div>';
-
-        return $popularStoresContent;
-    }
-    
     public static function getWebsiteLocales($frontend = '')
     {
         $websites = Website::getAllWebsites();
@@ -842,16 +470,9 @@ EOD;
         $siteName = LOCALE != '' ? 'Flipit' : 'Kortingscode';
         return $siteName;
     }
-    ##################################################################################
-    ################## END REFACTORED CODE ###########################################
-    ##################################################################################
-    /**
-    * get popular code list, Newest offer list, Extended offer list  from database
-    * @version 1.0
-    * @return array $data
-    */
+  
     public static function commonfrontendGetCode($type, $limit = 10, $shopId = 0, $userId = "")
-    {  
+    {
         switch (strtolower($type)) {
             case 'all':
                 $shopData = Offer::getAllOfferOnShop($shopId);
@@ -862,132 +483,80 @@ EOD;
             case 'popular':
                 $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
                 break;
-            case 'newest':
-                $shopData = Offer::getNewestOffers($type, $limit, $shopId, $userId);
-                break;
-            case 'newestmemberonly':
-                $shopData = Offer::commongetMemberOnlyOffer($type, $limit);
-                break;
-            case 'extended':
-                $shopData = Offer::commongetextendedOffers($type, $limit, $shopId);
-                break;
-            case 'allcouponshowtoguide':
-                $shopData = Offer::getCouponOffersHowToGuide($shopId);
-                break;
             default:
                 break;
         }
-
         return $shopData;
     }
-    /**
-     * check key exist in cache or not
-     * @author  kraj
-     * @param string $key i.e all_store_list
-     */
+
     public static function checkCacheStatusByKey($key)
     {
         $key = $key. '_' .LOCALE;
         $flag = false;
         $cache = Zend_Registry::get('cache');
-        if (($result = $cache->load($key)) === false ) {
+        if (($result = $cache->load($key)) === false) {
             $flag = true;
         }
         return $flag;
     }
-    /**
-     * get cache value by key
-     * @author  kraj
-     * @param string $key i.e all_store_list
-     */
+   
     public static function getFromCacheByKey($key)
     {
         $key = $key. '_' .LOCALE;
         $cache = Zend_Registry::get('cache');
         $cache = $cache->load($key);
-
         return $cache;
     }
-    /**
-     * set data in cache by key
-     * @author  kraj
-     * @param string $key  i.e all_store_list
-     * @param mixed  $data i.e data of the store table
-     */
-    public static function setInCache($key,$data)
+
+    public static function setInCache($key, $data)
     {
         $key = $key. '_' .LOCALE;
         $cache = Zend_Registry::get('cache');
         $cache->save($data, $key);
     }
 
-    /**
-     * @author daniel updated by kraj
-     * @param string $key  i.e all_store_list
-     * @param mixed  $data
-     */
     public static function clearCacheByKeyOrAll($key)
     {
         $cache = Zend_Registry::get('cache');
         if ($key=='all') {
-
             $cache->clean();
-
         } else {
-
-            # generate locale key for cache update and db_locale is registered in chain controller
-
             if (! Zend_Registry::get('db_locale')) {
                 $locale = LOCALE ;
             } else {
                 $locale  = Zend_Registry::get('db_locale') == 'en' ? ''
                             : Zend_Registry::get('db_locale') ;
             }
-
             $key = $key. '_' .$locale;
             $cache->remove($key);
             $OutPutKey = explode('_', $key);
             $newKey = $OutPutKey[0].'_'.$OutPutKey[1].'_'.'_output'.'_'.$OutPutKey[2] ;
             $cache->remove($newKey);
-
         }
     }
 
     public static function getallrelatedshopsid($shopId)
     {
         $data = Offer::commongetallrelatedshopsid($shopId);
-
         return $data;
-
     }
 
-    public static function substring($text,$length)
+    public static function substring($text, $length)
     {
         if (strlen($text)>$length) {
-            $text = substr($text,0,$length).'...';
+            $text = substr($text, 0, $length).'...';
         }
-
         return $text;
     }
-
-    # shorten the string jusing mb str method
-    public static function mbSubstring($text,$length,$encoding ='utf-8')
+    
+    public static function mbSubstring($text, $length, $encoding = 'utf-8')
     {
         if (strlen($text) > $length) {
-            $text = mb_substr ( $text , 0, $length , $encoding).'...';
+            $text = mb_substr($text, 0, $length, $encoding).'...';
         }
-
         return $text;
     }
-
-    /********************** Start Front end home page *************************************/
-
-    /**
-     * This Comman function To geting many type home page Sections from database for front end
-     * @author Er.Kundal
-     * @version 1.0
-     * @return array $data
-     */
+   
     public static function gethomeSections($offertype, $flag = "")
     {
         switch ($offertype) {
@@ -1013,678 +582,145 @@ EOD;
                 $status = 1;
                 $result = About :: getAboutContent($status);
                 break;
-            case "loginwedget":
-                $result = self :: getloginwedget();
-                break;
         }
-
         return $result;
     }
-
-    /**
-     * This function returns the identity of editor who has most published articles
-     * @author cbhopal
-     * @version 1.0
-     * @return array $editor
-     */
-    public static function getMostPublishedArticlesEditor()
+    
+    public static function checkIfThisShopEntryExists($eventType, $id, $ip)
     {
-        $date = date('Y-m-d H:i:s');
-
-        $editor = Doctrine_Query::create()->select('count(*) as articlesWritten ,authorid')
-                                          ->from('Articles')
-                                          ->where("publishdate <= '". $date ."'")
-                                          ->andWhere("publish = 1")
-                                          ->groupBy('authorid')
-                                          ->orderBy('articlesWritten DESC')
-                                          ->fetchOne(array(), Doctrine_Core::HYDRATE_ARRAY);
-
-        return $editor['authorid'];
-    }
-
-    public static function getEditorDetail($uId)
-    {
-        $obj = new User();
-
-        return $obj->getUserDetail($uId);
-    }
-
-    /**
-     * This will get the detail of famous article editor
-     * @param  integer $eId
-     * @return array
-     */
-    public static function getFamousEditorDetail($eId)
-    {
-        $obj = new User();
-
-        return $obj->getFamousUserDetail($eId);
-
-    }
-
-    /**
-     * generate submenu
-     * @author kraj
-     * @return mixed $mainUl
-     * @version 1.0
-     */
-  public static function generateSecondNav()
-  {
-        $trans = Zend_Registry::get('Zend_Translate');
-        //call to self function and get first level menu from database
-        $data = menu::getFirstLevelMenu();
-
-        $mainUl = '<div class="nav-container hide" style="display: none;">';
-        $mainUl .= '<div class="new-outer">';
-          $mainUl .= '<div class="row" id="links-submenu">';
-        //$i = 1;
-        foreach ($data as $menus) {
-
-                //call to self function and get second level menu from database
-                 $second =menu::getLevelSecond($menus['id']);
-                foreach ($second as $s) {
-
-                                    $mainUl .= '<ul class="column_two">';//start ul for main menu mean first level
-
-                                    $mainUl .= '<li class="new_heading" ><a href="' . HTTP_PATH_LOCALE.ltrim($s['url'], '/') . '" class="">'  . $s['name'] . '</a></li>';
-                                    //call to self function and get third level menu from database
-                                    $third =self::getLevelThird($s['id']);
-                                    $i = 1;
-                                    foreach ($third  as $t) {
-
-                                                if ($i <= 7) {
-
-                                                    $mainUl .= '<li><a href="' . HTTP_PATH_LOCALE.ltrim($t['url'], '/') . '" class="">'  .$t['name'] . '</a></li>';
-                                                    } else {
-
-                                                    $mainUl .= '<li><a href="#" class="">'.$trans->translate('Read More').'</a></li>';
-                                                break;
-                                            }
-
-                                            $i++;
-
-                                    }
-                                $mainUl .="</ul>";//close main url level first
-                        }
-
-                    }
-        $mainUl .="<div class='clr'></div>";
-        $mainUl .="<div class='sub-nav-bot-link'><a href='".HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus')."'><img src='".HTTP_PATH."public/images/front_end/sub-nav-money-icon.png' width='' height='' alt='' style='margin: 0 7px 2px 0;'/>".$trans->translate('Alle pluss')."</a> &raquo;</div>";
-        $mainUl .="</div>";//close row
-
-        $mainUl .="</div>";//close new-outer
-        $mainUl .="</div>";//nav-container
-
-        return $mainUl;
-  }
-
-  /**
-   * get menu from datbase by parent on third level
-   * @author kraj
-   * @version 1.0
-   * @return array $th
-   */
-  public static function getLevelThird($id)
-  {
-        $third =menu::getLevelThird($id);
-
-        return $third ;
-  }
-
-  /**
-   * Get popular Category list from database for fronthome page
-   * @author kkumar
-   * @version 1.0
-   * @return array $data
-   */
-
-  public static function getPopularCategories($flag,$type='popular')
-  {
-    $data = Doctrine_Query::create()
-        ->select('p.id,o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId')
-        ->from('PopularCategory p')
-        ->leftJoin('p.category o')
-        ->leftJoin('o.categoryicon i')
-        ->where('o.deleted=0' )
-        ->andWhere('o.status= 1' )
-        ->orderBy("p.position ASC")->limit($flag)->fetchArray();
-
-     return $data;
-
-  }
-  /**
-   * generate MS Articles related to a shop
-   * @author Raman
-   * @version 1.0
-   * @return array $data
-   */
-    public static function generateMSArticleShop($slug, $limit, $id)
-    {
-        $data = MoneySaving::generateMSArticleShop($slug, $limit, $id);
-
-        return $data;
-    }
-  
-  /**
-   * Check if the an Shop id and ip exist in shopViewCount Table
-   * @author Raman
-   * @version 1.0
-   * $id shop id
-   * $ip ip address of local machine
-   * @return array $data
-   */
-
-  public static function checkIfThisShopEntryExists($eventType, $id, $ip)
-  {
-    $res = "false";
-    switch (strtolower($eventType)) {
-
-        case 'onclick':
-            //die("raman");
-            $data = Doctrine_Query::create()
-            ->select('count(*) as exists')
-            ->from('ShopViewCount')
-            ->where('deleted=0')
-            ->andWhere('onclick!=0')
-            ->andWhere('shopid="'.$id.'"')
-            ->andWhere('ip="'.$ip.'"')
-            ->fetchArray();
-
-            if ($data[0]['exists'] == 0) {
-                $cnt  = new ShopViewCount();
-                $view = 1;
-                $cnt->shopid = $id;
-                $cnt->onclick = $view;
-                $cnt->ip = $ip;
-                $cnt->save();
-                $res = "true";
-            }
-            break;
-
-        case 'onload':
-
-            $data = Doctrine_Query::create()
-            ->select('count(*) as exists')
-            ->from('shopviewcount')
-            ->where('deleted=0' )
-            ->andWhere('onload!=0')
-            ->andWhere('shopid="'.$id.'"')
-            ->andWhere('ip="'.$ip.'"')
-            ->fetchArray();
-
-            if ($data[0]['exists'] == 0) {
-
-                $cnt  = new ArticleViewCount();
-                $view = 1;
-                $cnt->shopid = $id;
-                $cnt->onload = $view;
-                $cnt->ip = $ip;
-                $cnt->save();
-                $res = "true";
-            }
-
-            break;
-
-        default:
-            break;
-    }
-
-    return $res;
-
-  }
-
-  /**
-   * Check if the an Offer id and ip exist in offer ViewCount Table
-   * @author Raman
-   * @version 1.0
-   * $id offer id
-   * $ip ip address of local machine
-   * @return array $data
-   */
-
- public static function checkIfThisOfferEntryExists($eventType, $id, $ip)
- {
-    $res = "false";
-    switch (strtolower($eventType)) {
-
-        case 'onclick':
-
-            $data = Doctrine_Query::create()
-                ->select('count(v.id) as exists')
-                ->addSelect("(SELECT  id FROM ViewCount  click WHERE click.id = v.id) as clickId")
-                ->from('ViewCount v')
-                ->where('onClick!=0')
-                ->andWhere('offerId="'.$id.'"')
-                ->andWhere('IP="'.$ip.'"')
+        $res = "false";
+        switch (strtolower($eventType)) {
+            case 'onclick':
+                $data = Doctrine_Query::create()
+                ->select('count(*) as exists')
+                ->from('ShopViewCount')
+                ->where('deleted=0')
+                ->andWhere('onclick!=0')
+                ->andWhere('shopid="'.$id.'"')
+                ->andWhere('ip="'.$ip.'"')
                 ->fetchArray();
 
-            if ($data[0]['exists'] == 0) {
-
-                $cnt  = new ViewCount();
-                $view = 1;
-                $cnt->offerId = $id;
-                $cnt->onClick = $view;
-                $cnt->IP = $ip;
-                $cnt->save();
-                $res = "true";
-
-            }
-            break;
-
-        case 'onload':
-
-            $data = Doctrine_Query::create()
-            ->select('count(*) as exists')
-            ->from('ViewCount')
-            ->where('onLoad!=0')
-            ->andWhere('offerId="'.$id.'"')
-            ->andWhere('IP="'.$ip.'"')
-            ->fetchArray();
-
-            if ($data[0]['exists'] == 0) {
-
-                $cnt  = new ViewCount();
-                $view = 1;
-                $cnt->offerId = $id;
-                $cnt->onLoad = $view;
-                $cnt->IP = $ip;
-                $cnt->save();
-                $res = "true";
-            }
-
-            break;
-
-        default:
-        break;
-    }
-
-    return $res;
-
-  }
-
-  /**
-   * Get user Id from offer id
-   * @author Raman
-   * @return array $userId
-   * @version 1.0
-   */
-  public static function getAuthorId($offerId)
-  {
-    $userId = Doctrine_Query::create()
-    ->select('o.authorId')
-    ->from("Offer o")
-    ->where("o.id =$offerId")
-    ->fetchArray();
-
-    return $userId;
-  }
-
-  /**
-   * function to use in replaceStringArray
-   * @author Raman
-   * @version 1.0
-   */
-
-  public static function replaceKeyword(&$item, $key)
-  {
-    $item = str_replace(array('[month]', '[year]', '[day]'), array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY), $item);
-
-  }
-
-  /**
-   * function for replacing a srting in an array with another string
-   * @author Raman
-   * @return array $array
-   * @version 1.0
-   */
-  public static function replaceStringArray($originalArray)
-  {
-    $obj = new self();
-    array_walk_recursive($originalArray, array($obj, 'replaceKeyword'));
-
-    return $originalArray;
-
-  }
-
-  /**
-   * function for replacing a srting in a variable with another string
-   * @author Raman
-   * @return array $variable
-   * @version 1.0
-   */
-  public static function replaceStringVariable($variable)
-  {
-     $variable = str_replace(array('[month]', '[year]', '[day]','[offers]','[coupons]','[accounts]'),
-                    array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY,
-
-                        # total amount of offers in country
-                        Dashboard::getDashboardValueToDispaly("total_no_of_offers"),
-
-                        # total number of coupons in country
-                        Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code"),
-
-                        # total number of (e-mail adresses) accounts in country
-                        Dashboard::getDashboardValueToDispaly("total_no_members") ), $variable);
-
-    return $variable;
-  }
-
-  public static function generatCononical($link)
-  {
-        $permalink = $link;
-        preg_match("/^[\d]+$/", $permalink, $matches);
-
-        if (intval(@$matches[0]) > 0) {
-            $permalink = explode('/'.$matches[0],$permalink);
-            $permalink = $permalink[0];
-        } else {
-            $permalink = $permalink;
-        }
-
-        $splitVal = explode('?', $permalink);
-        //echo "<pre>";print_r($splitVal);die;
-
-        if (!empty($splitVal)) {
-
-            $permalink = $splitVal[0];
-
-        } else {
-
-            $permalink = $permalink;
-        }
-
-        if (LOCALE!='en') {
-
-            $front = Zend_Controller_Front::getInstance();
-            $cd = $front->getControllerDirectory();
-            $moduleNames = array_keys($cd);
-            $routeProp = explode( '/' , $permalink) ;
-
-            if (in_array($routeProp[0] , $moduleNames)) {
-                $tempLang  = ltrim($permalink , $routeProp[0]);
-                $permalink  = ltrim($tempLang , '/');
-            }
-
-        }
-        //die($permalink);
-        return rtrim($permalink, '/');
-  }
-
-  /**
-   * Remove all content after  ?
-   * @param unknown_type $json
-   */
-  public static function generateSocialLink($link)
-  {
-    $splitVal = explode('?', $link);
-    if (!empty($splitVal)) {
-
-        $link= $splitVal[0] ;
-
-    }
-
-    return $link;
-  }
-  /**
-   * Generate cononical link
-   *
-   * generate cononical from link and split
-   *
-   * @param string $link
-   * @version 1.0
-   */
-
-  public static function generatCononicalForSignUp($link)
-  {
-    $plink = $link;
-
-    if (LOCALE!="") {
-        $front = Zend_Controller_Front::getInstance();
-        $cd = $front->getControllerDirectory();
-        $moduleNames = array_keys($cd);
-        $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
-
-        $splitVal = explode('?', $link);
-        if (!empty($splitVal)) {
-
-            $permalink = $splitVal[0] ;
-
-        } else {
-
-            $permalink = $link;
-        }
-
-
-        $routeProp = explode( '/' , $permalink) ;
-
-        $tempLang1  = rtrim($routeProp[0] , '/') ;
-        $tempLang2  = ltrim($permalink , $tempLang1) ;
-        $tempLang  = ltrim($tempLang2 , '/') ;
-
-        //remove an email from the URL
-        $perArray = explode('/', $tempLang);
-        $originalString = "";
-        foreach($perArray as $arrayPer):
-
-            $decodedEmail = base64_decode($arrayPer);
-            if (filter_var($decodedEmail, FILTER_VALIDATE_EMAIL)) {
-
-                $originalString = $arrayPer;
-                // valid address
-            }
-
-        endforeach;
-
-        $perWithoutEmail = rtrim(str_replace($originalString, "", $tempLang), '/');
-
-        if (in_array($routeProp[0] , $moduleNames)) {
-
-            $plink = $perWithoutEmail;
-
-        }
-
-    } else {
-
-        $splitVal = explode('?', $link);
-        if (!empty($splitVal)) {
-
-            $permalink = $splitVal[0] ;
-            $perArray = explode('/', $permalink);
-
-            //remove an email from the URL
-            $originalString = "";
-            foreach($perArray as $arrayPer):
-
-                $decodedEmail = base64_decode($arrayPer);
-                if (filter_var($decodedEmail, FILTER_VALIDATE_EMAIL)) {
-
-                    $originalString = $arrayPer;
-                    // valid address
+                if ($data[0]['exists'] == 0) {
+                    $cnt  = new ShopViewCount();
+                    $view = 1;
+                    $cnt->shopid = $id;
+                    $cnt->onclick = $view;
+                    $cnt->ip = $ip;
+                    $cnt->save();
+                    $res = "true";
                 }
-
-            endforeach;
-
-            $perWithoutEmail = rtrim(str_replace($originalString, "", $permalink), '/');
-            $permalink = $perWithoutEmail;
-        } else {
-
-            $permalink = $link;
-
-
+                break;
+            case 'onload':
+                $data = Doctrine_Query::create()
+                ->select('count(*) as exists')
+                ->from('shopviewcount')
+                ->where('deleted=0')
+                ->andWhere('onload!=0')
+                ->andWhere('shopid="'.$id.'"')
+                ->andWhere('ip="'.$ip.'"')
+                ->fetchArray();
+                if ($data[0]['exists'] == 0) {
+                    $cnt  = new ArticleViewCount();
+                    $view = 1;
+                    $cnt->shopid = $id;
+                    $cnt->onload = $view;
+                    $cnt->ip = $ip;
+                    $cnt->save();
+                    $res = "true";
+                }
+                break;
+            default:
+                break;
         }
-
-        $plink = $permalink;
+        return $res;
     }
 
-    return $plink;
-  }
-
-    ######## Refactored End ##############
-  /**
-   * Generate cononical link for search page
-   *
-   * generate cononical from link and split
-   *
-   * @param string $link
-   * @version 1.0
-   */
-  public static function generatCononicalForSearch($link)
-  {
-
-    $plink = null ;
-    if (LOCALE!='en') {
-        $front = Zend_Controller_Front::getInstance();
-        $cd = $front->getControllerDirectory();
-        $moduleNames = array_keys($cd);
-        $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
-
-        $splitVal = explode('?', $link);
-        if (!empty($splitVal)) {
-
-            $permalink = $splitVal[0] ;
-
-        } else {
-
-            $permalink = $link;
-        }
-
-        $routeProp = explode( '/' , $permalink) ;
-
-        $routeProp = explode( '/' , $permalink) ;
-
-        $tempLang1  = rtrim($routeProp[0] , '/') ;
-        $tempLang2  = ltrim($permalink , $tempLang1) ;
-        $tempLang  = ltrim($tempLang2 , '/') ;
-
-        if (in_array($routeProp[0] , $moduleNames)) {
-
-            $tempLang3 = explode( '/' , $tempLang) ;
-            $plink = $tempLang3[0];
-        }
-
-    } else {
-
-        $splitVal = explode('?', $link);
-        if (!empty($splitVal)) {
-
-            $permalink = $splitVal[0] ;
-
-        } else {
-
-            $permalink = $link;
-        }
-
-        $tempLang3 = explode( '/' , $permalink) ;
-        $plink = $tempLang3[0];
-    }
-
-    return $plink;
-  }
-
-  public static function setValueOfJs($json)
-  { ?>
-        <script type="text/javascript">
-            var json = <?php echo $json;?>
-            var jsonData = {};
-            jsonData['nl_NL_frontend_js'] = json;
-            var gt = new Gettext({ "domain" : "nl_NL_frontend_js" , "locale_data" : jsonData });
-        </script>
-    <?php
-  }
-
-    /**
-     * sanitize
-     *
-     * it will return sanetized string which prevent sql injection and other volunerabilities
-     *
-     * @param  string  $string    stri9ng value to sanetize
-     * @param  boolena $stripTags set fale if keep html or xml tags
-     * @return string
-     *
-     * @author sp singh
-     */
-    public static function sanitize($string, $stripTags = true)
+    public static function checkIfThisOfferEntryExists($eventType, $id, $ip)
     {
 
-        $search = array(
-                '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
-                '@[\\\]@'   // Strip out slashes
+        $res = "false";
+        switch (strtolower($eventType)) {
+            case 'onclick':
+                $data = Doctrine_Query::create()
+                    ->select('count(v.id) as exists')
+                    ->addSelect("(SELECT  id FROM ViewCount  click WHERE click.id = v.id) as clickId")
+                    ->from('ViewCount v')
+                    ->where('onClick!=0')
+                    ->andWhere('offerId="'.$id.'"')
+                    ->andWhere('IP="'.$ip.'"')
+                    ->fetchArray();
+                if ($data[0]['exists'] == 0) {
+                    $cnt  = new ViewCount();
+                    $view = 1;
+                    $cnt->offerId = $id;
+                    $cnt->onClick = $view;
+                    $cnt->IP = $ip;
+                    $cnt->save();
+                    $res = "true";
+                }
+                break;
+         }
+        $obj = new User();
+        return $obj->getFamousUserDetail($eId);
+    }
+
+    public static function getAuthorId($offerId)
+    {
+        $userId = Doctrine_Query::create()
+        ->select('o.authorId')
+        ->from("Offer o")
+        ->where("o.id =$offerId")
+        ->fetchArray();
+        return $userId;
+    }
+
+    public static function replaceKeyword(&$item, $key)
+    {
+        $item = str_replace(array('[month]', '[year]', '[day]'), array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY), $item);
+    }
+
+    public static function replaceStringArray($originalArray)
+    {
+        $obj = new self();
+        array_walk_recursive($originalArray, array($obj, 'replaceKeyword'));
+        return $originalArray;
+    }
+
+    public static function replaceStringVariable($variable)
+    {
+        $variable = str_replace(
+            array('[month]', '[year]', '[day]', '[offers]', '[coupons]', '[accounts]'),
+            array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY,
+            Dashboard::getDashboardValueToDispaly("total_no_of_offers"),
+            Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code"),
+            Dashboard::getDashboardValueToDispaly("total_no_members")),
+            $variable
         );
+        return $variable;
+    }
 
+    public static function sanitize($string, $stripTags = true)
+    {
+        $search = array(
+            '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
+            '@[\\\]@'   // Strip out slashes
+        );
         $string = preg_replace($search, array('',''), $string);
-
-        $string = htmlspecialchars($string,ENT_QUOTES, 'UTF-8');
-
+        $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
         $string = trim(rtrim(rtrim($string)));
         $string = mysql_real_escape_string($string);
-
         return $string;
     }
 
-    /**
-     * retrunCountryName
-     *
-     * return country name for requested locale
-     *
-     * @param string $siteLocale country locale
-     *
-     * @example retrunCountryName('BE') will return Belgien
-     */
-    public static function retrunCountryName($siteLocale)
+    public static function fillupTopCodeWithNewest($offers, $number)
     {
-
-        $locale = Signupmaxaccount::getAllMaxAccounts();
-        $locale = !empty($locale[0]['locale']) ? $locale[0]['locale'] : 'NL';
-
-        $countries = Zend_Locale::getTranslationList('territory', $locale, 2);
-
-        return $countries[$siteLocale];
-
-    }
-
-        /**
-     * fillupTopCodeWithNewest
-     *
-     * This function is used to fill up popular offers with newest offer if popular offers are less then required number
-     *
-     * @param array   $offer totla offers
-     * @param integer $muber required length of codes
-     * @author sp Singh
-     * @version 1.0
-     */
-    public static function fillupTopCodeWithNewest($offers,$number)
-    {
-         # if top korting are less than $number then add newest code to fill up the list upto $number
-            if (count($offers) < $number ) {
-                # the limit of popular oces
-                if(count($offers) < $number )
-                    $additionalCodes = $number - count($offers) ;
-
-                    # GET TOP 5 POPULAR CODE
-                    $additionalTopVouchercodes = Offer::commongetnewestOffers('newest', $additionalCodes);
+        if (count($offers) < $number) {
+            $additionalCodes = $number - count($offers) ;
+            $additionalTopVouchercodes = Offer::commongetnewestOffers('newest', $additionalCodes);
         }
-
         return false;
     }
 
-
-    /**
-    * sendMandrillNewsletterByBatch
-    *
-    * This function is used to send mandrill newsletter in batches of 500
-    *
-    * @param array $mandrillNewsletterSubject mandrill newsletter subject
-    * @param array $mandrillSenderEmailAddress
-    * @param array $mandrillSenderName
-    * @param array $recipientMetaData contains receipent email and referrer
-    * @param array $globalMergeVars contains shop permalinks
-    * @param array $mandrillMergeVars contains email, login link and login with unsubscribe
-    * @param array $templateName template name of mandrill
-    * @param array $templateContent
-    * @param object $mandrill
-    * @param array $mandrillUsersList
-    * @version 1.0
-    */
     public static function sendMandrillNewsletterByBatch(
         $mandrillNewsletterSubject,
         $mandrillSenderEmailAddress,
@@ -1696,15 +732,13 @@ EOD;
         $templateContent,
         $mandrill,
         $mandrillUsersList
-    )
-    {
+    ) {
         sort($mandrillUsersList);
         sort($recipientMetaData);
         sort($mandrillMergeVars);
         $mandrillUsersLists  = array_chunk($mandrillUsersList, 500);
         $recipientMetaData   = array_chunk($recipientMetaData, 500);
         $mandrillMergeVars    = array_chunk($mandrillMergeVars, 500);
-
         foreach ($mandrillUsersLists as $mandrillUsersKey => $mandrillUsersEmailList) {
             $mandrillMessage = array(
                 'subject'    => $mandrillNewsletterSubject,
@@ -1718,7 +752,6 @@ EOD;
             );
             $mandrill->messages->sendTemplate($templateName, $templateContent, $mandrillMessage);
         }
-
         return true;
     }
 
@@ -1730,7 +763,6 @@ EOD;
         $topVouchercodes = FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
         $xmlTitle =  $zendTranslate->translate('Kortingscode.nl populairste kortingscodes') ;
         $xmlDescription  = $zendTranslate->translate('Populairste kortingscodes') ;
-
         $xml = new XMLWriter();
         $xml->openURI('php://output');
         $xml->startDocument('1.0');
@@ -1745,7 +777,6 @@ EOD;
         $xml->writeElement('description', $xmlDescription);
         $xml->writeElement('link', $domainName);
         $xml->writeElement('language', 'nl');
-
         $shopName = 'shopname';
         $description = 'title';
         if ($feedCheck == true) {
@@ -1756,17 +787,14 @@ EOD;
             $top10Offers = $offer['offer'] ;
             $xml->startElement("item");
             $xml->writeElement($shopName, $top10Offers['shop']['name']);
-
             if (mb_strlen($top10Offers['title'], 'UTF-8') > 42) {
                 $xml->writeElement($description, mb_substr($top10Offers['title'], 0, 42, 'UTF-8')."...");
             } else {
                 $xml->writeElement($description, $top10Offers['title']);
             }
-
             $xml->writeElement('link', $domainName . '/' . $top10Offers['shop']['permaLink']);
             $xml->endElement();
         }
-
         if ($feedCheck == false) {
              $xml->writeElement('More', 'nl');
             $xml->writeElement('moreLink', $domainName);
@@ -1777,5 +805,14 @@ EOD;
         }
         $xml->endDocument();
         $xml->flush();
+    }
+    public static function getWebsitesLocales($websites)
+    {
+        foreach ($websites as $website) {
+            $splitWebsite  = explode('/', $website['name']);
+            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
+            $locales[strtoupper($locale)] = $website['name'];
+        }
+        return $locales;
     }
 }

@@ -14,7 +14,10 @@ foreach ($this->expiredOffers as $offer) :
             <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
             <div class="box">
                 <span class="text">
-                <?php echo $offer->title=='' ? $this->translate("Description not available right now..") : $expiredOffersPartialClass->getOfferTitle($offer->title); ?>
+                <?php 
+                echo $offer->title=='' 
+                ? $this->translate("Description not available right now..") 
+                : $expiredOffersPartialClass->getOfferTitle($offer->title); ?>
                 </span>
                 <?php echo $expiredOffersPartialClass->getOfferCouponCode($offer->couponCode)?>
             </div>

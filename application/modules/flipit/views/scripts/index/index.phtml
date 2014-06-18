@@ -23,6 +23,7 @@
 </head>
 <body class="splash-page">
 <?php
+$mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(); 
     if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
         $countryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
         $localeName = $mostPopularCoupon['locale'] == 'en' ? '' : $mostPopularCoupon['locale'].'/';

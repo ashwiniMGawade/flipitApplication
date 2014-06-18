@@ -15,8 +15,8 @@ class ErrorController extends Zend_Controller_Action
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_CONTROLLER:
             case Zend_Controller_Plugin_ErrorHandler::EXCEPTION_NO_ACTION:
 
-                $pagePermalink = $this->getPageParmalink();
-                $pageNumber = $this->getPageNumbering($pagePermalink);
+                $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
+                $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
                 if ($pageDetails) {
                     if (is_array($this->pagePermalink)) {
@@ -37,7 +37,7 @@ class ErrorController extends Zend_Controller_Action
                         30,
                         3
                     );
-                    $frontendViewHelper = new FrontEnd_Helper_viewHelper();
+                    $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),
                         rtrim($this->pagePermalink, '/')
@@ -82,8 +82,8 @@ class ErrorController extends Zend_Controller_Action
         }
 
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::
-            createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        $signUpFormSidebarWidget =
+            FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
         $currentUrlParameters = $this->_request->getParams();
 
@@ -116,67 +116,16 @@ class ErrorController extends Zend_Controller_Action
         return $log;
     }
 
-    public function getPageParmalink()
-    {
-        $pagePermalinkWithoutLeftSlash  = ltrim($this->_request->getPathInfo(), '/');
-        $pagePermalink = rtrim($pagePermalinkWithoutLeftSlash, '/');
-        $permalink = explode('/page/', $pagePermalink);
-        if (count($permalink) > 0) {
-            $pagePermalink = $permalink[0];
-        }
-        return $pagePermalink;
-    }
-
     public function getPageDetails($pagePermalink, $pageNumber)
     {
         if (intval($pageNumber) > 0) {
             $pagePermalink = explode('/'.$pageNumber, $pagePermalink);
-            $pagePermalink = $this->getDefaultPermalink($pagePermalink);
+            $pagePermalink = $this->_helper->Error->getDefaultPermalink($pagePermalink);
         } else {
-            $pagePermalink = $this->getPermalinkForFlipit($pagePermalink);
+            $pagePermalink = $this->_helper->Error->getPermalinkForFlipit($pagePermalink);
         }
         $this->pagePermalink = $pagePermalink;
         $pagedata = Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
         return $pagedata;
-    }
-
-    public function getPageNumbering($pagePermalink)
-    {
-        preg_match("/[^\/]+$/", $pagePermalink, $matches);
-        return $matches[0];
-    }
-
-    public function getDefaultPermalink($pagePermalink)
-    {
-        if (HTTP_PATH != "www.kortingscode.nl") {
-            $splitParmalink = explode('/', $pagePermalink[0]);
-            if(!empty($splitParmalink[1])):
-                 $pagePermalink = $splitParmalink[1];
-            else:
-                 $pagePermalink = $splitParmalink[0];
-            endif;
-        } else {
-             $pagePermalink = $splitParmalink[0];
-        }
-        return  $pagePermalink;
-    }
-
-    public function getPermalinkForFlipit($pagePermalink)
-    {
-        if (LOCALE!='en') {
-            $frontEndControllersDirectory = Zend_Controller_Front::getInstance();
-            $moduleDirectories = $frontEndControllersDirectory->getControllerDirectory();
-            $moduleNames = array_keys($moduleDirectories);
-            $routeProperties = explode('/', $pagePermalink);
-            if (in_array($routeProperties[0], $moduleNames)) {
-                $pagePermalink = "";
-                foreach ($routeProperties as $routeIndex => $route) {
-                    if ($routeIndex > 0) {
-                        $pagePermalink .= $route .'/';
-                    }
-                }
-            }
-        }
-        return $pagePermalink;
     }
 }

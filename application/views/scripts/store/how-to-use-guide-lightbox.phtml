@@ -6,7 +6,10 @@ $howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopI
     <div id="popup1" class="lightbox lightbox-2">
         <a class="glyphicon glyphicon-remove btn-close" href="javascript:void(0);" onclick="customPopUpClose()"></a>
         <header class="head">
-            <h1><?php echo $this->translate('How to guide').' '.$this->shopInformation[0]['name'].' '.$this->translate('coupon codes'); ?></h1>
+            <h1>
+            <?php echo $this->translate('How to guide').' '.$this->shopInformation[0]['name'].' '
+            .$this->translate('coupon codes'); ?>
+            </h1>
         </header>
         <div class="text-block">
             <ol class="num-list">
@@ -15,14 +18,21 @@ $howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopI
             <?php
             if(!empty($howToGuideBigImageDetails)) :?>
             <div class="visual-img">
-                <img src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
+                <img 
+                src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" 
+                alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
             </div>
             <?php endif; ?>
         </div>
         <?php if(!empty($this->howToUseGuideChapters)) : ?>
-        <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_how-to/').$this->shopInformation[0]['permaLink']; ?>#guide" class="link-box">
+        <a 
+        href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_how-to/')
+        .$this->shopInformation[0]['permaLink']; ?>#guide" class="link-box">
             <hr class="alt2">
-            <span><?php echo $this->translate('Still having troubles using the code'); ?>?</span> <strong><?php echo $this->translate('Read more in our extensive guide'); ?></strong>
+            <span>
+            <?php echo $this->translate('Still having troubles using the code'); ?>?
+            </span>
+            <strong><?php echo $this->translate('Read more in our extensive guide'); ?></strong>
         </a>
         <?php endif; ?>
     </div>

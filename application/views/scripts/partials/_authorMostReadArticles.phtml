@@ -5,9 +5,18 @@
 <?php
 foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
     $authorMostReadArticle = (object) $authorMostReadArticle;
-    $authorMostReadArticle = isset($authorMostReadArticle->articles) ? $authorMostReadArticle->articles : (array) $authorMostReadArticle;
-    $articleImage = !empty($authorMostReadArticle['thumbnail']) ? PUBLIC_PATH_CDN.$authorMostReadArticle['thumbnail']['path']. $authorMostReadArticle['thumbnail']['name'] : '';
-    $articleContent = !empty($authorMostReadArticle['content']) ? $authorMostReadArticle['content'] : $authorMostReadArticle['chapters'][0]['content'];
+    $authorMostReadArticle = 
+    	isset($authorMostReadArticle->articles) 
+    	? $authorMostReadArticle->articles 
+    	: (array) $authorMostReadArticle;
+    $articleImage =
+        !empty($authorMostReadArticle['thumbnail']) 
+        ? PUBLIC_PATH_CDN.$authorMostReadArticle['thumbnail']['path']. $authorMostReadArticle['thumbnail']['name'] 
+        : '';
+    $articleContent = 
+    	!empty($authorMostReadArticle['content']) 
+    	? $authorMostReadArticle['content'] 
+    	: $authorMostReadArticle['chapters'][0]['content'];
     if(mb_strlen($articleContent, 'UTF-8') > 200):
         $articleContent = mb_substr($articleContent, 0, 200, 'UTF-8').'...';
     endif;

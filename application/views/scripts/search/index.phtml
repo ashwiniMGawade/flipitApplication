@@ -61,7 +61,7 @@ if(count($this->popularStores)){
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4"> 
         <?php 
-        $frontendHelper = new FrontEnd_Helper_viewHelper();
-        echo $signUpWidgetForm.$frontendHelper->socialMediaWidget();?>
+         $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+        echo $signUpWidgetForm.$frontendSidebarHelper->socialMediaWidget();?>
     </aside>
 </div>

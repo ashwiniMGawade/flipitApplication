@@ -1,5 +1,7 @@
 <?php
-$categoryHeaderImage = PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryheaderimage']['path'].$this->categoryDetails[0]['categoryheaderimage']['name'];
+$categoryHeaderImage =
+    PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryheaderimage']['path']
+    .$this->categoryDetails[0]['categoryheaderimage']['name'];
 $categoryPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
 echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetails[0]['name'], $categoryHeaderImage);
 $partialsViewPath = 'partials/';
@@ -35,11 +37,11 @@ $signUpWidgetForm = $this->partial(
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php 
-    $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-    echo $frontendViewHelper->popularCategoryWidget();
-    echo $frontendViewHelper->socialMediaWidget();
-    echo $frontendViewHelper->popularShopWidget();
-    echo $frontendViewHelper->browseByStoreWidget();
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->popularCategoryWidget();
+    echo $frontendSidebarHelper->socialMediaWidget();
+    echo $frontendSidebarHelper->popularShopWidget();
+    echo $frontendSidebarHelper->browseByStoreWidget();
     echo $signUpWidgetForm;
     ?>
     </aside>

@@ -1,10 +1,6 @@
 <?php
-
 class LoginController extends Zend_Controller_Action
 {
-    ###########################################################
-    ############## REFACTORED CODE ########################
-    ###########################################################
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -147,19 +143,6 @@ class LoginController extends Zend_Controller_Action
                         $content,
                         FrontEnd_Helper_viewHelper::__email('email_Forgot password header')
                     );
-echo $this->view->partial(
-                                        'emails/forgotpassword.phtml',
-                                        array(
-                                            'resetPasswordLink' => HTTP_PATH_LOCALE .
-                                            FrontEnd_Helper_viewHelper::__email('email_login').'/'
-                                            .FrontEnd_Helper_viewHelper::__email('email_resetpassword').'/'
-                                            .base64_encode($visitorDetails['id'])
-                                            )
-                                    );
-                                    echo $this->view->partial(
-                                        'emails/footer.phtml'
-                                    );
-                                     die;
                     $this->addFlashMessage(
                         $this->view->translate('Please check you mail and click on reset password link'),
                         HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
@@ -264,93 +247,7 @@ echo $this->view->partial(
             );
         }
     }
-    ###########################################################
-    ############## END REFACTORED CODE ########################
-    ###########################################################
 
-    /**
-     * redirecttosignup
-     *
-     * Show light box for login or signup
-     * return phtml of current action
-     *
-     * @author kraj
-     * @version 1.0
-     */
-    public function redirecttosignupAction()
-    {
-        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
-        $this->view->headTitle($headTitle);
-
-        $this->_helper->layout()->disableLayout();
-
-    }
-    /**
-     * updateuserdata
-     *
-     * save user profile in databse
-     * return boolen true
-     *
-     * @author kraj
-     * @version 1.0
-     */
-    public function updateuserdataAction()
-    {
-        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
-        $this->view->headTitle($headTitle);
-
-        if (Auth_VisitorAdapter::hasIdentity()) {
-            $params = $this->getRequest()->getParams();
-            $params['userId'] = Auth_VisitorAdapter::getIdentity()->id;
-            $userdetail = Visitor::updateVisitor($params);
-
-
-            if( $userdetail) {
-
-                $subsStatus = $this->getRequest()->getParam('currentSubscriptionStatus');
-                $newStatus =  $this->getRequest()->getParam('weekly') == 'on'  ? 1 : 0  ;
-
-                # chekc if your has not update newsletter status
-                if($subsStatus == $newStatus) {
-                    $status = 0;
-                    $userdetail['message'] = $this->view->translate( "Uw gegevens zijn succesvol aangepast") ;
-                } else {
-
-                    # display subscribe/unsubscribe message
-                    if($newStatus) {
-                        $status = 'subsribed' ;
-                        $userdetail['message'] = $this->view->translate( "you have successfully subscribed weekly newsletter.") ;
-                    } else {
-
-                        $status = 'unsubscibed' ;
-                        $userdetail['message'] = $this->view->translate( "Je bent succesvol uitgeschreven en je zal geen nieuwsbrieven meer van ons ontvangen.") ;
-                    }
-                }
-                $userdetail['newStatus'] = $newStatus ;
-                $userdetail['updateType'] = $status;
-
-
-
-            } else {
-
-                $userdetail['message'] = $this->view->translate( "Please enter a valid email address") ;
-
-            }
-
-
-            echo Zend_Json::encode($userdetail);
-        }
-        die;
-    }
-
-    /**
-     * directlogin
-     *
-     * Direct login the user to update his/her profile from newsletter
-     *
-     * @author cbhopal
-     * @version 1.0
-     */
     public function directloginAction()
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
@@ -363,29 +260,26 @@ echo $this->view->partial(
             $userid = Auth_VisitorAdapter::getIdentity()->id;
             $obj = new Visitor();
             $obj->updateLoginTime($userid);
-            //setcookie('kc_session_active', 1, time() + 1800, '/');
             setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
-            $url = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login').'/'.FrontEnd_Helper_viewHelper::__link('link_profiel');
+            $url =
+                HTTP_PATH_LOCALE
+                . FrontEnd_Helper_viewHelper::__link('link_login').'/'.FrontEnd_Helper_viewHelper::__link('profiel');
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect($url);
         }
     }
-
-    /**
-     * directloginunsubscribe
-     *
-     * Direct login the user to update his/her profile from newsletter
-     * and unsubscribe from newsletter
-     *
-     * @author cbhopal
-     * @version 1.0
-     */
+    #this function used in mandrill
     public function directloginunsubscribeAction()
     {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        $updateWeekNewLttr = Doctrine_Query::create()->update('Visitor')->set('weeklyNewsLetter',0)->where("email = '".$username."'")->execute();
-        $moduleKey = $this->getRequest()->getParam('lang' , null);
+        $updateWeekNewLttr =
+            Doctrine_Query::create()
+            ->update('Visitor')
+            ->set('weeklyNewsLetter', 0)
+            ->where("email = '".$username."'")
+            ->execute();
+        $moduleKey = $this->getRequest()->getParam('lang', null);
         $data_adapter = new Auth_VisitorAdapter($username, $password);
         $auth = Zend_Auth::getInstance();
         $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
@@ -394,19 +288,17 @@ echo $this->view->partial(
             $userid = Auth_VisitorAdapter::getIdentity()->id;
             $obj = new Visitor();
             $obj->updateLoginTime($userid);
-            //setcookie('kc_session_active', 1, time() + 1800, '/');
             setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('You are successfully unsubscribed to our newsletter');
             $flash->addMessage(array('success' => $message));
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-
-            //echo FrontEnd_Helper_viewHelper::__link('link_profiel') ;
-            //echo  FrontEnd_Helper_viewHelper::__link('link_login') ;
-            $this->_helper->redirector(FrontEnd_Helper_viewHelper::__link('link_profiel') , FrontEnd_Helper_viewHelper::__link('link_login') , $moduleKey ) ;
-
+            $this->_helper->redirector(
+                FrontEnd_Helper_viewHelper::__link('link_profiel'),
+                FrontEnd_Helper_viewHelper::__link('link_login'),
+                $moduleKey
+            );
         }
-
     }
 
     // Returns the right top menu for the user by fetching the partial which checks if a user is logged in.
@@ -434,13 +326,5 @@ echo $this->view->partial(
     {
         $this->view->layout()->robotKeywords = 'noindex, nofollow' ;
 
-    }
-    public function dummyboxAction()
-    {
-        $this->view->layout()->robotKeywords = 'noindex, nofollow' ;
-
-        $headTitle = FrontEnd_Helper_viewHelper::__form('form_Members Only');
-        $this->view->headTitle($headTitle);
-        $this->_helper->layout()->disableLayout();
     }
 }
