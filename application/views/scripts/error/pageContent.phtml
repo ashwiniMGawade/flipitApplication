@@ -2,6 +2,15 @@
 if ($this->pageCssClass == 'faq-page') {
     $this->minifyHeadScript()->appendFile("/public/js/front_end/faq.js");
 }
+if ($this->pageCssClass == 'contact-page') {
+    $this->minifyHeadScript()->appendFile("/public/js/front_end/contactForm.js");
+}
+if (isset($this->successMessage) && $this->successMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <strong><?php echo $this->successMessage;?></strong>
+    </div>
+    <?php 
+endif;
 if ($this->pageMode == true) {
     $partialsViewPath = 'partials/';
     $pageContent =
