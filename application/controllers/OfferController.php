@@ -8,20 +8,22 @@ class OfferController extends Zend_Controller_Action
     public function top20Action()
     {
         $pageName = 'top-20';
-        $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
-        $page = Page::getPageFromPageAttribute($pageAttributeId);
-
-        $pageHeaderImage = Logo::getPageLogo($page->pageHeaderImageId);
+        $pageDetails = Page::getPageDetails($pageName);
+        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
 
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache('top_20_offers_list', array('function' => 'Offer::getTopOffers', 'parameters' => array(20)));
-        $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($page->logo['path'].$page->logo['name']);
-        $this->view->pageTitle = $page->pageTitle;
+
+        $imagePath = isset($pageDetails->logo['path']) ? $pageDetails->logo['path'] : '';
+        $imageName = isset($pageDetails->logo['name']) ? $pageDetails->logo['name'] : '';
+        $this->view->pageLogo = PUBLIC_PATH_CDN. $imagePath . $imageName;
+        
+        $this->view->pageTitle = $pageDetails->pageTitle;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
 
-        $customHeader = isset($page->customHeader) ? $page->customHeader : '';
-        $this->viewHelperObject->getMetaTags($this, $page->pageTitle, $page->metaTitle, trim($page->metaDescription), FrontEnd_Helper_viewHelper::__link($pageName), FACEBOOK_IMAGE, $customHeader);
+        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
+        $this->viewHelperObject->getMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link($pageName), FACEBOOK_IMAGE, $customHeader);
 
         $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
@@ -115,7 +117,7 @@ class OfferController extends Zend_Controller_Action
      */
     public function indexAction()
     {
-        $offerPage = Page::getPageFromPageAttribute(6);
+        $pageDetails = Page::getPageDetails(6);
         $params = $this->_getAllParams();
         $cacheKeyForNewsOffer =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         if ($cacheKeyForNewsOffer) {
@@ -125,15 +127,15 @@ class OfferController extends Zend_Controller_Action
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
 
-        $pageHeaderImage = Logo::getPageLogo($offerPage->pageHeaderImageId);
+        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
 
-        $this->view->pageTitle = $offerPage->pageTitle;
+        $this->view->pageTitle = $pageDetails->pageTitle;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
-        $customHeader = isset($offerPage->customHeader) ? $offerPage->customHeader : '';
-        $this->viewHelperObject->getMetaTags($this, $offerPage->pageTitle, $offerPage->metaTitle, trim($offerPage->metaDescription),FrontEnd_Helper_viewHelper::__link('link_nieuw'), FACEBOOK_IMAGE, $customHeader);
+        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
+        $this->viewHelperObject->getMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription),FrontEnd_Helper_viewHelper::__link('link_nieuw'), FACEBOOK_IMAGE, $customHeader);
 
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];

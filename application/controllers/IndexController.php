@@ -20,8 +20,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
-        $pageAttributeId = Page::getPageAttributeByPermalink($this->getRequest()->getActionName());
-        $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
+        $pageDetails = Page::getPageDetails($this->getRequest()->getActionName());
         if (!empty($pageDetails)) {
             $this->view->pageTitle = ucfirst($pageDetails->pageTitle);
             $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';

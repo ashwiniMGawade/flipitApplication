@@ -36,7 +36,7 @@ class CategoryController extends Zend_Controller_Action
     {
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
-        $this->pageDetails = Page::getPageFromPageAttribute(9);
+        $this->pageDetails = Page::getPageDetails(9);
         $allCategories = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'all_category_list',

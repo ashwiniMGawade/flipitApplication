@@ -1,10 +1,10 @@
 <?php
 $partialViewPath = 'partials/';
-$imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
-$imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
-$pageImagePath = PUBLIC_PATH_CDN.$imagePath.$imageName;
-$pageHeaderPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $pageHeaderPartial->getCategoryOrPageHeader($this->pageTitle, $pageImagePath);
+$pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+echo $pageHeader->getCategoryOrPageHeader(
+    $this->pageTitle,
+    $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage)
+);
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">

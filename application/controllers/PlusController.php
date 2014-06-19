@@ -20,38 +20,40 @@ class PlusController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $articleOverviewPagePermalink = 'plus';
-        $pageAttributeId = Page::getPageAttributeByPermalink($articleOverviewPagePermalink);
-        $articleOverviewPageDetails = Page::getPageFromPageAttribute($pageAttributeId);
+        $articleOverviewPagePermalink  = 'plus';
+        $pageDetails = Page::getPageDetails($articleOverviewPagePermalink);
         $mostReadArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' =>
                 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
 
-        $this->view->pageTitle = isset($articleOverviewPageDetails->pageTitle) ?
-            $articleOverviewPageDetails->pageTitle :'';
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ?
+            $pageDetails->pageTitle :'';
         $this->view->permaLink = $articleOverviewPagePermalink;
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articleOverviewPagePermalink);
-        $customHeader = isset($articleOverviewPageDetails->customHeader) ?
-            $articleOverviewPageDetails->customHeader : '';
+        $customHeader = isset($pageDetails->customHeader) ?
+            $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            isset($articleOverviewPageDetails->pageTitle) ?
-            $articleOverviewPageDetails->pageTitle :'',
+            isset($pageDetails->pageTitle) ?
+            $pageDetails->pageTitle :'',
             trim(
-                isset($articleOverviewPageDetails->metaTitle) ?
-                $articleOverviewPageDetails->metaTitle :''
+                isset($pageDetails->metaTitle) ?
+                $pageDetails->metaTitle :''
             ),
             trim(
-                isset($articleOverviewPageDetails->metaDescription) ?
-                $articleOverviewPageDetails->metaDescription :''
+                isset($pageDetails->metaDescription) ?
+                $pageDetails->metaDescription :''
             ),
             $articleOverviewPagePermalink,
             HTTP_PATH."public/images/plus_og.png",
             $customHeader
         );
-        $this->view->pageDetails = $articleOverviewPageDetails;
+        
+        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;

@@ -17,7 +17,10 @@ class AboutController extends Zend_Controller_Action
     public function indexAction()
     {
         $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
-        $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
+        $pageDetails = Page::getPageDetails($pageAttributeId);
+        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+        
         $this->view->pageTitle = $pageDetails->pageTitle;
         $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags($this, $pageDetails->pageTitle, $pageDetails->metaTitle, trim($pageDetails->metaDescription), FrontEnd_Helper_viewHelper::__link('link_redactie'), FACEBOOK_IMAGE, $customHeader);
@@ -25,8 +28,8 @@ class AboutController extends Zend_Controller_Action
         $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache("all_about_pages_users_list", array('function' => 'User::getAllUsersDetails', 'parameters' => array(self::getWebsiteNameWithLocale())));
 
         $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination($allAuthorsDetails, $this->_getAllParams(), 20, 7);
-        $this->view->pageDetails = $pageDetails;
-
+        
+        $this->view->pageTitle = $pageDetails->pageTitle;
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
