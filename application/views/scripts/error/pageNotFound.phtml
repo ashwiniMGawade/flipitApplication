@@ -99,8 +99,8 @@ if (LOCALE == '') {
                     <ul class="countries">
                         <?php foreach ($this->flipitLocales as $flipitLocaleKey => $flipitLocaleValue) : 
                             $explodedLocaleValue = explode('=',$flipitLocaleValue);
-                            $localeStatus = $explodedLocaleValue[1];
-                            $websiteName = $explodedLocaleValue[0];
+                            $localeStatus = isset($explodedLocaleValue[1]) ? $explodedLocaleValue[1] : '';
+                            $websiteName = isset($explodedLocaleValue[0]) ? $explodedLocaleValue[0] : '';
                             if ($localeStatus == 'online') :
                         ?>
                         <li>
