@@ -31,7 +31,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         	$offerType=='topOffers' 
         	? HTTP_PATH ."public/images/img-08.png" 
         	: HTTP_PATH .'public/images/img-09.png';
-        $headerText = $offerType=='topOffers' ? 'Our 10 best coupons' : 'New and Fresh Codes';
+        $headerText = $offerType=='topOffers' ? FrontEnd_Helper_viewHelper::__form('form_Our 10 best coupons') : 
+            FrontEnd_Helper_viewHelper::__form('form_New and Fresh Codes');;
         return $leftColumnOffersHtml = $this->getLeftColumnContent(
         	$offerType,
         	$imageName,
@@ -51,8 +52,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
             	. $category['category']['categoryicon']['name'];
             $categoriesOffers =
             	$category['totalOffers'] . ' ' 
-            	. FrontEnd_Helper_viewHelper::__form('Offers'). ' ' . $category['countOff'] . " " 
-            	. FrontEnd_Helper_viewHelper::__form('coupons');
+            	. FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff'] . " " 
+            	. FrontEnd_Helper_viewHelper::__form('form_coupons');
             $categoriesHtml .= $this->getLeftColumnContent(
             	'categories',
             	$categoryImage,
@@ -76,8 +77,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
             $totalOffersOfSpecialPage = (intval($totalCouponsCount) - $totalCoupon) + $totalOffers;
             $specialListPageOffers =
             	$totalOffersOfSpecialPage . ' ' 
-            	. FrontEnd_Helper_viewHelper::__form('Offers'). ' ' . $totalCouponsCount . " " 
-            	. FrontEnd_Helper_viewHelper::__form('coupons');
+            	. FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $totalCouponsCount . " " 
+            	. FrontEnd_Helper_viewHelper::__form('form_coupons');
             $specialPageHtml .=
             	$this->getLeftColumnContent('special',
             		'',
@@ -93,11 +94,11 @@ class FrontEnd_Helper_HomePagePartialFunctions{
     public function getLeftColumnSavingGuidesListHtml() {
         $savingGuideOffers =
         	count($this->homePageData['moneySavingGuides']) . " " 
-        	. FrontEnd_Helper_viewHelper::__form('articles worth your time');
+        	. FrontEnd_Helper_viewHelper::__form('form_articles worth your time');
         return $this->getLeftColumnContent(
         	'savingGuide',
         	'',
-        	FrontEnd_Helper_viewHelper::__form('Smarter shopping'),
+        	FrontEnd_Helper_viewHelper::__form('form_Smarter shopping'),
         	70,
         	'moneysaving',
         	$savingGuideOffers
@@ -135,8 +136,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
     public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription) {
         $imageTagOrSpan = '';
         if($listType =='special' || $listType =='savingGuide') {
-            $listType = $listType==FrontEnd_Helper_viewHelper::__form('savingGuide') ?
-            FrontEnd_Helper_viewHelper::__form('FLIPIT PLUS') : $listType;
+            $listType = $listType==FrontEnd_Helper_viewHelper::__form('form_savingGuide') ?
+            FrontEnd_Helper_viewHelper::__form('form_FLIPIT PLUS') : $listType;
             $imageTagOrSpan = '<span class="discount-label" >' 
             	. FrontEnd_Helper_viewHelper::__form($listType). '</span>' ;
         } else {
@@ -151,12 +152,12 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         $topOffer = $this->getRightColumnOffersHtml(
         	'topOffers',
         	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-20'),
-        	'All Top Codes'
+        	FrontEnd_Helper_viewHelper::__form('from_All Top Codes')
         );
         $newOffer = $this->getRightColumnOffersHtml(
         	'newOffers',
         	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
-        	'All New Codes'
+        	FrontEnd_Helper_viewHelper::__form('from_All New Codes')
         );
         $categories = $this->getRighColumnCategoriesHtml();
         $specialListPage = $this->getRightColumnSpicialListHtml();
@@ -168,8 +169,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $this->getRightColumnOffersHtml(
         	'moneysaving',
         	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus'), 
-        	'All Saving Guides',
-        	'moneysaving'
+        	FrontEnd_Helper_viewHelper::__form('from_All Saving Guides'),
+        	FrontEnd_Helper_viewHelper::__form('from_moneysaving')
         ); 
     }
 
@@ -179,7 +180,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
             $specialListHtml .= $this->getRightColumnOffersHtml(
             	'special',
             	HTTP_PATH_LOCALE.$pageId,
-            	'All Special Codes',
+            	FrontEnd_Helper_viewHelper::__form('from_All Special Codes'),
             	$pageId
             );
         }
@@ -192,7 +193,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
            $categegoriesHtml .= $this->getRightColumnOffersHtml(
            	'categories',
            	HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $categoryId,
-           	'All Category Codes', $categoryId
+           	FrontEnd_Helper_viewHelper::__form('from_All Category Codes'), $categoryId
            );
          }
          return $categegoriesHtml;
