@@ -124,7 +124,7 @@ class SendNewsletter
             $this->_locale = $key;
             $this->_siteName = "Flipit.com";
             $this->_logo =  $this->_hostName ."/public/images/flipit-welcome-mail.jpg";
-            $this->_public_cdn_path = "http://img.kortingscode.nl/public/" . strtolower($this->_localePath);
+            $this->_public_cdn_path = "http://img.flipit.com/public/" . strtolower($this->_localePath);
         }
 
         defined('PUBLIC_PATH')
@@ -226,11 +226,11 @@ class SendNewsletter
         $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10),0,1);
 
         # fetch top 10 voucher codes
-        $voucherCodesData = $this->getVouchercodes();
+        $topVouchercodes = Offer::getTopOffers(10) ;
 
         # fetch top 10 categories
-        $categoriesData = $this->getCategories();
-
+        //$categoriesData = $this->getCategories();
+$categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']),0,3);
         # return visitors data
         $this->getDirectLoginLinks();
 
@@ -272,7 +272,7 @@ class SendNewsletter
         );
 
         //merge all the arrays into single array
-        $data = array_merge(
+        /*$data = array_merge(
                 $voucherCodesData['dataShopName'],
                 $voucherCodesData['dataOfferName'],
                 $voucherCodesData['dataShopImage'],
@@ -283,30 +283,54 @@ class SendNewsletter
                 $categoriesData['dataOfferNameCat'],
                 $categoriesData['dataShopImageCat'],
                 $categoriesData['expDateCat']
-        );
+        );*/
 
         //merge the permalinks array and static content array into single array
-        $dataPermalink = array_merge($voucherCodesData['shopPermalink'],
-                                    $categoriesData['shopPermalinkCat'],
-                                    $staticContent);
+   //     $dataPermalink = array_merge($voucherCodesData['shopPermalink'],
+   //                                 $categoriesData['shopPermalinkCat'],
+   //                                 $staticContent);
 
         //initialize mandrill with the template name and other necessary options
         $mandrill = new Mandrill_Init($this->_mandrillKey);
-        $templateName = $this->_template;
-        $templateContent = $data;
+        //$templateName = $this->_template;
+       // $templateContent = $data;
 
         //Start get email locale basis
         $mandrillSenderEmailAddress  = $settings[0]['emailperlocale'];
         $mandrillNewsletterSubject  = $settings[0]['emailsubject'];
         $mandrillSenderName  = $settings[0]['sendername'];
-
+        $categoryName = $topCategories[0]['category']['name'];
         try {
+            /*FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                $mandrillNewsletterSubject,
+                $mandrillSenderEmailAddress,
+                $mandrillSenderName,
+                $this->_recipientMetaData,
+                $dataPermalink,
+                $this->_loginLinkAndData,
+                $templateName,
+                $templateContent,
+                $mandrill,
+                $this->_to
+            );*/
             FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
-                    $mandrillNewsletterSubject, $mandrillSenderEmailAddress, $mandrillSenderName,
-                    $this->_recipientMetaData, $dataPermalink,
-                    $this->_loginLinkAndData, $templateName,
-                    $templateContent, $mandrill, $this->_to);
-
+                $topVouchercodes,
+                $categoryVouchers,
+                $categoryName,
+                $mandrillNewsletterSubject,
+                $mandrillSenderEmailAddress,
+                $mandrillSenderName,
+                $this->_recipientMetaData,
+                $this->_loginLinkAndData,
+                $this->_to,
+                $settings[0]['email_footer'],
+                array(
+                    'httpPath' => $this->_hostName,
+                    'locale' => $key,
+                    'httpPathLocale' => $this->_linkPath,
+                    'publicPathCdn' => $this->_public_cdn_path
+                )
+            );
             # set newsletter scheduling to be false and newsletter status true. Also set sending time to be past
             Signupmaxaccount::updateNewsletterSchedulingStatus();
 

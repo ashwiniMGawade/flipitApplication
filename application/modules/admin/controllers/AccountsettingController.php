@@ -128,97 +128,68 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         die;
     }
 
-    /**
-     * mandrill
-     *
-     * This function initialize the mandrill and send the mail using mandrill template
-     *
-     * @author cbhopal
-     * @version 1.0
-     */
     public function mandrillAction()
     {
         if ($this->_request->isPost()) {
-            //add the flash mesage that the newsletter has been sent
             $flash = $this->_helper->getHelper('FlashMessenger');
+            $isScheduled = $this->getRequest()->getParam("isScheduled", false);
 
-            $isScheduled = $this->getRequest()->getParam("isScheduled" , false);
-
-            if($isScheduled) {
-                if(Signupmaxaccount::saveScheduledNewsletter( $this->getRequest())) {
-                    $flash->addMessage(array('success' => $this->view->translate('Newsletter has been successfully scheduled')));
+            if ($isScheduled) {
+                if (Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
+                    $flash->addMessage(
+                        array(
+                            'success' => $this->view->translate('Newsletter has been successfully scheduled')
+                        )
+                    );
                 } else {
-                    $flash->addMessage(array('error' => $this->view->translate('There is some problem in your data') ));
+                    $flash->addMessage(
+                        array(
+                            'error' => $this->view->translate('There is some problem in your data')
+                        )
+                    );
                 }
 
-                $this->_helper->redirector('emailcontent' , 'accountsetting' , null ) ;
+                $this->_helper->redirector('emailcontent', 'accountsetting', null);
             }
 
-            # update current scheduled status to sent
             Signupmaxaccount::updateNewsletterSchedulingStatus();
 
-            if(LOCALE == '') {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND , '/') ."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
+            if (LOCALE == '') {
+                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') .">
+                    <img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
                 $siteName = "Kortingscode.nl";
-            } else	{
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND , '/') ."><img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
+            } else {
+                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') .">
+                    <img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
                 $siteName = "Flipit.com";
             }
 
-            set_time_limit ( 10000 );
-            ini_set('max_execution_time',115200);
-            ini_set("memory_limit","1024M");
-
-            //get offers from top ten popular shops and top one cateory as in homepage
+            set_time_limit(10000);
+            ini_set('max_execution_time', 115200);
+            ini_set("memory_limit", "1024M");
 
             $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvaouchercode_list');
-
-            //key not exist in cache
-
-            if($voucherflag){
-
-                # get 10 popular vouchercodes for news letter
+            if ($voucherflag) {
                 $topVouchercodes = Offer::getTopOffers(10) ;
-                //$topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
-
             } else {
                 $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvaouchercode_list');
             }
 
             $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularcategory_list');
-            //key not exist in cache
-
-            if($categoryflag){
-
-                $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10),0,1);
-
+            if ($categoryflag) {
+                $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
                 FrontEnd_Helper_viewHelper::setInCache('all_popularcategory_list', $topCategories);
-
             } else {
-
                 $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularcategory_list');
-
             }
 
-
-            //Start get email locale basis
             $email_data = Signupmaxaccount::getAllMaxAccounts();
             $mandrillSenderEmailAddress  = $email_data[0]['emailperlocale'];
             $mandrillNewsletterSubject  = $email_data[0]['emailsubject'];
             $mandrillSenderName  = $email_data[0]['sendername'];
-            //End get email locale basis
-
-
-
-            //call functions to set the needed data in global arrays
-            //$voucherCodesData = BackEnd_Helper_viewHelper::getTopVouchercodesDataMandrill($topVouchercodes);
-
-            $this->getVouchercodesOfCategories($topCategories);
             $this->getDirectLoginLinks();
             $this->getHeaderFooterContent();
 
-
-            //set the header image for mail
             $this->headerMail = array(array('name' => 'headerMail',
                                             'content' => $imgLogoMail
                                      ),
@@ -229,7 +200,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                                             'content' => $this->footerContent
                                     ));
 
-            //set the static content of mail so that we can change the text in PO Edit
             $this->staticContent = array(
                                     array('name' => 'websiteName',
                                             'content' => $siteName
@@ -247,46 +217,18 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                                             'content' => HTTP_PATH_FRONTEND . 'info/contact'
                                     ),
                                     array('name' => 'moreOffersLink',
-                                            'content' => HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_populair')
+                                        'content' => HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_populair')
                                     ),
                                     array('name' => 'moreOffers',
-                                            'content' => FrontEnd_Helper_viewHelper::__email('email_Bekijk meer van onze top aanbiedingen') . ' >'
+                                        'content' => FrontEnd_Helper_viewHelper::__email('email_Bekijk meer van onze top aanbiedingen') . ' >'
                                     )
                             );
 
-            //merge all the arrays into single array
-            /*$data = array_merge($voucherCodesData['dataShopName'],
-                    $voucherCodesData['dataOfferName'],
-                    $voucherCodesData['dataShopImage'],
-                    $voucherCodesData['expDate'],
-                    $this->headerMail, $this->dataShopNameCat,
-                    $this->dataOfferNameCat, $this->dataShopImageCat,
-                    $this->expDateCat, $this->category
-            );*/
-
-            //merge the permalinks array and static content array into single array
-           // $dataPermalink = array_merge($voucherCodesData['shopPermalink'], $this->shopPermalinkCat,
-             //                            $this->staticContent);
-
-            //initialize mandrill with the template name and other necessary options
-            $mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
+            $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
             $templateName = $this->getInvokeArg('newsletterTemplate');
-            //$templateContent = $data;
-            $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']),0,3);
+            $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
             $categoryName = $topCategories[0]['category']['name'];
             try {
-                /*FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
-                    $mandrillNewsletterSubject,
-                    $mandrillSenderEmailAddress,
-                    $mandrillSenderName,
-                    $this->recipientMetaData,
-                    $dataPermalink,
-                    $this->loginLinkAndData,
-                    $templateName,
-                    $templateContent,
-                    $mandrill,
-                    $this->to
-                );*/
                 FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                     $topVouchercodes,
                     $categoryVouchers,
@@ -296,106 +238,22 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     $mandrillSenderName,
                     $this->recipientMetaData,
                     $this->loginLinkAndData,
-                    $this->to
+                    $this->to,
+                    $this->footerContent
                 );
                 $message = $this->view->translate('Newsletter has been sent successfully');
             } catch (Mandrill_Error $e) {
-
-                //echo 'A mandrill error occurred: ' . get_class($e) . ' - ' . $e->getMessage();
                 $message = $this->view->translate('There is some problem in your data');
 
             }
-
-            //send newsletter
-
             $flash->addMessage(array('success' => $message));
-
-            //redirect to account setting controller after mail sent
-            $this->_helper->redirector('emailcontent' , 'accountsetting' , null ) ;
+            $this->_helper->redirector('emailcontent', 'accountsetting', null);
         } else {
-
-            $this->_helper->redirector('index' , 'index' , null ) ;
+            $this->_helper->redirector('index', 'index', null);
         }
         die;
-
     }
 
-
-
-    /**
-     * getVouchercodesOfCategories
-     *
-     * This function loops the category data and set the needed data in gloabal arrays
-     *
-     * @param array $topCategories
-     * @author cbhopal
-     * @version 1.0
-     */
-    public function getVouchercodesOfCategories($topCategories)
-    {
-        //set the logo for category, category name and more category link
-        //if it exists or not in $category array
-        if(count($topCategories[0]['category']['categoryicon']) > 0):
-                $img = PUBLIC_PATH_CDN.$topCategories[0]['category']['categoryicon']['path'].'thum_medium_'. $topCategories[0]['category']['categoryicon']['name'];
-
-        else:
-            $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_70x60.png";
-        endif;
-        $permalinkCatMainEmail = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $topCategories[0]['category']['permaLink'] . '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y');
-        $this->category = array(array('name' => 'categoryImage',
-                                      'content' => "<a style='color:#333333; text-decoration:none;' href='$permalinkCatMainEmail'><img src='".$img."'/></a>"
-                                ),
-                                array('name' => 'categoryName',
-                                        'content' => FrontEnd_Helper_viewHelper::__email('email_Populairste categorie:') ." <a style='color:#333333; text-decoration:none;' href='$permalinkCatMainEmail'>". $topCategories[0]['category']['name'] ."</a>"
-                                ),
-                                array('name' => 'categoryNameMore',
-                                      'content' => '<a href="'.$permalinkCatMainEmail.'" style="font-size:12px; text-decoration:none; color:#0B7DC1;" >' . FrontEnd_Helper_viewHelper::__email('email_Bekijk meer van onze') ." ". $topCategories[0]['category']['name'] ." ". FrontEnd_Helper_viewHelper::__email('email_aanbiedingen') . ' > </a>'
-                                ));
-
-        //get three voucher codes in top one category from homepage
-        $vouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']),0,3);
-
-        foreach ($vouchers as $key => $value) {
-
-            $permalinkCatEmail = HTTP_PATH_FRONTEND . $value['shop']['permalink'].'?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y');
-            //set $dataShopNameCat array with the title of shop in this category
-            $this->dataShopNameCat[$key]['name'] = "shopTitleCat_".($key+1);
-            $this->dataShopNameCat[$key]['content'] = "<a style='color:#333333; text-decoration:none;' href='$permalinkCatEmail'>".$value['shop']['name']."</a>";
-
-            //set $dataOfferNameCat array with the title of offer in this category
-            $this->dataOfferNameCat[$key]['name'] = "offerTitleCat_".($key+1);
-            $this->dataOfferNameCat[$key]['content'] = $value['title'];
-
-            //set the logo for shop in this category if it exists or not in $dataShopImageCat array
-            if(count($value['shop']['logo']) > 0):
-                    $img = PUBLIC_PATH_CDN.$value['shop']['logo']['path'].'thum_medium_store_'. $value['shop']['logo']['name'];
-
-            else:
-                $img = PUBLIC_PATH_LOCALE."images/NoImage/NoImage_200x100.jpg";
-            endif;
-
-            $this->dataShopImageCat[$key]['name'] = 'shopLogoCat_'.($key+1);
-            $this->dataShopImageCat[$key]['content'] = "<a href='$permalinkCatEmail'><img src='$img'></a>";
-
-            //set the expiry date for offer in this category in $expDateCat array
-            $expiryDate = new Zend_Date($value['endDate']);
-            $this->expDateCat[$key]['name'] = 'expDateCat_'.($key+1);
-            $this->expDateCat[$key]['content'] = FrontEnd_Helper_viewHelper::__email('email_Verloopt op:') ." ". $expiryDate->get(Zend_Date::DATE_MEDIUM);
-
-            //set the permalink for shop in this category in $shopPermalinkCat array
-            $this->shopPermalinkCat[$key]['name'] = 'shopPermalinkCat_'.($key+1);
-            $this->shopPermalinkCat[$key]['content'] = $permalinkCatEmail;
-        }
-    }
-
-    /**
-     * getDirectLoginLinks
-     *
-     * This function makes the URL for direct login links for each users
-     *
-     * @author cbhopal
-     * @version 1.0
-     */
     public function getDirectLoginLinks()
     {
         $email_data = Signupmaxaccount::getAllMaxAccounts();
@@ -406,7 +264,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $visitorMetaData = array();
         $toVisitorArray = array();
 
-        if(isset($send) && $send == 'test'){
+        if (isset($send) && $send == 'test') {
 
             $getTestEmaildata =  Visitor::getVisitorDetailsByEmail($testEmail);
 
@@ -423,33 +281,23 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $this->to = $toVisitorArray;
 
         } else {
-
-
-
-            # to make newsletters only be sent by admin or super admin user
-            if($this->_settings['administration']['rights']  == 1){
-
-
-                //retrieve the visitors with status, active and weeklynewsletter true
+            if ($this->_settings['administration']['rights']  == 1) {
                 $visitors = new Visitor();
-
                 $visitors = $visitors->getVisitorsToSendNewsletter();
-
-                //initialize the mandrill to retrieve the data of the users to whom we have sent mails
-                $mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
+                $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
                 $getUserDataFromMandrill = $mandrill->users->senders();
 
-                //set the profile inactive if any user has hard bounce or soft bounce
                 foreach ($getUserDataFromMandrill as $key => $value) {
-                    if($value['soft_bounces'] >= 6 || $value['hard_bounces'] >= 2 ){
-                        $updateActive = Doctrine_Query::create()->update('Visitor')->set('active',0)->where("email = '".$value['address']."'")->execute();
+                    if ($value['soft_bounces'] >= 6 || $value['hard_bounces'] >= 2) {
+                        $updateActive = Doctrine_Query::create()
+                            ->update('Visitor')
+                            ->set('active', 0)
+                            ->where("email = '".$value['address']."'")
+                            ->execute();
                     }
                 }
 
-                //loop the visitors and generate the links for unsubscribe and edit profile
                 foreach ($visitors as $key => $value) {
-
-                    # ADD REFERRAL KEYWORDS for mandril (recipient MetaData)
                     $keywords ='' ;
 
                     foreach ($value['keywords'] as $k => $word) {
@@ -459,27 +307,19 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
                     $visitorData[$key]['rcpt'] = $value['email'];
                     $visitorData[$key]['vars'][0]['name'] = 'loginLink';
-
-
                     $visitorMetaData[$key]['rcpt'] = $value['email'];
                     $visitorMetaData[$key]['values']['referrer'] = trim($keywords) ;
-                   // $visitorMetaData[$key]['values']['url'] = '';
-
                     $visitorData[$key]['vars'][0]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin") . "/" . base64_encode($value['email']) ."/". $value['password'];
-
                     $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
                     $visitorData[$key]['vars'][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe") . "/" . base64_encode($value['email']) ."/". $value['password'];
-
                     $toVisitorArray[$key]['email'] = $value['email'];
                     $toVisitorArray[$key]['name'] = !empty($value['firstName']) ? $value['firstName'] : 'Member';
 
                 }
 
-
-
-                $this->recipientMetaData = $visitorMetaData; // set referer for each user;
-                $this->loginLinkAndData = $visitorData;//set the visitor data in $loginLinkAndData array
-                $this->to = $toVisitorArray;//set the users email to which mails has been sent $to array
+                $this->recipientMetaData = $visitorMetaData;
+                $this->loginLinkAndData = $visitorData;
+                $this->to = $toVisitorArray;
             }
         }
     }

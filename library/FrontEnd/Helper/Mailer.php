@@ -7,9 +7,9 @@ class FrontEnd_Helper_Mailer {
     public function __construct()
     {
         $mandrillKey    =  Zend_Controller_Front::getInstance()->getParam('mandrillKey');
-        $this->mandrill = new Mandrill_Init($mandrillKey);
+        $this->mandrill = new Mandrill_Init('_99EQUbVJHnKffb_ImwIUQ');
 
-        $this->_view    = Zend_Layout::getMvcInstance()->getView();
+        //$this->_view    = Zend_Layout::getMvcInstance()->getView();
     }
 
     public function send(
@@ -21,10 +21,12 @@ class FrontEnd_Helper_Mailer {
         $content,
         $headerText,
         $recipientMetaData = '',
-        $directlinks = ''
+        $directlinks = '',
+        $footerContent = '',
+        $pathConstants
     ) {
         
-    echo "<pre>fromName-"; print_r($fromName); echo "</pre>";
+  /*  echo "<pre>fromName-"; print_r($fromName); echo "</pre>";
     echo "<pre>fromEmail-"; print_r($fromEmail); echo "</pre>";
     echo "<pre>visitorName-"; print_r($visitorName); echo "</pre>";
     echo "<pre>visitorEmail-"; print_r($visitorEmail); echo "</pre>";
@@ -32,7 +34,7 @@ class FrontEnd_Helper_Mailer {
     echo "<pre>content-"; print_r($content); echo "</pre>";
     echo "<pre>headerText-"; print_r($headerText); echo "</pre>";
     echo "<pre>recipientMetaData"; print_r($recipientMetaData); echo "</pre>";
-    echo "<pre>directlinks"; print_r($directlinks); echo "</pre>";
+    echo "<pre>directlinks"; print_r($directlinks); echo "</pre>";*/
 
         if (is_array($visitorEmail)) {
             $to = $visitorEmail;
@@ -46,10 +48,16 @@ class FrontEnd_Helper_Mailer {
         }
 
         if (!empty($directlinks)) {
-            $directLoginAndUnsubscribeLinks = self::getDirectLoginAndUnsubscribeLinks($directlinks);
+            $directLoginAndUnsubscribeLinks = $directlinks;
         } else {
-            $directLoginAndUnsubscribeLinks = self::getDirectLoginAndUnsubscribeLinks($visitorEmail);
-        }  die;
+            $directLoginAndUnsubscribeLinks = '';
+        } 
+
+        if (!empty($pathConstants)) {
+            $siteUrl = $pathConstants['httpPathLocale'];
+        } else {
+            $siteUrl = HTTP_PATH_LOCALE;
+        }
         $message = array(
                         'subject'    => $subject,
                         'from_email' => $fromEmail,
@@ -57,6 +65,7 @@ class FrontEnd_Helper_Mailer {
                         'to'         => $to,
                         'inline_css' => true,
                         "recipient_metadata" => $recipientMetaData,
+                        'merge_vars' => $directLoginAndUnsubscribeLinks
                     );
 
         $emailHeader = array(
@@ -67,15 +76,9 @@ class FrontEnd_Helper_Mailer {
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
         $footer = array(
                         'name'    => 'footer',
-                        'content' =>  $basePath->partial(
-                            'emails/footer.phtml',
-                            array(
-                                'directLoginAndUnsubscribeLinks' =>
-                                    $directLoginAndUnsubscribeLinks
-                            )
-                        ),
+                        'content' =>  $footerContent,
                         array(
-                            'siteUrl' => HTTP_PATH_LOCALE
+                            'siteUrl' => $siteUrl
                         )
                     );
 
@@ -85,11 +88,13 @@ class FrontEnd_Helper_Mailer {
     public static function getDirectLoginAndUnsubscribeLinks($visitorEmail)
     {
         if (is_array($visitorEmail)) {
+            $directLoginLink = array();
+            $directUnsubscribeLink = array();
             foreach ($visitorEmail as $links) {
-                echo "<pre>"; print_r($links['vars']); echo "</pre>";
+                $links = $links['vars'];
+                $directLoginLink[] = $links[0]['content'];
+                $directUnsubscribeLink[] = $links[1]['content'];
             }
-            $directLoginLink = $visitorEmail[0]['content'];
-            $directUnsubscribeLink = $visitorEmail[1]['content'];
         } else {
             $visitorDetails = Visitor::getVisitorDetailsByEmail($visitorEmail);
             $directLoginLink = HTTP_PATH_LOCALE .

@@ -465,9 +465,9 @@ EOD;
         return $countriesWithLocales = array_unique($countriesWithLocales);
     }
 
-    public static function getWebsiteName()
+    public static function getWebsiteName($locale)
     {
-        $siteName = LOCALE != '' ? 'Flipit' : 'Kortingscode';
+        $siteName = $locale != '' ? 'Flipit' : 'Kortingscode';
         return $siteName;
     }
   
@@ -730,7 +730,9 @@ EOD;
         $mandrillSenderName,
         $recipientMetaData,
         $mandrillMergeVars,
-        $mandrillUsersList
+        $mandrillUsersList,
+        $footerContent,
+        $pathConstants = ''
     ) {
         $basePath = new Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
@@ -742,6 +744,7 @@ EOD;
                     'topVouchercodes' => $topVouchercodes,
                     'categoryVouchers' => $categoryVouchers,
                     'categoryName' => $categoryName,
+                    'pathConstants' => $pathConstants
                 )
             )
         );
@@ -762,9 +765,11 @@ EOD;
                 $content,
                 FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
                 !empty($recipientMetaData[$mandrillUsersKey]) ? $recipientMetaData[$mandrillUsersKey] : '',
-                $mandrillMergeVars[$mandrillUsersKey]
+                $mandrillMergeVars[$mandrillUsersKey],
+                $footerContent,
+                $pathConstants
             );
-        }die;
+        } die;
         return true;
     }
 

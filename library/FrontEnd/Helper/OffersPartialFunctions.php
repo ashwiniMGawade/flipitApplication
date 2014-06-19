@@ -1,16 +1,16 @@
 <?php
 class FrontEnd_Helper_OffersPartialFunctions
 {
-    public function getUrlToShow($currentOffer)
+    public function getUrlToShow($currentOffer, $constants = 'HTTP_PATH_LOCALE')
     {
         if (
         	$currentOffer->refURL != "" 
         	|| $currentOffer->shop['refUrl']!= "" 
         	|| $currentOffer->shop['actualUrl'] != ""
         ) {
-            $urlToShow = self::getOfferBounceUrl($currentOffer->id);
+            $urlToShow = self::getOfferBounceUrl($currentOffer->id, $constants);
         } else {
-            $urlToShow = HTTP_PATH_LOCALE.$currentOffer->shop['permalink'];
+            $urlToShow = $constants.$currentOffer->shop['permalink'];
         }
         if ($currentOffer->discountType=='PA' || $currentOffer->discountType=='PR') {
             if ($currentOffer->refOfferUrl != null) {
@@ -22,9 +22,9 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $urlToShow;
     }
 
-    public function getOfferBounceUrl($offerId)
+    public function getOfferBounceUrl($offerId, $constants = 'HTTP_PATH_LOCALE')
     {
-        return HTTP_PATH_LOCALE."out/offer/".$offerId;
+        return $constants."out/offer/".$offerId;
     }
 
     public function getDiscountImage($currentOffer)

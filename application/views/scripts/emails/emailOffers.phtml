@@ -12,7 +12,7 @@
                         $topOffer = (object) $topOffer;
                         $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
                         $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($topOffer->endDate);
-                        $urlToShow = $offerPartial->getUrlToShow($topOffer);
+                        $urlToShow = $offerPartial->getUrlToShow($topOffer, $this->httpPathLocale);
                  ?>
                 <tr>
                     <td style="padding:28px 10px 30px 29px; border-bottom:1px solid #eaeaea;">
@@ -21,7 +21,7 @@
                                 <td width="132" style="border:1px solid #dddddd; border-radius:5px;">
                                     <table width="100%" cellpadding="0" cellspacing="0">
                                         <tbody><tr>
-                                            <td height="70" align="center"><img src="<?php echo PUBLIC_PATH_CDN.ltrim($topOffer->shop['logo']['path'],'/').$topOffer->shop['logo']['name']; ?>" style="vertical-align:top;" width="102" height="70" alt="<?php echo $topOffer->shop['name']; ?>"></td>
+                                            <td height="70" align="center"><img src="<?php echo $this->publicPathCdn.ltrim($topOffer->shop['logo']['path'],'/').$topOffer->shop['logo']['name']; ?>" style="vertical-align:top;" width="102" height="70" alt="<?php echo $topOffer->shop['name']; ?>"></td>
                                         </tr>
                                         <tr>
                                             <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; box-shadow:0 0 4px rgba(0,0,0,0.15); padding:6px 0 5px; font:11px/17px Arial, Helvetica, sans-serif; color:#fff;"><a href="<?php echo $urlToShow; ?>" style="text-decoration:none; color:#fff;">CODE</a></td>
@@ -48,7 +48,7 @@
                 </tr>
                 <?php } ?>
             <tr>
-                <td bgcolor="#fafafa" align="center" style="border-radius:0 0 4px 4px; padding:12px 0 11px; font:bold 14px/17px Arial, Helvetica, sans-serif; color:#373736;"><a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__email('email_top-20'); ?>" style="text-decoration:none; color:#373736;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Bekijk meer van onze top aanbiedingen');?> &gt;</a></td>
+                <td bgcolor="#fafafa" align="center" style="border-radius:0 0 4px 4px; padding:12px 0 11px; font:bold 14px/17px Arial, Helvetica, sans-serif; color:#373736;"><a href="<?php echo $this->httpPathLocale.FrontEnd_Helper_viewHelper::__email('email_top-20'); ?>" style="text-decoration:none; color:#373736;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Bekijk meer van onze top aanbiedingen');?> &gt;</a></td>
             </tr>
         </tbody></table>
     </td>
