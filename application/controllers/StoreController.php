@@ -14,10 +14,7 @@ class StoreController extends Zend_Controller_Action
         echo Zend_Json::encode($shopInformation);
         exit();
     }
-    /**
-    * show all details of one store
-    * @version 1.0
-    */
+
     public function storedetailAction()
     {
         $shopPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
@@ -122,7 +119,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->storeImage = $ShopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
-        $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
+        $this->view->shopEditor = User::getUserDetails($shopInformation[0]['contentManagerId']);
 
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
         $this->viewHelperObject->getMetaTags(
@@ -278,7 +275,7 @@ class StoreController extends Zend_Controller_Action
             )
         );
         $offers = array_chunk($offers, 3);
-        $this->view->shopEditor = User::getProfileImage($shopInformation[0]['contentManagerId']);
+        $this->view->shopEditor = User::getUserDetails($shopInformation[0]['contentManagerId']);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
         $frontEndViewHelper = new FrontEnd_Helper_viewHelper();

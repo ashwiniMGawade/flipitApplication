@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Offer
  *
@@ -12,6 +11,9 @@
  */
 class Offer extends BaseOffer
 {
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
     public function __contruct($connectionName = false)
     {
         if (!$connectionName) {
@@ -19,15 +21,7 @@ class Offer extends BaseOffer
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
-    ##################################################################################
-    ################## REFACTORED CODE ###############################################
-    ##################################################################################
-    /**
-     * get expired voucher codes for common function
-     * @author Raman
-     * @return array $data
-     * @version 1.0
-     */
+    
     public static function getExpiredOffers($type, $limit, $shopId = 0)
     {
         $expiredTime = date("Y-m-d 00:00:00");
@@ -53,13 +47,7 @@ class Offer extends BaseOffer
 
         return $expiredOffers;
     }
-
-    /**
-     * get offer from similar shops and similar categories
-     *
-     * @return array $similarShopsAndSimilarCategoriesOffers
-     * @version 1.0
-     */
+    
     public static function similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId = 0)
     {
         $date = date('Y-m-d 00:00:00');
@@ -195,8 +183,11 @@ class Offer extends BaseOffer
         return $similarShops;
     }
 
-    public static function mergeSimilarShopsOffersAndSimilarCategoriesOffers($similarShopsOffers, $similarCategoriesOffers, $limit)
-    {
+    public static function mergeSimilarShopsOffersAndSimilarCategoriesOffers(
+        $similarShopsOffers,
+        $similarCategoriesOffers,
+        $limit
+    ) {
         $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
         $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
         $mergeOffers = array_merge($shopsOffers, $categoriesOffers);
@@ -253,19 +244,7 @@ class Offer extends BaseOffer
         }
         return $topOffers;
     }
-    /**
-     * get top kortingscode same as home page but it displayed on shop
-     * page(only used when a shop is no money with no offers)
-     *
-     * offers will be displayed only when an offer's category == shop's category
-     *
-     * and sort poplar offers based on shop's category
-     *
-     * @param $limit integer limit for the no of offers. Default is set to 5
-     * @param $shopCategories array  no money shop categories
-     * @version 1.0
-     * @return array $data
-     */
+    
     public static function getTopCouponCodes($shopCategories, $limit = 5)
     {
         $currentDateAndTime = date('Y-m-d H:i:s');
@@ -307,13 +286,6 @@ class Offer extends BaseOffer
             ->fetchArray();
         return $topCouponCodes;
     }
-
-    /**
-     * Get latest voucher codes for common function.
-     *
-     * @return array $data
-     * @version 1.0
-     */
 
     public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "")
     {
@@ -360,11 +332,6 @@ class Offer extends BaseOffer
         return $newestCouponCodes;
     }
 
-    /**
-     * update zend varnish when all codes got expired
-     *
-     * @param integer $id offer id
-     */
     public static function updateCache($id)
     {
         $offer  = Doctrine_Query::create()->select("o.id,s.id")
@@ -391,11 +358,6 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
     }
 
-    /**
-     * Function getSpecialPageOffers
-     *
-     * get member only $specialOffers
-     */
     public static function getSpecialPageOffers($specialPage)
     {
         $currentDateAndTime = date('Y-m-d H:i:s');
@@ -716,8 +678,6 @@ class Offer extends BaseOffer
         return $specialOffersAfterMerging;
     }
 
-
-
     public static function getActiveCoupons($keyword)
     {
         $currentDateAndTime = date("Y-m-d 00:00:00");
@@ -1011,9 +971,7 @@ class Offer extends BaseOffer
             $urll = @$data['shop']['permalink'];
             $url = HTTP_PATH_LOCALE.$urll;
         }
-
         return $url ;
-
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################

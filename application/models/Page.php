@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Page
  *
@@ -34,7 +33,6 @@ class Page extends BasePage
         ->andWhere('p.deleted=0')
         ->orderBy('id DESC')
         ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
         return $pageAttributes;
     }
 
@@ -49,7 +47,6 @@ class Page extends BasePage
         ->fetchOne();
         return $page;
     }
-
 
     public static function getSpecialListPages()
     {
@@ -71,10 +68,7 @@ class Page extends BasePage
             ->fetchArray();
         return $specialListPages;
     }
-    /**
-     *  Get page details on id basis
-     *	Version: 1.0
-     */
+ 
     public static function getPageDetailsInError($page)
     {
         $currentDate = date('Y-m-d H:i:s');

@@ -11,6 +11,11 @@
  */
 class Shop extends BaseShop
 {
+
+     ##################################################################################
+     ################## REFACTORED CODE ###############################################
+     ##################################################################################
+
     public function __contruct($connectionName = false)
     {
         if (!$connectionName) {
@@ -18,14 +23,6 @@ class Shop extends BaseShop
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
-     ##################################################################################
-     ################## REFACTORED CODE ###############################################
-     ##################################################################################
-    /**
-     *  get shop categories
-     *  @return array contain shop categories ids'
-     *
-     */
 
     public static function returnShopCategories($id)
     {
@@ -41,14 +38,7 @@ class Shop extends BaseShop
         }
         return $categories;
     }
-    /**
-    * Function getSimilarShopsAndSimilarCategoryShops.
-    *
-    *  this return all the same shops and shops under same category.
-    *
-    *  @param integer $id
-    *  @return array
-    */
+
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
@@ -91,13 +81,6 @@ class Shop extends BaseShop
         return $similarShopsWithoutDuplicate;
     }
 
-    /**
-     * get popular store
-    * @param $limit integer no of popular shops
-    * @param $shopId integer  optional get popular shop by its id
-    * @version 1.1
-    * @return array $data
-    */
     public static function getPopularStores($limit, $shopId = null)
     {
         $currentDate = date('Y-m-d 00:00:00');
@@ -151,10 +134,6 @@ class Shop extends BaseShop
         return $allStoresDetail;
     }
 
-    /**
-     * getallStoresForFrontEnd get all store from database.
-     * @version 0.1
-     */
     public static function getallStoresForFrontEnd()
     {
         $currentDateAndTime = date('Y-m-d 00:00:00');
@@ -193,12 +172,6 @@ class Shop extends BaseShop
         return $storesForFrontend;
     }
 
-    /**
-    * get popular store
-    * @param $limit integer no of popular shops
-    * @version 1.1
-    * @return array $popularStores
-    */
     public static function getAllPopularStores($limit)
     {
         $popularStores = Doctrine_Query::create()

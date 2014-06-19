@@ -1,13 +1,6 @@
 <?php
 require_once 'BootstrapConstant.php';
 
-/**
- * load all function,view required for zend.
- *
- * @version 1.0
- *
- */
-
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
     protected $moduleDirectoryName = null;
@@ -20,11 +13,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected $cdnUrl = '';
     public $frontController = '';
 
-    /**
-     * Set base controller or view request
-     *
-     * @version 1.0
-     */
     public function _initRequest()
     {
         $this->bootstrap('frontController');
@@ -47,11 +35,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Controller_Action_HelperBroker::addPath(APPLICATION_PATH .'/controllers/helpers');
     }
 
-    /**
-     * Fuction _initSiteModules.
-     *
-     * Set module level layout and doctype of rendered view.
-     */
     protected function _initSiteModules()
     {
         $viewRenderer =
@@ -61,10 +44,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->frontController->addModuleDirectory(APPLICATION_PATH . '/modules');
     }
 
-    /**
-     *
-     * Set initial content according to locale settings.
-     */
     public function _initContants()
     {
         $routeUrl = ltrim(REQUEST_URI, '/');
@@ -286,14 +265,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         || define('IMG_PATH', PUBLIC_PATH . 'images/');
     }
 
-    /**
-     * Function _initDoctrine.
-     *
-     * Create connection with database by doctrine and
-     * defined model ,time zone and get dsn(doman name server).
-     *
-     * @return $imbullDbConnection
-     */
     protected function _initDoctrine()
     {
         $domain = HTTP_HOST;
@@ -335,16 +306,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return $locale;
     }
 
-    /**
-     *
-     * Set the initial translation.
-     */
     public function getTranslationSettings()
     {
         # add suffix according to locale
         $suffix = "" ;
         if (LOCALE) {
-            $suffix = "_" . strtoupper( LOCALE)  ;
+            $suffix = "_" . strtoupper(LOCALE);
         }
 
         $domain = $_SERVER['HTTP_HOST'];
@@ -386,23 +353,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $year = $date->get(Zend_Date::YEAR);
         $day = $date->get(Zend_Date::DAY);
 
-
-        #define currecnt month for text with [month]
         defined('CURRENT_MONTH')
-        || define('CURRENT_MONTH', $month );
+        || define('CURRENT_MONTH', $month);
 
-        #define currecnt year for text with [year]
         defined('CURRENT_YEAR')
-        || define('CURRENT_YEAR', $year );
+        || define('CURRENT_YEAR', $year);
 
-        #define currecnt day for text with [day]
         defined('CURRENT_DAY')
-        || define('CURRENT_DAY', $day );
+        || define('CURRENT_DAY', $day);
     }
 
     protected function _initPluginLiveTranslation()
     {
-
         $transSettings  = $this->getTranslationSettings();
         $locale         = $transSettings['locale'];
         $localePath     = $transSettings['localePath'];
@@ -410,24 +372,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         if ($this->moduleDirectoryName != 'admin') {
             $session        = new Zend_Session_Namespace('Transl8');
-            $activationMode = (isset($session->onlineTranslationActivated)) ? $session->onlineTranslationActivated : false;
+            $activationMode = (isset($session->onlineTranslationActivated))
+            ? $session->onlineTranslationActivated
+            : false;
         } else {
             $activationMode = false;
         }
 
         Zend_Registry::set('Transl8_Activated', $activationMode);
-
         Transl8_Translate_Writer_Csv::setDestinationFolder(
             APPLICATION_PATH.'/../public'.$localePath.'language'
         );
 
         if (Zend_Registry::get('Transl8_Activated')) {
-
-            // we register the plugin, with the webservices hooks to work with.
             $plugin = new Transl8_Controller_Plugin_Transl8();
-            $plugin->setActionGetFormData( $localePath.'trans/getformdata');
-            $plugin->setActionSubmit( $localePath.'trans/submit');
-
+            $plugin->setActionGetFormData($localePath.'trans/getformdata');
+            $plugin->setActionSubmit($localePath.'trans/submit');
             $front = Zend_Controller_Front::getInstance();
             $front->registerPlugin($plugin);
 
@@ -447,10 +407,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $locale         = $transSettings['locale'];
         $localePath     = $transSettings['localePath'];
         $suffix         = $transSettings['suffix'];
-
         Zend_Locale::setDefault('en_US');
-
-        $locale                     = new Zend_Locale( Zend_Registry::get('Zend_Locale') );
+        $locale                     = new Zend_Locale(Zend_Registry::get('Zend_Locale'));
         $inlineTranslationFolder    = Transl8_Translate_Writer_Csv::getDestinationFolder();
 
         $poTrans = new Zend_Translate(array(
@@ -458,16 +416,18 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                         'disableNotices' => true));
 
         $poTrans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/fallback/frontend_php' . $suffix . '.mo',
-                        'locale' => $locale
-                )
+            array(
+                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                    .'language/fallback/frontend_php' . $suffix . '.mo',
+                    'locale' => $locale
+            )
         );
         $poTrans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/backend_php' . $suffix . '.mo',
-                        'locale' => $locale
-                )
+            array(
+                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                    .'language/backend_php' . $suffix . '.mo',
+                    'locale' => $locale
+            )
         );
 
 
@@ -482,24 +442,27 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $poTrans->addTranslation($csvTranslate);
 
         $poTrans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/form' . $suffix . '.mo',
-                        'locale' => $locale
-                )
+            array(
+                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                    .'language/form' . $suffix . '.mo',
+                    'locale' => $locale
+            )
         );
 
         $poTrans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/email' . $suffix . '.mo',
-                        'locale' => $locale
-                )
+            array(
+                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                    .'language/email' . $suffix . '.mo',
+                    'locale' => $locale
+            )
         );
 
         $poTrans->addTranslation(
-                array(
-                        'content'   => APPLICATION_PATH.'/../public'.strtolower($localePath).'language/po_links' . $suffix . '.mo',
-                        'locale'    => $locale
-                )
+            array(
+                    'content'   => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                    .'language/po_links' . $suffix . '.mo',
+                    'locale'    => $locale
+            )
         );
 
         Zend_Registry::set('Zend_Locale', $locale);
@@ -513,16 +476,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view = $this->getResource('view');
         $view->doctype('HTML5');
         $view->addHelperPath(APPLICATION_PATH . '/../library/Transl8/View/Helper/', 'Transl8_View_Helper_');
-
         return $view;
     }
 
-    /**
-     * Function initDocType.
-     *
-     * Defined docoment type of view , meta description and head title of view.
-     *
-     */
     protected function _initDocType()
     {
         $this->bootstrap('View');
@@ -531,13 +487,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headMeta()->appendHttpEquiv('Content-type', 'text/html; charset=UTF-8');
     }
 
-    /**
-     * Function _initAutoLoad.
-     *
-     * set all path of application,form,model etc.
-     *
-     * @return Zend_Loader_Autoloader
-     */
     protected function _initAutoLoad()
     {
         $autoLoader = Zend_Loader_Autoloader::getInstance();
@@ -554,26 +503,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     ))
            )
         );
-
         return $autoLoader;
-
     }
 
-    /**
-     * Function _initRouter.
-     *
-     * Route the URI to respective URL using Zend_Controller_Router_Route.
-     */
     public function _initRouter()
     {
         $permalink = self::getPermalink();
-
         $this->routeProperties = explode('/', $permalink);
-
         $permalink = self::splitRouteProperties($permalink);
-
         $permalink = self::replacePermalinkString($permalink);
-
         // get last word in permalink using regex match
         preg_match('/[^\/]+$/', $permalink, $matches);
         // if url match with database permalink then get permalink from database and add in zend route
@@ -661,14 +599,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
 
         return $permalink;
-
     }
 
     public function replacePermalinkString($permalink)
     {
         $searchString = '~([a-zA-z]+.)([\?].+)~';
         $replaceString = '$1';
-
         preg_match($searchString, $permalink, $resultString);
 
         if ($resultString) {
@@ -676,7 +612,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
 
         return $permalink;
-
     }
 
     public function setRouteForPermalink($getPermalinkFromDb, $actualPermalink)
@@ -713,7 +648,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             self::routeForDefaultModule();
 
             $route = new Zend_Controller_Router_Route(
-                $this->routeProperties[0] .'/'. $actualPermalink, $urlArray
+                $this->routeProperties[0] .'/'. $actualPermalink,
+                $urlArray
             );
             $this->route->addRoute('user', $route);
 
@@ -739,7 +675,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     )
                 )
             );
-
             return;
         }
     }
@@ -918,7 +853,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
             }
         }
-
         return;
     }
 
@@ -954,15 +888,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 )
             )
         );
-       $this->route->addRoute(
+        $this->route->addRoute(
             'whitelabel',
             new Zend_Controller_Router_Route(
-               'whitelabel/top10.xml',
-               array(
+                'whitelabel/top10.xml',
+                array(
                        'action' => "error",
                        'controller' => "error"
-               )
-       ));
+                )
+            )
+        );
     }
 
     protected function _initCache()
@@ -980,6 +915,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
         Zend_Registry::set('cache', $cache);
     }
-
 }
 require_once 'Layout_Controller_Plugin_Layout.php';

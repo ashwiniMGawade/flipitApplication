@@ -36,7 +36,7 @@ class Articles extends BaseArticles
 
     public static function getAllArticles()
     {
-        $currentDateTime = date('Y-m-d H:i:s');
+        $currentDateTime = date('Y-m-d 00:00:00');
         $allArticles = Doctrine_Query::create()->select()
                 ->from("Articles a")
                 ->leftJoin('a.relatedstores as stores')
