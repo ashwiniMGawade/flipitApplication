@@ -1,6 +1,4 @@
 <?php 
-$this->headLink()->prependStylesheet("/public/css/front_end/in-savings.css");
-$this->headLink()->prependStylesheet("/public/css/front_end/author.css");
 $articleDetails = $this->articleDetails;
 $userDetails = $this->userDetails;
 $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/". $userDetails['slug'];
@@ -64,8 +62,6 @@ $directChapterLinks = $this->partial(
             'artcileDetails' => $articleDetails
         )
 );
-$sidebarHtml = '<aside id="sidebar" class="col-md-4 col-sm-4">' . $recentlyAddedArticles . $topPopularOffers . 
-    $directChapterLinks ."</aside>";
 $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$articleDetails['articleImage']['name'];
 ?>
 <main role="main" id="main" class="container">
@@ -98,6 +94,8 @@ $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$article
             </div>
             <?php echo $authorDetails. $savingGuides. $discussion;?>
         </div>
-        <?php echo $sidebarHtml; ?>
+        <aside id="sidebar" class="col-md-4 col-sm-4">
+            <?php echo $recentlyAddedArticles . $topPopularOffers . $directChapterLinks;?>
+        </aside>    
     </div>
 </main>

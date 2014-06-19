@@ -14,7 +14,7 @@ foreach ($this->offers as $offer) {
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
-        <div class="holder">
+        <div class="holder" id="<?php echo $offer->id; ?>">
     <?php 
     echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
@@ -60,7 +60,9 @@ foreach ($this->offers as $offer) {
     ?>
                 </div>
                 <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                    <span class="instruction"><strong><?php echo $this->translate('enter this code at checkout')?></strong></span>
+                    <span class="instruction">
+                        <strong><?php echo $this->translate('enter this code at checkout')?></strong>
+                    </span>
                     <strong class="code-value"><?php echo $offer->couponCode;?></strong>
                 </div>
     

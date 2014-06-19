@@ -1,7 +1,10 @@
 <?php
 $partialsViewPath = 'partials/';
+$imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
+$imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
+$pageImagePath = PUBLIC_PATH_CDN.$imagePath.$imageName;
 $pageHeaderPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $pageHeaderPartial->getCategoryOrPageHeader($this->pageTitle, $this->pageLogo);
+echo $pageHeaderPartial->getCategoryOrPageHeader($this->pageTitle, $pageImagePath);
 $storeViewPartialPath = 'store/';
 $signUpWidgetForm = '';
     $signUpWidgetForm = $this->partial(
@@ -30,8 +33,8 @@ $newestOffers = $this->partial(
     <aside class="col-md-4 col-sm-4" id="sidebar">
         <?php
         echo $signUpWidgetForm;
-        $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-        echo $frontendViewHelper->socialMediaWidget(strtolower($this->actionName));
+        $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+        echo $frontendSidebarHelper->socialMediaWidget(strtolower($this->actionName));
         ?>
     </aside>
 </div>

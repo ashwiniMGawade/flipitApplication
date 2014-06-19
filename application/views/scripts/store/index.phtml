@@ -1,5 +1,13 @@
 <?php
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
+
+//print_r($this->pageHeaderImage); die;
+$imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
+$imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
+$pageImagePath = PUBLIC_PATH_CDN.$imagePath.$imageName;
+$headerPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
+echo $headerPartial->getCategoryOrPageHeader($this->pageTitle, $pageImagePath);
+
 $storeViewPath = 'store/';
 $popularStores = '';
 if (count($this->popularStores)) :
@@ -27,15 +35,6 @@ $signUpWidgetForm = $this->partial(
     )
 );
 ?>
-<div class="header-block">
-    <div class="icon icon-small">
-        <img src="<?php echo HTTP_PATH; ?>public/images/ico-02.png" width="89" height="89" alt="image description">
-    </div>
-    <div class="box">
-        <h1><?php echo $this->translate('All stores'); ?></h1>
-        <strong><?php echo $this->translate('All stores sorted out for you from A to Z'); ?></strong>
-    </div>
-</div>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
         <div class="content-holder">            
@@ -49,8 +48,8 @@ echo $storesInformation;
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
 <?php
 echo $signUpWidgetForm;
-$frontendHelper = new FrontEnd_Helper_viewHelper();
-echo $frontendHelper->socialMediaWidget();
+$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+echo $frontendSidebarHelper->socialMediaWidget();
 ?>
     </aside>
 </div>

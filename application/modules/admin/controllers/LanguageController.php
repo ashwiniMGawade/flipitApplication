@@ -205,8 +205,10 @@ class Admin_LanguageController extends Zend_Controller_Action
         $scanPath[1] = APPLICATION_PATH . '/views';
         $scanPath[2] = APPLICATION_PATH . '/modules';
         $scanPath[3] = LIBRARY_PATH . '/FrontEnd';
+        $scanPath[4] = APPLICATION_PATH . '/forms';
         $obj->set_exts('php|phtml');
         $obj->set_regular('/(__form)\([^)]*\)/');
+
       }elseif ($existEmail) {
         $scanPath[0] = APPLICATION_PATH . '/controllers';
         $scanPath[1] = APPLICATION_PATH . '/views';

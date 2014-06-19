@@ -1,5 +1,5 @@
 <?php
-$this->minifyHeadScript()->prependFile(HTTP_PATH. "public/js/front_end/login.js");
+$this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/login.js");
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/login.css");
 $loginForm = $this->form;
 // Remove <dt> from label generation
@@ -22,11 +22,14 @@ $forgotPasswordLink =
     <form action="" method="post" class="login-form" name="login" id='login'>
         <fieldset>
             <div class="form-group">
-            <?php echo $this->translate($loginForm->emailAddress->renderLabel()). $loginForm->emailAddress->renderViewHelper();?>
+            <?php 
+            echo FrontEnd_Helper_viewHelper::__form($loginForm->emailAddress->renderLabel())
+            . $loginForm->emailAddress->renderViewHelper();
+            ?>
             </div>
             <div class="form-group">
                 <div class="link">
-                    <?php echo $this->translate($loginForm->password->renderLabel());?>
+                    <?php echo FrontEnd_Helper_viewHelper::__form($loginForm->password->renderLabel());?>
                     <a href="<?php echo $forgotPasswordLink;?>"
                         class="right">
                         <?php echo $this->translate('Forgot password?');?>

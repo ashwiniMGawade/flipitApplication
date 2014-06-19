@@ -1,7 +1,10 @@
 <?php
 $partialViewPath = 'partials/';
+$imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
+$imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
+$pageImagePath = PUBLIC_PATH_CDN.$imagePath.$imageName;
 $pageHeaderPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $pageHeaderPartial->getCategoryOrPageHeader($this->pageTitle, $this->pageLogo);
+echo $pageHeaderPartial->getCategoryOrPageHeader($this->pageTitle, $pageImagePath);
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
@@ -35,8 +38,8 @@ $signUpWidgetForm = $this->partial(
     <aside class="col-md-4 col-sm-4" id="sidebar">
 <?php
 echo $signUpWidgetForm;
-$frontendHelper = new FrontEnd_Helper_viewHelper();
-echo $frontendHelper->socialMediaWidget('top20');
+$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+echo $frontendSidebarHelper->socialMediaWidget('top20');
 ?>
     </aside>
 </div>

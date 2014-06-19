@@ -11,7 +11,7 @@ function OpenInNewTab(url) {
     windowObject.focus();
 }
 function showTermAndConditions(id) {
-    $('div#termAndConditions'+id).slideToggle();
+    $('#termAndConditions'+id).toggle();
     $('a#termAndConditionLink'+id).toggleClass('uparrow'); 
 }
 function showPopupTermAndConditions(id) {
@@ -74,6 +74,10 @@ function showCodePopUp(event) {
                 success : function(data) {
                     $('#element_to_pop_up').html(data);
                     $('#code-lightbox').show();
+                    $("#bigtextPopupShopLink").bigtext();
+                    $('#couponCode').click(function() {
+                        $(this).focus().select();
+                    });
                 }
             });
     }

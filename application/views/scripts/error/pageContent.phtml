@@ -1,12 +1,22 @@
 <?php
+$this->minifyHeadScript()->appendFile("/public/js/front_end/faq.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/contactForm.js");
+if (isset($this->successMessage) && $this->successMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <strong><?php echo $this->successMessage;?></strong>
+    </div>
+    <?php 
+endif;
 if ($this->pageMode == true) {
-    $sidebarWidgetHtml = '';
     $partialsViewPath = 'partials/';
-    $pageContent = '';
-    $contentDivStart ='';
-    $contentDivEnd = '';
-    $rowId = '';
+    $pageContent =
+            '<div class="section">
+                <div class="inner-section-wrapper">'
+                    .stripslashes($this->page['content']) 
+                .'</div>
+            </div>';
     if ($this->page['pageType'] == "offer") {
+        
         if ($this->offercount > 0) {
             $pageContent = $this->partial(
                 $partialsViewPath.'_offer.phtml',
@@ -15,42 +25,35 @@ if ($this->pageMode == true) {
                    'offersType'=>'offerPage',
                    'shopName'=> '',
                    'shop'=>'',
-                   'zendForm'=>$this->form,
+                   'zendForm'=>$this->form
                )
             );
         } else {
             $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
         }
-        $signUpWidgetForm = $this->partial(
-            $partialsViewPath.'_signupForm.phtml',
-            array(
-               'zendForm' => $this->sidebarWidgetForm,
-               'signupFormWidgetType'=> 'sidebarWidget',
-               'shopId'=>'',
-               'shopLogoOrDefaultImage'=>''
-            )
-        );
-        $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-        $sidebarWidgets = $this->widget . $frontendViewHelper->socialMediaWidget(). $signUpWidgetForm;
-        $sidebarWidgetHtml = '<aside class="col-md-4 col-sm-4" id="sidebar">' . $sidebarWidgets . '</aside>';
-        $contentDivStart = '<div id="content" class="col-md-8 col-sm-8">';
-        $contentDivEnd = '</div>';
-    } else {
-        $rowId = 'page-contents';
-        $pageContent=
-            '<div class="section">
-                <div class="inner-section-wrapper"><h1>'.$this->page['pageTitle'].'</h1>'.stripslashes($this->page['content']) .'</div>
-            </div>';
-    }
+    } 
+    $signUpWidgetForm = $this->partial(
+        $partialsViewPath.'_signupForm.phtml',
+        array(
+           'zendForm' => $this->sidebarWidgetForm,
+           'signupFormWidgetType'=> 'sidebarWidget',
+           'shopId'=>'',
+           'shopLogoOrDefaultImage'=>''
+        )
+    );
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     $imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
     $imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
     $pageImagePath = PUBLIC_PATH_CDN.$imagePath.$imageName;
     $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
     echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
-    <div class="row" id="<?php echo $rowId;?>">
-         <?php echo $contentDivStart;?>
-         <?php echo $pageContent; ?>
-         <?php echo $contentDivEnd . $sidebarWidgetHtml;?>
+    <div class="row">
+        <div id="content" class="col-md-8 col-sm-8">
+            <?php echo $pageContent; ?>
+        </div>
+        <aside class="col-md-4 col-sm-4" id="sidebar"> 
+            <?php echo $this->widget . $frontendSidebarHelper->socialMediaWidget(). $signUpWidgetForm; ?>  
+        </aside> 
     </div>
-    <?php 
+<?php 
 }

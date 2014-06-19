@@ -2,19 +2,22 @@
     <h2>
 <?php
 $headerName  = isset($this->shopName) ? $this->shopName : $this->firstName;
-echo $this->shopName!= ''?  $this->translate('Ask a question about'). ' ' . $headerName :  $this->translate('Ask a question');
+echo $this->shopName!= '' 
+    ?  $this->translate('Ask a question about'). ' ' . $headerName 
+    :  $this->translate('Ask a question');
 ?>
     </h2>
     <strong>
 <?php
-echo $this->shopName!= '' ? $this->translate('Ask us anything about'). ' '. $headerName.' '. $this->translate('and their discounts') : $this->translate('Ask us anything about'). ' '. $this->translate('discounts');
+echo $this->shopName!= '' 
+    ? $this->translate('Ask us anything about'). ' '. $headerName.' '. $this->translate('and their discounts') 
+    : $this->translate('Ask us anything about'). ' '. $this->translate('discounts');
 ?>
     </strong>
 </header>
 <section id="disqus_thread" class="section section-comments"></section>
 <script type="text/javascript">
-/* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
-var disqus_shortname = '<?php echo $this->translate('disqus_shortname');?>';
+    var disqus_shortname = '<?php echo $this->translate('disqus_shortname');?>';
 </script>
 <?php
 echo $this->inlineScript()->appendFile($this->baseUrl("public/js/front_end/disqus.js"));

@@ -4,11 +4,15 @@ class FrontEnd_Helper_AuthorPartialFunctions {
         $shopLogos = '';
         foreach ($shops as $shop):
             if (!empty($shop['shops'])):
-                $shopImage = PUBLIC_PATH_CDN.ltrim($shop['shops'][0]['logo']['path'], '/')."thum_small_".$shop['shops'][0]['logo']['name'];
+                $shopImage =
+            		PUBLIC_PATH_CDN.ltrim($shop['shops'][0]['logo']['path'], '/')
+            		."thum_small_".$shop['shops'][0]['logo']['name'];
                 $linkToShopDetails = HTTP_PATH_LOCALE.$shop['shops'][0]['permaLink'];
                 $shopLogos.=
                 '<li>
-                    <a href="'. $linkToShopDetails.'"><img src="'.$shopImage.'" width="90" height="45" alt="'.$shop['name'].'"></a>
+                    <a href="'. $linkToShopDetails.'">
+                    	<img src="'.$shopImage.'" width="90" height="45" alt="'.$shop['name'].'">
+                    </a>
                 </li>';
             endif;
         endforeach;
@@ -17,9 +21,18 @@ class FrontEnd_Helper_AuthorPartialFunctions {
 
     public function authorSocialMediaLinks($authorDetails)
     {
-        $authorSocialMediaLinks = $authorDetails['twitter']!="" ? $this->getSocialMediaLink($authorDetails['twitter'], 'ico-04.png', 'twitter') : '';
-        $authorSocialMediaLinks .= $authorDetails['google']!="" ? $this->getSocialMediaLink($authorDetails['google'], 'plus.png', 'google plus') : '';
-        $authorSocialMediaLinks .= $authorDetails['pinterest']!="" ? $this->getSocialMediaLink($authorDetails['pinterest'], 'p-icon.png', 'pinterest') : '';
+        $authorSocialMediaLinks =
+        	$authorDetails['twitter']!="" 
+        	? $this->getSocialMediaLink($authorDetails['twitter'], 'ico-04.png', 'twitter') 
+        	: '';
+        $authorSocialMediaLinks .=
+        	$authorDetails['google']!="" ?
+        	$this->getSocialMediaLink($authorDetails['google'], 'plus.png', 'google plus') 
+        	: '';
+        $authorSocialMediaLinks .=
+        	$authorDetails['pinterest']!="" 
+        	? $this->getSocialMediaLink($authorDetails['pinterest'], 'p-icon.png', 'pinterest') 
+        	: '';
         return $authorSocialMediaLinks;
     }
 
@@ -28,7 +41,8 @@ class FrontEnd_Helper_AuthorPartialFunctions {
         return 
         '<li>
             <a href="'.$socialMediaLinkUrl.'" target="_blank">
-                <img src="' .HTTP_PATH ."public/images/front_end/". $socialMediaLinkImage .'" width="16" height="16" />' .$socialMediaLinkName
+                <img src="' .HTTP_PATH ."public/images/front_end/"
+                . $socialMediaLinkImage .'" width="16" height="16" />' .$socialMediaLinkName
             .'</a>
         </li>';
     }
@@ -45,7 +59,10 @@ class FrontEnd_Helper_AuthorPartialFunctions {
     }
     public function getAuthorCountryFlagImage($authorCountryFlagName)
     {
-        $authorCountryFlag = $authorCountryFlagName!='' ? PUBLIC_PATH ."images/front_end/flags/flag_" . $authorCountryFlagName .".jpg" : '';
+        $authorCountryFlag =
+        	$authorCountryFlagName!='' 
+        	? PUBLIC_PATH ."images/front_end/flags/flag_" . $authorCountryFlagName .".jpg" 
+        	: '';
         return $authorCountryFlag;
     }
     

@@ -1,7 +1,7 @@
 <?php
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/authors.css");
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/signupnewsletter.js");
 
 $pageImage = PUBLIC_PATH_CDN.$this->pageDetails['logo']['path'].$this->pageDetails['logo']['name'];
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
@@ -34,11 +34,11 @@ $signUpWidgetForm = $this->partial(
     <?php echo $authorsList;?>
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php 
-    $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-    echo $frontendViewHelper->popularCategoryWidget();
-    echo $frontendViewHelper->socialMediaWidget();
-    echo $frontendViewHelper->popularShopWidget();
-    echo $frontendViewHelper->browseByStoreWidget();
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->popularCategoryWidget();
+    echo $frontendSidebarHelper->popularShopWidget();
+    echo $frontendSidebarHelper->browseByStoreWidget();
+    echo $frontendSidebarHelper->socialMediaWidget();
     echo $signUpWidgetForm;
     ?>
     </aside>

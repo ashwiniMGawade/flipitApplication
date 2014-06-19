@@ -13,28 +13,27 @@
 
 	$categoryPicturePath = '';
 	$categoryPictureName = '';
-	if(file_exists(ROOT_PATH.$this->categoryDetail[0]['categoryicon']['path'].$this->categoryDetail[0]['categoryicon']['name'])) {
-		$categoryPicturePath = PUBLIC_PATH_LOCALE.$this->categoryDetail[0]['categoryicon']['path'].$this->categoryDetail[0]['categoryicon']['name'];
+	if(isset($this->categoryDetail[0]['categoryicon']['name'])) {
+		$categoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path']
+		.$this->categoryDetail[0]['categoryicon']['name'];
 		$categoryPictureName = $this->categoryDetail[0]['categoryicon']['name'];
 	}
 
     $featuredCategoryPicturePath = '';
     $featuredCategoryPictureName = '';
     if(isset($this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
-        if(file_exists(ROOT_PATH.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
-            $featuredCategoryPicturePath = PUBLIC_PATH_LOCALE.$this->categoryDetail[0]['categoryfeaturedimage']['path'].$this->categoryDetail[0]['categoryfeaturedimage']['name'];
-            $featuredCategoryPictureName = $this->categoryDetail[0]['categoryfeaturedimage']['name'];
-        }
+        $featuredCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryfeaturedimage']['path']
+        .$this->categoryDetail[0]['categoryfeaturedimage']['name'];
+        $featuredCategoryPictureName = $this->categoryDetail[0]['categoryfeaturedimage']['name'];
     }
 
     $headerCategoryPicturePath = '';
     $headerCategoryPictureName = '';
     if(isset($this->categoryDetail[0]['categoryheaderimage']['name'])) {
-        if(file_exists(ROOT_PATH.$this->categoryDetail[0]['categoryheaderimage']['path'].$this->categoryDetail[0]['categoryheaderimage']['name'])) {
-            $headerCategoryPicturePath = PUBLIC_PATH_LOCALE.$this->categoryDetail[0]['categoryheaderimage']['path'].$this->categoryDetail[0]['categoryheaderimage']['name'];
-            $headerCategoryPictureName = $this->categoryDetail[0]['categoryheaderimage']['name'];
-        }
-    }
+        $headerCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryheaderimage']['path']
+        .$this->categoryDetail[0]['categoryheaderimage']['name'];
+        $headerCategoryPictureName = $this->categoryDetail[0]['categoryheaderimage']['name'];
+	}
 ?>
 
 
@@ -122,35 +121,62 @@
 
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left">
-                                <label><strong><?php echo $this->translate('Category Thumbnail'); ?></strong></label>
+                                <label>
+                                	<strong><?php echo $this->translate('Category Thumbnail'); ?></strong>
+                                </label>
                             </div>
-                            <img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $categoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image">
-                            <span class="ml15 img-name" title="<?php echo $categoryPictureName; ?>"  id="avtarName">
-                            <?php echo $categoryPictureName; ?>
-                            </span>
-                            <div class="mainpage-content-right control-group">
-                                <div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
-                                <div class="mainpage-content-right-inner-left-other">
-                                    <br>
-                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
-                                </div>
-                            </div>
+                            <div class="mainpage-content-right ">
+	                            <div class='browse-container'>    
+	                            	<img class='image-container' 
+	                             	src ="<?php echo $categoryPicturePath;?>" alt = "Category Image">
+	                            </div>
+
+	                            <div class="img-name" title="<?php echo $categoryPictureName; ?>"  id="avtarName">
+	                            	<?php echo $categoryPictureName; ?>
+	                            </div>
+	                            <div class="mainpage-content-right-inner-left-other">
+		                            <div>
+		                                 <input class="span3 ignore" data-max-size="2097152" 
+		                                 onchange="checkFileType(event)" 
+		                                 type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
+		                            </div>
+
+								     <div class='upload category-image'>
+		                                <?php 
+		                                echo $this->translate('Image Size: 175px x 175px (*.jpg or *.png file only)'); 
+		                                ?>
+		                             </div>
+		                        </div>
+		                     </div>
                         </div>
 
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left">
-                                <label><strong><?php echo $this->translate('Category featured image'); ?></strong></label>
+                                <label>
+                                	<strong><?php echo $this->translate('Category featured image'); ?></strong>
+                                </label>
                             </div>
-                            <img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $featuredCategoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image">
-                            <span class="ml15 img-name" title="<?php echo $featuredCategoryPictureName; ?>"  id="avtarName">
-                            <?php echo $featuredCategoryPictureName; ?>
-                            </span>
-                            <div class="mainpage-content-right control-group">
-                                <div class="mainpage-content-right-inner-right-other upload category-image"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
-                                <div class="mainpage-content-right-inner-left-other">
-                                    <br>
-                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryFeaturedImage" id="categoryFeaturedImage">
-                                </div>
+                            <div class="mainpage-content-right ">
+	                            <div class='browse-container'>    
+	                            	<img class='image-container'  src ="<?php echo $featuredCategoryPicturePath;?>" 
+	                            	alt = "Category Featured Image">
+	                            </div>
+	                            <div class="img-name" title="<?php echo $featuredCategoryPictureName; ?>" 
+	                             id="avtarName">
+	                            <?php echo $featuredCategoryPictureName; ?>
+	                            </div>
+	                            <div class="mainpage-content-right-inner-left-other">
+	                                <div>
+	                                    <input class="span3 ignore" data-max-size="2097152" 
+	                                    onchange="checkFileType(event)" type="file" 
+	                                    name="categoryFeaturedImage" id="categoryFeaturedImage">
+	                                </div>
+	                                  <div class="upload category-image">
+	                                  <?php 
+	                                  echo $this->translate('Image Size: 367px x 367px (*.jpg or *.png file only)');
+	                                  ?>
+	                                </div>
+	                            </div>
                             </div>
                         </div>
 
@@ -160,17 +186,26 @@
                                 	<strong><?php echo $this->translate('Category Header image'); ?></strong>
                                 </label>
                             </div>
-                            <img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $headerCategoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Header Image">
-                            <span class="ml15 img-name" title="<?php echo $headerCategoryPictureName; ?>"  id="avtarName">
-                            <?php echo $headerCategoryPictureName; ?>
-                            </span>
-                            <div class="mainpage-content-right control-group">
-                                <div class="mainpage-content-right-inner-right-other upload category-image">
-                                	<?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?>
+                            <div class="mainpage-content-right ">
+	                            <div class='browse-container'>    
+	                            	<img class='image-container' 
+	                            	src ="<?php echo $headerCategoryPicturePath;?>" 
+	                            	alt = "Category Header Image">
+	                            </div>
+                            	<div class="img-name" title="<?php echo $headerCategoryPictureName; ?>"  
+                            	id="avtarName">
+                            	<?php echo $headerCategoryPictureName; ?>
+                            	</div>
+                            <div class="mainpage-content-right-inner-left-other">
+                            	<div>
+                                    <input class="span3 ignore" data-max-size="2097152" 
+                                    onchange="checkFileType(event)" type="file" 
+                                    name="categoryHeaderImage" id="categoryHeaderImage">
                                 </div>
-                                <div class="mainpage-content-right-inner-left-other">
-                                    <br>
-                                    <input class="span3 ignore" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryHeaderImage" id="categoryHeaderImage">
+                                <div class="upload category-image">
+                                	<?php 
+                                	echo $this->translate('Image Size: 1170px x 304px (*.jpg or *.png file only)'); 
+                                	?>
                                 </div>
                             </div>
                         </div>

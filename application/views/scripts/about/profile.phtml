@@ -1,7 +1,5 @@
 <?php 
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
-
+$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
 $authorDetails  = '';
 if(!empty($this->authorDetails)):
 $authorDetails = $this->partial(
@@ -48,11 +46,11 @@ $signUpWidgetForm = $this->partial(
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php 
-    $frontendViewHelper = new FrontEnd_Helper_viewHelper();
-    echo $frontendViewHelper->popularCategoryWidget().
-    $frontendViewHelper->popularShopWidget().
-    $frontendViewHelper->browseByStoreWidget().
-    $frontendViewHelper->socialMediaWidget().
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->popularCategoryWidget().
+    $frontendSidebarHelper->popularShopWidget().
+    $frontendSidebarHelper->browseByStoreWidget().
+    $frontendSidebarHelper->socialMediaWidget().
     $signUpWidgetForm;
     ?>
     </aside>

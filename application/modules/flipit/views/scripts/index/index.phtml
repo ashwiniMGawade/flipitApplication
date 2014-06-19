@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php echo $this->render('partials/_head.phtml'); ?>
+<script type="text/javascript" src="/public/js/jquery-1.7.2.min.js"></script>
 <link rel="alternate" hreflang="nl-BE" href="http://www.flipit.com/be" />
 <link rel="alternate" hreflang="fr-FR" href="http://www.flipit.com/fr" />
 <link rel="alternate" hreflang="de-CH" href="http://www.flipit.com/ch" />
@@ -22,24 +23,22 @@
 </head>
 <body class="splash-page">
 <?php
-$mostPopularCoupon = FrontEnd_Helper_viewHelper::getMostPopularCouponOnEarth(); 
-if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
-    $countryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
-    $localeName = $mostPopularCoupon['locale'] == 'en' ? '' : $mostPopularCoupon['locale'].'/';
-    $domainName = $mostPopularCoupon['locale'] == 'en' ? 'http://www.kortingscode.nl/' : 'http://www.flipit.com/'.$localeName;
-    $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
-    $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($mostPopularCoupon['mostPopularCoupon'][0]['endDate']);
-    $offerExpiryDate =  $offerPartial->getOfferDates((object) $mostPopularCoupon['mostPopularCoupon'][0], $daysTillOfferExpires);
-}
+$mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(); 
+    if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
+        $countryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
+        $localeName = $mostPopularCoupon['locale'] == 'en' ? '' : $mostPopularCoupon['locale'].'/';
+        $domainName = $mostPopularCoupon['locale'] == 'en' ? 'http://www.kortingscode.nl/' : 'http://www.flipit.com/'.$localeName;
+        $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+        $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($mostPopularCoupon['mostPopularCoupon'][0]['endDate']);
+        $offerExpiryDate =  $offerPartial->getOfferDates((object) $mostPopularCoupon['mostPopularCoupon'][0], $daysTillOfferExpires);
+    }
 ?>
     <div id="wrapper">
         <div class="container">
             <div class="panel-box win-min-height">
                 <strong class="logo-panel"><a href="http://www.flipit.com/">flipt Changing the way we save</a></strong>
                 <span class="alt-text">CHoose RegioN:</span>
-                <div class="region-box">
-                    <span class="flag"><img src="<?php echo PUBLIC_PATH;?>images/front_end/img-34.png" alt="img-34" width="16" height="11" /></span><span class="text">Country Detected:  <a href="#">Sweden | Sverige</a></span>
-                </div>
+                <div id="selectedByIP" style="display:none;" class="region-box"></div>
                 <div class="links-cols">
                     <div class="row">
                     <div class="col-xs-6">
@@ -85,7 +84,7 @@ if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopul
                     </div>
                     </div>
                 </div>
-                <?php 
+                <?php
                     if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
                 ?>        
                 <span class="alt-text">Most Popular Coupon ON EARTH</span>
@@ -114,6 +113,46 @@ if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopul
             </div>
         </div>
     </div>
+    <script type="text/javascript">
+
+        $(function(){
+            var availableLanguages = <?php echo json_encode(
+                FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
+
+            $.get("http://ipinfo.io", function(response) {
+                if(response.country.toLowerCase() in availableLanguages){
+
+                    var countryCode = response.country.toLowerCase(),
+                        countryName = availableLanguages[countryCode];
+
+                    var countryUrl = '/'+countryCode;
+                    if(countryName == 'Netherlands') {
+                        countryUrl = 'http://www.kortingscode.nl';
+                    }
+                    var htmlContent = '<span class="flag"><span class="country-flags '+ countryCode +'"></span></span>';
+                        htmlContent+= '<span class="text">Country Detected:  <a href="'+countryUrl+'">'+ countryName
+                        +'</a></span>';
+
+                    $('#selectedByIP').html(htmlContent).show();
+                }
+
+            }, "jsonp");
+
+        });
+    </script>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+    $headScript->prependFile("/public/js/front_end/less/dist/less-1.7.0.js");
+} else {
+    $headScript = $this->HeadScript();
+}
+
+echo $headScript
+    ->prependFile("/public/js/front_end/jquery.main.js")
+    ->prependFile("/public/js/bootstrap.js")
+    ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
+?>
 </body>
 </html>
 

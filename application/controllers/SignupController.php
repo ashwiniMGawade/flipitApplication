@@ -38,7 +38,6 @@ class SignupController extends Zend_Controller_Action
         die();
     }
 
-
     public function indexAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
@@ -133,7 +132,7 @@ class SignupController extends Zend_Controller_Action
                 } else {
                     Visitor::setVisitorLoggedIn($visitorId);
                     $message = $this->view->translate('Thanks for registration now enjoy the more coupons');
-                    $mandrillFunctions->sendWelcomeMail($visitorId, $this);
+                    $this->sendWelcomeMail($visitorId);
                 }
                 self::showFlashMessage(
                     $message,
@@ -144,7 +143,32 @@ class SignupController extends Zend_Controller_Action
         }
         return;
     }
-
+    public function sendWelcomeMail($visitorId)
+    {
+        $visitorDetails = Visitor::getUserDetails($visitorId);
+        $FromEmail = Signupmaxaccount::getEmailAddress();
+        $mailer  = new FrontEnd_Helper_Mailer();
+        $content = array(
+                        'name'    => 'content',
+                        'content' => $this->view->partial(
+                            'emails/welcome.phtml',
+                            array(
+                                'topOffers' => Offer::getTopOffers(5)
+                                )
+                        )
+                    );
+        $VisitorName = $visitorDetails[0]['firstName'].' '.$visitorDetails[0]['lastName'];
+        $mailer->send(
+            FrontEnd_Helper_viewHelper::__email('email_sitename'),
+            $FromEmail[0]['emailperlocale'],
+            $VisitorName,
+            $visitorDetails[0]['email'],
+            FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
+            $content,
+            FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header')
+        );
+        return true;
+    }
     public function sendConfirmationMail($visitoremailMail)
     {
         $html = new Zend_View();

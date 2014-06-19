@@ -1,6 +1,6 @@
 <?php
-$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/home.js");
-$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/search.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/home.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
     'topOffers'=>$this->topOffers,
     'newOffers'=>$this->newOffers,
@@ -53,16 +53,15 @@ if(!empty($this->topStores)):
     );
 endif;
 echo $top9StoresContents;
-$websiteName = explode('www.', HTTP_HOST);
 ?>
 <main role="main" id="main">
 <div class="container best-items">
     <header class="heading">
-        <h1><?php echo $this->translate('The Best of') .' ' . $websiteName[1]; ?></h1>
+        <h1><?php echo $this->translate('The Best of Flipit'); ?></h1>
     </header>
     <div class="columns">
-    <?php 
-    $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions();
+    <?php
+    $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions(); 
     echo $homePagePartial->getHomePageLeftColumn($homePageTopNewOffersCategoriesAndSpecialGuidesData);
     echo $homePagePartial->getHomePageRightColumnOffersList();
     ?>
@@ -70,3 +69,4 @@ $websiteName = explode('www.', HTTP_HOST);
 </div>
 <?php echo $topStore.$seein.$aboutTabs;?>
 </main>
+<?php

@@ -1,3 +1,4 @@
+
 <?php
 if (APPLICATION_ENV == 'development') {
     $headScript =  $this->HeadScript();
@@ -7,7 +8,7 @@ if (APPLICATION_ENV == 'development') {
 }
 $this->minifyHeadScript()
     ->prependFile("/public/js/common.js")
-    ->prependFile("/public/js/front_end/jquery-bigtext.js");
+    ->prependFile("/public/js/front_end/bigtext.js");
 if(LOCALE !='') :
     $this->minifyHeadScript()
         ->prependFile("/public/" . LOCALE ."/js/front_end/json/translation.js")
@@ -18,9 +19,9 @@ else:
         ->prependFile("/public/js/front_end/json/shops.js");
 endif;
 
-echo $headScript
+    $headScript
+    ->prependFile("/public/js/front_end/login_esi.js")
     ->prependFile("/public/js/front_end/jquery.mmenu.min.js")
-    ->prependFile("/public/js/front_end/search.js")
     ->prependFile("/public/js/front_end/jquery.main.js")
     ->prependFile("/public/js/front_end/layout.js")
     ->prependFile("/public/js/Gettext.js")
