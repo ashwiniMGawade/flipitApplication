@@ -8,6 +8,7 @@
         require(APPLICATION_PATH.'/layouts/scripts/layout_css.phtml');
         require(APPLICATION_PATH.'/layouts/scripts/layout_js.phtml');
         $searchBoxCssClass = LOCALE == '' ? 'kortingscode' : '';
+        $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
         ?>
     </head>
 <?php 

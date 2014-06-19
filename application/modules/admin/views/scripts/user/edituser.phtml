@@ -127,6 +127,31 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.cust
                                </div> 
                             </div>
                         </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Name show in about listing'); ?></strong></label></div>
+                            <div class="mainpage-content-right control-group">
+                                <div class="mainpage-content-right-inner-right-other help-inline"></div>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div data-toggle="buttons-checkbox" class="btn-group">
+                                        <button type="button" id="btnYes"  name="btnYes" class="<?php if($this->userDetail['showInAboutListing']==1){echo "btn btn-primary";}else{echo "btn";}?>" onClick="aboutListNameStatus(event,'status','yes');"><?php echo $this->translate("Yes") ; ?></button>                     
+                                        <button type="button" id="btnNo" name="btnNo" class="<?php if($this->userDetail['showInAboutListing']==0){echo "btn btn-primary";}else{echo "btn";}?>" onClick="aboutListNameStatus(event,'status','no');" style="border-radius: 0 4px 4px 0;"><?php echo $this->translate("No") ; ?></button>
+                                        <input type="hidden" name="nameStatus" id="nameStatus" value="<?php echo $this->userDetail['showInAboutListing'] ? 1 : 0 ?>" />
+                                     </div>
+                                </div>                        
+                            </div>
+                        </div>
+                         
+                         
+                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Add Editor to Google plus rich snippets'); ?></strong></label></div>
+                            <div class="mainpage-content-right">
+                                <div data-toggle="buttons-checkbox" class="btn-group">
+                                <button onclick="addToSearchResults(event,'on')" class="btn <?php if($this->userDetail['addtosearch']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                                <button style="border-radius:0 4px 4px 0" onclick="addToSearchResults(event,'off')" class="btn <?php if($this->userDetail['addtosearch']=='0'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
+                                <input type="checkbox" id="addtosearch" <?php if($this->userDetail['addtosearch']=='1'){ echo 'checked'; }  ?>  name="addtosearch" style="display:none;"> 
+                            </div>
+                        </div>
+                        
                         <!-- add by kuldeep according to new changing -->
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Google+'); ?></strong></label></div>

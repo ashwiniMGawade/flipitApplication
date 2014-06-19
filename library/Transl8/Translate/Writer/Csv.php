@@ -103,8 +103,16 @@ class Transl8_Translate_Writer_Csv
         if (!$fileHandler2) {
             throw new Exception('Unable to open file ' . $locationFile . ' for writing');
         }
-        $this->fputcsvCustom($fileHandler2, $finalArrayDataCsv, ';');
-        fclose($fileHandler2);
+        
+        while(!flock($fileHandler2, LOCK_EX)) { 
+            sleep(1); 
+        }
+        
+        $this->fputcsvCustom($fileHandler2, $finalArrayDataCsv, ';'); 
+
+        flock($fileHandler2, LOCK_UN); 
+
+        fclose($fileHandler2); 
     }
 
     /**
