@@ -137,6 +137,7 @@ class VisitorImport
             } catch (Exception $e) {
                 $logContent .= 'Error: '.$e."\n";
             }
+            echo $logContent;
             $this->writeLogFile($logContent, $pathToExcelImportFolder);
         }
         $manager->closeConnection($doctrineSiteDbConnection);
