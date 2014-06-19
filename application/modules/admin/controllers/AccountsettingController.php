@@ -178,15 +178,14 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             if($voucherflag){
 
                 # get 10 popular vouchercodes for news letter
-                $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
-                $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
+                $topVouchercodes = Offer::getTopOffers(10) ;
+                //$topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
 
             } else {
                 $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvaouchercode_list');
             }
 
             $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularcategory_list');
-
             //key not exist in cache
 
             if($categoryflag){
@@ -212,7 +211,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
 
             //call functions to set the needed data in global arrays
-            $voucherCodesData = BackEnd_Helper_viewHelper::getTopVouchercodesDataMandrill($topVouchercodes);
+            //$voucherCodesData = BackEnd_Helper_viewHelper::getTopVouchercodesDataMandrill($topVouchercodes);
 
             $this->getVouchercodesOfCategories($topCategories);
             $this->getDirectLoginLinks();
@@ -256,27 +255,49 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                             );
 
             //merge all the arrays into single array
-            $data = array_merge($voucherCodesData['dataShopName'],
+            /*$data = array_merge($voucherCodesData['dataShopName'],
                     $voucherCodesData['dataOfferName'],
                     $voucherCodesData['dataShopImage'],
                     $voucherCodesData['expDate'],
                     $this->headerMail, $this->dataShopNameCat,
                     $this->dataOfferNameCat, $this->dataShopImageCat,
                     $this->expDateCat, $this->category
-            );
+            );*/
 
             //merge the permalinks array and static content array into single array
-            $dataPermalink = array_merge($voucherCodesData['shopPermalink'], $this->shopPermalinkCat,
-                                         $this->staticContent);
+           // $dataPermalink = array_merge($voucherCodesData['shopPermalink'], $this->shopPermalinkCat,
+             //                            $this->staticContent);
 
             //initialize mandrill with the template name and other necessary options
             $mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
             $templateName = $this->getInvokeArg('newsletterTemplate');
-            $templateContent = $data;
-
+            //$templateContent = $data;
+            $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']),0,3);
+            $categoryName = $topCategories[0]['category']['name'];
             try {
-                FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch($mandrillNewsletterSubject, $mandrillSenderEmailAddress, $mandrillSenderName,
-                        $this->recipientMetaData, $dataPermalink, $this->loginLinkAndData, $templateName, $templateContent, $mandrill, $this->to);
+                /*FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                    $mandrillNewsletterSubject,
+                    $mandrillSenderEmailAddress,
+                    $mandrillSenderName,
+                    $this->recipientMetaData,
+                    $dataPermalink,
+                    $this->loginLinkAndData,
+                    $templateName,
+                    $templateContent,
+                    $mandrill,
+                    $this->to
+                );*/
+                FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                    $topVouchercodes,
+                    $categoryVouchers,
+                    $categoryName,
+                    $mandrillNewsletterSubject,
+                    $mandrillSenderEmailAddress,
+                    $mandrillSenderName,
+                    $this->recipientMetaData,
+                    $this->loginLinkAndData,
+                    $this->to
+                );
                 $message = $this->view->translate('Newsletter has been sent successfully');
             } catch (Mandrill_Error $e) {
 
@@ -391,13 +412,13 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
             $key = 0;
             $visitorData[$key]['rcpt'] = $testEmail;
-            $visitorData[$key]['vars'][0]['name'] = 'loginLink';
-            $visitorData[$key]['vars'][0]['content'] =  HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin") . "/" . base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
-            $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
-            $visitorData[$key]['vars'][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe") . "/" . base64_encode($testEmail) ."/". $dummyPass;
+            $visitorData[$key][0]['name'] = 'loginLink';
+            $visitorData[$key][0]['content'] =  HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin") . "/" . base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
+            $visitorData[$key][1]['name'] = 'loginLinkWithUnsubscribe';
+            $visitorData[$key][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe") . "/" . base64_encode($testEmail) ."/". $dummyPass;
 
             $toVisitorArray[$key]['email'] = $testEmail;
-            $toVisitorArray[$key]['name'] = 'Member';
+            $toVisitorArray[$key]['name'] = !empty($getTestEmaildata[0]['firstName']) ? $getTestEmaildata[0]['firstName'] . ' ' .$getTestEmaildata[0]['lastName'] : 'member';
             $this->loginLinkAndData = $visitorData;//set the visitor data in $loginLinkAndData array
             $this->to = $toVisitorArray;
 

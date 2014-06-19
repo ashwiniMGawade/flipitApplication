@@ -659,7 +659,7 @@ EOD;
                     $res = "true";
                 }
                 break;
-         }
+        }
         $obj = new User();
         return $obj->getFamousUserDetail($eId);
     }
@@ -722,17 +722,29 @@ EOD;
     }
 
     public static function sendMandrillNewsletterByBatch(
+        $topVouchercodes,
+        $categoryVouchers,
+        $categoryName,
         $mandrillNewsletterSubject,
         $mandrillSenderEmailAddress,
         $mandrillSenderName,
         $recipientMetaData,
-        $globalMergeVars,
         $mandrillMergeVars,
-        $templateName,
-        $templateContent,
-        $mandrill,
         $mandrillUsersList
     ) {
+        $basePath = new Zend_View();
+        $basePath->setBasePath(APPLICATION_PATH . '/views/');
+        $content = array(
+            'name'    => 'content',
+            'content' => $basePath->partial(
+                'emails/welcome.phtml',
+                array(
+                    'topVouchercodes' => $topVouchercodes,
+                    'categoryVouchers' => $categoryVouchers,
+                    'categoryName' => $categoryName,
+                )
+            )
+        );
         sort($mandrillUsersList);
         sort($recipientMetaData);
         sort($mandrillMergeVars);
@@ -740,18 +752,19 @@ EOD;
         $recipientMetaData   = array_chunk($recipientMetaData, 500);
         $mandrillMergeVars    = array_chunk($mandrillMergeVars, 500);
         foreach ($mandrillUsersLists as $mandrillUsersKey => $mandrillUsersEmailList) {
-            $mandrillMessage = array(
-                'subject'    => $mandrillNewsletterSubject,
-                'from_email' => $mandrillSenderEmailAddress,
-                'from_name'  => $mandrillSenderName,
-                'to'         => $mandrillUsersEmailList,
-                'inline_css' => true,
-                "recipient_metadata" => $recipientMetaData[$mandrillUsersKey],
-                'global_merge_vars' => $globalMergeVars,
-                'merge_vars' => $mandrillMergeVars[$mandrillUsersKey]
+            $mailer  = new FrontEnd_Helper_Mailer();
+            $mailer->send(
+                $mandrillSenderName,
+                $mandrillSenderEmailAddress,
+                $mandrillUsersEmailList,
+                $mandrillUsersEmailList,
+                $mandrillNewsletterSubject,
+                $content,
+                FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
+                !empty($recipientMetaData[$mandrillUsersKey]) ? $recipientMetaData[$mandrillUsersKey] : '',
+                $mandrillMergeVars[$mandrillUsersKey]
             );
-            $mandrill->messages->sendTemplate($templateName, $templateContent, $mandrillMessage);
-        }
+        }die;
         return true;
     }
 
