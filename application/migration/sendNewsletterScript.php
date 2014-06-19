@@ -66,6 +66,7 @@ class SendNewsletter {
 		/** Zend_Application */
 		require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
 		require_once(LIBRARY_PATH.'/BackEnd/Helper/viewHelper.php');
+		require_once(LIBRARY_PATH.'/FrontEnd/Helper/viewHelper.php');
 		require_once (LIBRARY_PATH . '/Zend/Application.php');
 		require_once(DOCTRINE_PATH . '/Doctrine.php');
 
@@ -158,7 +159,7 @@ class SendNewsletter {
 
 				$this->_trans->addTranslation(
 						array(
-								'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $suffix . '.mo',
+								'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/fallback/frontend_php' . $suffix . '.mo',
 								'locale' => $cutsomLocale,
 						)
 				);
@@ -170,6 +171,12 @@ class SendNewsletter {
 						)
 				);
 
+				$this->_trans->addTranslation(
+						array(
+								'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/email' . $suffix . '.mo',
+								'locale' => $cutsomLocale ,
+						)
+				);
 
 
 				Zend_Registry::set('Zend_Translate', $this->_trans);

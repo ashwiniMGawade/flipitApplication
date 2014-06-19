@@ -4,9 +4,10 @@
  *
  * @author Daniel
  */
+
 new VisitorImport();
-class VisitorImport
-{
+
+class VisitorImport {
 
     protected $_localePath  = '/';
     protected $_trans       = null;
@@ -17,13 +18,16 @@ class VisitorImport
         require_once('ConstantForMigration.php');
         require_once('CommonMigrationFunctions.php');
         CommonMigrationFunctions::setTimeAndMemoryLimit();
+
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
-        foreach ($connections as $key => $connection) {
+        
+        foreach ( $connections as $key => $connection ) {
+            // check if database is a site
             if ($key != 'imbull') {
                 try {
-                    $this->importVisitors($connection ['dsn'], $key);
-                } catch (Exception $e) {
-                    echo $e->getMessage()."\n\n";
+                    $this->importVisitors( $connection ['dsn'], $key);
+                } catch ( Exception $e ) {
+                    echo $e->getMessage ()."\n\n";
                 }
             }
         }
@@ -31,16 +35,15 @@ class VisitorImport
 
     protected function importVisitors($dsn, $keyIn)
     {
-        $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
-        $manager = CommonMigrationFunctions::loadDoctrineModels();
+        CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
+        CommonMigrationFunctions::loadDoctrineModels();
 
         $localePath               = ($keyIn == 'en') ? '' : $keyIn.'/';
         $pathToExcelImportFolder  = UPLOAD_DATA_FOLDER_EXCEL_PATH . strtolower($localePath) . 'excels/import/';
         
         foreach (glob($pathToExcelImportFolder."*.xlsx") as $xlsxDocument) {
             
-            $logContent =
-                date('Y-m-d H:m:i').' - import file: '.basename($xlsxDocument).' for locale: '.strtoupper($keyIn)."\n";
+            $logContent = date('Y-m-d H:m:i').' - import file: '.basename($xlsxDocument).' for locale: '.strtoupper($keyIn)."\n";
 
             try {
                 $objReader      = PHPExcel_IOFactory::createReader('Excel2007');
@@ -65,24 +68,16 @@ class VisitorImport
                     $email      = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
                     $firstName  = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
                     $lastName   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
-                    $gender     =
-                        (strtoupper($data[$cell->getRow()]['D']) == 'F'
-                        || strtoupper($data[$cell->getRow()]['D']) == 'FEMALE')
-                        ? 1
-                        : 0;
-                    $dob        =
-                        PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['E'], "YYYY-MM-DD");
-                    $dob        = date('Y-m-d', strtotime($dob));
-                    $date       =
-                        PHPExcel_Style_NumberFormat::toFormattedString(
-                            $data[$cell->getRow()]['F'],
-                            "YYYY-MM-DD h:mm:ss"
-                        );
-                    $created_at = ($date) ? date('Y-m-d H:i:s', strtotime($date)) : date('Y-m-d H:i:s');
+                    $gender     = (strtoupper($data[$cell->getRow()]['D']) == 'F' || strtoupper($data[$cell->getRow()]['D']) == 'FEMALE') ? 1 : 0;
+                    $dob        = PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['E'], "YYYY-MM-DD");
+                    $dob        = date('Y-m-d',strtotime($dob));
+                    $date       = PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['F'], "YYYY-MM-DD h:mm:ss");
+                    $created_at = ($date) ? date('Y-m-d H:i:s',strtotime($date)) : date('Y-m-d H:i:s');
                     $keywords   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
                     $emailExist = Doctrine_Core::getTable('Visitor')->findBy('email', $email)->toArray();
-                    $keywordsArray = explode(',', $keywords);
-                    if (empty($emailExist)) {
+                    
+                    $keywordsArray = explode(',',$keywords);
+                    if(empty($emailExist)){
                         $countNewVisitors++;
                         $insert[$email]->firstName = $firstName;
                         $insert[$email]->lastName = $lastName;
@@ -93,34 +88,30 @@ class VisitorImport
                         $insert[$email]->weeklyNewsLetter = 1;
                         $insert[$email]->password = BackEnd_Helper_viewHelper::randomPassword();
                         $insert[$email]->active = 1;
-                        $insert[$email]->currentLogIn = '0000-00-00';
-                        $insert[$email]->lastLogIn = '0000-00-00';
-                        $insert[$email]->active_codeid = '';
-                        foreach ($keywordsArray as $words) {
-                            $insert[$email]->keywords[]->keyword = $words;
-                        }
+                        
+                        foreach ($keywordsArray as $words) $insert[$email]->keywords[]->keyword = $words;
 
                     } else {
                         $countUpdatedVisitors++;
-                        $updateVisitor = Doctrine_Core::getTable('Visitor')->find($emailExist[0]['id']);
-                        $updateVisitor->firstName = $firstName;
-                        $updateVisitor->lastName = $lastName;
-                        $updateVisitor->created_at = $created_at;
-                        $updateVisitor->gender = $gender;
-                        $updateVisitor->dateOfBirth = $dob;
-                        $updateVisitor->active = 1;
-                        $updateVisitor->save();
-
+                        $updateWeekNews = Doctrine_Query::create()->update('Visitor')
+                                                                  ->set('weeklyNewsLetter',1)
+                                                                  ->set('firstName','?' , $firstName )
+                                                                  ->set('lastName', '?' ,$lastName)
+                                                                  ->set('created_at', '?' , $created_at)
+                                                                  ->set('dateOfBirth','?',$dob)
+                                                                  ->set('gender', '?', $gender)
+                                                                  ->set('active','?',1)
+                                                                  ->where('id = '.$emailExist[0]['id'])
+                                                                  ->execute();
                         $keywordCounter     = 0;
                         $insertKeyword      = new Doctrine_Collection('VisitorKeyword');
                         foreach ($keywordsArray as $words) {
-                            $keywordExist = Doctrine_Query::create()
-                                ->from('VisitorKeyword')
-                                ->where("keyword = '". $words ."'")
-                                ->andWhere('visitorId = '.$emailExist[0]['id'])
-                                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+                            $keywordExist = Doctrine_Query::create()->from('VisitorKeyword')
+                                                                  ->where("keyword = '". $words ."'")
+                                                                  ->andWhere('visitorId = '.$emailExist[0]['id'])
+                                                                  ->fetchOne(null,Doctrine::HYDRATE_ARRAY);
 
-                            if (empty($keywordExist)) {
+                            if(empty($keywordExist)) {
                                 $insertKeyword[$keywordCounter]->keyword = $words;
                                 $insertKeyword[$keywordCounter]->visitorId = $emailExist[0]['id'];
                             }
@@ -129,7 +120,6 @@ class VisitorImport
                         $insertKeyword->save();
                     }
                 }
-
                 $logContent .= 'Total new users: '.$countNewVisitors."\n";
                 $logContent .= 'Total updated users: '.$countUpdatedVisitors."\n\n";
                 unlink($xlsxDocument);
@@ -139,13 +129,11 @@ class VisitorImport
             }
             $this->writeLogFile($logContent, $pathToExcelImportFolder);
         }
-        $manager->closeConnection($doctrineSiteDbConnection);
     }
 
-    private function writeLogFile($logContent, $pathToExcelImportFolder)
-    {
+    private function writeLogFile($logContent, $pathToExcelImportFolder){
         $filename = $pathToExcelImportFolder.'log.txt';
-        $file_content = file_exists($filename) ? file_get_contents($filename) : '';
+        $file_content = file_exists($filename) ? file_get_contents ($filename) : '';
         file_put_contents($filename, $logContent . "\n" . $file_content);
     }
 }
