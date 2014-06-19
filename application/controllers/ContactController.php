@@ -40,7 +40,10 @@ class ContactController extends Zend_Controller_Action
                 'content' => $this->view->partial(
                     'emails/contactform.phtml',
                     array(
-                        'message' => $message
+                        'message' => $message,
+                        'name' => $visitorName,
+                        'email'=> $visitorEmail,
+                        'subject'=>$subject
                     )
                 )
             );
