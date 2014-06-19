@@ -811,7 +811,7 @@ EOD;
         foreach ($websites as $website) {
             $splitWebsite  = explode('/', $website['name']);
             $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
-            $locales[strtoupper($locale)] = $website['name'];
+            $locales[strtoupper($locale)] = $website['name'].'='.$website['status'];
         }
         return $locales;
     }
