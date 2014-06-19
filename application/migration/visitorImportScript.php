@@ -63,70 +63,73 @@ class VisitorImport
                     }
 
                     $email      = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['A']);
-                    $firstName  = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
-                    $lastName   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
-                    $gender     =
-                        (strtoupper($data[$cell->getRow()]['D']) == 'F'
-                        || strtoupper($data[$cell->getRow()]['D']) == 'FEMALE')
-                        ? 1
-                        : 0;
-                    $dob        =
-                        PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['E'], "YYYY-MM-DD");
-                    $dob        = date('Y-m-d', strtotime($dob));
-                    $date       =
-                        PHPExcel_Style_NumberFormat::toFormattedString(
-                            $data[$cell->getRow()]['F'],
-                            "YYYY-MM-DD h:mm:ss"
-                        );
-                    $created_at = ($date) ? date('Y-m-d H:i:s', strtotime($date)) : date('Y-m-d H:i:s');
-                    $keywords   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
-                    $emailExist = Doctrine_Core::getTable('Visitor')->findBy('email', $email)->toArray();
-                    $keywordsArray = explode(',', $keywords);
-                    if (empty($emailExist)) {
-                        $countNewVisitors++;
-                        $insert[$email]->firstName = $firstName;
-                        $insert[$email]->lastName = $lastName;
-                        $insert[$email]->created_at = $created_at;
-                        $insert[$email]->email = $email;
-                        $insert[$email]->gender = $gender ;
-                        $insert[$email]->dateOfBirth = $dob ;
-                        $insert[$email]->weeklyNewsLetter = 1;
-                        $insert[$email]->password = BackEnd_Helper_viewHelper::randomPassword();
-                        $insert[$email]->active = 1;
-                        $insert[$email]->currentLogIn = '0000-00-00';
-                        $insert[$email]->lastLogIn = '0000-00-00';
-                        $insert[$email]->active_codeid = '';
-                        foreach ($keywordsArray as $words) {
-                            $insert[$email]->keywords[]->keyword = $words;
-                        }
-
-                    } else {
-                        $countUpdatedVisitors++;
-                        $updateVisitor = Doctrine_Core::getTable('Visitor')->find($emailExist[0]['id']);
-                        $updateVisitor->firstName = $firstName;
-                        $updateVisitor->lastName = $lastName;
-                        $updateVisitor->created_at = $created_at;
-                        $updateVisitor->gender = $gender;
-                        $updateVisitor->dateOfBirth = $dob;
-                        $updateVisitor->active = 1;
-                        $updateVisitor->save();
-
-                        $keywordCounter     = 0;
-                        $insertKeyword      = new Doctrine_Collection('VisitorKeyword');
-                        foreach ($keywordsArray as $words) {
-                            $keywordExist = Doctrine_Query::create()
-                                ->from('VisitorKeyword')
-                                ->where("keyword = '". $words ."'")
-                                ->andWhere('visitorId = '.$emailExist[0]['id'])
-                                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-                            if (empty($keywordExist)) {
-                                $insertKeyword[$keywordCounter]->keyword = $words;
-                                $insertKeyword[$keywordCounter]->visitorId = $emailExist[0]['id'];
+                    
+                    if(filter_var($email, FILTER_VALIDATE_EMAIL)){                        
+                        $firstName  = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['B']);
+                        $lastName   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['C']);
+                        $gender     =
+                            (strtoupper($data[$cell->getRow()]['D']) == 'F'
+                            || strtoupper($data[$cell->getRow()]['D']) == 'FEMALE')
+                            ? 1
+                            : 0;
+                        $dob        =
+                            PHPExcel_Style_NumberFormat::toFormattedString($data[$cell->getRow()]['E'], "YYYY-MM-DD");
+                        $dob        = date('Y-m-d', strtotime($dob));
+                        $date       =
+                            PHPExcel_Style_NumberFormat::toFormattedString(
+                                $data[$cell->getRow()]['F'],
+                                "YYYY-MM-DD h:mm:ss"
+                            );
+                        $created_at = ($date) ? date('Y-m-d H:i:s', strtotime($date)) : date('Y-m-d H:i:s');
+                        $keywords   = BackEnd_Helper_viewHelper::stripSlashesFromString($data[$cell->getRow()]['G']);
+                        $emailExist = Doctrine_Core::getTable('Visitor')->findBy('email', $email)->toArray();
+                        $keywordsArray = explode(',', $keywords);
+                        if (empty($emailExist)) {
+                            $countNewVisitors++;
+                            $insert[$email]->firstName = $firstName;
+                            $insert[$email]->lastName = $lastName;
+                            $insert[$email]->created_at = $created_at;
+                            $insert[$email]->email = $email;
+                            $insert[$email]->gender = $gender ;
+                            $insert[$email]->dateOfBirth = $dob ;
+                            $insert[$email]->weeklyNewsLetter = 1;
+                            $insert[$email]->password = BackEnd_Helper_viewHelper::randomPassword();
+                            $insert[$email]->active = 1;
+                            $insert[$email]->currentLogIn = '0000-00-00';
+                            $insert[$email]->lastLogIn = '0000-00-00';
+                            $insert[$email]->active_codeid = '';
+                            foreach ($keywordsArray as $words) {
+                                $insert[$email]->keywords[]->keyword = $words;
                             }
-                            $keywordCounter++;
+
+                        } else {
+                            $countUpdatedVisitors++;
+                            $updateVisitor = Doctrine_Core::getTable('Visitor')->find($emailExist[0]['id']);
+                            $updateVisitor->firstName = $firstName;
+                            $updateVisitor->lastName = $lastName;
+                            $updateVisitor->created_at = $created_at;
+                            $updateVisitor->gender = $gender;
+                            $updateVisitor->dateOfBirth = $dob;
+                            $updateVisitor->active = 1;
+                            $updateVisitor->save();
+
+                            $keywordCounter     = 0;
+                            $insertKeyword      = new Doctrine_Collection('VisitorKeyword');
+                            foreach ($keywordsArray as $words) {
+                                $keywordExist = Doctrine_Query::create()
+                                    ->from('VisitorKeyword')
+                                    ->where("keyword = '". $words ."'")
+                                    ->andWhere('visitorId = '.$emailExist[0]['id'])
+                                    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+
+                                if (empty($keywordExist)) {
+                                    $insertKeyword[$keywordCounter]->keyword = $words;
+                                    $insertKeyword[$keywordCounter]->visitorId = $emailExist[0]['id'];
+                                }
+                                $keywordCounter++;
+                            }
+                            $insertKeyword->save();
                         }
-                        $insertKeyword->save();
                     }
                 }
 
