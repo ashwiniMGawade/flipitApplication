@@ -102,19 +102,25 @@ class VisitorImport
 
                     } else {
                         $countUpdatedVisitors++;
-                        $updateVisitor = Doctrine_Core::getTable('Visitor')->find($emailExist[0]['id']);
+                        /*$updateVisitor = Doctrine_Core::getTable('Visitor')->find($emailExist[0]['id']);
                         $updateVisitor->firstName = $firstName;
                         $updateVisitor->lastName = $lastName;
                         $updateVisitor->created_at = $created_at;
                         $updateVisitor->gender = $gender;
                         $updateVisitor->dateOfBirth = $dob;
                         $updateVisitor->active = 1;
-                        $updateVisitor->save();
+                        $updateVisitor->save();*/
+
+                        //delete the query
+                        $del1 = Doctrine_Query::create()->delete()
+                                ->from('Visitor v')
+                                ->where("v.id=" . $emailExist[0]['id'])
+                                ->execute();//delete
 
                         $keywordCounter     = 0;
                         $insertKeyword      = new Doctrine_Collection('VisitorKeyword');
                         foreach ($keywordsArray as $words) {
-                            $keywordExist = Doctrine_Query::create()
+                            /*$keywordExist = Doctrine_Query::create()
                                 ->from('VisitorKeyword')
                                 ->where("keyword = '". $words ."'")
                                 ->andWhere('visitorId = '.$emailExist[0]['id'])
@@ -124,16 +130,22 @@ class VisitorImport
                                 $insertKeyword[$keywordCounter]->keyword = $words;
                                 $insertKeyword[$keywordCounter]->visitorId = $emailExist[0]['id'];
                             }
-                            $keywordCounter++;
+                            $keywordCounter++;*/
+
+                            //delete
+                            $keywordExist = Doctrine_Query::create()->delete()
+                                ->from('VisitorKeyword')
+                                ->where("keyword = '". $words ."'")
+                                ->andWhere('visitorId = '.$emailExist[0]['id'])->execute();//delete
                         }
-                        $insertKeyword->save();
+                       // $insertKeyword->save();
                     }
                 }
 
                 $logContent .= 'Total new users: '.$countNewVisitors."\n";
-                $logContent .= 'Total updated users: '.$countUpdatedVisitors."\n\n";
+                $logContent .= 'Total deleted users: '.$countUpdatedVisitors."\n\n";
                 unlink($xlsxDocument);
-                $insert->save();
+                //$insert->save();
             } catch (Exception $e) {
                 $logContent .= 'Error: '.$e."\n";
             }
