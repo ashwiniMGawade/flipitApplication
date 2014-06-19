@@ -94,19 +94,11 @@ if (LOCALE == '') {
             <footer id="footer">
                 <div class="container add-block">
                     <ul class="countries">
-                        <?php foreach ($this->flipitLocales as $flipitLocaleKey => $flipitLocaleValue) : 
-                            $explodedLocaleValue = explode('=',$flipitLocaleValue);
-                            $localeStatus = isset($explodedLocaleValue[1]) ? $explodedLocaleValue[1] : '';
-                            $websiteName = isset($explodedLocaleValue[0]) ? $explodedLocaleValue[0] : '';
-                            if ($localeStatus == 'online') :
-                        ?>
+                        <?php foreach ($this->flipitLocales as $flipitLocaleKey => $flipitLocaleValue) : ?>
                         <li>
-                            <a href="<?php echo 'http://'.$websiteName; ?>"
-                                class="country-flags <?php echo strtolower($flipitLocaleKey); ?>">
-                                <?php echo $websiteName; ?>
-                             </a>
+                            <a href="<?php echo 'http://'.$flipitLocaleValue; ?>" class="country-flags <?php 
+                            echo strtolower($flipitLocaleKey); ?>"><?php echo $flipitLocaleValue; ?></a>
                         </li>
-                            <?php endif; ?>
                         <?php endforeach; ?>
                     </ul>
                     <strong class="logo <?php echo $websiteLogo; ?>">
