@@ -60,7 +60,7 @@ class VisitorExport {
                 'Favorite Shops',
                 'Registration Date'
             );
-            fputcsv($fp, $headers);
+            fputcsv($fp, $headers, ';');
 
             $sql ='
                 SELECT
@@ -127,7 +127,7 @@ class VisitorExport {
                         $visitor['created_at'],
                     );
 
-                    fputcsv($fp, $visitor);
+                    fputcsv($fp, $visitor, ';');
                 }
             }
 
