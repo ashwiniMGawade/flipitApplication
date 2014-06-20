@@ -19,7 +19,7 @@ class Category extends BaseCategory
     public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
     {
         $categoryOffers= array();
-        $currentDateAndTime = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoryOffersList = Doctrine_Query::create()
         ->select(
             "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,
@@ -75,7 +75,7 @@ class Category extends BaseCategory
     
     public static function getPopularCategories($categoriesLimit = 0)
     {
-        $currentDateAndTime = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $popularCategories = Doctrine_Query::create()
         ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
         ->from('PopularCategory p')
@@ -86,10 +86,11 @@ class Category extends BaseCategory
             .$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff"
         )
         ->addSelect(
-            "(
-                SELECT  count(*) FROM refOfferCategory roc1 LEFT JOIN roc1.Offer off1 LEFT JOIN off1.shop s1  WHERE  
-                off1.deleted = 0 and s1.deleted = 0 and roc1.categoryId = p.categoryId and off1.enddate >'"
-            .$currentDateAndTime."'  and off1.Visability!='MEM') as totalOffers"
+            "(SELECT count(off1.id) FROM refShopCategory roc1 LEFT JOIN roc1.shops s1 LEFT JOIN s1.offer off1  
+                WHERE  s1.deleted = 0 and 
+                s1.status = 1 and off1.deleted = 0 and roc1.categoryId = p.categoryId  
+                and off1.enddate >'".$currentDateAndTime."' and off1.startdate < '".$currentDateAndTime."') 
+                as totalOffers"
         )
         ->leftJoin('p.category o')
         ->leftJoin('o.categoryicon i')
