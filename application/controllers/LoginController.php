@@ -52,7 +52,7 @@ class LoginController extends Zend_Controller_Action
         $loginForm->getElement('emailAddress')->setValue($emailAddressFromMemory);
         $this->viewHelperObject->getMetaTags($this);
         if ($this->getRequest()->isPost()) {
-            if ($loginForm->isValid($_POST)) {
+            if ($loginForm->isValid($this->getRequest()->getPost())) {
                 $visitorDetails = $loginForm->getValues();
                 $this->_helper->Login->setVisitorSession($visitorDetails);
                 self::redirectByVisitorStatus($visitorDetails);
@@ -97,7 +97,6 @@ class LoginController extends Zend_Controller_Action
     {
         Auth_VisitorAdapter::clearIdentity();
         setcookie('kc_unique_user_id', "", time() - 3600, '/');
-        unset($_COOKIE['kc_unique_user_id']);
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $module = $this->getRequest()->getParam('lang');
@@ -112,7 +111,7 @@ class LoginController extends Zend_Controller_Action
         $forgotPasswordForm = new Application_Form_ForgotPassword();
         $this->view->form = $forgotPasswordForm;
         if ($this->getRequest()->isPost()) {
-            if ($forgotPasswordForm->isValid($_POST)) {
+            if ($forgotPasswordForm->isValid($this->getRequest()->getPost())) {
                 $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(
                     FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress'))
                 );
@@ -180,7 +179,7 @@ class LoginController extends Zend_Controller_Action
             $this->view->linkAlreadyUsed = true;
         }
         if ($this->getRequest()->isPost()) {
-            if ($resetPasswordForm->isValid($_POST)) {
+            if ($resetPasswordForm->isValid($this->getRequest()->getPost())) {
                 self::resetPassword(
                     $visitorId,
                     $resetPasswordForm->getValue('password'),
@@ -188,7 +187,7 @@ class LoginController extends Zend_Controller_Action
                 );
             } else {
                 $resetPasswordForm->highlightErrorElements();
-            } 
+            }
         }
         $this->view->pageCssClass = 'login-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
