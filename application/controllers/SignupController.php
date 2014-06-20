@@ -2,6 +2,7 @@
 require_once 'Zend/Controller/Action.php';
 class SignupController extends Zend_Controller_Action
 {
+    public $_loginLinkAndData = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -153,11 +154,13 @@ class SignupController extends Zend_Controller_Action
                         'content' => $this->view->partial(
                             'emails/welcome.phtml',
                             array(
-                                'topOffers' => Offer::getTopOffers(5)
+                                'topOffers' => Offer::getTopOffers(5),
+                                'mailType' => 'welcome'
                                 )
                         )
                     );
         $VisitorName = $visitorDetails[0]['firstName'].' '.$visitorDetails[0]['lastName'];
+        BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails[0]['email']);
         $mailer->send(
             FrontEnd_Helper_viewHelper::__email('email_sitename'),
             $FromEmail[0]['emailperlocale'],
@@ -165,7 +168,9 @@ class SignupController extends Zend_Controller_Action
             $visitorDetails[0]['email'],
             FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
             $content,
-            FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header')
+            FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
+            '',
+            $this->_loginLinkAndData
         );
         return true;
     }

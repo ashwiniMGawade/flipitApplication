@@ -1,8 +1,8 @@
 <?php
-$websiteName = FrontEnd_Helper_viewHelper::getWebsiteName();
-$publicPath = HTTP_PATH.'public/images/';
+$websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($this->locale);
+$publicPath = $this->httpPath.'public/images/';
 
-if(LOCALE == ''):
+if($this->locale == ''):
     $logo = $publicPath.'kortingscode-logo.png';
 else :
     $logo = $publicPath.'logo-footer.png';
@@ -16,33 +16,21 @@ endif;
             <?php echo FrontEnd_Helper_viewHelper::__email('email_Je ontvangt deze nieuwsbrief omdat je ons toestemming hebt gegeven om je op de'); ?>
         <br>
             <?php echo FrontEnd_Helper_viewHelper::__email('email_hoogte te houden van onze laatste acties.'); ?> 
-            <a href="#" style="text-decoration:none; color:#878a8d;"><?php echo $this->siteUrl; ?></a> <?php echo FrontEnd_Helper_viewHelper::__email('email_is een onderdeel van'); ?>
+            <a href="<?php echo $this->siteUrl; ?>" style="text-decoration:none; color:#878a8d;"><?php echo $this->siteUrl; ?></a> <?php echo FrontEnd_Helper_viewHelper::__email('email_is een onderdeel van'); ?>
             <br>
             <?php echo FrontEnd_Helper_viewHelper::__email('email_Imbull. Weteringschans 120, 1017XT Amsterdam - KvK #34339618'); ?>
         </td>
     </tr>
     <tr>
         <td align="center" style="padding:0 0 37px; font:14px/17px Arial, Helvetica, sans-serif; color:#33383e;">
-            <?php
-                foreach ($this->directLoginAndUnsubscribeLinks['directUnsubscribeLink'] as $directLoginAndUnsubscribeLink) { 
-                  ?>
-                    <a href="<?php echo $directLoginAndUnsubscribeLink; ?>" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Uitschrijven'); ?></a>
-            <?php
-            } 
-            ?>
+                <a href="*|loginLinkWithUnsubscribe|*" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Uitschrijven'); ?></a>
              | 
-             <?php
-                foreach ($this->directLoginAndUnsubscribeLinks['directLoginLink'] as $directLoginAndUnsubscribeLink) { 
-                  
-                   ?>
-            <a href="<?php echo $directLoginAndUnsubscribeLink; ?>" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Wijzigen profiel'); ?></a>
-            <?php
-            } 
-            ?> | 
-            <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info/contact'); ?>" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Contact'); ?></a>
+            <a href="*|loginLink|*" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Wijzigen profiel'); ?></a>
+            | 
+            <a href="<?php echo $this->httpPathLocale.FrontEnd_Helper_viewHelper::__link('link_info/contact'); ?>" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Contact'); ?></a>
         </td>
     </tr>
     <tr>
-        <td align="center"><a href="<?php echo HTTP_PATH_LOCALE; ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" width="109" height="49" alt="<?php echo $websiteName; ?>"></a></td>
+        <td align="center"><a href="<?php echo rtrim($this->httpPathLocale, '/'); ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" alt="<?php echo $websiteName; ?>"></a></td>
     </tr>
 </table>

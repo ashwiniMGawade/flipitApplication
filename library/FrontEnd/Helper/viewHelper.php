@@ -769,7 +769,7 @@ EOD;
                 $footerContent,
                 $pathConstants
             );
-        } die;
+        }
         return true;
     }
 

@@ -1,6 +1,7 @@
 <?php
 class LoginController extends Zend_Controller_Action
 {
+    public $_loginLinkAndData = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -133,7 +134,7 @@ class LoginController extends Zend_Controller_Action
                                     )
                                 );
                     $VisitorName = $visitorDetails['firstName'].' '.$visitorDetails['lastName'];
-
+                    BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails['email']);
                     $mailer->send(
                         FrontEnd_Helper_viewHelper::__email('email_sitename'),
                         $FromEmail[0]['emailperlocale'],
@@ -141,7 +142,9 @@ class LoginController extends Zend_Controller_Action
                         $visitorDetails['email'],
                         FrontEnd_Helper_viewHelper::__email('email_Forgot Password'),
                         $content,
-                        FrontEnd_Helper_viewHelper::__email('email_Forgot password header')
+                        FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
+                        '',
+                        $this->_loginLinkAndData
                     );
                     $this->addFlashMessage(
                         $this->view->translate('Please check you mail and click on reset password link'),

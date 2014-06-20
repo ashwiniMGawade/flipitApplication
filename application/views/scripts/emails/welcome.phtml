@@ -16,9 +16,12 @@ $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($locale);
 $publicPath = $httpPath.'public/images/front_end/';
 
 if($locale == ''):
-    $logo = $publicPath.'emails/kortingscode-logo.png';
+    $logo = $this->mailType == 'welcome'
+        ? $publicPath.'emails/kortingscode-logo.png' : $publicPath.'emails/kortingscode-logo.png';
 else :
-    $logo = $publicPath.'emails/logo-forgotpassword.png';
+    $logo =
+        $this->mailType == 'welcome'
+        ? $publicPath.'emails/logo-welcome.png' : $publicPath.'emails/logo-newsletter.png';
 endif;
 
 $emailsViewPath = 'emails/';
@@ -73,7 +76,7 @@ if(!empty($this->categoryVouchers)) {
                             <tr>
                                 <td width="205"></td>
                                 <td width="431">
-                                    <a href="<?php echo $httpPathLocale; ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" width="237" height="47" alt="Welcome to <?php echo $websiteName;?>"></a>
+                                    <a href="<?php echo rtrim($httpPathLocale, '/'); ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" width="237" height="47" alt="<?php echo FrontEnd_Helper_viewHelper::__email('Welcome to').' '.$websiteName; ?>"></a>
                                 </td>
                             </tr>
                             <tr><td colspan="2" height="20"></td></tr>

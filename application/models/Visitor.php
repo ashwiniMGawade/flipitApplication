@@ -45,7 +45,7 @@ class Visitor extends BaseVisitor
     {
         $visitor = Doctrine_Core::getTable("Visitor")->find($visitorId);
         if ($visitor->currentLogIn=='0000-00-00 00:00:00') {
-            $user->currentLogIn = date('Y-m-d H:i:s');
+            $visitor->currentLogIn = date('Y-m-d H:i:s');
         }
         $visitor->lastLogIn = $visitor->currentLogIn;
         $visitor->currentLogIn = date('Y-m-d H:i:s');

@@ -18,17 +18,17 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     public $dataShopImageCat = array();
     public $expDateCat = array();
     public $shopPermalinkCat = array();
-    public $recipientMetaData  = array();
+    public $_recipientMetaData  = array();
 
     public $headerMail = array();
-    public $loginLinkAndData = array();
-    public $to = array();
+    public $_loginLinkAndData = array();
+    public $_to = array();
     public $staticContent = array();
     public $headerContent = array();
     public $footerContent = array();
 
     # holds settings regarding user rights
-    protected $_settings = false ;
+    public $_settings = false ;
     /**
      * check authentication before load the page
      * @see Zend_Controller_Action::preDispatch()
@@ -153,28 +153,11 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             }
 
             Signupmaxaccount::updateNewsletterSchedulingStatus();
-
-            if (LOCALE == '') {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') .">
-                    <img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
-                $siteName = "Kortingscode.nl";
-            } else {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') .">
-                    <img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
-                $siteName = "Flipit.com";
-            }
-
             set_time_limit(10000);
             ini_set('max_execution_time', 115200);
             ini_set("memory_limit", "1024M");
 
-            $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularvaouchercode_list');
-            if ($voucherflag) {
-                $topVouchercodes = Offer::getTopOffers(10) ;
-            } else {
-                $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularvaouchercode_list');
-            }
-
+            $topVouchercodes = Offer::getTopOffers(10);
             $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularcategory_list');
             if ($categoryflag) {
                 $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
@@ -184,46 +167,11 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             }
 
             $email_data = Signupmaxaccount::getAllMaxAccounts();
-            $mandrillSenderEmailAddress  = $email_data[0]['emailperlocale'];
-            $mandrillNewsletterSubject  = $email_data[0]['emailsubject'];
-            $mandrillSenderName  = $email_data[0]['sendername'];
-            $this->getDirectLoginLinks();
-            $this->getHeaderFooterContent();
-
-            $this->headerMail = array(array('name' => 'headerMail',
-                                            'content' => $imgLogoMail
-                                     ),
-                                    array('name' => 'headerContent',
-                                            'content' => $this->headerContent
-                                    ),
-                                    array('name' => 'footerContent',
-                                            'content' => $this->footerContent
-                                    ));
-
-            $this->staticContent = array(
-                                    array('name' => 'websiteName',
-                                            'content' => $siteName
-                                    ),
-                                    array('name' => 'unsubscribe',
-                                            'content' => FrontEnd_Helper_viewHelper::__email('email_Uitschrijven')
-                                    ),
-                                    array('name' => 'editProfile',
-                                            'content' => FrontEnd_Helper_viewHelper::__email('email_Wijzigen profiel')
-                                    ),
-                                    array('name' => 'contact',
-                                            'content' => FrontEnd_Helper_viewHelper::__email('email_Contact')
-                                    ),
-                                    array('name' => 'contactLink',
-                                            'content' => HTTP_PATH_FRONTEND . 'info/contact'
-                                    ),
-                                    array('name' => 'moreOffersLink',
-                                        'content' => HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_populair')
-                                    ),
-                                    array('name' => 'moreOffers',
-                                        'content' => FrontEnd_Helper_viewHelper::__email('email_Bekijk meer van onze top aanbiedingen') . ' >'
-                                    )
-                            );
-
+            $mandrillSenderEmailAddress = $email_data[0]['emailperlocale'];
+            $mandrillNewsletterSubject = $email_data[0]['emailsubject'];
+            $mandrillSenderName = $email_data[0]['sendername'];
+            BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this);
+            BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
             $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
             $templateName = $this->getInvokeArg('newsletterTemplate');
             $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
@@ -236,15 +184,14 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     $mandrillNewsletterSubject,
                     $mandrillSenderEmailAddress,
                     $mandrillSenderName,
-                    $this->recipientMetaData,
-                    $this->loginLinkAndData,
-                    $this->to,
+                    $this->_recipientMetaData,
+                    $this->_loginLinkAndData,
+                    $this->_to,
                     $this->footerContent
                 );
                 $message = $this->view->translate('Newsletter has been sent successfully');
             } catch (Mandrill_Error $e) {
                 $message = $this->view->translate('There is some problem in your data');
-
             }
             $flash->addMessage(array('success' => $message));
             $this->_helper->redirector('emailcontent', 'accountsetting', null);
@@ -253,77 +200,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         }
         die;
     }
-
-    public function getDirectLoginLinks()
-    {
-        $email_data = Signupmaxaccount::getAllMaxAccounts();
-        $testEmail = $this->getRequest()->getParam('testEmail');
-        $dummyPass = MD5('12345678');
-        $send = $this->getRequest()->getParam('send');
-        $visitorData = array();
-        $visitorMetaData = array();
-        $toVisitorArray = array();
-
-        if (isset($send) && $send == 'test') {
-
-            $getTestEmaildata =  Visitor::getVisitorDetailsByEmail($testEmail);
-
-            $key = 0;
-            $visitorData[$key]['rcpt'] = $testEmail;
-            $visitorData[$key][0]['name'] = 'loginLink';
-            $visitorData[$key][0]['content'] =  HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin") . "/" . base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
-            $visitorData[$key][1]['name'] = 'loginLinkWithUnsubscribe';
-            $visitorData[$key][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe") . "/" . base64_encode($testEmail) ."/". $dummyPass;
-
-            $toVisitorArray[$key]['email'] = $testEmail;
-            $toVisitorArray[$key]['name'] = !empty($getTestEmaildata[0]['firstName']) ? $getTestEmaildata[0]['firstName'] . ' ' .$getTestEmaildata[0]['lastName'] : 'member';
-            $this->loginLinkAndData = $visitorData;//set the visitor data in $loginLinkAndData array
-            $this->to = $toVisitorArray;
-
-        } else {
-            if ($this->_settings['administration']['rights']  == 1) {
-                $visitors = new Visitor();
-                $visitors = $visitors->getVisitorsToSendNewsletter();
-                $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
-                $getUserDataFromMandrill = $mandrill->users->senders();
-
-                foreach ($getUserDataFromMandrill as $key => $value) {
-                    if ($value['soft_bounces'] >= 6 || $value['hard_bounces'] >= 2) {
-                        $updateActive = Doctrine_Query::create()
-                            ->update('Visitor')
-                            ->set('active', 0)
-                            ->where("email = '".$value['address']."'")
-                            ->execute();
-                    }
-                }
-
-                foreach ($visitors as $key => $value) {
-                    $keywords ='' ;
-
-                    foreach ($value['keywords'] as $k => $word) {
-
-                        $keywords .= $word['keyword'] . ' ';
-                    }
-
-                    $visitorData[$key]['rcpt'] = $value['email'];
-                    $visitorData[$key]['vars'][0]['name'] = 'loginLink';
-                    $visitorMetaData[$key]['rcpt'] = $value['email'];
-                    $visitorMetaData[$key]['values']['referrer'] = trim($keywords) ;
-                    $visitorData[$key]['vars'][0]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin") . "/" . base64_encode($value['email']) ."/". $value['password'];
-                    $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
-                    $visitorData[$key]['vars'][1]['content'] = HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link("link_login") . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe") . "/" . base64_encode($value['email']) ."/". $value['password'];
-                    $toVisitorArray[$key]['email'] = $value['email'];
-                    $toVisitorArray[$key]['name'] = !empty($value['firstName']) ? $value['firstName'] : 'Member';
-
-                }
-
-                $this->recipientMetaData = $visitorMetaData;
-                $this->loginLinkAndData = $visitorData;
-                $this->to = $toVisitorArray;
-            }
-        }
-    }
-
 
     /**
      * emailHeaderFooter
@@ -354,12 +230,6 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         }
 
         die ;
-    }
-    public function getHeaderFooterContent()
-    {
-        $data = Signupmaxaccount::getEmailHeaderFooter();
-        $this->headerContent = $data['email_header'];
-        $this->footerContent = $data['email_footer'];
     }
 
     public function emailcontentAction()
