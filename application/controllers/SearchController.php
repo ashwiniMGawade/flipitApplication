@@ -56,13 +56,13 @@ class SearchController extends Zend_Controller_Action
 
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
         $this->viewHelperObject->getMetaTags(
-        	$this,
-        	isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            $this,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
             isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
             isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
-        	isset($pageDetails->permaLink) ? $pageDetails->permaLink : '',
-        	FACEBOOK_IMAGE,
-        	isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
+            isset($pageDetails->permaLink) ? $pageDetails->permaLink : '',
+            FACEBOOK_IMAGE,
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
         	'formSignupSidebarWidget',
