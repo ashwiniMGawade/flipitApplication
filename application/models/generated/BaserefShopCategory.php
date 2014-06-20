@@ -36,7 +36,7 @@ abstract class BaserefShopCategory extends Doctrine_Record
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('Shop', array(
+        $this->hasOne('Shop as shops', array(
              'local' => 'shopId',
              'foreign' => 'id'));
 
