@@ -215,7 +215,7 @@ class SendNewsletter
         $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
         $topVouchercodes = Offer::getTopOffers(10);
         $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
-        BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'script', '', $this->_mandrillKey);
+        BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'scheduleNewsletterSender', '', $this->_mandrillKey);
         $mandrill = new Mandrill_Init($this->_mandrillKey);
         $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
         $mandrillNewsletterSubject = $settings[0]['emailsubject'];
