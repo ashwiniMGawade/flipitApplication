@@ -87,7 +87,7 @@ class PlusController extends Zend_Controller_Action
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
             $this->view->topPopularOffers = Offer::getTopOffers(5);
-            $this->view->userDetails =  User::getProfileImage($articleDetails[0]['authorid']);
+            $this->view->userDetails =  User::getUserDetails($articleDetails[0]['authorid']);
           
             $this->viewHelperObject->getMetaTags(
                 $this,

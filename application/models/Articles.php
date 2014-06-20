@@ -36,7 +36,7 @@ class Articles extends BaseArticles
 
     public static function getAllArticles()
     {
-        $currentDateTime = date('Y-m-d H:i:s');
+        $currentDateTime = date('Y-m-d 00:00:00');
         $allArticles = Doctrine_Query::create()->select()
                 ->from("Articles a")
                 ->leftJoin('a.relatedstores as stores')
@@ -54,7 +54,8 @@ class Articles extends BaseArticles
 
     public static function generateArticlePermalinks($id)
     {
-        $allMoneySavingArticle = Doctrine_Query::create()->select('p.id, m.id, ac.id, r.id, a.id, a.permalink, ac.permalink')
+        $allMoneySavingArticle = Doctrine_Query::create()
+            ->select('p.id, m.id, ac.id, r.id, a.id, a.permalink, ac.permalink')
             ->from('page p')
             ->leftJoin('p.moneysaving m')
             ->leftJoin('m.articlecategory ac')
@@ -126,7 +127,7 @@ class Articles extends BaseArticles
         ->andWhere("art.title LIKE ?", "$srh%");
 
         //print_r($artList->fetchArray()); die;
-        $result = 	DataTable_Helper::generateDataTableResponse($artList,
+        $result =   DataTable_Helper::generateDataTableResponse($artList,
                 $params,
                 array("__identifier" => 'art.id','art.title','art.created_at','art.publish','art.authorname'),
                 array(),
@@ -146,7 +147,7 @@ class Articles extends BaseArticles
         ->andWhere("art.title LIKE ?", "$srh%");
 
         //print_r($artList->fetchArray()); die;
-        $result = 	DataTable_Helper::generateDataTableResponse($artList,
+        $result =   DataTable_Helper::generateDataTableResponse($artList,
                 $params,
                 array("__identifier" => 'art.id','art.title','art.created_at','art.publish','art.authorname'),
                 array(),
@@ -255,7 +256,7 @@ class Articles extends BaseArticles
                 return false;
             }
         }
-    /*	$ext = BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
+    /*  $ext = BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
         $data->articleImage->ext = $ext;*/
 
         if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
@@ -568,7 +569,7 @@ class Articles extends BaseArticles
 
 
         /**
-         *	 generating thumnails for upload logo if file in shop logo
+         *   generating thumnails for upload logo if file in shop logo
          */
         if ($file == "logoFile") {
             $path = ROOT_PATH . $uploadPath . "thum_large_" . $newName;

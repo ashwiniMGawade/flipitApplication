@@ -11,6 +11,11 @@
  */
 class Shop extends BaseShop
 {
+
+     ##################################################################################
+     ################## REFACTORED CODE ###############################################
+     ##################################################################################
+
     public function __contruct($connectionName = false)
     {
         if (!$connectionName) {
@@ -18,14 +23,6 @@ class Shop extends BaseShop
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
-     ##################################################################################
-     ################## REFACTORED CODE ###############################################
-     ##################################################################################
-    /**
-     *  get shop categories
-     *  @return array contain shop categories ids'
-     *
-     */
 
     public static function returnShopCategories($id)
     {
@@ -41,19 +38,14 @@ class Shop extends BaseShop
         }
         return $categories;
     }
-    /**
-    * Function getSimilarShopsAndSimilarCategoryShops.
-    *
-    *  this return all the same shops and shops under same category.
-    *
-    *  @param integer $id
-    *  @return array
-    */
+
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
         $relatedShops = Doctrine_Query::create()->from('Shop s')
-            ->select("s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink, 
-                c.id,ss.name, ss.permaLink")
+            ->select(
+                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink,
+                c.id,ss.name, ss.permaLink"
+            )
             ->where("s.id = ?", $shopId)
             ->andWhere("s.deleted = 0")
             ->andWhere("s.status = 1")
@@ -79,7 +71,8 @@ class Shop extends BaseShop
             // push shops related to same category which are not yet added
             foreach ($relatedShops[0]['category'] as $category) {
                 foreach ($category['shop'] as $relatedCategoryShop) {
-                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops && !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
+                    if (count($similarShopsWithoutDuplicate) <= $numberOfShops &&
+                            !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
                         $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop ;
                     }
                 }
@@ -88,22 +81,25 @@ class Shop extends BaseShop
         return $similarShopsWithoutDuplicate;
     }
 
-    /**
-     * get popular store
-    * @param $limit integer no of popular shops
-    * @param $shopId integer  optional get popular shop by its id
-    * @version 1.1
-    * @return array $data
-    */
     public static function getPopularStores($limit, $shopId = null)
     {
         $currentDate = date('Y-m-d 00:00:00');
         $popularStoreData = Doctrine_Query::create()
-        ->select('o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, img.name as imgname')
+        ->select(
+            'o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,
+            s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, 
+            img.name as imgname'
+        )
         ->from('PopularShop p')
-        ->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$currentDate')) as exclusiveCount")
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND
+            (o.exclusiveCode=1 AND o.endDate > '$currentDate')) as exclusiveCount"
+        )
         ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
-        ->addSelect("(SELECT COUNT(*) FROM Offer active WHERE (active.shopId = s.id AND o.endDate > '$currentDate')) as activeCount")
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer active WHERE
+            (active.shopId = s.id AND o.endDate > '$currentDate')) as activeCount"
+        )
         ->leftJoin('p.shop s')
         ->leftJoin('s.offer o')
         ->leftJoin('s.logo img')
@@ -138,17 +134,16 @@ class Shop extends BaseShop
         return $allStoresDetail;
     }
 
-    /**
-     * getallStoresForFrontEnd get all store from database.
-     * @version 0.1
-     */
     public static function getallStoresForFrontEnd()
     {
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $storeInformation = Doctrine_Query::create()
         ->select('o.id,s.id, s.name, s.permaLink as permalink')
         ->from('Shop s')
-        ->addSelect("(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount")
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND
+                (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount"
+        )
         ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
         ->leftJoin('s.offer o')
         ->leftJoin('s.logo img')
@@ -177,12 +172,6 @@ class Shop extends BaseShop
         return $storesForFrontend;
     }
 
-    /**
-    * get popular store
-    * @param $limit integer no of popular shops
-    * @version 1.1
-    * @return array $popularStores
-    */
     public static function getAllPopularStores($limit)
     {
         $popularStores = Doctrine_Query::create()
@@ -217,7 +206,7 @@ class Shop extends BaseShop
             ->from("Shop s")
             ->leftJoin("s.logo img")
             ->where('s.deleted=0')
-            ->andWhereIn("s.id",$shopIds)
+            ->andWhereIn("s.id", $shopIds)
             ->orderBy("s.name")->fetchArray();
         return $shopsInformation;
     }
@@ -266,8 +255,8 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
-       }
-       return;
+        }
+        return;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -298,7 +287,7 @@ class Shop extends BaseShop
         return   Doctrine_Query::create()
                     ->select('s.name,s.permaLink,s.id')
                     ->from("Shop s")
-                    ->where('s.deleted = ?',0)
+                    ->where('s.deleted = ?', 0)
                     ->andWhere("s.status=1")
                     ->andWhere("s.name LIKE ?", "$keyword%")
                     ->fetchArray();

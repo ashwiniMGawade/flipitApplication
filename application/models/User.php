@@ -1,5 +1,4 @@
 <?php
-
 /**
  * User
  *
@@ -16,18 +15,13 @@ class User extends BaseUser
     ##########################################################
     ########### REFACTORED CODE ##############################
     ##########################################################
-    /**
-     * Function getAllUsersDetail.
-     *
-     * Get users detail.
-     *
-     * @return array $usersData
-     * @version 1.0
-     */
     public static function getAllUsersDetails($websiteName)
     {
         $usersData = Doctrine_Query::create()
-        ->select("u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing, u.popularKortingscode, pi.name, pi.path")
+        ->select(
+            "u.firstName, u.lastName, u.slug, u.mainText, u.showInAboutListing,
+            u.popularKortingscode, pi.name, pi.path"
+        )
         ->from('User u')
         ->leftJoin("u.profileimage pi")
         ->leftJoin("u.refUserWebsite rfu")
@@ -84,20 +78,11 @@ class User extends BaseUser
             ->select("u.id,u.firstName,u.lastName,u.addtosearch, u.mainText, u.slug, u.google, pi.name, pi.path")
             ->from('User u')
             ->leftJoin("u.profileimage pi")
-            ->where("u.id = ?" , $userId)
-            ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+            ->where("u.id = ?", $userId)
+            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $userDetails;
-  }
-    public static function getProfileImage($UserId)
-    {
-        $profileImage = Doctrine_Query::create()
-        ->select("u.id,u.firstName,u.lastName, u.mainText, u.addtosearch, u.slug, u.google, pi.name, pi.path")
-        ->from('User u')
-        ->leftJoin("u.profileimage pi")
-        ->where("u.id = ?" , $UserId)
-        ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-        return $profileImage;
     }
+
     ##########################################################
     ########### END REFACTORED CODE ##########################
     ##########################################################
