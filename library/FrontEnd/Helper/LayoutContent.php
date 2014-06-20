@@ -217,9 +217,9 @@ class FrontEnd_Helper_LayoutContent
                 $link = $permalink[0]['permalink'];
             } else {
                 $link = $menu['url'];
-                if ($menu['url']== FrontEnd_Helper_viewHelper::__link('inschrijven')) {
+                if ($menu['url']== FrontEnd_Helper_viewHelper::__link('link_inschrijven')) {
                     if (Auth_VisitorAdapter::hasIdentity()) {
-                        $link = FrontEnd_Helper_viewHelper::__link('mijn-favorieten');
+                        $link = FrontEnd_Helper_viewHelper::__link('link_profiel');
                     } else {
                         $link = $menu['url'];
                     }

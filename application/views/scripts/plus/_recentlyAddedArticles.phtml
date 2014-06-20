@@ -5,13 +5,13 @@
                 $userInformationObject = new User();
                 $userDetails =  $userInformationObject->getUserDetails($recentlyAddedArticle['authorid']);
                 $profileLink =
-                    HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("redactie")."/". $userDetails['slug'];
+                    HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_redactie').'/'. $userDetails['slug'];
                 $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['updated_at']);
                 $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
     ?>            
     <article class="box">
         <span class="image">
-            <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>">
+            <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$recentlyAddedArticle['permalink'];?>">
                 <div class="latest-article-thumbnail">
                     <img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['thumbnail']['path'].
                     $recentlyAddedArticle['thumbnail']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>" 
@@ -22,7 +22,7 @@
         <div class="text-box">
                     
             <h1>
-                <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>">
+                <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$recentlyAddedArticle['permalink'];?>">
                     <?php echo $recentlyAddedArticle['title'];?>
                 </a>
             </h1>
@@ -45,7 +45,7 @@
                     ?>
                 </em>
             </p>
-            <a href="<?php echo  HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>" class="more">
+            <a href="<?php echo  HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$recentlyAddedArticle['permalink'];?>" class="more">
                 <span><?php echo FrontEnd_Helper_viewHelper::__translate('Read More');?></span>
             </a>
         </div>

@@ -152,12 +152,12 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         $topOffer = $this->getRightColumnOffersHtml(
         	'topOffers',
         	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-20'),
-        	FrontEnd_Helper_viewHelper::__form('from_All Top Codes')
+        	FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
         );
         $newOffer = $this->getRightColumnOffersHtml(
         	'newOffers',
         	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
-        	FrontEnd_Helper_viewHelper::__form('from_All New Codes')
+        	FrontEnd_Helper_viewHelper::__form('form_All New Codes')
         );
         $categories = $this->getRighColumnCategoriesHtml();
         $specialListPage = $this->getRightColumnSpicialListHtml();
@@ -169,8 +169,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $this->getRightColumnOffersHtml(
         	'moneysaving',
         	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus'), 
-        	FrontEnd_Helper_viewHelper::__form('from_All Saving Guides'),
-        	FrontEnd_Helper_viewHelper::__form('from_moneysaving')
+        	FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
+        	FrontEnd_Helper_viewHelper::__form('form_moneysaving')
         ); 
     }
 
@@ -180,7 +180,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
             $specialListHtml .= $this->getRightColumnOffersHtml(
             	'special',
             	HTTP_PATH_LOCALE.$pageId,
-            	FrontEnd_Helper_viewHelper::__form('from_All Special Codes'),
+            	FrontEnd_Helper_viewHelper::__form('form_All Special Codes'),
             	$pageId
             );
         }
@@ -193,7 +193,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
            $categegoriesHtml .= $this->getRightColumnOffersHtml(
            	'categories',
            	HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $categoryId,
-           	FrontEnd_Helper_viewHelper::__form('from_All Category Codes'), $categoryId
+           	FrontEnd_Helper_viewHelper::__form('form_All Category Codes'), $categoryId
            );
          }
          return $categegoriesHtml;

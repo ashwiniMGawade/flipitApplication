@@ -65,13 +65,13 @@ class createSiteMaps
         Zend_Registry::set('Zend_Translate', $this->_translate);
         set_time_limit(0);
         $sitemap = new PHPSitemap_sitemap();
-        $sitemaps = FrontEnd_Helper_viewHelper::__link('link_sitemap');
-        $plus = FrontEnd_Helper_viewHelper::__link('link_plus');
-        $main = FrontEnd_Helper_viewHelper::__link('link_main');
-        $shops = FrontEnd_Helper_viewHelper::__link('link_shops');
+        $sitemaps = FrontEnd_Helper_viewHelper::__form('form_sitemap');
+        $plus = FrontEnd_Helper_viewHelper::__form('form_plus');
+        $main = FrontEnd_Helper_viewHelper::__form('form_main');
+        $shops = FrontEnd_Helper_viewHelper::__form('form_shops');
         $info = FrontEnd_Helper_viewHelper::__link('link_info');
         $rssfeed = FrontEnd_Helper_viewHelper::__link('link_rssfeed');
-        $zoeken = FrontEnd_Helper_viewHelper::__link('link_zoeken');
+        $zoeken = FrontEnd_Helper_viewHelper::__link('link_search');
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
         $sitemap_main = $sitemaps.'_'.$main.'.xml';

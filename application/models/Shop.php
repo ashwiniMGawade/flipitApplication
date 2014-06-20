@@ -1485,7 +1485,7 @@ public static function getShopDetail($shopId)
         if($shop['howToUse']) {
             # check for extende offer url
             if( isset($shop['permaLink'])  && strlen( $shop['permaLink'] ) > 0 ) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'how-to') .'/'.$shop['permaLink'];
+                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'.$shop['permaLink'];
             }
         }
 
@@ -1497,7 +1497,7 @@ public static function getShopDetail($shopId)
         # check an offerr has one or more categories
         if(isset($shop['category']) && count($shop['category']) > 0) {
 
-            $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'categorieen') .'/' ;
+            $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
 
             # traverse through all catgories
             foreach($shop['category'] as $value) {
@@ -1514,7 +1514,7 @@ public static function getShopDetail($shopId)
             foreach( $shop['offer'] as $value) {
                 # check the offer is extended or not
                 if(isset($value['extendedOffer']) && $value['extendedOffer']  ) {
-                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'deals') .'/'. $value['extendedUrl'] ;
+                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $value['extendedUrl'] ;
                 }
             }
         }

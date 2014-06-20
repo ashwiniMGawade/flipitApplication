@@ -965,7 +965,7 @@ class Articles extends BaseArticles
 
         $urlsArray = array();
 
-        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'pluscat') .'/' ;
+        $cetgoriesPage = 'pluscat' .'/' ;
 
         # check for article permalink
         if(isset($article['permalink'])) {

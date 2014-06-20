@@ -3074,7 +3074,7 @@ class Offer extends BaseOffer
         if (isset($offer['extendedOffer'])) {
             # check for extende offer url
             if ($offer['extendedUrl'] && strlen( $offer['extendedUrl'] ) > 0 ) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'deals') .'/'. $offer['extendedUrl'];
+                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $offer['extendedUrl'];
             }
         }
 
@@ -3082,14 +3082,14 @@ class Offer extends BaseOffer
         if ($offer['shop']['howToUse']) {
             # check for extende offer url
             if ( isset($offer['shop']['permaLink'])  && strlen( $offer['shop']['permaLink'] ) > 0 ) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'how-to') .'/'. $offer['shop']['permaLink'];
+                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer['shop']['permaLink'];
             }
         }
 
         # check an offerr has one or more categories
         if (isset($offer['category']) && count($offer['category']) > 0) {
 
-            $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'categorieen') .'/' ;
+            $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
             # traverse through all catgories
             foreach ($offer['category'] as $value) {
                 # check if a category has permalink then add it into array

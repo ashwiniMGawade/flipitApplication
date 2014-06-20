@@ -81,7 +81,7 @@ EOD;
             $categorySidebarWodget.='
                     <li>
                         <a href="'. HTTP_PATH_LOCALE .
-                        FrontEnd_Helper_viewHelper::__link('categorieen'). '/' .
+                        FrontEnd_Helper_viewHelper::__link('link_categorieen'). '/' .
                         $allPopularCategories[$categoryIndex]['category']['permaLink'].'">' .
                         $allPopularCategories[$categoryIndex]['category']['name'] .
                         '</a>' . '

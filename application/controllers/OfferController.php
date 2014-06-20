@@ -95,7 +95,7 @@ class OfferController extends Zend_Controller_Action
             $couponDetails[0]['title'],
             trim($couponDetails[0]['extendedTitle']),
             trim($couponDetails[0]['extendedMetaDescription']),
-            FrontEnd_Helper_viewHelper::__link('deals') .'/'. $couponDetails[0]['extendedUrl'],
+            FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $couponDetails[0]['extendedUrl'],
             FACEBOOK_IMAGE,
             $customHeader
         );

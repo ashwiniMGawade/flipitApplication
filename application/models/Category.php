@@ -655,9 +655,9 @@ class Category extends BaseCategory
         $urlsArray = array();
 
 
-        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'categorieen') .'/' ;
+        $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
 
-        $articlesCetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'pluscat') .'/' ;
+        $articlesCetgoriesPage = 'pluscat' .'/' ;
 
         # check if a category has permalink then add it into array
         if(isset($data['permaLink']) && strlen($data['permaLink']) > 0 ) {
