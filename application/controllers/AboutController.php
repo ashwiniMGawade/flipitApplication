@@ -24,13 +24,12 @@ class AboutController extends Zend_Controller_Action
         $pageDetails = Page::getPageDetails($pageAttributeId);
         $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
-        $this->view->pageTitle = $pageDetails->pageTitle;
         $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            $pageDetails->pageTitle,
-            $pageDetails->metaTitle,
-            trim($pageDetails->metaDescription),
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            trim(isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : ''),
             FrontEnd_Helper_viewHelper::__link('redactie'),
             FACEBOOK_IMAGE,
             $customHeader
@@ -48,7 +47,7 @@ class AboutController extends Zend_Controller_Action
             20,
             7
         );
-        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '

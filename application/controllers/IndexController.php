@@ -26,7 +26,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->action = $this->getRequest()->getActionName();
         $pageDetails = Page::getPageDetails($this->getRequest()->getActionName());
         if (!empty($pageDetails)) {
-            $this->view->pageTitle = ucfirst($pageDetails->pageTitle);
+            $this->view->pageTitle = ucfirst(isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '');
             $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
             $this->viewHelperObject->getMetaTags(
                 $this,

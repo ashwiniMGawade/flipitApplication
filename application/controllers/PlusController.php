@@ -20,8 +20,8 @@ class PlusController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $articleOverviewPagePermalink  = 'plus';
-        $pageDetails = Page::getPageDetails($articleOverviewPagePermalink);
+        $articlesOverviewPagePermalink  = 'plus';
+        $pageDetails = Page::getPageDetails($articlesOverviewPagePermalink);
         $mostReadArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' =>
                 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
@@ -30,8 +30,8 @@ class PlusController extends Zend_Controller_Action
 
         $this->view->pageTitle = isset($pageDetails->pageTitle) ?
             $pageDetails->pageTitle :'';
-        $this->view->permaLink = $articleOverviewPagePermalink;
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articleOverviewPagePermalink);
+        $this->view->permaLink = $articlesOverviewPagePermalink;
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articlesOverviewPagePermalink);
         $customHeader = isset($pageDetails->customHeader) ?
             $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags(
@@ -46,7 +46,7 @@ class PlusController extends Zend_Controller_Action
                 isset($pageDetails->metaDescription) ?
                 $pageDetails->metaDescription :''
             ),
-            $articleOverviewPagePermalink,
+            $articlesOverviewPagePermalink,
             HTTP_PATH."public/images/plus_og.png",
             $customHeader
         );
