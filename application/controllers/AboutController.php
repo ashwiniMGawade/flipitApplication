@@ -21,19 +21,18 @@ class AboutController extends Zend_Controller_Action
     public function indexAction()
     {
         $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
-        $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
-        $this->view->pageTitle = $pageDetails->pageTitle;
-        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
+        $pageDetails = Page::getPageDetails($pageAttributeId);
+        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->viewHelperObject->getMetaTags(
             $this,
-            $pageDetails->pageTitle,
-            $pageDetails->metaTitle,
-            trim($pageDetails->metaDescription),
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
             FrontEnd_Helper_viewHelper::__link('redactie'),
             FACEBOOK_IMAGE,
-            $customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_about_pages_users_list",
             array(
@@ -41,15 +40,13 @@ class AboutController extends Zend_Controller_Action
                 'parameters' => array($this->_helper->About->getWebsiteNameWithLocale())
             )
         );
-
         $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
             $allAuthorsDetails,
             $this->_getAllParams(),
             20,
             7
         );
-        $this->view->pageDetails = $pageDetails;
-
+        
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
             'SignUp '

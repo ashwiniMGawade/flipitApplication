@@ -11,7 +11,7 @@ class PageAttribute extends BasePageAttribute
         ->from('pageAttribute p')
         ->where('p.name="'.$attributeName.'"')
         ->fetchOne();
-        return isset($pageAttribute->id) ? $pageAttribute->id : 0;
+        return isset($pageAttribute->id) ? (int) $pageAttribute->id : 0;
     }
     #########################################################
     ############# END REFACTORED CODE     ###################

@@ -24,24 +24,17 @@ class IndexController extends Zend_Controller_Action
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
-        $pageAttributeId = Page::getPageAttributeByPermalink($this->getRequest()->getActionName());
-        $pageDetails = Page::getPageFromPageAttribute($pageAttributeId);
-        if (!empty($pageDetails)) {
-            $this->view->pageTitle = ucfirst($pageDetails->pageTitle);
-            $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
-            $this->viewHelperObject->getMetaTags(
-                $this,
-                $pageDetails->metaTitle,
-                ucfirst(trim($pageDetails->metaTitle)),
-                trim($pageDetails->metaDescription),
-                FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName()),
-                FACEBOOK_IMAGE,
-                $customHeader
-            );
-        } else {
-            throw new Zend_Controller_Action_Exception('', 404);
-        }
-
+        $pageDetails = Page::getPageDetails($this->getRequest()->getActionName());
+        $this->view->pageTitle = ucfirst(isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '');
+        $this->viewHelperObject->getMetaTags(
+            $this,
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            ucfirst(trim(isset($pageDetails->metaTitle) ? $pageDetails->metaTitle :'')),
+            trim(isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : ''),
+            FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName()),
+            FACEBOOK_IMAGE,
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
+        );
         if (FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_popularvaouchercode_list",

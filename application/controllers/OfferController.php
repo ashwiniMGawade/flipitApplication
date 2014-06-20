@@ -21,27 +21,24 @@ class OfferController extends Zend_Controller_Action
     public function top20Action()
     {
         $pageName = 'top-20';
-        $pageAttributeId = Page::getPageAttributeByPermalink($pageName);
-        $page = Page::getPageFromPageAttribute($pageAttributeId);
+        $pageDetails = Page::getPageDetails($pageName);
+        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+        $this->viewHelperObject->getMetaTags(
+            $this,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            FrontEnd_Helper_viewHelper::__link($pageName),
+            FACEBOOK_IMAGE,
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
+        );
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'top_20_offers_list',
             array('function' => 'Offer::getTopOffers', 'parameters' => array(20))
         );
-        $this->view->pageLogo = PUBLIC_PATH_CDN.ltrim($page->logo['path'].$page->logo['name']);
-        $this->view->pageTitle = $page->pageTitle;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
-
-        $customHeader = isset($page->customHeader) ? $page->customHeader : '';
-        $this->viewHelperObject->getMetaTags(
-            $this,
-            $page->pageTitle,
-            $page->metaTitle,
-            trim($page->metaDescription),
-            FrontEnd_Helper_viewHelper::__link($pageName),
-            FACEBOOK_IMAGE,
-            $customHeader
-        );
         $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
@@ -162,7 +159,7 @@ class OfferController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $offerPage = Page::getPageFromPageAttribute(6);
+        $pageDetails = Page::getPageDetails(6);
         $params = $this->_getAllParams();
         $cacheKeyForNewsOffer =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         if ($cacheKeyForNewsOffer) {
@@ -171,23 +168,19 @@ class OfferController extends Zend_Controller_Action
         } else {
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
-
-        $pageHeaderImage = Logo::getPageLogo($offerPage->pageHeaderImageId);
-        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
-
-        $this->view->pageTitle = $offerPage->pageTitle;
+        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
-        $customHeader = isset($offerPage->customHeader) ? $offerPage->customHeader : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            $offerPage->pageTitle,
-            $offerPage->metaTitle,
-            trim($offerPage->metaDescription),
-            FrontEnd_Helper_viewHelper::__link('nieuw'),
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            FrontEnd_Helper_viewHelper::__link('link_nieuw'),
             FACEBOOK_IMAGE,
-            $customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];

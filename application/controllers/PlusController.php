@@ -20,44 +20,27 @@ class PlusController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $articleOverviewPagePermalink = 'plus';
-        $articleOverviewPageDetails  =  FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_moneysavingpage_list", array('function' => 'MoneySaving::getPageDetails',
-                'parameters' => array($articleOverviewPagePermalink)));
+
+        $articlesOverviewPagePermalink  = 'plus';
+        $pageDetails = Page::getPageDetails($articlesOverviewPagePermalink);
         $mostReadArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' =>
                 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
-
-        $this->view->pageTitle = isset($articleOverviewPageDetails[0]['pageTitle']) ? $articleOverviewPageDetails[0]
-            ['pageTitle'] :'';
-        $this->view->permaLink = $articleOverviewPagePermalink;
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articleOverviewPagePermalink);
-        $customHeader =
-            isset($articleOverviewPageDetails[0]['customHeader'])
-            ? $articleOverviewPageDetails[0]['customHeader']
-            : '';
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+        $this->view->permaLink = $articlesOverviewPagePermalink;
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articlesOverviewPagePermalink);
         $this->viewHelperObject->getMetaTags(
             $this,
-            isset($articleOverviewPageDetails[0]['pageTitle'])
-            ? $articleOverviewPageDetails[0]['pageTitle'] :'',
-            trim(
-                isset($articleOverviewPageDetails[0]['metaTitle'])
-                ? $articleOverviewPageDetails[0]['metaTitle']
-                :''
-            ),
-            trim(
-                isset($articleOverviewPageDetails[0]['metaDescription'])
-                ? $articleOverviewPageDetails[0]['metaDescription']
-                :''
-            ),
-            $articleOverviewPagePermalink,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            $articlesOverviewPagePermalink,
             HTTP_PATH."public/images/plus_og.png",
-            $customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-
-        $this->view->pageDetails = $articleOverviewPageDetails;
+        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
@@ -76,7 +59,6 @@ class PlusController extends Zend_Controller_Action
             : '';
         $incrementArticleViewCountValue  = FrontEnd_Helper_viewHelper::
             viewCounter('article', 'onload', $articleDetails[0]['id']);
-            
         if (!empty($articleDetails)) {
             $this->view->canonical =
                 FrontEnd_Helper_viewHelper::generateCononical($this->getRequest()->getParam('permalink'));
@@ -87,8 +69,7 @@ class PlusController extends Zend_Controller_Action
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
             $this->view->topPopularOffers = Offer::getTopOffers(5);
-            $this->view->userDetails =  User::getUserDetails($articleDetails[0]['authorid']);
-          
+            $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
             $this->viewHelperObject->getMetaTags(
                 $this,
                 $articleDetails[0]['title'],

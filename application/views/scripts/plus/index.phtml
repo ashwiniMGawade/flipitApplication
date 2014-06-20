@@ -1,13 +1,6 @@
 <?php 
-$this->minifyHeadScript()->appendFile("public/js/front_end/socialMedia.js");
-$this->minifyHeadScript()->appendFile("public/js/front_end/savingguides.js");
-$pageImage = '';
-$pageTitle = '';
-if (!empty($this->pageDetails)):
-    $pageImage = PUBLIC_PATH_CDN.$this->pageDetails[0]['logo']['path'].$this->pageDetails[0]['logo']['name'];
-    $pageTitle = $this->pageDetails[0]['pageTitle'];
-endif;
-
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialMedia.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/savingguides.js");
 $mostReadArticles = '';
 if (!empty($this->mostReadArticles)) {
     $mostReadArticles =
@@ -33,13 +26,16 @@ if (!empty($categoryWiseArticles['savingtip'])) {
     $categorySavingtipArticles = $partialFunctions->getArticles('Saving Tip', $categoryWiseArticles['savingtip']);
 }
 
+$pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+$pageHeaderImage = $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage);
+
 if(LOCALE == ''):
     $logoCssClass = 'kortingscode';
 endif
 
 ?>
 <div class="banner-block">
-    <img class='image' src="<?php echo $pageImage;?>" alt="<?php echo $pageTitle;?>"/>
+    <img class='image' src="<?php echo $pageHeaderImage;?>" alt="<?php echo $this->pageTitle;?>"/>
     <div class="frame-image">
         <div class="container">
             <h1 class="flipit-text <?php echo $logoCssClass; ?>"><?php $this->translate('Flipit plus');?></h1>
