@@ -12,66 +12,66 @@ class BackEnd_Helper_MandrillHelper
     {
         if ($linkType != 'script') {
             $testEmail = $currentObject->getRequest()->getParam('testEmail');
-            $dummyPass = MD5('12345678');
-            $send = $currentObject->getRequest()->getParam('send');
+            $passwordKey = MD5('12345678');
+            $sendParameter = $currentObject->getRequest()->getParam('send');
         }
-        $visitorData = array();
-        $visitorMetaData = array();
-        $toVisitorArray = array();
+        $visitorDirectLoginInformation = array();
+        $visitorRefererInformation = array();
+        $visitorInformation = array();
 
-        if (isset($send) && $send == 'test') {
+        if (isset($sendParameter) && $sendParameter == 'test') {
             $getTestEmaildata =  Visitor::getVisitorDetailsByEmail($testEmail);
             $key = 0;
-            $visitorData[$key]['rcpt'] = $testEmail;
-            $visitorData[$key]['vars'][0]['name'] = 'loginLink';
+            $visitorDirectLoginInformation[$key]['rcpt'] = $testEmail;
+            $visitorDirectLoginInformation[$key]['vars'][0]['name'] = 'loginLink';
             
-            $visitorData[$key]['vars'][0]['content'] =
+            $visitorDirectLoginInformation[$key]['vars'][0]['content'] =
                 HTTP_PATH_FRONTEND
                 .FrontEnd_Helper_viewHelper::__link("link_login")
                 . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin")
                 . "/"
                 .base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
-            $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
+            $visitorDirectLoginInformation[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
             
-            $visitorData[$key]['vars'][1]['content'] =
+            $visitorDirectLoginInformation[$key]['vars'][1]['content'] =
                 HTTP_PATH_FRONTEND
                 . FrontEnd_Helper_viewHelper::__link("link_login")
                 . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
-                . "/" . base64_encode($testEmail) ."/". $dummyPass;
-            $toVisitorArray[$key]['email'] = $testEmail;
+                . "/" . base64_encode($testEmail) ."/". $passwordKey;
+            $visitorInformation[$key]['email'] = $testEmail;
             
-            $toVisitorArray[$key]['name'] =
+            $visitorInformation[$key]['name'] =
                 !empty($getTestEmaildata[0]['firstName']) ? $getTestEmaildata[0]['firstName']
                 . ' ' .$getTestEmaildata[0]['lastName'] : 'member';
-            $currentObject->_loginLinkAndData = $visitorData;
-            $currentObject->_to = $toVisitorArray;
+            $currentObject->_loginLinkAndData = $visitorDirectLoginInformation;
+            $currentObject->_to = $visitorInformation;
 
         } elseif (isset($linkType) && $linkType == 'frontend') {
             $getTestEmaildata =  Visitor::getVisitorDetailsByEmail($visitorEmail);
             $key = 0;
-            $visitorData[$key]['rcpt'] = $visitorEmail;
-            $visitorData[$key]['vars'][0]['name'] = 'loginLink';
+            $visitorDirectLoginInformation[$key]['rcpt'] = $visitorEmail;
+            $visitorDirectLoginInformation[$key]['vars'][0]['name'] = 'loginLink';
            
-            $visitorData[$key]['vars'][0]['content'] =
+            $visitorDirectLoginInformation[$key]['vars'][0]['content'] =
                 HTTP_PATH_LOCALE
                 .FrontEnd_Helper_viewHelper::__link("link_login")
                 . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin")
                 . "/"
                 .base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
-            $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
+            $visitorDirectLoginInformation[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
             
-            $visitorData[$key]['vars'][1]['content'] =
+            $visitorDirectLoginInformation[$key]['vars'][1]['content'] =
                 HTTP_PATH_LOCALE
                 . FrontEnd_Helper_viewHelper::__link("link_login")
                 . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
-                . "/" . base64_encode($visitorEmail) ."/". $dummyPass;
-            $toVisitorArray[$key]['email'] = $visitorEmail;
+                . "/" . base64_encode($visitorEmail) ."/". $passwordKey;
+            $visitorInformation[$key]['email'] = $visitorEmail;
             
-            $toVisitorArray[$key]['name'] =
+            $visitorInformation[$key]['name'] =
                 !empty($getTestEmaildata[0]['firstName']) ? $getTestEmaildata[0]['firstName']
                 . ' ' .$getTestEmaildata[0]['lastName'] : 'member';
-            $currentObject->_loginLinkAndData = $visitorData;
-            $currentObject->_to = $toVisitorArray;
+            $currentObject->_loginLinkAndData = $visitorDirectLoginInformation;
+            $currentObject->_to = $visitorInformation;
         } else {
             $visitors = new Visitor();
             $visitors = $visitors->getVisitorsToSendNewsletter();
@@ -87,11 +87,7 @@ class BackEnd_Helper_MandrillHelper
 
             foreach ($getUserDataFromMandrill as $key => $value) {
                 if ($value['soft_bounces'] >= 6 || $value['hard_bounces'] >= 2) {
-                    $updateActive = Doctrine_Query::create()
-                        ->update('Visitor')
-                        ->set('active', 0)
-                        ->where("email = '".$value['address']."'")
-                        ->execute();
+                    $updateActive = Visitor::updateVisitorActiveStatus($value['address']);
                 }
             }
 
@@ -101,27 +97,27 @@ class BackEnd_Helper_MandrillHelper
                     $keywords .= $word['keyword'] . ' ';
                 }
 
-                $visitorData[$key]['rcpt'] = $value['email'];
-                $visitorData[$key]['vars'][0]['name'] = 'loginLink';
-                $visitorMetaData[$key]['rcpt'] = $value['email'];
-                $visitorMetaData[$key]['values']['referrer'] = trim($keywords) ;
-                $visitorData[$key]['vars'][0]['content'] =
+                $visitorDirectLoginInformation[$key]['rcpt'] = $value['email'];
+                $visitorDirectLoginInformation[$key]['vars'][0]['name'] = 'loginLink';
+                $visitorRefererInformation[$key]['rcpt'] = $value['email'];
+                $visitorRefererInformation[$key]['values']['referrer'] = trim($keywords) ;
+                $visitorDirectLoginInformation[$key]['vars'][0]['content'] =
                     $frontendPath . FrontEnd_Helper_viewHelper::__link("link_login")
                     . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin")
                     . "/" . base64_encode($value['email']) ."/". $value['password'];
-                $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
-                $visitorData[$key]['vars'][1]['content'] =
+                $visitorDirectLoginInformation[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
+                $visitorDirectLoginInformation[$key]['vars'][1]['content'] =
                     $frontendPath
                     . FrontEnd_Helper_viewHelper::__link("link_login")
                     . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
                     . "/" . base64_encode($value['email']) ."/". $value['password'];
-                $toVisitorArray[$key]['email'] = $value['email'];
-                $toVisitorArray[$key]['name'] = !empty($value['firstName']) ? $value['firstName'] : 'Member';
+                $visitorInformation[$key]['email'] = $value['email'];
+                $visitorInformation[$key]['name'] = !empty($value['firstName']) ? $value['firstName'] : 'Member';
             }
 
-            $currentObject->_recipientMetaData = $visitorMetaData;
-            $currentObject->_loginLinkAndData = $visitorData;
-            $currentObject->_to = $toVisitorArray;
+            $currentObject->_recipientMetaData = $visitorRefererInformation;
+            $currentObject->_loginLinkAndData = $visitorDirectLoginInformation;
+            $currentObject->_to = $visitorInformation;
         }
     }
     public static function getOfferDates($currentOffer, $daysTillOfferExpires)

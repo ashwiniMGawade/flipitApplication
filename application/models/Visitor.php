@@ -174,6 +174,16 @@ class Visitor extends BaseVisitor
         }
         return $visitorLoginStatus;
     }
+
+    public static function updateVisitorActiveStatus($email)
+    {
+        Doctrine_Query::create()
+            ->update('Visitor')
+            ->set('active', 0)
+            ->where("email = '".$email."'")
+            ->execute();
+        return true;
+    }
     #############################################################
     ######### END REFACTRED CODE ################################
     #############################################################
