@@ -24,6 +24,7 @@ class BackEnd_Helper_MandrillHelper
             $key = 0;
             $visitorData[$key]['rcpt'] = $testEmail;
             $visitorData[$key]['vars'][0]['name'] = 'loginLink';
+            
             $visitorData[$key]['vars'][0]['content'] =
                 HTTP_PATH_FRONTEND
                 .FrontEnd_Helper_viewHelper::__link("link_login")
@@ -31,12 +32,14 @@ class BackEnd_Helper_MandrillHelper
                 . "/"
                 .base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
             $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
+            
             $visitorData[$key]['vars'][1]['content'] =
                 HTTP_PATH_FRONTEND
                 . FrontEnd_Helper_viewHelper::__link("link_login")
                 . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
                 . "/" . base64_encode($testEmail) ."/". $dummyPass;
             $toVisitorArray[$key]['email'] = $testEmail;
+            
             $toVisitorArray[$key]['name'] =
                 !empty($getTestEmaildata[0]['firstName']) ? $getTestEmaildata[0]['firstName']
                 . ' ' .$getTestEmaildata[0]['lastName'] : 'member';
@@ -48,6 +51,7 @@ class BackEnd_Helper_MandrillHelper
             $key = 0;
             $visitorData[$key]['rcpt'] = $visitorEmail;
             $visitorData[$key]['vars'][0]['name'] = 'loginLink';
+           
             $visitorData[$key]['vars'][0]['content'] =
                 HTTP_PATH_LOCALE
                 .FrontEnd_Helper_viewHelper::__link("link_login")
@@ -55,12 +59,14 @@ class BackEnd_Helper_MandrillHelper
                 . "/"
                 .base64_encode($getTestEmaildata[0]['email']) ."/". $getTestEmaildata[0]['password'];
             $visitorData[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
+            
             $visitorData[$key]['vars'][1]['content'] =
                 HTTP_PATH_LOCALE
                 . FrontEnd_Helper_viewHelper::__link("link_login")
                 . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
                 . "/" . base64_encode($visitorEmail) ."/". $dummyPass;
             $toVisitorArray[$key]['email'] = $visitorEmail;
+            
             $toVisitorArray[$key]['name'] =
                 !empty($getTestEmaildata[0]['firstName']) ? $getTestEmaildata[0]['firstName']
                 . ' ' .$getTestEmaildata[0]['lastName'] : 'member';
