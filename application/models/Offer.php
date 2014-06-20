@@ -247,7 +247,7 @@ class Offer extends BaseOffer
     
     public static function getTopCouponCodes($shopCategories, $limit = 5)
     {
-        $currentDateAndTime = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $topCouponCodes = Doctrine_Query::create()
         ->select(
             'p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
@@ -289,7 +289,7 @@ class Offer extends BaseOffer
 
     public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "")
     {
-        $currentDateAndTime = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $newestCouponCodes = Doctrine_Query::create()
             ->select(
                 's.id,s.name,
@@ -360,7 +360,7 @@ class Offer extends BaseOffer
 
     public static function getSpecialPageOffers($specialPage)
     {
-        $currentDateAndTime = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDateAndTime);
         $constraintsRelatedOffers = self::getOfferByPageConstraints($specialPage, $currentDateAndTime);
         $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
@@ -875,7 +875,6 @@ class Offer extends BaseOffer
 
     public static function addConversion($offerId)
     {
-
         $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());
 
         if (Offer:: getCloakLink($id, true)) {

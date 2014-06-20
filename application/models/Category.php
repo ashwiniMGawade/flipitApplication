@@ -174,7 +174,7 @@ class Category extends BaseCategory
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
             $category->categoryHeaderImageId = $categoryHeaderImageId;
-        } else if ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
+        } elseif ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
             $categoryIconId = self::
                 setCategoryImage(
                     $_FILES['categoryIconNameHidden']['name'],
@@ -191,7 +191,7 @@ class Category extends BaseCategory
                     'featured'
                 );
             $category->categoryFeaturedImageId = $categoryFeaturedImageId;
-        } else if ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryHeaderImage']['name'] != '') {
+        } elseif ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryHeaderImage']['name'] != '') {
             $categoryIconId = self::
                 setCategoryImage(
                     $_FILES['categoryIconNameHidden']['name'],
@@ -203,7 +203,7 @@ class Category extends BaseCategory
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
             $category->categoryHeaderImageId = $categoryHeaderImageId;
-        } else if ($_FILES['categoryHeaderImage']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
+        } elseif ($_FILES['categoryHeaderImage']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
             $category->categoryHeaderImageId = $categoryHeaderImageId;
