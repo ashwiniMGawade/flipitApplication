@@ -58,27 +58,31 @@ class CategoryController extends Zend_Controller_Action
     {
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
-        $this->pageDetails = Page::getPageFromPageAttribute(9);
-        $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_category_list',
-            array('function' => 'Category::getCategoriesInformation', 'parameters' => array())
-        );
-        
-        $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_categoryspeciallist_list',
-            array('function' => 'Page::getSpecialListPages','parameters' => array())
-        );
-        $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
-        $customHeader = isset($this->pageDetails->customHeader) ? $this->pageDetails->customHeader : '';
+        $pageDetails = Page::getPageDetails(9);
         $this->viewHelperObject->getMetaTags(
             $this,
-            $this->pageDetails->pageTitle,
-            $this->pageDetails->metaTitle,
-            trim($this->pageDetails->metaDescription),
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
             FrontEnd_Helper_viewHelper::__link('link_categorieen'),
             FACEBOOK_IMAGE,
-            $customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
+        $allCategories = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_category_list',
+                array(
+                    'function' => 'Category::getCategoriesInformation', 'parameters' => array()
+                )
+            );
+        $specialPagesList = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_categoryspeciallist_list',
+                array(
+                    'function' => 'Page::getSpecialListPages', 'parameters' => array()
+                )
+            );
+        $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',

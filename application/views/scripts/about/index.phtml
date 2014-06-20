@@ -1,12 +1,12 @@
 <?php
 $this->minifyHeadLink()->prependStylesheet("/public/css/front_end/authors.css");
-$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
-$this->minifyHeadScript()->appendFile("public/js/front_end/signupnewsletter.js");
-
-$pageImage = PUBLIC_PATH_CDN.$this->pageDetails['logo']['path'].$this->pageDetails['logo']['name'];
+$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
-echo $pageHeader->getCategoryOrPageHeader($this->pageDetails['pageTitle'], $pageImage);
-
+echo $pageHeader->getCategoryOrPageHeader(
+    $this->pageTitle,
+    $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage)
+);
 $partialViewPath = 'partials/';
 $authorsList = '';
 if (!empty($this->authorsWithPagination)) {
