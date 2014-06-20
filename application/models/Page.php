@@ -30,7 +30,7 @@ class Page extends BasePage
             ->andWhere('p.publish=1')
             ->andWhere('p.pagelock=0')
             ->andWhere('p.deleted=0')
-            ->fetchArray();
+            ->fetchOne();
         return $pageDetails;
     }
 
