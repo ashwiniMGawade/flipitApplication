@@ -25,14 +25,20 @@ if (!empty($categoryWiseArticles['blog'])) {
 if (!empty($categoryWiseArticles['savingtip'])) {
     $categorySavingtipArticles = $partialFunctions->getArticles('Saving Tip', $categoryWiseArticles['savingtip']);
 }
+
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
 $pageHeaderImage = $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage);
+
+if(LOCALE == ''):
+    $logoCssClass = 'kortingscode';
+endif
+
 ?>
 <div class="banner-block">
     <img class='image' src="<?php echo $pageHeaderImage;?>" alt="<?php echo $this->pageTitle;?>"/>
     <div class="frame-image">
         <div class="container">
-            <h1 class="flipit-text"><?php $this->translate('Flipit plus');?></h1>
+            <h1 class="flipit-text <?php echo $logoCssClass; ?>"><?php $this->translate('Flipit plus');?></h1>
         </div>
     </div>
     <div class="container">

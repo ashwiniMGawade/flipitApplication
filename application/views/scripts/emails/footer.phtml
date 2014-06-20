@@ -1,3 +1,14 @@
+<?php
+$websiteName = FrontEnd_Helper_viewHelper::getWebsiteName();
+$publicPath = HTTP_PATH.'public/images/';
+
+if(LOCALE == ''):
+    $logo = $publicPath.'kortingscode-logo.png';
+else :
+    $logo = $publicPath.'logo-footer.png';
+endif;
+
+?>
 <table width="100%" align="center" cellpadding="0" cellspacing="0">
     <tr><td height="46"></td></tr>
     <tr>
@@ -12,12 +23,12 @@
     </tr>
     <tr>
         <td align="center" style="padding:0 0 37px; font:14px/17px Arial, Helvetica, sans-serif; color:#33383e;">
-            <a href="#" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Uitschrijven'); ?></a> | 
-            <a href="#" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Wijzigen profiel'); ?></a> | 
-            <a href="#" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Contact'); ?></a>
+            <a href="<?php echo $this->directLoginAndUnsubscribeLinks['directUnsubscribeLink']; ?>" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Uitschrijven'); ?></a> | 
+            <a href="<?php echo $this->directLoginAndUnsubscribeLinks['directLoginLink']; ?>" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Wijzigen profiel'); ?></a> | 
+            <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_info/contact'); ?>" style="text-decoration:none; color:#33383e;"><?php echo FrontEnd_Helper_viewHelper::__email('email_Contact'); ?></a>
         </td>
     </tr>
     <tr>
-        <td align="center"><a href="http://www.flipit.com/"><img src="logo-footer.png" border="0" style="vertical-align:top;" width="109" height="49" alt="Flipit"></a></td>
+        <td align="center"><a href="<?php echo HTTP_PATH_LOCALE; ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" width="109" height="49" alt="<?php echo $websiteName; ?>"></a></td>
     </tr>
 </table>

@@ -3,7 +3,10 @@ $EditorFirstName = str_replace(' ', '', $this->shopEditor['firstName']);
 $EditorLastName = str_replace(' ', '', $this->shopEditor['lastName']);
 $EditorImageSlug = $this->shopEditor['slug'];
 $shopHeader = $this->translate('All').' '.$this->shop['name'].' '.$this->translate('deals verified by');
-$shopEditorPath = HTTP_PATH_CDN . ltrim($this->shopEditor['profileimage']['path'], "/"). 'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
+$shopEditorPath =
+	HTTP_PATH_CDN 
+	.ltrim($this->shopEditor['profileimage']['path'], "/")
+	.'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
 $shopAbout = $this->translate('About').' '.$this->shop['name'].' '.$this->translate('Vouchers').' '.date('Y');
 
 $howToUse = '';
@@ -27,7 +30,8 @@ endif;
                 </span>
                 <div class="photo">
                     <span class="text-box"><?php echo $this->translate('Hello'); ?></span>
-                    <img alt="<?php echo $this->shopEditor['firstName']; ?>" class="" src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
+                    <img alt="<?php echo $this->shopEditor['firstName']; ?>" class="" 
+                    src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
                 </div>
             </div>
         </div>

@@ -5,7 +5,10 @@
 foreach ($this->aboutTabs as $aboutTabIndex => $aboutTab):
     ?>
             <li class="<?php echo $aboutTabIndex=='0' ? 'active' : ''; ?>">
-                <a id="tab_<?php echo $aboutTabIndex;?>" onclick="showTab('<?php echo $aboutTabIndex;?>');" href="javascript:void(0)"><?php echo $aboutTab['title']; ?></a>
+                <a id="tab_<?php echo $aboutTabIndex;?>" 
+                onclick="showTab('<?php echo $aboutTabIndex;?>');" href="javascript:void(0)">
+                <?php echo $aboutTab['title']; ?>
+                </a>
             </li>
     <?php 
 endforeach;

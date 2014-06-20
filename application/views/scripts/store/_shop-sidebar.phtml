@@ -1,8 +1,13 @@
 <?php
-$this->minifyHeadScript()->prependFile("/public/js/front_end/lightbox.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/lightbox.js");
 echo $this->shopEditor;
-$frontendHelper = new FrontEnd_Helper_viewHelper();
-echo $frontendHelper->socialMediaWidget($this->currentStoreInformation['affliateProgram'] =='' ? $this->currentStoreInformation['actualUrl'] : $this->currentStoreInformation['affliateProgram']);
+$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+echo 
+	$frontendSidebarHelper->socialMediaWidget(
+		$this->currentStoreInformation['affliateProgram'] =='' ? 
+		$this->currentStoreInformation['actualUrl'] 
+		: $this->currentStoreInformation['affliateProgram']
+	);
 
 if (count($this->latestShopUpdates) > 0):?>
     <?php echo $this->partial('store/_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));

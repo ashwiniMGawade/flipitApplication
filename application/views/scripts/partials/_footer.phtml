@@ -1,7 +1,14 @@
 <?php
 $footer = FrontEnd_Helper_viewHelper::getFooterData();
-$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('footerLargeSignUpForm', 'SignUp' , 'email-form form-inline', 'orange');
-if (zend_Controller_Front::getInstance()->getRequest()->isPost() && zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
+$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+	'footerLargeSignUpForm',
+	'SignUp',
+	'email-form form-inline',
+	'orange'
+);
+if (
+	zend_Controller_Front::getInstance()->getRequest()->isPost() 
+	&& zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
     if ($signUpForm->isValid(zend_Controller_Front::getInstance()->getRequest()->getPost())) {
         $signUpStep2Url = FrontEnd_Helper_SignUpPartialFunction::signUpRedirectLink($signUpForm);
         header('location:'. $signUpStep2Url);
@@ -25,7 +32,6 @@ $signUpWidgetForm = $this->partial(
 if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='login'
     && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='signup'
 ):
-$this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/signupnewsletter.js");
 ?>
     <div class="bottom-panel">
         <div class="container" id ="footer-signup-form">
@@ -51,17 +57,17 @@ endif;
         <ul class="countries">
             <?php
             $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
-            
             foreach ($websitesWithLocales as $flipitLocaleKey => $flipitLocaleValue) : 
                 $explodedLocaleValue = explode('=',$flipitLocaleValue);
-                $localeStatus = $explodedLocaleValue[1];
-                $websiteName = $explodedLocaleValue[0];
+                $localeStatus = isset($explodedLocaleValue[1]) ? $explodedLocaleValue[1] : '';
+                $websiteName = isset($explodedLocaleValue[0]) ? $explodedLocaleValue[0] : '';
                 if ($localeStatus == 'online') :
-            ?>
-            <li>
-                <a href="<?php echo 'http://'.$websiteName; ?>"
-                class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $websiteName; ?></a>
-            </li>
+            	?>
+            	<li>
+                	<a href="<?php echo 'http://'.$websiteName; ?>"
+                	class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $websiteName; ?>
+                	</a>
+            	</li>
                 <?php endif; ?>
             <?php endforeach; ?>
         </ul>

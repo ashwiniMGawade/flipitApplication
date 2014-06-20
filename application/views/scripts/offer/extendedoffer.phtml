@@ -64,8 +64,8 @@ $howToUseOffer = $this->partial(
            'shop' => $this->currentStoreInformation[0]
         )
 );
-$frontEndViewHelper = new FrontEnd_Helper_viewHelper();
-echo $headerBlock = $frontEndViewHelper->getShopHeader($offer->shop, $expiredMessage, $offer->title);
+$frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
+echo $headerBlock = $frontShopHeaderHelper->getShopHeader($offer->shop, $expiredMessage, $offer->title);
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">

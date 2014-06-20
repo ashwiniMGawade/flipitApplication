@@ -116,7 +116,6 @@ class Admin_PageController extends Zend_Controller_Action
     public function updatepageAction()
     {
         $params = $this->_getAllParams();
-
         if(@$params['pageTemplate'] == 15){
             $pageObj = new Page();
             $checkfooterpages = $pageObj->checkFotterpages(@$params['pageTemplate']);
@@ -563,7 +562,6 @@ class Admin_PageController extends Zend_Controller_Action
             $exactLinkCategory = 'category/index/attachedpage/'.$id;
             $exactLinkMsGuide = 'bw/index/attachedpage/'.$id;
             $exactLinkAbout = 'about/index/attachedpage/'.$id;
-            $exactLinkMyFav = 'myfavorite/index/attachedpage/'.$id;
             $exactLinkLogin = 'login/index/attachedpage/'.$id;
             $exactLinkForgot = 'login/forgotpassword/attachedpage/'.$id;
             $exactLinkFree = 'freesignup/index/attachedpage/'.$id;
@@ -575,7 +573,7 @@ class Admin_PageController extends Zend_Controller_Action
                     @$rp[0]['exactlink'] == $exactLinkOfferPop || @$rp[0]['exactlink'] == $exactLinkOffer ||
                     @$rp[0]['exactlink'] == $exactLinkStore || @$rp[0]['exactlink'] == $exactLinkCategory ||
                     @$rp[0]['exactlink'] == $exactLinkMsGuide || @$rp[0]['exactlink'] == $exactLinkAbout ||
-                    @$rp[0]['exactlink'] == $exactLinkMyFav || @$rp[0]['exactlink'] == $exactLinkLogin ||
+                    @$rp[0]['exactlink'] == $exactLinkLogin ||
                     @$rp[0]['exactlink'] == $exactLinkForgot || @$rp[0]['exactlink'] == $exactLinkFree ||
                     @$rp[0]['exactlink'] == $exactLinkWelcome
                   ){

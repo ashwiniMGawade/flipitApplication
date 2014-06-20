@@ -2,7 +2,8 @@
     <form role="form">
         <fieldset>
             <div class="holder">
-                <input id="couponCode" class="default form-control" type="text" value="<?php echo $this->couponCode; ?>">
+                <input id="couponCode" class="default form-control" type="text" 
+                value="<?php echo $this->couponCode; ?>">
                 <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->couponCode; ?>');">
                     <?php echo $this->translate('Copy Code');?>
                 </a>
@@ -10,7 +11,8 @@
             <div id="bigtextPopupShopLink">                    
                  <a href="<?php echo $this->urlToShow; ?>" class="btn blue btn-primary">
                     <?php 
-                    echo $this->translate('Open').' '.$this->offer->shop['name'].' '.$this->translate('New year sale code');
+                    echo $this->translate('Open').' '.$this->offer->shop['name'].' '
+                    .$this->translate('New year sale code');
                     ?>
                 </a>
             </div>

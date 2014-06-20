@@ -6,10 +6,10 @@ class PlusController extends Zend_Controller_Action
         $module   = strtolower($this->getRequest()->getParam('lang'));
         $controller = strtolower($this->getRequest()->getControllerName());
         $action     = strtolower($this->getRequest()->getActionName());
-
-        if (file_exists(
-            APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
-        )
+        if (
+            file_exists(
+                APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
+            )
         ) {
             $this->view->setScriptPath(APPLICATION_PATH . '/modules/'  . $module . '/views/scripts');
         } else {
@@ -50,10 +50,9 @@ class PlusController extends Zend_Controller_Action
             HTTP_PATH."public/images/plus_og.png",
             $customHeader
         );
-        
-        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $pageHeaderImageId = isset($pageDetails->pageHeaderImageId) ? $pageDetails->pageHeaderImageId : '' ;
+        $pageHeaderImage = Logo::getPageLogo($pageHeaderImageId);
         $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
-
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
@@ -66,15 +65,15 @@ class PlusController extends Zend_Controller_Action
         $articleDetails = Articles::getArticleByPermalink($this->getRequest()->getParam('permalink'));
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles(4);
-        $articlesRelatedToCurrentCategory = !empty($categoryWiseArticles[$currentArticleCategory]) ?
-            $categoryWiseArticles[$currentArticleCategory] : '';
+        $articlesRelatedToCurrentCategory =
+            !empty($categoryWiseArticles[$currentArticleCategory])
+            ? $categoryWiseArticles[$currentArticleCategory]
+            : '';
         $incrementArticleViewCountValue  = FrontEnd_Helper_viewHelper::
             viewCounter('article', 'onload', $articleDetails[0]['id']);
-            
         if (!empty($articleDetails)) {
-            $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical(
-                $this->getRequest()->getParam('permalink')
-            );
+            $this->view->canonical =
+                FrontEnd_Helper_viewHelper::generateCononical($this->getRequest()->getParam('permalink'));
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array(
                     'function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
@@ -83,16 +82,11 @@ class PlusController extends Zend_Controller_Action
             $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails = User::getProfileImage($articleDetails[0]['authorid']);
-          
             $this->viewHelperObject->getMetaTags(
                 $this,
                 $articleDetails[0]['title'],
-                trim(
-                    $articleDetails[0]['metatitle']
-                ),
-                trim(
-                    $articleDetails[0]['metadescription']
-                ),
+                trim($articleDetails[0]['metatitle']),
+                trim($articleDetails[0]['metadescription']),
                 $articleDetails[0]['permalink'],
                 FACEBOOK_IMAGE,
                 ''

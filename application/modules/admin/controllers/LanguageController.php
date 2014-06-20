@@ -157,64 +157,53 @@ class Admin_LanguageController extends Zend_Controller_Action
 
         $fileName = $this->getRequest()->getParam('fname');
         $existback_php = strstr($fileName, 'backend_php' . $suffix );// check if back_php keyword is present
-        $existfront_php = strstr($fileName, 'frontend_php' . $suffix);// check if front_php keyword is present
         $existback_js = strstr($fileName, 'backend_js' . $suffix);// check if back_js keyword is present
         $existfront_js = strstr($fileName, 'frontend_js' . $suffix);// check if front_js keyword is present
-      $existlinks = strstr($fileName, 'links');// check if links keyword is present
-      $existForm = strstr($fileName, 'form'  . $suffix);// check if form keyword is present
+        $existlinks = strstr($fileName, 'links');// check if links keyword is present
+        $existForm = strstr($fileName, 'form'  . $suffix);// check if form keyword is present
         $existEmail = strstr($fileName, 'email'  . $suffix);// check if emails keyword is present
         $obj = new FrontEnd_Helper_POTCreator();
 
         if($existback_php){
-
             $scanPath[0] = APPLICATION_PATH . '/modules';
             $obj->set_exts('php|phtml');
             $obj->set_regular('/(translate)\([^)]*\)/');
-
-        }elseif($existfront_php){
-
-            $scanPath[0] = APPLICATION_PATH . '/controllers';
-            $scanPath[1] = APPLICATION_PATH . '/views';
-            $scanPath[2] = LIBRARY_PATH . '/FrontEnd';
-            $scanPath[3] = APPLICATION_PATH . '/migration';
-            $obj->set_exts('php|phtml');
-            $obj->set_regular('/(translate)\([^)]*\)/');
-
         }elseif($existback_js){
             $scanPath[0] = APPLICATION_PATH.'/../public/js/back_end';
             $scanPath[1] = APPLICATION_PATH.'/../public/js/front_end';
             $obj->set_exts('js');
             $obj->set_regular('/(__)\([^)]*\)/');
-
         }elseif($existfront_js){
-
             $scanPath[0] = APPLICATION_PATH.'/../public/js/front_end';
             $obj->set_exts('js');
             $obj->set_regular('/(__)\([^)]*\)/');
-
         }elseif($existlinks){
-
-            $scanPath[0] = ROOT_PATH;
-            $scanPath[1] = APPLICATION_PATH;
-            $scanPath[2] = LIBRARY_PATH . '/FrontEnd';
-            $scanPath[3] = APPLICATION_PATH.'/../public/js/front_end';
+            $scanPath[0] = APPLICATION_PATH . '/controllers';
+            $scanPath[1] = APPLICATION_PATH . '/views';
+            $scanPath[2] = APPLICATION_PATH . '/modules';
+            $scanPath[3] = APPLICATION_PATH . '/models';
+            $scanPath[4] = APPLICATION_PATH . '/migration';
+            $scanPath[5] = LIBRARY_PATH . '/FrontEnd';
+            $scanPath[6] = APPLICATION_PATH.'/../public/js/front_end';
             $obj->set_exts('php|phtml|js');
             $obj->set_regular('/(__link)\([^)]*\)/');
         }elseif ($existForm) {
-        $scanPath[0] = APPLICATION_PATH . '/controllers';
-        $scanPath[1] = APPLICATION_PATH . '/views';
-        $scanPath[2] = APPLICATION_PATH . '/modules';
-        $scanPath[3] = LIBRARY_PATH . '/FrontEnd';
-        $obj->set_exts('php|phtml');
-        $obj->set_regular('/(__form)\([^)]*\)/');
-      }elseif ($existEmail) {
-        $scanPath[0] = APPLICATION_PATH . '/controllers';
-        $scanPath[1] = APPLICATION_PATH . '/views';
-        $scanPath[2] = APPLICATION_PATH . '/modules';
-        $scanPath[3] = APPLICATION_PATH . '/migration';
-        $obj->set_exts('php|phtml');
-        $obj->set_regular('/(__email)\([^)]*\)/');
-      }
+            $scanPath[0] = APPLICATION_PATH . '/controllers';
+            $scanPath[1] = APPLICATION_PATH . '/views';
+            $scanPath[2] = APPLICATION_PATH . '/modules';
+            $scanPath[3] = APPLICATION_PATH . '/migration';
+            $scanPath[4] = LIBRARY_PATH . '/FrontEnd';
+            $scanPath[5] = APPLICATION_PATH . '/forms';
+            $obj->set_exts('php|phtml');
+            $obj->set_regular('/(__form)\([^)]*\)/');
+        }elseif ($existEmail) {
+            $scanPath[0] = APPLICATION_PATH . '/controllers';
+            $scanPath[1] = APPLICATION_PATH . '/views';
+            $scanPath[2] = APPLICATION_PATH . '/modules';
+            $scanPath[3] = APPLICATION_PATH . '/migration';
+            $obj->set_exts('php|phtml');
+            $obj->set_regular('/(__email)\([^)]*\)/');
+        }
 
         //echo "<pre>"; print_r($scanPath); die;
 
