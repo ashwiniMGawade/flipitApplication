@@ -8,7 +8,12 @@ class Page extends BasePage
         if (is_string($pageAttribute)) {
             $pageAttribute = self::getPageAttributeByPermalink($pageAttribute);
         }
-        return self::getPageDetailsByAttributeId($pageAttribute);
+        $pageDetails = self::getPageDetailsByAttributeId($pageAttribute);
+        if (!empty($pageDetails)) {
+            return $pageDetails;
+        } else {
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
     }
 
     public static function getPageAttributeByPermalink($permalink)

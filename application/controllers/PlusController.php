@@ -28,31 +28,19 @@ class PlusController extends Zend_Controller_Action
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
         $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
 
-        $this->view->pageTitle = isset($pageDetails->pageTitle) ?
-            $pageDetails->pageTitle :'';
+        $this->view->pageTitle = $pageDetails->pageTitle;
         $this->view->permaLink = $articlesOverviewPagePermalink;
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articlesOverviewPagePermalink);
-        $customHeader = isset($pageDetails->customHeader) ?
-            $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            isset($pageDetails->pageTitle) ?
-            $pageDetails->pageTitle :'',
-            trim(
-                isset($pageDetails->metaTitle) ?
-                $pageDetails->metaTitle :''
-            ),
-            trim(
-                isset($pageDetails->metaDescription) ?
-                $pageDetails->metaDescription :''
-            ),
+            $pageDetails->pageTitle,
+            trim($pageDetails->metaTitle),
+            trim($pageDetails->metaDescription),
             $articlesOverviewPagePermalink,
             HTTP_PATH."public/images/plus_og.png",
-            $customHeader
+            $pageDetails->customHeader
         );
-        $pageHeaderImageId = isset($pageDetails->pageHeaderImageId) ? $pageDetails->pageHeaderImageId : '' ;
-        $pageHeaderImage = Logo::getPageLogo($pageHeaderImageId);
-        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;

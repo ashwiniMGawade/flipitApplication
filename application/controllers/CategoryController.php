@@ -58,7 +58,16 @@ class CategoryController extends Zend_Controller_Action
     {
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
-        $this->pageDetails = Page::getPageDetails(9);
+        $pageDetails = Page::getPageDetails(9);
+        $this->viewHelperObject->getMetaTags(
+            $this,
+            $pageDetails->pageTitle,
+            $pageDetails->metaTitle,
+            trim($pageDetails->metaDescription),
+            FrontEnd_Helper_viewHelper::__link('link_categorieen'),
+            FACEBOOK_IMAGE,
+            $pageDetails->customHeader
+        );
         $allCategories = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'all_category_list',
@@ -74,16 +83,6 @@ class CategoryController extends Zend_Controller_Action
                 )
             );
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
-        $customHeader = isset($this->pageDetails->customHeader) ? $this->pageDetails->customHeader : '';
-        $this->viewHelperObject->getMetaTags(
-            $this,
-            $this->pageDetails->pageTitle,
-            $this->pageDetails->metaTitle,
-            trim($this->pageDetails->metaDescription),
-            FrontEnd_Helper_viewHelper::__link('link_categorieen'),
-            FACEBOOK_IMAGE,
-            $customHeader
-        );
         $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',

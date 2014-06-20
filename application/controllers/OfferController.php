@@ -22,26 +22,23 @@ class OfferController extends Zend_Controller_Action
     {
         $pageName = 'top-20';
         $pageDetails = Page::getPageDetails($pageName);
-        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
-        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
+        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->viewHelperObject->getMetaTags(
+            $this,
+            $pageDetails->pageTitle,
+            $pageDetails->metaTitle,
+            $pageDetails->metaDescription,
+            FrontEnd_Helper_viewHelper::__link($pageName),
+            FACEBOOK_IMAGE,
+            $pageDetails->customHeader
+        );
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'top_20_offers_list',
             array('function' => 'Offer::getTopOffers', 'parameters' => array(20))
         );
-        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
-
-        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
-        $this->viewHelperObject->getMetaTags(
-            $this,
-            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
-            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
-            trim(isset($pageDetails->metaDescription) ? $pageDetails->metaDescription :''),
-            FrontEnd_Helper_viewHelper::__link($pageName),
-            FACEBOOK_IMAGE,
-            $customHeader
-        );
         $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'formSignupSidebarWidget',
@@ -171,25 +168,20 @@ class OfferController extends Zend_Controller_Action
         } else {
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
-
-        $pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
-        $this->view->pageHeaderImage = isset($pageHeaderImage[0]) ? $pageHeaderImage[0] : '';
-
-        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageTitle = $pageDetails->pageTitle;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
-        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
-            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle :'',
-            trim(isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : ''),
+            $pageDetails->pageTitle,
+            $pageDetails->metaTitle,
+            $pageDetails->metaDescription,
             FrontEnd_Helper_viewHelper::__link('link_nieuw'),
             FACEBOOK_IMAGE,
-            $customHeader
+            $pageDetails->customHeader
         );
-
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];
         $this->view->offersType = 'newestOffer';
