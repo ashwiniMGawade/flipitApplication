@@ -17,29 +17,29 @@ class Application_Form_Register extends Application_Form_Base
              )
          );
          $visitorEmail->setAttrib('class', 'form-control');
-         $visitorEmail->setLabel('Email');
+         $visitorEmail->setLabel(FrontEnd_Helper_viewHelper::__form('form_Email'));
 
         $vistorPassword = new Zend_Form_Element_Password('password');
         $vistorPassword->setRequired(true);
         $vistorPassword->setAttribs(
             array('class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
         );
-        $vistorPassword->setLabel('Password');
+        $vistorPassword->setLabel(FrontEnd_Helper_viewHelper::__form('form_Password'));
         $vistorPassword->setAttrib('autocomplete', 'off');
 
         $vistorFirstName = new Zend_Form_Element_Text('firstName');
         $vistorFirstName->setRequired(true);
         $vistorFirstName->setAttrib('class', 'form-control');
-        $vistorFirstName->setLabel('First name');
+        $vistorFirstName->setLabel(FrontEnd_Helper_viewHelper::__form('form_First name'));
 
         $vistorLastName = new Zend_Form_Element_Text('lastName');
         $vistorLastName->setRequired(true);
         $vistorLastName->setAttrib('class', 'form-control');
-        $vistorLastName->setLabel('Last name');
+        $vistorLastName->setLabel(FrontEnd_Helper_viewHelper::__form('form_Last name'));
 
         $vistorDateOfBirth = new Zend_Form_Element_Text('dateOfBirth');
         $vistorDateOfBirth->setAttrib('class', 'form-control');
-        $vistorDateOfBirth->setLabel('Date of Birth');
+        $vistorDateOfBirth->setLabel(FrontEnd_Helper_viewHelper::__form('form_Date of Birth'));
 
         $vistorDateOfBirthDay = new Zend_Form_Element_Text('dateOfBirthDay');
         $vistorDateOfBirthDay->setRequired(true);
@@ -76,13 +76,13 @@ class Application_Form_Register extends Application_Form_Base
         $vistorGender = new Zend_Form_Element_Select('gender');
         $vistorGender->setRequired(true);
         $vistorGender->setAttrib('class', 'form-control');
-        $vistorGender->setLabel('Gender');
+        $vistorGender->setLabel(FrontEnd_Helper_viewHelper::__form('form_Gender'));
         $vistorGender->addMultiOptions(array('M'=>'Male', 'F'=>'Female'));
 
         $vistorPostalCode = new Zend_Form_Element_Text('postCode');
         $vistorPostalCode->setRequired(true);
         $vistorPostalCode->setAttrib('class', 'form-control');
-        $vistorPostalCode->setLabel('Postcode');
+        $vistorPostalCode->setLabel(FrontEnd_Helper_viewHelper::__form('form_Postcode'));
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
         $this->addElements(
             array(

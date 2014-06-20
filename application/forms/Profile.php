@@ -8,7 +8,7 @@ class Application_Form_Profile extends Application_Form_Base
     public function init()
     {
         $visitorEmail = new Zend_Form_Element_Text('emailAddress');
-        $visitorEmail->setLabel('Email');
+        $visitorEmail->setLabel(FrontEnd_Helper_viewHelper::__form('form_Email'));
         $visitorEmail->setAttribs(
             array('readonly' => 'readonly', 'class'=>'form-control', 'disabled'=> 'disabled')
         );
@@ -17,28 +17,28 @@ class Application_Form_Profile extends Application_Form_Base
         $vistorPassword->setAttribs(
             array('autocomplete'=> 'off', 'class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
         );
-        $vistorPassword->setLabel('Password');
+        $vistorPassword->setLabel(FrontEnd_Helper_viewHelper::__form('form_Password'));
 
         $vistorConfirmPassword = new Zend_Form_Element_Password('confirmPassword');
         $vistorConfirmPassword->setAttribs(
             array('autocomplete'=> 'off', 'class'=>'form-control', 'minlength'=> 1, 'maxlength' => 20)
         );
-        $vistorConfirmPassword->setLabel('Confirm Password');
+        $vistorConfirmPassword->setLabel(FrontEnd_Helper_viewHelper::__form('form_Confirm Password'));
         $vistorConfirmPassword->addValidator('Identical', false, array('token' => 'password'));
 
         $vistorFirstName = new Zend_Form_Element_Text('firstName');
         $vistorFirstName->setRequired(true);
         $vistorFirstName->setAttrib('class', 'form-control');
-        $vistorFirstName->setLabel('First name');
+        $vistorFirstName->setLabel(FrontEnd_Helper_viewHelper::__form('form_First name'));
 
         $vistorLastName = new Zend_Form_Element_Text('lastName');
         $vistorLastName->setRequired(true);
         $vistorLastName->setAttrib('class', 'form-control');
-        $vistorLastName->setLabel('Last name');
+        $vistorLastName->setLabel(FrontEnd_Helper_viewHelper::__form('form_Last name'));
 
         $vistorDateOfBirth = new Zend_Form_Element_Text('dateOfBirth');
         $vistorDateOfBirth->setAttrib('class', 'form-control');
-        $vistorDateOfBirth->setLabel('Date of Birth');
+        $vistorDateOfBirth->setLabel(FrontEnd_Helper_viewHelper::__form('form_Date of Birth'));
 
         $vistorDateOfBirthDay = new Zend_Form_Element_Text('dateOfBirthDay');
         $vistorDateOfBirthDay->setRequired(true);
@@ -75,13 +75,13 @@ class Application_Form_Profile extends Application_Form_Base
         $vistorGender = new Zend_Form_Element_Select('gender');
         $vistorGender->setRequired(true);
         $vistorGender->setAttrib('class', 'form-control');
-        $vistorGender->setLabel('Gender');
+        $vistorGender->setLabel(FrontEnd_Helper_viewHelper::__form('form_Gender'));
         $vistorGender->addMultiOptions(array('M'=>'Male', 'F'=>'Female'));
 
         $vistorPostalCode = new Zend_Form_Element_Text('postCode');
         $vistorPostalCode->setRequired(true);
         $vistorPostalCode->setAttrib('class', 'form-control');
-        $vistorPostalCode->setLabel('Postcode');
+        $vistorPostalCode->setLabel(FrontEnd_Helper_viewHelper::__form('form_Postcode'));
 
         $vistorNewsLetterStatus = new Zend_Form_Element_Checkbox('weeklyNewsLetter');
 

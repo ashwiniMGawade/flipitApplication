@@ -17,7 +17,7 @@ class Application_Form_ForgotPassword extends Application_Form_Base
             )
         );
         $vistorEmail->setAttrib('class', 'form-control');
-        $vistorEmail->setLabel('Email address');
+        $vistorEmail->setLabel(FrontEnd_Helper_viewHelper::__form('form_Email address'));
         $this->addElements(array($vistorEmail));
     }
 }
