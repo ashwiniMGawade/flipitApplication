@@ -38,7 +38,7 @@ class CategoryController extends Zend_Controller_Action
                 $categoryDetails[0]['name'],
                 trim($categoryDetails[0]['metatitle']),
                 trim($categoryDetails[0]['metaDescription']),
-                FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .$categoryDetails[0]['permaLink'],
+                FrontEnd_Helper_viewHelper::__link('link_categorieen') . '/' .$categoryDetails[0]['permaLink'],
                 FACEBOOK_IMAGE,
                 $customHeader
             );
@@ -61,8 +61,9 @@ class CategoryController extends Zend_Controller_Action
         $this->pageDetails = Page::getPageFromPageAttribute(9);
         $allCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_category_list',
-            array('function' => 'Category::getCategoriesDetail', 'parameters' => array())
+            array('function' => 'Category::getCategoriesInformation', 'parameters' => array())
         );
+        
         $specialPagesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_categoryspeciallist_list',
             array('function' => 'Page::getSpecialListPages','parameters' => array())
@@ -74,7 +75,7 @@ class CategoryController extends Zend_Controller_Action
             $this->pageDetails->pageTitle,
             $this->pageDetails->metaTitle,
             trim($this->pageDetails->metaDescription),
-            FrontEnd_Helper_viewHelper::__link('categorieen'),
+            FrontEnd_Helper_viewHelper::__link('link_categorieen'),
             FACEBOOK_IMAGE,
             $customHeader
         );

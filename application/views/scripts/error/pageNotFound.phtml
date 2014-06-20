@@ -8,6 +8,7 @@
         require(APPLICATION_PATH.'/layouts/scripts/layout_css.phtml');
         require(APPLICATION_PATH.'/layouts/scripts/layout_js.phtml');
         $searchBoxCssClass = LOCALE == '' ? 'kortingscode' : '';
+        $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
         ?>
     </head>
 <?php 
@@ -51,10 +52,7 @@ if (LOCALE == '') {
                                 <div class="slide search-box">
                                     <form role="form" class="search-form">
                                         <input 
-                                        placeholder="
-                                        <?php 
-                                        echo FrontEnd_Helper_viewHelper::__form('form_Type in a Store e.g. Avis');
-                                        ?>" 
+                                        placeholder="<?php echo FrontEnd_Helper_viewHelper::__form('form_Type in a Store e.g. Avis');?>"
                                         class="form-control <?php echo $searchBoxCssClass;?>" 
                                         id='searchFieldHeader' name='searchFieldHeader' type='text'/>
                                         <input id='searchedKeyword' name='searchedKeyword' type='hidden'/>
@@ -99,8 +97,8 @@ if (LOCALE == '') {
                     <ul class="countries">
                         <?php foreach ($this->flipitLocales as $flipitLocaleKey => $flipitLocaleValue) : 
                             $explodedLocaleValue = explode('=',$flipitLocaleValue);
-                            $localeStatus = $explodedLocaleValue[1];
-                            $websiteName = $explodedLocaleValue[0];
+                            $localeStatus = isset($explodedLocaleValue[1]) ? $explodedLocaleValue[1] : '';
+                            $websiteName = isset($explodedLocaleValue[0]) ? $explodedLocaleValue[0] : '';
                             if ($localeStatus == 'online') :
                         ?>
                         <li>

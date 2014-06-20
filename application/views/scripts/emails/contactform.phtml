@@ -34,11 +34,52 @@ endif;
                         <tbody><tr><td height="36"></td></tr>
                         <tr>
                             <td style="padding:0 0 21px; font:23px/27px Arial, Helvetica, sans-serif; color:#32383e;">
-                            <?php echo FrontEnd_Helper_viewHelper::__email('email_Beste '.$websiteName.' email_bezoeker'); ?></td>
+                                <?php echo FrontEnd_Helper_viewHelper::__email('email_Dear KC/ Flipit admin,'); ?>
+                            </td>
                         </tr>
                         <tr>
-                            <td style="padding:0 0 30px; font:14px/17px Arial, Helvetica, sans-serif; color:#373736;">
-                                <?php echo $this->message; ?>
+                            <td style="padding:0 0 21px; font:23px/27px Arial, Helvetica, sans-serif; color:#32383e;">
+                            <?php 
+                                echo FrontEnd_Helper_viewHelper::__email(
+                                'emial_The contact form is filled with the following data:'); ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:23px/27px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php 
+                                        echo FrontEnd_Helper_viewHelper::__email('email_Visitor Name:').' '.$this->name; 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:23px/27px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php 
+                                    echo FrontEnd_Helper_viewHelper::__email('email_From email:').' '.$this->email; 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:23px/27px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php 
+                                    echo FrontEnd_Helper_viewHelper::__email('email_Subject:').' '.$this->subject; 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:23px/27px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php 
+                                    echo FrontEnd_Helper_viewHelper::__email('email_Message:').' '.$this->message; 
+                                ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding:0 0 21px; font:23px/27px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php echo FrontEnd_Helper_viewHelper::__email('email_Have a great day,'); ?>
+                            </td>
+                        </tr>
+                         <tr>
+                            <td style="padding:0 0 21px; font:23px/27px Arial, Helvetica, sans-serif; color:#32383e;">
+                                <?php echo FrontEnd_Helper_viewHelper::__email('email_Tech team!'); ?>
                             </td>
                         </tr>
                         <tr><td height="36"></td></tr>

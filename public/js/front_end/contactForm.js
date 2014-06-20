@@ -16,7 +16,7 @@ function validateRegistration() {
             name: {
                 required: true
             },
-            subject1: {
+            subject: {
                 required: true
             },
             message: {
@@ -31,7 +31,7 @@ function validateRegistration() {
               name: {
                   required:''
                },
-              subject1: {
+              subject: {
                   required:''
                },
               message: {

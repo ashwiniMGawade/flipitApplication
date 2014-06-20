@@ -7,20 +7,21 @@ class Admin_SplashController extends Zend_Controller_Action
     {
         $databaseConnection = BackEnd_Helper_viewHelper::addConnection();
 
-        if (! Auth_StaffAdapter::hasIdentity ()) {
+        if (!Auth_StaffAdapter::hasIdentity()) {
             $pageReferer = new Zend_Session_Namespace('referer');
             $pageReferer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-            $this->_redirect ( '/admin/auth/index' );
+            $this->_redirect('/admin/auth/index');
         }
 
         BackEnd_Helper_viewHelper::closeConnection($databaseConnection);
-        $this->view->controllerName = $this->getRequest()->getParam ('controller');
+        $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
 
-        if($sessionNamespace->settings['rights']['administration']['rights'] != '1' && $sessionNamespace->settings['rights']['administration']['rights'] !='2' ) {
+        if ($sessionNamespace->settings['rights']['administration']['rights'] != '1'
+            && $sessionNamespace->settings['rights']['administration']['rights'] !='2' ) {
             $flashMessenger = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate ('You have no permission to access page');
+            $message = $this->view->translate('You have no permission to access page');
             $flashMessenger->addMessage(array('error' => $message));
             $this->_redirect('/admin');
         }
@@ -73,7 +74,7 @@ class Admin_SplashController extends Zend_Controller_Action
     public function offersListAction()
     {
         if ($this->_request->isXmlHttpRequest()) {
-            $localeId = intval($this->getRequest()->getParam('locale', false ));
+            $localeId = intval($this->getRequest()->getParam('locale', false));
 
             if ($localeId) {
                 $locale = BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
@@ -95,7 +96,7 @@ class Admin_SplashController extends Zend_Controller_Action
                 $this->_helper->json($coupons);
             }
         }
-        die();
+        exit();
     }
 
     public function deleteOfferAction()
