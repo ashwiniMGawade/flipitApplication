@@ -2,7 +2,7 @@
 
 class ContactController extends Zend_Controller_Action
 {
-
+    public $_loginLinkAndData = array();
     public function init()
     {
         $module   = strtolower($this->getRequest()->getParam('lang'));
@@ -32,7 +32,7 @@ class ContactController extends Zend_Controller_Action
 
     public function sendMailThroughMandril($visitorName, $visitorEmail, $subject, $message)
     {
-        $adminEmail = "asharma11@seasiainfotech.com";
+        $adminEmail = Signupmaxaccount::getEmailAddress();
         if (!empty($visitorEmail)) {
             $mailer  = new FrontEnd_Helper_Mailer();
             $content = array(
@@ -48,13 +48,15 @@ class ContactController extends Zend_Controller_Action
                 )
             );
             $mailer->send(
-                FrontEnd_Helper_viewHelper::__email('email_sitename'),
-                $visitorEmail,
                 $visitorName,
+                $visitorEmail,
+                FrontEnd_Helper_viewHelper::__email('email_sitename'),
                 $adminEmail,
                 FrontEnd_Helper_viewHelper::__email('email_'.$subject),
                 $content,
-                FrontEnd_Helper_viewHelper::__email('email_Forgot password header')
+                FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
+                '',
+                $this->_loginLinkAndData
             );
         }
         $successMessage = "Your message has been sent.";

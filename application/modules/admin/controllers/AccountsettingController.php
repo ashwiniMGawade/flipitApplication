@@ -176,11 +176,12 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $templateName = $this->getInvokeArg('newsletterTemplate');
             $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
             $categoryName = $topCategories[0]['category']['name'];
+            $categoryPermalink = $topCategories[0]['category']['permaLink'];
             try {
                 FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                     $topVouchercodes,
                     $categoryVouchers,
-                    $categoryName,
+                    $categoryName.'|'.$categoryPermalink,
                     $mandrillNewsletterSubject,
                     $mandrillSenderEmailAddress,
                     $mandrillSenderName,

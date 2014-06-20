@@ -724,7 +724,7 @@ EOD;
     public static function sendMandrillNewsletterByBatch(
         $topVouchercodes,
         $categoryVouchers,
-        $categoryName,
+        $categoryInformation,
         $mandrillNewsletterSubject,
         $mandrillSenderEmailAddress,
         $mandrillSenderName,
@@ -739,11 +739,11 @@ EOD;
         $content = array(
             'name'    => 'content',
             'content' => $basePath->partial(
-                'emails/welcome.phtml',
+                'emails/emailLayout.phtml',
                 array(
                     'topVouchercodes' => $topVouchercodes,
                     'categoryVouchers' => $categoryVouchers,
-                    'categoryName' => $categoryName,
+                    'categoryInformation' => $categoryInformation,
                     'pathConstants' => $pathConstants
                 )
             )
@@ -755,7 +755,7 @@ EOD;
         $recipientMetaData   = array_chunk($recipientMetaData, 500);
         $mandrillMergeVars    = array_chunk($mandrillMergeVars, 500);
         foreach ($mandrillUsersLists as $mandrillUsersKey => $mandrillUsersEmailList) {
-            $mailer  = new FrontEnd_Helper_Mailer();
+            $mailer = new FrontEnd_Helper_Mailer($pathConstants);
             $mailer->send(
                 $mandrillSenderName,
                 $mandrillSenderEmailAddress,
@@ -763,7 +763,7 @@ EOD;
                 $mandrillUsersEmailList,
                 $mandrillNewsletterSubject,
                 $content,
-                FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
+                FrontEnd_Helper_viewHelper::__email('email_Newsletter header'),
                 !empty($recipientMetaData[$mandrillUsersKey]) ? $recipientMetaData[$mandrillUsersKey] : '',
                 $mandrillMergeVars[$mandrillUsersKey],
                 $footerContent,

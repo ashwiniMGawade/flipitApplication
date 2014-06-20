@@ -152,7 +152,7 @@ class SignupController extends Zend_Controller_Action
         $content = array(
                         'name'    => 'content',
                         'content' => $this->view->partial(
-                            'emails/welcome.phtml',
+                            'emails/emailLayout.phtml',
                             array(
                                 'topOffers' => Offer::getTopOffers(5),
                                 'mailType' => 'welcome'

@@ -10,7 +10,6 @@ class BackEnd_Helper_MandrillHelper
 
     public static function getDirectLoginLinks($currentObject, $linkType = '', $visitorEmail = '', $mandrillKey = '')
     {
-        $email_data = Signupmaxaccount::getAllMaxAccounts();
         if ($linkType != 'script') {
             $testEmail = $currentObject->getRequest()->getParam('testEmail');
             $dummyPass = MD5('12345678');

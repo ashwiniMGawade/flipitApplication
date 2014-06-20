@@ -221,11 +221,12 @@ class SendNewsletter
         $mandrillNewsletterSubject = $settings[0]['emailsubject'];
         $mandrillSenderName = $settings[0]['sendername'];
         $categoryName = $topCategories[0]['category']['name'];
+        $categoryPermalink = $topCategories[0]['category']['permaLink'];
         try {
             FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                 $topVouchercodes,
                 $categoryVouchers,
-                $categoryName,
+                $categoryName.'|'.$categoryPermalink,
                 $mandrillNewsletterSubject,
                 $mandrillSenderEmailAddress,
                 $mandrillSenderName,
@@ -237,7 +238,8 @@ class SendNewsletter
                     'httpPath' => $this->_hostName,
                     'locale' => $key,
                     'httpPathLocale' => $this->_linkPath,
-                    'publicPathCdn' => $this->_public_cdn_path
+                    'publicPathCdn' => $this->_public_cdn_path,
+                    'mandrillKey' => $this->_mandrillKey
                 )
             );
             Signupmaxaccount::updateNewsletterSchedulingStatus();
