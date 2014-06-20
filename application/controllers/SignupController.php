@@ -48,7 +48,7 @@ class SignupController extends Zend_Controller_Action
         }
         $pageName = 'signup';
         $pageDetails =  Page::getPageDetails($pageName);
-        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->viewHelperObject->getMetaTags($this);
         
         $emailAddressFromMemory = '';

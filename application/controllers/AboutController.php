@@ -25,14 +25,14 @@ class AboutController extends Zend_Controller_Action
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->viewHelperObject->getMetaTags(
             $this,
-            $pageDetails->pageTitle,
-            $pageDetails->metaTitle,
-            $pageDetails->metaDescription,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
             FrontEnd_Helper_viewHelper::__link('redactie'),
             FACEBOOK_IMAGE,
-            $pageDetails->customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "all_about_pages_users_list",
             array(

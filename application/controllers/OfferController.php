@@ -23,15 +23,15 @@ class OfferController extends Zend_Controller_Action
         $pageName = 'top-20';
         $pageDetails = Page::getPageDetails($pageName);
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
-        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->viewHelperObject->getMetaTags(
             $this,
-            $pageDetails->pageTitle,
-            $pageDetails->metaTitle,
-            $pageDetails->metaDescription,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
             FrontEnd_Helper_viewHelper::__link($pageName),
             FACEBOOK_IMAGE,
-            $pageDetails->customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'top_20_offers_list',
@@ -169,18 +169,18 @@ class OfferController extends Zend_Controller_Action
             $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
         }
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
-        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->actionName = $this->getRequest()->getActionName();
         $this->view->top20PopularOffers = $offers;
         $this->viewHelperObject->getMetaTags(
             $this,
-            $pageDetails->pageTitle,
-            $pageDetails->metaTitle,
-            $pageDetails->metaDescription,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
             FrontEnd_Helper_viewHelper::__link('link_nieuw'),
             FACEBOOK_IMAGE,
-            $pageDetails->customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $this->view->shopId = '';
         $this->view->controllerName = $params['controller'];

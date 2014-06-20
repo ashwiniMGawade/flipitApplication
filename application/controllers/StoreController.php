@@ -186,7 +186,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $pageDetails = Page::getPageDetails(7);
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
-        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $allStoresList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_shops_list',
@@ -205,12 +205,12 @@ class StoreController extends Zend_Controller_Action
         );
         $this->viewHelperObject->getMetaTags(
             $this,
-            $pageDetails->pageTitle,
-            $pageDetails->metaTitle,
-            trim($pageDetails->metaDescription),
-            $pageDetails->permaLink,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            isset($pageDetails->permaLink) ? $pageDetails->permaLink : '',
             FACEBOOK_IMAGE,
-            $pageDetails->customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
 
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(

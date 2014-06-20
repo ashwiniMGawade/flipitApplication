@@ -8,12 +8,30 @@ class Page extends BasePage
         if (is_string($pageAttribute)) {
             $pageAttribute = self::getPageAttributeByPermalink($pageAttribute);
         }
-        $pageDetails = self::getPageDetailsByAttributeId($pageAttribute);
+        if(empty($pageAttribute)) {
+            $pageDetails = self::getPageDetailsByPermalink($pageAttribute);
+        } else {
+            $pageDetails = self::getPageDetailsByAttributeId($pageAttribute);
+        }
         if (!empty($pageDetails)) {
             return $pageDetails;
         } else {
             throw new Zend_Controller_Action_Exception('', 404);
         }
+    }
+
+    public static function getPageDetailsByPermalink($permalink)
+    {
+        $pageDetails = Doctrine_Query::create()
+            ->select('p.*, img.id, img.path, img.name')
+            ->from('Page p')
+            ->leftJoin('p.logo img')
+            ->where("p.permaLink='".$permalink."'")
+            ->andWhere('p.publish=1')
+            ->andWhere('p.pagelock=0')
+            ->andWhere('p.deleted=0')
+            ->fetchArray();
+        return $pageDetails;
     }
 
     public static function getPageAttributeByPermalink($permalink)

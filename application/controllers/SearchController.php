@@ -28,7 +28,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $pageDetails = Page::getPageDetails($pagePermalink);
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
-        $this->view->pageTitle = $pageDetails->pageTitle;
+        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $searchedKeywords = $this->getRequest()->getParam('searchField');
         $shopIds = "";
         $shopIds =$this->_helper->Search->getExcludedShopIdsBySearchedKeywords($searchedKeywords);
@@ -55,15 +55,14 @@ class SearchController extends Zend_Controller_Action
         }
 
         $this->view->searchedKeyword = ($searchedKeywords !="" || $searchedKeywords != null) ? $searchedKeywords : '';
-        $customHeader = isset($pageDetails->customHeader) ? $pageDetails->customHeader : '';
         $this->viewHelperObject->getMetaTags(
         	$this,
-        	$pageDetails->pageTitle,
-        	$pageDetails->metaTitle,
-        	trim($pageDetails->metaDescription),
-        	$pageDetails->permaLink,
+        	isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+        	isset($pageDetails->permaLink) ? $pageDetails->permaLink : '',
         	FACEBOOK_IMAGE,
-        	$customHeader
+        	isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
         	'formSignupSidebarWidget',

@@ -61,12 +61,12 @@ class CategoryController extends Zend_Controller_Action
         $pageDetails = Page::getPageDetails(9);
         $this->viewHelperObject->getMetaTags(
             $this,
-            $pageDetails->pageTitle,
-            $pageDetails->metaTitle,
-            trim($pageDetails->metaDescription),
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
             FrontEnd_Helper_viewHelper::__link('link_categorieen'),
             FACEBOOK_IMAGE,
-            $pageDetails->customHeader
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $allCategories = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
