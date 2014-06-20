@@ -19,7 +19,7 @@ class Category extends BaseCategory
     public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
     {
         $categoryOffers= array();
-        $currentDateAndTime = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoryOffersList = Doctrine_Query::create()
         ->select(
             "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,
