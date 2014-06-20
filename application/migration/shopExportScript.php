@@ -1,71 +1,43 @@
 <?php
-
-/**
- * Script for exporting the shops
- *
- * @author Raman
- *
- */
 class ShopExport
 {
     protected $_localePath = '/';
     protected $_hostName = '';
     protected $_trans = null;
 
-
     public function __construct()
     {
-    ini_set('memory_limit', '-1');
-
-    set_time_limit(0);
-    /*
-    $domain1 = $_SERVER['HOSTNAME'];
-    $domain = 'http://www.'.$domain1;
-    */
-
-
+        ini_set('memory_limit', '-1');
+        set_time_limit(0);
         require_once('ConstantForMigration.php');
         require_once('CommonMigrationFunctions.php');
-        // Create application, bootstrap, and run
-        $application = new Zend_Application(APPLICATION_ENV,
-                APPLICATION_PATH . '/configs/application.ini');
-
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
         $connections = $application->getOption('doctrine');
         spl_autoload_register(array('Doctrine', 'autoload'));
-
         $manager = Doctrine_Manager::getInstance();
-
         $imbull = $connections['imbull'];
-
-        // cycle htoruh all site database
         $DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
-
         echo "\n";
         print "Get all shops data from databases of all locales\n";
 
-        // cycle htoruh all site database
-        foreach ( $connections as $key => $connection ) {
-            // check database is being must be site
+        foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-
-                    $this->exportingShops( $connection ['dsn'], $key ,$imbull );
-
-                    } catch ( Exception $e ) {
-
-                    echo $e->getMessage ();
+                    $this->exportingShops($connection ['dsn'], $key, $imbull);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
                     echo "\n\n";
                 }
                 echo "\n\n";
             }
         }
-
-        //$this->exportingShops($connections['en']['dsn'], 'en' ,$imbull ); //uncommnet this line when you check only kortingscode.nl excel export list
-
         $manager->closeConnection($DMC1);
     }
 
-    protected function exportingShops($dsn, $key,$imbull)
+    protected function exportingShops($dsn, $key, $imbull)
     {
         if ($key == 'en') {
             $this->_localePath = '';
@@ -79,39 +51,37 @@ class ShopExport
         }
 
         defined('PUBLIC_PATH')
-        || define('PUBLIC_PATH',
-                dirname(dirname(dirname(__FILE__)))."/public/");
+        || define(
+            'PUBLIC_PATH',
+            dirname(dirname(dirname(__FILE__)))."/public/"
+        );
 
         $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
         spl_autoload_register(array('Doctrine', 'modelsAutoload'));
-
         $manager = Doctrine_Manager::getInstance();
-        //Doctrine_Core::loadModels(APPLICATION_PATH . '/models/generated');
-
         $manager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING, Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
         $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-
         $cutsomLocale = Signupmaxaccount::getAllMaxAccounts();
         $cutsomLocale = !empty($cutsomLocale[0]['locale']) ? $cutsomLocale[0]['locale'] : 'nl_NL';
-
         $this->_trans = new Zend_Translate(array(
                 'adapter' => 'gettext',
                 'disableNotices' => true));
-
         $this->_trans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $suffix . '.mo',
-                        'locale' => $cutsomLocale,
-                )
+            array(
+                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php'
+                    . $suffix . '.mo',
+                    'locale' => $cutsomLocale,
+            )
         );
 
         $this->_trans->addTranslation(
-                array(
-                        'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $suffix . '.mo',
-                        'locale' => $cutsomLocale ,
-                )
+            array(
+                    'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links'
+                    . $suffix . '.mo',
+                    'locale' => $cutsomLocale ,
+            )
         );
 
 
@@ -120,31 +90,15 @@ class ShopExport
         $year = $date->get(Zend_Date::YEAR);
         $day = $date->get(Zend_Date::DAY);
 
-
-        #define currecnt month for text with [month]
-        defined('CURRENT_MONTH')
-                || define('CURRENT_MONTH', $month );
-
-                        #define currecnt year for text with [year]
-        defined('CURRENT_YEAR')
-        || define('CURRENT_YEAR', $year );
-
-        #define currecnt day for text with [day]
-        defined('CURRENT_DAY')
-        || define('CURRENT_DAY', $day );
-
-        defined ( 'PUBLIC_PATH' ) || define ( 'PUBLIC_PATH', dirname ( dirname ( dirname ( __FILE__ ) ) ) . "/public/" );
-
-
-        //setting to no time limit,
+        defined('CURRENT_MONTH')|| define('CURRENT_MONTH', $month);
+        defined('CURRENT_YEAR') || define('CURRENT_YEAR', $year);
+        defined('CURRENT_DAY')  || define('CURRENT_DAY', $day);
+        defined('PUBLIC_PATH') || define(
+            'PUBLIC_PATH',
+            dirname(dirname(dirname(__FILE__))) . "/public/"
+        );
         set_time_limit(0);
-
-        //declaring class instance
         $data =  Shop::exportShopeList();
-
-        //echo "<pre>";
-        //print_r($data); die;
-        //create object of phpExcel
         echo "\n";
         print "Parse shops data and save it into excel file\n";
 
@@ -173,7 +127,10 @@ class ShopExport
         $objPHPExcel->getActiveSheet()->setCellValue('U1', $this->_trans->translate('Actual URL'));
         $objPHPExcel->getActiveSheet()->setCellValue('V1', $this->_trans->translate('Shop Text'));
         $objPHPExcel->getActiveSheet()->setCellValue('W1', $this->_trans->translate('Days Without Online Coupons'));
-        $objPHPExcel->getActiveSheet()->setCellValue('X1', $this->_trans->translate('No. of Times Shop became Favourite'));
+        $objPHPExcel->getActiveSheet()->setCellValue(
+            'X1',
+            $this->_trans->translate('No. of Times Shop became Favourite')
+        );
         $objPHPExcel->getActiveSheet()->setCellValue('Y1', $this->_trans->translate('Last week Clickouts'));
         $objPHPExcel->getActiveSheet()->setCellValue('Z1', $this->_trans->translate('Total Clickouts'));
         $objPHPExcel->getActiveSheet()->setCellValue('AA1', $this->_trans->translate('Amount of Coupons'));
@@ -187,208 +144,147 @@ class ShopExport
         $objPHPExcel->getActiveSheet()->setCellValue('AI1', $this->_trans->translate('Extra opties'));
         $objPHPExcel->getActiveSheet()->setCellValue('AJ1', $this->_trans->translate('Last Updated'));
 
-
         $column = 2;
         $row = 2;
 
-        //loop for each shop
         foreach ($data as $shop) {
             print ".";
-
-            //condition apply on affliatedprograme
             $prog = '';
-            if($shop['affliateProgram']==true){
-
+            if ($shop['affliateProgram']==true) {
                 $prog = $this->_trans->translate('Yes');
-            } else{
+            } else {
                 $prog = $this->_trans->translate('No');
             }
 
-            //get account manage name from array
             $accountManagername = '';
-            if($shop['accountManagerName']==''
+            if ($shop['accountManagerName']==''
                     ||$shop['accountManagerName']=='undefined'
                     ||$shop['accountManagerName']==null
-                    ||$shop['accountManagerName']=='0'){
-
+                    ||$shop['accountManagerName']=='0') {
                 $accountManagername ='';
             } else {
-
                 $accountManagername = User::getUserName($shop['accoutManagerId']);
             }
 
-            //create start date format
             $startDate =  date("d-m-Y", strtotime($shop['created_at']));
 
-            //get affilate network from array
             $affilateNetwork = '';
-
-                if($shop['affname']==null
-                        ||$shop['affname']==''
-                        ||$shop['affname']=='undefined'){
-
-                    $affilateNetwork = '';
-
-                }  else {
-
-                    $affilateNetwork = $shop['affname'];
-                }
-
-
-            //get offline (status of shop from array
-            $offLine='';
-            if($shop['status']==true){
-
-                $offLine=$this->_trans->translate('Yes');
-
+            if ($shop['affname'] == null
+                    ||$shop['affname']==''
+                    ||$shop['affname']=='undefined') {
+                $affilateNetwork = '';
             } else {
+                $affilateNetwork = $shop['affname'];
+            }
 
+            $offLine = '';
+            if ($shop['status']==true) {
+                $offLine=$this->_trans->translate('Yes');
+            } else {
                 $offLine=$this->_trans->translate('No');
             }
 
-            //get offline since or not from array
             $offLineSince = '';
-            if($shop['offlineSicne']=='undefined'
+            if ($shop['offlineSicne'] == 'undefined'
                     || $shop['offlineSicne']==null
-                    || $shop['offlineSicne']==''){
-
+                    || $shop['offlineSicne']=='') {
                 $offLineSince='';
-
             } else {
-
                 $offLineSince = date("d-m-Y", strtotime($shop['offlineSicne']));
             }
 
             $overriteTitle = '';
-            if($shop['overriteTitle']=='undefined'
+            if ($shop['overriteTitle'] == 'undefined'
                     || $shop['overriteTitle']==null
-                    || $shop['overriteTitle']==''){
-
+                    || $shop['overriteTitle']=='') {
                 $overriteTitle='';
-
             } else {
-
                 $overriteTitle = $shop['overriteTitle'];
             }
 
             $metaDesc = '';
-            if($shop['metaDescription']=='undefined'
+            if ($shop['metaDescription']=='undefined'
                     || $shop['metaDescription']==null
-                    || $shop['metaDescription']==''){
-
+                    || $shop['metaDescription']=='') {
                 $metaDesc='';
-
             } else {
-
                 $metaDesc = $shop['metaDescription'];
             }
 
             $userGenerated = '';
-            if($shop['usergenratedcontent']==true){
-
+            if ($shop['usergenratedcontent']==true) {
                 $userGenerated= $this->_trans->translate('Yes');
-            } else{
+            } else {
                 $userGenerated = $this->_trans->translate('No');
             }
 
-
             $howToGuide = '';
-            if($shop['howToUse']==true){
-
+            if ($shop['howToUse']==true) {
                 $howToGuide = $this->_trans->translate('Yes');
-            } else{
+            } else {
                 $howToGuide = $this->_trans->translate('No');
             }
 
-            # if it is set then current shop has atleast one new ticker
             $newsTicker = '';
-            if($shop['newsTickerTime'] > 0 ){
-
+            if ($shop['newsTickerTime'] > 0) {
                 $newsTicker = $this->_trans->translate('Yes');
-            } else{
+            } else {
                 $newsTicker = $this->_trans->translate('No');
             }
 
-            //get offline since or not from array
             $lastUpdated = '';
-
-
-            # gte shop updated time based on shop updated time and its' newstickers update time and offers update time
             $shopTime = strtotime(@$shop['updated_at']);
-
             $newTickerTime = isset($shop['newsTickerTime'])
-            ? strtotime($shop['newsTickerTime']) : false 	;
-
+            ? strtotime($shop['newsTickerTime']) : false;
             $offerTime =	 isset($shop['offerTime'])
-            ? strtotime($shop['offerTime']) : false ;
-
-            # get latetest time among three
+            ? strtotime($shop['offerTime']) : false;
             $lastUpdated = max($shopTime, $newTickerTime, $offerTime);
-
-
             $lastUpdated = date("d-m-Y H:i:s", $lastUpdated);
 
-
-
-            if($shop['discussions'] ==true){
-
+            if ($shop['discussions'] ==true) {
                 $discussion = $this->_trans->translate('Yes');
-            } else{
+            } else {
                 $discussion = $this->_trans->translate('No');
             }
 
-
-
             $title = '';
-            if($shop['title']=='undefined'
+            if ($shop['title']=='undefined'
                     || $shop['title']==null
-                    || $shop['title']==''){
-
+                    || $shop['title']=='') {
                 $title='';
-
             } else {
-
                 $title = FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']);
             }
 
             $subTitle = '';
-            if($shop['subTitle']=='undefined'
+            if ($shop['subTitle']=='undefined'
                     || $shop['subTitle']==null
-                    || $shop['subTitle']==''){
-
+                    || $shop['subTitle']=='') {
                 $subTitle ='';
-
             } else {
-
                 $subTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']);
             }
 
             $notes = '';
-            if($shop['notes']=='undefined'
+            if ($shop['notes']=='undefined'
                     || $shop['notes']==null
-                    || $shop['notes']==''){
-
+                    || $shop['notes']=='') {
                 $notes ='';
-
             } else {
-
                 $notes = $shop['notes'];
             }
 
             $contentManagerName = '';
-            if($shop['contentManagerId']=='undefined'
+            if ($shop['contentManagerId']=='undefined'
                     || $shop['contentManagerId']==null
-                    || $shop['contentManagerId']==''){
-
+                    || $shop['contentManagerId']=='') {
                 $contentManagerName ='';
-
             } else {
-
                 $contentManagerName = User::getUserName($shop['contentManagerId']);
             }
 
             $categories = '';
-            if(!empty($shop['category'])){
+            if (!empty($shop['category'])) {
                 $prefix = '';
                 foreach ($shop['category'] as $cat) {
                     $categories .= $prefix  . $cat['name'];
@@ -397,7 +293,7 @@ class ShopExport
             }
 
             $relatedshops = '';
-            if(!empty($shop['relatedshops'])){
+            if (!empty($shop['relatedshops'])) {
                 $prefix = '';
                 foreach ($shop['relatedshops'] as $rShops) {
                     $relatedshops .= $prefix  . $rShops['name'];
@@ -406,93 +302,78 @@ class ShopExport
             }
 
             $deeplink = '';
-            if($shop['deepLink']=='undefined'
+            if ($shop['deepLink']=='undefined'
                     || $shop['deepLink']==null
-                    || $shop['deepLink']==''){
-
+                    || $shop['deepLink']=='') {
                 $deeplink ='';
-
             } else {
-
                 $deeplink = $shop['deepLink'];
             }
 
             $refUrl = '';
-            if($shop['refUrl']=='undefined'
+            if ($shop['refUrl']=='undefined'
                     || $shop['refUrl']==null
-                    || $shop['refUrl']==''){
-
+                    || $shop['refUrl']=='') {
                 $refUrl ='';
-
             } else {
-
                 $refUrl = $shop['refUrl'];
             }
 
             $actualUrl = '';
-            if($shop['actualUrl']=='undefined'
+            if ($shop['actualUrl']=='undefined'
                     || $shop['actualUrl']==null
-                    || $shop['actualUrl']==''){
-
+                    || $shop['actualUrl']=='') {
                 $actualUrl ='';
-
             } else {
-
                 $actualUrl = $shop['actualUrl'];
             }
 
             $shopText = '';
-            if($shop['shopText']=='undefined'
+            if ($shop['shopText']=='undefined'
                     || $shop['shopText']==null
-                    || $shop['shopText']==''){
-
+                    || $shop['shopText']=='') {
                 $shopText ='';
-
             } else {
-
                 $shopText = $shop['shopText'];
             }
 
 
-            if($shop['showSimliarShops'] == 1){
+            if ($shop['showSimliarShops'] == 1) {
                 $showSimliarShops = $this->_trans->translate('Yes');
             } else {
                 $showSimliarShops = $this->_trans->translate('No');
             }
 
-
-            if($shop['showSignupOption'] == 1){
+            if ($shop['showSignupOption'] == 1) {
                 $showSignupOption = $this->_trans->translate('Yes');
             } else {
                 $showSignupOption = $this->_trans->translate('No');
             }
 
 
-            if($shop['showChains'] == 1){
+            if ($shop['showChains'] == 1) {
                 $showChains = $this->_trans->translate('Yes');
             } else {
                 $showChains = $this->_trans->translate('No');
             }
 
-            if($shop['customHeader']){
+            if ($shop['customHeader']) {
                 $customHeader = $this->_trans->translate('Yes');
             } else {
                 $customHeader = $this->_trans->translate('No');
             }
 
 
-            if($shop['displayExtraProperties'] == 1){
+            if ($shop['displayExtraProperties'] == 1) {
                 $displayExtraProperties = $this->_trans->translate('Yes');
             } else {
                 $displayExtraProperties = $this->_trans->translate('No');
             }
 
             $shopId = $shop['id'];
-            //Extra columns added to excel export
             $daysWithoutCoupon = Shop::getDaysSinceShopWithoutOnlneOffers($shopId);
             $timesShopFavourite = Shop::getTimesShopFavourite($shopId);
             $lastWeekClicks = ShopViewCount::getAmountClickoutOfShop($shopId);
-            //$totalClicks = ShopViewCount::getTotalAmountClicksOfShop($shopId);
             $totalClicks =  ShopViewCount::getTotalViewCountOfShopAndOffer($shopId);
             $totalAmountCoupons = Offer::getTotalAmountOfCouponsShop($shopId, 'CD');
             $totalAmountOffers = Offer::getTotalAmountOfCouponsShop($shopId);
@@ -500,7 +381,7 @@ class ShopExport
             //set value in column of excel
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $shop['permaLink']);
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$column,$prog);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $prog);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $accountManagername);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $startDate);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $affilateNetwork);
@@ -528,8 +409,6 @@ class ShopExport
             $objPHPExcel->getActiveSheet()->setCellValue('AB'.$column, $totalAmountOffers);
             $objPHPExcel->getActiveSheet()->setCellValue('AC'.$column, $howToGuide);
             $objPHPExcel->getActiveSheet()->setCellValue('AD'.$column, $newsTicker);
-
-
             $objPHPExcel->getActiveSheet()->setCellValue('AE'.$column, $showSignupOption);
             $objPHPExcel->getActiveSheet()->setCellValue('AF'.$column, $showSimliarShops);
             $objPHPExcel->getActiveSheet()->setCellValue('AG'.$column, $showChains);
@@ -537,12 +416,10 @@ class ShopExport
             $objPHPExcel->getActiveSheet()->setCellValue('AI'.$column, $displayExtraProperties);
             $objPHPExcel->getActiveSheet()->setCellValue('AJ'.$column, $lastUpdated);
 
-            //counter incriment by 1
             $column++;
             $row++;
         }
 
-        //FORMATING OF THE EXCELL
         $headerStyle = array(
                 'fill' => array(
                         'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -556,20 +433,17 @@ class ShopExport
                 array('outline' =>
                         array('style' => PHPExcel_Style_Border::BORDER_THICK,
                                 'color' => array('argb' => '000000'),	),),);
-        //HEADER COLOR
 
         $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AJ1')->applyFromArray($headerStyle);
-
-        //SET ALIGN OF TEXT
-        $objPHPExcel->getActiveSheet()->getStyle('A1:AJ1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('B2:AJ'.$row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
-
-        //BORDER TO CELL
+        $objPHPExcel->getActiveSheet()->getStyle('A1:AJ1')->getAlignment()->setHorizontal(
+            PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+        );
+        $objPHPExcel->getActiveSheet()->getStyle('B2:AJ'.$row)->getAlignment()->setVertical(
+            PHPExcel_Style_Alignment::VERTICAL_TOP
+        );
         $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AJ1')->applyFromArray($borderStyle);
         $borderColumn =  (intval($column) -1 );
-
         $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AJ'.$borderColumn)->applyFromArray($borderStyle);
-
 
         //SET SIZE OF THE CELL
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
@@ -604,36 +478,25 @@ class ShopExport
         $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
 
-
-
         $pathToFile = UPLOAD_EXCEL_TMP_PATH . strtolower($this->_localePath) . 'excels/' ;
 
-        if(!file_exists($pathToFile)) {
-            mkdir($pathToFile, 0774, TRUE);
+        if (!file_exists($pathToFile)) {
+            mkdir($pathToFile, 0774, true);
         }
 
         $filepath = $pathToFile . "shopList.xlsx" ;
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($filepath);
         $manager->closeConnection($DMC);
-
         echo "\n";
         print "$key - Shops have been exported successfully!!!";
 
-        if($key == 'en') {
+        if ($key == 'en') {
             $key = 'excels';
         }
 
-      CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$key, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
-      CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$key);
-
-
+        CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$key, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
+        CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$key);
     }
-
-
-
-
-
 }
-
 new ShopExport();

@@ -15,21 +15,16 @@ class Category extends BaseCategory
     #####################################################
     ############# REFACORED CODE ########################
     #####################################################
-    /**
-     * Function getCategoryVoucherCodes.
-     *
-     * get vouchercodes per category.
-     *
-     * @return array $categoryOffers
-     * @version 1.0
-     */
+
     public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
     {
         $categoryOffers= array();
-        $currentDateAndTime = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoryOffersList = Doctrine_Query::create()
         ->select(
-            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink, o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,fv.shopId,fv.visitorId,fv.Id,terms.content"
+            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,
+            o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,
+            fv.shopId,fv.visitorId,fv.Id,terms.content"
         )
         ->from("refOfferCategory roc")
         ->leftJoin("roc.Category c")
@@ -47,7 +42,11 @@ class Category extends BaseCategory
         $categoryOffersList->andWhere("c.deleted = 0")
         ->andWhere("c.status= 1")
         ->andWhere('o.discounttype="CD"')
-        ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+        ->andWhere(
+            "(couponCodeType = 'UN' AND (
+            SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0
+            ) or couponCodeType = 'GN'"
+        )
         ->andWhere("s.deleted = 0")
         ->andWhere("s.status = 1")
         ->andWhere("o.deleted = 0")
@@ -60,7 +59,9 @@ class Category extends BaseCategory
         ->addOrderBy('o.startDate DESC')
         ->limit($numberOfOffers);
         $categoryOffersList = $categoryOffersList->fetchArray();
-        return $categoriesoffers = $pageName=='home' ? $categoryOffersList : self::changeDataAccordingToOfferHtml($categoryOffersList);
+        return $categoriesoffers = $pageName=='home'
+        ? $categoryOffersList
+        : self::changeDataAccordingToOfferHtml($categoryOffersList);
 
     }
 
@@ -71,22 +72,26 @@ class Category extends BaseCategory
         }
         return $categoryOffers;
     }
-    /**
-     * Function getPopularCategories.
-     *
-     * Get popular Category list from database for front-end.
-     *
-     * @version 1.0
-     * @return array $allCategories
-     */
+    
     public static function getPopularCategories($categoriesLimit = 0)
     {
-        $currentDateAndTime = date('Y-m-d H:i:s');
+        $currentDateAndTime = date('Y-m-d 00:00:00');
         $popularCategories = Doctrine_Query::create()
         ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
         ->from('PopularCategory p')
-        ->addSelect("(SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'".$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff")
-        ->addSelect("(SELECT  count(*) FROM refOfferCategory roc1 LEFT JOIN roc1.Offer off1 LEFT JOIN off1.shop s1  WHERE  off1.deleted = 0 and s1.deleted = 0 and roc1.categoryId = p.categoryId and off1.enddate >'".$currentDateAndTime."'  and off1.Visability!='MEM') as totalOffers")
+        ->addSelect(
+            "(
+                SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  
+                off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'"
+            .$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff"
+        )
+        ->addSelect(
+            "(SELECT count(off1.id) FROM refShopCategory roc1 LEFT JOIN roc1.shops s1 LEFT JOIN s1.offer off1  
+                WHERE  s1.deleted = 0 and 
+                s1.status = 1 and off1.deleted = 0 and roc1.categoryId = p.categoryId  
+                and off1.enddate >'".$currentDateAndTime."' and off1.startdate < '".$currentDateAndTime."') 
+                as totalOffers"
+        )
         ->leftJoin('p.category o')
         ->leftJoin('o.categoryicon i')
         ->where('o.deleted=0')
@@ -100,7 +105,10 @@ class Category extends BaseCategory
     public static function getCategoryDetails($permalink)
     {
         $categoryDetails = Doctrine_Query::create()
-        ->select("c.*,i.name,i.path, categoryfeaturedimage.name, categoryfeaturedimage.path, categoryheaderimage.name, categoryheaderimage.path")
+        ->select(
+            "c.*,i.name,i.path, categoryfeaturedimage.name, categoryfeaturedimage.path, categoryheaderimage.name,
+            categoryheaderimage.path"
+        )
         ->from('Category c')
         ->LeftJoin("c.categoryicon i")
         ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
@@ -112,13 +120,7 @@ class Category extends BaseCategory
         return $categoryDetails;
 
     }
-    /**
-     * Save new category.
-     *
-     * @param array $categoryParameter
-     * @return mixed
-     * @version 1.0
-     */
+   
     public static function saveCategories($categoryParameter)
     {
         $category = new Category();
@@ -141,66 +143,100 @@ class Category extends BaseCategory
             self::updateFeaturedCategory($category->id);
             self::categoryRoutePermalinkSave($categoryParameter, $category);
             return array($category->toArray(), $category->toArray());
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return false;
         }
     }
 
-    /**
-     * Update by id category.
-     *
-     * @param array $categoryParameter
-     * @version 1.0
-     */
     public static function updateCategory($categoryParameter)
     {
-        $category = Doctrine_Core::getTable('Category')->find( $categoryParameter['id']);
+        $category = Doctrine_Core::getTable('Category')->find($categoryParameter['id']);
         self::getCategoryParameters($categoryParameter, $category);
        
-        if($_FILES['categoryIconNameHidden']['name'] != ''
-            && $_FILES['categoryFeaturedImage']['name'] != '' 
-            && $_FILES['categoryHeaderImage']['name'] != '' ){
+        if ($_FILES['categoryIconNameHidden']['name'] != ''
+            && $_FILES['categoryFeaturedImage']['name'] != ''
+            && $_FILES['categoryHeaderImage']['name'] != '' ) {
             $categoryIconId = self::
-                setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+                setCategoryImage(
+                    $_FILES['categoryIconNameHidden']['name'],
+                    'categoryIconNameHidden',
+                    $category,
+                    'thumb'
+                );
             $category->categoryIconId = $categoryIconId;
             $categoryFeaturedImageId = self::
-                setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+                setCategoryImage(
+                    $_FILES['categoryFeaturedImage']['name'],
+                    'categoryFeaturedImage',
+                    $category,
+                    'featured'
+                );
             $category->categoryFeaturedImageId = $categoryFeaturedImageId;
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
             $category->categoryHeaderImageId = $categoryHeaderImageId;
-        }else if($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != ''){
+        } elseif ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
             $categoryIconId = self::
-                setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+                setCategoryImage(
+                    $_FILES['categoryIconNameHidden']['name'],
+                    'categoryIconNameHidden',
+                    $category,
+                    'thumb'
+                );
             $category->categoryIconId = $categoryIconId;
             $categoryFeaturedImageId = self::
-                setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
-            $category->categoryFeaturedImageId = $categoryFeaturedImageId;    
-        }else if($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryHeaderImage']['name'] != ''){
-            $categoryIconId = self::
-                setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
-            $category->categoryIconId = $categoryIconId;
-            $categoryHeaderImageId = self::
-                setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-            $category->categoryHeaderImageId = $categoryHeaderImageId;
-        }else if($_FILES['categoryHeaderImage']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '' ){
-            $categoryHeaderImageId = self::
-                setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-            $category->categoryHeaderImageId = $categoryHeaderImageId;
-            $categoryFeaturedImageId = self::
-                setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+                setCategoryImage(
+                    $_FILES['categoryFeaturedImage']['name'],
+                    'categoryFeaturedImage',
+                    $category,
+                    'featured'
+                );
             $category->categoryFeaturedImageId = $categoryFeaturedImageId;
-        }elseif($_FILES['categoryIconNameHidden']['name'] != '' &&  $_FILES['categoryFeaturedImage']['name'] == '' &&
+        } elseif ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryHeaderImage']['name'] != '') {
+            $categoryIconId = self::
+                setCategoryImage(
+                    $_FILES['categoryIconNameHidden']['name'],
+                    'categoryIconNameHidden',
+                    $category,
+                    'thumb'
+                );
+            $category->categoryIconId = $categoryIconId;
+            $categoryHeaderImageId = self::
+                setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
+            $category->categoryHeaderImageId = $categoryHeaderImageId;
+        } elseif ($_FILES['categoryHeaderImage']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
+            $categoryHeaderImageId = self::
+                setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
+            $category->categoryHeaderImageId = $categoryHeaderImageId;
+            $categoryFeaturedImageId = self::
+                setCategoryImage(
+                    $_FILES['categoryFeaturedImage']['name'],
+                    'categoryFeaturedImage',
+                    $category,
+                    'featured'
+                );
+            $category->categoryFeaturedImageId = $categoryFeaturedImageId;
+        } elseif ($_FILES['categoryIconNameHidden']['name'] != '' &&  $_FILES['categoryFeaturedImage']['name'] == '' &&
             $_FILES['categoryHeaderImage']['name'] == '' ) {
             $categoryIconId = self::
-                setCategoryImage($_FILES['categoryIconNameHidden']['name'], 'categoryIconNameHidden', $category, 'thumb');
+                setCategoryImage(
+                    $_FILES['categoryIconNameHidden']['name'],
+                    'categoryIconNameHidden',
+                    $category,
+                    'thumb'
+                );
             $category->categoryIconId = $categoryIconId;
-        }elseif($_FILES['categoryFeaturedImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' && 
+        } elseif ($_FILES['categoryFeaturedImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
             $_FILES['categoryHeaderImage']['name'] == '') {
             $categoryFeaturedImageId = self::
-                setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
+                setCategoryImage(
+                    $_FILES['categoryFeaturedImage']['name'],
+                    'categoryFeaturedImage',
+                    $category,
+                    'featured'
+                );
             $category->categoryFeaturedImageId = $categoryFeaturedImageId;
-        }elseif($_FILES['categoryHeaderImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
+        } elseif ($_FILES['categoryHeaderImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
             $_FILES['categoryFeaturedImage']['name'] == '') {
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
@@ -219,11 +255,11 @@ class Category extends BaseCategory
         try {
             $category->save();
             self::updateFeaturedCategory($categoryParameter['id']);
-            if(!empty($getRouteLink)){
+            if (!empty($getRouteLink)) {
                 self::updateCategoryRoutePermalink($categoryParameter, $categoryInfo);
             }
             return true;
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             return false;
         }
 
@@ -234,7 +270,8 @@ class Category extends BaseCategory
         $category->name = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["categoryName"]);
         $category->permaLink = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["permaLink"]);
         $category->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["metaTitle"]);
-        $category->metaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["metaDescription"]);
+        $category->metaDescription = BackEnd_Helper_viewHelper::
+            stripSlashesFromString($categoryParameter["metaDescription"]);
         $category->description = BackEnd_Helper_viewHelper::stripSlashesFromString($categoryParameter["description"]);
         $category->featured_category = $categoryParameter["featuredCategory"];
         return true;
@@ -269,7 +306,12 @@ class Category extends BaseCategory
 
     public static function getCategoryRoutePermalink($categoryInfo)
     {
-        return Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = '".$categoryInfo[0]['permaLink']."'")->andWhere('type = "CAT"')->fetchArray();
+        return Doctrine_Query::create()
+            ->select()
+            ->from('RoutePermalink')
+            ->where("permalink = '".$categoryInfo[0]['permaLink']."'")
+            ->andWhere('type = "CAT"')
+            ->fetchArray();
     }
 
     public static function getCategoryById($categoryId)
@@ -281,8 +323,10 @@ class Category extends BaseCategory
     {
         $categoryPermalink = 'category/show/id/'.$category['id'];
         $updateRouteLink = Doctrine_Query::create()->update('RoutePermalink')
-            ->set('permalink', "'".
-            BackEnd_Helper_viewHelper::stripSlashesFromString($category["permaLink"]) ."'")
+            ->set(
+                'permalink',
+                "'".BackEnd_Helper_viewHelper::stripSlashesFromString($category["permaLink"]) ."'"
+            )
             ->set('type', "'CAT'")
             ->set('exactlink', "'".$categoryPermalink."'");
         $updateRouteLink->where('type = "CAT"')->andWhere("permalink = '".$categoryInfo[0]['permaLink']."'")->execute();
@@ -324,7 +368,10 @@ class Category extends BaseCategory
     public static function getCategoryInformation($categoryId)
     {
         $categoryDetails = Doctrine_Query::create()
-        ->select("c.*,i.name,i.path,categoryfeaturedimage.name,categoryfeaturedimage.path, categoryheaderimage.name,categoryheaderimage.path")
+        ->select(
+            "c.*,i.name,i.path,categoryfeaturedimage.name,categoryfeaturedimage.path, categoryheaderimage.name,
+            categoryheaderimage.path"
+        )
         ->from('Category c')
         ->LeftJoin("c.categoryicon i")
         ->LeftJoin("c.categoryfeaturedimage categoryfeaturedimage")
@@ -333,7 +380,57 @@ class Category extends BaseCategory
         ->andWhere('c.deleted=0')
         ->fetchArray();
         return $categoryDetails;
+    }
 
+    public static function uploadImage($file)
+    {
+        $uploadPath = UPLOAD_IMG_PATH."category/";
+        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $rootPath = ROOT_PATH.$uploadPath;
+        $files = $adapter->getFileInfo($file);
+        
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 0776, true);
+        }
+
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, 'jpg,png');
+        $adapter->addValidator('Size', false, array('max' => '2MB'));
+        $fileName = $adapter->getFileName($file, false);
+        $newImageName = time() . "_" . $fileName;
+        $changedImagePath = $rootPath . $newImageName;
+
+        $path = ROOT_PATH . $uploadPath . "thum_" . $newImageName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newImageName, 135, 95, $path);
+
+        $path = ROOT_PATH. $uploadPath . "thum_medium_" . $newImageName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newImageName, 50, 50, $path);
+
+        $path = ROOT_PATH . $uploadPath . "thum_large_" . $newImageName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newImageName, 95, 95, $path);
+
+        $path = ROOT_PATH . $uploadPath . "thum_small_" . $newImageName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newImageName, 24, 24, $path);
+
+        $adapter
+        ->addFilter(
+            new Zend_Filter_File_Rename(
+                array('target' => $changedImagePath,
+                    'overwrite' => true)
+            ),
+            null,
+            $file
+        );
+        $adapter->receive($file);
+
+        if ($adapter->isValid($file)) {
+            return array(
+                "fileName" => $newImageName,
+                "status" => "200",
+                    "path" => $uploadPath);
+        } else {
+            return array("status" => "-1");
+        }
     }
     #####################################################
     ############# ENd REFACORED CODE ####################
@@ -347,79 +444,7 @@ class Category extends BaseCategory
      * @version 1.0
      */
 
-    public static function uploadImage($file)
-    {
-       // generate upload path for images related to category
-        $uploadPath = UPLOAD_IMG_PATH."category/";
-        $adapter = new Zend_File_Transfer_Adapter_Http();
-        // generate real path for upload path
-        $rootPath = ROOT_PATH.$uploadPath;
-        //echo $rootPath; die;
-        // get upload file info
-        $files = $adapter->getFileInfo($file);
 
-        // check upload directory exists, if no then create upload directory
-        if (!file_exists($rootPath))
-            mkdir($rootPath ,776, true);
-
-
-        // set destination path and apply validations
-        $adapter->setDestination($rootPath);
-        $adapter->addValidator('Extension', false, 'jpg,png');
-        $adapter->addValidator('Size', false, array('max' => '2MB'));
-
-        // get file name
-        $name = $adapter->getFileName($file, false);
-
-        // rename file name to by prefixing current unix timestamp
-        $newName = time() . "_" . $name;
-
-        // generates complete path of image
-        $cp = $rootPath . $newName;
-
-
-        /**
-         *	 generating thumnails for image
-         */
-
-        $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 135, 95, $path);
-
-        $path = ROOT_PATH. $uploadPath . "thum_medium_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 50, 50, $path);
-
-        $path = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 95, 95, $path);
-
-        $path = ROOT_PATH . $uploadPath . "thum_small_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 24, 24, $path);
-
-        //echo "<pre>"; print_r($file); die;
-        //apply filter to rename file name and set target
-        $adapter
-        ->addFilter(
-                new Zend_Filter_File_Rename(
-                        array('target' => $cp, 'overwrite' => true)),
-                null, $file);
-
-        // recieve file for upload
-        $adapter->receive($file);
-
-        // check is file is valid then
-
-        if ($adapter->isValid($file)) {
-
-            return array("fileName" => $newName, "status" => "200",
-                    "path" => $uploadPath);
-
-        } else {
-
-            return array("status" => "-1"
-            );
-
-        }
-
-    }
 
 
     /**

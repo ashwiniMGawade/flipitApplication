@@ -20,6 +20,7 @@ class Page extends BasePage
         ->andWhere('p.deleted=0')
         ->fetchArray();
         return isset($pageAttributes[0]['pageAttributeId']) ? $pageAttributes[0]['pageAttributeId'] : '';
+
     }
 
     public static function getPageDetailsByAttributeId($pageAttributeId)
@@ -54,10 +55,6 @@ class Page extends BasePage
             ->fetchArray();
         return $specialListPages;
     }
-    /**
-     *  Get page details on id basis
-     *  Version: 1.0
-     */
     public static function getPageDetailsInError($page)
     {
         $currentDate = date('Y-m-d H:i:s');
