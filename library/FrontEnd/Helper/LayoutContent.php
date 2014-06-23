@@ -253,7 +253,7 @@ class FrontEnd_Helper_LayoutContent
 
     public static function getMostPopularCouponOnEarth()
     {
-        $splashInformation = self::getSplashInformation();
+        $splashInformation = FrontEnd_Helper_viewHelper::getSplashInformation();
         if (!empty($splashInformation)) {
             $locale = $splashInformation[0]['locale'];
             $connectionWithSiteDatabase = BackEnd_Helper_DatabaseManager::addConnection($locale);
