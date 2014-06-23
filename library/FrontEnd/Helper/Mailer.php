@@ -4,7 +4,7 @@ class FrontEnd_Helper_Mailer {
     private $mandrill;
     private $_view;
 
-    public function __construct($pathConstants)
+    public function __construct($pathConstants = '')
     {
         if (!empty($pathConstants)) {
             $mandrillKey = $pathConstants['mandrillKey'];
