@@ -1,0 +1,23 @@
+<?php
+$firstName = $this->firstName;
+$lastName = $this->lastName;
+$articleDetails = $this->artcileDetails;
+?>
+<section class="list-box" id="floatDiv">
+    <h1><?php echo $this->translate('Read This List');?></h1>
+    <ol>
+    <?php  
+        if (!empty($articleDetails['chapters'])) {
+            foreach ($articleDetails['chapters'] as $articleChapter) :
+    ?>
+        <li>
+            <a href="#<?php echo $articleChapter['id']; ?>" rel="<?php echo $articleChapter['id']; ?>">
+                <strong class="title"><?php echo $articleChapter['title'];?></strong>
+            </a>
+        </li>   
+    <?php          
+            endforeach;
+        }
+    ?>            
+    </ol>
+</section>

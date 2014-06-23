@@ -1,637 +1,72 @@
 <?php
-$this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/jquery.placeholder.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/home.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
+$homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
+    'topOffers'=>$this->topOffers,
+    'newOffers'=>$this->newOffers,
+    'topCategories'=>$this->topCategories,
+    'topCategoriesOffers'=>$this->topCategoriesOffers,
+    'specialPages'=>$this->specialListPages,
+    'specialPagesOffers'=>$this->specialPagesOffers,
+    'moneySavingGuides'=>$this->moneySavingGuides
+);
 
+$indexViewPath = 'index/';
+$topStore = '';
+if(!empty($this->topStores)):
+    $topStore = $this->partial(
+        $indexViewPath. '_popularShops.phtml',
+        array(
+           'topStores' => $this->topStores,
+        )
+    );
+endif;
 
-# chekc banner is set or not
-if($this->banner)
-{
+$seein = '';
+if(!empty($this->seeninContents)):
+    $seein = $this->partial(
+        $indexViewPath.'_seeinContents.phtml',
+        array(
+           'seeninContents' => $this->seeninContents,
+        )
+    );
+endif;
 
-	$banner = $this->banner;
+$aboutTabs = '';
+if(!empty($this->aboutTabs)):
+    $aboutTabs = $this->partial(
+        $indexViewPath.'_aboutTabs.phtml',
+        array(
+           'aboutTabs' => $this->aboutTabs,
+        )
+    );
+endif;
 
-	# verify that homepage banner is available or not. if yes then create new class for this banner
-	if( isset($banner['homepagebanner_path']) && isset($banner['homepagebanner_name']) )
-	{
-
-		$filePath = trim($banner['homepagebanner_path'] . $banner['homepagebanner_name'] );
-
-		if(file_exists(ROOT_PATH . $filePath)) {
-
-			$this->headStyle()->captureStart(); ?>
-			.search-outer-background {
-				background: url("<?php echo PUBLIC_PATH_CDN . $filePath ?>") no-repeat scroll center top rgba(0, 0, 0, 0);
-                background-size: cover;
-   			}
-			<?php $this->headStyle()->captureEnd();
-        }
-
-    }
-
-    # verify that widget background image is available or not. if yes then create new class for this banner
-    if( isset($banner['homepage_widget_banner_path']) && isset($banner['homepage_widget_banner_name']) )
-    {
-        $filePath = trim($banner['homepage_widget_banner_path'] . $banner['homepage_widget_banner_name'] );
-
-        if(file_exists(ROOT_PATH . $filePath)) {
-
-            $this->headStyle()->captureStart(); ?>
-            .mid-home-inner {
-               background: url("<?php echo PUBLIC_PATH_CDN . $filePath ?>") no-repeat scroll center top rgba(0, 0, 0, 0);
-                background-size: cover;
-            }
-            <?php $this->headStyle()->captureEnd();
-        }
-    }
-} ?>
-<script type="text/javascript">
-    $(function() {
-    // Invoke the plugin
-    $('input, textarea').placeholder();
-
-   });
-</script>
-<div class="search-outer-home-bg">
-
-    <div class="search-outer-background"></div>
-</div>
-<div class='new-outer new-outer-search'>
-    <!-- Banner Text Starts -->
-        <div class="banner-text">
-            <h1><?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate('Maak gebruik van GRATIS Exclusieve Kortingscodes, lees onze Besp!')); ?></h1>
-            <h2><?php echo FrontEnd_Helper_viewHelper::replaceStringVariable( $this->translate(' 435 active coupon codes and discounts for your favourite online shops')) ;?></h2>
-        </div>
-
-        <div class="search-outer">
-            <div class="fl">
-                <input value="<?php echo FrontEnd_Helper_viewHelper::__form('Vind kortingscodes voor jouw favoriete winkels..') ?>"  onblur="if(this.value=='') this.value=this.defaultValue;" onfocus="if(this.value==this.defaultValue) this.value='';" id='searchField'  name='searchField' label='searchField' type="text" />
-                <input type='hidden' name='searchHidden' label='searchHidden' id='searchHidden' />
-            </div>
-            <a href="javascript:void(0);" alt="<?php echo FrontEnd_Helper_viewHelper::__form('ZOEKEN');?>">
-                <button class="searchbutton" id='searchbuttonHP' value='<?php echo FrontEnd_Helper_viewHelper::__form('ZOEKEN');?>'>
-                    <?php echo FrontEnd_Helper_viewHelper::__form('ZOEKEN');?>
-                </button>
-            </a>
-        </div>
+$top9Stores = array_slice($this->topStores, 0, 9);
+$top9StoresContents = '';
+if(!empty($this->topStores)):
+    $top9StoresContents = $this->partial(
+        $indexViewPath.'_top9Stores.phtml',
+        array(
+            'top9Stores' => $top9Stores,
+        )
+    );
+endif;
+echo $top9StoresContents;
+?>
+<main role="main" id="main">
+<div class="container best-items">
+    <header class="heading">
+        <h1><?php echo $this->translate('The Best of Flipit'); ?></h1>
+    </header>
+    <div class="columns">
+    <?php
+    $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions(); 
+    echo $homePagePartial->getHomePageLeftColumn($homePageTopNewOffersCategoriesAndSpecialGuidesData);
+    echo $homePagePartial->getHomePageRightColumnOffersList();
+    ?>
     </div>
-
-        <!-- Common Div Starts -->
-
-        <div class="new-outer">
-        <div class="common-div-new">
-
-  <!-- Popular Kortings Voucher Code Starts -->
-        	<div class="popular-kortings-new">
-                <h2><?php echo $this->translate('Populaire Kortingscodes'); ?></h2>
-                <!-- Popular Kortings Mid Starts -->
-                <div class="popular-kortings-mid">
-
-
-		                <!-- Popular Kortings Voucher Code Starts  -->
-			<?php
-				$topVoucherCode = $this->topCode;
-				for($v=0;$v<count($topVoucherCode);$v++)
-         	  	{
-         	  		if($v==0)
-         	  		{
-         	  			$cls =  'popular-kortings-col1';
-
-         	  		} else {
-         	  			$cls =  'popular-kortings-col3';
-         	  		}
-         	  		if(count($topVoucherCode) == ($v + 1))
-         	  		{
-         	  			$cls =  'popular-kortings-col3';
-         	  		}
-         	?>
-
-               		 <div class="<?php echo $cls;?>">
-
-		               <div class="popular-kortings-col3-left">
-			                  <div class="popular-kortings-col1-img">
-			                  <?php
-			                  $img = PUBLIC_PATH_CDN.ltrim($topVoucherCode[$v]['offer']['shop']['logo']['path'], "/") .'thum_small_'. $topVoucherCode[$v]['offer']['shop']['logo']['name'];
-								
-		                   		?>
-
-			                    <a href="<?php echo HTTP_PATH_LOCALE.$topVoucherCode[$v]['offer']['shop']['permaLink'];  ?>">
-			                    <img class='radiusImg' src="<?php  echo $img; ?>" alt="<?php echo $topVoucherCode[$v]['offer']['shop']['name'];?>" />
-			                    </a>
-			                   </div>
-		                </div>
-						<div class="popular-kortings-col3-mid">
-							<div class="popular-kortings-col1-text">
-		                        <h3>
-		                        	<?php if($topVoucherCode[$v]['offer']['exclusiveCode']==1){?>
-    		                        <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.$topVoucherCode[$v]['offer']['shop']['permaLink'];  ?>"   >
-
-                            			<?php if($topVoucherCode[$v]['offer']['shop']['name']!='') if(mb_strlen($topVoucherCode[$v]['offer']['shop']['name'], 'UTF-8') > 15){ echo mb_substr($topVoucherCode[$v]['offer']['shop']['name'], 0,15,  'UTF-8')."..."; }else{ echo $topVoucherCode[$v]['offer']['shop']['name']; }?>
-									</a>
-
-	                            	<span class="exclusief"><?php echo $this->translate('Exclusive')?></span>
-
-                            	<?php }else{ ?>
-
-                            		<a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.$topVoucherCode[$v]['offer']['shop']['permaLink'];  ?>"   >
-
-                            		<?php if($topVoucherCode[$v]['offer']['shop']['name']!='') if(mb_strlen($topVoucherCode[$v]['offer']['shop']['name'], 'UTF-8') > 28){
-                            			echo mb_substr($topVoucherCode[$v]['offer']['shop']['name'], 0,28,  'UTF-8')."...";
-                            		}else{ echo $topVoucherCode[$v]['offer']['shop']['name'];
-                            		}?>
-                            		</a>
-
-                            	<?php }?>
-                            	</h3>
-	                        </div>
-		                     <div class="popular-kortings-col1-text2">
-		                        <a href="<?php echo HTTP_PATH_LOCALE.$topVoucherCode[$v]['offer']['shop']['permaLink'];  ?>">
-                            		<?php if(mb_strlen($topVoucherCode[$v]['offer']['title'], 'UTF-8') > 65){  echo mb_substr($topVoucherCode[$v]['offer']['title'], 0,65, 'UTF-8').'...'; }else{ echo $topVoucherCode[$v]['offer']['title']; }
-                                    ?>
-                        		</a>
-		                    </div>
-						</div>
-						<div class="popular-kortings-col3-right">
-
-						</div>
-		           </div>
-            	<?php } ?>
-               	</div>
-                <!-- Popular Kortings Voucher Code  Ends  -->
-                <div class="popular-kortings-bot">
-                <div class="button-grey"><?php echo $this->translate('All'); ?>
-                <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('populair'); ?>"><?php echo $this->translate('popular offers'); ?></a></div>
-                </div>
-        	</div>
-        	<!-- Popular Kortings Ends -->
-
-  			<!-- Popular Kortings Voucher Code  Ends  -->
-
-  			<!-- Starts Newest Offer from offer table -->
-        	<div class="popular-kortings-new">
-                <h2><?php echo $this->translate('Nieuwe Kortingscodes'); ?></h2>
-
-                <!-- Newest Offer  Mid Starts -->
-                <div class="popular-kortings-mid">
-                     <!--  Newest Offer COl1 Starts -->
-
-         <?php
-			  $newestCoupon = $this->NewestOffer;
-
-         for($n=0;$n<count($newestCoupon);$n++)
-         {
-         	if(count($newestCoupon[$n]['shop']) >0){
-         	  	if($n==0)
-         	  	{
-         	  		$cls =  'popular-kortings-col1';
-         	  	} else {
-         	  		$cls =  'popular-kortings-col3';
-         	  	}
-
-         	  	if(count($newestCoupon) == ($n + 1)) {
-         	  		$cls =  'popular-kortings-col3';
-         	  	}
-               ?>
-                <div class="<?php echo $cls;?>">
-
-                 	<div class="popular-kortings-col3-left">
-			                  <div class="popular-kortings-col1-img  ">
-			                  <?php
-			                 	$img = PUBLIC_PATH_CDN.ltrim($newestCoupon[$n]['shop']['logo']['path'],"/") .'thum_small_'. $newestCoupon[$n]['shop']['logo']['name'];
-								 
-                    		?>
-			                    <a href="<?php echo HTTP_PATH_LOCALE.$newestCoupon[$n]['shop']['permaLink'];?>">
-			                 		<img class='radiusImg' src="<?php  echo $img ; ?>" alt="<?php echo $newestCoupon[$n]['shop']['name'];?>" />
-			                    </a>
-			                   </div>
-		                   </div>
-						<div class="popular-kortings-col3-mid">
-							<div class="popular-kortings-col1-text">
-                                <h3>
-                                	<?php if($newestCoupon[$n]['exclusiveCode']==1){?>
-        		                    	<a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.@$newestCoupon[$n]['shop']['permaLink'];  ?>" >
-
-        		                        	<?php if(mb_strlen($newestCoupon[$n]['shop']['name'], 'UTF-8') > 15){  echo mb_substr($newestCoupon[$n]['shop']['name'], 0,15, 'UTF-8').'...'; }else{ echo $newestCoupon[$n]['shop']['name']; } ?>
-										</a>
-
-                              		   <span class="exclusief"><?php echo $this->translate('Exclusive')?></span>
-	                            	<?php }else{?>
-
-	                            		<a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.@$newestCoupon[$n]['shop']['permaLink'];  ?>" >
-
-	                            		<?php if(mb_strlen($newestCoupon[$n]['shop']['name'], 'UTF-8') > 28){
-	                            			echo mb_substr($newestCoupon[$n]['shop']['name'], 0,28, 'UTF-8').'...';
-		                            		}else{ echo $newestCoupon[$n]['shop']['name'];
-		                            		} ?>
-	                            		</a>
-
-	                           	  <?php }?>
-                                </h3>
-		                    </div>
-		                    <div class="popular-kortings-col1-text2">
-    		                    <?php  if(count($newestCoupon[$n]['shop']) >0){?>
-                                <?php } ?>
-                                <a href="<?php echo HTTP_PATH_LOCALE.@$newestCoupon[$n]['shop']['permaLink'];  ?>"  ><?php if(mb_strlen($newestCoupon[$n]['title'], 'UTF-8') > 65){  echo mb_substr($newestCoupon[$n]['title'], 0,65, 'UTF-8').'...'; }else{ echo $newestCoupon[$n]['title']; } ?></a>
-                      			<?php if(count($newestCoupon[$n]['shop']) >0){?>
-                                <?php } ?>
-		                    </div>
-						</div>
-
-						<div class="popular-kortings-col3-right">
-					</div>
-                 </div>
-
-            <?php } }  ?>
-
-               <!-- Newest Offer COl1 Ends -->
-                </div>
-                <!-- Popular Kortings Mid Ends -->
-                <div class="popular-kortings-bot">
-                <div class="button-grey"><?php echo $this->translate('View all'); ?>
-                <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('nieuw'); ?>"><?php echo $this->translate('Newest offers'); ?></a></div>
-                </div>
-        	</div>
-        	<!-- Popular Kortings Ends -->
-
-            <!-- Start Popular Categories COl2 Starts -->
-            <!--<div class="popular-kortings2 mr-none"> -->
-        	<div class="popular-kortings-new mr-none">
-                <h2><?php echo $this->translate('Populaire Categorieen'); ?></h2>
-                <!-- Popular Kortings Mid Starts -->
-                <div class="popular-kortings-mid">
-
-                 <!-- Popular Categories COl2 Starts -->
-         	<?php
-         	if(count($this->topCategories) >0):
-
-			  $category = $this->topCategories;
-
-         	  for($c=0;$c<count($category);$c++) {
-
-	               if($c==0) {
-	               	    $cls =  'popular-kortings-col2';
-	               } else {
-	               	    $cls =  'popular-kortings-col2';
-	               }
-	               ?>
-                	 <div class="<?php echo $cls;?>">
-                    	<div class="popular-kortings-col2-img  removeBg">
-                    		<?php
-                    			$img = PUBLIC_PATH_CDN.$category[$c]['category']['categoryicon']['path']  .'thum_small_'. $category[$c]['category']['categoryicon']['name'];
-								 
-                    		?>
-                    		<img class='' src="<?php  echo $img ; ?>" alt="<?php echo $category[$c]['category']['name'];?>" />
-
-                    	</div>
-                        <div class="popular-kortings-col1-text3">
-                            <h4>
-                        		<a class="text-blue-link fl" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('categorieen').'/'.$category[$c]['category']['permaLink'];  ?>" ><?php if(mb_strlen($category[$c]['category']['name'], 'UTF-8') > 30){  echo mb_substr($category[$c]['category']['name'], 0,30, 'UTF-8').'...'; }else{ echo $category[$c]['category']['name']; } ?>
-                                </a>
-                            </h4>
-                            <span class="number-of-offers"><?php echo $category[$c]['countOff'];?> <?php echo $this->translate('kortingscodes') ?>
-                            </span>
-                        </div>
-                    </div>
-         			<?php } endif;?>
-                    <!-- Popular Kortings COl2 Ends -->
-
-                </div>
-                <!-- Popular Kortings Mid Ends -->
-                <div class="popular-kortings-bot2 mt15">
-                    <div class="button-grey">
-                        <?php echo $this->translate('All offers'); ?>
-                            <a class="text-blue-link" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('categorieen'); ?>"><?php echo $this->translate('by category'); ?></a>
-                    </div>
-                </div>
-        	</div>
-        	<!-- End Popular Categories COl2 Starts -->
-           </div>
-        </div>
-        <!-- Common Div Ends -->
-
-        <!-- Separator Starts -->
-        <div class="separator">&nbsp;</div>
-        <!-- Separator Ends -->
-
-        <!-- Common Div Starts -->
-        <div class="mid-home-bg">
-        <div class="mid-home-inner">
-        <div class="new-outer">
-        <div class="common-div-home">
-       	<!--Start SPECIALE OVERZICHTEN Special List Kortings Starts -->
-        	<div class="popular-kortings-mid-new">
-       		   <h2 class="text-white"><?php echo $this->translate('Speciale Overzichten'); ?></h2>
-               <!--Start SPECIALE OVERZICHTEN Special List Kortings Starts -->
-                <?php if(count($this->specialList) > 0) :?>
-                <div class="popular-kortings-mid">
-                 <?php
-					$specialList = $this->specialList;
-
-					$i = 1;
-					$j = 0;
-					$listcnt = count($specialList);
-         	  		for($s=0;$s<3;$s++)
-         	  		{
-         	  			if($i==1)
-	                 	{
-	                 		$cls =  'popular-kortings-col5';
-	                 	} else {
-	                 		$cls =  'popular-kortings-col5';
-	                 	}
-	                 	if($listcnt==$i)
-	                 	{
-	                 		$cls =  'popular-kortings-col5 bdr-none';
-	                 	}
-	                 	$i++;
-
-	                 	if(!isset($specialList[$s]))
-	                 	{
-	                 		continue;
-	                 	}
-         		?>
-                 <!-- Popular Kortings COl2 Starts -->
-
-                	 <div class="<?php echo $cls;?>">
-                    	<div class="popular-kortings-col2-img">
-                    	<?php
-                    		$img = PUBLIC_PATH_CDN.ltrim($specialList[$s]['page'][0]['logo']['path'], "/") .'thum_page_small'. $specialList[$s]['page'][0]['logo']['name'];
-						
-							?>
-							<img src="<?php echo $img ; ?>" alt="<?php echo $specialList[$s]['page'][0]['pageTitle'];?>" />
-
-                    	</div>
-                        <div class="popular-kortings-col1-text3-new">
-                            <h4>
-                            	<a class="text-white-link fl" href="<?php echo HTTP_PATH_LOCALE.$specialList[$s]['page'][0]['permaLink'];  ?>" >
-                                    <?php if(mb_strlen($specialList[$s]['page'][0]['pageTitle'], 'UTF-8') > 25) {
-                            				echo mb_substr($specialList[$s]['page'][0]['pageTitle'], 0,25, 'UTF-8').'...';
-                            	 	}else{
-                            	 			echo $specialList[$s]['page'][0]['pageTitle'];
-                            	  } ?>
-                                </a>
-                            </h4>
-						<span class="number-of-offers text-light-grey"><?php echo !empty($this->splofferlists[$j]) ? $this->splofferlists[$j] : 0 ;?> <?php echo $this->translate('kortingscodes'); ?></span>
-
-                        </div>
-                    </div>
-                    <!-- Popular Kortings COl2 Ends -->
-
-                   <?php // }
-                        	  $j++;
-						 } ?>
-
-                </div>
-                <?php endif;?>
-                <!-- Popular Kortings Mid Ends -->
-                <div class="popular-kortings-bot5-new">
-                <div class="button-grey-new text-light-grey"><?php echo $this->translate('View all'); ?>
-                <a class="text-white-link" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('categorieen'); ?>"><?php echo $this->translate('Specials'); ?></a></div>
-                </div>
-        	</div>
-        	<!-- Popular Kortings Ends -->
-
-
-   			<!-- Popular Kortings Starts -->
-        	<div class="popular-kortings-mid-new">
-       		    <h2 class="text-white"><?php echo $this->translate('Populaire Bespaar Wijzers'); ?></h2>
-                <!-- Popular Kortings Mid Starts -->
-                <div class="popular-kortings-mid">
-
-                 <?php
-                 $i = 1;
-                 $cnt = count($this->moneySaving);
-                 foreach($this->moneySaving as $saving){
-	                 	if($i==1)
-	                 	{
-	                 		$cls =  'popular-kortings-col6';
-	                 	} else {
-	                 		$cls =  'popular-kortings-col6';
-	                 	}
-	                 	if($cnt==$i)
-	                 	{
-	                 		$cls =  'popular-kortings-col6 bdr-none';
-	                 	}
-	                 	$i++;
-                 	?>
-                    <!-- Popular Kortings COl1 Starts -->
-                	 <div class="<?php echo $cls;?>">
-                    	<div class="popular-kortings-monetsaving-img rediusnone ">
-                    	<?php
-
-                    		$img = PUBLIC_PATH_CDN.ltrim($saving['article']['thumbnail']['path'], "/") .'thum_article_medium_'. $saving['article']['thumbnail']['name'];
-                    	
-                    	?>
-
-                    	<a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$saving['article']['permalink'];  ?>"  >
-                            <img class='' src="<?php  echo  $img ; ?>" alt="<?php echo $saving['article']['title'];?>"/>
-                        </a>
-                    	</div>
-                       <div class="popular-kortings-col1-text-outer bg-none">
-                        	<div class="popular-kortings-col1-text textW home-bespaarwijzer-title">
-                        	   <h3>
-                                    <a class="text-white-link" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$saving['article']['permalink'];  ?>"   >
-                                		<?php
-                                    		$str = $saving['article']['title'];
-                                    		if( mb_strlen($saving['article']['title'], 'UTF-8') > 30 ){
-                                    			$str = mb_substr($saving['article']['title'], 0, 30, 'UTF-8').'...';
-                                    		}
-                                    		echo $str;
-                                		?>
-                                    </a>
-                                </h3>
-               		     </div>
-                       		 <div class="popular-kortings-col1-text2 textW">
-                        		<a class="text-light-grey" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$saving['article']['permalink'];  ?>"   >
-                                    <?php
-                                    if(isset($saving['article']['chapters'][0])){
-
-                                    if($saving['article']['chapters'][0]['content']!=null || $saving['article']['chapters'][0]['content']!='undefined' || $saving['article']['chapters'][0]['content']!=''){
-                            			$allowed_tags = '';
-                            			$description = $saving['article']['chapters'][0]['content'];
-                            			$desc = strip_tags($description, $allowed_tags);
-                            			if(mb_strlen($desc, 'UTF-8') > 65){
-                            			echo mb_substr($desc, 0,65, 'UTF-8') . "...";
-                            			}
-                            			else{
-                            				echo $desc;
-                            			}
-                                    }
-                                    }
-                                    else{
-                                    	//echo $only;
-                                    }
-                            		 ?>
-                                </a>
-                       		 </div>
-                        </div>
-
-                    </div>
-
-                    <!-- Popular Kortings COl1 Ends -->
-                   <?php } ?>
-                </div>
-                <!-- Popular Kortings Mid Ends -->
-                <div class="popular-kortings-bot6-new">
-                <div class="button-grey-new text-light-grey"><?php echo $this->translate('All'); ?>
-                <a class="text-white-link" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('bespaarwijzer'); ?>"><?php echo $this->translate('Bespaarwijzers'); ?></a></div>
-                </div>
-        	</div>
-        	<!-- Popular Kortings Ends -->
-
-            <!-- Log Direct Starts -->
-          <div class="log-direct-new user_widget-new" id="user_widget">
-            <?php echo $this->esi(LOCALE.'/login/userwidget'); ?>
-		  </div>
-            <!-- Log Direct Ends -->
-
-        </div>
-        </div>
-        </div>
-        </div>
-        <!-- Common Div Ends -->
-
-        <!-- Common Div Starts -->
-        <div class="search-outer-bg">
-        <div class="new-outer">
-        <div class="common-div clr">
-			<!-- Popular Stores Left Outer Starts -->
-            <div class="popular-stores-lt-outer">
-                <h2><?php echo $this->translate('Onze Meest Populaire Winkels'); ?></h2>
-           		<?php
-           		/* echo "<pre>";
-           		 print_r($this->topStores);
-           		 echo "</pre>";*/
-           		 ?>
-            	<div class="popular-stores-lt">
-
-              		<?php
-              		echo "<ul>";
-              		$store = $this->topStores;
-              		for($s=0; $s < count($store); $s++ ){
-                        if($s==4 || $s==8 || $s==12){ echo "<ul>"; }
-              		    echo "<li>";
-              				?>
-                        	<a href="<?php echo HTTP_PATH_LOCALE.$store[$s]['shop']['permaLink'];  ?>"   >
-                        		<?php if(mb_strlen($store[$s]['shop']['name'], 'UTF-8') > 20){ echo mb_substr($store[$s]['shop']['name'],0,10, 'UTF-8'); }else{ echo $store[$s]['shop']['name']; } ?>
-                        	</a>
-                    		<?php
-                    echo "</li>";
-                    	if($s==3 || $s==7 || $s==11){ echo "</ul>"; }
-              		 }
-
-              		 ?>
-
-            	</div>
-             </div>
-             <!-- Popular Stores Left Outer Ends -->
-
-        <!-- Popular Stores Right Outer Starts -->
-		  <div class="popular-stores-rt-outer">
-        		<h2><?php echo $this->translate('Nieuwe Winkels'); ?></h2>
-            	<div class="popular-stores-rt">
-                    <ul>
-                    <?php foreach($this->recentStore as $recent){ ?>
-                        <li>
-                        	<a href="<?php echo HTTP_PATH_LOCALE.$recent['permaLink'];  ?>"   >
-                        		<?php if(mb_strlen($recent['name'], 'UTF-8') > 20){ echo mb_substr($recent['name'],0,20, 'UTF-8'); }else{ echo $recent['name']; } ?>
-                        	</a>
-                        </li>
-                    <?php } ?>
-                    </ul>
-                </div>
-        </div>
-        <!-- Popular Stores Right Outer Ends -->
-
-        </div>
-        </div>
-        </div>
-        <!-- Common Div Ends -->
-
-        <!-- As Seen Outer Starts -->
-        <div class="white-bg">
-        <div class="new-outer">
-        <div class="as-seen-outer">
-       	  <h2><?php echo $this->translate('Bekend van'); ?></h2>
-        	<div class="as-seen-bot">
-        	<?php
-        	$seeninLink = $this->translate('seenin').'/';
-        	foreach($this->seenin as $asseen){
-
-        		$urlToShow = HTTP_PATH_LOCALE.$seeninLink.$asseen['toolltip'];
-        		$url = $asseen['url'];
-        			$img = PUBLIC_PATH_CDN.$asseen['logo']['path'] .'thum_SeenIn_large'. $asseen['logo']['name'];
-        		
-        	?>
-       	    	<div class="partner1">
-       	    	  <a>
-       	    		<img src="<?php  echo $img; ?>" title="<?php echo $asseen['toolltip']; ?>" alt="<?php echo $asseen['altText']; ?>" />
-       	    	 </a>
-       	    	</div>
-            <?php }?>
-            </div>
-        </div>
-        </div>
-        </div>
-        <!-- As Seen Outer Ends -->
-
-
-		<?php	if(count($this->aboutTabs) > 0){ ?>
-        <!-- Wc Kcode Outer Starts -->
-        <div class="new-outer">
-        <div class="wt-kcode-outer">
-
-        	 <div class="our_offering" >
-              <div class="top_navigation">
-            <ul>
-                  <?php
-					$tabs = $this->aboutTabs; for($t=0;$t<count($tabs);$t++){
-						if($t == 0){ $navcls = 'selected_nav'; }
-						else{ $navcls = ''; }
-					?>
-                  <li>
-				    <a  class="<?php echo $navcls; ?>" id="tab_<?php echo $t;?>" onclick="nexttab('<?php echo $t;?>');" href="javascript:void(this)">
-						<span id="about" class="service_nav_over" ><?php echo $tabs[$t]['title']; ?></span>
-					</a>
-				 </li>
-				 <?php } ?>
-
-                </ul>
-          </div>
-       <div class="offering_data_service">
-
-				<?php
-					$tabs = $this->aboutTabs; for($tb=0;$tb<count($tabs);$tb++){
-						if($tb == 0){ $navcss = 'display: block; visibility: visible;'; }
-						else{ $navcss = 'display: none; visibility: hidden;'; }
-				?>
-            <div style="<?php echo $navcss; ?>" id="services_<?php echo $tb; ?>">
-                 <div class="wt-kcode-txt">
-
-                  	<?php echo $tabs[$tb]['content']; ?>
-
-                 </div>
-            </div>
-             <?php } ?>
-        </div>
-    		 </div>
-        </div>
-        <!-- Separator Starts -->
-
-        <!-- Separator Ends -->
-        </div>
-        <!-- Wc Kcode Outer Ends -->
-
-
-
-         <?php } ?>
-
-
-<script type="text/javascript">
-
-function nexttab(obj){
-
-	$('#services_'+obj).css({"display":"block","visibility":"visible"}).siblings().css({"display":"none","visibility":"hidden"});
-	$('div.top_navigation ul li a').removeClass('selected_nav');
-	$('a#tab_'+obj).addClass('selected_nav');
-
-}
-
-
-</script>
+</div>
+<?php echo $topStore.$seein.$aboutTabs;?>
+</main>
+<?php

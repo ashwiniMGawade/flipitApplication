@@ -1,0 +1,30 @@
+<!-- Refactored code -->
+<?php 
+$expiredOffersPartialClass = new FrontEnd_Helper_ExpiredOffersPartialFunction();
+echo $expiredOffersPartialClass->getExpiredOffersHeader($this->shopName);?>
+<section class="section-module">
+<?php
+foreach ($this->expiredOffers as $offer) :
+    $offer = (object) $offer;
+    ?>
+    <div class="line">
+      <a href="<?php echo $expiredOffersPartialClass->getExpiredOfferUrl($offer);?>" 
+      rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
+        <div class="holder">
+            <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
+            <div class="box">
+                <span class="text">
+                <?php 
+                echo $offer->title=='' 
+                ? $this->translate("Description not available right now..") 
+                : $expiredOffersPartialClass->getOfferTitle($offer->title); ?>
+                </span>
+                <?php echo $expiredOffersPartialClass->getOfferCouponCode($offer->couponCode)?>
+            </div>
+        </div>
+        <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate);?></span>
+      </a>
+    </div>
+    <?php 
+endforeach;?>
+</section>

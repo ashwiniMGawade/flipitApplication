@@ -1,0 +1,41 @@
+<?php
+$offer = (object) $this->offerdetail[0];
+$offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$termsAndConditions =  $offerPartial->getOfferTermsAndCondition($offer);
+$daysTillOfferExpires =  $offerPartial->getDaysTillOfferExpires($offer->endDate);
+if ($this->offerImagePath == '') {
+    $lightboxContent = $this->partial(
+        'offer/_lightBoxPartial.phtml',
+        array(
+            'offer' => $offer,
+            'termsAndConditions' => $termsAndConditions,
+            'siteImage' => $offerPartial->getSiteLogoforPopup(),
+            'couponCode' => $this->couponCode,
+            'urlToShow' => $offerPartial->getUrlToShow($offer)
+       )
+    );
+} else {
+    $lightboxContent = '<img src = "'.$this->offerImagePath.'" alt = "Printable Coupon">';
+}
+?>
+<section id="code-lightbox">
+    <div id="popup1" class="lightbox">
+    <a class="glyphicon glyphicon-remove btn-close" onclick="customPopUpClose()"></a>
+        <header class="head">
+            <div class="icon">
+                <img src="<?php echo $this->facebookImage; ?>" 
+                width="176" height="89" alt='<?php echo $offer->shop['name'];?>'>
+            </div>
+            <div class="box">
+                <div class="text">
+                    <p><?php echo  $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);?></p>
+                    <h1><?php echo $offer->title; ?></h1>
+                </div>
+            </div>
+        </header>
+       <?php
+        echo $lightboxContent;
+       ?> 
+    </div> 
+</section>
+

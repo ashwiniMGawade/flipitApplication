@@ -59,4 +59,3 @@ $site->query("ALTER TABLE `category` ADD INDEX (`name`)");
 
 $user->query("ALTER TABLE `user` ADD COLUMN `wc_orig_user` INT");
 $user->query("ALTER TABLE `user` ADD INDEX (`wc_orig_user`)");
-

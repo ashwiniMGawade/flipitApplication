@@ -3,11 +3,22 @@
 <title>Flipit.com | Changing The Way We Save</title>
 <meta name="viewport" content="user-scalable=yes, width=device-width, initial-scale=1.0" />
 <link href="http://www.flipit.com" rel="canonical" />
-<link href="<?php echo HTTP_PATH;?>public/flipit/css/style.css" rel="stylesheet" type="text/css" />
+<?php
+if (APPLICATION_ENV == 'development') {
+    $lessCssPath = "/public/css/front_end/";
+    $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'all.less'));
+    echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'ie.less'));
+} else {
+    echo $this->headLink()
+        ->prependStylesheet("/public/css/front_end/all.css");
+}
+?>
+<link href='http://fonts.googleapis.com/css?family=Cookie' rel='stylesheet' type='text/css'>
+<!--[if IE]>
+<link type="text/css" media="all" rel="stylesheet" href="<?php echo HTTP_PATH;?>public/front_end/css/ie.css">
+<script type="text/javascript" src="<?php echo HTTP_PATH;?>public/front_end/js/ie.js"></script>
+<![endif]-->
 <link href="<?php echo HTTP_PATH;?>public/flipit/images/favicon.ico" rel="shortcut icon" type="image/x-icon" />
-<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
-<script type="text/javascript" src="http://use.typekit.com/shn5sjh.js"></script>
-<script type="text/javascript" src="<?php echo HTTP_PATH;?>public/js/front_end/socialmedia.js"></script>
 <meta name="msvalidate.01" content="44C2028411B932A2DCC28359FD20685F" />
 <meta property="og:title" content="Flipit.com">
 <meta property="og:description" content="Changing The Way We Save" />

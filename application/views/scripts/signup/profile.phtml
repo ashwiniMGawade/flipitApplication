@@ -1,0 +1,124 @@
+<?php
+$this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/profile.js");
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/profile.css");
+$profileForm = $this->form;
+// Remove <dt> from label generation
+foreach ($profileForm->getElements() as $formElement) :
+    $formElement->getDecorator('label')->setOption('tag', null);
+endforeach;
+if($this->messageSuccess!='' || $this->messageError!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
+    </div>
+    <?php 
+endif;
+?>
+<section class="profile-box">
+    <form id="profile" name="profile" method="POST" action="">
+        <div class="title">
+            <h1>
+            <?php 
+            echo $this->translate('Hi'). " " . $this->firstName .',' . " ". $this->translate('How are you?');
+            ?>
+            </h1>
+            <?php echo 
+            $this->translate('Want to change you personal setting then you are free to do so below. Change name, email address, password and more');?>
+        </div>
+        <div class="form-row">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <?php 
+                                echo $profileForm->firstName->renderLabel()
+                                . $profileForm->firstName->renderViewHelper();
+                                ?>
+                            </div>
+                            <div class="col-sm-6">
+                                <?php 
+                                echo $profileForm->lastName->renderLabel()
+                                . $profileForm->lastName->renderViewHelper();
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <?php 
+                        echo $profileForm->emailAddress->renderLabel()
+                        . $profileForm->emailAddress->renderViewHelper();
+                        ?>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <?php 
+                                echo $profileForm->gender->renderLabel()
+                                . $profileForm->gender->renderViewHelper();
+                                ?>
+                            </div>
+                            <div class="col-sm-6">
+                                <?php echo $profileForm->dateOfBirth->renderLabel();?>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                        <?php echo $profileForm->dateOfBirthDay->renderViewHelper();?>
+                                        </div>
+                                        <div class="col-sm-4">
+                                         <?php echo $profileForm->dateOfBirthMonth->renderViewHelper();?>
+                                        </div>
+                                        <div class="col-sm-4">
+                                         <?php echo $profileForm->dateOfBirthYear->renderViewHelper();?>
+                                        </div>
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <?php 
+                                echo $profileForm->password->renderLabel()
+                                . $profileForm->password->renderViewHelper();
+                                ?>
+                            </div>
+                            <div class="col-sm-6">
+                                <?php 
+                                echo $profileForm->confirmPassword->renderLabel()
+                                . $profileForm->confirmPassword->renderViewHelper();
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <?php 
+                                echo $profileForm->postCode->renderLabel()
+                                . $profileForm->postCode->renderViewHelper();
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="note-box">
+            <h2><?php echo $this->translate('Email and Newsletter Settings:'); ?></h2>
+            <div class="form-group">
+                <?php echo $profileForm->weeklyNewsLetter->renderViewHelper();?>
+                <label for="checkbox">
+                    <strong><?php echo $this->translate('The Kortingscode.nl weekly newsletter');?></strong>
+                    <?php echo $this->translate('The newsletter is Kortingscode.nl almost every week improved the next time. Our ultimate goal: The user can provide with only shops in which you are truly interested in a personal discount list.');?>
+                </label>
+            </div>
+        </div>
+        <?php 
+        echo $this->formSubmit(
+            'submit',
+            FrontEnd_Helper_viewHelper::__form('form_update your settings'),
+            array('class'=>'btn blue btn-lg btn-primary', 'id'=>'register')
+        ) ?>
+    </form>
+</section>

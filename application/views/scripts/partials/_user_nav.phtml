@@ -1,24 +1,40 @@
-<?php if (Auth_VisitorAdapter::hasIdentity()): ?>
-    <?php
-        $userid = Auth_VisitorAdapter::getIdentity()->id;
-        //$detail = Visitor::getuserdetail($userid);
-        $hash = md5($userid.microtime());
+<?php 
+if(Auth_VisitorAdapter::hasIdentity()) :
+    $visitorId = Auth_VisitorAdapter::getIdentity()->id;
+    $visitorInformation = Visitor::getUserDetails($visitorId);
     ?>
-
-    <div class="dropdown">
-        <a class="account" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('mijn-favorieten') ?>?hash=<?php echo $hash; ?>"><img width ="" height ="" style="float:left;" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-man.png" alt="user" />
-            <span><strong><?php echo FrontEnd_Helper_viewHelper:: __form('Mijn profiel');?></strong></span>
-        </a>
-    </div>
-    <ul style="float:right;">
-		<li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper:: __link('info/privacy-cookies');?>" ><?php echo FrontEnd_Helper_viewHelper:: __form('Cookies');?></a></li>
-        <li><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') .'/'. FrontEnd_Helper_viewHelper::__link('logout') ?>"><?php echo FrontEnd_Helper_viewHelper:: __form('Uitloggen');?></a></li>
-    </ul>
-<?php else: ?>
-
     <ul>
-        <li><img width ="" height ="" src="<?php echo HTTP_PATH; ?>public/images/front_end/img-man.png" alt="user" /><a class="text-orange-link" rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1') ?>"><?php echo FrontEnd_Helper_viewHelper:: __form('Inschrijven');?></a></li>
-        <li class="none"><a rel="nofollow" href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login') ?>"><?php echo FrontEnd_Helper_viewHelper:: __form('Inloggen');?></a></li>
-        <li class="none"><a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper:: __link("info/privacy-cookies")?>"><?php echo FrontEnd_Helper_viewHelper:: __form('Cookies');?></a></li>
+        <li>
+           <span class="glyphicon glyphicon-user"></span>
+           <span><?php echo FrontEnd_Helper_viewHelper::__form('form_Welcome') . " ";?></span>
+           <a href="<?php echo HTTP_PATH_LOCALE 
+               . FrontEnd_Helper_viewHelper::__link('link_inschrijven') . "/" 
+               . FrontEnd_Helper_viewHelper::__link('link_profiel');?>" class="name">
+               <?php echo $visitorInformation[0]['firstName'];?>
+           </a>
+        </li>
+        <li>
+            <a href=" <?php echo HTTP_PATH_LOCALE 
+            . FrontEnd_Helper_viewHelper::__link('link_login') .'/'
+            . FrontEnd_Helper_viewHelper::__link('link_logout'); ?>">
+              <?php echo FrontEnd_Helper_viewHelper::__form('form_Sign Out');?>
+            </a>
+        </li>
     </ul>
-<?php endif; ?>
+    <?php
+else:
+    ?>
+    <ul>
+        <li>
+            <a rel="nofollow" href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') ?>">
+            <?php echo $this->translate('Sign In'); ?>
+            </a>
+        </li>
+        <li class="">
+            <a href="<?php  echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_inschrijven') ?>">
+            <?php echo $this->translate('Sign Up'); ?>
+            </a>
+        </li>
+    </ul>
+    <?php
+endif;

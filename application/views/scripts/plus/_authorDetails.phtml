@@ -1,0 +1,24 @@
+<?php 
+$userDetails = $this->userDetails;
+$firstName = str_replace(' ', '', $userDetails['firstName']);
+$profileLink = $this->profileLink;
+?>
+<section class="about-box">
+    <div class="photo">
+        <span class="name"><?php echo $firstName; ?></span>
+            <?php
+                $authorImage = HTTP_PATH_CDN . ltrim($userDetails['profileimage']['path'], "/") .'thum_medium_' .
+                    $userDetails['profileimage']['name'];
+            ?>
+        <img width="120" height="120" alt="<?php echo $firstName; ?>" src="<?php echo $authorImage; ?>">
+    </div>
+    <div class="text-box">
+        <p>
+            <strong><?php echo $this->translate('About').' '.$firstName; ?></strong>, 
+            <?php echo $userDetails['mainText'];?>
+        </p>
+        <p>
+            <a href="<?php echo $profileLink; ?>"><?php echo $this->translate('Read more about'). ' '.$firstName; ?></a>
+        </p>
+    </div>
+</section>

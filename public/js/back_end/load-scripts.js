@@ -5687,13 +5687,7 @@ function send_to_editor(c) {
                 if (b.plugins.imbullgallery) {
                     c = b.plugins.imbullgallery._do_gallery(c)
                 }
-            } else {
-                if (c.indexOf("[embed") === 0) {
-                    if (b.plugins.wordpress) {
-                        c = b.plugins.wordpress._setEmbed(c)
-                    }
-                }
-            }
+            } 
         }
         b.execCommand("mceInsertContent", false, c)
     } else {

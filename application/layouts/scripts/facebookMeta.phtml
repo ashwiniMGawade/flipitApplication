@@ -1,0 +1,8 @@
+<?php 
+$headMeta = FrontEnd_Helper_viewHelper::getHeadMeta($this);
+
+foreach ($headMeta as $socialMediakey => $socialMediavalue) {
+    if ($socialMediavalue != '') {
+        $this->headMeta()->setName($socialMediakey, $socialMediavalue);
+    }
+}

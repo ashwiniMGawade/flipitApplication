@@ -1,0 +1,26 @@
+<?php   
+$mostReadArticles = $this->articles;
+$mostReadArticleNumber = 0;
+foreach ($mostReadArticles as $mostReadArticle) {
+	if (!empty($mostReadArticle['articles']['thumbnail'])) {
+		$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path']. 
+			$mostReadArticle['articles']['thumbnail']['name'];
+	} else {
+		$mostReadArticleImage = '';
+	}
+	$mostReadArticleId = $mostReadArticle['articles']['id'];
+	$mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? 
+		mb_substr($mostReadArticle['articles']['title'], 0,40).'..' : $mostReadArticle['articles']['title'];
+?>
+ <li>
+    <a class="same-height-left" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id);" 
+    	href="javascript:void(0);">
+        <img class="ico" width="52" src="<?php echo $mostReadArticleImage; ?>" 
+        alt="<?php echo $mostReadArticleTitle; ?>"/>
+        <span><?php echo $mostReadArticleTitle; ?></span>
+    </a>
+</li>
+<?php
+$mostReadArticleNumber++;
+}
+

@@ -23,6 +23,63 @@ class PHPSitemap_sitemap
 	private $check = array();
 	private $proxy = "";
 	
+
+######################### Refactored ############################
+
+    public function generateGuidesSitemap($domain, $locale)
+    {
+        $pageDetails = RoutePermalink::getPageProperties(FrontEnd_Helper_viewHelper::__link('link_plus'));
+        $pageId = $pageDetails[0]['id'];
+        $articlePermalinks = Articles::generateArticlePermalinks($pageId);
+        $newArticlePermalinks = array();
+        if(!empty($articlePermalinks[0]['moneysaving'])):
+            foreach($articlePermalinks[0]['moneysaving'] as $arrayPermalinks) :
+                $newArticlePermalinks['articleCategoriesPermalink'][] = $arrayPermalinks['articlecategory'][0]['permalink'];
+                foreach($arrayPermalinks['refarticlecategory'] as $permalink):
+                    $newArticlePermalinks['articlePermalinks'][] = $permalink['articles']['permalink'];
+                endforeach;
+            endforeach;
+        endif;
+
+        $xml = '<?xml version="1.0" encoding="UTF-8"?>
+        <urlset
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+        http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
+
+        if(!empty($newArticlePermalinks)):
+            foreach($newArticlePermalinks['articleCategoriesPermalink'] as $articleCategoryPermalink):
+                if($locale=='en'):
+                    $xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_plusCategory').'/'.$articleCategoryPermalink.'</loc></url>';
+                else:
+                    $xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_plusCategory').'/'.$articleCategoryPermalink.'</loc></url>';
+                endif;
+            endforeach;
+
+            foreach($newArticlePermalinks['articlePermalinks'] as $articlePermalink):
+                if($locale=='en'):
+                    $xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$articlePermalink.'</loc></url>';
+                else:
+                    $xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$articlePermalink.'</loc></url>';
+                endif;
+            endforeach;
+        endif;
+        
+        if($locale=='en'):
+            $xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_plus').'</loc></url>';
+        else:
+            $xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_plus').'</loc></url>';
+        endif;
+        
+        $xml .= '</urlset>';
+        return $xml;
+    }
+
+
+######################### Refactored ends #################
+
+
 	//setting list of substring to ignore in urls
 	public function set_ignore($ignore_list){
 		$this->check = $ignore_list;
@@ -295,9 +352,9 @@ class PHPSitemap_sitemap
 				
 					if($permalinks['howToUse'] == 1):
 						if($locale=='en'):
-							$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('how-to').'/'.$permalinks['permaLink'].'</loc></url>';
+							$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_how-to').'/'.$permalinks['permaLink'].'</loc></url>';
 						else:
-							$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('how-to').'/'.$permalinks['permaLink'].'</loc></url>';
+							$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_how-to').'/'.$permalinks['permaLink'].'</loc></url>';
 						endif;
 					endif;
 					
@@ -324,64 +381,7 @@ class PHPSitemap_sitemap
 	 *
 	 */
 	//Generates Bespaarwizers sitemap
-	public function generate_guides_sitemap($domain, $locale){
- 		
-		$pageDetail = RoutePermalink::getPageProperties(FrontEnd_Helper_viewHelper::__link('bespaarwijzer'));
 	
-		$pageId = $pageDetail[0]['id'];
-		$artPermalinks = Articles::generateArticlePermalinks($pageId);
-		
-		$newArtPermalinks = array();
-		if(!empty($artPermalinks[0]['moneysaving'])):
-			foreach($artPermalinks[0]['moneysaving'] as $arrPermalinks) :
-		
-				$newArtPermalinks['artcat'][] = $arrPermalinks['articlecategory'][0]['permalink'];
-				foreach($arrPermalinks['refarticlecategory'] as $perma):
-					$newArtPermalinks['art'][] = $perma['articles']['permalink'];
-				endforeach;
-	
-			endforeach;
-		endif;
-		
-		$xml = '<?xml version="1.0" encoding="UTF-8"?>
-		<urlset
-		xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
-		http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
-		
-		if(!empty($newArtPermalinks)):
-			foreach($newArtPermalinks['artcat'] as $artpermalinks):
-				
-				if($locale=='en'):
-					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('bespaarwijzercat').'/'.$artpermalinks.'</loc></url>';
-				else:
-					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('bespaarwijzercat').'/'.$artpermalinks.'</loc></url>';
-				endif;
-				
-			endforeach;
-			foreach($newArtPermalinks['art'] as $permalinks):
-			
-				if($locale=='en'):
-					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$permalinks.'</loc></url>';
-				else:
-					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'/'.$permalinks.'</loc></url>';
-				endif;	
-				
-			endforeach;
-			
-		endif;
-		
-		if($locale=='en'):
-			$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'</loc></url>';
-		else:
-			$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('bespaarwijzer').'</loc></url>';
-		endif;
-		
-		$xml .= '</urlset>';
-		return $xml;
-
-	}
 	
 	
 	/**
@@ -398,9 +398,9 @@ class PHPSitemap_sitemap
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
-		//echo FrontEnd_Helper_viewHelper::__link('categorieen');
+		//echo FrontEnd_Helper_viewHelper::__link('link_categorieen');
 		//categories links
-		$category = Category::getCategoryIcons();
+		$category = Category::getCategoriesInformation();
 		
 		if($locale=='en'):
 			$xml .= '<url><loc>'.$domain.'</loc></url>';
@@ -411,17 +411,17 @@ class PHPSitemap_sitemap
 		if(!empty($category)):
 			foreach($category as $permalinks):
 				if($locale=='en'):
-					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('categorieen').'/'.$permalinks['permaLink'].'</loc></url>';
+					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'.$permalinks['permaLink'].'</loc></url>';
 				else:
-					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('categorieen').'/'.$permalinks['permaLink'].'</loc></url>';
+					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'.$permalinks['permaLink'].'</loc></url>';
 				endif;
 			endforeach;
 		endif;
 		
 		if($locale=='en'):
-			$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('categorieen').'</loc></url>';
+			$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_categorieen').'</loc></url>';
 		else:
-			$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('categorieen').'</loc></url>';
+			$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_categorieen').'</loc></url>';
 		endif;
 		
 		//extended offer links
@@ -430,9 +430,9 @@ class PHPSitemap_sitemap
 			foreach($extendedPermalinks as $permalinks):
 				
 				if($locale=='en'):
-					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('deals').'/'.$permalinks['extendedUrl'].'</loc></url>';
+					$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_deals').'/'.$permalinks['extendedUrl'].'</loc></url>';
 				else:
-					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('deals').'/'.$permalinks['extendedUrl'].'</loc></url>';
+					$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_deals').'/'.$permalinks['extendedUrl'].'</loc></url>';
 				endif;
 				
 			endforeach;
@@ -449,9 +449,9 @@ class PHPSitemap_sitemap
 				if($permalinks['slug'] != ""):
 					
 					if($locale=='en'):
-						$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('redactie').'/'.strtolower($permalinks['slug']).'</loc></url>';
+						$xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_redactie').'/'.strtolower($permalinks['slug']).'</loc></url>';
 					else:
-						$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('redactie').'/'.strtolower($permalinks['slug']).'</loc></url>';
+						$xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_redactie').'/'.strtolower($permalinks['slug']).'</loc></url>';
 					endif;
 					
 				endif;
@@ -463,15 +463,15 @@ class PHPSitemap_sitemap
 		if(!empty($pagesPermalinks)):
 			foreach($pagesPermalinks as $permalinks):
 
-				$string1 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("info"));
+				$string1 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("link_info"));
 				$string2 = strstr($permalinks['permaLink'], "rssfeed/");
 				$string3 = strstr($permalinks['permaLink'], "out/");
-                $string4 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("zoeken"));
+                $string4 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("link_zoeken"));
 				$string5 = strstr($permalinks['permaLink'], "admin/");
 				$string6 = strstr($permalinks['permaLink'], "index");
 				$string7 = strstr($permalinks['permaLink'], "marktplaatsfeed");
 				$string8 = strstr($permalinks['permaLink'], "metronieuws");
-				$string9 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("mijn-favorieten"));
+				$string9 = strstr($permalinks['permaLink'], FrontEnd_Helper_viewHelper::__link("link_mijn-favorieten"));
 			
 				
 				if($permalinks['permaLink'] != "" && $string1 == "" && $string2 == "" && $string3 == "" 

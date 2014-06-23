@@ -124,7 +124,7 @@ class generateOfferFeeds
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
 
-        $settings = Signupmaxaccount::getallmaxaccounts();
+        $settings = Signupmaxaccount::getAllMaxAccounts();
 
         $cutsomLocale = !empty( $settings[0]['locale']) ? $settings[0]['locale'] : 'nl_NL';
 
@@ -180,7 +180,7 @@ class generateOfferFeeds
         }
 
         $feedData = array(
-                'title'=> FrontEnd_Helper_viewHelper::__form('Newest offers') ,
+                'title'=> FrontEnd_Helper_viewHelper::__form('form_Newest offers') ,
                 'link'=> $this->_hostName ,
                 'language' =>  str_replace('_', '-', Zend_Registry::get('Zend_Locale')) ,
                 'charset'=>'UTF-8',
@@ -189,7 +189,7 @@ class generateOfferFeeds
         );
         $feed = Zend_Feed::importArray ( $feedData, 'rss' );
         $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
-        $fileName = FrontEnd_Helper_viewHelper::__form('newest-offers');
+        $fileName = FrontEnd_Helper_viewHelper::__form('form_newest-offers');
         $offerXml = $rssDirectory. "{$fileName}.xml";
 
         if(!file_exists($rssDirectory))
@@ -228,7 +228,7 @@ class generateOfferFeeds
         }
 
         $feedData = array(
-                'title'=> FrontEnd_Helper_viewHelper::__form('Popular offers') ,
+                'title'=> FrontEnd_Helper_viewHelper::__form('form_Popular offers') ,
                 'link'=> $this->_hostName ,
                 'language' =>  str_replace('_', '-', Zend_Registry::get('Zend_Locale')) ,
                 'charset'=>'UTF-8',
@@ -237,7 +237,7 @@ class generateOfferFeeds
         );
         $feed = Zend_Feed::importArray ( $feedData, 'rss' );
         $rssDirectory = PUBLIC_PATH. $this->_localePath ."rss/";
-        $fileName = FrontEnd_Helper_viewHelper::__form('popular-offers');
+        $fileName = FrontEnd_Helper_viewHelper::__form('form_popular-offers');
         $offerXml = $rssDirectory. "{$fileName}.xml";
 
         if(!file_exists($rssDirectory))

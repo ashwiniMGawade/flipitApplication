@@ -1,471 +1,332 @@
 <?php
+class LoginController extends Zend_Controller_Action
+{
+    public $directLoginLinks = array();
+    public function init()
+    {
+        $module = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action = strtolower($this->getRequest()->getActionName());
+        if (
+            file_exists(
+                APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
+            )
+        ) {
+            $this->view->setScriptPath(APPLICATION_PATH . '/modules/' . $module . '/views/scripts');
+        } else {
+            $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
+        }
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessage->getMessages();
+        $this->view->successMessage = isset($message[0]['success']) ?
+        $message[0]['success'] : '';
+        $this->view->errorMessage = isset($message[0]['error']) ?
+        $message[0]['error'] : '';
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+    }
 
-class LoginController extends Zend_Controller_Action {
+    public function preDispatch()
+    {
+        $action = $this->getRequest()->getActionName();
+        if (Auth_VisitorAdapter::hasIdentity()
+            && ($action == 'forgotpassword'
+            || $action == 'resetpassword'
+            || $action == 'index')
+        ) {
+            $this->_redirect(
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('link_profiel')
+            );
+        }
+    }
 
-	/**
-	 * override views based on modules if exists
-	 * @see Zend_Controller_Action::init()
-	 * @author Bhart
-	 */
-	public function init() {
+    public function indexAction()
+    {
+        $emailAddressFromMemory = '';
+        $emailAddressSpace = new Zend_Session_Namespace('emailAddressSpace');
+        if (isset($emailAddressSpace->emailAddressSpace)) {
+            $emailAddressFromMemory = $emailAddressSpace->emailAddressSpace;
+            $emailAddressSpace->emailAddressSpace = '';
+        }
+        $loginForm = new Application_Form_Login();
+        $this->view->form = $loginForm;
+        $loginForm->getElement('emailAddress')->setValue($emailAddressFromMemory);
+        $this->viewHelperObject->getMetaTags($this);
+        if ($this->getRequest()->isPost()) {
+            if ($loginForm->isValid($this->getRequest()->getPost())) {
+                $visitorDetails = $loginForm->getValues();
+                $this->_helper->Login->setVisitorSession($visitorDetails);
+                self::redirectByVisitorStatus($visitorDetails);
+            } else {
+                $loginForm->highlightErrorElements();
+            }
+        }
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
+        $this->view->pageCssClass = 'login-page';
+        # set reponse header X-Nocache used for varnish
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+    }
 
-		$module   = strtolower($this->getRequest()->getParam('lang'));
-		$controller = strtolower($this->getRequest()->getControllerName());
-		$action     = strtolower($this->getRequest()->getActionName());
+    public function redirectByVisitorStatus($visitorDetails)
+    {
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $this->_helper->Login->setUserCookies();
+            $this->_redirect(
+                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('link_profiel')
+            );
+        } else {
+            $visitorEmail = new Zend_Session_Namespace('emailAddressSpace');
+            $visitorEmail->emailAddressSpace = $visitorDetails['emailAddress'];
+            $this->addFlashMessage(
+                FrontEnd_Helper_viewHelper::__translate('User Does Not Exist'),
+                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
+                'error'
+            );
+        }
+        return;
+    }
 
-		# check module specific view exists or not
-		if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-			
-			# set module specific view script path
-			$this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-		}
-		else{
-			
-			# set default module view script path
-			$this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
-		}
-	}
-	
-	public function preDispatch() {
+    public function addFlashMessage($message, $redirectLink, $errorType)
+    {
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $flashMessage->addMessage(array($errorType => $message));
+        $this->_redirect($redirectLink);
+    }
 
-		$action = $this->getRequest()->getActionName();
-		if (Auth_VisitorAdapter::hasIdentity() && ($action == 'forgotpassword' 
-								||	$action == 'resetpassword' ||	$action == 'index')){
-			
-			$this->_helper->redirector(null,FrontEnd_Helper_viewHelper::__link('mijn-favorieten')) ;
-		}
-	}
+    public function logoutAction()
+    {
+        Auth_VisitorAdapter::clearIdentity();
+        setcookie('kc_unique_user_id', "", time() - 3600, '/');
+        # set reponse header X-Nocache used for varnish
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $module = $this->getRequest()->getParam('lang');
+        $this->_redirect(HTTP_PATH_LOCALE);
+    }
 
-	public function indexAction() {
-		
-		# get cononical link
-		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-		//$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
-		
-		$this->view->headTitle("Members Only");
+    public function forgotpasswordAction()
+    {
+        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
+        $forgotPasswordForm = new Application_Form_ForgotPassword();
+        $this->view->form = $forgotPasswordForm;
+        if ($this->getRequest()->isPost()) {
+            if ($forgotPasswordForm->isValid($this->getRequest()->getPost())) {
+                $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(
+                    FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress'))
+                );
+                $FromEmail = Signupmaxaccount::getEmailAddress();
+                if ($visitorDetails!= false) {
 
-	}
-	
-	/**
-	 * check user authenticaion 
-	 * 
-	 * @version 1.0
-	 */
-	public function checkloginAction() {
+                    $mailer  = new FrontEnd_Helper_Mailer();
+                    $content = array(
+                                    'name'    => 'content',
+                                    'content' => $this->view->partial(
+                                        'emails/forgotpassword.phtml',
+                                        array(
+                                            'resetPasswordLink' => HTTP_PATH_LOCALE .
+                                            FrontEnd_Helper_viewHelper::__email('email_login').'/'
+                                            .FrontEnd_Helper_viewHelper::__email('email_resetpassword').'/'
+                                            .base64_encode($visitorDetails['id'])
+                                            )
+                                    )
+                                );
+                    $VisitorName = $visitorDetails['firstName'].' '.$visitorDetails['lastName'];
+                    BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails['email']);
+                    $mailer->send(
+                        FrontEnd_Helper_viewHelper::__email('email_sitename'),
+                        $FromEmail[0]['emailperlocale'],
+                        $VisitorName,
+                        $visitorDetails['email'],
+                        FrontEnd_Helper_viewHelper::__email('email_Forgot Password'),
+                        $content,
+                        FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
+                        '',
+                        $this->directLoginLinks
+                    );
+                    $this->addFlashMessage(
+                        FrontEnd_Helper_viewHelper::__translate('Please check you mail and click on reset password link'),
+                        HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
+                        .FrontEnd_Helper_viewHelper::__link('link_forgotpassword'),
+                        'error'
+                    );
+                } else {
+                    $this->addFlashMessage(
+                        FrontEnd_Helper_viewHelper::__translate('Wrong Email address. Please enter valid email address'),
+                        HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
+                        .FrontEnd_Helper_viewHelper::__link('link_forgotpassword'),
+                        'error'
+                    );
+                }
+            } else {
+                $forgotPasswordForm->highlightErrorElements();
+            }
+        }
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $this->view->pageCssClass = 'login-page';
+        $this->viewHelperObject->getMetaTags($this);
+    }
 
-		$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
-		
-		$params = $this->_request->getParams();
-		//for displaying error message when incorrect credentials
-		$errmsg = $this->_helper->flashMessenger->getMessages();
-		if (!empty($errmsg)) {
-			$this->view->message = 'showmsg';
-		}
-		//check post form or not
-		if ($this->getRequest()->isPost()) {
-			$username = $params["uname"];
-			$password = MD5($params["pwd"]);
-			
-			$data_adapter = new Auth_VisitorAdapter($username, $password);
+    public function resetpasswordAction()
+    {
+        $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
+        $visitorId = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("forgotid"))));
+        $visitor = Visitor::getVisitorDetails($visitorId);
+        $resetPasswordForm = new Application_Form_ResetPassword();
+        $this->view->form = $resetPasswordForm;
+        if ($visitor['changepasswordrequest']) {
+            $this->view->resetLinkMessage = FrontEnd_Helper_viewHelper::__translate('This password reset link has already been used!');
+            $this->view->linkAlreadyUsed = false;
+        } else {
+            $this->view->linkAlreadyUsed = true;
+        }
+        if ($this->getRequest()->isPost()) {
+            if ($resetPasswordForm->isValid($this->getRequest()->getPost())) {
+                self::resetPassword(
+                    $visitorId,
+                    $resetPasswordForm->getValue('password'),
+                    $this->_request->getParam("forgotid")
+                );
+            } else {
+                $resetPasswordForm->highlightErrorElements();
+            }
+        }
+        $this->view->pageCssClass = 'login-page';
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $this->viewHelperObject->getMetaTags($this);
+    }
 
-			$auth = Zend_Auth::getInstance();
+    public function resetPassword($visitorId, $newPassword, $encodedVisitorId)
+    {
+        $updatedPassword = Visitor::updateVisitorPassword($visitorId, $newPassword);
+        if ($updatedPassword) {
+            if (!Auth_VisitorAdapter::hasIdentity()) {
+                Visitor::updatePasswordRequest($visitorId, 1);
+                $redirectLink = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login');
+            } else {
+                Visitor::updatePasswordRequest($visitorId, 1);
+                $redirectLink =
+                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'). '/'
+                    .FrontEnd_Helper_viewHelper::__link('link_profiel');
+            }
+            $this->addFlashMessage(FrontEnd_Helper_viewHelper::__translate('Your password has been changed.'), $redirectLink, 'success');
+        } else {
+            $this->addFlashMessage(
+                FrontEnd_Helper_viewHelper::__translate('Invalid reset password url please confirm again.'),
+                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'). '/'
+                .FrontEnd_Helper_viewHelper::__link('link_resetpassword') .'/' . $encodedVisitorId,
+                'success'
+            );
+        }
+        return true;
+    }
 
-			$auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
-			$result = $auth->authenticate($data_adapter);
+    public function confirmemailAction()
+    {
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $visitorEmail = FrontEnd_Helper_viewHelper::sanitize((base64_decode($this->_request->getParam("email"))));
+        $visitor = Visitor::getVisitorDetailsByEmail($visitorEmail);
+        if (!empty($visitor)) {
+            if (Visitor::updateVisitorStatus($visitor[0]['id'])) {
+                $this->addFlashMessage(
+                    FrontEnd_Helper_viewHelper::__translate('Your email address has been confirmed please login'),
+                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
+                    'success'
+                );
+            } else {
+                $this->addFlashMessage(
+                    FrontEnd_Helper_viewHelper::__translate('Your email address is already confirmed'),
+                    HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
+                    'error'
+                );
+            }
+        } else {
+            $this->addFlashMessage(
+                FrontEnd_Helper_viewHelper::__translate('Invalid confirmation link'),
+                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
+                'error'
+            );
+        }
+    }
 
-			if (Auth_VisitorAdapter::hasIdentity()) {
-
-				$userid = Auth_VisitorAdapter::getIdentity()->id;
-				$obj = new Visitor();
-				$obj->updateLoginTime($userid);
-				//setcookie('kc_session_active', 1, time() + 2592000, '/');
-				setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
-				echo $url = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('mijn-favorieten'); 
-				die();
-			} else {
-				echo "false";
-				die();
-
-			}
-		}
-
-	}
-	/**
-	 * forget password by email
-	 *
-	 * @version 1.0
-	 */
-	public function forgotpasswordAction() {
-		
-		$this->view->controllerName = $this->getRequest()->getControllerName();
-		$this->view->actionName = $this->getRequest()->getActionName();
-		
-		# get cononical link
-		$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-		$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
-		
-		$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
-	}
-	/**
-	 * send mail to user for reset password
-	 *
-	 * @version 1.0
-	 */ 
-	public function forgotpwdAction() {
-		
-		$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
-		$params = $this->_request->getParams();
-		
-		if ($this->getRequest()->isPost()) {
-			
-			$email = $params["email"];
-			$result = Auth_VisitorAdapter::forgotPassword($email);
-			
-			if ($result == true) {
-				$resultuserid = base64_encode($result["id"]);
-				
-				$domain = $_SERVER['HTTP_HOST'];
-				 
-				$imgLogoMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
-				 
-				$siteName = "Flipit.com";
-				 
-				$siteUrl = HTTP_PATH_LOCALE;
-				 
-				if($domain == "kortingscode.nl" || $domain == "www.kortingscode.nl") {
-					 
-					$imgLogoMail = "<a href=".HTTP_PATH_LOCALE."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
-					 
-					$siteName = "Kortingscode.nl";
-					 
-				}
-				$mailData = array(array('name'=>'headerWelcome',
-						'content'=>$imgLogoMail
-				),
-						array('name'=>'bestRegards',
-								'content'=>FrontEnd_Helper_viewHelper::__email('Beste').' '.$siteName.' '.FrontEnd_Helper_viewHelper::__email('Bezoeker,')
-						),
-						array('name'=>'centerContent',
-								'content'=>FrontEnd_Helper_viewHelper::__email('Geen enkel probleem dat u uw wachtwoord heeft vergeten, via de volgende link kunt u deze opnieuw instellen:'). '<a href="'
-											. HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('resetpassword').'/'.$resultuserid
-											. '">'.FrontEnd_Helper_viewHelper::__email('Klik hier').'</a>' 
-						),
-						array('name'=>'bottomContent',
-								'content'=> FrontEnd_Helper_viewHelper::__email('Groetjes').',<br><br>'. FrontEnd_Helper_viewHelper::__email('De redactie van Kortingscode.nl')
-				
-						),
-						array('name'=>'copyright',
-								'content'=>FrontEnd_Helper_viewHelper::__email('Copyright &copy; 2013').' '.$siteName.'. '.FrontEnd_Helper_viewHelper::__email('All Rights Reserved.')
-						),
-						array('name'=>'address',
-								'content'=>FrontEnd_Helper_viewHelper::__email("U ontvangt deze nieuwsbrief omdat u ons uw toestemming heeft gegeven om u op de hoogte te houden van onze laatste").
-								'<br/>' . FrontEnd_Helper_viewHelper::__email("acties."). '<a href='.$siteUrl.' style="color:#ffffff; padding:0 2px;">'.$siteName.'</a>' . FrontEnd_Helper_viewHelper::__email('is een onderdeel van Imbull, Weteringschans 120, 1017XT Amsterdam - KvK 34339618')
-						),
-						array('name'=>'logincontact',
-								'content'=>'<a style="color:#ffffff; padding:0 4px; text-decoration:none;" href="'.HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'">'.FrontEnd_Helper_viewHelper::__email('Inloggen').'</a>'
-						));
-				 
-				$email_data = Signupmaxaccount::getemailmaxaccounts();
-				$emailFrom  = $email_data[0]['emailperlocale'];
-				 
-				$mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
-    			$template_name = $this->getInvokeArg('passwordTemplate');
-				$template_content = $mailData;
-				$message = array(
-						'subject'    => FrontEnd_Helper_viewHelper::__email('Wachtwoord Wijziging'),
-						'from_email' => $emailFrom,
-						'from_name'  => FrontEnd_Helper_viewHelper::__email('Forgot-Password'),
-						'to'         => array(array('email'=>$this->getRequest()->getParam("email"),'name'=> 'Member')) ,
-						'inline_css' => true
-				);
-				$mandrill->messages->sendTemplate($template_name, $template_content, $message);
-				
-				//Update table visitor field flag = true
-				$v = Visitor::updatePasswordRequest($result["id"], 0);
-				echo "emailsent";
-				die();
-			} else {
-				echo "emailnotfound";
-				die();
-			}
-
-		}
-	}
-	/**
-	 * reset password by email link
-	 *
-	 * @version 1.0
-	 */
-	public function resetpasswordAction() {
-	
-		$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
-		
-		$params = $this->_request->getParams();
-		$user_id = @(base64_decode($params["forgotid"]));
-		
-		
-		$user_id = FrontEnd_Helper_viewHelper::sanitize( $user_id) ;
-		// find visitor exist  based on $user_id
-		$visitor = Doctrine_Core::getTable("Visitor")->find($user_id);
-		
-		if($visitor['changepasswordrequest']) {
-			$flash = $this->_helper->getHelper('FlashMessenger');
-		    $message = $this->view->translate('Password Reset Link has already been used!');
-		    $flash->addMessage(array('success' => $message));
-		    $flash = $this->_helper->getHelper('FlashMessenger');
-		    $message = $flash->getMessages();
-		    $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-		    $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-		    $this->view->flag = false;
-		}else{
-			$this->view->flag = true;
-		}
-		$this->view->forgotid = $user_id;
-
-	}
-
-	public function resetpwdAction() {
-
-		$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
-		
-		$params = $this->_request->getParams();
-		$user_id = $params["forgotid"];
-		if ($this->getRequest()->isPost()) {
-			$newpwd = $params["pwd"];
-			$res = Visitor::updatefrontendPassword($user_id, $newpwd);
-			if ($res) {
-
-				$flash = $this->_helper->getHelper('FlashMessenger');
-				$message = $this->view
-						->translate('Uw wachtwoord is gewijzigd.');
-				$flash->addMessage(array('success' => $message));
-
-				if (!Auth_VisitorAdapter::hasIdentity()) {
-
-					echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login');
-					//update visitor field flag true;
-					$v = Visitor::updatePasswordRequest($user_id, 1);
-					
-				} else {
-					echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login'). '/' .FrontEnd_Helper_viewHelper::__link('profiel');
-					//update visitor field flag false;
-					$v = Visitor::updatePasswordRequest($user_id, 1);
-				}
-				die;
-			} else {
-
-				echo "usernotfound";
-				die();
-
-			}
-		}
-	}
-	/**
-	 * unset all cookies and session of the logged user
-	 *
-	 * @version 1.0
-	 */
-	public function logoutAction() {
-		
-		$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
-		
-		//unset the session
-		Auth_VisitorAdapter::clearIdentity();
-		
-		
-		setcookie('kc_unique_user_id', "", time() - 3600, '/');
-		unset($_COOKIE['kc_unique_user_id']);
-
-		
-		# set reponse header X-Nocache used for varnish
-		$this->getResponse()->setHeader('X-Nocache', 'no-cache');
-		
-		/*setcookie('kc_session_active', "", time() - 3600, '/');
-		unset($_COOKIE['kc_session_active']);
-		session_destroy();*/
-	
-		$module = $this->getRequest()->getParam('lang');
-		$this->_helper->redirector('index','index',$module);
-		//$namespace = new Zend_Session_Namespace('Zend_Auth');
-		//$namespace->setExpirationSeconds(14400);
-	}
-	/**
-	 * redirecttosignup
-	 * 
-	 * Show light box for login or signup
-	 * return phtml of current action 
-	 *
-	 * @author kraj
-	 * @version 1.0
-	 */
-	public function redirecttosignupAction() {
-		
-		$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
-		
-		$this->_helper->layout()->disableLayout();
-	
-	}
-	/**
-	 * updateuserdata
-	 * 
-	 * save user profile in databse
-	 * return boolen true
-	 *
-	 * @author kraj
-	 * @version 1.0
-	 */
-	public function updateuserdataAction() {
-		$headTitle = $this->view->translate("Members Only ");
-    	$this->view->headTitle($headTitle);
-		
-		if (Auth_VisitorAdapter::hasIdentity()) {
-			$params = $this->getRequest()->getParams();
-			$params['userId'] = Auth_VisitorAdapter::getIdentity()->id;
-			$userdetail = Visitor::updateVisitor($params);
-			
-			 
-			if( $userdetail)
-			{
-
-				$subsStatus = $this->getRequest()->getParam('currentSubscriptionStatus');
-				$newStatus =  $this->getRequest()->getParam('weekly') == 'on'  ? 1 : 0  ;
-
-				# chekc if your has not update newsletter status	
-				if($subsStatus == $newStatus)
-				{
-					$status = 0;	
-					$userdetail['message'] = $this->view->translate( "Uw gegevens zijn succesvol aangepast") ; 
-				} else {
-
-					# display subscribe/unsubscribe message 	
-					if($newStatus) {
-						$status = 'subsribed' ;
-						$userdetail['message'] = $this->view->translate( "you have successfully subscribed weekly newsletter.") ; 
-					} else {
-
-						$status = 'unsubscibed' ; 	
-						$userdetail['message'] = $this->view->translate( "Je bent succesvol uitgeschreven en je zal geen nieuwsbrieven meer van ons ontvangen.") ; 
-					}
-				}
-				$userdetail['newStatus'] = $newStatus ; 
-				$userdetail['updateType'] = $status;
- 				
-
-
-			} else {
-				
-				$userdetail['message'] = $this->view->translate( "Please enter a valid email address") ;
-				
-			}
-			
-			
-			echo Zend_Json::encode($userdetail);
-		}
-		die;
-	}
-	
-	/**
-	 * directlogin
-	 * 
-	 * Direct login the user to update his/her profile from newsletter
-	 * 
-	 * @author cbhopal
-	 * @version 1.0
-	 */
-	public function directloginAction() {
-		
-		$username = base64_decode($this->getRequest()->getParam("email"));
-	    $password = $this->getRequest()->getParam("pwd");
-		$data_adapter = new Auth_VisitorAdapter($username, $password);
-	    $auth = Zend_Auth::getInstance();
-	    $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
-	    $result = $auth->authenticate($data_adapter);
-	    if (Auth_VisitorAdapter::hasIdentity()) {
-		    $userid = Auth_VisitorAdapter::getIdentity()->id;
-		    $obj = new Visitor();
-	    	$obj->updateLoginTime($userid);
-		    //setcookie('kc_session_active', 1, time() + 1800, '/');
-			setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
-		    $url = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('profiel');
-		    $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-		    $this->_redirect($url);
-		} 
-	}
-	
-	/**
-	 * directloginunsubscribe
-	 * 
-	 * Direct login the user to update his/her profile from newsletter 
-	 * and unsubscribe from newsletter
-	 * 
-	 * @author cbhopal
-	 * @version 1.0
-	 */
-	public function directloginunsubscribeAction() {
-	
-		
-	    $username = base64_decode($this->getRequest()->getParam("email"));
-	    $password = $this->getRequest()->getParam("pwd");
-	    $updateWeekNewLttr = Doctrine_Query::create()->update('Visitor')->set('weeklyNewsLetter',0)->where("email = '".$username."'")->execute();
-	    $moduleKey = $this->getRequest()->getParam('lang' , null);
-	    $data_adapter = new Auth_VisitorAdapter($username, $password);
+    public function directloginAction()
+    {
+        $username = base64_decode($this->getRequest()->getParam("email"));
+        $password = $this->getRequest()->getParam("pwd");
+        $data_adapter = new Auth_VisitorAdapter($username, $password);
         $auth = Zend_Auth::getInstance();
-	    $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
-	    $result = $auth->authenticate($data_adapter);
-		if (Auth_VisitorAdapter::hasIdentity()) {
-		    $userid = Auth_VisitorAdapter::getIdentity()->id;
-		    $obj = new Visitor();
-		    $obj->updateLoginTime($userid);
-		    //setcookie('kc_session_active', 1, time() + 1800, '/');
-		    setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
-		    $flash = $this->_helper->getHelper('FlashMessenger');
-		    $message = $this->view->translate('You are successfully unsubscribed to our newsletter');
-		    $flash->addMessage(array('success' => $message));
-		    $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-		    
-		    //echo FrontEnd_Helper_viewHelper::__link('profiel') ;
-		    //echo  FrontEnd_Helper_viewHelper::__link('login') ;
-	 		$this->_helper->redirector(FrontEnd_Helper_viewHelper::__link('profiel') , FrontEnd_Helper_viewHelper::__link('login') , $moduleKey ) ;
-		  
-		}
+        $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
+        $result = $auth->authenticate($data_adapter);
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $userid = Auth_VisitorAdapter::getIdentity()->id;
+            $obj = new Visitor();
+            $obj->updateLoginTime($userid);
+            setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
+            $url =
+                HTTP_PATH_LOCALE
+                . FrontEnd_Helper_viewHelper::__link('link_login').'/'.FrontEnd_Helper_viewHelper::__link('link_profiel');
+            $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+            $this->_redirect($url);
+        }
+    }
+    #this function used in mandrill
+    public function directloginunsubscribeAction()
+    {
+        $username = base64_decode($this->getRequest()->getParam("email"));
+        $password = $this->getRequest()->getParam("pwd");
+        $updateWeekNewLttr =
+            Doctrine_Query::create()
+            ->update('Visitor')
+            ->set('weeklyNewsLetter', 0)
+            ->where("email = '".$username."'")
+            ->execute();
+        $moduleKey = $this->getRequest()->getParam('lang', null);
+        $data_adapter = new Auth_VisitorAdapter($username, $password);
+        $auth = Zend_Auth::getInstance();
+        $auth->setStorage(new Zend_Auth_Storage_Session('front_login'));
+        $result = $auth->authenticate($data_adapter);
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $userid = Auth_VisitorAdapter::getIdentity()->id;
+            $obj = new Visitor();
+            $obj->updateLoginTime($userid);
+            setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
+            $flash->addMessage(array('success' => $message));
+            $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+            $this->_helper->redirector(
+                FrontEnd_Helper_viewHelper::__link('link_profiel'),
+                FrontEnd_Helper_viewHelper::__link('link_login'),
+                $moduleKey
+            );
+        }
+    }
 
-	}
+    // Returns the right top menu for the user by fetching the partial which checks if a user is logged in.
+    public function usermenuAction()
+    {
+        $this->_helper->layout()->disableLayout();
+    }
+    // Returns the footer part for the user by fetching the partial which checks if a user is logged in.
+    public function userfooterAction()
+    {
+        $this->_helper->layout()->disableLayout();
+    }
+    // Returns the widget part for the user by fetching the partial which checks if a user is logged in.
+    public function userwidgetAction()
+    {
+        $this->_helper->layout()->disableLayout();
+    }
+    // returns the signup bar on home
+    public function usersignupAction()
+    {
+        $this->_helper->layout()->disableLayout();
+    }
+    // returns the dummy page bar on home
+    public function dummypageAction()
+    {
+        $this->view->layout()->robotKeywords = 'noindex, nofollow' ;
 
-	// Returns the right top menu for the user by fetching the partial which checks if a user is logged in.
-	public function usermenuAction(){
-		$this->_helper->layout()->disableLayout();
-	}
-	// Returns the footer part for the user by fetching the partial which checks if a user is logged in.
-	public function userfooterAction(){
-		$this->_helper->layout()->disableLayout();
-	}	
-	// Returns the widget part for the user by fetching the partial which checks if a user is logged in.
-	public function userwidgetAction(){
-		$this->_helper->layout()->disableLayout();
-	}		
-	// returns the signup bar on home
-	public function usersignupAction(){
-		$this->_helper->layout()->disableLayout();
-	}
-	// returns the dummy page bar on home
-	public function dummypageAction(){
-
-		$this->view->layout()->robotKeywords = 'noindex, nofollow' ;
-		
-	}
-	public function dummyboxAction(){
-		
-		$this->view->layout()->robotKeywords = 'noindex, nofollow' ;
-		
-		$headTitle = $this->view->translate("Members Only ");
-		$this->view->headTitle($headTitle);
-		$this->_helper->layout()->disableLayout();
-	}
+    }
 }

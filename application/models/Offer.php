@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Offer
  *
@@ -12,1356 +11,2109 @@
  */
 class Offer extends BaseOffer
 {
-	/**
-	 * getofferList(deleted and non deleted by flag) fetches all record from database
-	 * also search according to keyword if present.
-	 * @param array $params
-	 * @return array $offerList
-	 * @version 1.0
-	 * @author mkaur update by kraj
-	 */
-	public static  function getofferList($params){
-
-		$role =  Auth_StaffAdapter::getIdentity()->roleId;
-
-		$srhOffer 	= 	@$params["offerText"]!='undefined' ? $params["offerText"] : '';
-		$srhShop 	=   @$params["shopText"]!='undefined' ? $params["shopText"] : '';
-		$srhCoupon 	=   @$params["shopCoupon"]!='undefined' ? $params["shopCoupon"] : '';
-		$type 		=   @$params["couponType"]!='undefined' ? $params["couponType"] : '';
-		//get offer deleted or other by flag flag (1 or 0)
-		$flag = @$params['flag'];
-
-
-		//echo 'O ' . $srhOffer ;
-		//echo 'S ' . $srhShop ;
-		//echo 'T ' . $type ;
-
-		$offerList = Doctrine_Query::create()
-			->select('o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL,o.couponcode')
-			->from("Offer o")
-		///	->addSelect("(SELECT sum(onClick) FROM ViewCount WHERE offerId = o.id ) as clicks")
-			->leftJoin('o.shop s')
-        	->where("o.deleted="."'$flag'")
-			->andWhere("o.userGenerated = '0'");
-		//->orderBy('o.startDate DESC');
-
-		//condition for editor
-		if($role=='4')
-		{
-			$offerList->andWhere("o.Visability='DE'");
-
-		}
-
-		if($srhOffer != '' ){
-			$offerList->andWhere("o.title LIKE ?", "%$srhOffer%");
-		}
-		if($srhShop!=''){
-			$offerList->andWhere("s.name LIKE ?", "%$srhShop%");
-		}
-		if($srhCoupon!=''){
-			$offerList->andWhere("o.couponcode LIKE ?", "%$srhCoupon%");
-		}
-		if($type!=''){
-			$offerList->andWhere("o.discountType="."'$type'");
-		}
-
-		//$offerList->orderBy("o.id DESC");
-		//$offerList->limit(10);
-		//print_r($offerList->getSqlQuery()); die;
-		$result	=	DataTable_Helper::generateDataTableResponse($offerList,
-				$params,
-				array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.Visability','o.couponcode','o.startDate','o.endDate', 'clicks','authorName'),
-				array(),
-				array());
-		//echo "<pre>";
-		//print_r($result); die;
-		return $result;
-
-	}
-
-	/**
-	 * Move record in trash.
-	 * @param integer $id
-	 * @version 1.0
-	 * @author  Er.kundal
-	 * @return integer $id
-	 */
-	public static function moveToTrash($id){
-		if ($id) {
-			//find record by id
-			$u = Doctrine_Core::getTable("Offer")->find($id);
-			$offer_id = $id;
-			$authorId = self::getAuthorId($offer_id);
-
-			//Delete popular code if exist
-			$exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($offer_id);
-
-			if ($exist) {
-				PopularCode::deletePopular($offer_id, $exist->position );
-			}
-			//Delete popular code if exist
-
-			$uid = $authorId[0]['authorId'];
-			$popularcodekey ="all_". "popularcode".$uid ."_list";
-			$newcodekey ="all_". "newestcode".$uid ."_list";
-
-			$key = 'all_offerInStore'  . $u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_relatedShopInStore'  . $u->shopId  . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
-
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-
-			$key = 'all_widget5_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-			$key = 'all_widget6_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$u->delete();
-
-
-		} else {
-
-			$id = null;
-		}
-		//call cache function
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
-		return $id;
-
-	}
-	/**
-	 * Permanent delete record from database.
-	 * @param integer $id
-	 * @version 1.0
-	 * @author kraj
-	 * @return integer $id
-	 */
-	public static function deleteOffer($id){
-
-		if ($id) {
-			//find record by id and change status (deleted=1)
-			$u = Doctrine_Core::getTable("Offer")->find($id);
-
-
-			$offer_id = $id;
-			$authorId = self::getAuthorId($offer_id);
-
-			$uid = $authorId[0]['authorId'];
-			$popularcodekey ="all_". "popularcode".$uid ."_list";
-			$newcodekey ="all_". "newestcode".$uid ."_list";
-
-			$key = 'all_offerInStore'  . $u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_relatedShopInStore'  . $u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
-
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-
-		   $del1 = Doctrine_Query::create()->delete()
-			->from('refOfferCategory w')->where("w.offerId=" . $id)
-			->execute();
-
-		   $del1 = Doctrine_Query::create()->delete()
-		   ->from('TermAndCondition w')->where("w.offerId=" . $id)
-		   ->execute();
-
-		   $d = Doctrine_Query::create()->delete()
-		   ->from('PopularCode w')->where("w.offerId=" . $id)
-		   ->execute();
-
-		   $d2 = Doctrine_Query::create()->delete()
-		   ->from('refOfferPage w')->where("w.offerId=" . $id)
-		   ->execute();
-
-		   $d3 = Doctrine_Query::create()->delete()
-		   ->from('ViewCount w')->where("w.offerId=" . $id)
-		   ->execute();
-
-		   $del2 = Doctrine_Query::create()->delete()->from('OfferNews p')
-		   ->where('p.offerId=' . $id)->execute();
-
-		   $del2 = Doctrine_Query::create()->delete()->from('OfferNews p')
-		   ->where('p.offerId=' . $id)->execute();
-
-		   $del3 = Doctrine_Query::create()->delete()->from('PopularCode p')
-		   ->where('p.offerId=' . $id)->execute();
-
-		   $key = 'all_widget5_list';
-		   FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-		   $key = 'all_widget6_list';
-		   FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-
-			$del = Doctrine_Query::create()->delete()
-			->from('Offer o')
-			->where("o.id=" . $id)
-			->execute();
-
-
-		} else {
-			$id = null;
-		}
-		//call cache function
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-	   	return $id;
-	}
-	/**
-	 * restore offer from trash to list
-	 * @param integer $id
-	 * @version 1.0
-	 * @author kraj
-	 */
-	public static function restoreOffer($id){
-
-		if ($id) {
-
-
-			$u = Doctrine_Core::getTable("Offer")->find($id);
-
-
-
-			$offer_id = $id;
-			$authorId = self::getAuthorId($offer_id);
-
-			$uid = $authorId[0]['authorId'];
-			$popularcodekey ="all_". "popularcode".$uid ."_list";
-			$newcodekey ="all_". "newestcode".$uid ."_list";
-
-			$key = 'all_offerInStore'  . $u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_relatedShopInStore'  . $u->shopId . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
-
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-
-			$key = 'all_widget5_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-			$key = 'all_widget6_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-
-			//update status of record by id(deleted=0)
-			$O = Doctrine_Query::create()->update('Offer')
-			->set('deleted', '0')->where('id=' . $id);
-			$O->execute();
-
-		} else {
-			$id = null;
-		}
-		//call cache function
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-		return $id;
-	}
-	/**
-	 * Search to five offer
-	 * @param string $keyword
-	 * @param boolean $flag
-	 * @version 1.0
-	 * @return array $data
-	 * @author kraj
-	 */
-	public static function searchToFiveOffer($keyword,$flag){
-
-		$data = Doctrine_Query::create()
-		->select('o.title as title')
-		->from("Offer o")
-		->where('o.deleted=' . "'$flag'")
-		->andWhere("o.title LIKE ?", "$keyword%")
-		->orderBy("o.title ASC")->andWhere("o.userGenerated = '0'")->limit(5)->fetchArray();
-
-
-		return $data;
-	}
-	/**
-	 * Search top five shop
-	 * @param string $keyword
-	 * @param boolean $flag
-	 * @return array $data
-	 * @author kraj
-	 */
-	public static function searchToFiveShop($keyword,$flag){
-
-		$data = Doctrine_Query::create()
-		->select()
-		->from("Offer o")->leftJoin('o.shop s')
-		->where('o.deleted=' . "'$flag'")
-		->andWhere("s.name LIKE ?", "$keyword%")->andWhere("o.userGenerated = '0'")
-		->orderBy("s.id ASC")->groupBy('s.name')->limit(5)->fetchArray();
-		//print_r($data); die;
-		return $data;
-	}
-
-	/**
-	 * Search top five Coupon
-	 * @param string $keyword
-	 * @param boolean $flag
-	 * @return array $data
-	 * @author Amit Sharma
-	 */
-	public static function searchToFiveCoupon($keyword,$flag){
-
-		$data = Doctrine_Query::create()
-		->select()
-		->from("Offer o")
-		->where('o.deleted=' . "'$flag'")
-		->andWhere("o.couponcode LIKE ?", "$keyword%")
-		->orderBy("o.id ASC")->limit(5)->fetchArray();
-		//print_r($data); die;
-		return $data;
-	}
-
-	/**
-	 * Save offer in the database
-	 * @param $shopDetail
-	 * @author kkumar
-	 */
-
-	public  function saveOffer($params){
-
-
-		if(!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news"){
-				// check the offer type
-				if(isset($params['defaultoffercheckbox'])){     //offer type is default
-					$this->Visability = 'DE';
-					if($params['selctedshop']!=''){
-
-						if(intval($params['selctedshop']) > 0)
-						{
-							$this->shopId = $params['selctedshop'] ;
-						} else {
-							return array('result' => true , 'errType' => 'shop' );
-						}
-					}
-				}else{                                            // offer type member only
-					$this->Visability = 'MEM';
-					$this->shopId = null;
-				}
-		}else{
-
-
-			if(intval($params['selctedshop']) > 0)
-			{
-				$this->shopId =  $params['selctedshop'] ;
-			} else {
-				return array('result' => true , 'errType' => 'shop' );
-			}
-
-		}
-
-
-		// check the discountype
-		if(isset($params['couponCodeCheckbox'])){             // discount type coupon
-			$this->discountType = 'CD';
-			$this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
-			$this->discount = BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
-			$this->discountvalueType =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['discountchk']);
-			if(isset($params['selectedcategories']))
-			{
-				foreach ($params['selectedcategories'] as $categories) {
-
-					$this->refOfferCategory[]->categoryId = $categories ;
-
-				}
-			}
-		}else if(isset($params['newsCheckbox'])){       // discount type sale
-			$this->discountType = 'NW';
-		}else if(isset($params['saleCheckbox'])){       // discount type sale
-			$this->discountType = 'SL';
-		}else{                                                // discount type printable
-			$this->discountType = 'PA';
-			//check printable document
-			if(isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != ''){                          // upload offer
-
-				$fileName = self::uploadFile($_FILES['uploadoffer']['name']);
-				$ext =  BackEnd_Helper_viewHelper::getImageExtension($fileName);
-				$pattern = '/^[0-9]{10}_(.+)/i' ;
-			     preg_match($pattern, $fileName , $matches );
-			    if(!$fileName){
-			    	return false;
-			    }
-			    if(@$matches[1])
-			    {
+    ##################################################################################
+    ################## REFACTORED CODE ###############################################
+    ##################################################################################
+    public function __contruct($connectionName = "")
+    {
+        if (!$connectionName) {
+            $connectionName = "doctrine_site" ;
+        }
+        Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
+    }
+    
+    public static function getExpiredOffers($type, $limit, $shopId = 0)
+    {
+        $expiredTime = date("Y-m-d 00:00:00");
+        $expiredOffers = Doctrine_Query::create()
+        ->select(
+            's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate,
+            o.extendedoffer, o.extendedUrl, o.shopid'
+        )
+        ->from('Offer o')
+        ->leftJoin('o.shop s')
+        ->where('o.deleted=0')
+        ->andWhere('o.userGenerated=0')
+        ->andWhere('o.enddate<'."'".$expiredTime."'")
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('s.deleted = 0')
+        ->orderBy('o.id DESC');
+
+        if ($shopId != '') {
+            $expiredOffers->andWhere('s.id = '.$shopId.'');
+        }
+        $expiredOffers->limit($limit);
+        $expiredOffers = $expiredOffers->fetchArray();
+
+        return $expiredOffers;
+    }
+    
+    public static function similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId = 0)
+    {
+        $date = date('Y-m-d 00:00:00');
+        $similarShopsOffers = self::getOffersBySimilarShops($date, $limit, $shopId);
+        $similarCategoriesOffers = self::getOffersBySimilarCategories($date, $limit, $shopId);
+        $similarShopsAndSimilarCategoriesOffers = self::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
+            $similarShopsOffers,
+            $similarCategoriesOffers,
+            $limit
+        );
+        return $similarShopsAndSimilarCategoriesOffers;
+    }
+
+    public static function getOffersBySimilarShops($date, $limit, $shopId)
+    {
+        $similarShopsIds = self::getShopsIdsForWhereIn($shopId);
+        if (count($similarShopsIds) > 0) {
+            $similarShopsOffers = Doctrine_Query::create()
+                ->select(
+                    's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
+                    o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
+                    o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode,
+                    o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid,
+                    o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path,
+                    img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
+                )
+                ->from('Offer o')
+                ->addSelect(
+                    "(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes"
+                )
+                ->leftJoin('o.shop s')
+                ->leftJoin('s.favoriteshops fv')
+                ->leftJoin('o.termandcondition terms')
+                ->leftJoin('o.vote vot')
+                ->leftJoin('s.refShopCategory c')
+                ->leftJoin('s.logo img')
+                ->where('o.deleted = 0')
+                ->andWhere('s.deleted = 0')
+                ->andWhere('s.affliateProgram = 1')
+                ->andWhere('o.discountType="CD"')
+                ->andWhere('o.Visability!="MEM"')
+                ->andWhere('o.enddate > "'.$date.'"')
+                ->andWhere('o.startdate <= "'.$date.'"')
+                ->andWhere('o.userGenerated=0')
+                ->andWhereIn("o.shopId", $similarShopsIds)
+                ->andWhere("o.shopId != ".$shopId)
+                ->orderBy('o.startdate DESC')
+                ->limit($limit)
+                ->fetchArray();
+        } else {
+            $similarShopsOffers = array();
+        }
+        return $similarShopsOffers;
+    }
+
+    public static function getShopsIdsForWhereIn($shopId)
+    {
+        $similarShopsArray = array();
+        $similarShops=self::getRelatedShops($shopId);
+        if (sizeof($similarShops)>0) {
+            for ($i=0; $i<sizeof($similarShops); $i++) {
+                $similarShopsArray[$i] = $similarShops[$i]['relatedshopId'];
+            }
+        }
+        return $similarShopsArray;
+    }
+
+    public static function getOffersBySimilarCategories($date, $limit, $shopId)
+    {
+        $similarCategoriesIds = self::getCategoriesIdsForWhereIn($shopId);
+        $similarCategoriesOffer = array();
+        if (!empty($similarCategoriesIds)) {
+            $similarCategoriesOffer = Doctrine_Query::create()
+            ->select(
+                's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL,
+                o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,
+                o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,
+                o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid,
+                o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,
+                fv.id,vot.id,vot.vote'
+            )
+            ->from('Offer o')
+            ->addSelect("(SELECT count(id) FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('s.refShopCategory c')
+            ->leftJoin('s.logo img')
+            ->where('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.affliateProgram = 1')
+            ->andWhere('o.discountType="CD"')
+            ->andWhere('o.Visability!="MEM"')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->andWhere('o.userGenerated=0')
+            ->andWhereIn("c.categoryId", $similarCategoriesIds)
+            ->andWhere("s.id != ".$shopId)
+            ->orderBy('o.startdate DESC')
+            ->limit($limit)
+            ->fetchArray();
+        }
+        return $similarCategoriesOffer;
+    }
+
+    public static function getCategoriesIdsForWhereIn($shopId)
+    {
+        $similarCategories = array();
+        $shopsCategories = self::getShopsCategories($shopId);
+        if (sizeof($shopsCategories)>0) {
+            for ($i=0; $i<sizeof($shopsCategories); $i++) {
+                $similarCategories[$i]=$shopsCategories[$i]['categoryId'];
+            }
+        }
+        return $similarCategories;
+    }
+
+    public static function getShopsCategories($shopId)
+    {
+        $similarCategories = Doctrine_Query::create()
+        ->from('refShopCategory r')
+        ->where('r.shopId='.$shopId)
+        ->fetchArray();
+        return $similarCategories;
+    }
+    public static function getRelatedShops($shopId)
+    {
+        $similarShops = Doctrine_Query::create()
+            ->from('refShopRelatedshop r')
+            ->where('r.shopId='.$shopId)
+            ->fetchArray();
+        return $similarShops;
+    }
+
+    public static function mergeSimilarShopsOffersAndSimilarCategoriesOffers(
+        $similarShopsOffers,
+        $similarCategoriesOffers,
+        $limit
+    ) {
+        $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
+        $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
+        $mergeOffers = array_merge($shopsOffers, $categoriesOffers);
+        return $offers = self::sliceOfferByLimit($mergeOffers, $limit);
+    }
+
+    public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
+    {
+        $NewOfferOfRelatedShops = array();
+        foreach ($similarShopsOffers as $shopOffer):
+            $NewOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
+        endforeach;
+        return $NewOfferOfRelatedShops;
+    }
+
+    public static function createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers)
+    {
+        $NewOfferOfRelatedCats = array();
+        foreach ($similarCategoriesOffers as $categoryOffer):
+            $NewOfferOfRelatedCats["'".$categoryOffer['id']."'"] = $categoryOffer;
+        endforeach;
+        return $NewOfferOfRelatedCats;
+    }
+
+    public static function sliceOfferByLimit($mergeOffers, $limit)
+    {
+        $offers = array();
+        if (!empty($mergeOffers)) {
+            foreach($mergeOffers as $newOfShop):
+                $offers[] = $newOfShop;
+            endforeach;
+        }
+        $slicedOffer = array_slice($offers, 0, $limit);
+        return $slicedOffer;
+    }
+
+    public static function getTopOffers($limit)
+    {
+        $topVoucherCodes = self::getTopCouponCodes(array(), $limit);
+        if (count($topVoucherCodes) < $limit) {
+            $newestCodesLimit = $limit - count($topVoucherCodes);
+            $newestTopVouchercodes = self::getNewestOffers('newest', $newestCodesLimit);
+            foreach ($newestTopVouchercodes as $value) {
+                $topVoucherCodes[] = array(
+                    'id'=> $value['shop']['id'],
+                    'permalink' => $value['shop']['permalink'],
+                    'offer' => $value
+                 );
+            }
+        }
+        $topOffers = array();
+        foreach ($topVoucherCodes as $value) {
+            $topOffers[] = $value['offer'];
+        }
+        return $topOffers;
+    }
+    
+    public static function getTopCouponCodes($shopCategories, $limit = 5)
+    {
+        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $topCouponCodes = Doctrine_Query::create()
+        ->select(
+            'p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
+            o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
+            o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,
+            o.startDate,o.endDate,o.refOfferUrl,
+            o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
+            s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name'
+        )
+        ->from('PopularCode p')
+        ->leftJoin('p.offer o')
+        ->leftJoin('o.shop s')
+        ->leftJoin('s.logo img')
+        ->leftJoin('o.termandcondition terms')
+        ->where('o.deleted =0')
+        ->andWhere(
+            "(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE
+            cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'"
+        )
+        ->andWhere('s.deleted=0')
+        ->andWhere('o.offline = 0');
+
+        if (!empty($shopCategories)) {
+            $topCouponCodes = $topCouponCodes->leftJoin('s.refShopCategory sc')
+            ->andWhereIn('sc.categoryId', $shopCategories);
+        }
+
+        $topCouponCodes = $topCouponCodes->andWhere('s.status = 1')
+            ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+            ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+            ->andWhere('o.discounttype = "CD"')
+            ->andWhere('o.userGenerated = 0')
+            ->andWhere('o.Visability != "MEM"')
+            ->orderBy('p.position ASC')
+            ->limit($limit)
+            ->fetchArray();
+        return $topCouponCodes;
+    }
+
+    public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "")
+    {
+        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $newestCouponCodes = Doctrine_Query::create()
+            ->select(
+                's.id,s.name,
+                s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
+                s.actualUrl,terms.content,
+                o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+                o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
+                o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.extendedUrl,
+                o.discountType,o.startdate,o.endDate,
+                img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.logo ologo')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id
+                    and status=1)  > 0) or o.couponCodeType = 'GN'"
+            )
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+            ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability != "MEM"')
+            ->andWhere('o.userGenerated=0')
+            ->orderBy('o.startdate DESC');
+        if ($shopId!='') {
+            $newestCouponCodes->andWhere('s.id = '.$shopId.'');
+        }
+        if ($userId!="") {
+            $newestCouponCodes->andWhere('o.authorId = '.$userId.'');
+        }
+        $newestCouponCodes = $newestCouponCodes->limit($limit)->fetchArray();
+        return $newestCouponCodes;
+    }
+
+    public static function updateCache($id)
+    {
+        $offer  = Doctrine_Query::create()->select("o.id,s.id")
+                  ->from('Offer o')
+                  ->leftJoin("o.shop s")
+                  ->where("o.id=? ", $id)
+                  ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $shopId = $offer['shop']['id'] ;
+        $key = 'all_shopdetail'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_offerInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_latestupdatesInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_expiredOfferInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_relatedShopInStore'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $moneySavingGuideKey ="allMoneySavingGuideLists";
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(moneySavingGuideKey);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewOfferList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
+    }
+
+    public static function getSpecialPageOffers($specialPage)
+    {
+        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDateAndTime);
+        $constraintsRelatedOffers = self::getOfferByPageConstraints($specialPage, $currentDateAndTime);
+        $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+        $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
+        return $specialOffers;
+    }
+
+    public static function getSpecialOffersByPage($pageId, $currentDateAndTime)
+    {
+        $specialPageOffers = self::getOffersByPageId($pageId, $currentDateAndTime);
+        return self::removeDuplicateOffers($specialPageOffers);
+    }
+
+    public static function getOffersByPageId($pageId, $currentDateAndTime)
+    {
+        $specialPageOffers = Doctrine_Query::create()
+        ->select(
+            'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
+            o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
+            o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,s.name,s.refUrl,
+            s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
+            ologo.name'
+        )
+        ->from('refOfferPage op')
+        ->leftJoin('op.Offer o')
+        ->leftJoin('o.logo ologo')
+        ->andWhere(
+            "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
+            or couponCodeType = 'GN'"
+        )
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('s.logo l')
+        ->leftJoin('s.favoriteshops fv')
+        ->where('op.pageId = '.$pageId)
+        ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+        ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+        ->andWhere('o.deleted =0')
+        ->andWhere('s.deleted =0')
+        ->andWhere('s.status = 1')
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('o.Visability!="MEM"')
+        ->orderBy('o.exclusiveCode DESC')
+        ->addOrderBy('o.startdate DESC')
+        ->fetchArray();
+        return $specialPageOffers;
+    }
+
+    public static function removeDuplicateOffers($specialPageOffers)
+    {
+        $specialOffersWithoutDuplication = array();
+        if (count($specialPageOffers) > 0) {
+            for ($offerIndex = 0; $offerIndex < count($specialPageOffers); $offerIndex++) {
+                $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['Offer'];
+            }
+        }
+        return $specialOffersWithoutDuplication;
+    }
+
+    public static function getOfferByPageConstraints($specialPage, $currentDateAndTime)
+    {
+        $specialOffersByConstraints = self::getSpecialOffersByPageConstraints($specialPage, $currentDateAndTime);
+        return self::getFilteredOffersByConstraints($specialPage, $specialOffersByConstraints);
+    }
+
+    public static function getSpecialOffersByPageConstraints($specialPage, $currentDateAndTime)
+    {
+        $offersConstraintsQuery = Doctrine_Query::create()
+        ->select(
+            'o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
+            o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
+            o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
+            fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name'
+        )
+        ->from('Offer o')
+        ->leftJoin('o.logo ologo')
+        ->andWhere(
+            "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
+            or couponCodeType = 'GN'"
+        )
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('s.logo l')
+        ->leftJoin('s.favoriteshops fv')
+        ->andWhere('o.deleted =0')
+        ->andWhere("o.userGenerated = 0")
+        ->andWhere('s.deleted =0')
+        ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
+        ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+        ->andWhere('o.Visability!="MEM"')
+        ->andWhere('o.discounttype!="SL" and o.discounttype!="PA"')
+        ->orderBy('o.exclusiveCode DESC')
+        ->addOrderBy('o.startdate DESC');
+        $offersConstraintsQuery = self::implementOffersConstraints($offersConstraintsQuery, $specialPage);
+        $specialOffersByConstraints = $offersConstraintsQuery->fetchArray();
+        return $specialOffersByConstraints;
+    }
+
+    public static function implementOffersConstraints($offersConstraintsQuery, $specialPage)
+    {
+        if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
+            $offersConstraintsQuery->orderBy("o.title ASC");
+        } elseif (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 0) {
+            $offersConstraintsQuery->orderBy("o.title DESC");
+        } else {
+            $offersConstraintsQuery->orderBy("o.id DESC");
+        }
+        if (isset($specialPage['enableWordConstraint']) && $specialPage['enableWordConstraint'] > 0
+                && $specialPage['enableWordConstraint'] != null) {
+            $wordTitle = $specialPage['wordTitle'];
+            $offersConstraintsQuery->andWhere('o.title LIKE ?', "$wordTitle%");
+        }
+
+        $offerEditorpick = $specialPage['couponEditorPick']==1 ? $specialPage['couponEditorPick'] : 0;
+        $offerExclusive = $specialPage['couponExclusive'] == 1 ? $specialPage['couponExclusive'] : 0;
+        $offerRegular = $specialPage['couponRegular'] == 1 ? $specialPage['couponRegular'] : 0;
+        if ($offerRegular == 0) {
+            $offersConstraintsQuery = self::offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
+        } else {
+            $offersConstraintsQuery = self::
+                offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
+        }
+        return $offersConstraintsQuery;
+    }
+
+    public static function offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
+    {
+        if ($offerEditorpick == 0) {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::noCouponNoExclusiveNoEditorPickConstraints($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::yesCouponAndYesExclusiveConstraints($offersConstraintsQuery);
+            }
+        } else {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::
+                    yesCouponAndYesEditorPicksOrYesExclusiveConstraints($offersConstraintsQuery);
+            }
+        }
+        return $offersConstraintsQuery;
+    }
+
+    public static function offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
+    {
+        if ($offerEditorpick == 0) {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::
+                    yesCouponAndNoEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::
+                    yesCouponAndYesExclusiveAndNoEditorPicksConstraints($offersConstraintsQuery);
+            }
+        } else {
+            if ($offerExclusive == 0) {
+                $offersConstraintsQuery = self::
+                    yesCouponAndYesEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
+            } else {
+                $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+            }
+        }
+        return $offersConstraintsQuery;
+    }
+
+    public static function noCouponNoExclusiveNoEditorPickConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::noCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesExclusiveConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesExclusiveCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesEditorPicksCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesEditorPicksOrYesExclusiveConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::yesExclusiveOrYesEditorPickConstraints($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndNoEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesExclusiveAndNoEditorPicksConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponAndYesExclusiveConstraints($offersConstraintsQuery);
+        $offersConstraintsQuery = self::noEditorPicksCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function yesCouponAndYesEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery);
+        $offersConstraintsQuery = self::notExclusiveCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function noExclusiveCodeAndNoEditorPickCodeConstraints($offersConstraintsQuery)
+    {
+        $offersConstraintsQuery = self::noEditorPicksCodeConstraint($offersConstraintsQuery);
+        $offersConstraintsQuery = self::notExclusiveCodeConstraint($offersConstraintsQuery);
+        return $offersConstraintsQuery;
+    }
+
+    public static function noCouponCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.discounttype!="CD"');
+    }
+
+    public static function yesExclusiveOrYesEditorPickConstraints($offersConstraintsQuery)
+    {
+        return  $offersConstraintsQuery->andWhere('o.exclusiveCode = 1 or o.editorPicks = 1');
+    }
+
+    public static function noEditorPicksCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
+    }
+
+    public static function notExclusiveCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
+    }
+
+    public static function yesExclusiveCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.exclusiveCode = 1');
+    }
+
+    public static function yesEditorPicksCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.editorPicks = 1');
+    }
+
+    public static function yesCouponCodeConstraint($offersConstraintsQuery)
+    {
+        return $offersConstraintsQuery->andWhere('o.discounttype ="CD"');
+    }
+
+    public static function getFilteredOffersByConstraints($specialPage, $specialOffersByConstraints)
+    {
+        $offersAccordingToConstraints = array();
+        if (count($specialOffersByConstraints) > 0) {
+            for ($offerIndex = 0; $offerIndex < count($specialOffersByConstraints); $offerIndex++) {
+
+                $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate'];
+                $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['endDate'];
+                $offerSubmissionDaysIncreasedBy = ' +'.$specialPage['timenumberOfDays'].' days';
+                $offerSubmissionDaysDecreasedBy  = ' -'.$specialPage['timenumberOfDays'].' days';
+                $increasedOfferPublishDate = date(
+                    'Y-m-d',
+                    strtotime($offerPublishDate .$offerSubmissionDaysIncreasedBy)
+                );
+                $decreasedOfferExpiredDate = date(
+                    'Y-m-d',
+                    strtotime($offerExpiredDate .$offerSubmissionDaysDecreasedBy)
+                );
+                $currentDate = strtotime(date("Y-m-d"));
+                $newOfferPublishDate = strtotime($increasedOfferPublishDate);
+                $newOfferExprationDate = strtotime($decreasedOfferExpiredDate);
+
+                if (isset($specialPage['enableTimeConstraint']) && $specialPage['enableTimeConstraint'] == 1) {
+                    if ($specialPage['timeType'] == 1) {
+                        if ($newOfferPublishDate >= $currentDate) {
+                            $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
+                        }
+                    } elseif ($specialPage['timeType'] == 2) {
+                        if ($newOfferExprationDate <= $currentDate) {
+                            $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
+                        }
+                    }
+                } elseif (isset($specialPage['enableClickConstraint']) && $specialPage['enableClickConstraint'] == true
+                        && $specialPage['enableClickConstraint'] == 1) {
+                    if ($specialOffersByConstraints[$offerIndex]['clicks'] >= $specialPage['numberOfClicks']) {
+                        $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
+                    }
+                } else {
+                    $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
+                }
+
+            }
+        }
+        return $offersAccordingToConstraints;
+    }
+
+    public static function getDataForOfferPhtml($specialMargedOffers, $specialPage)
+    {
+        if (isset($specialPage['maxOffers']) && @$specialPage['maxOffers'] > 0 && @$specialPage['maxOffers'] != null) {
+            $specialMargedOffers = array_slice($specialMargedOffers, 0, $specialPage['maxOffers']);
+        }
+        $specialOffersAfterMerging = array();
+        foreach ($specialMargedOffers as $specialOffer) {
+            if (isset($specialOffersAfterMerging[$specialOffer['id']])) {
+            } else {
+                $specialOffersAfterMerging[$specialOffer['id']] = $specialOffer;
+            }
+        }
+        return $specialOffersAfterMerging;
+    }
+
+    public static function getActiveCoupons($keyword)
+    {
+        $currentDateAndTime = date("Y-m-d 00:00:00");
+        $activeCoupons = Doctrine_Query::create()
+        ->select(
+            's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer,
+            o.extendedUrl, o.shopid'
+        )
+        ->from('Offer o')
+        ->leftJoin('o.shop s')
+        ->where('o.deleted=0')
+        ->andWhere('o.userGenerated=0')
+        ->andWhere("o.title LIKE '%$keyword%'")
+        ->andWhere('o.enddate>'."'".$currentDateAndTime."'")
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('s.deleted = 0')
+        ->orderBy('o.id DESC')
+        ->fetchArray();
+        return $activeCoupons;
+    }
+
+    public static function getSplashPagePopularCoupon($offerId)
+    {
+        $offerDetails = Doctrine_Query::create()
+            ->select(
+                'o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+                o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
+                o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,
+                o.discountType,o.startdate,o.endDate, o.shopId'
+            )
+            ->from('Offer o')
+            ->where('o.deleted = 0')
+            ->andWhere('o.userGenerated=0')
+            ->andWhere('o.id='.$offerId)
+            ->andWhere('o.discounttype="CD"')
+            ->orderBy('o.id DESC')
+            ->fetchArray();
+            $shopDetails = self::getShopDetailFromOffer($offerDetails[0]['shopId']);
+            $logoDetails = self::getShopLogo($shopDetails[0]['logoId']);
+            $splashPagePopularCoupon = array_merge($offerDetails, $shopDetails, $logoDetails);
+        return $splashPagePopularCoupon;
+    }
+
+    public static function getShopDetailFromOffer($shopId)
+    {
+        $splashPagePopularCouponShopDetails = Doctrine_Query::create()
+            ->select(
+                's.id,s.name,
+                s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
+                s.actualUrl,s.logoId'
+            )
+            ->from('Shop s')
+            ->where('s.id='.$shopId)
+            ->andWhere('s.deleted = 0')
+            ->fetchArray();
+        return $splashPagePopularCouponShopDetails;
+    }
+
+    public static function getShopLogo($logoId)
+    {
+        $splashPagePopularCouponLogo = Doctrine_Query::create()
+            ->select('l.name, l.path')
+            ->from('Logo l')
+            ->where('l.id='.$logoId)
+            ->fetchArray();
+        return $splashPagePopularCouponLogo;
+    }
+
+    public static function searchOffers($searchParameters, $shopIds, $limit)
+    {
+        $searchKeyword = '';
+        if(isset($searchParameters['searchField'])) :
+            $searchKeyword = $searchParameters['searchField'];
+        endif;
+
+        $currentDate = date('Y-m-d H:i:s');
+        $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
+        $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
+        $mergedOffersBySearchedKeywords = array_merge($searchedOffersByIds, $offersBySearchedKeywords);
+        $searchedOffers = array_slice($mergedOffersBySearchedKeywords, 0, $limit);
+        return $searchedOffers;
+    }
+
+    public static function getOffersByShopIds($shopIds, $currentDate)
+    {
+        $shopOffersByShopIds = array();
+        if(!empty($shopIds)) :
+            $shopIds = array_map("mysql_real_escape_string", $shopIds);
+            $shopIds = ("'" . implode("', '", $shopIds) . "'");
+            $shopOffersByShopIds = Doctrine_Query::create()
+            ->select(
+                's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,
+                o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate,
+                o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName,
+                o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId'
+            )
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.favoriteshops fv')
+            ->leftJoin('o.termandcondition terms')
+            ->leftJoin('o.tiles t')
+            ->where('o.deleted = 0')
+            ->andWhere("o.userGenerated = 0")
+            ->andWhere('o.offline = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
+            ->andWhere('o.enddate > "'.$currentDate.'"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability != "MEM"')
+            ->andWhere(
+                "s.id IN(" . $shopIds .")"
+            )
+            ->orderBy("s.name ASC")
+            ->fetchArray();
+        endif;
+        return $shopOffersByShopIds;
+    }
+
+    public static function getOffersBySearchedKeywords($searchKeyword, $currentDate)
+    {
+        $shopOffersBySearchedKeywords = Doctrine_Query::create()
+                ->select(
+                    's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,
+                    o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, 
+                    o.refofferurl, o.startdate,o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount,
+                    o.authorId, o.authorName, o.shopid,o.offerlogoid, o.userGenerated, o.approved,img.id, img.path,
+                    img.name,fv.shopId,fv.visitorId,t.*'
+                )
+                ->from('Offer o')
+                ->leftJoin('o.shop s')
+                ->leftJoin('s.logo img')
+                ->leftJoin('s.favoriteshops fv')
+                ->leftJoin('o.termandcondition terms')
+                 ->leftJoin('o.tiles t')
+                ->where('o.deleted = 0')
+                ->andWhere('o.offline = 0')
+                ->andWhere('s.deleted = 0')
+                ->andWhere('o.startdate <= "'.$currentDate.'"')
+                ->andWhere('o.enddate > "'.$currentDate.'"')
+                ->andWhere('o.discounttype="CD"')
+                ->andWhere('o.Visability != "MEM"')
+                ->andWhere(
+                    "s.name LIKE '%$searchKeyword%' or o.title LIKE '%$searchKeyword%'",
+                    $searchKeyword,
+                    $searchKeyword
+                )
+                ->orderBy("s.name ASC")
+                ->fetchArray();
+        return $shopOffersBySearchedKeywords;
+    }
+
+    public static function getOfferList($parameters)
+    {
+        $userRole           = Auth_StaffAdapter::getIdentity()->roleId;
+        $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
+        $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
+        $searchCoupon       = $parameters["shopCoupon"]!='undefined' ? $parameters["shopCoupon"] : '';
+        $searchCouponType   = $parameters["couponType"]!='undefined' ? $parameters["couponType"] : '';
+        $deletedStatus      = $parameters['flag'];
+        $getOffersQuery = Doctrine_Query::create()
+            ->select(
+                'o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,
+                o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL,o.couponcode'
+            )
+            ->from("Offer o")
+            ->leftJoin('o.shop s')
+            ->where("o.deleted="."'$deletedStatus'")
+            ->andWhere("o.userGenerated = '0'");
+        if ($userRole=='4') {
+            $getOffersQuery->andWhere("o.Visability='DE'");
+        }
+        if ($searchOffer != '') {
+            $getOffersQuery->andWhere("o.title LIKE ?", "%$searchOffer%");
+        }
+        if ($searchShop!='') {
+            $getOffersQuery->andWhere("s.name LIKE ?", "%$searchShop%");
+        }
+        if ($searchCoupon!='') {
+            $getOffersQuery->andWhere("o.couponcode LIKE ?", "%$searchCoupon%");
+        }
+        if ($searchCouponType!='') {
+            $getOffersQuery->andWhere("o.discountType="."'$searchCouponType'");
+        }
+        $offersList = DataTable_Helper::generateDataTableResponse(
+            $getOffersQuery,
+            $parameters,
+            array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate',
+                'o.endDate', 'clicks','authorName'),
+            array(),
+            array()
+        );
+        return $offersList;
+    }
+
+    public static function addConversion($offerId)
+    {
+        $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());
+
+        if (Offer:: getCloakLink($id, true)) {
+                $offerData = Doctrine_Query::create()
+                        ->select('count(c.id) as exists,c.id')
+                        ->from('Conversions c')
+                        ->andWhere('c.offerId="'.$offerId.'"')
+                        ->andWhere('c.IP="'.$clientIP.'"')
+                        ->andWhere("c.converted=0")
+                        ->groupBy('c.id')
+                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+
+            if (!$offerData['exists']) {
+                $offerCount  = new Conversions();
+                $offerCount->offerId = $offerId;
+                $offerCount->IP = $clientIP;
+                $offerCount->utma = $this->getRequest()->getCookie("__utma");
+                $offerCount->utmz = $this->getRequest()->getCookie("__utmz");
+                $time = time();
+                $offerCount->subid = md5(time()*rand(1, 999));
+                $offerCount->save();
+
+            } else {
+                $offerCount = Doctrine_Core::getTable("Conversions")->find($offerData['id']);
+                if ($offerCount) {
+                    $offerCount->utma = $this->getRequest()->getCookie("__utma");
+                    $offerCount->utmz = $this->getRequest()->getCookie("__utmz");
+                    $time = time();
+                    $offerCount->subid = md5(time()*rand(1, 999));
+                    $offerCount->save();
+                }
+            }
+        }
+    }
+
+    public static function getCloakLink($offerId, $checkRefUrl = false)
+    {
+        $data = Doctrine_Query::create()
+        ->select(
+            's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl'
+        )
+        ->from('Offer o')
+        ->leftJoin('o.shop s')
+        ->where('o.id = "'.$offerId.'"')
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+
+        $network = Shop::getAffliateNetworkDetail(@$data['shop']['id']);
+
+        if ($checkRefUrl) {
+            # retur false if s shop is not associated with any network
+            if (! isset($network['affliatenetwork'])) {
+                return false ;
+            }
+
+            if (@$data['refURL'] != "") {
+                return true ;
+
+            } elseif (@$data['shop']['refUrl'] != "") {
+                return true ;
+            } else {
+                return true ;
+            }
+        }
+
+        $subid = "" ;
+        if (isset($network['affliatenetwork'])) {
+            if (!empty($network['subid'])) {
+                 $subid = "&". $network['subid'] ;
+                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
+                 $ip = ip2long($clientIP);
+                 # get click detail and replcae A2ASUBID click subid
+                 $conversion = Conversions::getConversionId($data['id'], $ip, 'offer');
+                 $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
+            }
+        }
+
+        if (@$data['refURL'] != "") {
+
+            $url = @$data['refURL'];
+
+            $url .= $subid ;
+
+        } elseif (@$data['shop']['refUrl'] != "") {
+
+            $url = @$data['shop']['refUrl'];
+            $url .=  $subid ;
+
+        } elseif (@$data['shop']['actualUrl'] != "") {
+
+            $url = @$data['shop']['actualUrl'];
+        } else {
+
+            $urll = @$data['shop']['permalink'];
+            $url = HTTP_PATH_LOCALE.$urll;
+        }
+        return $url ;
+    }
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
+
+    /**
+     * Move record in trash.
+     * @param  integer $id
+     * @version 1.0
+     * @author  Er.kundal
+     * @return integer $id
+     */
+    public static function moveToTrash($id)
+    {
+        if ($id) {
+            //find record by id
+            $u = Doctrine_Core::getTable("Offer")->find($id);
+            $offer_id = $id;
+            $authorId = self::getAuthorId($offer_id);
+
+            //Delete popular code if exist
+            $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($offer_id);
+
+            if ($exist) {
+                PopularCode::deletePopular($offer_id, $exist->position );
+            }
+            //Delete popular code if exist
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+
+            $key = 'all_offerInStore'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_relatedShopInStore'  . $u->shopId  . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+
+            $key = 'all_widget5_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $u->delete();
+
+        } else {
+
+            $id = null;
+        }
+        //call cache function
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+
+        return $id;
+
+    }
+    /**
+     * Permanent delete record from database.
+     * @param  integer $id
+     * @version 1.0
+     * @author kraj
+     * @return integer $id
+     */
+    public static function deleteOffer($id)
+    {
+        if ($id) {
+            //find record by id and change status (deleted=1)
+            $u = Doctrine_Core::getTable("Offer")->find($id);
+
+            $offer_id = $id;
+            $authorId = self::getAuthorId($offer_id);
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+
+            $key = 'all_offerInStore'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_relatedShopInStore'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+
+           $del1 = Doctrine_Query::create()->delete()
+            ->from('refOfferCategory w')->where("w.offerId=" . $id)
+            ->execute();
+
+           $del1 = Doctrine_Query::create()->delete()
+           ->from('TermAndCondition w')->where("w.offerId=" . $id)
+           ->execute();
+
+           $d = Doctrine_Query::create()->delete()
+           ->from('PopularCode w')->where("w.offerId=" . $id)
+           ->execute();
+
+           $d2 = Doctrine_Query::create()->delete()
+           ->from('refOfferPage w')->where("w.offerId=" . $id)
+           ->execute();
+
+           $d3 = Doctrine_Query::create()->delete()
+           ->from('ViewCount w')->where("w.offerId=" . $id)
+           ->execute();
+
+           $del2 = Doctrine_Query::create()->delete()->from('OfferNews p')
+           ->where('p.offerId=' . $id)->execute();
+
+           $del2 = Doctrine_Query::create()->delete()->from('OfferNews p')
+           ->where('p.offerId=' . $id)->execute();
+
+           $del3 = Doctrine_Query::create()->delete()->from('PopularCode p')
+           ->where('p.offerId=' . $id)->execute();
+
+           $key = 'all_widget5_list';
+           FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+           $key = 'all_widget6_list';
+           FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $del = Doctrine_Query::create()->delete()
+            ->from('Offer o')
+            ->where("o.id=" . $id)
+            ->execute();
+
+        } else {
+            $id = null;
+        }
+        //call cache function
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+
+        return $id;
+    }
+    /**
+     * restore offer from trash to list
+     * @param integer $id
+     * @version 1.0
+     * @author kraj
+     */
+    public static function restoreOffer($id)
+    {
+        if ($id) {
+
+            $u = Doctrine_Core::getTable("Offer")->find($id);
+
+            $offer_id = $id;
+            $authorId = self::getAuthorId($offer_id);
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+
+            $key = 'all_offerInStore'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_relatedShopInStore'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+
+            $key = 'all_widget5_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            //update status of record by id(deleted=0)
+            $O = Doctrine_Query::create()->update('Offer')
+            ->set('deleted', '0')->where('id=' . $id);
+            $O->execute();
+
+        } else {
+            $id = null;
+        }
+        //call cache function
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+
+        return $id;
+    }
+    /**
+     * Search to five offer
+     * @param  string  $keyword
+     * @param  boolean $flag
+     * @version 1.0
+     * @return array   $data
+     * @author kraj
+     */
+    public static function searchToFiveOffer($keyword,$flag)
+    {
+        $data = Doctrine_Query::create()
+        ->select('o.title as title')
+        ->from("Offer o")
+        ->where('o.deleted=' . "'$flag'")
+        ->andWhere("o.title LIKE ?", "$keyword%")
+        ->orderBy("o.title ASC")->andWhere("o.userGenerated = '0'")->limit(5)->fetchArray();
+
+        return $data;
+    }
+    /**
+     * Search top five shop
+     * @param  string  $keyword
+     * @param  boolean $flag
+     * @return array   $data
+     * @author kraj
+     */
+    public static function searchToFiveShop($keyword,$flag)
+    {
+        $data = Doctrine_Query::create()
+        ->select()
+        ->from("Offer o")->leftJoin('o.shop s')
+        ->where('o.deleted=' . "'$flag'")
+        ->andWhere("s.name LIKE ?", "$keyword%")->andWhere("o.userGenerated = '0'")
+        ->orderBy("s.id ASC")->groupBy('s.name')->limit(5)->fetchArray();
+        //print_r($data); die;
+        return $data;
+    }
+
+    /**
+     * Search top five Coupon
+     * @param  string  $keyword
+     * @param  boolean $flag
+     * @return array   $data
+     * @author Amit Sharma
+     */
+    public static function searchToFiveCoupon($keyword,$flag)
+    {
+        $data = Doctrine_Query::create()
+        ->select()
+        ->from("Offer o")
+        ->where('o.deleted=' . "'$flag'")
+        ->andWhere("o.couponcode LIKE ?", "$keyword%")
+        ->orderBy("o.id ASC")->limit(5)->fetchArray();
+        //print_r($data); die;
+        return $data;
+    }
+
+    /**
+     * Save offer in the database
+     * @param $shopDetail
+     * @author kkumar
+     */
+
+    public function saveOffer($params)
+    {
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
+                // check the offer type
+                if (isset($params['defaultoffercheckbox'])) {     //offer type is default
+                    $this->Visability = 'DE';
+                    if ($params['selctedshop']!='') {
+
+                        if (intval($params['selctedshop']) > 0) {
+                            $this->shopId = $params['selctedshop'] ;
+                        } else {
+                            return array('result' => true , 'errType' => 'shop' );
+                        }
+                    }
+                } else {                                            // offer type member only
+                    $this->Visability = 'MEM';
+                    $this->shopId = null;
+                }
+        } else {
+
+            if (intval($params['selctedshop']) > 0) {
+                $this->shopId =  $params['selctedshop'] ;
+            } else {
+                return array('result' => true , 'errType' => 'shop' );
+            }
+
+        }
+
+        // check the discountype
+        if (isset($params['couponCodeCheckbox'])) {             // discount type coupon
+            $this->discountType = 'CD';
+            $this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
+            $this->discount = BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
+            $this->discountvalueType =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['discountchk']);
+            if (isset($params['selectedcategories'])) {
+                foreach ($params['selectedcategories'] as $categories) {
+
+                    $this->refOfferCategory[]->categoryId = $categories ;
+
+                }
+            }
+        } elseif (isset($params['newsCheckbox'])) {       // discount type sale
+            $this->discountType = 'NW';
+        } elseif (isset($params['saleCheckbox'])) {       // discount type sale
+            $this->discountType = 'SL';
+        } else {                                                // discount type printable
+            $this->discountType = 'PA';
+            //check printable document
+            if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {                          // upload offer
+
+                $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
+                $ext =  BackEnd_Helper_viewHelper::getImageExtension($fileName);
+                $pattern = '/^[0-9]{10}_(.+)/i' ;
+                 preg_match($pattern, $fileName , $matches );
+                if (!$fileName) {
+                    return false;
+                }
+                if (@$matches[1]) {
                    $this->logo->ext = $ext;
-			  	   $this->logo->path ='images/upload/offer/';
-			  	   $this->logo->name = $fileName;
-			   }
-			}else{                                                   // add offer refUrl
-				$this->refOfferUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
-			}
-		}
+                   $this->logo->path ='images/upload/offer/';
+                   $this->logo->name = $fileName;
+               }
+            } else {                                                   // add offer refUrl
+                $this->refOfferUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
+            }
+        }
 
-		$this->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
+        $this->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
+
+        if (isset($params['deepLinkStatus']) ) {
+            $this->refURL =  BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
+            //$this->shop->deepLink = $params['offerRefUrl'];
+        }
 
-		if(isset($params['deepLinkStatus']) ) {
-			$this->refURL =  BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
-			//$this->shop->deepLink = $params['offerRefUrl'];
-		}
+        if (trim($params['termsAndcondition'])!='') {
+            $this->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']) ;
+        }
 
-		if(trim($params['termsAndcondition'])!=''){
-			$this->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']) ;
-		}
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
+            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
+            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+        }
 
+        if (isset($params['attachedpages'])) {
+            foreach ($params['attachedpages'] as $pageId) {
 
-		if(!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news"){
-			$this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
-        	$this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
-		}
+                $this->refOfferPage[]->pageId = $pageId ;
 
-		if(isset($params['attachedpages'])){
-			foreach ($params['attachedpages'] as $pageId) {
+            }
+        }
 
-				$this->refOfferPage[]->pageId = $pageId ;
-
-			}
-		}
-
-		if(isset($params['extendedoffercheckbox'])){                  // check if offer is extended
-		  $this->extendedOffer = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
-		  $this->extendedTitle =BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
-		  $this->extendedUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
-		  $this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
-		  $this->extendedFullDescription =BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
-		}else{
-
-			$this->extendedOffer = 0;
-			$this->extendedTitle = '';
-			$this->extendedUrl = '';
-			$this->extendedMetaDescription = '';
-			$this->extendedFullDescription = '';
-		}
-
-		$this->exclusiveCode=$this->editorPicks = 0;
-		if(isset($params['exclusivecheckbox'])){
-			$this->exclusiveCode=1;
-		}
-
-
-
-		if(isset($params['editorpickcheckbox'])){
-			$this->editorPicks=1;
-		}
-
-		$this->maxlimit=$this->maxcode='0';
-
-		if(isset($params['maxoffercheckbox'])){
-			$this->maxlimit='1';
-			$this->maxcode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxoffertxt']);
-		}
-
-		$connUser = BackEnd_Helper_viewHelper::addConnection();
-
-			$this->authorId = Auth_StaffAdapter::getIdentity()->id;
-			$this->authorName = Auth_StaffAdapter::getIdentity()->firstName . " " . Auth_StaffAdapter::getIdentity()->lastName;
-
-		BackEnd_Helper_viewHelper::closeConnection($connUser);
-		$connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-		if(intval($params['offerImageSelect']) > 0){
-
-			$this->tilesId = $params['offerImageSelect'];
-		}
-
-		// New code starts add blal
-
-		if(isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])){
-
-			if(intval($params['selctedshop']) > 0)
-			{
-				$this->shopId = $params['selctedshop'] ;
-
-			} else {
-				return array('result' => true , 'errType' => 'shop' );
-			}
-
-		}
-
-
-
-		if(isset($params['fromWhichShop']) && $params['fromWhichShop']== 0){
-			$this->shopExist = 0;
-		}else{
-			$this->shopExist = 1;
-		}
-
-		if(isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])){
-
-
-			$saveNewShop = new Shop();
-			$saveNewShop->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
-			$saveNewShop->permaLink = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
-			$saveNewShop->status = 1;
-
-			if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != ''){
-
-				$fileName = self::uploadShopLogo('logoFile');
-				$saveNewShop->logo->ext = 	BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
-				$saveNewShop->logo->path = 'images/upload/shop/';
-				$saveNewShop->logo->name = $fileName;
-				}else{
-					return false;
-				}
-
-			$saveNewShop->logoId = $saveNewShop->logo->id;
-
-			$saveNewShop->save();
-			$this->shopId = $saveNewShop->id;
-
-		}      // New code Ends
-
-		try {
-
-
-			if(intval($this->shopId) > 0)
-			{
-				$this->save();
-				$key = trim('all_relatedShopInStore'  . intval(@$params['selctedshop']) . '_list');
-				FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-			} else 	{
-				return array('result' => true , 'errType' => 'shop' );
-			}
-
-
-
-	/***************** Start Add news code ********************/
-		$lId = $this->id;
-		if(isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news"){
-			$newstitleloop = @$params['newsTitle'];
-			for($n=0;$n<count($newstitleloop);$n++){
-				$savenews = new OfferNews();
-				$savenews->shopId = @$params['selctedshop'];
-				$savenews->offerId = @$lId;
-				$savenews->title = @$newstitleloop[$n] != "" ?
-										BackEnd_Helper_viewHelper::stripSlashesFromString($newstitleloop[$n]) : "";
-
-				$savenews->url = @$params['newsrefUrl'][$n] != "" ?
-								BackEnd_Helper_viewHelper::stripSlashesFromString( $params['newsrefUrl'][$n]) : "";
-
-				$savenews->content = @$params['newsDescription'][$n] != "" ?
-						BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsDescription'][$n]) : "";
-
-				$savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
-				$savenews->save();
-			}
-		}
-	/***************** End Add news code ********************/
-			$offer_id = $this->id;
-			$authorId = self::getAuthorId($offer_id);
-
-			$uid = $authorId[0]['authorId'];
-			$popularcodekey ="all_". "popularcode".$uid ."_list";
-			$newcodekey ="all_". "newestcode".$uid ."_list";
-			//call cache function
-			$key = 'all_offerInStore'  . intval($params['selctedshop']) . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_latestupdatesInStore'  . intval($params['selctedshop']) . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_expiredOfferInStore'  . intval($params['selctedshop']) . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = trim('all_relatedShopInStore'  . intval(@$params['selctedshop']) . '_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-
-
-			$mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-			return array('result' => true , 'ofer_id' => $this->id );
-
-			$key = 'all_widget5_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-			$key = 'all_widget6_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-		}catch (Exception $e){
-
-			return false;
-		}
-
-	}
-
-
-	/**
-	 *
-	 */
-	 public static function addkortingscode($title,$shopid,$kortingscode,$desc,$userid,$uname){
-	 	$pc = new Offer();
-	 	$pc->shopId =$shopid;
-	 	$pc->title =BackEnd_Helper_viewHelper::stripSlashesFromString($title);
-	 	$pc->couponCode =BackEnd_Helper_viewHelper::stripSlashesFromString($kortingscode);
-	 	$pc->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($desc);
-	 	$pc->userGenerated = 1;
-	 	$pc->authorId = BackEnd_Helper_viewHelper::stripSlashesFromString($userid);
-	 	$pc->authorName =BackEnd_Helper_viewHelper::stripSlashesFromString($uname);
-	 	if($pc->save())
-	 	{
-	 		return true;
-	 	}
-	 	else{
-
-	 		return false;
-	 	}
-	 }
-	/**
-	 * Update offer in the detail
-	 * @param $shopDetail
-	 * @author kkumar
-	 */
-
-	public  function updateOffer($params){
-		//echo "<pre>"; print_r($params); die;
-		if(!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news"){
-				// check the offer type
-				if(isset($params['defaultoffercheckbox'])){      //offer type is default
-					$this->Visability = 'DE';
-					if($params['selctedshop']!=''){
-						$this->shopId =  $params['selctedshop'] ;
-					}
-				}else{                                            // offer type member only
-					$this->Visability = 'MEM';
-					$this->shopId = null;
-				}
-		}else{
-			$this->shopId =  $params['selctedshop'] ;
-		}
-		// check the discountype
-
-
-		if(intval($params['offerImageSelect']) > 0){
-
-			$this->tilesId =  $params['offerImageSelect'] ;
-
-		}
-
-
-
-
-		$this->couponCodeType = $params['couponCodeType'];
-
-
-		if(isset($params['couponCodeCheckbox'])){             // discount type coupon
-
-
-			$this->discountType = 'CD';
-			$this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
-			$this->discount = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
-			$this->discountvalueType = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountchk']);
-			$this->refOfferCategory->delete();
-			if(isset($params['selectedcategories']))
-			{
-				foreach ($params['selectedcategories'] as $categories) {
-
-					$this->refOfferCategory[]->categoryId = $categories ;
-
-				}
-			}
-
-		}else if(isset($params['newsCheckbox'])){       // discount type sale
-			$this->discountType = 'NW';
-		}else if(isset($params['saleCheckbox'])){       // discount type sale
-			$this->discountType = 'SL';
-
-			//find if the offers exist in popular codes
-			$exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
-
-			if ($exist) {
-				PopularCode::deletePopular($params['offerId'], $exist->position );
-			}
-
-		}else{                                                // discount type printable
-			$this->discountType = 'PA';
-
-
-			//$this->tilesId = null ;
-
-
-
-			//find if the offers exist in popular codes
-			$exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
-
-			if ($exist) {
-				PopularCode::deletePopular($params['offerId'], $exist->position );
-			}
-
-			//check printable document
-			if(isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != ''){  // upload offer
-
-
-				$this->refOfferUrl = '';
-				$fileName = self::uploadFile($_FILES['uploadoffer']['name']);
-				$ext =  BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
-				$pattern = '/^[0-9]{10}_(.+)/i' ;
-				preg_match($pattern, $fileName , $matches );
-				if(!$fileName){
-
-					return false;
-				}
-				if(@$matches[1])
-				{
-
-					$this->logo->ext = $ext;
-					$this->logo->path ='images/upload/offer/';
-					$this->logo->name = $fileName;
-				}
-
-			}else{                                                     // add offer refUrl
-				$this->refOfferUrl = BackEnd_Helper_viewHelper::stripSlashesFromString ($params['offerrefurlPR']);
-			}
-		}
-
-		$this->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
-
-	    if(isset($params['deepLinkStatus'])){
-			$this->refURL =  BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
-		}else{
-			$this->refURL =  '';
-		}
-		$this->termandcondition->delete();
-
-
-		if(trim($params['termsAndcondition'])!=''){
-			$this->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
-		}
-
-		if(!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news"){
-			$this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
-			$this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
-		}
-
-		$this->refOfferPage->delete();
-		if(isset($params['attachedpages'])){
-			foreach ($params['attachedpages'] as $pageId) {
-
-				$this->refOfferPage[]->pageId = $pageId ;
-
-			}
-		}
-		//&& isset($params['couponCodeCheckbox'])
-
-		if(isset($params['extendedoffercheckbox'])){
-			//echo "<pre>";
-			//print_r($params['couponInfo']);
-			// check if offer is extended
-			$this->extendedOffer = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
-			$this->extendedTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
-			$this->extendedUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
-			$this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
-			$this->extendedFullDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
-		}else{
-
-			$this->extendedOffer = 0;
-			$this->extendedTitle = '';
-			$this->extendedUrl = '';
-			$this->extendedMetaDescription = '';
-			$this->extendedFullDescription = '';
-		}
-
-		$this->exclusiveCode=$this->editorPicks=0;
-		if(isset($params['exclusivecheckbox'])){
-			$this->exclusiveCode=1;
-		}
-
-		if(isset($params['editorpickcheckbox'])){
-			$this->editorPicks=1;
-		}
-
-		$this->maxlimit=$this->maxcode='0';
-
-		if(isset($params['maxoffercheckbox'])){
-			$this->maxlimit='1';
-			$this->maxcode=$params['maxoffertxt'];
-		}
-
-		$getcategory = Doctrine_Query::create()->select()->from('Offer')->where('id = '.$params['offerId'] )->fetchArray();
-
-		if(!empty($getcategory)){
-
-			$extendedUrl = mysql_real_escape_string($getcategory[0]['extendedUrl']);
-
-			$getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where('permalink = "?"', $extendedUrl)->andWhere('type = "EXTOFFER"')->fetchArray();
-
-			if(empty($getRouteLink)){
-				$getRouteLink = 'empty';
-			}
-			//$updateRouteLink = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $getcategory[0]['permaLink'] );
-		}else{
-			$updateRouteLink = new RoutePermalink();
-		}
-
-
-		// New code starts add blal
-
-		if(isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])){
-			//die("Hiiii");
-			$this->shopId = @$params['selctedshop'];
-		}
-		if(isset($params['fromWhichShop']) && $params['fromWhichShop']== 0){
-			$this->shopExist = 0;
-		}else{
-			$this->shopExist = 1;
-		}
-		if(isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])){
-			$saveNewShop = new Shop();
-			$saveNewShop->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
-			$saveNewShop->permaLink = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
-			$saveNewShop->status = 1;
-
-			if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != ''){
-
-				$fileName = self::uploadShopLogo('logoFile');
-				$saveNewShop->logo->ext = 	BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
-				$saveNewShop->logo->path = 'images/upload/shop/';
-				$saveNewShop->logo->name = $fileName;
-			}else{
-				return false;
-			}
-
-			$saveNewShop->logoId = $saveNewShop->logo->id;
-
-			$saveNewShop->save();
-			$this->shopId = $saveNewShop->id;
-
-		}      // New code Ends
-
-		try {
-
-			$this->save();
-			$lId = $this->id;
-
-			/*****************Add more news of offer******************/
-
-			$offerId = @$params['offerId'];
-
-			Doctrine_Query::create()->delete('OfferNews')
-			->where('offerId=' . $offerId)->execute();
-
-			if(isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news"){
-				$newsloop = @$params['newsTitle'];
-				for($n=0;$n<count($newsloop);$n++){
-
-					$savenews = new OfferNews();
-					$savenews->shopId = @$params['selctedshop'];
-					$savenews->offerId = @$offerId;
-
-					$savenews->title = @$newsloop[$n] != "" ?
-							 BackEnd_Helper_viewHelper::stripSlashesFromString($newsloop[$n]) : "";
-
-					$savenews->url = @$params['newsrefUrl'][$n] != "" ?
-											 BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsrefUrl'][$n]) : "";
-
-					$savenews->content = @$params['newsDescription'][$n] != "" ?
-											BackEnd_Helper_viewHelper::stripSlashesFromString(	$params['newsDescription'][$n])  : "";
-					$savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
-					$savenews->save();
-				}
-			}
-
-			/***********End update more news of offer shop*************/
-
-			$offerID = $params['offerId'];
-			$authorId = self::getAuthorId($offerID);
-
-			$uid = $authorId[0]['authorId'];
-			$popularcodekey ="all_". "popularcode".$uid ."_list";
-			$newcodekey ="all_". "newestcode".$uid ."_list";
-			//call cache function
-
-			$key = 'all_offerInStore'  . intval($params['selctedshop']) . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_latestupdatesInStore'  . intval($params['selctedshop']) . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_expiredOfferInStore'  .intval($params['selctedshop']) . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$key = 'all_relatedShopInStore'  . intval($params['selctedshop']) . '_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-			$mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-
-
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-
-			$key = 'all_widget5_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-			$key = 'all_widget6_list';
-			FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-
-			return array('result' => true);
-		}catch (Exception $e){
-			return false;
-		}
-	}
-
-	/**
-	 * Get user Id from offer id
-	 * @author Raman
-	 * @return array $userId
-	 * @version 1.0
-	 */
-	public static function getAuthorId($offerId){
-
-		$userId = Doctrine_Query::create()
-		->select('o.authorId')
-		->from("Offer o")
-		->where("o.id =$offerId")
-		->fetchArray();
-
-		return $userId;
-	}
-
-
-
-	/**
-	 * get list of offer for export
-	 * @author kraj
-	 * @return array $offerList
-	 * @version 1.0
-	 */
-	public static function exportofferList (){
-		$offerList = Doctrine_Query::create()
-		->select('o.*,s.name,s.deeplink,term.content')
-		->from("Offer o")
-		->addSelect('(SELECT COUNT(*) FROM ViewCount v WHERE v.offerId = o.id) as Count')
-		->leftJoin('o.shop s')
-		->leftJoin('o.termandcondition term')
-		->where("o.deleted=0")
-		->andWhere("o.userGenerated=0")
-		->orderBy("o.id DESC")
-		->fetchArray();
-		return $offerList;
-	}
-
-	public static function getOfferDetail($offerId){
-		$shopDetail = Doctrine_Query::create()
-		->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
-		->from("Offer o")
-		->leftJoin('o.shop s')
-		->leftJoin('s.affliatenetwork a')
-		->leftJoin('o.page p')
-		->leftJoin('o.termandcondition tc')
-		->leftJoin('o.category cat')
-		->leftJoin('o.logo img')
-		->leftJoin('o.offernews news')
-		->leftJoin('o.tiles t')
-		->addSelect("(SELECT  count(cc.status) FROM CouponCode cc WHERE cc.offerid = o.id and cc.status = 0) as used")
-		->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")
-		->andWhere("o.id =$offerId")->andWhere("o.userGenerated = '0'")->fetchArray();
-		return $shopDetail;
-	}
-
-
-	public static function getOfferInfo($offerId){
-		$shopDetail = Doctrine_Query::create()
-		->select('o.*,s.name,s.notes,s.accountManagerName,s.deepLink,s.refUrl,s.actualUrl,s.affliateNetworkId as aid,s.permaLink,a.name as affname,a.id,p.id,tc.*,cat.id,img.*')
-		->from("Offer o")
-		->leftJoin('o.shop s')
-		->leftJoin('s.affliatenetwork a')
-		->leftJoin('o.page p')
-		->leftJoin('o.termandcondition tc')
-		->leftJoin('o.category cat')
-		->leftJoin('s.logo img')
-		->andWhere("o.id =$offerId")->fetchArray();
-
-		//echo "<pre>";
-		//print_r($shopDetail); die;
-		return $shopDetail;
-	}
-
-
-
-	public function uploadFile($imgName){
-
-
-		$uploadPath = "images/upload/offer/";
-		$adapter = new Zend_File_Transfer_Adapter_Http();
-		$user_path = ROOT_PATH . $uploadPath;
-		$img = $imgName;
-
-
-
-		//unlink image file from folder if exist
-		if ($img) {
-			@unlink($user_path . $img);
-			@unlink($user_path . "thum_" . $img);
-			@unlink($user_path . "thum_large" . $img);
-		}
-		if (!file_exists($user_path))
-			mkdir($user_path,776, true);
-		$adapter->setDestination(ROOT_PATH . $uploadPath);
-		$adapter->addValidator('Extension', false, 'jpg,pdf,jpeg');
-		$adapter->addValidator('Size', false, array('max' => '2MB'));
-		$files = $adapter->getFileInfo();
-
-		foreach ($files as $file => $info) {
-			if($file=='uploadoffer' && $info['name']!=''){
-
-				$name = $adapter->getFileName($file, false);
-				$name = $adapter->getFileName($file);
-				$orgName = time() . "_" . $info['name'];
-
-				$fname = $user_path . $orgName;
-				//call function resize image
-				$path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
-				BackEnd_Helper_viewHelper::resizeImage($_FILES["uploadoffer"], $orgName,
-						126, 90, $path);
-
-				//call function resize image
-				$path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
-				BackEnd_Helper_viewHelper::resizeImage($_FILES["uploadoffer"], $orgName,
-						132, 95, $path);
-
-				$adapter->addFilter(
-						new Zend_Filter_File_Rename(
-								array('target' => $fname,
-										'overwrite' => true)), null, $file);
-
-				$adapter->receive($file);
-				$status = "";
-				$data = "";
-				$msg = "";
-				if ($adapter->isValid($file) == 1) {
-					$data = $orgName;
-					return $data;
-				}else{
-
-					return false;
-				}
-			}
-
-		}
-	}
-
-	public static function uploadTiles($imgName){
-
-		$uploadPath = UPLOAD_IMG_PATH."offertiles/";
-		$adapter = new Zend_File_Transfer_Adapter_Http();
-		$user_path = ROOT_PATH . $uploadPath;
-		$img = $imgName;
-		//unlink image file from folder if exist
-		if ($img) {
-			@unlink($user_path . $img);
-			@unlink($user_path . "thum_" . $img);
-			@unlink($user_path . "thum_large" . $img);
-		}
-		if (!file_exists($user_path))
-			mkdir($user_path,776, true);
-		$adapter->setDestination(ROOT_PATH . $uploadPath);
-		$adapter->addValidator('Extension', false, 'jpg,jpeg,png');
-		$adapter->addValidator('Size', false, array('max' => '2MB'));
-		$files = $adapter->getFileInfo();
-		foreach ($files as $file => $info) {
-
-			$name = $adapter->getFileName($file, false);
-			$name = $adapter->getFileName($file);
-			$orgName = time() . "_" . $info['name'];
-			$fname = $user_path . $orgName;
-			//call function resize image
-			$path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
-
-			BackEnd_Helper_viewHelper::resizeImageForAjax($_FILES["tileupload"], $orgName,
-					126, 90, $path);
-			//call function resize image
-			$path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
-			BackEnd_Helper_viewHelper::resizeImageForAjax($_FILES["tileupload"], $orgName,
-					132, 95, $path);
-
-			$path = ROOT_PATH . $uploadPath . "thum_small_" . $orgName;
-			$thum_small = BackEnd_Helper_viewHelper::resizeImageForAjax($_FILES["tileupload"], $orgName,
-					80, 80, $path);
-
-			$path = ROOT_PATH . $uploadPath . "thum_large_" . $orgName;
-			$thum_small = BackEnd_Helper_viewHelper::resizeImageForAjax($_FILES["tileupload"], $orgName,
-					127, 127, $path);
-
-			$adapter->addFilter(
-					new Zend_Filter_File_Rename(
-							array('target' => $fname,
-									'overwrite' => true)), null, $file);
-
-			$adapter->receive($file);
-			$status = "";
-			$data = "";
-			$msg = "";
-			if ($adapter->isValid($file) == 1) {
-
-				$data = $orgName;
-				return $data;
-
-			}else{
-
-				return false;
-			}
-		}
-	}
-
-
-	public function uploadShopLogo($file)
-	{
-		// generate upload path for images related to category
-		$uploadPath = UPLOAD_IMG_PATH."shop/";
-		$adapter = new Zend_File_Transfer_Adapter_Http();
+        if (isset($params['extendedoffercheckbox'])) {                  // check if offer is extended
+          $this->extendedOffer = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
+          $this->extendedTitle =BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+          $this->extendedUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
+          $this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
+          $this->extendedFullDescription =BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
+        } else {
+
+            $this->extendedOffer = 0;
+            $this->extendedTitle = '';
+            $this->extendedUrl = '';
+            $this->extendedMetaDescription = '';
+            $this->extendedFullDescription = '';
+        }
+
+        $this->exclusiveCode=$this->editorPicks = 0;
+        if (isset($params['exclusivecheckbox'])) {
+            $this->exclusiveCode=1;
+        }
+
+        if (isset($params['editorpickcheckbox'])) {
+            $this->editorPicks=1;
+        }
+
+        $this->maxlimit=$this->maxcode='0';
+
+        if (isset($params['maxoffercheckbox'])) {
+            $this->maxlimit='1';
+            $this->maxcode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxoffertxt']);
+        }
+
+        $connUser = BackEnd_Helper_viewHelper::addConnection();
+
+            $this->authorId = Auth_StaffAdapter::getIdentity()->id;
+            $this->authorName = Auth_StaffAdapter::getIdentity()->firstName . " " . Auth_StaffAdapter::getIdentity()->lastName;
+
+        BackEnd_Helper_viewHelper::closeConnection($connUser);
+        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
+        if (intval($params['offerImageSelect']) > 0) {
+
+            $this->tilesId = $params['offerImageSelect'];
+        }
+
+        // New code starts add blal
+
+        if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
+
+            if (intval($params['selctedshop']) > 0) {
+                $this->shopId = $params['selctedshop'] ;
+
+            } else {
+                return array('result' => true , 'errType' => 'shop' );
+            }
+
+        }
+
+        if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
+            $this->shopExist = 0;
+        } else {
+            $this->shopExist = 1;
+        }
+
+        if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
+
+            $saveNewShop = new Shop();
+            $saveNewShop->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
+            $saveNewShop->permaLink = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
+            $saveNewShop->status = 1;
+
+            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
+
+                $fileName = self::uploadShopLogo('logoFile');
+                $saveNewShop->logo->ext =   BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
+                $saveNewShop->logo->path = 'images/upload/shop/';
+                $saveNewShop->logo->name = $fileName;
+                } else {
+                    return false;
+                }
+
+            $saveNewShop->logoId = $saveNewShop->logo->id;
+
+            $saveNewShop->save();
+            $this->shopId = $saveNewShop->id;
+
+        }      // New code Ends
+
+        try {
+
+            if (intval($this->shopId) > 0) {
+                $this->save();
+                $key = trim('all_relatedShopInStore'  . intval(@$params['selctedshop']) . '_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            } else {
+                return array('result' => true , 'errType' => 'shop' );
+            }
+
+    /***************** Start Add news code ********************/
+        $lId = $this->id;
+        if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
+            $newstitleloop = @$params['newsTitle'];
+            for ($n=0;$n<count($newstitleloop);$n++) {
+                $savenews = new OfferNews();
+                $savenews->shopId = @$params['selctedshop'];
+                $savenews->offerId = @$lId;
+                $savenews->title = @$newstitleloop[$n] != "" ?
+                                        BackEnd_Helper_viewHelper::stripSlashesFromString($newstitleloop[$n]) : "";
+
+                $savenews->url = @$params['newsrefUrl'][$n] != "" ?
+                                BackEnd_Helper_viewHelper::stripSlashesFromString( $params['newsrefUrl'][$n]) : "";
+
+                $savenews->content = @$params['newsDescription'][$n] != "" ?
+                        BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsDescription'][$n]) : "";
+
+                $savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
+                $savenews->save();
+            }
+        }
+    /***************** End Add news code ********************/
+            $offer_id = $this->id;
+            $authorId = self::getAuthorId($offer_id);
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+            //call cache function
+            $key = 'all_offerInStore'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_latestupdatesInStore'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_expiredOfferInStore'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = trim('all_relatedShopInStore'  . intval(@$params['selctedshop']) . '_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+
+            return array('result' => true , 'ofer_id' => $this->id );
+
+            $key = 'all_widget5_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        } catch (Exception $e) {
+            return false;
+        }
+
+    }
+
+    /**
+     *
+     */
+     public static function addkortingscode($title,$shopid,$kortingscode,$desc,$userid,$uname)
+     {
+        $pc = new Offer();
+        $pc->shopId =$shopid;
+        $pc->title =BackEnd_Helper_viewHelper::stripSlashesFromString($title);
+        $pc->couponCode =BackEnd_Helper_viewHelper::stripSlashesFromString($kortingscode);
+        $pc->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($desc);
+        $pc->userGenerated = 1;
+        $pc->authorId = BackEnd_Helper_viewHelper::stripSlashesFromString($userid);
+        $pc->authorName =BackEnd_Helper_viewHelper::stripSlashesFromString($uname);
+        if ($pc->save()) {
+            return true;
+        } else {
+            return false;
+        }
+     }
+    /**
+     * Update offer in the detail
+     * @param $shopDetail
+     * @author kkumar
+     */
+
+    public function updateOffer($params)
+    {
+        //echo "<pre>"; print_r($params); die;
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
+                // check the offer type
+                if (isset($params['defaultoffercheckbox'])) {      //offer type is default
+                    $this->Visability = 'DE';
+                    if ($params['selctedshop']!='') {
+                        $this->shopId =  $params['selctedshop'] ;
+                    }
+                } else {                                            // offer type member only
+                    $this->Visability = 'MEM';
+                    $this->shopId = null;
+                }
+        } else {
+            $this->shopId =  $params['selctedshop'] ;
+        }
+        // check the discountype
+
+        if (intval($params['offerImageSelect']) > 0) {
+
+            $this->tilesId =  $params['offerImageSelect'] ;
+
+        }
+
+        $this->couponCodeType = $params['couponCodeType'];
+
+        if (isset($params['couponCodeCheckbox'])) {             // discount type coupon
+
+            $this->discountType = 'CD';
+            $this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
+            $this->discount = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
+            $this->discountvalueType = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountchk']);
+            $this->refOfferCategory->delete();
+            if (isset($params['selectedcategories'])) {
+                foreach ($params['selectedcategories'] as $categories) {
+
+                    $this->refOfferCategory[]->categoryId = $categories ;
+
+                }
+            }
+
+        } elseif (isset($params['newsCheckbox'])) {       // discount type sale
+            $this->discountType = 'NW';
+        } elseif (isset($params['saleCheckbox'])) {       // discount type sale
+            $this->discountType = 'SL';
+
+            //find if the offers exist in popular codes
+            $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
+
+            if ($exist) {
+                PopularCode::deletePopular($params['offerId'], $exist->position );
+            }
+
+        } else {                                                // discount type printable
+            $this->discountType = 'PA';
+
+            //$this->tilesId = null ;
+
+            //find if the offers exist in popular codes
+            $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
+
+            if ($exist) {
+                PopularCode::deletePopular($params['offerId'], $exist->position );
+            }
+
+            //check printable document
+            if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {  // upload offer
+
+                $this->refOfferUrl = '';
+                $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
+                $ext =  BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
+                $pattern = '/^[0-9]{10}_(.+)/i' ;
+                preg_match($pattern, $fileName , $matches );
+                if (!$fileName) {
+                    return false;
+                }
+                if (@$matches[1]) {
+
+                    $this->logo->ext = $ext;
+                    $this->logo->path ='images/upload/offer/';
+                    $this->logo->name = $fileName;
+                }
+
+            } else {                                                     // add offer refUrl
+                $this->refOfferUrl = BackEnd_Helper_viewHelper::stripSlashesFromString ($params['offerrefurlPR']);
+            }
+        }
+
+        $this->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
+
+        if (isset($params['deepLinkStatus'])) {
+            $this->refURL =  BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
+        } else {
+            $this->refURL =  '';
+        }
+        $this->termandcondition->delete();
+
+        if (trim($params['termsAndcondition'])!='') {
+            $this->termandcondition[]->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
+        }
+
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
+            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
+            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+        }
+
+        $this->refOfferPage->delete();
+        if (isset($params['attachedpages'])) {
+            foreach ($params['attachedpages'] as $pageId) {
+
+                $this->refOfferPage[]->pageId = $pageId ;
+
+            }
+        }
+        //&& isset($params['couponCodeCheckbox'])
+
+        if (isset($params['extendedoffercheckbox'])) {
+            //echo "<pre>";
+            //print_r($params['couponInfo']);
+            // check if offer is extended
+            $this->extendedOffer = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
+            $this->extendedTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $this->extendedUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
+            $this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
+            $this->extendedFullDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
+        } else {
+
+            $this->extendedOffer = 0;
+            $this->extendedTitle = '';
+            $this->extendedUrl = '';
+            $this->extendedMetaDescription = '';
+            $this->extendedFullDescription = '';
+        }
+
+        $this->exclusiveCode=$this->editorPicks=0;
+        if (isset($params['exclusivecheckbox'])) {
+            $this->exclusiveCode=1;
+        }
+
+        if (isset($params['editorpickcheckbox'])) {
+            $this->editorPicks=1;
+        }
+
+        $this->maxlimit=$this->maxcode='0';
+
+        if (isset($params['maxoffercheckbox'])) {
+            $this->maxlimit='1';
+            $this->maxcode=$params['maxoffertxt'];
+        }
+
+        $getcategory = Doctrine_Query::create()->select()->from('Offer')->where('id = '.$params['offerId'] )->fetchArray();
+
+        if (!empty($getcategory)) {
+
+            $extendedUrl = mysql_real_escape_string($getcategory[0]['extendedUrl']);
+
+            $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where('permalink = "?"', $extendedUrl)->andWhere('type = "EXTOFFER"')->fetchArray();
+
+            if (empty($getRouteLink)) {
+                $getRouteLink = 'empty';
+            }
+            //$updateRouteLink = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $getcategory[0]['permaLink'] );
+        } else {
+            $updateRouteLink = new RoutePermalink();
+        }
+
+        // New code starts add blal
+
+        if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
+            //die("Hiiii");
+            $this->shopId = @$params['selctedshop'];
+        }
+        if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
+            $this->shopExist = 0;
+        } else {
+            $this->shopExist = 1;
+        }
+        if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
+            $saveNewShop = new Shop();
+            $saveNewShop->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
+            $saveNewShop->permaLink = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
+            $saveNewShop->status = 1;
+
+            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
+
+                $fileName = self::uploadShopLogo('logoFile');
+                $saveNewShop->logo->ext =   BackEnd_Helper_viewHelper::stripSlashesFromString(BackEnd_Helper_viewHelper::getImageExtension($fileName));
+                $saveNewShop->logo->path = 'images/upload/shop/';
+                $saveNewShop->logo->name = $fileName;
+            } else {
+                return false;
+            }
+
+            $saveNewShop->logoId = $saveNewShop->logo->id;
+
+            $saveNewShop->save();
+            $this->shopId = $saveNewShop->id;
+
+        }      // New code Ends
+
+        try {
+
+            $this->save();
+            $lId = $this->id;
+
+            /*****************Add more news of offer******************/
+
+            $offerId = @$params['offerId'];
+
+            Doctrine_Query::create()->delete('OfferNews')
+            ->where('offerId=' . $offerId)->execute();
+
+            if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
+                $newsloop = @$params['newsTitle'];
+                for ($n=0;$n<count($newsloop);$n++) {
+
+                    $savenews = new OfferNews();
+                    $savenews->shopId = @$params['selctedshop'];
+                    $savenews->offerId = @$offerId;
+
+                    $savenews->title = @$newsloop[$n] != "" ?
+                             BackEnd_Helper_viewHelper::stripSlashesFromString($newsloop[$n]) : "";
+
+                    $savenews->url = @$params['newsrefUrl'][$n] != "" ?
+                                             BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsrefUrl'][$n]) : "";
+
+                    $savenews->content = @$params['newsDescription'][$n] != "" ?
+                                            BackEnd_Helper_viewHelper::stripSlashesFromString(  $params['newsDescription'][$n])  : "";
+                    $savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
+                    $savenews->save();
+                }
+            }
+
+            /***********End update more news of offer shop*************/
+
+            $offerID = $params['offerId'];
+            $authorId = self::getAuthorId($offerID);
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+            //call cache function
+
+            $key = 'all_offerInStore'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_latestupdatesInStore'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_expiredOfferInStore'  .intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'all_relatedShopInStore'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+
+            $key = 'all_widget5_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            return array('result' => true);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    /**
+     * Get user Id from offer id
+     * @author Raman
+     * @return array $userId
+     * @version 1.0
+     */
+    public static function getAuthorId($offerId)
+    {
+        $userId = Doctrine_Query::create()
+        ->select('o.authorId')
+        ->from("Offer o")
+        ->where("o.id =$offerId")
+        ->fetchArray();
+
+        return $userId;
+    }
+
+    /**
+     * get list of offer for export
+     * @author kraj
+     * @return array $offerList
+     * @version 1.0
+     */
+    public static function exportofferList()
+    {
+        $offerList = Doctrine_Query::create()
+        ->select('o.*,s.name,s.deeplink,term.content')
+        ->from("Offer o")
+        ->addSelect('(SELECT COUNT(*) FROM ViewCount v WHERE v.offerId = o.id) as Count')
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.termandcondition term')
+        ->where("o.deleted=0")
+        ->andWhere("o.userGenerated=0")
+        ->orderBy("o.id DESC")
+        ->fetchArray();
+
+        return $offerList;
+    }
+
+    public static function getOfferDetail($offerId)
+    {
+        $shopDetail = Doctrine_Query::create()
+        ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
+        ->from("Offer o")
+        ->leftJoin('o.shop s')
+        ->leftJoin('s.affliatenetwork a')
+        ->leftJoin('o.page p')
+        ->leftJoin('o.termandcondition tc')
+        ->leftJoin('o.category cat')
+        ->leftJoin('o.logo img')
+        ->leftJoin('o.offernews news')
+        ->leftJoin('o.tiles t')
+        ->addSelect("(SELECT  count(cc.status) FROM CouponCode cc WHERE cc.offerid = o.id and cc.status = 0) as used")
+        ->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")
+        ->andWhere("o.id =$offerId")->andWhere("o.userGenerated = '0'")->fetchArray();
+
+        return $shopDetail;
+    }
+
+    public static function getOfferInfo($offerId)
+    {
+        $shopDetail = Doctrine_Query::create()
+        ->select('o.*,s.name,s.notes,s.accountManagerName,s.deepLink,s.refUrl,s.actualUrl,s.affliateNetworkId as aid,s.permaLink,a.name as affname,a.id,p.id,tc.*,cat.id,img.*')
+        ->from("Offer o")
+        ->leftJoin('o.shop s')
+        ->leftJoin('s.affliatenetwork a')
+        ->leftJoin('o.page p')
+        ->leftJoin('o.termandcondition tc')
+        ->leftJoin('o.category cat')
+        ->leftJoin('s.logo img')
+        ->andWhere("o.id =$offerId")->fetchArray();
+
+        //echo "<pre>";
+        //print_r($shopDetail); die;
+        return $shopDetail;
+    }
+
+    public function uploadFile($imgName)
+    {
+        $uploadPath = "images/upload/offer/";
+        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $user_path = ROOT_PATH . $uploadPath;
+        $img = $imgName;
+
+        //unlink image file from folder if exist
+        if ($img) {
+            @unlink($user_path . $img);
+            @unlink($user_path . "thum_" . $img);
+            @unlink($user_path . "thum_large" . $img);
+        }
+        if (!file_exists($user_path))
+            mkdir($user_path,776, true);
+        $adapter->setDestination(ROOT_PATH . $uploadPath);
+        $adapter->addValidator('Extension', false, 'jpg,pdf,jpeg');
+        $adapter->addValidator('Size', false, array('max' => '2MB'));
+        $files = $adapter->getFileInfo();
+
+        foreach ($files as $file => $info) {
+            if ($file=='uploadoffer' && $info['name']!='') {
+
+                $name = $adapter->getFileName($file, false);
+                $name = $adapter->getFileName($file);
+                $orgName = time() . "_" . $info['name'];
+
+                $fname = $user_path . $orgName;
+                //call function resize image
+                $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
+                BackEnd_Helper_viewHelper::resizeImage($_FILES["uploadoffer"], $orgName,
+                        126, 90, $path);
+
+                //call function resize image
+                $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
+                BackEnd_Helper_viewHelper::resizeImage($_FILES["uploadoffer"], $orgName,
+                        132, 95, $path);
+
+                $adapter->addFilter(
+                        new Zend_Filter_File_Rename(
+                                array('target' => $fname,
+                                        'overwrite' => true)), null, $file);
+
+                $adapter->receive($file);
+                $status = "";
+                $data = "";
+                $msg = "";
+                if ($adapter->isValid($file) == 1) {
+                    $data = $orgName;
+
+                    return $data;
+                } else {
+                    return false;
+                }
+            }
+
+        }
+    }
+
+    public static function uploadTiles($imgName)
+    {
+        $uploadPath = UPLOAD_IMG_PATH."offertiles/";
+        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $user_path = ROOT_PATH . $uploadPath;
+        $img = $imgName;
+        //unlink image file from folder if exist
+        if ($img) {
+            @unlink($user_path . $img);
+            @unlink($user_path . "thum_" . $img);
+            @unlink($user_path . "thum_large" . $img);
+        }
+        if (!file_exists($user_path))
+            mkdir($user_path,776, true);
+        $adapter->setDestination(ROOT_PATH . $uploadPath);
+        $adapter->addValidator('Extension', false, 'jpg,jpeg,png');
+        $adapter->addValidator('Size', false, array('max' => '2MB'));
+        $files = $adapter->getFileInfo();
+        foreach ($files as $file => $info) {
+
+            $name = $adapter->getFileName($file, false);
+            $name = $adapter->getFileName($file);
+            $orgName = time() . "_" . $info['name'];
+            $fname = $user_path . $orgName;
+            //call function resize image
+            $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
+
+            BackEnd_Helper_viewHelper::resizeImageForAjax($_FILES["tileupload"], $orgName,
+                    126, 90, $path);
+            //call function resize image
+            $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
+            BackEnd_Helper_viewHelper::resizeImageForAjax($_FILES["tileupload"], $orgName,
+                    132, 95, $path);
+
+            $path = ROOT_PATH . $uploadPath . "thum_small_" . $orgName;
+            $thum_small = BackEnd_Helper_viewHelper::resizeImageForAjax($_FILES["tileupload"], $orgName,
+                    80, 80, $path);
+
+            $path = ROOT_PATH . $uploadPath . "thum_large_" . $orgName;
+            $thum_small = BackEnd_Helper_viewHelper::resizeImageForAjax($_FILES["tileupload"], $orgName,
+                    127, 127, $path);
+
+            $adapter->addFilter(
+                    new Zend_Filter_File_Rename(
+                            array('target' => $fname,
+                                    'overwrite' => true)), null, $file);
+
+            $adapter->receive($file);
+            $status = "";
+            $data = "";
+            $msg = "";
+            if ($adapter->isValid($file) == 1) {
+
+                $data = $orgName;
+
+                return $data;
+
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function uploadShopLogo($file)
+    {
+        // generate upload path for images related to category
+        $uploadPath = UPLOAD_IMG_PATH."shop/";
+        $adapter = new Zend_File_Transfer_Adapter_Http();
         // generate real path for upload path
-		$rootPath = ROOT_PATH.$uploadPath;
-		// get upload file info
-		$files = $adapter->getFileInfo($file);
+        $rootPath = ROOT_PATH.$uploadPath;
+        // get upload file info
+        $files = $adapter->getFileInfo($file);
 
-		// check upload directory exists, if no then create upload directory
-		if (!file_exists($rootPath))
-			mkdir($rootPath,776, true);
+        // check upload directory exists, if no then create upload directory
+        if (!file_exists($rootPath))
+            mkdir($rootPath,776, true);
 
+        // set destination path and apply validations
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, 'jpg,png');
+        $adapter->addValidator('Size', false, array('max' => '2MB'));
 
-		// set destination path and apply validations
-		$adapter->setDestination($rootPath);
-		$adapter->addValidator('Extension', false, 'jpg,png');
-		$adapter->addValidator('Size', false, array('max' => '2MB'));
+        // get file name
+        $name = $adapter->getFileName($file, false);
 
-		// get file name
-		$name = $adapter->getFileName($file, false);
+        // rename file name to by prefixing current unix timestamp
+        $newName = time() . "_" . $name;
 
-		// rename file name to by prefixing current unix timestamp
-		$newName = time() . "_" . $name;
+        // generates complete path of image
+        $cp = $rootPath . $newName;
 
-		// generates complete path of image
-		$cp = $rootPath . $newName;
+        /**
+         *   generating thumnails for image
+         */
 
+        $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 135, 95, $path);
 
-		/**
-		 *	 generating thumnails for image
-		 */
+        $path = $uploadPath . "thum_medium_" . $newName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 50, 50, $path);
 
-		$path = ROOT_PATH . $uploadPath . "thum_" . $newName;
-		BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 135, 95, $path);
+        $path = $uploadPath . "thum_large_" . $newName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 95, 95, $path);
 
-		$path = $uploadPath . "thum_medium_" . $newName;
-		BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 50, 50, $path);
+        $path = $uploadPath . "thum_small_" . $newName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 24, 24, $path);
 
-		$path = $uploadPath . "thum_large_" . $newName;
-		BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 95, 95, $path);
+        //echo "<pre>"; print_r($file); die;
+        // apply filter to rename file name and set target
+        $adapter
+        ->addFilter(
+                new Zend_Filter_File_Rename(
+                        array('target' => $cp, 'overwrite' => true)),
+                null, $file);
 
-		$path = $uploadPath . "thum_small_" . $newName;
-		BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 24, 24, $path);
+        // recieve file for upload
+        $adapter->receive($file);
 
-		//echo "<pre>"; print_r($file); die;
-		// apply filter to rename file name and set target
-		$adapter
-		->addFilter(
-				new Zend_Filter_File_Rename(
-						array('target' => $cp, 'overwrite' => true)),
-				null, $file);
+        // check is file is valid then
 
-		// recieve file for upload
-		$adapter->receive($file);
+        if ($adapter->isValid($file) == 1) {
 
-		// check is file is valid then
+            $data = $newName;
 
-		if ($adapter->isValid($file) == 1) {
+            return $data;
 
-			$data = $newName;
-			return $data;
-
-		} else {
-	        return false;
-	    }
-	}
-
+        } else {
+            return false;
+        }
+    }
 
 /******************functions to be used on frontend*******************/
 
-	/**
-	 * Search offers in the relative shops on the basis of keywords in the search field
-	 * @author cbhopal modified by mkaur
-	 * @version 1.0
-	 * @return array $data
-	 */
+    /**
+     * Search related offers in the relative shops on the basis of keywords in the search field
+     * @author cbhopal updated by kraj
+     * @version 1.0
+     * @return array $suggestion
+     */
 
-	public static function searchOffers($params,$shopIds, $limit)
-	{
-		//array to string IDS
-		//$shopIds = '';
-		$shopIds = @array_map("mysql_real_escape_string", $shopIds);
-		$shopIds = @("'" . implode("', '", $shopIds) . "'");
+    public static function searchRelatedOffers($params)
+    {
 
-		$flag = 0;
-		$keyword = @strtolower($params['searchField']);
-		$date = date('Y-m-d H:i:s');
+        $suggestion = array();
+        $date = date('Y-m-d H:i:s');
+        $data = Doctrine_Query::create()
+                                ->select('p.id,o.enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,o.Visability,o.extendedUrl,o.shopid,o.offerlogoid,o.couponcode,o.exclusivecode,o.discount,o.discountvalueType,s.name,s.logoid,l.path,l.name,p.type,p.position,p.offerId,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+                                ->from('PopularCode p')
+                                ->leftJoin('p.offer o')
+                                ->leftJoin('o.shop s')
+                                ->leftJoin('o.vote vot')
+                                ->leftJoin('s.favoriteshops fv')
+                                ->leftJoin('s.logo l')
+                                ->where('o.deleted =0')
+                                ->andWhere("o.userGenerated = 0")
+                                ->andWhere('s.deleted = 0')
+                                ->andWhere('o.offline = 0')
+                                ->andWhere('o.startdate <= "'.$date.'"')
+                                ->andWhere('o.enddate > "'.$date.'"')
+                                ->andWhere('o.discounttype="CD"')
+                                ->andWhere('o.Visability != "MEM"')
+                                ->orderBy('p.position ASC')->limit(4)->fetchArray();
+                foreach ($data as $d):
+                    $suggestion[] = $d['offer'];
+                endforeach;
 
-		//this query is for all the connected shops offers
-		$data1 = Doctrine_Query::create()
-		->select('s.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId')
-		->from('Offer o')
-		->leftJoin('o.shop s')
-		->leftJoin('s.logo img')
-		->leftJoin('s.favoriteshops fv')
-		->leftJoin('o.termandcondition terms')
-		->where('o.deleted = 0' )
-		->andWhere("o.userGenerated = 0")
-		->andWhere('o.offline = 0')
-		->andWhere('s.deleted = 0')
-		->andWhere('o.startdate <= "'.$date.'"')
-		->andWhere('o.enddate > "'.$date.'"')
-		->andWhere('o.discounttype="CD"')
-		->andWhere('o.Visability != "MEM"')
-		->andWhere("s.id IN(" . $shopIds .")" )
-		->orderBy("s.name ASC")
-		->fetchArray();
-
-		//for merge purpose
-		$data11 = array();
-		foreach($data1 as $d1):
-
-			$data11["'".$d1['id']."'"] = $d1;
-
-		endforeach;
-
-		//this query is for matching shops offers
-		$data2 = Doctrine_Query::create()
-		->select('s.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId')
-				->from('Offer o')
-				->leftJoin('o.shop s')
-				->leftJoin('s.logo img')
-				->leftJoin('s.favoriteshops fv')
-				->leftJoin('o.termandcondition terms')
-				->where('o.deleted = 0' )
-				->andWhere('o.offline = 0')
-				->andWhere('s.deleted = 0')
-				->andWhere('o.startdate <= "'.$date.'"')
-				->andWhere('o.enddate > "'.$date.'"')
-				->andWhere('o.discounttype="CD"')
-				->andWhere('o.Visability != "MEM"')
-				->andWhere("s.name LIKE '%?%' or o.title LIKE '%?%'" , $keyword, $keyword )
-				->orderBy("s.name ASC")
-				->fetchArray();
-
-		//merge purpose
-		$data21 = array();
-		foreach($data2 as $d2):
-
-			$data21["'".$d2['id']."'"] = $d2;
-
-		endforeach;
-
-		//Merge the connected shops offers with matched shops offers
-		$dataMerged = array_merge($data11, $data21);
-
-		//make array usable for view
-		$newArrData = array();
-
-		foreach($dataMerged as $datam):
-
-			$newArrData[] = $datam;
-
-		endforeach;
-
-		//apply the limit on the merged array
-		$dataFinal = array_slice($newArrData, 0, $limit);
-
-		return $dataFinal;
-	}
-
-
-	/**
-	 * Search related offers in the relative shops on the basis of keywords in the search field
-	 * @author cbhopal updated by kraj
-	 * @version 1.0
-	 * @return array $suggestion
-	 */
-
-	public static function searchRelatedOffers($params)
-	{
-
-		$suggestion = array();
-		$date = date('Y-m-d H:i:s');
-		$data = Doctrine_Query::create()
-								->select('p.id,o.enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,o.Visability,o.extendedUrl,o.shopid,o.offerlogoid,o.couponcode,o.exclusivecode,o.discount,o.discountvalueType,s.name,s.logoid,l.path,l.name,p.type,p.position,p.offerId,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
-								->from('PopularCode p')
-								->leftJoin('p.offer o')
-								->leftJoin('o.shop s')
-								->leftJoin('o.vote vot')
-								->leftJoin('s.favoriteshops fv')
-								->leftJoin('s.logo l')
-								->where('o.deleted =0')
-								->andWhere("o.userGenerated = 0")
-								->andWhere('s.deleted = 0')
-								->andWhere('o.offline = 0')
-								->andWhere('o.startdate <= "'.$date.'"')
-								->andWhere('o.enddate > "'.$date.'"')
-								->andWhere('o.discounttype="CD"')
-								->andWhere('o.Visability != "MEM"')
-								->orderBy('p.position ASC')->limit(4)->fetchArray();
-				foreach ($data as $d):
-					$suggestion[] = $d['offer'];
-				endforeach;
-
-		return $suggestion;
-	}
+        return $suggestion;
+    }
      /**
       * get coupon details
       * @author blal
@@ -1369,227 +2121,227 @@ class Offer extends BaseOffer
       * @version 1.0
       */
 
-    public static function getCouponDetails($extUrl){
-		$couponDetail = Doctrine_Query::create()
-
-					   ->select('o.*,s.name,s.id,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+    public static function getCouponDetails($extendedUrl)
+    {
+        $couponDetails = Doctrine_Query::create()
+                       ->select('t.*,o.*,s.name,s.id,s.discussions,s.permaLink as permalink,s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,s.affliateProgram,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
                        ->from("Offer o")
-					   ->leftJoin('o.shop s')
-					   ->leftJoin('o.logo ologo')
-					   ->leftJoin('o.termandcondition tc')
-					   ->leftJoin('s.logo img')
-					   ->leftJoin('s.screenshot ws')
-					   ->Where("o.extendedUrl = '".$extUrl."'")
-					   ->andWhere('o.extendedOffer = 1')
-					   ->andWhere('s.status = 1')
-					   ->fetchArray();
-		return $couponDetail;
-	 }
+                       ->leftJoin('o.shop s')
+                       ->leftJoin('o.logo ologo')
+                       ->leftJoin('o.tiles t')
+                       ->leftJoin('o.termandcondition tc')
+                       ->leftJoin('s.logo img')
+                       ->leftJoin('s.screenshot ws')
+                       ->Where("o.extendedUrl = '".$extendedUrl."'")
+                       ->andWhere('o.extendedOffer = 1')
+                       ->andWhere('s.status = 1')
+                       ->fetchArray();
 
+        return $couponDetails;
+    }
 
-	 /**
-	  * get related offers
-	  * @author blal
-	  * @return array $relatedOffers
-	  * @version 1.0
-	  */
+     /**
+      * get related offers
+      * @author blal
+      * @return array $relatedOffers
+      * @version 1.0
+      */
+     public static function getrelatedOffers($shopId, $currentDate)
+     {
+        $date = date('Y-m-d H:i:s');
+        $relatedOffers = Doctrine_Query::create()
+                        ->select('t.*, o.*,s.*,s.permaLink as permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+                        ->from('offer o')
+                        ->leftJoin('o.shop s')
+                        ->leftJoin('o.logo ologo')
+                        ->leftJoin('o.termandcondition tc')
+                        ->leftJoin('o.tiles t')
+                        ->leftJoin('s.logo img')
+                        ->leftJoin('s.screenshot ws')
+                        //->Where('o.extendedOffer=?','1')
+                        ->andWhere('o.shopId=?',$shopId)
+                        ->andWhere('o.endDate > ?',$currentDate)
+                        ->andWhere('o.startdate <= "'.$date.'"')
+                        ->andWhere('o.deleted=0')
+                        ->limit(1)
+                        ->fetchArray();
 
-	 public static function getrelatedOffers($shopId,$currentDate){
+        return $relatedOffers;
+     }
 
-	 	$date = date('Y-m-d H:i:s');
-	 	$relatedOffers = Doctrine_Query::create()
-					 	->select('o.*,s.id,s.name,s.permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
-					 	->from('offer o')
-					    ->leftJoin('o.shop s')
-					    ->leftJoin('o.logo ologo')
-					 	->leftJoin('o.termandcondition tc')
-					 	->leftJoin('s.logo img')
-					 	->leftJoin('s.screenshot ws')
-					 	->Where('o.extendedOffer=?','1')
-					 	->andWhere('o.shopId=?',$shopId)
-					 	->andWhere('o.endDate > ?',$currentDate)
-					 	->andWhere('o.startdate <= "'.$date.'"')
-					 	->andWhere('o.deleted=0')
-					 	->limit(1)
-					 	->fetchArray();
+      /**
+      * get popular voucher codes
+      * @author blal
+      * @return array $popularOffers
+      * @version 1.0
+      */
 
-		return $relatedOffers;
-	 }
+     public static function getpopularOffers($offerId,$cpnDetails)
+     {
+        //echo "<pre>";
+        //print_r($cpnDetails); die;
+        $date = date('Y-m-d H:i:s');
+        $title = "";
+        if (isset($cpnDetails[0]['title']) && $cpnDetails[0]['title'] != "") {
+        $title = $cpnDetails[0]['title'];
+        }
+        $popularOffers = Doctrine_Query::create()
+                        ->select('po.*,o.*,s.id,s.name,s.permalink,img.name,img.path')
+                        ->from("PopularCode po")
+                        ->leftJoin('po.offer o')
+                        ->leftJoin('o.shop s')
+                        ->leftJoin('s.logo img')
+                        ->where('o.title !="'.$title.'"')
+                        ->andWhere('o.endDate >="'.$date.'"')
+                        ->andWhere('o.startdate <= "'.$date.'"')
+                        ->andWhere('o.deleted = 0')
+                        ->andWhere('s.deleted = 0')
+                        ->orderBy('po.id DESC')
+                        ->limit(3)
+                        ->fetchArray();
 
-	  /**
-	  * get popular voucher codes
-	  * @author blal
-	  * @return array $popularOffers
-	  * @version 1.0
-	  */
+        return $popularOffers;
+     }
 
-	 public static function getpopularOffers($offerId,$cpnDetails){
-	 	//echo "<pre>";
-	 	//print_r($cpnDetails); die;
-	 	$date = date('Y-m-d H:i:s');
-	 	$title = "";
-	 	if(isset($cpnDetails[0]['title']) && $cpnDetails[0]['title'] != ""){
-	 	$title = $cpnDetails[0]['title'];
-	 	}
-	 	$popularOffers = Doctrine_Query::create()
-					 	->select('po.*,o.*,s.id,s.name,s.permalink,img.name,img.path')
-					 	->from("PopularCode po")
-					 	->leftJoin('po.offer o')
-					 	->leftJoin('o.shop s')
-					 	->leftJoin('s.logo img')
-					 	->where('o.title !="'.$title.'"')
-					 	->andWhere('o.endDate >="'.$date.'"')
-					 	->andWhere('o.startdate <= "'.$date.'"')
-					 	->andWhere('o.deleted = 0')
-					 	->andWhere('s.deleted = 0')
-					 	->orderBy('po.id DESC')
-					 	->limit(3)
-					 	->fetchArray();
-	 	return $popularOffers;
-	 }
+     /**
+      * get popular voucher codes for common function
+      * @author Raman modified by mkaur
+      * @return array $data
+      * @version 1.0
+      */
 
-	 /**
-	  * get popular voucher codes for common function
-	  * @author Raman modified by mkaur
-	  * @return array $data
-	  * @version 1.0
-	  */
+     public static function commongetpopularOffers($type, $limit, $shopId=0, $userId ="")
+     {
 
-	 public static function commongetpopularOffers($type, $limit, $shopId=0, $userId ="")
-	 {
+        $date = date('Y-m-d H:i:s');
+        $data = Doctrine_Query::create()
+                ->select('s.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,p.id,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.couponCodeType,o.userGenerated,o.couponCode,o.refOfferUrl,o.refURL, o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+                ->from('PopularCode p')
+                ->leftJoin('p.offer o')
+                ->leftJoin('o.logo ologo')
+                ->leftJoin('o.shop s')
+                ->leftJoin('o.vote vot')
+                ->leftJoin('s.logo img')
+                ->leftJoin('s.favoriteshops fv')
+                ->leftJoin('o.termandcondition terms')
+                ->where('o.deleted = 0')
+                ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+                ->andWhere("o.userGenerated = 0")
+                ->andWhere('o.enddate > "'.$date.'"')
+                ->andWhere('o.startdate <= "'.$date.'"')
+                ->andWhere('s.deleted = 0')
+                ->andWhere('s.status = 1')
+                ->andWhere('o.discounttype="CD"')
+                ->andWhere('o.Visability!="MEM"')
+                ->andWhere('o.userGenerated=0');
 
-	 	$date = date('Y-m-d H:i:s');
-	 	$data = Doctrine_Query::create()
-				->select('s.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,p.id,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.couponCodeType,o.userGenerated,o.couponCode,o.refOfferUrl,o.refURL, o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
-				->from('PopularCode p')
-	 			->leftJoin('p.offer o')
-				->leftJoin('o.logo ologo')
-				->leftJoin('o.shop s')
-				->leftJoin('o.vote vot')
-				->leftJoin('s.logo img')
-				->leftJoin('s.favoriteshops fv')
-				->leftJoin('o.termandcondition terms')
-				->where('o.deleted = 0')
-				->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-				->andWhere("o.userGenerated = 0")
-				->andWhere('o.enddate > "'.$date.'"')
-				->andWhere('o.startdate <= "'.$date.'"')
-				->andWhere('s.deleted = 0')
-				->andWhere('s.status = 1')
-				->andWhere('o.discounttype="CD"')
-				->andWhere('o.Visability!="MEM"')
-				->andWhere('o.userGenerated=0');
+                if ($shopId!='') {
 
-	 			if($shopId!=''){
+                    $data->andWhere('s.id = '.$shopId.'');
+                }
 
-					$data->andWhere('s.id = '.$shopId.'');
-				}
+                if ($userId!='') {
 
-				if($userId!=''){
+                    $data->andWhere('o.authorId = '.$userId.'');
+                }
 
-					$data->andWhere('o.authorId = '.$userId.'');
-				}
+                if ($limit!='') {
 
-				if($limit!=''){
+                    $data->limit($limit);
+                }
 
-					$data->limit($limit);
-				}
+                $data = $data->orderBy('p.position ASC')->fetchArray();
+                $newData = array();
 
-				$data = $data->orderBy('p.position ASC')->fetchArray();
-				$newData = array();
+                foreach ($data as $res) {
+                    $newData[] = $res['offer'];
+                }
 
+        return $newData;
+     }
+     /**
+      * get latest memberonly voucher codes for common function
+      * @author kraj
+      * @return array $data
+      * @version 1.0
+      */
+    public static function commongetMemberOnlyOffer($type,$limit)
+    {
+        $date = date('Y-m-d H:i:s');
+        $data = Doctrine_Query::create()
+                    ->select('s.id,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+                    ->from('Offer o')
+                    ->leftJoin('o.shop s')
+                    ->leftJoin('o.logo ologo')
+                    ->leftJoin('o.vote vot')
+                    ->leftJoin('s.logo img')
+                    ->leftJoin('s.favoriteshops fv')
+                    ->leftJoin('o.termandcondition terms')
+                    ->where('o.deleted = 0' )
+                    ->andWhere('s.deleted = 0')
+                    ->andWhere('o.Visability = "MEM"')
+                    ->andWhere('o.enddate > "'.$date.'"')
+                    ->andWhere('o.startdate <= "'.$date.'"')
+                    ->andWhere('o.discountType != "NW"')
+                    ->andWhere('o.discounttype="CD"')
+                    ->andWhere('o.userGenerated=0')
+                    //->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
+                    ->orderBy('o.id DESC');
+                     $data = $data->limit($limit)
+                    //->getSqlQuery();
+                    //die;
+                    ->fetchArray();
 
-				foreach($data as $res){
-					$newData[] = $res['offer'];
-				}
+        return $data;
 
-	 	return $newData;
-	 }
-	 /**
-	  * get latest memberonly voucher codes for common function
-	  * @author kraj
-	  * @return array $data
-	  * @version 1.0
-	  */
-	public static function commongetMemberOnlyOffer($type,$limit){
+    }
+     /**
+      * get latest voucher codes for common function
+      * @author Raman modified by mkaur
+      * @return array $data
+      * @version 1.0
+      */
 
-		$date = date('Y-m-d H:i:s');
-		$data = Doctrine_Query::create()
-					->select('s.id,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
-					->from('Offer o')
-					->leftJoin('o.shop s')
-					->leftJoin('o.logo ologo')
-					->leftJoin('o.vote vot')
-					->leftJoin('s.logo img')
-					->leftJoin('s.favoriteshops fv')
-					->leftJoin('o.termandcondition terms')
-					->where('o.deleted = 0' )
-					->andWhere('s.deleted = 0')
-					->andWhere('o.Visability = "MEM"')
-					->andWhere('o.enddate > "'.$date.'"')
-					->andWhere('o.startdate <= "'.$date.'"')
-					->andWhere('o.discountType != "NW"')
-					->andWhere('o.discounttype="CD"')
-					->andWhere('o.userGenerated=0')
-					//->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
-					->orderBy('o.id DESC');
-					 $data = $data->limit($limit)
-					//->getSqlQuery();
-					//die;
-					->fetchArray();
-		return $data;
+    public static function getCommonNewestOffers($type, $limit, $shopId = 0, $userId = "")
+    {
+         $currentDateTime = date('Y-m-d H:i:s');
+         $data = Doctrine_Query::create()
+                ->select('s.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.extendedoffer,o.extendedurl,o.editorpicks,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+                ->from('Offer o')
+                ->leftJoin('o.shop s')
+                ->leftJoin('o.logo ologo')
+                ->leftJoin('o.vote vot')
+                ->leftJoin('s.logo img')
+                ->leftJoin('s.favoriteshops fv')
+                ->leftJoin('o.termandcondition terms')
+                ->where('o.deleted = 0')
+                ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or o.couponCodeType = 'GN'")
+                ->andWhere('s.deleted = 0')
+                ->andWhere('s.status = 1')
+                ->andWhere('o.enddate > "'.$currentDateTime.'"')
+                ->andWhere('o.startdate <= "'.$currentDateTime.'"')
+                ->andWhere('o.discountType != "NW"')
+                ->andWhere('o.discounttype="CD"')
+                ->andWhere('o.Visability != "MEM"')
+                ->andWhere('o.userGenerated=0')
+                ->orderBy('o.startdate DESC');
+        if ($shopId!='') {
+                    $data->andWhere('s.id = '.$shopId.'');
+        }
+        if ($userId!="") {
+                    $data->andWhere('o.authorId = '.$userId.'');
+        }
+                    $newOffers = $data->limit($limit)->fetchArray();
+        return $newOffers;
+    }
 
-	}
-	 /**
-	  * get latest voucher codes for common function
-	  * @author Raman modified by mkaur
-	  * @return array $data
-	  * @version 1.0
-	  */
+     /**
+      * get latest voucher codes for rss feeds
+      * @author Suridnerpal Singh
+      * @return array
+      * @version 1.0
+      */
 
-	 public static function commongetnewestOffers($type, $limit, $shopId=0, $userId=""){
-
-	 	 $date = date('Y-m-d H:i:s');
-	 	 $data = Doctrine_Query::create()
-				->select('s.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
-				->from('Offer o')
-				->leftJoin('o.shop s')
-				->leftJoin('o.logo ologo')
-				->leftJoin('o.vote vot')
-				->leftJoin('s.logo img')
-				->leftJoin('s.favoriteshops fv')
-				->leftJoin('o.termandcondition terms')
-				->where('o.deleted = 0' )
-				->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or o.couponCodeType = 'GN'")
-				->andWhere('s.deleted = 0')
-				->andWhere('s.status = 1')
-				->andWhere('o.enddate > "'.$date.'"')
-				->andWhere('o.startdate <= "'.$date.'"')
-				->andWhere('o.discountType != "NW"')
-				->andWhere('o.discounttype="CD"')
-				->andWhere('o.Visability != "MEM"')
-			//	->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
-	 	 		->andWhere('o.userGenerated=0')
-				->orderBy('o.startdate DESC');
-				if($shopId!=''){
-					$data->andWhere('s.id = '.$shopId.'');
-				}
-				if($userId!=""){
-					$data->andWhere('o.authorId = '.$userId.'');
-				}
-				$data = $data->limit($limit)->fetchArray();
-
-
-				return $data;
-	 }
-
-
-    /**
-    * get latest voucher codes for rss feeds
-    * @author Suridnerpal Singh
-    * @return array
-    * @version 1.0
-    */
     public static function getNewestOffersForRSS()
     {
         $currentDate = date('Y-m-d H:i:s');
@@ -1615,12 +2367,13 @@ class Offer extends BaseOffer
         return $newestOffersForRss;
     }
 
-    /**
-    * get popular voucher codes for rss feeds
-    * @author Surinderpal Singh
-    * @return array
-    * @version 1.0
-    */
+     /**
+      * get popular voucher codes for rss feeds
+      * @author Surinderpal Singh
+      * @return array
+      * @version 1.0
+      */
+
     public static function getPopularOffersForRSS()
     {
         $currentDate = date('Y-m-d H:i:s');
@@ -1650,1095 +2403,520 @@ class Offer extends BaseOffer
         return $popularOfferForRss;
     }
 
-
-	 /**
-	  * get extended voucher codes for common function
-	  * @author Raman
-	  * @return array $data
-	  * @version 1.0
-	  */
-
-	 public static function commongetextendedOffers($type, $limit, $shopId=0){
-	 	$date = date('Y-m-d H:i:s');
-	 	$data = Doctrine_Query::create()
-				->select('o.*, img.id, img.path, img.name')
-				->from('Offer o')
-				->leftJoin('o.shop s')
-				->leftJoin('o.logo img')
-				->where('o.deleted=0' )
-				->andWhere('s.deleted = 0')
-				->andWhere('o.extendedoffer=1')
-				->andWhere('o.discountType != "NW"')
-				->andWhere('o.discounttype="CD"')
-				->andWhere('o.enddate > "'.$date.'"')
-				->andWhere('o.startdate <= "'.$date.'"')
-				->orderBy('o.id DESC')
-				->limit($limit)->fetchArray();
-	 	return $data;
-	 }
-
-	 /**
-	  * get expired voucher codes for common function
-	  * @author Raman
-	  * @return array $data
-	  * @version 1.0
-	  */
-
-	 public static function commongetexpiredOffers($type, $limit, $shopId=0){
-	 	$expiredtime=date("Y-m-d 00:00:00");
-		$data = Doctrine_Query::create()
-				->select('s.id,s.name,o.id, o.title,o.extendedfulldescription, o.visability, o.couponcode, o.refofferurl, o.startdate, o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer, o.extendedUrl, o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, img.id, img.path, img.name')
-				->from('Offer o')
-				->leftJoin('o.shop s')
-				->leftJoin('s.logo img')
-				->where('o.deleted=0' )
-				->andWhere('o.userGenerated=0')
-				->andWhere('o.enddate<'."'".$expiredtime."'")
-				->andWhere('o.discounttype="CD"')
-				->andWhere('s.deleted = 0')
-				->orderBy('o.id DESC');
-				if($shopId!=''){
-					$data->andWhere('s.id = '.$shopId.'');
-				}
-				$data->limit($limit);
-				$data = $data->fetchArray();
-
-				return $data;
-
-	 }
-
-
-	 /**
-	  * get related shops for common function
-	  * @author Raman modified by mkaur
-	  * @return array $data
-	  * @version 1.0
-	  */
-
-	 public static function commongetrelatedshops($type, $limit, $shopId=0){
-	 	$data =  null;
-	 	$date = date('Y-m-d H:i:s');
-	 	$lastdata=FrontEnd_Helper_viewHelper::getallrelatedshopsid($shopId);
-		if(sizeof($lastdata)>0){
-			for($i=0;$i<sizeof($lastdata);$i++){
-				$shopdata[$i]=$lastdata[$i]['relatedshopId'];
-			}
-			$shopvalues=implode(",", $shopdata);
-			$data = Doctrine_Query::create()
-				->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
-				->from('Offer o')
-				->leftJoin('o.shop s')
-				->leftJoin('s.favoriteshops fv')
-				->leftJoin('o.termandcondition terms')
-				->leftJoin('o.vote vot')
-				->leftJoin('s.logo img')
-				->where("o.shopId IN ($shopvalues)")
-				->andWhere('o.deleted = 0')
-				->andWhere('s.deleted = 0')
-				->andWhere('o.enddate > "'.$date.'"')
-				->andWhere('o.startdate <= "'.$date.'"')
-				->andWhere('o.discounttype="CD"')
-				->andWhere('o.shopid != "'.$shopId.'"')
-				->orderBy('o.startdate DESC')->limit($limit);
-				$data = $data->fetchArray();
-		} else {
-			$data = array();
-		}
-
-	 	return $data;
-	 }
-
-	 /**
-	  * get related shops for common function
-	  * @author kraj modified by mkaur
-	  * @return array $data
-	  * @version 1.0
-	  */
-
-	 public static function commongetrelatedshopsByCategory($type, $limit, $shopId=0){
-	 	$date = date('Y-m-d H:i:s');
-	 	$shopData = array();
-	 	$catData = array();
-	 	//get all related category of the shop
-	 	$allRelatedCategory = self::getShopCategory($shopId);
-	 	if(sizeof($allRelatedCategory)>0){
-
-	 		for($i=0;$i<sizeof($allRelatedCategory);$i++){
-
-	 			$catData[$i]=$allRelatedCategory[$i]['categoryId'];
-	 		}
-	 	}
-	 	//get related shop from datbase
-	 	$allRelatedShops=self::getRelatedShop($shopId);
-	 	if(sizeof($allRelatedShops)>0){
-
-	 		for($i=0;$i<sizeof($allRelatedShops);$i++){
-
-	 			$shopData[$i]=$allRelatedShops[$i]['relatedshopId'];
-	 		}
-	 	}
-	 	if(count($shopData) > 0){
-
-	 	//	Zend_Debug::dump($shopId);
-
-	 	$OfferOfRelatedShops = Doctrine_Query::create()
-	 	->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
-	 	->from('Offer o')
-	 	->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
-	 	->leftJoin('o.shop s')
-	 	->leftJoin('s.favoriteshops fv')
-	 	->leftJoin('o.termandcondition terms')
-	 	->leftJoin('o.vote vot')
-	 	->leftJoin('s.refShopCategory c')
-	 	->leftJoin('s.logo img')
-	 	->where('o.deleted = 0')
-	 	->andWhere('s.deleted = 0')
-	 	->andWhere('s.affliateProgram = 1')
-	 	->andWhere('o.discountType="CD"')
-	 	->andWhere('o.Visability!="MEM"')
-	 	->andWhere('o.enddate > "'.$date.'"')
-	 	->andWhere('o.startdate <= "'.$date.'"')
-	 	->andWhere('o.userGenerated=0')
-	 	->andWhereIn("o.shopId",$shopData)
-	 	->andWhere("o.shopId != ".$shopId)
-	 	->orderBy('o.startdate DESC')
-	 	->limit($limit)
-	 	->fetchArray();
-// 	 	echo "<pre>";
-// 	 	print_r($OfferOfRelatedShops); die;
-	 	} else {
-
-	 		$OfferOfRelatedShops = array();
-	 	}
-
-	 	if(count($catData) > 0){
-	 		$commaSepratedCategroyIdValues = implode(', ', $catData);
-	 		//Zend_Debug::dump($catData); die;
-	 		$OfferOfRelatedCats = Doctrine_Query::create()
-	 		->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,
-	 				terms.content,o.id,o.title, o.Visability, o.discountType,o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode,
-	 			     o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id,
-	 				 img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
-	 		->from('Offer o')
-	 		->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
-	 		->leftJoin('o.shop s')
-	 		->leftJoin('s.favoriteshops fv')
-	 		->leftJoin('o.termandcondition terms')
-	 		->leftJoin('o.vote vot')
-	 		->leftJoin('o.refOfferCategory c')
-	 		->leftJoin('s.logo img')
-	 		->where('o.deleted = 0')
-	 		->andWhere('s.deleted = 0')
-	 		->andWhere('s.affliateProgram = 1')
-	 		->andWhere('o.discountType="CD"')
-	 		->andWhere('o.Visability!="MEM"')
-	 		->andWhere('o.enddate > "'.$date.'"')
-	 		->andWhere('o.startdate <= "'.$date.'"')
-	 		->andWhere('o.userGenerated=0')
-	 		->andWhere("c.categoryId IN ($commaSepratedCategroyIdValues)")
-	 		->andWhere("s.id != ".$shopId)
-	 		->orderBy('o.startdate DESC')
-	 		->limit($limit)
-	 		->fetchArray();
-	 		} else {
-
-	 		$OfferOfRelatedCats = array();
-	 	}
-
-	 	$NewOfferOfRelatedShops = array();
-	 	$NewOfferOfRelatedCats = array();
-
-	 	foreach ($OfferOfRelatedShops as $shopsoffer):
-	 		$NewOfferOfRelatedShops["'".$shopsoffer['id']."'"] = $shopsoffer;
-	 	endforeach;
-
-	 	foreach ($OfferOfRelatedCats as $catsoffer):
-	 		$NewOfferOfRelatedCats["'".$catsoffer['id']."'"] = $catsoffer;
-	 	endforeach;
-
-	 	$result1 = array_merge($NewOfferOfRelatedShops, $NewOfferOfRelatedCats);
-
-	 	$newarr = array();
-	 	if(count($result1) > 0){
-	 		$o = 0;
-	 		foreach($result1 as $newOfShop):
-
-	 			$newarr[$o] = @$newOfShop;
-	 			$o++;
-	 		endforeach;
-
-	 	}
-	 	$result = array_slice($newarr, 0, $limit);
-	 	return $result;
-	 }
-
-	public static function getShopCategory($shopId)
-	{
-		$cat = Doctrine_Query::create()->from('refShopCategory r')->where('r.shopId='.$shopId)->fetchArray();
-		return $cat;
-	}
-	public static function getRelatedShop($shopId)
-	{
-		$shops = Doctrine_Query::create()->from('refShopRelatedshop r')->where('r.shopId='.$shopId)->fetchArray();
-		return $shops;
-	}
-	 /**
-	  * get expired voucher codes for common function
-	  * @author Raman
-	  * @return array $data
-	  * @version 1.0
-	  */
-
-	 public static function commongetallrelatedshopsid($shopId){
-
-	 	$data = Doctrine_Query::create()
-			->select('ref.relatedshopId,s.name,s.id')
-			->from("refShopRelatedshop ref")
-			->leftJoin('ref.shop s')
-			->andWhere("ref.shopId=".$shopId)->orderBy("s.name ASC")->fetchArray();
-	 	    return $data;
-
-	 }
-
-
-	 /**
-	  * get latest updates voucher codes for common function
-	  * @author Raman
-	  * @return array $data
-	  * @version 1.0
-	  */
-
-	 public static function getLatestUpdates($type, $limit, $shopId=0){
-
-	 	$expiredtime=date("Y-m-d 00:00:00");
-		$data = Doctrine_Query::create()
-					->from('OfferNews n')
-					->andWhere('n.shopId = ' . $shopId)
-					->orderBy('n.updated_at DESC');
-
-		$data = $data->limit($limit)->fetchArray();
-		return $data;
-	 }
-
-
-	 /**
-	  * Get newest offer for home page list from database
-	  * @author Er.Kundal
-	  * @version 1.0
-	  * @return array $data
-	  */
-	 public static function getNewstoffers($flag) {
-	 	$memOnly = "MEM";
-	 	$data = Doctrine_Query::create()->select('o.title,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*')
-	 	->from("Offer o")
-	 	->leftJoin('o.shop s')
-	 	->leftJoin('s.logo l')
-	 	->where('o.Visability!=' ."'$memOnly'")
-	 	->andWhere('o.deleted =0')
-	 	->andWhere('s.deleted =0')
-	 	->andWhere('o.discountType != "NW"')
-	 	->orderBy("o.id DESC")
-	 	->limit($flag)
-	 	->fetchArray();
-	 	return $data;
-
-	 }
-
-	 /**
-	  * Get newest offer for home page list from database
-	  * @author unknown modified by Surinderpal Singh
-	  * @param $id integer shop id for which offer are listed
-	  * @param $limit integer limit for the no of offers. Default is set to no limit
-	  * @param $getExclusiveOnly boolean set true to get only exclusive offers
-	  * @param $includingOffline boolean set true to all offers including offline offers
-	  * @version 1.0
-	  * @return array $data
-	  */
-
-	public static function getAllOfferOnShop($id , $limit = null , $getExclusiveOnly = false , $includingOffline = false)
-	{
-		$nowDate = date('Y-m-d H:i:s');
-		$data = Doctrine_Query::create()
-
-		->select('o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
-				o.couponCodeType, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name,vot.id,vot.vote')
-		->from('Offer o')
-
-		->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
-		->leftJoin('o.shop s')
-		->leftJoin('o.logo l')
-		->leftJoin('s.logo img')
-		->leftJoin('o.termandcondition terms')
-		->leftJoin('o.vote vot')
-		->leftJoin('o.tiles t')
-		->where('o.deleted = 0' );
-
-		if(!$includingOffline)
-		{
-			$data = $data->andWhere('o.offline = 0')
-			->andWhere('o.endDate >='."'$nowDate'")
-			->andWhere('o.startdate <= "'.$nowDate.'"');
-		}
-
-		$data= $data->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
-			->andWhere('s.id='.$id)
-			->andWhere('s.deleted = 0')
-			->andWhere('o.discountType != "NW"')
-			->andWhere('o.Visability!="MEM"')
-			->orderBy('o.editorPicks DESC')
-			->addOrderBy('o.exclusiveCode DESC')
-			->addOrderBy('o.discountType ASC')
-			->addOrderBy('o.startdate DESC')
-			//		->addOrderBy('clicks DESC')
-			->addOrderBy('o.popularityCount DESC')
-			->addOrderBy('o.title ASC');
-
-		// check need to get exclusive offers or not
-		if($getExclusiveOnly)
-		{
-			$data = $data->andWhere('o.exclusiveCode = 1' ) ;
-		}
-		// check $limit if passed or not
-		if($limit)
-		{
-			$data = $data->limit($limit);
-
-		}
-
-		$data = $data->fetchArray();
-		//var_dump($data); die;
-		return $data;
-
-
-	}
-
-
-
-	/**
-	 * check the characteristics of a shop like hot shop,super partner etc
-	 * @param $id integer shop id for which offer are listed
-	 * @param $limit integer limit for the no of offers. Default is set to no limit
-	 * @param $getExclusiveOnly boolean set true to get only exclusive offers
-	 * @param $includingOffline boolean set true to all offers including offline offers
-	 * @return array number of offer based on given constraints
-	 * @author sp singh
-	 */
-
-	public static function getShopCharacteristics($id , $limit = null , $getExclusiveOnly = false , $includingOffline = false)
-	{
-		$nowDate = date('Y-m-d H:i:s');
-		$data = Doctrine_Query::create()
-
-		->select('o.id,s.id')
-				->from('Offer o')
-				->leftJoin('o.shop s')
-				->where('o.deleted = 0' );
-		if(!$includingOffline)
-		{
-			$data = $data->andWhere('o.offline = 0')
-			->andWhere('o.endDate >='."'$nowDate'")
-			->andWhere('o.startdate <= "'.$nowDate.'"');
-		}
-
-		$data= $data->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
-		->andWhere('s.id='.$id)
-		->andWhere('s.deleted = 0')
-		->andWhere('o.discountType != "NW"')
-		->andWhere('o.Visability!="MEM"')
-		->orderBy('o.editorPicks DESC')
-		->addOrderBy('o.exclusiveCode DESC')
-		->addOrderBy('o.discountType ASC')
-		->addOrderBy('o.startdate DESC')
-		->addOrderBy('o.popularityCount DESC')
-		->addOrderBy('o.title ASC');
-
-		// check need to get exclusive offers or not
-		if($getExclusiveOnly)
-		{
-			$data = $data->andWhere('o.exclusiveCode = 1' ) ;
-		}
-		// check $limit if passed or not
-		if($limit)
-		{
-			$data = $data->limit($limit);
-
-		}
-
-		$data = $data->fetchArray();
-		return $data;
-
-
-	}
-
-
-
-	/**
-	 * get top kortingscode same as home page but it displayed on shop page(only used when a shop is no money with no offers)
-	 *
-	 * offers will be displayed only when an offer's category == shop's category
-	 *
-	 * and sort poplar offers based on shop's category
-	 *
-	 * @author spsingh
-	 *
-	 * @param $limit integer limit for the no of offers. Default is set to 5
-	 * @param $shopCategories array  no money shop categories
-	 * @version 1.0
-	 * @return array $data
-	 */
-
-	public static function getTopKortingscodeForShopPage($shopCategories,$limit = 5 )
-	{
-		$date = date('Y-m-d H:i:s');
-
-		$data = Doctrine_Query::create()
-			->select('p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
-				o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name')
-			->from('PopularCode p')
-			->leftJoin('p.offer o')
-			->leftJoin('o.shop s')
-			->leftJoin('s.logo img')
-			->leftJoin('o.termandcondition terms')
-			->where('o.deleted =0')
-			->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-			->andWhere('s.deleted=0')
-			->andWhere('o.offline = 0');
-
-		if(! empty($shopCategories))
-		{
-			$data = $data->leftJoin('s.refShopCategory sc')
-					->andWhereIn('sc.categoryId', $shopCategories);
-		}
-
-			$data = $data->andWhere('s.status = 1')
-						->andWhere('o.enddate > "'.$date.'"')
-				      	->andWhere('o.startdate <= "'.$date.'"')
-						->andWhere('o.discounttype = "CD"')
-						->andWhere('o.userGenerated = 0')
-						->andWhere('o.Visability != "MEM"')
-						->orderBy('p.position ASC')
-						->limit($limit)
-					    ->fetchArray();
-
-
-		return $data;
-	}
-
-
-
-	/**
-	 * get top kortingscode same as home page but it displayed on shop page(only used when a shop is no money with no offers)
-	 *
-	 * shops will be displayed only when there is no offer based on condition like offer's category == shop's category
-	 *
-	 * and sort poplar offers based on offer's category
-	 * @param array $shopCategories  no money shop categories
-	 * @param array $offerIDs  offer which needs to bre excluded (these are already added)
-	 * @author spsingh
-	 *
-	 * @param $limit integer limit for the no of offers. Default is set to 5
-	 * @version 1.0
-	 * @return array $data
-	 */
-
-	public static function getAdditionalTopKortingscodeForShopPage($shopCategories,$offerIDs,$limit = 5 )
-	{
-		$date = date('Y-m-d H:i:s');
-
-		$data = Doctrine_Query::create()
-				->select('p.id,o.id,o.authorId,o.refURL,o.couponCodeType,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
-					o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
-
-				->from('PopularCode p')
-				->leftJoin('p.offer o')
-				->leftJoin('o.shop s')
-				->leftJoin('s.refShopCategory sc')
-				->leftJoin('o.logo l')
-				->leftJoin('s.logo img')
-				->leftJoin('s.favoriteshops fv')
-				->leftJoin('o.termandcondition terms')
-				->leftJoin('o.vote vot')
-				->leftJoin('o.tiles t')
-				->where('o.deleted =0')
-				->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-				->andWhereNotIn('sc.categoryId', $shopCategories)
-				->andWhereNotIn('o.id', $offerIDs )
-				->andWhere('s.deleted=0')
-				->andWhere('o.offline = 0')
-				->andWhere('s.status = 1')
-				->andWhere('o.enddate > "'.$date.'"')
-				->andWhere('o.startdate <= "'.$date.'"')
-				->andWhere('o.discounttype = "CD"')
-				->andWhere('o.userGenerated = 0')
-				->andWhere('o.Visability != "MEM"')
-				->orderBy('p.position ASC')
-				->limit($limit)
-				->fetchArray();
-		return $data;
-	}
-
-
- 	/**
-	  * Get offers for how to guide page from database
-	  * @author blal
-	  * @param $id integer shop id for which offer are listed
-	  * @param $limit integer limit for the no of offers. Default is set to no limit
-	  * @param $getExclusiveOnly boolean set true to get only exclusive offers
-	  * @param $includingOffline boolean set true to all offers including offline offers
-	  * @version 1.0
-	  * @return array $data
-	  */
-
-	public static function getCouponOffersHowToGuide($pLink , $limit = null , $getExclusiveOnly = false , $includingOffline = false)
-	{
-		$nowDate = date('Y-m-d H:i:s');
-		$data = Doctrine_Query::create()
-
-		->select('l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.*,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
-		->from('Offer o')
-
-//		->addSelect("(SELECT ((sum(v.onclick)) / (DATEDIFF(NOW(),o.startdate))) as pop FROM ViewCount v WHERE offerId = o.id ) as clicks")
-		->leftJoin('o.shop s')
-		->leftJoin('o.logo l')
-		->leftJoin('s.logo img')
-		->leftJoin('s.favoriteshops fv')
-		->leftJoin('o.termandcondition terms')
-		->leftJoin('o.vote vot')
-		->leftJoin('o.tiles t')
-		->where('o.deleted = 0' );
-
-		if(!$includingOffline)
-		{
-			$data = $data->andWhere('o.offline = 0')
-			->andWhere('o.endDate >='."'$nowDate'")
-			->andWhere('o.startdate <= "'.$nowDate.'"');
-		}
-
-		$data= $data->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
-		->andWhere("s.permaLink='".$pLink."'")
-
-		->andWhere('s.deleted =0')
-		->andWhere('o.discountType = "CD"')
-		->andWhere('o.discountType != "NW"')
-		->andWhere('o.Visability!="MEM"')
-		->orderBy('o.exclusiveCode DESC')
-		->addOrderBy('o.discountType ASC')
-		->addOrderBy('o.startdate DESC')
-//		->addOrderBy('clicks DESC')
-		->addOrderBy('o.popularityCount DESC')
-		->addOrderBy('o.title ASC');
-
-		// check need to get execlusive offers or not
-		if($getExclusiveOnly)
-		{
-			$data = $data->andWhere('o.exclusiveCode = 1' ) ;
-		}
-
-		// check $limit if passed or not
-		if($limit)
-		{
-			$data = $data->limit($limit);
-
-		}
-		$data = $data->fetchArray();
-
-		return $data;
-
-	}
-
-	 /**
-	  * get popular offers of particular shop
-	  * @author blal updated by sunny
-	  * @return array $popularOffers
-	  * @version 1.0
-	  */
-
-	public static function getpopularOffersOfShops($shopId,$limit){
-		$date = date('Y-m-d H:i:s');
-		$popularOffers = Doctrine_Query::create()
-					 	->select('po.*,o.*,terms.*,s.id,s.name,img.name,img.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
-					 	->from("PopularVouchercodes po")
-					 	->leftJoin('po.offer o')
-					 	->leftJoin('o.shop s')
-					 	->leftJoin('o.termandcondition terms')
-					 	->leftJoin('o.vote vot')
-					 	->leftJoin('s.logo img')
-					 	->leftJoin('s.favoriteshops fv')
-					 	->Where('s.id='.$shopId)
-					 	->andWhere('o.deleted =0')
-					 	->andWhere('o.enddate > "'.$date.'"')
-					 	->andWhere('o.startdate <= "'.$date.'"')
-					 	->andWhere('s.deleted =0')
-					 	->orderBy('po.vaoucherofferid DESC')
-					 	->limit($limit)
-					 	->fetchArray();
-
-		return $popularOffers;
-	 }
-
-
-
-	 /**
-	  * get total view count for offer and update the total viewcount
-	  *
-	  * @author sp singh
-	  * @version 1.0
-	  */
-	 public static function updateTotalViewCount(){
-
-
-		 $data = Doctrine_Query::create()
-			 		->select('o.id,o.totalViewcount,o.startDate,DATEDIFF(NOW(),o.startdate) as diff')
-			 		->from('Offer o')
-			 		->addSelect("(SELECT  sum(v.onclick)  as clicks FROM ViewCount v WHERE v.offerId = o.id and v.counted=0 ) as clicks")
-				 	->fetchArray();
-
-
-	  	foreach ($data as $value)
-	 	{
-
-	 		# update only when there ar new click out in view_count table
-	 		if($value['clicks'])
-	 		{
-
-	 				ViewCount::processViewCount($value['id']);
-
-
-					# COUNT POPULAITY OF AN OFFER based on otal clicks
-
-		 			$newtotal = intval($value['clicks']) + intval($value['totalViewcount']) ;
-
-
-		 			$dStart = new DateTime(date("y-m-d h:i:s"));
-		 			$dEnd  = new DateTime($value['startDate']);
-		 			$dDiff = $dEnd->diff($dStart);
-
-
-		 			$diff = (int)$dDiff->days ;
-
-
-		 			$popularity = round( $newtotal / ($diff > 0 ? $diff : 1 ) , 4);
-
-
-		 			# update popularity and otal click counts
-		 			$shopList = Doctrine_Query::create()
-				 			->update('Offer o')
-				 			->set('o.totalViewcount', $newtotal)
-				 		    ->set('o.popularityCount' , 	"'".  $popularity ."'" )
-				 			->where('o.id = ?', $value['id'])
-				 			->execute() ;
-	 		}
-	 	}
-
-
-	 }
-
-
-
-
-
-	 /**
-	  * get popular offers of particular shop
-	  * @author blal updated by sunny modified by mkaur
-	  * @return array $popularOffers
-	  * @version 1.0
-	  */
-
-	 public static function getmemberexclusiveOffersOfShops(){
-	 	$date = date('Y-m-d H:i:s');
-	 	$popularOffers = Doctrine_Query::create()
-	 	->select('po.*,o.*,terms.*,s.*,img.name,img.path,vot.id,vot.vote')
-	 	->from("PopularVouchercodes po")
-	 	->leftJoin('po.offer o')
-	 	->leftJoin('o.shop s')
-	 	->leftJoin('o.vote vot')
-	 	->leftJoin('s.logo img')
-	    ->leftJoin('s.favoriteshops fv')
-	 	->where('s.id=?o.shopid')
-	 	->andWhere('o.exclusivecode<>0')
-	 	->andWhere('o.enddate > "'.$date.'"')
-	 	->andWhere('o.startdate <= "'.$date.'"')
-	 	->andWhere('o.deleted =0')
-	 	->andWhere('s.deleted =0')
-	 	->orderBy('o.title ASC')
-	 	->fetchArray();
- 	 	return $popularOffers;
-	 }
+     /**
+      * get extended voucher codes for common function
+      * @author Raman
+      * @return array $data
+      * @version 1.0
+      */
+
+     public static function commongetextendedOffers($type, $limit, $shopId=0)
+     {
+        $date = date('Y-m-d H:i:s');
+        $data = Doctrine_Query::create()
+                ->select('o.*, img.id, img.path, img.name')
+                ->from('Offer o')
+                ->leftJoin('o.shop s')
+                ->leftJoin('o.logo img')
+                ->where('o.deleted=0' )
+                ->andWhere('s.deleted = 0')
+                ->andWhere('o.extendedoffer=1')
+                ->andWhere('o.discountType != "NW"')
+                ->andWhere('o.discounttype="CD"')
+                ->andWhere('o.enddate > "'.$date.'"')
+                ->andWhere('o.startdate <= "'.$date.'"')
+                ->orderBy('o.id DESC')
+                ->limit($limit)->fetchArray();
+
+        return $data;
+     }
+
+     /**
+      * get related shops for common function
+      * @author Raman modified by mkaur
+      * @return array $data
+      * @version 1.0
+      */
+
+     public static function commongetrelatedshops($type, $limit, $shopId=0)
+     {
+        $data =  null;
+        $date = date('Y-m-d H:i:s');
+        $lastdata=FrontEnd_Helper_viewHelper::getallrelatedshopsid($shopId);
+        if (sizeof($lastdata)>0) {
+            for ($i=0;$i<sizeof($lastdata);$i++) {
+                $shopdata[$i]=$lastdata[$i]['relatedshopId'];
+            }
+            $shopvalues=implode(",", $shopdata);
+            $data = Doctrine_Query::create()
+                ->select('s.id,s.permalink as permalink,s.name,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid, o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+                ->from('Offer o')
+                ->leftJoin('o.shop s')
+                ->leftJoin('s.favoriteshops fv')
+                ->leftJoin('o.termandcondition terms')
+                ->leftJoin('o.vote vot')
+                ->leftJoin('s.logo img')
+                ->where("o.shopId IN ($shopvalues)")
+                ->andWhere('o.deleted = 0')
+                ->andWhere('s.deleted = 0')
+                ->andWhere('o.enddate > "'.$date.'"')
+                ->andWhere('o.startdate <= "'.$date.'"')
+                ->andWhere('o.discounttype="CD"')
+                ->andWhere('o.shopid != "'.$shopId.'"')
+                ->orderBy('o.startdate DESC')->limit($limit);
+                $data = $data->fetchArray();
+        } else {
+            $data = array();
+        }
+
+        return $data;
+     }
+
+     /**
+      * get expired voucher codes for common function
+      * @author Raman
+      * @return array $data
+      * @version 1.0
+      */
+
+     public static function commongetallrelatedshopsid($shopId)
+     {
+        $data = Doctrine_Query::create()
+            ->select('ref.relatedshopId,s.name,s.id')
+            ->from("refShopRelatedshop ref")
+            ->leftJoin('ref.shop s')
+            ->andWhere("ref.shopId=".$shopId)->orderBy("s.name ASC")->fetchArray();
+
+            return $data;
+
+     }
+
+     /**
+      * get latest updates voucher codes for common function
+      * @author Raman
+      * @return array $data
+      * @version 1.0
+      */
+
+     public static function getLatestUpdates($type, $limit, $shopId=0)
+     {
+        $expiredtime=date("Y-m-d 00:00:00");
+        $data = Doctrine_Query::create()
+                    ->from('OfferNews n')
+                    ->andWhere('n.shopId = ' . $shopId)
+                    ->orderBy('n.startdate DESC');
+
+        $data = $data->limit($limit)->fetchArray();
+
+        return $data;
+     }
+
+     /**
+      * Get newest offer for home page list from database
+      * @author Er.Kundal
+      * @version 1.0
+      * @return array $data
+      */
+     public static function getNewstoffers($flag)
+     {
+        $memOnly = "MEM";
+        $data = Doctrine_Query::create()->select('o.title,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*')
+        ->from("Offer o")
+        ->leftJoin('o.shop s')
+        ->leftJoin('s.logo l')
+        ->where('o.Visability!=' ."'$memOnly'")
+        ->andWhere('o.deleted =0')
+        ->andWhere('s.deleted =0')
+        ->andWhere('o.discountType != "NW"')
+        ->orderBy("o.id DESC")
+        ->limit($flag)
+        ->fetchArray();
+
+        return $data;
+
+     }
+
+     /**
+      * Get newest offer for home page list from database
+      * @author unknown modified by Surinderpal Singh
+      * @param $id integer shop id for which offer are listed
+      * @param $limit integer limit for the no of offers. Default is set to no limit
+      * @param $getExclusiveOnly boolean set true to get only exclusive offers
+      * @param $includingOffline boolean set true to all offers including offline offers
+      * @version 1.0
+      * @return array $data
+      */
+
+    public static function getAllOfferOnShop($id , $limit = null , $getExclusiveOnly = false , $includingOffline = false)
+    {
+        $nowDate = date('Y-m-d 00:00:00');
+        $data = Doctrine_Query::create()
+
+        ->select('o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
+                o.couponCodeType, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name,vot.id,vot.vote')
+        ->from('Offer o')
+
+        ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.logo l')
+        ->leftJoin('s.logo img')
+        ->leftJoin('o.termandcondition terms')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('o.tiles t')
+        ->where('o.deleted = 0' );
+
+        if (!$includingOffline) {
+            $data = $data->andWhere('o.offline = 0')
+            ->andWhere('o.endDate >='."'$nowDate'")
+            ->andWhere('o.startdate <= "'.$nowDate.'"');
+        }
+
+        $data= $data->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+            ->andWhere('s.id='.$id)
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.Visability!="MEM"')
+            ->orderBy('o.editorPicks DESC')
+            ->addOrderBy('o.exclusiveCode DESC')
+            ->addOrderBy('o.discountType ASC')
+            ->addOrderBy('o.startdate DESC')
+            //      ->addOrderBy('clicks DESC')
+            ->addOrderBy('o.popularityCount DESC')
+            ->addOrderBy('o.title ASC');
+
+        // check need to get exclusive offers or not
+        if ($getExclusiveOnly) {
+            $data = $data->andWhere('o.exclusiveCode = 1' ) ;
+        }
+        // check $limit if passed or not
+        if ($limit) {
+            $data = $data->limit($limit);
+
+        }
+
+        $data = $data->fetchArray();
+        return $data;
+    }
+
+    /**
+     * get top kortingscode same as home page but it displayed on shop page(only used when a shop is no money with no offers)
+     *
+     * shops will be displayed only when there is no offer based on condition like offer's category == shop's category
+     *
+     * and sort poplar offers based on offer's category
+     * @param array $shopCategories no money shop categories
+     * @param array $offerIDs       offer which needs to bre excluded (these are already added)
+     * @author spsingh
+     *
+     * @param $limit integer limit for the no of offers. Default is set to 5
+     * @version 1.0
+     * @return array $data
+     */
+
+    public static function getAdditionalTopKortingscodeForShopPage($shopCategories,$offerIDs,$limit = 5)
+    {
+        $date = date('Y-m-d H:i:s');
+
+        $additionalTopKortingscodeForShopPage = Doctrine_Query::create()
+                ->select('p.id,o.id,o.authorId,o.refURL,o.couponCodeType,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
+                    o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+
+                ->from('PopularCode p')
+                ->leftJoin('p.offer o')
+                ->leftJoin('o.shop s')
+                ->leftJoin('s.refShopCategory sc')
+                ->leftJoin('o.logo l')
+                ->leftJoin('s.logo img')
+                ->leftJoin('s.favoriteshops fv')
+                ->leftJoin('o.termandcondition terms')
+                ->leftJoin('o.vote vot')
+                ->leftJoin('o.tiles t')
+                ->where('o.deleted =0')
+                ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
+                ->andWhereNotIn('sc.categoryId', $shopCategories)
+                ->andWhereNotIn('o.id', $offerIDs)
+                ->andWhere('s.deleted=0')
+                ->andWhere('o.offline = 0')
+                ->andWhere('s.status = 1')
+                ->andWhere('o.enddate > "'.$date.'"')
+                ->andWhere('o.startdate <= "'.$date.'"')
+                ->andWhere('o.discounttype = "CD"')
+                ->andWhere('o.userGenerated = 0')
+                ->andWhere('o.Visability != "MEM"')
+                ->orderBy('p.position ASC')
+                ->limit($limit)
+                ->fetchArray();
+
+        return $additionalTopKortingscodeForShopPage;
+    }
+
+    /**
+      * Get offers for how to guide page from database
+      * @author blal
+      * @param $id integer shop id for which offer are listed
+      * @param $limit integer limit for the no of offers. Default is set to no limit
+      * @param $getExclusiveOnly boolean set true to get only exclusive offers
+      * @param $includingOffline boolean set true to all offers including offline offers
+      * @version 1.0
+      * @return array $data
+      */
+
+    public static function getCouponOffersHowToGuide($pLink , $limit = null , $getExclusiveOnly = false , $includingOffline = false)
+    {
+        $nowDate = date('Y-m-d H:i:s');
+        $data = Doctrine_Query::create()
+
+        ->select('l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.*,img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote')
+        ->from('Offer o')
+
+//      ->addSelect("(SELECT ((sum(v.onclick)) / (DATEDIFF(NOW(),o.startdate))) as pop FROM ViewCount v WHERE offerId = o.id ) as clicks")
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.logo l')
+        ->leftJoin('s.logo img')
+        ->leftJoin('s.favoriteshops fv')
+        ->leftJoin('o.termandcondition terms')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('o.tiles t')
+        ->where('o.deleted = 0' );
+
+        if (!$includingOffline) {
+            $data = $data->andWhere('o.offline = 0')
+            ->andWhere('o.endDate >='."'$nowDate'")
+            ->andWhere('o.startdate <= "'.$nowDate.'"');
+        }
+
+        $data= $data->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+        ->andWhere("s.permaLink='".$pLink."'")
+
+        ->andWhere('s.deleted =0')
+        ->andWhere('o.discountType = "CD"')
+        ->andWhere('o.discountType != "NW"')
+        ->andWhere('o.Visability!="MEM"')
+        ->orderBy('o.exclusiveCode DESC')
+        ->addOrderBy('o.discountType ASC')
+        ->addOrderBy('o.startdate DESC')
+//      ->addOrderBy('clicks DESC')
+        ->addOrderBy('o.popularityCount DESC')
+        ->addOrderBy('o.title ASC');
+
+        // check need to get execlusive offers or not
+        if ($getExclusiveOnly) {
+            $data = $data->andWhere('o.exclusiveCode = 1' ) ;
+        }
+
+        // check $limit if passed or not
+        if ($limit) {
+            $data = $data->limit($limit);
+
+        }
+        $data = $data->fetchArray();
+
+        return $data;
+
+    }
+
+     /**
+      * get popular offers of particular shop
+      * @author blal updated by sunny
+      * @return array $popularOffers
+      * @version 1.0
+      */
+
+    public static function getpopularOffersOfShops($shopId,$limit)
+    {
+        $date = date('Y-m-d H:i:s');
+        $popularOffers = Doctrine_Query::create()
+                        ->select('po.*,o.*,terms.*,s.id,s.name,img.name,img.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
+                        ->from("PopularVouchercodes po")
+                        ->leftJoin('po.offer o')
+                        ->leftJoin('o.shop s')
+                        ->leftJoin('o.termandcondition terms')
+                        ->leftJoin('o.vote vot')
+                        ->leftJoin('s.logo img')
+                        ->leftJoin('s.favoriteshops fv')
+                        ->Where('s.id='.$shopId)
+                        ->andWhere('o.deleted =0')
+                        ->andWhere('o.enddate > "'.$date.'"')
+                        ->andWhere('o.startdate <= "'.$date.'"')
+                        ->andWhere('s.deleted =0')
+                        ->orderBy('po.vaoucherofferid DESC')
+                        ->limit($limit)
+                        ->fetchArray();
+
+        return $popularOffers;
+     }
+
+     /**
+      * get total view count for offer and update the total viewcount
+      *
+      * @author sp singh
+      * @version 1.0
+      */
+     public static function updateTotalViewCount()
+     {
+         $data = Doctrine_Query::create()
+                    ->select('o.id,o.totalViewcount,o.startDate,DATEDIFF(NOW(),o.startdate) as diff')
+                    ->from('Offer o')
+                    ->addSelect("(SELECT  sum(v.onclick)  as clicks FROM ViewCount v WHERE v.offerId = o.id and v.counted=0 ) as clicks")
+                    ->fetchArray();
+
+        foreach ($data as $value) {
+
+            # update only when there ar new click out in view_count table
+            if ($value['clicks']) {
+
+                    ViewCount::processViewCount($value['id']);
+
+                    # COUNT POPULAITY OF AN OFFER based on otal clicks
+
+                    $newtotal = intval($value['clicks']) + intval($value['totalViewcount']) ;
+
+                    $dStart = new DateTime(date("y-m-d h:i:s"));
+                    $dEnd  = new DateTime($value['startDate']);
+                    $dDiff = $dEnd->diff($dStart);
+
+                    $diff = (int) $dDiff->days ;
+
+                    $popularity = round( $newtotal / ($diff > 0 ? $diff : 1 ) , 4);
+
+                    # update popularity and otal click counts
+                    $shopList = Doctrine_Query::create()
+                            ->update('Offer o')
+                            ->set('o.totalViewcount', $newtotal)
+                            ->set('o.popularityCount' ,     "'".  $popularity ."'" )
+                            ->where('o.id = ?', $value['id'])
+                            ->execute() ;
+            }
+        }
+
+     }
+
+     /**
+      * get popular offers of particular shop
+      * @author blal updated by sunny modified by mkaur
+      * @return array $popularOffers
+      * @version 1.0
+      */
+
+     public static function getmemberexclusiveOffersOfShops()
+     {
+        $date = date('Y-m-d H:i:s');
+        $popularOffers = Doctrine_Query::create()
+        ->select('po.*,o.*,terms.*,s.*,img.name,img.path,vot.id,vot.vote')
+        ->from("PopularVouchercodes po")
+        ->leftJoin('po.offer o')
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('s.logo img')
+        ->leftJoin('s.favoriteshops fv')
+        ->where('s.id=?o.shopid')
+        ->andWhere('o.exclusivecode<>0')
+        ->andWhere('o.enddate > "'.$date.'"')
+        ->andWhere('o.startdate <= "'.$date.'"')
+        ->andWhere('o.deleted =0')
+        ->andWhere('s.deleted =0')
+        ->orderBy('o.title ASC')
+        ->fetchArray();
+
+        return $popularOffers;
+     }
 
 /**
  * counter existence of  favorite shop in database
  * @author mkaur
  */
-	 public static function countFavShop($shopId){
-	 	$data = Doctrine_Query::create()->select('count(*) as total')
-	 	->from("FavoriteShop")->where('shopId='.$shopId)
-	 	->fetchArray();
-	 	if($data[0]['total']>0){
-	 		return true;
-	 	}
-	 	else{
-		return null;
-	 	}
-	 }
+     public static function countFavShop($shopId)
+     {
+        $data = Doctrine_Query::create()->select('count(*) as total')
+        ->from("FavoriteShop")->where('shopId='.$shopId)
+        ->fetchArray();
+        if ($data[0]['total']>0) {
+            return true;
+        } else {
+        return null;
+        }
+     }
 
  /**
   * add favorite shop in the database
   * @author mkaur
   */
-	 public static  function addFavoriteShop($sid,$flag){
-	 	$userid = Auth_VisitorAdapter::getIdentity()->id;
-	 	if($flag=='1' || $flag==1){
-	 		$fvshop = new FavoriteShop();
-	 		$fvshop->shopId = $sid;
-	 		$fvshop->visitorId = $userid;
-	 		$fvshop->save();
-	 		//call cache function
-	 		$key = 'all_shopdetail'  . $sid . '_list';
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-	 		$key = 'all_relatedShopInStore'  . $sid  . '_list';
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-	 		return 1;
+     public static  function addFavoriteShop($sid,$flag)
+     {
+        $userid = Auth_VisitorAdapter::getIdentity()->id;
+        if ($flag=='1' || $flag==1) {
+            $fvshop = new FavoriteShop();
+            $fvshop->shopId = $sid;
+            $fvshop->visitorId = $userid;
+            $fvshop->save();
+            //call cache function
+            $key = 'all_shopdetail'  . $sid . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_relatedShopInStore'  . $sid  . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
 
+            return 1;
 
-	 	}else {
+        } else {
 
-	 		$d3 = Doctrine_Query::create()->delete()
-		   		->from('FavoriteShop fs')
-		   		->where("fs.shopId=" . $sid)
-		   		->andWhere('fs.visitorId='.$userid)
-		   ->execute();
-	 		//call cache function
-	 		$key = 'all_shopdetail'  . $sid . '_list';
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-	 		$key = 'all_relatedShopInStore'  . $sid  . '_list';
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_popularvaouchercode_list');
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-	 		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-	 		return 2;
-	 	}
+            $d3 = Doctrine_Query::create()->delete()
+                ->from('FavoriteShop fs')
+                ->where("fs.shopId=" . $sid)
+                ->andWhere('fs.visitorId='.$userid)
+           ->execute();
+            //call cache function
+            $key = 'all_shopdetail'  . $sid . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_relatedShopInStore'  . $sid  . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
 
+            return 2;
+        }
 
 }
 /**
  * get member only offers
  * @author mkaur
  */
-	 	public static function getMemberonly(){
-	 		$date = date('Y-m-d H:i:s');
-	 		$memOnly = "MEM";
-	 		$data = Doctrine_Query::create()->select('o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
-	 		->from("Offer o")
-	 		->leftJoin('o.shop s')
-	 		->leftJoin('o.vote vot')
-	 		->leftJoin('s.logo l')
-	 		->leftJoin('s.favoriteshops fv')
-	 		->where('o.Visability='."'$memOnly'")
-	 		->andWhere('o.deleted =0')
-	 		->andWhere('s.deleted =0')
-	 		->andWhere('o.enddate > "'.$date.'"')
-	 		->andWhere('o.startdate <= "'.$date.'"')
-	 		->orderBy("o.id DESC")
-	 		->fetchArray();
-
-	 		$k = 0;
-
-	 		if(count($data) > 0):
-	 		foreach ($data as $pag):
-		 		$data[$k]['marginCounter'] = 4;
-		 		$k++;
-	 		endforeach;
-	 		endif;
-	 		return $data;
-	 	}
-
-	 	/**
-	 	 * get member only offers
-	 	 * @author Er,kundal
-	 	 */
-	 	public static function getspecialofferonly($splconidtion){
+        public static function getMemberonly()
+        {
             $date = date('Y-m-d H:i:s');
-
-            //echo $date;
-	 		$memOnly = "MEM";
-
-	 		$pId = $splconidtion['pageid'];
-
-	 		$CDvaule = "";
-	 		$couponRegular = 0;
-	 		if($splconidtion['couponregular'] == 1){
-
-	 			$couponRegular = 1;
-	 		}
-
-	 		$editorpick = 0;
-	 		if($splconidtion['couponeditorpick'] == 1){
-
-	 			$editorpick = $splconidtion['couponeditorpick'];
-	 		}
-
-	 		$exclusive = 0;
-	 		if($splconidtion['couponexclusive'] == 1){
-
-	 			$exclusive = $splconidtion['couponexclusive'];
-	 		}
-
-	 		$wordTitle = "";
-	 		if($splconidtion['enableWordConstraint'] == 1){
-
-	 			$wordTitle = $splconidtion['wordTitle'];
-	 		}
-
-	 		$maxOffers = "";
-	 		if($splconidtion['maxOffers']){
-
-	 			$maxOffers = $splconidtion['maxOffers'];
-	 		}
-
-	 		$discountvaule = array($CDvaule);
-
-
-	 		//get all offer that attached to page
-			$data1 = Doctrine_Query::create()->select('op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
-	 		->from('refOfferPage op')
-	 		->leftJoin('op.Offer o')
-	 		->leftJoin('o.logo ologo')
-	 		->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-	 		->leftJoin('o.shop s')
-	 		->leftJoin('o.vote vot')
-	 		->leftJoin('s.logo l')
-	 		->leftJoin('s.favoriteshops fv')
-	 		->where('op.pageId = '.$pId)
-	 		->andWhere('o.enddate > "'.$date.'"')
-	 		->andWhere('o.startdate <= "'.$date.'"')
-	 		->andWhere('o.deleted =0')
-	 		->andWhere('s.deleted =0')
-	 		->andWhere('s.status = 1')
-	 		->andWhere('o.discounttype="CD"')
-	 		->andWhere('o.Visability!="MEM"')
-	 		->orderBy('o.exclusiveCode DESC')
-	 		->addOrderBy('o.startdate DESC');
-
-	 		//Query for get all offer with constraint
-	 		$Q = Doctrine_Query::create()->select('o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name')
-	 		->from('Offer o')
-	 		->leftJoin('o.logo ologo')
-	 		->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-	 		->leftJoin('o.shop s')
-	 		->leftJoin('o.vote vot')
-	 		->leftJoin('s.logo l')
-	 		->leftJoin('s.favoriteshops fv')
-	 		->andWhere('o.deleted =0')
-	 		->andWhere("o.userGenerated = 0")
-	 		->andWhere('s.deleted =0')
-	 		->andWhere('o.enddate > "'.$date.'"')
-	 		->andWhere('o.startdate <= "'.$date.'"')
-	 		->andWhere('o.Visability!="MEM"')
-	 		->andWhere('o.discounttype!="SL" and o.discounttype!="PA"')
-	 		->orderBy('o.exclusiveCode DESC')
-	 		->addOrderBy('o.startdate DESC');
-
-			if(isset($splconidtion['oderOffers']) && $splconidtion['oderOffers'] == 1){
-
-	 			$Q->orderBy("o.title ASC");
-	 		}
-
-	 		else if(isset($splconidtion['oderOffers']) && $splconidtion['oderOffers'] == 0){
-
-	 			$Q->orderBy("o.title DESC");
-	 		}
-	 		else{
-
-	 			$Q->orderBy("o.id DESC");
-	 		}
-
-	 		if(isset($splconidtion['enableWordConstraint']) && @$splconidtion['enableWordConstraint'] > 0 && @$splconidtion['enableWordConstraint'] != null){
-
-	 			$Q->andWhere('o.title LIKE ?',"$wordTitle%");
-
-	 		}
-
-	 		if($splconidtion['couponregular'] == 1){
-
-	 			$regular = 1;
-	 		} else {
-
-	 			$regular = 0;
-
-	 		}
-
-	 		if($regular == 0){
-
-	 			if($editorpick == 0){
-
-	 				if($exclusive == 0){
-
-	 					$Q->andWhere('o.discounttype!="CD"');
-	 					$Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-	 					$Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-	 				}else{
-
-	 					$Q->andWhere('o.discounttype ="CD"');
-	 					$Q->andWhere('o.exclusiveCode = 1');
-	 				}
-	 		  } else {
-	 				if($exclusive == 0){
-	 					$Q->andWhere('o.discounttype="CD"');
-	 					$Q->andWhere('o.editorPicks = 1');
-	 					//$Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-	 				}else{
-	 					$Q->andWhere('o.discounttype ="CD"');
-	 					$Q->andWhere('o.exclusiveCode = 1 or o.editorPicks = 1');
-	 				}
-
-	 			}
-
-
-	 		} else{
-
-	 			if($editorpick == 0){
-
-	 				if($exclusive == 0){
-
-	 					$Q->andWhere('o.discounttype="CD"');
-	 					$Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-	 					$Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-	 				}else{
-
-	 					$Q->andWhere('o.discounttype ="CD"');
-	 					$Q->andWhere('o.editorPicks = 0 or o.editorPicks is NULL');
-	 					$Q->andWhere('o.exclusiveCode = 1');
-	 				}
-
-
-	 			} else {
-	 				if($exclusive == 0){
-
-	 					$Q->andWhere('o.discounttype="CD"');
-	 					$Q->andWhere('o.editorPicks = 1');
-	 					$Q->andWhere('o.exclusiveCode = 0 or o.exclusiveCode is NULL');
-
-	 				}else{
-
-	 					$Q->andWhere('o.discounttype ="CD"');
-
-	 				}
-
-	 			}
-
-	 		}
-	 		/*if(isset($splconidtion['maxOffers']) && @$splconidtion['maxOffers'] >0 && @$splconidtion['maxOffers'] != null){
-	 			$Q->LIMIT($maxOffers);
-	 		}*/
-
-	 		$data = $data1->fetchArray();
-
-
-
-
-	 		//traverse array of all offer accordig to constrains
-	 		$newarr = array();
-			if(count($data) > 0){
-
-	 			for($o=0;$o<count($data);$o++){
-
-	 				$newarr[$o] = @$data[$o]['Offer'];
-	 			}
-
-	 		}
-	 		//echo $data = $Q->getSqlQuery();  die;
-	 		$data = $Q->fetchArray();
-
-
-
-	 		$newarr1 = array();
-
-	 		if(count($data) > 0){
-
-	 			for($o=0;$o<count($data);$o++){
-
-	 				$publishdate = @$data[$o]['startDate'];
-
-	 				$expireDate = @$data[$o]['endDate'];
-	 				//echo $expireDate; echo "<br>";
-	 				//echo $splconidtion['timenumOfDays'];echo "<br>";
-	 				$timeconstriant = ' +'.@$splconidtion['timenumOfDays'].' day';
-	 				$timeconstriant1 = ' -'.@$splconidtion['timenumOfDays'].' day';
-
-	 				$NewDate=date('Y-m-d', strtotime($publishdate .$timeconstriant));
-	 				//echo $NewDate; echo "<br>";
-	 				$ExNewDate = date('Y-m-d', strtotime($expireDate .$timeconstriant1));
-
-	 				//echo $ExNewDate; echo "<br>";
-	 				$todays_date = date("Y-m-d");
-	 				$today = strtotime($todays_date);
-	 				$expiration_date = strtotime($NewDate);
-	 				$new_exp_date = strtotime($ExNewDate);
-
-	 				// echo $NewDate."<br>Type 2<br>".$todays_date;
-	 				if(isset($splconidtion['enableTimeConst']) && @$splconidtion['enableTimeConst'] == 1){
-
-
-	 					if(@$splconidtion['timeType'] == 1){
-
-	 						//echo $NewDate; echo "<br>";
-	 						if ($expiration_date >= $today) {
-	 							$newarr1[$o] = @$data[$o];
-	 							//die('a');
-	 						}
-	 					}
-	 					else if(@$splconidtion['timeType'] == 2){
-	 						if ($new_exp_date <= $today) {
-	 							$newarr1[$o] = @$data[$o];
-	 							//die('b');
-	 						}
-	 					}
-	 				}else if(isset($splconidtion['enableclickconst']) && @$splconidtion['enableclickconst'] == true && @$splconidtion['enableclickconst'] == 1){
-	 			 		if ($data[$o]['clicks'] >= $splconidtion['numberofclicks']) {
-
-	 						$newarr1[$o] = @$data[$o];
-	 						//die('c');
-	 					}
-
-	 				} else {
-
-	 					$newarr1[$o] = @$data[$o];
-	 				}
-					}
-
-	 		}
-	 		$result = array_merge($newarr, $newarr1);
-			if(isset($splconidtion['maxOffers']) && @$splconidtion['maxOffers'] >0 && @$splconidtion['maxOffers'] != null){
-				//$Q->LIMIT($maxOffers);
-				 $result = array_slice($result,0,$maxOffers);
-
-			}
-
-	 		$Fresult = array();
-	 		foreach ($result as $r)
-	 		{
-	 			 if(isset($Fresult[$r['id']])){
-
-	 			 } else {
-
-	 			 	$Fresult[$r['id']] = $r;
-	 			 }
-	 		}
-
-
-	 		return $Fresult;
-	 		//return $result;
-
-	 	}
-
-
+            $memOnly = "MEM";
+            $data = Doctrine_Query::create()->select('o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,o.discountvalueType,s.name,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote')
+            ->from("Offer o")
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.vote vot')
+            ->leftJoin('s.logo l')
+            ->leftJoin('s.favoriteshops fv')
+            ->where('o.Visability='."'$memOnly'")
+            ->andWhere('o.deleted =0')
+            ->andWhere('s.deleted =0')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->orderBy("o.id DESC")
+            ->fetchArray();
+
+            $k = 0;
+
+            if(count($data) > 0):
+            foreach ($data as $pag):
+                $data[$k]['marginCounter'] = 4;
+                $k++;
+            endforeach;
+            endif;
+
+            return $data;
+        }
 
 /**
  * Get total no of offers on userid basis
@@ -2746,26 +2924,29 @@ class Offer extends BaseOffer
  * @version 1.0
  * @return array $data
  */
-	 public static function findNoOfOffersByUser($uid) {
-	 	$date = date('Y-m-d H:i:s');
-	 	$data = Doctrine_Query::create()->select('count(*) as cout')
-	 	->from("Offer o")
-	 	->leftJoin('o.shop s')
-	 	->where('o.authorId=' ."'$uid'")
-	 	->andWhere('o.deleted =0')
-	 	->andWhere('o.enddate > "'.$date.'"')
-	 	->andWhere('o.startdate <= "'.$date.'"')
-	 	->andWhere('s.deleted =0')
-	 	->fetchArray();
-	 	return $data;
+     public static function findNoOfOffersByUser($uid)
+     {
+        $date = date('Y-m-d H:i:s');
+        $data = Doctrine_Query::create()->select('count(*) as cout')
+        ->from("Offer o")
+        ->leftJoin('o.shop s')
+        ->where('o.authorId=' ."'$uid'")
+        ->andWhere('o.deleted =0')
+        ->andWhere('o.enddate > "'.$date.'"')
+        ->andWhere('o.startdate <= "'.$date.'"')
+        ->andWhere('s.deleted =0')
+        ->fetchArray();
 
-	 }
+        return $data;
+
+     }
  /**
   * Get total vote count from database
   * @author mkaur
   */
-	public static function countVotes($id){
-	  $positiveVotes = Doctrine_Query::create()
+    public static function countVotes($id)
+    {
+      $positiveVotes = Doctrine_Query::create()
       ->select('count(*) as cnt')
       ->from("Vote v")
       ->where("v.offerID=".$id)
@@ -2783,6 +2964,7 @@ class Offer extends BaseOffer
        $arr = array();
        $arr['vote'] = (($positiveVotes[0]['cnt'])/($negativeVotes[0]['cnt']+$positiveVotes[0]['cnt']))*100 ;
        $arr['poscount'] = $positiveVotes[0]['cnt'];
+
        return $arr;
     }
 
@@ -2792,18 +2974,19 @@ class Offer extends BaseOffer
     * @return array $shopLogo
     * @version 1.0
     */
-   public static function getOfferShopDetail($offerId){
-	   $shopLogo = Doctrine_Query::create()
-				   	->select('o.shopId,s.logoId,l.name,l.path,s.permaLink')
-				   	->from("offer o")
-				   	->leftJoin("o.shop s")
-				   	->leftJoin("s.logo l")
-				   	->where('s.deleted=0')
-				   	->andWhere("o.id = $offerId")
-				   	->fetchArray();
-	return $shopLogo;
-   }
+   public static function getOfferShopDetail($offerId)
+   {
+       $shopLogo = Doctrine_Query::create()
+                    ->select('o.shopId,s.logoId,l.name,l.path,s.permaLink')
+                    ->from("offer o")
+                    ->leftJoin("o.shop s")
+                    ->leftJoin("s.logo l")
+                    ->where('s.deleted=0')
+                    ->andWhere("o.id = $offerId")
+                    ->fetchArray();
 
+    return $shopLogo;
+   }
 
    /**
     * Get links for cloaking purpose and also check the offer has ref url or not
@@ -2815,83 +2998,7 @@ class Offer extends BaseOffer
     * @version 1.0
     */
 
-   public static function getcloakLink($offerId , $checkRefUrl = false ){
-
-  	$data = Doctrine_Query::create()
-   	->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl')
-   	->from('Offer o')
-   	->leftJoin('o.shop s')
-   	->where('o.id = "'.$offerId.'"')
-   	->fetchOne(null,Doctrine::HYDRATE_ARRAY );
-
-  	$network = Shop::getAffliateNetworkDetail( @$data['shop']['id'] );
-
-	  	if($checkRefUrl)
-	  	{
-	  		# retur false if s shop is not associated with any network
-	  		if(! isset($network['affliatenetwork']))
-	  		{
-	  			return false ;
-	  		}
-
-	  		if(@$data['refURL'] != ""){
-
-	  			return true ;
-
-	  		}elseif (@$data['shop']['refUrl'] != ""){
-
-	  			return true ;
-	  		}else{
-
-	  			return true ;
-	  		}
-		}
-
-
-		$subid = "" ;
-		if( isset($network['affliatenetwork']) )
-		{
-			if(!empty($network['subid']) )
-			{
-				 $subid = "&". $network['subid'] ;
-				 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-				 $ip = ip2long($clientIP);
-
-				 # get click detail and replcae A2ASUBID click subid
-				 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'offer') ;
-
-				 $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
-			}
-
-		}
-
-
-
-		if(@$data['refURL'] != ""){
-
-			$url = @$data['refURL'];
-
-			$url .= $subid ;
-
-
-		}elseif(@$data['shop']['refUrl'] != ""){
-
-			$url = @$data['shop']['refUrl'];
-			$url .=  $subid ;
-
-		}elseif(@$data['shop']['actualUrl'] != ""){
-
-			$url = @$data['shop']['actualUrl'];
-		}else{
-
-			$urll = @$data['shop']['permalink'];
-			$url = HTTP_PATH_LOCALE.$urll;
-		}
-
-
-  		return $url ;
-
-   }
+   
 
    /**
     * get all extended  voucher codes
@@ -2900,23 +3007,24 @@ class Offer extends BaseOffer
     * @version 1.0
     */
 
-   public static function getAllExtendedOffers(){
-   			$date = date('Y-m-d H:i:s');
-		   	$data = Doctrine_Query::create()
-		   	->select('o.id, o.extendedUrl')
-		   	->from('Offer o')
-		   	->leftJoin('o.shop s')
-		   	->where('o.deleted=0' )
-		   	->andWhere('s.deleted = 0')
-		   	->andWhere('o.extendedoffer=1')
-		   	->andWhere('o.discounttype="CD"')
-		   	->andWhere('o.enddate > "'.$date.'"')
-		   	->andWhere('o.startdate <= "'.$date.'"')
-		   	->orderBy('o.id DESC')
-		    ->fetchArray();
-  	 	return $data;
-   }
+   public static function getAllExtendedOffers()
+   {
+            $date = date('Y-m-d H:i:s');
+            $data = Doctrine_Query::create()
+            ->select('o.id, o.extendedUrl')
+            ->from('Offer o')
+            ->leftJoin('o.shop s')
+            ->where('o.deleted=0' )
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.extendedoffer=1')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.enddate > "'.$date.'"')
+            ->andWhere('o.startdate <= "'.$date.'"')
+            ->orderBy('o.id DESC')
+            ->fetchArray();
 
+        return $data;
+   }
 
    /**
    * getAllUrls
@@ -2928,147 +3036,82 @@ class Offer extends BaseOffer
    * @author Surinderpal Singh
    * @return array array of urls
    */
-   public static  function getAllUrls($id)
+   public static function getAllUrls($id)
    {
- 		# get offer data
-   		$offer  = Doctrine_Query::create()->select("o.id, o.extendedOffer,o.authorId , o.extendedUrl,
-   		    	   	s.permaLink, s.howToUse ,s.contentManagerId , sp.permaLink, p.permaLink,c.permaLink")
-   				  ->from('Offer o')
-   				  ->leftJoin("o.category c")
-   				  ->leftJoin("o.shop s")
-   				  ->leftJoin("s.page sp")
-   				  ->leftJoin("s.page")
-   				  ->leftJoin("o.page p")
-   				  ->where("o.id=? " , $id)
-   		    	  ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        # get offer data
+        $offer  = Doctrine_Query::create()->select("o.id, o.extendedOffer,o.authorId , o.extendedUrl,
+                    s.permaLink, s.howToUse ,s.contentManagerId , sp.permaLink, p.permaLink,c.permaLink")
+                  ->from('Offer o')
+                  ->leftJoin("o.category c")
+                  ->leftJoin("o.shop s")
+                  ->leftJoin("s.page sp")
+                  ->leftJoin("s.page")
+                  ->leftJoin("o.page p")
+                  ->where("o.id=? " , $id)
+                  ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-   		$urlsArray = array();
+        $urlsArray = array();
 
-   		# check for related shop permalink
-   		if(isset($offer['shop']))
-   		{
-   			$urlsArray[] = $offer['shop']['permaLink'];
+        # check for related shop permalink
+        if (isset($offer['shop'])) {
+            $urlsArray[] = $offer['shop']['permaLink'];
 
-   			# check if a shop has editor or not
-   			if(isset($offer['shop']['contentManagerId']))
-   			{
+            # check if a shop has editor or not
+            if (isset($offer['shop']['contentManagerId'])) {
 
-	   			# redactie permalink
-	   			$redactie =  User::returnEditorUrl($offer['shop']['contentManagerId']);
+                # redactie permalink
+                $redactie =  User::returnEditorUrl($offer['shop']['contentManagerId']);
 
-	   			# check if an editor  has permalink then add it into array
-	   			if(isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 )
-	   			{
-	   				$urlsArray[] = $redactie['permalink'] ;
-	   			}
-   			}
+                # check if an editor  has permalink then add it into array
+                if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 ) {
+                    $urlsArray[] = $redactie['permalink'] ;
+                }
+            }
 
-   		}
+        }
 
-   		# check for extende offer page
-   		if(isset($offer['extendedOffer']))
-   		{
-   			# check for extende offer url
-   			if($offer['extendedUrl'] && strlen( $offer['extendedUrl'] ) > 0 )
-   			{
-   				$urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'deals') .'/'. $offer['extendedUrl'];
-   			}
-   		}
+        # check for extende offer page
+        if (isset($offer['extendedOffer'])) {
+            # check for extende offer url
+            if ($offer['extendedUrl'] && strlen( $offer['extendedUrl'] ) > 0 ) {
+                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $offer['extendedUrl'];
+            }
+        }
 
-   		# check for shop permalink
-   		if($offer['shop']['howToUse'])
-   		{
-   			# check for extende offer url
-   			if( isset($offer['shop']['permaLink'])  && strlen( $offer['shop']['permaLink'] ) > 0 )
-   			{
-				$urlsArray[] = FrontEnd_Helper_viewHelper::__link( 'how-to') .'/'. $offer['shop']['permaLink'];
-   			}
-   		}
+        # check for shop permalink
+        if ($offer['shop']['howToUse']) {
+            # check for extende offer url
+            if ( isset($offer['shop']['permaLink'])  && strlen( $offer['shop']['permaLink'] ) > 0 ) {
+                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer['shop']['permaLink'];
+            }
+        }
 
+        # check an offerr has one or more categories
+        if (isset($offer['category']) && count($offer['category']) > 0) {
 
+            $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
+            # traverse through all catgories
+            foreach ($offer['category'] as $value) {
+                # check if a category has permalink then add it into array
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
+                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] ;
+                }
+            }
+        }
 
-   		# check an offerr has one or more categories
-   		if(isset($offer['category']) && count($offer['category']) > 0)
-   		{
+        # check an offerr has one or more pages
+        if (isset($offer['page']) && count($offer['page']) > 0) {
+            # traverse through all pages
+            foreach ($offer['page'] as $value) {
+                # check if a page has permalink then add it into array
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
+                    $urlsArray[] = $value['permaLink'] ;
+                }
+            }
+        }
 
-   			$cetgoriesPage = FrontEnd_Helper_viewHelper::__link( 'categorieen') .'/' ;
-   			# traverse through all catgories
-   			foreach($offer['category'] as $value)
-   			{
-   				# check if a category has permalink then add it into array
-				if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 )
-		   		{
-		   			$urlsArray[] = $cetgoriesPage . $value['permaLink'] ;
-		   		}
-   			}
-   		}
-
-   		# check an offerr has one or more pages
-   		if(isset($offer['page']) && count($offer['page']) > 0)
-   		{
-   			# traverse through all pages
-	   		foreach($offer['page'] as $value)
-	   		{
-		   		# check if a page has permalink then add it into array
-		   		if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 )
-		   		{
-	   				$urlsArray[] = $value['permaLink'] ;
-		   		}
-	   		}
-   		}
-
-   		return $urlsArray ;
+        return $urlsArray ;
    }
-
-
-   /**
-    * update zend varnish when all codes got expired
-    *
-    * @param integer $id offer id
-    */
-
-
-   public static function updateCache($id)
-   {
-	   	# get offer data
-	   	$offer  = Doctrine_Query::create()->select("o.id,s.id")
-	   			->from('Offer o')
-	   			->leftJoin("o.shop s")
-	   			->where("o.id=? " , $id)
-	   			->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-   		$shopId = $offer['shop']['id'] ;
-
-
-
-
-   		$key = 'all_shopdetail'  . $shopId . '_list';
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-   		$key = 'all_offerInStore'  . $shopId . '_list';
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-   		$key = 'all_latestupdatesInStore'  . $shopId . '_list';
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-   		$key = 'all_expiredOfferInStore'  . $shopId . '_list';
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-   		$key = 'all_relatedShopInStore'  . $shopId . '_list';
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-   		$mspopularKey ="all_mspagepopularCodeAtTheMoment_list";
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mspopularKey);
-
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-   		FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
-
-
-
-   }
-
 
    /**
     * addConversion
@@ -3078,174 +3121,120 @@ class Offer extends BaseOffer
     * @param integeter $id offerId
     * @auther Surinderpal Singh
     */
-   public static function addConversion($id)
-   {
+   
 
-	 
-		$clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-		$ip = ip2long($clientIP);
-
-	   	# save conversion detail if an offer is associated with a network
-	   	if(Offer:: getcloakLink($id , true ))
-	   	{
-	   		   	# check for previous cnversion of same ip
-			 	$data = Doctrine_Query::create()
-					   	->select('count(c.id) as exists,c.id')
-	   					->from('Conversions c')
-	   					->andWhere('c.offerId="'.$id.'"')
-	   					->andWhere('c.IP="'.$ip.'"')
-	   					->andWhere("c.converted=0")
-	   					->groupBy('c.id')
-	   		   		    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-		
-		   	if(! $data['exists']){
-
-		   		# save conversion detail if an offer is associated with a network
-		   		$cnt  = new Conversions();
-		   		$cnt->offerId = $id;
-		   		$cnt->IP = $ip;
-		   		$cnt->utma = $_COOKIE["__utma"];
-		   		$cnt->utmz = $_COOKIE["__utmz"];
-		   		$time = time();
-		   		$cnt->subid = md5(time()*rand(1,999));
-		   		$cnt->save();
-
-		   	} else{
+    /**
+     *
+     */
 
 
-		   		# update existing conversion detail
-		   		$cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-		   		if($cnt)
-		   		{
-			   		$cnt->utma = $_COOKIE["__utma"];
-			   		$cnt->utmz = $_COOKIE["__utmz"];
-			   		$time = time();
-			   		$cnt->subid = md5(time()*rand(1,999));
-			   		$cnt->save();
-		   		}
-   			}
-	   	}
-   	}
+    /**
+     * get No of offers created in last 7 days for dashboard
+     * @author Raman
+     * @return integer
+     * @version 1.0
+     */
 
-   	/**
-   	 *
-   	 */
-   	public static function getAllOffers()
-   	{
-   		$offerList = Doctrine_Query::create()
-							   		->select('o.id,o.title')
-							   		->from("Offer o")
-							   		->where("o.deleted= '0'")
-							   		->andWhere("o.userGenerated = '0'")
-   									->fetchArray();
-   		return $offerList;
-   	}
+    public static function getAmountOffersCreatedLastWeek()
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        // - 7 days from today
+        $past7Days = date($format, strtotime('-7 day' . $date));
+        $nowDate = $date;
 
-   	/**
-   	 * get No of offers created in last 7 days for dashboard
-   	 * @author Raman
-   	 * @return integer
-   	 * @version 1.0
-   	 */
+        $data = Doctrine_Query::create()
+        ->select("count(*) as amountOffers")
+        ->from('Offer o')
+        ->where('o.deleted = 0' )
+        ->andWhere('o.discountType != "NW"')
+        ->andWhere('o.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"')
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
 
-   	public static function getAmountOffersCreatedLastWeek() {
+        return $data;
+    }
 
-   		$format = 'Y-m-j H:i:s';
-   		$date = date($format);
-   		// - 7 days from today
-   		$past7Days = date($format, strtotime('-7 day' . $date));
-   		$nowDate = $date;
+    /**
+     * get total No of offers created
+     * @author Raman
+     * @return integer
+     * @version 1.0
+     */
 
-   		$data = Doctrine_Query::create()
-   		->select("count(*) as amountOffers")
-   		->from('Offer o')
-   		->where('o.deleted = 0' )
-   		->andWhere('o.discountType != "NW"')
-   		->andWhere('o.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"')
-   		->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
-   		return $data;
-   	}
+    public static function getTotalAmountOfOffers()
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        $data = Doctrine_Query::create()
+        ->select("count(*) as amountOffers")
+        ->from('Offer o')
+        ->where('o.deleted = 0' )
+        ->andWhere('o.enddate > "'.$date.'"')
+        ->andWhere('o.startdate <= "'.$date.'"')
+        ->andWhere('o.discountType != "NW"')
+        ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
 
-   	/**
-   	 * get total No of offers created
-   	 * @author Raman
-   	 * @return integer
-   	 * @version 1.0
-   	 */
+        return $data;
+    }
 
-   	public static function getTotalAmountOfOffers(){
+    /**
+     * get total No of Coupons of a shop
+     * @author Raman
+     * @param  integer $shopId
+     * @return integer
+     * @version 1.0
+     */
 
-   		$format = 'Y-m-j H:i:s';
-   		$date = date($format);
-   		$data = Doctrine_Query::create()
-   		->select("count(*) as amountOffers")
-   		->from('Offer o')
-   		->where('o.deleted = 0' )
-   		->andWhere('o.enddate > "'.$date.'"')
-   		->andWhere('o.startdate <= "'.$date.'"')
-   		->andWhere('o.discountType != "NW"')
-   		->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
-   		return $data;
-   	}
+    public static function getTotalAmountOfCouponsShop($shopId, $type='')
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        $data1 = Doctrine_Query::create()
+        ->select("count(*)")
+        ->from('Offer o')
+        ->where('o.deleted = 0' )
+        ->andWhere('o.enddate > "'.$date.'"')
+        ->andWhere('o.startdate <= "'.$date.'"')
+        ->andWhere('o.shopId = '.$shopId)
+        ->andWhere('o.discountType != "NW"');
 
-   	/**
-   	 * get total No of Coupons of a shop
-   	 * @author Raman
-   	 * @param integer $shopId
-   	 * @return integer
-   	 * @version 1.0
-   	 */
+        if ($type == 'CD') {
+            $data1->andWhere('o.discountType = "CD"');
+        }
 
-   	public static function getTotalAmountOfCouponsShop($shopId, $type=''){
+        $data = $data1->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
 
-   		$format = 'Y-m-j H:i:s';
-   		$date = date($format);
-   		$data1 = Doctrine_Query::create()
-   		->select("count(*)")
-   		->from('Offer o')
-   		->where('o.deleted = 0' )
-   		->andWhere('o.enddate > "'.$date.'"')
-   		->andWhere('o.startdate <= "'.$date.'"')
-   		->andWhere('o.shopId = '.$shopId)
-   		->andWhere('o.discountType != "NW"');
+        return $data['count'];
+    }
 
-   		if($type == 'CD'){
-   			$data1->andWhere('o.discountType = "CD"');
-   		}
+    /**
+     * get total No of offers created
+     * @author Raman
+     * @return integer
+     * @version 1.0
+     */
 
-   		$data = $data1->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
-   		return $data['count'];
-   	}
+    public static function getTotalAmountOfOffersByShopId($shopId)
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        $data = Doctrine_Query::create()
+        ->select("o.id")
+        ->from('Offer o')
+        ->where('o.deleted = 0' )
+        ->andWhere('o.shopId = '.$shopId)
+        ->andWhere('o.enddate > "'.$date.'"')
+        ->andWhere('o.startdate <= "'.$date.'"')
+        ->andWhere('o.discountType = "CD"')
+        ->fetchArray() ;
+        $Ids = array();
+        if(!empty($data)):
+            foreach($data as $arr):
+                $Ids[] = $arr['id'];
+            endforeach;
+        endif;
 
-   	/**
-   	 * get total No of offers created
-   	 * @author Raman
-   	 * @return integer
-   	 * @version 1.0
-   	 */
-
-   	public static function getTotalAmountOfOffersByShopId($shopId){
-
-   		$format = 'Y-m-j H:i:s';
-   		$date = date($format);
-   		$data = Doctrine_Query::create()
-   		->select("o.id")
-   		->from('Offer o')
-   		->where('o.deleted = 0' )
-   		->andWhere('o.shopId = '.$shopId)
-   		->andWhere('o.enddate > "'.$date.'"')
-   		->andWhere('o.startdate <= "'.$date.'"')
-   		->andWhere('o.discountType = "CD"')
-   		->fetchArray() ;
-   		$Ids = array();
-   		if(!empty($data)):
-   			foreach($data as $arr):
-   				$Ids[] = $arr['id'];
-   			endforeach;
-   		endif;
-   		return $Ids;
-   	}
-
+        return $Ids;
+    }
 
 }

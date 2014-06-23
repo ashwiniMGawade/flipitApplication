@@ -1,6 +1,7 @@
 <?php
 
-function migrate_offers() {
+function migrate_offers()
+{
     global $org_outer;
     global $org_inner;
     global $site;
@@ -109,7 +110,7 @@ function migrate_offers() {
         $discount,
         $discountValueType,
         $image_id,
-        $created_at, 
+        $created_at,
         $updated_at,
         $wc_orig_id,
         $shop,
@@ -147,12 +148,12 @@ function migrate_offers() {
 
                 $logo_abs_path = $logo_base_path . $logo_path_rest . $logo_file_name;
                 $logo_rel_path = $logo_path_rest . $logo_file_name;
-            
+
                 /* write the file */
                 $fh = fopen($logo_abs_path, 'w');
                 fwrite($fh, $var_data);
                 fclose($fh);
-            
+
                 /* put file path into database */
                 $stmt_logo = $site_logo->prepare("
                     INSERT INTO image (
@@ -167,7 +168,7 @@ function migrate_offers() {
                 $stmt_logo->execute();
                 $image_id = $site_logo->insert_id;
                 $stmt_logo->close();
-            
+
                 /*
                 $stmt_logo = $site_logo->prepare("
                     INSERT INTO media
@@ -200,11 +201,11 @@ function migrate_offers() {
             $discount = $labeltext_eurodiscount;
 
         /* check if percentage: coupon */
-        } else if (!empty($labeltext_percentage)) {
+        } elseif (!empty($labeltext_percentage)) {
             $discountType = 'CD';
             $discountValueType = '2';
             $discount = $labeltext_percentage;
-        } else if (empty($discountType)) {
+        } elseif (empty($discountType)) {
             $discountType = 'SL';
             $discountValueType = '0';
             $discount = 0;
@@ -245,7 +246,8 @@ function migrate_offers() {
     }
 }
 
-function filter_val($var_name, $var_field, $var_data) {
+function filter_val($var_name, $var_field, $var_data)
+{
     // echo "name: $var_name, field: $var_field, data: $var_data\n";
 
     switch ($var_field) {

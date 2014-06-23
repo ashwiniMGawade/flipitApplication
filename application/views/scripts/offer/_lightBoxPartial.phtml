@@ -1,0 +1,45 @@
+<div class="block">
+    <form role="form">
+        <fieldset>
+            <div class="holder">
+                <input id="couponCode" class="default form-control" type="text" 
+                value="<?php echo $this->couponCode; ?>">
+                <a class="btn orange btn-warning" onclick = "copyToClipboard('<?php echo $this->couponCode; ?>');">
+                    <?php echo $this->translate('Copy Code');?>
+                </a>
+            </div>
+            <div id="bigtextPopupShopLink">                    
+                 <a href="<?php echo $this->urlToShow; ?>" class="btn blue btn-primary">
+                    <?php 
+                    echo $this->translate('Open').' '.$this->offer->shop['name'].' '
+                    .$this->translate('New year sale code');
+                    ?>
+                </a>
+            </div>
+        </fieldset>
+    </form>
+</div>
+<footer class="bottom">
+    <ul class="view-list">
+        <li>
+<?php
+if ($this->offer->userGenerated ==0 &&  $this->termsAndConditions!='' && $this->termsAndConditions!=null) { ?>
+            <a id="termAndConditionLinkPopup<?php echo $this->offer->id ;?>" 
+                onclick="showPopupTermAndConditions(<?php echo $this->offer->id; ?>)" class="terms"
+                            href="javascript:void(0);"><?php echo $this->translate('Terms &amp; Conditions'); ?> 
+            </a>
+        </li>
+    </ul>
+    <?php
+    if ($this->termsAndConditions!='' && $this->termsAndConditions!=null && $this->extendedOffer =='1') {?>
+        &nbsp; | &nbsp;
+        <?php
+    }
+}
+?>
+    <div class="terms-block" id='termAndConditionsPopup<?php echo $this->offer->id ;?>' style = "display:none;">
+        <ol class="num-list">
+            <?php echo $this->termsAndConditions;?>
+        </ol>
+    </div>
+</footer>      

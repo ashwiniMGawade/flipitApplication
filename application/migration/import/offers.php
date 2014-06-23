@@ -119,7 +119,7 @@ $stmt_success = $stmt_site->bind_param('ssssssisssisissiii',
     $discount,
     $discountValueType,
     $image_id,
-    $created_at, 
+    $created_at,
     $updated_at,
     $wc_orig_id,
     $shop,
@@ -196,12 +196,12 @@ while ($stmt_outer->fetch()) {
                 echo "$logo_abs_path_parent\n";
                 mkdir($logo_abs_path_parent);
             }
-        
+
             /* write the file */
             $fh = fopen($logo_abs_path, 'w');
             fwrite($fh, $var_data);
             fclose($fh);
-        
+
             /* put file path into database */
             $stmt_logo = $site_logo->prepare("
                 INSERT INTO image (
@@ -225,11 +225,11 @@ while ($stmt_outer->fetch()) {
         $discount = 100 * $labeltext_eurodiscount;
 
     /* check if percentage: coupon */
-    } else if (!empty($labeltext_percentage)) {
+    } elseif (!empty($labeltext_percentage)) {
         $discountType = 'CD';
         $discountValueType = '2';
         $discount = $labeltext_percentage;
-    } else if (empty($discountType)) {
+    } elseif (empty($discountType)) {
         $discountType = 'SL';
         $discountValueType = '0';
         $discount = 0;
@@ -272,8 +272,8 @@ while ($stmt_outer->fetch()) {
 
 echo "\n";
 
-function filter_val($var_name, $var_field, $var_data) {
-
+function filter_val($var_name, $var_field, $var_data)
+{
     switch ($var_field) {
     case 'Aanbevolen actie':
         return ($var_data === 'on') ? 1 : 0;

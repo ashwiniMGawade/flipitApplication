@@ -96,7 +96,7 @@ function getArticleCategory(iSearchText,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var value = obj.aData.permalink; 
-								value = value.replace("bespaarwijzer/", "");
+								value = value.replace("plus/", "");
 								return "<p class='word-wrap-without-margin' style='width:190px;'>"+value+"</p>";
 							 },
 							"bSearchable" : true,
@@ -163,7 +163,10 @@ function getArticleCategory(iSearchText,iStart,iSortCol,iSortDir) {
 						}
 					}
 					
-					var top = $('td.row_selected').offset().top;
+					if($('td.row_selected').length > 0){
+						var top = $('td.row_selected').offset().top;
+					}
+					
 					var windowHeight = $(window).height() / 2 - 50;
 					window.scrollTo(0, top - windowHeight);
 				 },

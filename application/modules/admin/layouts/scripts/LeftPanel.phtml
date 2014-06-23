@@ -81,7 +81,7 @@
 	               	</li>
 	               	<li><?php if($controller == 'category') { $class = "num-blueAffiliate"; }else { $class = "num-greyAffiliate";} ?>
 
-	               		<a href="<?php echo HTTP_PATH?>admin/category" class="<?php echo $class;?>" tabindex="1"><?php echo $this->translate('Category');?></a>
+	               		<a href="<?php echo HTTP_PATH?>admin/category/index" class="<?php echo $class;?>" tabindex="1"><?php echo $this->translate('Category');?></a>
 	               	</li>
 
 	               	<?php if($sessionNamespace->settings['rights']['administration']['rights']=='1' || $sessionNamespace->settings['rights']['administration']['rights']=='2' ){?>
@@ -215,6 +215,28 @@
 	       </li>
 	      <?php } ?>
 	 </ul>
+
+<!--     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Email');?></h2></div>
+    <ul id="adminmenu" role="navigation">
+        <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ){?>
+
+       	<li <?php if($controller == 'email' && $action == 'index') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
+
+      	<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/email/index"><br></a></div>
+	    <div class=""><div></div></div>
+	    <a <?php if($controller == 'email' && $action == 'index'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/email/index" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Emails');?></a>
+	 	</li>
+
+        <li <?php if($controller == 'email' && $action == 'emailSettings') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
+
+      	<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/email/emailSettings"><br></a></div>
+	    <div class=""><div></div></div>
+	    <a <?php if($controller == 'email' && $action == 'emailSettings'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/email/email-settings" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Email Settings');?></a>
+	 	</li>
+
+        <?php } ?>
+
+    </ul> -->
     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Template Settings');?></h2></div>
     <ul id="adminmenu" role="navigation">
 	      <li <?php if($controller == 'homepage') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php }?> id="menu-links">
@@ -328,11 +350,18 @@
 		        <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH?>admin/chain"><br></a></div>
 		        <div class=""><div></div></div>
 		        <a href="<?php echo HTTP_PATH?>admin/chain" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" tabindex="1"><?php echo $this->translate('Chains');?></a>
-		     </li>
+		    </li>
+		     	<li <?php if($controller == 'splash') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php }?> id="menu-links">
+		        <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH?>admin/splash/"><br></a></div>
+		        <div class=""><div></div></div>
+		        <a href="<?php echo HTTP_PATH?>admin/splash/" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" tabindex="1"><?php echo $this->translate('Splash');?></a>
+		    </li>
 	     </ul>
-	 <?php endif;?>
+	 <?php endif;
 
-	<?php $releaseInfo = @BackEnd_Helper_viewHelper::currentRelease(); ?>
+
+
+	$releaseInfo = @BackEnd_Helper_viewHelper::currentRelease(); ?>
 	<div class="clear"></div>
 		<div class='release-note'>
 		by <a href="http://www.web-flight.nl/" target="_blank">Webflight</a><br>

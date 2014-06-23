@@ -18,30 +18,30 @@ $publishHHM = date('H').':'.date('i');
  $currentTime = strtotime(date('d-m-Y H:i:00')); 
  $publishTime = strtotime($this->pageDetail['publishDate']); 
   if(isset($this->pageDetail['publishDate']) && $this->pageDetail['publishDate']!='0000-00-00 00:00:00'){
-		$publishDateTime = explode(' ',$this->pageDetail['publishDate']);
-		$publishDate = date('d-m-Y',strtotime($publishDateTime[0])) ;
-		$publishHHM =  explode(':',$publishDateTime[1]);
-		$publishHHM = $publishHHM[0].':'.$publishHHM[1];
+        $publishDateTime = explode(' ',$this->pageDetail['publishDate']);
+        $publishDate = date('d-m-Y',strtotime($publishDateTime[0])) ;
+        $publishHHM =  explode(':',$publishDateTime[1]);
+        $publishHHM = $publishHHM[0].':'.$publishHHM[1];
    }
   
    $status = $this->translate('Draft');
   if($this->pageDetail['publish']=='1'){
-  	
-  	if($publishTime>=$currentTime){
-  	    $status = $this->translate('Scheduled');
-  	   $publishText = $this->translate('Scheduled for:');	
-	}else{
-		$status = $this->translate('Published');
-		$publishText = $this->translate('Published on:');
-	}
+    
+    if($publishTime>=$currentTime){
+        $status = $this->translate('Scheduled');
+       $publishText = $this->translate('Scheduled for:');   
+    }else{
+        $status = $this->translate('Published');
+        $publishText = $this->translate('Published on:');
+    }
   }else{
-  	if($publishTime>=$currentTime){
-  		$status = $this->translate('Draft');
-  		$publishText = $this->translate('Scheduled for:');
-  	}else{
-  		$status = $this->translate('Draft');
-  		$publishText = $this->translate('Published on:');
-  	}
+    if($publishTime>=$currentTime){
+        $status = $this->translate('Draft');
+        $publishText = $this->translate('Scheduled for:');
+    }else{
+        $status = $this->translate('Draft');
+        $publishText = $this->translate('Published on:');
+    }
   }
 ?>
 <?php echo $this->headTitle()->append('Edit Page');?>
@@ -52,7 +52,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 </script>
 <div class="wrap columns-2">
         
-    	
+        
           <h1><?php  echo $this->translate('Edit Page'); ?><button type = "button" onClick="window.location.href='<?php echo HTTP_PATH;?>admin/page<?php echo '#'.$this->qstring; ?>'" class="btn ml10" ><?php echo $this->translate('Cancel'); ?></button><button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button></h1>
             <div class="btn-group mb20" data-toggle="buttons-checkbox">
                 
@@ -69,7 +69,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 <div class="meta-box-sortables ui-sortable" id="side-sortables">
                   <div class="postbox " id="submitdiv">
                     <div class="sidebar-heading">
-	                    <p><?php  echo $this->translate('Publish');  ?></p>
+                        <p><?php  echo $this->translate('Publish');  ?></p>
                     </div>
                     <div class="sidebar-content-box">
                         <button class="btn" type="submit" onClick="$('#savePage').val('draft')" href="#" id="saveDraftbtn" ><?php echo $this->translate('Save Draft'); ?></button>
@@ -100,7 +100,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                   
                   <div class="postbox " id="submitdiv">
                     <div class="sidebar-heading">
-	                    <p><?php echo $this->translate('Page Attributes');?></p>
+                        <p><?php echo $this->translate('Page Attributes');?></p>
                     </div>
                     <div class="sidebar-content-box">
                         <p><?php echo $this->translate('Template'); ?></p>
@@ -110,10 +110,10 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             $display = 'block;';
                             foreach($this->pageattr as $pageattr){ 
                             if($this->pageDetail['pageType']=='offer' && $pageattr['id']>3) {
-                            	 $display = 'none;';
+                                 $display = 'none;';
                             }
                             ?>
-                             <option value="<?php echo $pageattr['id'];?>" style="display:<?php echo $display;?>" <?php if($this->pageDetail['pageAttributeId']==$pageattr['id']){?>selected="selected" <?php }?>><?php echo $pageattr['name'];?></option>	
+                             <option value="<?php echo $pageattr['id'];?>" style="display:<?php echo $display;?>" <?php if($this->pageDetail['pageAttributeId']==$pageattr['id']){?>selected="selected" <?php }?>><?php echo $pageattr['name'];?></option>  
                         <?php    
                             } 
 
@@ -123,10 +123,10 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
           <div id="artcatg-div"   > 
              <?php 
              
-             	foreach($this->pageDetail['moneysaving'] as $pageatrcatg){
-             		$pagecatg[]= $pageatrcatg['categoryid'];
-             	 }
-             	
+                foreach($this->pageDetail['moneysaving'] as $pageatrcatg){
+                    $pagecatg[]= $pageatrcatg['categoryid'];
+                 }
+                
              ?>  
                     <p><?php echo $this->translate('Article categories'); ?></p>
                 <div class="web-address-list multiselect">
@@ -135,14 +135,14 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                         
                                                
                         foreach($this->artcategory as $atrcatg){ ?>
-                        	<li class="list_<?php echo $atrcatg['id']; if( count($this->pageDetail['moneysaving']) > 0 ){ if(in_array($atrcatg['id'],$pagecatg)){ echo ' selected'; } }?> " >
-                        		<input <?php if( count($this->pageDetail['moneysaving']) > 0 ){ if(in_array($atrcatg['id'],$pagecatg)){ ?>checked="checked"<?php } } ?>  type="checkbox"  name="artcatgs[]" value="<?php echo $atrcatg['id']; ?>" style="display:none;" />
-                        		<?php echo $atrcatg['name'];?>
-                        	</li>
+                            <li class="list_<?php echo $atrcatg['id']; if( count($this->pageDetail['moneysaving']) > 0 ){ if(in_array($atrcatg['id'],$pagecatg)){ echo ' selected'; } }?> " >
+                                <input <?php if( count($this->pageDetail['moneysaving']) > 0 ){ if(in_array($atrcatg['id'],$pagecatg)){ ?>checked="checked"<?php } } ?>  type="checkbox"  name="artcatgs[]" value="<?php echo $atrcatg['id']; ?>" style="display:none;" />
+                                <?php echo $atrcatg['name'];?>
+                            </li>
                         <?php } ?>
-           			</ul>
-           		</div>  
-           	</div>	   
+                    </ul>
+                </div>  
+            </div>     
                  
                             
           </div>
@@ -172,10 +172,10 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                   </div>
                   <div class="postbox " id="submitdiv">
                     <div class="sidebar-heading">
-	                    <p><?php echo $this->translate('Sidebar');?></p>
+                        <p><?php echo $this->translate('Sidebar');?></p>
                     </div>
                     <div class="sidebar-content-box" >
-                    	<div class="sidebar-content-box-left" style="overflow-y:scroll;height:50px;" id='storesDiv'>
+                        <div class="sidebar-content-box-left" style="overflow-y:scroll;height:50px;" id='storesDiv'>
                      
                          <ul id="widgetListul-li">
                             <?php 
@@ -195,7 +195,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                           </ul> 
                          <input type="hidden" id="selectedWigetForPage" name="selectedWigetForPage" value="">
                        </div>
-                    	<div class="sidebar-content-box-right">
+                        <div class="sidebar-content-box-right">
                             <button type = "button" class="btn addwidget" href="#"><?php echo $this->translate('Add Widgets'); ?></button>
                             <button type = "button" class="btn deletewidget" href="#"><?php echo $this->translate('Delete'); ?></button>
                             <button type = "button" class="btn up" href="#"><?php echo $this->translate('Move Up');?></button>
@@ -209,7 +209,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                          <?php   
                         foreach($this->widgetListUserDefined as $widgetList){ 
                          if(!in_array($widgetList['id'], $widgetArry)){
-                        	?>
+                            ?>
                          <option value="<?php echo $widgetList['id'];?>"  ><?php  echo $widgetList['title']; ?> </option>
                           <?php } 
                           
@@ -217,7 +217,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                          }
                        /*  foreach($this->widgetList as $widgetList){ 
                          if(!in_array($widgetList['id'], $widgetArry)){
-                        	?>
+                            ?>
                          <option value="<?php echo $widgetList['id'];?>"  ><?php  echo $widgetList['title']; ?> </option>
                           <?php } 
                           
@@ -232,9 +232,9 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 </div>
               </div>
               <div id="post-body">
-              	<div id="post-body-content">
-              		<div class="mainpage-content">
-                    	<div class="mainpage-content-line">
+                <div id="post-body-content">
+                    <div class="mainpage-content">
+                        <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" value="<?php echo $this->pageDetail['pageTitle']; ?>" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>"></div>
                             <div class="mainpage-content-right" style="height : 20px;"></div>
@@ -243,64 +243,130 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Permalink'); ?></strong></label></div>
                             <div class="mainpage-content-right"><div class="mainpage-content-right-inner-left"><label><?php echo $this->translate('http://www.kortingscode.nl/'); ?></label></div><div class="mainpage-content-right-inner-right"><input <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> type="text" class="span3" value="<?php echo $this->pageDetail['permaLink']; ?>" name="pagepermalink" id="pagepermalink" placeholder="<?php echo $this->translate('permalink'); ?>"></div>
                             <?php if($this->role == '3' || $this->role == '4'){ ?>
-                            	<input type="hidden" value="<?php echo $this->pageDetail['permaLink']?>" name="pagepermalink" id="pagepermalink">
-                            <?php }?>	
+                                <input type="hidden" value="<?php echo $this->pageDetail['permaLink']?>" name="pagepermalink" id="pagepermalink">
+                            <?php }?>   
                             <div class="mainpage-content-right" style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;"></div> 
                             </div>
                           </div>
-                          <div class="mainpage-content-line">
-                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Image'); ?></strong></label></div>
-                            <div class="mainpage-content-right">
-                            <?php 
-                            $pageImage = '';
-                            if($this->pageDetail['logoId']){
-                              
-                            	if(isset($this->pageDetail['logo']['name']) && $this->pageDetail['logo']['name']!=''){
-                            		
-                            		if(file_exists(ROOT_PATH.$this->pageDetail['logo']['path'].$this->pageDetail['logo']['name'])){
-                            			$pageImage = PUBLIC_PATH_LOCALE.$this->pageDetail['logo']['path'].'thum_'.$this->pageDetail['logo']['name'];
-                            			
-                            		}
-                            	}
-                            	?>
-                            <img src="<?php echo $pageImage;?>"  alt="pageLogo" align="top">
-                            <a  class="red" onclick="deleteImage(<?php echo $this->pageDetail['logo']['id']; ?>,<?php echo $this->pageDetail['id']; ?>)" href="javascript:void(0);" id="deleteButton"><strong>DELETE</strong></a>
-                            
-                            <?php }?>
-                            <input type="file" onchange="checkFileType(event)" class="ignore" name="logoFile" id="pageImage"><span><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 0.75)'); ?></span>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Thumbnail'); ?></strong></label>
                             </div>
-                              <div class="mainpage-content-right" id="imagerrorDiv" style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;"></div> 
+                            <div class="mainpage-content-right">
+                                <?php 
+                                $pageImage = '';
+                                if($this->pageDetail['logoId']) {
+                                    if(
+                                        isset($this->pageDetail['logo']['name']) 
+                                        && $this->pageDetail['logo']['name']!=''
+                                    ) {
+                                        $pageImage = PUBLIC_PATH_CDN.$this->pageDetail['logo']['path']
+                                        .'thum_'.$this->pageDetail['logo']['name'];
+                                    }
+                                ?>
+                                <div class='browse-container'>    
+                                    <img class='image-container' src="<?php echo $pageImage;?>"  
+                                    alt="pageLogo" align="top">
+                                    <a  class="red" 
+                                    onclick="deleteImage(<?php echo $this->pageDetail['logo']['id']; ?>,
+                                    <?php echo $this->pageDetail['id']; ?>)" 
+                                    href="javascript:void(0);" id="deleteButton">
+                                    <strong><?php echo $this->translate('DELETE');?></strong>
+                                    </a>
+                                </div>
+                                <?php }?>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div>
+                                        <input type="file" 
+                                        onchange="checkFileType(event)" class="ignore" 
+                                        name="logoFile" id="pageImage">
+                                    </div>
+                                    <div>
+                                    <?php echo $this->translate('Image Size: 175px x 175px (*.jpg or *.png file only)'); ?>
+                                    </div>
+                                    <div 
+                                    class="mainpage-content-right"
+                                    id="imagerrorDiv" 
+                                    style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;">  
+                                    </div> 
+                                </div>
+                            </div>
                         </div>  
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Header Image'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <?php 
+                                $headerImage = '';
+                                if($this->pageDetail['pageheaderimage']) {
+                                    if(
+                                        isset($this->pageDetail['pageheaderimage']['name']) 
+                                        && $this->pageDetail['pageheaderimage']['name']!=''
+                                    ) {
+                                    $headerImage = PUBLIC_PATH_CDN.$this->pageDetail['pageheaderimage']['path']
+                                    .'thum_'.$this->pageDetail['pageheaderimage']['name'];
+                                }
+                                ?>
+                                <div class='browse-container'>    
+                                    <img class='image-container'  src="<?php echo $headerImage;?>"  
+                                    alt="pageHeaderImage" align="top">
+                                    <a  class="red" 
+                                    onclick="deleteImage(<?php echo $this->pageDetail['pageheaderimage']['id']; ?>,
+                                    <?php echo $this->pageDetail['id']; ?>)" 
+                                    href="javascript:void(0);" id="deleteButton">
+                                    <strong><?php echo $this->translate('DELETE');?></strong>
+                                    </a>
+                                </div>
+                                <?php }?>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div>
+                                        <input type="file" 
+                                        onchange="checkFileType(event)" class="ignore" 
+                                        name="headerFile" id="pageHeaderImage">
+                                    </div>
+                                    <div>
+                                    <?php echo $this->translate('Image Size: 1170px x 304px (*.jpg or *.png file only)'); ?>
+                                    </div>
+                                    <div class="mainpage-content-right" id="imagerrorDiv" 
+                                    style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;">
+                                    </div> 
+                                </div>
+                            </div> 
+                        </div>
+
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->pageDetail['metaTitle']; ?>"/>
-							<!--<span id="metaTextLeft" class="nobel" style="width:504px;"></span>-->
+                            <!--<span id="metaTextLeft" class="nobel" style="width:504px;"></span>-->
                             <!--<input type="text" class="span3" placeholder="<?php //echo $this->translate('Meta Title'); ?>" maxlength="68" value="<?php //echo $this->pageDetail['metaTitle']; ?>" name="pagemetaTitle" id="pagemetaTitle"></div>-->
                             </div>
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
                             <div class="mainpage-content-right"><textarea class="input-xlarge mbot bbot ignore" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo $this->pageDetail['metaDescription']; ?></textarea>
-							<!--<span id="metaDescLeft" class="nobel" style="width:504px;"></span>-->
+                            <!--<span id="metaDescLeft" class="nobel" style="width:504px;"></span>-->
                             <!--<textarea class="input-xlarge mbot bbot ignore" name="pagemetaDesc" id="pagemetaDesc" placeholder="<?php //echo $this->translate('Meta Description'); ?>"  maxlength="150" rows="3"><?php //echo $this->pageDetail['metaDescription']; ?></textarea>
                             <input type="text" class="input-xlarge disabled btop word-count"  id="metaTextLeft" value = "Characters Left: 160" placeholder="Word Count: 28" disabled="disabled">-->
                             </div>
                         </div>
-						<div class="mainpage-content-line">
+                        <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Custom Header Text'); ?></strong></label></div>
                             <div class="mainpage-content-right"><textarea class="input-xlarge mbot bbot ignore" id="pageCustomHeader" name="pageCustomHeader" placeholder="<?php echo $this->translate ( 'Custom Header Text' );?>" rows="3"><?php echo $this->pageDetail['customHeader']; ?></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate("Page custom header length ").strlen($this->pageDetail['customHeader']). $this->translate(' characters');?>" id="pageCustomHeaderLeft" class="input-xlarge disabled btop word-count">
-							</div>
+                            <input type="text" disabled="disabled" value="<?php echo $this->translate("Page custom header length ").strlen($this->pageDetail['customHeader']). $this->translate(' characters');?>" id="pageCustomHeaderLeft" class="input-xlarge disabled btop word-count">
+                            </div>
                         </div>
                     </div>
                     </div>
                    
                 <div id="mainpage-content">    
-                	<textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php echo $this->translate('Page Description'); ?>" rows="3"><?php echo $this->pageDetail['content']; ?></textarea>
+                	<textarea class="input-xlarge" name="pageDesc" id="pageDesc" placeholder="<?php echo $this->translate('Page Description'); ?>" rows="3"><?php echo htmlspecialchars($this->pageDetail['content']); ?></textarea>
                 </div>  
                 <br><div id="offerconstraint" <?php if($this->pageDetail['pageType']=='default'){?>class="display-none" <?php }?>> 
                    
                 <div class="mainpage-content">
-                    	<div class="mainpage-content-line">
+                        <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Maximum Offers on Page'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="maxOffer" value="<?php echo $this->pageDetail['maxOffers']; ?>" id="maxOffer" class="span3" placeholder="<?php echo $this->translate('Maximum Offer'); ?>"></div>
                         </div>
@@ -314,14 +380,14 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                         </div>
                  </div>
                     <div class="edit-page-box-new">
-                    	<div class="mainpage-content-line">
-                        	<label class="checkbox">
+                        <div class="mainpage-content-line">
+                            <label class="checkbox">
                                 <input type="checkbox" value="1" <?php if($this->pageDetail['enableTimeConstraint']=='1'){?>checked="checked"<?php }?> onClick="constraint(event,'time')" id="timeCostraintchk" name="timeCostraintchk"> <strong><?php echo $this->translate('Enable time Constraint');?></strong>
                             </label>
                             <div class="line"></div>
                             <div class="edit-page-feilds <?php if($this->pageDetail['enableTimeConstraint']!='1'){?> display-none <?php }?>" id="showTimeConstraint">
-                            	<div class="fl">
-                            	<select id="postwithin" name="postwithin">
+                                <div class="fl">
+                                <select id="postwithin" name="postwithin">
                                     <option value="1" <?php if($this->pageDetail['timeType']=='1'){?> selected="selected" <?php }?>><?php echo $this->translate('Posted within'); ?></option>
                                     <option value="2" <?php if($this->pageDetail['timeType']=='2'){?> selected="selected" <?php }?>><?php echo $this->translate('Expires in'); ?></option>
                                  </select>
@@ -387,7 +453,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                 <div class="mainpage-content">
                         <strong><?php echo $this->translate('Show offer types'); ?></strong>                               
                         <div class="line"></div>
-                    	<div class="mainpage-content-line mb10">
+                        <div class="mainpage-content-line mb10">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Coupon'); ?></strong></label></div>
                             <div class="mainpage-content-right">
                                 <div class="btn-group" data-toggle="buttons-checkbox">
@@ -432,11 +498,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     
                     
                     <div style="height:28px;" class="mainpage-content">
-                    	<div class="mainpage-content-line m10">
-                        	<div class="fl">
-                            	<strong><?php echo $this->translate('Show as page when creating offers?'); ?></strong>
+                        <div class="mainpage-content-line m10">
+                            <div class="fl">
+                                <strong><?php echo $this->translate('Show as page when creating offers?'); ?></strong>
                             </div>
-                        	<label class="checkbox fl ml15">
+                            <label class="checkbox fl ml15">
                                  <input type="radio" name="showPage" value = "1" <?php if($this->pageDetail['showPage']=='1'){?> checked="checked" <?php }?>> <?php echo $this->translate('Yes'); ?>
                             </label>
                             <label class="checkbox fl ml15">

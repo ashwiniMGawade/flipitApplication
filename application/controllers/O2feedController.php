@@ -12,7 +12,7 @@ class O2feedController extends  Zend_Controller_Action
     public function top10XmlAction()
     {
 
-    	$this->_helper->layout()->disableLayout();
+        $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
 
         # fetch 10 Popular voucher offers for http://www.metronieuws.nl
@@ -25,7 +25,7 @@ class O2feedController extends  Zend_Controller_Action
 
         # set locale
         $locale = LOCALE;
-        
+
 
         #  doamin path with locale
         $domainPath = $domain . '/' . $locale;
@@ -63,7 +63,7 @@ class O2feedController extends  Zend_Controller_Action
             $xml->startElement("item");
             $xml->writeElement('shopname', $offerData['shop']['name']);
             $xml->writeElement('title', $offerData['title']);
- 
+
             $xml->writeElement('link', $domainPath . '/' . $offerData['shop']['permaLink']);
             $xml->endElement();
 
@@ -80,9 +80,8 @@ class O2feedController extends  Zend_Controller_Action
         //flush
         $xml->flush();
 
-        $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8'); 
+        $this->_response->setHeader('Content-Type', 'text/xml; charset=utf-8');
 
     }
 
 }
-

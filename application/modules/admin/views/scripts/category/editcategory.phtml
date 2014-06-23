@@ -8,28 +8,44 @@
 	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.custom.css" );
 	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/category-common.js");
 
 
 	$categoryPicturePath = '';
 	$categoryPictureName = '';
-	if(file_exists(ROOT_PATH.$this->editRec[0]['categoryicon']['path'].$this->editRec[0]['categoryicon']['name'])) {
-		$categoryPicturePath = PUBLIC_PATH_LOCALE.$this->editRec[0]['categoryicon']['path'].$this->editRec[0]['categoryicon']['name'];
-		$categoryPictureName = $this->editRec[0]['categoryicon']['name'];
-	}else {
-		$categoryPicturePath = PUBLIC_PATH ."images/upload/no.jpg";
+	if(isset($this->categoryDetail[0]['categoryicon']['name'])) {
+		$categoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path']
+		.$this->categoryDetail[0]['categoryicon']['name'];
+		$categoryPictureName = $this->categoryDetail[0]['categoryicon']['name'];
 	}
 
+    $featuredCategoryPicturePath = '';
+    $featuredCategoryPictureName = '';
+    if(isset($this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
+        $featuredCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryfeaturedimage']['path']
+        .$this->categoryDetail[0]['categoryfeaturedimage']['name'];
+        $featuredCategoryPictureName = $this->categoryDetail[0]['categoryfeaturedimage']['name'];
+    }
+
+    $headerCategoryPicturePath = '';
+    $headerCategoryPictureName = '';
+    if(isset($this->categoryDetail[0]['categoryheaderimage']['name'])) {
+        $headerCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryheaderimage']['path']
+        .$this->categoryDetail[0]['categoryheaderimage']['name'];
+        $headerCategoryPictureName = $this->categoryDetail[0]['categoryheaderimage']['name'];
+	}
 ?>
 
 
 	<!-- update category -->
 <div id='editCategory' class="wrap columns-2">
 	<form action="<?php echo HTTP_PATH ;?>admin/category/editcategory" method="POST" name='updateCategoryForm' id="updateCategoryForm" method=POST enctype=multipart/form-data>
-	<input type="hidden" value="<?php echo $this->editRec[0]['categoryIconId'] ;?>" name='iconId' id='iconId' />
-	<input type="hidden" value="<?php echo $this->editRec[0]['id'] ?>" name='id' id='id' />
+	<input type="hidden" value="<?php echo $this->categoryDetail[0]['categoryIconId'] ;?>" name='iconId' id='iconId' />
+	<input type="hidden" value="<?php echo $this->categoryDetail[0]['id'] ?>" name='id' id='id' />
 	<input type="hidden" value="<?php echo $this->role; ?>" name='role' id='role' />
 	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
-
+	<?php $featuredCategory = $this->categoryDetail[0]['featured_category'] == '' ? 0 : 1; ?>
+    <input type="hidden" name="featuredCategory" id="featuredCategory" value="<?php echo $featuredCategory;?>" />
 	<h1><?php echo $this->translate('Edit Category'); ?><input type="button"  Value='<?php echo $this->translate('Cancel'); ?>' class="btn ml10" onClick="window.location.href='<?php echo HTTP_PATH; ?>admin/category'" /></h1>
 		<div id="poststuff" class="metabox-holder has-right-sidebar">
 			<div id="post-body">
@@ -45,7 +61,7 @@
 								<div class="mainpage-content-right-inner-left-other">
 									<input type="text" name="categoryName"
 										placeholder="<?php echo $this->translate('Edit Title')?>"
-										class="span3" value="<?php echo $this->editRec[0]['name'] ?>">
+										class="span3" value="<?php echo $this->categoryDetail[0]['name'] ?>">
 								</div>
 							</div>
 						</div>
@@ -59,9 +75,9 @@
 								</div>
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-right-full">
-								<input <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> type="text" name="permaLink" id="permaLink" placeholder="centerparks" class="span3" value="<?php echo $this->editRec[0]['permaLink']; ?>">
+								<input <?php echo ($this->role == '3' || $this->role == '4') ? "disabled=disabled" : "" ;  ?> type="text" name="permaLink" id="permaLink" placeholder="centerparks" class="span3" value="<?php echo $this->categoryDetail[0]['permaLink']; ?>">
 								<?php if($this->role == '3' || $this->role == '4'){ ?>
-                            	<input type="hidden" value="<?php echo $this->editRec[0]['permaLink']?>" name="permaLink" id="permaLink">
+                            	<input type="hidden" value="<?php echo $this->categoryDetail[0]['permaLink']?>" name="permaLink" id="permaLink">
                             	<?php }?>
 								</div>
 
@@ -75,7 +91,7 @@
 							<div class="mainpage-content-right">
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-left-other">
-								<input type="text" name="metaTitle" id="metaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->editRec[0]['metatitle'] ?>"/>
+								<input type="text" name="metaTitle" id="metaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->categoryDetail[0]['metatitle'] ?>"/>
 								<span id="metaTextLeft" class="nobel"></span>
 								</div>
 							</div>
@@ -89,37 +105,110 @@
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-left-other">
 
-								<textarea class="input-xlarge mbot bbot ignore" id="metaDescription" name="metaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+								<textarea class="input-xlarge mbot bbot ignore" id="metaDescription" name="metaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo trim($this->categoryDetail[0]['metaDescription']); ?></textarea>
 									<span id="metaDescriptionleft" class="nobel"></span>
 
-							<!--<textarea class="input-xlarge mbot bbot ignore word_count" id="metaDescription" placeholder="<?php //echo $this->translate('Meta Description'); ?>" rows="3" name="metaDescription" ><?php //echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+							<!--<textarea class="input-xlarge mbot bbot ignore word_count" id="metaDescription" placeholder="<?php //echo $this->translate('Meta Description'); ?>" rows="3" name="metaDescription" ><?php //echo trim($this->categoryDetail[0]['metaDescription']); ?></textarea>
 							<input type="text" class="input-xlarge disabled btop word-count"  id="metaDescription_count" disabled="disabled">-->
 
 								<!--<textarea id="metaDescription" rows="3" class="word_count" name="metaDescription"
-								    placeholder="<?php //echo $this->translate('Meta Description')?>"><?php //echo trim($this->editRec[0]['metaDescription']); ?></textarea>
+								    placeholder="<?php //echo $this->translate('Meta Description')?>"><?php //echo trim($this->categoryDetail[0]['metaDescription']); ?></textarea>
 								    <div id="metaDescription_count" style="display:none"></div>-->
 
 								</div>
 							</div>
 						</div>
 
-						<div class="mainpage-content-line">
-							<div class="mainpage-content-left">
-								<label><strong><?php echo $this->translate('Category Icon'); ?></strong></label>
-							</div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                	<strong><?php echo $this->translate('Category Thumbnail'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right ">
+	                            <div class='browse-container'>    
+	                            	<img class='image-container' 
+	                             	src ="<?php echo $categoryPicturePath;?>" alt = "Category Image">
+	                            </div>
 
-							<img src ="<?php echo PUBLIC_PATH;?>thumb.php?src=<?php echo $categoryPicturePath;?>&h=95&w=115&zc=0" alt = "Category Image" style="margin-top:5px;">
-							<span class="ml15 img-name" title="<?php echo $categoryPictureName; ?>"  id="avtarName">
-                            	<?php echo strlen($categoryPictureName)< 60 ?  $categoryPictureName : substr($categoryPictureName, 0,60).'...'; ?>
-                            </span>
-							<div class="mainpage-content-right control-group">
-								<div style='width : 275px; margin-right: 245px; margin-top: 2px !important;' class="mainpage-content-right-inner-right-other upload"><?php echo $this->translate('.jpg or .png file only (Size: 2MB, Ratio: 1:1)'); ?></div>
-								<div class="mainpage-content-right-inner-left-other">
-									</br>
-									<input class="span3 ignore" style="margin-top:-11px;" data-max-size="2097152" onchange="checkFileType(event)" type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
-								</div>
-							</div>
-						</div>
+	                            <div class="img-name" title="<?php echo $categoryPictureName; ?>"  id="avtarName">
+	                            	<?php echo $categoryPictureName; ?>
+	                            </div>
+	                            <div class="mainpage-content-right-inner-left-other">
+		                            <div>
+		                                 <input class="span3 ignore" data-max-size="2097152" 
+		                                 onchange="checkFileType(event)" 
+		                                 type="file" name="categoryIconNameHidden" id="categoryIconNameHidden">
+		                            </div>
+
+								     <div class='upload category-image'>
+		                                <?php 
+		                                echo $this->translate('Image Size: 175px x 175px (*.jpg or *.png file only)'); 
+		                                ?>
+		                             </div>
+		                        </div>
+		                     </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                	<strong><?php echo $this->translate('Category featured image'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right ">
+	                            <div class='browse-container'>    
+	                            	<img class='image-container'  src ="<?php echo $featuredCategoryPicturePath;?>" 
+	                            	alt = "Category Featured Image">
+	                            </div>
+	                            <div class="img-name" title="<?php echo $featuredCategoryPictureName; ?>" 
+	                             id="avtarName">
+	                            <?php echo $featuredCategoryPictureName; ?>
+	                            </div>
+	                            <div class="mainpage-content-right-inner-left-other">
+	                                <div>
+	                                    <input class="span3 ignore" data-max-size="2097152" 
+	                                    onchange="checkFileType(event)" type="file" 
+	                                    name="categoryFeaturedImage" id="categoryFeaturedImage">
+	                                </div>
+	                                  <div class="upload category-image">
+	                                  <?php 
+	                                  echo $this->translate('Image Size: 367px x 367px (*.jpg or *.png file only)');
+	                                  ?>
+	                                </div>
+	                            </div>
+                            </div>
+                        </div>
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                	<strong><?php echo $this->translate('Category Header image'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right ">
+	                            <div class='browse-container'>    
+	                            	<img class='image-container' 
+	                            	src ="<?php echo $headerCategoryPicturePath;?>" 
+	                            	alt = "Category Header Image">
+	                            </div>
+                            	<div class="img-name" title="<?php echo $headerCategoryPictureName; ?>"  
+                            	id="avtarName">
+                            	<?php echo $headerCategoryPictureName; ?>
+                            	</div>
+                            <div class="mainpage-content-right-inner-left-other">
+                            	<div>
+                                    <input class="span3 ignore" data-max-size="2097152" 
+                                    onchange="checkFileType(event)" type="file" 
+                                    name="categoryHeaderImage" id="categoryHeaderImage">
+                                </div>
+                                <div class="upload category-image">
+                                	<?php 
+                                	echo $this->translate('Image Size: 1170px x 304px (*.jpg or *.png file only)'); 
+                                	?>
+                                </div>
+                            </div>
+                        </div>
 
 						<div class="mainpage-content-line">
 							<div class="mainpage-content-left">
@@ -129,17 +218,26 @@
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-left-other">
 
-								<textarea class="input-xlarge mbot bbot ignore word_count" id="description" placeholder="<?php echo $this->translate('Description');?>" rows="3" name="description"><?php echo trim($this->editRec[0]['description']);?></textarea>
+								<textarea class="input-xlarge mbot bbot ignore word_count" id="description" placeholder="<?php echo $this->translate('Description');?>" rows="3" name="description"><?php echo trim($this->categoryDetail[0]['description']);?></textarea>
 								 <input type="text" class="input-xlarge disabled btop word-count"  id="description_count" disabled="disabled">
 
 								<!--<textarea id="description" rows="3" class="word_count" name="description"
-								    placeholder="<?php //echo $this->translate('Description')?>"><?php //echo trim($this->editRec[0]['description']);?></textarea>
+								    placeholder="<?php //echo $this->translate('Description')?>"><?php //echo trim($this->categoryDetail[0]['description']);?></textarea>
 								    <div id="description_count" style="display:none"></div>-->
 
 								</div>
 							</div>
 						</div>
-
+                        <div class="mainpage-content-line mb10">
+                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Featured category'); ?></strong></label></div>
+                                <div class="mainpage-content-right">
+                                    <div class="btn-group" data-toggle="buttons-checkbox">
+                                    <?php $backEndViewHelper = new BackEnd_Helper_viewHelper();
+                                    echo $featuredCategory == 1 ? $backEndViewHelper->getOnOffButtonsForFeaturedCategory(1) : $backEndViewHelper->getOnOffButtonsForFeaturedCategory(0);
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
 					</div>
 
 				</div>

@@ -1,0 +1,24 @@
+<?php
+if($this->locale == ''):
+    $logo = $this->mailType == 'welcome'
+        ? $this->publicPath.'emails/kortingscode-logo.png' : $this->publicPath.'emails/kortingscode-logo.png';
+else :
+    $logo =
+        $this->mailType == 'welcome'
+        ? $this->publicPath.'emails/logo-welcome.png' : $this->publicPath.'emails/logo-newsletter.png';
+endif;
+?>
+<tr>
+    <td bgcolor="#0077cc">
+        <table width="600" align="center" bgcolor="#0077cc" cellpadding="0" cellspacing="0" style="background:url(<?php echo $this->publicPath.'emails/stamp_01.jpg'; ?>) no-repeat right bottom;">
+            <tbody><tr><td colspan="2" height="22"></td></tr>
+            <tr>
+                <td width="205"></td>
+                <td width="431">
+                    <a href="<?php echo rtrim($this->httpPathLocale, '/'); ?>"><img src="<?php echo $logo; ?>" border="0" style="vertical-align:top;" width="237" height="47" alt="<?php echo $this->websiteName; ?>"></a>
+                </td>
+            </tr>
+            <tr><td colspan="2" height="20"></td></tr>
+        </tbody></table>
+    </td>
+</tr>

@@ -94,7 +94,7 @@
                  ?>
                    <div class="blog nonebdr">
                         <div class="icontext popular-kortings-col1-text3">
-                            <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'category');" class="text-blue-link fl" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('categorieen').'/'.$category[$c]['category']['permaLink'];  ?>" ><?php if(mb_strlen($category[$c]['category']['name'], 'UTF-8') > 30){  echo mb_substr($category[$c]['category']['name'], 0,30, 'UTF-8').'...'; }else{ echo $category[$c]['category']['name']; } ?>
+                            <a target="_blank" onClick="ga('send', 'event', 'marktplaats', 'click', 'category');" class="text-blue-link fl" href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'.$category[$c]['category']['permaLink'];  ?>" ><?php if(mb_strlen($category[$c]['category']['name'], 'UTF-8') > 30){  echo mb_substr($category[$c]['category']['name'], 0,30, 'UTF-8').'...'; }else{ echo $category[$c]['category']['name']; } ?>
                                  </a><br />
                             <span class="number-of-offers"><?php echo $category[$c]['countOff'];?> <?php echo $this->translate('kortingscodes') ?>
                             </span>

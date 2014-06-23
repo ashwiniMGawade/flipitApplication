@@ -1,0 +1,16 @@
+<?php
+$viewHelperObject = new FrontEnd_Helper_viewHelper();
+$howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shop['bigimage']);
+
+if(!empty($howToGuideBigImageDetails['howToGuideImagePath'])) : ?>
+
+
+    <article class="box box-2">
+        <h2><?php echo $this->translate('How to Use The Voucher Codes'); ?></h2>
+        <p><?php echo $this->shop['howToIntroductionText']; ?></p>
+        <div class="visual-img">
+            <img src="<?php echo $howToGuideBigImageDetails['howToGuideImagePath'];?>" 
+            alt="<?php echo $howToGuideBigImageDetails['howToGuideImageAltText'];?>">
+        </div>
+    </article>
+<?php endif; ?>

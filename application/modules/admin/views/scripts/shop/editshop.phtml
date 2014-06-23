@@ -9,8 +9,14 @@
 	$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
 	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
 	$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-?>
-<?php echo $this->headTitle()->append('Edit Shop');?>
+
+$howToIntroductionText = '';
+$howToIntroductionText = $this->partial(
+    'shop/_how-to-introduction-text.phtml',
+    array('howToIntroductionText'=> $this->data['howToIntroductionText'])
+);
+
+echo $this->headTitle()->append('Edit Shop');?>
 <div id="imbullbody-content" style="overflow: hidden;">
       
  
@@ -23,12 +29,20 @@
                 <strong><?php echo $this->translate("THIS SHOP IS OFFLINE ATM"); ?></strong>
             </div>
        <?php endif; ?>
-
-
-
-         <!-- Start addUser form -->
+        <!-- Start addUser form -->
          
-          <h1><?php echo $this->translate('Edit Shop'); ?><button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop<?php echo '#'.$this->qstring; ?>'"><?php echo $this->translate('Cancel'); ?></button><button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button>	</h1>
+            <h1>
+                <?php echo $this->translate('Edit Shop'); ?>
+                <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop<?php echo '#'.$this->qstring; ?>'"><?php echo $this->translate('Cancel'); ?></button>
+                <button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button>	
+                <?php $host = 'kortingscode.nl';
+                if ($_COOKIE['site_name'] != 'kortingscode.nl') {
+                    $host = 'flipit.com/admin';
+                } 
+                ?>
+                <?php $hash = md5($this->data['id'].date('Y').'-'.date('m').'-'.date('d').':'.date('H')); ?>
+                <a href="<?php echo 'http://'.$host.'/branding/start?storeUrl=http://'.$_COOKIE['site_name'].'/' ?><?php echo $this->data['permaLink'].'&shopID='.$this->data['id'].'&hash='.$hash; ?>" class="btn btn-primary">Brand this shop</a>
+            </h1>
 
          
 			<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
@@ -445,56 +459,64 @@
             <div class="mainpage-content">
             	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shop Logo'); ?></strong></label></div>
-                    <div class="mainpage-content-right ">
+                    <div class="mainpage-content-right">
                     	<div class="mainpage-content-right-inner-right-other"></div>
-                     <?php       
-					     
-	                     	$shopPicture = PUBLIC_PATH.'images/upload/no.jpg';
-	                        if(isset( $this->data['logo']['name'] ) && $this->data['logo']['name'] != '' ) {
-						  		
-	                        	 if( file_exists ( ROOT_PATH .  $this->data['logo']['path'] .'thum_large_'. $this->data['logo']['name'] )) {
-	                        	 	
-	                         		$shopPicture = PUBLIC_PATH_LOCALE.  $this->data['logo']['path']  .'thum_large_'. $this->data['logo']['name'] ;
-	                         
-	                         	}
-	                      	}	
-						  
-                      ?>
-                        
-                        <img alt="<?php echo $this->translate('Shop logo'); ?>" src="<?php echo $shopPicture ; ?>">
-                    	<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-						</br>
-                    	<input data-max-size="2097152" type="file" name="logoFile" onchange="checkFileType(event)" class="ignore" />
-                    		<span class="ml15 help-inline" style="display: inline-block; padding-bottom: 5px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB , Ratio 2:01)'); ?></span>
+                        <?php       
+                        $shopPicture = '';
+                        if(isset( $this->data['logo']['name'] ) && $this->data['logo']['name'] != '' ) {
+                            $shopPicture = PUBLIC_PATH_CDN.  $this->data['logo']['path']  .'thum_large_'. $this->data['logo']['name'] ;
+                            }				  
+                        ?> 
+                        <div class='browse-container'>    
+                            <img class='image-container' 
+                            alt="<?php echo $this->translate('Shop logo'); ?>" 
+                            src="<?php echo $shopPicture ; ?>">
+                        </div>
+                    	<div class="mainpage-content-right-inner-left-other">
+                            <div>
+                        	   <input data-max-size="2097152" type="file" name="logoFile" 
+                               onchange="checkFileType(event)" class="ignore" />
+                           </div>
+                    		<div 
+                            class="help-inline">
+                            <?php echo $this->translate('Image Size: 300px x 150px (*.jpg or *.png file only)'); 
+                            ?>
+                            </div>
 						</div>
                     </div>
                 </div>
                 
                    <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Website Screenshot'); ?></strong></label></div>
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Website Screenshot'); ?></strong>
+                        </label>
+                    </div>
                     <div class="mainpage-content-right">
                      <div class="mainpage-content-right-inner-right-other"></div>
                       <?php       
-					
-	                     	$shopPicture = PUBLIC_PATH.'images/upload/no.jpg';
-						 			 
-	                        if(isset( $this->data['screenshot']['name'] ) && $this->data['screenshot']['name'] != '' ) {
-						  
-	                        	 if( file_exists ( ROOT_PATH .  $this->data['screenshot']['path'] .'thum_large_'. $this->data['screenshot']['name'] )) {
-	                        	 	
-	                         		$shopPicture = PUBLIC_PATH_LOCALE.  $this->data['screenshot']['path']  .'thum_large_'. $this->data['screenshot']['name'] ;
-	                         
-	                         	}
-	                      	}	
-						  
+                        $shopPicture = '';
+                        if(
+                            isset($this->data['screenshot']['name'] ) && $this->data['screenshot']['name'] != ''
+                            ) {
+                            $shopPicture = 
+                                PUBLIC_PATH_CDN
+                                .$this->data['screenshot']['path'] 
+                                .'thum_large_'. $this->data['screenshot']['name'];
+                        }	
                       ?>
-                        
-                        <img alt="<?php echo $this->translate('Shop screen shot'); ?>" src="<?php echo $shopPicture ; ?>">
-                    	
-                      	<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-                      	</br>
-                        	<input  data-max-size="2097152" type="file" name="websitescreenshot" onchange="checkFileType(event)" class="ignore" />
-				        	<span id="logo_file_message" class="ml15 help-inline" style="display: inline-block; padding-bottom: 5px;" ><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB,Width:450px)'); ?></span>
+                        <div class='browse-container'>
+                            <img class='image-container' 
+                            alt="<?php echo $this->translate('Shop screen shot'); ?>" src="<?php echo $shopPicture ; ?>">
+                    	</div>
+                      	<div class="mainpage-content-right-inner-left-other">
+                            <div>
+                        	<input  data-max-size="2097152" type="file" name="websitescreenshot" 
+                            onchange="checkFileType(event)" class="ignore" />
+                            </div>
+				        	<div id="logo_file_message" class="help-inline">
+                            <?php echo $this->translate('Image Size: min width 450px (*.jpg or *.png file only)'); ?>
+                            </span>
                     	</div>
                     </div>
                 </div>
@@ -681,7 +703,8 @@
 						</div>	 
 					 </div>
                 </div>
-                
+                <?php echo $howToIntroductionText; ?>
+
                 <div class="mainpage-content">
 
 							<div class="mainpage-content-line mb10">

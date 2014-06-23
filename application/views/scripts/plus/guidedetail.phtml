@@ -1,0 +1,101 @@
+<?php 
+$articleDetails = $this->articleDetails;
+$userDetails = $this->userDetails;
+$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/". $userDetails['slug'];
+$firstName = str_replace(' ', '', $userDetails['firstName']);
+$lastName = str_replace(' ', '', $userDetails['lastName']);
+$articleUpdatedAtDate = new Zend_Date($articleDetails['created_at']);
+$articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
+$plusViewPath = 'plus/';
+$discussion = $this->partial(
+    'partials/_discussion.phtml',
+    array('shopName' =>'')
+);
+$articleInformation = $this->partial(
+    $plusViewPath.'_articleInformation.phtml',
+        array(
+           'artcileDetails' => $articleDetails,
+           'userDetails' => $userDetails,
+           'profileLink' => $profileLink,
+           'firstName' => $firstName,
+           'lastName' => $lastName,
+           'articleUpdatedAtDate'=> $articleUpdatedAtDate
+        )
+);
+$authorDetails = $this->partial(
+    $plusViewPath.'_authorDetails.phtml',
+        array(
+            'userDetails' => $userDetails,
+            'profileLink' => $profileLink
+        )
+);
+
+$partialViewPath = 'partials/';
+$savingGuides = '';
+if(!empty($this->articlesRelatedToCurrentCategory)):
+    $savingGuides = $this->partial(
+        $partialViewPath.'_authorMostReadArticles.phtml', 
+        array(
+            "authorMostReadArticles"=>$this->articlesRelatedToCurrentCategory,
+            "moneySavingGuideHeader"=>$this->translate('Saving guides')
+        )
+    );
+endif;
+
+$recentlyAddedArticles = $this->partial(
+    $plusViewPath.'_recentlyAddedArticles.phtml',
+        array(
+            'recentlyAddedArticles' => $this->recentlyAddedArticles
+        )
+);
+$topPopularOffers = $this->partial(
+    $plusViewPath.'_topPopularOffers.phtml',
+        array(
+            'topPopularOffers' => $this->topPopularOffers,
+        )
+);
+$directChapterLinks = $this->partial(
+    $plusViewPath.'_directChapterLinks.phtml',
+        array(
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'artcileDetails' => $articleDetails
+        )
+);
+$articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$articleDetails['articleImage']['name'];
+?>
+<main role="main" id="main" class="container">
+    <div class="banner-block">
+        <img class="image" width="1169" src="<?php echo $articleImage; ?>" alt="<?php echo $articleDetails['title'];?>">
+    </div>
+    <div class="row">
+        <div id="content" class="col-md-8 col-sm-8">
+            <?php echo $articleInformation; ?>
+            <div class="share-box">
+                <span class="txt"><?php echo $this->translate('Share this tip');?></span>
+                <ul class="social-box">
+                    <li>
+                        <img src="<?php echo HTTP_PATH.'public/images/img-42.png';?>" alt="image description" 
+                        width="129" height="20" />
+                    </li>
+                    <li>
+                        <img src="<?php echo HTTP_PATH.'public/images/img-43.png';?>" alt="image description" 
+                            width="81" height="20" />
+                    </li>
+                    <li>
+                        <img src="<?php echo HTTP_PATH.'public/images/img-45.png';?>" alt="image description" 
+                            width="238" height="24" />
+                    </li>
+                    <li>
+                        <img src="<?php echo HTTP_PATH.'public/images/img-44.png';?>" alt="image description"
+                            width="81" height="21" />
+                    </li>
+                </ul>           
+            </div>
+            <?php echo $authorDetails. $savingGuides. $discussion;?>
+        </div>
+        <aside id="sidebar" class="col-md-4 col-sm-4">
+            <?php echo $recentlyAddedArticles . $topPopularOffers . $directChapterLinks;?>
+        </aside>    
+    </div>
+</main>

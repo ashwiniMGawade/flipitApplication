@@ -2416,3 +2416,18 @@ $(function () {
     }) ;
 });
 
+function LocaleStatusToggle(el)
+{
+	$(el).addClass('btn-primary').siblings('button').removeClass('btn-primary active');
+	var localeStatus = $(el).attr('data-status');
+    
+    $.ajax({
+		url : HOST_PATH + 'admin/homepage/savelocalestatus',
+		type : 'post',
+		dataType : 'json',
+		data : {'localeStatus' : localeStatus},
+		success : function(obj){
+			window.location.reload(true);
+		}
+	});
+}
