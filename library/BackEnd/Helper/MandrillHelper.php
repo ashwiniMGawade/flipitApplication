@@ -100,11 +100,16 @@ class BackEnd_Helper_MandrillHelper
     ) {
         $visitorDetails = Visitor::getVisitorDetailsByEmail($visitorEmail);
         $key = 0;
+        if (defined('HTTP_PATH_FRONTEND')) {
+            $httpPathLocale = HTTP_PATH_FRONTEND;
+        } else {
+            $httpPathLocale = HTTP_PATH_LOCALE;
+        }
         $visitorDirectLoginInformation[$key]['rcpt'] = $visitorEmail;
         $visitorDirectLoginInformation[$key]['vars'][0]['name'] = 'loginLink';
        
         $visitorDirectLoginInformation[$key]['vars'][0]['content'] =
-            HTTP_PATH_LOCALE
+            $httpPathLocale
             .FrontEnd_Helper_viewHelper::__link("link_login")
             . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin")
             . "/"
@@ -113,7 +118,7 @@ class BackEnd_Helper_MandrillHelper
         $visitorDirectLoginInformation[$key]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
         
         $visitorDirectLoginInformation[$key]['vars'][1]['content'] =
-            HTTP_PATH_LOCALE
+            $httpPathLocale
             . FrontEnd_Helper_viewHelper::__link("link_login")
             . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
             . "/" . base64_encode($visitorEmail) ."/". $visitorDetails[0]['password'];
