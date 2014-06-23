@@ -16,7 +16,7 @@ class Shop extends BaseShop
      ################## REFACTORED CODE ###############################################
      ##################################################################################
 
-    public function __contruct($connectionName = false)
+    public function __contruct($connectionName = "")
     {
         if (!$connectionName) {
             $connectionName = "doctrine_site" ;
