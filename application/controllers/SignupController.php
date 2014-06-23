@@ -2,7 +2,7 @@
 require_once 'Zend/Controller/Action.php';
 class SignupController extends Zend_Controller_Action
 {
-    public $_loginLinkAndData = array();
+    public $directLoginLinks = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -36,7 +36,7 @@ class SignupController extends Zend_Controller_Action
         );
         $visitorStatus = $visitorInformation > 0 ? false : true;
         echo Zend_Json::encode($visitorStatus);
-        die();
+        exit;
     }
 
     public function indexAction()
@@ -69,11 +69,11 @@ class SignupController extends Zend_Controller_Action
         $registrationForm->getElement('emailAddress')->setValue($emailAddressFromMemory);
         $registrationForm->getElement('shopId')->setValue($shopId);
         if ($this->getRequest()->isPost()) {
-            if ($registrationForm->isValid($_POST)) {
+            if ($registrationForm->isValid($this->getRequest()->getPost())) {
                 $visitorInformation = $registrationForm->getValues();
                 if (Visitor::checkDuplicateUser($visitorInformation['emailAddress']) > 0) {
                     self::showFlashMessage(
-                        $this->view->translate('Please change you E-mail address this user already exist'),
+                        FrontEnd_Helper_viewHelper::__translate('Please change you E-mail address this user already exist'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'error'
                     );
@@ -84,7 +84,7 @@ class SignupController extends Zend_Controller_Action
                     }
                     self::redirectAccordingToMessage(
                         $visitorId,
-                        $this->view->translate('Please enter valid information'),
+                        FrontEnd_Helper_viewHelper::__translate('Please enter valid information'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'signup',
                         $visitorInformation['emailAddress']
@@ -125,11 +125,11 @@ class SignupController extends Zend_Controller_Action
             } else {
                 $mandrillFunctions = new FrontEnd_Helper_MandrillMailFunctions();
                 if (Signupmaxaccount::getemailConfirmationStatus()) {
-                    $message = $this->view->translate('Please check your mail and confirm your email address');
+                    $message = FrontEnd_Helper_viewHelper::__translate('Please check your mail and confirm your email address');
                     $mandrillFunctions->sendConfirmationMail($visitorEmail, $this);
                 } else {
                     Visitor::setVisitorLoggedIn($visitorId);
-                    $message = $this->view->translate('Thanks for registration now enjoy the more coupons');
+                    $message = FrontEnd_Helper_viewHelper::__translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
                 self::showFlashMessage(
@@ -167,7 +167,7 @@ class SignupController extends Zend_Controller_Action
             $content,
             FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
             '',
-            $this->_loginLinkAndData
+            $this->directLoginLinks
         );
         return true;
     }
@@ -178,7 +178,7 @@ class SignupController extends Zend_Controller_Action
         $html->assign('email', $visitoremailMail);
         $bodyText = $html->render('confirmemail.phtml');
         $recipents = array("to" => $visitoremailMail);
-        $subject = $this->view->translate("Welcome to Kortingscode.nl");
+        $subject = FrontEnd_Helper_viewHelper::__translate("Welcome to Kortingscode.nl");
         $body = $bodyText;
         $sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents, $subject, $body);
         return true;
@@ -195,7 +195,7 @@ class SignupController extends Zend_Controller_Action
         $profileForm = new Application_Form_Profile();
         $this->view->form = $profileForm;
         if ($this->getRequest()->isPost()) {
-            if ($profileForm->isValid($_POST)) {
+            if ($profileForm->isValid($this->getRequest()->getPost())) {
                 $visitorDetails = $profileForm->getValues();
                 self::addVisitor($visitorDetails);
             } else {
@@ -227,9 +227,9 @@ class SignupController extends Zend_Controller_Action
             FrontEnd_Helper_viewHelper::__link('link_profiel');
         $visitorId = Visitor::addVisitor($visitorDetails);
         if ($visitorId) {
-            $message = $this->view->translate('Your information has been updated successfully !.');
+            $message = FrontEnd_Helper_viewHelper::__translate('Your information has been updated successfully !.');
         } else {
-            $message = $this->view->translate('Please enter valid information');
+            $message = FrontEnd_Helper_viewHelper::__translate('Please enter valid information');
         }
         self::redirectAccordingToMessage($visitorId, $message, $redirectLink, 'profile');
     }

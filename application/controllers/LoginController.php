@@ -1,7 +1,7 @@
 <?php
 class LoginController extends Zend_Controller_Action
 {
-    public $_loginLinkAndData = array();
+    public $directLoginLinks = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -79,7 +79,7 @@ class LoginController extends Zend_Controller_Action
             $visitorEmail = new Zend_Session_Namespace('emailAddressSpace');
             $visitorEmail->emailAddressSpace = $visitorDetails['emailAddress'];
             $this->addFlashMessage(
-                $this->view->translate('User Does Not Exist'),
+                FrontEnd_Helper_viewHelper::__translate('User Does Not Exist'),
                 HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
                 'error'
             );
@@ -143,17 +143,17 @@ class LoginController extends Zend_Controller_Action
                         $content,
                         FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
                         '',
-                        $this->_loginLinkAndData
+                        $this->directLoginLinks
                     );
                     $this->addFlashMessage(
-                        $this->view->translate('Please check you mail and click on reset password link'),
+                        FrontEnd_Helper_viewHelper::__translate('Please check you mail and click on reset password link'),
                         HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
                         .FrontEnd_Helper_viewHelper::__link('link_forgotpassword'),
                         'error'
                     );
                 } else {
                     $this->addFlashMessage(
-                        $this->view->translate('Wrong Email address. Please enter valid email address'),
+                        FrontEnd_Helper_viewHelper::__translate('Wrong Email address. Please enter valid email address'),
                         HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login') . '/'
                         .FrontEnd_Helper_viewHelper::__link('link_forgotpassword'),
                         'error'
@@ -176,7 +176,7 @@ class LoginController extends Zend_Controller_Action
         $resetPasswordForm = new Application_Form_ResetPassword();
         $this->view->form = $resetPasswordForm;
         if ($visitor['changepasswordrequest']) {
-            $this->view->resetLinkMessage = $this->view->translate('This password reset link has already been used!');
+            $this->view->resetLinkMessage = FrontEnd_Helper_viewHelper::__translate('This password reset link has already been used!');
             $this->view->linkAlreadyUsed = false;
         } else {
             $this->view->linkAlreadyUsed = true;
@@ -210,10 +210,10 @@ class LoginController extends Zend_Controller_Action
                     HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'). '/'
                     .FrontEnd_Helper_viewHelper::__link('link_profiel');
             }
-            $this->addFlashMessage($this->view->translate('Your password has been changed.'), $redirectLink, 'success');
+            $this->addFlashMessage(FrontEnd_Helper_viewHelper::__translate('Your password has been changed.'), $redirectLink, 'success');
         } else {
             $this->addFlashMessage(
-                $this->view->translate('Invalid reset password url please confirm again.'),
+                FrontEnd_Helper_viewHelper::__translate('Invalid reset password url please confirm again.'),
                 HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'). '/'
                 .FrontEnd_Helper_viewHelper::__link('link_resetpassword') .'/' . $encodedVisitorId,
                 'success'
@@ -230,20 +230,20 @@ class LoginController extends Zend_Controller_Action
         if (!empty($visitor)) {
             if (Visitor::updateVisitorStatus($visitor[0]['id'])) {
                 $this->addFlashMessage(
-                    $this->view->translate('Your email address has been confirmed please login'),
+                    FrontEnd_Helper_viewHelper::__translate('Your email address has been confirmed please login'),
                     HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
                     'success'
                 );
             } else {
                 $this->addFlashMessage(
-                    $this->view->translate('Your email address is already confirmed'),
+                    FrontEnd_Helper_viewHelper::__translate('Your email address is already confirmed'),
                     HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
                     'error'
                 );
             }
         } else {
             $this->addFlashMessage(
-                $this->view->translate('Invalid confirmation link'),
+                FrontEnd_Helper_viewHelper::__translate('Invalid confirmation link'),
                 HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_login'),
                 'error'
             );
@@ -292,7 +292,7 @@ class LoginController extends Zend_Controller_Action
             $obj->updateLoginTime($userid);
             setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
             $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('You are successfully unsubscribed to our newsletter');
+            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
             $flash->addMessage(array('success' => $message));
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_helper->redirector(
