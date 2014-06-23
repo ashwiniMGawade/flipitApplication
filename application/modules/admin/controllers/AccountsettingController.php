@@ -166,14 +166,13 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                 $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularcategory_list');
             }
 
-            $email_data = Signupmaxaccount::getAllMaxAccounts();
-            $mandrillSenderEmailAddress = $email_data[0]['emailperlocale'];
-            $mandrillNewsletterSubject = $email_data[0]['emailsubject'];
-            $mandrillSenderName = $email_data[0]['sendername'];
+            $emailDetails = Signupmaxaccount::getAllMaxAccounts();
+            $mandrillSenderEmailAddress = $emailDetails[0]['emailperlocale'];
+            $mandrillNewsletterSubject = $emailDetails[0]['emailsubject'];
+            $mandrillSenderName = $emailDetails[0]['sendername'];
             BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this);
             BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
             $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
-            $templateName = $this->getInvokeArg('newsletterTemplate');
             $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
             $categoryName = $topCategories[0]['category']['name'];
             $categoryPermalink = $topCategories[0]['category']['permaLink'];
@@ -199,7 +198,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         } else {
             $this->_helper->redirector('index', 'index', null);
         }
-        die;
+        exit;
     }
 
     /**

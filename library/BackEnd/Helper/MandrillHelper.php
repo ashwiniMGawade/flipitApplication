@@ -3,9 +3,9 @@ class BackEnd_Helper_MandrillHelper
 {
     public static function getHeaderFooterContent($currentObject)
     {
-        $data = Signupmaxaccount::getEmailHeaderFooter();
-        $currentObject->headerContent = $data['email_header'];
-        $currentObject->footerContent = $data['email_footer'];
+        $emailHeaderFooterContent = Signupmaxaccount::getEmailHeaderFooter();
+        $currentObject->headerContent = $emailHeaderFooterContent['email_header'];
+        $currentObject->footerContent = $emailHeaderFooterContent['email_footer'];
     }
 
     public static function getDirectLoginLinks($currentObject, $linkType = '', $visitorEmail = '', $mandrillKey = '')
@@ -67,18 +67,22 @@ class BackEnd_Helper_MandrillHelper
                 $visitorDirectLoginInformation[$visitorKey]['vars'][0]['name'] = 'loginLink';
                 $visitorRefererInformation[$visitorKey]['rcpt'] = $visitorValue['email'];
                 $visitorRefererInformation[$visitorKey]['values']['referrer'] = trim($keywords);
+                
                 $visitorDirectLoginInformation[$visitorKey]['vars'][0]['content'] =
                     $frontendPath . FrontEnd_Helper_viewHelper::__link("link_login")
                     . "/" .FrontEnd_Helper_viewHelper::__link("link_directlogin")
                     . "/" . base64_encode($visitorValue['email']) ."/". $visitorValue['password'];
                 $visitorDirectLoginInformation[$visitorKey]['vars'][1]['name'] = 'loginLinkWithUnsubscribe';
+                
                 $visitorDirectLoginInformation[$visitorKey]['vars'][1]['content'] =
                     $frontendPath
                     . FrontEnd_Helper_viewHelper::__link("link_login")
                     . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
                     . "/" . base64_encode($visitorValue['email']) ."/". $visitorValue['password'];
+                
                 $visitorInformation[$visitorKey]['email'] = $visitorValue['email'];
-                $visitorInformation[$visitorKey]['name'] = !empty($visitorValue['firstName']) ? $visitorValue['firstName'] : 'Member';
+                $visitorInformation[$visitorKey]['name'] =
+                        !empty($visitorValue['firstName']) ? $visitorValue['firstName'] : 'Member';
             }
 
             $currentObject->_recipientMetaData = $visitorRefererInformation;
@@ -112,7 +116,7 @@ class BackEnd_Helper_MandrillHelper
             HTTP_PATH_LOCALE
             . FrontEnd_Helper_viewHelper::__link("link_login")
             . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
-            . "/" . base64_encode($visitorEmail) ."/". $passwordKey;
+            . "/" . base64_encode($visitorEmail) ."/". $visitorDetails[0]['password'];
         $visitorInformation[$key]['email'] = $visitorEmail;
         
         $visitorInformation[$key]['name'] =
