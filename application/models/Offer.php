@@ -14,7 +14,7 @@ class Offer extends BaseOffer
     ##################################################################################
     ################## REFACTORED CODE ###############################################
     ##################################################################################
-    public function __contruct($connectionName = false)
+    public function __contruct($connectionName = "")
     {
         if (!$connectionName) {
             $connectionName = "doctrine_site" ;
@@ -891,8 +891,8 @@ class Offer extends BaseOffer
                 $offerCount  = new Conversions();
                 $offerCount->offerId = $offerId;
                 $offerCount->IP = $clientIP;
-                $offerCount->utma = $_COOKIE["__utma"];
-                $offerCount->utmz = $_COOKIE["__utmz"];
+                $offerCount->utma = $this->getRequest()->getCookie("__utma");
+                $offerCount->utmz = $this->getRequest()->getCookie("__utmz");
                 $time = time();
                 $offerCount->subid = md5(time()*rand(1, 999));
                 $offerCount->save();
@@ -900,8 +900,8 @@ class Offer extends BaseOffer
             } else {
                 $offerCount = Doctrine_Core::getTable("Conversions")->find($offerData['id']);
                 if ($offerCount) {
-                    $offerCount->utma = $_COOKIE["__utma"];
-                    $offerCount->utmz = $_COOKIE["__utmz"];
+                    $offerCount->utma = $this->getRequest()->getCookie("__utma");
+                    $offerCount->utmz = $this->getRequest()->getCookie("__utmz");
                     $time = time();
                     $offerCount->subid = md5(time()*rand(1, 999));
                     $offerCount->save();
