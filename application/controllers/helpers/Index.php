@@ -15,7 +15,8 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
     {
         $topCategoriesOffersWithCategoriesPermalinkIndex = '';
         foreach ($topCategoriesOffers as $topCategoriesOffer) {
-            $topCategoriesOffersWithCategoriesPermalinkIndex[$topCategoriesOffer['categoryPermalink']][] =
+            $categoryIndex = $topCategoriesOffer['categoryPermalink'] . "," .$topCategoriesOffer['categoryName'];
+            $topCategoriesOffersWithCategoriesPermalinkIndex[$categoryIndex][] =
             $topCategoriesOffer['Offer'];
         }
 
@@ -27,7 +28,8 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
         $specialOfferslist = '';
         foreach ($specialListPages as $specialListPage) {
             foreach ($specialListPage['page'] as $page) {
-                $specialOfferslist[$page['permaLink']] = Offer::getSpecialPageOffers($page);
+                $specialOfferslistIndex = $page['permaLink'] . ',' . $page['pageTitle'];
+                $specialOfferslist[$specialOfferslistIndex] = Offer::getSpecialPageOffers($page);
             }
         }
 
