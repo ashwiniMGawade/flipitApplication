@@ -279,7 +279,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopEditor = User::getUserDetails($shopInformation[0]['contentManagerId']);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
-        $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+        $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
         $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides=$howToGuides;

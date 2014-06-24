@@ -1,6 +1,6 @@
 <?php
-$EditorFirstName = str_replace(' ', '', $this->shopEditor['firstName']);
-$EditorLastName = str_replace(' ', '', $this->shopEditor['lastName']);
+$authorName = FrontEnd_Helper_AuthorPartialfunctions::
+    getAuthorName($this->shopEditor['firstName'], $this->shopEditor['lastName']);
 $EditorImageSlug = $this->shopEditor['slug'];
 $shopHeader = $this->translate('All').' '.$this->shop['name'].' '.$this->translate('deals verified by');
 $shopEditorPath =
@@ -26,11 +26,11 @@ endif;
         <div class="deal">
             <div class="deal-holder">
                 <span class="text"><?php echo $shopHeader; ?>
-                    <span class="name"><?php echo $EditorFirstName; ?></span>
+                    <span class="name"><?php echo $authorName; ?></span>
                 </span>
                 <div class="photo">
                     <span class="text-box"><?php echo $this->translate('Hello'); ?></span>
-                    <img alt="<?php echo $this->shopEditor['firstName']; ?>" class="" 
+                    <img alt="<?php echo $authorName; ?>" class="" 
                     src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
                 </div>
             </div>

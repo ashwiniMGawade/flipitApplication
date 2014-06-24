@@ -1,7 +1,6 @@
 <?php
-$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/authors.css");
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/signupnewsletter.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
+$this->minifyHeadScript()->appendFile("public/js/front_end/signupnewsletter.js");
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
 echo $pageHeader->getCategoryOrPageHeader(
     $this->pageTitle,
