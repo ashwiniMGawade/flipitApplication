@@ -1,0 +1,76 @@
+<?php
+	$this->headTitle()->append('Account Settings');
+	$this->headMeta('keyword', 'Description');
+	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
+	$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/timepicker.css" );
+	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
+	$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/accountsetting.js" );
+	$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/accountsetting2.js" );
+	$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
+	$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
+	$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
+	$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+?>
+
+<script type="text/javascript">
+
+var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
+
+</script>
+
+
+       <div class="newsletter-setting-container wrap columns-2">
+                 <div class='wrap columns-2'>
+		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
+		<br><div class ="mainpage-content-colorbox success">
+		<?php if($this->messageSuccess!=''){?>
+		<span class="successserver"><?php echo $this->messageSuccess; ?></span>
+		<?php }?>
+		<?php if($this->messageError!=''){?>
+		<span class="errorserver"><?php echo $this->messageError; ?></span>
+		<?php } ?>
+		</div>
+		<?php
+		}?>
+		</div>
+           <h1><?php echo $this->translate('Create account settings'); ?><!-- <button  onclick="cancelAccountSettings();" class="btn ml10"></button> --></h1>
+
+            <div class="mainpage-content">
+            	<form name="speacialForm" method="post" id="speacialForm" action="">
+            	   <div class="mainpage-content-line mb10">
+						<div class="mainpage-content-left">
+							<label><strong><?php echo $this->translate('Sender Email Address'); ?></strong></label>
+						</div>
+						<div class="mainpage-content-right">
+
+							<div class="mainpage-content-right-inner-left-other">
+							<div class="mainpage-content-right-inner-right-other"></div>
+								<div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
+									<input type="text" value="<?php echo !empty($this->data[0]['emailperlocale']) ? $this->data[0]['emailperlocale'] : '';?>" placeholder=<?php echo $this->translate('Sender')?> name="senderEmail" id="senderEmail" onblur="saveSenderEmail(this)"
+									class="span3">
+								</div>
+							</div>
+						</div>
+					</div>
+
+		    		<div class="mainpage-content-line mb10">
+						<div class="mainpage-content-left">
+							<label><strong><?php echo $this->translate('Sender Name'); ?></strong></label>
+						</div>
+						<div class="mainpage-content-right">
+
+							<div class="mainpage-content-right-inner-left-other">
+							<div class="mainpage-content-right-inner-right-other"></div>
+								<div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
+									<input type="text" value="<?php echo !empty($this->data[0]['sendername']) ? $this->data[0]['sendername'] : '';?>" placeholder=<?php echo $this->translate('Name')?> name="senderName" id="senderName" onblur="saveSenderEmail(this)"
+									class="span3">
+								</div>
+							</div>
+						</div>
+					</div>
+					</form>
+					</div>

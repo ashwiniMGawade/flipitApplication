@@ -13,3 +13,5 @@ $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
 $manager->setAttribute(Doctrine_Core::ATTR_AUTOCOMMIT, false);
 
 Doctrine_Manager::connection("mysql://root:password@localhost/flipit_test");
+
+\Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'_pages');

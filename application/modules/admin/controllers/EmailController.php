@@ -312,25 +312,8 @@ class Admin_EmailController extends Zend_Controller_Action
 
     }
 
-
-
-
-
-
-    /**
-     * Load settings for email templates
-     * @author asharma
-     */
     public function emailSettingsAction()
     {
 
-        $params = $this->_getAllParams ();
-        $emailSettingsData = EmailSettings::getEmailSettingsContent();
-
-        echo "<pre>";print_r($emailSettingsData);
-        die ();
     }
-
-
-
 }
