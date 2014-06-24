@@ -331,7 +331,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $suffix = "_" . strtoupper(LOCALE);
         }
 
-        $domain = $_SERVER['HTTP_HOST'];
+        $domain = 'www.kortingscode.nl';
 
         if (strlen($this->moduleDirectoryName) == 2) {
             if ($domain != "www.kortingscode.nl" && $domain != "kortingscode.nl") {

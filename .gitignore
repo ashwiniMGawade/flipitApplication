@@ -216,4 +216,4 @@ deployment.xml
  
 
 tests/_output/*
-tests/_output/*
+tests/_log/
