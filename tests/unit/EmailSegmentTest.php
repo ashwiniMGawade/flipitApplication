@@ -22,7 +22,7 @@ class EmailSegmentTest extends \Codeception\TestCase\Test
         $campainModel = new EmailCampain();
         $campain = array('sender' => 'd@d.com','subject' => 'koek');
         $save = $campainModel->saveForm($campain);
-        $this->assertGreaterThan(0, $save);
+        $this->assertGreaterThan(0,$save);
     }
 
 

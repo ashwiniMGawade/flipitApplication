@@ -15,3 +15,4 @@ modules:
             user: 'root'
             password: 'password'
             dump: tests/_data/flipit_test.sql
+            cleanup: false
