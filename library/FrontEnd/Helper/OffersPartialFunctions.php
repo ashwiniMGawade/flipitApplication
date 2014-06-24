@@ -312,7 +312,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 	$urlToShow,
                 	$offerBounceRate,
                 	$offerAnchorTagContent,
-                	"link"
+                	"link clickout-title"
                 );
             break;
             case 'offerImage':
