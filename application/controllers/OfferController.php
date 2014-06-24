@@ -37,6 +37,12 @@ class OfferController extends Zend_Controller_Action
             'top_20_offers_list',
             array('function' => 'Offer::getTopOffers', 'parameters' => array(20))
         );
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'all_popularshop_list',
+            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)),
+            true
+        );
+        $this->view->popularStores = $popularStores;
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->top20PopularOffers = $offers;
         $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
