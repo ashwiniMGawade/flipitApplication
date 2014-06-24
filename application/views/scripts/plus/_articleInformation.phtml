@@ -7,7 +7,7 @@ $authorName = $authorPartial->getAuthorName($this->firstName, $this->lastName);
 $articleUpdatedAtDate = $this->articleUpdatedAtDate;
 $byAuthorName[0] = '';
 $byAuthorName[1] = '';
-if ($authorName == '') {
+if (!$authorName == '') {
     $byAuthorName[0] = $this->translate('By');
     $byAuthorName[1] = $authorName;
 }
