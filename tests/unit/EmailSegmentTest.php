@@ -6,7 +6,7 @@ class EmailSegmentTest extends \Codeception\TestCase\Test
    /**
     * @var \CodeGuy
     */
-    protected $codeTester;
+    protected $tester;
 
     protected function _before()
     {
@@ -22,8 +22,8 @@ class EmailSegmentTest extends \Codeception\TestCase\Test
         $campainModel = new EmailCampain();
         $campain = array('sender' => 'd@d.com','subject' => 'koek');
         $save = $campainModel->saveForm($campain);
-        $this->assertGreaterThan(0,$save);
+        //$this->assertGreaterThan(0, $save);
+        //$this->assertEquals('2', $save);
+        $this->tester->seeInTable('EmailCampain', array('sender' => 'd@dsss.com','subject' => 'koek'));
     }
-
-
 }

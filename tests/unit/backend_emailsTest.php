@@ -16,12 +16,6 @@ class backend_emailsTest extends \Codeception\TestCase\Test
     {
     }
 
-   // public function testEmailSettings(CodeGuy $I)
-   //  {
-   //  	$I->wantToTest('Test email settings class.');
-   //  	$user = new Emailsettings();
-   //  }
-    
     public function saveEmailSettings(codeTester $I)
     {
         $I->wantToTest('Save email settings.');

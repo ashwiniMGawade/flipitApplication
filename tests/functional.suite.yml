@@ -6,7 +6,7 @@
 
 class_name: FunctionalTester
 modules:
-    enabled: [ZF1, Db, Doctrine1, Filesystem, FunctionalHelper]
+    enabled: [ZF1, Doctrine1, Filesystem, FunctionalHelper]
     config:
-        Db:
-            cleanup: false
+        Doctrine1:
+            cleanup: true

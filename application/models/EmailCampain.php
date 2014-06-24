@@ -11,12 +11,11 @@ class EmailCampain extends BaseEmailCampain
                                 ->fetchArray();
     }
 
-    public function saveForm($data){
-
+    public function saveForm($data)
+    {
         if (!empty($data['id'])) {
             $campain =  Doctrine_Core::getTable("EmailCampain")->find($data['id']);
-            //echo '<pre>'.print_r($campain, true).'</pre>';
-        }else{
+        } else {
             $campain            = $this;
             $campain->sender    = $data['sender'];
             $campain->subject   = $data['subject'];

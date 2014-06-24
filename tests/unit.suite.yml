@@ -5,5 +5,5 @@ class_name: UnitTester
 modules:
     enabled: [ZF1, Doctrine1, Asserts, UnitHelper]
     config:
-        Db:
-            cleanup: false
+        Doctrine1:
+            cleanup: true
