@@ -62,7 +62,7 @@ class LoginController extends Zend_Controller_Action
             }
         }
         $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
-        $this->view->pageCssClass = 'login-page';
+        $this->view->pageCssClass = 'login-page home-page';
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
@@ -164,7 +164,7 @@ class LoginController extends Zend_Controller_Action
             }
         }
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-        $this->view->pageCssClass = 'login-page';
+        $this->view->pageCssClass = 'login-page home-page';
         $this->viewHelperObject->getMetaTags($this);
     }
 
@@ -192,7 +192,7 @@ class LoginController extends Zend_Controller_Action
                 $resetPasswordForm->highlightErrorElements();
             }
         }
-        $this->view->pageCssClass = 'login-page';
+        $this->view->pageCssClass = 'login-page home-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $this->viewHelperObject->getMetaTags($this);
     }
