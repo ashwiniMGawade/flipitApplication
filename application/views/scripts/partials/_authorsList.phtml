@@ -14,8 +14,14 @@ foreach ($this->authors as $author) :
                     .FrontEnd_Helper_viewHelper::__link('link_redactie') .'/'
                     . strtolower($author['slug']); ?>"
                     style="height: 275px;" class="same-height-left">
-                    <h1><?php echo $author['firstName'];?></h1>
-                    <img width="87" height="87" 
+                    <h1>
+                        <?php 
+                            $authorPartial = new FrontEnd_Helper_AuthorPartialfunctions();
+                            $authorName = $authorPartial->getAuthorName($author['firstName'], $author['lastName']);
+                            echo $authorName;
+                        ?>
+                    </h1>
+                    <img width="87" height="87"
                     alt="<?php echo isset($author['profileimage']['name']) ? $author['profileimage']['name'] : '';?>" 
                     src="<?php echo $authorPicture;?>" class="photo-image">
                     <strong class="status"><?php echo $this->translate('deal spotter');?></strong>

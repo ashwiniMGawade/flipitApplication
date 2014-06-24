@@ -156,7 +156,7 @@ class SignupController extends Zend_Controller_Action
                                 )
                         )
                     );
-        $VisitorName = $visitorDetails[0]['firstName'].' '.$visitorDetails[0]['lastName'];
+        $VisitorName = $visitorDetails[0]['firstName'].' '. $visitorDetails[0]['lastName'];
         BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails[0]['email']);
         $mailer->send(
             FrontEnd_Helper_viewHelper::__email('email_sitename'),

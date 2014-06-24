@@ -22,6 +22,8 @@ $articleInformation = $this->partial(
            'articleUpdatedAtDate'=> $articleUpdatedAtDate
         )
 );
+$authorDetails = '';
+if(!empty($userDetails)):
 $authorDetails = $this->partial(
     $plusViewPath.'_authorDetails.phtml',
         array(
@@ -29,6 +31,7 @@ $authorDetails = $this->partial(
             'profileLink' => $profileLink
         )
 );
+endif;
 
 $partialViewPath = 'partials/';
 $savingGuides = '';
