@@ -33,7 +33,18 @@ $signUpWidgetForm = $this->partial(
     )
 );
 
-?>
+$popularStores = '';
+if (!empty($this->popularStores)) :
+     $popularStores = $this->partial(
+         $partialViewPath.'_popular-stores.phtml',
+         array(
+            'popularStores' => $this->popularStores,
+            'headerText' => $this->translate('Popular Stores')
+        )
+     );
+endif;
+echo $popularStores; ?>
+
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
 <?php

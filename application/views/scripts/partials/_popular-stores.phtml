@@ -1,10 +1,6 @@
 <article class="section section-2">
     <h2>
-    <?php 
-    echo $this->offers  == 0 
-        ? $this->translate('Popular Stores') 
-        : $this->translate('Stores matching search result'); 
-    ?>
+    <?php echo $this->headerText;?>
     </h2>
     <ul class="shops shops-2">
         <?php
