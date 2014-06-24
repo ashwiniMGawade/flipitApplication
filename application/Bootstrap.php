@@ -75,28 +75,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public function constantsForFacebookImageAndLocale()
     {
         if (LOCALE == '') {
-            defined('FACEBOOK_IMAGE')
-            || define('FACEBOOK_IMAGE', HTTP_PATH."public/images/logo_og.png");
-            defined('FACEBOOK_LOCALE')
-            || define('FACEBOOK_LOCALE', '');
+            define('FACEBOOK_IMAGE', HTTP_PATH."public/images/logo_og.png");
+            define('FACEBOOK_LOCALE', '');
         } else {
-            defined('FACEBOOK_IMAGE')
-            || define('FACEBOOK_IMAGE', HTTP_PATH."public/images/flipit.png");
-            defined('FACEBOOK_LOCALE')
-            || define('FACEBOOK_LOCALE', LOCALE);
+            define('FACEBOOK_IMAGE', HTTP_PATH."public/images/flipit.png");
+            define('FACEBOOK_LOCALE', LOCALE);
         }
     }
 
     public function constantForCacheDirectory()
     {
-        defined('HTTP_PATH')
-            || define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
+        define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
         if (APPLICATION_ENV == 'testing') {
-            defined('CACHE_DIRECTORY_PATH')
-            || define('CACHE_DIRECTORY_PATH', $this->getOption['CACHE_DIRECTORY_PATH']);
+            define('CACHE_DIRECTORY_PATH', $this->getOption['CACHE_DIRECTORY_PATH']);
         } else {
-            defined('CACHE_DIRECTORY_PATH')
-            || define('CACHE_DIRECTORY_PATH', './tmp/');
+            define('CACHE_DIRECTORY_PATH', './tmp/');
         }
     }
 
@@ -104,23 +97,19 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $this->cdnUrl = $this->getOption('cdn');
         if (isset($this->cdnUrl) && isset($this->cdnUrl[HTTP_HOST])) {
-            defined('HTTP_PATH_CDN')
-            || define('HTTP_PATH_CDN', trim('http://'. $this->cdnUrl[HTTP_HOST] . '/'));
+            define('HTTP_PATH_CDN', trim('http://'. $this->cdnUrl[HTTP_HOST] . '/'));
         } else {
-            defined('HTTP_PATH_CDN')
-            || define('HTTP_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
+            define('HTTP_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
         }
     }
 
     public function constantsForLocale()
     {
-        defined('LOCALE')
-            || define('LOCALE', trim(strtolower($this->moduleDirectoryName)));
-        defined('HTTP_PATH_LOCALE')
-            || define(
-                'HTTP_PATH_LOCALE',
-                trim('http://' . HTTP_HOST . '/' . $this->moduleDirectoryName .'/')
-            );
+        define('LOCALE', trim(strtolower($this->moduleDirectoryName)));
+        define(
+            'HTTP_PATH_LOCALE',
+            trim('http://' . HTTP_HOST . '/' . $this->moduleDirectoryName .'/')
+        );
         defined('PUBLIC_PATH')
         || define(
             'PUBLIC_PATH',
@@ -130,8 +119,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
 
         if (isset($this->cdnUrl) && isset($this->cdnUrl[HTTP_HOST])) {
-            defined('PUBLIC_PATH_CDN')
-            || define(
+            define(
                 'PUBLIC_PATH_CDN',
                 trim(
                     'http://'. $this->cdnUrl[HTTP_HOST]
@@ -139,8 +127,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 )
             );
         } else {
-            defined('PUBLIC_PATH_CDN')
-            || define(
+            define(
                 'PUBLIC_PATH_CDN',
                 trim(
                     'http://' . HTTP_HOST
@@ -185,12 +172,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         if (isset($_COOKIE['locale']) && ($_COOKIE['locale']) != 'en') {
             $localeAbbreviation = $_COOKIE['locale'] . '/';
-            defined('LOCALE')
-            || define('LOCALE', trim($localeAbbreviation, '/'));
+            define('LOCALE', trim($localeAbbreviation, '/'));
 
         } else {
-            defined('LOCALE')
-            || define('LOCALE', '');
+            define('LOCALE', '');
         }
 
         if (!defined('HTTP_PATH_FRONTEND')) {
@@ -252,14 +237,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $localePath = LOCALE =='' ? '/' : '/'. strtolower(LOCALE) .'/';
         if (isset($this->cdnUrl) && isset($this->cdnUrl[HTTP_HOST])) {
-            defined('PUBLIC_PATH_CDN')
-            || define(
+            define(
                 'PUBLIC_PATH_CDN',
                 trim('http://'. $this->cdnUrl[HTTP_HOST] .$localePath)
             );
         } else {
-            defined('PUBLIC_PATH_CDN')
-            || define(
+            define(
                 'PUBLIC_PATH_CDN',
                 trim('http://' . HTTP_HOST . $localePath)
             );
@@ -268,10 +251,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     
     public function constantsForDefaultModule()
     {
-        defined('LOCALE')
-            || define('LOCALE', '');
-        defined('HTTP_PATH_LOCALE')
-            || define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/'));
+        define('LOCALE', '');
+        define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/'));
         defined('PUBLIC_PATH')
         || define(
             'PUBLIC_PATH',
@@ -280,11 +261,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
 
         if (isset($this->cdnUrl) && isset($this->cdnUrl[HTTP_HOST])) {
-            defined('PUBLIC_PATH_CDN')
-            || define('PUBLIC_PATH_CDN', trim('http://'. $this->cdnUrl[HTTP_HOST] . '/'));
+            define('PUBLIC_PATH_CDN', trim('http://'. $this->cdnUrl[HTTP_HOST] . '/'));
         } else {
-            defined('PUBLIC_PATH_CDN')
-            || define('PUBLIC_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
+            define('PUBLIC_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
         }
 
         defined('ROOT_PATH')
@@ -352,7 +331,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $suffix = "_" . strtoupper(LOCALE);
         }
 
-        $domain = APPLICATION_ENV == 'testing' ? 'http://www.flipit.com' : $_SERVER['HTTP_PATH'];
+        $domain = 'www.kortingscode.nl';
 
         if (strlen($this->moduleDirectoryName) == 2) {
             if ($domain != "www.kortingscode.nl" && $domain != "kortingscode.nl") {
