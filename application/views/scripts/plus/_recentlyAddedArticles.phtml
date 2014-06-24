@@ -35,9 +35,9 @@
                         $authorRedirectLink =  '';
                     } else {
                         $authorNameExplodedBySpace = explode(' ', $recentlyAddedArticle['authorname']);
-                        $authorPartial = new FrontEnd_Helper_AuthorPartialfunctions();
                         $byAuthorName = 
-                            $authorPartial->getAuthorName($authorNameExplodedBySpace[0], $authorNameExplodedBySpace[1]);
+                            FrontEnd_Helper_AuthorPartialfunctions::
+                            getAuthorName($authorNameExplodedBySpace[0], $authorNameExplodedBySpace[1]);
                         $authorRedirectLink =  '<a href="'.$profileLink.'">
                         '.$byAuthorName.'</a>, ';
                     }

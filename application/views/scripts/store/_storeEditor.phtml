@@ -1,6 +1,6 @@
 <?php
-$authorPartial = new FrontEnd_Helper_AuthorPartialfunctions();
-$authorName = $authorPartial->getAuthorName($this->shopEditor['firstName'], $this->shopEditor['lastName']);
+$authorName = FrontEnd_Helper_AuthorPartialfunctions::
+    getAuthorName($this->shopEditor['firstName'], $this->shopEditor['lastName']);
 $EditorImageSlug = $this->shopEditor['slug'];
 $shopHeader = $this->translate('All').' '.$this->shop['name'].' '.$this->translate('deals verified by');
 $shopEditorPath =

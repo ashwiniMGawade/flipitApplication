@@ -1,15 +1,15 @@
 <?php 
 $userDetails = $this->userDetails;
-$authorPartial = new FrontEnd_Helper_AuthorPartialfunctions();
-$authorName = $authorPartial->getAuthorName($userDetails['firstName'], $userDetails['lastName']);
+$authorName = FrontEnd_Helper_AuthorPartialfunctions::
+    getAuthorName($userDetails['firstName'], $userDetails['lastName']);
 $profileLink = $this->profileLink;
 ?>
 <section class="about-box">
     <div class="photo">
         <span class="name"><?php echo $authorName; ?></span>
             <?php
-                $authorImage = HTTP_PATH_CDN . ltrim($userDetails['profileimage']['path'], "/") .'thum_medium_'
-                .$userDetails['profileimage']['name'];
+                $authorImage = HTTP_PATH_CDN . ltrim($userDetails['profileimage']['path'], "/")
+                .'thum_medium_'.$userDetails['profileimage']['name'];
             ?>
         <img width="120" height="120" alt="<?php echo $authorName; ?>" src="<?php echo $authorImage; ?>">
     </div>

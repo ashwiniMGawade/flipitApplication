@@ -16,8 +16,8 @@ foreach ($this->authors as $author) :
                     style="height: 275px;" class="same-height-left">
                     <h1>
                         <?php 
-                            $authorPartial = new FrontEnd_Helper_AuthorPartialfunctions();
-                            $authorName = $authorPartial->getAuthorName($author['firstName'], $author['lastName']);
+                            $authorName = FrontEnd_Helper_AuthorPartialfunctions::
+                                getAuthorName($author['firstName'], $author['lastName']);
                             echo $authorName;
                         ?>
                     </h1>

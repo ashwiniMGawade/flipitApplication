@@ -85,7 +85,7 @@ class FrontEnd_Helper_AuthorPartialFunctions
         return $authorFlagImageLi;
     }
 
-    public function getAuthorName($firstName, $lastName)
+    public static function getAuthorName($firstName, $lastName)
     {
         return $authorName = $firstName;
     }

@@ -1,7 +1,7 @@
 <?php 
 $this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
-$authorPartial = new FrontEnd_Helper_AuthorPartialfunctions();
-$authorName = $authorPartial->getAuthorName($this->authorDetails['firstName'], $this->authorDetails['lastName']);
+$authorName = FrontEnd_Helper_AuthorPartialfunctions::
+    getAuthorName($this->authorDetails['firstName'], $this->authorDetails['lastName']);
 $authorDetails  = '';
 if(!empty($this->authorDetails)):
 $authorDetails = $this->partial(
