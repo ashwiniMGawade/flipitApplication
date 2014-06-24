@@ -22,7 +22,7 @@ class Category extends BaseCategory
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoryOffersList = Doctrine_Query::create()
         ->select(
-            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,
+            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,c.name as categoryName,
             o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,
             fv.shopId,fv.visitorId,fv.Id,terms.content"
         )

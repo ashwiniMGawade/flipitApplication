@@ -1,23 +1,26 @@
 <?php
-class FrontEnd_Helper_HomePagePartialFunctions{
+class FrontEnd_Helper_HomePagePartialFunctions
+{
 
     public $homePageData = '';
-    public function getHomePageLeftColumn($homePageData) {
+    public function getHomePageLeftColumn($homePageData)
+    {
         $this->homePageData = $homePageData;
         $leftBlockList = '
         <div class="categories-block">
-            <a href="' 
+            <a href="'
             . HTTP_PATH_LOCALE
-            . FrontEnd_Helper_viewHelper::__link('link_categorieen') 
+            . FrontEnd_Helper_viewHelper::__link('link_categorieen')
             .'" class="all">'. FrontEnd_Helper_viewHelper::__form('form_All Categories') .'</a>
-            <ul>' 
+            <ul>'
                .$this->getHomePageLeftColumnList().
             '</ul>
         </div>';
         return $leftBlockList;
     }
 
-    public function getHomePageLeftColumnList() {
+    public function getHomePageLeftColumnList()
+    {
         $topOffer = $this->getLeftColumnOffersHtml('topOffers');
         $newOffer = $this->getLeftColumnOffersHtml('newOffers');
         $categories = $this->getLeftColumnCategoriesHtml();
@@ -26,92 +29,101 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $topOffer . $newOffer . $categories . $specialListPage. $savingGuides;
     }
 
-    public function getLeftColumnOffersHtml($offerType) {
+    public function getLeftColumnOffersHtml($offerType)
+    {
         $imageName =
-        	$offerType=='topOffers' 
-        	? HTTP_PATH ."public/images/img-08.png" 
-        	: HTTP_PATH .'public/images/img-09.png';
-        $headerText = $offerType=='topOffers' ? FrontEnd_Helper_viewHelper::__form('form_Our 10 best coupons') : 
-            FrontEnd_Helper_viewHelper::__form('form_New and Fresh Codes');;
+            $offerType=='topOffers'
+            ? HTTP_PATH ."public/images/img-08.png"
+            : HTTP_PATH .'public/images/img-09.png';
+        $headerText =
+            $offerType=='topOffers'
+            ? FrontEnd_Helper_viewHelper::__form('form_Our 10 best coupons')
+            : FrontEnd_Helper_viewHelper::__form('form_New and Fresh Codes');
         return $leftColumnOffersHtml = $this->getLeftColumnContent(
-        	$offerType,
-        	$imageName,
-        	FrontEnd_Helper_viewHelper::__form($headerText),
-        	36,
-        	$offerType
+            $offerType,
+            $imageName,
+            FrontEnd_Helper_viewHelper::__form($headerText),
+            36,
+            $offerType
         );
     }
 
-    public function getLeftColumnCategoriesHtml() {
+    public function getLeftColumnCategoriesHtml()
+    {
         $categoriesHtml = '';
         $categories = $this->homePageData['topCategories'];
         foreach ($categories as $category) {
             $categoryImage =
-            	PUBLIC_PATH_CDN
-            	.$category['category']['categoryicon']['path']
-            	. $category['category']['categoryicon']['name'];
+                PUBLIC_PATH_CDN
+                .$category['category']['categoryicon']['path']
+                . $category['category']['categoryicon']['name'];
             $categoriesOffers =
-            	$category['totalOffers'] . ' ' 
-            	. FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff'] . " " 
-            	. FrontEnd_Helper_viewHelper::__form('form_coupons');
+                $category['totalOffers'] . ' '
+                . FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff'] . " "
+                . FrontEnd_Helper_viewHelper::__form('form_coupons');
             $categoriesHtml .= $this->getLeftColumnContent(
-            	'categories',
-            	$categoryImage,
-            	$category['category']['name'],
-            	70,
-            	$category['category']['permaLink'],
-            	$categoriesOffers
+                'categories',
+                $categoryImage,
+                $category['category']['name'],
+                70,
+                $category['category']['permaLink'],
+                $categoriesOffers
             );
         }
         return $categoriesHtml;
     }
 
-    public function getLeftColumnSpicialListHtml() {
+    public function getLeftColumnSpicialListHtml()
+    {
         $specialPageHtml = '';
         $specialListPages = $this->homePageData['specialPages'];
         foreach ($specialListPages as $indexOfPage => $specialListPage) {
             $totalCoupon = intval($specialListPage['totalCoupons']);
             $totalOffers = intval($specialListPage['totalOffers']);
+            $specialPageListIndex = $specialListPage['page'][0]['permaLink'] .','
+               .$specialListPage['page'][0]['pageTitle'];
             $totalCouponsCount =
-            	count($this->homePageData['specialPagesOffers'][$specialListPage['page'][0]['permaLink']]);
+                count($this->homePageData['specialPagesOffers'][$specialPageListIndex]);
             $totalOffersOfSpecialPage = (intval($totalCouponsCount) - $totalCoupon) + $totalOffers;
             $specialListPageOffers =
-            	$totalOffersOfSpecialPage . ' ' 
-            	. FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $totalCouponsCount . " " 
-            	. FrontEnd_Helper_viewHelper::__form('form_coupons');
+                $totalOffersOfSpecialPage . ' '
+                . FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $totalCouponsCount . " "
+                . FrontEnd_Helper_viewHelper::__form('form_coupons');
             $specialPageHtml .=
-            	$this->getLeftColumnContent('special',
-            		'',
-            		$specialListPage['page'][0]['pageTitle'],
-            		70,
-            		$specialListPage['page'][0]['permaLink'],
-            		$specialListPageOffers
-            	);
+                $this->getLeftColumnContent(
+                    'special',
+                    '',
+                    $specialListPage['page'][0]['pageTitle'],
+                    70,
+                    $specialListPage['page'][0]['permaLink'],
+                    $specialListPageOffers
+                );
         }
         return $specialPageHtml;
     }
 
-    public function getLeftColumnSavingGuidesListHtml() {
+    public function getLeftColumnSavingGuidesListHtml()
+    {
         $savingGuideOffers =
-        	count($this->homePageData['moneySavingGuides']) . " " 
-        	. FrontEnd_Helper_viewHelper::__form('form_articles worth your time');
+            count($this->homePageData['moneySavingGuides']) . " "
+            . FrontEnd_Helper_viewHelper::__form('form_articles worth your time');
         return $this->getLeftColumnContent(
-        	'savingGuide',
-        	'',
-        	FrontEnd_Helper_viewHelper::__form('form_Smarter shopping'),
-        	70,
-        	'moneysaving',
-        	$savingGuideOffers
+            'savingGuide',
+            '',
+            FrontEnd_Helper_viewHelper::__form('form_Smarter shopping'),
+            70,
+            'moneysaving',
+            $savingGuideOffers
         );
     }
 
     public function getLeftColumnContent(
-    	$LisDescription,
-    	$imageName,
-    	$headerText,
-    	$imageSize,
-    	$imageDescription,
-    	$numberOfOffersContent = ''
+        $LisDescription,
+        $imageName,
+        $headerText,
+        $imageSize,
+        $imageDescription,
+        $numberOfOffersContent = ''
     ) {
         $leftColumnsLiContent =
         '<li>
@@ -129,35 +141,38 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $leftColumnsLiContent;
     }
 
-    public function getNumberOfOfferSpan($listType, $numberOfOffersContent) {
+    public function getNumberOfOfferSpan($listType, $numberOfOffersContent)
+    {
         return $listType =='categories' || 'special' ? '<span>' .$numberOfOffersContent. '</span>' : '';
     }
 
-    public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription) {
+    public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription)
+    {
         $imageTagOrSpan = '';
-        if($listType =='special' || $listType =='savingGuide') {
+        if ($listType =='special' || $listType =='savingGuide') {
             $listType = $listType==FrontEnd_Helper_viewHelper::__form('form_savingGuide') ?
             FrontEnd_Helper_viewHelper::__form('form_FLIPIT PLUS') : $listType;
-            $imageTagOrSpan = '<span class="discount-label" >' 
-            	. FrontEnd_Helper_viewHelper::__form($listType). '</span>' ;
+            $imageTagOrSpan = '<span class="discount-label" >'
+                . FrontEnd_Helper_viewHelper::__form($listType). '</span>' ;
         } else {
-           $imageTagOrSpan =
-           	'<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
-           	alt="'. $imageDescription.'">';
+            $imageTagOrSpan =
+            '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
+            alt="'. $imageDescription.'">';
         }
         return $imageTagOrSpan;
     }
 
-    public function getHomePageRightColumnOffersList() {
+    public function getHomePageRightColumnOffersList()
+    {
         $topOffer = $this->getRightColumnOffersHtml(
-        	'topOffers',
-        	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-20'),
-        	FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
+            'topOffers',
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-20'),
+            FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
         );
         $newOffer = $this->getRightColumnOffersHtml(
-        	'newOffers',
-        	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
-        	FrontEnd_Helper_viewHelper::__form('form_All New Codes')
+            'newOffers',
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
+            FrontEnd_Helper_viewHelper::__form('form_All New Codes')
         );
         $categories = $this->getRighColumnCategoriesHtml();
         $specialListPage = $this->getRightColumnSpicialListHtml();
@@ -165,43 +180,57 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $topOffer . $newOffer . $categories . $specialListPage.$savingGuides;
     }
 
-    public function getRightColumnSavingGuidesListHtml() {
+    public function getRightColumnSavingGuidesListHtml()
+    {
         return $this->getRightColumnOffersHtml(
-        	'moneysaving',
-        	HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus'), 
-        	FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
-        	FrontEnd_Helper_viewHelper::__form('form_moneysaving')
-        ); 
+            'moneysaving',
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus'),
+            FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
+            FrontEnd_Helper_viewHelper::__form('form_moneysaving')
+        );
     }
 
-    public function getRightColumnSpicialListHtml() {
+    public function getRightColumnSpicialListHtml()
+    {
         $specialListHtml = '';
-        foreach ($this->homePageData['specialPagesOffers'] as $pageId=>$specialPageOffers) {
+        foreach ($this->homePageData['specialPagesOffers'] as $pageId => $specialPageOffers) {
+            $splitSpecialpageId = explode(',', $pageId);
             $specialListHtml .= $this->getRightColumnOffersHtml(
-            	'special',
-            	HTTP_PATH_LOCALE.$pageId,
-            	FrontEnd_Helper_viewHelper::__form('form_All Special Codes'),
-            	$pageId
+                'special',
+                HTTP_PATH_LOCALE.$splitSpecialpageId[0],
+                FrontEnd_Helper_viewHelper::__form('form_All') . " " . $splitSpecialpageId[1]
+                . " " . FrontEnd_Helper_viewHelper::__form('form_Codes'),
+                $pageId
             );
         }
         return $specialListHtml;
     }
 
-     public function getRighColumnCategoriesHtml() {
-         $categegoriesHtml = '';
-         foreach ($this->homePageData['topCategoriesOffers'] as $categoryId=>$topCategorieOffers) {
-           $categegoriesHtml .= $this->getRightColumnOffersHtml(
-           	'categories',
-           	HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $categoryId,
-           	FrontEnd_Helper_viewHelper::__form('form_All Category Codes'), $categoryId
-           );
-         }
+    public function getRighColumnCategoriesHtml()
+    {
+        $categegoriesHtml = '';
+        foreach ($this->homePageData['topCategoriesOffers'] as $categoryId => $topCategorieOffers) {
+            $splitCategoryIndex = explode(',', $categoryId);
+            $categegoriesHtml .= $this->getRightColumnOffersHtml(
+                'categories',
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $splitCategoryIndex[0],
+                FrontEnd_Helper_viewHelper::__form('form_All') . " " . $splitCategoryIndex[1] . " "
+                . FrontEnd_Helper_viewHelper::__form('form_Code'),
+                $categoryId
+            );
+        }
          return $categegoriesHtml;
     }
 
-    public function getRightColumnOffersHtml($offerDivName, $goToAllLink, $linkText, $dynamicDivId = '') {
-        $divId = $offerDivName=='categories' || $offerDivName=='special' ? $dynamicDivId : $offerDivName;
-        $rightOfferColumnHtml = 
+    public function getRightColumnOffersHtml($offerDivName, $goToAllLink, $linkText, $dynamicDivId = '')
+    {
+        if ($offerDivName == 'categories' || $offerDivName == 'special') {
+            $splitDivId = explode(',', $dynamicDivId);
+            $divId = $splitDivId[0];
+        } else {
+            $divId = $offerDivName;
+        }
+        $rightOfferColumnHtml =
         '<div id="div_' . $divId .'" class="vouchers">
             <a href="'. $goToAllLink.'" class="all">'.FrontEnd_Helper_viewHelper::__form($linkText).'</a>
             <ul>'.
@@ -211,7 +240,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $rightOfferColumnHtml;
     }
 
-    public function getRightColumnOffersList($offerDivName, $dynamicDivId) {
+    public function getRightColumnOffersList($offerDivName, $dynamicDivId)
+    {
         $offersHtml = '';
         switch ($offerDivName){
             case 'topOffers':
@@ -234,12 +264,13 @@ class FrontEnd_Helper_HomePagePartialFunctions{
                 $offersHtml = $this->getMoneySavingGuidesRightCoulumnList($dynamicDivId);
                 break;
             default:
-            break;
+                break;
         }
         return $offersHtml;
     }
  
-    public function getTopOffersRightCoulumnList() {
+    public function getTopOffersRightCoulumnList()
+    {
         $topOfferRightHtml = '';
         foreach ($this->homePageData['topOffers'] as $topOffer) {
             $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
@@ -247,7 +278,8 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $topOfferRightHtml;
     }
 
-    public function getNewestOffersRightCoulumnList() {
+    public function getNewestOffersRightCoulumnList()
+    {
         $newestOfferRightHtml = '';
         foreach ($this->homePageData['newOffers'] as $newOffer) {
             $newestOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($newOffer);
@@ -255,18 +287,20 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $newestOfferRightHtml;
     }
 
-    public function getToCategoryRightCoulumnList($dynamicDivId) {
+    public function getToCategoryRightCoulumnList($dynamicDivId)
+    {
         $categoryOffersRightHtml = '';
         $topTenCategoryOffers = array_slice($this->homePageData['topCategoriesOffers'][$dynamicDivId], 0, 10);
         foreach ($topTenCategoryOffers as $categoryOffer) {
             $categoryOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($categoryOffer);
         }
-       return $categoryOffersRightHtml;
+        return $categoryOffersRightHtml;
     }
 
-    public function getSpecialPageRightCoulumnList($dynamicDivId) {
+    public function getSpecialPageRightCoulumnList($dynamicDivId)
+    {
         $specialOffersRightHtml = '';
-        $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId] , 0, 10);
+        $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId], 0, 10);
         foreach ($topTenSpecialListPageOffers as $specialOffer) {
             $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer);
         }
@@ -276,7 +310,7 @@ class FrontEnd_Helper_HomePagePartialFunctions{
     public function getRightColumnOffersHtmlForAllOffersTypes($offer)
     {
         $shopImage =
-        	PUBLIC_PATH_CDN.ltrim($offer['shop']['logo']['path'],"/") .'thum_small_'. $offer['shop']['logo']['name'];
+            PUBLIC_PATH_CDN.ltrim($offer['shop']['logo']['path'], "/") .'thum_small_'. $offer['shop']['logo']['name'];
         $shopPermalink = $offer['shop']['permalink'];
         $shopName = $offer['shop']['name'];
         $offerTitle = $offer['title'];
@@ -284,44 +318,45 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
     }
 
-    public function getMoneySavingGuidesRightCoulumnList($dynamicDivId) {
+    public function getMoneySavingGuidesRightCoulumnList($dynamicDivId)
+    {
         $moneySavingGuidestHtml = '';
         $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
         foreach ($topTenMoneySavingGuides as $savingGuide) {
             $savingImage =
-            	PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/") 
-            	. $savingGuide['article']['thumbnail']['name'];
+                PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/")
+                . $savingGuide['article']['thumbnail']['name'];
             $savingPermalink =
-            	FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['article']['permalink'];
+                FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['article']['permalink'];
             $savingTitle = $savingGuide['article']['title'];
             $allowed_tags = '';
             $guideDescription = strip_tags($savingGuide['article']['chapters'][0]['content'], $allowed_tags);
-            $savingContent = 
-            	mb_strlen($guideDescription, 'UTF-8') > 50 
-            	? mb_substr($guideDescription, 0, 50, 'UTF-8') . "..." 
-            	: $guideDescription;
+            $savingContent =
+                mb_strlen($guideDescription, 'UTF-8') > 50
+                ? mb_substr($guideDescription, 0, 50, 'UTF-8') . "..."
+                : $guideDescription;
             $moneySavingGuidestHtml .= $this->getRighColumnContent(
-            	$savingImage,
-            	$savingPermalink,
-            	$savingTitle,
-            	$savingContent,
-            	'',
-            	'saving-guides'
+                $savingImage,
+                $savingPermalink,
+                $savingTitle,
+                $savingContent,
+                '',
+                'saving-guides'
             );
         }
         return $moneySavingGuidestHtml;
     }
 
     public function getRighColumnContent(
-    	$shopImage,
-    	$shopPermalink,
-    	$shopName,
-    	$offerTitle,
-    	$offerExclusiveText,
-    	$dynamicDivId = ''
-    ) { 
+        $shopImage,
+        $shopPermalink,
+        $shopName,
+        $offerTitle,
+        $offerExclusiveText,
+        $dynamicDivId = ''
+    ) {
         $imageDimensions = 'width="84" height="42"';
-        if($dynamicDivId == 'saving-guides') {
+        if ($dynamicDivId == 'saving-guides') {
             $imageDimensions = 'width="70"';
         }
 
@@ -342,22 +377,22 @@ class FrontEnd_Helper_HomePagePartialFunctions{
         return $rightColumnContent;
     }
 
-    public function getOfferOptionText($offerExclusive) {
+    public function getOfferOptionText($offerExclusive)
+    {
         $exclusiveText =
-        	$offerExclusive==1 
-        	? '<strong class="exclusive"><span class="glyphicon glyphicon-star"></span>'
-        	. FrontEnd_Helper_viewHelper::__translate('Exclusive'). '</strong>' 
-        	: '';
+            $offerExclusive==1
+            ? '<strong class="exclusive"><span class="glyphicon glyphicon-star"></span>'
+            . FrontEnd_Helper_viewHelper::__translate('Exclusive'). '</strong>'
+            : '';
         return $exclusiveText;
     }
 
-    public static function getFlipitHomePageStatus() {
+    public static function getFlipitHomePageStatus()
+    {
         if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') {
                 return false;
         } else {
                 return true;
-        }    
+        }
     }
 }
-
-?>
