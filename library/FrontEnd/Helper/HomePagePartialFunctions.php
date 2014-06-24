@@ -194,11 +194,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $specialListHtml = '';
         foreach ($this->homePageData['specialPagesOffers'] as $pageId => $specialPageOffers) {
-            $splitSpecialpageId = explode(',', $pageId);
+            $splitedSpecialPageId = explode(',', $pageId);
             $specialListHtml .= $this->getRightColumnOffersHtml(
                 'special',
-                HTTP_PATH_LOCALE.$splitSpecialpageId[0],
-                FrontEnd_Helper_viewHelper::__form('form_All') . " " . $splitSpecialpageId[1]
+                HTTP_PATH_LOCALE.$splitedSpecialPageId[0],
+                FrontEnd_Helper_viewHelper::__form('form_All') . " " . $splitedSpecialPageId[1]
                 . " " . FrontEnd_Helper_viewHelper::__form('form_Codes'),
                 $pageId
             );
@@ -209,12 +209,12 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getRighColumnCategoriesHtml()
     {
         $categegoriesHtml = '';
-        foreach ($this->homePageData['topCategoriesOffers'] as $categoryId => $topCategorieOffers) {
-            $splitCategoryIndex = explode(',', $categoryId);
+        foreach ($this->homePageData['topCategoriesOffers'] as $categoryId => $topCategoryOffers) {
+            $splitedCategoryId = explode(',', $categoryId);
             $categegoriesHtml .= $this->getRightColumnOffersHtml(
                 'categories',
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $splitCategoryIndex[0],
-                FrontEnd_Helper_viewHelper::__form('form_All') . " " . $splitCategoryIndex[1] . " "
+                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $splitedCategoryId[0],
+                FrontEnd_Helper_viewHelper::__form('form_All') . " " . $splitedCategoryId[1] . " "
                 . FrontEnd_Helper_viewHelper::__form('form_Code'),
                 $categoryId
             );
@@ -225,8 +225,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getRightColumnOffersHtml($offerDivName, $goToAllLink, $linkText, $dynamicDivId = '')
     {
         if ($offerDivName == 'categories' || $offerDivName == 'special') {
-            $splitDivId = explode(',', $dynamicDivId);
-            $divId = $splitDivId[0];
+            $splitedDivId = explode(',', $dynamicDivId);
+            $divId = $splitedDivId[0];
         } else {
             $divId = $offerDivName;
         }
