@@ -42,7 +42,7 @@ $signUpWidgetForm = $this->partial(
     )
 );
 
-$headerText = count($this->offers)  == 0
+$popularStoreHeaderText = count($this->offers)  == 0
     ? $this->translate('Popular Stores') 
     : $this->translate('Stores matching search result'); 
 $popularStores = '';
@@ -51,7 +51,7 @@ if(count($this->popularStores)){
         $partialViewPath .'_popular-stores.phtml',
         array(
            'popularStores' => $this->popularStores,
-           'headerText' => $headerText
+           'headerText' => $popularStoreHeaderText
         )
     );
 }
