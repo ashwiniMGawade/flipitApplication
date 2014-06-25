@@ -343,7 +343,7 @@ $howToIntroductionText = '';
                     </div>
                     <div class="mainpage-content-right">
                       	<div>
-                        	<input  data-max-size="2097152" type="file" name="logoFile"
+                            <input  data-max-size="2097152" type="file" name="logoFile"
                             onchange="checkFileType(event)" class="ignore" />
                         </div>
 				        <div>
@@ -359,7 +359,7 @@ $howToIntroductionText = '';
                     </div>
                     <div class="mainpage-content-right">
                         <div>
-                        	<input  data-max-size="2097152" type="file" 
+                            <input  data-max-size="2097152" type="file" 
                             name="websitescreenshot" onchange="checkFileType(event)" class="ignore" />
                         </div>
 				        <div>
@@ -444,7 +444,8 @@ $howToIntroductionText = '';
                     </div>
                     <div class="mainpage-content-right">
                       	<div>
-                    	   <input   data-max-size="2097152" type="file" class="input-file"  onchange="checkFileType(event)" name="smallLogoFile"/>
+                    	    <input   data-max-size="2097152" type="file" class="input-file"  
+                    	    onchange="checkFileType(event)" name="smallLogoFile"/>
                         </div>
 		                <div>
                         <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
@@ -453,23 +454,22 @@ $howToIntroductionText = '';
                 </div>
                 <div class="mainpage-content-line oveflow-hidden">
                     <div class="mainpage-content-left">
-                        <label style="padding:0 14px 0 0;">
+                        <label class="padddingLeft14">
                             <strong><?php echo $this->translate('Upload second image lightbox'); ?></strong>
                         </label>
                     </div>
-	                    <div class="mainpage-content-right">
-	                    	<div>
-			                   	<input data-max-size="2097152" type="file" class="input-file" 
-                                onchange="checkFileType(event)" name="bigLogoFile" />
-                            </div>
-			                 <div>
-                             <?php 
-                             echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
-	                   		</div>
-                        </div>                     
+                    <div class="mainpage-content-right">
+                    	<div>
+		                    <input data-max-size="2097152" type="file" class="input-file" 
+                            onchange="checkFileType(event)" name="bigLogoFile" />
+                        </div>
+		                <div>
+                        <?php 
+                        echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); 
+                        ?>
+                   		</div>
+                    </div>                     
                 </div>
-            	
-              		
                	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
