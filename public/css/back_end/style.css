@@ -3438,3 +3438,6 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 .mainpage-content-right div.browse-container {
 	width: 300px;
 }
+.borderradius4px{
+	border-radius:0 4px 4px 0 !important;
+}
