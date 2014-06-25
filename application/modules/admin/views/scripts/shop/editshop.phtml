@@ -630,14 +630,17 @@ echo $this->headTitle()->append('Edit Shop');?>
 				                      	}	
 						  
                      		 ?>
-                      		  
-                      		<img alt="<?php echo $this->translate('main image'); ?>" src="<?php echo $smallLogo ; ?>">
-                      		<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-                      		   
-                      		   <br>
-                    	       <input data-max-size="2097152" onchange="checkFileType(event)" type="file" class="input-file ignore"  name="smallLogoFile"/>
-		                       <span class="ml15 help-inline" style="display: inline-block; padding-bottom: 5px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB,width:300px)'); ?></span>
-                       		</div>
+                            <div class='browse-container'>
+                                <img class='image-container' alt="<?php echo $this->translate('main image'); ?>" 
+                                src="<?php echo $smallLogo ; ?>">
+                            </div>
+                            <div>
+                                <input data-max-size="2097152" onchange="checkFileType(event)"
+                                type="file" class="input-file ignore"  name="smallLogoFile"/>
+                            </div>
+                            <div>
+                            <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
+                            </div>
                     </div>   
                 </div>
                 <div class="mainpage-content-line">
@@ -658,12 +661,17 @@ echo $this->headTitle()->append('Edit Shop');?>
 				                      	}	
 						  
                      		 ?>
-	                    	<img alt="<?php echo $this->translate('second image'); ?>" src="<?php echo $bigLogo ; ?>">
-	                    	<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-		                    	 <br>	
-		                    	 <input data-max-size="2097152" onchange="checkFileType(event)" type="file" class="input-file ignore" name="bigLogoFile" >
-		                     	 <span class="ml15 help-inline" style="display: inline-block; padding-bottom: 5px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB,width:300px)'); ?></span>
-	                   		</div>
+                            <div class='browse-container'>
+                                <img class='image-container'
+                                alt="<?php echo $this->translate('second image'); ?>" src="<?php echo $bigLogo ; ?>">
+                            </div>
+                            <div>
+                                <input data-max-size="2097152" onchange="checkFileType(event)" type="file" 
+                                class="input-file ignore" name="bigLogoFile" >
+                            </div>
+                            <div>
+                            <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
+                            </div>
                    </div>
                                        
                 </div>

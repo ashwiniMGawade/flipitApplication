@@ -1,7 +1,7 @@
 <?php
 class FrontEnd_Helper_OffersPartialFunctions
 {
-    public function getUrlToShow($currentOffer, $constants = 'HTTP_PATH_LOCALE')
+    public function getUrlToShow($currentOffer, $constants = HTTP_PATH_LOCALE)
     {
         if (
         	$currentOffer->refURL != "" 
@@ -22,7 +22,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $urlToShow;
     }
 
-    public function getOfferBounceUrl($offerId, $constants = 'HTTP_PATH_LOCALE')
+    public function getOfferBounceUrl($offerId, $constants = HTTP_PATH_LOCALE)
     {
         return $constants."out/offer/".$offerId;
     }
@@ -312,7 +312,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 	$urlToShow,
                 	$offerBounceRate,
                 	$offerAnchorTagContent,
-                	"link"
+                	"link clickout-title"
                 );
             break;
             case 'offerImage':

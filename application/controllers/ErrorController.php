@@ -86,15 +86,15 @@ class ErrorController extends Zend_Controller_Action
 
         if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
                 (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'faq')) {
-            $this->view->pageCssClass = 'faq-page';
+            $this->view->pageCssClass = 'faq-page home-page';
         } else if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
                 (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'contact')) {
             $flashMessage = $this->_helper->getHelper('FlashMessenger');
             $message = $flashMessage->getMessages();
             $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
-            $this->view->pageCssClass = 'contact-page';
+            $this->view->pageCssClass = 'contact-page home-page';
         } else {
-            $this->view->pageCssClass = 'flipit-expired-page';
+            $this->view->pageCssClass = 'flipit-expired-page home-page';
         }
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;
