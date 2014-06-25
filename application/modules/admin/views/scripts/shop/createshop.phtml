@@ -337,27 +337,37 @@ $howToIntroductionText = '';
                 
             </div>
             <div class="mainpage-content">
-            	<div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Upload Logo'); ?></strong></label></div>
+                <div class="mainpage-content-line">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Upload Logo'); ?></strong></label>
+                    </div>
                     <div class="mainpage-content-right">
-                     <div class="mainpage-content-right-inner-right-other"></div>
-                      	<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-                        	<input  data-max-size="2097152" type="file" name="logoFile" onchange="checkFileType(event)" class="ignore" />
-				        	<span id="logo_file_message" class="help-inline" style="display: inline-block; padding-bottom: 5px; margin-left: 10px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB, Ratio 2:01)'); ?></span>
-                    	</div>
+                      	<div>
+                            <input data-max-size="2097152" type="file" name="logoFile"
+                            onchange="checkFileType(event)" class="ignore" />
+                        </div>
+                        <div>
+                        <?php echo $this->translate('Image Size: 300px x 150px (*.jpg or *.png file only)');?>
+                        </div>
                     </div>
                 </div>
+
                 <div class="mainpage-content-line">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Website Screenshot'); ?></strong></label></div>
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Website Screenshot'); ?></strong></label>
+                    </div>
                     <div class="mainpage-content-right">
-                     <div class="mainpage-content-right-inner-right-other"></div>
-                      	<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-                        	<input  data-max-size="2097152" type="file" name="websitescreenshot" onchange="checkFileType(event)" class="ignore" />
-				        	<span id="logo_file_message" style="margin-left: 11px;" class="help-inline" ><?php echo $this->translate(' Upload .jpg or .png file only (Maximum file size: 2MB,Width:450px)'); ?></span>
-                    	</div>
+                        <div>
+                            <input  data-max-size="2097152" type="file" 
+                            name="websitescreenshot" onchange="checkFileType(event)" class="ignore" />
+                        </div>
+                        <div>
+                        <?php echo $this->translate('Image Size: min width 450px (*.jpg or *.png file only)');?>
+                        </div>
                     </div>
                 </div>
             </div>
+          
             <div class="mainpage-content">
             	<div class="mainpage-content-line mb10">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Shoptext'); ?></strong></label></div>
@@ -427,30 +437,38 @@ $howToIntroductionText = '';
 
             
             <div class="mainpage-content display-none" id="howToUseContent">
-            	<div class="mainpage-content-line oveflow-hidden">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Upload main image lightbox'); ?></strong></label></div>
-                    <div class="mainpage-content-right">
-                         <div class="mainpage-content-right-inner-right-other"></div>
-                      		<div style="margin-right: 0px;"  class="mainpage-content-right-inner-left-other">
-                    	       <input   data-max-size="2097152" type="file" class="input-file"  onchange="checkFileType(event)" name="smallLogoFile"/>
-		                       <span class="mhelp-inline" style="display: inline-block; padding-bottom: 5px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB,width:300px)'); ?></span>
-                       		</div>
+                <div class="mainpage-content-line oveflow-hidden">
+                    <div class="mainpage-content-left">
+                        <label><strong><?php echo $this->translate('Upload main image lightbox'); ?></strong></label>
                     </div>
-                                       
+                    <div class="mainpage-content-right">
+                        <div>
+                            <input   data-max-size="2097152" type="file" class="input-file"  
+                            onchange="checkFileType(event)" name="smallLogoFile"/>
+                        </div>
+                        <div>
+                        <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
+                        </div>
+                    </div>                 
                 </div>
                 <div class="mainpage-content-line oveflow-hidden">
-                    <div class="mainpage-content-left"><label style="padding:0 14px 0 0;"><strong><?php echo $this->translate('Upload second image lightbox'); ?></strong></label></div>
-	                    <div class="mainpage-content-right">
-	                        <div class="mainpage-content-right-inner-right-other"></div>
-	                    	<div style="margin-right: 0px;"  class="mainpage-content-right-inner-left-other">
-			                   	 <input data-max-size="2097152" type="file" class="input-file" onchange="checkFileType(event)" name="bigLogoFile" />
-			                   	 <span class="help-inline" style="display: inline-block; padding-bottom: 5px;"><?php echo $this->translate(' Upload .jpg or .png file only (Maximum file size: 2MB,width:300px)'); ?></span>
-	                   		</div>
-                   </div>
-                                       
+                    <div class="mainpage-content-left">
+                        <label class="padddingLeft14">
+                            <strong><?php echo $this->translate('Upload second image lightbox'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div>
+                            <input data-max-size="2097152" type="file" class="input-file" 
+                            onchange="checkFileType(event)" name="bigLogoFile" />
+                        </div>
+                        <div>
+                        <?php 
+                        echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); 
+                        ?>
+                        </div>
+                    </div>
                 </div>
-            	
-              		
                	<div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
