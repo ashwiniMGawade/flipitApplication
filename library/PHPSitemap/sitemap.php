@@ -459,7 +459,7 @@ class PHPSitemap_sitemap
 		endif;		
 
 		//pages links
-		$pagesPermalinks = Page::PagesPermalinksList();
+		$pagesPermalinks = Page::pagesPermalinksList();
 		if(!empty($pagesPermalinks)):
 			foreach($pagesPermalinks as $permalinks):
 

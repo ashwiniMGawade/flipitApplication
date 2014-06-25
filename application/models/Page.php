@@ -348,6 +348,9 @@ class Page extends BasePage
         if (isset($params['lockPageStatuschk'])){
             $this->pageLock = 1;
         }
+        
+        isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
+    
         if(trim($params['pageTemplate'])!=''){
         $this->pageAttributeId = $params['pageTemplate'];
         }
@@ -646,6 +649,9 @@ class Page extends BasePage
         if (isset($params['lockPageStatuschk'])){
             $this->pageLock = 1;
         }
+        
+        isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
+
         if(trim($params['pageTemplate'])!=''){
             $this->pageAttributeId = $params['pageTemplate'];
         }else{
@@ -1200,16 +1206,17 @@ public static function exportpagelist()
  * @version 1.0
  */
 
-public static function PagesPermalinksList()
-{
-    $q = Doctrine_Query::create()
-    ->select('id, permaLink')
-    ->from('Page p')
-    ->where('p.deleted = 0')
-    ->andWhere('p.publish = 1')
-    ->orderBy('p.pagetitle ASC')
-    ->fetchArray();
-    return $q;
-}
+    public static function pagesPermalinksList()
+    {
+        $pageIdsAndPermalinks = Doctrine_Query::create()
+        ->select('id, permaLink')
+        ->from('Page p')
+        ->where('p.deleted = 0')
+        ->andWhere('p.publish = 1')
+        ->andWhere('p.showsitemap = 1')
+        ->orderBy('p.pagetitle ASC')
+        ->fetchArray();
+        return $pageIdsAndPermalinks;
+    }
 
 }

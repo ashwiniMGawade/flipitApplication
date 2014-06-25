@@ -168,6 +168,23 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <input type="checkbox" <?php if($this->pageDetail['pageLock']=='1'){?>checked="checked"<?php }?> name="lockPageStatuschk" class="display-none" id="lockPageStatuschk" value="1">
                          </div>
                     </div>
+                     <div class="sidebar-content-box">
+                        <p><?php echo $this->translate('Show Sitemap'); ?></p>
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button  type="button" 
+                                class="btn <?php if ($this->pageDetail['showsitemap']=='1') {?> btn-primary <?php }?>" 
+                                id="showSitemapYes" onClick="showSitemapStatus('showSitemapYes')">
+                                <?php echo $this->translate('Yes');?>
+                            </button>                     
+                            <button class = "borderradius4px" type="button"
+                                class="btn <?php if ($this->pageDetail['showsitemap']!='1') {?>btn-primary <?php }?>"
+                                onClick="showSitemapStatus('showSitemapNo')" id="showSitemapNo">
+                                <?php echo $this->translate('No'); ?>
+                            </button>
+                            <input type="checkbox"<?php if ($this->pageDetail['showsitemap']=='1') {?> checked="checked" <?php }?> 
+                                name="showSitemapStatuscheck" class="display-none" id="showSitemapStatuscheck" value="1">
+                         </div>
+                    </div>
                     <?php } ?>
                   </div>
                   <div class="postbox " id="submitdiv">

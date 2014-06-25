@@ -3441,3 +3441,6 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 .padddingLeft14 {
     padding:0 14px 0 0!important;
 }
+.borderradius4px{
+	border-radius:0 4px 4px 0 !important;
+}

@@ -105,6 +105,11 @@ abstract class BasePage extends Doctrine_Record
              'type' => 'boolean',
              'comment' => 'defines page is locked',
              ));
+        $this->hasColumn('showsitemap', 'boolean', null, array(
+             'default' => 0,
+             'type' => 'boolean',
+             'comment' => 'defines show in sitemap or not',
+             ));
         $this->hasColumn('pageAttributeId', 'integer', 11, array(
              'type' => 'integer',
              'comment' => 'Fk to page_attribute.id',

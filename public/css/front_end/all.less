@@ -237,6 +237,7 @@ img.logo.kortingscode{
 	&:after {.after;}
 	.banner-block{
 		margin:-28px 0 29px;
+		width:100%;
 	}
 }
 .page-header{
@@ -673,6 +674,9 @@ a.pop{
 				color:@light-blue;
 				text-decoration:underline;
 			}
+		}
+		.clickout-title{
+			text-decoration: underline;
 		}
 		.terms-block{
 			display:none;
@@ -2933,6 +2937,10 @@ input[type="submit"]::-moz-focus-inner{
 	}
 }
 @media only screen and (max-width: 1199px){
+	img.logo.kortingscode{
+		width:260px;
+		margin-top:10px;
+	}
 	.navigation{
 		.logo{
 			margin:10px 0;
@@ -2956,7 +2964,7 @@ input[type="submit"]::-moz-focus-inner{
 		}
 	}
 	.search-box{
-		margin:16px 28px 15px 0;
+		margin: 16px 8px 15px 0;
 		position:relative;
 		.opener{
 			display:block;
@@ -2969,7 +2977,7 @@ input[type="submit"]::-moz-focus-inner{
 			position:absolute;
 			right:0;
 			top:0;
-			width:300px;
+			width:320px;
 		}
 	}
 	.search-box.active{
@@ -2981,14 +2989,17 @@ input[type="submit"]::-moz-focus-inner{
 		input[type="text"]{
 			float:left;
 			padding:9px 8px 8px;
-			width:89%;
+			width:87%;
 			height:32px;
 			font-size:12px;
 			text-indent:0;
 		}
+		input.kortingscode[type="text"]{
+			width: 150px;
+		}
 		.btn{
 			float:left;
-			width:11%;
+			width:13%;
 			padding:8px 9px 8px 8px;
 			font-size:14px;
 			line-height:14px;
@@ -3148,7 +3159,8 @@ input[type="submit"]::-moz-focus-inner{
 		width:100% !important;
 	}
 	img.logo.kortingscode{
-		width:260px;
+		width:200px;
+		margin-top:16px;
 	}
 	#footer{
 		font-size:12px;
@@ -3234,14 +3246,18 @@ input[type="submit"]::-moz-focus-inner{
 		}
 	}
 	.search-box{
+		margin: 16px 4px 15px 0;
 		.slide{
-			width:180px;
+			width:235px;
 		}
 	}
 	.search-form{
 		input[type="text"]{
 			width:82%;
 			padding:9px 4px 8px;
+		}
+		input.kortingscode[type="text"]{
+			width:107px;
 		}
 		.btn{
 			width:18%;
