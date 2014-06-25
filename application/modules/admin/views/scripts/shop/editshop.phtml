@@ -631,17 +631,17 @@ echo $this->headTitle()->append('Edit Shop');?>
 						  
                      		 ?>
                       		  
-                      		<div class='browse-container'>
+                            <div class='browse-container'>
                                 <img class='image-container' alt="<?php echo $this->translate('main image'); ?>" 
                                 src="<?php echo $smallLogo ; ?>">
                             </div>
-                      		<div>
-                    	        <input data-max-size="2097152" onchange="checkFileType(event)"
+                            <div>
+                                <input data-max-size="2097152" onchange="checkFileType(event)"
                                 type="file" class="input-file ignore"  name="smallLogoFile"/>
                             </div>
-		                    <div>
+                            <div>
                             <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
-                       		</div>
+                       	    </div>
                     </div>   
                 </div>
                 <div class="mainpage-content-line">
@@ -662,17 +662,17 @@ echo $this->headTitle()->append('Edit Shop');?>
 				                      	}	
 						  
                      		 ?>
-	                    	<div class='browse-container'>
+                            <div class='browse-container'>
                                 <img class='image-container'
                                 alt="<?php echo $this->translate('second image'); ?>" src="<?php echo $bigLogo ; ?>">
                             </div>
-	                    	<div>
-		                        <input data-max-size="2097152" onchange="checkFileType(event)" type="file" 
+                            <div>
+                                <input data-max-size="2097152" onchange="checkFileType(event)" type="file" 
                                 class="input-file ignore" name="bigLogoFile" >
                             </div>
-		                    <div>
+                            <div>
                             <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
-	                   		</div>
+                            </div>
                    </div>
                                        
                 </div>

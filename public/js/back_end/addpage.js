@@ -766,33 +766,33 @@ function validateFormAddNewPage(){
 									
 				},
 
-				onfocusin : function(element) {
-					if(element.type.toLowerCase()!='file') {
-						var flag = 1; 
-						if(element.name=='pageTemplate' 
-							|| element.name=='pageAuthor' 
-							|| element.name=='pagemetaTitle' 
-							|| element.name=='postwithin') {
-							flag = 0;
-						}
-						if(element.name == 'pagemetaDesc') {
-							$(element).parent('div')
-								.removeClass('success');
-								return true;
-						}
-						if(element.name == 'pageCustomHeader') {
-							$(element).parent('div')
-								.removeClass('success');
-								return true;
-						}
-					   if (!$(element).parent('div').next("div")
-							.hasClass('success') && flag) {
-							this.showLabel(element, focusRules[element.name]);
-							$(element).parent('div').next('div').children('span.help-inline')
-							.removeClass('error').removeClass('success').removeClass('valid');
-						}
-					}
-				},
+                onfocusin : function(element) {
+                    if(element.type.toLowerCase()!='file') {
+                    var flag = 1; 
+                        if(element.name=='pageTemplate' 
+                           || element.name=='pageAuthor' 
+                           || element.name=='pagemetaTitle' 
+                           || element.name=='postwithin') {
+                               flag = 0;
+                        }
+                        if(element.name == 'pagemetaDesc') {
+                            $(element).parent('div')
+                            .removeClass('success');
+                            return true;
+                        }
+                        if(element.name == 'pageCustomHeader') {
+                            $(element).parent('div')
+                            .removeClass('success');
+                            return true;
+                        }
+                        if (!$(element).parent('div').next("div")
+                            .hasClass('success') && flag) {
+                            this.showLabel(element, focusRules[element.name]);
+                            $(element).parent('div').next('div').children('span.help-inline')
+                            .removeClass('error').removeClass('success').removeClass('valid');
+                        }
+                    }
+                },
 
 				highlight : function(element,
 						errorClass, validClass) {
