@@ -144,24 +144,21 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                              <div class="mainpage-content-right" style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;"></div>
                             </div>
                        </div>
-                         <div class="mainpage-content-line">
+                        <div class="mainpage-content-line">
                             <div class="mainpage-content-left">
                                 <label><strong><?php echo $this->translate('Header image'); ?></strong></label>
                             </div>
                             <div class="mainpage-content-right">
                                 <div>
-                                    <input type="file" onchange="checkFileType(event)" class="ignore"   name="articleImage" id="articleImage">
+                                    <input type="file" onchange="checkFileType(event)" class="ignore"  
+                                     name="articleImage" id="articleImage">
                                 </div>
                                 <div>
                                 <?php echo $this->translate('Image size: 1170px x 285px (*.jpg or *.png file only)'); ?>
                                 </div>
                             </div>
-                        	<div 
-                            class="mainpage-content-right" id="imagerrorDiv" 
-                            style="float: right; margin:-9px 0 6px 0;height : 20px; width : 511px;">
-                            </div>
                         </div>
-						<div class="mainpage-content-line">
+						            <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label>
                                 <strong><?php echo $this->translate('Thumbnail Small'); ?></strong></label>
                             </div>
@@ -174,7 +171,6 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 <?php echo $this->translate('Image Size: 370px x 300px (*.jpg or *.png file only)');?>
                                 </div>
                             </div>
-                        	<div class="mainpage-content-right" id="imagerrorDiv2" style="float: right; margin:-9px 0 6px 0;height : 20px; width : 511px;"></div>
                         </div>
                         <div class="mainpage-content-line" style='display: inline-block;'>
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>

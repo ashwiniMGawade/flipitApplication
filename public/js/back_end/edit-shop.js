@@ -644,7 +644,7 @@ function validateFormAddNewShop(){
 				},
 
 				onfocusin : function(element) {
-					
+					if(element.type.toLowerCase()!='file') {
 					// display hint messages when an element got focus 
 					if (!$(element).parent('div').prev("div")
 							.hasClass('success')) {
@@ -685,6 +685,7 @@ function validateFormAddNewShop(){
 											this.settings.validClass);
 			    	     }
 					}
+				}
 				},
 
 				highlight : function(element,
