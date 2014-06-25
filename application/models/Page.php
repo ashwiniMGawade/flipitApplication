@@ -348,10 +348,9 @@ class Page extends BasePage
         if (isset($params['lockPageStatuschk'])){
             $this->pageLock = 1;
         }
-        $this->showsitemap = 0;
-        if (isset($params['showSitemapStatuschk'])) {
-            $this->showsitemap = 1;
-        }
+        
+        isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
+    
         if(trim($params['pageTemplate'])!=''){
         $this->pageAttributeId = $params['pageTemplate'];
         }
@@ -650,10 +649,9 @@ class Page extends BasePage
         if (isset($params['lockPageStatuschk'])){
             $this->pageLock = 1;
         }
-        $this->showsitemap = 0;
-        if (isset($params['showSitemapStatuschk'])) {
-            $this->showsitemap = 1;
-        }
+        
+        isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
+
         if(trim($params['pageTemplate'])!=''){
             $this->pageAttributeId = $params['pageTemplate'];
         }else{
@@ -1208,7 +1206,7 @@ public static function exportpagelist()
  * @version 1.0
  */
 
-    public static function PagesPermalinksList()
+    public static function pagesPermalinksList()
     {
         $pageIdsAndPermalinks = Doctrine_Query::create()
         ->select('id, permaLink')

@@ -9,8 +9,8 @@ class AddColumnShowSitemap extends Doctrine_Migration_Base
             'int',
             1,
             array(
-            'default' => '0',
-            'notnull' => true
+                'default' => '0',
+                'notnull' => true
             )
         );
     }

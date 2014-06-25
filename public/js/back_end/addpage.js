@@ -557,16 +557,15 @@ function lockPageStatus(dIv) {
 }
 
 function showSitemapStatus(dIv) {
-	$("#" + dIv).addClass("btn-primary").siblings().removeClass("btn-primary");
-	switch (dIv) {
-	case 'showSitemapYes':
-		$("input#showSitemapStatuschk").attr('checked', 'checked');
-		break;
-	case 'showSitemapNo':
-		$("input#showSitemapStatuschk").removeAttr('checked');
-		break;
-
-	}
+    $("#" + dIv).addClass("btn-primary").siblings().removeClass("btn-primary");
+    switch (dIv) {
+    case 'showSitemapYes':
+	    $("input#showSitemapStatuschk").attr('checked', 'checked');
+	    break;
+    case 'showSitemapNo':
+	    $("input#showSitemapStatuschk").removeAttr('checked');
+	    break;
+    }
 }
 
 function setOffersOrder(dIv) {
