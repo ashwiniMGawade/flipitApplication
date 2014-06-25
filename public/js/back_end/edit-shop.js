@@ -645,11 +645,10 @@ function validateFormAddNewShop(){
 
                 onfocusin : function(element) {
                     if(element.type.toLowerCase()!='file') {
-                        if (!$(element).parent('div').prev("div")
-                            .hasClass('success')) {
+                        if (!$(element).parent('div').prev("div").hasClass('success')) {
                             var label = this.errorsFor(element);
-                            if( $( label ).attr('hasError')) {
-                                if($( label ).attr('remote-validated') != "true") {
+                            if($(label).attr('hasError')) {
+                                if($(label).attr('remote-validated') != "true") {
                                     this.showLabel(element, focusRules[element.name]);
                                     $(element).parent('div').removeClass(
                                         this.settings.errorClass)
