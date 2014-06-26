@@ -66,23 +66,26 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                         class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
                         .$affliateDisabled.'
                         onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shop['actualUrl'].'
-                        </a>';
+                        </a>'. self::getLoveAnchor($shop['id']);
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
             $divContent .='</div></div>';
-        return $divContent ;
+        return $divContent;
     }
     
     public function getLoveAnchor($shopId)
     {
-        $favouriteShopId = 0;
-        if (Auth_VisitorAdapter::hasIdentity()):
-             $favouriteShopId=Auth_VisitorAdapter::getIdentity()->id;
+        $visitorId = 0;
+        if(Auth_VisitorAdapter::hasIdentity()):
+            $visitorId = Auth_VisitorAdapter::getIdentity()->id;
         endif;
-        return '<a onclick="storeAddToFeborite('.$favouriteShopId.','.$shopId.')" 
-            class="pop btn btn-sm btn-default" href="javascript:void(0)">
-            <span class="glyphicon glyphicon-heart"></span>'.
+        $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart red-heart';
+        if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
+            $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
+        endif;
+        return '<a class="pop btn btn-sm btn-default" href="javascript:void(0)">
+            <span class="' . $loveClassGreyColorOrRedColor . '"></span>'.
             $this->__translate('Love').
         '</a>';
     }
