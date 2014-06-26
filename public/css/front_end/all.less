@@ -196,6 +196,12 @@ img.logo.kortingscode{
 		}
 	}
 }
+.flipit-plus_menu {
+	background: url("../../images/flipit-plus_menu.png") no-repeat;
+	height: 42px;
+	text-indent: -9999px;
+	width: 64px;
+}
 .nav-bar{
 	float:right;
 	#nav{
@@ -228,6 +234,12 @@ img.logo.kortingscode{
 					}
 				}
 			}
+		    li:last-child a {
+		    	.flipit-plus_menu;
+    			&:hover, &:focus{
+	    			.flipit-plus_menu;
+    			}
+		    }
 		}
 	}
 }
