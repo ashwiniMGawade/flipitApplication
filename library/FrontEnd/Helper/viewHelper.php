@@ -710,27 +710,24 @@ EOD;
         $string = preg_replace($search, array('',''), $string);
         $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
         $string = trim(rtrim(rtrim($string)));
+        $string = mysqli_real_escape_string(self::getDbConnectionDetails(), $string);
+        return $string;
+    }
 
-        foreach(Doctrine_Manager::getInstance()->getConnections() as $connection){
+    public static function getDbConnectionDetails()
+    {
+        foreach (Doctrine_Manager::getInstance()->getConnections() as $connection) {
             $dbConnection = $connection->getOptions();
             preg_match('/host=(.*);/', $dbConnection['dsn'], $host);
         }
-
         $splitDbName = explode('=', $dbConnection['dsn']);
         $dbName = $splitDbName[2];
         $dbUserName = $dbConnection['username'];
         $dbUserPassword = $dbConnection['password'];
         $dbHost = $host[1];
-
-        // echo $dbHost . $dbUserName . $dbUserPassword . $dbName;
-        // exit;
-
         $mysqlConnection = mysqli_connect($dbHost, $dbUserName, $dbUserPassword, $dbName);
-        $string = mysqli_real_escape_string($mysqlConnection, $string);
-
-        return $string;
+        return $mysqlConnection;
     }
-
     public static function fillupTopCodeWithNewest($offers, $number)
     {
         if (count($offers) < $number) {
