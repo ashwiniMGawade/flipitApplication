@@ -26,6 +26,25 @@ class Settings extends BaseSettings
         ->fetchArray();
         return $aboutPageSettings ;
     }
+
+    public static function getEmailSettings($emailAddressFieldName)
+    {
+        $emailSettings = Doctrine_Query::create()->select('s.value')
+        ->from("Settings s")
+        ->andWhere("s.name = '".$emailAddressFieldName."'")
+        ->fetchArray();
+        return !empty($emailSettings) ? $emailSettings[0]['value'] : '';
+    }
+
+    public static function updateSendersEmailAddress($sendersEmailAddress)
+    {
+        Doctrine_Query::create()
+            ->update('Settings')
+            ->set("value", '"'.$sendersEmailAddress.'"')
+            ->where('name = "sender_email_address"')
+            ->execute();
+        return true;
+    }
     #####################################################
     ######### END REFACTORED CODE #######################
     #####################################################

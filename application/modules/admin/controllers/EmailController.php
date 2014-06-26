@@ -314,6 +314,11 @@ class Admin_EmailController extends Zend_Controller_Action
 
     public function emailSettingsAction()
     {
-
+        if ($this->getRequest()->isPost()) {
+            $sendersParameters = $this->getRequest()->getParams();
+            Settings::updateSendersEmailAddress($sendersParameters['senderEmail']);
+        }
+        $sendersEmailAddress = Settings::getEmailSettings('sender_email_address');
+        $this->view->sendersEmailAddress = $sendersEmailAddress;
     }
 }

@@ -10,7 +10,6 @@ $manager->setAttribute(
 );
 $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
 $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
-$manager->setAttribute(Doctrine_Core::ATTR_AUTOCOMMIT, false);
 
 Doctrine_Manager::connection("mysql://root:password@localhost/flipit_test");
 

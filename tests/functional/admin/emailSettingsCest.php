@@ -16,26 +16,30 @@ class emailSettingsCest
 
     public function emailSettingsUpdate(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-         $I = new FunctionalTester\AdminSteps($scenario);
+        $I = new FunctionalTester\AdminSteps($scenario);
         $I->login('kim@web-flight.nl', 'Mind@123');
+        $I->canSee('Email Settings');
         $I->click('Email Settings');
-        $this->fillForm($I, 'kim@web-flight.nl', 'Kim');
-        //$I->seeInField('#senderEmail', 'kim@web-flight.nl');
+        $I->fillField('#senderEmail', 'kim@web-flight.nl');
+        $I->fillField('#senderName', 'kim');
+        $I->click('button[type=submit]');
+        $I->amOnPage('/admin/email/email-settings');
+        $I->seeInField('#senderEmail', 'kim@web-flight.nl');
+        //$I->seeInField('#senderName', $senderName);
         //$I->canSee('Email settings have succesfully been updated.');
     }
 
-    // public function emailSettingsValidation(FunctionalTester $I, \Codeception\Scenario $scenario)
-    // {
-    //     $this->fillForm('noEmailAddress', '');
-    //     $I->canSee('Sender email is not valid.');
-    //     $I->canSee('Sender name cannot be empty.');
-    // }
+    protected function emailSettingsValidation($I)
+    {
+        $this->fillForm($I, 'kim@web-flight.nl', 'Kim');
+        $I->canSee('Sender email is valid.');
+        //$I->canSee('Sender name is valid.');
+    }
 
     protected function fillForm($I, $senderEmail, $senderName)
     {
         $I->fillField('#senderEmail', $senderEmail);
-        $I->fillField('#senderName', $senderName);
-        //$I->click('button type["submit"]');
-        //$I->amOnPage('admin/email-settings');
+        //$I->fillField('#senderName', $senderName);
+        $I->click('button[type=submit]');
     }
 }
