@@ -228,7 +228,7 @@ class FrontEnd_Helper_LayoutContent
             if ($mainMenuvalue == $mainMenuCount) {
                 $menuName = str_replace(' ', '-', trim(strtolower($menu["name"])));
                 $navigationString .=
-                    '<li><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" 
+                    '<li id="' . $menuName .'" ><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" 
                     class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a>
                     </li>';
             } else {
@@ -236,11 +236,11 @@ class FrontEnd_Helper_LayoutContent
                 preg_match('/http:\/\//', $menu['url'], $matches);
                 if (count($matches) > 0) {
                     $navigationString .=
-                        '<li><a id="'. $menuName. '" name="'. $menuName. '" 
+                        '<li id="' . $menuName .'"><a id="'. $menuName. '" name="'. $menuName. '" 
                         class="" href="'.  $menu['url'] . '">' . $menu["name"] . '</a></li>';
                 } else {
                     $navigationString .=
-                        '<li><a id="'. $menuName. '" name="'. $menuName. '" 
+                        '<li id="' . $menuName .'"><a id="'. $menuName. '" name="'. $menuName. '" 
                         class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a>
                         </li>';
                 }

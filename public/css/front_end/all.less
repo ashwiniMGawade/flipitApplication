@@ -196,6 +196,12 @@ img.logo.kortingscode{
 		}
 	}
 }
+.flipit-plus_menu {
+	background: url("../../images/flipit-plus_menu.png")  no-repeat;
+	height: 42px;
+	text-indent: -9999px;
+	width: 70px;
+}
 .nav-bar{
 	float:right;
 	#nav{
@@ -227,6 +233,15 @@ img.logo.kortingscode{
 						text-decoration:none;
 					}
 				}
+			}
+		    li:last-child {
+		    	padding-top: 6%;
+			    a {
+			    	.flipit-plus_menu;
+	    			&:hover, &:focus{
+		    			.flipit-plus_menu;
+	    			}
+			    }
 			}
 		}
 	}
@@ -705,7 +720,7 @@ a.pop{
 	}
 	.orange-block{
 		.holder{
-			background:#fef6ec url(../../images/bg-star.png) no-repeat 97% 50%;
+			background:#fef6ec url(../../images/exclusive-star.png) no-repeat 100% 0%;
 		}
 		.alt2{
 			border-color:#edd5b6;
