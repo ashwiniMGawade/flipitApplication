@@ -728,6 +728,7 @@ EOD;
         $mysqlConnection = mysqli_connect($dbHost, $dbUserName, $dbUserPassword, $dbName);
         return $mysqlConnection;
     }
+    
     public static function fillupTopCodeWithNewest($offers, $number)
     {
         if (count($offers) < $number) {
