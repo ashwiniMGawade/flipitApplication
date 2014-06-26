@@ -197,7 +197,7 @@ img.logo.kortingscode{
 	}
 }
 .flipit-plus_menu {
-	background: url("../../images/flipit-plus_menu.png")  no-repeat scroll 50% 80% rgba(0, 0, 0, 0);
+	background: url("../../images/flipit-plus_menu.png")  no-repeat;
 	height: 42px;
 	text-indent: -9999px;
 	width: 70px;
@@ -234,12 +234,15 @@ img.logo.kortingscode{
 					}
 				}
 			}
-		    li:last-child a {
-		    	.flipit-plus_menu;
-    			&:hover, &:focus{
-	    			.flipit-plus_menu;
-    			}
-		    }
+		    li:last-child {
+		    	padding-top: 6%;
+			    a {
+			    	.flipit-plus_menu;
+	    			&:hover, &:focus{
+		    			.flipit-plus_menu;
+	    			}
+			    }
+			}
 		}
 	}
 }
