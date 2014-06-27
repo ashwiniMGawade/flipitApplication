@@ -25,12 +25,8 @@ class emailSettingsCest
         $I->click('button[type=submit]');
         $I->amOnPage('/admin/email/email-settings');
         $I->seeInField('#senderEmail', 'kim@web-flight.nl');
-        
-        $I->amOnPage('/admin/email/email-settings');
         $I->seeInField('#senderEmail', 'kim@web-flight.nl');
-
         $I->seeInField('#senderName', 'kim');
-        $I->canSee('Email settings have succesfully been updated.');
     }
 
     protected function emailSettingsValidation($I)
@@ -43,7 +39,7 @@ class emailSettingsCest
     protected function fillForm($I, $senderEmail, $senderName)
     {
         $I->fillField('#senderEmail', $senderEmail);
-        //$I->fillField('#senderName', $senderName);
+        $I->fillField('#senderName', $senderName);
         $I->click('button[type=submit]');
     }
 }
