@@ -536,11 +536,19 @@ a.pop{
 	&:hover,
 	&:focus{text-decoration:underline;background: white;}
 }
-.btn .glyphicon-heart{
-	color:#fc0d1b;
-	font-size:15px;
-	padding:0 6px 0 2px;
-	vertical-align:top;
+.btn {
+	.glyphicon-heart {
+		color:#878a8d;
+		font-size:15px;
+		padding:0 6px 0 2px;
+		vertical-align:top;
+		&:hover {
+	    	color:#fc0d1b;
+		}
+	}
+	.red-heart {
+		color:#fc0d1b;
+	}
 }
 .btn-sm, .btn-group-sm > .btn{
 	font-size:11px;

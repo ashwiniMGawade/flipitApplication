@@ -850,4 +850,13 @@ EOD;
         }
         return $locales;
     }
+
+    public static function redirectAddToFavouriteShop()
+    {
+        $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
+        if (isset($favouriteShopIdFromSession->favouriteShopId)) {
+            header('location:'.HTTP_PATH_LOCALE. 'store/addtofavourite');
+            exit();
+        }
+    }
 }

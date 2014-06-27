@@ -129,6 +129,7 @@ class SignupController extends Zend_Controller_Action
                     $mandrillFunctions->sendConfirmationMail($visitorEmail, $this);
                 } else {
                     Visitor::setVisitorLoggedIn($visitorId);
+                    FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
                     $message = FrontEnd_Helper_viewHelper::__translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
