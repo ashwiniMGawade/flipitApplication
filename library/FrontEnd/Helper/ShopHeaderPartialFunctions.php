@@ -93,7 +93,8 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
             $titleTextForLove = $this->__translate("Add in Favourite");
         endif;
-        return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" class="pop btn btn-sm btn-default" href="javascript:void(0)">
+        return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" 
+            class="pop btn btn-sm btn-default" href="javascript:void(0)">
             <span class="' . $loveClassGreyColorOrRedColor . '"></span>'.
             $this->__translate('Love').
         '</a>';
