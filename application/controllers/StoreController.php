@@ -331,7 +331,25 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopInformation = $shopInformation;
         $this->view->howToUseGuideChapters = $howToUseGuideChapters;
     }
-   
+
+    public function addtofavouriteAction()
+    {
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $visitorId = Auth_VisitorAdapter::getIdentity()->id;
+            $shopIdForVavouriteFromSession = new Zend_Session_Namespace('shopIdForFavourite');
+            $shopPermalinkFromSession = new Zend_Session_Namespace('shopPermalink');
+            if (isset($shopIdForVavouriteFromSession->shopIdForFavourite)) {
+                $shopId = $shopIdForVavouriteFromSession->shopIdForFavourite;
+                Shop::shopAddInFavourite($visitorId, $shopId);
+                $shopPermalink = $shopPermalinkFromSession->shopPermalink;
+                Zend_Session::namespaceUnset('shopIdForFavourite');
+                Zend_Session::namespaceUnset('shopPermalink');
+                $this->_redirect(HTTP_PATH_LOCALE. $shopPermalink);
+            }
+        } else {
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
+    }
     // Returns the right favorite heart status by fetching the partial.
     public function addfavoriteviewAction()
     {
