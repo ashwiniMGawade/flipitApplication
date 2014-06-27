@@ -78,20 +78,20 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
     {
         $shopPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login');
-        $visitorShopIdSessionNameSpance = new Zend_Session_Namespace('shopIdForFavourite');
-        $visitorShopIdSessionNameSpance->shopIdForFavourite = $shopId;
-        $shopPermalinkSessionNameSpance = new Zend_Session_Namespace('shopPermalink');
-        $shopPermalinkSessionNameSpance->shopPermalink = $shopPermalink;
+        $visitorShopIdSessionNameSpace = new Zend_Session_Namespace('favouriteShopId');
+        $visitorShopIdSessionNameSpace->favouriteShopId = $shopId;
+        $shopPermalinkSessionNameSpace = new Zend_Session_Namespace('shopPermalink');
+        $shopPermalinkSessionNameSpace->shopPermalink = $shopPermalink;
         $visitorId = 0;
         if(Auth_VisitorAdapter::hasIdentity()):
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite';
         endif;
-        $titleTextForLove = 'Remove from Favourite';
+        $titleTextForLove = $this->__translate('Remove from Favourite');
         $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart red-heart';
         if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
             $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
-            $titleTextForLove = "Add in Favourite";
+            $titleTextForLove = $this->__translate("Add in Favourite");
         endif;
         return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" class="pop btn btn-sm btn-default" href="javascript:void(0)">
             <span class="' . $loveClassGreyColorOrRedColor . '"></span>'.

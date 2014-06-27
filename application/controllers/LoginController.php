@@ -71,10 +71,7 @@ class LoginController extends Zend_Controller_Action
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->_helper->Login->setUserCookies();
-            $shopIdForFavouriteFromSession = new Zend_Session_Namespace('shopIdForFavourite');
-            if (isset($shopIdForFavouriteFromSession->shopIdForFavourite)) {
-                $this->_redirect(HTTP_PATH_LOCALE. 'store/addtofavourite');
-            }
+            FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
             $this->_redirect(
                 HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
                 FrontEnd_Helper_viewHelper::__link('link_profiel')

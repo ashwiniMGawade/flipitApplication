@@ -336,13 +336,13 @@ class StoreController extends Zend_Controller_Action
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
-            $shopIdForVavouriteFromSession = new Zend_Session_Namespace('shopIdForFavourite');
+            $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
             $shopPermalinkFromSession = new Zend_Session_Namespace('shopPermalink');
-            if (isset($shopIdForVavouriteFromSession->shopIdForFavourite)) {
-                $shopId = $shopIdForVavouriteFromSession->shopIdForFavourite;
+            if (isset($favouriteShopIdFromSession->favouriteShopId)) {
+                $shopId = $favouriteShopIdFromSession->favouriteShopId;
                 Shop::shopAddInFavourite($visitorId, $shopId);
                 $shopPermalink = $shopPermalinkFromSession->shopPermalink;
-                Zend_Session::namespaceUnset('shopIdForFavourite');
+                Zend_Session::namespaceUnset('favouriteShopId');
                 Zend_Session::namespaceUnset('shopPermalink');
                 $this->_redirect(HTTP_PATH_LOCALE. $shopPermalink);
             }
