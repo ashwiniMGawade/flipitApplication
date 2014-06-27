@@ -199,18 +199,15 @@ class FrontEnd_Helper_LayoutContent
         return $divShow;
     }
 
-    public static function generateMainMenu($menuType = '')
+    public static function generateMainMenu()
     {
         $mainMenu = menu::getFirstLevelMenu();
         $mainMenuCount = count($mainMenu);
         $mainMenuvalue = 0;
         $menuNavId = 'nav';
         $mobileMenuHeader = '';
-        if ($menuType == 'mobile') {
-            $menuNavId = 'menu';
-            $mobileMenuHeader = '<h1>Korting pakken</h1>';
-        }
-        $navigationString ='<nav id="'.$menuNavId.'"><ul>'.$mobileMenuHeader;
+        $navigationString ='<nav id="'.$menuNavId.'">
+            <ul>'.$mobileMenuHeader;
         foreach ($mainMenu as $menu) {
             $permalink = RoutePermalink::getPermalinks($menu['url']);
             if (count($permalink) > 0) {
@@ -247,10 +244,13 @@ class FrontEnd_Helper_LayoutContent
             }
             $mainMenuvalue++;
         }
-        $navigationString .= '</ul></nav>';
+        $navigationString .= '</ul>
+            </nav>';
         return $navigationString;
     }
-
+    public static function generateMobileMenu()
+    {
+    }
     public static function getMostPopularCouponOnEarth()
     {
         $splashInformation = FrontEnd_Helper_viewHelper::getSplashInformation();

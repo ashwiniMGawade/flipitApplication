@@ -22,7 +22,7 @@ endif
             <span class="slogan"><?php 
             echo FrontEnd_Helper_viewHelper::__translate('save money with online discount codes and save pointers');?>
             </span>
-            <a class="menu-account" href="#menu"><?php echo FrontEnd_Helper_viewHelper::__translate('account menu');?>
+            <a class="btn-menu" href="#"><?php echo FrontEnd_Helper_viewHelper::__translate('account menu');?>
             </a>
             <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
@@ -68,4 +68,3 @@ endif
         </div>
     </div>
 </header>
-<?php echo FrontEnd_Helper_layoutContent::generateMainMenu('mobile'); ?>

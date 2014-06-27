@@ -1,10 +1,82 @@
+// page init
 jQuery(function(){
 	initOpenClose();
 	initInputs();
 	initSameHeight();
+	initNavigation();
 	jQuery('input, textarea').placeholder();
 	initBackgroundResize();
 });
+
+// mobile navigation
+function initNavigation() {
+	var page = jQuery('body');
+	var pageContainer = jQuery('#wrapper');
+	var pageHolder = jQuery('.wrapper-holder');
+	var nav = jQuery('.nav-mobile');
+	var navWidth = nav.width();
+	var navOpener = jQuery('.btn-menu');
+	var activeClass = 'menu-opened';
+	var animSpeed = 700;
+
+	nav.css({
+		marginLeft: -nav.width()
+	});
+
+	function openNav() {
+		page.addClass(activeClass);
+		pageHolder.width(pageHolder.width());
+
+		pageContainer.css({
+			height:100 + '%',
+			overflow: 'hidden'
+		});
+
+		pageHolder.stop().animate({
+			marginLeft: navWidth
+		}, animSpeed);
+
+		nav.animate({
+			marginLeft: 0
+		}, animSpeed);
+	}
+
+	function closeNav() {
+		page.removeClass(activeClass);
+
+		pageContainer.css({
+			height: '',
+			overflow: ''
+		});
+
+		pageHolder.stop().animate({
+			marginLeft: 0
+		}, animSpeed);
+
+		nav.animate({
+			marginLeft: -navWidth
+		}, animSpeed);
+	}
+
+	navOpener.on('click', function(e) {
+		e.preventDefault();
+		if(!page.hasClass(activeClass)) {
+			openNav();
+		} else {
+			closeNav();
+		}
+	});
+
+	jQuery(window).on('resize orientationchange', function() {
+		pageHolder.width(100 + '%');
+
+		if(navOpener.css('display') == 'none' && page.hasClass(activeClass) ) {
+			closeNav();
+		}
+	});
+}
+
+// stretch background to fill blocks
 function initBackgroundResize() {
 	jQuery('.bg-stretch').each(function() {
 		ImageStretcher.add({
@@ -13,6 +85,7 @@ function initBackgroundResize() {
 		});
 	});
 }
+// open-close init
 function initOpenClose() {
 	jQuery('div.search-box').openClose({
 		activeClass: 'active',
@@ -23,12 +96,16 @@ function initOpenClose() {
 	});
 }
 
+// clear inputs on focus
 function initInputs() {
 	PlaceholderInput.replaceByOptions({
+		// filter options
 		clearInputs: true,
 		clearTextareas: true,
 		clearPasswords: true,
 		skipClass: 'default',
+		
+		// input options
 		wrapWithElement: false,
 		showUntilTyping: false,
 		getParentByClass: false,
@@ -36,6 +113,7 @@ function initInputs() {
 	});
 }
 
+// align blocks height
 function initSameHeight() {
 	jQuery('.authors').sameHeight({
 		elements: 'li a',
@@ -59,8 +137,11 @@ function initSameHeight() {
 	};
 
 	var createStyleTag = function() {
+		// create style tag
 		var styleTag = jQuery('<style>').appendTo('head');
 		styleSheet = styleTag.prop('sheet') || styleTag.prop('styleSheet');
+
+		// crossbrowser style handling
 		var addCSSRule = function(selector, rules, index) {
 			if(styleSheet.insertRule) {
 				styleSheet.insertRule(selector + '{' + rules + '}', index);
@@ -68,6 +149,8 @@ function initSameHeight() {
 				styleSheet.addRule(selector, rules, index);
 			}
 		};
+
+		// create style rules
 		addCSSRule('.win-min-height', 'min-height:0');
 		addCSSRule('.win-height', 'height:auto');
 		addCSSRule('.win-max-height', 'max-height:100%');
@@ -75,6 +158,7 @@ function initSameHeight() {
 	};
 
 	var resizeHandler = function() {
+		// handle changes in style rules
 		var currentWindowHeight = getWindowHeight(),
 			styleRules = styleSheet.cssRules || styleSheet.rules;
 		
@@ -83,6 +167,7 @@ function initSameHeight() {
 			currentRule.style[currentProperty] = currentWindowHeight + 'px';
 		});
 	};
+
 	createStyleTag();
 	jQuery(window).on('resize orientationchange', resizeHandler);
 }());
@@ -91,6 +176,7 @@ function initSameHeight() {
  */
 var ImageStretcher = {
 	getDimensions: function(data) {
+		// calculate element coords to fit in mask
 		var ratio = data.imageRatio || (data.imageWidth / data.imageHeight),
 			slideWidth = data.maskWidth,
 			slideHeight = slideWidth / ratio;
@@ -152,13 +238,19 @@ var ImageStretcher = {
 	add: function(options) {
 		var container = jQuery(options.container ? options.container : window),
 			image = typeof options.image === 'string' ? container.find(options.image) : jQuery(options.image);
+
+		// resize image
 		this.resizeImage(image, container);
+
+		// add resize handler once if needed
 		if(!this.win) {
 			this.resizeHandler = jQuery.proxy(this.resizeHandler, this);
 			this.imgList = [];
 			this.win = jQuery(window);
 			this.win.on('resize orientationchange', this.resizeHandler);
 		}
+
+		// store item in collection
 		this.imgList.push({
 			container: container,
 			image: image
@@ -196,6 +288,7 @@ var ImageStretcher = {
 			this.slider = this.holder.find(this.options.slider);
 		},
 		attachEvents: function() {
+			// add handler
 			var self = this;
 			this.eventHandler = function(e) {
 				e.preventDefault();
@@ -206,6 +299,8 @@ var ImageStretcher = {
 				}
 			};
 			self.opener.bind(self.options.event, this.eventHandler);
+
+			// hover mode handler
 			if(self.options.event === 'over') {
 				self.opener.bind('mouseenter', function() {
 					self.showSlide();
@@ -215,6 +310,7 @@ var ImageStretcher = {
 				});
 			}
 
+			// outside click handler
 			self.outsideClickHandler = function(e) {
 				if(self.options.hideOnClickOutside) {
 					var target = $(e.target);
@@ -224,6 +320,7 @@ var ImageStretcher = {
 				}
 			};
 
+			// set initial styles
 			if (this.holder.hasClass(this.options.activeClass)) {
 				$(document).bind('click touchstart', self.outsideClickHandler);
 			} else {
@@ -299,6 +396,7 @@ var ImageStretcher = {
 		$('head').append(tabStyleSheet);
 	});
 
+	// animation effects
 	var toggleEffects = {
 		slide: {
 			show: function(o) {
@@ -326,6 +424,7 @@ var ImageStretcher = {
 		}
 	};
 
+	// jQuery plugin interface
 	$.fn.openClose = function(opt) {
 		return this.each(function() {
 			jQuery(this).data('OpenClose', new OpenClose($.extend(opt, {holder: this})));
@@ -716,7 +815,8 @@ jQuery.onFontResize = (function($) {
 	};
 	PlaceholderInput.replaceByOptions = function(opt) {
 		var inputs = [].concat(
-			convertToArray(document.getElementsByName('searchFieldHeader'))
+			convertToArray(document.getElementsByTagName('input')),
+			convertToArray(document.getElementsByTagName('textarea'))
 		);
 		for(var i = 0; i < inputs.length; i++) {
 			if(inputs[i].className.indexOf(opt.skipClass) < 0) {
