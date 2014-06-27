@@ -1,19 +1,8 @@
 <?php
-    $this->headTitle()->append('Account Settings');
-    $this->headMeta('keyword', 'Description');
-    $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
-    $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/timepicker.css" );
-    $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
-    $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-    $this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/accountsetting.js" );
-    $this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/accountsetting2.js" );
-    $this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
-    $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
-    $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
-    $this->headLink()->appendStylesheet(PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css");
-    $this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
-    $this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
-    $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headTitle()->append('Email Settings');
+$this->headMeta('keyword', 'Description');
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/emailSettings.js");
 ?>
 <div class="newsletter-setting-container wrap columns-2">
     <div class='wrap columns-2'>
@@ -31,33 +20,30 @@
     </div>
     <h1><?php echo $this->translate('Create account settings'); ?></h1>
     <div class="mainpage-content">
-        <form name="speacialForm" method="post" id="speacialForm" action="">
+        <form name="emailSettings" method="post" id="emailSettings">
             <div class="mainpage-content-line mb10">
                 <div class="mainpage-content-left">
                     <label><strong><?php echo $this->translate('Sender Email Address'); ?></strong></label>
                 </div>
                 <div class="mainpage-content-right">
-
                     <div class="mainpage-content-right-inner-left-other">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
-                            <input type="text" value="<?php echo !empty($this->sendersEmailAddress) ? $this->sendersEmailAddress : '';?>" placeholder=<?php echo $this->translate('Sender')?> name="senderEmail" id="senderEmail" onblur="saveSenderEmail(this)"
+                            <input type="text" value="<?php echo !empty($this->sendersEmailAddress) ? $this->sendersEmailAddress : '';?>" placeholder=<?php echo $this->translate('Email Address')?> name="senderEmail" id="senderEmail" 
                         class="span3">
                         </div>
                     </div>
                 </div>
             </div>
-
             <div class="mainpage-content-line mb10">
                 <div class="mainpage-content-left">
                     <label><strong><?php echo $this->translate('Sender Name'); ?></strong></label>
                 </div>
                 <div class="mainpage-content-right">
-
                     <div class="mainpage-content-right-inner-left-other">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
-                            <input type="text" value="<?php echo !empty($this->data[0]['sendername']) ? $this->data[0]['sendername'] : '';?>" placeholder=<?php echo $this->translate('Name')?> name="senderName" id="senderName" onblur="saveSenderEmail(this)"
+                            <input type="text" value="<?php echo !empty($this->sendersName) ? $this->sendersName : '';?>" placeholder=<?php echo $this->translate('Name')?> name="senderName" id="senderName" 
                         class="span3">
                         </div>
                     </div>
@@ -68,7 +54,7 @@
                 <div class="mainpage-content-right">
                     <div class="mainpage-content-right-inner-left-other">
                     <div class="btn-group" data-toggle="buttons-checkbox">
-                        <button onclick="" href="javascript:;" class="btn btn-primary" type="submit"><?php echo $this->translate('Submit'); ?></button>
+                        <button class="btn btn-primary" type="submit"><?php echo $this->translate('Submit'); ?></button>
                     </div>
                     </div>
                 </div>

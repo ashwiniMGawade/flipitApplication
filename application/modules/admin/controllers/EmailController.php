@@ -2,7 +2,7 @@
 
 class Admin_EmailController extends Zend_Controller_Action
 {
-
+    public $flashMessenger = '';
     /**
      * check authentication before load the page
      * @see Zend_Controller_Action::preDispatch()
@@ -314,11 +314,39 @@ class Admin_EmailController extends Zend_Controller_Action
 
     public function emailSettingsAction()
     {
+        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $this->getFlashMessage();
         if ($this->getRequest()->isPost()) {
             $sendersParameters = $this->getRequest()->getParams();
-            Settings::updateSendersEmailAddress($sendersParameters['senderEmail']);
+            
+            if ($sendersParameters['senderName']  == '' || $sendersParameters['senderEmail'] == '') {
+                $this->setFlashMessage('Error in updating Email Settings.');
+            } else {
+                Settings::updateSendersSettings('sender_email_address', $sendersParameters['senderEmail']);
+                Settings::updateSendersSettings('sender_name', $sendersParameters['senderName']);
+                $this->setFlashMessage('Email Settings have been updated successfully');
+            }
+            $this->_redirect(HTTP_PATH . 'admin/email/email-settings');
         }
+        
         $sendersEmailAddress = Settings::getEmailSettings('sender_email_address');
+        $sendersName = Settings::getEmailSettings('sender_name');
         $this->view->sendersEmailAddress = $sendersEmailAddress;
+        $this->view->sendersName = $sendersName;
+    }
+
+    public function getFlashMessage()
+    {
+        $message = $this->flashMessenger->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+        return $this;
+    }
+
+    public function setFlashMessage($messageText)
+    {
+        $message = $this->view->translate($messageText);
+        $this->flashMessenger->addMessage(array('success' => $message));
+        return $this;
     }
 }
