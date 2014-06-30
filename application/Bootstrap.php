@@ -352,6 +352,31 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return array('locale' => $locale, 'localePath' => $localePath, 'suffix' => $suffix);
     }
 
+    protected function _initAutoLoad()
+    {
+        $autoLoader = Zend_Loader_Autoloader::getInstance();
+        $resourceLoader = new Zend_Loader_Autoloader_Resource(
+            array(
+                'basePath' => APPLICATION_PATH,
+                'namespace' => 'Application',
+                'resourceTypes' => array(
+                    'form' => array(
+                        'path' => 'forms/',
+                        'namespace' => 'Form'
+                    ),
+                    'model' => array(
+                        'path' => 'models/',
+                        'namespace' => 'Model'
+                    ),
+                    'service' => array(
+                        'path' => 'services/',
+                        'namespace' => 'Service'
+                    )
+                )
+            )
+        );
+        return $autoLoader;
+    }
 
     public function _initTranslation()
     {
@@ -400,7 +425,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Transl8_Translate_Writer_Csv::setDestinationFolder(
             APPLICATION_PATH.'/../public'.$localePath.'language'
         );
-
+        
         if (Zend_Registry::get('Transl8_Activated')) {
             $plugin = new Transl8_Controller_Plugin_Transl8();
             $plugin->setActionGetFormData($localePath.'trans/getformdata');
@@ -481,7 +506,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     public function getDbTranslations($locale)
     {
-        $setDbTranslationsToPoTranslate = Translations::setDbTranslationsToPoTranslate();
+        $getDbTranslationsForZendTranslate = Translations::getDbTranslationsForZendTranslate();
         
         $dBtranslations = new Zend_Translate(
             array(
@@ -492,7 +517,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
         $dBtranslations->addTranslation(
             array(
-                    'content' => $setDbTranslationsToPoTranslate,
+                    'content' => $getDbTranslationsForZendTranslate,
                     'locale' => $locale
             )
         );
@@ -529,32 +554,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view = $this->getResource('View');
         $view->doctype('HTML5');
         $view->headMeta()->appendHttpEquiv('Content-type', 'text/html; charset=UTF-8');
-    }
-
-    protected function _initAutoLoad()
-    {
-        $autoLoader = Zend_Loader_Autoloader::getInstance();
-        $resourceLoader = new Zend_Loader_Autoloader_Resource(
-            array(
-                'basePath' => APPLICATION_PATH,
-                'namespace' => 'Application',
-                'resourceTypes' => array(
-                    'form' => array(
-                        'path' => 'forms/',
-                        'namespace' => 'Form'
-                    ),
-                    'model' => array(
-                        'path' => 'models/',
-                        'namespace' => 'Model'
-                    ),
-                    'service' => array(
-                        'path' => 'services/plugins',
-                        'namespace' => 'Service'
-                    )
-                )
-            )
-        );
-        return $autoLoader;
     }
 
     public function _initRouter()
