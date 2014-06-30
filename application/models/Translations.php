@@ -3,7 +3,7 @@
 class Translations extends BaseTranslations
 {
 
-    public static function fetchAllDatabaseTranslations()
+    public static function getAllDatabaseTranslations()
     {
         return Doctrine_Query::create()
             ->select()
@@ -12,9 +12,9 @@ class Translations extends BaseTranslations
             ->fetchArray();
     }
 
-    public static function setDbTranslationsToPoTranslate()
+    public static function getDbTranslationsForZendTranslate()
     {
-        $allDbTranslations = self::fetchAllDatabaseTranslations();
+        $allDbTranslations = self::getAllDatabaseTranslations();
 
         $poTranslations = array();
 
@@ -22,6 +22,18 @@ class Translations extends BaseTranslations
             $poTranslation = $dbTranslation['translation'];
             $poTranslationKey = $dbTranslation['translationKey'];
             $poTranslations[$poTranslationKey] =  $poTranslation;
+        }
+
+        return $poTranslations;
+    }
+
+    public static function getCsvWritableTranslations()
+    {
+        $allDbTranslations = self::getAllDatabaseTranslations();
+
+        foreach ($allDbTranslations as $key => $dbTranslation) {
+            $poTranslations[$key] = array($dbTranslation['translationKey'], $dbTranslation['translation']);
+            $key++;
         }
 
         return $poTranslations;
@@ -52,11 +64,6 @@ class Translations extends BaseTranslations
             ->from('translations')
             ->where("translationKey = '".$translation['translationKey']."'")
             ->fetchArray();
-    }
-
-    public function updateTranslationKey($translation)
-    {
-
     }
 
 }
