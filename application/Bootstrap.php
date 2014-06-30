@@ -426,45 +426,38 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $suffix         = $transSettings['suffix'];
         Zend_Locale::setDefault('en_US');
         $locale                     = new Zend_Locale(Zend_Registry::get('Zend_Locale'));
-        $inlineTranslationFolder    = Transl8_Translate_Writer_Csv::getDestinationFolder();
 
-        $poTrans = new Zend_Translate(array(
-                        'adapter' => 'gettext',
-                        'disableNotices' => true));
+        $poTrans = new Zend_Translate(
+            array(
+                'adapter' => 'gettext',
+                'locale'  => $locale,
+                'disableNotices' => true
+            )
+        );
 
         $poTrans->addTranslation(
             array(
-                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
-                    .'language/fallback/frontend_php' . $suffix . '.mo',
-                    'locale' => $locale
+                'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                .'language/fallback/frontend_php' . $suffix . '.mo',
+                'locale' => $locale
             )
         );
         $poTrans->addTranslation(
             array(
-                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
-                    .'language/backend_php' . $suffix . '.mo',
-                    'locale' => $locale
+                'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                .'language/backend_php' . $suffix . '.mo',
+                'locale' => $locale
             )
         );
 
-
-        $csvTranslation = array(
-            'adapter'   => 'Transl8_Translate_Adapter_Csv',
-            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
-            'content'   => $inlineTranslationFolder . '/' . $locale,
-            'locale'    => $locale
-        );
-
-        $csvTranslate = new Zend_Translate($csvTranslation);
-        $poTrans->addTranslation($csvTranslate);
-
-        $poTrans->addTranslation(
-            array(
-                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
-                    .'language/form' . $suffix . '.mo',
-                    'locale' => $locale
-            )
-        );
+        $translateSession = new Zend_Session_Namespace('Transl8');
+        if (!empty($translateSession->onlineTranslationActivated)) {
+            $dBtranslations = self::getDbTranslations($locale);
+            $poTrans->addTranslation($dBtranslations);
+        } else {
+            $csvTranslate = self::getCsvTranslations($locale);
+            $poTrans->addTranslation($csvTranslate);
+        }
 
         $poTrans->addTranslation(
             array(
@@ -486,6 +479,40 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('Zend_Translate', $poTrans);
     }
 
+    public function getDbTranslations($locale)
+    {
+        $setDbTranslationsToPoTranslate = Translations::setDbTranslationsToPoTranslate();
+        
+        $dBtranslations = new Zend_Translate(
+            array(
+                'adapter' => 'array',
+                'locale'  => $locale,
+                'disableNotices' => true
+            )
+        );
+        $dBtranslations->addTranslation(
+            array(
+                    'content' => $setDbTranslationsToPoTranslate,
+                    'locale' => $locale
+            )
+        );
+
+        return $dBtranslations;
+    }
+
+    public function getCsvTranslations($locale)
+    {
+        $inlineTranslationFolder = Transl8_Translate_Writer_Csv::getDestinationFolder();
+        $csvTranslation = array(
+            'adapter'   => 'Transl8_Translate_Adapter_Csv',
+            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
+            'content'   => $inlineTranslationFolder . '/' . $locale,
+            'locale'    => $locale
+        );
+
+        $csvTranslate = new Zend_Translate($csvTranslation);
+        return $csvTranslate;
+    }
 
     protected function _initViewScripts()
     {
@@ -512,13 +539,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 'basePath' => APPLICATION_PATH,
                 'namespace' => 'Application',
                 'resourceTypes' => array(
-                    'form' => array('path' => 'forms/',
+                    'form' => array(
+                        'path' => 'forms/',
                         'namespace' => 'Form'
                     ),
-                    'model' => array('path' => 'models/',
+                    'model' => array(
+                        'path' => 'models/',
                         'namespace' => 'Model'
-                    ))
-           )
+                    ),
+                    'service' => array(
+                        'path' => 'services/plugins',
+                        'namespace' => 'Service'
+                    )
+                )
+            )
         );
         return $autoLoader;
     }
