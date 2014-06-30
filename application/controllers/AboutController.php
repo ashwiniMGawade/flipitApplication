@@ -19,9 +19,17 @@ class AboutController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {
-        $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
-        $pageDetails = Page::getPageDetails($pageAttributeId);
+    { 
+        $pagePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+
+        if (LOCALE != '') {
+            $explodedCurrentUrl = explode('/', $pagePermalink);
+            $pagePermalink = $explodedCurrentUrl[1];
+        } else {
+            $pagePermalink = $pagePermalink;
+        }
+        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
+
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->viewHelperObject->getMetaTags(
             $this,
@@ -83,7 +91,7 @@ class AboutController extends Zend_Controller_Action
         );
         $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_'. 'mostread'.$authorId .'_list',
-            array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(6, $authorId)),
+            array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
             0
         );
         $authorFullName = $authorDetails['firstName'].' '. $authorDetails['lastName'];

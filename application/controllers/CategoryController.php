@@ -59,7 +59,7 @@ class CategoryController extends Zend_Controller_Action
     {
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
-        $pageDetails = Page::getPageDetails(9);
+        $pageDetails = Page::getPageDetailsFromUrl($categoryPermalink);
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',

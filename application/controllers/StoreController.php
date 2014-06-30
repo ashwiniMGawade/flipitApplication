@@ -83,7 +83,7 @@ class StoreController extends Zend_Controller_Action
                 (string)'all_msArticleInStore'.$ShopList,
                 (array)array(
                     'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
-                    'parameters' => array('moneysaving', 6, $shopId)
+                    'parameters' => array('moneysaving', 4, $shopId)
                 )
             );
 
@@ -183,8 +183,14 @@ class StoreController extends Zend_Controller_Action
     public function indexAction()
     {
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        if (LOCALE != '') {
+            $explodedCurrentUrl = explode('/', $permalink);
+            $pagePermalink = $explodedCurrentUrl[1];
+        } else {
+            $pagePermalink = $permalink;
+        }
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = Page::getPageDetails(7);
+        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');

@@ -22,7 +22,7 @@ class PlusController extends Zend_Controller_Action
     {
 
         $articlesOverviewPagePermalink  = 'plus';
-        $pageDetails = Page::getPageDetails($articlesOverviewPagePermalink);
+        $pageDetails = Page::getPageDetailsFromUrl($articlesOverviewPagePermalink);
         $mostReadArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' =>
                 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));

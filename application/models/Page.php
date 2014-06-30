@@ -3,16 +3,9 @@ class Page extends BasePage
 {
     #####################################################
     ############ REFECTORED CODE ########################
-    public static function getPageDetails($pageAttribute)
+    public static function getPageDetailsFromUrl($pagePermalink)
     {
-        if (is_string($pageAttribute)) {
-            $pageAttribute = self::getPageAttributeByPermalink($pageAttribute);
-        }
-        if(empty($pageAttribute)) {
-            $pageDetails = self::getPageDetailsByPermalink($pageAttribute);
-        } else {
-            $pageDetails = self::getPageDetailsByAttributeId($pageAttribute);
-        }
+        $pageDetails = self::getPageDetailsByPermalink($pagePermalink);
         if (!empty($pageDetails)) {
             return $pageDetails;
         } else {
@@ -46,18 +39,6 @@ class Page extends BasePage
 
     }
 
-    public static function getPageDetailsByAttributeId($pageAttributeId)
-    {
-        $pageDetails = Doctrine_Query::create()
-        ->select('p.*,i.path,i.name')
-        ->from('Page p')->leftJoin('p.logo i')
-        ->where("pageAttributeId = ?", $pageAttributeId)
-        ->andWhere('p.deleted=0')
-        ->orderBy('id DESC')
-        ->fetchOne();
-        return $pageDetails;
-    }
-
     public static function getSpecialListPages()
     {
         $currentDateAndTime = date('Y-m-d 00:00:00');
@@ -80,7 +61,7 @@ class Page extends BasePage
     }
     public static function getPageDetailsInError($page)
     {
-        $currentDate = date('Y-m-d H:i:s');
+        $currentDate = date('Y-m-d 00:00:00');
         $pageDetails = Doctrine_Query::create()->from('Page p')
         ->where("p.permalink="."'$page'")
         ->leftJoin("p.widget w")
@@ -110,6 +91,34 @@ class Page extends BasePage
         ->andWhere('p.deleted=0')
         ->fetchArray();
         return $pageDetail;
+    }
+
+    public static function updatePageAttributeId()
+    {
+        $updatePagesAttributeId = Doctrine_Query::create()->update('Page')
+            ->set('pageAttributeId', 3)
+            ->execute();
+        self::updateFaqPageAttributeId();
+        self::updateContactPageAttributeId();
+        return true;
+    }
+
+    public static function updateFaqPageAttributeId()
+    {
+        $updateFaqPageAttributeId = Doctrine_Query::create()->update('Page')
+            ->set('pageAttributeId', 2)
+            ->where('permalink="info/faq"')
+            ->execute();
+            return true;
+    }
+
+    public static function updateContactPageAttributeId()
+    {
+        $updateContactPageAttributeId = Doctrine_Query::create()->update('Page')
+            ->set('pageAttributeId', 1)
+            ->where('permalink="info/contact"')
+            ->execute();
+            return true;
     }
 
     ######################################################

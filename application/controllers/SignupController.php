@@ -47,11 +47,8 @@ class SignupController extends Zend_Controller_Action
                 FrontEnd_Helper_viewHelper::__link('link_profiel')
             );
         }
-        $pageName = 'signup';
-        $pageDetails =  Page::getPageDetails($pageName);
-        $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+
         $this->viewHelperObject->getMetaTags($this);
-        
         $emailAddressFromMemory = '';
         $emailAddressSpace = new Zend_Session_Namespace('emailAddressSignup');
         if (isset($emailAddressSpace->emailAddressSignup)) {
