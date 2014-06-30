@@ -172,6 +172,8 @@
 /public/za/sitemaps/*
 
 # Numerous always-ignore extensions
+*.xlsx
+*.xls
 *.diff
 *.err
 *.orig
