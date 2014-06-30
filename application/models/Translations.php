@@ -3,6 +3,30 @@
 class Translations extends BaseTranslations
 {
 
+    public static function fetchAllDatabaseTranslations()
+    {
+        return Doctrine_Query::create()
+            ->select()
+            ->from('translations')
+            ->where("translations.deleted='0'")
+            ->fetchArray();
+    }
+
+    public static function setDbTranslationsToPoTranslate()
+    {
+        $allDbTranslations = self::fetchAllDatabaseTranslations();
+
+        $poTranslations = array();
+
+        foreach ($allDbTranslations as $dbTranslation) {
+            $poTranslation = $dbTranslation['translation'];
+            $poTranslationKey = $dbTranslation['translationKey'];
+            $poTranslations[$poTranslationKey] =  $poTranslation;
+        }
+
+        return $poTranslations;
+    }
+
     public function saveTranslations($translations)
     {
         $existingTranslation =  self::getExistingTranslation($translations);
