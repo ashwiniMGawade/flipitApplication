@@ -82,13 +82,12 @@ class ErrorController extends Zend_Controller_Action
         $signUpFormSidebarWidget =
             FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
-        $currentUrlParameters = $this->_request->getParams();
-
-        if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
-                (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'faq')) {
+        $currentUrl = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $explodedCurrentUrl = explode('/', $currentUrl);
+        
+        if (isset($explodedCurrentUrl[2]) && $explodedCurrentUrl[2]  == 'faq') {
             $this->view->pageCssClass = 'faq-page home-page';
-        } else if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
-                (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'contact')) {
+        } else if (isset($explodedCurrentUrl[2]) && $explodedCurrentUrl[2]  == 'contact') {
             $flashMessage = $this->_helper->getHelper('FlashMessenger');
             $message = $flashMessage->getMessages();
             $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
