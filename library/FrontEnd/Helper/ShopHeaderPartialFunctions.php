@@ -48,7 +48,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                     class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
                     onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">
                     <img class="radiusImg" 
-                    src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . $shop['logo']['name']. '" 
+                    src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . "thum_big_" . $shop['logo']['name']. '" 
                     alt="'.$shop['name'].'" width="176" height="89" />
                     </a>
                 </div>
