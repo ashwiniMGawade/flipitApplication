@@ -64,9 +64,15 @@ class TransController extends Zend_Controller_Action
         setcookie('passCache', '1', '1', '/');
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
+        
+        $languageFile = APPLICATION_PATH.'/../public/language/'.Zend_Registry::get('Zend_Locale').'/translations.csv';
+        $csvWritableTranslations = Translations::getCsvWritableTranslations();
+        $csvWriter = new Application_Service_CsvWriter($languageFile);
+        $csvWriter->writeFromArray($csvWritableTranslations);
 
         $session = new Zend_Session_Namespace('Transl8');
         $session->onlineTranslationActivated = false;
+
         $this->_redirect('http://www.flipit.com/admin');
     }
 
