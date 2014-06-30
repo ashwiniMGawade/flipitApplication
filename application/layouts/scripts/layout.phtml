@@ -22,15 +22,12 @@ $language = $locale[0];
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php
-if(isset($this->canonical)):
-   $this->headLink(
-        FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)
-    );
+
+if(isset($this->canonical)): 
+    echo $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)); 
 endif;
 
-$this->headMeta()->appendName(
-    'robots',
-    FrontEnd_Helper_LayoutContent::loadRobots(
+echo $this->headMeta()->appendName('robots', FrontEnd_Helper_LayoutContent::loadRobots(
         $this->param,
         $this->layout()->robotKeywords
     )
@@ -38,7 +35,7 @@ $this->headMeta()->appendName(
 
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
-$this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
 
 # if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
 if(LOCALE=='') :
@@ -54,11 +51,11 @@ else:
         )
     );
 endif;
+
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
 echo $this->headStyle();
-
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 
 ?>
