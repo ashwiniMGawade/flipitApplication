@@ -10,6 +10,7 @@ if (!$authorName == '') {
     $byAuthorName[0] = $this->translate('By');
     $byAuthorName[1] = $authorName;
 }
+$websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
 ?>
 <section class="post-box">
     <header class="meta">
@@ -18,9 +19,9 @@ if (!$authorName == '') {
             <?php echo $byAuthorName[0]; ?>
             <a href="<?php echo $profileLink; ?>">
                 <?php echo $byAuthorName[1];?></a> <?php echo empty($byAuthorName[1]) ? '' : '-'; 
-                echo $articleUpdatedAtDate; ?> &nbsp; | &nbsp;   
+                echo $articleUpdatedAtDate; ?> &nbsp; | &nbsp; <?php echo $this->translate('back to') . " ";?>   
             <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_plus')?>">
-                <?php echo $this->translate('All Plus');?></a>
+                <?php echo $websiteName . " ". $this->translate('plus');?></a>
         </p>
     </header>
 <?php  
