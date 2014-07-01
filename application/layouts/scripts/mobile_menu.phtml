@@ -1,16 +1,11 @@
 <nav class="nav-mobile">
 	<ul>
 		<li>
-			<strong class="title">Korting pakken</strong>
-			<ul>
-				<li><a href="#">Top 20 Codes</a></li>
-				<li><a href="#">Alle Winkels</a></li>
-				<li><a href="#">Categorieen</a></li>
-				<li><a href="#">Flipit Plus</a></li>
-			</ul>
+			<strong class="title"><?php echo $this->translate('Korting pakken'); ?></strong>
+			<?php echo FrontEnd_Helper_layoutContent::generateMobileMenu(); ?>
 		</li>
 		<li>
-			<strong class="title">Account</strong>
+			<strong class="title"><?php echo $this->translate('Account') ;?></strong>
 			<?php echo $this->render('partials/_user_nav.phtml'); ?>
 		</li>
 	</ul>

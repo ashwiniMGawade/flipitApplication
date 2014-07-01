@@ -201,55 +201,30 @@ class FrontEnd_Helper_LayoutContent
 
     public static function generateMainMenu()
     {
-        $mainMenu = menu::getFirstLevelMenu();
-        $mainMenuCount = count($mainMenu);
-        $mainMenuvalue = 0;
-        $menuNavId = 'nav';
-        $mobileMenuHeader = '';
-        $navigationString ='<nav id="'.$menuNavId.'">
-            <ul>'.$mobileMenuHeader;
-        foreach ($mainMenu as $menu) {
-            $permalink = RoutePermalink::getPermalinks($menu['url']);
-            if (count($permalink) > 0) {
-                $link = $permalink[0]['permalink'];
-            } else {
-                $link = $menu['url'];
-                if ($menu['url']== FrontEnd_Helper_viewHelper::__link('link_inschrijven')) {
-                    if (Auth_VisitorAdapter::hasIdentity()) {
-                        $link = FrontEnd_Helper_viewHelper::__link('link_profiel');
-                    } else {
-                        $link = $menu['url'];
-                    }
-                }
-            }
-            if ($mainMenuvalue == $mainMenuCount) {
-                $menuName = str_replace(' ', '-', trim(strtolower($menu["name"])));
-                $navigationString .=
-                    '<li id="' . $menuName .'" ><a rel="toggel" id="'. $menuName . '" name="'. $menuName. '" 
-                    class="show_hide1" href="javascript:void(0);">' . $menu["name"] . '</a>
-                    </li>';
-            } else {
-                $menuName = str_replace(' ', '-', trim(strtolower($menu["name"])));
-                preg_match('/http:\/\//', $menu['url'], $matches);
-                if (count($matches) > 0) {
-                    $navigationString .=
-                        '<li id="' . $menuName .'"><a id="'. $menuName. '" name="'. $menuName. '" 
-                        class="" href="'.  $menu['url'] . '">' . $menu["name"] . '</a></li>';
-                } else {
-                    $navigationString .=
-                        '<li id="' . $menuName .'"><a id="'. $menuName. '" name="'. $menuName. '" 
-                        class="" href="'. HTTP_PATH_LOCALE  . $link . '">' . $menu["name"] . '</a>
-                        </li>';
-                }
-            }
-            $mainMenuvalue++;
-        }
-        $navigationString .= '</ul>
-            </nav>';
-        return $navigationString;
+        return $navigationString ='<nav id="nav">' . self::getUlOfMainMenu() . '</nav>';
     }
+     
+    public static function getUlOfMainMenu()
+    {
+        $mainMenu = menu::getFirstLevelMenu();
+        $ulOfMainMenu =
+        '<ul>';
+        foreach ($mainMenu as $menu) {
+            $ulOfMainMenu.=
+            '<li id="' . $menu["name"] .'">
+                <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
+                    class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . $menu["name"]
+                . '</a>
+            </li>';
+        }
+        $ulOfMainMenu .=
+        '</ul>';
+        return $ulOfMainMenu;
+    }
+
     public static function generateMobileMenu()
     {
+        return self::getUlOfMainMenu();
     }
     public static function getMostPopularCouponOnEarth()
     {
