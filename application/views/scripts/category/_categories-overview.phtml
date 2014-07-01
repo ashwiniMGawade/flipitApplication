@@ -1,5 +1,6 @@
 <?php
 foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
+    if($categoryWithSpecialPage['totalCoupons'] >= 4) {
     $featuredCategoryClass = '';
     $featuredCategorySpan = '';
     if(isset($categoryWithSpecialPage['logo'])) {
@@ -45,4 +46,5 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
         </a>
     </article>
     <?php
+}
 }

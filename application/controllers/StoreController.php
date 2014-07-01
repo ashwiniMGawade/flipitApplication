@@ -83,7 +83,7 @@ class StoreController extends Zend_Controller_Action
                 (string)'all_msArticleInStore'.$ShopList,
                 (array)array(
                     'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
-                    'parameters' => array('moneysaving', 6, $shopId)
+                    'parameters' => array('moneysaving', 3, $shopId)
                 )
             );
 
