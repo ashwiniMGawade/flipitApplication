@@ -259,11 +259,11 @@ img.logo.kortingscode{
 		}
 	}
 }
-.flipit-plus_menu {
-	background: url("../../images/flipit-plus_menu.png")  no-repeat;
-	height: 42px;
+.plus_menu(@x){
+	background: url("../../images/sprite.png")  no-repeat @x -495px;
+	height: 43px;
 	text-indent: -9999px;
-	width: 70px;
+	width: 64px;
 }
 .nav-bar{
 	float:right;
@@ -297,12 +297,21 @@ img.logo.kortingscode{
 					}
 				}
 			}
-		    li:last-child {
+		    li.flipit-menu{
 		    	padding-top: 6%;
 			    a {
-			    	.flipit-plus_menu;
+			    	.plus_menu(-0px);
 	    			&:hover, &:focus{
-		    			.flipit-plus_menu;
+		    			.plus_menu(-64px);
+	    			}
+			    }
+			}
+			li.kc-menu{
+		    	padding-top: 6%;
+			    a {
+			    	.plus_menu(-131px);
+	    			&:hover, &:focus{
+		    			.plus_menu(-195px);
 	    			}
 			    }
 			}
