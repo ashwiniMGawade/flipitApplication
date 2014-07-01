@@ -259,11 +259,11 @@ img.logo.kortingscode{
 		}
 	}
 }
-.plus_menu(@x){
-	background: url("../../images/sprite.png")  no-repeat @x -495px;
-	height: 43px;
+.flipit-plus_menu {
+	background: url("../../images/flipit-plus_menu.png")  no-repeat;
+	height: 42px;
 	text-indent: -9999px;
-	width: 64px;
+	width: 70px;
 }
 .nav-bar{
 	float:right;
@@ -297,21 +297,12 @@ img.logo.kortingscode{
 					}
 				}
 			}
-		    li.flipit-menu{
+		    li:last-child {
 		    	padding-top: 6%;
 			    a {
-			    	.plus_menu(-0px);
+			    	.flipit-plus_menu;
 	    			&:hover, &:focus{
-		    			.plus_menu(-64px);
-	    			}
-			    }
-			}
-			li.kc-menu{
-		    	padding-top: 6%;
-			    a {
-			    	.plus_menu(-131px);
-	    			&:hover, &:focus{
-		    			.plus_menu(-195px);
+		    			.flipit-plus_menu;
 	    			}
 			    }
 			}
@@ -568,8 +559,8 @@ input[type="password"]:-ms-input-placeholder {color: #a2a2a2;}
 	}
 	h1{
 		color:#32383e;
-		font-size:26px;
-		line-height:30px;
+		font-size:22px;
+		line-height:25px;
 		margin:0;
 	}
 }

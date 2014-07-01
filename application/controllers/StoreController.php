@@ -276,7 +276,6 @@ class StoreController extends Zend_Controller_Action
             )
         );
         $offers = array_chunk($offers, 3);
-        $this->view->shopEditor = User::getUserDetails($shopInformation[0]['contentManagerId']);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
         $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
