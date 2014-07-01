@@ -30,19 +30,6 @@ else:
     $actualUrl = $this->currentStoreInformation[0]['actualUrl'];
 endif;
 
-$shopEditor = '';
-if($this->shopEditor != null):
-    $shopEditor = $this->partial(
-        $storeViewPartialPath.'_storeEditor.phtml',
-        array(
-           'shopEditor' => $this->shopEditor,
-           'shop' => $this->currentStoreInformation[0],
-           'howToUseGuidePermalink'=>$howToUseGuidePermalink,
-           'actualUrl'=>$actualUrl
-        )
-    );
-endif;
-
 $signUpWidgetForm = '';
 if ($this->currentStoreInformation[0]['showSignupOption']) :
     $signUpWidgetForm = $this->partial(
@@ -122,7 +109,7 @@ if ($expiredMessage == '') {
     echo $this->partial(
         'store/_shop-sidebar.phtml',
         array(
-            'shopEditor' => $shopEditor,
+            'shopEditor' => '',
             'latestShopUpdates'=> $this->latestShopUpdates,
             'shopChain' => $this->shopChain,
             'shop' => $this->currentStoreInformation[0],
