@@ -13,8 +13,6 @@ class deletePageAttributes
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
 
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
-        $imbull = $connections['imbull'];
-
         echo CommonMigrationFunctions::showProgressMessage(
             'Insert Page Attributes'
         );
@@ -22,7 +20,7 @@ class deletePageAttributes
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->deletePageAttributes($connection['dsn'], $key, $imbull);
+                    $this->deletePageAttributes($connection['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -33,7 +31,7 @@ class deletePageAttributes
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
-    protected function deletePageAttributes($dsn, $key, $imbull)
+    protected function deletePageAttributes($dsn, $key)
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();

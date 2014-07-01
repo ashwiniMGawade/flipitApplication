@@ -13,8 +13,6 @@ class insertPageAttributes
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
 
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
-        $imbull = $connections['imbull'];
-
         echo CommonMigrationFunctions::showProgressMessage(
             'Insert Page Attributes'
         );
@@ -22,7 +20,7 @@ class insertPageAttributes
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->addPageAttributes($connection['dsn'], $key, $imbull);
+                    $this->addPageAttributes($connection['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -33,7 +31,7 @@ class insertPageAttributes
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
-    protected function addPageAttributes($dsn, $key, $imbull)
+    protected function addPageAttributes($dsn, $key)
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
