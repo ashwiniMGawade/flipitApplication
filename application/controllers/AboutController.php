@@ -19,17 +19,8 @@ class AboutController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    { 
-        $pagePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-
-        if (LOCALE != '') {
-            $explodedCurrentUrl = explode('/', $pagePermalink);
-            $pagePermalink = $explodedCurrentUrl[1];
-        } else {
-            $pagePermalink = $pagePermalink;
-        }
-        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
-
+    {
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->viewHelperObject->getMetaTags(
             $this,

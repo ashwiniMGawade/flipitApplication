@@ -182,15 +182,8 @@ class StoreController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        if (LOCALE != '') {
-            $explodedCurrentUrl = explode('/', $permalink);
-            $pagePermalink = $explodedCurrentUrl[1];
-        } else {
-            $pagePermalink = $permalink;
-        }
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');

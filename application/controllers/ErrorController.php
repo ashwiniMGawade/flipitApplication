@@ -40,16 +40,8 @@ class ErrorController extends Zend_Controller_Action
                         $sidebarParameters = array(),
                         rtrim($this->pagePermalink, '/')
                     );
-                    $currentUrl = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-
-                    if (LOCALE != '') {
-                        $explodedCurrentUrl = explode('/', $currentUrl);
-                        $pagePermalink = $explodedCurrentUrl[1] .'/'. $explodedCurrentUrl[2];
-                    } else {
-                        $pagePermalink = $currentUrl;
-                    }
-
-                    $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
+                    
+                    $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
 
                     if ($pageDetails['pageAttributeId'] == 2) {
                         $this->view->pageCssClass = 'faq-page home-page';

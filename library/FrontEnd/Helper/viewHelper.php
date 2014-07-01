@@ -824,6 +824,7 @@ EOD;
         $xml->endDocument();
         $xml->flush();
     }
+
     public static function getWebsitesLocales($websites)
     {
         foreach ($websites as $website) {
@@ -832,5 +833,18 @@ EOD;
             $locales[strtoupper($locale)] = $website['name'].'='.$website['status'];
         }
         return $locales;
+    }
+
+    public static function getPagePermalink()
+    {
+        $pagePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+
+        if (LOCALE != '') {
+            $explodedPagePermalink = explode('/', $pagePermalink);
+            $secondUrlParameter = isset($explodedPagePermalink[2]) ? '/'. $explodedPagePermalink[2] : '';
+            $pagePermalink = $explodedPagePermalink[1].$secondUrlParameter;
+        }
+        
+        return  $pagePermalink;
     }
 }

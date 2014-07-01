@@ -83,30 +83,20 @@ class Page extends BasePage
 
     public static function updatePageAttributeId()
     {
-        $updatePagesAttributeId = Doctrine_Query::create()->update('Page')
-            ->set('pageAttributeId', 3)
-            ->execute();
-        self::updateFaqPageAttributeId();
-        self::updateContactPageAttributeId();
+        for ($i = 1; $i <= 3; $i++) {
+            $updatePagesAttributeId = Doctrine_Query::create()->update('Page')
+                ->set('pageAttributeId', $i);
+            if ($i == 1) {
+                $updatePagesAttributeId->where('permalink="info/contact"');
+            } else if ($i == 2) {
+                $updatePagesAttributeId->where('permalink="info/faq"');
+            } else if ($i == 3) {
+                $updatePagesAttributeId->where('permalink!="info/faq"');
+                $updatePagesAttributeId->andWhere('permalink!="info/contact"');
+            }
+            $updatePagesAttributeId->execute();
+        }
         return true;
-    }
-
-    public static function updateFaqPageAttributeId()
-    {
-        $updateFaqPageAttributeId = Doctrine_Query::create()->update('Page')
-            ->set('pageAttributeId', 2)
-            ->where('permalink="info/faq"')
-            ->execute();
-            return true;
-    }
-
-    public static function updateContactPageAttributeId()
-    {
-        $updateContactPageAttributeId = Doctrine_Query::create()->update('Page')
-            ->set('pageAttributeId', 1)
-            ->where('permalink="info/contact"')
-            ->execute();
-            return true;
     }
 
     ######################################################
