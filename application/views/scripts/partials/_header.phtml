@@ -39,13 +39,13 @@ endif
                     <img class="<?php echo $logoCssClass;?>"src="<?php echo $logoPath;?>"/>
                 </a>
             </strong>
-            <a href="#" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
+            <a href="javascript:void(0);" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
             <div class="nav-bar">
             <?php 
             $currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
             if($currentControllerName != 'index') { ?>
                 <div class="search-box">
-                    <a href="#" class="opener"><span class="glyphicon glyphicon-search"></span></a>
+                    <a href="javascript:void(0);" class="opener"><span class="glyphicon glyphicon-search"></span></a>
                 <?php
                 $localePartialPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/scripts/partials/';
                 $basePartialViewPath = new Zend_View();
