@@ -57,7 +57,7 @@ class createSiteMaps
         $connectionManager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
 
-        $databaseLocale = Signupmaxaccount::getAllMaxAccounts();
+        $databaseLocale = LocaleSettings::getLocaleSettings();
         $databaseLocale = !empty($databaseLocale [0] ['locale'] ) ? $databaseLocale [0] ['locale'] : 'nl_NL';
         $this->_translate = new Zend_Translate(array('adapter' => 'gettext', 'disableNotices' => true));
         $this->_translate->addTranslation(array('content' => PUBLIC_PATH . strtolower ( $this->_localePath ) . 'language/po_links' . $locale . '.mo', 'locale' => $databaseLocale));

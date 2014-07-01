@@ -11,9 +11,9 @@ endif;
 echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
-$localeName = Signupmaxaccount::getLocaleName();
-$countryLocale = !empty($localeName['locale']) ?
-    $localeName['locale'] : 'nl_NL';
+$localeName = LocaleSettings::getLocaleSettings();
+$countryLocale = isset($localeName[0]['locale']) ?
+    $localeName[0]['locale'] : 'nl_NL';
 $locale = explode('_', $countryLocale);
 $language = $locale[0];
 ?>

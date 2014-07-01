@@ -237,7 +237,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         $data = Signupmaxaccount::getAllMaxAccounts();
 
         $this->view->data = $data;
-
+        $this->view->localeSettings = LocaleSettings::getLocaleSettings();
         $this->view->rights = $this->_settings['administration'];
         $this->view->timezones_list = Signupmaxaccount::$timezones;
     }

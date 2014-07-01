@@ -58,39 +58,6 @@ $(document).ready(function(){
 
 	init();
 
-
-
-	jQuery("#locale")
-		.select2({placeholder: __("Select a locale")})
-		.change(function(){
-			$.ajax({
-				url : HOST_PATH + 'admin/homepage/savelocale',
-				type : 'post',
-				dataType : 'json',
-				data : {'locale' : $(this).val()},
-				success : function(obj){
-					window.location.reload(true);
-				}
-			});
-	});
-
-
-	jQuery("select#timezone")
-		.select2({placeholder: __("Select a timezone")})
-		.change(function(){
-			$.ajax({
-				url : HOST_PATH + 'admin/homepage/save-timezone',
-				type : 'post',
-				dataType : 'json',
-				data : {'timezone' : $(this).val()},
-				success : function(obj){
-					window.location.reload(true);
-				}
-			});
-		});
-
-
-
 	jQuery('#delete-header-image-btn').click(function(){
 
 		var headerImageName = jQuery('#delete-header-image-btn').attr('alt');
@@ -123,16 +90,6 @@ $(document).ready(function(){
 			});
 		
 
-	});
-
-	
-	$.ajax({
-		url : HOST_PATH + 'admin/homepage/getlocale',
-		type : 'post',
-		dataType : 'json',
-		success : function(obj){
-			jQuery("#locale").select2('val',obj);
-		}
 	});
 
 	$.ajax({
@@ -2415,19 +2372,3 @@ $(function () {
 
     }) ;
 });
-
-function LocaleStatusToggle(el)
-{
-	$(el).addClass('btn-primary').siblings('button').removeClass('btn-primary active');
-	var localeStatus = $(el).attr('data-status');
-    
-    $.ajax({
-		url : HOST_PATH + 'admin/homepage/savelocalestatus',
-		type : 'post',
-		dataType : 'json',
-		data : {'localeStatus' : localeStatus},
-		success : function(obj){
-			window.location.reload(true);
-		}
-	});
-}
