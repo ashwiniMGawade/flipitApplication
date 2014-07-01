@@ -26,16 +26,3 @@ function viewCounter(eventType, type, id) {
         }
     });
 }
-$(function() {
-	$("nav#menu").mmenu({
-		counters    : true
-	});
-	function mobileMenu() {
-		var windowWidth = $(window).width();
-		if(windowWidth >= 767) {
-			$('nav#menu').trigger('close');
-		}
-	}
-	mobileMenu();
-	$(window).resize(function() { mobileMenu(); });
-});

@@ -52,7 +52,6 @@ class OfferController extends Zend_Controller_Action
         );
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
         $this->view->form = $signUpFormLarge;
-        $this->view->pageCssClass = 'home-page';
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
@@ -93,7 +92,6 @@ class OfferController extends Zend_Controller_Action
         $this->view->topOfferFromStore = $topOfferFromStore;
         $this->view->couponDetails = $couponDetails;
         $this->view->currentStoreInformation = $shopInformation;
-        $this->view->shopEditor = User::getUserDetails($shopInformation[0]['contentManagerId']);
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
 
         $customHeader = '';

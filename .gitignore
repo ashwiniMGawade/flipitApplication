@@ -214,3 +214,5 @@ publish
 deployment.properties
 deployment.xml
  
+tests/_output/*
+tests/_log/
