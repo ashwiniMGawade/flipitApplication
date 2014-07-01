@@ -12,7 +12,6 @@ class insertPageAttributes
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
 
-        $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
         echo CommonMigrationFunctions::showProgressMessage(
             'Insert Page Attributes'
         );
@@ -28,7 +27,6 @@ class insertPageAttributes
                 echo "\n\n";
             }
         }
-        $manager->closeConnection($doctrineImbullDbConnection);
     }
 
     protected function addPageAttributes($dsn, $key)

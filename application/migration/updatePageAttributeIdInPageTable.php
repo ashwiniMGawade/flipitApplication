@@ -12,8 +12,6 @@ class updatePageAttributeIdInPageTable
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
 
-        $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
-
         echo CommonMigrationFunctions::showProgressMessage(
             'Insert Page Attributes'
         );
@@ -29,7 +27,6 @@ class updatePageAttributeIdInPageTable
                 echo "\n\n";
             }
         }
-        $manager->closeConnection($doctrineImbullDbConnection);
     }
     protected function updatePageAttributeId($dsn, $key)
     {
