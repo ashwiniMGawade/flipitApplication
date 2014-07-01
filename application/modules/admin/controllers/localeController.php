@@ -35,9 +35,7 @@ class Admin_LocaleController extends Zend_Controller_Action
     public function savelocaleAction()
     {
         LocaleSettings::savelocale($this->getRequest()->getParam('locale'));
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Locale has been changed successfully.');
-        $flash->addMessage(array('success' => $message ));
+        $this->setFlashMessage($this, 'Locale has been changed successfully.');
         die;
     }
     
@@ -45,9 +43,7 @@ class Admin_LocaleController extends Zend_Controller_Action
     {
 
         LocaleSettings::saveTimezone($this->getRequest()->getParam('timezone'));
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Timezone has been changed successfully.');
-        $flash->addMessage(array('success' => $message ));
+        $this->setFlashMessage($this, 'Timezone has been changed successfully.');
         die;
     }
 
@@ -61,9 +57,14 @@ class Admin_LocaleController extends Zend_Controller_Action
     public function savelocalestatusAction()
     {
         Website::setLocaleStatus($this->getRequest()->getParam('localeStatus'), $_COOKIE['site_name']);
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Locale Status has been changed successfully.');
-        $flash->addMessage(array('success' => $message));
+        $this->setFlashMessage($this, 'Locale Status has been changed successfully.');
         die;
+    }
+
+    public function setFlashMessage($currentObject, $messageText)
+    {
+        $flash = $currentObject->_helper->getHelper('FlashMessenger');
+        $message = $currentObject->view->translate($messageText);
+        $flash->addMessage(array('success' => $message));
     }
 }

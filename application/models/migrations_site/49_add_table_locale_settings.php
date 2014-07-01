@@ -15,10 +15,6 @@ class AddLocaleSettingsTable extends Doctrine_Migration_Base
                     'type'   => 'string',
                     'length' => 10
             ),
-            'status' => array(
-                    'type'   => 'string',
-                    'length' => 20
-            ),
             'timezone' => array(
                     'type'   => 'string',
                     'length' => 255
