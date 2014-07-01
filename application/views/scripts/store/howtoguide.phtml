@@ -16,19 +16,6 @@ endif;
 
 $storeViewPartialPath = 'store/';
 $partialViewPath = 'partials/';
-$shopEditor = '';
-if($this->shopEditor != null):
-    $shopEditor = $this->partial(
-        $storeViewPartialPath.'_storeEditor.phtml',
-        array(
-           'shopEditor' => $this->shopEditor,
-           'shop' =>$this->currentStoreInformation[0],
-           'howToUseGuidePermalink'=>$howToUseGuidePermalink,
-           'actualUrl'=>$actualUrl
-        )
-    );
-endif;
-
 $signUpWidgetForm = '';
 if ($this->currentStoreInformation[0]['showSignupOption']) :
     $signUpWidgetForm = $this->partial(
@@ -91,7 +78,7 @@ echo $headerBlock;
     echo $this->partial(
             $storeViewPartialPath. '_shop-sidebar.phtml',
             array(
-                'shopEditor' => $shopEditor,
+                'shopEditor' => '',
                 'latestShopUpdates'=> $this->latestShopUpdates,
                 'shopChain' => $this->shopChain,
                 'shop' => $this->currentStoreInformation[0],
