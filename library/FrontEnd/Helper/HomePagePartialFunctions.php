@@ -370,7 +370,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     <h2>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
                     </h2>
-                   <p>' . $offerTitle .'</p>
+                   <p class="sub-text">' . $offerTitle .'</p>
                 </div>
             </a>
         </li>';
