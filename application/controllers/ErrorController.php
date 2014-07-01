@@ -40,6 +40,27 @@ class ErrorController extends Zend_Controller_Action
                         $sidebarParameters = array(),
                         rtrim($this->pagePermalink, '/')
                     );
+                    $currentUrl = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+
+                    if (LOCALE != '') {
+                        $explodedCurrentUrl = explode('/', $currentUrl);
+                        $pagePermalink = $explodedCurrentUrl[1] .'/'. $explodedCurrentUrl[2];
+                    } else {
+                        $pagePermalink = $currentUrl;
+                    }
+
+                    $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
+
+                    if ($pageDetails['pageAttributeId'] == 2) {
+                        $this->view->pageCssClass = 'faq-page home-page';
+                    } else if (isset($pageDetails['pageAttributeId']) && $pageDetails['pageAttributeId'] == 1) {
+                        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+                        $message = $flashMessage->getMessages();
+                        $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
+                        $this->view->pageCssClass = 'contact-page home-page';
+                    } else {
+                        $this->view->pageCssClass = 'flipit-expired-page home-page';
+                    }
 
                     $this->view->message = 'Page not found';
                     $this->view->pageTitle = $pageDetails['pageTitle'];
@@ -83,27 +104,7 @@ class ErrorController extends Zend_Controller_Action
             FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
         
-        $currentUrl = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-
-        if (LOCALE != '') {
-            $explodedCurrentUrl = explode('/', $currentUrl);
-            $pagePermalink = $explodedCurrentUrl[1] .'/'. isset($explodedCurrentUrl[2]);
-        } else {
-            $pagePermalink = $currentUrl;
-        }
-
-        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
-
-        if ($pageDetails['pageAttributeId'] == 2) {
-            $this->view->pageCssClass = 'faq-page home-page';
-        } else if (isset($pageDetails['pageAttributeId']) && $pageDetails['pageAttributeId'] == 1) {
-            $flashMessage = $this->_helper->getHelper('FlashMessenger');
-            $message = $flashMessage->getMessages();
-            $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
-            $this->view->pageCssClass = 'contact-page home-page';
-        } else {
-            $this->view->pageCssClass = 'flipit-expired-page home-page';
-        }
+        
 
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;

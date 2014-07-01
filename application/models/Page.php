@@ -27,18 +27,6 @@ class Page extends BasePage
         return $pageDetails;
     }
 
-    public static function getPageAttributeByPermalink($permalink)
-    {
-        $pageAttributes = Doctrine_Query::create()
-        ->select('p.id, p.pageAttributeId')
-        ->from('Page p')
-        ->where("permaLink = '". $permalink ."'")
-        ->andWhere('p.deleted=0')
-        ->fetchArray();
-        return isset($pageAttributes[0]['pageAttributeId']) ? $pageAttributes[0]['pageAttributeId'] : '';
-
-    }
-
     public static function getSpecialListPages()
     {
         $currentDateAndTime = date('Y-m-d 00:00:00');
