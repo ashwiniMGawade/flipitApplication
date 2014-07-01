@@ -176,8 +176,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 id="showSitemapYes" onClick="showSitemapStatus('showSitemapYes')">
                                 <?php echo $this->translate('Yes');?>
                             </button>                     
-                            <button class = "borderradius4px" type="button"
-                                class="btn <?php if ($this->pageDetail['showsitemap']!='1') {?>btn-primary <?php }?>"
+                            <button type="button"
+                                class="btn borderradius4px <?php if ($this->pageDetail['showsitemap']!='1') {?>btn-primary <?php }?>"
                                 onClick="showSitemapStatus('showSitemapNo')" id="showSitemapNo">
                                 <?php echo $this->translate('No'); ?>
                             </button>

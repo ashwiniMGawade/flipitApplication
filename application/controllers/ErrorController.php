@@ -40,6 +40,19 @@ class ErrorController extends Zend_Controller_Action
                         $sidebarParameters = array(),
                         rtrim($this->pagePermalink, '/')
                     );
+                    
+                    $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+
+                    if ($pageDetails['pageAttributeId'] == 2) {
+                        $this->view->pageCssClass = 'faq-page home-page';
+                    } else if (isset($pageDetails['pageAttributeId']) && $pageDetails['pageAttributeId'] == 1) {
+                        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+                        $message = $flashMessage->getMessages();
+                        $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
+                        $this->view->pageCssClass = 'contact-page home-page';
+                    } else {
+                        $this->view->pageCssClass = 'flipit-expired-page home-page';
+                    }
 
                     $this->view->message = 'Page not found';
                     $this->view->pageTitle = $pageDetails['pageTitle'];
@@ -82,25 +95,13 @@ class ErrorController extends Zend_Controller_Action
         $signUpFormSidebarWidget =
             FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
-        $currentUrlParameters = $this->_request->getParams();
+        
+        
 
-        if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
-                (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'faq')) {
-            $this->view->pageCssClass = 'faq-page home-page';
-        } else if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
-                (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'contact')) {
-            $flashMessage = $this->_helper->getHelper('FlashMessenger');
-            $message = $flashMessage->getMessages();
-            $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
-            $this->view->pageCssClass = 'contact-page home-page';
-        } else {
-            $this->view->pageCssClass = 'flipit-expired-page home-page';
-        }
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;
         $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        
     }
 
     public function getLog()

@@ -26,7 +26,7 @@ class SearchController extends Zend_Controller_Action
         $splitSearchPermalink = explode('/', $searchPermalink);
         $pagePermalink = isset($splitSearchPermalink[2]) ? $splitSearchPermalink[1] : $splitSearchPermalink[0];
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
-        $pageDetails = Page::getPageDetails($pagePermalink);
+        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $searchedKeywords = $this->getRequest()->getParam('searchField');
