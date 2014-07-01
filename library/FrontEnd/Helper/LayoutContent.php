@@ -209,9 +209,11 @@ class FrontEnd_Helper_LayoutContent
         $mainMenu = menu::getFirstLevelMenu();
         $ulOfMainMenu =
         '<ul>';
+        $classForFlipIt = LOCALE=='' ? "kc-menu" : 'flipit-menu';
         foreach ($mainMenu as $menu) {
+            $cssClassForLastLi = strtolower($menu['name'])=='plus' ? $classForFlipIt: '';
             $ulOfMainMenu.=
-            '<li id="' . $menu["name"] .'">
+            '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
                 <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
                     class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . $menu["name"]
                 . '</a>
