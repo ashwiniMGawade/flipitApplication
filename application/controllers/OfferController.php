@@ -21,7 +21,7 @@ class OfferController extends Zend_Controller_Action
     public function top20Action()
     {
         $pageName = 'top-20';
-        $pageDetails = Page::getPageDetails($pageName);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->viewHelperObject->getMetaTags(
@@ -164,7 +164,7 @@ class OfferController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $pageDetails = Page::getPageDetails(6);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $params = $this->_getAllParams();
         $cacheKeyForNewsOffer =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         if ($cacheKeyForNewsOffer) {

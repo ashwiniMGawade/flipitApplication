@@ -13,6 +13,26 @@ class PageAttribute extends BasePageAttribute
         ->fetchOne();
         return isset($pageAttribute->id) ? (int) $pageAttribute->id : 0;
     }
+
+    public static function insertPageAttributes()
+    {
+        $pageAttributeObject = new Doctrine_Collection('PageAttribute');
+        $pageAttributeObject[0]->name = "contact";
+        $pageAttributeObject[1]->name = "faq";
+        $pageAttributeObject[2]->name = "default";
+        $pageAttributeObject->save();
+        return true;
+    }
+
+    public static function deletePageAttributes()
+    {
+        $databaseConnection = Doctrine_Manager::getInstance()->getCurrentConnection()->getDbh();
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS=0');
+        $databaseConnection->query('TRUNCATE TABLE page_attribute');
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS=1');
+        unset($databaseConnection);
+        return true;
+    }
     #########################################################
     ############# END REFACTORED CODE     ###################
     #########################################################
@@ -54,25 +74,6 @@ class PageAttribute extends BasePageAttribute
      *	Version: 1.0
      */
 
-    public static function insertPageAttribute()
-    {
-            for($i=1; $i<5; $i++) {
 
-                $sname = "Sign Up Step ".$i;
-                $findRecordFromDatabase = $data = Doctrine_Core::getTable('pageAttribute')->findOneBy('name', $sname);
-                if(!isset($findRecordFromDatabase)) {
-                    $pageAttributeObject = new PageAttribute();
-                    $pageAttributeObject->name = $sname;
-                    $pageAttributeObject->save();
-                    return true;
-                }else{
-
-                    return false;
-
-                }
-
-            }
-
-        }
 
 }
