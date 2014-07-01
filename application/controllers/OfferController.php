@@ -166,16 +166,7 @@ class OfferController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $pagePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-
-        if (LOCALE != '') {
-            $explodedCurrentUrl = explode('/', $pagePermalink);
-            $pagePermalink = $explodedCurrentUrl[1];
-        } else {
-            $pagePermalink = $pagePermalink;
-        }
-
-        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $params = $this->_getAllParams();
         $cacheKeyForNewsOffer =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         if ($cacheKeyForNewsOffer) {
