@@ -8,10 +8,7 @@ class insertPageAttributes
         require_once('CommonMigrationFunctions.php');
 
         CommonMigrationFunctions::setTimeAndMemoryLimit();
-
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
-        $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
-
         echo CommonMigrationFunctions::showProgressMessage(
             'Insert Page Attributes'
         );
@@ -43,4 +40,4 @@ class insertPageAttributes
         );
     }
 }
-new InsertPageAttributes();
+new insertPageAttributes();
