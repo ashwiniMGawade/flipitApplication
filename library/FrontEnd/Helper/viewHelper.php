@@ -869,7 +869,12 @@ EOD;
     {
         $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
         if (isset($favouriteShopIdFromSession->favouriteShopId)) {
-            header('location:'.HTTP_PATH_LOCALE. 'store/addtofavourite');
+            header(
+                'location:'.HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
+                .FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('link_profiel').'&shopId='
+                . $favouriteShopIdFromSession->favouriteShopId
+            );
             exit();
         }
     }
