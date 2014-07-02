@@ -337,21 +337,25 @@ class StoreController extends Zend_Controller_Action
 
     public function addtofavouriteAction()
     {
+        $this->view->layout()->robotKeywords = 'noindex, nofollow';
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $visitorShopIdSessionNameSpace = new Zend_Session_Namespace('favouriteShopId');
+        $visitorShopIdSessionNameSpace->favouriteShopId = $this->getRequest()->getParam('shopId');
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
-            $shopPermalinkFromSession = new Zend_Session_Namespace('shopPermalink');
             if (isset($favouriteShopIdFromSession->favouriteShopId)) {
                 $shopId = $favouriteShopIdFromSession->favouriteShopId;
-                Shop::shopAddInFavourite($visitorId, $shopId);
-                $shopPermalink = $shopPermalinkFromSession->shopPermalink;
+                Shop::shopAddInFavourite($visitorId, base64_decode($shopId));
                 Zend_Session::namespaceUnset('favouriteShopId');
-                Zend_Session::namespaceUnset('shopPermalink');
-                $this->_redirect(HTTP_PATH_LOCALE. $shopPermalink);
+                $this->_redirect(HTTP_PATH_LOCALE. $this->getRequest()->getParam('permalink'));
+                exit();
             }
         } else {
-            throw new Zend_Controller_Action_Exception('', 404);
+            $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'));
+            exit();
         }
+        throw new Zend_Controller_Action_Exception('', 404);
     }
     // Returns the right favorite heart status by fetching the partial.
     public function addfavoriteviewAction()
