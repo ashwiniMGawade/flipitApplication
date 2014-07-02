@@ -880,5 +880,12 @@ EOD;
             exit();
         }
     }
+
+    public static function getModuleName()
+    {
+        $requestedUrl = ltrim(REQUEST_URI, '/');
+        $splitedModuleName = preg_split('/[\/\?]+/', $requestedUrl);
+        return rtrim($splitedModuleName[0], '/');
+    }
 }
 

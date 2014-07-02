@@ -59,5 +59,8 @@
 
         public function testAction()
         {
+             echo "LOCALE CONTANT" . LOCALE ."<br/>";
+             print(FrontEnd_Helper_viewHelper::getModuleName());
+             die;
         }
     }
