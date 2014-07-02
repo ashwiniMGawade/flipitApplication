@@ -19,30 +19,6 @@ class ErrorController extends Zend_Controller_Action
                 $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
                 if ($pageDetails) {
-                    if (is_array($this->pagePermalink)) {
-                        $this->pagePermalink = end($this->pagePermalink);
-                    }
-                    if($pageDetails['pageType'] == 'default'):
-                        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($this->pagePermalink);
-                    endif;
-                    if ($pageDetails['customHeader']) {
-                        $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
-                    }
-                    $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
-                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
-                        $specialPageOffers,
-                        $pageNumber,
-                        30,
-                        3
-                    );
-                    $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
-                    $sidebarWidget = $frontendViewHelper->getSidebarWidget(
-                        $sidebarParameters = array(),
-                        rtrim($this->pagePermalink, '/')
-                    );
-                    
-                    $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
-
                     if ($pageDetails['pageAttributeId'] == 2) {
                         $this->view->pageCssClass = 'faq-page home-page';
                     } else if (isset($pageDetails['pageAttributeId']) && $pageDetails['pageAttributeId'] == 1) {
@@ -53,6 +29,31 @@ class ErrorController extends Zend_Controller_Action
                     } else {
                         $this->view->pageCssClass = 'flipit-expired-page home-page';
                     }
+
+                    if (is_array($this->pagePermalink)) {
+                        $this->pagePermalink = end($this->pagePermalink);
+                    }
+                    if($pageDetails['pageType'] == 'default'):
+                        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($this->pagePermalink);
+                    endif;
+                    if ($pageDetails['customHeader']) {
+                        $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
+                    }
+                    $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
+                    $paginationNumber['page'] = $pageNumber;
+                    $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
+                        $specialPageOffers,
+                        $paginationNumber,
+                        10,
+                        3
+                    );
+                    $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+                    $sidebarWidget = $frontendViewHelper->getSidebarWidget(
+                        $sidebarParameters = array(),
+                        rtrim($this->pagePermalink, '/')
+                    );
+                    
+                    
 
                     $this->view->message = 'Page not found';
                     $this->view->pageTitle = $pageDetails['pageTitle'];

@@ -158,14 +158,6 @@ EOD;
         $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
         $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($permalinkAfterQueryString[0])));
         if ($pageCount > 1) :
-            if ($currentPage - 1 != 0) :
-                if ($currentPage==2) :
-                    $previousPermalink = HTTP_PATH . $permalink;
-                else:
-                    $previousPermalink = HTTP_PATH . $permalink .'/'. ($currentPage - 1);
-                endif;
-                $view->headLink(array('rel' => 'prev', 'href' => $previousPermalink));
-            endif;
             if ($currentPage <= 2) :
                 if ($currentPage == 1) :
                     $permalinkAfterQueryString = explode('?', $permalink);
@@ -175,6 +167,16 @@ EOD;
                     $view->headLink(array('rel' => 'next', 'href' => HTTP_PATH . $permalink .'/'. ($currentPage + 1)));
                 endif;
             endif;
+            
+            if ($currentPage - 1 != 0) :
+                if ($currentPage==2) :
+                    $previousPermalink = HTTP_PATH . $permalink;
+                else:
+                    $previousPermalink = HTTP_PATH . $permalink .'/'. ($currentPage - 1);
+                endif;
+                $view->headLink(array('rel' => 'prev', 'href' => $previousPermalink));
+            endif;
+
             echo '<ul class="pagination">';
             foreach ($pagesInRange as $pageNumber):
                 if ($pageNumber < 4):
@@ -869,9 +871,21 @@ EOD;
     {
         $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
         if (isset($favouriteShopIdFromSession->favouriteShopId)) {
-            header('location:'.HTTP_PATH_LOCALE. 'store/addtofavourite');
+            header(
+                'location:'.HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
+                .FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('link_profiel').'&shopId='
+                . $favouriteShopIdFromSession->favouriteShopId
+            );
             exit();
         }
+    }
+
+    public static function getModuleName()
+    {
+        $requestedUrl = ltrim(REQUEST_URI, '/');
+        $splitedModuleName = preg_split('/[\/\?]+/', $requestedUrl);
+        return rtrim($splitedModuleName[0], '/');
     }
 }
 
