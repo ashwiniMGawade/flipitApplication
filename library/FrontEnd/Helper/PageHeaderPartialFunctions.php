@@ -1,12 +1,17 @@
 <?php
 class FrontEnd_Helper_PageHeaderPartialFunctions
 {
-    public function getCategoryOrPageHeader($headerText, $headerImage)
+    public function getCategoryOrPageHeader($headerText, $headerImage, $pageType = '')
     {
+        if ($pageType == 'info') {
+            $headertitle = '<h1>' . $headerText . '</h1>';
+        } else {
+            $headertitle = '<span>' . $headerText . '</span>';
+        }
+
         $header = '<div class="banner-block">
             <img alt="' . $headerText . '" src="' .  $headerImage . '" class="image">
-            <div class="bar">
-            <span>' . $headerText . '</span></div>
+            <div class="bar">' . $headertitle . '</div>
             </div>';
         return $header;
     }
