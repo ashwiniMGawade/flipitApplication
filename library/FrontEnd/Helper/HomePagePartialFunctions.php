@@ -320,13 +320,13 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
         foreach ($topTenMoneySavingGuides as $savingGuide) {
             $savingImage =
-                PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/")
-                . $savingGuide['article']['thumbnail']['name'];
+                PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/")
+                . $savingGuide['thumbnail']['name'];
             $savingPermalink =
-                FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['article']['permalink'];
-            $savingTitle = $savingGuide['article']['title'];
+                FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
+            $savingTitle = $savingGuide['title'];
             $allowed_tags = '';
-            $guideDescription = strip_tags($savingGuide['article']['chapters'][0]['content'], $allowed_tags);
+            $guideDescription = strip_tags($savingGuide['chapters'][0]['content'], $allowed_tags);
             $savingContent =
                 mb_strlen($guideDescription, 'UTF-8') > 50
                 ? mb_substr($guideDescription, 0, 50, 'UTF-8') . "..."
