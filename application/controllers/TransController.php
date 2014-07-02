@@ -99,7 +99,7 @@ class TransController extends Zend_Controller_Action
             .($sessionForModuleName->moduleName == '' ? '' : $sessionForModuleName->moduleName.'/')
             .'language/translations.csv';
 
-        $cdn = new Application_Service_Infrastructure_CdnWrapper();
+        $cdn = new Application_Service_Infrastructure_CdnWriter();
         $cdn->putFile($localLanguageFilePath, $cdnLanguageFilePath);
     }
 }
