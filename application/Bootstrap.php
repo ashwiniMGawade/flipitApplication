@@ -59,6 +59,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         self::constantForCacheDirectory();
         self::httpPathConstantForCdn();
+        self::s3Defines();
 
         defined('BASE_ROOT') || define('BASE_ROOT', dirname($_SERVER['SCRIPT_FILENAME']) . '/');
 
@@ -101,6 +102,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         } else {
             define('HTTP_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
         }
+    }
+
+    public function s3Defines()
+    {
+        $s3Credentials = $this->getOption('s3');
+        define('S3BUCKET', $s3Credentials['bucket']);
+        define('S3KEY', $s3Credentials['key']);
+        define('S3SECRET', $s3Credentials['secret']);
     }
 
     public function constantsForLocale()
@@ -531,7 +540,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $csvTranslation = array(
             'adapter'   => 'Transl8_Translate_Adapter_Csv',
             'scan'      => Zend_Translate::LOCALE_DIRECTORY,
-            'content'   => $inlineTranslationFolder . '/' . $locale,
+            'content'   => $inlineTranslationFolder . '/',
             'locale'    => $locale
         );
 
