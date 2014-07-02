@@ -44,7 +44,7 @@ class ErrorController extends Zend_Controller_Action
                     $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
                         $paginationNumber,
-                        30,
+                        10,
                         3
                     );
                     $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
