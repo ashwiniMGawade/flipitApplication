@@ -144,12 +144,14 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription)
     {
         $imageTagOrSpan = '';
-        if ($listType =='special' || $listType =='savingGuide') {
-            $cssClassForPlusImage = $listType == 'savingGuide' ? 'home_plus_menu_image' : 'discount-label';
+        if ($listType =='special') {
             $imageTagOrSpan =
-                '<span class="' . $cssClassForPlusImage . '" >'
+                '<span class="discount-label">'
                     . FrontEnd_Helper_viewHelper::__form($listType)
                 . '</span>' ;
+        } else if ($listType =='savingGuide') {
+            $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
+            $imageTagOrSpan ='<img class="' . $cssClassForPlusImage . '" ></img>';
         } else {
             $imageTagOrSpan =
             '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
