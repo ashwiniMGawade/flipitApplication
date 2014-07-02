@@ -259,11 +259,17 @@ img.logo.kortingscode{
 		}
 	}
 }
-.plus_menu(@x){
+.plus-menu(@x){
 	background: url("../../images/sprite.png")  no-repeat @x -495px;
 	height: 43px;
 	text-indent: -9999px;
 	width: 64px;
+}
+.flipit-menu_image_home{
+	.plus-menu(-64px);
+}
+.kc_menu_image_home{
+	.plus-menu(-195px);
 }
 .nav-bar{
 	float:right;
@@ -300,18 +306,18 @@ img.logo.kortingscode{
 		    li.flipit-menu{
 		    	padding-top: 6%;
 			    a {
-			    	.plus_menu(-0px);
+			    	.plus-menu(-0px);
 	    			&:hover, &:focus{
-		    			.plus_menu(-64px);
+		    			.plus-menu(-64px);
 	    			}
 			    }
 			}
 			li.kc-menu{
 		    	padding-top: 6%;
 			    a {
-			    	.plus_menu(-131px);
+			    	.plus-menu(-131px);
 	    			&:hover, &:focus{
-		    			.plus_menu(-195px);
+		    			.plus-menu(-195px);
 	    			}
 			    }
 			}
