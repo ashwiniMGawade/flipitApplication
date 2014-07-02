@@ -55,20 +55,7 @@ class MoneySaving extends BaseMoneySaving
             ->fetchArray();
         return $recentlyAddedArticles;
     }
-    public static function getPageDetails($permalink)
-    {
-        $pageDetails = Doctrine_Query::create()
-            ->select('p.*, img.id, img.path, img.name')
-            ->from('Page p')
-            ->leftJoin('p.logo img')
-            ->where("p.permaLink='".$permalink."'")
-            ->andWhere('p.publish=1')
-            ->andWhere('p.pagelock=0')
-            ->andWhere('p.deleted=0')
-            ->fetchArray();
-        return $pageDetails;
-    }
-
+   
     public static function getAllMoneySavingArticles($permalink)
     {
         $allMoneySavingArticles = Doctrine_Query::create()

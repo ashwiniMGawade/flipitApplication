@@ -596,9 +596,15 @@ input[type="password"]:-ms-input-placeholder {color: #a2a2a2;}
 a.pop{
 	color:#353535;
 	margin-bottom: 10px;
-	&:hover{color: #fc0d1b;}
-	&:focus{text-decoration:underline;background: white;}
+	&:hover,
+	&:focus{
+		background: white;
+		.glyphicon-heart{
+			color:#fc0d1b;
+		}
+	}
 }
+
 .btn {
 	.glyphicon-heart {
 		color:#878a8d;
@@ -2461,7 +2467,7 @@ hr.alt2{
 			border:none;
 			color:@text-color;
 			box-shadow:none;
-			font-size:30px;
+			font-size:27px;
 			line-height:30px;
 			height:40px;
 			text-transform:uppercase;
