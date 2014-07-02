@@ -1,5 +1,5 @@
 <?php
-class Application_Service_CsvReader extends Application_Service_CsvBase
+class Application_Service_Infrastructure_CsvReader extends Application_Service_Infrastructure_CsvBase
 {
     private $headersInFirstRow = true;
     private $headers;
