@@ -82,13 +82,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $totalOffers = intval($specialListPage['totalOffers']);
             $specialPageListIndex = $specialListPage['page'][0]['permaLink'] .','
                .$specialListPage['page'][0]['pageTitle'];
-            $totalCouponsCount =
-                count($this->homePageData['specialPagesOffers'][$specialPageListIndex]);
-            $totalOffersOfSpecialPage = (intval($totalCouponsCount) - $totalCoupon) + $totalOffers;
-            $specialListPageOffers =
-                $totalOffersOfSpecialPage . ' '
-                . FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $totalCouponsCount . " "
-                . FrontEnd_Helper_viewHelper::__form('form_coupons');
+            $totalCouponsCount = count($this->homePageData['specialPagesOffers'][$specialPageListIndex]);
+            $specialListPageOffers = $totalCouponsCount . " " . FrontEnd_Helper_viewHelper::__form('form_coupons');
             $specialPageHtml .=
                 $this->getLeftColumnContent(
                     'special',
