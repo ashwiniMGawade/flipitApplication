@@ -46,7 +46,7 @@ if ($this->pageMode == true) {
     $imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
     $pageImagePath = PUBLIC_PATH_CDN.$imagePath.$imageName;
     $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
-    echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath);?>
+    echo $pageHeader->getCategoryOrPageHeader($this->page['pageTitle'], $pageImagePath, 'info');?>
     <div class="row">
         <div id="content" class="col-md-8 col-sm-8">
             <?php echo $pageContent; ?>
