@@ -328,7 +328,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
             $savingTitle = $savingGuide['title'];
             $allowed_tags = '';
-            $guideDescription = strip_tags($savingGuide['chapters'][0]['content'], $allowed_tags);
+            $guideDescription = strip_tags(
+                isset($savingGuide['chapters'][0]['content'])
+                ? $savingGuide['chapters'][0]['content'] : '',
+                $allowed_tags
+            );
             $savingContent =
                 mb_strlen($guideDescription, 'UTF-8') > 50
                 ? mb_substr($guideDescription, 0, 50, 'UTF-8') . "..."
