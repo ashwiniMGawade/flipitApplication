@@ -145,10 +145,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
     {
         $imageTagOrSpan = '';
         if ($listType =='special' || $listType =='savingGuide') {
-            $listType = $listType==FrontEnd_Helper_viewHelper::__form('form_savingGuide') ?
-            FrontEnd_Helper_viewHelper::__form('form_FLIPIT PLUS') : $listType;
-            $imageTagOrSpan = '<span class="discount-label" >'
-                . FrontEnd_Helper_viewHelper::__form($listType). '</span>' ;
+            $cssClassForPlusImage = $listType == 'savingGuide' ? 'home_plus_menu_image' : 'discount-label';
+            $imageTagOrSpan =
+                '<span class="' . $cssClassForPlusImage . '" >'
+                    . FrontEnd_Helper_viewHelper::__form($listType)
+                . '</span>' ;
         } else {
             $imageTagOrSpan =
             '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
