@@ -22,11 +22,40 @@ class PlusController extends Zend_Controller_Action
     {
         $articlesOverviewPagePermalink  = 'plus';
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+
         $mostReadArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' =>
                 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
-        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
-        $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
+
+        $categoryWiseArticles = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache("all_categoryWiseArticles_list", array('function' =>
+                'MoneySaving::getCategoryWiseArticles', 'parameters' => array()));
+
+        foreach ($categoryWiseArticles['blog'] as $key => $categoryWiseArticle) {
+            $categoryWiseArticles['blog'][$key]['authorDetails'] =
+                User::getUserDetails($categoryWiseArticle['authorid']);
+        }
+
+        foreach ($categoryWiseArticles['savingtip'] as $key => $categoryWiseArticle) {
+            $categoryWiseArticles['savingtip'][$key]['authorDetails'] =
+                User::getUserDetails($categoryWiseArticle['authorid']);
+        }
+
+        $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
+                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
+
+        foreach ($recentlyAddedArticles as $key => $recentlyAddedArticle) {
+            $recentlyAddedArticles[$key]['authorDetails'] =
+                User::getUserDetails($recentlyAddedArticle['authorid']);
+        }
+
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)'all_popularshop_list',
+            (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)),
+            true
+        );
+        
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->permaLink = $articlesOverviewPagePermalink;
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articlesOverviewPagePermalink);
@@ -40,10 +69,11 @@ class PlusController extends Zend_Controller_Action
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->popularStores = $popularStores;
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
-        $this->view->pageCssClass = 'saving-page  home-page';
+        $this->view->pageCssClass = 'article-page home-page';
     }
 
 

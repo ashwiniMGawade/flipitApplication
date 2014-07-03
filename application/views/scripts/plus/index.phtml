@@ -1,6 +1,7 @@
 <?php 
 $this->minifyHeadScript()->prependFile("public/js/front_end/socialMedia.js");
 $this->minifyHeadScript()->prependFile("public/js/front_end/savingguides.js");
+
 $mostReadArticles = '';
 if (!empty($this->mostReadArticles)) {
     $mostReadArticles =
@@ -12,27 +13,25 @@ if (!empty($this->mostReadArticles)) {
     $mostReadArticles = $this->translate("No Records Found");
 }
 
-$flipitPlusHeaderText =
-    $this->translate('Flipit.com Plus magazine helps out all the consumers out there in every way possible');
-
 $categoryWiseArticles = $this->categoryWiseArticles;
+$recentlyAddedArticles = $this->recentlyAddedArticles;
 $partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
-$categoryBlogArticles = '';
-$categorySavingtipArticles = '';
-if (!empty($categoryWiseArticles['blog'])) {
-    $categoryBlogArticles = $partialFunctions->getArticles('From Blog', $categoryWiseArticles['blog']);
-}
-if (!empty($categoryWiseArticles['savingtip'])) {
-    $categorySavingtipArticles = $partialFunctions->getArticles('Saving Tip', $categoryWiseArticles['savingtip']);
-}
+
+$plusViewPath = 'plus/';
+$popularStores = '';
+if (!empty($this->popularStores)) :
+     $popularStores = $this->partial(
+         $plusViewPath.'_popularShopLogos.phtml',
+         array(
+            'popularStores' => $this->popularStores,
+            'headerText' => $this->translate('Popular Stores')
+        )
+     );
+endif;
 
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
 $pageHeaderImage = $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage);
-
-if(LOCALE == ''):
-    $logoCssClass = 'kortingscode';
-endif
-
+LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
 ?>
 <div class="banner-block">
     <img class='image' src="<?php echo $pageHeaderImage;?>" alt="<?php echo $this->pageTitle;?>"/>
@@ -41,35 +40,20 @@ endif
             <h1 class="flipit-text <?php echo $logoCssClass; ?>"><?php $this->translate('Flipit plus');?></h1>
         </div>
     </div>
-    <div class="container">
-        <div class="text-box">
-            <p>
-            <?php echo $flipitPlusHeaderText;?>
-            </p>
-        </div>
-        <div class="block">
-            <div class="caption"><span><?php echo $this->translate('Featured savings');?></span></div>
-            <div class="carousel">
-                <div class="holder">
-                    <div class="mask">
-                        <div class="slideset">
-                        <?php echo $partialFunctions->getMostReadArticles($this->mostReadArticles);?>
-                        </div>
-                    </div>
-                </div>
-                <ul class="switcher">
-                <?php echo $mostReadArticles;?>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php echo $mostReadArticles;?>
 </div>
 <main role="main" id="main">
-    <div class="container content-box">
+    <div class="container">
     <?php 
-    echo $partialFunctions->getArticles('Recently added', $this->recentlyAddedArticles);
-    echo $categoryBlogArticles;
-    echo $categorySavingtipArticles;
+        $partialFunctions->getArticles('From Blog', $categoryWiseArticles['blog']);
+        $partialFunctions->getArticles('Top Article', array(0 => $recentlyAddedArticles[0]));
+    ?>
+    </div>
+    <?php echo '</div>'.$popularStores;?>
+    <div class="container">
+    <?php 
+        $partialFunctions->getArticles('Saving Tip', $categoryWiseArticles['savingtip']);
+        $partialFunctions->getArticles('Top Article', array(0 => $recentlyAddedArticles[1]));
     ?>
     </div>
 </main>
