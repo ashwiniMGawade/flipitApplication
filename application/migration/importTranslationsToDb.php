@@ -33,7 +33,8 @@ class ImportTranslationsToDb
 
         while ($translationsRow = $csvReader->getRow()) {
             try {
-                $translationInformation = Doctrine_Core::getTable('Translations')->findBy('translationKey', $translationsRow[0])->toArray();
+                $translationInformation = Doctrine_Core::getTable('Translations')
+                    ->findBy('translationKey', $translationsRow[0])->toArray();
                 if (empty($translationInformation)) {
                     $translationInsert = new Translations();
                     $translationInsert->translationKey = $translationsRow[0];
@@ -41,7 +42,8 @@ class ImportTranslationsToDb
                     $translationInsert->save();
                     $message = strtoupper($keyIn). ' translations are added sucessfully.';
                 } else {
-                    $updateTranslations = Doctrine_Core::getTable('Translations')->find($translationInformation[0]['id']);
+                    $updateTranslations = Doctrine_Core::getTable('Translations')
+                        ->find($translationInformation[0]['id']);
                     $updateTranslations->translation = $translationsRow[1];
                     $updateTranslations->updated_at = date('Y-m-d H:i:s');
                     $updateTranslations->save();
