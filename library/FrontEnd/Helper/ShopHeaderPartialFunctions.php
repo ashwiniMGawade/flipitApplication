@@ -62,7 +62,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                 $explodedShopUrl = explode('//', $shop['actualUrl']);
                 $divContent .=
                     '<h1>'.$shop['title'].'</h1>
-                    <strong>'.$shop['subTitle'].'</strong>
+                    <h2>'.$shop['subTitle'].'</h2>
                         <a target="_blank" rel="nofollow" 
                         class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
                         .$affliateDisabled.'

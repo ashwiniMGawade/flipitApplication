@@ -58,10 +58,10 @@ class FrontEnd_Helper_SignUpPartialFunction
     {
        if ($widgetType== 'sidebarWidget') {
         $signUpHeader=
-        	'<h2 class="form-signin-heading">' .FrontEnd_Helper_viewHelper::__translate('Sign up').'
+        	'<h4 class="form-signin-heading">' .FrontEnd_Helper_viewHelper::__translate('Sign up').'
             <span>'.FrontEnd_Helper_viewHelper::__translate('and join over').'<br>' 
             .FrontEnd_Helper_viewHelper::__translate('10 million people')
-            .'</span></h2>';
+            .'</span></h4>';
        } else if($widgetType == 'categoryPageSignupForm') {
         $signUpHeader='<h2 class="form-signin-heading">' .'
             <span>'.FrontEnd_Helper_viewHelper::__translate('Sign up for our newsletter and receive discounts inside your mailbox').'!'
@@ -69,15 +69,15 @@ class FrontEnd_Helper_SignUpPartialFunction
        }
        else if($widgetType == 'footerSignupForm') {
         $signUpHeader='<div class="text">
-                <h2>'.FrontEnd_Helper_viewHelper::__translate('Subscribe now').'</h2>
+                <h4>'.FrontEnd_Helper_viewHelper::__translate('Subscribe now').'</h4>
                 <span>'.FrontEnd_Helper_viewHelper::__translate('Become a saving superstar&#33;').'<br>'
                 .FrontEnd_Helper_viewHelper::__translate('And get exclusive codes').'</span>
             </div>';
        }
        else {
-         $signUpHeader='<h2>'.FrontEnd_Helper_viewHelper::__translate('Receive weekly updates of the best offers?')
+         $signUpHeader='<h4>'.FrontEnd_Helper_viewHelper::__translate('Receive weekly updates of the best offers?')
          .'<br>'
-         .FrontEnd_Helper_viewHelper::__translate('Sign up for our newsletter!').'</h2>';
+         .FrontEnd_Helper_viewHelper::__translate('Sign up for our newsletter!').'</h4>';
        }
        return $signUpHeader;
     }

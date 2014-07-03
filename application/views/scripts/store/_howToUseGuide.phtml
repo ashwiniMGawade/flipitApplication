@@ -4,7 +4,7 @@ $shopUrl = $domainName.'out/shop/'.$this->shop['id'];
 ?>
 <ul class="add-info">
     <li>
-        <h2><?php echo $this->translate('How to use code'); ?></h2>
+        <h4><?php echo $this->translate('How to use code'); ?></h4>
         <p>
             <a href="javascript:void(0);" id="clicker" class="how-to-showme-link" 
             onclick="showLightboxPopUp(<?php echo $this->shop['id']; ?>);">
@@ -21,7 +21,7 @@ $shopUrl = $domainName.'out/shop/'.$this->shop['id'];
         </p>
     </li>
     <li class="web">
-        <h2><?php echo $this->translate('Official website'); ?></h2>
+        <h4><?php echo $this->translate('Official website'); ?></h4>
         <a href="<?php echo $shopUrl; ?>"><?php echo $this->actualUrl;?></a>
     </li>
 </ul>
