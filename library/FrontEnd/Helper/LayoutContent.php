@@ -215,7 +215,7 @@ class FrontEnd_Helper_LayoutContent
             $ulOfMainMenu.=
             '<li class="' . $cssClassForLastLi .'" id="'. $menu["name"] .'">
                 <a id="'. $menu["name"] . '" name="'. $menu["name"] . '" 
-                    class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . $menu["name"]
+                    class="" href="'. HTTP_PATH_LOCALE  . $menu['url'] . '">' . ucfirst($menu["name"])
                 . '</a>
             </li>';
         }
