@@ -1,0 +1,35 @@
+{
+    "event": "suiteStart",
+    "suite": "unit",
+    "tests": 2
+}{
+    "event": "testStart",
+    "suite": "unit",
+    "test": "localeSettingsTest::testLocaleUpdate"
+}{
+    "event": "test",
+    "suite": "unit",
+    "test": "localeSettingsTest::testLocaleUpdate",
+    "status": "pass",
+    "time": 0.75999188423157,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}{
+    "event": "testStart",
+    "suite": "unit",
+    "test": "localeSettingsTest::testTimezoneUpdate"
+}{
+    "event": "test",
+    "suite": "unit",
+    "test": "localeSettingsTest::testTimezoneUpdate",
+    "status": "pass",
+    "time": 0.33999705314636,
+    "trace": [
+
+    ],
+    "message": "",
+    "output": ""
+}

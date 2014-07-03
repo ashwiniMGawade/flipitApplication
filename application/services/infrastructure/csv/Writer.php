@@ -1,5 +1,5 @@
 <?php
-class Application_Service_Infrastructure_CsvWriter extends Application_Service_Infrastructure_CsvBase
+class Application_Service_Infrastructure_Csv_Writer extends Application_Service_Infrastructure_Csv_Base
 {
     public function writeRow($row)
     {

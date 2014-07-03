@@ -2,7 +2,7 @@
 
 // For more info on the CsvReader/ Writer have a look at https://github.com/jwage/easy-csv
 
-class Application_Service_Infrastructure_CsvBase
+class Application_Service_Infrastructure_Csv_Base
 {
     protected $handle;
     protected $delimiter = ';';

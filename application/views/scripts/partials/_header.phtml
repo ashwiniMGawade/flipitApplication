@@ -3,7 +3,7 @@ $translateSession = new Zend_Session_Namespace('Transl8');
 if (!empty($translateSession->onlineTranslationActivated)): ?>
     <div class="inline-translation-bar">
         Inline translation active!
-        <a href="<?php echo HTTP_PATH; ?>trans/stopinlinetranslation">Stop inline translation and return to Admin</a>
+        <a href="<?php echo HTTP_PATH_LOCALE; ?>trans/stopinlinetranslation">Stop inline translation and return to Admin</a>
     </div>
 <?php 
 endif;

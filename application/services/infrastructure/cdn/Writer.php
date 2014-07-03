@@ -1,5 +1,5 @@
 <?php
-class Application_Service_Infrastructure_CdnWriter extends Application_Service_Infrastructure_CdnBase
+class Application_Service_Infrastructure_Cdn_Writer extends Application_Service_Infrastructure_Cdn_Base
 {
     public function putFile($localFilePath, $cdnFilePath)
     {

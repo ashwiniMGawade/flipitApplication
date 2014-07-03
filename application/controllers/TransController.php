@@ -89,7 +89,7 @@ class TransController extends Zend_Controller_Action
     protected function writeTranslationsToCsv($localLanguageFilePath)
     {
         $csvWritableTranslations = Translations::getCsvWritableTranslations();
-        $csvWriter = new Application_Service_Infrastructure_CsvWriter($localLanguageFilePath);
+        $csvWriter = new Application_Service_Infrastructure_Csv_Writer($localLanguageFilePath);
         $csvWriter->writeFromArray($csvWritableTranslations);
     }
 
@@ -99,7 +99,7 @@ class TransController extends Zend_Controller_Action
             .($sessionForModuleName->moduleName == '' ? '' : $sessionForModuleName->moduleName.'/')
             .'language/translations.csv';
 
-        $cdn = new Application_Service_Infrastructure_CdnWriter();
+        $cdn = new Application_Service_Infrastructure_Cdn_Writer();
         $cdn->putFile($localLanguageFilePath, $cdnLanguageFilePath);
     }
 }
