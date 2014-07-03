@@ -146,9 +146,8 @@ EOD;
         $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
         $permalink = rtrim($permalink, '/');
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
-        echo intval($permalinkMatches[0]) . intval($pageCount);
         if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :
-            if (intval($permalinkMatches[0]) > intval($pageCount)) : echo "222";
+            if (intval($permalinkMatches[0]) > intval($pageCount)) :
                 $permalink = explode('/'.$permalinkMatches[0], $permalink);
                 $permalink = $permalink[0];
                 header('location:'. HTTP_PATH.$permalink);
@@ -872,13 +871,17 @@ EOD;
     public static function getPagePermalink()
     {
         $pagePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $explodedPagePermalink = explode('/', $pagePermalink);
 
         if (LOCALE != '') {
-            $explodedPagePermalink = explode('/', $pagePermalink);
             $secondUrlParameter = isset($explodedPagePermalink[2]) ? '/'. $explodedPagePermalink[2] : '';
+            $secondUrlParameter = isset($explodedPagePermalink[2]) && intval($explodedPagePermalink[2]) ? '' : $secondUrlParameter;
             $pagePermalink = $explodedPagePermalink[1].$secondUrlParameter;
+        } else {
+            $secondUrlParameter = isset($explodedPagePermalink[1]) ? '/'. $explodedPagePermalink[1] : '';
+            $secondUrlParameter = isset($explodedPagePermalink[1]) &&  intval($explodedPagePermalink[1]) ? '' : $secondUrlParameter;
+            $pagePermalink = $explodedPagePermalink[0].$secondUrlParameter;
         }
-        
         return  $pagePermalink;
     }
 
@@ -901,6 +904,14 @@ EOD;
         $requestedUrl = ltrim(REQUEST_URI, '/');
         $splitedModuleName = preg_split('/[\/\?]+/', $requestedUrl);
         return rtrim($splitedModuleName[0], '/');
+    }
+
+    public static function setErrorPageParameters($currentObject)
+    {
+        $currentObject->getResponse()->setHttpResponseCode(404);
+        $currentObject->view->popularShops = Shop::getPopularStores(12);
+        $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+        $currentObject->view->flipitLocales = $websitesWithLocales;
     }
 }
 
