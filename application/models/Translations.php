@@ -29,6 +29,7 @@ class Translations extends BaseTranslations
 
     public static function getCsvWritableTranslations()
     {
+        $poTranslations = '';
         $allDbTranslations = self::getAllDatabaseTranslations();
 
         foreach ($allDbTranslations as $key => $dbTranslation) {
