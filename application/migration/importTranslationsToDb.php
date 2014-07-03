@@ -12,9 +12,7 @@ class ImportTranslationsToDb
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    if($key == 'en') {
                     $this->importTranslationsToDb($connection ['dsn'], $key);
-                }
                 } catch (Exception $e) {
                     echo $e->getMessage()."\n\n";
                 }
