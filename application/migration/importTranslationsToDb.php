@@ -24,10 +24,8 @@ class ImportTranslationsToDb
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
-        $cultureName = Signupmaxaccount::getAllMaxAccounts();
-        $cultureName = isset($cultureName[0]['locale']) ? $cultureName[0]['locale'] : 'nl_NL';
         $pathToTranslationsCsvFolder = APPLICATION_PATH . '/../public'. ($keyIn != 'en' ? '/'.$keyIn : '') .
-            '/language/'. $cultureName .'/translations.csv';
+            '/language/translations.csv';
         $csvReader = new Application_Service_Infrastructure_Csv_Reader($pathToTranslationsCsvFolder);
         $message = '';
 
