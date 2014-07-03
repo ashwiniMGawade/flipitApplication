@@ -67,7 +67,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                         class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
                         .$affliateDisabled.'
                         onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$explodedShopUrl[1].'
-                        </a>'. self::getLoveAnchor($shop['id']);
+                        </a>'. self::getLoveAnchor($shop['id'], $shop['name']);
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
@@ -75,7 +75,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         return $divContent;
     }
     
-    public function getLoveAnchor($shopId)
+    public function getLoveAnchor($shopId, $shopName)
     {
         $shopPermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
         $visitorId = Auth_VisitorAdapter::hasIdentity() ? Auth_VisitorAdapter::getIdentity()->id : 0;
@@ -90,7 +90,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" 
             class="pop btn btn-sm btn-default" href="javascript:void(0)">
             <span class="' . $loveClassGreyColorOrRedColor . '"></span>'.
-            $this->__translate('Love').
+            $shopName.
         '</a>';
     }
 }
