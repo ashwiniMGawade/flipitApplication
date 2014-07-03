@@ -1,5 +1,6 @@
-<?php   /*
+<?php   
 $mostReadArticles = $this->articles;
+/*
 $mostReadArticleNumber = 0;
 foreach ($mostReadArticles as $mostReadArticle) {
 	if (!empty($mostReadArticle['articles']['thumbnail'])) {
@@ -9,8 +10,7 @@ foreach ($mostReadArticles as $mostReadArticle) {
 		$mostReadArticleImage = '';
 	}
 	$mostReadArticleId = $mostReadArticle['articles']['id'];
-	$mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? 
-		mb_substr($mostReadArticle['articles']['title'], 0,40).'..' : $mostReadArticle['articles']['title'];
+	
 ?>
  <li>
     <a class="same-height-left" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id);" 
@@ -26,34 +26,56 @@ $mostReadArticleNumber++;
 ?>
 <div class="slideshow-area">
     <div class="container">
-        <div class="slideshow">
+        <div id="carousel" class="carousel slide slideshow" data-ride="carousel">
             <div class="mask">
-                <div class="slideset">
-                    <div class="slide active">
+                <div class="slideset carousel-inner">
+                <?php $i = 0;
+                $indicators = '';
+                foreach ($mostReadArticles as $mostReadArticle) {
+                    $mostReadArticleImage = PUBLIC_PATH_CDN
+                                            .$mostReadArticle['articles']['thumbnail']['path'] 
+                                            .$mostReadArticle['articles']['thumbnail']['name'];
+                    $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? 
+                                            mb_substr($mostReadArticle['articles']['title'], 0,40)
+                                            .'..' : $mostReadArticle['articles']['title'];
+                    $articleUpdatedAtDate = new Zend_Date($mostReadArticle['articles']['created_at']);
+                    $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG); 
+                    $active = '';
+                    if($i == 0) {
+                        $active = 'active';
+                    }
+                    $indicators .= '<li data-target="#carousel" data-slide-to="'.$i.'" class="'.$active.'"></li>';
+                ?>
+                    <div class="slide item <?php if($i == 0) { echo 'active'; } ?>">
                         <div class="holder">
-                            <img class="visual" src="/public/images/front_end/slide01.jpg" width="563" height="391"
-                            alt="image description">
+                            <img class="visual" src="http://img.flipit.com/public/in/images/upload/article/1386346182_GOSF logo.PNG" width="563" height="391" alt="image description">
                             <span class="category dark-pink">Featured</span>
                             <div class="text-holder">
                                 <div class="text-frame">
-                                    <h2>
-                                        <a href="#">Betaal jij te veel voor verzekeringen die je niet nodig hebt?</a>
-                                    </h2>
+                                    <h2><a href="#"><?php echo $mostReadArticleTitle;?></a></h2>
                                     <em class="date">June 16 2014</em>
                                 </div>
                             </div>
                         </div>
                     </div>
+                <?php
+                $i++;
+            }
+            ?>
                 </div>
             </div>
-            <a class="btn-prev" href="#">Previous</a>
-            <a class="btn-next" href="#">Next</a>
-            <ul class="switcher-2">
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
+            <a href="#carousel" class="btn-prev carousel-control" data-slide="prev">Previous
+    </a>
+    <a href="#carousel" class="btn-next carousel-control" data-slide="next">Next
+    </a>
+
+            <ul class="switcher-2 carousel-indicators">
+               <?php echo $indicators; ?>
             </ul>
         </div>
     </div>
 </div>
+
+ 
+
+
