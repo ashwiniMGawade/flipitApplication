@@ -20,14 +20,14 @@ class ErrorController extends Zend_Controller_Action
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
                 if ($pageDetails) {
                     if ($pageDetails['pageAttributeId'] == 2) {
-                        $this->view->pageCssClass = 'faq-page home-page';
+                        $this->view->pageCssClass = 'faq-page';
                     } else if (isset($pageDetails['pageAttributeId']) && $pageDetails['pageAttributeId'] == 1) {
                         $flashMessage = $this->_helper->getHelper('FlashMessenger');
                         $message = $flashMessage->getMessages();
                         $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
-                        $this->view->pageCssClass = 'contact-page home-page';
+                        $this->view->pageCssClass = 'contact-page';
                     } else {
-                        $this->view->pageCssClass = 'flipit-expired-page home-page';
+                        $this->view->pageCssClass = 'flipit-expired-page';
                     }
 
                     if (is_array($this->pagePermalink)) {

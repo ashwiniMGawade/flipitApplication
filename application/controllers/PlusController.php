@@ -43,7 +43,7 @@ class PlusController extends Zend_Controller_Action
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
-        $this->view->pageCssClass = 'saving-page  home-page';
+        $this->view->pageCssClass = 'saving-page';
     }
 
 
@@ -78,7 +78,7 @@ class PlusController extends Zend_Controller_Action
                 FACEBOOK_IMAGE,
                 ''
             );
-            $this->view->pageCssClass = 'in-savings-page author-page  home-page';
+            $this->view->pageCssClass = 'in-savings-page author-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
         }
