@@ -217,7 +217,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $imgTagWithImage = '';
         if ($shop!=null) {
             $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
-            $imgTagWithImage = '<img alt="' . $shop['logo']['name']. '" src="'. $shopLogoImage .'">';
+            $imgTagWithImage = '<img alt="' . $shop['name']. '" src="'. $shopLogoImage .'">';
         } else {
             $imgTagWithImage = '<div class="ico-mail"></div>';
         }

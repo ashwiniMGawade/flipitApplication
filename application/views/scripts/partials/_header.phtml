@@ -11,9 +11,11 @@ endif;
 if(LOCALE == ''):
     $logoCssClass = 'logo kortingscode';
     $logoPath = HTTP_PATH.'public/images/kortingscode-logo.png';
+    $logoAlt = "kortingscode.nl";
 else :
     $logoCssClass = 'logo flipit';
     $logoPath = HTTP_PATH.'public/images/flipit-logo.png';
+    $logoAlt = "flipit.com";
 endif
 ?>
 <header id="header">
@@ -36,7 +38,7 @@ endif
             <strong>
                 <a href="<?php echo LOCALE == '' ? 
                     'http://www.kortingscode.nl' : 'http://www.flipit.com/'.LOCALE ;?>">
-                    <img class="<?php echo $logoCssClass;?>"src="<?php echo $logoPath;?>"/>
+                    <img alt="<?php echo $logoAlt; ?>" class="<?php echo $logoCssClass;?>" src="<?php echo $logoPath;?>"/>
                 </a>
             </strong>
             <a href="javascript:void(0);" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>

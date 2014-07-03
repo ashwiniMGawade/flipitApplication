@@ -151,7 +151,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 . '</span>' ;
         } else if ($listType =='savingGuide') {
             $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
-            $imageTagOrSpan ='<img class="' . $cssClassForPlusImage . '" ></img>';
+            $imageTagOrSpan ='<span class="' . $cssClassForPlusImage . '" ></span>';
         } else {
             $imageTagOrSpan =
             '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
