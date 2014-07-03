@@ -146,7 +146,22 @@ EOD;
         $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
         $permalink = rtrim($permalink, '/');
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
+        echo intval($permalinkMatches[0]) . intval($pageCount);
         if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :
+            if (intval($permalinkMatches[0]) > intval($pageCount)) : echo "222";
+                $permalink = explode('/'.$permalinkMatches[0], $permalink);
+                $permalink = $permalink[0];
+                header('location:'. HTTP_PATH.$permalink);
+            elseif(intval($pageCount) == 1) :
+                $baseLink = explode('/', $permalink);
+                if (intval($baseLink[1]) == 1) :
+                    header('location:'. HTTP_PATH.$baseLink[0]);
+                    exit;
+                endif;
+                header('location:'. HTTP_PATH.$baseLink[0] ."/" .$baseLink[1]);
+                exit;
+            endif;
+
             $permalink = explode('/'.$permalinkMatches[0], $permalink);
             $permalink = $permalink[0];
         elseif (intval($permalinkMatches[0]) > 3) :
