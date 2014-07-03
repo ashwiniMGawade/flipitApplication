@@ -119,7 +119,7 @@ class OfferController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'flipit-expired-page home-page';
+        $this->view->pageCssClass = 'flipit-expired-page';
     }
 
     public function offerDetailAction()
@@ -207,7 +207,6 @@ class OfferController extends Zend_Controller_Action
             $signUpFormSidebarWidget
         );
         $this->view->form = $signUpFormForStorePage;
-        $this->view->pageCssClass = 'home-page';
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 }

@@ -177,7 +177,7 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'author-page home-page';
+        $this->view->pageCssClass = 'author-page';
     }
 
     public function indexAction()
@@ -226,7 +226,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
-        $this->view->pageCssClass = 'all-stores-page home-page';
+        $this->view->pageCssClass = 'all-stores-page';
     }
 
     public function howtoguideAction()

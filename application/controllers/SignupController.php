@@ -96,7 +96,7 @@ class SignupController extends Zend_Controller_Action
         }
         $testimonials = Signupmaxaccount::getTestimonials();
         $this->view->testimonials = $testimonials;
-        $this->view->pageCssClass = 'register-page  home-page';
+        $this->view->pageCssClass = 'register-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
 
@@ -214,7 +214,7 @@ class SignupController extends Zend_Controller_Action
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
         }
-        $this->view->pageCssClass = 'profile-page  home-page';
+        $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
         $this->viewHelperObject->getMetaTags($this);
         # set reponse header X-Nocache used for varnish
