@@ -45,10 +45,6 @@ class TransController extends Zend_Controller_Action
         $storeUrl 	= $this->_getParam('storeUrl', 'http://www.flipit.com');
         $hash 		= $this->_getParam('hash', false);
 
-        $sessionForModuleName = new Zend_Session_Namespace('moduleName');
-        $moduleName = explode('/', $storeUrl);
-        $sessionForModuleName->moduleName = isset($moduleName[3]) ? $moduleName[3] : '';
-
         if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'flipit.com')) {
             if ($hash == $this->view->inlineTranslationHash()) {
                 $session->onlineTranslationActivated = true;
@@ -68,20 +64,13 @@ class TransController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        $sessionForModuleName = new Zend_Session_Namespace('moduleName');
-
-        $localLanguageFilePath = APPLICATION_PATH
-            .'/../public/'
-            .($sessionForModuleName->moduleName == '' ? '' : $sessionForModuleName->moduleName.'/')
-            .'language/translations.csv';
+        $localLanguageFilePath = APPLICATION_PATH.'/../public/'.LOCALE.'language/translations.csv';
 
         self::writeTranslationsToCsv($localLanguageFilePath);
-        self::writeCsvToS3($localLanguageFilePath, $sessionForModuleName);
+        self::writeCsvToS3($localLanguageFilePath);
 
         $session = new Zend_Session_Namespace('Transl8');
         $session->onlineTranslationActivated = false;
-
-        $sessionForModuleName->moduleName = '';
 
         $this->_redirect('http://www.flipit.com/admin');
     }
@@ -90,15 +79,12 @@ class TransController extends Zend_Controller_Action
     {
         $csvWritableTranslations = Translations::getCsvWritableTranslations();
         $csvWriter = new Application_Service_Infrastructure_Csv_Writer($localLanguageFilePath);
-        $csvWriter->writeFromArray($csvWritableTranslations);
+        (!empty($csvWritableTranslations) ? $csvWriter->writeFromArray($csvWritableTranslations) : '');
     }
 
-    protected function writeCsvToS3($localLanguageFilePath, $sessionForModuleName)
+    protected function writeCsvToS3($localLanguageFilePath)
     {
-        $cdnLanguageFilePath = '/public/'
-            .($sessionForModuleName->moduleName == '' ? '' : $sessionForModuleName->moduleName.'/')
-            .'language/translations.csv';
-
+        $cdnLanguageFilePath = '/public/'.LOCALE.'language/translations.csv';
         $cdn = new Application_Service_Infrastructure_Cdn_Writer();
         $cdn->putFile($localLanguageFilePath, $cdnLanguageFilePath);
     }
