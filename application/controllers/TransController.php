@@ -64,7 +64,10 @@ class TransController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        $localLanguageFilePath = APPLICATION_PATH.'/../public/'.LOCALE.'language/translations.csv';
+        $localLanguageFilePath = APPLICATION_PATH
+            .'/../public'
+            .(LOCALE == '' ? '' : '/'.LOCALE)
+            .'/language/translations.csv';
 
         self::writeTranslationsToCsv($localLanguageFilePath);
         self::writeCsvToS3($localLanguageFilePath);
@@ -84,8 +87,10 @@ class TransController extends Zend_Controller_Action
 
     protected function writeCsvToS3($localLanguageFilePath)
     {
-        $cdnLanguageFilePath = '/public/'.LOCALE.'language/translations.csv';
-        $cdn = new Application_Service_Infrastructure_Cdn_Writer();
-        $cdn->putFile($localLanguageFilePath, $cdnLanguageFilePath);
+        $cdnLanguageFilePath = '/public'
+            .(LOCALE == '' ? '' : '/'.LOCALE)
+            .'/language/translations.csv';
+        $cdnWriter = new Application_Service_Infrastructure_Cdn_Writer();
+        $cdnWriter->putFile($localLanguageFilePath, $cdnLanguageFilePath);
     }
 }
