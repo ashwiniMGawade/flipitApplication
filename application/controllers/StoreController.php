@@ -128,9 +128,14 @@ class StoreController extends Zend_Controller_Action
             $this->view->topPopularOffers = $offers;
         }
         $this->view->expiredOffers = $expiredOffers;
+        if ($shopInformation[0]['affliateProgram'] == 0) {
+            $numberOfSimilarOffers = 10;
+        } else {
+            $numberOfSimilarOffers = 4;
+        }
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
             'similarStoresAndSimilarCategoriesOffers',
-            4,
+            $numberOfSimilarOffers,
             $shopId
         );
         $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;

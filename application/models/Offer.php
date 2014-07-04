@@ -120,6 +120,7 @@ class Offer extends BaseOffer
         $similarCategoriesIds = self::getCategoriesIdsForWhereIn($shopId);
         $similarCategoriesOffer = array();
         if (!empty($similarCategoriesIds)) {
+            $commaSepratedCategroyIdValues = implode(', ', $similarCategoriesIds);
             $similarCategoriesOffer = Doctrine_Query::create()
             ->select(
                 's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus, o.refURL,
@@ -135,7 +136,7 @@ class Offer extends BaseOffer
             ->leftJoin('s.favoriteshops fv')
             ->leftJoin('o.termandcondition terms')
             ->leftJoin('o.vote vot')
-            ->leftJoin('s.refShopCategory c')
+            ->leftJoin('o.refOfferCategory c')
             ->leftJoin('s.logo img')
             ->where('o.deleted = 0')
             ->andWhere('s.deleted = 0')
@@ -145,7 +146,7 @@ class Offer extends BaseOffer
             ->andWhere('o.enddate > "'.$date.'"')
             ->andWhere('o.startdate <= "'.$date.'"')
             ->andWhere('o.userGenerated=0')
-            ->andWhereIn("c.categoryId", $similarCategoriesIds)
+            ->andWhere("c.categoryId IN ($commaSepratedCategroyIdValues)")
             ->andWhere("s.id != ".$shopId)
             ->orderBy('o.startdate DESC')
             ->limit($limit)
