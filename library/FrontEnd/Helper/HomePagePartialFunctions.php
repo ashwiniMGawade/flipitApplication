@@ -369,9 +369,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'">
                 </div>
                 <div class="box">
-                    <h2>
+                    <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
-                    </h2>
+                    </h3>
                    <p class="sub-text">' . $offerTitle .'</p>
                 </div>
             </a>

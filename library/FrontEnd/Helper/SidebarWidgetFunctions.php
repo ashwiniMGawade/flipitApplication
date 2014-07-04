@@ -51,7 +51,7 @@ EOD;
 
     public function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
-        $socialMediaTitle = "<h2>".$this->__translate('Follow us')."</h2>";
+        $socialMediaTitle = "<h4>".$this->__translate('Follow us')."</h4>";
         $facebookPageLink = 'https://www.facebook.com/kortingsbonnen';
         $twitterPageLink = 'https://twitter.com/codekorting';
         $googlePlusPageLink = 'https://plus.google.com/+KortingscodeNl';
@@ -85,7 +85,7 @@ EOD;
         $categorySidebarWodget =
         '<div class="block">
             <div class="intro">
-            <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
+            <h4 class="sidebar-heading">'. $this->__translate('All Categories').'</h4></div>
                 <ul class="tags">';
         for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
             $categorySidebarWodget.='
@@ -108,7 +108,7 @@ EOD;
         $browseByStoreWidget =
         '<div class="block">
             <div class="intro">
-               <h2>'.$this->__translate('Browse by Store') .'</h2>
+               <h4>'.$this->__translate('Browse by Store') .'</h4>
             </div>
             <div class="alphabet-holder">
                 <ul class="alphabet">';
@@ -148,7 +148,7 @@ EOD;
     {
         $popularStores = self::getStoreForFrontEnd('popular', 25);
         $popularStoresContent = '<div class="block"><div class="intro">
-                   <h2>'.$this->__translate('Populaire Winkels').'</h2>
+                   <h4>'.$this->__translate('Populaire Winkels').'</h4>
                    <span>'
                    .$this->__translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
                  </div><ul class="tags">';

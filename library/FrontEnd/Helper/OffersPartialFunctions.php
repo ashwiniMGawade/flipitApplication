@@ -244,7 +244,12 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerAnchorTagContent,
         $class
     ) {
-        
+    	$headOpen = '';
+    	$headClose = '';
+        if($class=='link clickout-title'){
+        	$headOpen = '<h3>';
+        	$headClose = '</h3>';
+        }
         if ($currentOffer->discountType == "CD") {
             $onClick =  $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
             $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
@@ -278,7 +283,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">
                 '.$offerAnchorTagContent .'</a>';
         }
-        return $offerLink;
+        return $headOpen. $offerLink . $headClose;
     }
 
     public function getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $offerAnchorTagContent, $class)
