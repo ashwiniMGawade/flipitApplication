@@ -1,5 +1,5 @@
 <?php
-Doctrine_Manager::getInstance()->bindComponent('Logo', 'doctrine_site');
+//Doctrine_Manager::getInstance()->bindComponent('Logo', 'doctrine_site');
 
 /**
  * BaseLogo
