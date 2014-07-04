@@ -1,41 +1,8 @@
 <?php
-class FrontEnd_Helper_MoneySavingGuidesPartialFunctions {
-    public function getMostReadArticles($mostReadArticles)
-    {
-        $articleNumber = 1;
-        
-        foreach ($mostReadArticles as $mostReadArticle) {
-            if ($articleNumber == 1) {
-                $id = 'first';
-                $class= 'slide active';
-            } else if ($articleNumber == 2) {
-                $id = 'second';
-                $class = 'slide';
-            } else {
-                $id = 'third';
-                $class = 'slide';
-            }
-            echo'<div class="'.$class.'" id="'.$id.'">
-                <a href="'.HTTP_PATH_LOCALE.'plus/'.$mostReadArticle['articles']['permalink'].'">
-                    <div class="mostread-image">
-                        <img width="632" class="aligncenter" 
-                        src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path']
-                        .$mostReadArticle['articles']['articleImage']['name'].'" 
-                        alt="'.$mostReadArticle['articles']['title'].'">
-                    </div>
-                    <h1>'.$mostReadArticle['articles']['title'].'</h1>
-                </a>
-                <p>
-                   '.$mostReadArticle['articles']['content'].'
-                </p>
-            </div>';
-            $articleNumber++;
-        }
-        
-    }
-
+class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
+{
     public function getArticles($headingType, $articles)
-    {   
+    {
         if ($headingType != 'Top Article') {
             $relatedArticles = '<div class="row articles-box">';
         } else {
@@ -67,10 +34,12 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions {
                             <span class="category '.$topArticleColorClass.'">
                                 '.FrontEnd_Helper_viewHelper::__translate($headingType).'
                             </span>
-                            <img
+                            <a href= "'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
+                                <img
                                 src="'.PUBLIC_PATH_CDN.$article['thumbnail']['path']
                                 .$article['thumbnail']['name'].'"
                                 width="270" height="192" alt="'.$article['title'].'">
+                            </a>    
                         </div>
                         <div class="holder">
                             <div class="box">

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$('#mycarousel').carousel();
+	 
     $('.switcher li:eq(0) a').addClass('active');
     $('.switcher li a').click(addActiveClass);
 });

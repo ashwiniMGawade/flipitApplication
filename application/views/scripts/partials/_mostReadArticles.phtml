@@ -1,32 +1,9 @@
 <?php   
 $mostReadArticles = $this->articles;
-/*
-$mostReadArticleNumber = 0;
-foreach ($mostReadArticles as $mostReadArticle) {
-	if (!empty($mostReadArticle['articles']['thumbnail'])) {
-		$mostReadArticleImage = PUBLIC_PATH_CDN.$mostReadArticle['articles']['thumbnail']['path']. 
-			$mostReadArticle['articles']['thumbnail']['name'];
-	} else {
-		$mostReadArticleImage = '';
-	}
-	$mostReadArticleId = $mostReadArticle['articles']['id'];
-	
-?>
- <li>
-    <a class="same-height-left" id="<?php echo $mostReadArticleNumber; ?>" onClick="showArticleOnClick(this.id);" 
-    	href="javascript:void(0);">
-        <img class="ico" width="52" src="<?php echo $mostReadArticleImage; ?>" 
-        alt="<?php echo $mostReadArticleTitle; ?>"/>
-        <span><?php echo $mostReadArticleTitle; ?></span>
-    </a>
-</li>
-<?php
-$mostReadArticleNumber++;
-}*/
 ?>
 <div class="slideshow-area">
     <div class="container">
-        <div id="carousel" class="carousel slide slideshow" data-ride="carousel">
+        <div id="myCarousel" class="carousel slide slideshow" data-ride="carousel">
             <div class="mask">
                 <div class="slideset carousel-inner">
                 <?php $i = 0;
@@ -44,16 +21,25 @@ $mostReadArticleNumber++;
                     if($i == 0) {
                         $active = 'active';
                     }
-                    $indicators .= '<li data-target="#carousel" data-slide-to="'.$i.'" class="'.$active.'"></li>';
+                    $indicators .= '<li data-target="#myCarousel" data-slide-to="'.$i.'" class="'.$active.'"></li>';
                 ?>
                     <div class="slide item <?php if($i == 0) { echo 'active'; } ?>">
                         <div class="holder">
-                            <img class="visual" src="http://img.flipit.com/public/in/images/upload/article/1386346182_GOSF logo.PNG" width="563" height="391" alt="image description">
-                            <span class="category dark-pink">Featured</span>
-                            <div class="text-holder">
+                            <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$mostReadArticle['articles']['permalink'];?>">
+                            <img class="visual" src="/public/images/front_end/slide01.jpg" width="563" height="391"
+                                alt="<?php echo $mostReadArticleTitle;?>">
+                                </a>
+                            <span class="category dark-pink"><?php echo $this->translate('Featured');?></span>
+                            <div class="text-holder carousel-caption">
                                 <div class="text-frame">
-                                    <h2><a href="#"><?php echo $mostReadArticleTitle;?></a></h2>
-                                    <em class="date">June 16 2014</em>
+                                    <h2>
+                                        <a 
+                                        href="<?php echo HTTP_PATH_LOCALE.'plus/'
+                                        .$mostReadArticle['articles']['permalink'];?>">
+                                            <?php echo $mostReadArticleTitle;?>
+                                        </a>
+                                    </h2>
+                                    <em class="date"><?php echo $articleUpdatedAtDate;?></em>
                                 </div>
                             </div>
                         </div>
@@ -64,18 +50,12 @@ $mostReadArticleNumber++;
             ?>
                 </div>
             </div>
-            <a href="#carousel" class="btn-prev carousel-control" data-slide="prev">Previous
-    </a>
-    <a href="#carousel" class="btn-next carousel-control" data-slide="next">Next
-    </a>
-
+            <a href="#myCarousel" class="btn-prev left carousel-control" role="button" data-slide="prev">Previous</a>
+            <a href="#myCarousel" class="btn-next right carousel-control" role="button" data-slide="next">Next</a>
             <ul class="switcher-2 carousel-indicators">
                <?php echo $indicators; ?>
             </ul>
         </div>
     </div>
-</div>
-
- 
-
-
+</div>         
+  

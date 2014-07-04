@@ -52,7 +52,7 @@ class PlusController extends Zend_Controller_Action
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'all_popularshop_list',
-            (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)),
+            (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(7)),
             true
         );
         
@@ -73,7 +73,7 @@ class PlusController extends Zend_Controller_Action
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->categoryWiseArticles = $categoryWiseArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
-        $this->view->pageCssClass = 'article-page home-page';
+        $this->view->pageCssClass = 'article-page';
     }
 
 
@@ -108,7 +108,7 @@ class PlusController extends Zend_Controller_Action
                 FACEBOOK_IMAGE,
                 ''
             );
-            $this->view->pageCssClass = 'in-savings-page author-page  home-page';
+            $this->view->pageCssClass = 'in-savings-page author-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
         }
