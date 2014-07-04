@@ -31,24 +31,19 @@ class PlusController extends Zend_Controller_Action
             getRequestedDataBySetGetCache("all_categoryWiseArticles_list", array('function' =>
                 'MoneySaving::getCategoryWiseArticles', 'parameters' => array()));
 
-        foreach ($categoryWiseArticles['blog'] as $key => $categoryWiseArticle) {
-            $categoryWiseArticles['blog'][$key]['authorDetails'] =
-                User::getUserDetails($categoryWiseArticle['authorid']);
-        }
-
-        foreach ($categoryWiseArticles['savingtip'] as $key => $categoryWiseArticle) {
-            $categoryWiseArticles['savingtip'][$key]['authorDetails'] =
-                User::getUserDetails($categoryWiseArticle['authorid']);
-        }
-
+        $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+        $blogCategoryWiseArticles = array();
+        $blogCategoryWiseArticles['blog'] = $moneySavingPartialFunctions->
+            addAuthorDetailsInArticles($categoryWiseArticles, 'blog');
+        
+        $savingTipCategoryWiseArticles = array();
+        $savingTipCategoryWiseArticles['savingtips'] = $moneySavingPartialFunctions->
+            addAuthorDetailsInArticles($categoryWiseArticles, 'savingtip');
+        
+        $allArticles = $blogCategoryWiseArticles + $savingTipCategoryWiseArticles;
         $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
-
-        foreach ($recentlyAddedArticles as $key => $recentlyAddedArticle) {
-            $recentlyAddedArticles[$key]['authorDetails'] =
-                User::getUserDetails($recentlyAddedArticle['authorid']);
-        }
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'all_popularshop_list',
@@ -71,7 +66,7 @@ class PlusController extends Zend_Controller_Action
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->popularStores = $popularStores;
         $this->view->mostReadArticles = $mostReadArticles;
-        $this->view->categoryWiseArticles = $categoryWiseArticles;
+        $this->view->allArticles = $allArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
         $this->view->pageCssClass = 'article-page';
     }

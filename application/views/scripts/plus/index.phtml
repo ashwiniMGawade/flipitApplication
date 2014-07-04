@@ -13,7 +13,10 @@ if (!empty($this->mostReadArticles)) {
     $mostReadArticles = $this->translate("No Records Found");
 }
 
-$categoryWiseArticles = $this->categoryWiseArticles;
+$allArticles = $this->allArticles;
+$allArticles = array_merge($allArticles['blog'], $allArticles['savingtips']);
+
+$firstSectionArticles = array_chunk($allArticles, 4);
 $recentlyAddedArticles = $this->recentlyAddedArticles;
 $partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
 
@@ -40,20 +43,28 @@ LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
             <h1 class="flipit-text <?php echo $logoCssClass; ?>"><?php $this->translate('Flipit plus');?></h1>
         </div>
     </div>
-    <?php echo $mostReadArticles;?>
 </div>
 <main role="main" id="main">
+<?php
+for ($i=0; $i < count($firstSectionArticles) ; $i++) { 
+    if ($i == 0) {?>
     <div class="container">
+    <?php  
+        $partialFunctions->
+            getArticles($firstSectionArticles[$i]);
+   echo '</div>'.$popularStores; ?>
+    </div>
+   <?php } else {
+     ?>
+     <div class="container">
     <?php 
-        $partialFunctions->getArticles('From Blog', $categoryWiseArticles['blog']);
-        $partialFunctions->getArticles('Top Article', array(0 => $recentlyAddedArticles[0]));
+        $partialFunctions->
+            getArticles($firstSectionArticles[$i]);
     ?>
     </div>
-    <?php echo '</div>'.$popularStores;?>
-    <div class="container">
-    <?php 
-        $partialFunctions->getArticles('Saving Tip', $categoryWiseArticles['savingtip']);
-        $partialFunctions->getArticles('Top Article', array(0 => $recentlyAddedArticles[1]));
-    ?>
-    </div>
+  <?php  }
+ 
+}
+?>
+    
 </main>

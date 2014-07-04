@@ -6,8 +6,8 @@ $mostReadArticles = $this->articles;
         <div id="myCarousel" class="carousel slide slideshow" data-ride="carousel">
             <div class="mask">
                 <div class="slideset carousel-inner">
-                <?php $i = 0;
-                $indicators = '';
+                <?php $carouselCounter = 0;
+                $carouselIndicators = '';
                 foreach ($mostReadArticles as $mostReadArticle) {
                     $mostReadArticleImage = PUBLIC_PATH_CDN
                                             .$mostReadArticle['articles']['thumbnail']['path'] 
@@ -17,13 +17,14 @@ $mostReadArticles = $this->articles;
                                             .'..' : $mostReadArticle['articles']['title'];
                     $articleUpdatedAtDate = new Zend_Date($mostReadArticle['articles']['created_at']);
                     $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG); 
-                    $active = '';
-                    if($i == 0) {
-                        $active = 'active';
+                    $activeClass = '';
+                    if($carouselCounter == 0) {
+                        $activeClass = 'active';
                     }
-                    $indicators .= '<li data-target="#myCarousel" data-slide-to="'.$i.'" class="'.$active.'"></li>';
+                    $carouselIndicators .= '<li data-target="#myCarousel" data-slide-to="'.$carouselCounter.'"
+                      class="'.$activeClass.'"></li>';
                 ?>
-                    <div class="slide item <?php if($i == 0) { echo 'active'; } ?>">
+                    <div class="slide item <?php if($carouselCounter == 0) { echo 'active'; } ?>">
                         <div class="holder">
                             <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$mostReadArticle['articles']['permalink'];?>">
                             <img class="visual" src="/public/images/front_end/slide01.jpg" width="563" height="391"
@@ -45,7 +46,7 @@ $mostReadArticles = $this->articles;
                         </div>
                     </div>
                 <?php
-                $i++;
+                $carouselCounter++;
             }
             ?>
                 </div>
@@ -53,9 +54,10 @@ $mostReadArticles = $this->articles;
             <a href="#myCarousel" class="btn-prev left carousel-control" role="button" data-slide="prev">Previous</a>
             <a href="#myCarousel" class="btn-next right carousel-control" role="button" data-slide="next">Next</a>
             <ul class="switcher-2 carousel-indicators">
-               <?php echo $indicators; ?>
+               <?php echo $carouselIndicators; ?>
             </ul>
         </div>
     </div>
 </div>         
+  
   

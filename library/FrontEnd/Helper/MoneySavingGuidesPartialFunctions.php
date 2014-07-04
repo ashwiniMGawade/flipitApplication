@@ -1,14 +1,9 @@
 <?php
 class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
 {
-    public function getArticles($headingType, $articles)
+    public function getArticles($articles)
     {
-        if ($headingType != 'Top Article') {
-            $relatedArticles = '<div class="row articles-box">';
-        } else {
-            $relatedArticles = '';
-        }
-       
+        $relatedArticles = '<div class="row articles-box">';
         $articleCounter = 1;
         foreach ($articles as $article) {
             if ($articleCounter == 1 || $articleCounter == 5) {
@@ -19,7 +14,6 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                 $articleClass = '';
             }
 
-            $headingType == 'Top Article' ? $topArticleColorClass = 'blue' : $topArticleColorClass = '';
             $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
                     . $article['authorDetails']['slug'];
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
@@ -31,8 +25,8 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 '.$articleClass.'"  style="height: 361px;">
                         <div class="image">
-                            <span class="category '.$topArticleColorClass.'">
-                                '.FrontEnd_Helper_viewHelper::__translate($headingType).'
+                            <span class="category">
+                                '.FrontEnd_Helper_viewHelper::__translate($article['type']).'
                             </span>
                             <a href= "'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
                                 <img
@@ -62,6 +56,18 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                     </article>';
             ++$articleCounter;
         }
-        echo $relatedArticles ;
+        echo $relatedArticles .'</div>';
+    }
+
+    public function addAuthorDetailsInArticles($categoryWiseArticles, $type)
+    {
+
+        foreach ($categoryWiseArticles[$type] as $key => $categoryWiseArticle) {
+            $categoryWiseArticles[$type][$key]['authorDetails'] =
+                User::getUserDetails($categoryWiseArticle['authorid']);
+            $categoryWiseArticles[$type][$key]['type'] = $type;
+        }
+
+        return $categoryWiseArticles[$type];
     }
 }
