@@ -1,18 +1,18 @@
 <script type="text/javascript">
     $('#code-hint').hide();
-    var clip = new ZeroClipboard($('a#my-button'));
+    var clip = new ZeroClipboard($('a#code-button'));
     ZeroClipboard.config({swfPath: "/public/js/front_end/zeroclipboard/ZeroClipboard.swf"});
     clip.on('error', function (client, args) {
         $('#code-hint').show();
-        $('a#my-button').hide();
+        $('a#code-button').hide();
         var codeBox = $('#couponCode');
         codeBox.addClass("noflash");
         codeBox.focus();
         codeBox.select();
     });
-    clip.on( "aftercopy", function( event ) {
-        $('a#my-button').addClass('copied');
-        $('a#my-button').html('<?php echo $this->translate('COPIED')?>');
+    clip.on("aftercopy", function(event) {
+        $('a#code-button').addClass('copied');
+        $('a#code-button').html('<?php echo $this->translate('COPIED')?>');
     } )
     if (navigator.appVersion.indexOf("MSIE 10") !== -1) {
         var codeBox = $('#couponCode');
@@ -22,12 +22,12 @@
 <div class="block">
     <form role="form">
         <fieldset>
-            <div id="code-hint">Press Ctrl + C to copy the code </div>
+            <div id="code-hint"><?php echo $this->translate('Press Ctrl + C to copy the code');?></div>
             <div class="holder">
-                <input id="couponCode" class="default form-control" type="text" 
+                <input id="couponCode" class="default form-control" type="text"
                 value="<?php echo strtoupper($this->couponCode); ?>">
                 <a data-clipboard-text="<?php echo strtoupper($this->couponCode); ?>"
-                 id='my-button' class="btn orange btn-warning">
+                 id='code-button' class="btn orange btn-warning">
                     <?php echo $this->translate('Copy Code');?>
                 </a>
             </div>
