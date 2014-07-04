@@ -815,7 +815,7 @@ jQuery.onFontResize = (function($) {
 	};
 	PlaceholderInput.replaceByOptions = function(opt) {
 		var inputs = [].concat(
-			convertToArray(document.getElementsByTagName('searchFieldHeader')),
+			convertToArray(document.getElementsByTagName('searchFieldHeader'))
 		);
 		for(var i = 0; i < inputs.length; i++) {
 			if(inputs[i].className.indexOf(opt.skipClass) < 0) {
