@@ -70,4 +70,9 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
 
         return $categoryWiseArticles[$type];
     }
+
+    public static function getArticlesAccordingToDescOrderFunction($articleCreatedDateAsc, $articleCreatedDateDesc)
+    {
+        return strtotime($articleCreatedDateDesc['created_at']) - strtotime($articleCreatedDateAsc['created_at']);
+    }
 }

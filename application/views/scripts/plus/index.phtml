@@ -13,11 +13,8 @@ if (!empty($this->mostReadArticles)) {
     $mostReadArticles = $this->translate("No Records Found");
 }
 
-$allArticles = $this->allArticles;
-$allArticles = array_merge($allArticles['blog'], $allArticles['savingtips']);
-
-$firstSectionArticles = array_chunk($allArticles, 4);
-$recentlyAddedArticles = $this->recentlyAddedArticles;
+usort($this->allArticles, "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescOrderFunction");
+$articlesInformation = array_chunk($this->allArticles, 8);
 $partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
 
 $plusViewPath = 'plus/';
@@ -46,12 +43,12 @@ LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
 </div>
 <main role="main" id="main">
 <?php
-for ($i=0; $i < count($firstSectionArticles) ; $i++) { 
-    if ($i == 0) {?>
+for ($articleCounter =0; $articleCounter < count($articlesInformation) ; $articleCounter++) { 
+    if ($articleCounter == 0) {?>
     <div class="container">
     <?php  
         $partialFunctions->
-            getArticles($firstSectionArticles[$i]);
+            getArticles($articlesInformation[$articleCounter]);
    echo '</div>'.$popularStores; ?>
     </div>
    <?php } else {
@@ -59,12 +56,11 @@ for ($i=0; $i < count($firstSectionArticles) ; $i++) {
      <div class="container">
     <?php 
         $partialFunctions->
-            getArticles($firstSectionArticles[$i]);
+            getArticles($articlesInformation[$articleCounter]);
     ?>
     </div>
   <?php  }
  
 }
-?>
-    
+?>   
 </main>

@@ -37,10 +37,12 @@ class PlusController extends Zend_Controller_Action
             addAuthorDetailsInArticles($categoryWiseArticles, 'blog');
         
         $savingTipCategoryWiseArticles = array();
-        $savingTipCategoryWiseArticles['savingtips'] = $moneySavingPartialFunctions->
+        $savingTipCategoryWiseArticles['savingtip'] = $moneySavingPartialFunctions->
             addAuthorDetailsInArticles($categoryWiseArticles, 'savingtip');
         
         $allArticles = $blogCategoryWiseArticles + $savingTipCategoryWiseArticles;
+        $allArticles = array_merge($allArticles['blog'], $allArticles['savingtip']);
+        
         $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
@@ -91,7 +93,9 @@ class PlusController extends Zend_Controller_Action
                     'function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
-            $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
+            $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
+                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
             $this->viewHelperObject->getMetaTags(
