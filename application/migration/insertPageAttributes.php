@@ -33,7 +33,9 @@ class insertPageAttributes
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Inserting page attributes!!!"
         );
+        PageAttribute::deletePageAttributes();
         PageAttribute::insertPageAttributes();
+        Page::updatePageAttributeId();
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Attributes have been inserted successfully!!!"
