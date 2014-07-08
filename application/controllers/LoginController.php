@@ -267,7 +267,9 @@ class LoginController extends Zend_Controller_Action
             setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
             $url =
                 HTTP_PATH_LOCALE
-                . FrontEnd_Helper_viewHelper::__link('link_login').'/'.FrontEnd_Helper_viewHelper::__link('link_profiel');
+                . FrontEnd_Helper_viewHelper::__link('link_inschrijven')
+                .'/'
+                .FrontEnd_Helper_viewHelper::__link('link_profiel');
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect($url);
         }
@@ -299,7 +301,7 @@ class LoginController extends Zend_Controller_Action
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_helper->redirector(
                 FrontEnd_Helper_viewHelper::__link('link_profiel'),
-                FrontEnd_Helper_viewHelper::__link('link_login'),
+                FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                 $moduleKey
             );
         }
