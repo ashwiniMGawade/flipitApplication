@@ -1,8 +1,9 @@
 <?php
 $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
 $searchBoxCssClass = LOCALE == '' ? 'kortingscode' : '';
+$searchSlideClass = LOCALE != '' ? 'flipit-slide' : '';
 ?>
-<div class="slide">
+<div class="slide <?php echo $searchSlideClass;?>">
     <form role="form" class="search-form">
         <input 
             placeholder="<?php echo FrontEnd_Helper_viewHelper::__form('form_Type in a Store e.g. Avis');?>" 
