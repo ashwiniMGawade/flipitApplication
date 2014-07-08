@@ -464,7 +464,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <?php       
                         $shopPicture = '';
                         if(isset( $this->data['logo']['name'] ) && $this->data['logo']['name'] != '' ) {
-                            $shopPicture = PUBLIC_PATH_CDN.  $this->data['logo']['path']  .'thum_large_'. $this->data['logo']['name'] ;
+                            $shopPicture = PUBLIC_PATH_CDN.  $this->data['logo']['path']. $this->data['logo']['name'] ;
                             }				  
                         ?> 
                         <div class='browse-container'>    
@@ -501,8 +501,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                             ) {
                             $shopPicture = 
                                 PUBLIC_PATH_CDN
-                                .$this->data['screenshot']['path'] 
-                                .'thum_large_'. $this->data['screenshot']['name'];
+                                .$this->data['screenshot']['path'] . $this->data['screenshot']['name'];
                         }	
                       ?>
                         <div class='browse-container'>
