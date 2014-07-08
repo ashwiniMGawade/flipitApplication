@@ -20,32 +20,42 @@ class PlusController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $articlesOverviewPagePermalink  = 'plus';
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $articlesOverviewPagePermalink  = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $pageDetails = Page::getPageDetailsFromUrl($articlesOverviewPagePermalink);
 
         $mostReadArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' =>
-                'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
+            getRequestedDataBySetGetCache(
+                (string)"all_mostreadMsArticlePage_list",
+                (array)array('function' =>
+                'MoneySaving::getMostReadArticles',
+                'parameters' => array(3))
+            );
 
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_categoryWiseArticles_list", array('function' =>
-                'MoneySaving::getCategoryWiseArticles', 'parameters' => array()));
+            getRequestedDataBySetGetCache(
+                (string)"all_categoryWiseArticles_list",
+                (array)array('function' =>
+                'MoneySaving::getCategoryWiseArticles', 'parameters' => array())
+            );
 
         $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
-        $blogCategoryWiseArticles = array();
-        $blogCategoryWiseArticles['blog'] = $moneySavingPartialFunctions->
+        $blogCategoryArticles = array();
+        $blogCategoryArticles['blog'] = $moneySavingPartialFunctions->
             addAuthorDetailsInArticles($categoryWiseArticles, 'blog');
         
-        $savingTipCategoryWiseArticles = array();
-        $savingTipCategoryWiseArticles['savingtip'] = $moneySavingPartialFunctions->
+        $savingTipCategoryArticles = array();
+        $savingTipCategoryArticles['savingtip'] = $moneySavingPartialFunctions->
             addAuthorDetailsInArticles($categoryWiseArticles, 'savingtip');
         
-        $allArticles = $blogCategoryWiseArticles + $savingTipCategoryWiseArticles;
+        $allArticles = $blogCategoryArticles + $savingTipCategoryArticles;
         $allArticles = array_merge($allArticles['blog'], $allArticles['savingtip']);
         
         $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
-                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
+            getRequestedDataBySetGetCache(
+                (string)"all_recentlyAddedArticles_list",
+                (array)array('function' =>
+                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2))
+            );
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'all_popularshop_list',

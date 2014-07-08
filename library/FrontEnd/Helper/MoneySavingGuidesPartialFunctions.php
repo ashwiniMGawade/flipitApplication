@@ -1,7 +1,7 @@
 <?php
 class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
 {
-    public function getArticles($articles)
+    public static function getArticles($articles)
     {
         $relatedArticles = '<div class="row articles-box">';
         $articleCounter = 1;
@@ -18,9 +18,9 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                     . $article['authorDetails']['slug'];
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
-            $authorName = explode(' ', $article['authorname']);
-            $authorFirstName = isset($authorName[0])? $authorName[0] : '';
-            $authorLastName =  isset($authorName[1])? $authorName[1] : '';
+            $articleAuthorName = explode(' ', $article['authorname']);
+            $authorFirstName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
+            $authorLastName =  isset($articleAuthorName[1])? $articleAuthorName[1] : '';
             $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName($authorFirstName, $authorLastName);
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 '.$articleClass.'"  style="height: 361px;">
@@ -71,7 +71,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
         return $categoryWiseArticles[$type];
     }
 
-    public static function getArticlesAccordingToDescOrderFunction($articleCreatedDateAsc, $articleCreatedDateDesc)
+    public static function getArticlesAccordingToDescendingOrderFunction($articleCreatedDateAsc, $articleCreatedDateDesc)
     {
         return strtotime($articleCreatedDateDesc['created_at']) - strtotime($articleCreatedDateAsc['created_at']);
     }

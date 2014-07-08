@@ -7,15 +7,17 @@ if (!empty($this->mostReadArticles)) {
     $mostReadArticles =
         $this->partial(
             'partials/_mostReadArticles.phtml',
-            array('articles'=>$this->mostReadArticles)
+            array('mostReadArticles'=>$this->mostReadArticles)
         );
 } else {
     $mostReadArticles = $this->translate("No Records Found");
 }
 
-usort($this->allArticles, "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescOrderFunction");
+usort(
+    $this->allArticles,
+    "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescendingOrderFunction"
+);
 $articlesInformation = array_chunk($this->allArticles, 8);
-$partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
 
 $plusViewPath = 'plus/';
 $popularStores = '';
@@ -46,22 +48,23 @@ LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
 <?php
 for ($articleCounter =0; $articleCounter < count($articlesInformation) ; $articleCounter++) { 
     if ($articleCounter == 0) {?>
-    <div class="container">
-    <?php  
-        $partialFunctions->
-            getArticles($articlesInformation[$articleCounter]);
-   echo '</div>'.$popularStores; ?>
-    </div>
-   <?php } else {
-     ?>
-     <div class="container">
-    <?php 
-        $partialFunctions->
-            getArticles($articlesInformation[$articleCounter]);
-    ?>
-    </div>
-  <?php  }
- 
+        <div class="container">
+            <?php  
+            FrontEnd_Helper_MoneySavingGuidesPartialFunctions::
+                getArticles($articlesInformation[$articleCounter]);
+            echo '</div>'.$popularStores; ?>
+        </div>
+        <?php 
+    } else {
+        ?>
+        <div class="container">
+        <?php 
+            FrontEnd_Helper_MoneySavingGuidesPartialFunctions::
+                getArticles($articlesInformation[$articleCounter]);
+        ?>
+        </div>
+        <?php 
+    }
 }
 ?>   
 </main>
