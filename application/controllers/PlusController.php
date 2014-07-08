@@ -39,17 +39,18 @@ class PlusController extends Zend_Controller_Action
             );
 
         $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+
         $blogCategoryArticles = array();
         $blogCategoryArticles['blog'] = $moneySavingPartialFunctions->
             addAuthorDetailsInArticles($categoryWiseArticles, 'blog');
-        
+
         $savingTipCategoryArticles = array();
         $savingTipCategoryArticles['savingtip'] = $moneySavingPartialFunctions->
             addAuthorDetailsInArticles($categoryWiseArticles, 'savingtip');
-        
+
         $allArticles = $blogCategoryArticles + $savingTipCategoryArticles;
         $allArticles = array_merge($allArticles['blog'], $allArticles['savingtip']);
-        
+
         $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 (string)"all_recentlyAddedArticles_list",

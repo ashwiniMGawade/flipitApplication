@@ -26,7 +26,7 @@ $mostReadArticles = $this->mostReadArticles;
                         class="'.$activeClass.'">'.$carouselCounter.'</li>';
                     ?>
                     <div class="slide item <?php echo $activeClass;?>">
-                        <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink()
+                        <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
                             .$mostReadArticle['articles']['permalink'];?>">
                             <img class="visual" src="<?php echo $mostReadArticleImage;?>" width="563" height="391"
                                     alt="<?php echo $mostReadArticleTitle;?>">
@@ -36,7 +36,7 @@ $mostReadArticles = $this->mostReadArticles;
                             <div class="text-frame">
                                 <h2>
                                     <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink()
-                                        .$mostReadArticle['articles']['permalink'];?>">
+                                    .'/'.$mostReadArticle['articles']['permalink'];?>">
                                         <?php echo $mostReadArticleTitle;?>
                                     </a>
                                 </h2>
