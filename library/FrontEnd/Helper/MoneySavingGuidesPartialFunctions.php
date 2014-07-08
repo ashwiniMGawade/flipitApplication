@@ -19,16 +19,20 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
             $articleAuthorName = explode(' ', $article['authorname']);
-            $authorFirstName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
-            $authorLastName =  isset($articleAuthorName[1])? $articleAuthorName[1] : '';
-            $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName($authorFirstName, $authorLastName);
+            $articleAuthorFirstName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
+            $articleAuthorLastName =  isset($articleAuthorName[1])? $articleAuthorName[1] : '';
+            $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
+                $articleAuthorFirstName,
+                $articleAuthorLastName
+            );
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 '.$articleClass.'"  style="height: 361px;">
                         <div class="image">
                             <span class="category">
                                 '.FrontEnd_Helper_viewHelper::__translate($article['type']).'
                             </span>
-                            <a href= "'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
+                            <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
+                                .$article['permalink'].'">
                                 <img
                                 src="'.PUBLIC_PATH_CDN.$article['thumbnail']['path']
                                 .$article['thumbnail']['name'].'"
@@ -38,7 +42,8 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                         <div class="holder">
                             <div class="box">
                                 <h2>
-                                    <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
+                                    <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
+                                        .$article['permalink'].'">
                                        '.$article['title'].'
                                     </a>
                                 </h2>
