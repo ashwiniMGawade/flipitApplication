@@ -246,8 +246,8 @@ class FrontEnd_Helper_OffersPartialFunctions
     ) {
     	$headOpen = '';
     	$headClose = '';
-        if($class=='link clickout-title'){
-        	$headOpen = '<h3>';
+        if($class=='link clickout-title') {
+        	$headOpen = '<h3 class="'. $class .'">';
         	$headClose = '</h3>';
         }
         if ($currentOffer->discountType == "CD") {
