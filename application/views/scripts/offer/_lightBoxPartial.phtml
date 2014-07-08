@@ -1,7 +1,6 @@
 <script type="text/javascript">
     $('#code-hint').hide();
     var clip = new ZeroClipboard($('a#code-button'));
-    ZeroClipboard.config({swfPath: "/public/js/front_end/zeroclipboard/ZeroClipboard.swf"});
     clip.on('error', function (client, args) {
         $('#code-hint').show();
         $('a#code-button').hide();
@@ -12,8 +11,8 @@
     });
     clip.on("aftercopy", function(event) {
         $('a#code-button').addClass('copied');
-        $('a#code-button').html('<?php echo $this->translate('COPIED')?>');
-    } )
+        $('a#code-button').html($('#copiedText').val());
+    });
     if (navigator.appVersion.indexOf("MSIE 10") !== -1) {
         var codeBox = $('#couponCode');
         codeBox.addClass("noflash");
@@ -21,6 +20,7 @@
 </script>
 <div class="block">
     <form role="form">
+    <input type="hidden" name="copiedText" id='copiedText' value='<?php echo $this->translate("COPIED");?>'>
         <fieldset>
             <div id="code-hint"><?php echo $this->translate('Press Ctrl + C to copy the code');?></div>
             <div class="holder">

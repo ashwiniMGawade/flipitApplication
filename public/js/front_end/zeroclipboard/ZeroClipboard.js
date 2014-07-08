@@ -334,7 +334,7 @@
  * @private
  */
   var _globalConfig = {
-    swfPath: _swfPath,
+    swfPath: 'public/js/front_end/zeroclipboard/ZeroClipboard.swf',
     trustedDomains: window.location.host ? [ window.location.host ] : [],
     cacheBust: true,
     forceEnhancedClipboard: false,
