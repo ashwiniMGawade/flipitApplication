@@ -503,6 +503,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $poTrans->addTranslation(
             array(
+                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                    .'language/form' . $suffix . '.mo',
+                    'locale' => $locale
+            )
+        );
+
+        $poTrans->addTranslation(
+            array(
                     'content'   => APPLICATION_PATH.'/../public'.strtolower($localePath)
                     .'language/po_links' . $suffix . '.mo',
                     'locale'    => $locale
