@@ -1,5 +1,3 @@
-@import "custom-variables.less";
-@import "custom-mixins.less";
 .banner-block {
 	.slideshow-area{
 		position:absolute;
@@ -21,27 +19,13 @@
 		.mask{
 			width:100%;
 			position:relative;
-			overflow:hidden;
-		}
-		.slideset {
-			width:100%;
-			float: left;
-		}
-		.slide{
-			display:none;
-			float:left;
-			width:577px;
-			padding:0 0 0 4px;
-		}
-		.slide.active{display:block;}
-		.holder{
 			border:5px solid @white-color;
 			.border-radius(2px);
-			position:relative;
+			overflow:hidden;
 		}
 		.category{
 			top:10px;
-			left:-9px;
+			left:0;
 			padding:6px 14px 9px;
 			font-size:18px;
 			line-height:20px;
@@ -98,7 +82,7 @@
 		top:50%;
 		left:15px;
 		z-index:7;
-		background:url(../../images/sprite.png) no-repeat -330px -432px;
+		background:url(../../images/sprite.png) no-repeat -295px -427px;
 		width: 10px;
 		height: 32px;
 		margin:-16px 0 0;
@@ -112,7 +96,7 @@
 		}
 	}
 	a.btn-next{
-		background-position:-301px -432px;
+		background-position:-328px -428px;
 		left:auto;
 		right:15px;
 	}
@@ -131,21 +115,17 @@
 			display:inline-block;
 			vertical-align:top;
 			margin:0 1px;
-		}
-		.active{
-			a{background:@white-color;}
-		}
-		a{
-			display:block;
 			background:rgba(255,255,255,.5);
 			width:10px;
 			height:10px;
 			.border-radius(5px);
 			text-indent:-9999px;
 			overflow:hidden;
-			&:hover{
-				background:@white-color;
-			}
+		}
+		.active{
+			background:@white-color;
+			width:10px;
+			height:10px;
 		}
 	}
 }
@@ -167,7 +147,7 @@
 		border-width:1px 0;
 		border-style:solid;
 		border-color:#e1e1e1;
-		box-shadow: 0 1px 3px rgba(0,0,0,.1);
+		.box-shadow(0 1px 3px rgba(0,0,0,.1));
 	}
 	.box{
 		padding:0 0 15px;
@@ -242,7 +222,7 @@
 		img{
 			vertical-align:top;
 			.border-radius;
-			box-shadow: 0 1px 1px 0 rgba(0,0,0,0.1);
+			.box-shadow(0 1px 1px 0 rgba(0,0,0,0.1));
 			border:1px solid #ddd;
 		}
 	}
@@ -350,123 +330,9 @@
 			margin:0 0 -7px;
 		}
 	}
-	#footer{
-		text-shadow:none;
-		background:none;
-		font-size:15px;
-		line-height:18px;
+	#footer-light{
 		.bottom-nav{
-			padding:41px 5px 54px;
-			text-align:left;
 			border-bottom:1px solid #e4e4e4;
-			h3{margin:0 0 11px;}
-			ul{
-				padding:0;
-				margin:0;
-				list-style:none;
-				font-size:13px;
-				line-height:24px;
-			}
-			.ico{
-				line-height:24px;
-				text-align:center;
-				padding-top:6px;
-				.num{
-					display:block;
-					font-size:21px;
-					line-height:24px;
-					margin:0 0 3px;
-				}
-				.add-text{
-					display:block;
-					max-width:82px;
-					margin:0;
-				}
-			}
-			.ico-shop{
-				display:block;
-				margin:0 0 16px;
-				width:82px;
-				height:80px;
-				border:3px solid @light-blue;
-				.border-radius (50%);
-				position:relative;
-				&:before{
-					content:'';
-					position:absolute;
-					top:50%;
-					left:50%;
-					background:url(../../images/sprite.png) no-repeat -160px -383px;
-					width: 26px;
-					height: 25px;
-					margin:-13px 0 0 -12px;
-				}
-			}
-		}
-		.add-block{
-			padding:40px 5px;
-			.benefits{
-				padding:0;
-				margin:0 0 40px;
-				list-style:none;
-				li{
-					width:20%;
-					margin:0 1%;
-					display:inline-block;
-					vertical-align:top;
-					text-align:left;
-				}
-			}
-		}
-		.title{
-			font-size:24px;
-			line-height:30px;
-			color:@light-blue;
-			font-weight:bold;
-			text-align:center;
-			margin:0 0 44px;
-			.glyphicon-ok{
-				font-size:28px;
-				vertical-align:top;
-				margin:-2px 11px 0 0;
-			}
-		}
-		.language{
-			padding:0;
-			margin:0 0 27px;
-			list-style:none;
-			li{
-				display:inline-block;
-				vertical-align:top;
-				margin:0 3px;
-			}
-			a{
-				display:block;
-				background:url(../../images/sprite.png) no-repeat -3px -455px;
-				width: 24px;
-				height: 16px;
-				text-indent:-9999px;
-				overflow:hidden;
-			}
-			.ico-2{background-position:-37px -455px;}
-			.ico-3{background-position:-71px -455px;}
-			.ico-4{background-position:-106px -455px;}
-			.ico-5{background-position:-139px -455px;}
-			.ico-6{background-position:-173px -455px;}
-			.ico-7{background-position:-207px -455px;}
-			.ico-8{background-position:-241px -455px;}
-		}
-		.logo{
-			display:block;
-			float:none;
-			background:url(../../images/logo-footer.png) no-repeat;
-			width:89px;
-			height:40px;
-			margin:0 auto 21px;
-		}
-		.copy{
-			font-size:11px;
-			line-height:20px;
 		}
 	}
 }
@@ -562,19 +428,6 @@
 				}
 			}
 		}
-		#footer{
-			font-size:12px;
-			.bottom-nav{
-				padding:21px 15px 27px;
-				font-size:12px;
-				nav{
-					padding:0 15px;
-				}
-				ul{
-					font-size:12px;
-				}
-			}
-		}
 	}
 }
 @media only screen and (max-width: 767px){
@@ -584,8 +437,11 @@
 		}
 	}
 	.article-page {
+		#main{
+			.container{padding:0 6px;}
+		}
 		.banner-block{
-			margin:-1px 0 15px;
+			margin:-1px 0 0;
 			.container{padding:0 6px;}
 			background:none;
 			.image{
@@ -597,7 +453,7 @@
 		.slideshow-area {
 			position:static;
 			.container{
-				padding:30px 15px 0;
+				padding:30px 6px 0;
 			}
 			.slideshow{
 				float:none;
@@ -624,31 +480,6 @@
 			font-size: 16px;
 			line-height: 18px;
 			.container{padding:10px;}
-		}
-		#footer{
-			.bottom-nav{
-				nav{
-					margin:0 0 15px;
-				}
-			}
-			.title{
-				font-size:18px;
-				margin:0 0 12px;
-				.glyphicon-ok {
-					font-size: 21px;
-					margin: 2px 6px 0 0;
-				}
-			}
-			.add-block{
-				.benefits{
-					li{
-						display:block;
-						width:100%;
-						margin:0 0 10px;
-						text-align:center;
-					}
-				}
-			}
 		}
 		.login-box {
 			padding:25px 0 5px;
