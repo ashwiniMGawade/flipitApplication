@@ -52,7 +52,7 @@ class AboutController extends Zend_Controller_Action
         );
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'authors-page home-page';
+        $this->view->pageCssClass = 'authors-page';
 
     }
 
@@ -108,6 +108,6 @@ class AboutController extends Zend_Controller_Action
         );
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'author-page home-page';
+        $this->view->pageCssClass = 'author-page';
     }
 }

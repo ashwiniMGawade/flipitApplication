@@ -83,7 +83,6 @@ class PlusController extends Zend_Controller_Action
         $this->view->pageCssClass = 'article-page';
     }
 
-
     public function guidedetailAction()
     {
         $articleDetails = Articles::getArticleByPermalink($this->getRequest()->getParam('permalink'));

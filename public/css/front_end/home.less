@@ -115,7 +115,7 @@
 				font-weight:bold;
 				margin:0 0 8px;
 			}
-			h2{
+			.home-header-second-header{
 				color:@white-color;
 				font-size:34px;
 				line-height:36px;
@@ -142,70 +142,6 @@
 			}
 		}
 	}
-	#header{background:none;}
-	.top-panel{
-		background:#2d2c2c;
-		background:rgba(0, 0, 0,.7);
-		.container{
-			padding-bottom: 0;
-			padding-top: 0;
-		}
-		.slogan{
-			padding:9px 0 11px;
-		}
-		.account-box{
-			ul{
-				-webkit-box-shadow: none;
-				box-shadow: none;
-				border:none;
-				li{
-					-webkit-box-shadow: none;
-					box-shadow: none;
-					border:none;
-					padding:0;
-				}
-				.active a{
-					background:@orange-color;
-				}
-				a{
-					display:block;
-					padding:11px 16px 11px;
-					&:hover{
-						background:@orange-color;
-						text-decoration:none;
-					}
-				}
-			}
-		}
-	}
-	.navigation{
-		background:#353534;
-		background:rgba(0,0,0,.6);
-		border:none;
-	}
-	.nav-bar{
-		#nav{
-			ul{
-				border:none;
-				-webkit-box-shadow: none;
-				box-shadow: none;
-				li{
-					border:none;
-					-webkit-box-shadow: none;
-					box-shadow: none;
-					padding:40px 0 0;
-					margin:0 0 0 51px;
-						> a{
-							padding:0;
-							&:hover,
-							&:focus{
-								background:none;
-							}
-					}
-				}
-			}
-		}
-	}
 	.email-form{
 		.form-group{
 			float:left;
@@ -213,7 +149,7 @@
 		}
 		.form-control{
 			display:block;
-			width:100% !important;
+			width:100%;
 			font-size:15px;
 			line-height:18px;
 			padding:12px 10px;
@@ -302,7 +238,7 @@
 			.border-radius(2px 2px 0 0);
 			padding:19px 28px 19px;
 			background:#fafafa;
-			h1{
+			h2{
 				font-weight:bold;
 				font-size:21px;
 				line-height:22px;
@@ -508,7 +444,7 @@
 			    width: 70px;
 			}
 			.box{overflow:hidden;}
-			h2{
+			h3{
 				color:#0077cc;
 				font-size:18px;
 				line-height:22px;
@@ -665,17 +601,7 @@
 	.home-page {
 		.section-top{
 			height:500px;
-		}
-		.nav-bar{
-			#nav{
-				ul{
-					li{
-						padding:24px 0 25px;
-					}
-				}
-			}
-		}
-		
+		}		
 		.shops{
 			li{
 				width:10%;
@@ -719,7 +645,6 @@
 				.box {
 					width:70.5%;
 					padding:0 0 0 10px;
-				
 					h2{
 						font-size:16px;
 						line-height:20px;
@@ -741,15 +666,6 @@
 			margin:0 0 15px;
 			.container{
 				padding-bottom: 16px;
-			}
-		}
-		.nav-bar{
-			#nav{
-				ul{
-					li{
-						margin:0 0 0 30px;
-					}
-				}
 			}
 		}
 		.shops{
@@ -841,30 +757,13 @@
 }
 @media only screen and (max-width: 767px){
 	.home-page {
-		.navigation{
-			.logo{
-				margin:0 auto;
-			}
-		}
-		.nav-bar{
-			#nav{
-				ul{
-					li{
-						padding:0;
-						margin:0;
-							> a{
-								padding:15px 20px;
-								&:hover,
-								&:focus{
-									background:#353534;
-								}
-						}
-					}
-				}
-			}
-		}
 		.area {
 			margin-bottom: 15px;
+		}
+		.text-block {
+			.container{
+				padding: 0px;
+			}
 		}
 		.section-top{
 			.email-form{
@@ -880,6 +779,11 @@
 					line-height:22px;
 					margin:0 0 12px;
 				}
+				.home-header-second-header{
+					font-size:20px;
+					line-height:22px;
+					margin:0 0 12px;
+				}
 				.form-control{.border-radius;}
 				.holder{
 					border:none;
@@ -891,15 +795,14 @@
 		}
 		.email-form{
 			.form-group{
-				float:none;
-				width:100%;
+				width:70%;
 				margin:0 0 10px;
 			}
 			.form-control{
 				.border-radius;
 			}
 			.btn.orange{
-				width:100%;
+				width:30%;
 				float:none;
 				display:block;
 				.border-radius;
@@ -933,6 +836,9 @@
 				border-left: 1px solid #EAEAEA;
 				ul{
 					h2{
+						font-size:16px;
+					}
+					h3{
 						font-size:16px;
 					}
 					a{

@@ -1,7 +1,7 @@
 <section class="block">
-    <h2>
+    <h4>
 <?php echo $this->translate('Latest news about').' '.$this->partialLoop()->view->currentStoreInformation[0]['name'];?>
-    </h2>
+    </h4>
 <?php 
 foreach ($this->latestShopUpdates as $latestShopUpdate) {
     $latestShopUpdate = (object) $latestShopUpdate;
@@ -20,7 +20,7 @@ foreach ($this->latestShopUpdates as $latestShopUpdate) {
     <div class="news-box">
         <article class="box">
             <em class="date"><?php echo $newsStartDate;?></em>
-            <h3><?php 
+            <h5><?php 
     if ($latestShopUpdate->url!=null && $latestShopUpdate->url!='') :
         ?>
                 <a href="
@@ -35,7 +35,7 @@ foreach ($this->latestShopUpdates as $latestShopUpdate) {
     else :
         echo $latestShopUpdate->title;
     endif;?>
-            </h3>
+            </h5>
             <p>
     <?php echo $content;?>
             </p>

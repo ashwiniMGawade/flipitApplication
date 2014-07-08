@@ -95,10 +95,6 @@ function customPopUp(id) {
     return false;
 }
 
-function copyToClipboard(text) {
-    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
-}
-
 function customPopUpClose() {
     $('#fade , .popup_block, .popup_block_signup').fadeOut('9000', function() {
         $('#fade').remove(); 

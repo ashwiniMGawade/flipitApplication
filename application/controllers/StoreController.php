@@ -128,9 +128,14 @@ class StoreController extends Zend_Controller_Action
             $this->view->topPopularOffers = $offers;
         }
         $this->view->expiredOffers = $expiredOffers;
+        if ($shopInformation[0]['affliateProgram'] == 0) {
+            $numberOfSimilarOffers = 10;
+        } else {
+            $numberOfSimilarOffers = 4;
+        }
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
             'similarStoresAndSimilarCategoriesOffers',
-            4,
+            $numberOfSimilarOffers,
             $shopId
         );
         $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
@@ -177,7 +182,7 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'author-page home-page';
+        $this->view->pageCssClass = 'author-page';
     }
 
     public function indexAction()
@@ -226,7 +231,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
-        $this->view->pageCssClass = 'all-stores-page home-page';
+        $this->view->pageCssClass = 'all-stores-page';
     }
 
     public function howtoguideAction()

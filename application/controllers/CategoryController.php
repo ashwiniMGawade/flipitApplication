@@ -52,7 +52,6 @@ class CategoryController extends Zend_Controller_Action
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
         $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'home-page';
     }
 
     public function indexAction()
@@ -84,6 +83,6 @@ class CategoryController extends Zend_Controller_Action
                 )
             );
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
-        $this->view->pageCssClass = 'all-categories-alt-page home-page';
+        $this->view->pageCssClass = 'all-categories-alt-page';
     }
 }
