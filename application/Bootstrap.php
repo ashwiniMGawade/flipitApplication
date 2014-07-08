@@ -59,7 +59,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         self::constantForCacheDirectory();
         self::httpPathConstantForCdn();
-        self::s3Defines();
+        self::s3ConstantDefines();
 
         defined('BASE_ROOT') || define('BASE_ROOT', dirname($_SERVER['SCRIPT_FILENAME']) . '/');
 
@@ -104,7 +104,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
     }
 
-    public function s3Defines()
+    public function s3ConstantDefines()
     {
         $s3Credentials = $this->getOption('s3');
         define('S3BUCKET', $s3Credentials['bucket']);
@@ -486,8 +486,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $translateSession = new Zend_Session_Namespace('Transl8');
         if (!empty($translateSession->onlineTranslationActivated)) {
-            $dBtranslations = self::getDbTranslations($locale);
-            $poTrans->addTranslation($dBtranslations);
+            $dbTranslations = self::getDbTranslations($locale);
+            $poTrans->addTranslation($dbTranslations);
         } else {
             $csvTranslate = self::getCsvTranslations($locale);
             $poTrans->addTranslation($csvTranslate);
@@ -517,21 +517,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $getDbTranslationsForZendTranslate = Translations::getDbTranslationsForZendTranslate();
         
-        $dBtranslations = new Zend_Translate(
+        $dbTranslations = new Zend_Translate(
             array(
                 'adapter' => 'array',
                 'locale'  => $locale,
                 'disableNotices' => true
             )
         );
-        $dBtranslations->addTranslation(
+        $dbTranslations->addTranslation(
             array(
                     'content' => $getDbTranslationsForZendTranslate,
                     'locale' => $locale
             )
         );
 
-        return $dBtranslations;
+        return $dbTranslations;
     }
 
     public function getCsvTranslations($locale)

@@ -15,7 +15,6 @@ class Translations extends BaseTranslations
     public static function getDbTranslationsForZendTranslate()
     {
         $allDbTranslations = self::getAllDatabaseTranslations();
-
         $poTranslations = array();
 
         foreach ($allDbTranslations as $dbTranslation) {
@@ -32,9 +31,9 @@ class Translations extends BaseTranslations
         $poTranslations = '';
         $allDbTranslations = self::getAllDatabaseTranslations();
 
-        foreach ($allDbTranslations as $key => $dbTranslation) {
-            $poTranslations[$key] = array($dbTranslation['translationKey'], $dbTranslation['translation']);
-            $key++;
+        foreach ($allDbTranslations as $translationNumber => $dbTranslation) {
+            $poTranslations[$translationNumber] = array($dbTranslation['translationKey'], $dbTranslation['translation']);
+            $translationNumber++;
         }
 
         return $poTranslations;

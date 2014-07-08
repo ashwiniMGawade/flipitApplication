@@ -11,7 +11,7 @@ abstract class BaseTranslations extends Doctrine_Record
              'type' => 'integer',
              'autoincrement' => true,
              'comment' => 'PK',
-             'length' => '20',
+             'length' => '20'
              ));
         $this->hasColumn('translationKey', 'string', null, array(
                 'type' => 'string',
@@ -19,7 +19,7 @@ abstract class BaseTranslations extends Doctrine_Record
                 'unsigned' => false,
                 'primary' => false,
                 'notnull' => true,
-                'autoincrement' => false,
+                'autoincrement' => false
         ));
         $this->hasColumn('translation', 'string', null, array(
                 'type' => 'string',
@@ -27,7 +27,7 @@ abstract class BaseTranslations extends Doctrine_Record
                 'unsigned' => false,
                 'primary' => false,
                 'notnull' => true,
-                'autoincrement' => false,
+                'autoincrement' => false
         ));
     }
 
@@ -36,16 +36,16 @@ abstract class BaseTranslations extends Doctrine_Record
         parent::setUp();
         $softdelete0 = new Doctrine_Template_SoftDelete(array(
              'name' => 'deleted',
-             'type' => 'boolean',
+             'type' => 'boolean'
              ));
         $timestampable0 = new Doctrine_Template_Timestampable(array(
              'created' =>
              array(
-              'name' => 'created_at',
+              'name' => 'created_at'
              ),
              'updated' =>
              array(
-              'name' => 'updated_at',
+              'name' => 'updated_at'
              ),
              ));
         $this->actAs($softdelete0);
