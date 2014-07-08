@@ -279,7 +279,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                         && $this->pageDetail['logo']['name']!=''
                                     ) {
                                         $pageImage = PUBLIC_PATH_CDN.$this->pageDetail['logo']['path']
-                                        .'thum_'.$this->pageDetail['logo']['name'];
+                                        .$this->pageDetail['logo']['name'];
                                     }
                                 ?>
                                 <div class='browse-container'>    
@@ -324,7 +324,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                         && $this->pageDetail['pageheaderimage']['name']!=''
                                     ) {
                                     $headerImage = PUBLIC_PATH_CDN.$this->pageDetail['pageheaderimage']['path']
-                                    .'thum_'.$this->pageDetail['pageheaderimage']['name'];
+                                    .$this->pageDetail['pageheaderimage']['name'];
                                 }
                                 ?>
                                 <div class='browse-container'>    
