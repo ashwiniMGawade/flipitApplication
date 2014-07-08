@@ -42,8 +42,10 @@ class MoneySaving extends BaseMoneySaving
     public static function getRecentlyAddedArticles($limit)
     {
         $recentlyAddedArticles = Doctrine_Query::create()
-            ->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,  ai.path,
-                ai.name,aai.path, aai.name')
+            ->select(
+                'DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,
+                a.created_at, ai.path, ai.name,aai.path, aai.name'
+            )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
@@ -125,7 +127,7 @@ class MoneySaving extends BaseMoneySaving
         $articles = Doctrine_Query::create()
             ->select(
                 'chap.*, a.id, a.title, a.permalink, a.content, a.authorid, 
-                    a.authorname,  ai.path, ai.name,aai.path, aai.name'
+                    a.authorname, a.created_at, ai.path, ai.name,aai.path, aai.name'
             )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
@@ -135,6 +137,7 @@ class MoneySaving extends BaseMoneySaving
             ->where('r.relatedcategoryid ='.  "'$categoryId'")
             ->andWhere('a.deleted=0')
             ->limit($limit)
+            ->orderBy('a.created_at DESC')
             ->fetchArray();
         return $articles;
     }
