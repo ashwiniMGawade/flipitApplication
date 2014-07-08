@@ -9,9 +9,11 @@ $mostReadArticles = $this->mostReadArticles;
                 $carouselCounter = 0;
                 $carouselIndicators = '';
                 foreach ($mostReadArticles as $mostReadArticle) {
-                    $mostReadArticleImage = PUBLIC_PATH_CDN
+                    $mostReadArticleImage = 
+                                        !empty($mostReadArticle['articles']['thumbnail']) ?
+                                            PUBLIC_PATH_CDN
                                             .$mostReadArticle['articles']['thumbnail']['path'] 
-                                            .$mostReadArticle['articles']['thumbnail']['name'];
+                                            .$mostReadArticle['articles']['thumbnail']['name'] : '';
                     $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? 
                                             mb_substr($mostReadArticle['articles']['title'], 0,40)
                                             .'..' : $mostReadArticle['articles']['title'];
@@ -29,7 +31,7 @@ $mostReadArticles = $this->mostReadArticles;
                         <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
                             .$mostReadArticle['articles']['permalink'];?>">
                             <img class="visual" src="<?php echo $mostReadArticleImage;?>" width="563" height="391"
-                                    alt="<?php echo $mostReadArticleTitle;?>">
+                                alt="<?php echo $mostReadArticleTitle;?>">
                         </a>
                         <span class="category dark-pink"><?php echo $this->translate('Featured');?></span>
                         <div class="text-holder">
