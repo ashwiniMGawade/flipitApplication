@@ -46,30 +46,34 @@ echo $headerBlock;
     <div id="content" class="col-md-8 col-sm-8">
     <?php
     $offers = $this->offers;
-    for ($i = 0; $i<count($offers); $i++) {
-        $signUpForm = '';
-        if ($i == 0) {
-            $signUpForm = $this->form; 
+    if(!empty($offers)) {
+        for ($i = 0; $i<count($offers); $i++) {
+            $signUpForm = '';
+            if ($i == 0) {
+                $signUpForm = $this->form; 
+            }
+            $storeFilteredOffers = $this->partial(
+                   $partialViewPath .'_offer.phtml',
+                    array(
+                        'offers' => $offers[$i],
+                        'offersType'=>'simple',
+                        'shopName' => $this->currentStoreInformation[0]['name'],
+                        'shop' => $this->currentStoreInformation[0],
+                        'zendForm'=> $signUpForm,
+                        'pageType' => 'howToGuide'
+                    )
+                ); 
+            if ($i == 0) {
+            echo  $storeFilteredOffers.$howToGuides;
+            } else {
+                echo '<header class="heading-box text-star">
+                        <h2>'.$this->translate('Most valuable codes from').' '
+                        . $this->currentStoreInformation[0]['name'].'</h2>
+                    </header>'.$storeFilteredOffers;
+            }
         }
-        $storeFilteredOffers = $this->partial(
-               $partialViewPath .'_offer.phtml',
-                array(
-                    'offers' => $offers[$i],
-                    'offersType'=>'simple',
-                    'shopName' => $this->currentStoreInformation[0]['name'],
-                    'shop' => $this->currentStoreInformation[0],
-                    'zendForm'=> $signUpForm,
-                    'pageType' => 'howToGuide'
-                )
-            ); 
-        if ($i == 0) {
-        echo  $storeFilteredOffers.$howToGuides;
-        } else {
-            echo '<header class="heading-box text-star">
-                    <h2>'.$this->translate('Most valuable codes from').' '
-                    . $this->currentStoreInformation[0]['name'].'</h2>
-                </header>'.$storeFilteredOffers;
-        }
+    } else {
+        echo  $howToGuides;
     }
     ?>
     </div>

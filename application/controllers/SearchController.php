@@ -21,7 +21,7 @@ class SearchController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {
+    { 
         $searchPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $splitSearchPermalink = explode('/', $searchPermalink);
         $pagePermalink = isset($splitSearchPermalink[2]) ? $splitSearchPermalink[1] : $splitSearchPermalink[0];

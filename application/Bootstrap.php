@@ -865,7 +865,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             } else {
                 $routeLanguage = new Zend_Controller_Router_Route(':lang', array('lang' => ':lang'));
                 $baseChain = new Zend_Controller_Router_Route(
-                    '@redactie',
+                    '@link_redactie',
                     array(
                         'controller' => 'about',
                         'module' => 'default'
