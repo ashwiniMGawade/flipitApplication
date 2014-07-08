@@ -1,7 +1,6 @@
 <script type="text/javascript">
     $('#code-hint').hide();
     var clip = new ZeroClipboard($('a#code-button'));
-    ZeroClipboard.config({swfPath: "<?php echo HTTP_PATH; ?>public/js/front_end/zeroclipboard/ZeroClipboard.swf"});
     clip.on('error', function (client, args) {
         $('#code-hint').show();
         $('a#code-button').hide();
