@@ -878,11 +878,12 @@ function getUserList(iSearchText,iStart,iSortCol,iSortDir,iRole) {
 							"fnRender" : function(obj) {
 								var imgSrc = "";
 								if (obj.aData.ppname == null || obj.aData.ppname=='' || obj.aData.ppname==undefined) {
-								    imgSrc = '';
+								    imgSrc = HTTP_PATH_CDN
+										+ "/images/user-avtar.jpg";
 								} else {
 									var image = obj.aData.path
 										+ obj.aData.ppname;
-									imgSrc = PUBLIC_PATH_CDN + image;
+									imgSrc = HTTP_PATH_CDN + image;
 								}
 								var name = "<span class='word-wrap-username'>" + ucfirst(obj.aData.firstName)
 										+ " "

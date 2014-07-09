@@ -46,7 +46,8 @@ $this->headScript ()->prependFile ( PUBLIC_PATH . "js/back_end/main-script.js" )
 ->prependScript(  'var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";'  )
 ->prependScript( 'var HOST_PATH_PUBLIC = "'.  PUBLIC_PATH .'";'  )
 ->prependScript(  'var PUBLIC_PATH_LOCALE = "'.  PUBLIC_PATH_LOCALE .'";'  )
-->prependScript(  'var PUBLIC_PATH_CDN = "'.  rtrim(PUBLIC_PATH_CDN, "/").'";'  );
+->prependScript(  'var HTTP_PATH_CDN = "'.  HTTP_PATH_CDN.'";'  )
+->prependScript(  'var PUBLIC_PATH_CDN = "'.  PUBLIC_PATH_CDN .'";'  );
 //$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/load-scripts.js" );
 
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap.js" );
