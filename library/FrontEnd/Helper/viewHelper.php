@@ -160,8 +160,10 @@ EOD;
                 header('location:'. HTTP_PATH.$baseLink[0] ."/" .$baseLink[1]);
                 exit;
             endif;
-
             $permalink = explode('/'.$permalinkMatches[0], $permalink);
+            if ($permalinkMatches[0]==1) {
+                header('location:'. HTTP_PATH.$permalink[0]);
+            }
             $permalink = $permalink[0];
         elseif (intval($permalinkMatches[0]) > 3) :
             throw new Exception('Error occured');
