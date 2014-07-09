@@ -150,7 +150,7 @@ EOD;
         $popularStoresContent = '<div class="block"><div class="intro">
                    <h4>'.$this->__translate('Populaire Winkels').'</h4>
                    <span>'
-                   .$this->__translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
+                   .$this->__translate('Grab a promotional code, discount code or voucher').'</span>
                  </div><ul class="tags">';
         for ($i=0; $i<count($popularStores); $i++) {
             $class ='';

@@ -147,7 +147,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         if ($listType =='special') {
             $imageTagOrSpan =
                 '<span class="discount-label">'
-                    . FrontEnd_Helper_viewHelper::__form($listType)
+                    . FrontEnd_Helper_viewHelper::__translate($listType)
                 . '</span>' ;
         } else if ($listType =='savingGuide') {
             $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
