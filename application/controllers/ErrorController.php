@@ -19,6 +19,11 @@ class ErrorController extends Zend_Controller_Action
                 $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
                 $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
+                if ($pageDetails['pageType']=='default') {
+                    if ($pageNumber > 0) {
+                        $pageNumber = 4;
+                    }
+                }
                 if ($pageNumber >= 4) {
                     $this->_helper->layout()->disableLayout();
                     FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
@@ -52,14 +57,16 @@ class ErrorController extends Zend_Controller_Action
                         30,
                         3
                     );
+                    if (empty($specialPageOffers)) {
+                        $pageNumber = 4;
+                        $this->_helper->layout()->disableLayout();
+                        FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
+                    }
                     $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),
                         rtrim($this->pagePermalink, '/')
                     );
-                    
-                    
-
                     $this->view->message = 'Page not found';
                     $this->view->pageTitle = $pageDetails['pageTitle'];
                     $this->view->headTitle($pageDetails['metaTitle']);

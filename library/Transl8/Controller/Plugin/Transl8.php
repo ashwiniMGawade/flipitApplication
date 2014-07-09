@@ -185,7 +185,7 @@ CSS;
     {
         $js = <<<JS
 <script type="text/javascript">
-$(function() {
+$(window).load(function() {
 
     /**
      * Toggle display of additional translations
@@ -222,6 +222,7 @@ $(function() {
         $.ajax({
             url: '{$this->_actionGetFormData}',
             dataType: 'json',
+            scope: parent,
             data: {translationKey: translationKey},
             error: function (data) {
                 alert('Error');

@@ -24,7 +24,7 @@ $language = $locale[0];
 <?php
 
 if(isset($this->canonical)): 
-    echo $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)); 
+    $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)); 
 endif;
 
 echo $this->headMeta()->appendName('robots', FrontEnd_Helper_LayoutContent::loadRobots(
@@ -35,7 +35,7 @@ echo $this->headMeta()->appendName('robots', FrontEnd_Helper_LayoutContent::load
 
 echo $this->headTitle();
 echo $this->layout()->customHeader ;
-echo $this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+$this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
 
 # if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
 if(LOCALE=='') :
@@ -51,7 +51,9 @@ else:
         )
     );
 endif;
-
+if (APPLICATION_ENV != 'development') {
+    echo $this->headLink();
+}
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');

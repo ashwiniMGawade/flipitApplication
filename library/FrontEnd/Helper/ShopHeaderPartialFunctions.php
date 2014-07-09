@@ -81,11 +81,11 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $visitorId = Auth_VisitorAdapter::hasIdentity() ? Auth_VisitorAdapter::getIdentity()->id : 0;
         $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $shopPermalink .'&shopId='
             . base64_encode($shopId);
-        $titleTextForLove = $this->__translate('Remove from Favourite');
+        $titleTextForLove = $this->__form('form_Remove from Favourite');
         $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart red-heart';
         if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
             $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
-            $titleTextForLove = $this->__translate("Add in Favourite");
+            $titleTextForLove = $this->__form("form_Add in Favourite");
         endif;
         return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" 
             class="pop btn btn-sm btn-default" href="javascript:void(0)">
