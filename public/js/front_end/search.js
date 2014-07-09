@@ -78,7 +78,7 @@ $("input#searchFieldHeader").autocomplete({
             $('form').submit(function() {
                 return false;
             });
-            var searchUrl = HOST_PATH_LOCALE + __("search") + '/' + encodeURIComponent(searchedKeywordValue);
+            var searchUrl = HOST_PATH_LOCALE + __("zoeken") + '/' + encodeURIComponent(searchedKeywordValue);
             window.location.href = searchUrl;
         }
     }
@@ -113,7 +113,7 @@ if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searc
           return false;
         });
 
-        var searchUrl = HOST_PATH_LOCALE + __("search") + '/' + encodeURIComponent(searchedKeywordValue);
+        var searchUrl = HOST_PATH_LOCALE + __("zoeken") + '/' + encodeURIComponent(searchedKeywordValue);
         window.location.href = searchUrl;
     }
 }

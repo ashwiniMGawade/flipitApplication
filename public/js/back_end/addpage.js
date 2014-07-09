@@ -560,10 +560,10 @@ function showSitemapStatus(dIv) {
     $("#" + dIv).addClass("btn-primary").siblings().removeClass("btn-primary");
     switch (dIv) {
     case 'showSitemapYes':
-	    $("input#showSitemapStatuschk").attr('checked', 'checked');
+	    $("input#showSitemapStatuscheck").val(1);
 	    break;
     case 'showSitemapNo':
-	    $("input#showSitemapStatuschk").removeAttr('checked');
+	    $("input#showSitemapStatuscheck").val(0);
 	    break;
     }
 }

@@ -25,6 +25,10 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                 $articleAuthorFirstName,
                 $articleAuthorLastName
             );
+            $articleImage = !empty($article['thumbnail']) ?
+                PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
+            $articleTitle = mb_strlen($article['title']) > 20 ?
+                                        mb_substr($article['title'], 0, 20).'..' : $article['title'];                                     
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 '.$articleClass.'"  style="height: 361px;">
                         <div class="image">
@@ -34,8 +38,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                             <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
                                 .$article['permalink'].'">
                                 <img
-                                src="'.PUBLIC_PATH_CDN.$article['thumbnail']['path']
-                                .$article['thumbnail']['name'].'"
+                                src="'.$articleImage.'"
                                 width="270" height="192" alt="'.$article['title'].'">
                             </a>    
                         </div>
@@ -44,7 +47,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                                 <h2>
                                     <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
                                         .$article['permalink'].'">
-                                       '.$article['title'].'
+                                       '.$articleTitle.'
                                     </a>
                                 </h2>
                                 <div class="meta">
