@@ -28,9 +28,9 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             $articleImage = !empty($article['thumbnail']) ?
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
             $articleTitle = mb_strlen($article['title']) > 20 ?
-                                        mb_substr($article['title'], 0, 20).'..' : $article['title'];                                     
+                                        mb_substr($article['title'], 0, 20).'..' : $article['title'];
             $relatedArticles .=
-                    '<article class="article col-md-3 col-sm-4 col-xs-6 '.$articleClass.'"  style="height: 361px;">
+                    '<article class="article col-md-3 col-sm-4 col-xs-6 article-height '.$articleClass.'">
                         <div class="image">
                             <span class="category">
                                 '.FrontEnd_Helper_viewHelper::__translate($article['type']).'
