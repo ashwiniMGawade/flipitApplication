@@ -20,7 +20,7 @@ class Varnish_Sweeper{
 	public function clearCategories(){
 		if ( $this->checkIP() ) {
     	$catObj 		= new Category();
-    	$categories = $catObj->exportcategoryList();
+    	$categories = $catObj->getAllCategories();
     	if (!empty($categories)) {
     		foreach ($categories as $category) {
     			$this->refresh( $category['permaLink'] );
