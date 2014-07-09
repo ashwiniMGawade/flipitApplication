@@ -57,7 +57,8 @@ class ErrorController extends Zend_Controller_Action
                         30,
                         3
                     );
-                    if (empty($specialPageOffers)) {
+                    if (empty($specialPageOffers) && $pageDetails['pageAttributeId'] != 2
+                        && $pageDetails['pageAttributeId'] != 1) {
                         $pageNumber = 4;
                         $this->_helper->layout()->disableLayout();
                         FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
