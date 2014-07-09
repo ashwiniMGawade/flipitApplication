@@ -32,8 +32,6 @@ if ($this->pageMode == true) {
         } else {
             $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
         }
-    } else {
-        $this->matches; die;
     } 
     $signUpWidgetForm = $this->partial(
         $partialsViewPath.'_signupForm.phtml',
