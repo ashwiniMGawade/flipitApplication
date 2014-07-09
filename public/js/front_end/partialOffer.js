@@ -89,10 +89,17 @@ function customPopUp(id) {
         "z-index" : 999999
     }).fadeIn();
     $('body').append('<div onClick="customPopUpClose();" id="fade"></div>');
+    if(popupId != 'how_to_lightbox_pop_up') {
+        fadeCustomPopup();
+    }
+    return false;
+}
+
+function fadeCustomPopup()
+{
     $('#fade').css({
         'filter' : 'alpha(opacity=80)'
     }).fadeIn();
-    return false;
 }
 
 function customPopUpClose() {
