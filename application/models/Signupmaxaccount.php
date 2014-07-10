@@ -56,6 +56,13 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         return $email;
     }
 
+    public static function alterSignupMaxAccountTable()
+    {
+        $databaseConnection = Doctrine_Manager::getInstance()->getCurrentConnection()->getDbh();
+        $databaseConnection->query('ALTER TABLE `signupmaxaccount` DROP `locale`');
+        $databaseConnection->query('ALTER TABLE `signupmaxaccount` DROP `timezone`');
+        unset($databaseConnection);
+    }
     #################################################################
     #################### END REFACTOR CODE ##########################
     #################################################################
@@ -211,9 +218,12 @@ class Signupmaxaccount extends BaseSignupmaxaccount
     public static function getAllMaxAccounts()
     {
         $data = Doctrine_Query::create()
-        ->select('p.id,p.no_of_acc,p.max_account,p.status,p.email_confirmation,p.email_header,p.email_footer,p.locale, p.emailperlocale,p.sendername,p.emailsubject,p.testemail,p.showTestimonial,p.testimonial1,p.testimonial2,p.testimonial3,
-            p.homepagebanner_path,p.homepagebanner_name,p.homepage_widget_banner_path,p.homepage_widget_banner_name,p.timezone,
-            p.newletter_is_scheduled,p.newletter_status,p.newletter_scheduled_time')
+        ->select(
+            'p.id,p.no_of_acc,p.max_account,p.status,p.email_confirmation,p.email_header,p.email_footer,
+            p.emailperlocale,p.sendername,p.emailsubject,p.testemail,p.showTestimonial,p.testimonial1,
+            p.testimonial2,p.testimonial3,p.homepagebanner_path,p.homepagebanner_name,p.homepage_widget_banner_path,
+            p.homepage_widget_banner_name,p.newletter_is_scheduled,p.newletter_status,p.newletter_scheduled_time'
+        )
         ->from('Signupmaxaccount p')
         ->where('id=1')
         ->fetchArray();
@@ -364,48 +374,6 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         ->fetchOne(NULL, Doctrine::HYDRATE_ARRAY);
 
     }
-
-    public static function savelocale($loc)
-    {
-        $getRecord = Doctrine_Query::create()->select()->from("Signupmaxaccount")->where('id = 1')->fetchArray();
-        if(empty($getRecord)){
-            $data = new Signupmaxaccount();
-            $data->id = 1;
-            $data->locale = $loc ;
-            $data->save();
-            return ;
-        }
-        $q = Doctrine_Query::create()->update('Signupmaxaccount')
-                            ->set('locale', "'". $loc . "'" )
-                            ->where('id=1')
-                            ->execute();
-    }
-
-    /**
-     * saveTimezone
-     *
-     * it save /update currwen timezone
-     * @param string $timezone select timezone
-     */
-    public static function saveTimezone($timezone)
-    {
-        $getRecord = Doctrine_Query::create()->select()->from("Signupmaxaccount")->where('id = 1')->fetchArray();
-        if(empty($getRecord)){
-            $data = new Signupmaxaccount();
-            $data->id = 1;
-            $data->timezone = $timezone ;
-            $data->save();
-            return ;
-        } else {
-
-            $q = Doctrine_Query::create()->update('Signupmaxaccount')
-                        ->set('timezone', "'". $timezone . "'" )
-                        ->where('id=1')
-                        ->execute();
-        }
-
-    }
-
 
     public static function saveemail($email)
     {
@@ -631,50 +599,36 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 
     }
 
-    /**
-    * saveTimezone
-    *
-    * it save /update currwen timezone
-    * @param object $request  request object for newsletter scheduling value
-    *
-    */
     public static function saveScheduledNewsletter($request)
     {
-
-        $scheduledDate = $request->getParam("sendDate" , false);
-        $scheduledTime = $request->getParam("sendTime" , false);
-        $timezone = $request->getParam("timezone" , false);;
-
-        $timestamp =   date('Y-m-d',strtotime($scheduledDate)).' '.date('H:i:s',strtotime($scheduledTime)) ;
+        $scheduledDate = $request->getParam("sendDate", false);
+        $scheduledTime = $request->getParam("sendTime", false);
+        $timezone = $request->getParam("timezone", false);
+        $timestamp = date('Y-m-d', strtotime($scheduledDate)).' '.date('H:i:s', strtotime($scheduledTime));
 
         try {
-
             $getRecord = Doctrine_Query::create()->select()->from("Signupmaxaccount")->where('id = 1')->fetchArray();
-            if(empty($getRecord)) {
-                    $data = new Signupmaxaccount();
-                    $data->id = 1;
-                    $data->newletter_is_scheduled = $this->getRequest()->getParam("isScheduled" , false) ;
-                    $data->newletter_scheduled_time = $timestamp ;
-                    $data->newletter_status = 0 ;
-                    $data->save();
-                return true ;
+            if (empty($getRecord)) {
+                    $signupmaxaccount = new Signupmaxaccount();
+                    $signupmaxaccount->id = 1;
+                    $signupmaxaccount->newletter_is_scheduled = $this->getRequest()->getParam("isScheduled", false);
+                    $signupmaxaccount->newletter_scheduled_time = $timestamp ;
+                    $signupmaxaccount->newletter_status = 0 ;
+                    $signupmaxaccount->save();
+                return true;
             } else {
-
                 $q = Doctrine_Query::create()
-                        ->update('Signupmaxaccount')
-                        ->set('newletter_scheduled_time', '?' , $timestamp)
-                        ->set('newletter_is_scheduled', '?' ,$request->getParam("isScheduled" , false))
-                        ->set('newletter_status', '?' ,0)
-                        ->where('id=1')
-                        ->execute();
-                return true ;
+                    ->update('Signupmaxaccount')
+                    ->set('newletter_scheduled_time', '?', $timestamp)
+                    ->set('newletter_is_scheduled', '?', $request->getParam("isScheduled", false))
+                    ->set('newletter_status', '?', 0)
+                    ->where('id=1')
+                    ->execute();
+                return true;
             }
         } catch (Exception $e) {
-
             return false;
         }
-
-
     }
 
     /**

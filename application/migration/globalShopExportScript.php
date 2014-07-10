@@ -48,7 +48,7 @@ class GlobalShopExport
         $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-        $cutsomLocale = Signupmaxaccount::getAllMaxAccounts();
+        $cutsomLocale = LocaleSettings::getLocaleSettings();
         $cutsomLocale = !empty($cutsomLocale[0]['locale']) ? $cutsomLocale[0]['locale'] : 'nl_NL';
         $data =  Shop::exportShopeList();
         $this->_shopsData[$key]['data'] = $data;

@@ -139,10 +139,10 @@ class SendNewsletter
         try {
 
             $settings = Signupmaxaccount::getAllMaxAccounts();
-
+            $localeSettings = LocaleSettings::getLocaleSettings();
             # check if newsletter is scheduled and still not sent then proceed with  newsletter sending
             if($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
-                $cutsomLocale = !empty( $settings[0]['locale']) ? $settings[0]['locale'] : 'nl_NL';
+                $cutsomLocale = !empty( $localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
 
 
                 $this->_trans = new Zend_Translate(array(
@@ -168,7 +168,7 @@ class SendNewsletter
                 Zend_Registry::set('Zend_Translate', $this->_trans);
                 Zend_Registry::set('Zend_Locale', $cutsomLocale);
 
-                $timezone = $settings[0]['timezone'];
+                $timezone = $localeSettings[0]['timezone'];
 
                 echo "\n" ;
 

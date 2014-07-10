@@ -27,7 +27,6 @@ class EmailSettings extends BaseEmailSettings
         ->from('EmailSettings p')
         //->where('id=1')
         ->fetchArray();
-        print_r($data);die;
         return $data;
 
     }

@@ -110,7 +110,7 @@ class SitemapRefreshVarnish
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
 
 
-        $cutsomLocale = Signupmaxaccount::getAllMaxAccounts();
+        $cutsomLocale = LocaleSettings::getLocaleSettings();
         $cutsomLocale = !empty($cutsomLocale[0]['locale']) ? $cutsomLocale[0]['locale'] : 'nl_NL';
 
         $this->_trans = new Zend_Translate(array(
