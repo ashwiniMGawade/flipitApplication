@@ -4,15 +4,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
     public static function getArticles($articles)
     {
         $relatedArticles = '<div class="row articles-box">';
-        $articleCounter = 1;
-        foreach ($articles as $article) {
-            if ($articleCounter == 1 || $articleCounter == 5) {
-                $articleClass = 'same-height-left';
-            } else if ($articleCounter == 4 || $articleCounter == 8) {
-                $articleClass = 'same-height-right';
-            } else {
-                $articleClass = '';
-            }
+        foreach ($articles as $article) {        
 
             $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
                     . $article['authorDetails']['slug'];
@@ -30,7 +22,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             $articleTitle = mb_strlen($article['title']) > 20 ?
                                         mb_substr($article['title'], 0, 20).'..' : $article['title'];
             $relatedArticles .=
-                    '<article class="article col-md-3 col-sm-4 col-xs-6 article-height '.$articleClass.'">
+                    '<article class="article col-md-3 col-sm-4 col-xs-6 ">
                         <div class="image">
                             <span class="category">
                                 '.FrontEnd_Helper_viewHelper::__translate($article['type']).'
@@ -62,7 +54,6 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                             </a>
                         </div>
                     </article>';
-            ++$articleCounter;
         }
         echo $relatedArticles .'</div>';
     }

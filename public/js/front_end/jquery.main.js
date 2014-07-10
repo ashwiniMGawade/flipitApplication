@@ -6,6 +6,7 @@ jQuery(function(){
 	initNavigation();
 	jQuery('input, textarea').placeholder();
 	initBackgroundResize();
+	initCustomHover();
 });
 
 // mobile navigation
@@ -76,6 +77,15 @@ function initNavigation() {
 	});
 }
 
+// add classes on hover/touch
+function initCustomHover() {
+	jQuery('.brands-page .section .block').touchHover();
+	jQuery('.brands-page #sidebar .box').touchHover();
+	jQuery('.youroffers-page .section .block').touchHover();
+}
+
+
+
 // stretch background to fill blocks
 function initBackgroundResize() {
 	jQuery('.bg-stretch').each(function() {
@@ -122,6 +132,21 @@ function initSameHeight() {
 	});
 	jQuery('.switcher').sameHeight({
 		elements: 'li a',
+		flexible: true,
+		multiLine: true
+	});
+	jQuery('.articles-box').sameHeight({
+		elements: '.article',
+		flexible: true,
+		multiLine: true
+	});
+	jQuery('.youroffers-page .section').sameHeight({
+		elements: '.block .holder',
+		flexible: true,
+		multiLine: true
+	});
+	jQuery('.brands-page .section .row-area').sameHeight({
+		elements: '.block',
 		flexible: true,
 		multiLine: true
 	});
@@ -257,6 +282,79 @@ var ImageStretcher = {
 		});
 	}
 };
+
+
+/*
+ * Mobile hover plugin
+ */
+;(function($){
+
+	// detect device type
+	var isTouchDevice = ('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch,
+		isWinPhoneDevice = navigator.msPointerEnabled && /MSIE 10.*Touch/.test(navigator.userAgent);
+
+	// define events
+	var eventOn = (isTouchDevice && 'touchstart') || (isWinPhoneDevice && 'MSPointerDown') || 'mouseenter',
+		eventOff = (isTouchDevice && 'touchend') || (isWinPhoneDevice && 'MSPointerUp') || 'mouseleave';
+
+	// event handlers
+	var toggleOn, toggleOff, preventHandler;
+	if(isTouchDevice || isWinPhoneDevice) {
+		// prevent click handler
+		preventHandler = function(e) {
+			e.preventDefault();
+		};
+
+		// touch device handlers
+		toggleOn = function(e) {
+			var options = e.data, element = $(this);
+
+			var toggleOff = function(e) {
+				var target = $(e.target);
+				if (!target.is(element) && !target.closest(element).length) {
+					element.removeClass(options.hoverClass);
+					element.off('click', preventHandler);
+					if(options.onLeave) options.onLeave(element);
+					$(document).off(eventOn, toggleOff);
+				}
+			};
+
+			if(!element.hasClass(options.hoverClass)) {
+				element.addClass(options.hoverClass);
+				element.one('click', preventHandler);
+				$(document).on(eventOn, toggleOff);
+				if(options.onHover) options.onHover(element);
+			}
+		};
+	} else {
+		// desktop browser handlers
+		toggleOn = function(e) {
+			var options = e.data, element = $(this);
+			element.addClass(options.hoverClass);
+			$(options.context).on(eventOff, options.selector, options, toggleOff);
+			if(options.onHover) options.onHover(element);
+		};
+		toggleOff = function(e) {
+			var options = e.data, element = $(this);
+			element.removeClass(options.hoverClass);
+			$(options.context).off(eventOff, options.selector, toggleOff);
+			if(options.onLeave) options.onLeave(element);
+		};
+	}
+
+	// jQuery plugin
+	$.fn.touchHover = function(opt) {
+		var options = $.extend({
+			context: this.context,
+			selector: this.selector,
+			hoverClass: 'hover'
+		}, opt);
+
+		$(this.context).on(eventOn, this.selector, options, toggleOn);
+		return this;
+	};
+}(jQuery));
+
 /*
  * jQuery Open/Close plugin
  */
@@ -815,7 +913,8 @@ jQuery.onFontResize = (function($) {
 	};
 	PlaceholderInput.replaceByOptions = function(opt) {
 		var inputs = [].concat(
-			convertToArray(document.getElementsByTagName('searchFieldHeader'))
+			convertToArray(document.getElementsByTagName('input')),
+			convertToArray(document.getElementsByTagName('textarea'))
 		);
 		for(var i = 0; i < inputs.length; i++) {
 			if(inputs[i].className.indexOf(opt.skipClass) < 0) {
