@@ -1,7 +1,7 @@
 <?php
 class LoginController extends Zend_Controller_Action
 {
-    public $directLoginLinks = array();
+    public $_loginLinkAndData = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -145,7 +145,7 @@ class LoginController extends Zend_Controller_Action
                         $content,
                         FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
                         '',
-                        $this->directLoginLinks
+                        $this->_loginLinkAndData
                     );
                     $this->addFlashMessage(
                         FrontEnd_Helper_viewHelper::__translate('Please check you mail and click on reset password link'),

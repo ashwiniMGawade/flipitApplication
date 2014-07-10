@@ -745,11 +745,15 @@ display:block;
 .grid-img{
 	border:1px solid #ddd;
 	border-radius:3px;
-	max-height:100px;
-	max-width: 200px;
+	height:120px;
+	width: 120px;
 	float:left;
 	margin:0 10px 10px 0!important;
-	padding:2px
+	padding:2px;
+	overflow: hidden;
+}
+.grid-img img{
+	height: 120px;
 }
 .square-btn{
 	width:80px;

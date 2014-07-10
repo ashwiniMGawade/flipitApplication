@@ -2,7 +2,7 @@
 require_once 'Zend/Controller/Action.php';
 class SignupController extends Zend_Controller_Action
 {
-    public $directLoginLinks = array();
+    public $_loginLinkAndData = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -168,7 +168,7 @@ class SignupController extends Zend_Controller_Action
             $content,
             FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
             '',
-            $this->directLoginLinks
+            $this->_loginLinkAndData
         );
         return true;
     }
