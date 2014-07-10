@@ -17,9 +17,8 @@ class StoreController extends Zend_Controller_Action
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
 
-        $params = $this->_getAllParams();
-        $id = $this->getRequest()->getParam('id');
-        $shopdetail = Shop::getshopStatus($id);
+        $shopId = $this->getRequest()->getParam('id');
+        $shopdetail = Shop::getshopStatus($shopId);
         if ($shopdetail) {
             $request = $this->getRequest();
             $request->setControllerName('error');
@@ -47,17 +46,16 @@ class StoreController extends Zend_Controller_Action
         $shopId = $this->getRequest()->getParam('id');
 
         if ($shopId) {
-            $currentDate = date('Y-m-d H:i:s');
             $ShopList = $shopId.'_list';
             $allShopDetailKey = 'all_shopdetail'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allShopDetailKey,
-                (array)array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
+                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
             );
             $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
             $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allOffersInStoreKey,
-                (array)array(
+                array(
                     'function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
                     'parameters' => array("all", 10, $shopId, 0)
                 )
@@ -65,7 +63,7 @@ class StoreController extends Zend_Controller_Action
             $allExpiredOfferKey = 'all_expiredOfferInStore'.$ShopList;
             $expiredOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allExpiredOfferKey,
-                (array)array(
+                array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
                     'parameters' => array("expired", 12, $shopId)
                 )
@@ -73,7 +71,7 @@ class StoreController extends Zend_Controller_Action
             $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
             $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allLatestUpdatesInStoreKey,
-                (array)array(
+                array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
                     'parameters' => array('latestupdates', 4, $shopId)
                 )
@@ -81,7 +79,7 @@ class StoreController extends Zend_Controller_Action
             $expiredOffersInStoreKey = 'all_msArticleInStore'.$ShopList;
             $moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)'all_msArticleInStore'.$ShopList,
-                (array)array(
+                array(
                     'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
                     'parameters' => array('moneysaving', 3, $shopId)
                 )
@@ -101,7 +99,7 @@ class StoreController extends Zend_Controller_Action
                     $shopInformation[0]['name'],
                     $shopInformation[0]['chainItemId']
                 );
-                $logDirectoryPath = APPLICATION_PATH . "/../logs/test";
+
                 if (isset($shopChains['headLink'])) {
                     $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
                 }
@@ -187,6 +185,7 @@ class StoreController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $permalink = FrontEnd_Helper_viewHelper::getPagePermalink();
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
@@ -259,12 +258,12 @@ class StoreController extends Zend_Controller_Action
                 $shopInformation[0]['name'],
                 $shopInformation[0]['chainItemId']
             );
-            $logDirectoryPath = APPLICATION_PATH . "/../logs/test";
+
             if (isset($shopChains['headLink'])) {
                 $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
             }
             if ($shopChains['hasShops'] && isset($shopChains['string'])) {
-                $this->view->shopChain = $shopChains['string'] ;
+                $this->view->shopChain = $shopChains['string'];
             }
         }
 
