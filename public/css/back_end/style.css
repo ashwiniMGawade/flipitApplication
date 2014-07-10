@@ -752,6 +752,9 @@ display:block;
 	padding:2px;
 	overflow: hidden;
 }
+.grid-img img{
+	height: 120px;
+}
 .square-btn{
 	width:80px;
 	height:80px;
