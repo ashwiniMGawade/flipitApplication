@@ -6,18 +6,19 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
 ?>
 <div class="wrap columns-2">
     <div class='wrap columns-2'>
-        <?php if($this->messageSuccess!='' || $this->messageError!='' ){ ?>
-        <br>
-        <div class="mainpage-content-colorbox success">
-        <?php if($this->messageSuccess!=''){ ?>
-        <span class="successserver"><?php echo $this->messageSuccess; ?></span>
-        <?php }?>
-        <?php if($this->messageError!=''){?>
-        <span class="errorserver"><?php echo $this->messageError; ?></span>
-        <?php } ?>
-        </div>
-        <?php
-        }?>
+        <?php if ($this->messageSuccess != '' || $this->messageError != '' ) { ?>
+            <br>
+            <div class="mainpage-content-colorbox success">
+                <?php if ($this->messageSuccess != '') { ?>
+                    <span class="successserver"><?php echo $this->messageSuccess; ?></span>
+                <?php }?>
+                <?php if ($this->messageError != '') {?>
+                    <span class="errorserver"><?php echo $this->messageError; ?></span>
+                <?php } ?>
+            </div>
+            <?php
+            }
+        ?>
     </div>
     <h1><?php echo $this->translate('Locale Settings'); ?></h1>
     <div class="mainpage-content">
@@ -31,13 +32,13 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                         <select id='locale' style='width:200px;'>
                             <option value=""></option>
                             <?php
-                            $seletced = '';
+                                $seletced = '';
                                 $locale = Zend_Locale::getLocaleList();
-                                foreach($locale as $key => $loc):
-                                    if ($this->localeSettings['0']['locale'] == $key) {
+                                foreach ($locale as $localeKey => $localeValue):
+                                    if ($this->localeSettings['0']['locale'] == $localeKey) {
                                         $seletced = 'selected="selected"';
                                     }
-                                    echo "<option $seletced value=". $key .">". $key ."</option>";
+                                    echo "<option $seletced value=". $localeKey .">". $localeKey ."</option>";
                                 endforeach;
                             ?>
                         </select>
@@ -74,13 +75,16 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                         <select id='timezone' style='width:300px;' name="timezone">
                             <option value=""></option>
                             <?php
-                                $timezones_list = $this->timezones_list;
-                                foreach($timezones_list as $key => $name):
+                                $timezonesList = $this->timezones_list;
+                                foreach($timezonesList as $timezoneskey => $timezonesName):
                                     $seletcedTimeZone = '';
-                                    if ($this->localeSettings['0']['timezone'] == $key) {
+
+                                    if ($this->localeSettings['0']['timezone'] == $timezoneskey) {
                                         $seletcedTimeZone = 'selected="selected"';
                                     }
-                                    echo "<option $seletcedTimeZone value=". $key .">". $name ."</option>";
+
+                                    echo "<option $seletcedTimeZone value=". $timezoneskey .">".
+                                        $timezonesName ."</option>";
                                 endforeach;
                             ?>
                         </select>

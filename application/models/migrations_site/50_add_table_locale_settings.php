@@ -25,9 +25,7 @@ class AddLocaleSettingsTable extends Doctrine_Migration_Base
                 'type'    => 'INNODB',
                 'charset' => 'utf8'
         );
-
         $this->createTable('locale_settings', $columns, $options);
-
     }
 
     public function down()

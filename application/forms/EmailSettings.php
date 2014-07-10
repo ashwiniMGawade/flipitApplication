@@ -18,7 +18,6 @@ class Application_Form_EmailSettings extends Application_Form_Base
         );
         $senderEmail->setAttrib('class', 'span3');
         $senderEmail->setLabel(FrontEnd_Helper_viewHelper::__form('form_Sender Email Address'));
-
         $senderName = new Zend_Form_Element_Text('senderName');
         $senderName->setRequired(true);
         $senderName->setAttrib('class', 'span3');

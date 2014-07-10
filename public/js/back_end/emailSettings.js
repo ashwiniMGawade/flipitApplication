@@ -4,7 +4,6 @@ $(document).ready(function(){
         validClass : 'success',
         errorElement : 'span',
         ignore: ":hidden",
-
         errorPlacement : function(error, element) {
             element.parent("div").next("div").html(error);
         },

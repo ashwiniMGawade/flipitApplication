@@ -30,7 +30,6 @@ class localeTimezoneValues
                 isset($SignupmaxaccountInformation[0]['locale']) ? $SignupmaxaccountInformation[0]['locale'] : '';
             $timezone =
                 isset($SignupmaxaccountInformation[0]['timezone']) ? $SignupmaxaccountInformation[0]['timezone'] : '';
-            
             $localeSettings = LocaleSettings::getLocaleSettings();
             if (empty($localeSettings)) {
                 LocaleSettings::setLocaleSettings($locale, $timezone);

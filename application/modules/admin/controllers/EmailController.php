@@ -3,12 +3,6 @@
 class Admin_EmailController extends Zend_Controller_Action
 {
     public $flashMessenger = '';
-    /**
-     * check authentication before load the page
-     * @see Zend_Controller_Action::preDispatch()
-     * @author Amit Sharma
-     * @version 1.0
-     */
     public function preDispatch()
     {
         $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
@@ -330,9 +324,8 @@ class Admin_EmailController extends Zend_Controller_Action
         }
         
         $sendersEmailAddress = Settings::getEmailSettings('sender_email_address');
-        $sendersName = Settings::getEmailSettings('sender_name');
         $this->view->sendersEmailAddress = $sendersEmailAddress;
-        $this->view->sendersName = $sendersName;
+        $this->view->sendersName = Settings::getEmailSettings('sender_name');
     }
 
     public function getFlashMessage()
