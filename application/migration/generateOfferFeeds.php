@@ -124,7 +124,7 @@ class generateOfferFeeds
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
 
-        $settings = Signupmaxaccount::getAllMaxAccounts();
+        $settings = LocaleSettings::getLocaleSettings();
 
         $cutsomLocale = !empty( $settings[0]['locale']) ? $settings[0]['locale'] : 'nl_NL';
 

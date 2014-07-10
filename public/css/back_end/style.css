@@ -745,11 +745,15 @@ display:block;
 .grid-img{
 	border:1px solid #ddd;
 	border-radius:3px;
-	max-height:100px;
-	max-width: 200px;
+	height:120px;
+	width: 120px;
 	float:left;
 	margin:0 10px 10px 0!important;
-	padding:2px
+	padding:2px;
+	overflow: hidden;
+}
+.grid-img img{
+	height: 120px;
 }
 .square-btn{
 	width:80px;
@@ -3437,6 +3441,9 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 }
 .mainpage-content-right div.browse-container {
 	width: 300px;
+}
+.timezone .select2-drop{
+	position: relative;
 }
 .padddingLeft14 {
     padding:0 14px 0 0!important;

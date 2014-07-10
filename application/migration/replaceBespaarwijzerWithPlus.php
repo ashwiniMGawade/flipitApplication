@@ -46,7 +46,7 @@ class replaceBespaarwijzerWithPlus
         $doctrineManager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $doctrineManager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-        $maxAccountTableValues = Signupmaxaccount::getAllMaxAccounts();
+        $maxAccountTableValues = LocaleSettings::getLocaleSettings();
         $currentLocale = !empty($maxAccountTableValues[0]['locale']) ? $maxAccountTableValues[0]['locale'] : 'nl_NL';
         $this->_translate = new Zend_Translate(array(
                 'adapter' => 'gettext',

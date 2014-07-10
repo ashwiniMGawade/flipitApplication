@@ -268,7 +268,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 
         // Return locale for front end
         $this->view->locale = Signupmaxaccount::getAllMaxAccounts();
-
+        $this->view->localeSettings = LocaleSettings::getLocaleSettings();
         $this->view->timezones_list = Signupmaxaccount::$timezones;
         $this->view->localeStatus = Website::getLocaleStatus($_COOKIE['site_name']);
 
@@ -963,53 +963,6 @@ class Admin_HomepageController extends Zend_Controller_Action
 
         }
 
-    }
-
-    /**
-     *  savelocale
-     *
-     *  saves the current locale which is to be set in front end
-     */
-    public function savelocaleAction()
-    {
-        // saves the locale with region in database 'en_US'
-        Signupmaxaccount::savelocale($this->getRequest()->getParam('locale'));
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Locale has been changed successfully.');
-        $flash->addMessage(array('success' => $message ));
-        die;
-    }
-
-    public function savelocalestatusAction()
-    {
-        Website::setLocaleStatus($this->getRequest()->getParam('localeStatus'), $_COOKIE['site_name']);
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Locale Status has been changed successfully.');
-        $flash->addMessage(array('success' => $message));
-        die;
-    }
-
-    public function getlocaleAction()
-    {
-        $locale_data = Signupmaxaccount::getAllMaxAccounts();
-        echo Zend_Json::encode($locale_data[0]['locale']);
-        die;
-    }
-
-
-    /**
-     *  savetimezonelocale
-     *
-     *  saves the current timezone which will bed used for datetime
-     */
-    public function saveTimezoneAction()
-    {
-
-        Signupmaxaccount::saveTimezone($this->getRequest()->getParam('timezone'));
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Timezone has been changed successfully.');
-        $flash->addMessage(array('success' => $message ));
-        die;
     }
 
 
