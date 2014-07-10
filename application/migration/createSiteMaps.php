@@ -71,7 +71,7 @@ class createSiteMaps
         $shops = FrontEnd_Helper_viewHelper::__form('form_shops');
         $info = FrontEnd_Helper_viewHelper::__link('link_info');
         $rssfeed = FrontEnd_Helper_viewHelper::__link('link_rssfeed');
-        $zoeken = FrontEnd_Helper_viewHelper::__link('link_search');
+        $zoeken = FrontEnd_Helper_viewHelper::__link('link_zoeken');
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
         $sitemap_main = $sitemaps.'_'.$main.'.xml';

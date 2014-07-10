@@ -12,7 +12,7 @@ class OutController extends Zend_Controller_Action
         $this->_redirect($redirectUrl);
     }
 
-    public function extendedofferAction()
+    public function exofferAction()
     {
         $offerId = $this->getRequest()->getParam('id');
         $redirectUrl  = Offer::getcloakLink($offerId, false);

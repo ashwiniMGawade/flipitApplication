@@ -147,7 +147,23 @@ EOD;
         $permalink = rtrim($permalink, '/');
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
         if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :
+            if (intval($permalinkMatches[0]) > intval($pageCount)) :
+                $permalink = explode('/'.$permalinkMatches[0], $permalink);
+                $permalink = $permalink[0];
+                header('location:'. HTTP_PATH.$permalink);
+            elseif(intval($pageCount) == 1) :
+                $baseLink = explode('/', $permalink);
+                if (intval($baseLink[1]) == 1) :
+                    header('location:'. HTTP_PATH.$baseLink[0]);
+                    exit;
+                endif;
+                header('location:'. HTTP_PATH.$baseLink[0] ."/" .$baseLink[1]);
+                exit;
+            endif;
             $permalink = explode('/'.$permalinkMatches[0], $permalink);
+            if ($permalinkMatches[0]==1) {
+                header('location:'. HTTP_PATH.$permalink[0]);
+            }
             $permalink = $permalink[0];
         elseif (intval($permalinkMatches[0]) > 3) :
             throw new Exception('Error occured');
@@ -158,14 +174,6 @@ EOD;
         $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
         $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($permalinkAfterQueryString[0])));
         if ($pageCount > 1) :
-            if ($currentPage - 1 != 0) :
-                if ($currentPage==2) :
-                    $previousPermalink = HTTP_PATH . $permalink;
-                else:
-                    $previousPermalink = HTTP_PATH . $permalink .'/'. ($currentPage - 1);
-                endif;
-                $view->headLink(array('rel' => 'prev', 'href' => $previousPermalink));
-            endif;
             if ($currentPage <= 2) :
                 if ($currentPage == 1) :
                     $permalinkAfterQueryString = explode('?', $permalink);
@@ -175,6 +183,16 @@ EOD;
                     $view->headLink(array('rel' => 'next', 'href' => HTTP_PATH . $permalink .'/'. ($currentPage + 1)));
                 endif;
             endif;
+            
+            if ($currentPage - 1 != 0) :
+                if ($currentPage==2) :
+                    $previousPermalink = HTTP_PATH . $permalink;
+                else:
+                    $previousPermalink = HTTP_PATH . $permalink .'/'. ($currentPage - 1);
+                endif;
+                $view->headLink(array('rel' => 'prev', 'href' => $previousPermalink));
+            endif;
+
             echo '<ul class="pagination">';
             foreach ($pagesInRange as $pageNumber):
                 if ($pageNumber < 4):
@@ -425,6 +443,7 @@ EOD;
 
     public static function getWebsiteLocales($frontend = '')
     {
+        $locales = '';
         $websites = Website::getAllWebsites();
         foreach ($websites as $website) {
             $spiltWebsite  = explode('/', $website['name']);
@@ -438,6 +457,7 @@ EOD;
                 $locales[strtoupper($locale)] = $website['name'];
             }
         }
+
         return $locales;
     }
 
@@ -708,10 +728,25 @@ EOD;
         $string = preg_replace($search, array('',''), $string);
         $string = htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
         $string = trim(rtrim(rtrim($string)));
-        $string = mysql_real_escape_string($string);
+        $string = mysqli_real_escape_string(self::getDbConnectionDetails(), $string);
         return $string;
     }
 
+    public static function getDbConnectionDetails()
+    {
+        foreach (Doctrine_Manager::getInstance()->getConnections() as $connection) {
+            $dbConnection = $connection->getOptions();
+            preg_match('/host=(.*);/', $dbConnection['dsn'], $host);
+        }
+        $splitDbName = explode('=', $dbConnection['dsn']);
+        $dbName = $splitDbName[2];
+        $dbUserName = $dbConnection['username'];
+        $dbUserPassword = $dbConnection['password'];
+        $dbHost = $host[1];
+        $mysqlConnection = mysqli_connect($dbHost, $dbUserName, $dbUserPassword, $dbName);
+        return $mysqlConnection;
+    }
+    
     public static function fillupTopCodeWithNewest($offers, $number)
     {
         if (count($offers) < $number) {
@@ -824,6 +859,7 @@ EOD;
         $xml->endDocument();
         $xml->flush();
     }
+
     public static function getWebsitesLocales($websites)
     {
         foreach ($websites as $website) {
@@ -833,4 +869,51 @@ EOD;
         }
         return $locales;
     }
+
+    public static function getPagePermalink()
+    {
+        $pagePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $explodedPagePermalink = explode('/', $pagePermalink);
+
+        if (LOCALE != '') {
+            $secondUrlParameter = isset($explodedPagePermalink[2]) ? '/'. $explodedPagePermalink[2] : '';
+            $secondUrlParameter = isset($explodedPagePermalink[2]) && intval($explodedPagePermalink[2]) ? '' : $secondUrlParameter;
+            $pagePermalink = $explodedPagePermalink[1].$secondUrlParameter;
+        } else {
+            $secondUrlParameter = isset($explodedPagePermalink[1]) ? '/'. $explodedPagePermalink[1] : '';
+            $secondUrlParameter = isset($explodedPagePermalink[1]) &&  intval($explodedPagePermalink[1]) ? '' : $secondUrlParameter;
+            $pagePermalink = $explodedPagePermalink[0].$secondUrlParameter;
+        }
+        return  $pagePermalink;
+    }
+
+    public static function redirectAddToFavouriteShop()
+    {
+        $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
+        if (isset($favouriteShopIdFromSession->favouriteShopId)) {
+            header(
+                'location:'.HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
+                .FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
+                FrontEnd_Helper_viewHelper::__link('link_profiel').'&shopId='
+                . $favouriteShopIdFromSession->favouriteShopId
+            );
+            exit();
+        }
+    }
+
+    public static function getModuleName()
+    {
+        $requestedUrl = ltrim(REQUEST_URI, '/');
+        $splitedModuleName = preg_split('/[\/\?]+/', $requestedUrl);
+        return rtrim($splitedModuleName[0], '/');
+    }
+
+    public static function setErrorPageParameters($currentObject)
+    {
+        $currentObject->getResponse()->setHttpResponseCode(404);
+        $currentObject->view->popularShops = Shop::getPopularStores(12);
+        $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+        $currentObject->view->flipitLocales = $websitesWithLocales;
+    }
 }
+

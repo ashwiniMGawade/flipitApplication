@@ -7,7 +7,7 @@ $howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopI
         <a class="glyphicon glyphicon-remove btn-close" href="javascript:void(0);" onclick="customPopUpClose()"></a>
         <header class="head">
             <h1>
-            <?php echo $this->translate('How to guide').' '.$this->shopInformation[0]['name'].' '
+            <?php echo FrontEnd_Helper_viewHelper::__translate('How to guide').' '.$this->shopInformation[0]['name'].' '
             .$this->translate('coupon codes'); ?>
             </h1>
         </header>
@@ -26,7 +26,7 @@ $howToGuideBigImageDetails = $viewHelperObject->getHowToGuidesImage($this->shopI
         </div>
         <?php if(!empty($this->howToUseGuideChapters)) : ?>
         <a 
-        href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_how-to').'/'.
+        href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_how-to').'/'
         .$this->shopInformation[0]['permaLink']; ?>#guide" class="link-box">
             <hr class="alt2">
             <span>

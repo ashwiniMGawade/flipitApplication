@@ -1,5 +1,7 @@
 <?php 
 $this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
+$authorName = FrontEnd_Helper_AuthorPartialFunctions::
+    getAuthorName($this->authorDetails['firstName'], $this->authorDetails['lastName']);
 $authorDetails  = '';
 if(!empty($this->authorDetails)):
 $authorDetails = $this->partial(
@@ -18,14 +20,14 @@ if(!empty($this->authorMostReadArticles)):
         $partialViewPath.'_authorMostReadArticles.phtml',
         array(
             "authorMostReadArticles"=>$this->authorMostReadArticles,
-            "moneySavingGuideHeader"=>$this->translate('Saving guides by') . " " . $this->authorDetails['firstName']
+            "moneySavingGuideHeader"=>$this->translate('Saving guides by') . " " . $authorName
         )
     );
 endif;
 
 $discussion = $this->partial(
         $partialViewPath.'_discussion.phtml',
-        array('firstName' => $this->authorDetails['firstName'])
+        array('authorName' => $authorName)
 );
 
 $signUpWidgetForm = '';

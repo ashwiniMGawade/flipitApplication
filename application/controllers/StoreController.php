@@ -83,7 +83,7 @@ class StoreController extends Zend_Controller_Action
                 (string)'all_msArticleInStore'.$ShopList,
                 (array)array(
                     'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
-                    'parameters' => array('moneysaving', 6, $shopId)
+                    'parameters' => array('moneysaving', 3, $shopId)
                 )
             );
 
@@ -128,9 +128,14 @@ class StoreController extends Zend_Controller_Action
             $this->view->topPopularOffers = $offers;
         }
         $this->view->expiredOffers = $expiredOffers;
+        if ($shopInformation[0]['affliateProgram'] == 0) {
+            $numberOfSimilarOffers = 10;
+        } else {
+            $numberOfSimilarOffers = 4;
+        }
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
             'similarStoresAndSimilarCategoriesOffers',
-            4,
+            $numberOfSimilarOffers,
             $shopId
         );
         $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
@@ -182,9 +187,8 @@ class StoreController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = Page::getPageDetails(7);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');
@@ -236,6 +240,11 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidePermalink);
         $parameters = $this->_getAllParams();
         $howToGuides=Shop::getshopDetails($parameters['permalink']);
+
+        if (empty($howToGuides)) {
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
+
         $ShopList = $howToGuides[0]['id'].'_list';
         $allShopDetailKey = 'all_shopdetail'.$ShopList;
         $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -276,10 +285,9 @@ class StoreController extends Zend_Controller_Action
             )
         );
         $offers = array_chunk($offers, 3);
-        $this->view->shopEditor = User::getUserDetails($shopInformation[0]['contentManagerId']);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
-        $frontEndViewHelper = new FrontEnd_Helper_viewHelper();
+        $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
         $this->view->popularStoresList = $frontEndViewHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
         $this->view->howToGuides=$howToGuides;
@@ -331,7 +339,29 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopInformation = $shopInformation;
         $this->view->howToUseGuideChapters = $howToUseGuideChapters;
     }
-   
+
+    public function addtofavouriteAction()
+    {
+        $this->view->layout()->robotKeywords = 'noindex, nofollow';
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $visitorShopIdSessionNameSpace = new Zend_Session_Namespace('favouriteShopId');
+        $visitorShopIdSessionNameSpace->favouriteShopId = $this->getRequest()->getParam('shopId');
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $visitorId = Auth_VisitorAdapter::getIdentity()->id;
+            $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
+            if (isset($favouriteShopIdFromSession->favouriteShopId)) {
+                $shopId = $favouriteShopIdFromSession->favouriteShopId;
+                Shop::shopAddInFavourite($visitorId, base64_decode($shopId));
+                Zend_Session::namespaceUnset('favouriteShopId');
+                $this->_redirect(HTTP_PATH_LOCALE. $this->getRequest()->getParam('permalink'));
+                exit();
+            }
+        } else {
+            $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'));
+            exit();
+        }
+        throw new Zend_Controller_Action_Exception('', 404);
+    }
     // Returns the right favorite heart status by fetching the partial.
     public function addfavoriteviewAction()
     {

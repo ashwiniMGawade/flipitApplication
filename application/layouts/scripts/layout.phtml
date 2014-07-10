@@ -22,15 +22,12 @@ $language = $locale[0];
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <?php
-if(isset($this->canonical)):
-   $this->headLink(
-        FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)
-    );
+
+if(isset($this->canonical)): 
+    $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)); 
 endif;
 
-$this->headMeta()->appendName(
-    'robots',
-    FrontEnd_Helper_LayoutContent::loadRobots(
+echo $this->headMeta()->appendName('robots', FrontEnd_Helper_LayoutContent::loadRobots(
         $this->param,
         $this->layout()->robotKeywords
     )
@@ -54,11 +51,13 @@ else:
         )
     );
 endif;
+if (APPLICATION_ENV != 'development') {
+    echo $this->headLink();
+}
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
 echo $this->headStyle();
-
 echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 
 ?>
@@ -66,9 +65,11 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 </head>
 <body<?php echo (!empty($this->pageCssClass) ? " class='$this->pageCssClass'" : ''); ?>>
     <?php echo $this->render('branding_menu.phtml'); ?>
+    <?php echo $this->render('mobile_menu.phtml'); ?>
     <div id="wrapper">
-        <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
-        <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
+        <div class="wrapper-holder">
+            <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
+            <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
 <?php 
 if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
     echo '<div class="section-top">';
@@ -110,6 +111,7 @@ if (FrontEnd_Helper_LayoutContent::showMainContainerDiv()):
     echo "</main>";
 endif;
 ?>
+        </div>
     </div>
 <?php
 if(file_exists($localePartialPath .  '_footer.phtml')):

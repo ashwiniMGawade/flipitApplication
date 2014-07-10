@@ -464,7 +464,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <?php       
                         $shopPicture = '';
                         if(isset( $this->data['logo']['name'] ) && $this->data['logo']['name'] != '' ) {
-                            $shopPicture = PUBLIC_PATH_CDN.  $this->data['logo']['path']  .'thum_large_'. $this->data['logo']['name'] ;
+                            $shopPicture = PUBLIC_PATH_CDN.  $this->data['logo']['path']. $this->data['logo']['name'] ;
                             }				  
                         ?> 
                         <div class='browse-container'>    
@@ -501,8 +501,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                             ) {
                             $shopPicture = 
                                 PUBLIC_PATH_CDN
-                                .$this->data['screenshot']['path'] 
-                                .'thum_large_'. $this->data['screenshot']['name'];
+                                .$this->data['screenshot']['path'] . $this->data['screenshot']['name'];
                         }	
                       ?>
                         <div class='browse-container'>
@@ -615,55 +614,55 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Upload main image lightbox'); ?></strong></label></div>
                     <div class="mainpage-content-right">
                          <div class="mainpage-content-right-inner-right-other"></div>
-                      		
-                      		  <?php       
-					
-				                     	$smallLogo = PUBLIC_PATH.'images/upload/no.jpg';
-									 			 
-				                        if(isset( $this->data['howtousesmallimage']['name'] ) && $this->data['howtousesmallimage']['name'] != '' ) {
-									  
-				                        	 if( file_exists ( ROOT_PATH .  $this->data['howtousesmallimage']['path'] . $this->data['howtousesmallimage']['name'] )) {
-				                        	 	
-				                         		$smallLogo = PUBLIC_PATH_LOCALE .  $this->data['howtousesmallimage']['path']  .'thum_'. $this->data['howtousesmallimage']['name'] ;
-				                         
-				                         	}
-				                      	}	
-						  
-                     		 ?>
-                      		  
-                      		<img alt="<?php echo $this->translate('main image'); ?>" src="<?php echo $smallLogo ; ?>">
-                      		<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-                      		   
-                      		   <br>
-                    	       <input data-max-size="2097152" onchange="checkFileType(event)" type="file" class="input-file ignore"  name="smallLogoFile"/>
-		                       <span class="ml15 help-inline" style="display: inline-block; padding-bottom: 5px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB,width:300px)'); ?></span>
-                       		</div>
+                  		  <?php       
+	                     	$smallLogo = ''; 
+	                        if(
+                                isset($this->data['howtousesmallimage']['name']) 
+                                && $this->data['howtousesmallimage']['name'] != '' 
+                            ) {
+	                         	$smallLogo = PUBLIC_PATH_CDN . $this->data['howtousesmallimage']['path']  
+                                .$this->data['howtousesmallimage']['name'] ;	
+	                      	}	
+					  
+                 		 ?>
+                            <div class='browse-container'>
+                                <img class='image-container' alt="<?php echo $this->translate('main image'); ?>" 
+                                src="<?php echo $smallLogo ; ?>">
+                            </div>
+                            <div>
+                                <input data-max-size="2097152" onchange="checkFileType(event)"
+                                type="file" class="input-file ignore"  name="smallLogoFile"/>
+                            </div>
+                            <div>
+                            <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
+                            </div>
                     </div>   
                 </div>
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label style="padding:0 14px 0 0;"><strong><?php echo $this->translate('Upload second image lightbox'); ?></strong></label></div>
 	                    <div class="mainpage-content-right">
 	                        <div class="mainpage-content-right-inner-right-other"></div>
-	                    	<?php       
-					
-				                     	$bigLogo = PUBLIC_PATH.'images/upload/no.jpg';
-									 			 
-				                        if(isset( $this->data['howtousebigimage']['name'] ) && $this->data['howtousebigimage']['name'] != '' ) {
-									  
-				                        	 if( file_exists ( ROOT_PATH .  $this->data['howtousebigimage']['path'] . $this->data['howtousebigimage']['name'] )) {
-				                        	 	
-				                         		$bigLogo = PUBLIC_PATH_LOCALE .  $this->data['howtousebigimage']['path']  .'thum_'. $this->data['howtousebigimage']['name'] ;
-				                         
-				                         	}
-				                      	}	
-						  
-                     		 ?>
-	                    	<img alt="<?php echo $this->translate('second image'); ?>" src="<?php echo $bigLogo ; ?>">
-	                    	<div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
-		                    	 <br>	
-		                    	 <input data-max-size="2097152" onchange="checkFileType(event)" type="file" class="input-file ignore" name="bigLogoFile" >
-		                     	 <span class="ml15 help-inline" style="display: inline-block; padding-bottom: 5px;"><?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB,width:300px)'); ?></span>
-	                   		</div>
+                            <?php       
+                            $bigLogo = '';
+                            if(
+                                isset($this->data['howtousebigimage']['name'] ) 
+                                && $this->data['howtousebigimage']['name'] != ''
+                            ) {
+                                $bigLogo = PUBLIC_PATH_CDN . $this->data['howtousebigimage']['path']
+                                . $this->data['howtousebigimage']['name'] ;
+                            }
+                            ?>
+                            <div class='browse-container'>
+                                <img class='image-container'
+                                alt="<?php echo $this->translate('second image'); ?>" src="<?php echo $bigLogo ; ?>">
+                            </div>
+                            <div>
+                                <input data-max-size="2097152" onchange="checkFileType(event)" type="file" 
+                                class="input-file ignore" name="bigLogoFile" >
+                            </div>
+                            <div>
+                            <?php echo $this->translate('Image Size: min 300px (*.jpg or *.png file only)'); ?>
+                            </div>
                    </div>
                                        
                 </div>

@@ -17,7 +17,7 @@ endif;
     <form id="registerForm" name="registerForm" method="POST" action="">
         <fieldset>
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-6 hide-testimonials">
                  <?php  echo $this->testimonials[0]['testimonial1']; ?>
                  <?php  echo $this->testimonials[0]['testimonial2']; ?>
                  <?php  echo $this->testimonials[0]['testimonial3']; ?>
@@ -63,15 +63,15 @@ endif;
                             <div class="form-group">
                             <?php echo $registerForm->dateOfBirth->renderLabel();?>
                                 <div class="row">
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-4 first">
                                     <?php echo $registerForm->dateOfBirthDay->renderViewHelper();?>
                                     </div>
                                     
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-4 second">
                                      <?php echo $registerForm->dateOfBirthMonth->renderViewHelper();?>
                                     </div>
                                     
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-4 third">
                                      <?php echo $registerForm->dateOfBirthYear->renderViewHelper();?>
                                     </div>
                                 </div>

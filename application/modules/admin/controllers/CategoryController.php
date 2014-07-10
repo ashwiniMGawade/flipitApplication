@@ -254,7 +254,7 @@ class Admin_CategoryController extends Zend_Controller_Action
     public function exportcategorylistAction()
     {
         // get all category from database
-        $data = Category::exportcategoryList ();
+        $data = Category::getAllCategories();
         // create object of phpExcel
         $objPHPExcel = new PHPExcel ();
         $objPHPExcel->setActiveSheetIndex ( 0 );

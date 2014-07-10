@@ -77,7 +77,7 @@ class BackEnd_Helper_MandrillHelper
                 $visitorDirectLoginInformation[$visitorKey]['vars'][1]['content'] =
                     $frontendPath
                     . FrontEnd_Helper_viewHelper::__link("link_login")
-                    . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
+                    . "/" ."directloginunsubscribe"
                     . "/" . base64_encode($visitorValue['email']) ."/". $visitorValue['password'];
                 
                 $visitorInformation[$visitorKey]['email'] = $visitorValue['email'];
@@ -120,7 +120,7 @@ class BackEnd_Helper_MandrillHelper
         $visitorDirectLoginInformation[$key]['vars'][1]['content'] =
             $httpPathLocale
             . FrontEnd_Helper_viewHelper::__link("link_login")
-            . "/" .FrontEnd_Helper_viewHelper::__link("link_directloginunsubscribe")
+            . "/" ."directloginunsubscribe"
             . "/" . base64_encode($visitorEmail) ."/". $visitorDetails[0]['password'];
         $visitorInformation[$key]['email'] = $visitorEmail;
         

@@ -22,6 +22,8 @@ $articleInformation = $this->partial(
            'articleUpdatedAtDate'=> $articleUpdatedAtDate
         )
 );
+$authorDetails = '';
+if(!empty($userDetails)):
 $authorDetails = $this->partial(
     $plusViewPath.'_authorDetails.phtml',
         array(
@@ -29,6 +31,7 @@ $authorDetails = $this->partial(
             'profileLink' => $profileLink
         )
 );
+endif;
 
 $partialViewPath = 'partials/';
 $savingGuides = '';
@@ -95,7 +98,7 @@ $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$article
             <?php echo $authorDetails. $savingGuides. $discussion;?>
         </div>
         <aside id="sidebar" class="col-md-4 col-sm-4">
-            <?php echo $recentlyAddedArticles . $topPopularOffers . $directChapterLinks;?>
+            <?php echo $recentlyAddedArticles . $topPopularOffers;?>
         </aside>    
     </div>
 </main>

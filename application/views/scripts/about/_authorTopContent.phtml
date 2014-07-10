@@ -3,8 +3,8 @@ $auhtorProfileImage =
     HTTP_PATH_CDN
     .ltrim($this->authorDetails['profileimage']['path'], "/")
     ."thum_large_widget_".$this->authorDetails['profileimage']['name'];
-$authorFullName = $this->authorDetails['firstName']. " " .$this->authorDetails['lastName'];
 $partialFunctions = new FrontEnd_Helper_AuthorPartialFunctions();
+$authorName = $partialFunctions->getAuthorName($this->authorDetails['firstName'], $this->authorDetails['lastName']);
 $authorFavouriteShops = '';
 if (!empty($this->authorFavouriteShops)):
 $authorFavouriteShops = $this->partial(
@@ -20,11 +20,11 @@ endif;
     <header class="heading">
         <div class="icon">
             <img width="87" height="87" src="<?php echo $auhtorProfileImage;?>" 
-            alt="<?php echo $this->authorDetails['firstName'];?>">
+            alt="<?php echo $authorName;?>">
         </div>
         <div class="box">
             <h1>
-                <span><?php echo $authorFullName;?></span>
+                <span><?php echo $authorName;?></span>
                 <span class="status"><?php echo $this->translate('deal guru');?></span>
             </h1>
             <ul class="author-details">

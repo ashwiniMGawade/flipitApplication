@@ -89,14 +89,17 @@ function customPopUp(id) {
         "z-index" : 999999
     }).fadeIn();
     $('body').append('<div onClick="customPopUpClose();" id="fade"></div>');
-    $('#fade').css({
-        'filter' : 'alpha(opacity=80)'
-    }).fadeIn();
+    if(popupId != 'how_to_lightbox_pop_up') {
+        fadeCustomPopup();
+    }
     return false;
 }
 
-function copyToClipboard(text) {
-    window.prompt("Copy to clipboard: Ctrl+C, Enter", text);
+function fadeCustomPopup()
+{
+    $('#fade').css({
+        'filter' : 'alpha(opacity=80)'
+    }).fadeIn();
 }
 
 function customPopUpClose() {

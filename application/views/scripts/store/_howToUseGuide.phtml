@@ -1,9 +1,16 @@
+<?php
+$domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+$shopUrl = $domainName.'out/shop/'.$this->shop['id'];
+?>
+<script type="text/javascript">
+    var relatedShopId = "<?php echo $this->shop['id']; ?>";
+</script>
 <ul class="add-info">
     <li>
-        <h2><?php echo $this->translate('How to use code'); ?></h2>
+        <h4><?php echo $this->translate('How to use code'); ?></h4>
         <p>
             <a href="javascript:void(0);" id="clicker" class="how-to-showme-link" 
-            onclick="showLightboxPopUp(<?php echo $this->shop['id']; ?>);">
+            onclick="showHowToLightboxPopup();">
             <?php echo $this->translate('Show me'); ?>
             </a> 
             <?php 
@@ -17,7 +24,7 @@
         </p>
     </li>
     <li class="web">
-        <h2><?php echo $this->translate('Official website'); ?></h2>
-        <a href="<?php echo $this->shop['actualUrl']; ?>"><?php echo $this->actualUrl;?></a>
+        <h4><?php echo $this->translate('Official website'); ?></h4>
+        <a href="<?php echo $shopUrl; ?>"><?php echo $this->actualUrl;?></a>
     </li>
 </ul>

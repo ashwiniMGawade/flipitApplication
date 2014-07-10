@@ -22,7 +22,7 @@ class Category extends BaseCategory
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoryOffersList = Doctrine_Query::create()
         ->select(
-            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,
+            "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,c.name as categoryName,
             o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,
             fv.shopId,fv.visitorId,fv.Id,terms.content"
         )
@@ -432,6 +432,18 @@ class Category extends BaseCategory
             return array("status" => "-1");
         }
     }
+
+    public static function getAllCategories()
+    {
+       $allCategories = Doctrine_Query::create()
+            ->select('c.*')
+            ->from("Category  c")
+            ->where("c.deleted=0")
+            ->andWhere('c.status= 1')
+            ->orderBy("c.id DESC")
+            ->fetchArray();
+        return $allCategories;
+    }
     #####################################################
     ############# ENd REFACORED CODE ####################
     #####################################################
@@ -528,24 +540,6 @@ class Category extends BaseCategory
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
-    }
-
-    /**
-     * get list of category for export
-     * @author kraj
-     * @return array $categoryList
-     * @version 1.0
-     */
-    public static function exportcategoryList()
-    {
-       $categoryList = Doctrine_Query::create()
-                ->select('c.*')
-                ->from("Category  c")
-                ->where("c.deleted=0")
-                ->orderBy("c.id DESC")
-                ->fetchArray();
-        return $categoryList;
-
     }
 
 /******************functions to be used on frontend*******************/

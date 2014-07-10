@@ -1,7 +1,7 @@
 <header class="heading-box text-ask">
     <h2>
 <?php
-$headerName  = isset($this->shopName) ? $this->shopName : $this->firstName;
+$headerName  = isset($this->shopName) ? $this->shopName : $this->authorName;
 echo $this->shopName!= '' 
     ?  $this->translate('Ask a question about'). ' ' . $headerName 
     :  $this->translate('Ask a question');

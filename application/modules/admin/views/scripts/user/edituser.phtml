@@ -97,14 +97,17 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.cust
                         </div>
                         
                         <div class="mainpage-content-line mb10">
-                            <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Upload Avatar'); ?></strong></label></div>
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Upload Avatar'); ?></strong></label>
+                            </div>
                             <div class="mainpage-content-right upload">
                             <?php       
-                            $userPicture = PUBLIC_PATH.'images/back_end/user-avtar.jpg';
+                            $userPicture = '';
                             $avatarName = $this->translate('');
                             if(isset($this->userDetail['profileimage']['name']) && $this->userDetail['profileimage']['name']!='') {  
-                            $userPicture = HTTP_PATH. "public" . $this->userDetail['profileimage']['path'].'thum_'.$this->userDetail['profileimage']['name'];
-                            $avatarName = $this->userDetail['profileimage']['name'];
+                                $userPicture = HTTP_PATH_CDN . $this->userDetail['profileimage']['path']
+                                .$this->userDetail['profileimage']['name'];
+                                $avatarName = $this->userDetail['profileimage']['name'];
                             }   
                             ?>
                                 <div class='browse-container'>    

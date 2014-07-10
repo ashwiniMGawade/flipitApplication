@@ -42,17 +42,19 @@ $signUpWidgetForm = $this->partial(
     )
 );
 
+$popularStoreHeaderText = count($this->offers)  == 0
+    ? $this->translate('Popular Stores') 
+    : $this->translate('Stores matching search result'); 
 $popularStores = '';
 if(count($this->popularStores)){
     $popularStores = $this->partial(
-        'search/_popular-stores.phtml',
+        $partialViewPath .'_popular-stores.phtml',
         array(
            'popularStores' => $this->popularStores,
-           'offers' => count($this->offers)
+           'headerText' => $popularStoreHeaderText
         )
     );
 }
-
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">

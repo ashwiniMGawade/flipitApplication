@@ -48,7 +48,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                     class="text-blue-link store-header-link '.$affliateClass.'"  '.$affliateDisabled.'
                     onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">
                     <img class="radiusImg" 
-                    src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . $shop['logo']['name']. '" 
+                    src="'. PUBLIC_PATH_CDN . $shop['logo']['path'] . "thum_big_" . $shop['logo']['name']. '" 
                     alt="'.$shop['name'].'" width="176" height="89" />
                     </a>
                 </div>
@@ -59,31 +59,38 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $shop['subTitle'] = $shop['subTitle'];
         }
         if ($expiredMessage !='') {
+                $explodedShopUrl = explode('//', $shop['actualUrl']);
                 $divContent .=
                     '<h1>'.$shop['title'].'</h1>
-                    <strong>'.$shop['subTitle'].'</strong>
+                    <h2>'.$shop['subTitle'].'</h2>
                         <a target="_blank" rel="nofollow" 
                         class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
                         .$affliateDisabled.'
-                        onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shop['actualUrl'].'
-                        </a>';
+                        onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$explodedShopUrl[1].'
+                        </a>'. self::getLoveAnchor($shop['id'], $shop['name']);
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
             $divContent .='</div></div>';
-        return $divContent ;
+        return $divContent;
     }
     
-    public function getLoveAnchor($shopId)
+    public function getLoveAnchor($shopId, $shopName)
     {
-        $favouriteShopId = 0;
-        if (Auth_VisitorAdapter::hasIdentity()):
-             $favouriteShopId=Auth_VisitorAdapter::getIdentity()->id;
+        $shopPermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $visitorId = Auth_VisitorAdapter::hasIdentity() ? Auth_VisitorAdapter::getIdentity()->id : 0;
+        $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $shopPermalink .'&shopId='
+            . base64_encode($shopId);
+        $titleTextForLove = $this->__form('form_Remove from Favourite');
+        $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart red-heart';
+        if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
+            $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
+            $titleTextForLove = $this->__form("form_Add in Favourite");
         endif;
-        return '<a onclick="storeAddToFeborite('.$favouriteShopId.','.$shopId.')" 
+        return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" 
             class="pop btn btn-sm btn-default" href="javascript:void(0)">
-            <span class="glyphicon glyphicon-heart"></span>'.
-            $this->__translate('Love').
+            <span class="' . $loveClassGreyColorOrRedColor . '"></span>'.
+            $shopName.
         '</a>';
     }
 }

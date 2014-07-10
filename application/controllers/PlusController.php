@@ -20,14 +20,50 @@ class PlusController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $articlesOverviewPagePermalink  = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $pageDetails = Page::getPageDetailsFromUrl($articlesOverviewPagePermalink);
 
-        $articlesOverviewPagePermalink  = 'plus';
-        $pageDetails = Page::getPageDetails($articlesOverviewPagePermalink);
         $mostReadArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array('function' =>
-                'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
-        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles();
-        $recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(3);
+            getRequestedDataBySetGetCache(
+                (string)"all_mostreadMsArticlePage_list",
+                (array)array('function' =>
+                'MoneySaving::getMostReadArticles',
+                'parameters' => array(3))
+            );
+
+        $categoryWiseArticles = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                (string)"all_categoryWiseArticles_list",
+                (array)array('function' =>
+                'MoneySaving::getCategoryWiseArticles', 'parameters' => array())
+            );
+
+        $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+
+        $blogCategoryArticles = array();
+        $blogCategoryArticles['blog'] = $moneySavingPartialFunctions->
+            addAuthorDetailsInArticles($categoryWiseArticles, 'blog');
+
+        $savingTipCategoryArticles = array();
+        $savingTipCategoryArticles['savingtip'] = $moneySavingPartialFunctions->
+            addAuthorDetailsInArticles($categoryWiseArticles, 'savingtip');
+
+        $allArticles = $blogCategoryArticles + $savingTipCategoryArticles;
+        $allArticles = array_merge($allArticles['blog'], $allArticles['savingtip']);
+
+        $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                (string)"all_recentlyAddedArticles_list",
+                (array)array('function' =>
+                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2))
+            );
+
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            (string)'all_popularshop_list',
+            (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(6)),
+            true
+        );
+        
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->permaLink = $articlesOverviewPagePermalink;
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($articlesOverviewPagePermalink);
@@ -41,12 +77,12 @@ class PlusController extends Zend_Controller_Action
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->popularStores = $popularStores;
         $this->view->mostReadArticles = $mostReadArticles;
-        $this->view->categoryWiseArticles = $categoryWiseArticles;
+        $this->view->allArticles = $allArticles;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
-        $this->view->pageCssClass = 'saving-page';
+        $this->view->pageCssClass = 'article-page';
     }
-
 
     public function guidedetailAction()
     {
@@ -67,7 +103,9 @@ class PlusController extends Zend_Controller_Action
                     'function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
-            $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles(4);
+            $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
+                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
             $this->viewHelperObject->getMetaTags(

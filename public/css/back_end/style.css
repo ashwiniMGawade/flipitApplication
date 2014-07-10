@@ -745,8 +745,8 @@ display:block;
 .grid-img{
 	border:1px solid #ddd;
 	border-radius:3px;
-	width:126px;
-	height:89px;
+	max-height:100px;
+	max-width: 200px;
 	float:left;
 	margin:0 10px 10px 0!important;
 	padding:2px
@@ -3440,4 +3440,10 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 }
 .timezone .select2-drop{
 	position: relative;
+}
+.padddingLeft14 {
+    padding:0 14px 0 0!important;
+}
+.borderradius4px{
+	border-radius:0 4px 4px 0 !important;
 }

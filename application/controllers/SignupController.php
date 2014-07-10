@@ -2,7 +2,7 @@
 require_once 'Zend/Controller/Action.php';
 class SignupController extends Zend_Controller_Action
 {
-    public $directLoginLinks = array();
+    public $_loginLinkAndData = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -47,11 +47,11 @@ class SignupController extends Zend_Controller_Action
                 FrontEnd_Helper_viewHelper::__link('link_profiel')
             );
         }
-        $pageName = 'signup';
-        $pageDetails =  Page::getPageDetails($pageName);
+
+        $pageDetails =  Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+
         $this->viewHelperObject->getMetaTags($this);
-        
         $emailAddressFromMemory = '';
         $emailAddressSpace = new Zend_Session_Namespace('emailAddressSignup');
         if (isset($emailAddressSpace->emailAddressSignup)) {
@@ -129,6 +129,7 @@ class SignupController extends Zend_Controller_Action
                     $mandrillFunctions->sendConfirmationMail($visitorEmail, $this);
                 } else {
                     Visitor::setVisitorLoggedIn($visitorId);
+                    FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
                     $message = FrontEnd_Helper_viewHelper::__translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
@@ -144,7 +145,7 @@ class SignupController extends Zend_Controller_Action
     public function sendWelcomeMail($visitorId)
     {
         $visitorDetails = Visitor::getUserDetails($visitorId);
-        $FromEmail = Signupmaxaccount::getEmailAddress();
+        $fromEmail = Signupmaxaccount::getEmailAddress();
         $mailer  = new FrontEnd_Helper_Mailer();
         $content = array(
                         'name'    => 'content',
@@ -156,18 +157,18 @@ class SignupController extends Zend_Controller_Action
                                 )
                         )
                     );
-        $VisitorName = $visitorDetails[0]['firstName'].' '.$visitorDetails[0]['lastName'];
+        $visitorName = $visitorDetails[0]['firstName'] .' '. $visitorDetails[0]['lastName'];
         BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails[0]['email']);
         $mailer->send(
             FrontEnd_Helper_viewHelper::__email('email_sitename'),
-            $FromEmail[0]['emailperlocale'],
-            $VisitorName,
+            $fromEmail[0]['emailperlocale'],
+            $visitorName,
             $visitorDetails[0]['email'],
             FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
             $content,
             FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
             '',
-            $this->directLoginLinks
+            $this->_loginLinkAndData
         );
         return true;
     }

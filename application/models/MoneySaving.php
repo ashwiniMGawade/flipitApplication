@@ -42,8 +42,10 @@ class MoneySaving extends BaseMoneySaving
     public static function getRecentlyAddedArticles($limit)
     {
         $recentlyAddedArticles = Doctrine_Query::create()
-            ->select('DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,  ai.path,
-                ai.name,aai.path, aai.name')
+            ->select(
+                'DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,
+                a.created_at, ai.path, ai.name,aai.path, aai.name'
+            )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
@@ -55,20 +57,7 @@ class MoneySaving extends BaseMoneySaving
             ->fetchArray();
         return $recentlyAddedArticles;
     }
-    public static function getPageDetails($permalink)
-    {
-        $pageDetails = Doctrine_Query::create()
-            ->select('p.*, img.id, img.path, img.name')
-            ->from('Page p')
-            ->leftJoin('p.logo img')
-            ->where("p.permaLink='".$permalink."'")
-            ->andWhere('p.publish=1')
-            ->andWhere('p.pagelock=0')
-            ->andWhere('p.deleted=0')
-            ->fetchArray();
-        return $pageDetails;
-    }
-
+   
     public static function getAllMoneySavingArticles($permalink)
     {
         $allMoneySavingArticles = Doctrine_Query::create()
@@ -138,7 +127,7 @@ class MoneySaving extends BaseMoneySaving
         $articles = Doctrine_Query::create()
             ->select(
                 'chap.*, a.id, a.title, a.permalink, a.content, a.authorid, 
-                    a.authorname,  ai.path, ai.name,aai.path, aai.name'
+                    a.authorname, a.created_at, ai.path, ai.name,aai.path, aai.name'
             )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
@@ -148,6 +137,7 @@ class MoneySaving extends BaseMoneySaving
             ->where('r.relatedcategoryid ='.  "'$categoryId'")
             ->andWhere('a.deleted=0')
             ->limit($limit)
+            ->orderBy('a.created_at DESC')
             ->fetchArray();
         return $articles;
     }

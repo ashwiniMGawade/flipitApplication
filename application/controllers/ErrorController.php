@@ -2,6 +2,7 @@
 class ErrorController extends Zend_Controller_Action
 {
     protected $pagePermalink = '';
+
     public function errorAction()
     {
         $this->view->controller = $this->_request->getControllerName();
@@ -18,7 +19,27 @@ class ErrorController extends Zend_Controller_Action
                 $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
                 $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
+                if ($pageDetails['pageType']=='default') {
+                    if ($pageNumber > 0) {
+                        $pageNumber = 4;
+                    }
+                }
+                if ($pageNumber >= 4) {
+                    $this->_helper->layout()->disableLayout();
+                    FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
+                }
                 if ($pageDetails) {
+                    if ($pageDetails['pageAttributeId'] == 2) {
+                        $this->view->pageCssClass = 'faq-page';
+                    } else if (isset($pageDetails['pageAttributeId']) && $pageDetails['pageAttributeId'] == 1) {
+                        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+                        $message = $flashMessage->getMessages();
+                        $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
+                        $this->view->pageCssClass = 'contact-page';
+                    } else {
+                        $this->view->pageCssClass = 'flipit-expired-page';
+                    }
+
                     if (is_array($this->pagePermalink)) {
                         $this->pagePermalink = end($this->pagePermalink);
                     }
@@ -29,18 +50,24 @@ class ErrorController extends Zend_Controller_Action
                         $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
                     }
                     $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
+                    $paginationNumber['page'] = $pageNumber;
                     $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
-                        $pageNumber,
+                        $paginationNumber,
                         30,
                         3
                     );
+                    if (empty($specialPageOffers) && $pageDetails['pageAttributeId'] != 2
+                        && $pageDetails['pageAttributeId'] != 1) {
+                        $pageNumber = 4;
+                        $this->_helper->layout()->disableLayout();
+                        FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
+                    }
                     $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),
                         rtrim($this->pagePermalink, '/')
                     );
-
                     $this->view->message = 'Page not found';
                     $this->view->pageTitle = $pageDetails['pageTitle'];
                     $this->view->headTitle($pageDetails['metaTitle']);
@@ -53,11 +80,8 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->widget = $sidebarWidget;
                     $this->view->pageMode = true;
                 } else {
-                    $this->getResponse()->setHttpResponseCode(404);
                     $this->_helper->layout()->disableLayout();
-                    $this->view->popularShops = Shop::getPopularStores(12);
-                    $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
-                    $this->view->flipitLocales = $websitesWithLocales;
+                    FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
                 }
                 break;
             default:
@@ -82,25 +106,13 @@ class ErrorController extends Zend_Controller_Action
         $signUpFormSidebarWidget =
             FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
-        $currentUrlParameters = $this->_request->getParams();
+        
+        
 
-        if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
-                (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'faq')) {
-            $this->view->pageCssClass = 'faq-page';
-        } else if ((isset($currentUrlParameters['controller']) && $currentUrlParameters['controller'] == 'info') &&
-                (isset($currentUrlParameters['action']) && $currentUrlParameters['action'] == 'contact')) {
-            $flashMessage = $this->_helper->getHelper('FlashMessenger');
-            $message = $flashMessage->getMessages();
-            $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] :'';
-            $this->view->pageCssClass = 'contact-page';
-        } else {
-            $this->view->pageCssClass = 'flipit-expired-page';
-        }
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;
         $this->view->form = $largeSignUpForm;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        
     }
 
     public function getLog()

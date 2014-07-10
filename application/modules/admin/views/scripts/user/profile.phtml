@@ -72,10 +72,11 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.cust
                         </div>
                         
                     <?php      
-                     $userPicture = PUBLIC_PATH.'images/back_end/user-avtar.jpg';
-                     $avatarName = $this->translate('160px * 160px');
+                     $userPicture = '';
+                     $avatarName = $this->translate('120px x 120px');
                       if(isset($this->profile['profileimage']['name']) && $this->profile['profileimage']['name']!='') {
-                            $userPicture = HTTP_PATH. "public" . $this->profile['profileimage']['path'].'thum_'.$this->profile['profileimage']['name'];
+                            $userPicture = HTTP_PATH_CDN. $this->profile['profileimage']['path']
+                            .$this->profile['profileimage']['name'];
                             $avatarName = $this->profile['profileimage']['name'];
                          }
                       ?>

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	 
     $('.switcher li:eq(0) a').addClass('active');
     $('.switcher li a').click(addActiveClass);
 });

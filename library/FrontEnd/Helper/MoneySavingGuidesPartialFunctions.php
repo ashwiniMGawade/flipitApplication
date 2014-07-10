@@ -1,74 +1,77 @@
 <?php
-class FrontEnd_Helper_MoneySavingGuidesPartialFunctions {
-    public function getMostReadArticles($mostReadArticles)
+class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
+{
+    public static function getArticles($articles)
     {
-        $articleNumber = 1;
-        
-        foreach($mostReadArticles as $mostReadArticle) {
-            if($articleNumber == 1){
-                $id = 'first';
-                $class= 'slide active';
-            } else if ($articleNumber == 2) {
-                $id = 'second';
-                $class = 'slide';
-            } else {
-                $id = 'third';
-                $class = 'slide';
-            }
-            echo'<div class="'.$class.'" id="'.$id.'">
-                <a href="'.HTTP_PATH_LOCALE.'plus/'.$mostReadArticle['articles']['permalink'].'">
-                    <div class="mostread-image">
-                        <img width="632" class="aligncenter" 
-                        src="'.PUBLIC_PATH_CDN.$mostReadArticle['articles']['articleImage']['path']
-                        .$mostReadArticle['articles']['articleImage']['name'].'" 
-                        alt="'.$mostReadArticle['articles']['title'].'">
-                    </div>
-                    <h1>'.$mostReadArticle['articles']['title'].'</h1>
-                </a>
-                <p>
-                   '.$mostReadArticle['articles']['content'].'
-                </p>
-            </div>';
-            $articleNumber++;
-        }
-        
-    }
+        $relatedArticles = '<div class="row articles-box">';
+        foreach ($articles as $article) {        
 
-    public function getArticles($headingType, $articles)
-    {
-        $relatedArticles = 
-            '<header class="heading-bar">
-                <h2>'.FrontEnd_Helper_viewHelper::__translate($headingType).'</h2>
-            </header>
-            <div class="item-block">
-                <div class="holder">';
-                    foreach($articles as $article) { 
-        $relatedArticles .=
-                '<div class="item">
-                    <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
-                        <div class="related-image-wrapper">
-                            <img src="'.PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'].'" 
-                            width="363" alt="'.$article['title'].'">
-                        </div>
-                    </a>
-                    <div class="box">
-                        <div class="caption-area">
-                            <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'">
-                                <span class="caption">
-                                '.$article['title'].'
-                                </span>
+            $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
+                    . $article['authorDetails']['slug'];
+            $articleUpdatedAtDate = new Zend_Date($article['created_at']);
+            $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
+            $articleAuthorName = explode(' ', $article['authorname']);
+            $articleAuthorFirstName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
+            $articleAuthorLastName =  isset($articleAuthorName[1])? $articleAuthorName[1] : '';
+            $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
+                $articleAuthorFirstName,
+                $articleAuthorLastName
+            );
+            $articleImage = !empty($article['thumbnail']) ?
+                PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
+            $articleTitle = mb_strlen($article['title']) > 20 ?
+                                        mb_substr($article['title'], 0, 20).'..' : $article['title'];
+            $relatedArticles .=
+                    '<article class="article col-md-3 col-sm-4 col-xs-6 ">
+                        <div class="image">
+                            <span class="category">
+                                '.FrontEnd_Helper_viewHelper::__translate($article['type']).'
+                            </span>
+                            <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
+                                .$article['permalink'].'">
+                                <img
+                                src="'.$articleImage.'"
+                                width="270" height="192" alt="'.$article['title'].'">
                             </a>    
                         </div>
-                        <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'" class="link">'
-                            .FrontEnd_Helper_viewHelper::__translate('more').' &#8250;
-                        </a>
-                    </div>
-                </div>';
-            }           
-        $relatedArticles .=
-           '</div>
-        </div>';
-        return $relatedArticles;
+                        <div class="holder">
+                            <div class="box">
+                                <h2>
+                                    <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
+                                        .$article['permalink'].'">
+                                       '.$articleTitle.'
+                                    </a>
+                                </h2>
+                                <div class="meta">
+                                    <span class="author">'.FrontEnd_Helper_viewHelper::__translate('By').'
+                                        <a href="'.$profileLink.'">'.$authorName.'</a>
+                                    </span>
+                                    <em class="date">'.$articleUpdatedAtDate.'</em>
+                                </div>
+                            </div>
+                            <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'" class="more">
+                                '.FrontEnd_Helper_viewHelper::__translate('continue').' ›
+                            </a>
+                        </div>
+                    </article>';
+        }
+        echo $relatedArticles .'</div>';
     }
 
+    public function addAuthorDetailsInArticles($categoryWiseArticles, $type)
+    {
+
+        foreach ($categoryWiseArticles[$type] as $key => $categoryWiseArticle) {
+            $categoryWiseArticles[$type][$key]['authorDetails'] =
+                User::getUserDetails($categoryWiseArticle['authorid']);
+            $categoryWiseArticles[$type][$key]['type'] = $type;
+        }
+
+        return $categoryWiseArticles[$type];
+    }
+
+    public static function getArticlesAccordingToDescendingOrderFunction($articleCreatedDateAsc, $articleCreatedDateDesc)
+    {
+        return strtotime($articleCreatedDateDesc['created_at']) - strtotime($articleCreatedDateAsc['created_at']);
+    }
 }
