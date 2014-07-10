@@ -234,4 +234,10 @@ class SignupController extends Zend_Controller_Action
         }
         self::redirectAccordingToMessage($visitorId, $message, $redirectLink, 'profile');
     }
+    public function yourbrandsAction()
+    {
+          $this->view->pageCssClass = 'brands-page';
+          $popularStores = FrontEnd_Helper_viewHelper::getStoreForFrontEnd('popular', 25);
+          $this->view->popularStores = $popularStores;
+    }
 }

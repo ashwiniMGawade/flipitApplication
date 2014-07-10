@@ -1,0 +1,122 @@
+.youroffers-page {
+	#main{padding-bottom: 7px;}
+	.header-block{
+		h1{
+			font-size:40px;
+			line-height:40px;
+		}
+		.box {
+			padding: 14px 4px 5px;
+		}
+		.icon{
+			img {
+				border-radius: 3px;
+				box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+				display: block;
+			}
+		}
+	}
+	.section{
+		.row{
+			margin:-1px 0 0 -1px;
+			overflow:hidden;
+		}
+		.block{
+			border-width:1px 0 0 1px;			border-style:solid;			border-color:@page-header-border-color;
+			padding:0;
+			&:first-child{
+				border-width:1px 0 0 1px;
+				border-style:solid;
+				border-color:@page-header-border-color;
+			}
+			.holder{padding:24px 29px 25px;}
+			.code{margin:6px 25px 0 0;}
+			.box{padding:0 0 0 5px;}
+			.link{
+				font-size:21px;
+				line-height:30px;
+				display:inline-block;
+				margin:0 0 6px;
+			}
+			.text{
+				p{
+					margin:0 0 20px;
+					a{
+						color:@text-color;
+						text-decoration:underline;
+						&:hover{color:@link-color;}
+					}
+				}
+			}
+		}
+		.block.hover{background:#f8f8f8;}
+	}
+	.pop{
+		line-height:18px;
+		color:@text-color;
+		padding:5px 18px 6px;
+		box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 0 #fff inset;
+		border-color:#dedede;
+		span{
+			display:inline-block;
+			vertical-align:middle;
+		}
+		.glyphicon-heart{
+			display:none;
+			padding:0 6px 0 0;
+			margin:-1px 0 0 -8px;
+			vertical-align:middle;
+		}
+		&:hover{
+			.glyphicon-heart{
+				display:inline-block;
+			}
+		}
+	}
+}
+@media only screen and (max-width: 979px){
+	.youroffers-page {
+		#main{
+			padding:27px 6px 7px;
+		}
+		.section{
+			.block{
+				.holder{
+					padding:15px;
+				}
+				.code{margin-right:10px;}
+				.link{
+					font-size:18px;
+					line-height:26px;
+				}
+			}
+		}
+		.header-block{
+			h1{
+				font-size:26px;
+				line-height:26px;
+			}
+		}
+	}
+}
+@media only screen and (max-width: 767px){
+	.youroffers-page {
+		#main{
+			padding:27px 15px 7px;
+		}
+		.header-block{
+			.box{padding:4px;}
+		}
+		.section{
+			margin:0 -15px 7px;
+			.block{
+				height:auto !important;
+				.holder{padding:10px;}
+				.link{
+					font-size:16px;
+					line-height:22px;
+				}
+			}
+		}
+	}
+}

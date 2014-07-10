@@ -1,0 +1,69 @@
+<div class="row">
+    <div id="content" class="col-sm-8">
+        <div class="section">
+            <header class="heading">
+            <?php echo $this->translate('Like your favourite shops');?>
+            </header>
+            <div class="row row-area">
+            <?php 
+            echo  FrontEnd_Helper_VisitorFavouriteFunctions::getAllShops($this->popularStores);
+            ?>
+            </div>
+        </div>
+    </div>
+    <aside id="sidebar" class="col-sm-4">
+        <article class="block white">
+            <header class="heading">
+            <?php echo $this->translate('Your favorite shops');?>
+            </header>
+            <div class="box-area">
+            <?php 
+            echo  FrontEnd_Helper_VisitorFavouriteFunctions::getFavouriteShops(1);
+            ?>
+            </div>
+        </article>
+        <article class="block">
+            <div class="heading-2">
+                <h2>Share Codes</h2>
+                <p>Share a code with our users and bla bla bla blablabla bla bla</p>
+            </div>
+            <form action="#" role="form" class="share-forms">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input type="text" placeholder="First Name">
+                            </div>
+                            <div class="col col-md-6">
+                                <input type="text" placeholder="Last Name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Offer Title">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" placeholder="Offer URL">
+                    </div>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col col-md-6">
+                                <input type="text" placeholder="Voucher Code">
+                            </div>
+                            <div class="col col-md-6">
+                                <input type="text" placeholder="Expire Date">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control" placeholder="Offer Details" cols="30" rows="10"></textarea>
+                    </div>
+                    <button class="btn blue btn-lg btn-primary" type="submit">share vouchercode</button>
+                </fieldset>
+            </form>
+        </article>
+    </aside>
+</div>
