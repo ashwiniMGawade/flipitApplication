@@ -30,7 +30,7 @@ $pageHeaderImage = $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderIm
 LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
 ?>
 <div class="banner-block">
-    <img class='image' src="http://www.kortingscode.nl/public/images/upload/page/1404890582_1404380141_banner-06.jpg" alt="<?php echo $this->pageTitle;?>"/>
+    <img class='image' src="<?php echo $pageHeaderImage;?>" alt="<?php echo $this->pageTitle;?>"/>
     <div class="frame-image">
         <div class="container">
             <h1 class="flipit-text <?php echo $logoCssClass; ?>"><?php echo $this->translate('Flipit plus');?></h1>

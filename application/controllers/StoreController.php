@@ -37,7 +37,7 @@ class StoreController extends Zend_Controller_Action
     }
 
     public function storedetailAction()
-    {
+    {   
         $shopPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
