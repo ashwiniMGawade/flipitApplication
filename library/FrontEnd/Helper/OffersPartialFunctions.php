@@ -4,9 +4,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getUrlToShow($currentOffer, $constants = HTTP_PATH_LOCALE)
     {
         if (
-        	$currentOffer->refURL != "" 
-        	|| $currentOffer->shop['refUrl']!= "" 
-        	|| $currentOffer->shop['actualUrl'] != ""
+            $currentOffer->refURL != ""
+            || $currentOffer->shop['refUrl']!= ""
+            || $currentOffer->shop['actualUrl'] != ""
         ) {
             $urlToShow = self::getOfferBounceUrl($currentOffer->id, $constants);
         } else {
@@ -40,11 +40,11 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getOfferTermsAndCondition($currentOffer)
     {
         $termsAndConditions = '';
-        if(isset($currentOffer->termandcondition)) {
+        if (isset($currentOffer->termandcondition)) {
             if (count($currentOffer->termandcondition) > 0) {
                 $termsAndConditions = $currentOffer->termandcondition[0]['content'];
             }
-        }    
+        }
         return $termsAndConditions;
     }
 
@@ -81,7 +81,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if ($currentOffer->exclusiveCode == '1'):
             $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'));
         elseif ($currentOffer->editorPicks =='1'):
-        $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Editor'));
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Editor'));
         endif;
         return $offerOption;
     }
@@ -98,36 +98,35 @@ class FrontEnd_Helper_OffersPartialFunctions
             $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
             $offerDates .= ', ';
 
-        if (
-        	$daysTillOfferExpires ==5 
-        	|| $daysTillOfferExpires ==4
-        	|| $daysTillOfferExpires ==3
-        	|| $daysTillOfferExpires ==2
-        ) {
-            $offerDates .= $stringOnly;
-            $offerDates .= '&nbsp;';
-            $offerDates .= $daysTillOfferExpires;
-            $offerDates .= '&nbsp;';
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('days left!');
+            if (
+                $daysTillOfferExpires ==5
+                || $daysTillOfferExpires ==4
+                || $daysTillOfferExpires ==3
+                || $daysTillOfferExpires ==2
+            ) {
+                $offerDates .= $stringOnly;
+                $offerDates .= '&nbsp;';
+                $offerDates .= $daysTillOfferExpires;
+                $offerDates .= '&nbsp;';
+                $offerDates .= FrontEnd_Helper_viewHelper::__translate('days left!');
+            } elseif ($daysTillOfferExpires == 1) {
+                $offerDates .= $stringOnly;
+                $offerDates .= '&nbsp;';
+                $offerDates .= $daysTillOfferExpires;
+                $offerDates .= '&nbsp;';
+                $offerDates .= FrontEnd_Helper_viewHelper::__translate('day left!');
 
-        } elseif ($daysTillOfferExpires == 1) {
-            $offerDates .= $stringOnly;
-            $offerDates .= '&nbsp;';
-            $offerDates .= $daysTillOfferExpires;
-            $offerDates .= '&nbsp;';
-            $offerDates .= FrontEnd_Helper_viewHelper::__translate('day left!');
-
-        } elseif ($daysTillOfferExpires == 0) {
+            } elseif ($daysTillOfferExpires == 0) {
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires today');
         } else {
                 $endDate = new Zend_Date(strtotime($currentOffer->endDate));
                 $offerDates .= FrontEnd_Helper_viewHelper::__translate('Expires on').': ';
                 $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
         } elseif (
-        	$currentOffer->discountType == "PR" 
-        	|| $currentOffer->discountType == "SL" 
-        	|| $currentOffer->discountType == "PA"
-        ):
+                $currentOffer->discountType == "PR"
+                || $currentOffer->discountType == "SL"
+                || $currentOffer->discountType == "PA"
+            ):
             $offerDates .= $stringAdded;
             $offerDates .= ': ';
             $offerDates .= ucwords($startDate->get(Zend_Date::DATE_MEDIUM));
@@ -159,8 +158,8 @@ class FrontEnd_Helper_OffersPartialFunctions
             $altAttributeText = $currentOffer->shop['name'];
             $imageTag = self::getImageTag($offerDiscountImage, $altAttributeText, true);
             $offerImageDiv =
-            	$imageTag . '<footer class="bottom">' 
-            	. FrontEnd_Helper_viewHelper::__translate(self::getOfferTypeText($currentOffer)) . '</footer>';
+                $imageTag . '<footer class="bottom">'
+                . FrontEnd_Helper_viewHelper::__translate(self::getOfferTypeText($currentOffer)) . '</footer>';
         }
       
         return $offerImageDiv;
@@ -168,9 +167,9 @@ class FrontEnd_Helper_OffersPartialFunctions
 
     public function getShopLogoForOffer($currentOffer)
     {
-        return 
-        	PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_medium_store_'
-        	. $currentOffer->shop['logo']['name'];
+        return
+            PUBLIC_PATH_CDN.ltrim($currentOffer->shop['logo']['path'], "/").'thum_medium_store_'
+            . $currentOffer->shop['logo']['name'];
     }
     
     public function getImageTag($offerDiscountImage, $altAttributeText, $shopCodeHolder)
@@ -206,7 +205,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         if ($offersType == 'similar') {
             $similarShopHeader = '<header class="heading-box text-coupon">
             <h2>'.FrontEnd_Helper_viewHelper::__translate('Coupon codes for similar stores').'</h2>
-            <strong>'.FrontEnd_Helper_viewHelper::__translate('Similar vouchers and discounts for'). ' ' 
+            <strong>'.FrontEnd_Helper_viewHelper::__translate('Similar vouchers and discounts for'). ' '
             . $shopName .'</strong>
             </header>';
         }
@@ -218,7 +217,7 @@ class FrontEnd_Helper_OffersPartialFunctions
         $imgTagWithImage = '';
         if ($shop!=null) {
             $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
-            $imgTagWithImage = '<img alt="' . $shop['logo']['name']. '" src="'. $shopLogoImage .'">';
+            $imgTagWithImage = '<img alt="' . $shop['name']. '" src="'. $shopLogoImage .'">';
         } else {
             $imgTagWithImage = '<div class="ico-mail"></div>';
         }
@@ -238,40 +237,53 @@ class FrontEnd_Helper_OffersPartialFunctions
     }
 
     public function getmainOfferLink(
-    	$currentOffer,
-    	$urlToShow,
-    	$offerBounceRate,
-    	$popupLink,
-    	$offerAnchorTagContent,
-    	$class
+        $currentOffer,
+        $urlToShow,
+        $offerBounceRate,
+        $popupLink,
+        $offerAnchorTagContent,
+        $class
     ) {
-        
-        if ($currentOffer->discountType == "CD" ) {
+    	$headOpen = '';
+    	$headClose = '';
+        if($class=='link clickout-title') {
+        	$headOpen = '<h3 class="'. $class .'">';
+        	$headClose = '</h3>';
+        }
+        if ($currentOffer->discountType == "CD") {
             $onClick =  $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate'),OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
-            $offerLink = 
-            	'<a id="'.$currentOffer->id.'" class="'.$class.'" 
-            	href="'.$urlToShow.'" vote="0" rel="nofollow" 
-            	target="_self" onClick="'.$onClick.'">
+            $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
+            ga('send', 'event', 'aff', '$offerBounceRate'),
+            OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
+            $offerLink =
+                '<a id="'.$currentOffer->id.'" class="'.$class.'" 
+                href="'.$urlToShow.'" vote="0" rel="nofollow" 
+                target="_self" onClick="'.$onClick.'">
             '.$offerAnchorTagContent.' </a>';
         } elseif ($currentOffer->discountType == "SL") {
-            $onClick = "viewCounter('onclick', 'offer', $currentOffer->id), ga('send', 'event', 'aff', '$offerBounceRate')";
-            $offerLink = 
-            	'<a id="'.$currentOffer->id.'" class="'.$class.'" 
-            	href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
-            '.$offerAnchorTagContent.' </a>';
+            if ($class == "btn blue btn-primary") {
+                $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
+            }
+            $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
+            ga('send', 'event', 'aff', '$offerBounceRate')";
+            $offerLink =
+                '<a id="'.$currentOffer->id.'" class="'.$class.'" 
+                href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
+             '.$offerAnchorTagContent.'</a>';
         } else {
-            $onClick = 
-            	self::getUserIsLoggedInOrNot() == "true" 
-            	? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')" 
-            	: HTTP_PATH_LOCALE."accountlogin" ;
-            $offerLink = 
-            	'<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
-            	alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">'
-            	.$offerAnchorTagContent
-            	.'</a>';
+            if ($class == "btn blue btn-primary") {
+                $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+            }
+            $onClick =
+                self::getUserIsLoggedInOrNot() == "true"
+                ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
+                : HTTP_PATH_LOCALE."accountlogin" ;
+            $offerLink =
+                '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
+                alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">
+                '.$offerAnchorTagContent .'</a>';
         }
-        return $offerLink;
+        return $headOpen. $offerLink . $headClose;
     }
 
     public function getRedirectUrlforOffer($currentOffer, $urlToShow, $offerBounceRate, $offerAnchorTagContent, $class)
@@ -279,49 +291,50 @@ class FrontEnd_Helper_OffersPartialFunctions
         
         $popupLink = self::getPopupLink($currentOffer, $urlToShow);
         echo $mainOfferLink = self::getmainOfferLink(
-        	$currentOffer,
-        	$urlToShow,
-        	$offerBounceRate,
-        	$popupLink,
-        	$offerAnchorTagContent,
-        	$class
+            $currentOffer,
+            $urlToShow,
+            $offerBounceRate,
+            $popupLink,
+            $offerAnchorTagContent,
+            $class
         );
         return $mainOfferLink;
     }
 
     public function getCommonRedirectUrlForOffer(
-    	$currentOffer,
-    	$urlToShow,
-    	$offerBounceRate,
-    	$offerAnchorTagContent,
-    	$type
+        $currentOffer,
+        $urlToShow,
+        $offerBounceRate,
+        $offerAnchorTagContent,
+        $type
     ) {
         $redirectUrl = '';
         switch ($type){
             case 'mainOfferClickoutButton':
                 $redirectUrl = self::getRedirectUrlforOffer(
-                	$currentOffer,
-                	$urlToShow,
-                	$offerBounceRate,
-                	FrontEnd_Helper_viewHelper::__translate('Get code &amp; Open site'), "btn blue btn-primary"
+                    $currentOffer,
+                    $urlToShow,
+                    $offerBounceRate,
+                    FrontEnd_Helper_viewHelper::__translate('Get code &amp; Open site'),
+                    "btn blue btn-primary"
                 );
             break;
             case 'offerTitle':
                 $redirectUrl = self::getRedirectUrlforOffer(
-                	$currentOffer,
-                	$urlToShow,
-                	$offerBounceRate,
-                	$offerAnchorTagContent,
-                	"link clickout-title"
+                    $currentOffer,
+                    $urlToShow,
+                    $offerBounceRate,
+                    $offerAnchorTagContent,
+                    "link clickout-title"
                 );
             break;
             case 'offerImage':
                 $redirectUrl = self::getRedirectUrlforOffer(
-                	$currentOffer,
-                	$urlToShow, 
-                	$offerBounceRate,
-                	self::getOfferImage($currentOffer, $offerAnchorTagContent),
-                	self::getCssClassNameForOffer($currentOffer, $offerAnchorTagContent)
+                    $currentOffer,
+                    $urlToShow, 
+                    $offerBounceRate,
+                    self::getOfferImage($currentOffer, $offerAnchorTagContent),
+                    self::getCssClassNameForOffer($currentOffer, $offerAnchorTagContent)
                 );
             break;
             default: break;
@@ -335,16 +348,18 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $buttonWithCodeforOffer = '';
         if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
-            $onClick =  
-            	self::getUserIsLoggedInOrNot() == "true" 
-            	? "printIt('$urlToShow');" 
-            	: "printIt('$urlToShow');";
+            $onClick =
+                self::getUserIsLoggedInOrNot() == "true"
+                ? "printIt('$urlToShow');"
+                : "printIt('$urlToShow');";
             $buttonWithCodeforOffer = '<a class="btn btn-default btn-print" onclick ="'.$onClick.'"  >'
-            	.FrontEnd_Helper_viewHelper::__translate('print now').'<span class="ico-print"></span>
+                .FrontEnd_Helper_viewHelper::__translate('print now').'<span class="ico-print"></span>
             </a>';
         } else if ($currentOffer->discountType=='CD') {
             $onClick =
-            	"showCodeInformation($currentOffer->id), showCodePopUp(this), ga('send','event', 'aff','$offerBounceRate'),OpenInNewTab('".HTTP_PATH_LOCALE. $permalink. "?popup=$currentOffer->id&type=code#$currentOffer->id')";
+                "showCodeInformation($currentOffer->id), showCodePopUp(this),
+                ga('send','event', 'aff','$offerBounceRate'),
+                OpenInNewTab('".HTTP_PATH_LOCALE. $permalink. "?popup=$currentOffer->id&type=code#$currentOffer->id')";
             $buttonWithCodeforOffer =
             '<a id="'.$currentOffer->id.'" 
             class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 
@@ -360,13 +375,13 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $termAndConditionLink ='';
         if (
-        	isset($currentOffer->userGenerated) 
-        	? $currentOffer->userGenerated == 0 
-        	: '' &&  $termsAndConditions!='' 
-        	&& $termsAndConditions!=null
+            isset($currentOffer->userGenerated)
+            ? $currentOffer->userGenerated == 0
+            : '' &&  $termsAndConditions!=''
+            && $termsAndConditions!=null
         ) {
             $termAndConditionLink = '<li>
-            <a id="termAndConditionLink'.$currentOffer->id 
+            <a id="termAndConditionLink'.$currentOffer->id
             .'" onclick="showTermAndConditions('.$currentOffer->id.')" class="terms"
             href="javascript:void(0);">'
             . FrontEnd_Helper_viewHelper::__translate('Terms &amp; Conditions') . '</a>';
@@ -393,9 +408,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
         return $viewAllLink = $showHyphen.'<li>'
-        	. FrontEnd_Helper_viewHelper::__translate("View all") 
-        	.' <a href="'.$domainName.$shopPermalink.'">'. $shopName . ' ' 
-        	. FrontEnd_Helper_viewHelper::__translate("Voucher Codes").'</a></li>';
+            . FrontEnd_Helper_viewHelper::__translate("View all")
+            .' <a href="'.$domainName.$shopPermalink.'">'. $shopName . ' '
+            . FrontEnd_Helper_viewHelper::__translate("Voucher Codes").'</a></li>';
     }
     
     public function getExpiredOfferMessage($endDate, $currentDate)
@@ -418,10 +433,9 @@ class FrontEnd_Helper_OffersPartialFunctions
             $siteImage = "";
         } else {
             $siteImage =
-            	'<img class="logo-img" 
-            	src="'.HTTP_PATH.'public/images/logo-3.png" width="109" height="49" alt="Flipit">';
+                '<img class="logo-img" 
+                src="'.HTTP_PATH.'public/images/logo-3.png" width="109" height="49" alt="Flipit">';
         }
         return $siteImage;
     }
-    
 }

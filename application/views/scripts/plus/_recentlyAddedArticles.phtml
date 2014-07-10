@@ -8,15 +8,16 @@
                     HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_redactie').'/'. $userDetails['slug'];
                 $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['updated_at']);
                 $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
+                $articleImage = !empty($recentlyAddedArticle['thumbnail']) ? PUBLIC_PATH_CDN
+                    .$recentlyAddedArticle['thumbnail']['path'].$recentlyAddedArticle['thumbnail']['name'] : '';
     ?>            
     <article class="box">
         <span class="image">
             <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus').'/'
                 .$recentlyAddedArticle['permalink'];?>">
                 <div class="latest-article-thumbnail">
-                    <img src="<?php echo PUBLIC_PATH_CDN.$recentlyAddedArticle['thumbnail']['path'].
-                    $recentlyAddedArticle['thumbnail']['name'];?>" alt="<?php echo $recentlyAddedArticle['title'];?>" 
-                    height="118" />
+                    <img src="<?php echo $articleImage;?>" alt="<?php echo $recentlyAddedArticle['title'];?>" 
+                        height="118" />
                 </div>
             </a>    
         </span>
@@ -36,7 +37,7 @@
                     } else {
                         $authorNameExplodedBySpace = explode(' ', $recentlyAddedArticle['authorname']);
                         $byAuthorName = 
-                            FrontEnd_Helper_AuthorPartialfunctions::
+                            FrontEnd_Helper_AuthorPartialFunctions::
                             getAuthorName($authorNameExplodedBySpace[0], $authorNameExplodedBySpace[1]);
                         $authorRedirectLink =  '<a href="'.$profileLink.'">
                         '.$byAuthorName.'</a>, ';

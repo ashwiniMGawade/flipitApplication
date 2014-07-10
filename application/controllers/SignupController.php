@@ -2,7 +2,7 @@
 require_once 'Zend/Controller/Action.php';
 class SignupController extends Zend_Controller_Action
 {
-    public $directLoginLinks = array();
+    public $_loginLinkAndData = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -47,11 +47,11 @@ class SignupController extends Zend_Controller_Action
                 FrontEnd_Helper_viewHelper::__link('link_profiel')
             );
         }
-        $pageName = 'signup';
-        $pageDetails =  Page::getPageDetails($pageName);
+
+        $pageDetails =  Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
+
         $this->viewHelperObject->getMetaTags($this);
-        
         $emailAddressFromMemory = '';
         $emailAddressSpace = new Zend_Session_Namespace('emailAddressSignup');
         if (isset($emailAddressSpace->emailAddressSignup)) {
@@ -96,7 +96,7 @@ class SignupController extends Zend_Controller_Action
         }
         $testimonials = Signupmaxaccount::getTestimonials();
         $this->view->testimonials = $testimonials;
-        $this->view->pageCssClass = 'register-page  home-page';
+        $this->view->pageCssClass = 'register-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
 
@@ -168,7 +168,7 @@ class SignupController extends Zend_Controller_Action
             $content,
             FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
             '',
-            $this->directLoginLinks
+            $this->_loginLinkAndData
         );
         return true;
     }
@@ -214,7 +214,7 @@ class SignupController extends Zend_Controller_Action
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
         }
-        $this->view->pageCssClass = 'profile-page  home-page';
+        $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
         $this->viewHelperObject->getMetaTags($this);
         # set reponse header X-Nocache used for varnish

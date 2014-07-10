@@ -176,13 +176,13 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 id="showSitemapYes" onClick="showSitemapStatus('showSitemapYes')">
                                 <?php echo $this->translate('Yes');?>
                             </button>                     
-                            <button class = "borderradius4px" type="button"
-                                class="btn <?php if ($this->pageDetail['showsitemap']!='1') {?>btn-primary <?php }?>"
+                            <button type="button"
+                                class="btn borderradius4px <?php if ($this->pageDetail['showsitemap']!='1') {?>btn-primary <?php }?>"
                                 onClick="showSitemapStatus('showSitemapNo')" id="showSitemapNo">
                                 <?php echo $this->translate('No'); ?>
                             </button>
-                            <input type="checkbox"<?php if ($this->pageDetail['showsitemap']=='1') {?> checked="checked" <?php }?> 
-                                name="showSitemapStatuscheck" class="display-none" id="showSitemapStatuscheck" value="1">
+                            <input type="hidden"<?php if ($this->pageDetail['showsitemap']=='1') {?> checked="checked" <?php }?> 
+                                name="showSitemapStatuscheck"  id="showSitemapStatuscheck" value="<?php echo $this->pageDetail['showsitemap']; ?>">
                          </div>
                     </div>
                     <?php } ?>
@@ -279,7 +279,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                         && $this->pageDetail['logo']['name']!=''
                                     ) {
                                         $pageImage = PUBLIC_PATH_CDN.$this->pageDetail['logo']['path']
-                                        .'thum_'.$this->pageDetail['logo']['name'];
+                                        .$this->pageDetail['logo']['name'];
                                     }
                                 ?>
                                 <div class='browse-container'>    
@@ -324,7 +324,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                         && $this->pageDetail['pageheaderimage']['name']!=''
                                     ) {
                                     $headerImage = PUBLIC_PATH_CDN.$this->pageDetail['pageheaderimage']['path']
-                                    .'thum_'.$this->pageDetail['pageheaderimage']['name'];
+                                    .$this->pageDetail['pageheaderimage']['name'];
                                 }
                                 ?>
                                 <div class='browse-container'>    

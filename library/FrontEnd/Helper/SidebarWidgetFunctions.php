@@ -51,45 +51,54 @@ EOD;
 
     public function socialMediaWidget($socialMediaUrl = '', $type = null)
     {
-            $socialMediaTitle = "<h2>".$this->__translate('Follow us')."</h2>";
-            $socialMedia = "
-                <article class='block'>
-                    <div class='social-networks'>
-                        <div class='intro'>".$socialMediaTitle."</div>
-                        <ul class='share-list'>
-                            <li><a class='facebook' href='#'></a></li>
-                            <li><a class='twitter' href='#'></a></li>
-                            <li><a class='google' href='#'></a></li>
-                            <li class='share-text'>"
-                            .$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')
-                            ."</li>
-                        </ul>
-                    </div>
-                </article>";
+        $socialMediaTitle = "<h4>".$this->__translate('Follow us')."</h4>";
+        $facebookPageLink = 'https://www.facebook.com/kortingsbonnen';
+        $twitterPageLink = 'https://twitter.com/codekorting';
+        $googlePlusPageLink = 'https://plus.google.com/+KortingscodeNl';
+
+        if (LOCALE != '') {
+            $facebookPageLink = 'https://www.facebook.com/flipitcom';
+            $twitterPageLink = 'https://twitter.com/Flipit';
+            $googlePlusPageLink = 'https://plus.google.com/104667362431888724932/about';
+        }
+
+        $socialMedia = "
+            <article class='block'>
+                <div class='social-networks'>
+                    <div class='intro'>".$socialMediaTitle."</div>
+                    <ul class='share-list'>
+                        <li><a class='facebook' href='".$facebookPageLink."' target='_blank'></a></li>
+                        <li><a class='twitter' href='".$twitterPageLink."' target='_blank'></a></li>
+                        <li><a class='google' href='".$googlePlusPageLink."' target='_blank'></a></li>
+                        <li class='share-text'>"
+                        .$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')
+                        ."</li>
+                    </ul>
+                </div>
+            </article>";
         return $socialMedia;
     }
     
     public function popularCategoryWidget()
     {
-        $allPopularCategories = Category::getPopularCategories();
-        $categorySidebarWodget =
+        $allCategories = Category::getAllCategories();
+        $categoriesSidebarWidget =
         '<div class="block">
             <div class="intro">
-            <h2 class="sidebar-heading">'. $this->__translate('All Categories').'</h2></div>
+            <h4 class="sidebar-heading">'. $this->__translate('All Categories').'</h4></div>
                 <ul class="tags">';
-        for ($categoryIndex=0; $categoryIndex < count($allPopularCategories); $categoryIndex++) {
-            $categorySidebarWodget.='
+        foreach ($allCategories  as $category) {
+            $categoriesSidebarWidget.='
                     <li>
                         <a href="'. HTTP_PATH_LOCALE .
-                        FrontEnd_Helper_viewHelper::__link('link_categorieen'). '/' .
-                        $allPopularCategories[$categoryIndex]['category']['permaLink'].'">' .
-                        $allPopularCategories[$categoryIndex]['category']['name'] .
+                        FrontEnd_Helper_viewHelper::__link('link_categorieen'). '/'
+                        . $category['permaLink'].'">' . $category['name'] .
                         '</a>' . '
                     </li>';
         }
-        $categorySidebarWodget.=
+        $categoriesSidebarWidget.=
                 '</ul></div>';
-        return $categorySidebarWodget;
+        return $categoriesSidebarWidget;
     }
 
 
@@ -98,7 +107,7 @@ EOD;
         $browseByStoreWidget =
         '<div class="block">
             <div class="intro">
-               <h2>'.$this->__translate('Browse by Store') .'</h2>
+               <h4>'.$this->__translate('Browse by Store') .'</h4>
             </div>
             <div class="alphabet-holder">
                 <ul class="alphabet">';
@@ -138,9 +147,9 @@ EOD;
     {
         $popularStores = self::getStoreForFrontEnd('popular', 25);
         $popularStoresContent = '<div class="block"><div class="intro">
-                   <h2>'.$this->__translate('Populaire Winkels').'</h2>
+                   <h4>'.$this->__translate('Populaire Winkels').'</h4>
                    <span>'
-                   .$this->__translate('Grab a promotional code, discount code or voucher for').date(' F Y').'</span>
+                   .$this->__translate('Grab a promotional code, discount code or voucher').'</span>
                  </div><ul class="tags">';
         for ($i=0; $i<count($popularStores); $i++) {
             $class ='';

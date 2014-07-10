@@ -1,75 +1,74 @@
 <?php 
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialMedia.js");
-$this->minifyHeadScript()->prependFile("public/js/front_end/savingguides.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/socialMedia.js");
+$this->minifyHeadScript()->appendFile("/public/js/front_end/savingguides.js");
+
 $mostReadArticles = '';
 if (!empty($this->mostReadArticles)) {
     $mostReadArticles =
         $this->partial(
             'partials/_mostReadArticles.phtml',
-            array('articles'=>$this->mostReadArticles)
+            array('mostReadArticles'=>$this->mostReadArticles)
         );
 } else {
     $mostReadArticles = $this->translate("No Records Found");
 }
 
-$flipitPlusHeaderText =
-    $this->translate('Flipit.com Plus magazine helps out all the consumers out there in every way possible');
-
-$categoryWiseArticles = $this->categoryWiseArticles;
-$partialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
-$categoryBlogArticles = '';
-$categorySavingtipArticles = '';
-if (!empty($categoryWiseArticles['blog'])) {
-    $categoryBlogArticles = $partialFunctions->getArticles('From Blog', $categoryWiseArticles['blog']);
-}
-if (!empty($categoryWiseArticles['savingtip'])) {
-    $categorySavingtipArticles = $partialFunctions->getArticles('Saving Tip', $categoryWiseArticles['savingtip']);
-}
+$plusViewPath = 'plus/';
+$popularStores = '';
+if (!empty($this->popularStores)) :
+     $popularStores = $this->partial(
+         $plusViewPath.'_popularShopLogos.phtml',
+         array(
+            'popularStores' => $this->popularStores,
+            'headerText' => $this->translate('Popular Stores')
+        )
+     );
+endif;
 
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
 $pageHeaderImage = $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderImage);
-
-if(LOCALE == ''):
-    $logoCssClass = 'kortingscode';
-endif
-
+LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
 ?>
 <div class="banner-block">
-    <img class='image' src="<?php echo $pageHeaderImage;?>" alt="<?php echo $this->pageTitle;?>"/>
+    <img class='image' src="http://www.kortingscode.nl/public/images/upload/page/1404890582_1404380141_banner-06.jpg" alt="<?php echo $this->pageTitle;?>"/>
     <div class="frame-image">
         <div class="container">
-            <h1 class="flipit-text <?php echo $logoCssClass; ?>"><?php $this->translate('Flipit plus');?></h1>
+            <h1 class="flipit-text <?php echo $logoCssClass; ?>"><?php echo $this->translate('Flipit plus');?></h1>
         </div>
     </div>
-    <div class="container">
-        <div class="text-box">
-            <p>
-            <?php echo $flipitPlusHeaderText;?>
-            </p>
-        </div>
-        <div class="block">
-            <div class="caption"><span><?php echo $this->translate('Featured savings');?></span></div>
-            <div class="carousel">
-                <div class="holder">
-                    <div class="mask">
-                        <div class="slideset">
-                        <?php echo $partialFunctions->getMostReadArticles($this->mostReadArticles);?>
-                        </div>
-                    </div>
-                </div>
-                <ul class="switcher">
-                <?php echo $mostReadArticles;?>
-                </ul>
-            </div>
-        </div>
-    </div>
+    <?php echo $mostReadArticles;?>
 </div>
 <main role="main" id="main">
-    <div class="container content-box">
-    <?php 
-    echo $partialFunctions->getArticles('Recently added', $this->recentlyAddedArticles);
-    echo $categoryBlogArticles;
-    echo $categorySavingtipArticles;
-    ?>
-    </div>
+<?php
+if (!empty($this->allArticles)) {
+    usort(
+        $this->allArticles,
+        "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescendingOrderFunction"
+    );
+    $articlesInformation = array_chunk($this->allArticles, 8);
+    for ($articleCounter =0; $articleCounter < count($articlesInformation) ; $articleCounter++) { 
+        if ($articleCounter == 0) {?>
+            <div class="container">
+                <?php  
+                FrontEnd_Helper_MoneySavingGuidesPartialFunctions::
+                    getArticles($articlesInformation[$articleCounter]);
+                 ?>
+            </div>
+            <?php 
+            echo $popularStores;
+        } else {
+            ?>
+            <div class="container">
+            <?php 
+                FrontEnd_Helper_MoneySavingGuidesPartialFunctions::
+                    getArticles($articlesInformation[$articleCounter]);
+            ?>
+            </div>
+            <?php 
+        }
+    }
+} else {
+    echo $this->translate('No record Found');
+}    
+?>   
 </main>

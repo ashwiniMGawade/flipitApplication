@@ -52,14 +52,13 @@ class CategoryController extends Zend_Controller_Action
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
         $this->view->form = $signUpFormLarge;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'home-page';
     }
 
     public function indexAction()
     {
         $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
-        $pageDetails = Page::getPageDetails(9);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
@@ -84,14 +83,6 @@ class CategoryController extends Zend_Controller_Action
                 )
             );
         $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
-        $largeSignUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignUpForm', 'SignUp');
-        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
-            'formSignupSidebarWidget',
-            'SignUp '
-        );
-        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
-        $this->view->form = $largeSignUpForm;
-        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'all-categories-alt-page home-page';
+        $this->view->pageCssClass = 'all-categories-alt-page';
     }
 }

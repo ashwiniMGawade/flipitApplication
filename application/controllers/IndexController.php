@@ -24,7 +24,7 @@ class IndexController extends Zend_Controller_Action
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
-        $pageDetails = Page::getPageDetails($this->getRequest()->getActionName());
+        $pageDetails = Page::getPageDetailsFromUrl($this->getRequest()->getActionName());
         $this->view->pageTitle = ucfirst(isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '');
         $this->viewHelperObject->getMetaTags(
             $this,
@@ -76,7 +76,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->specialPagesOffers = $specialPagesOffers;
             $this->view->moneySavingGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_homemanisaving_list",
-                array('function' => 'Articles::getMoneySavingArticles', 'parameters' => array())
+                array('function' => 'Articles::getAllArticles', 'parameters' => array())
             );
             $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_popularshopForHomePage_list",

@@ -21,7 +21,7 @@ class OfferController extends Zend_Controller_Action
     public function top20Action()
     {
         $pageName = 'top-20';
-        $pageDetails = Page::getPageDetails($pageName);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->viewHelperObject->getMetaTags(
@@ -92,7 +92,6 @@ class OfferController extends Zend_Controller_Action
         $this->view->topOfferFromStore = $topOfferFromStore;
         $this->view->couponDetails = $couponDetails;
         $this->view->currentStoreInformation = $shopInformation;
-        $this->view->shopEditor = User::getUserDetails($shopInformation[0]['contentManagerId']);
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
 
         $customHeader = '';
@@ -120,7 +119,7 @@ class OfferController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'flipit-expired-page home-page';
+        $this->view->pageCssClass = 'flipit-expired-page';
     }
 
     public function offerDetailAction()
@@ -165,7 +164,7 @@ class OfferController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $pageDetails = Page::getPageDetails(6);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $params = $this->_getAllParams();
         $cacheKeyForNewsOffer =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
         if ($cacheKeyForNewsOffer) {
@@ -208,7 +207,6 @@ class OfferController extends Zend_Controller_Action
             $signUpFormSidebarWidget
         );
         $this->view->form = $signUpFormForStorePage;
-        $this->view->pageCssClass = 'home-page';
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 }

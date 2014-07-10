@@ -82,13 +82,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $totalOffers = intval($specialListPage['totalOffers']);
             $specialPageListIndex = $specialListPage['page'][0]['permaLink'] .','
                .$specialListPage['page'][0]['pageTitle'];
-            $totalCouponsCount =
-                count($this->homePageData['specialPagesOffers'][$specialPageListIndex]);
-            $totalOffersOfSpecialPage = (intval($totalCouponsCount) - $totalCoupon) + $totalOffers;
-            $specialListPageOffers =
-                $totalOffersOfSpecialPage . ' '
-                . FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $totalCouponsCount . " "
-                . FrontEnd_Helper_viewHelper::__form('form_coupons');
+            $totalCouponsCount = count($this->homePageData['specialPagesOffers'][$specialPageListIndex]);
+            $specialListPageOffers = $totalCouponsCount . " " . FrontEnd_Helper_viewHelper::__form('form_coupons');
             $specialPageHtml .=
                 $this->getLeftColumnContent(
                     'special',
@@ -149,11 +144,14 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription)
     {
         $imageTagOrSpan = '';
-        if ($listType =='special' || $listType =='savingGuide') {
-            $listType = $listType==FrontEnd_Helper_viewHelper::__form('form_savingGuide') ?
-            FrontEnd_Helper_viewHelper::__form('form_FLIPIT PLUS') : $listType;
-            $imageTagOrSpan = '<span class="discount-label" >'
-                . FrontEnd_Helper_viewHelper::__form($listType). '</span>' ;
+        if ($listType =='special') {
+            $imageTagOrSpan =
+                '<span class="discount-label">'
+                    . FrontEnd_Helper_viewHelper::__translate($listType)
+                . '</span>' ;
+        } else if ($listType =='savingGuide') {
+            $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
+            $imageTagOrSpan ='<span class="' . $cssClassForPlusImage . '" ></span>';
         } else {
             $imageTagOrSpan =
             '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
@@ -324,13 +322,17 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
         foreach ($topTenMoneySavingGuides as $savingGuide) {
             $savingImage =
-                PUBLIC_PATH_CDN.ltrim($savingGuide['article']['thumbnail']['path'], "/")
-                . $savingGuide['article']['thumbnail']['name'];
+                PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/")
+                . $savingGuide['thumbnail']['name'];
             $savingPermalink =
-                FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['article']['permalink'];
-            $savingTitle = $savingGuide['article']['title'];
+                FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
+            $savingTitle = $savingGuide['title'];
             $allowed_tags = '';
-            $guideDescription = strip_tags($savingGuide['article']['chapters'][0]['content'], $allowed_tags);
+            $guideDescription = strip_tags(
+                isset($savingGuide['chapters'][0]['content'])
+                ? $savingGuide['chapters'][0]['content'] : '',
+                $allowed_tags
+            );
             $savingContent =
                 mb_strlen($guideDescription, 'UTF-8') > 50
                 ? mb_substr($guideDescription, 0, 50, 'UTF-8') . "..."
@@ -367,10 +369,10 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     <img '.$imageDimensions.' alt="' . $shopName .'" src="' . $shopImage .'">
                 </div>
                 <div class="box">
-                    <h2>
+                    <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
-                    </h2>
-                   <p>' . $offerTitle .'</p>
+                    </h3>
+                   <p class="sub-text">' . $offerTitle .'</p>
                 </div>
             </a>
         </li>';

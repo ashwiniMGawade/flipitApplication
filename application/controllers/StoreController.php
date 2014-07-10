@@ -17,9 +17,8 @@ class StoreController extends Zend_Controller_Action
             $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
 
-        $params = $this->_getAllParams();
-        $id = $this->getRequest()->getParam('id');
-        $shopdetail = Shop::getshopStatus($id);
+        $shopId = $this->getRequest()->getParam('id');
+        $shopdetail = Shop::getshopStatus($shopId);
         if ($shopdetail) {
             $request = $this->getRequest();
             $request->setControllerName('error');
@@ -47,17 +46,16 @@ class StoreController extends Zend_Controller_Action
         $shopId = $this->getRequest()->getParam('id');
 
         if ($shopId) {
-            $currentDate = date('Y-m-d H:i:s');
             $ShopList = $shopId.'_list';
             $allShopDetailKey = 'all_shopdetail'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allShopDetailKey,
-                (array)array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
+                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
             );
             $allOffersInStoreKey = 'all_offerInStore'.$ShopList;
             $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allOffersInStoreKey,
-                (array)array(
+                array(
                     'function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
                     'parameters' => array("all", 10, $shopId, 0)
                 )
@@ -65,7 +63,7 @@ class StoreController extends Zend_Controller_Action
             $allExpiredOfferKey = 'all_expiredOfferInStore'.$ShopList;
             $expiredOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allExpiredOfferKey,
-                (array)array(
+                array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
                     'parameters' => array("expired", 12, $shopId)
                 )
@@ -73,7 +71,7 @@ class StoreController extends Zend_Controller_Action
             $allLatestUpdatesInStoreKey = 'all_latestupdatesInStore'.$ShopList;
             $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allLatestUpdatesInStoreKey,
-                (array)array(
+                array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
                     'parameters' => array('latestupdates', 4, $shopId)
                 )
@@ -81,9 +79,9 @@ class StoreController extends Zend_Controller_Action
             $expiredOffersInStoreKey = 'all_msArticleInStore'.$ShopList;
             $moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)'all_msArticleInStore'.$ShopList,
-                (array)array(
+                array(
                     'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
-                    'parameters' => array('moneysaving', 6, $shopId)
+                    'parameters' => array('moneysaving', 3, $shopId)
                 )
             );
 
@@ -101,7 +99,7 @@ class StoreController extends Zend_Controller_Action
                     $shopInformation[0]['name'],
                     $shopInformation[0]['chainItemId']
                 );
-                $logDirectoryPath = APPLICATION_PATH . "/../logs/test";
+
                 if (isset($shopChains['headLink'])) {
                     $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
                 }
@@ -128,9 +126,14 @@ class StoreController extends Zend_Controller_Action
             $this->view->topPopularOffers = $offers;
         }
         $this->view->expiredOffers = $expiredOffers;
+        if ($shopInformation[0]['affliateProgram'] == 0) {
+            $numberOfSimilarOffers = 10;
+        } else {
+            $numberOfSimilarOffers = 4;
+        }
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
             'similarStoresAndSimilarCategoriesOffers',
-            4,
+            $numberOfSimilarOffers,
             $shopId
         );
         $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
@@ -177,14 +180,14 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'author-page home-page';
+        $this->view->pageCssClass = 'author-page';
     }
 
     public function indexAction()
     {
-        $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
+        $permalink = FrontEnd_Helper_viewHelper::getPagePermalink();
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
-        $pageDetails = Page::getPageDetails(7);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getParam('controller');
@@ -227,7 +230,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->storesInformation = $allStoresList;
         $this->view->storeSearchByAlphabet = $storeSearchByAlphabet;
         $this->view->popularStores = $popularStores;
-        $this->view->pageCssClass = 'all-stores-page home-page';
+        $this->view->pageCssClass = 'all-stores-page';
     }
 
     public function howtoguideAction()
@@ -236,6 +239,11 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidePermalink);
         $parameters = $this->_getAllParams();
         $howToGuides=Shop::getshopDetails($parameters['permalink']);
+
+        if (empty($howToGuides)) {
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
+
         $ShopList = $howToGuides[0]['id'].'_list';
         $allShopDetailKey = 'all_shopdetail'.$ShopList;
         $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -250,12 +258,12 @@ class StoreController extends Zend_Controller_Action
                 $shopInformation[0]['name'],
                 $shopInformation[0]['chainItemId']
             );
-            $logDirectoryPath = APPLICATION_PATH . "/../logs/test";
+
             if (isset($shopChains['headLink'])) {
                 $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
             }
             if ($shopChains['hasShops'] && isset($shopChains['string'])) {
-                $this->view->shopChain = $shopChains['string'] ;
+                $this->view->shopChain = $shopChains['string'];
             }
         }
 
@@ -276,7 +284,6 @@ class StoreController extends Zend_Controller_Action
             )
         );
         $offers = array_chunk($offers, 3);
-        $this->view->shopEditor = User::getUserDetails($shopInformation[0]['contentManagerId']);
         $this->view->offers = $offers;
         $this->view->currentStoreInformation = $shopInformation;
         $frontEndViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
@@ -334,21 +341,25 @@ class StoreController extends Zend_Controller_Action
 
     public function addtofavouriteAction()
     {
+        $this->view->layout()->robotKeywords = 'noindex, nofollow';
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $visitorShopIdSessionNameSpace = new Zend_Session_Namespace('favouriteShopId');
+        $visitorShopIdSessionNameSpace->favouriteShopId = $this->getRequest()->getParam('shopId');
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $favouriteShopIdFromSession = new Zend_Session_Namespace('favouriteShopId');
-            $shopPermalinkFromSession = new Zend_Session_Namespace('shopPermalink');
             if (isset($favouriteShopIdFromSession->favouriteShopId)) {
                 $shopId = $favouriteShopIdFromSession->favouriteShopId;
-                Shop::shopAddInFavourite($visitorId, $shopId);
-                $shopPermalink = $shopPermalinkFromSession->shopPermalink;
+                Shop::shopAddInFavourite($visitorId, base64_decode($shopId));
                 Zend_Session::namespaceUnset('favouriteShopId');
-                Zend_Session::namespaceUnset('shopPermalink');
-                $this->_redirect(HTTP_PATH_LOCALE. $shopPermalink);
+                $this->_redirect(HTTP_PATH_LOCALE. $this->getRequest()->getParam('permalink'));
+                exit();
             }
         } else {
-            throw new Zend_Controller_Action_Exception('', 404);
+            $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'));
+            exit();
         }
+        throw new Zend_Controller_Action_Exception('', 404);
     }
     // Returns the right favorite heart status by fetching the partial.
     public function addfavoriteviewAction()

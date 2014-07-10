@@ -20,8 +20,7 @@ class AboutController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $pageAttributeId = PageAttribute::getPageAttributeIdByName($this->getRequest()->getControllerName());
-        $pageDetails = Page::getPageDetails($pageAttributeId);
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->viewHelperObject->getMetaTags(
             $this,
@@ -53,7 +52,7 @@ class AboutController extends Zend_Controller_Action
         );
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'authors-page home-page';
+        $this->view->pageCssClass = 'authors-page';
 
     }
 
@@ -83,7 +82,7 @@ class AboutController extends Zend_Controller_Action
         );
         $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'all_'. 'mostread'.$authorId .'_list',
-            array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(6, $authorId)),
+            array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
             0
         );
         $authorFullName = $authorDetails['firstName'].' '. $authorDetails['lastName'];
@@ -109,6 +108,6 @@ class AboutController extends Zend_Controller_Action
         );
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-        $this->view->pageCssClass = 'author-page home-page';
+        $this->view->pageCssClass = 'author-page';
     }
 }

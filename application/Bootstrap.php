@@ -59,6 +59,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         self::constantForCacheDirectory();
         self::httpPathConstantForCdn();
+        self::s3ConstantDefines();
 
         defined('BASE_ROOT') || define('BASE_ROOT', dirname($_SERVER['SCRIPT_FILENAME']) . '/');
 
@@ -101,6 +102,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         } else {
             define('HTTP_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
         }
+    }
+
+    public function s3ConstantDefines()
+    {
+        $s3Credentials = $this->getOption('s3');
+        define('S3BUCKET', $s3Credentials['bucket']);
+        define('S3KEY', $s3Credentials['key']);
+        define('S3SECRET', $s3Credentials['secret']);
     }
 
     public function constantsForLocale()
@@ -352,6 +361,31 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return array('locale' => $locale, 'localePath' => $localePath, 'suffix' => $suffix);
     }
 
+    protected function _initAutoLoad()
+    {
+        $autoLoader = Zend_Loader_Autoloader::getInstance();
+        $resourceLoader = new Zend_Loader_Autoloader_Resource(
+            array(
+                'basePath' => APPLICATION_PATH,
+                'namespace' => 'Application',
+                'resourceTypes' => array(
+                    'form' => array(
+                        'path' => 'forms/',
+                        'namespace' => 'Form'
+                    ),
+                    'model' => array(
+                        'path' => 'models/',
+                        'namespace' => 'Model'
+                    ),
+                    'service' => array(
+                        'path' => 'services/',
+                        'namespace' => 'Service'
+                    )
+                )
+            )
+        );
+        return $autoLoader;
+    }
 
     public function _initTranslation()
     {
@@ -400,7 +434,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Transl8_Translate_Writer_Csv::setDestinationFolder(
             APPLICATION_PATH.'/../public'.$localePath.'language'
         );
-
+        
         if (Zend_Registry::get('Transl8_Activated')) {
             $plugin = new Transl8_Controller_Plugin_Transl8();
             $plugin->setActionGetFormData($localePath.'trans/getformdata');
@@ -426,50 +460,51 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $suffix         = $transSettings['suffix'];
         Zend_Locale::setDefault('en_US');
         $locale                     = new Zend_Locale(Zend_Registry::get('Zend_Locale'));
-        $inlineTranslationFolder    = Transl8_Translate_Writer_Csv::getDestinationFolder();
 
-        $poTrans = new Zend_Translate(array(
-                        'adapter' => 'gettext',
-                        'disableNotices' => true));
+        $poTrans = new Zend_Translate(
+            array(
+                'adapter' => 'gettext',
+                'locale'  => $locale,
+                'disableNotices' => true
+            )
+        );
 
         $poTrans->addTranslation(
             array(
-                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
-                    .'language/fallback/frontend_php' . $suffix . '.mo',
-                    'locale' => $locale
+                'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                .'language/fallback/frontend_php' . $suffix . '.mo',
+                'locale' => $locale
             )
         );
         $poTrans->addTranslation(
             array(
-                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
-                    .'language/backend_php' . $suffix . '.mo',
-                    'locale' => $locale
+                'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                .'language/backend_php' . $suffix . '.mo',
+                'locale' => $locale
             )
         );
 
-
-        $csvTranslation = array(
-            'adapter'   => 'Transl8_Translate_Adapter_Csv',
-            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
-            'content'   => $inlineTranslationFolder . '/' . $locale,
-            'locale'    => $locale
-        );
-
-        $csvTranslate = new Zend_Translate($csvTranslation);
-        $poTrans->addTranslation($csvTranslate);
-
-        $poTrans->addTranslation(
-            array(
-                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
-                    .'language/form' . $suffix . '.mo',
-                    'locale' => $locale
-            )
-        );
+        $translateSession = new Zend_Session_Namespace('Transl8');
+        if (!empty($translateSession->onlineTranslationActivated)) {
+            $dbTranslations = self::getDbTranslations($locale);
+            $poTrans->addTranslation($dbTranslations);
+        } else {
+            $csvTranslate = self::getCsvTranslations($locale);
+            $poTrans->addTranslation($csvTranslate);
+        }
 
         $poTrans->addTranslation(
             array(
                     'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
                     .'language/email' . $suffix . '.mo',
+                    'locale' => $locale
+            )
+        );
+
+        $poTrans->addTranslation(
+            array(
+                    'content' => APPLICATION_PATH.'/../public'.strtolower($localePath)
+                    .'language/form' . $suffix . '.mo',
                     'locale' => $locale
             )
         );
@@ -486,6 +521,40 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         Zend_Registry::set('Zend_Translate', $poTrans);
     }
 
+    public function getDbTranslations($locale)
+    {
+        $getDbTranslationsForZendTranslate = Translations::getDbTranslationsForZendTranslate();
+        
+        $dbTranslations = new Zend_Translate(
+            array(
+                'adapter' => 'array',
+                'locale'  => $locale,
+                'disableNotices' => true
+            )
+        );
+        $dbTranslations->addTranslation(
+            array(
+                    'content' => $getDbTranslationsForZendTranslate,
+                    'locale' => $locale
+            )
+        );
+
+        return $dbTranslations;
+    }
+
+    public function getCsvTranslations($locale)
+    {
+        $inlineTranslationFolder = Transl8_Translate_Writer_Csv::getDestinationFolder();
+        $csvTranslation = array(
+            'adapter'   => 'Transl8_Translate_Adapter_Csv',
+            'scan'      => Zend_Translate::LOCALE_DIRECTORY,
+            'content'   => $inlineTranslationFolder . '/',
+            'locale'    => $locale
+        );
+
+        $csvTranslate = new Zend_Translate($csvTranslation);
+        return $csvTranslate;
+    }
 
     protected function _initViewScripts()
     {
@@ -502,25 +571,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view = $this->getResource('View');
         $view->doctype('HTML5');
         $view->headMeta()->appendHttpEquiv('Content-type', 'text/html; charset=UTF-8');
-    }
-
-    protected function _initAutoLoad()
-    {
-        $autoLoader = Zend_Loader_Autoloader::getInstance();
-        $resourceLoader = new Zend_Loader_Autoloader_Resource(
-            array(
-                'basePath' => APPLICATION_PATH,
-                'namespace' => 'Application',
-                'resourceTypes' => array(
-                    'form' => array('path' => 'forms/',
-                        'namespace' => 'Form'
-                    ),
-                    'model' => array('path' => 'models/',
-                        'namespace' => 'Model'
-                    ))
-           )
-        );
-        return $autoLoader;
     }
 
     public function _initRouter()
@@ -823,7 +873,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             } else {
                 $routeLanguage = new Zend_Controller_Router_Route(':lang', array('lang' => ':lang'));
                 $baseChain = new Zend_Controller_Router_Route(
-                    '@redactie',
+                    '@link_redactie',
                     array(
                         'controller' => 'about',
                         'module' => 'default'

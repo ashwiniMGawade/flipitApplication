@@ -1,7 +1,7 @@
 <?php
 class LoginController extends Zend_Controller_Action
 {
-    public $directLoginLinks = array();
+    public $_loginLinkAndData = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -62,7 +62,7 @@ class LoginController extends Zend_Controller_Action
             }
         }
         $this->view->headTitle(FrontEnd_Helper_viewHelper::__form('form_Members Only'));
-        $this->view->pageCssClass = 'login-page home-page';
+        $this->view->pageCssClass = 'login-page';
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
@@ -102,6 +102,7 @@ class LoginController extends Zend_Controller_Action
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $module = $this->getRequest()->getParam('lang');
+        Zend_Session::namespaceUnset('favouriteShopId');
         $this->_redirect(HTTP_PATH_LOCALE);
     }
 
@@ -144,7 +145,7 @@ class LoginController extends Zend_Controller_Action
                         $content,
                         FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
                         '',
-                        $this->directLoginLinks
+                        $this->_loginLinkAndData
                     );
                     $this->addFlashMessage(
                         FrontEnd_Helper_viewHelper::__translate('Please check you mail and click on reset password link'),
@@ -165,7 +166,7 @@ class LoginController extends Zend_Controller_Action
             }
         }
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-        $this->view->pageCssClass = 'login-page home-page';
+        $this->view->pageCssClass = 'login-page';
         $this->viewHelperObject->getMetaTags($this);
     }
 
@@ -193,7 +194,7 @@ class LoginController extends Zend_Controller_Action
                 $resetPasswordForm->highlightErrorElements();
             }
         }
-        $this->view->pageCssClass = 'login-page home-page';
+        $this->view->pageCssClass = 'login-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $this->viewHelperObject->getMetaTags($this);
     }
@@ -266,7 +267,9 @@ class LoginController extends Zend_Controller_Action
             setcookie('kc_unique_user_id', $userid, time() + 2592000, '/');
             $url =
                 HTTP_PATH_LOCALE
-                . FrontEnd_Helper_viewHelper::__link('link_login').'/'.FrontEnd_Helper_viewHelper::__link('link_profiel');
+                . FrontEnd_Helper_viewHelper::__link('link_inschrijven')
+                .'/'
+                .FrontEnd_Helper_viewHelper::__link('link_profiel');
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect($url);
         }
@@ -298,7 +301,7 @@ class LoginController extends Zend_Controller_Action
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_helper->redirector(
                 FrontEnd_Helper_viewHelper::__link('link_profiel'),
-                FrontEnd_Helper_viewHelper::__link('link_login'),
+                FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                 $moduleKey
             );
         }

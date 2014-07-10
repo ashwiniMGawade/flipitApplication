@@ -1,7 +1,7 @@
 function showLightboxPopUp(id) {
-    $('#element_to_pop_up').html('');
+    $('#how_to_lightbox_pop_up').html('');
     if (! ( /(iPod|iPhone|iPad)/i.test(navigator.userAgent) )) {
-        customPopUp('element_to_pop_up');
+        customPopUp('how_to_lightbox_pop_up');
         $.ajax({
             url : HOST_PATH_LOCALE + "store/how-to-use-guide-lightbox",
             method : "post",
@@ -10,9 +10,17 @@ function showLightboxPopUp(id) {
             },
             type : "post",
             success : function(data) {
-                $('#element_to_pop_up').html(data);
-                $('#code-lightbox').show();
+                $('#how_to_lightbox_pop_up').html(data);
             }
         });
     }
 }
+
+function showHowToLightboxPopup()
+{
+    customPopUp('how_to_lightbox_pop_up');
+    fadeCustomPopup();
+    $('#how_to_lightbox_pop_up, #how_to_lightbox_pop_up #code-lightbox').show();
+}
+
+showLightboxPopUp(relatedShopId);

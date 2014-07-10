@@ -103,11 +103,11 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <button type="button" class="btn" id="showSitemapYes" onClick="showSitemapStatus('showSitemapYes')" >
                                 <?php echo $this->translate('Yes');?>
                             </button>                     
-                            <button class= "borderradius4px" type="button" class="btn btn-primary"
+                            <button type="button" class="btn btn-primary borderradius4px"
                                 onClick="showSitemapStatus('showSitemapNo')" id="showSitemapNo">
                                 <?php echo $this->translate('No'); ?>
                             </button>
-                            <input type="checkbox" name="showSitemapStatuscheck" class="display-none" id="showSitemapStatuscheck" value="1">
+                            <input type="hidden" name="showSitemapStatuscheck"  id="showSitemapStatuscheck" value="0">
                         </div>
                     </div>
                     <?php } ?>

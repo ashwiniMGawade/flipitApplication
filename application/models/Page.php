@@ -3,16 +3,9 @@ class Page extends BasePage
 {
     #####################################################
     ############ REFECTORED CODE ########################
-    public static function getPageDetails($pageAttribute)
+    public static function getPageDetailsFromUrl($pagePermalink)
     {
-        if (is_string($pageAttribute)) {
-            $pageAttribute = self::getPageAttributeByPermalink($pageAttribute);
-        }
-        if(empty($pageAttribute)) {
-            $pageDetails = self::getPageDetailsByPermalink($pageAttribute);
-        } else {
-            $pageDetails = self::getPageDetailsByAttributeId($pageAttribute);
-        }
+        $pageDetails = self::getPageDetailsByPermalink($pagePermalink);
         if (!empty($pageDetails)) {
             return $pageDetails;
         } else {
@@ -31,30 +24,6 @@ class Page extends BasePage
             ->andWhere('p.pagelock=0')
             ->andWhere('p.deleted=0')
             ->fetchOne();
-        return $pageDetails;
-    }
-
-    public static function getPageAttributeByPermalink($permalink)
-    {
-        $pageAttributes = Doctrine_Query::create()
-        ->select('p.id, p.pageAttributeId')
-        ->from('Page p')
-        ->where("permaLink = '". $permalink ."'")
-        ->andWhere('p.deleted=0')
-        ->fetchArray();
-        return isset($pageAttributes[0]['pageAttributeId']) ? $pageAttributes[0]['pageAttributeId'] : '';
-
-    }
-
-    public static function getPageDetailsByAttributeId($pageAttributeId)
-    {
-        $pageDetails = Doctrine_Query::create()
-        ->select('p.*,i.path,i.name')
-        ->from('Page p')->leftJoin('p.logo i')
-        ->where("pageAttributeId = ?", $pageAttributeId)
-        ->andWhere('p.deleted=0')
-        ->orderBy('id DESC')
-        ->fetchOne();
         return $pageDetails;
     }
 
@@ -80,7 +49,7 @@ class Page extends BasePage
     }
     public static function getPageDetailsInError($page)
     {
-        $currentDate = date('Y-m-d H:i:s');
+        $currentDate = date('Y-m-d 00:00:00');
         $pageDetails = Doctrine_Query::create()->from('Page p')
         ->where("p.permalink="."'$page'")
         ->leftJoin("p.widget w")
@@ -110,6 +79,24 @@ class Page extends BasePage
         ->andWhere('p.deleted=0')
         ->fetchArray();
         return $pageDetail;
+    }
+
+    public static function updatePageAttributeId()
+    {
+        for ($i = 1; $i <= 3; $i++) {
+            $updatePagesAttributeId = Doctrine_Query::create()->update('Page')
+                ->set('pageAttributeId', $i);
+            if ($i == 1) {
+                $updatePagesAttributeId->where('permalink="info/contact"');
+            } else if ($i == 2) {
+                $updatePagesAttributeId->where('permalink="info/faq"');
+            } else if ($i == 3) {
+                $updatePagesAttributeId->where('permalink!="info/faq"');
+                $updatePagesAttributeId->andWhere('permalink!="info/contact"');
+            }
+            $updatePagesAttributeId->execute();
+        }
+        return true;
     }
 
     ######################################################
@@ -650,7 +637,7 @@ class Page extends BasePage
             $this->pageLock = 1;
         }
         
-        isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
+        isset($params['showSitemapStatuscheck']) && $params['showSitemapStatuscheck'] == 1 ? $this->showsitemap = 1 : $this->showsitemap = 0;
 
         if(trim($params['pageTemplate'])!=''){
             $this->pageAttributeId = $params['pageTemplate'];
