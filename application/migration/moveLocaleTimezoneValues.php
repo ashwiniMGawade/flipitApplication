@@ -25,7 +25,7 @@ class localeTimezoneValues
         $manager = CommonMigrationFunctions::loadDoctrineModels();
         $logContent = '';
         try {
-            $SignupmaxaccountInformation = Signupmaxaccount::getAllMaxAccounts();
+            $SignupmaxaccountInformation = Signupmaxaccount::getAllMaxAccounts('localeScript');
             $locale =
                 isset($SignupmaxaccountInformation[0]['locale']) ? $SignupmaxaccountInformation[0]['locale'] : '';
             $timezone =
