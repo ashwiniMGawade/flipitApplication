@@ -10,12 +10,16 @@ endif;
 
 if ($this->pageMode == true) {
     $partialsViewPath = 'partials/';
-    $pageContent =
+    if ($this->pageCssClass == 'faq-page') {
+        $pageContent =  stripslashes($this->page['content']);                  
+    } else {
+        $pageContent =
             '<div class="section">
                 <div class="inner-section-wrapper">'
                     .stripslashes($this->page['content']) 
                 .'</div>
             </div>';
+    }
     if ($this->page['pageType'] == "offer") {
         
         if ($this->offercount > 0) {
