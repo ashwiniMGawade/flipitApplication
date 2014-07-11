@@ -26,7 +26,7 @@ class PlusController extends Zend_Controller_Action
         $mostReadArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 (string)"all_mostreadMsArticlePage_list",
-                (array)array('function' =>
+                array('function' =>
                 'MoneySaving::getMostReadArticles',
                 'parameters' => array(3))
             );
@@ -34,33 +34,23 @@ class PlusController extends Zend_Controller_Action
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 (string)"all_categoryWiseArticles_list",
-                (array)array('function' =>
+                array('function' =>
                 'MoneySaving::getCategoryWiseArticles', 'parameters' => array())
             );
 
         $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
-
-        $blogCategoryArticles = array();
-        $blogCategoryArticles['blog'] = $moneySavingPartialFunctions->
-            addAuthorDetailsInArticles($categoryWiseArticles, 'blog');
-
-        $savingTipCategoryArticles = array();
-        $savingTipCategoryArticles['savingtip'] = $moneySavingPartialFunctions->
-            addAuthorDetailsInArticles($categoryWiseArticles, 'savingtip');
-
-        $allArticles = $blogCategoryArticles + $savingTipCategoryArticles;
-        $allArticles = array_merge($allArticles['blog'], $allArticles['savingtip']);
+        $allArticlesWithAuthorDetails = $moneySavingPartialFunctions->addAuthorDetailsInArticles($categoryWiseArticles);
 
         $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 (string)"all_recentlyAddedArticles_list",
-                (array)array('function' =>
+                array('function' =>
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2))
             );
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'all_popularshop_list',
-            (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(6)),
+            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(6)),
             true
         );
         
@@ -79,7 +69,7 @@ class PlusController extends Zend_Controller_Action
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
         $this->view->popularStores = $popularStores;
         $this->view->mostReadArticles = $mostReadArticles;
-        $this->view->allArticles = $allArticles;
+        $this->view->allArticles =  $allArticlesWithAuthorDetails;
         $this->view->recentlyAddedArticles = $recentlyAddedArticles;
         $this->view->pageCssClass = 'article-page';
     }
