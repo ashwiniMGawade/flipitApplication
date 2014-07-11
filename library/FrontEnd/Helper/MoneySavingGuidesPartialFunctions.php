@@ -42,16 +42,13 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                                        '.$articleTitle.'
                                     </a>
                                 </h2>
-                                <div class="meta">
-                                    <span class="author">'.$articleBy.'
-                                        <a href="'.$profileLink.'">'.$authorName.'</a>
-                                    </span>
-                                    <em class="date">'.$articleUpdatedAtDate.'</em>
-                                </div>
                             </div>
-                            <a href="'.HTTP_PATH_LOCALE.'plus/'.$article['permalink'].'" class="more">
-                                '.FrontEnd_Helper_viewHelper::__translate('continue').' ›
-                            </a>
+                            <div class="meta">
+                                <span class="author">'.$articleBy.'
+                                    <a href="'.$profileLink.'">'.$authorName.'</a>
+                                </span>
+                                <em class="date">'.$articleUpdatedAtDate.'</em>
+                            </div>
                         </div>
                     </article>';
         }
