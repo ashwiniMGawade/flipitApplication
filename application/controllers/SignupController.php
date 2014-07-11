@@ -234,10 +234,41 @@ class SignupController extends Zend_Controller_Action
         }
         self::redirectAccordingToMessage($visitorId, $message, $redirectLink, 'profile');
     }
+
     public function yourbrandsAction()
     {
-          $this->view->pageCssClass = 'brands-page';
-          $popularStores = FrontEnd_Helper_viewHelper::getStoreForFrontEnd('popular', 25);
-          $this->view->popularStores = $popularStores;
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $this->view->pageCssClass = 'brands-page';
+            $popularShops = Shop::getPopularStores(25);
+            $notAlreadySelectedPopularShops = FavoriteShop::rejectAlreadyFavouriteShops($popularShops);
+            $this->view->popularShops = $notAlreadySelectedPopularShops;
+            $favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
+            $this->view->favouriteShops = $favouriteShops;
+        } else {
+            $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+            $this->_redirect('/');
+        }
+    }
+
+    public function memberonlycodesAction()
+    {
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $this->view->pageCssClass = 'youroffers-page';
+            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
+            $favouriteShopsOffers = FrontEnd_Helper_viewHelper::renderPagination(
+                $favoriteShopsOffers,
+                $this->_getAllParams(),
+                30,
+                3
+            );
+            $this->view->favouriteShopsOffers = $favouriteShopsOffers;
+            $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+            $this->view->userDetails = $userDetails[0];
+            echo "<pre>";
+            print_r( $userDetails[0]); die;
+        } else {
+            $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+            $this->_redirect('/');
+        }
     }
 }

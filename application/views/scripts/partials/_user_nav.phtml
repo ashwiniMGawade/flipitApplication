@@ -14,6 +14,18 @@ if(Auth_VisitorAdapter::hasIdentity()) :
            </a>
         </li>
         <li>
+          <a href="<?php echo HTTP_PATH_LOCALE 
+          . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/" 
+          . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes');?>">
+          <?php echo FrontEnd_Helper_viewHelper::__form('form_Your offers');?>
+          </a>
+        </li>
+        <li>
+          <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');?>">
+          <?php echo FrontEnd_Helper_viewHelper::__form('form_Your brands');?>
+          </a>
+        </li>
+        <li>
             <a href=" <?php echo HTTP_PATH_LOCALE 
             . FrontEnd_Helper_viewHelper::__link('link_login') .'/'
             . FrontEnd_Helper_viewHelper::__link('link_logout'); ?>">

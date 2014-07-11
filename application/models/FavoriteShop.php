@@ -12,6 +12,27 @@
  */
 class FavoriteShop extends BaseFavoriteShop
 {
+    ####################### refactored code ################
+    public static function rejectAlreadyFavouriteShops($popularShops)
+    {
+        $visitorFavouriteShops = Doctrine_Query::create()->select()
+            ->from('FavoriteShop')
+            ->where('visitorId = '. Auth_VisitorAdapter::getIdentity()->id)
+            ->fetchArray();
+        $favouriteShops = array();
+        foreach ($visitorFavouriteShops as $shops) {
+            $favouriteShops[] = $shops['shopId'];
+        }
+        $removedAlreayAddedInFavouriteShops = array();
+        foreach ($popularShops as $popularShop) {
+            if (!in_array($popularShop['shopId'], $favouriteShops)) {
+                $removedAlreayAddedInFavouriteShops[] = $popularShop;
+            }
+        }
+        return $removedAlreayAddedInFavouriteShops;
+    }
+    ###################### END REFACTORED CODE #############
+
     public static function get_suggestionshops($userid,$flag)
     {
         $lastdata=FavoriteShop::get_allshops($userid);
@@ -158,34 +179,6 @@ class FavoriteShop extends BaseFavoriteShop
             $percentage=30;
         }
         return $percentage;
-    }
-
-    /**
-     * This will reject all those favorite shops which are selected already
-     * @author cbhopal
-     * @param $data array
-     * @return array
-     * @version 1.0
-     */
-    public static function rejectAlreadySelected($data)
-    {
-        $getSelectedShops = Doctrine_Query::create()->select()
-                                                    ->from('FavoriteShop')
-                                                    ->where('visitorId = '. Auth_VisitorAdapter::getIdentity()->id)
-                                                    ->fetchArray();
-
-        $newArray = array();
-        foreach ($getSelectedShops as $key => $shops){
-            $newArray[] = $shops['shopId'];
-        }
-        $newList = array();
-        foreach ($data as $key => $d){
-            if(!in_array($d['shopId'], $newArray)){
-                $newList[] = $d;
-            }
-        }
-        return array_slice($newList, 0, 6);;
-
     }
 
     /**
