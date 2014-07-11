@@ -18,8 +18,8 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             );
             $articleImage = !empty($article['thumbnail']) ?
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
-            $articleTitle = mb_strlen($article['title']) > 20 ?
-                                        mb_substr($article['title'], 0, 20).'..' : $article['title'];
+            $articleTitle = mb_strlen($article['title']) > 50 ?
+                                        mb_substr($article['title'], 0, 50).'..' : $article['title'];
             $articleBy = !empty($authorName) ? FrontEnd_Helper_viewHelper::__translate('By') : '';
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
