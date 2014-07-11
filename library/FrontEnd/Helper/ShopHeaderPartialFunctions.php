@@ -60,13 +60,14 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         }
         if ($expiredMessage !='') {
                 $explodedShopUrl = explode('//', $shop['actualUrl']);
+                $shopWebsiteUrl = isset($explodedShopUrl[1]) ? $explodedShopUrl[1] : $explodedShopUrl[0];
                 $divContent .=
                     '<h1>'.$shop['title'].'</h1>
                     <h2>'.$shop['subTitle'].'</h2>
                         <a target="_blank" rel="nofollow" 
                         class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
                         .$affliateDisabled.'
-                        onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$explodedShopUrl[1].'
+                        onclick="'.$affliateBounceRate.'" href="'.$affliateUrl.'">'.$shopWebsiteUrl.'
                         </a>'. self::getLoveAnchor($shop['id'], $shop['name']);
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
