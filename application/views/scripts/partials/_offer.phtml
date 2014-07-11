@@ -14,7 +14,7 @@ foreach ($this->offers as $offer) {
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
-        <div class="holder" id="<?php echo $offer->id; ?>">
+        <div class="holder offer-holder" id="<?php echo $offer->id; ?>">
     <?php 
     echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
