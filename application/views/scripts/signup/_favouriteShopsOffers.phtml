@@ -1,0 +1,50 @@
+<?php 
+foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
+    $shopImage = 
+        PUBLIC_PATH_CDN.ltrim($favouriteShopsOffer['shops']['logo']['path'], "/")
+        . $favouriteShopsOffer['shops']['logo']['name'];
+    $offerId = $favouriteShopsOffer['id'];
+    $offerBounceRate = "/out/offer/".$favouriteShopsOffer['id'];
+    $onClick = "viewCounter('onclick', 'offer', $offerId), ga('send', 'event', 'aff', '$offerBounceRate')";
+    ?>
+    <article class="block col-sm-6">
+        <div class="holder">
+            <a onClick="<?php echo $onClick;?>" 
+            href="<?php echo HTTP_PATH_LOCALE. $favouriteShopsOffer["shop"]["permaLink"];?>"  
+            class="code code-2">
+                <div class="center">
+                    <div class="code-holder">
+                        <img src="<?php echo $shopImage;?>" width="132"
+                        alt="<?php echo $favouriteShopsOffer['shop']['name'];?>">
+                    </div>
+                </div>
+                <footer class="bottom"><?php echo FrontEnd_Helper_viewHelper::__translate('code');?></footer>
+            </a>
+            <div class="box">
+                <div class="text">
+                    <a onClick="<?php echo $onClick;?>" 
+                    href="<?php echo HTTP_PATH_LOCALE. $favouriteShopsOffer["shop"]["permaLink"];?>"  
+                    class="link">
+                    <?php echo $favouriteShopsOffer['title'];?>
+                    </a>
+                    <p>
+                        <?php 
+                        echo FrontEnd_Helper_viewHelper::__translate('and'). "10". " " 
+                        .FrontEnd_Helper_viewHelper::__translate('other active codes for');
+                        ?>
+                        <a onClick="<?php echo $onClick;?>" 
+                        href="<?php echo HTTP_PATH_LOCALE. $favouriteShopsOffer["shop"]["permaLink"];?>">
+                        <?php echo $favouriteShopsOffer['shop']['name'];?>
+                        </a>
+                    </p>
+                    <button class="pop btn btn-default" type="button">
+                        <span class="glyphicon glyphicon-heart"></span>
+                        <span><?php echo FrontEnd_Helper_viewHelper::__translate('Favorite');?></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </article>
+<?php
+}
+echo $this->paginationControl($this->favouriteShopsOffers, 'Sliding', '/partials/_pagination.phtml');

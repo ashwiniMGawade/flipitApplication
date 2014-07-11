@@ -1,0 +1,27 @@
+<?php
+$signupViewPath = "signup/";
+$favouriteShopsOffers = $this->partial(
+    $signupViewPath.'_favouriteShopsOffers.phtml',
+    array(
+       'favouriteShopsOffers'=> $this->favouriteShopsOffers,
+   )
+);
+?>
+<div class="header-block">
+    <div class="icon icon-small">
+        <img src="<?php echo PUBLIC_PATH;?>images/front_end/logo-43.png" width="90" height="90"
+        alt="<?php echo $this->userDetails['firstName'];?>">
+    </div>
+    <div class="box">
+        <h1>
+        <?php echo FrontEnd_Helper_viewHelper::__translate('Hi'). " " 
+        . $this->userDetails['firstName'];?>,
+        </h1>
+        <strong><?php echo FrontEnd_Helper_viewHelper::__translate('Welcome to your personal coupon page');?></strong>
+    </div>
+</div>
+<div class="section">
+    <div class="row">
+    <?php echo $favouriteShopsOffers; ?>    
+    </div>
+</div>
