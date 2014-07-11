@@ -918,10 +918,10 @@ EOD;
 
     public static function renderFlipitErrorPage()
     {
-        $flipitViewPath = APPLICATION_PATH . '/modules/flipit/views/' ;
-        $flipitPartialViewPath = new Zend_View();
-        $flipitPartialViewPath->setBasePath($flipitViewPath);
-        return $flipitPartialViewPath;
+        $flipitViewPath = APPLICATION_PATH . '/modules/flipit/views/';
+        $flipitErrorViewPath = new Zend_View();
+        $flipitErrorViewPath->setBasePath($flipitViewPath);
+        return $flipitErrorViewPath;
     }
 }
 
