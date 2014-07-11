@@ -915,5 +915,13 @@ EOD;
         $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
         $currentObject->view->flipitLocales = $websitesWithLocales;
     }
+
+    public static function renderFlipitErrorPage()
+    {
+        $flipitViewPath = APPLICATION_PATH . '/modules/flipit/views/' ;
+        $flipitPartialViewPath = new Zend_View();
+        $flipitPartialViewPath->setBasePath($flipitViewPath);
+        return $flipitPartialViewPath;
+    }
 }
 

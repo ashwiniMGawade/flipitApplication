@@ -36,16 +36,6 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 
         $this->frontController = Zend_Controller_Front::getInstance();
         self::getErrorHandlerPlugin($request);
-
-        if (!$this->frontController->getDispatcher()->isDispatchable($request)) {
-
-            if ($this->moduleName == 'default' && empty($this->localeDirectoryName) &&
-                    ($request->getHttpHost() == 'www.flipit.com')) {
-                header('Location: http://'.$request->getScheme .'/'. $request->getHttpHost(), true, 301);
-                exit();
-            }
-
-        }
     }
 
     public function setLayoutPath()
