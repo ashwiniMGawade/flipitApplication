@@ -361,7 +361,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
         if ($dynamicDivId == 'saving-guides') {
             $imageDimensions = 'width="70"';
         }
-        
+
         $rightColumnContent = '
         <li>
             <a href="'.HTTP_PATH_LOCALE.$shopPermalink.'">
