@@ -50,7 +50,7 @@ class PlusController extends Zend_Controller_Action
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'all_popularshop_list',
-            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(6)),
+            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(7)),
             true
         );
         
