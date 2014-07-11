@@ -3,10 +3,10 @@ $messege = $this->message;
 if ($messege == "Page not found" &&  $this->matches < 4) {
     echo $this->render('error/pageContent.phtml');
 } else {
-	if (HTTP_PATH == 'http://www.flipit.com/' && LOCALE == '') {
-		$flipitPartialViewPath = FrontEnd_Helper_viewHelper::renderFlipitErrorPage();
-		echo $flipitPartialViewPath->render('error/error.phtml');
-	} else {
-    	echo $this->render('error/pageNotFound.phtml');
-	}
+    if (HTTP_PATH == 'http://www.flipit.com/' && LOCALE == '') {
+        $flipitPartialViewPath = FrontEnd_Helper_viewHelper::renderFlipitErrorPage();
+        echo $flipitPartialViewPath->render('error/error.phtml');
+    } else {
+        echo $this->render('error/pageNotFound.phtml');
+    }
 }
