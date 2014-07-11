@@ -40,12 +40,18 @@ LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
 </div>
 <main role="main" id="main">
 <?php
+foreach ($this->allArticles as $articleValues) {
+   foreach ($articleValues as $articleValue) {
+        $articleDetails[] = $articleValue;
+    }
+}
+ 
 if (!empty($this->allArticles)) {
     usort(
-        $this->allArticles,
-        "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescendingOrderFunction"
+        $articleDetails,
+        "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescendingOrder"
     );
-    $articlesInformation = array_chunk($this->allArticles, 8);
+    $articlesInformation = array_chunk($articleDetails, 8);
     for ($articleCounter =0; $articleCounter < count($articlesInformation) ; $articleCounter++) { 
         if ($articleCounter == 0) {?>
             <div class="container">

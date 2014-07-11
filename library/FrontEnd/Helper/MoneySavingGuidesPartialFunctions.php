@@ -1,11 +1,10 @@
 <?php
 class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
 {
-    public static function getArticles($articles)
+    public static function getArticles($categoryWiseAllArticles)
     {
         $relatedArticles = '<div class="row articles-box">';
-        foreach ($articles as $article) {        
-
+        foreach ($categoryWiseAllArticles as $article) {
             $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
                     . $article['authorDetails']['slug'];
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
@@ -21,11 +20,12 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
             $articleTitle = mb_strlen($article['title']) > 20 ?
                                         mb_substr($article['title'], 0, 20).'..' : $article['title'];
+            $articleBy = !empty($authorName) ? FrontEnd_Helper_viewHelper::__translate('By') : '';
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
                         <div class="image">
                             <span class="category">
-                                '.FrontEnd_Helper_viewHelper::__translate($article['type']).'
+                                '.FrontEnd_Helper_viewHelper::__translate($article['artcileCategoryType']).'
                             </span>
                             <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
                                 .$article['permalink'].'">
@@ -43,7 +43,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                                     </a>
                                 </h2>
                                 <div class="meta">
-                                    <span class="author">'.FrontEnd_Helper_viewHelper::__translate('By').'
+                                    <span class="author">'.$articleBy.'
                                         <a href="'.$profileLink.'">'.$authorName.'</a>
                                     </span>
                                     <em class="date">'.$articleUpdatedAtDate.'</em>
@@ -58,19 +58,20 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
         echo $relatedArticles .'</div>';
     }
 
-    public function addAuthorDetailsInArticles($categoryWiseArticles, $type)
+    public function addAuthorDetailsInArticles($categoryWiseArticles)
     {
-
-        foreach ($categoryWiseArticles[$type] as $key => $categoryWiseArticle) {
-            $categoryWiseArticles[$type][$key]['authorDetails'] =
-                User::getUserDetails($categoryWiseArticle['authorid']);
-            $categoryWiseArticles[$type][$key]['type'] = $type;
+        $artcileCategoryTypes = array_keys($categoryWiseArticles);
+        foreach ($artcileCategoryTypes as $artcileCategoryType) {
+            foreach ($categoryWiseArticles[$artcileCategoryType] as $key => $categoryWiseArticle) {
+                $categoryWiseArticles[$artcileCategoryType][$key]['authorDetails'] =
+                    User::getUserDetails($categoryWiseArticle['authorid']);
+                $categoryWiseArticles[$artcileCategoryType][$key]['artcileCategoryType'] = $artcileCategoryType;
+            }
         }
-
-        return $categoryWiseArticles[$type];
+        return $categoryWiseArticles;
     }
 
-    public static function getArticlesAccordingToDescendingOrderFunction($articleCreatedDateAsc, $articleCreatedDateDesc)
+    public static function getArticlesAccordingToDescendingOrder($articleCreatedDateAsc, $articleCreatedDateDesc)
     {
         return strtotime($articleCreatedDateDesc['created_at']) - strtotime($articleCreatedDateAsc['created_at']);
     }
