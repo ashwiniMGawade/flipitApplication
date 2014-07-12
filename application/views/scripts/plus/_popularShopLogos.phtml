@@ -6,7 +6,9 @@
                 <?php
                 foreach ($this->popularStores as $popularStore) { 
                     $popularStoreImage =
-                        PUBLIC_PATH_CDN.ltrim($popularStore['shop']['logo']['imgpath'], '/')
+                        PUBLIC_PATH_CDN
+                        .ltrim($popularStore['shop']['logo']['imgpath'], '/')
+                        .'thum_big_'
                         .$popularStore['shop']['logo']['imgname'];  
                     ?>
                     <div class="slide">

@@ -200,7 +200,7 @@
     margin:0 0 30px;
     .carousel {
         text-align:center;
-        padding:54px 53px;
+        padding:50px 0px;
         position: relative;
         .mask{
             position: relative;
@@ -212,11 +212,11 @@
             float: left;
         }
         .slide{
-            width:134px;
+            width:150px;
             display:inline-block;
             vertical-align:top;
             padding:2px;
-            margin:0 7px;
+            margin:0 6px;
         }
         img{
             vertical-align:top;
@@ -359,7 +359,16 @@
     .carousel-area{
         .carousel{
             float: left;
-            .slide{margin:0 17px;}
+            .mask {
+                height: 0px;
+            }
+            .slide{
+                margin:0 11px;
+                width: 110px;
+            }
+            img {
+                width: 110px;
+            }
         }
     }
     .article-page {
@@ -403,7 +412,13 @@
     .carousel-area{
         .carousel{
             float: left;
-            .slide{margin:0 12px;}
+            .slide{
+                margin:0 6px;
+                width: 90px;
+            }
+            img {
+                width: 90px;
+            }
         }
     }
     .article-page {
@@ -504,6 +519,14 @@
     .carousel-area{
         .carousel{
             float: left;
+            padding: 20px 0;
+            .slide{
+                margin: 10px;
+                width: 100px;
+            }
+            img {
+                width: 100px;
+            }
         }
     }
 }
