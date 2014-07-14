@@ -2,9 +2,6 @@
 $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
 $shopUrl = $domainName.'out/shop/'.$this->shop['id'];
 ?>
-<script type="text/javascript">
-    var relatedShopId = "<?php echo $this->shop['id']; ?>";
-</script>
 <ul class="add-info">
     <li>
         <h4><?php echo $this->translate('How to use code'); ?></h4>

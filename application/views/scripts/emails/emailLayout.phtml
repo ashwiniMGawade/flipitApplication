@@ -10,7 +10,8 @@ if (defined('HTTP_PATH')) {
     $httpPathLocale = $this->pathConstants['httpPathLocale'];
     $publicPathCdn = $this->pathConstants['publicPathCdn'];
 }
-
+$publicLocalePath = $locale != '' ? $httpPath.'public/'.$locale.'/images/front_end/'
+    : $httpPath.'public/images/front_end/';
 $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($locale);
 $publicPath = $httpPath.'public/images/front_end/';
 $emailsViewPath = 'emails/';
@@ -18,10 +19,11 @@ $emailHeader = $this->partial(
     $emailsViewPath. 'emailHeader.phtml',
     array(
         'websiteName' => $websiteName,
-        'publicPath' => $publicPath,
+        'publicLocalePath' => $publicLocalePath,
         'httpPathLocale' => $httpPathLocale,
         'mailType' => $this->mailType,
-        'locale' => $locale
+        'locale' => $locale,
+        'publicPath' => $publicPath
     )
 );
 

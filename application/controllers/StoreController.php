@@ -319,26 +319,6 @@ class StoreController extends Zend_Controller_Action
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
     }
 
-    public function howToUseGuideLightboxAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $howToUseGuideChapters = '';
-        $ShopList = $this->getRequest()->getParam('id').'_list';
-        $allShopDetailsKey = 'all_shopdetail'.$ShopList;
-        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            $allShopDetailsKey,
-            array('function' => 'Shop::getStoreDetails', 'parameters' => array($this->getRequest()->getParam('id')))
-        );
-
-        $howToGuide = Shop::getshopDetails($shopInformation[0]['permaLink']);
-        if (!empty($howToGuide[0]['howtochapter'])) :
-            $howToUseGuideChapters = $howToGuide[0]['howtochapter'];
-        endif;
-
-        $this->view->shopInformation = $shopInformation;
-        $this->view->howToUseGuideChapters = $howToUseGuideChapters;
-    }
-
     public function addtofavouriteAction()
     {
         $this->view->layout()->robotKeywords = 'noindex, nofollow';
