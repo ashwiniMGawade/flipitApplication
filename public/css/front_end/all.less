@@ -35,7 +35,6 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 }
 .top-panel{
 	background:#2d2c2c;
-    background:rgba(0, 0, 0,.7);
 	font-size:13px;
 	line-height:18px;
 	&:after {.after}
@@ -168,9 +167,17 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 }
 .navigation{
 	&:after {.after}
-	background:#353534;
-	background:rgba(0,0,0,.6);
-	border:none;
+    border-width:1px 0;
+	border-style:solid;
+	border-color:#525150 @white-color @white-color;
+	background: #434241;
+	background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIxMDAlIiB5Mj0iMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzQzNDI0MSIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9Ijk5JSIgc3RvcC1jb2xvcj0iIzM1MzQzNCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+	background: -moz-linear-gradient(left,  #434241 0%, #353434 99%);
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,#434241), color-stop(99%,#353434));
+	background: -webkit-linear-gradient(left,  #434241 0%,#353434 99%);
+	background: -o-linear-gradient(left,  #434241 0%,#353434 99%);
+	background: -ms-linear-gradient(left,  #434241 0%,#353434 99%);
+	background: linear-gradient(to right,  #434241 0%,#353434 99%);
 	margin:0;
 	.logo{
 		margin:25px 0;
@@ -286,9 +293,6 @@ img.logo.kortingscode{
 	#nav{
 		float:right;
 		ul{
-			border:none;
-			-webkit-box-shadow: none;
-			box-shadow: none;
 			font-size:12px;
 			float:right;
 			padding:0;
@@ -297,38 +301,42 @@ img.logo.kortingscode{
 			text-transform:uppercase;
 			font-weight:bold;
 			text-shadow:0 1px 0 rgba(0,0,0,0.1);
+			box-shadow: 1px 0 0 #2e2e2d inset;
+     		border-left:1px solid #4a4a49;
 			li{
-				border:none;
-				-webkit-box-shadow: none;
-				box-shadow: none;
-				padding:40px 0 0;
-				margin:0 0 0 51px;
+				box-shadow: 1px 0 0 #4a4a49;
+				border-right:1px solid #2e2e2d;
+				margin:0 0 0 1px;
 				float:left;
 				> a{
 					display:block;
-					padding:0;
+					padding:39px 23px 39px 25px;
 					color:@white-color;
 					&:hover,
 					&:focus{
-						background:none;
-						color: #E69342;
+						background:#353534;
+						color: #0077cc;
 						text-decoration:none;
 					}
 				}
 			}
 		    li.flipit-menu{
-		    	padding-top: 30px;
+		    	padding: 21px 23px 0 25px;
 			    a {
 			    	.plus-menu(-0px);
+			    	position: relative;
+			    	top: 6px;
 	    			&:hover, &:focus{
 		    			.plus-menu(-64px);
 	    			}
 			    }
 			}
 			li.kc-menu{
-		    	padding-top: 30px;
+		    	padding: 21px 23px 0 25px;
 			    a {
 			    	.plus-menu(-131px);
+			    	position: relative;
+			        top: 6px;
 	    			&:hover, &:focus{
 		    			.plus-menu(-200px);
 	    			}
@@ -3194,13 +3202,19 @@ input[type="submit"]::-moz-focus-inner{
 		#nav{
 			ul{
 				li{
-					padding:24px 0 25px;
+					>a{padding:24px 23px 23px 25px;}
 				}
                 li.kc-menu{
-                    padding-top: 12px;
+                    padding: 12px 12px 10px;
+                    a{
+                    	top: 0;
+                    }
                 }
                 li.flipit-menu{
-                    padding-top: 12px;
+                    padding: 12px 12px 10px;
+                    a{
+                    	top: 0;
+                    }
                 }
 			}
 		}
@@ -3430,13 +3444,13 @@ input[type="submit"]::-moz-focus-inner{
 		#nav{
 			ul{
 				li{
-					margin:0 0 0 30px;
+					a{padding:24px 10px 23px 12px;}
 				}
                 li.kc-menu{
-                    padding-top: 12px;
+                    padding: 12px 12px 10px;
                 }
                 li.flipit-menu{
-                    padding-top: 12px;
+                    padding: 12px 12px 10px;
                 }
 			}
 		}
@@ -3859,10 +3873,10 @@ input[type="submit"]::-moz-focus-inner{
 					}
 				}
                 li.kc-menu{
-                    padding-top: 12px;
+                    padding: 12px 12px 10px;
                 }
                 li.flipit-menu{
-                    padding-top: 12px;
+                    padding: 12px 12px 10px;
                 }
 			}
 			
