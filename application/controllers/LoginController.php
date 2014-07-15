@@ -127,8 +127,8 @@ class LoginController extends Zend_Controller_Action
                                         'emails/forgotpassword.phtml',
                                         array(
                                             'resetPasswordLink' => HTTP_PATH_LOCALE .
-                                            FrontEnd_Helper_viewHelper::__email('email_login').'/'
-                                            .FrontEnd_Helper_viewHelper::__email('email_resetpassword').'/'
+                                            FrontEnd_Helper_viewHelper::__email('link_login').'/'
+                                            .FrontEnd_Helper_viewHelper::__email('link_resetpassword').'/'
                                             .base64_encode($visitorDetails['id'])
                                             )
                                     )
