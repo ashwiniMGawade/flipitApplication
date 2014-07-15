@@ -17,7 +17,7 @@ class Offer extends BaseOffer
     public function __contruct($connectionName = "")
     {
         if (!$connectionName) {
-            $connectionName = "doctrine_site" ;
+            $connectionName = "doctrine_site";
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
@@ -107,8 +107,9 @@ class Offer extends BaseOffer
     {
         $similarShopsArray = array();
         $similarShops=self::getRelatedShops($shopId);
-        if (sizeof($similarShops)>0) {
-            for ($i=0; $i<sizeof($similarShops); $i++) {
+        if (count($similarShops)>0) {
+            $countOfSimilarShops = count($similarShops);
+            for ($i=0; $i<$countOfSimilarShops; $i++) {
                 $similarShopsArray[$i] = $similarShops[$i]['relatedshopId'];
             }
         }
@@ -159,8 +160,9 @@ class Offer extends BaseOffer
     {
         $similarCategories = array();
         $shopsCategories = self::getShopsCategories($shopId);
-        if (sizeof($shopsCategories)>0) {
-            for ($i=0; $i<sizeof($shopsCategories); $i++) {
+        if (count($shopsCategories)>0) {
+            $countOfShopCategories = count($shopsCategories);
+            for ($i=0; $i<$countOfShopCategories; $i++) {
                 $similarCategories[$i]=$shopsCategories[$i]['categoryId'];
             }
         }
@@ -192,7 +194,7 @@ class Offer extends BaseOffer
         $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
         $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
         $mergeOffers = array_merge($shopsOffers, $categoriesOffers);
-        return $offers = self::sliceOfferByLimit($mergeOffers, $limit);
+        return self::sliceOfferByLimit($mergeOffers, $limit);
     }
 
     public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
@@ -333,14 +335,14 @@ class Offer extends BaseOffer
         return $newestCouponCodes;
     }
 
-    public static function updateCache($id)
+    public static function updateCache($offerId)
     {
         $offer  = Doctrine_Query::create()->select("o.id,s.id")
                   ->from('Offer o')
                   ->leftJoin("o.shop s")
-                  ->where("o.id=? ", $id)
+                  ->where("o.id=? ", $offerId)
                   ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        $shopId = $offer['shop']['id'] ;
+        $shopId = $offer['shop']['id'];
         $key = 'all_shopdetail'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_offerInStore'  . $shopId . '_list';
@@ -351,8 +353,7 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_relatedShopInStore'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $moneySavingGuideKey ="allMoneySavingGuideLists";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(moneySavingGuideKey);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allMoneySavingGuideLists');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewOfferList');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
@@ -414,7 +415,8 @@ class Offer extends BaseOffer
     {
         $specialOffersWithoutDuplication = array();
         if (count($specialPageOffers) > 0) {
-            for ($offerIndex = 0; $offerIndex < count($specialPageOffers); $offerIndex++) {
+            $countOfSpecialPageOffers = count($specialPageOffers);
+            for ($offerIndex = 0; $offerIndex < $countOfSpecialPageOffers; $offerIndex++) {
                 $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['Offer'];
             }
         }
@@ -464,7 +466,7 @@ class Offer extends BaseOffer
     {
         if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 1) {
             $offersConstraintsQuery->orderBy("o.title ASC");
-        } elseif (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 0) {
+        } else if (isset($specialPage['oderOffers']) && $specialPage['oderOffers'] == 0) {
             $offersConstraintsQuery->orderBy("o.title DESC");
         } else {
             $offersConstraintsQuery->orderBy("o.id DESC");
@@ -481,8 +483,7 @@ class Offer extends BaseOffer
         if ($offerRegular == 0) {
             $offersConstraintsQuery = self::offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
         } else {
-            $offersConstraintsQuery = self::
-                offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
+            $offersConstraintsQuery = self::offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
         }
         return $offersConstraintsQuery;
     }
@@ -500,7 +501,7 @@ class Offer extends BaseOffer
                 $offersConstraintsQuery = self::yesCouponAndYesEditorPicksConstraints($offersConstraintsQuery);
             } else {
                 $offersConstraintsQuery = self::
-                    yesCouponAndYesEditorPicksOrYesExclusiveConstraints($offersConstraintsQuery);
+                yesCouponAndYesEditorPicksOrYesExclusiveConstraints($offersConstraintsQuery);
             }
         }
         return $offersConstraintsQuery;
@@ -511,15 +512,15 @@ class Offer extends BaseOffer
         if ($offerEditorpick == 0) {
             if ($offerExclusive == 0) {
                 $offersConstraintsQuery = self::
-                    yesCouponAndNoEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
+                yesCouponAndNoEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
             } else {
                 $offersConstraintsQuery = self::
-                    yesCouponAndYesExclusiveAndNoEditorPicksConstraints($offersConstraintsQuery);
+                yesCouponAndYesExclusiveAndNoEditorPicksConstraints($offersConstraintsQuery);
             }
         } else {
             if ($offerExclusive == 0) {
                 $offersConstraintsQuery = self::
-                    yesCouponAndYesEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
+                yesCouponAndYesEditorPicksAndNoExclusiveConstraints($offersConstraintsQuery);
             } else {
                 $offersConstraintsQuery = self::yesCouponCodeConstraint($offersConstraintsQuery);
             }
@@ -622,7 +623,8 @@ class Offer extends BaseOffer
     {
         $offersAccordingToConstraints = array();
         if (count($specialOffersByConstraints) > 0) {
-            for ($offerIndex = 0; $offerIndex < count($specialOffersByConstraints); $offerIndex++) {
+            $countOfSpecialOffersByConstraints = count($specialOffersByConstraints);
+            for ($offerIndex = 0; $offerIndex < $countOfSpecialOffersByConstraints; $offerIndex++) {
 
                 $offerPublishDate = $specialOffersByConstraints[$offerIndex]['startDate'];
                 $offerExpiredDate = $specialOffersByConstraints[$offerIndex]['endDate'];
@@ -645,12 +647,12 @@ class Offer extends BaseOffer
                         if ($newOfferPublishDate >= $currentDate) {
                             $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                         }
-                    } elseif ($specialPage['timeType'] == 2) {
+                    } else if ($specialPage['timeType'] == 2) {
                         if ($newOfferExprationDate <= $currentDate) {
                             $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
                         }
                     }
-                } elseif (isset($specialPage['enableClickConstraint']) && $specialPage['enableClickConstraint'] == true
+                } else if (isset($specialPage['enableClickConstraint']) && $specialPage['enableClickConstraint'] == true
                         && $specialPage['enableClickConstraint'] == 1) {
                     if ($specialOffersByConstraints[$offerIndex]['clicks'] >= $specialPage['numberOfClicks']) {
                         $offersAccordingToConstraints[$offerIndex] = $specialOffersByConstraints[$offerIndex];
@@ -666,13 +668,12 @@ class Offer extends BaseOffer
 
     public static function getDataForOfferPhtml($specialMargedOffers, $specialPage)
     {
-        if (isset($specialPage['maxOffers']) && @$specialPage['maxOffers'] > 0 && @$specialPage['maxOffers'] != null) {
+        if (isset($specialPage['maxOffers']) && $specialPage['maxOffers'] > 0 && $specialPage['maxOffers'] != null) {
             $specialMargedOffers = array_slice($specialMargedOffers, 0, $specialPage['maxOffers']);
         }
         $specialOffersAfterMerging = array();
         foreach ($specialMargedOffers as $specialOffer) {
-            if (isset($specialOffersAfterMerging[$specialOffer['id']])) {
-            } else {
+            if (!isset($specialOffersAfterMerging[$specialOffer['id']])) {
                 $specialOffersAfterMerging[$specialOffer['id']] = $specialOffer;
             }
         }
@@ -846,22 +847,22 @@ class Offer extends BaseOffer
             )
             ->from("Offer o")
             ->leftJoin('o.shop s')
-            ->where("o.deleted="."'$deletedStatus'")
+            ->where('o.deleted='.$deletedStatus)
             ->andWhere("o.userGenerated = '0'");
         if ($userRole=='4') {
             $getOffersQuery->andWhere("o.Visability='DE'");
         }
         if ($searchOffer != '') {
-            $getOffersQuery->andWhere("o.title LIKE ?", "%$searchOffer%");
+            $getOffersQuery->andWhere("o.title LIKE ?", "%".$searchOffer."%");
         }
         if ($searchShop!='') {
-            $getOffersQuery->andWhere("s.name LIKE ?", "%$searchShop%");
+            $getOffersQuery->andWhere("s.name LIKE ?", "%".$searchShop."%");
         }
         if ($searchCoupon!='') {
-            $getOffersQuery->andWhere("o.couponcode LIKE ?", "%$searchCoupon%");
+            $getOffersQuery->andWhere("o.couponcode LIKE ?", "%".$searchCoupon."%");
         }
         if ($searchCouponType!='') {
-            $getOffersQuery->andWhere("o.discountType="."'$searchCouponType'");
+            $getOffersQuery->andWhere("o.discountType='$searchCouponType'");
         }
         $offersList = DataTable_Helper::generateDataTableResponse(
             $getOffersQuery,
@@ -878,7 +879,7 @@ class Offer extends BaseOffer
     {
         $clientIP = ip2long(FrontEnd_Helper_viewHelper::getRealIpAddress());
 
-        if (Offer:: getCloakLink($id, true)) {
+        if (self:: getCloakLink($offerId, true)) {
                 $offerData = Doctrine_Query::create()
                         ->select('count(c.id) as exists,c.id')
                         ->from('Conversions c')
@@ -894,7 +895,6 @@ class Offer extends BaseOffer
                 $offerCount->IP = $clientIP;
                 $offerCount->utma = $this->getRequest()->getCookie("__utma");
                 $offerCount->utmz = $this->getRequest()->getCookie("__utmz");
-                $time = time();
                 $offerCount->subid = md5(time()*rand(1, 999));
                 $offerCount->save();
 
@@ -903,7 +903,6 @@ class Offer extends BaseOffer
                 if ($offerCount) {
                     $offerCount->utma = $this->getRequest()->getCookie("__utma");
                     $offerCount->utmz = $this->getRequest()->getCookie("__utmz");
-                    $time = time();
                     $offerCount->subid = md5(time()*rand(1, 999));
                     $offerCount->save();
                 }
@@ -922,56 +921,52 @@ class Offer extends BaseOffer
         ->where('o.id = "'.$offerId.'"')
         ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-        $network = Shop::getAffliateNetworkDetail(@$data['shop']['id']);
+        $network = Shop::getAffliateNetworkDetail($data['shop']['id']);
 
         if ($checkRefUrl) {
             # retur false if s shop is not associated with any network
             if (! isset($network['affliatenetwork'])) {
-                return false ;
+                return false;
             }
 
-            if (@$data['refURL'] != "") {
+            if ($data['refURL'] != "") {
                 return true ;
 
-            } elseif (@$data['shop']['refUrl'] != "") {
-                return true ;
+            } else if ($data['shop']['refUrl'] != "") {
+                return true;
             } else {
-                return true ;
+                return true;
             }
         }
 
         $subid = "" ;
         if (isset($network['affliatenetwork'])) {
             if (!empty($network['subid'])) {
-                 $subid = "&". $network['subid'] ;
+                 $subid = "&". $network['subid'];
                  $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
-                 $ip = ip2long($clientIP);
+                 $clientProperAddress = ip2long($clientIP);
                  # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId($data['id'], $ip, 'offer');
+                 $conversion = Conversions::getConversionId($data['id'], $clientProperAddress, 'offer');
                  $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
             }
         }
 
-        if (@$data['refURL'] != "") {
+        if ($data['refURL'] != "") {
+            $url = $data['refURL'];
+            $url .= $subid;
 
-            $url = @$data['refURL'];
+        } else if ($data['shop']['refUrl'] != "") {
 
-            $url .= $subid ;
+            $url = $data['shop']['refUrl'];
+            $url .=  $subid;
 
-        } elseif (@$data['shop']['refUrl'] != "") {
-
-            $url = @$data['shop']['refUrl'];
-            $url .=  $subid ;
-
-        } elseif (@$data['shop']['actualUrl'] != "") {
-
-            $url = @$data['shop']['actualUrl'];
+        } else if ($data['shop']['actualUrl'] != "") {
+            $url = $data['shop']['actualUrl'];
         } else {
-
-            $urll = @$data['shop']['permalink'];
+            $urll = $data['shop']['permalink'];
             $url = HTTP_PATH_LOCALE.$urll;
         }
-        return $url ;
+        return $url;
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -996,7 +991,7 @@ class Offer extends BaseOffer
             $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($offer_id);
 
             if ($exist) {
-                PopularCode::deletePopular($offer_id, $exist->position );
+                PopularCode::deletePopular($offer_id, $exist->position);
             }
             //Delete popular code if exist
 
