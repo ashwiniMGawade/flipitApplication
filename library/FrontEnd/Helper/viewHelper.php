@@ -936,9 +936,12 @@ EOD;
         return $flipitErrorViewPath;
     }
 
-    public static function setEmailLogos($locale, $publicLocalePath, $publicPath, $logoName)
+    public static function setEmailLogos($locale = '', $publicLocalePath = '', $publicPath = '', $logoName = '')
     {
-        if (file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$locale.'images/front_end/emails/'.$logoName)) {
+        $documentRoot = $_SERVER['DOCUMENT_ROOT'] != '' ?
+            $_SERVER['DOCUMENT_ROOT'] : dirname(dirname(dirname(dirname(__FILE__))));
+            
+        if (file_exists($documentRoot.'/public/'.$locale.'images/front_end/emails/'.$logoName)) {
             $emailLogo = $publicLocalePath.'emails/'.$logoName;
         } else {
             $emailLogo = $publicPath.'emails/'.$logoName;
