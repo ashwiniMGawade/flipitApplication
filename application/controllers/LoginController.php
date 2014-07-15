@@ -101,7 +101,6 @@ class LoginController extends Zend_Controller_Action
         setcookie('kc_unique_user_id', "", time() - 3600, '/');
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-        $module = $this->getRequest()->getParam('lang');
         Zend_Session::namespaceUnset('favouriteShopId');
         $this->_redirect(HTTP_PATH_LOCALE);
     }
