@@ -34,7 +34,7 @@ class Category extends BaseCategory
         ->leftJoin('s.favoriteshops fv');
         if ($pageName=='home') {
             $categoryId = implode(',', $categoryId);
-            $categoryOffersList->where("roc.categoryId IN (".$categoryId.")");
+            $categoryOffersList->where("roc.categoryId IN ($categoryId)");
         } else {
             $categoryOffersList->Where("roc.categoryId =".$categoryId);
         }
