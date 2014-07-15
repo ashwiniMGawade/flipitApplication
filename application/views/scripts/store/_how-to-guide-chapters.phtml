@@ -20,7 +20,8 @@
                         <div class="visual-img">
                             <?php
                             foreach ($howToGuideImages['src'] as $howToGuideImageSource) {
-                                echo '<img src="'.$domainName.$howToGuideImageSource.'" alt="image description">';
+                                echo '<img src="'.HTTP_PATH.ltrim($howToGuideImageSource, '/').'"
+                                    alt="image description">';
                             }
                             ?>   
                         </div>
