@@ -25,7 +25,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
                         <div class="image">
                             <span class="category">
-                                '.FrontEnd_Helper_viewHelper::__translate($article['artcileCategoryType']).'
+                                '.$article['artcileCategoryType'].'
                             </span>
                             <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
                                 .$article['permalink'].'">
