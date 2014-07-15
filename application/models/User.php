@@ -38,7 +38,7 @@ class User extends BaseUser
         $userDetails = Doctrine_Query::create()
         ->select("u.id")
         ->from('User u')
-        ->where("u.slug = '$slug'")
+        ->where("u.slug = '".$slug."'")
         ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return !empty($userDetails) ? $userDetails['id'] : '';
     }

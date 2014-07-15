@@ -19,22 +19,22 @@ class Shop extends BaseShop
     public function __contruct($connectionName = "")
     {
         if (!$connectionName) {
-            $connectionName = "doctrine_site" ;
+            $connectionName = "doctrine_site";
         }
         Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
     }
 
-    public static function returnShopCategories($id)
+    public static function returnShopCategories($shopId)
     {
         $categoryData = Doctrine_Query::create()
         ->select("r.categoryId")
         ->from("refShopCategory r")
-        ->where('r.shopid=' . $id)
+        ->where('r.shopid=' . $shopId)
         ->fetchArray();
-        $categories =  array();
+        $categories = array();
 
         foreach ($categoryData as $category) {
-            $categories[] = $category['categoryId'] ;
+            $categories[] = $category['categoryId'];
         }
         return $categories;
     }
@@ -73,7 +73,7 @@ class Shop extends BaseShop
                 foreach ($category['shop'] as $relatedCategoryShop) {
                     if (count($similarShopsWithoutDuplicate) <= $numberOfShops &&
                             !in_array($relatedCategoryShop['id'], $similarShopsWithoutDuplicate)) {
-                        $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop ;
+                        $similarShopsWithoutDuplicate[$relatedCategoryShop['id']] = $relatedCategoryShop;
                     }
                 }
             }
@@ -108,7 +108,7 @@ class Shop extends BaseShop
         ->orderBy('p.position ASC');
 
         if ($shopId) {
-            $popularStoreData =  $popularStoreData->andWhere("s.id = ? ", $shopId);
+            $popularStoreData = $popularStoreData->andWhere("s.id = ? ", $shopId);
         } else {
             $popularStoreData = $popularStoreData->limit($limit);
         }
@@ -119,7 +119,6 @@ class Shop extends BaseShop
 
     public static function getStoreDetails($shopId)
     {
-        $currentDate = date('Y-m-d 00:00:00');
         $storeDetail = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
         ->from('Shop s')
         ->leftJoin('s.logo img')
@@ -154,7 +153,7 @@ class Shop extends BaseShop
         $storesForFrontend =array();
         foreach ($storeInformation as $store) {
             if ($store['name']!='' && $store['name']!=null) {
-                $FirstCharacter =  strtoupper(self::filterFirstCharacter($store['name']));
+                $FirstCharacter = strtoupper(self::filterFirstCharacter($store['name']));
                 if (preg_match_all('/[0-9]/', $FirstCharacter, $characterMatch)) {
                     if (intval($characterMatch[0][0]) >=0) {
                         $FirstCharacter = 'abc';
@@ -232,7 +231,7 @@ class Shop extends BaseShop
             ->where('s.visitorId='.$visitorId)
             ->andWhere('s.shopId='.$shopId)->fetchOne();
             if ($favouriteShops) {
-                $deleteAddedFavouriteShops = Doctrine_Query::create()->delete()
+                Doctrine_Query::create()->delete()
                     ->from('FavoriteShop fs')
                     ->where("fs.shopId=" . $shopId)
                     ->andWhere('fs.visitorId='.$visitorId)

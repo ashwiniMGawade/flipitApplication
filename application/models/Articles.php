@@ -47,12 +47,12 @@ class Articles extends BaseArticles
                 ->leftJoin('a.chapters chap')
                 ->where('a.publish = "1"')
                 ->andWhere("a.deleted= 0")
-                ->andWhere('a.publishdate <= '."'$currentDateTime'")
+                ->andWhere('a.publishdate <="'.$currentDateTime.'"')
                 ->fetchArray();
         return $allArticles;
     }
 
-    public static function generateArticlePermalinks($id)
+    public static function generateArticlePermalinks($pageId)
     {
         $allMoneySavingArticle = Doctrine_Query::create()
             ->select('p.id, m.id, ac.id, r.id, a.id, a.permalink, ac.permalink')
@@ -61,7 +61,7 @@ class Articles extends BaseArticles
             ->leftJoin('m.articlecategory ac')
             ->leftJoin('m.refarticlecategory r')
             ->leftJoin('r.articles a')
-            ->where('p.id =' . "'$id'")
+            ->where('p.id ='.$pageId)
             ->andWhere('p.publish=1')
             ->andWhere('p.deleted=0')
             ->andWhere('a.deleted=0')
