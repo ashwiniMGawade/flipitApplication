@@ -46,7 +46,10 @@ class Translations extends BaseTranslations
         if (!empty($existingTranslation[0]['id'])) {
             $translationQuery = Doctrine_Query::create()
                 ->update('translations')
-                ->set('translation', "'".$translations[(string)Zend_Registry::get('Zend_Locale')]."'")
+                ->set(
+                    'translation',
+                    "'".mysql_real_escape_string($translations[(string)Zend_Registry::get('Zend_Locale')])."'"
+                )
                 ->where('id = '.$existingTranslation[0]['id'])
                 ->execute();
         } else {
