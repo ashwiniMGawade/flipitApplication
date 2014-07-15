@@ -13,7 +13,7 @@
 class FavoriteShop extends BaseFavoriteShop
 {
     ####################### refactored code ################
-    public static function rejectAlreadyFavouriteShops($popularShops)
+    public static function rejectAlreadyFavouritedShops($popularShops)
     {
         $visitorFavouriteShops = Doctrine_Query::create()->select()
             ->from('FavoriteShop')

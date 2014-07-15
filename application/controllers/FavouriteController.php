@@ -21,12 +21,12 @@ class FavouriteController extends Zend_Controller_Action
     public function yourbrandsAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $this->view->pageCssClass = 'brands-page';
             $popularShops = Shop::getPopularStores(25);
-            $notAlreadySelectedPopularShops = FavoriteShop::rejectAlreadyFavouriteShops($popularShops);
-            $this->view->popularShops = $notAlreadySelectedPopularShops;
+            $popularShopsWithoughtAlreadyAddedInFavourite = FavoriteShop::rejectAlreadyFavouritedShops($popularShops);
             $favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
+            $this->view->popularShops = $popularShopsWithoughtAlreadyAddedInFavourite;
             $this->view->favouriteShops = $favouriteShops;
+            $this->view->pageCssClass = 'brands-page';
         } else {
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect('/');
@@ -36,7 +36,6 @@ class FavouriteController extends Zend_Controller_Action
     public function youroffersAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $this->view->pageCssClass = 'youroffers-page';
             $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
             $favouriteShopsOffers = FrontEnd_Helper_viewHelper::renderPagination(
                 $favoriteShopsOffers,
@@ -44,9 +43,10 @@ class FavouriteController extends Zend_Controller_Action
                 30,
                 3
             );
-            $this->view->favouriteShopsOffers = $favouriteShopsOffers;
             $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+            $this->view->favouriteShopsOffers = $favouriteShopsOffers;
             $this->view->userDetails = $userDetails[0];
+            $this->view->pageCssClass = 'youroffers-page';
         } else {
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect('/');
