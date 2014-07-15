@@ -1,11 +1,4 @@
 <?php
-$profileImage = '';
-if (!empty($this->userDetails['visitorimage'])) {
-    $profileImage = 
-        PUBLIC_PATH_CDN
-        .ltrim($this->userDetails['visitorimage']['path'],"/")
-        .$this->userDetails['visitorimage']['name'];
-}
 $signupViewPath = "favourite/";
 $favouriteShopsOffers = $this->partial(
     $signupViewPath.'_favouriteShopsOffers.phtml',
@@ -16,7 +9,7 @@ $favouriteShopsOffers = $this->partial(
 ?>
 <div class="header-block">
     <div class="icon icon-small">
-        <img src="<?php echo $profileImage;?>" width="90"
+        <img src="<?php echo PUBLIC_PATH;?>images/front_end/logo-43.png" width="90"
         alt="<?php echo $this->userDetails['firstName'];?>">
     </div>
     <div class="box">

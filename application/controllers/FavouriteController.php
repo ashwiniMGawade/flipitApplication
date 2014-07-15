@@ -18,6 +18,7 @@ class FavouriteController extends Zend_Controller_Action
         }
         $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
+
     public function yourbrandsAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
