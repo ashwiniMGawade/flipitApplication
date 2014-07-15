@@ -3,6 +3,8 @@ class FrontEnd_Helper_viewHelper
 {
     public static function writeLog($message, $logfile = '')
     {
+        $requestTime = Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_TIME');
+        $remoteAddress = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         if ($logfile == '') {
             $logDir = APPLICATION_PATH . "../logs/";
             if (!file_exists($logDir)) {
@@ -11,10 +13,10 @@ class FrontEnd_Helper_viewHelper
             $fileName = "default";
             $logfile = $logDir . $fileName;
         }
-        if (($time = $_SERVER['REQUEST_TIME']) == '') {
+        if (($time = $requestTime) == '') {
             $time = time();
         }
-        if (($remote_addr = $_SERVER['REMOTE_ADDR']) == '') {
+        if (($remote_addr = $remoteAddress) == '') {
             $remote_addr = "REMOTE_ADDR_UNKNOWN";
         }
         $date = date("M d, Y H:i:s", $time);
@@ -144,7 +146,8 @@ EOD;
 
     public static function getPagnation($pageCount, $currentPage, $redirector, $pagesInRange, $nextPage)
     {
-        $permalink = ltrim($_SERVER['REQUEST_URI'], '/');
+        $requestUri = Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI');
+        $permalink = ltrim($requestUri, '/');
         $permalink = rtrim($permalink, '/');
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
         if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :
@@ -286,13 +289,16 @@ EOD;
 
     public static function getRealIpAddress()
     {
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $clinetIp=$_SERVER['HTTP_CLIENT_IP'];
-        } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ipRange=$_SERVER['HTTP_X_FORWARDED_FOR'];
-            $clinetIp=current(array_slice(explode(",", $ipRange), 0, 1));
+        $clientIp = Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_CLIENT_IP');
+        $httpXForwardedFor = Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_X_FORWARDED_FOR');
+
+        if (!empty($clientIp)) {
+            $clinetIp = $clientIp;
+        } else if (!empty($httpXForwardedFor)) {
+            $ipRange = $httpXForwardedFor;
+            $clinetIp = current(array_slice(explode(",", $ipRange), 0, 1));
         } else {
-            $clinetIp=$_SERVER['REMOTE_ADDR'];
+            $clinetIp = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         }
         return $clinetIp;
     }
@@ -820,7 +826,7 @@ EOD;
     public static function top10Xml($feedCheck = false)
     {
         $zendTranslate = Zend_Registry::get('Zend_Translate');
-        $domainName ='http://'.$_SERVER['HTTP_HOST'];
+        $domainName ='http://'.Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_HOST');
         $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
         $topVouchercodes = self::fillupTopCodeWithNewest($topVouchercodes, 10);
         $xmlTitle =  $zendTranslate->translate('Kortingscode.nl populairste kortingscodes');
@@ -937,8 +943,8 @@ EOD;
 
     public static function setEmailLogos($locale = '', $publicLocalePath = '', $publicPath = '', $logoName = '')
     {
-        $documentRoot = $_SERVER['DOCUMENT_ROOT'] != '' ?
-            $_SERVER['DOCUMENT_ROOT'] : dirname(dirname(dirname(dirname(__FILE__))));
+        $documentRoot = Zend_Controller_Front::getInstance()->getRequest()->getServer('DOCUMENT_ROOT');
+        $documentRoot != '' ? $documentRoot : dirname(dirname(dirname(dirname(__FILE__))));
             
         if (file_exists($documentRoot.'/public/'.$locale.'images/front_end/emails/'.$logoName)) {
             $emailLogo = $publicLocalePath.'emails/'.$logoName;

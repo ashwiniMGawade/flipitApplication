@@ -11,6 +11,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected $route = '';
     protected $routeProperties = '';
     protected $cdnUrl = '';
+    protected $scriptFileName = '';
+    protected $scriptName = '';
+    protected $localeCookieData = '';
     public $frontController = '';
 
     public function _initRequest()
@@ -25,9 +28,13 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->route = Zend_Controller_Front::getInstance()->getRouter();
         Zend_Registry::set('request', $this->request);
         Zend_Registry::set('db_locale', false);
-        if (isset($_COOKIE['site_name'])) {
-            $this->siteName = $_COOKIE['site_name'];
+        $cookieData = $this->request->getCookie('site_name');
+        if (isset($cookieData) && !empty($cookieData)) {
+            $this->siteName = $cookieData;
         }
+        $this->scriptFileName = $this->request->getServer('SCRIPT_FILENAME');
+        $this->scriptName = $this->request->getServer('SCRIPT_NAME');
+        $this->localeCookieData = $this->request->getCookie('locale');
     }
 
     protected function _initControllerHelpers()
@@ -60,8 +67,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         self::constantForCacheDirectory();
         self::httpPathConstantForCdn();
         self::s3ConstantDefines();
-
-        defined('BASE_ROOT') || define('BASE_ROOT', dirname($_SERVER['SCRIPT_FILENAME']) . '/');
+        
+        defined('BASE_ROOT') || define('BASE_ROOT', dirname($this->scriptFileName) . '/');
 
         if (strlen(strtolower($this->moduleDirectoryName))==2 && $this->httpHost != "www.kortingscode.nl") {
             self::constantsForLocale();
@@ -123,7 +130,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         || define(
             'PUBLIC_PATH',
             'http://' . HTTP_HOST. dirname(
-                $_SERVER['SCRIPT_NAME']
+                $this->scriptName
             ) . '/'.strtolower($this->moduleDirectoryName) .'/'
         );
 
@@ -144,11 +151,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 )
             );
         }
-
         defined('ROOT_PATH')
         || define(
             'ROOT_PATH',
-            dirname($_SERVER['SCRIPT_FILENAME']) . '/'
+            dirname($this->scriptFileName) . '/'
             . strtolower($this->moduleDirectoryName) .'/'
         );
         self::constantsImagesForLocale();
@@ -178,9 +184,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public function constantsForAdminModule()
     {
         $localeAbbreviation = '';
-
-        if (isset($_COOKIE['locale']) && ($_COOKIE['locale']) != 'en') {
-            $localeAbbreviation = $_COOKIE['locale'] . '/';
+        if (isset($this->localeCookieData) && ($this->localeCookieData) != 'en') {
+            $localeAbbreviation = $this->localeCookieData . '/';
             define('LOCALE', trim($localeAbbreviation, '/'));
 
         } else {
@@ -195,20 +200,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         || define(
             'PUBLIC_PATH',
             'http://' . HTTP_HOST
-            . dirname($_SERVER['SCRIPT_NAME']) . '/'
+            . dirname($this->scriptName) . '/'
         );
 
         defined('PUBLIC_PATH_LOCALE')
         || define(
             'PUBLIC_PATH_LOCALE',
             'http://' . HTTP_HOST
-            . dirname($_SERVER['SCRIPT_NAME']) . '/' . $localeAbbreviation
+            . dirname($this->scriptName) . '/' . $localeAbbreviation
         );
 
         defined('ROOT_PATH')
         || define(
             'ROOT_PATH',
-            dirname($_SERVER['SCRIPT_FILENAME']) . '/' . $localeAbbreviation
+            dirname($this->scriptFileName) . '/' . $localeAbbreviation
         );
         self::constantsImagesForAdminModule($localeAbbreviation);
         self::constantsCdnForAdminModule();
@@ -238,7 +243,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         || define(
             'HTTP_PATH_LOCALE',
             'http://' . HTTP_HOST
-            . dirname($_SERVER['SCRIPT_NAME']) . '/'. strtolower($this->moduleDirectoryName) .'/'
+            . dirname($this->scriptName) . '/'. strtolower($this->moduleDirectoryName) .'/'
         );
     }
 
@@ -266,7 +271,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         || define(
             'PUBLIC_PATH',
             'http://' . HTTP_HOST
-            . dirname($_SERVER['SCRIPT_NAME']) . '/'
+            . dirname($this->scriptName) . '/'
         );
 
         if (isset($this->cdnUrl) && isset($this->cdnUrl[HTTP_HOST])) {
@@ -276,7 +281,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
 
         defined('ROOT_PATH')
-        || define('ROOT_PATH', dirname($_SERVER['SCRIPT_FILENAME']) . '/');
+        || define('ROOT_PATH', dirname($this->scriptFileName) . '/');
 
         defined('UPLOAD_PATH')
         || define('UPLOAD_PATH', 'images/');
@@ -324,7 +329,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         if (strlen($this->moduleDirectoryName) == 2) {
             $locale = $this->moduleDirectoryName;
         } elseif ($this->moduleDirectoryName == 'admin') {
-            $locale =  isset($_COOKIE['locale']) ? $_COOKIE['locale'] : 'en';
+            $locale =  isset($this->localeCookieData) ? $this->localeCookieData : 'en';
         } elseif ($this->moduleDirectoryName == "default") {
             $locale = 'en';
         }
@@ -340,17 +345,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $suffix = "_" . strtoupper(LOCALE);
         }
 
-        $domain = $_SERVER['HTTP_HOST'];
+        $domain = $this->request->getServer('HTTP_HOST');
 
         if (strlen($this->moduleDirectoryName) == 2) {
             if ($domain != "www.kortingscode.nl" && $domain != "kortingscode.nl") {
-                $localePath = '/'.$this->moduleDirectoryName.'/' ;
+                $localePath = '/'.$this->moduleDirectoryName.'/';
             } else {
-                $localePath = '/' ;
+                $localePath = '/';
             }
         } elseif ($this->moduleDirectoryName == 'admin') {
-
-            $localePath =  isset($_COOKIE['locale']) && $_COOKIE['locale'] != 'en' ? '/'.$_COOKIE['locale'].'/' : '/'  ;
+            $localePath =  isset($this->localeCookieData) && $this->localeCookieData != 'en'
+                ? '/'.$this->localeCookieData.'/' : '/';
         } else {
             $localePath = '/' ;
         }
@@ -647,7 +652,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         if (count($this->routeProperties) == 1) {
             $permalink = $this->routeProperties[0];
-        } elseif (count($this->routeProperties) == 2) {
+        } else if (count($this->routeProperties) == 2) {
             if (intval($this->routeProperties[0]) > 0) {
                 $permalink = $this->routeProperties[0];
             } else {
@@ -658,7 +663,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                     $permalink = $this->routeProperties[1];
                 }
             }
-        } elseif (count($this->routeProperties) == 3) {
+        } else if (count($this->routeProperties) == 3) {
             preg_match('/^[1-3]{1}$/', $this->routeProperties[2], $maximumIntegerNumber);
             if ($maximumIntegerNumber) {
                 $permalink = $this->routeProperties[2];
