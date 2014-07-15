@@ -10,8 +10,9 @@ class localeTimezoneValues
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
-                try {
-                    $this->localeSettings($connection ['dsn'], $key);
+                try {echo 'ss'.
+                dirname(dirname(dirname(__FILE__))); die;
+                    //$this->localeSettings($connection ['dsn'], $key);
                 } catch (Exception $e) {
                     echo $e->getMessage()."\n\n";
                 }
