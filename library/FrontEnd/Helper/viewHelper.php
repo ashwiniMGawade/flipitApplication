@@ -8,7 +8,7 @@ class FrontEnd_Helper_viewHelper
             if (!file_exists($logDir)) {
                 mkdir($logDir, 0776, true);
             }
-            $fileName = "default" ;
+            $fileName = "default";
             $logfile = $logDir . $fileName;
         }
         if (($time = $_SERVER['REQUEST_TIME']) == '') {
@@ -18,12 +18,12 @@ class FrontEnd_Helper_viewHelper
             $remote_addr = "REMOTE_ADDR_UNKNOWN";
         }
         $date = date("M d, Y H:i:s", $time);
-        if ($fd = @fopen($logfile, "a")) {
+        if ($fileData = fopen($logfile, "a")) {
             $str = <<<EOD
             $date; $remote_addr; $message
 EOD;
-            $result = fwrite($fd, $str .PHP_EOL);
-            fclose($fd);
+            $result = fwrite($fileData, $str .PHP_EOL);
+            fclose($fileData);
             if ($result > 0) {
                 return array('status' => true);
             } else {
@@ -77,9 +77,9 @@ EOD;
         return rtrim($permalink, '/');
     }
 
-    public static function generateShopMoneySavingGuideArticle($slug, $limit, $id)
+    public static function generateShopMoneySavingGuideArticle($slug, $limit, $articleId)
     {
-        $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $id);
+        $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $articleId);
         return $ShopMoneySavingGuideArticle;
     }
     
@@ -132,7 +132,8 @@ EOD;
         $paginationParameter,
         $itemCountPerPage,
         $paginationRange = 3
-    ) {
+    )
+    {
         $currentPageNumber = !empty($paginationParameter['page']) ? $paginationParameter['page'] : '1';
         $pagination = Zend_Paginator::factory($totalRecordsForPagination);
         $pagination->setCurrentPageNumber($currentPageNumber);
@@ -228,40 +229,41 @@ EOD;
         $dataKey = '',
         $relatedFunction = '',
         $replaceStringArrayCheck = '1'
-    ) {
+    )
+    {
         if ($relatedFunction['function'] == '') {
             $functionToBeCached = $relatedFunction['parameters'];
         } else {
             $functionToBeCached = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
         }
-        $cacheStatusByKey = FrontEnd_Helper_viewHelper::checkCacheStatusByKey($dataKey);
+        $cacheStatusByKey = self::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
             if ($replaceStringArrayCheck == '1') {
-                $requestedInformation = FrontEnd_Helper_viewHelper::replaceStringArray($functionToBeCached);
+                $requestedInformation = self::replaceStringArray($functionToBeCached);
             } else {
                 $requestedInformation = $functionToBeCached;
             }
-            FrontEnd_Helper_viewHelper::setInCache($dataKey, $requestedInformation);
+            self::setInCache($dataKey, $requestedInformation);
         } else {
-            $requestedInformation = FrontEnd_Helper_viewHelper::getFromCacheByKey($dataKey);
+            $requestedInformation = self::getFromCacheByKey($dataKey);
         }
         return $requestedInformation;
     }
 
-    public static function viewCounter($type, $eventType, $id)
+    public static function viewCounter($type, $eventType, $typeId)
     {
         $clientIP = self::getRealIpAddress();
-        $ip = ip2long($clientIP);
+        $properClientIpAddress = ip2long($clientIP);
         $counterValue = "false";
         switch (strtolower($type)) {
             case 'article':
-                $counterValue = self::checkIfThisArticleEntryExists($eventType, $id, $ip);
+                $counterValue = self::checkIfThisArticleEntryExists($eventType, $typeId, $properClientIpAddress);
                 break;
             case 'shop':
-                $counterValue = self::checkIfThisShopEntryExists($eventType, $id, $ip);
+                $counterValue = self::checkIfThisShopEntryExists($eventType, $typeId, $properClientIpAddress);
                 break;
             case 'offer':
-                $counterValue = self::checkIfThisOfferEntryExists($eventType, $id, $ip);
+                $counterValue = self::checkIfThisOfferEntryExists($eventType, $typeId, $properClientIpAddress);
                 break;
             default:
                 break;
@@ -285,17 +287,17 @@ EOD;
     public static function getRealIpAddress()
     {
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip=$_SERVER['HTTP_CLIENT_IP'];
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $clinetIp=$_SERVER['HTTP_CLIENT_IP'];
+        } else if (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ipRange=$_SERVER['HTTP_X_FORWARDED_FOR'];
-            $ip=current(array_slice(explode(",", $ipRange), 0, 1));
+            $clinetIp=current(array_slice(explode(",", $ipRange), 0, 1));
         } else {
-            $ip=$_SERVER['REMOTE_ADDR'];
+            $clinetIp=$_SERVER['REMOTE_ADDR'];
         }
-        return $ip;
+        return $clinetIp;
     }
 
-    public static function checkIfThisArticleEntryExists($eventType, $id, $ip)
+    public static function checkIfThisArticleEntryExists($eventType, $articleId, $clientIp)
     {
         $artcileExistsOrNot = "false";
         switch (strtolower($eventType)) {
@@ -305,15 +307,15 @@ EOD;
                     ->from('ArticleViewCount')
                     ->where('deleted=0')
                     ->andWhere('onclick!=0')
-                    ->andWhere('articleid="'.$id.'"')
-                    ->andWhere('ip="'.$ip.'"')
+                    ->andWhere('articleid="'.$articleId.'"')
+                    ->andWhere('ip="'.$clientIp.'"')
                     ->fetchArray();
                 if ($article[0]['exists'] == 0) {
                     $articleViewCount  = new ArticleViewCount();
                     $onClick = 1;
-                    $articleViewCount->articleid = $id;
+                    $articleViewCount->articleid = $articleId;
                     $articleViewCount->onclick = $onClick;
-                    $articleViewCount->ip = $ip;
+                    $articleViewCount->ip = $clientIp;
                     $articleViewCount->save();
                     $artcileExistsOrNot = "true";
                 }
@@ -324,15 +326,15 @@ EOD;
                     ->from('ArticleViewCount')
                     ->where('deleted=0')
                     ->andWhere('onload!=0')
-                    ->andWhere('articleid="'.$id.'"')
-                    ->andWhere('ip="'.$ip.'"')
+                    ->andWhere('articleid="'.$articleId.'"')
+                    ->andWhere('ip="'.$clientIp.'"')
                     ->fetchArray();
                 if ($article[0]['exists'] == 0) {
                     $articleViewCount  = new ArticleViewCount();
                     $onLoad = 1;
-                    $articleViewCount->articleid = $id;
+                    $articleViewCount->articleid = $articleId;
                     $articleViewCount->onload = $onLoad;
-                    $articleViewCount->ip = $ip;
+                    $articleViewCount->ip = $clientIp;
                     $articleViewCount->onclick = 0;
                     $articleViewCount->save();
                     $artcileExistsOrNot = "true";
@@ -388,7 +390,8 @@ EOD;
         $permaLink = '',
         $image = '',
         $customHeader = ''
-    ) {
+    )
+    {
         if ($metaTitle == '') {
             $metaTitle = $title;
         }
@@ -408,7 +411,7 @@ EOD;
 
         if (isset($customHeader)) {
             $currentObject->view->layout()->customHeader =
-                $currentObject->view->layout()->customHeader . $customHeader . "\n" ;
+                $currentObject->view->layout()->customHeader . $customHeader . "\n";
         }
         return $currentObject;
     }
@@ -436,7 +439,7 @@ EOD;
 
     public static function __translate($variable)
     {
-        $translation =  new Transl8_View_Helper_Translate();
+        $translation = new Transl8_View_Helper_Translate();
         $variable = $translation->translate($variable);
         return $variable;
     }
@@ -447,7 +450,7 @@ EOD;
         $websites = Website::getAllWebsites();
         foreach ($websites as $website) {
             $spiltWebsite  = explode('/', $website['name']);
-            $locale = isset($spiltWebsite[1]) ?  $spiltWebsite[1] : "nl" ;
+            $locale = isset($spiltWebsite[1]) ? $spiltWebsite[1] : "nl";
            
             if ($frontend == 'true') {
                 if ($website['status'] == 'online') {
@@ -542,15 +545,14 @@ EOD;
             $cache->clean();
         } else {
             if (! Zend_Registry::get('db_locale')) {
-                $locale = LOCALE ;
+                $locale = LOCALE;
             } else {
-                $locale  = Zend_Registry::get('db_locale') == 'en' ? ''
-                            : Zend_Registry::get('db_locale') ;
+                $locale  = Zend_Registry::get('db_locale') == 'en' ? '' : Zend_Registry::get('db_locale');
             }
             $key = $key. '_' .$locale;
             $cache->remove($key);
             $OutPutKey = explode('_', $key);
-            $newKey = $OutPutKey[0].'_'.$OutPutKey[1].'_'.'_output'.'_'.$OutPutKey[2] ;
+            $newKey = $OutPutKey[0].'_'.$OutPutKey[1].'_'.'_output'.'_'.$OutPutKey[2];
             $cache->remove($newKey);
         }
     }
@@ -581,32 +583,32 @@ EOD;
     {
         switch ($offertype) {
             case "popular":
-                $result = PopularCode :: gethomePopularvoucherCode($flag);
+                $result = PopularCode::gethomePopularvoucherCode($flag);
                 break;
             case "newest":
-                $result = PopularVouchercodes :: getNewstoffer($flag);
+                $result = PopularVouchercodes::getNewstoffer($flag);
                 break;
             case "category":
-                $result = Category :: getPopularCategories($flag);
+                $result = Category::getPopularCategories($flag);
                 break;
             case "specialList":
                 $result = $data = SpecialList::getfronendsplpage($flag);
                 break;
             case "moneySaving":
-                $result = Articles :: getmoneySavingArticles($flag);
+                $result = Articles::getmoneySavingArticles($flag);
                 break;
             case "asseenin":
-                $result = SeenIn :: getSeenInContent();
+                $result = SeenIn::getSeenInContent();
                 break;
             case "about":
                 $status = 1;
-                $result = About :: getAboutContent($status);
+                $result = About::getAboutContent($status);
                 break;
         }
         return $result;
     }
     
-    public static function checkIfThisShopEntryExists($eventType, $id, $ip)
+    public static function checkIfThisShopEntryExists($eventType, $shopId, $clientIp)
     {
         $res = "false";
         switch (strtolower($eventType)) {
@@ -616,16 +618,16 @@ EOD;
                 ->from('ShopViewCount')
                 ->where('deleted=0')
                 ->andWhere('onclick!=0')
-                ->andWhere('shopid="'.$id.'"')
-                ->andWhere('ip="'.$ip.'"')
+                ->andWhere('shopid="'.$shopId.'"')
+                ->andWhere('ip="'.$clientIp.'"')
                 ->fetchArray();
 
                 if ($data[0]['exists'] == 0) {
                     $cnt  = new ShopViewCount();
                     $view = 1;
-                    $cnt->shopid = $id;
+                    $cnt->shopid = $shopId;
                     $cnt->onclick = $view;
-                    $cnt->ip = $ip;
+                    $cnt->ip = $clientIp;
                     $cnt->save();
                     $res = "true";
                 }
@@ -636,15 +638,15 @@ EOD;
                 ->from('shopviewcount')
                 ->where('deleted=0')
                 ->andWhere('onload!=0')
-                ->andWhere('shopid="'.$id.'"')
-                ->andWhere('ip="'.$ip.'"')
+                ->andWhere('shopid="'.$shopId.'"')
+                ->andWhere('ip="'.$clientIp.'"')
                 ->fetchArray();
                 if ($data[0]['exists'] == 0) {
                     $cnt  = new ArticleViewCount();
                     $view = 1;
-                    $cnt->shopid = $id;
+                    $cnt->shopid = $shopId;
                     $cnt->onload = $view;
-                    $cnt->ip = $ip;
+                    $cnt->ip = $clientIp;
                     $cnt->save();
                     $res = "true";
                 }
@@ -655,7 +657,7 @@ EOD;
         return $res;
     }
 
-    public static function checkIfThisOfferEntryExists($eventType, $id, $ip)
+    public static function checkIfThisOfferEntryExists($eventType, $offerId, $clientIp)
     {
 
         $res = "false";
@@ -666,15 +668,15 @@ EOD;
                     ->addSelect("(SELECT  id FROM ViewCount  click WHERE click.id = v.id) as clickId")
                     ->from('ViewCount v')
                     ->where('onClick!=0')
-                    ->andWhere('offerId="'.$id.'"')
-                    ->andWhere('IP="'.$ip.'"')
+                    ->andWhere('offerId="'.$offerId.'"')
+                    ->andWhere('IP="'.$clientIp.'"')
                     ->fetchArray();
                 if ($data[0]['exists'] == 0) {
                     $cnt  = new ViewCount();
                     $view = 1;
-                    $cnt->offerId = $id;
+                    $cnt->offerId = $offerId;
                     $cnt->onClick = $view;
-                    $cnt->IP = $ip;
+                    $cnt->IP = $clientIp;
                     $cnt->save();
                     $res = "true";
                 }
@@ -689,14 +691,21 @@ EOD;
         $userId = Doctrine_Query::create()
         ->select('o.authorId')
         ->from("Offer o")
-        ->where("o.id =$offerId")
+        ->where("o.id =".$offerId)
         ->fetchArray();
         return $userId;
     }
 
     public static function replaceKeyword(&$item, $key)
     {
-        $item = str_replace(array('[month]', '[year]', '[day]'), array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY), $item);
+        $item = str_replace(
+            array(
+                '[month]',
+                '[year]',
+                '[day]'),
+            array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY),
+            $item
+        );
     }
 
     public static function replaceStringArray($originalArray)
@@ -750,7 +759,7 @@ EOD;
     public static function fillupTopCodeWithNewest($offers, $number)
     {
         if (count($offers) < $number) {
-            $additionalCodes = $number - count($offers) ;
+            $additionalCodes = $number - count($offers);
             $additionalTopVouchercodes = Offer::commongetnewestOffers('newest', $additionalCodes);
         }
         return false;
@@ -768,7 +777,8 @@ EOD;
         $mandrillUsersList,
         $footerContent,
         $pathConstants = ''
-    ) {
+    )
+    {
         $basePath = new Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
         $content = array(
@@ -798,7 +808,7 @@ EOD;
                 $mandrillUsersEmailList,
                 $mandrillNewsletterSubject,
                 $content,
-                FrontEnd_Helper_viewHelper::__email('email_Newsletter header'),
+                self::__email('email_Newsletter header'),
                 !empty($recipientMetaData[$mandrillUsersKey]) ? $recipientMetaData[$mandrillUsersKey] : '',
                 $mandrillMergeVars[$mandrillUsersKey],
                 $footerContent,
@@ -813,9 +823,9 @@ EOD;
         $zendTranslate = Zend_Registry::get('Zend_Translate');
         $domainName ='http://'.$_SERVER['HTTP_HOST'];
         $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
-        $topVouchercodes = FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
-        $xmlTitle =  $zendTranslate->translate('Kortingscode.nl populairste kortingscodes') ;
-        $xmlDescription  = $zendTranslate->translate('Populairste kortingscodes') ;
+        $topVouchercodes = self::fillupTopCodeWithNewest($topVouchercodes, 10);
+        $xmlTitle =  $zendTranslate->translate('Kortingscode.nl populairste kortingscodes');
+        $xmlDescription  = $zendTranslate->translate('Populairste kortingscodes');
         $xml = new XMLWriter();
         $xml->openURI('php://output');
         $xml->startDocument('1.0');
@@ -837,7 +847,7 @@ EOD;
             $description = 'description';
         }
         foreach ($topVouchercodes as $offer) {
-            $top10Offers = $offer['offer'] ;
+            $top10Offers = $offer['offer'];
             $xml->startElement("item");
             $xml->writeElement($shopName, $top10Offers['shop']['name']);
             if (mb_strlen($top10Offers['title'], 'UTF-8') > 42) {
@@ -864,7 +874,7 @@ EOD;
     {
         foreach ($websites as $website) {
             $splitWebsite  = explode('/', $website['name']);
-            $locale = isset($splitWebsite[1]) ?  $splitWebsite[1] : "nl" ;
+            $locale = isset($splitWebsite[1]) ? $splitWebsite[1] : "nl";
             $locales[strtoupper($locale)] = $website['name'].'='.$website['status'];
         }
         return $locales;
@@ -877,11 +887,13 @@ EOD;
 
         if (LOCALE != '') {
             $secondUrlParameter = isset($explodedPagePermalink[2]) ? '/'. $explodedPagePermalink[2] : '';
-            $secondUrlParameter = isset($explodedPagePermalink[2]) && intval($explodedPagePermalink[2]) ? '' : $secondUrlParameter;
+            $secondUrlParameter = isset($explodedPagePermalink[2]) && intval($explodedPagePermalink[2])
+                ? '' : $secondUrlParameter;
             $pagePermalink = $explodedPagePermalink[1].$secondUrlParameter;
         } else {
             $secondUrlParameter = isset($explodedPagePermalink[1]) ? '/'. $explodedPagePermalink[1] : '';
-            $secondUrlParameter = isset($explodedPagePermalink[1]) &&  intval($explodedPagePermalink[1]) ? '' : $secondUrlParameter;
+            $secondUrlParameter = isset($explodedPagePermalink[1]) && intval($explodedPagePermalink[1])
+                ? '' : $secondUrlParameter;
             $pagePermalink = $explodedPagePermalink[0].$secondUrlParameter;
         }
         return  $pagePermalink;
@@ -893,8 +905,8 @@ EOD;
         if (isset($favouriteShopIdFromSession->favouriteShopId)) {
             header(
                 'location:'.HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
-                .FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
-                FrontEnd_Helper_viewHelper::__link('link_profiel').'&shopId='
+                .self::__link('link_inschrijven'). '/'
+                .self::__link('link_profiel').'&shopId='
                 . $favouriteShopIdFromSession->favouriteShopId
             );
             exit();
@@ -912,7 +924,7 @@ EOD;
     {
         $currentObject->getResponse()->setHttpResponseCode(404);
         $currentObject->view->popularShops = Shop::getPopularStores(12);
-        $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+        $websitesWithLocales = self::getWebsitesLocales(Website::getAllWebsites());
         $currentObject->view->flipitLocales = $websitesWithLocales;
     }
 
@@ -937,4 +949,3 @@ EOD;
         return $emailLogo;
     }
 }
-
