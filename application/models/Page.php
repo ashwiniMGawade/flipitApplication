@@ -51,9 +51,9 @@ class Page extends BasePage
     {
         $currentDate = date('Y-m-d 00:00:00');
         $pageDetails = Doctrine_Query::create()->from('Page p')
-        ->where("p.permalink="."'$page'")
+         ->where("p.permaLink='".$page."'")
         ->leftJoin("p.widget w")
-        ->andWhere('p.publishDate <= '."'$currentDate'")
+        ->andWhere("p.publishDate <='".$currentDate."'")
         ->andWhere('p.deleted=0')->fetchOne();
         return $pageDetails;
 
