@@ -1,8 +1,8 @@
 <?php 
 foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
     $shopImage = 
-        PUBLIC_PATH_CDN.ltrim($favouriteShopsOffer['shops']['logo']['path'], "/")
-        . $favouriteShopsOffer['shops']['logo']['name'];
+        PUBLIC_PATH_CDN.ltrim($favouriteShopsOffer['shop']['logo']['path'], "/")
+        . $favouriteShopsOffer['shop']['logo']['name'];
     $offerId = $favouriteShopsOffer['id'];
     $offerBounceRate = "/out/offer/".$favouriteShopsOffer['id'];
     $onClick = "viewCounter('onclick', 'offer', $offerId), ga('send', 'event', 'aff', '$offerBounceRate')";
