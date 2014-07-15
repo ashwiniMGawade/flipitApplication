@@ -923,5 +923,15 @@ EOD;
         $flipitErrorViewPath->setBasePath($flipitViewPath);
         return $flipitErrorViewPath;
     }
+
+    public static function setEmailLogos($locale, $publicLocalePath, $publicPath, $logoName)
+    {
+        if (file_exists($_SERVER['DOCUMENT_ROOT'].'/public/'.$locale.'images/front_end/emails/'.$logoName)) {
+            $emailLogo = $publicLocalePath.'emails/'.$logoName;
+        } else {
+            $emailLogo = $publicPath.'emails/'.$logoName;
+        }
+        return $emailLogo;
+    }
 }
 

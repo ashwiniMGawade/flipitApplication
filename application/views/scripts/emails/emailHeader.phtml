@@ -1,6 +1,19 @@
 <?php
+$locale = $this->locale != '' ? $this->locale.'/' : '';
+$welcomelogo = FrontEnd_Helper_viewHelper::setEmailLogos(
+    $locale,
+    $this->publicLocalePath,
+    $this->publicPath,
+    'email-header-welcome.png'
+);
+$newsLetterlogo = FrontEnd_Helper_viewHelper::setEmailLogos(
+    $locale,
+    $this->publicLocalePath,
+    $this->publicPath,
+    'email-header-best.png'
+);
 $logo = $this->mailType == 'welcome'
-    ? $this->publicLocalePath.'emails/email-header-welcome.png' : $this->publicLocalePath.'emails/email-header-best.png';
+    ? $welcomelogo : $newsLetterlogo;
 ?>
 <tr>
     <td bgcolor="#0077cc">
