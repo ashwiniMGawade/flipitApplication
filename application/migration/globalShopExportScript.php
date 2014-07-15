@@ -23,7 +23,7 @@ class GlobalShopExport
         $imbull = $connections['imbull'];
         $DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
         echo "\n";
-        print "Get all shops data from databases of all locales\n";
+        echo "Get all shops data from databases of all locales\n";
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
@@ -50,14 +50,14 @@ class GlobalShopExport
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
         $cutsomLocale = LocaleSettings::getLocaleSettings();
         $cutsomLocale = !empty($cutsomLocale[0]['locale']) ? $cutsomLocale[0]['locale'] : 'nl_NL';
-        $data =  Shop::exportShopeList();
+        $data = Shop::exportShopeList();
         $this->_shopsData[$key]['data'] = $data;
-        $this->_shopsData[$key]['customLocale'] = $cutsomLocale ;
+        $this->_shopsData[$key]['customLocale'] = $cutsomLocale;
         $this->_shopsData[$key]['dsn'] = $dsn;
         $manager->closeConnection($DMC);
         sleep(1.5);
         echo "\n";
-        print "$key - Shops have been fetched successfully!!!";
+        echo $key." Shops have been fetched successfully!!!";
     }
 
     protected function exportShopsInExcel()
@@ -65,7 +65,7 @@ class GlobalShopExport
     
         if (! empty($this->_shopsData)) {
             echo "\n";
-            print "Parse shops data and save it into excel file\n";
+            echo "Parse shops data and save it into excel file\n";
             $objPHPExcel = new PHPExcel();
             $objPHPExcel->setActiveSheetIndex(0);
             $objPHPExcel->getActiveSheet()->setCellValue('A1', 'Shopname');
@@ -113,22 +113,22 @@ class GlobalShopExport
             $year = $date->get(Zend_Date::YEAR);
             $day = $date->get(Zend_Date::DAY);
 
-            defined('CURRENT_MONTH')|| define('CURRENT_MONTH', $month);
+            defined('CURRENT_MONTH') || define('CURRENT_MONTH', $month);
             defined('CURRENT_YEAR') || define('CURRENT_YEAR', $year);
-            defined('CURRENT_DAY')  || define('CURRENT_DAY', $day);
+            defined('CURRENT_DAY') || define('CURRENT_DAY', $day);
             defined('PUBLIC_PATH') ||
                 define('PUBLIC_PATH', dirname(dirname(dirname(__FILE__))) . "/public/");
 
             foreach ($this->_shopsData as $key => $data) {
                 echo "\n";
-                print "$key - Shops are being saved into excel file !!!";
+                echo $key." - Shops are being saved into excel file !!!";
 
                 if ($key == 'en') {
                     $this->_localePath = '';
-                    $suffix = "" ;
+                    $suffix = "";
                 } else {
                     $this->_localePath = $key . "/";
-                    $suffix = "_" . strtoupper($key) ;
+                    $suffix = "_" . strtoupper($key);
                 }
 
                 $this->_trans = new Zend_Translate(array(
