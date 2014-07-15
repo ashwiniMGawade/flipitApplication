@@ -112,7 +112,8 @@ EOD;
             <div class="alphabet-holder">
                 <ul class="alphabet">';
         foreach (range('A', 'Z') as $oneCharacter) {
-            $redirectUrl = HTTP_PATH_LOCALE ."alle-winkels#".strtolower($oneCharacter);
+            $redirectUrl = 
+                HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_alle-winkels')."#".strtolower($oneCharacter);
             $browseByStoreWidget .=
                     '<li>
                         <a href="' .$redirectUrl.'">'.$this->__translate($oneCharacter).'</a>
