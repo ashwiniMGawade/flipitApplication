@@ -6,10 +6,11 @@ $favouriteShopsOffers = $this->partial(
        'favouriteShopsOffers'=> $this->favouriteShopsOffers,
    )
 );
+$firstCharacterFromName =  mb_substr($this->userDetails['firstName'], 0, 1);
 ?>
 <div class="header-block">
     <div class="icon icon-small">
-        <div class='img-box'>i</div>
+        <div class='img-box'><?php echo $firstCharacterFromName;?></div>
     </div>
     <div class="box">
         <h1>
