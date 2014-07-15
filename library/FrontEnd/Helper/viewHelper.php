@@ -781,7 +781,8 @@ EOD;
         $mandrillMergeVars,
         $mandrillUsersList,
         $footerContent,
-        $pathConstants = ''
+        $pathConstants = '',
+        $emailHeaderText = ''
     )
     {
         $basePath = new Zend_View();
@@ -813,7 +814,7 @@ EOD;
                 $mandrillUsersEmailList,
                 $mandrillNewsletterSubject,
                 $content,
-                self::__email('email_Newsletter header'),
+                $emailHeaderText,
                 !empty($recipientMetaData[$mandrillUsersKey]) ? $recipientMetaData[$mandrillUsersKey] : '',
                 $mandrillMergeVars[$mandrillUsersKey],
                 $footerContent,

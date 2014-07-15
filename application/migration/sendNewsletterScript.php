@@ -240,7 +240,8 @@ class SendNewsletter
                     'httpPathLocale' => $this->_linkPath,
                     'publicPathCdn' => $this->_public_cdn_path,
                     'mandrillKey' => $this->_mandrillKey
-                )
+                ),
+                FrontEnd_Helper_viewHelper::__email('email_Newsletter header')
             );
             Signupmaxaccount::updateNewsletterSchedulingStatus();
             $message = 'Newsletter has been sent successfully' ;
