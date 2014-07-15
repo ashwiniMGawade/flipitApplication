@@ -187,7 +187,9 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     $this->_recipientMetaData,
                     $this->_loginLinkAndData,
                     $this->_to,
-                    $this->footerContent
+                    $this->footerContent,
+                    '',
+                    FrontEnd_Helper_viewHelper::__email('email_Newsletter header')
                 );
                 $message = $this->view->translate('Newsletter has been sent successfully');
             } catch (Mandrill_Error $e) {

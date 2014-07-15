@@ -893,16 +893,16 @@ class Offer extends BaseOffer
                 $offerCount  = new Conversions();
                 $offerCount->offerId = $offerId;
                 $offerCount->IP = $clientIP;
-                $offerCount->utma = $this->getRequest()->getCookie("__utma");
-                $offerCount->utmz = $this->getRequest()->getCookie("__utmz");
+                $offerCount->utma = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utma');
+                $offerCount->utmz = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utmz');
                 $offerCount->subid = md5(time()*rand(1, 999));
                 $offerCount->save();
 
             } else {
                 $offerCount = Doctrine_Core::getTable("Conversions")->find($offerData['id']);
                 if ($offerCount) {
-                    $offerCount->utma = $this->getRequest()->getCookie("__utma");
-                    $offerCount->utmz = $this->getRequest()->getCookie("__utmz");
+                    $offerCount->utma = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utma');
+                    $offerCount->utmz = Zend_Controller_Front::getInstance()->getRequest()->getCookie('__utmz');
                     $offerCount->subid = md5(time()*rand(1, 999));
                     $offerCount->save();
                 }
