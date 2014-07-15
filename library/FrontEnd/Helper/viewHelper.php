@@ -682,8 +682,7 @@ EOD;
                 }
                 break;
         }
-        $obj = new User();
-        return $obj->getFamousUserDetail($eId);
+        return $res;
     }
 
     public static function getAuthorId($offerId)
