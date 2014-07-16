@@ -22,8 +22,7 @@ class FavouriteController extends Zend_Controller_Action
     public function yourbrandsAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $popularShopsNotAddedInFavourite = FavoriteShop::filterAlreadyFavouriteShops(Shop::getPopularStores(25));
-            $this->view->popularShops = $popularShopsNotAddedInFavourite;
+            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops(Shop::getPopularStores(25));
             $this->view->favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
             $this->view->pageCssClass = 'brands-page';
         } else {
