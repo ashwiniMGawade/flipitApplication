@@ -176,6 +176,50 @@ class Visitor extends BaseVisitor
             ->execute();
         return true;
     }
+
+    public static function getFavoriteShops($visitorId)
+    {
+        $currentDate = date('Y-m-d 00:00:00');
+        $favouriteShops = Doctrine_Query::create()
+        ->select("fv.id as id,s.name as name,s.permaLink,s.id as id,l.*")
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer active WHERE
+            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.discountType='CD')) as activeCount"
+        )
+        ->from("FavoriteShop fv")->leftJoin("fv.shops s")
+        ->leftJoin('s.logo l')
+        ->where('fv.visitorId='.$visitorId)
+        ->fetchArray();
+        return $favouriteShops;
+    }
+    
+    public static function getFavoriteShopsOffers()
+    {
+        $currentDate = date('Y-m-d 00:00:00');
+        $favouriteShopsOffers = Doctrine_Query::create()
+        ->select(
+            'fv.id as fvid,fv.shopId as shopId,s.refUrl,
+            s.actualUrl,fv.visitorId as visitorId,s.name as name,s.logoid as slogoId,
+            s.permalink as permaLink,o.*,l.path,l.name,l.id,terms.content,vot.id,vot.vote'
+        )
+        ->from('Offer o')
+        ->leftJoin('o.shop s')
+        ->leftJoin('s.favoriteshops fv')
+        ->leftJoin('s.logo l')
+        ->leftJoin('o.termandcondition terms')
+        ->leftJoin('o.vote vot')
+        ->where('fv.visitorId='. Auth_VisitorAdapter::getIdentity()->id)
+        ->andWhere('s.deleted=0')
+        ->andWhere('o.endDate > "'.$currentDate.'"')
+        ->andWhere('o.startDate <= "'.$currentDate.'"')
+        ->andWhere('o.discountType="CD"')
+        ->andWhere('o.Visability!="MEM"')
+        ->andWhere('o.userGenerated=0')
+        ->orderBy('o.exclusiveCode DESC')
+        ->addOrderBy('o.startdate DESC')
+        ->fetchArray();
+        return $favouriteShopsOffers;
+    }
     #############################################################
     ######### END REFACTRED CODE ################################
     #############################################################
@@ -558,78 +602,6 @@ class Visitor extends BaseVisitor
 
 
 /*---------------start front end----------------*/
-
-/**
- * get record of favorite shop's offer
- * @return array
- * @author mkaur updated by blal
- */
- public static function getfavoriteOffer()
- {
-    $userid = Auth_VisitorAdapter::getIdentity()->id;
-    $date = date('Y-m-d H:i:s');
-    $data = Doctrine_Query::create()
-    ->select('fv.id as fvid,fv.shopId as shopId,s.refUrl,s.actualUrl,fv.visitorId as visitorId,s.name as name,s.logoid as slogoId,s.permalink as permalink,o.*,l.path,l.name,l.id,terms.content,vot.id,vot.vote')
-    ->from('Offer o')
-    ->leftJoin('o.shop s')
-    ->leftJoin('s.favoriteshops fv')
-    ->leftJoin('s.logo l')
-    ->leftJoin('o.termandcondition terms')
-    ->leftJoin('o.vote vot')
-    ->where('fv.visitorId='. $userid)
-    ->andWhere('s.deleted=0')
-    ->andWhere('o.endDate > "'.$date.'"')
-    ->andWhere('o.startDate <= "'.$date.'"')
-    ->andWhere('o.discountType="CD"')
-    ->andWhere('o.Visability!="MEM"')
-    ->andWhere('o.userGenerated=0')
-    ->orderBy('o.exclusiveCode DESC')
-    ->addOrderBy('o.startdate DESC')
-    ->fetchArray();
-    //echo $data->getSqlQuery(); die;
-
-    /*$newData = 0;
-    $newData = array();
-    foreach($data as $result){
-        foreach($result['shop'] as $res){
-            if($res['offer']!=null){
-                foreach($res['offer'] as $offer){
-                    $offer['shop']['id'] =  $result['shopId'];
-                    $offer['shop']['name'] = $result['sname'];
-                    $offer['shop']['logo'] = $res['logo'];
-                    $offer['shop']['refUrl'] = $res['refUrl'];
-                    $offer['shop']['actualUrl'] = $res['actualUrl'];
-                    $offer['shop']['favoriteshops'] = array(array('id'=>$result['fvid'],
-                            'visitorId'=>$result['visitorId'],
-                            'shopId'=>$result['shopId']));
-                    $offer['shop']['permalink'] = $res['perma'];
-                    $newData[] = $offer;
-                }
-            }
-        }
-    }*/
-    return $data;
-}
-
-/**
- * function use for get the favoriteshop access according visitorId
- * from session
- * @param integer $visitorId
- * @return array $ar
- * @author mkaur
- * @version 1.0
- */
-public static function getFavoriteShops($visitorId)
-{
-    $data = Doctrine_Query::create()->select("fv.id as id,s.name as name,s.permaLink,s.id as id,l.*")->
-    from("FavoriteShop fv")->leftJoin("fv.shops s")
-    ->leftJoin('s.logo l')
-    ->where('fv.visitorId='.$visitorId)
-    ->fetchArray();
-
-    return $data;
-}
-
 /**
  * Return count of total accounts created..
  * @param array $params if 0 then returns visitors and 1 for trash visitors

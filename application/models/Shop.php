@@ -93,12 +93,15 @@ class Shop extends BaseShop
         ->from('PopularShop p')
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND
-            (o.exclusiveCode=1 AND o.endDate > '$currentDate')) as exclusiveCount"
+            (o.exclusiveCode=1 AND exclusive.endDate > '$currentDate')) as exclusiveCount"
         )
         ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
-            (active.shopId = s.id AND o.endDate > '$currentDate')) as activeCount"
+            (active.shopId = s.id AND active.endDate >= '$currentDate' 
+                AND active.discountType='CD'
+            )
+            ) as activeCount"
         )
         ->leftJoin('p.shop s')
         ->leftJoin('s.offer o')

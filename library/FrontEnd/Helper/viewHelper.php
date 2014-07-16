@@ -911,8 +911,7 @@ EOD;
         if (isset($favouriteShopIdFromSession->favouriteShopId)) {
             header(
                 'location:'.HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
-                .self::__link('link_inschrijven'). '/'
-                .self::__link('link_profiel').'&shopId='
+                .FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten').'&shopId='
                 . $favouriteShopIdFromSession->favouriteShopId
             );
             exit();
