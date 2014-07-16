@@ -1,16 +1,20 @@
 <?php
-$signupViewPath = "favourite/";
-$popularShops = '';
+$favouriteViewPath = "favourite/";
+$recordNotFound = '<div class = "no-record txt-center">' . $this->translate('No record found') .'</div>'; 
+$popularShops = $recordNotFound;
 if(!empty($this->popularShops)) {
     $popularShops = $this->partial(
-        $signupViewPath . '_popularStores.phtml',
+        $favouriteViewPath . '_popularStores.phtml',
         array('popularShops' => $this->popularShops)
     );
 }
-$favouriteShops = $this->partial(
-    $signupViewPath . '_favouriteStores.phtml',
-        array('favouriteShops' => $this->favouriteShops)
-    );
+$favouriteShops = $recordNotFound; 
+if(!empty($this->favouriteShops)) {
+    $favouriteShops = $this->partial(
+        $favouriteViewPath . '_favouriteStores.phtml',
+            array('favouriteShops' => $this->favouriteShops)
+        );
+}
 ?>
 <div class="row">
     <div id="content" class="col-sm-8">

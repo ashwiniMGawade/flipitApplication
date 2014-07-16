@@ -22,11 +22,9 @@ class FavouriteController extends Zend_Controller_Action
     public function yourbrandsAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $popularShops = Shop::getPopularStores(25);
-            $popularShopsWithoughtAlreadyAddedInFavourite = FavoriteShop::rejectAlreadyFavouritedShops($popularShops);
-            $favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
-            $this->view->popularShops = $popularShopsWithoughtAlreadyAddedInFavourite;
-            $this->view->favouriteShops = $favouriteShops;
+            $popularShopsNotAddedInFavourite = FavoriteShop::filterAlreadyFavouriteShops(Shop::getPopularStores(25));
+            $this->view->popularShops = $popularShopsNotAddedInFavourite;
+            $this->view->favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
             $this->view->pageCssClass = 'brands-page';
         } else {
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
@@ -37,15 +35,14 @@ class FavouriteController extends Zend_Controller_Action
     public function youroffersAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
-            $favouriteShopsOffers = FrontEnd_Helper_viewHelper::renderPagination(
-                $favoriteShopsOffers,
+            $favouriteShopsOffersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
+                Visitor::getFavoriteShopsOffers(),
                 $this->_getAllParams(),
                 30,
                 3
             );
             $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-            $this->view->favouriteShopsOffers = $favouriteShopsOffers;
+            $this->view->favouriteShopsOffers = $favouriteShopsOffersWithPagination;
             $this->view->userDetails = $userDetails[0];
             $this->view->pageCssClass = 'youroffers-page';
         } else {

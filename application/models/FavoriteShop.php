@@ -13,23 +13,23 @@
 class FavoriteShop extends BaseFavoriteShop
 {
     ####################### refactored code ################
-    public static function rejectAlreadyFavouritedShops($popularShops)
+    public static function filterAlreadyFavouriteShops($popularShops)
     {
         $visitorFavouriteShops = Doctrine_Query::create()->select()
             ->from('FavoriteShop')
             ->where('visitorId = '. Auth_VisitorAdapter::getIdentity()->id)
             ->fetchArray();
         $favouriteShops = array();
-        foreach ($visitorFavouriteShops as $shops) {
-            $favouriteShops[] = $shops['shopId'];
+        foreach ($visitorFavouriteShops as $visitorFavouriteShop) {
+            $favouriteShops[] = $visitorFavouriteShop['shopId'];
         }
-        $removedAlreayAddedInFavouriteShops = array();
+        $removeAlreayAddedFavouriteShops = array();
         foreach ($popularShops as $popularShop) {
             if (!in_array($popularShop['shopId'], $favouriteShops)) {
-                $removedAlreayAddedInFavouriteShops[] = $popularShop;
+                $removeAlreayAddedFavouriteShops[] = $popularShop;
             }
         }
-        return $removedAlreayAddedInFavouriteShops;
+        return $removeAlreayAddedFavouriteShops;
     }
     ###################### END REFACTORED CODE #############
 

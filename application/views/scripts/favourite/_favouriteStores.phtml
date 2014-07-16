@@ -16,7 +16,7 @@
                     <a href="<?php echo $favouriteShop['shops'][0]['permaLink'];?>" class="active-offer">
                         <?php 
                         echo $favouriteShop['activeCount']. " " 
-                        . FrontEnd_Helper_viewHelper::__translate('active offers');
+                        . $this->translate('active offers');
                         ?>
                     </a>
                 </p>
@@ -24,11 +24,11 @@
                 . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') .'&shopId='
                 . base64_encode($favouriteShop['shops'][0]['id']);?>'
                 class="pop btn btn-default">
-                    <em><?php echo FrontEnd_Helper_viewHelper::__translate('I like this');?></em>
-                    <strong><?php echo FrontEnd_Helper_viewHelper::__translate('Remove');?></strong>
+                    <em><?php echo $this->translate('I like this');?></em>
+                    <strong><?php echo $this->translate('Remove');?></strong>
                 </a>
             </div>
         </div>
     </article>
-<?php
+    <?php
 }

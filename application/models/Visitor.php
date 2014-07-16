@@ -200,6 +200,7 @@ class Visitor extends BaseVisitor
         ->fetchArray();
         return $favouriteShops;
     }
+    
     public static function getFavoriteShopsOffers()
     {
         $currentDate = date('Y-m-d 00:00:00');
