@@ -84,10 +84,14 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                          </span>
                     </div>
                     <div class="sidebar-box-footer">
-
-                    <a  style="margin-top: 5px!important;" href ='javascript:void(0)' 
-                    onClick='moveToTrash("<?php echo $this->articleData[0]['id'] ?>")' 
-                    class="red trash-link" id="movetotrash"><?php echo $this->translate('Move to Trash')?></a>
+                    <?php 
+                        $moveToTrashTranslate = $this->translate('Move to Trash');
+                        $moveToTrash = mb_strlen($moveToTrashTranslate) > 7 ? mb_substr($moveToTrashTranslate, 0, 7)
+                                            .'..' : $moveToTrashTranslate;
+                    ?>
+                    <a  style="margin-top: 5px!important;" title = "<?php echo $moveToTrashTranslate;?>"
+                    href ='javascript:void(0)' onClick='moveToTrash("<?php echo $this->articleData[0]['id'] ?>")' 
+                    class="red trash-link" id="movetotrash"><?php echo $moveToTrash;?></a>
                     <button onClick="$('#savePage').val('publish')" class="btn btn-primary fr"
                      href="#" id="publishBtn"><?php echo $this->translate('Publish'); ?></button>
                      <a class="fr m5" href="<?php echo HTTP_PATH;?>admin/article" 

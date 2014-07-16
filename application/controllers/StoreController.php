@@ -76,7 +76,6 @@ class StoreController extends Zend_Controller_Action
                     'parameters' => array('latestupdates', 4, $shopId)
                 )
             );
-            $expiredOffersInStoreKey = 'all_msArticleInStore'.$ShopList;
             $moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)'all_msArticleInStore'.$ShopList,
                 array(
@@ -85,8 +84,7 @@ class StoreController extends Zend_Controller_Action
                 )
             );
 
-            if (sizeof($shopInformation) >0) {
-            } else {
+            if (!count($shopInformation) >0) {
                 $LocaleUrl = HTTP_PATH_LOCALE;
                 $this->_helper->redirector->setCode(301);
                 $this->_redirect($LocaleUrl);
@@ -104,7 +102,7 @@ class StoreController extends Zend_Controller_Action
                     $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
                 }
                 if ($shopChains['hasShops'] && isset($shopChains['string'])) {
-                    $this->view->shopChain = $shopChains['string'] ;
+                    $this->view->shopChain = $shopChains['string'];
                 }
             }
 
@@ -137,8 +135,6 @@ class StoreController extends Zend_Controller_Action
             $shopId
         );
         $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
-
-        // --- end comments
 
         $this->view->countPopularOffers = count(
             FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId)
@@ -317,26 +313,6 @@ class StoreController extends Zend_Controller_Action
         );
         $this->view->form = $signUpFormForStorePage;
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
-    }
-
-    public function howToUseGuideLightboxAction()
-    {
-        $this->_helper->layout->disableLayout();
-        $howToUseGuideChapters = '';
-        $ShopList = $this->getRequest()->getParam('id').'_list';
-        $allShopDetailsKey = 'all_shopdetail'.$ShopList;
-        $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            $allShopDetailsKey,
-            array('function' => 'Shop::getStoreDetails', 'parameters' => array($this->getRequest()->getParam('id')))
-        );
-
-        $howToGuide = Shop::getshopDetails($shopInformation[0]['permaLink']);
-        if (!empty($howToGuide[0]['howtochapter'])) :
-            $howToUseGuideChapters = $howToGuide[0]['howtochapter'];
-        endif;
-
-        $this->view->shopInformation = $shopInformation;
-        $this->view->howToUseGuideChapters = $howToUseGuideChapters;
     }
 
     public function addtofavouriteAction()

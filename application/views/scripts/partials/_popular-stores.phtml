@@ -9,7 +9,7 @@
             $popularStore = isset($popularStore['shop']) ?  $popularStore['shop'] :  $popularStore;
             $popularStoreImage =
                 PUBLIC_PATH_CDN.ltrim($popularStore['logo']['imgpath'], '/')
-                ."thum_medium_".$popularStore['logo']['imgname'];            
+                ."thum_big_".$popularStore['logo']['imgname'];            
             echo '<li>
                 <a href="' .HTTP_PATH_LOCALE. $popularStore['permaLink']. '">
                     <img src="' . $popularStoreImage . '"  

@@ -30,7 +30,7 @@ $pageHeaderImage = $pageHeader->getCategoryOrPageHeaderImage($this->pageHeaderIm
 LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
 ?>
 <div class="banner-block">
-    <img class='image' src="http://www.kortingscode.nl/public/images/upload/page/1404890582_1404380141_banner-06.jpg" alt="<?php echo $this->pageTitle;?>"/>
+    <img class='image' src="<?php echo $pageHeaderImage;?>" alt="<?php echo $this->pageTitle;?>"/>
     <div class="frame-image">
         <div class="container">
             <h1 class="flipit-text <?php echo $logoCssClass; ?>"><?php echo $this->translate('Flipit plus');?></h1>
@@ -40,12 +40,18 @@ LOCALE == '' ? $logoCssClass = 'kortingscode' : $logoCssClass = '';
 </div>
 <main role="main" id="main">
 <?php
+foreach ($this->allArticles as $articleValues) {
+   foreach ($articleValues as $articleValue) {
+        $articleDetails[] = $articleValue;
+    }
+}
+ 
 if (!empty($this->allArticles)) {
     usort(
-        $this->allArticles,
-        "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescendingOrderFunction"
+        $articleDetails,
+        "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescendingOrder"
     );
-    $articlesInformation = array_chunk($this->allArticles, 8);
+    $articlesInformation = array_chunk($articleDetails, 8);
     for ($articleCounter =0; $articleCounter < count($articlesInformation) ; $articleCounter++) { 
         if ($articleCounter == 0) {?>
             <div class="container">

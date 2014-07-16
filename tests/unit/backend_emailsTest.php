@@ -6,7 +6,7 @@ class backend_emailsTest extends \Codeception\TestCase\Test
    /**
     * @var \CodeGuy
     */
-    protected $codeGuy;
+    protected $codeTester;
 
     protected function _before()
     {
@@ -16,24 +16,17 @@ class backend_emailsTest extends \Codeception\TestCase\Test
     {
     }
 
-   public function testEmailSettings(CodeGuy $I)
+    public function saveEmailSettings(codeTester $I)
     {
-    	$I->wantToTest('Test email settings class.');
-    	$user = new Emailsettings();
-          	 
-    }
-    
-    public function saveEmailSettings(CodeGuy $I)
-    {
-    	$I->wantToTest('Save email settings.');
-    	$user = new Emailsettings();
-    	$user->emailperlocale = 'test@flipit.com';
-    	$user->sendername = 'flipit';
-    	$user->save();
-    	$this->codeGuy->seeInDatabase(
-    	             'Signupmaxaccount',
-    	             array('sendername' => 'flipit')
-    	 );
+        $I->wantToTest('Save email settings.');
+        $user = new Emailsettings();
+        $user->emailperlocale = 'test@flipit.com';
+        $user->sendername = 'flipit';
+        $user->save();
+        $this->codeTester->seeInDatabase(
+            'Signupmaxaccount',
+            array('sendername' => 'flipit')
+        );
           
     }
 }

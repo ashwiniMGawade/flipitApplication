@@ -1,6 +1,6 @@
 var BigText = {
     STARTING_PX_FONT_SIZE: 11,
-    DEFAULT_MAX_FONT_SIZE_EM: 20,
+    DEFAULT_MAX_FONT_SIZE_EM: 1.4,
     GLOBAL_STYLE_ID: 'bigtext-style',
     STYLE_ID: 'bigtext-styleinjection',
     LINE_CLASS_PREFIX: 'bigtext-line',

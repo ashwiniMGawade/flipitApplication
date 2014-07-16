@@ -101,7 +101,6 @@ class LoginController extends Zend_Controller_Action
         setcookie('kc_unique_user_id', "", time() - 3600, '/');
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
-        $module = $this->getRequest()->getParam('lang');
         Zend_Session::namespaceUnset('favouriteShopId');
         $this->_redirect(HTTP_PATH_LOCALE);
     }
@@ -128,8 +127,8 @@ class LoginController extends Zend_Controller_Action
                                         'emails/forgotpassword.phtml',
                                         array(
                                             'resetPasswordLink' => HTTP_PATH_LOCALE .
-                                            FrontEnd_Helper_viewHelper::__email('email_login').'/'
-                                            .FrontEnd_Helper_viewHelper::__email('email_resetpassword').'/'
+                                            FrontEnd_Helper_viewHelper::__link('link_login').'/'
+                                            .FrontEnd_Helper_viewHelper::__link('link_resetpassword').'/'
                                             .base64_encode($visitorDetails['id'])
                                             )
                                     )

@@ -57,8 +57,7 @@ class ErrorController extends Zend_Controller_Action
                         30,
                         3
                     );
-                    if (empty($specialPageOffers) && $pageDetails['pageAttributeId'] != 2
-                        && $pageDetails['pageAttributeId'] != 1) {
+                    if (empty($specialPageOffers) && $pageDetails['pageType'] == 'offer') {
                         $pageNumber = 4;
                         $this->_helper->layout()->disableLayout();
                         FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
@@ -106,9 +105,6 @@ class ErrorController extends Zend_Controller_Action
         $signUpFormSidebarWidget =
             FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $largeSignUpForm, $signUpFormSidebarWidget);
-        
-        
-
         $this->view->request   = $errors->request;
         $this->view->helper = $this->_helper ;
         $this->view->form = $largeSignUpForm;
@@ -118,9 +114,11 @@ class ErrorController extends Zend_Controller_Action
     public function getLog()
     {
         $bootstrap = $this->getInvokeArg('bootstrap');
+
         if (!$bootstrap->hasResource('Log')) {
             return false;
         }
+
         $log = $bootstrap->getResource('Log');
         return $log;
     }
@@ -133,6 +131,7 @@ class ErrorController extends Zend_Controller_Action
         } else {
             $pagePermalink = $this->_helper->Error->getPermalinkForFlipit($pagePermalink);
         }
+        
         $this->pagePermalink = $pagePermalink;
         $pagedata = Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
         return $pagedata;

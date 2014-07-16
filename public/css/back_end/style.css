@@ -3442,6 +3442,9 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 .mainpage-content-right div.browse-container {
 	width: 300px;
 }
+.timezone .select2-drop{
+	position: relative;
+}
 .padddingLeft14 {
     padding:0 14px 0 0!important;
 }

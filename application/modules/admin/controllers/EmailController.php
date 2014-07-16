@@ -2,13 +2,7 @@
 
 class Admin_EmailController extends Zend_Controller_Action
 {
-
-    /**
-     * check authentication before load the page
-     * @see Zend_Controller_Action::preDispatch()
-     * @author Amit Sharma
-     * @version 1.0
-     */
+    public $flashMessenger = '';
     public function preDispatch()
     {
         $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
@@ -312,25 +306,40 @@ class Admin_EmailController extends Zend_Controller_Action
 
     }
 
-
-
-
-
-
-    /**
-     * Load settings for email templates
-     * @author asharma
-     */
     public function emailSettingsAction()
     {
-
-        $params = $this->_getAllParams ();
-        $emailSettingsData = EmailSettings::getEmailSettingsContent();
-
-        echo "<pre>";print_r($emailSettingsData);
-        die ();
+        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $this->getFlashMessage();
+        if ($this->getRequest()->isPost()) {
+            $sendersParameters = $this->getRequest()->getParams();
+            
+            if ($sendersParameters['senderName']  == '' || $sendersParameters['senderEmail'] == '') {
+                $this->setFlashMessage('Error in updating Email Settings.');
+            } else {
+                Settings::updateSendersSettings('sender_email_address', $sendersParameters['senderEmail']);
+                Settings::updateSendersSettings('sender_name', $sendersParameters['senderName']);
+                $this->setFlashMessage('Email Settings have been updated successfully');
+            }
+            $this->_redirect(HTTP_PATH . 'admin/email/email-settings');
+        }
+        
+        $sendersEmailAddress = Settings::getEmailSettings('sender_email_address');
+        $this->view->sendersEmailAddress = $sendersEmailAddress;
+        $this->view->sendersName = Settings::getEmailSettings('sender_name');
     }
 
+    public function getFlashMessage()
+    {
+        $message = $this->flashMessenger->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+        return $this;
+    }
 
-
+    public function setFlashMessage($messageText)
+    {
+        $message = $this->view->translate($messageText);
+        $this->flashMessenger->addMessage(array('success' => $message));
+        return $this;
+    }
 }

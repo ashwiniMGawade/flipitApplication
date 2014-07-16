@@ -1,13 +1,15 @@
 <?php
 $authorName = FrontEnd_Helper_AuthorPartialFunctions::
     getAuthorName($this->shopEditor['firstName'], $this->shopEditor['lastName']);
-$EditorImageSlug = $this->shopEditor['slug'];
+
+$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
+                    . $this->shopEditor['slug'];
 $shopHeader = $this->translate('All').' '.$this->shop['name'].' '.$this->translate('deals verified by');
 $shopEditorPath =
 	HTTP_PATH_CDN 
 	.ltrim($this->shopEditor['profileimage']['path'], "/")
 	.'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
-$shopAbout = $this->translate('About').' '.$this->shop['name'].' '.$this->translate('Vouchers');
+$shopAbout = $this->translate('About').' '.$this->shop['name'];
 
 $howToUse = '';
 if($this->shop['howToUse']):
@@ -26,12 +28,16 @@ endif;
         <div class="deal">
             <div class="deal-holder">
                 <span class="text"><?php echo $shopHeader; ?>
-                    <span class="name"><?php echo $authorName; ?></span>
+                    <a href="<?php echo $profileLink;?>">
+                        <span class="name"><?php echo $authorName; ?></span>
+                    </a>
                 </span>
                 <div class="photo">
                     <span class="text-box"><?php echo $this->translate('Hello'); ?></span>
-                    <img alt="<?php echo $authorName; ?>" class="" 
-                    src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
+                    <a href="<?php echo $profileLink;?>">
+                        <img alt="<?php echo $authorName; ?>" class=""
+                        src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
+                    </a>    
                 </div>
             </div>
         </div>

@@ -1,6 +1,44 @@
 @import "custom-variables.less";
 @import "custom-mixins.less";
 .home-page {
+	.top-panel{
+		background:rgba(0, 0, 0,.7);
+	}
+	.navigation{
+		background:#353534;
+		background:rgba(0,0,0,.6);
+		border:none;
+	}
+	.nav-bar{
+	    #nav{
+	        ul{
+	            border:none;
+	            -webkit-box-shadow: none;
+	            box-shadow: none;
+	            li{
+	                border:none;
+	                -webkit-box-shadow: none;
+	                box-shadow: none;
+	                padding:40px 0 0;
+	                margin:0 0 0 51px;
+	                    > a{
+	                        padding:0;
+	                        &:hover,
+	                        &:focus{
+	                            background:none;
+	                            color: #E69342;
+	                        }
+	                }
+	            }
+			    li.flipit-menu{
+			    	padding: 21px 23px 0 0;
+				}
+				li.kc-menu{
+			    	padding: 21px 23px 0 0;
+				}
+	        }
+	    }
+	}
 	.newsletter{
 	    margin:0;
 	    input[type="email"]{
@@ -299,26 +337,6 @@
 							background:@white-color;
 							color:@link-color;
 							text-decoration:none;
-							h2{
-								color:@orange-color;
-							}
-							.left-box{
-								//width:36.5%;
-							}
-							.box{
-								//width:83.5%;
-								//padding:0 24px;
-							}
-							&:before{
-								content:'';
-								position:absolute;
-								top:50%;
-								right:30px;
-								background:url(../../images/sprite.png) no-repeat -256px -350px;
-								width: 9px;
-								height: 15px;
-								margin: -9px 0 0;
-							}
 							&:after{
 								content:'';
 								position:absolute;
@@ -345,7 +363,7 @@
 				padding:0 0 0 32px;
 				h2{
 					color:@text-color;
-					font-size:18px;
+					font-size:16px;
 					line-height:24px;
 					margin:0;
 					width: 90%;
@@ -462,7 +480,8 @@
 			}
 			p{margin:0;}
 			.sub-text{
-				color: #000000;
+				color: #666;
+				padding-right:4%;
 			}
 		}
 	}
@@ -599,6 +618,27 @@
 }
 @media only screen and (max-width: 1199px){
 	.home-page {
+		.nav-bar{
+			#nav{
+				ul{
+					li{
+						padding:24px 0 25px;
+     				}
+     				li.kc-menu{
+	                    padding: 12px 12px 10px 0;
+	                    a{
+	                    	top: 0;
+	                    }
+	                }
+	                li.flipit-menu{
+	                    padding: 12px 12px 10px 0;
+	                    a{
+	                    	top: 0;
+	                    }
+	                }
+				}
+			}
+		}
 		.section-top{
 			height:500px;
 		}		
@@ -662,6 +702,15 @@
 }
 @media only screen and (max-width: 979px){
 	.home-page {
+		.nav-bar{
+			#nav{
+				ul{
+					li{
+						margin:0 0 0 30px;
+					}
+				}
+			}
+		}
 		.logos-panel{
 			margin:0 0 15px;
 			.container{
@@ -757,6 +806,23 @@
 }
 @media only screen and (max-width: 767px){
 	.home-page {
+		.nav-bar{
+			#nav{
+				ul{
+					li{
+						padding:0;
+						margin:0;
+							> a{
+								padding:15px 20px;
+								&:hover,
+								&:focus{
+									background:#353534;
+								}
+						}
+					}
+				}
+			}
+		}
 		.area {
 			margin-bottom: 15px;
 		}

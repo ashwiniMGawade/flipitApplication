@@ -6,12 +6,14 @@
                 <?php
                 foreach ($this->popularStores as $popularStore) { 
                     $popularStoreImage =
-                        PUBLIC_PATH_CDN.ltrim($popularStore['shop']['logo']['imgpath'], '/')
-                        ."thum_medium_".$popularStore['shop']['logo']['imgname'];  
+                        PUBLIC_PATH_CDN
+                        .ltrim($popularStore['shop']['logo']['imgpath'], '/')
+                        .'thum_big_'
+                        .$popularStore['shop']['logo']['imgname'];  
                     ?>
                     <div class="slide">
                         <a href="<?php echo HTTP_PATH_LOCALE.$popularStore['shop']['permaLink'];?>">
-                            <img src="<?php echo $popularStoreImage; ?>"
+                            <img src="<?php echo $popularStoreImage; ?>" width = "150px"
                             alt="<?php echo $popularStore['shop']['name']; ?>">
                         </a>
                     </div>

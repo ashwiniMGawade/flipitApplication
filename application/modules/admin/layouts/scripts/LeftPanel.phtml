@@ -216,16 +216,16 @@
 	      <?php } ?>
 	 </ul>
 
-<!--     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Email');?></h2></div>
+     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Email');?></h2></div>
     <ul id="adminmenu" role="navigation">
         <?php if($sessionNamespace->settings['rights']['administration']['rights'] == '1' ){?>
 
-       	<li <?php if($controller == 'email' && $action == 'index') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
+       	<!--<li <?php if($controller == 'email' && $action == 'index') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
 
       	<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/email/index"><br></a></div>
 	    <div class=""><div></div></div>
 	    <a <?php if($controller == 'email' && $action == 'index'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/email/index" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Emails');?></a>
-	 	</li>
+	 	</li>-->
 
         <li <?php if($controller == 'email' && $action == 'emailSettings') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
 
@@ -236,9 +236,15 @@
 
         <?php } ?>
 
-    </ul> -->
+    </ul>
     <div class="admin-sidebar-headings"><h2><?php echo $this->translate('Template Settings');?></h2></div>
     <ul id="adminmenu" role="navigation">
+     <li <?php if($controller == 'locale' && $action == 'locale-settings') { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
+
+      	<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/locale/locale-settings"><br></a></div>
+	    <div class=""><div></div></div>
+	    <a <?php if($controller == 'locale' && $action == 'locale-settings'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/locale/locale-settings" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Locale Settings');?></a>
+	 	</li>
 	      <li <?php if($controller == 'homepage') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php }?> id="menu-links">
 	        <div class="imbull-menu-image"><a href="<?php echo HTTP_PATH?>admin/homepage"><br></a></div>
 	        <div class=""><div></div></div>

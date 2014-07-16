@@ -1,13 +1,8 @@
 <?php
 class Visitor extends BaseVisitor
 {
-    //const USER_SET_STATUS = 0;
-
-    const INVALID_NEW_PASSWORD_STATUS = "-2";
-    const INVALID_OLD_PASSWORD_STATUS = "-1";
     const SUCCESS = "200";
-
-    public $currentLocale = null ;
+    public $currentLocale = null;
     #############################################################
     ######### REFACTRED CODE ####################################
     #############################################################
@@ -35,7 +30,7 @@ class Visitor extends BaseVisitor
             if (!empty($favoriteShops)) {
                 $favouriteShopsStatus = true;
             }
-        } elseif ($visitorId!=0) {
+        } else if ($visitorId!=0) {
             $favouriteShopsStatus = true;
         }
         return $favouriteShopsStatus;
@@ -49,7 +44,7 @@ class Visitor extends BaseVisitor
         }
         $visitor->lastLogIn = $visitor->currentLogIn;
         $visitor->currentLogIn = date('Y-m-d H:i:s');
-        $visitor->active = 1 ;
+        $visitor->active = 1;
         $visitor->active_codeid = '';
         $visitor->save();
     }
@@ -88,9 +83,7 @@ class Visitor extends BaseVisitor
             );
         $visitor->postalCode =
             FrontEnd_Helper_viewHelper::sanitize(
-                isset($visitorInformation['postCode'])
-                ? $visitorInformation['postCode']
-                : ''
+                isset($visitorInformation['postCode']) ? $visitorInformation['postCode'] : ''
             );
         if (!empty($visitorInformation['password'])) {
             $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($visitorInformation['password']));
@@ -101,11 +94,10 @@ class Visitor extends BaseVisitor
 
     public static function updatePasswordRequest($visitorId, $changePasswordStatus)
     {
-         $visitor = Doctrine_Query::create()->update('Visitor')
+        Doctrine_Query::create()->update('Visitor')
          ->set('changepasswordrequest', $changePasswordStatus)
          ->where('id='. FrontEnd_Helper_viewHelper::sanitize($visitorId))
          ->execute();
-         return;
     }
 
     public static function updateVisitorPassword($visitorId, $password)
@@ -138,9 +130,9 @@ class Visitor extends BaseVisitor
 
     public static function getVisitorDetailsByEmail($visitorEmail)
     {
-        $visitorDetails = Doctrine_Query::create()->select("v.*")->
-        from("Visitor v")
-        ->where('v.email='."'$visitorEmail'")
+        $visitorDetails = Doctrine_Query::create()->select("v.*")
+        ->from("Visitor v")
+        ->where("v.email='".$visitorEmail."'")
         ->fetchArray();
         return $visitorDetails;
     }
@@ -150,7 +142,7 @@ class Visitor extends BaseVisitor
         $visitorConrmationStatus = false;
         $visitor = Doctrine_Core::getTable("Visitor")->find($visitorId);
         if ($visitor->active==false) {
-            $visitor->active  =  true;
+            $visitor->active  = true;
             $visitor->save();
             $visitorConrmationStatus = true;
         }
@@ -160,7 +152,7 @@ class Visitor extends BaseVisitor
     public static function setVisitorLoggedIn($visitorId)
     {
         $visitorLoginStatus = false;
-        $visitorDetails = Visitor::getUserDetails($visitorId);
+        $visitorDetails = self::getUserDetails($visitorId);
         $dataAdapter = new Auth_VisitorAdapter($visitorDetails[0]["email"], $visitorDetails[0]["password"]);
         $visitorZendAuth = Zend_Auth::getInstance();
         $visitorZendAuth->setStorage(new Zend_Auth_Storage_Session('front_login'));

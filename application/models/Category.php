@@ -18,7 +18,6 @@ class Category extends BaseCategory
 
     public static function getCategoryVoucherCodes($categoryId, $numberOfOffers = 0, $pageName = '')
     {
-        $categoryOffers= array();
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $categoryOffersList = Doctrine_Query::create()
         ->select(
@@ -59,14 +58,13 @@ class Category extends BaseCategory
         ->addOrderBy('o.startDate DESC')
         ->limit($numberOfOffers);
         $categoryOffersList = $categoryOffersList->fetchArray();
-        return $categoriesoffers = $pageName=='home'
-        ? $categoryOffersList
-        : self::changeDataAccordingToOfferHtml($categoryOffersList);
+        return $pageName=='home' ? $categoryOffersList : self::changeDataAccordingToOfferHtml($categoryOffersList);
 
     }
 
     public static function changeDataAccordingToOfferHtml($categoryOffersList)
     {
+        $categoryOffers = array();
         foreach ($categoryOffersList as $offer) {
             $categoryOffers[] = $offer['Offer'];
         }
@@ -175,7 +173,7 @@ class Category extends BaseCategory
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
             $category->categoryHeaderImageId = $categoryHeaderImageId;
-        } elseif ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
+        } else if ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
             $categoryIconId = self::
                 setCategoryImage(
                     $_FILES['categoryIconNameHidden']['name'],
@@ -192,7 +190,7 @@ class Category extends BaseCategory
                     'featured'
                 );
             $category->categoryFeaturedImageId = $categoryFeaturedImageId;
-        } elseif ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryHeaderImage']['name'] != '') {
+        } else if ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryHeaderImage']['name'] != '') {
             $categoryIconId = self::
                 setCategoryImage(
                     $_FILES['categoryIconNameHidden']['name'],
@@ -204,7 +202,7 @@ class Category extends BaseCategory
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
             $category->categoryHeaderImageId = $categoryHeaderImageId;
-        } elseif ($_FILES['categoryHeaderImage']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
+        } else if ($_FILES['categoryHeaderImage']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
             $category->categoryHeaderImageId = $categoryHeaderImageId;
@@ -216,7 +214,7 @@ class Category extends BaseCategory
                     'featured'
                 );
             $category->categoryFeaturedImageId = $categoryFeaturedImageId;
-        } elseif ($_FILES['categoryIconNameHidden']['name'] != '' &&  $_FILES['categoryFeaturedImage']['name'] == '' &&
+        } else if ($_FILES['categoryIconNameHidden']['name'] != '' &&  $_FILES['categoryFeaturedImage']['name'] == '' &&
             $_FILES['categoryHeaderImage']['name'] == '' ) {
             $categoryIconId = self::
                 setCategoryImage(
@@ -226,7 +224,7 @@ class Category extends BaseCategory
                     'thumb'
                 );
             $category->categoryIconId = $categoryIconId;
-        } elseif ($_FILES['categoryFeaturedImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
+        } else if ($_FILES['categoryFeaturedImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
             $_FILES['categoryHeaderImage']['name'] == '') {
             $categoryFeaturedImageId = self::
                 setCategoryImage(
@@ -236,7 +234,7 @@ class Category extends BaseCategory
                     'featured'
                 );
             $category->categoryFeaturedImageId = $categoryFeaturedImageId;
-        } elseif ($_FILES['categoryHeaderImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
+        } else if ($_FILES['categoryHeaderImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
             $_FILES['categoryFeaturedImage']['name'] == '') {
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
@@ -246,8 +244,6 @@ class Category extends BaseCategory
 
         if (!empty($categoryInfo[0]['permaLink'])) {
             $getRouteLink = self::getCategoryRoutePermalink($categoryInfo);
-        } else {
-            $updateRouteLink = new RoutePermalink();
         }
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');

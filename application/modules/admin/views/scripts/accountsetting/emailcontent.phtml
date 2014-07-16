@@ -151,8 +151,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/ckeditor/" ; ?>" ;
 											<strong>
 											<?php
 												# set current timezone for scheduled newsletter if available (in case if it is schediled)
-												echo $currentTimezone = isset($this->data['0']['timezone']) ?
-																$this->data['0']['timezone'] : "" ;
+												echo $currentTimezone = isset($this->localeSettings['0']['timezone']) ?
+																$this->localeSettings['0']['timezone'] : "" ;
 											?>
 											</strong>
 										</label>
