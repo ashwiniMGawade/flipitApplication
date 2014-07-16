@@ -11,6 +11,17 @@
  */
 class Chain extends BaseChain
 {
+    ######### refactored code #################
+    public static function updateChainItemLocale($newLocale, $oldLocale)
+    {
+        Doctrine_Query::create()
+            ->update('ChainItem')
+            ->set("locale", '"'.$newLocale.'"')
+            ->where("locale = "."'".$oldLocale."'")
+            ->execute();
+        return true;
+    }
+    ######### end refactored code #################
      /**
       *  saveChain
       *

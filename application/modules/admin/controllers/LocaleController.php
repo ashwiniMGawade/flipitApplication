@@ -34,7 +34,10 @@ class Admin_LocaleController extends Zend_Controller_Action
 
     public function savelocaleAction()
     {
-        LocaleSettings::savelocale($this->getRequest()->getParam('locale'));
+        $localeName = $this->getRequest()->getParam('locale');
+        $localeSettings = LocaleSettings::getLocaleSettings();
+        LocaleSettings::savelocale($localeName);
+        Chain::updateChainItemLocale($localeName, $localeSettings[0]['locale']);
         $this->setFlashMessage($this, 'Locale has been changed successfully.');
         exit();
     }
