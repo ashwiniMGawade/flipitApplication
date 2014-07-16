@@ -310,10 +310,6 @@ RewriteRule ^ch/vorteil/gratis-telefonieren?$ http://www.flipit.com/ch/plus/grat
 RewriteRule ^ch/vorteil/smartphone-typen?$ http://www.flipit.com/ch/plus/smartphone-typen? [R=301,L]
 RewriteRule ^ch/vorteil?$ http://www.flipit.com/ch/plus? [R=301,L]
 
-
-
-
-
 # Start with the app
 RewriteRule ^.*$ public/index.php [NC,L]
 
