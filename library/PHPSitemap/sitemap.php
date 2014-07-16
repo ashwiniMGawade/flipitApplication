@@ -28,19 +28,7 @@ class PHPSitemap_sitemap
 
     public function generateGuidesSitemap($domain, $locale)
     {
-        $pageDetails = RoutePermalink::getPageProperties(FrontEnd_Helper_viewHelper::__link('link_plus'));
-        $pageId = $pageDetails[0]['id'];
-        $articlePermalinks = Articles::generateArticlePermalinks($pageId);
-        $newArticlePermalinks = array();
-        if(!empty($articlePermalinks[0]['moneysaving'])):
-            foreach($articlePermalinks[0]['moneysaving'] as $arrayPermalinks) :
-                $newArticlePermalinks['articleCategoriesPermalink'][] = $arrayPermalinks['articlecategory'][0]['permalink'];
-                foreach($arrayPermalinks['refarticlecategory'] as $permalink):
-                    $newArticlePermalinks['articlePermalinks'][] = $permalink['articles']['permalink'];
-                endforeach;
-            endforeach;
-        endif;
-
+        $articlePermalinks = Articles::generateArticlePermalinks();
         $xml = '<?xml version="1.0" encoding="UTF-8"?>
         <urlset
         xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
@@ -48,20 +36,14 @@ class PHPSitemap_sitemap
         xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
 
-        if(!empty($newArticlePermalinks)):
-            foreach($newArticlePermalinks['articleCategoriesPermalink'] as $articleCategoryPermalink):
+        if(!empty($articlePermalinks)):
+            foreach($articlePermalinks as $articlePermalink):
                 if($locale=='en'):
-                    $xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_plusCategory').'/'.$articleCategoryPermalink.'</loc></url>';
+                    $xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_plus').'/'
+                	.$articlePermalink['permalink'].'</loc></url>';
                 else:
-                    $xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_plusCategory').'/'.$articleCategoryPermalink.'</loc></url>';
-                endif;
-            endforeach;
-
-            foreach($newArticlePermalinks['articlePermalinks'] as $articlePermalink):
-                if($locale=='en'):
-                    $xml .= '<url><loc>'.$domain.'/'.FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$articlePermalink.'</loc></url>';
-                else:
-                    $xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$articlePermalink.'</loc></url>';
+                    $xml .= '<url><loc>'.$domain.'/'.$locale.'/'.FrontEnd_Helper_viewHelper::__link('link_plus').'/'
+                	.$articlePermalink['permalink'].'</loc></url>';
                 endif;
             endforeach;
         endif;

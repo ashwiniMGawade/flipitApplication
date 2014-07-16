@@ -52,22 +52,18 @@ class Articles extends BaseArticles
         return $allArticles;
     }
 
-    public static function generateArticlePermalinks($pageId)
+    public static function generateArticlePermalinks()
     {
-        $allMoneySavingArticle = Doctrine_Query::create()
-            ->select('p.id, m.id, ac.id, r.id, a.id, a.permalink, ac.permalink')
-            ->from('page p')
-            ->leftJoin('p.moneysaving m')
-            ->leftJoin('m.articlecategory ac')
-            ->leftJoin('m.refarticlecategory r')
-            ->leftJoin('r.articles a')
-            ->where('p.id ='.$pageId)
-            ->andWhere('p.publish=1')
-            ->andWhere('p.deleted=0')
-            ->andWhere('a.deleted=0')
-            ->orderBy('ac.name')
+        $currentDateTime = date('Y-m-d 00:00:00');
+        $allArticlesPermalink = Doctrine_Query::create()
+            ->select('a.*')
+            ->from('Articles a')
+            ->where('a.publish = "1"')
+            ->andWhere("a.deleted= 0")
+            ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+            ->orderBy('a.id')
             ->fetchArray();
-        return $allMoneySavingArticle;
+        return $allArticlesPermalink;
     }
     ###############################################
     ########## END REFACTORED CODE ################
