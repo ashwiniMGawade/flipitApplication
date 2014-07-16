@@ -40,8 +40,10 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
                 <span><?php echo FrontEnd_Helper_viewHelper::__form('form_Coupons inside'); ?></span>
             </div>
             <div class="caption">
-                <?php echo $featuredCategorySpan; ?>
-                <strong><?php echo $categoryWithSpecialPage['name']; ?></strong>
+                <?php 
+                echo $featuredCategorySpan;
+                echo $categoryWithSpecialPage['name'];
+                ?>
             </div>
         </a>
     </article>
