@@ -56,9 +56,9 @@ class CategoryController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        $categoryPermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink) ;
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $categoryPermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink);
+        $pageDetails = Page::getPageDetailsFromUrl($categoryPermalink);
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
@@ -82,7 +82,8 @@ class CategoryController extends Zend_Controller_Action
                     'function' => 'Page::getSpecialListPages', 'parameters' => array()
                 )
             );
-        $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPagesList);
+        $specialPages = $this->_helper->Category->getSpecialPageWithOffersCount($specialPagesList);
+        $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPages);
         $this->view->pageCssClass = 'all-categories-alt-page';
     }
 }

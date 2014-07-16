@@ -31,16 +31,8 @@ class Page extends BasePage
     {
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $specialListPages = Doctrine_Query::create()
-            ->select('p.id,p.pageTitle as name,p.permaLink,i.path,i.name')
+            ->select('p.*,i.*')
             ->from('Page p')
-            ->addSelect(
-                "(
-                    SELECT count(*) FROM refOfferPage roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  
-                    WHERE roc.pageid = p.id and off.deleted = 0 and s.deleted = 0 and off.enddate >
-                    '".$currentDateAndTime."' and off.startdate <= '".$currentDateAndTime."'  and off.discounttype='CD'
-                      and off.Visability!='MEM'
-                ) as totalCoupons"
-            )
             ->leftJoin('p.logo i')
             ->where("pageType = ?", 'offer')
             ->andWhere('p.deleted=0')
