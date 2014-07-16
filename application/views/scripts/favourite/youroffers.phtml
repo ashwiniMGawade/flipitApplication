@@ -9,11 +9,11 @@ if(!empty($this->favouriteShopsOffers)) {
        )
     );
 }
-$firstCharacterFromUserName = mb_substr($this->userDetails['firstName'], 0, 1);
+$firstCharacterOfUserName = mb_substr($this->userDetails['firstName'], 0, 1);
 ?>
 <div class="header-block">
     <div class="icon icon-small">
-        <div class='img-box'><?php echo $firstCharacterFromUserName;?></div>
+        <div class='img-box'><?php echo $firstCharacterOfUserName;?></div>
     </div>
     <div class="box">
         <h1>
