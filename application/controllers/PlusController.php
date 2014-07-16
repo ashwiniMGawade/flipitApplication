@@ -63,7 +63,7 @@ class PlusController extends Zend_Controller_Action
             isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
             isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
             $articlesOverviewPagePermalink,
-            HTTP_PATH."public/images/plus_og.png",
+            FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
@@ -85,9 +85,12 @@ class PlusController extends Zend_Controller_Action
             : '';
         $incrementArticleViewCountValue  = FrontEnd_Helper_viewHelper::
             viewCounter('article', 'onload', $articleDetails[0]['id']);
+
         if (!empty($articleDetails)) {
             $this->view->canonical =
-                FrontEnd_Helper_viewHelper::generateCononical($this->getRequest()->getParam('permalink'));
+                FrontEnd_Helper_viewHelper::generateCononical(
+                    $this->getRequest()->getControllerName() .'/'. $this->getRequest()->getParam('permalink')
+                );
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array(
                     'function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
@@ -98,13 +101,19 @@ class PlusController extends Zend_Controller_Action
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
+            $articleThumbNailImage = FACEBOOK_IMAGE;
+            if (!empty($articleDetails[0]['articleImage'])) {
+                $articleThumbNailImage = PUBLIC_PATH_CDN
+                    . $articleDetails[0]['articleImage']['path']
+                    . $articleDetails[0]['articleImage']['name'];
+            }
             $this->viewHelperObject->getMetaTags(
                 $this,
                 $articleDetails[0]['title'],
                 trim($articleDetails[0]['metatitle']),
                 trim($articleDetails[0]['metadescription']),
-                $articleDetails[0]['permalink'],
-                FACEBOOK_IMAGE,
+                $this->getRequest()->getControllerName() .'/'. $articleDetails[0]['permalink'],
+                $articleThumbNailImage,
                 ''
             );
             $this->view->pageCssClass = 'in-savings-page author-page';
