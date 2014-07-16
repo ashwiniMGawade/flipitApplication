@@ -1,6 +1,7 @@
 <?php
 
-function init_db($host, $user, $pw, $db, $port, $socket) {
+function init_db($host, $user, $pw, $db, $port, $socket)
+{
     $mysqli = array();
 
     foreach ($db as $db_index => $db_name) {
@@ -28,7 +29,8 @@ function init_db($host, $user, $pw, $db, $port, $socket) {
     return $mysqli;
 }
 
-function close_db($db) {
+function close_db($db)
+{
     foreach ($db as $the_db) {
         $the_db->close();
     }

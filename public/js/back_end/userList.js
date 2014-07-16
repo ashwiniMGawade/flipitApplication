@@ -876,35 +876,22 @@ function getUserList(iSearchText,iStart,iSortCol,iSortDir,iRole) {
 						{
 
 							"fnRender" : function(obj) {
-
 								var imgSrc = "";
-								//alert(obj.aData.path);
 								if (obj.aData.ppname == null || obj.aData.ppname=='' || obj.aData.ppname==undefined) {
-
-											imgSrc = HOST_PATH_PUBLIC
-											+ "images/back_end/user-avtar.jpg";
-
-
-
+								    imgSrc = HTTP_PATH_CDN
+										+ "/images/user-avtar.jpg";
 								} else {
-
 									var image = obj.aData.path
-											+ "thum_"
-											+ obj.aData.ppname;
-									imgSrc = HOST_PATH_PUBLIC + image;
-
+										+ obj.aData.ppname;
+									imgSrc = HTTP_PATH_CDN + image;
 								}
 								var name = "<span class='word-wrap-username'>" + ucfirst(obj.aData.firstName)
 										+ " "
 										+ ucfirst(obj.aData.lastName) + "</span>" ;
-								var html = "<div editId='" + obj.aData.id + "' class='grid-img'><a href='javascript:void(0);'><img src='"
-										+ imgSrc
-										+ "'/></a></div>" +	"<a href='javascript:void(0);'>" + name + "</a>";
-
+								var html = "<div editId='" + obj.aData.id + "' class='grid-img'>"
+                                        + "<a href='javascript:void(0);'><img src='" + imgSrc + "'/></a></div>" 
+                                        + "<a href='javascript:void(0);'>" + name + "</a>";
 								return  html;
-
-
-
 							},
 
 							"bSortable" : true

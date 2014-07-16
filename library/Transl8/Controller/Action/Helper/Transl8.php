@@ -113,7 +113,7 @@ class Transl8_Controller_Action_Helper_Transl8
      *
      * @return Transl8_Form
      */
-    protected function _createForm()
+    public function _createForm()
     {
         return new Transl8_Form();
     }

@@ -1,7 +1,7 @@
 <?php // Define path to application directory
 defined('APPLICATION_PATH')
 || define('APPLICATION_PATH',
-		dirname(dirname(__FILE__)));
+        dirname(dirname(__FILE__)));
 
 defined('LIBRARY_PATH')
 || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
@@ -10,17 +10,17 @@ defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
 
 defined('APPLICATION_ENV')
 || define('APPLICATION_ENV',
-		(getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-				: 'production'));
+        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
+                : 'production'));
 
 set_include_path(
-		implode(PATH_SEPARATOR,
-				array(realpath(APPLICATION_PATH . '/../library'),
-						get_include_path(),)));
+        implode(PATH_SEPARATOR,
+                array(realpath(APPLICATION_PATH . '/../library'),
+                        get_include_path(),)));
 set_include_path(
-		implode(PATH_SEPARATOR,
-				array(realpath(DOCTRINE_PATH), get_include_path(),)));
-	
+        implode(PATH_SEPARATOR,
+                array(realpath(DOCTRINE_PATH), get_include_path(),)));
+
 defined('UPLOAD_DATA_FOLDER_EXCEL_PATH')
 || define('UPLOAD_DATA_FOLDER_EXCEL_PATH', APPLICATION_PATH. '/../data/' );
 

@@ -49,73 +49,6 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			onclick="cancelHomePage();" class="btn ml10"><?php echo $this->translate('Cancel'); ?></button>
 	</h1>
 
-
-	<!-------------------- Start Locale Settings -------------------->
-		<div class="mainpage-content">
-			<div class="mainpage-content-line mb10">
-				<div class="mainpage-content-left">
-					<label><strong><?php echo $this->translate('Locale'); ?></strong></label>
-				</div>
-				<div class="mainpage-content-right">
-					<div class="mainpage-content-right-inner-left-other">
-						<div data-toggle="buttons-checkbox" class="btn-group">
-							<select id='locale' style='width:200px;'>
-								<option value=""></option>
-								<?php
-
-								$seletced = '';
-
-									$locale = Zend_Locale::getLocaleList();
-									foreach($locale as $key => $loc):
-
-										if($this->locale['0']['locale'] == $key)
-										{
-											$seletced = 'selected="selected"';
-
-										}
-										echo "<option $seletced value=". $key .">". $key ."</option>";
-									endforeach;
-								?>
-							</select>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	<!-------------------- End Locale Settings -------------------->
-
-		<div class="mainpage-content">
-			<div class="mainpage-content-line mb10">
-				<div class="mainpage-content-left">
-					<label><strong><?php echo $this->translate('Time Zone'); ?></strong></label>
-				</div>
-				<div class="mainpage-content-right">
-					<div class="mainpage-content-right-inner-left-other">
-						<div data-toggle="buttons-checkbox" class="btn-group">
-							<select id='timezone' style='width:300px;' name="timezone">
-								<option value=""></option>
-								<?php
-
-									$timezones_list = $this->timezones_list;
-
-									foreach($timezones_list as $key => $name):
-
-										$seletcedTimeZone = '';
-										if($this->locale['0']['timezone'] == $key)
-										{
-											$seletcedTimeZone = 'selected="selected"';
-										}
-
-										echo "<option $seletcedTimeZone value=". $key .">". $name ."</option>";
-									endforeach;
-								?>
-							</select>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
 	<!-------------------- Start Email Settings locale basis -------------------->
 
 	<!-------------------- End Locale Settings -------------------->
@@ -402,104 +335,56 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 </div>
 	<!-- /poststuffs -->
 
-	<div class="mainpage-content">
+<div class="mainpage-content">
+	<div class="mainpage-content-line header-image-cont">
+		<h3>
+			<strong><?php echo $this->translate('Homepage header Image'); ?></strong>
+		</h3>
+		<div class="mainpage-content-right-inner"></div>
+		<div class="mainpage-content-right-inner">
+			<div class='browse-container'>            
+				<?php  if($this->locale['0']['homepagebanner_name'] != 'null') { ?>
+				<img class='image-container' 
+				src="<?php echo PUBLIC_PATH_CDN. $this->locale['0']['homepagebanner_path'] .
+				$this->locale['0']['homepagebanner_name'] ?>">
+				<?php } ?>
+			</div>
+			<div class="mainpage-content-right-inner-left-other">
+			</div>
+			<div class="progress-file-detail hide">
+				<div>
+				<img alt="uploadig" src="http://www.flipit.com/public/images/back_end/ajax-loader-tran.gif">
+				<span id="selected-filename"></span>
+				</div>
+				<div class="progress progress-success progress-striped" id="progress">
+				<div class="bar" style="width: 99%;"></div>
+				</div>
+			</div>
+			<div class="mainpage-content-right-inner-right-other">
+				<span class="message help-inline success margin-bottom-tenpx"></span>
+			</div>
+			<?php if($this->locale['0']['homepagebanner_name'] == 'null')
+			{ ?>
+			<input type="file"  id="homepageBanner" class="span3 margin-bottom-tenpx" name="homepageBanner" >
+			<?php } else { ?>
+			<button class="btn btn-primary" type="button" 
+			alt = "<?php echo $this->locale['0']['homepagebanner_name']; ?>" id="delete-header-image-btn">
+			<?php echo $this->translate("Delete Image");?>
+			</button>
+			<?php } ?>	
+			<button class="btn btn-primary hide" type="button" 
+			alt = "<?php echo $this->locale['0']['homepagebanner_name']; ?>" id="delete-header-image-btn"><?php echo $this->translate("Delete Image");?>
+			</button>
+			<button class="btn btn-primary hide" type="button" id="update-header-image-btn"><?php echo $this->translate("Update Image");?></button>
 
-		<div class="mainpage-content-line header-image-cont">
-			<h3>
-				<strong><?php echo $this->translate('Homepage header Image'); ?></strong>
-			</h3>
-					<div class="mainpage-content-right-inner"></div>
-					<div class="mainpage-content-right-inner">
-					
-			 				
-						<div class="homepageBanner-content">
-							<?php  if($this->locale['0']['homepagebanner_name'] != 'null')
-				       { ?>
-							   	<img  src="<?php echo PUBLIC_PATH_LOCALE. $this->locale['0']['homepagebanner_path'] .
-								   	 $this->locale['0']['homepagebanner_name'] ?>">
-						
-					    <?php } ?>
-						</div>
-						
-						<div class="mainpage-content-right-inner-left-other">
-						</div>
-						<div class="progress-file-detail hide">
-							<div>
-								<img alt="uploadig" src="http://www.flipit.com/public/images/back_end/ajax-loader-tran.gif">
-								<span id="selected-filename"></span>
-
-							</div>
-							<div class="progress progress-success progress-striped" id="progress">
-								<div class="bar" style="width: 99%;"></div>
-							</div>
-
-						</div>
-						<div class="mainpage-content-right-inner-right-other">
-								<span class="message help-inline success margin-bottom-tenpx"></span>
-						</div>
-						<?php if($this->locale['0']['homepagebanner_name'] == 'null')
-				       { ?>
-				      	 <input type="file"  id="homepageBanner" class="span3 margin-bottom-tenpx" name="homepageBanner" >
-				       <?php } else { ?>
-				       	<button class="btn btn-primary" type="button" alt = "<?php echo $this->locale['0']['homepagebanner_name']; ?>" id="delete-header-image-btn"><?php echo $this->translate("Delete Image");?></button>
-				  <?php } ?>	
-				  	<button class="btn btn-primary hide" type="button" alt = "<?php echo $this->locale['0']['homepagebanner_name']; ?>" id="delete-header-image-btn"><?php echo $this->translate("Delete Image");?></button>
-				       <button class="btn btn-primary hide" type="button" id="update-header-image-btn"><?php echo $this->translate("Update Image");?></button>
-				       
-					   <div class="margin-bottom-tenpx">
-				           <span class="help-inline" id="logo_file_message"><?php echo $this->translate("Image Size: 2400 X 512 (*.jpg or *.png file only)") . "&nbsp;" . $this->translate("Max filesize:") . "&nbsp;" . ini_get('upload_max_filesize'); ?></span>
-					   </div>
-					</div>
+			<div class="margin-bottom-tenpx">
+				<span class="help-inline" id="logo_file_message"><?php echo $this->translate("Image Size: 1600px x 690px (*.jpg or *.png file only)") . "&nbsp;" . $this->translate("Max filesize:") . "&nbsp;" . ini_get('upload_max_filesize'); ?>
+				</span>
+			</div>
 		</div>
 	</div>
+</div>
 
-	<div class="mainpage-content">
-
-		<div class="mainpage-content-line widget-image-cont">
-			<h3>
-				<strong><?php echo $this->translate('Homepage Widget Background'); ?></strong>
-			</h3>
-					<div class="mainpage-content-right-inner"></div>
-					<div class="mainpage-content-right-inner">
-					
-						<div class="homepageWidget-content">
-							<?php  if($this->locale['0']['homepage_widget_banner_name'] != 'null')
-				       { ?>
-			 					   	<img  src="<?php echo PUBLIC_PATH_LOCALE. $this->locale['0']['homepage_widget_banner_path'] .
-								   	 $this->locale['0']['homepage_widget_banner_name'] ?>">
-						<?php } ?>
-						</div>
-						
-						<div class="mainpage-content-right-inner-left-other">
-						</div>
-						<div class="progress-file-detail hide">
-							<div>
-								<img alt="uploadig" src="http://www.flipit.com/public/images/back_end/ajax-loader-tran.gif">
-								<span id="selected-filename"></span>
-
-							</div>
-							<div class="progress progress-success progress-striped" id="progress">
-								<div class="bar" style="width: 99%;"></div>
-							</div>
-
-						</div>
-						<div class="mainpage-content-right-inner-right-other">
-								<span class="message help-inline success margin-bottom-tenpx"></span>
-						</div>
-						<?php if($this->locale['0']['homepage_widget_banner_name'] == 'null')
-				       { ?>
-				       <input type="file"  id="homepageWidgetBackground" class="span3 margin-bottom-tenpx" name="homepageWidgetBackground" >
-				         <?php } else { ?>
-				       	<button class="btn btn-primary" type="button" alt = "<?php echo $this->locale['0']['homepage_widget_banner_name'];  ?>" id="delete-widget-image-btn"><?php echo $this->translate("Delete Image");?></button>
-				  <?php } ?>
-				  		<button class="btn btn-primary hide" type="button" alt = "<?php echo $this->locale['0']['homepage_widget_banner_name'];  ?>" id="delete-widget-image-btn"><?php echo $this->translate("Delete Image");?></button>
-				       <button class="btn btn-primary hide" type="button" id="update-widget-image-btn"><?php echo $this->translate("Update Image");?></button>
-					   <div class="margin-bottom-tenpx">
-				           <span class="help-inline" id="logo_file_message"><?php echo $this->translate("Image Size: 1080 X 350 (*.jpg or *.png file only)") . "&nbsp;" . $this->translate("Max filesize:") . "&nbsp;" . ini_get('upload_max_filesize'); ?></span>
-					   </div>
-					</div>
-		</div>
-	</div>
 	 <div class="mainpage-content">
 		<form enctype="multipart/form-data" method="post" id="asSeenIn" name="asSeenIn">
 					<div class="mainpage-content-line mb10">

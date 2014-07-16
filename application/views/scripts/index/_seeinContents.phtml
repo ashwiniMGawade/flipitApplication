@@ -1,0 +1,20 @@
+<div class="area">
+    <div class="container logos-section">
+        <ul>
+<?php 
+foreach ($this->seeninContents as $seeninContent):
+    $seeinImage =
+         PUBLIC_PATH_CDN
+         .$seeninContent['logo']['path'] 
+         .'thum_SeenIn_large'. $seeninContent['logo']['name'];
+    ?>
+            <li>
+                <img src="<?php echo $seeinImage;?>" title="<?php echo $seeninContent['altText']; ?>" 
+                width="120" alt="<?php echo $seeninContent['altText']; ?>">
+            </li>
+    <?php
+endforeach;
+?>
+        </ul>
+    </div>
+</div>

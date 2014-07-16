@@ -1,0 +1,48 @@
+<?php
+$authorName = FrontEnd_Helper_AuthorPartialFunctions::
+    getAuthorName($this->shopEditor['firstName'], $this->shopEditor['lastName']);
+
+$profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
+                    . $this->shopEditor['slug'];
+$shopHeader = $this->translate('All').' '.$this->shop['name'].' '.$this->translate('deals verified by');
+$shopEditorPath =
+	HTTP_PATH_CDN 
+	.ltrim($this->shopEditor['profileimage']['path'], "/")
+	.'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
+$shopAbout = $this->translate('About').' '.$this->shop['name'];
+
+$howToUse = '';
+if($this->shop['howToUse']):
+    $howToUse = $this->partial(
+        'store/_howToUseGuide.phtml',
+        array(
+           'shop' => $this->shop,
+           'howToUseGuidePermalink' => $this->howToUseGuidePermalink,
+           'actualUrl'=>$this->actualUrl
+        )
+    );
+endif;
+?>
+<article class="block">
+    <div class="intro intro-2">
+        <div class="deal">
+            <div class="deal-holder">
+                <span class="text"><?php echo $shopHeader; ?>
+                    <a href="<?php echo $profileLink;?>">
+                        <span class="name"><?php echo $authorName; ?></span>
+                    </a>
+                </span>
+                <div class="photo">
+                    <span class="text-box"><?php echo $this->translate('Hello'); ?></span>
+                    <a href="<?php echo $profileLink;?>">
+                        <img alt="<?php echo $authorName; ?>" class=""
+                        src="<?php echo $shopEditorPath; ?>" width="120" height="120"/>
+                    </a>    
+                </div>
+            </div>
+        </div>
+        <h2><?php echo $shopAbout; ?></h2>
+        <?php echo $this->shop['shopText']; ?>
+    </div>
+<?php echo $howToUse; ?>
+</article>

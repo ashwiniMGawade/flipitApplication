@@ -1,45 +1,56 @@
 <?php
-$this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/jquery.placeholder.js");
-$this->minifyHeadScript()->prependFile ( HTTP_PATH."public/js/front_end/login.js" );
-?>
-<script>
-   $(function() {
-    	// Invoke the plugin
-	    $('input, textarea').placeholder();
-   });
-</script>
-
-	<div class='new-outer'>
-	<div class="new-signup-outer-round mt40">
-	<div class='forgot-pwd-warning'>
-	 	<div style="display: none" id="errorPop" class="yellow-box-error-box-code mt10 no-margin"><strong><?php echo $this->translate("Weet je het zeker? Deze inloggegevens staan niet in ons systeem! Probeer het alsjeblieft opnieuw..")?></strong></div>
-	 </div>
-   		<h1>
-        	<?php echo $this->translate("Log snel in want er worden dagelijks nieuwe Members-Only codes toegevoegd!"); ?>
-        </h1>
-       <form name="login" id="login" method="post" action="" autocomplete="off"> 
-        <div class="login-form">
-       		<div class="error-msg"></div>
-            <div class="login-form-row clearfix">
-            	<input type="text" name="uname" id="uname" value="" tabindex="1" placeholder="<?php echo FrontEnd_Helper_viewHelper::__form("e-mailaddress");?>" /><label class="lblerrcls"></label>
-            </div>
-            <div class="login-form-row clearfix">
-            	<input type="password" name="pwd" id="pwd" value=""  tabindex="2"  type="text" placeholder="<?php echo FrontEnd_Helper_viewHelper::__form("password") ?>"/><label class="lblerrcls"></label>
-                
-            </div>
-            
-            	<a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('login').'/'.FrontEnd_Helper_viewHelper::__link('forgotpassword')?>" class="forgot-password-login"><?php echo $this->translate("Vergeten?");?></a>
-            <div class="clr"></div>
-            <div id='changeWhenLogin' class="blue_btn">
-            	<a href="javascript:void(0);"  tabindex="3" onclick="checkLogin();"><?php echo $this->translate('aanmelden');?></a>
-            </div>
-            <div class="already-ac">
-            	<?php echo $this->translate("Heb je nog geen account? ") ; ?> <a href="<?php echo HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('inschrijven').'/'.FrontEnd_Helper_viewHelper::__link('stap1')?>"><?php echo $this->translate("Klik hier om je te registreren") ;?></a>
-            </div>
-       
-       <div class="clr"></div>
-       </div> 
-       </form>
+$this->minifyHeadScript()->appendFile(HTTP_PATH. "public/js/front_end/login.js");
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/login.css");
+$loginForm = $this->form;
+// Remove <dt> from label generation
+foreach ($loginForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+if($this->successMessage!='' || $this->errorMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
     </div>
-    <!--     <?php echo $this->render('login/login_footer_member.phtml')?> -->
-</div>
+    <?php 
+endif;
+$forgotPasswordLink =
+    HTTP_PATH_LOCALE .
+    FrontEnd_Helper_viewHelper::__link('link_login').'/'
+    .FrontEnd_Helper_viewHelper::__link('link_forgotpassword');
+?>
+<section class="login-box">
+    <h1><?php echo $this->translate('Welcome back, nice to see you again!');?></h1>
+    <form action="" method="post" class="login-form" name="login" id='login'>
+        <fieldset>
+            <div class="form-group">
+            <?php 
+            echo $loginForm->emailAddress->renderLabel()
+            . $loginForm->emailAddress->renderViewHelper();
+            ?>
+            </div>
+            <div class="form-group">
+                <div class="link">
+                    <?php echo $loginForm->password->renderLabel();?>
+                    <a href="<?php echo $forgotPasswordLink;?>"
+                        class="right">
+                        <?php echo $this->translate('Forgot password?');?>
+                    </a>
+                </div>
+                <?php echo $loginForm->password->renderViewHelper();?>
+            </div>
+            <div class="form-group">
+            <?php 
+            echo $this->formSubmit(
+                'submit',
+                FrontEnd_Helper_viewHelper::__form('form_Sign In'),
+                array('class'=>'btn blue btn-lg btn-primary', 'id'=>'login')
+            )
+            ?>
+                <div class="text"><?php echo $this->translate('No Account yet?');?>
+                    <a href="<?php echo HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven');?>">
+                        <?php echo $this->translate('Click here to register');?>
+                    </a>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</section>

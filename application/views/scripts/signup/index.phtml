@@ -1,0 +1,113 @@
+<?php
+$this->minifyHeadLink()->prependStylesheet("/public/css/front_end/register.css");
+echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/registration.js");
+$registerForm = $this->form;
+// Remove <dt> from label generation
+foreach ($registerForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+if($this->messageSuccess!='' || $this->messageError!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
+    </div>
+    <?php 
+endif;
+?>
+<section class="register-box">
+    <form id="registerForm" name="registerForm" method="POST" action="">
+        <fieldset>
+            <div class="row">
+                <div class="col-md-6 hide-testimonials">
+                 <?php  echo $this->testimonials[0]['testimonial1']; ?>
+                 <?php  echo $this->testimonials[0]['testimonial2']; ?>
+                 <?php  echo $this->testimonials[0]['testimonial3']; ?>
+                </div>
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->emailAddress->renderLabel()
+                            . $registerForm->emailAddress->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->password->renderLabel()
+                            . $registerForm->password->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->firstName->renderLabel()
+                            . $registerForm->firstName->renderViewHelper();?>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->lastName->renderLabel()
+                            . $registerForm->lastName->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php echo $registerForm->dateOfBirth->renderLabel();?>
+                                <div class="row">
+                                    <div class="col-xs-4 first">
+                                    <?php echo $registerForm->dateOfBirthDay->renderViewHelper();?>
+                                    </div>
+                                    
+                                    <div class="col-xs-4 second">
+                                     <?php echo $registerForm->dateOfBirthMonth->renderViewHelper();?>
+                                    </div>
+                                    
+                                    <div class="col-xs-4 third">
+                                     <?php echo $registerForm->dateOfBirthYear->renderViewHelper();?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->gender->renderLabel()
+                            . $registerForm->gender->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                            <?php 
+                            echo $registerForm->postCode->renderLabel()
+                            . $registerForm->postCode->renderViewHelper();
+                            ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group alt">
+                         <?php echo $registerForm->shopId->renderViewHelper();?>
+                         <?php 
+                         echo $this->formSubmit(
+                             'submit',
+                             FrontEnd_Helper_viewHelper::__form('form_Create account'),
+                             array('class'=>'btn blue btn-lg btn-primary', 'id'=>'register')
+                         ) ?>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+    </form>
+</section>

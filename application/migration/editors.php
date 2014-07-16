@@ -96,7 +96,7 @@ $stmt_outer->close();
 echo '--> Resolving relationships between offers/shops and users ...';
 
 $site->query("
-	UPDATE		`offer` o
+    UPDATE		`offer` o
     INNER JOIN	`kortingscode_user`.`user` u
             ON	u.`wc_orig_user` = o.`wc_orig_user`
     SET			o.`authorId` = u.`id`,

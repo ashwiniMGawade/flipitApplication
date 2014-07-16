@@ -1,0 +1,27 @@
+<?php
+echo $this->shopEditor;
+$frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+echo 
+	$frontendSidebarHelper->socialMediaWidget(
+		$this->currentStoreInformation['affliateProgram'] =='' ? 
+		$this->currentStoreInformation['actualUrl'] 
+		: $this->currentStoreInformation['affliateProgram']
+	);
+
+if (count($this->latestShopUpdates) > 0):?>
+    <?php echo $this->partial('store/_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
+endif;
+
+if ($this->shopChain):
+    ?>
+        <article class="block">
+    <?php echo $this->shopChain; ?>
+        </article>
+    <?php
+endif;
+        
+if(isset($this->popularStoresList)):
+    echo $this->popularStoresList;
+endif;
+
+echo $this->signUpWidgetForm;

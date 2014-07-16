@@ -4,7 +4,7 @@ Doctrine_Manager::getInstance()->bindComponent('MoneySaving', 'doctrine_site');
  /**
  * @author Raman
  * @version 1.0
- * 
+ *
  * @property integer $id
  * @property integer $pageid
  * @property integer $categoryid
@@ -74,39 +74,39 @@ abstract class BaseMoneySaving extends Doctrine_Record
     public function setUp()
     {
         parent::setUp();
-        
+
         $this->hasOne('Page as page', array(
-        		'local' => 'pageid',
-        		'foreign' => 'id'));
-        
+                'local' => 'pageid',
+                'foreign' => 'id'));
+
         $this->hasMany('Articlecategory as articlecategory', array(
-        		'local' => 'categoryid',
-        		'foreign' => 'id'));
-        
+                'local' => 'categoryid',
+                'foreign' => 'id'));
+
         $this->hasMany('Page as page', array(
-        		'local' => 'pageid',
-        		'foreign' => 'id'));
-        
-        
+                'local' => 'pageid',
+                'foreign' => 'id'));
+
+
         $this->hasMany('RefArticleCategory as refarticlecategory', array(
-        		'local' => 'categoryid',
-        		'foreign' => 'relatedcategoryid'));
-        
-       
+                'local' => 'categoryid',
+                'foreign' => 'relatedcategoryid'));
+
+
         $softdelete0 = new Doctrine_Template_SoftDelete(array(
-        		'name' => 'deleted',
-        		'type' => 'boolean',
+                'name' => 'deleted',
+                'type' => 'boolean',
         ));
-        
+
         $timestampable0 = new Doctrine_Template_Timestampable(array(
-        		'created' =>
-        		array(
-        				'name' => 'created_at',
-        		),
-        		'updated' =>
-        		array(
-        				'name' => 'updated_at',
-        		),
+                'created' =>
+                array(
+                        'name' => 'created_at',
+                ),
+                'updated' =>
+                array(
+                        'name' => 'updated_at',
+                ),
         ));
         $this->actAs($softdelete0);
         $this->actAs($timestampable0);

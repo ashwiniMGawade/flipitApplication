@@ -9,4 +9,3 @@ foreach ($tables as $key => $value) {
 mysql_query("ALTER TABLE $value COLLATE utf8_general_ci");
 }
 }
-?> 

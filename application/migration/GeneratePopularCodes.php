@@ -10,19 +10,19 @@ class GeneratePopularCodes
     {
         require_once 'ConstantForMigration.php';
         require_once('CommonMigrationFunctions.php');
-        
+
         CommonMigrationFunctions::setTimeAndMemoryLimit();
-        
+
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
-        
+
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
         $imbull = $connections['imbull'];
 
         echo CommonMigrationFunctions::showProgressMessage(
             'get all popular codes data from databases of all locales'
         );
-        
+
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
@@ -34,7 +34,7 @@ class GeneratePopularCodes
                 echo "\n\n";
             }
         }
-        
+
         //uncomment this line when you run for one locale
         //$this->genereatePopularOffers($connections['be']['dsn'], 'be', $imbull);
         $manager->closeConnection($doctrineImbullDbConnection);

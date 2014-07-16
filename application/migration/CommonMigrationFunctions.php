@@ -70,7 +70,7 @@ class CommonMigrationFunctions
 
         return $doctrineSiteConnection;
     }
-    
+
     public static function getAllConnectionStrings()
     {
         $application = new Zend_Application(
@@ -108,12 +108,12 @@ class CommonMigrationFunctions
     {
         $pdoCredentials             = parse_url($dsn);
         $pdoCredentials['dbname']   = ltrim ($pdoCredentials['path'],'/');
-        return new PDO("mysql:host={$pdoCredentials['host']};dbname={$pdoCredentials['dbname']}", 
+        return new PDO("mysql:host={$pdoCredentials['host']};dbname={$pdoCredentials['dbname']}",
                         $pdoCredentials['user'], $pdoCredentials['pass']);
     }
 
-    public static function pathToTempExcelFolder($locale){
-
+    public static function pathToTempExcelFolder($locale)
+    {
         $localePath         = ($locale == 'en') ? '' : $locale.'/';
         $pathToExcelFolder  = UPLOAD_EXCEL_TMP_PATH . strtolower($localePath) . 'excels/';
         if(!file_exists($pathToExcelFolder)) mkdir($pathToExcelFolder, 0774, TRUE);

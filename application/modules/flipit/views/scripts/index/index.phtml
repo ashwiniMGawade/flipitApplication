@@ -1,503 +1,175 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <?php echo $this->render('partials/_head.phtml'); ?>
-
-<link rel="alternate" hreflang="nl-be" href="http://www.flipit.com/be" />
+<script type="text/javascript" src="/public/js/jquery-1.7.2.min.js"></script>
+<link rel="alternate" hreflang="nl-BE" href="http://www.flipit.com/be" />
 <link rel="alternate" hreflang="fr" href="http://www.flipit.com/fr" />
-<link rel="alternate" hreflang="de-ch" href="http://www.flipit.com/ch" />
-<link rel="alternate" hreflang="en-in" href="http://www.flipit.com/in" />
+<link rel="alternate" hreflang="de-DE" href="http://www.flipit.com/de" />
 <link rel="alternate" hreflang="pl" href="http://www.flipit.com/pl" />
-<link rel="alternate" hreflang="de-de" href="http://www.flipit.com/de" />
 <link rel="alternate" hreflang="es" href="http://www.flipit.com/es" />
-<link rel="alternate" hreflang="pt-br" href="http://www.flipit.com/br" />
-<link rel="alternate" hreflang="pt-pt" href="http://www.flipit.com/pt" />
-<link rel="alternate" hreflang="de-at" href="http://www.flipit.com/at" />
+<link rel="alternate" hreflang="de-CH" href="http://www.flipit.com/ch" />
+<link rel="alternate" hreflang="de-AT" href="http://www.flipit.com/at" />
+<link rel="alternate" hreflang="da" href="http://www.flipit.com/dk" />
 <link rel="alternate" hreflang="it" href="http://www.flipit.com/it" />
 <link rel="alternate" hreflang="sv" href="http://www.flipit.com/se" />
-<link rel="alternate" hreflang="da" href="http://www.flipit.com/dk" />
-<link rel="alternate" hreflang="en-us" href="http://www.flipit.com/us" />
-<link rel="alternate" hreflang="en-au" href="http://www.flipit.com/au" />
-<link rel="alternate" hreflang="en-ca" href="http://www.flipit.com/ca" />
-<link rel="alternate" hreflang="en-sg" href="http://www.flipit.com/sg" />
-<link rel="alternate" hreflang="en-nz" href="http://www.flipit.com/nz" />
-<link rel="alternate" hreflang="en-id" href="http://www.flipit.com/id" />
-<link rel="alternate" hreflang="en-my" href="http://www.flipit.com/my" />
+<link rel="alternate" hreflang="pt-PT" href="http://www.flipit.com/pt" />
+<link rel="alternate" hreflang="en-IN" href="http://www.flipit.com/in" />
+<link rel="alternate" hreflang="en-ID" href="http://www.flipit.com/id" />
+<link rel="alternate" hreflang="en-MY" href="http://www.flipit.com/my" />
+<link rel="alternate" hreflang="en-SG" href="http://www.flipit.com/sg" />
+<link rel="alternate" hreflang="en-AU" href="http://www.flipit.com/au" />
+<link rel="alternate" hreflang="en-NZ" href="http://www.flipit.com/nz" />
+<link rel="alternate" hreflang="pt-BR" href="http://www.flipit.com/br" />
+<link rel="alternate" hreflang="en-CA" href="http://www.flipit.com/ca" />
+<link rel="alternate" hreflang="en-US" href="http://www.flipit.com/us" />
 <link rel="alternate" hreflang="x-default" href="http://www.flipit.com" />
 
 </head>
-
-<body>
-<header>
-  <div class="top-header">
-    <div class="container">
-      <div class="top-text">
-        Flipit.com - Next Generation 'Global' Couponing - Select your Country and use our Coupons!
-      </div>
-    </div>
-  </div>
-  <div class="container">
-    <img src="<?php echo PUBLIC_PATH;?>images/front_end/flipit.png" alt="Flipit" />
-  </div>
-</header>
-<div class="big-banner">
-  <div class="slides">
-    <div class="mapcontainer">
-      <div id="button" data-rel="story" onclick="rotate(this,'left');"></div>
-      <div id="buttonpress-right" data-rel="press" onclick="rotate(this,'right');"></div>
-      <div class="container">
-        <ul>
-          <li class="northamerica"> <img class="icon" src="<?php echo PUBLIC_PATH;?>flipit/images/pointer.png" alt="" />
-            <div class="submenu"> <img src="<?php echo PUBLIC_PATH;?>flipit/images/line.png" class="line" alt="" />
-              <ul>
-                <li class="menucountry">North America</li>
-                <li><a href="http://www.flipit.com/ca">Canada</a></li>
-                <li><a href="http://www.flipit.com/us">United States</a></li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-        <ul>
-          <li class="southamerica"> <img class="icon" src="<?php echo PUBLIC_PATH;?>flipit/images/pointer.png" alt="" />
-            <div class="submenu"> <img src="<?php echo PUBLIC_PATH;?>flipit/images/line.png" class="line" alt="" />
-              <ul>
-                <li class="menucountry">South America</li>
-                <li><a href="http://www.flipit.com/br">Brazil | Brasil</a></li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-        <ul>
-          <li class="europe"> <img class="icon" src="<?php echo PUBLIC_PATH;?>flipit/images/pointer.png" alt="" />
-            <div class="submenu"> <img src="<?php echo PUBLIC_PATH;?>flipit/images/line.png" class="line" alt="" />
-              <ul>
-                <li class="menucountry">Europe</li>
-                <li><a href="http://www.flipit.com/be">Belgium | België</a></li>
-                <li><a href="http://www.flipit.com/fr">France</a></li>
-                <li><a href="http://www.flipit.com/de">Germany | Deutschland</a></li>
-                <li><a href="http://www.flipit.com/pl">Poland | Polska</a></li>
-                <li><a href="http://www.flipit.com/es">Spain | España</a></li>
-                <li><a href="http://www.flipit.com/ch">Switzerland | Schweiz</a></li>
-                <li><a href="http://www.kortingscode.nl">Netherlands | Nederland *</a></li>
-                <li><a href="http://www.flipit.com/at">Austria | Österreich</a></li>
-                </ul>
-                <ul class="two-col">
-                  <li><a href="http://www.flipit.com/dk">Denmark | Danmark</a></li>
-                  <li class="disabled">Finland | Suomi</li>
-                  <li><a href="http://www.flipit.com/it">Italy | Italia</a></li>
-                  <li class="disabled">Norway | Norge</li>
-                  <li><a href="http://www.flipit.com/se">Sweden | Sverige</a></li>
-                  <li><a href="http://www.flipit.com/pt">Portugal</a></li>
-                  <li class="disabled">Turkey | Türkiye</li>
-                  <li class="disabled">United Kingdom</li>
-                </ul>
-            </div>
-          </li>
-        </ul>
-        <ul>
-          <li class="africa"> <img class="icon" src="<?php echo PUBLIC_PATH;?>flipit/images/pointer.png" alt="" />
-            <div class="submenu"> <img src="<?php echo PUBLIC_PATH;?>flipit/images/line.png" class="line" alt="" />
-              <ul>
-                <li class="menucountry">Africa</li>
-                <li class="disabled">South Africa</li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-        <ul>
-          <li class="asia"> <img class="icon" src="<?php echo PUBLIC_PATH;?>flipit/images/pointer.png" alt="" />
-            <div class="submenu"> <img src="<?php echo PUBLIC_PATH;?>flipit/images/line.png" class="line" alt="" />
-              <ul>
-                <li class="menucountry">Asia</li>
-                <li><a href="http://www.flipit.com/in">India</a></li>
-                <li><a href="http://www.flipit.com/id">Indonesia</a></li>
-                <li class="disabled">Japan | 日本</li>
-                <li><a href="http://www.flipit.com/my">Malaysia | Malasj</a></li>
-                <li><a href="http://www.flipit.com/sg">Singapore</a></li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-        <ul>
-          <li class="australia"> <img class="icon" src="<?php echo PUBLIC_PATH;?>flipit/images/pointer.png" alt="" />
-            <div class="submenu"> <img src="<?php echo PUBLIC_PATH;?>flipit/images/line.png" class="line" alt="" />
-              <ul>
-                <li class="menucountry">Australia</li>
-                <li><a href="http://www.flipit.com/au">Australia</a></li>
-                <li><a href="http://www.flipit.com/nz">New Zealand</a></li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  
-  <div class="thestory hide storycontainer">
-    <div id="buttonpress" data-rel="press" onclick="rotate(this,'left');"></div>
-    <div id="buttonmap-right" data-rel="map" onclick="rotate(this,'right');"></div>
-    <div class="containerthestory">
-      <div class="holder">
-        <div class="thestorytext">
-          <h1>Next Generation Couponing</h1>
-          <p>Our Flipit.com adventure started more than a year ago. For quite some time, we have managed large couponing portals in Europe. But we felt we could still add more to the shopping experience. Don't you agree? Online shopping can be much more effective - cheaper and much more fun! This is exactly our ambition: to create a global couponing environment which adapts to your wishes and needs perfectly.</p>
-          <p>How do we make this happen? Well, you decide. It might result in a geo-based couponing App for Google Glass, or a postal service that delivers customized coupons to your door. What we do know is that our developers are ready to build exactly what you want based on your reviews and feedback.</p>
-          <p>We'll be launching in many countries in the near future, we want to help the entire world saving as much on online shopping. Become part of our journey. Use our website and give us your feedback.</p>
-          <p>E-mail us for more info, our presskit or any questions about this adventure!</p>
-          <h2>Let's Flipit!</h2>
-          <div class="bubble-arrow"></div>
-        </div>
-        <div class="imageholder"></div>
-        <div class="name">
-          <h2>Jochem Vroom</h2>
-          <span>jochem@imbull.com</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="press presscontainer hide">
-    <div id="buttonmap" data-rel="map" onclick="rotate(this,'left');"></div>
-    <div id="button-right" data-rel="story" onclick="rotate(this,'right');"></div>
-      <div class="press-bg">
-          <div class="press-inner-container">
-              <div class="press-comment">
-                  Due<br> to our position<br> and experience
-                  <span>we know what
-                  advertisers want</span>
-                  they want to have a <span>large additional reach</span> and added value from<br> their publishers.
-                  <p>Techinasia</p>
-                  <p>INDIA</p>
-              </div>
-              <div class="press-comment">
-                  Queremos <br>crearun entorno que <br>continuamente se adapte a losdeseos y a las necesidades de sus usuarios y que de esta<br>manera se <span>acerque<br>
-                  a la perfección<br>
-                  absoluta.</span>
-                  <p>Eureka-Startups</p>
-                  <p>SPAIN</p>
-              </div>
-              <div class="press-comment">                  
-                  Flipit.com<br>powinien być<br> postrzegany jako idealna<br> platforma <span>do oszczędzania
-                  pieniędzy</span> (w sieci). Tak więc w tym sensie, Flipit.com będzie konkurował z nimi wszystkimi.
-                  <p>Spidersweb</p> 
-                  <p>POLAND</p>
-              </div>
-              <div class="press-comment">
-                  Neben<br>
-                  Gutscheincodes findet<br> man hier auch <span>“Saving<br> Guides”</span>, die verraten,<br>
-                  wie man in bestimmten<br>
-                  <span>Alltagssituationen Geld sparen</span><br> kann.
-                  <p>Gründerszene</p>
-                  <p>GERMANY</p>
-              </div>
-              <div class="press-comment">
-                  In<br> India, Flipit<br> has already partnered<br> with companies like<br> <span>MakeMyTrip, Yebhi,<br> Firstcry, Shopclues</span><br> and chains such as<br> <span>Dominos Pizza</span>. 
-                  <p>Lamwire.com</p>
-                  <p>INDIA</p>
-              </div>
-              <div class="press-comment">                  
-                  Wij willen<br>
-                  wereldwijd het<br>
-                  <span>nummer-een-merk</span> worden op dit gebied.<br>
-                  Niemand werkt globaal in lokale talen. Dat gaan wij doen. 
-                  <p>Emerce</p>
-                  <p>NETHERLANDS</p>
-              </div>
-
-          </div>
-      </div>
-  </div>
-</div>
-<div class="small-banner">
-  <div class="small-left">
-      <ul class="small-left-tabs">
-          <li class="selected"><img src="<?php echo PUBLIC_PATH;?>flipit/images/m-location-icon.png" alt="" /><a href="javascript:;" id="location">Location</a></li>          
-          <li><img src="<?php echo PUBLIC_PATH;?>flipit/images/m-story-icon.png" alt="" /><a href="javascript:;"  id="story">Story</a></li>
-          <li><img src="<?php echo PUBLIC_PATH;?>flipit/images/m-press-icon.png" alt="" /><a href="javascript:;"  id="press">Press</a></li>
-      </ul>
-  </div>
-  <div class="small-right">
-          <div id="jquery-tabs-slider">
-            <div class="accordian">
-              <ul>
-                <li class="dropdown">
-                  <div class="arrow-right"></div>
-                  <h2>Europe</h2>
-                </li>
-                <li class="dropdown_bottom_box">
-                  <div class="expand_listing">
-                    <div class="main_expandlisting">
-                      <div class="text_expand_listing">
-                        <a href="http://www.flipit.com/be">Belgium | België</a>
-                        <a href="http://www.flipit.com/fr">France</a>
-                        <a href="http://www.flipit.com/de">Germany | Deutschland</a>
-                        <a href="http://www.flipit.com/pl">Poland | Polska</a>
-                        <a href="http://www.flipit.com/es">Spain | España</a>
-                        <a href="http://www.flipit.com/ch">Switzerland | Schweiz</a>
-                        <a href="http://www.kortingscode.nl">Netherlands | Nederland *</a>
-                        <a href="http://www.flipit.com/at">Austria | Österreich</a>
-                        <a href="http://www.flipit.com/dk">Denmark | Danmark</a>
-                        <span class="disabled">Finland | Suomi</span>
-                        <a href="http://www.flipit.com/it">Italy | Italia</a>
-                        <span class="disabled">Norway | Norge</span>
-                        <a href="http://www.flipit.com/se">Sweden | Sverige</a>
-                        <a href="http://www.flipit.com/pt">Portugal</a>
-                        <span class="disabled">Turkey | Türkiye</span>
-                        <span class="disabled">United Kingdom</span>
-                      </div>
+<body class="splash-page">
+<?php
+$mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(); 
+    if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
+        $countryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
+        $localeName = 
+            $mostPopularCoupon['locale'] == 'en' 
+            ? '' 
+            : $mostPopularCoupon['locale'].'/';
+        $domainName = 
+            $mostPopularCoupon['locale'] == 'en' 
+            ? 'http://www.kortingscode.nl/' 
+            : 'http://www.flipit.com/'.$localeName;
+        $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+        $daysTillOfferExpires = 
+            $offerPartial->getDaysTillOfferExpires($mostPopularCoupon['mostPopularCoupon'][0]['endDate']);
+        $offerExpiryDate = 
+            $offerPartial->getOfferDates((object) $mostPopularCoupon['mostPopularCoupon'][0], $daysTillOfferExpires);
+    }
+?>
+    <div id="wrapper">
+        <div class="container">
+            <div class="panel-box win-min-height">
+                <strong class="logo-panel"><a href="http://www.flipit.com/">flipt Changing the way we save</a></strong>
+                <span class="alt-text">CHoose RegioN:</span>
+                <div id="selectedByIP" style="display:none;" class="region-box"></div>
+                <div class="links-cols">
+                    <div class="row">
+                    <div class="col-xs-6">
+                        <strong class="title">ASIA</strong>
+                        <ul>
+                            <li><a href="http://www.flipit.com/in">India</a></li>
+                            <li><a href="http://www.flipit.com/id">Indonesia</a></li>
+                            <li><a href="http://www.flipit.com/my">Malaysia | Malasja</a></li>
+                            <li><a href="http://www.flipit.com/sg">Singapore</a></li>
+                        </ul>
+                        <strong class="title">australia</strong>
+                        <ul>
+                            <li><a href="http://www.flipit.com/au">Australia</a></li>
+                            <li><a href="http://www.flipit.com/nz">New Zealand</a></li>
+                        </ul>
+                        <strong class="title">NORTH AND SOUTH AMERICA</strong>
+                        <ul>
+                            <li><a href="http://www.flipit.com/br">Brazil | Brasil</a></li>
+                            <li><a href="http://www.flipit.com/ca">Canada</a></li>
+                            <li><a href="http://www.flipit.com/us">United States</a></li>
+                        </ul>
                     </div>
-                  </div>
-                  <div class="clear"></div>
-                </li>
-
-                <li class="dropdown">
-                  <div class="arrow-right"></div>
-                  <h2>Asia</h2>
-                </li>
-                <li class="dropdown_bottom_box">
-                  <div class="expand_listing">
-                    <div class="main_expandlisting">
-                      <div class="text_expand_listing">
-                        <a href="http://www.flipit.com/in">India</a>
-                        <a href="http://www.flipit.com/id">Indonesia</a>
-                        <span class="disabled">Japan | 日本</span>
-                        <a href="http://www.flipit.com/my">Malaysia | Malasja</a>
-                        <a href="http://www.flipit.com/sg">Singapore</a>
-                      </div>
+                    <div class="col-xs-6">
+                        <strong class="title">EUROPE</strong>
+                        <ul>
+                            <li><a href="http://www.flipit.com/at">Austria | Österreich</a></li>
+                            <li><a href="http://www.flipit.com/be">Belgium | België</a></li>
+                            <li><a href="http://www.flipit.com/dk">Denmark | Danmark</a></li>
+                            <li><a href="http://www.flipit.com/fr">France</a></li>
+                            <li><a href="http://www.flipit.com/de">Germany | Deutschland</a></li>
+                            <li><a href="http://www.flipit.com/it">Italy | Italia</a></li>
+                            <li><a href="http://www.kortingscode.nl">Netherlands | Nederland</a></li>
+                            <li><a href="http://www.flipit.com/pl">Poland | Polska</a></li>
+                            <li><a href="http://www.flipit.com/pt">Portugal</a></li>
+                            <li><a href="http://www.flipit.com/es">Spain | España</a></li>
+                            <li><a href="http://www.flipit.com/se">Sweden | Sverige</a></li>
+                            <li><a href="http://www.flipit.com/ch">Switzerland | Schweiz</a></li>
+                        </ul>
                     </div>
-                  </div>
-                  <div class="clear"></div>
-                </li>
-
-                <li class="dropdown">
-                  <div class="arrow-right"></div>
-                  <h2>Africa</h2>
-                </li>
-                <li class="dropdown_bottom_box">
-                  <div class="expand_listing">
-                    <div class="main_expandlisting">
-                      <div class="text_expand_listing">
-                        <span class="disabled">South Africa</span>
-                      </div>
                     </div>
-                  </div>
-                  <div class="clear"></div>
-                </li>
-
-                <li class="dropdown">
-                  <div class="arrow-right"></div>
-                  <h2>Australia</h2>
-                </li>
-                <li class="dropdown_bottom_box">
-                  <div class="expand_listing">
-                    <div class="main_expandlisting">
-                      <div class="text_expand_listing">
-                        <a href="http://www.flipit.com/au">Australia</a>
-                        <a href="http://www.flipit.com/nz">New Zealand</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="clear"></div>
-                </li>
-                <li class="dropdown">
-                  <div class="arrow-right"></div>
-                  <h2>North and South America</h2>
-                </li>
-                <li class="dropdown_bottom_box">
-                  <div class="expand_listing">
-                    <div class="main_expandlisting">
-                      <div class="text_expand_listing">
-                        <a href="http://www.flipit.com/br">Brazil | Brasil</a>
-                        <a href="http://www.flipit.com/ca">Canada</a>
-                        <a href="http://www.flipit.com/us">United States</a>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="clear"></div>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="press-bg" id="press-box" style="display:none;">
-          <span class="press-bg-shadow-top"></span>
-          <div class="press-inner-container">
-              <div class="press-comment">
-                  Due<br> to our position<br> and experience
-                  <span>we know what
-                  advertisers want</span>
-                  they want to have a <span>large additional reach</span> and added value from<br> their publishers.
-                  <p>Techinasia</p>
-                  <p>INDIA</p>
-              </div>
-              <div class="press-comment">
-                  Queremos <br>crearun entorno que <br>continuamente se adapte a losdeseos y a las necesidades de sus usuarios y que de esta<br>manera se <span>acerque<br>
-                  a la perfección<br>
-                  absoluta.</span>
-                  <p>Eureka-Startups</p>
-                  <p>SPAIN</p>
-              </div>
-              <div class="press-comment">                  
-                  Flipit.com<br>powinien być<br> postrzegany jako idealna<br> platforma <span>do oszczędzania
-                  pieniędzy</span> (w sieci). Tak więc w tym sensie, Flipit.com będzie konkurował z nimi wszystkimi.
-                  <p>Spidersweb</p> 
-                  <p>POLAND</p>
-              </div>
-              <div class="press-comment">
-                  Neben<br>
-                  Gutscheincodes findet<br> man hier auch <span>“Saving<br> Guides”</span>, die verraten,<br>
-                  wie man in bestimmten<br>
-                  <span>Alltagssituationen Geld sparen</span><br> kann.
-                  <p>Gründerszene</p>
-                  <p>GERMANY</p>
-              </div>
-              <div class="press-comment">
-                  In<br> India, Flipit<br> has already partnered<br> with companies like<br> <span>MakeMyTrip, Yebhi,<br> Firstcry, Shopclues</span><br> and chains such as<br> <span>Dominos Pizza</span>. 
-                  <p>Lamwire.com</p>
-                  <p>INDIA</p>
-              </div>
-              <div class="press-comment">
-                  Wij willen<br>
-                  wereldwijd het<br>
-                  <span>nummer-een-merk</span> worden op dit gebied.<br>
-                  Niemand werkt globaal in lokale talen. Dat gaan wij doen. 
-                  <p>Emerce</p>
-                  <p>NETHERLANDS</p>
-              </div>
-          </div>
-          <div class="clear"></div>
-          <span class="press-bg-shadow-bot"></span>
-      </div>
-      <div class="thestory-s" id="thestory-small" style="display:none;">
-        <div class="containerthestory">
-          <div class="holder">
-            <div class="thestorytext">
-              <h1>Next Generation Couponing</h1>
-              <p>Our Flipit.com adventure started more than a year ago. For quite some time, we have managed large couponing portals in Europe. But we felt we could still add more to the shopping experience. Don't you agree? Online shopping can be much more effective - cheaper and much more fun! This is exactly our ambition: to create a global couponing environment which adapts to your wishes and needs perfectly.</p>
-              <p>How do we make this happen? Well, you decide. It might result in a geo-based couponing App for Google Glass, or a postal service that delivers customized coupons to your door. What we do know is that our developers are ready to build exactly what you want based on your reviews and feedback.</p>
-              <p>We'll be launching in many countries in the near future, we want to help the entire world saving as much on online shopping. Become part of our journey. Use our website and give us your feedback.</p>
-              <p>E-mail us for more info, our presskit or any questions about this adventure!</p>
-              <h2>Let's Flipit!</h2>
-              <div class="bubble-arrow"></div>
-            </div>
-            <div class="imageholder-center">
-                <span class="imageholder"></span>
-                <div class="name">
-                  <h2>Jochem Vroom</h2>
-                  <span>jochem@imbull.com</span>
                 </div>
+                <?php
+                    if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
+                ?>        
+                <span class="alt-text">Most Popular Coupon ON EARTH</span>
+                <div class="sponsor-box">
+                    <span class="image">
+                        <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
+                            <img src="<?php echo PUBLIC_PATH_CDN.$localeName
+                            .ltrim($mostPopularCoupon['mostPopularCoupon'][2]['path'], '/')
+                            .'thum_medium_'
+                            .$mostPopularCoupon['mostPopularCoupon'][2]['name']; ?>" 
+                            alt="<?php echo $mostPopularCoupon['mostPopularCoupon'][2]['name'];?>"
+                            width="86" height="44" />
+                        </a>
+                    </span>
+                    <div class="text-box">
+                         <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
+                            <strong>Flipit 
+                            <?php echo $countryName; ?> - 
+                            <?php echo $mostPopularCoupon['mostPopularCoupon'][1]['name']; ?>
+                            </strong>
+                        </a>
+                        <p><span class="mark"><?php echo $offerExpiryDate; ?></span>
+                            <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['exclusiveCode'] != '' ? 
+                            '<span class="mark2">Exclusive</span>' : '' ; ?></p>
+                        <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
+                        <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['title']; ?></a>
+                    </div>
+                </div>
+                <?php 
+                    }
+                ?>
             </div>
-          </div>
+            <div class="bg-stretch">
+                <img src="<?php echo PUBLIC_PATH;?>images/front_end/img-33.jpg" alt="img-33" />
+            </div>
         </div>
-      </div>
-  </div>
-  <div class="clear"></div>
-</div>
-<nav>
-  <div class="container">
-    <h2 class="selecttext">Select your country</h2>
+    </div>
+    <script type="text/javascript">
 
-    <?php echo $this->render('partials/_bottom_country_list.phtml'); ?>
+        $(function(){
+            var availableLanguages = <?php echo json_encode(
+                FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames('true')); ?>;
 
-  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script> 
-  <script src="http://code.jquery.com/jquery-migrate-1.2.1.min.js"></script> 
-  <script type="text/javascript" src="<?php echo PUBLIC_PATH;?>flipit/js/jMenu.js"></script>
-  <script type="text/javascript" src="<?php echo PUBLIC_PATH;?>flipit/js/jquery.flippy.js"></script> 
-  <script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
-  <script type="text/javascript">stLight.options({publisher: "96dd1eba-e0de-4147-ae74-e2430944f8ef", doNotHash: true, doNotCopy: false, hashAddressBar: false});</script>
-  <script>
+            $.get("http://ipinfo.io", function(response) {
+                if(response.country.toLowerCase() in availableLanguages){
 
-      (function() {
+                    var countryCode = response.country.toLowerCase(),
+                        countryName = availableLanguages[countryCode];
 
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/plusone.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
-      
-  var mapContent = $(".mapcontainer").clone();
+                    var countryUrl = '/'+countryCode;
+                    if(countryName == 'Netherlands') {
+                        countryUrl = 'http://www.kortingscode.nl';
+                    }
+                    var htmlContent = '<span class="flag"><span class="country-flags '+ countryCode +'"></span></span>';
+                        htmlContent+= '<span class="text">Country Detected:  <a href="'+countryUrl+'">'+ countryName
+                        +'</a></span>';
 
-  $(document).ready(function(){
-      init();
-  });
-  function rotate(obj,dir)
-  {
-     var cont, btnClass,content="" ;
+                    $('#selectedByIP').html(htmlContent).show();
+                }
 
-      btnClass = jQuery(obj).data('rel');
-      content = jQuery("div." + btnClass + "container").clone();
-     
-      if(btnClass == 'map')
-      {
-        content = mapContent ;
-      }
-      var div =    $("<div />").html(content.removeClass('hide'));
+            }, "jsonp");
 
-      jQuery("div.slides").flippy({
-              content: div ,
-              direction: dir,
-              duration:"750",
-              color_target :"#ea5234",
-              onFinish: function(){
-                init();
-              }
-      });
-
-      
-   // e.preventDefault();
-  }
-
-  function init()
-  {
-
-    $("li").hover(
-          function() { $(".submenu", this).show(); },
-          function() { $(".submenu", this).hide(); }
-      );
-  }
-  </script> 
-  <script>
-  /*jQuery(".slides .button").bind("click",function(e){
-      e.preventDefault();
-      
-      var content = jQuery(this).parents(".mapcontainer").next(".thestory").html();
-      
-      jQuery(this).parents(".mapcontainer").flippy({
-          content: content,
-          direction:"left",
-          duration:"750",
-          color_target :"#ea5234",
-      });
-  });*/
-  </script>
-  <script>
-    $(document).ready(function(){
-
-        $('#location').click(function(){
-
-          $("li.selected" , ".small-left-tabs").removeClass('selected');
-          $(this).parent('li').addClass("selected");
-          $('#jquery-tabs-slider').show();
-          $('#press-box').hide();
-          $('#thestory-small' , '.small-banner').hide();
-                      
         });
-        $('#story').click(function(){
-          $("li.selected" , ".small-left-tabs").removeClass('selected');
-          $(this).parent('li').addClass("selected");
-          $('#jquery-tabs-slider').hide();
-          $('#press-box').hide();
-          $('#thestory-small' , '.small-banner').show();
-        });
-        $('#press').click(function(){
+    </script>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+    $headScript->prependFile("/public/js/front_end/less/dist/less-1.7.0.js");
+} else {
+    $headScript = $this->HeadScript();
+}
 
-          $("li.selected" , ".small-left-tabs").removeClass('selected');
-          $(this).parent('li').addClass("selected");
-
-          $('#jquery-tabs-slider').hide();
-          $('#press-box').show();
-          $('#thestory-small' , '.small-banner').hide();
-        });
-        
-    });
-  </script>
-</footer>
+echo $headScript
+    ->prependFile("/public/js/front_end/jquery.main.js")
+    ->prependFile("/public/js/bootstrap.js")
+    ->prependScript('var HOST_PATH_LOCALE = "'.  HTTP_PATH_LOCALE .'";');
+?>
 </body>
 </html>
+

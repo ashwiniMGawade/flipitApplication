@@ -643,49 +643,40 @@ function validateFormAddNewShop(){
 						
 				},
 
-				onfocusin : function(element) {
-					
-					// display hint messages when an element got focus 
-					if (!$(element).parent('div').prev("div")
-							.hasClass('success')) {
-						
-			    		 var label = this.errorsFor(element);
-			    		 
-			    		 if( $( label ).attr('hasError')  )
-			    	     {
-			    			 if($( label ).attr('remote-validated') != "true")
-			    			 	{
-									this.showLabel(element, focusRules[element.name]);
-									
-									$(element).parent('div').removeClass(
-													this.settings.errorClass)
-											.removeClass(
-													this.settings.validClass)
-											.prev("div")
-											.addClass('focus')
-											.removeClass(
-													this.settings.errorClass)
-											.removeClass(
-													this.settings.validClass);
-			    			 	}
-			    			 
-			    	     } else {
-			    	    	 
-							this.showLabel(element, focusRules[element.name]);
-							
-							$(element).parent('div').removeClass(
-											this.settings.errorClass)
-									.removeClass(
-											this.settings.validClass)
-									.prev("div")
-									.addClass('focus')
-									.removeClass(
-											this.settings.errorClass)
-									.removeClass(
-											this.settings.validClass);
-			    	     }
-					}
-				},
+                onfocusin : function(element) {
+                    if(element.type.toLowerCase()!='file') {
+                        if (!$(element).parent('div').prev("div").hasClass('success')) {
+                            var label = this.errorsFor(element);
+                            if($(label).attr('hasError')) {
+                                if($(label).attr('remote-validated') != "true") {
+                                    this.showLabel(element, focusRules[element.name]);
+                                    $(element).parent('div').removeClass(
+                                        this.settings.errorClass)
+                                        .removeClass(
+                                        this.settings.validClass)
+                                        .prev("div")
+                                        .addClass('focus')
+                                        .removeClass(
+                                        this.settings.errorClass)
+                                        .removeClass(
+                                        this.settings.validClass);
+                                }
+                            } else {
+                                this.showLabel(element, focusRules[element.name]);
+                                $(element).parent('div').removeClass(
+                                    this.settings.errorClass)
+                                    .removeClass(
+                                    this.settings.validClass)
+                                    .prev("div")
+                                    .addClass('focus')
+                                    .removeClass(
+                                    this.settings.errorClass)
+                                    .removeClass(
+                                    this.settings.validClass);
+                                }
+                            }
+                        }
+                    },
 
 				highlight : function(element,
 						errorClass, validClass) {

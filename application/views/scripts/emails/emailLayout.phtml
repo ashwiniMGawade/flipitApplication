@@ -1,0 +1,98 @@
+<?php
+if (defined('HTTP_PATH')) {
+    $httpPath = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
+    $locale = LOCALE;
+    $httpPathLocale = LOCALE != '' ? 'http://www.flipit.com/'.LOCALE.'/' : 'http://www.kortingscode.nl/';
+    $publicPathCdn = LOCALE != '' ? 'http://img.flipit.com/public/'.LOCALE.'/' : 'http://img.kortingscode.nl/public/';
+} else {
+    $httpPath = $this->pathConstants['httpPath'].'/';
+    $locale = $this->pathConstants['locale'];
+    $httpPathLocale = $this->pathConstants['httpPathLocale'];
+    $publicPathCdn = $this->pathConstants['publicPathCdn'];
+}
+$publicLocalePath = $locale != '' ? $httpPath.'public/'.$locale.'/images/front_end/'
+    : $httpPath.'public/images/front_end/';
+$websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($locale);
+$publicPath = $httpPath.'public/images/front_end/';
+$emailsViewPath = 'emails/';
+$emailHeader = $this->partial(
+    $emailsViewPath. 'emailHeader.phtml',
+    array(
+        'websiteName' => $websiteName,
+        'publicLocalePath' => $publicLocalePath,
+        'httpPathLocale' => $httpPathLocale,
+        'mailType' => $this->mailType,
+        'locale' => $locale,
+        'publicPath' => $publicPath
+    )
+);
+
+$welcomeTopBlock = '';
+if(!empty($this->topOffers)) {
+    $welcomeTopBlock = $this->partial(
+        $emailsViewPath. 'welcomeTopBlock.phtml',
+        array(
+            'websiteName' => $websiteName,
+            'publicPath' => $publicPath
+        )
+    );
+}
+
+$topOffers = '';
+if(!empty($this->topOffers)) {
+    $topOffers = $this->partial(
+        $emailsViewPath. 'emailOffers.phtml',
+        array(
+            'topOffers' => $this->topOffers,
+            'categoryInformation' => null,
+            'httpPathLocale' => $httpPathLocale,
+            'publicPathCdn' => $publicPathCdn
+        )
+    );
+}
+
+$topVouchercodes = '';
+if(!empty($this->topVouchercodes)) {
+    $topVouchercodes = $this->partial(
+        $emailsViewPath. 'emailOffers.phtml',
+        array(
+            'topOffers' => $this->topVouchercodes,
+            'categoryInformation' => null,
+            'httpPathLocale' => $httpPathLocale,
+            'publicPathCdn' => $publicPathCdn
+        )
+    );
+}
+
+$categoryVouchers = '';
+if(!empty($this->categoryVouchers)) {
+    $categoryVouchers = $this->partial(
+        $emailsViewPath. 'emailOffers.phtml',
+        array(
+            'topOffers' => $this->categoryVouchers,
+            'categoryInformation' => $this->categoryInformation,
+            'httpPathLocale' => $httpPathLocale,
+            'publicPathCdn' => $publicPathCdn
+        )
+    );
+} 
+
+?>
+<table width="100%" cellpadding="0" cellspacing="0">
+<tbody>
+    <tr>
+        <td>
+            <table width="100%" align="center" cellpadding="0" cellspacing="0">
+                <tbody>
+                <?php
+                echo $emailHeader;
+                echo $welcomeTopBlock;
+                echo $topOffers;
+                echo $topVouchercodes;
+                echo $categoryVouchers;
+                ?>
+            </tbody></table>
+        </td>
+    </tr>
+</tbody>
+</table>

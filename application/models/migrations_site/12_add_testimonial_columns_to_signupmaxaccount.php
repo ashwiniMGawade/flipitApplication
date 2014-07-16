@@ -3,19 +3,19 @@ class AddTestmonialsColumnAccountSettings extends Doctrine_Migration_Base
 {
     public function up()
     {
-		$this->addColumn( 'signupmaxaccount', 'testimonial1', 'text', null ,  
-    					array('notnull' => false ));
-		$this->addColumn( 'signupmaxaccount', 'testimonial2', 'text', null ,  
-    					array('notnull' => false ));
-    	$this->addColumn( 'signupmaxaccount', 'testimonial3', 'text', null ,  
-    					array('notnull' => false ));
-    	
-    	$this->addColumn( 'signupmaxaccount', 'showtestimonial', 'boolean', null ,
-    			array('default' => 0 ,
-    					'notnull' => true	));
-    	
-    	
-	}
+        $this->addColumn( 'signupmaxaccount', 'testimonial1', 'text', null ,
+                        array('notnull' => false ));
+        $this->addColumn( 'signupmaxaccount', 'testimonial2', 'text', null ,
+                        array('notnull' => false ));
+        $this->addColumn( 'signupmaxaccount', 'testimonial3', 'text', null ,
+                        array('notnull' => false ));
+
+        $this->addColumn( 'signupmaxaccount', 'showtestimonial', 'boolean', null ,
+                array('default' => 0 ,
+                        'notnull' => true	));
+
+
+    }
 
     public function down()
     {

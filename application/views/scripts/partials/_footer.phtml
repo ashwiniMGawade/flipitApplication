@@ -1,7 +1,84 @@
-<!-- Footer Section Starts -->
-<?php 
-	echo $this->render('partials/_footerDynamic.phtml'); 
-	echo $this->render('partials/_footerPageLink.phtml'); 
+<?php
+$footer = FrontEnd_Helper_viewHelper::getFooterData();
+$signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+	'footerLargeSignUpForm',
+	'SignUp',
+	'email-form form-inline',
+	'orange'
+);
+if (
+	zend_Controller_Front::getInstance()->getRequest()->isPost() 
+	&& zend_Controller_Front::getInstance()->getRequest()->getParam('formName')=='footerLargeSignUpForm') {
+    if ($signUpForm->isValid(zend_Controller_Front::getInstance()->getRequest()->getPost())) {
+        $signUpStep2Url = FrontEnd_Helper_SignUpPartialFunction::signUpRedirectLink($signUpForm);
+        header('location:'. $signUpStep2Url);
+    } else {
+        $signUpForm->highlightErrorElements();
+    }
+}
+$signUpWidgetForm = ''; 
+$signUpWidgetForm = $this->partial(
+       'partials/_signupForm.phtml',
+        array(
+            'zendForm' => $signUpForm,
+            'signupFormWidgetType' => 'footerSignupForm',
+            'shopId' => '',
+            'shopLogoOrDefaultImage' => '',
+        )
+    );
 ?>
-</div>	
-<!-- Footer Section Ends -->
+<footer id="footer">
+<?php 
+if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='login'
+    && zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='signup'
+):
+?>
+    <div class="bottom-panel">
+        <div class="container" id ="footer-signup-form">
+            <?php echo $signUpWidgetForm; ?>
+            <div class="social">
+                <?php echo $footer[0]['topFooter'];?>
+            </div>
+        </div>
+    </div>
+<?php
+endif;
+?>
+    <div class="container bottom-nav">
+        <div class="row">
+            <?php echo $footer[0]['middleColumn1'];?>
+            <?php echo $footer[0]['middleColumn2'];?>
+            <?php echo $footer[0]['middleColumn3'];?>
+        </div>
+    </div>
+
+    <div class="container add-block">
+        <?php echo $footer[0]['middleColumn4'];?>
+        <ul class="countries">
+            <?php
+            $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
+            foreach ($websitesWithLocales as $flipitLocaleKey => $flipitLocaleValue) : 
+                $explodedLocaleValue = explode('=',$flipitLocaleValue);
+                $localeStatus = isset($explodedLocaleValue[1]) ? $explodedLocaleValue[1] : '';
+                $websiteName = isset($explodedLocaleValue[0]) ? $explodedLocaleValue[0] : '';
+                if ($localeStatus == 'online') :
+            	?>
+            	<li>
+                	<a title='<?php echo $websiteName; ?>' href="<?php echo 'http://'.$websiteName; ?>"
+                	class="country-flags <?php echo strtolower($flipitLocaleKey); ?>"><?php echo $websiteName; ?>
+                	</a>
+            	</li>
+                <?php endif; ?>
+            <?php endforeach; ?>
+        </ul>
+    <?php echo $footer[0]['bottomFooter'];?>
+    </div>
+<?php
+if (APPLICATION_ENV == 'development') {
+    $headScript =  $this->HeadScript();
+} else {
+    $headScript = $this->minifyHeadScript();
+}
+echo $headScript;
+?>
+</footer>

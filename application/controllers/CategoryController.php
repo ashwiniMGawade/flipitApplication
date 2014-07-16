@@ -1,160 +1,89 @@
 <?php
-class CategoryController extends Zend_Controller_Action {
+class CategoryController extends Zend_Controller_Action
+{
+    public function init()
+    {
+        $module     = strtolower($this->getRequest()->getParam('lang'));
+        $controller = strtolower($this->getRequest()->getControllerName());
+        $action     = strtolower($this->getRequest()->getActionName());
+        if (
+            file_exists(
+                APPLICATION_PATH . '/modules/' . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
+            )
+        ) {
+            $this->view->setScriptPath(APPLICATION_PATH . '/modules/' . $module . '/views/scripts');
+        } else {
+            $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
+        }
+        $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
+    }
+    public function showAction()
+    {
+        $categoryPermalink = $this->getRequest()->getParam('permalink');
+        $categoryDetails = Category::getCategoryDetails($categoryPermalink);
+        if (count($categoryDetails) > 0) {
+            $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetails[0]['id'], 71);
+            $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
+                $categoryVoucherCodes,
+                $this->_getAllParams(),
+                27,
+                3
+            );
+            $this->view->offersWithPagination = $offersWithPagination;
+            $this->view->categoryDetails = $categoryDetails;
+            $this->view->offersType = 'offerWithPagenation';
+            $customHeader = '';
+            $this->viewHelperObject->getMetaTags(
+                $this,
+                $categoryDetails[0]['name'],
+                trim($categoryDetails[0]['metatitle']),
+                trim($categoryDetails[0]['metaDescription']),
+                FrontEnd_Helper_viewHelper::__link('link_categorieen') . '/' .$categoryDetails[0]['permaLink'],
+                FACEBOOK_IMAGE,
+                $customHeader
+            );
 
-	/**
-	 * override views based on modules if exists
-	 * @see Zend_Controller_Action::init()
-	 * @author Bhart
-	 */
-	public function init() {
+        } else {
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
+        $signUpFormLarge = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('largeSignupForm', 'SignUp');
+        $signUpFormSidebarWidget =
+           FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp('formSignupSidebarWidget', 'SignUp ');
+        FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, $signUpFormLarge, $signUpFormSidebarWidget);
+        $this->view->form = $signUpFormLarge;
+        $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
+    }
 
-		$module   = strtolower($this->getRequest()->getParam('lang'));
-		$controller = strtolower($this->getRequest()->getControllerName());
-		$action     = strtolower($this->getRequest()->getActionName());
-
-		# check module specific view exists or not
-		if (file_exists (APPLICATION_PATH . '/modules/'  . $module . '/views/scripts/' . $controller . '/' . $action . ".phtml")){
-			
-			# set module specific view script path
-			$this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-		}
-		else{
-			
-			# set default module view script path
-			$this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
-		}
-	}
-	
-	/**
-	 * get all category icons and special category list
-	 * @author blal
-	 */
-	 public function indexAction() {
-	 	
-	 	$permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
-    	$this->view->canonical = FrontEnd_Helper_viewHelper::generatCononical($permalink) ;
-	 	
-		//get category icons from database
-        $this->pageDetail = Page::getPageFromPageAttr(9);
-    	$this->view->pageTitle = @$this->pageDetail->pageTitle;
-    	$this->view->headTitle(@$this->pageDetail->metaTitle);
-    	$this->view->headMeta()->setName('description', @trim($this->pageDetail->metaDescription));
-    	$this->view->desc = @$this->pageDetail->content;
-    	$this->view->pageDetail = $this->pageDetail;
-	 	$cache = Zend_Registry::get('cache');
-	 	$pageKey ="all_category_list";
-	 	
-	 	
-	 	if( @$this->pageDetail->customHeader)
-	 	{
-	 		$this->view->layout()->customHeader = "\n" . @$this->pageDetail->customHeader;
-	 	}
-	 	
-	 	
-	 	// no cache available, lets query.
-	 	$flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pageKey);
-	 	//key not exist in cache
-	 	if($flag){
-	 			
-	 		//get Page data from database and store in cache
-	 		$categoryIcons = Category::getCategoryIcons();  //function call from model to show category icons 
-	 		FrontEnd_Helper_viewHelper::setInCache($pageKey, $categoryIcons);
-	 		//echo  'FROM DATABASE';
-	 			
-	 	} else {
-	 		//get from cache
-	 		$categoryIcons = FrontEnd_Helper_viewHelper::getFromCacheByKey($pageKey);
-	 		//echo 'The result is comming from cache!!';
-	 	}
-	 	
-	 	$this->view->catIcons = $categoryIcons;
-	 	
-	 	
-	 	/******************* show offer list pages****************/
-	 	 
-		$pageKey ="all_categoryspeciallist_list";
-		$specialflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pageKey);
-		//key not exist in cache
-		if($specialflag){
-		    $specialList = Page::getOfferListPage();
-			FrontEnd_Helper_viewHelper::setInCache($pageKey, $specialList);
-			//echo  'FROM DATABASE';
-		} else {
-		
-			$specialList = FrontEnd_Helper_viewHelper::getFromCacheByKey($pageKey);
-			//echo 'The result is comming from cache!!';
-		}
-		
-		//for facebook parameters
-		$this->view->fbtitle = @$this->pageDetail->pageTitle;
-		$this->view->fbshareUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('categorieen');
-		if(LOCALE == '' )
-		{
-				$fbImage = 'logo_og.png';
-		}else{
-				$fbImage = 'flipit.png';
-					
-		}
-		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
-
-		
-		$this->view->specialCat = $specialList;
-	}
-
-	
-	 /**
-	 * get offer related to category
-	 * @author mkaur updated by blal
-	 */
-	 public function showAction() {
-	  
-	 	$permalink = $this->getRequest ()->getParam ('permalink');
-	   //get category for voucher codes
-	   $category = Category::getCategoryforFrontend($permalink);
-	  
-	   $this->view->category = $category;
-	   if(count($category )> 0 ) {
-	   $this->view->editRec = $category;
-	   $this->view->headTitle(@trim($category[0]['metatitle']));
-       $this->view->headMeta()->setName('description', @trim($category[0]['metaDescription']));
-	   
-	   //get voucher codes on category id basis from database
-	   $vouchers = Category::getCategoryVoucherCodes($category[0]['id'],71);
-	   
-	 
-	   $ArNew =  array();
-	   foreach ($vouchers as $v){
-	   	$ArNew[$v['id']]  = $v;
-	   }
-	   $authorId = Category::getAuthorId();
-	   $this->view->authorId = $authorId['authorId'];
-	   $paginator = FrontEnd_Helper_viewHelper::renderPagination($vouchers,$this->_getAllParams(),54,3);
-	   $this->view->paginator = $paginator;
-	   
-	   //for facebook parameters
-	   $this->view->fbtitle = @$category[0]['name'];
-	   $this->view->fbshareUrl = HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('categorieen') . '/' .@$category[0]['permaLink'];
-
-		if(LOCALE == '' )
-		{
-				$fbImage = 'logo_og.png';
-		}else{
-				$fbImage = 'flipit.png';
-					
-		}
-		$this->view->fbImg = HTTP_PATH."public/images/" .$fbImage ;
-	   
-	   }else {
-	     throw new Zend_Controller_Action_Exception('', 404);
-	   	
-	   }
-	 }
-	  
-
-	  public function clearcacheAction(){
-	  	$cache = Zend_Registry::get('cache');
-	  	$cache->clean();
-	  	echo 'cache is cleared';
-	  	exit;
-	  }
+    public function indexAction()
+    {
+        $categoryPermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink);
+        $pageDetails = Page::getPageDetailsFromUrl($categoryPermalink);
+        $this->viewHelperObject->getMetaTags(
+            $this,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            FrontEnd_Helper_viewHelper::__link('link_categorieen'),
+            FACEBOOK_IMAGE,
+            isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
+        );
+        $allCategories = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_category_list',
+                array(
+                    'function' => 'Category::getCategoriesInformation', 'parameters' => array()
+                )
+            );
+        $specialPagesList = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_categoryspeciallist_list',
+                array(
+                    'function' => 'Page::getSpecialListPages', 'parameters' => array()
+                )
+            );
+        $specialPages = $this->_helper->Category->getSpecialPageWithOffersCount($specialPagesList);
+        $this->view->categoriesWithSpecialPagesList = array_merge($allCategories, $specialPages);
+        $this->view->pageCssClass = 'all-categories-alt-page';
+    }
 }

@@ -1,0 +1,32 @@
+<header class="heading-box text-shop">
+    <h2>
+<?php 
+echo $this->translate('Similar shops');
+?>  
+    </h2>
+    <strong>
+<?php 
+echo $this->translate('Check out these similar shops for more discounts');
+?>  
+    </strong>
+</header>
+<section class="section">
+    <div class="block">
+       <div class="holder">
+           <ul class="shops">
+<?php 
+if (!empty($this->similarShopsAndSimilarCategoryShops)) {
+    foreach ($this->similarShopsAndSimilarCategoryShops as $shop) {
+        printf(
+            '<li><a href="%s"><img alt="%s" src="%s"></a></li>',
+            HTTP_PATH_LOCALE  . $shop['permaLink'],
+            $shop['name'],
+            PUBLIC_PATH_CDN . $shop['logo']['path'] . 'thum_small_'. $shop['logo']['name']
+        );
+    }
+}
+?>
+           </ul>
+       </div>
+    </div>
+</section>

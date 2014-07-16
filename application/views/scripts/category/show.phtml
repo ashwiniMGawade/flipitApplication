@@ -1,110 +1,48 @@
+<?php
+$categoryHeaderImage =
+    PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryheaderimage']['path']
+    .$this->categoryDetails[0]['categoryheaderimage']['name'];
+$categoryPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
+echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetails[0]['name'], $categoryHeaderImage);
+$partialsViewPath = 'partials/';
+$offers = '';
+if (count($this->offersWithPagination)>0) {
+    $offers = $this->partial(
+        $partialsViewPath.'_offer.phtml',
+        array(
+        'offers'=> $this->offersWithPagination,
+        'offersType'=>$this->offersType,
+        'shopName'=> '',
+        'shop'=>'',
+        'zendForm'=>$this->form,
+        'categoryPermaLink'=>$this->categoryDetails[0]['permaLink']
+        )
+    );
+} else {
+    $offers ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
+}
+$signUpWidgetForm = $this->partial(
+    $partialsViewPath.'_signupForm.phtml',
+    array(
+        'zendForm' => $this->sidebarWidgetForm,
+        'signupFormWidgetType'=> 'sidebarWidget',
+        'shopId'=>'',
+        'shopLogoOrDefaultImage'=>''
+    )
+);
+?> 
+<div class="row">
+    <div class="col-md-8 col-sm-8" id="content">
+    <?php echo $offers; ?>
+    </div>
+    <aside class="col-md-4 col-sm-4" id="sidebar">
     <?php 
-   		$category = $this->category;
-    	$breadcrumb = "<a href='".HTTP_PATH_LOCALE."category/index/' style='color:#6a6a6a'>".$this->translate('Categories')."</a>";
-		$headerSearch = new FrontEnd_Helper_viewHelper();
-		echo $this->partial('partials/_headerSearch.phtml',array('breadcrumb' => $breadcrumb));
-
-
-		?> 
-        <!-- Search Outer2 Ends -->
-        
-        <!-- Separator Starts -->
-        <div class="separator">&nbsp;</div>
-        <!-- Separator Ends -->
-     <div class="new-outer">
-        <!-- Voucher Outer Starts -->
-        <div class="new-outer">
-        <div class="voucher-outer">
-        <input type="hidden" value="<?php echo $this->editRec[0]['id'] ?>" name='id' id='id' />
-        	 <!-- Voucher Outer Left Starts -->
-       		 <div class="voucher-outer-left">
-             
-             	<!-- Voucher Outer Left Col1 Starts -->
-             	<div class="voucher-outer-left-col1">
-                 
-                 <?php 
-                   for($i = 0; $i < count($this->editRec); $i++){
-                   $categoryIconPath = '';
-        		   $categoryIconPath = PUBLIC_PATH_CDN.$this->editRec[$i]['categoryicon']['path']."thum_large_".$this->editRec[$i]['categoryicon']['name'];
-        			   
-                   ?>
-                   <div class="voucher-left catlogo">
-                   <img src ="<?php echo $categoryIconPath;?>" alt="<?php echo $this->editRec[$i]['name'];?>">
-                   </div>
-                   
-                   <div class="voucher-heading ml15 mt5">
-                   <h1><?php echo $this->editRec[$i]['name']; ?></h1>
-           		   </div>
-                   
-                   <div class="voucher-text1 ml15">
-                   <span class="word-wrap-without-margin-category"><?php echo $this->editRec[$i]['description']; ?></span>
-                   </div>
-                   <?php  
-                   }
-                   ?>
-                  </div>
-                 <!-- Voucher Outer Left Col1 Ends -->
-                 
-                 <div class="separator" style="margin-top:17px;">&nbsp;</div>
-                   
-                 <!-- Voucher Outer Left Col2 Starts -->
-                 
-                 <?php if(count($this->paginator)>0){?>
-                   <div class="voucher-outer-left-col2" style="margin-top:10px;">
-	             	 <div class="voucher-outer-left-col2" style="width:750px; margin-top:10px;">
-	             	 
-	            	<?php echo $this->partialLoop('partials/offer.phtml', $this->paginator); ?>
-	            	
-					</div>
-               </div>
-                 <!-- Voucher Outer Left Col2 Ends -->
-                 
-                 <!-- Voucher Paging Outer Starts -->
-                 <div  class="voucher-paging-outer">
-                 	<div class="voucher-paging-inner">
-                    	 <?php 
-                                    echo $this->paginationControl($this->paginator,
-                                    'Sliding',
-                                    '/partials/_pagination.phtml'); 
-                              ?>
-                    </div>
-                 </div>
-				<?php }else{?>
-				<div style="text-align:center;font-size:14px;font-weight:bold;">
-				
-				<?php echo $this->translate('No record found.');?>
-				      </div>
-				      <?php }?>
-				                        
-                 <!-- Voucher Paging Outer Ends -->
-
-        </div>
-        	 <!-- Voucher Outer Left Ends -->
-             
-          <!-- Voucher Outer Right Starts -->
-            <div class="voucher-outer-right mt20">
-            	  <!-- Waardebon Starts -->
-           	 <?php     	
-           	 	
- 				$arr = array ();
- 				if(Auth_VisitorAdapter::hasIdentity()):
- 				$arr ['userId'] = Auth_VisitorAdapter::getIdentity()->id;
- 				endif;
- 				$arr ['controllerName'] = $this->controllerName; 
-				echo FrontEnd_Helper_viewHelper::PopularWinkelsWidget()
-        .FrontEnd_Helper_viewHelper::PopularCategoryWidget()
-        .FrontEnd_Helper_viewHelper::otherhelpfullSavingTipsWidget()
-				;
-				           	 
-           	 ?>
-           
-             </div>
-             <!-- Most Popular Outer Ends -->
-             
-            </div>
-            </div>
-              <!-- Voucher Outer Right Ends -->
-      </div>  
-   
-        <!-- Voucher Outer Ends -->
- 
+    $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
+    echo $frontendSidebarHelper->popularCategoryWidget();
+    echo $frontendSidebarHelper->socialMediaWidget();
+    echo $frontendSidebarHelper->popularShopWidget();
+    echo $frontendSidebarHelper->browseByStoreWidget();
+    echo $signUpWidgetForm;
+    ?>
+    </aside>
+</div>
