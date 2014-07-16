@@ -18,6 +18,11 @@ RewriteRule ^sitemaps$ public/flipit/robots.txt [NC,L]
 
 RewriteRule ^(.*)/$ /$1 [L,R=301]
 
+RewriteRule ^how-to/(.*)?$ /$1 [R=301,NC,NE,L]
+
+RewriteCond %{HTTP_HOST} ^www.flipit.com$
+RewriteRule ^([a-z]{2})(\/)how-to/(.*)?$ /$1/$3 [R=301,NC,NE,L]
+
 # wp redirects
 RewriteRule ^nieuws/?$ http://www.kortingscode.nl/bespaarwijzer? [R=301,L]
 RewriteRule ^nieuws/mannen-shoppen-vaker-online-onder-werktijd-dan-vrouwen/?$ http://www.kortingscode.nl/bespaarwijzer/mannen-shoppen-vaker-online-onder-werktijd-dan-vrouwen? [R=301,L]
