@@ -1,0 +1,37 @@
+<?php 
+foreach ($this->popularShops as $popularShop) {
+    $shopImage = PUBLIC_PATH_CDN.ltrim($popularShop['shop']['logo']['imgpath'], "/")
+        . $popularShop['shop']['logo']['imgname'];
+    ?>
+    <article class="block col-sm-6 col-xs-6">
+        <div class="text-holder">
+            <div class="text-holder">
+                <a href="<?php echo $popularShop['shop']['permaLink']; ?>" class="img-ico">
+                    <img width="132" src="<?php echo $shopImage; ?>" 
+                    alt="<?php echo $popularShop['shop']['name']; ?>">
+                </a>
+                <div class="text">
+                    <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["shop"]["permaLink"];?>" class="link">
+                    <?php echo $popularShop['shop']['name']; ?>
+                    </a>
+                    <p>
+                        <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["shop"]["permaLink"];?>" class="active-offer">
+                        <?php 
+                        echo $popularShop['activeCount'] . " " 
+                        .$this->translate('active offers');
+                        ?>
+                        </a>
+                    </p>
+                    <a 
+                    href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
+                    . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') .'&shopId='
+                    . base64_encode($popularShop['shop']['id']);?>' class="pop btn btn-default">
+                        <span class="glyphicon red-heart glyphicon-heart"></span>
+                        <span><?php echo $this->translate('Favourite');?></span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </article>
+    <?php
+}

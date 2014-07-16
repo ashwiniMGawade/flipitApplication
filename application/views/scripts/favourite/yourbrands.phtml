@@ -1,0 +1,40 @@
+<?php
+$favouriteViewPath = "favourite/";
+$recordNotFound = '<div class = "no-record txt-center">' . $this->translate('No record found') .'</div>'; 
+$popularShops = $recordNotFound;
+if(!empty($this->popularShops)) {
+    $popularShops = $this->partial(
+        $favouriteViewPath . '_popularStores.phtml',
+        array('popularShops' => $this->popularShops)
+    );
+}
+$favouriteShops = $recordNotFound; 
+if(!empty($this->favouriteShops)) {
+    $favouriteShops = $this->partial(
+        $favouriteViewPath . '_favouriteStores.phtml',
+            array('favouriteShops' => $this->favouriteShops)
+    );
+}
+?>
+<div class="row">
+    <div id="content" class="col-sm-8">
+        <div class="section">
+            <header class="heading">
+            <?php echo $this->translate('Like your favourite shops');?>
+            </header>
+            <div class="row row-area">
+            <?php echo $popularShops;?>
+            </div>
+        </div>
+    </div>
+    <aside id="sidebar" class="col-sm-4">
+        <article class="block white">
+            <header class="heading">
+            <?php echo $this->translate('Your favorite shops');?>
+            </header>
+            <div class="box-area">
+            <?php echo $favouriteShops; ?>
+            </div>
+        </article>
+    </aside>
+</div>
