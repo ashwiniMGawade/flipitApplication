@@ -87,7 +87,7 @@ class SitemapRefreshVarnish
         }
 
 
-        $connName ='doctrine_site_'.$key;
+        $connName ='doctrine_site';
         # auto load doctrine library
         spl_autoload_register(array('Doctrine', 'autoload'));
 
