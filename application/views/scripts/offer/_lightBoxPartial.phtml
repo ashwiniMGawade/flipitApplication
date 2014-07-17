@@ -20,7 +20,8 @@
 </script>
 <div class="block">
     <form role="form">
-    <input type="hidden" name="copiedText" id='copiedText' value='<?php echo $this->translate("COPIED");?>'>
+    <input type="hidden" name="copiedText" id='copiedText'
+        value='<?php echo FrontEnd_Helper_viewHelper::__form("COPIED");?>'>
         <fieldset>
             <div id="code-hint"><?php echo $this->translate('Press Ctrl + C to copy the code');?></div>
             <div class="holder">
