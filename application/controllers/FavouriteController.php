@@ -34,8 +34,10 @@ class FavouriteController extends Zend_Controller_Action
     public function youroffersAction()
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
+            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
+            $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
             $favouriteShopsOffersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
-                Visitor::getFavoriteShopsOffers(),
+                $offers,
                 $this->_getAllParams(),
                 30,
                 3
