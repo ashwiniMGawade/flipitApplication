@@ -260,6 +260,17 @@ class Shop extends BaseShop
         }
         return;
     }
+
+    public static function getActiveOffersCount($shopId) {
+        $currentDate = date('Y-m-d 00:00:00');
+        $acitveOfferCount = Doctrine_Query::create()->select('count(o.id) as activeCount')
+            ->from('Shop s')
+            ->leftJoin('s.offer o')
+            ->where('s.id='.$shopId)
+            ->andWhere('o.enddate>'."'".$currentDate."'")
+            ->andWhere('o.discounttype="CD"')->fetchArray();
+        return $acitveOfferCount;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
