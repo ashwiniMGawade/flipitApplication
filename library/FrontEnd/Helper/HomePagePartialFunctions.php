@@ -334,8 +334,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 $allowed_tags
             );
             $savingContent =
-                mb_strlen($guideDescription, 'UTF-8') > 185
-                ? mb_substr($guideDescription, 0, 185, 'UTF-8') . "..."
+                mb_strlen($guideDescription, 'UTF-8') > 170
+                ? mb_substr($guideDescription, 0, 170, 'UTF-8') . "..."
                 : $guideDescription;
             $moneySavingGuidestHtml .= $this->getRighColumnContent(
                 $savingImage,

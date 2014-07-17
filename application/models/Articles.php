@@ -357,7 +357,7 @@ class Articles extends BaseArticles
         $data->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($md);
         $data->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
         $data->authorid = BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorList']);
-        $data->authorname = BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']);
+        $data->authorname = trim(BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']));
 
         if(isset($_FILES['articleImage']['name']) && $_FILES['articleImage']['name'] != '') {
 
