@@ -108,6 +108,7 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
                 var divId = "<?php echo $divID; ?>";
                 var link = "<?php echo $src; ?>";
                 var http = "<?php echo HTTP_PATH . ltrim($src, '/'); ?>";
+                var domainName = "<?php echo HTTP_PATH; ?>";
             </script>
             <?php
         }
