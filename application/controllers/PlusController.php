@@ -105,7 +105,7 @@ class PlusController extends Zend_Controller_Action
             if (!empty($articleDetails[0]['articleImage'])) {
                 $articleThumbNailImage = PUBLIC_PATH_CDN
                     . $articleDetails[0]['articleImage']['path']
-                    . $articleDetails[0]['articleImage']['name'];
+                    . 'thum_article_samll_'.$articleDetails[0]['articleImage']['name'];
             }
             $this->viewHelperObject->getMetaTags(
                 $this,
