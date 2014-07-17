@@ -166,7 +166,7 @@ class generateOfferFeeds
         $entries = array();
 
         foreach ($offers as  $offer) {
-            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'],'/').$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
+            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'],'/').'thum_big_'.$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
             $offerTermsWithShopImage = $offer['terms'].$shopImage;
             $entry = array(
                         'title'       => $offer['title'] ,
@@ -212,7 +212,7 @@ class generateOfferFeeds
         $entries = array();
 
         foreach ($offers as  $offer) {
-            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'], '/').$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
+            $shopImage = '<img src="'.$this->_public_cdn_path.ltrim($offer['shop']['logo']['shopImagePath'], '/').'thum_big_'.$offer['shop']['logo']['shopImageName'].'" alt="'.$offer['shop']['logo']['shopImageName'].'">';
             $terms = isset($offer['termandcondition'][0]) ? $offer['termandcondition'][0]['terms']
                          : '' ;
             $offerTermsWithShopImage = $terms.$shopImage;

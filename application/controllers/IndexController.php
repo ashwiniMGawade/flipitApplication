@@ -31,7 +31,7 @@ class IndexController extends Zend_Controller_Action
             isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
             ucfirst(trim(isset($pageDetails->metaTitle) ? $pageDetails->metaTitle :'')),
             trim(isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : ''),
-            FrontEnd_Helper_viewHelper::__link($this->getRequest()->getActionName()),
+            '',
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
