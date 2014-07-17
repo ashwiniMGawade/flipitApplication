@@ -415,7 +415,7 @@ class Signupmaxaccount extends BaseSignupmaxaccount
 
 
 
-                        $getRecord = Doctrine_Query::create()->select()->from("Signupmaxaccount")->where('id = 1')->fetchOne(null,Doctrine::HYDRATE_ARRAY);
+                        $getRecord = Doctrine_Query::create()->select('s.homepagebanner_name, s.homepagebanner_path')->from("Signupmaxaccount s")->where('s.id = 1')->fetchOne(null,Doctrine::HYDRATE_ARRAY);
                         if(empty($getRecord)){
                             $data = new Signupmaxaccount();
                             $data->id = 1;
