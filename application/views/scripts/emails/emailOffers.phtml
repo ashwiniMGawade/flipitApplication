@@ -31,7 +31,7 @@ if($this->categoryInformation != null) {
                                 <td width="132" style="border:1px solid #dddddd; border-radius:5px;">
                                     <table width="100%" cellpadding="0" cellspacing="0">
                                         <tbody><tr>
-                                            <td height="66" align="center"><img src="<?php echo $this->publicPathCdn.ltrim($topOffer->shop['logo']['path'],'/').$topOffer->shop['logo']['name']; ?>" style="vertical-align:top;" width="132" height="66" alt="<?php echo $topOffer->shop['name']; ?>"></td>
+                                            <td height="66" align="center"><img src="<?php echo $this->publicPathCdn.ltrim($topOffer->shop['logo']['path'],'/').'thum_big_'.$topOffer->shop['logo']['name']; ?>" style="vertical-align:top;" width="132" height="66" alt="<?php echo $topOffer->shop['name']; ?>"></td>
                                         </tr>
                                         <tr>
                                             <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; box-shadow:0 0 4px rgba(0,0,0,0.15); padding:6px 0 5px; font:11px/17px Arial, Helvetica, sans-serif; color:#fff;"><a href="<?php echo $urlToShow; ?>" style="text-decoration:none; color:#fff;"><?php echo FrontEnd_Helper_viewHelper::__email('CODE'); ?></a></td>

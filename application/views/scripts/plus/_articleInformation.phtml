@@ -18,7 +18,7 @@ $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
         <p>
             <?php echo $byAuthorName[0]; ?>
             <a href="<?php echo $profileLink; ?>">
-                <?php echo $byAuthorName[1];?></a> <?php echo empty($byAuthorName[1]) ? '' : '-'; 
+                <?php echo $byAuthorName[1];?></a> <?php echo empty($byAuthorName[1]) ? '' : '- '; 
                 echo $articleUpdatedAtDate; ?> &nbsp; | &nbsp; <?php echo $this->translate('back to') . " ";?>   
             <a href="<?php echo HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_plus')?>">
                 <?php echo $websiteName . " ". $this->translate('plus');?></a>
