@@ -79,6 +79,7 @@ class replaceBespaarwijzerWithPlus
         || define('CURRENT_DAY', $currentDay);
 
         menu::replaceBespaarwijzerWithPlus();
+        Page::replaceToPlusPage();
         echo "\n";
         print "$localeKey - Replacement of Bespaarwijzers have been done successfully!!!";
 
