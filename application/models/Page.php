@@ -91,6 +91,16 @@ class Page extends BasePage
         return true;
     }
 
+    public static function replaceToPlusPage()
+    {
+        $updatePage = Doctrine_Query::create()
+            ->update('Page p')
+            ->set('p.permaLink',"'plus'")
+            ->where('p.id=66')
+            ->execute();
+        return true;
+    }
+
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
