@@ -26,6 +26,7 @@ class Articles extends BaseArticles
                     ->leftJoin('related.articlecategory as category')
                     ->leftJoin('a.chapters as chapter')
                     ->leftJoin('a.articleImage')
+                    ->leftJoin('a.thumbnail thum')
                     ->leftJoin('stores.shop')
                     ->where('a.permalink="'.$permalink.'"')
                     ->andWhere('a.publish = "1"')

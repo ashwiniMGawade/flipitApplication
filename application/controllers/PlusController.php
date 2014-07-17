@@ -102,10 +102,10 @@ class PlusController extends Zend_Controller_Action
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
             $articleThumbNailImage = FACEBOOK_IMAGE;
-            if (!empty($articleDetails[0]['articleImage'])) {
+            if (!empty($articleDetails[0]['thumbnail'])) {
                 $articleThumbNailImage = PUBLIC_PATH_CDN
-                    . $articleDetails[0]['articleImage']['path']
-                    . 'thum_article_samll_'.$articleDetails[0]['articleImage']['name'];
+                    . $articleDetails[0]['thumbnail']['path']
+                    .$articleDetails[0]['thumbnail']['name'];
             }
             $this->viewHelperObject->getMetaTags(
                 $this,
