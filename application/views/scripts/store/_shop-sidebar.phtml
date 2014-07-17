@@ -8,7 +8,7 @@ echo
 		: $this->currentStoreInformation['affliateProgram']
 	);
 
-if (count($this->latestShopUpdates) > 0):?>
+if (!empty($this->latestShopUpdates)):?>
     <?php echo $this->partial('store/_latestNews.phtml', array('latestShopUpdates' => $this->latestShopUpdates));
 endif;
 
