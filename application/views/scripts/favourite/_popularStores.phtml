@@ -1,7 +1,7 @@
 <?php 
 foreach ($this->popularShops as $popularShop) {
     $shopImage = PUBLIC_PATH_CDN.ltrim($popularShop['shop']['logo']['imgpath'], "/")
-        . $popularShop['shop']['logo']['imgname'];
+        .  "thum_big_" . $popularShop['shop']['logo']['imgname'];
     ?>
     <article class="block col-sm-6 col-xs-6">
         <div class="text-holder">

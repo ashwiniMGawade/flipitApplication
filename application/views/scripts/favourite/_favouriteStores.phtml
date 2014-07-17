@@ -1,7 +1,7 @@
  <?php
  foreach ($this->favouriteShops as $favouriteShop) {
     $shopImage = PUBLIC_PATH_CDN.ltrim($favouriteShop['shops'][0]['logo']['path'], "/")
-        . $favouriteShop['shops'][0]['logo']['name'];
+        .  "thum_big_" . $favouriteShop['shops'][0]['logo']['name'];
     ?>   
     <article class="box">
         <div class="text-holder">

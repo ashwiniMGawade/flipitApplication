@@ -2,7 +2,7 @@
 foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
     $shopImage = 
         PUBLIC_PATH_CDN.ltrim($favouriteShopsOffer['shop']['logo']['path'], "/")
-        . $favouriteShopsOffer['shop']['logo']['name'];
+        . "thum_big_" . $favouriteShopsOffer['shop']['logo']['name'];
     $offerId = $favouriteShopsOffer['id'];
     $offerBounceRate = "/out/offer/".$favouriteShopsOffer['id'];
     $permaLink = isset($favouriteShopsOffer["shop"]["permaLink"]) 

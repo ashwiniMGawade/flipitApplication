@@ -78,7 +78,8 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
     
     public function getLoveAnchor($shopId, $shopName)
     {
-        $shopPermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $shopPermalink = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/"
+          . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes');
         $visitorId = Auth_VisitorAdapter::hasIdentity() ? Auth_VisitorAdapter::getIdentity()->id : 0;
         $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $shopPermalink .'&shopId='
             . base64_encode($shopId);
