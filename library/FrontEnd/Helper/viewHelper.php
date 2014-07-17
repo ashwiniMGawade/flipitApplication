@@ -401,10 +401,12 @@ EOD;
         if ($metaTitle == '') {
             $metaTitle = $title;
         }
+
+        $facebookShareUrl = $permaLink != '' ? HTTP_PATH_LOCALE . $permaLink : rtrim(HTTP_PATH_LOCALE, '/');
         $currentObject->view->headTitle($metaTitle);
         $currentObject->view->headMeta()->setName('description', $metaDescription);
         $currentObject->view->facebookTitle = $title;
-        $currentObject->view->facebookShareUrl = HTTP_PATH_LOCALE . $permaLink;
+        $currentObject->view->facebookShareUrl = $facebookShareUrl;
         $currentObject->view->facebookImage = $image;
         $currentObject->view->facebookDescription = $metaDescription;
         if (LOCALE == '') {
