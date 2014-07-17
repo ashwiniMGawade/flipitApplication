@@ -46,7 +46,7 @@ class createSiteMaps
             $locale = "_" . strtoupper($key) ;
         }
 
-        $domainForRobot = $this->_hostName . '/' . $this->_localePath;
+        $domainForRobot = $this->_hostName . '/public/' . $this->_localePath;
         $pathToXMLFile = PUBLIC_PATH . $this->_localePath;
         $DoctrineConnectionManager = Doctrine_Manager::connection($dsn, 'doctrine_site');
         spl_autoload_register(array('Doctrine', 'modelsAutoload'));
@@ -72,10 +72,22 @@ class createSiteMaps
         $info = FrontEnd_Helper_viewHelper::__link('link_info');
         $rssfeed = FrontEnd_Helper_viewHelper::__link('link_rssfeed');
         $zoeken = FrontEnd_Helper_viewHelper::__link('link_zoeken');
+        $login = FrontEnd_Helper_viewHelper::__link('link_login');
+        $signup = FrontEnd_Helper_viewHelper::__link('link_inschrijven');
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
         $sitemap_main = $sitemaps.'_'.$main.'.xml';
-        $robotTextContent ="User-agent: *\r\nDisallow:/".$info."/\r\nDisallow:/".$rssfeed."/\r\nDisallow:/out/\r\nDisallow:/".$zoeken."/\r\nDisallow:/admin/\r\n\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_shops."\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_plus."\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_main;
+        $robotTextContent ="User-agent: *
+            \r\nDisallow:/".$info."/
+            \r\nDisallow:/".$rssfeed."/
+            \r\nDisallow:/out/
+            \r\nDisallow:/".$zoeken."/
+            \r\nDisallow:/admin/
+            \r\nDisallow:/".ltrim(strtolower($locale), '_')."/".$login."
+            \r\nDisallow:/".ltrim(strtolower($locale), '_')."/".$signup."
+            \r\n\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_shops."
+            \r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_plus."
+            \r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_main;
         $robotTextFile = $pathToXMLFile."robots.txt";
         $robotTextHandle = fopen($robotTextFile, 'w');
         fwrite($robotTextHandle, $robotTextContent);
