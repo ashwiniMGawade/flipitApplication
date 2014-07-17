@@ -4,6 +4,11 @@ if (empty($session->brandingActivated) && !empty($this->shopBranding)):
     $this->headStyle()->appendStyle($this->shop()->brandingCss($this->shopBranding));
     $this->headScript()->appendScript($this->shop()->brandingJs($this->shopBranding));
 endif;
+?>
+<script type="text/javascript">
+    var domainName = "<?php echo HTTP_PATH; ?>";
+</script>
+<?php
 $partialViewPath = 'partials/';
 $offers = '';
 if(count($this->offers) > 0):
