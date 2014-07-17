@@ -14,8 +14,8 @@ $mostReadArticles = $this->mostReadArticles;
                                             PUBLIC_PATH_CDN
                                             .$mostReadArticle['articles']['thumbnail']['path'] 
                                             .$mostReadArticle['articles']['thumbnail']['name'] : '';
-                    $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 40 ? 
-                                            mb_substr($mostReadArticle['articles']['title'], 0,40)
+                    $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 50 ? 
+                                            mb_substr($mostReadArticle['articles']['title'], 0,50)
                                             .'..' : $mostReadArticle['articles']['title'];
                     $articleUpdatedAtDate = new Zend_Date($mostReadArticle['articles']['created_at']);
                     $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG); 
@@ -28,11 +28,8 @@ $mostReadArticles = $this->mostReadArticles;
                         class="'.$activeClass.'">'.$carouselCounter.'</li>';
                     ?>
                     <div class="slide item <?php echo $activeClass;?>">
-                        <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
-                            .$mostReadArticle['articles']['permalink'];?>">
-                            <img class="visual" src="<?php echo $mostReadArticleImage;?>" width="450px"
-                                alt="<?php echo $mostReadArticleTitle;?>">
-                        </a>
+                        <img class="visual" src="<?php echo $mostReadArticleImage;?>" width="450px"
+                            alt="<?php echo $mostReadArticleTitle;?>">
                         <span class="category dark-pink"><?php echo $this->translate('Featured');?></span>
                         <div class="text-holder">
                             <div class="text-frame">
