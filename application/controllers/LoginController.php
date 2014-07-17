@@ -119,7 +119,7 @@ class LoginController extends Zend_Controller_Action
                 );
                 $FromEmail = Signupmaxaccount::getEmailAddress();
                 if ($visitorDetails!= false) {
-
+                    Visitor::updatePasswordRequest($visitorDetails['id'], 0);
                     $mailer  = new FrontEnd_Helper_Mailer();
                     $content = array(
                                     'name'    => 'content',
