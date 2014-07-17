@@ -308,7 +308,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getRightColumnOffersHtmlForAllOffersTypes($offer)
     {
         $shopImage =
-            PUBLIC_PATH_CDN.ltrim($offer['shop']['logo']['path'], "/") .'thum_small_'. $offer['shop']['logo']['name'];
+            PUBLIC_PATH_CDN.ltrim($offer['shop']['logo']['path'], "/") .'thum_medium_'. $offer['shop']['logo']['name'];
         $shopPermalink = $offer['shop']['permalink'];
         $shopName = $offer['shop']['name'];
         $offerTitle = $offer['title'];
