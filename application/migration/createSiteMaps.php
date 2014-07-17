@@ -15,7 +15,7 @@ class createSiteMaps
 
     public function __construct()
     {
-        require_once('constantsForMigration.php');
+        require_once('donstantsForMigration.php');
         require_once('databaseConnectionForMigrations.php');
         foreach ( $databaseConnections as $key => $connection ) {
 
