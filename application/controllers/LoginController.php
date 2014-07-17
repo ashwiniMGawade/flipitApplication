@@ -117,7 +117,7 @@ class LoginController extends Zend_Controller_Action
                 $visitorDetails = Doctrine_Core::getTable('Visitor')->findOneByemail(
                     FrontEnd_Helper_viewHelper::sanitize($forgotPasswordForm->getValue('emailAddress'))
                 );
-                $FromEmail = Signupmaxaccount::getEmailAddress();
+                $fromEmail = Signupmaxaccount::getEmailAddress();
                 if ($visitorDetails!= false) {
                     Visitor::updatePasswordRequest($visitorDetails['id'], 0);
                     $mailer  = new FrontEnd_Helper_Mailer();
@@ -137,7 +137,7 @@ class LoginController extends Zend_Controller_Action
                     BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails['email']);
                     $mailer->send(
                         FrontEnd_Helper_viewHelper::__email('email_sitename'),
-                        $FromEmail[0]['emailperlocale'],
+                        $fromEmail[0]['emailperlocale'],
                         $VisitorName,
                         $visitorDetails['email'],
                         FrontEnd_Helper_viewHelper::__email('email_Forgot Password'),
