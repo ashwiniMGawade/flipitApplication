@@ -4,7 +4,7 @@ foreach ($this->storesInformation as $storesKey => $stores) :
         $alphabetName = $storesKey =="abc" ? "0-9" : $storesKey;
 ?>
     <div class="block" id="<?php echo strtolower($alphabetName);?>">
-        <h2><?php echo $alphabetName;?></h2>
+        <h3><?php echo $alphabetName;?></h3>
         <div class="row">
         <?php
             $totolStoredAsPerKey = (count($this->storesInformation[$storesKey]) / 3);
