@@ -176,7 +176,7 @@ class Chain extends BaseChain
             # fetch chain detail
 
             $locale = explode('_' , $value['locale']);
-            $locale = isset($locale[1]) ? $locale[1] : 'nl';
+            $locale = isset($locale[1]) ? $locale[1] : $locale[0];
 
 
              $hrefLocale = isset($value['locale']) ? $value['locale'] : 'nl_NL';
