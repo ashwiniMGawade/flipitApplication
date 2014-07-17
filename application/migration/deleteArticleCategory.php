@@ -11,7 +11,7 @@ class deleteArticleCategory
 
     public function __construct()
     {
-        require_once('constantsForMigration.php');
+        require_once('ConstantForMigration.php');
         require_once('databaseConnectionForMigrations.php');
         foreach ($databaseConnections as $databaseConnectionKey => $databaseConnection ) {
             if ($databaseConnectionKey != 'imbull') {

@@ -1,5 +1,5 @@
 <?php
-Doctrine_Manager::getInstance()->bindComponent('LocaleSettings', 'doctrine_site');
+//Doctrine_Manager::getInstance()->bindComponent('LocaleSettings', 'doctrine_site');
 
 abstract class BaseLocaleSettings extends Doctrine_Record
 {

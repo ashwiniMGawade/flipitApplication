@@ -66,31 +66,19 @@ class Admin_ChainController extends Zend_Controller_Action
             $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
             $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
 
-
             if ($this->_request->isPost()) {
-
                 $localeId = $request->getParam('locale' , false);
-
-                # get selected locale detail
                 $website = Website::getWebsiteDetails($localeId);
-
                 $localeData = explode('/', $website['name']);
                 $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
-
-                # connect to select locale database
                 $connObj = BackEnd_Helper_DatabaseManager::addConnection($locale);
-
-                $signMaxObj = new Signupmaxaccount($locale);
-                $langLocale =  $signMaxObj::getAllMaxAccounts();
-                $langLocale = !empty($langLocale[0]['locale']) ? $langLocale[0]['locale'] : 'nl_NL';
-
-
+                $localeSettings = new LocaleSettings($connObj['connName']);
+                $localeSetting = $localeSettings->getLocaleSettings();
+                $langLocale = !empty($localeSetting[0]['locale']) ? $localeSetting[0]['locale'] : 'nl_NL';
                 Zend_Registry::set('db_locale', $locale ) ;
-
-                # save new chain
+                
                 $chain = new ChainItem();
-                $ret = $chain->saveChain($request,$langLocale);
-
+                $ret = $chain->saveChain($request, $langLocale);
                 # if chain is saved then refresh shop page in varnish
                 if($ret) {
                     $message = $this->view->translate ( 'Shop has been added successfully' );
@@ -100,13 +88,8 @@ class Admin_ChainController extends Zend_Controller_Action
                     $message = $this->view->translate ( 'This shop has been already added for this particulat locale' );
                     $flash->addMessage ( array ('error' => $message ));
                 }
-
-
-                # close connection
                 $connObj = BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
-
                 Zend_Registry::set('db_locale', false ) ;
-
                 $this->_redirect ( HTTP_PATH . 'admin/chain/chain-item/chain/'. $chianId  );
             }
         } else {
