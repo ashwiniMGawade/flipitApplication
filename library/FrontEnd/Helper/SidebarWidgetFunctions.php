@@ -15,9 +15,9 @@ class FrontEnd_Helper_SidebarWidgetFunctions extends FrontEnd_Helper_viewHelper
                 $this->__translate("Check out the coupons and discounts from other countries when you're interested:");
             $string = <<<EOD
              <div class="intro">
-                <h4>
+                <h3>
                      {$shopName}
-                </h4>
+                </h3>
                  <span>$widgetText</span>
             </div>
             <ul class="countries">
