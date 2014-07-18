@@ -16,17 +16,8 @@ class CouponCode extends BaseCouponCode
     ##################################################################################
     ################## REFACTORED CODE ###############################################
     ##################################################################################
-    /**
-     *
-     * it return an available coupon code whenever coupoun code type is unique
-     *
-     * @param integer $id offer id
-     * @return string code;
-     *
-     * @author Amit
-     *
-     */
-    public static function returnAvailableCoupon($id)
+
+    public static function returnAvailableCoupon($id, $pageType='')
     {
         $availableCoupon = Doctrine_Query::create()
         ->select('c.code')
@@ -35,17 +26,12 @@ class CouponCode extends BaseCouponCode
         ->andWhere('c.status=1')
         ->limit(1)
         ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-        self::updateCodeStatus($id, $availableCoupon['code']);
+        if ($pageType == 'offerDetail') {
+            self::updateCodeStatus($id, $availableCoupon['code']);
+        }
         return $availableCoupon;
     }
 
-
-    /**
-     * change code status
-     * @param integer $id
-     * @return ture
-     */
     public static function updateCodeStatus($id, $code, $status = 0)
     {
         Doctrine_Query::create()->update('CouponCode')
