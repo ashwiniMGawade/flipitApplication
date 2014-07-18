@@ -1,5 +1,5 @@
 <?php 
-foreach ($this->popularShops as $popularShop) {
+foreach ($this->popularShops as $popularShop) :
     $shopImage = PUBLIC_PATH_CDN.ltrim($popularShop['shop']['logo']['imgpath'], "/")
         .  "thum_big_" . $popularShop['shop']['logo']['imgname'];
     ?>
@@ -15,12 +15,12 @@ foreach ($this->popularShops as $popularShop) {
                     <?php echo $popularShop['shop']['name']; ?>
                     </a>
                     <p>
-                        <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["shop"]["permaLink"];?>" class="active-offer">
-                        <?php 
-                        echo $popularShop['activeCount'] . " " 
-                        .$this->translate('active offers');
-                        ?>
+                    <?php if($popularShop['activeCount'] > 0):?>
+                        <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["shop"]["permaLink"];?>" 
+                        class="active-offer">
+                        <?php echo $popularShop['activeCount'] . " "  .$this->translate('active offers');?>
                         </a>
+                    <?php endif; ?>
                     </p>
                     <a 
                     href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
@@ -34,4 +34,4 @@ foreach ($this->popularShops as $popularShop) {
         </div>
     </article>
     <?php
-}
+endforeach;
