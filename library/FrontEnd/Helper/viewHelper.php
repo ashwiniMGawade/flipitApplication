@@ -768,11 +768,11 @@ EOD;
         if (count($offers) < $number) {
             $additionalCodes = $number - count($offers);
             $additionalTopVouchercodes = Offer::getCommonNewestOffers('newest', $additionalCodes);
-            foreach ($additionalTopVouchercodes as $key => $value) {
+            foreach ($additionalTopVouchercodes as $additionalTopVouchercodekey => $additionalTopVouchercodevalue) {
                 $offers[] = array(
-                    'id'=> $value['shop']['id'],
-                    'permalink' => $value['shop']['permalink'],
-                    'offer' => $value
+                    'id'=> $additionalTopVouchercodevalue['shop']['id'],
+                    'permalink' => $additionalTopVouchercodevalue['shop']['permalink'],
+                    'offer' => $additionalTopVouchercodevalue
                 );
             }
         }
