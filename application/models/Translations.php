@@ -47,7 +47,7 @@ class Translations extends BaseTranslations
                 ->update('translations')
                 ->set(
                     'translation',
-                    "'".mysql_real_escape_string($translations[(string)Zend_Registry::get('Zend_Locale')])."'"
+                    "'".$translations[(string)Zend_Registry::get('Zend_Locale')]."'"
                 )
                 ->where('id = '.$existingTranslation[0]['id'])
                 ->execute();
