@@ -2,19 +2,19 @@
 $favouriteViewPath = "favourite/";
 $recordNotFound = '<div class = "no-record txt-center">' . $this->translate('No record found') .'</div>'; 
 $popularShops = $recordNotFound;
-if(!empty($this->popularShops)) {
+if(!empty($this->popularShops)) :
     $popularShops = $this->partial(
         $favouriteViewPath . '_popularStores.phtml',
         array('popularShops' => $this->popularShops)
     );
-}
+endif;
 $favouriteShops = $recordNotFound; 
-if(!empty($this->favouriteShops)) {
+if(!empty($this->favouriteShops)) :
     $favouriteShops = $this->partial(
         $favouriteViewPath . '_favouriteStores.phtml',
             array('favouriteShops' => $this->favouriteShops)
     );
-}
+endif;
 ?>
 <div class="row">
     <div id="content" class="col-sm-8">

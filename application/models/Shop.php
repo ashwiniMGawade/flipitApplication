@@ -99,7 +99,7 @@ class Shop extends BaseShop
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
             (active.shopId = s.id AND active.endDate >= '$currentDate' 
-                AND active.discountType='CD'
+                AND active.deleted = 0
             )
             ) as activeCount"
         )
@@ -267,8 +267,8 @@ class Shop extends BaseShop
             ->from('Shop s')
             ->leftJoin('s.offer o')
             ->where('s.id='.$shopId)
-            ->andWhere('o.enddate>'."'".$currentDate."'")
-            ->andWhere('o.discounttype="CD"')->fetchArray();
+            ->andWhere('o.enddate >'."'".$currentDate."'")
+            ->andWhere('o.deleted=0')->fetchArray();
         return $acitveOfferCount;
     }
     ##################################################################################

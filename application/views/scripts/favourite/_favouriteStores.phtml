@@ -1,5 +1,5 @@
  <?php
- foreach ($this->favouriteShops as $favouriteShop) {
+ foreach ($this->favouriteShops as $favouriteShop) :
     $shopImage = PUBLIC_PATH_CDN.ltrim($favouriteShop['shops'][0]['logo']['path'], "/")
         .  "thum_big_" . $favouriteShop['shops'][0]['logo']['name'];
     ?>   
@@ -13,12 +13,11 @@
                 <?php echo $favouriteShop['name'];?>
                 </a>
                 <p>
+                <?php if($favouriteShop['activeCount'] > 0):?>
                     <a href="<?php echo $favouriteShop['shops'][0]['permaLink'];?>" class="active-offer">
-                        <?php 
-                        echo $favouriteShop['activeCount']. " " 
-                        . $this->translate('active offers');
-                        ?>
+                    <?php echo $favouriteShop['activeCount']. " " . $this->translate('active offers');?>
                     </a>
+                <?php endif;?>
                 </p>
                 <a href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
                 . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') .'&shopId='
@@ -31,4 +30,4 @@
         </div>
     </article>
     <?php
-}
+endforeach;
