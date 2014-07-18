@@ -9,7 +9,6 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                     . $article['authorDetails']['slug'];
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
-            echo $article['authorname'];
             $articleAuthorName = explode(' ', $article['authorname']);
             $articleAuthorFirstName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
             $articleAuthorLastName =  isset($articleAuthorName[1])? $articleAuthorName[1] : '';
@@ -45,7 +44,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                                 </h2>
                             </div>
                             <div class="meta">
-                                <span class="author">'.$articleBy.'
+                                <span class="author">'. $article['authorname'].$articleBy.'
                                     <a href="'.$profileLink.'">'.$authorName.'</a>
                                 </span>
                                 <em class="date">'.$articleUpdatedAtDate.'</em>
