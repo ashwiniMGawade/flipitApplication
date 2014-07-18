@@ -5,12 +5,18 @@ $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()
     <ul>
         <li>
            <span class="glyphicon glyphicon-user"></span>
-           <span class='show-on-web'><?php echo FrontEnd_Helper_viewHelper::__form('form_Welcome') . " ";?></span>
-           <a href="<?php echo HTTP_PATH_LOCALE 
+           <span class='show-on-web'>
+               <a href="<?php echo HTTP_PATH_LOCALE 
+               . FrontEnd_Helper_viewHelper::__link('link_inschrijven') . "/" 
+               . FrontEnd_Helper_viewHelper::__link('link_profiel');?>">
+               <?php echo FrontEnd_Helper_viewHelper::__form('form_Welcome') . " ";?>
+               </a>
+            </span>
+           <!--<a href="<?php echo HTTP_PATH_LOCALE 
                . FrontEnd_Helper_viewHelper::__link('link_inschrijven') . "/" 
                . FrontEnd_Helper_viewHelper::__link('link_profiel');?>" class="name">
-               <?php echo $visitorInformation[0]['firstName'];?>
-           </a>
+               <?php //echo $visitorInformation[0]['firstName'];?>
+           </a>-->
         </li>
         <li>
           <a href="<?php echo HTTP_PATH_LOCALE 
