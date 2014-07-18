@@ -74,27 +74,6 @@ $articleImage = PUBLIC_PATH_CDN.$articleDetails['articleImage']['path'].$article
     <div class="row">
         <div id="content" class="col-md-8 col-sm-8">
             <?php echo $articleInformation; ?>
-            <div class="share-box">
-                <span class="txt"><?php echo $this->translate('Share this tip');?></span>
-                <ul class="social-box">
-                    <li>
-                        <img src="<?php echo HTTP_PATH.'public/images/img-42.png';?>" alt="image description" 
-                        width="129" height="20" />
-                    </li>
-                    <li>
-                        <img src="<?php echo HTTP_PATH.'public/images/img-43.png';?>" alt="image description" 
-                            width="81" height="20" />
-                    </li>
-                    <li>
-                        <img src="<?php echo HTTP_PATH.'public/images/img-45.png';?>" alt="image description" 
-                            width="238" height="24" />
-                    </li>
-                    <li>
-                        <img src="<?php echo HTTP_PATH.'public/images/img-44.png';?>" alt="image description"
-                            width="81" height="21" />
-                    </li>
-                </ul>           
-            </div>
             <?php echo $authorDetails. $savingGuides. $discussion;?>
         </div>
         <aside id="sidebar" class="col-md-4 col-sm-4">

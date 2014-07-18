@@ -968,6 +968,25 @@ class Offer extends BaseOffer
         }
         return $url;
     }
+
+    public static function getOfferInfo($offerId)
+    {
+        $OfferDetails = Doctrine_Query::create()
+        ->select(
+            'o.*,s.name,s.notes,s.accountManagerName,s.deepLink,s.refUrl,s.actualUrl,s.affliateNetworkId as aid,
+            s.permaLink,a.name as affname,a.id,p.id,tc.*,cat.id,img.*'
+        )
+        ->from("Offer o")
+        ->leftJoin('o.shop s')
+        ->leftJoin('s.affliatenetwork a')
+        ->leftJoin('o.page p')
+        ->leftJoin('o.termandcondition tc')
+        ->leftJoin('o.category cat')
+        ->leftJoin('s.logo img')
+        ->andWhere("o.id =".$offerId)
+        ->fetchArray();
+        return $OfferDetails;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1865,24 +1884,7 @@ class Offer extends BaseOffer
         return $shopDetail;
     }
 
-    public static function getOfferInfo($offerId)
-    {
-        $shopDetail = Doctrine_Query::create()
-        ->select('o.*,s.name,s.notes,s.accountManagerName,s.deepLink,s.refUrl,s.actualUrl,s.affliateNetworkId as aid,s.permaLink,a.name as affname,a.id,p.id,tc.*,cat.id,img.*')
-        ->from("Offer o")
-        ->leftJoin('o.shop s')
-        ->leftJoin('s.affliatenetwork a')
-        ->leftJoin('o.page p')
-        ->leftJoin('o.termandcondition tc')
-        ->leftJoin('o.category cat')
-        ->leftJoin('s.logo img')
-        ->andWhere("o.id =$offerId")->fetchArray();
-
-        //echo "<pre>";
-        //print_r($shopDetail); die;
-        return $shopDetail;
-    }
-
+    
     public function uploadFile($imgName)
     {
         $uploadPath = "images/upload/offer/";

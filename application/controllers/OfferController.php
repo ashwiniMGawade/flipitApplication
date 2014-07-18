@@ -152,7 +152,7 @@ class OfferController extends Zend_Controller_Action
             ''
         );
         if ($offerDetails[0]['couponCodeType']  == 'UN') {
-            $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerId);
+            $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offerDetails[0]['id'], 'offerDetail');
             if ($getOfferUniqueCode) {
                 $this->view->couponCode = $getOfferUniqueCode['code'] ;
             }
