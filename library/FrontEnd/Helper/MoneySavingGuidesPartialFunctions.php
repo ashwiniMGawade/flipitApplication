@@ -10,17 +10,12 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
             $articleAuthorName = explode(' ', $article['authorname']);
-            $articleAuthorFirstName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
-            $articleAuthorLastName =  isset($articleAuthorName[1])? $articleAuthorName[1] : '';
-            $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
-                $articleAuthorFirstName,
-                $articleAuthorLastName
-            );
+            $authorName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
             $articleImage = !empty($article['thumbnail']) ?
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
             $articleTitle = mb_strlen($article['title']) > 50 ?
                                         mb_substr($article['title'], 0, 50).'..' : $article['title'];
-            $articleBy = !empty($authorName) ? FrontEnd_Helper_viewHelper::__translate('By') : '';
+            $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
                         <div class="image">
@@ -44,7 +39,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                                 </h2>
                             </div>
                             <div class="meta">
-                                <span class="author">'. $article['authorname'].$articleBy.'
+                                <span class="author">'.$articleBy.'
                                     <a href="'.$profileLink.'">'.$authorName.'</a>
                                 </span>
                                 <em class="date">'.$articleUpdatedAtDate.'</em>
