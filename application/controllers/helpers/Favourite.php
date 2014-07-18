@@ -5,14 +5,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
     {
         $topOffers = array();
         if (count($favoriteShopsOffers)  < 4) {
-            $topOffers =
-                FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                    "all_popularvaouchercode_list",
-                    array(
-                        'function' => 'Offer::getTopOffers',
-                        'parameters' => array(4)
-                    )
-                );
+            $topOffers =Offer::getTopOffers(4);
         }
         $mergedTopOffersAndFavouriteShopsOffers = array_merge($topOffers, $favoriteShopsOffers);
         return self::removeDuplicateOffers($mergedTopOffersAndFavouriteShopsOffers);

@@ -73,7 +73,9 @@ class LoginController extends Zend_Controller_Action
             $this->_helper->Login->setUserCookies();
             FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
             $this->_redirect(
-                HTTP_PATH_LOCALE . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten')
+                HTTP_PATH_LOCALE
+                . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/"
+                . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes')
             );
         } else {
             $visitorEmail = new Zend_Session_Namespace('emailAddressSpace');
