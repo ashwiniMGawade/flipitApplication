@@ -184,7 +184,7 @@ class Visitor extends BaseVisitor
         ->select("fv.id as id,s.name as name,s.permaLink,s.id as id,l.*")
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
-            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.discountType='CD')) as activeCount"
+            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
         )
         ->from("FavoriteShop fv")->leftJoin("fv.shops s")
         ->leftJoin('s.logo l')
@@ -204,9 +204,7 @@ class Visitor extends BaseVisitor
         )
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
-            (active.shopId = s.id AND active.endDate >= '$currentDate' 
-                AND active.discountType='CD'
-            )
+            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.deleted = 0)
             ) as activeCount"
         )
         ->from('Offer o')
