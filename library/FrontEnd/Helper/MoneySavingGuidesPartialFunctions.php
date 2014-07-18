@@ -10,7 +10,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
             $articleAuthorName = explode(' ', $article['authorname']);
-            $authorName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
+            $authorName = isset($articleAuthorName[0]) ? $articleAuthorName[0] : '';
             $articleImage = !empty($article['thumbnail']) ?
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
             $articleTitle = mb_strlen($article['title']) > 50 ?
@@ -40,7 +40,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                             </div>
                             <div class="meta">
                                 <span class="author">'.$articleBy.'
-                                    <a href="'.$profileLink.'">'.$articleAuthorName[0].$authorName.'</a>
+                                    <a href="'.$profileLink.'">'.$article['authorname'].'--'.$authorName.'</a>
                                 </span>
                                 <em class="date">'.$articleUpdatedAtDate.'</em>
                             </div>
