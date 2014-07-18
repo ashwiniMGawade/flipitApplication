@@ -15,6 +15,13 @@ foreach ($this->offers as $offer) {
     $offerTitle = $offer->title;
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
+    $couponCode = $offer->couponCode;
+    if ($offer->couponCodeType  == 'UN') {
+        $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offer->id);
+        if ($getOfferUniqueCode) {
+            $couponCode = $getOfferUniqueCode['code'];
+        }
+    }
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
         <div class="holder offer-holder" id="<?php echo $offer->id; ?>">
@@ -66,7 +73,7 @@ foreach ($this->offers as $offer) {
                     <span class="instruction">
                         <strong><?php echo $this->translate('enter this code at checkout')?></strong>
                     </span>
-                    <strong class="code-value"><?php echo $offer->couponCode;?></strong>
+                    <strong class="code-value"><?php echo $couponCode;?></strong>
                 </div>
     
                 <ul class="view-list">
