@@ -769,7 +769,8 @@ EOD;
             $additionalCodes = $number - count($offers);
             $additionalTopVouchercodes = Offer::getCommonNewestOffers('newest', $additionalCodes);
             foreach ($additionalTopVouchercodes as $key => $value) {
-                $offers[] =   array('id'=> $value['shop']['id'],
+                $offers[] = array(
+                    'id'=> $value['shop']['id'],
                     'permalink' => $value['shop']['permalink'],
                     'offer' => $value
                 );
