@@ -8,6 +8,8 @@ class ErrorController extends Zend_Controller_Action
         $this->view->controller = $this->_request->getControllerName();
         $errors = $this->_getParam('error_handler');
         if (!$errors || !$errors instanceof ArrayObject) {
+            $this->_helper->layout()->disableLayout();
+            FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
             $this->view->message = 'You have reached on error page';
             return;
         }

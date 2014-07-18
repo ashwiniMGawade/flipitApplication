@@ -767,9 +767,9 @@ EOD;
     {
         if (count($offers) < $number) {
             $additionalCodes = $number - count($offers);
-            $additionalTopVouchercodes = Offer::commongetnewestOffers('newest', $additionalCodes);
+            $additionalTopVouchercodes = Offer::getCommonNewestOffers('newest', $additionalCodes);
         }
-        return false;
+        return $additionalTopVouchercodes;
     }
 
     public static function sendMandrillNewsletterByBatch(
@@ -831,7 +831,7 @@ EOD;
         $zendTranslate = Zend_Registry::get('Zend_Translate');
         $domainName ='http://'.Zend_Controller_Front::getInstance()->getRequest()->getServer('HTTP_HOST');
         $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
-        $topVouchercodes = self::fillupTopCodeWithNewest($topVouchercodes, 10);
+        //$topVouchercodes = self::fillupTopCodeWithNewest($topVouchercodes, 10);
         $xmlTitle =  $zendTranslate->translate('Kortingscode.nl populairste kortingscodes');
         $xmlDescription  = $zendTranslate->translate('Populairste kortingscodes');
         $xml = new XMLWriter();
