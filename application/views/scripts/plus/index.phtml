@@ -52,6 +52,7 @@ if (!empty($this->allArticles)) {
         "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescendingOrder"
     );
     $articlesInformation = array_chunk($articleDetails, 8);
+    echo "<pre>"; print_r($articlesInformation); die;
     for ($articleCounter =0; $articleCounter < count($articlesInformation) ; $articleCounter++) { 
         if ($articleCounter == 0) {?>
             <div class="container">
