@@ -9,7 +9,8 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                     . $article['authorDetails']['slug'];
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
-            $authorName = $article['authorDetails']['firstName'];
+            $authorName = $article['authorDetails']['firstName'] != ''
+                ? $article['authorDetails']['firstName'] : '';
             $articleImage = !empty($article['thumbnail']) ?
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
             $articleTitle = mb_strlen($article['title']) > 50 ?
