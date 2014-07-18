@@ -9,18 +9,13 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                     . $article['authorDetails']['slug'];
             $articleUpdatedAtDate = new Zend_Date($article['created_at']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
-            $articleAuthorName = explode(' ', $article['authorname']);
-            $articleAuthorFirstName = isset($articleAuthorName[0])? $articleAuthorName[0] : '';
-            $articleAuthorLastName =  isset($articleAuthorName[1])? $articleAuthorName[1] : '';
-            $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
-                $articleAuthorFirstName,
-                $articleAuthorLastName
-            );
+            $authorName = $article['authorDetails']['firstName'] != ''
+                ? $article['authorDetails']['firstName'] : '';
             $articleImage = !empty($article['thumbnail']) ?
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
             $articleTitle = mb_strlen($article['title']) > 50 ?
                                         mb_substr($article['title'], 0, 50).'..' : $article['title'];
-            $articleBy = !empty($authorName) ? FrontEnd_Helper_viewHelper::__translate('By') : '';
+            $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
                         <div class="image">
