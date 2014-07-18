@@ -40,7 +40,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                             </div>
                             <div class="meta">
                                 <span class="author">'.$articleBy.'
-                                    <a href="'.$profileLink.'">'.$authorName.'</a>
+                                    <a href="'.$profileLink.'">'.$articleAuthorName[0].$authorName.'</a>
                                 </span>
                                 <em class="date">'.$articleUpdatedAtDate.'</em>
                             </div>
