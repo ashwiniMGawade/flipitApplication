@@ -2,13 +2,23 @@
 foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
     $shopImage = 
         PUBLIC_PATH_CDN.ltrim($favouriteShopsOffer['shop']['logo']['path'], "/")
-        . $favouriteShopsOffer['shop']['logo']['name'];
-    $offerId = $favouriteShopsOffer['id'];
-    $offerBounceRate = "/out/offer/".$favouriteShopsOffer['id'];
+        . "thum_big_" . $favouriteShopsOffer['shop']['logo']['name'];
+
+    $permaLink = isset($favouriteShopsOffer["shop"]["permaLink"]) 
+        ?  $favouriteShopsOffer["shop"]["permaLink"]
+        : $favouriteShopsOffer["shop"]["permalink"];
+
+    $activeOffers = isset($favouriteShopsOffer['activeCount']) 
+        ? $favouriteShopsOffer['activeCount'] 
+        : Shop::getActiveOffersCount($favouriteShopsOffer['shop']['id']);
+
+    $activeOffers = isset($favouriteShopsOffer['activeCount']) 
+        ? $activeOffers 
+        : $activeOffers[0]['activeCount'];
     ?>
     <article class="block col-sm-6">
         <div class="holder">
-            <a href="<?php echo HTTP_PATH_LOCALE. $favouriteShopsOffer["shop"]["permaLink"];?>"  
+            <a href="<?php echo HTTP_PATH_LOCALE. $permaLink;?>"  
             class="code code-2">
                 <div class="center">
                     <div class="code-holder">
@@ -20,16 +30,16 @@ foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
             </a>
             <div class="box">
                 <div class="text">
-                    <a href="<?php echo HTTP_PATH_LOCALE. $favouriteShopsOffer["shop"]["permaLink"];?>"  
+                    <a href="<?php echo HTTP_PATH_LOCALE. $permaLink;?>"  
                     class="link">
                     <?php echo $favouriteShopsOffer['title'];?>
                     </a>
                     <p>
                         <?php 
-                        echo $this->translate('and'). "10". " " 
+                        echo $this->translate('and'). " " . $activeOffers. " " 
                         .$this->translate('other active codes for');
                         ?>
-                        <a href="<?php echo HTTP_PATH_LOCALE. $favouriteShopsOffer["shop"]["permaLink"];?>">
+                        <a href="<?php echo HTTP_PATH_LOCALE. $permaLink;?>">
                         <?php echo $favouriteShopsOffer['shop']['name'];?>
                         </a>
                     </p>

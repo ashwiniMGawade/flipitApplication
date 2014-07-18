@@ -202,6 +202,13 @@ class Visitor extends BaseVisitor
             s.actualUrl,fv.visitorId as visitorId,s.name as name,s.logoid as slogoId,
             s.permalink as permaLink,o.*,l.path,l.name,l.id,terms.content,vot.id,vot.vote'
         )
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer active WHERE
+            (active.shopId = s.id AND active.endDate >= '$currentDate' 
+                AND active.discountType='CD'
+            )
+            ) as activeCount"
+        )
         ->from('Offer o')
         ->leftJoin('o.shop s')
         ->leftJoin('s.favoriteshops fv')

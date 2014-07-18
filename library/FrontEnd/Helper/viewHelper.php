@@ -767,9 +767,16 @@ EOD;
     {
         if (count($offers) < $number) {
             $additionalCodes = $number - count($offers);
-            $additionalTopVouchercodes = Offer::commongetnewestOffers('newest', $additionalCodes);
+            $additionalTopVouchercodes = Offer::getCommonNewestOffers('newest', $additionalCodes);
+            foreach ($additionalTopVouchercodes as $additionalTopVouchercodekey => $additionalTopVouchercodevalue) {
+                $offers[] = array(
+                    'id'=> $additionalTopVouchercodevalue['shop']['id'],
+                    'permalink' => $additionalTopVouchercodevalue['shop']['permalink'],
+                    'offer' => $additionalTopVouchercodevalue
+                );
+            }
         }
-        return false;
+        return $offers;
     }
 
     public static function sendMandrillNewsletterByBatch(

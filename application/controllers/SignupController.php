@@ -187,8 +187,8 @@ class SignupController extends Zend_Controller_Action
 
     public function profileAction()
     {
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (!Auth_VisitorAdapter::hasIdentity()) {
-            $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect('/');
         }
         $visitorDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
@@ -217,8 +217,7 @@ class SignupController extends Zend_Controller_Action
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
         $this->viewHelperObject->getMetaTags($this);
-        # set reponse header X-Nocache used for varnish
-        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+  
     }
 
     public function addVisitor($visitorDetails)

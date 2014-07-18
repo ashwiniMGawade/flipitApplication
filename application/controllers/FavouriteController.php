@@ -21,21 +21,24 @@ class FavouriteController extends Zend_Controller_Action
 
     public function yourbrandsAction()
     {
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops(Shop::getPopularStores(25));
             $this->view->favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
             $this->view->pageCssClass = 'brands-page';
         } else {
-            $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect('/');
         }
     }
 
     public function youroffersAction()
     {
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
+            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
+            $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
             $favouriteShopsOffersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
-                Visitor::getFavoriteShopsOffers(),
+                $offers,
                 $this->_getAllParams(),
                 30,
                 3
@@ -45,7 +48,6 @@ class FavouriteController extends Zend_Controller_Action
             $this->view->userDetails = $userDetails[0];
             $this->view->pageCssClass = 'youroffers-page';
         } else {
-            $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_redirect('/');
         }
     }
