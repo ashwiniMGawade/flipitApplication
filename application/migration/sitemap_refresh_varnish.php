@@ -119,13 +119,6 @@ class SitemapRefreshVarnish
 
         $this->_trans->addTranslation(
                 array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $suffix . '.mo',
-                        'locale' => $cutsomLocale,
-                )
-        );
-
-        $this->_trans->addTranslation(
-                array(
                         'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $suffix . '.mo',
                         'locale' => $cutsomLocale ,
                 )
