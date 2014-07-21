@@ -26,7 +26,7 @@ class CategoryController extends Zend_Controller_Action
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
                 $this->_getAllParams(),
-                27,
+                5,
                 3
             );
             $this->view->offersWithPagination = $offersWithPagination;
