@@ -24,7 +24,7 @@ class Offer extends BaseOffer
     
     public static function getExpiredOffers($type, $limit, $shopId = 0)
     {
-        $expiredTime = date("Y-m-d 00:00:00");
+        $expiredDate = date("Y-m-d 00:00:00");
         $expiredOffers = Doctrine_Query::create()
         ->select(
             's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate,
@@ -34,7 +34,7 @@ class Offer extends BaseOffer
         ->leftJoin('o.shop s')
         ->where('o.deleted=0')
         ->andWhere('o.userGenerated=0')
-        ->andWhere('o.enddate<'."'".$expiredTime."'")
+        ->andWhere('o.enddate<'."'".$expiredDate."'")
         ->andWhere('o.discounttype="CD"')
         ->andWhere('s.deleted = 0')
         ->orderBy('o.id DESC');
@@ -63,7 +63,7 @@ class Offer extends BaseOffer
 
     public static function getOffersBySimilarShops($date, $limit, $shopId)
     {
-        $similarShopsIds = self::getShopsIdsForWhereIn($shopId);
+        $similarShopsIds = self::getSimilarShopsIds($shopId);
         if (count($similarShopsIds) > 0) {
             $similarShopsOffers = Doctrine_Query::create()
                 ->select(
@@ -103,22 +103,22 @@ class Offer extends BaseOffer
         return $similarShopsOffers;
     }
 
-    public static function getShopsIdsForWhereIn($shopId)
+    public static function getSimilarShopsIds($shopId)
     {
-        $similarShopsArray = array();
+        $similarShopsIds = array();
         $similarShops=self::getRelatedShops($shopId);
         if (count($similarShops)>0) {
             $countOfSimilarShops = count($similarShops);
             for ($i=0; $i<$countOfSimilarShops; $i++) {
-                $similarShopsArray[$i] = $similarShops[$i]['relatedshopId'];
+                $similarShopsIds[$i] = $similarShops[$i]['relatedshopId'];
             }
         }
-        return $similarShopsArray;
+        return $similarShopsIds;
     }
 
     public static function getOffersBySimilarCategories($date, $limit, $shopId)
     {
-        $similarCategoriesIds = self::getCategoriesIdsForWhereIn($shopId);
+        $similarCategoriesIds = self::getSimilarCategoriesIds($shopId);
         $similarCategoriesOffer = array();
         if (!empty($similarCategoriesIds)) {
             $commaSepratedCategroyIdValues = implode(', ', $similarCategoriesIds);
@@ -156,34 +156,34 @@ class Offer extends BaseOffer
         return $similarCategoriesOffer;
     }
 
-    public static function getCategoriesIdsForWhereIn($shopId)
+    public static function getSimilarCategoriesIds($shopId)
     {
-        $similarCategories = array();
-        $shopsCategories = self::getShopsCategories($shopId);
+        $similarCategoriesIds = array();
+        $shopsCategories = self::getShopCategories($shopId);
         if (count($shopsCategories)>0) {
             $countOfShopCategories = count($shopsCategories);
             for ($i=0; $i<$countOfShopCategories; $i++) {
-                $similarCategories[$i]=$shopsCategories[$i]['categoryId'];
+                $similarCategoriesIds[$i]=$shopsCategories[$i]['categoryId'];
             }
         }
-        return $similarCategories;
+        return $similarCategoriesIds;
     }
 
-    public static function getShopsCategories($shopId)
+    public static function getShopCategories($shopId)
     {
-        $similarCategories = Doctrine_Query::create()
+        $shopCategories = Doctrine_Query::create()
         ->from('refShopCategory r')
         ->where('r.shopId='.$shopId)
         ->fetchArray();
-        return $similarCategories;
+        return $shopCategories;
     }
     public static function getRelatedShops($shopId)
     {
-        $similarShops = Doctrine_Query::create()
+        $relatedShops = Doctrine_Query::create()
             ->from('refShopRelatedshop r')
             ->where('r.shopId='.$shopId)
             ->fetchArray();
-        return $similarShops;
+        return $relatedShops;
     }
 
     public static function mergeSimilarShopsOffersAndSimilarCategoriesOffers(
@@ -193,48 +193,48 @@ class Offer extends BaseOffer
     ) {
         $shopsOffers = self::createShopsArrayAccordingToOfferHtml($similarShopsOffers);
         $categoriesOffers = self::createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers);
-        $mergeOffers = array_merge($shopsOffers, $categoriesOffers);
-        return self::sliceOfferByLimit($mergeOffers, $limit);
+        $mergedOffers = array_merge($shopsOffers, $categoriesOffers);
+        return self::sliceOffersByLimit($mergedOffers, $limit);
     }
 
     public static function createShopsArrayAccordingToOfferHtml($similarShopsOffers)
     {
-        $NewOfferOfRelatedShops = array();
+        $NewOffersOfRelatedShops = array();
         foreach ($similarShopsOffers as $shopOffer):
             $NewOfferOfRelatedShops["'".$shopOffer['id']."'"] = $shopOffer;
         endforeach;
-        return $NewOfferOfRelatedShops;
+        return $NewOffersOfRelatedShops;
     }
 
     public static function createCategoriesArrayAccordingToOfferHtml($similarCategoriesOffers)
     {
-        $NewOfferOfRelatedCats = array();
+        $NewOfferOfRelatedCategories = array();
         foreach ($similarCategoriesOffers as $categoryOffer):
-            $NewOfferOfRelatedCats["'".$categoryOffer['id']."'"] = $categoryOffer;
+            $NewOfferOfRelatedCategories["'".$categoryOffer['id']."'"] = $categoryOffer;
         endforeach;
-        return $NewOfferOfRelatedCats;
+        return $NewOfferOfRelatedCategories;
     }
 
-    public static function sliceOfferByLimit($mergeOffers, $limit)
+    public static function sliceOffersByLimit($mergedOffers, $limit)
     {
         $offers = array();
-        if (!empty($mergeOffers)) {
-            foreach($mergeOffers as $newOfShop):
+        if (!empty($mergedOffers)) {
+            foreach($mergedOffers as $newOfShop):
                 $offers[] = $newOfShop;
             endforeach;
         }
-        $slicedOffer = array_slice($offers, 0, $limit);
-        return $slicedOffer;
+        $slicedOffers = array_slice($offers, 0, $limit);
+        return $slicedOffers;
     }
 
     public static function getTopOffers($limit)
     {
-        $topVoucherCodes = self::getTopCouponCodes(array(), $limit);
-        if (count($topVoucherCodes) < $limit) {
-            $newestCodesLimit = $limit - count($topVoucherCodes);
+        $topCouponCodes = self::getTopCouponCodes(array(), $limit);
+        if (count($topCouponCodes) < $limit) {
+            $newestCodesLimit = $limit - count($topCouponCodes);
             $newestTopVouchercodes = self::getNewestOffers('newest', $newestCodesLimit);
             foreach ($newestTopVouchercodes as $value) {
-                $topVoucherCodes[] = array(
+                $topCouponCodes[] = array(
                     'id'=> $value['shop']['id'],
                     'permalink' => $value['shop']['permalink'],
                     'offer' => $value
@@ -242,7 +242,7 @@ class Offer extends BaseOffer
             }
         }
         $topOffers = array();
-        foreach ($topVoucherCodes as $value) {
+        foreach ($topCouponCodes as $value) {
             $topOffers[] = $value['offer'];
         }
         return $topOffers;
@@ -250,7 +250,7 @@ class Offer extends BaseOffer
     
     public static function getTopCouponCodes($shopCategories, $limit = 5)
     {
-        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $currentDate = date('Y-m-d 00:00:00');
         $topCouponCodes = Doctrine_Query::create()
         ->select(
             'p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
@@ -279,8 +279,8 @@ class Offer extends BaseOffer
         }
 
         $topCouponCodes = $topCouponCodes->andWhere('s.status = 1')
-            ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
-            ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+            ->andWhere('o.enddate > "'.$currentDate.'"')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
             ->andWhere('o.discounttype = "CD"')
             ->andWhere('o.userGenerated = 0')
             ->andWhere('o.Visability != "MEM"')
@@ -292,7 +292,7 @@ class Offer extends BaseOffer
 
     public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "")
     {
-        $currentDateAndTime = date('Y-m-d 00:00:00');
+        $currentDate = date('Y-m-d 00:00:00');
         $newestCouponCodes = Doctrine_Query::create()
             ->select(
                 's.id,s.name,
@@ -318,8 +318,8 @@ class Offer extends BaseOffer
             )
             ->andWhere('s.deleted = 0')
             ->andWhere('s.status = 1')
-            ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
-            ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+            ->andWhere('o.enddate > "'.$currentDate.'"')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
             ->andWhere('o.discountType != "NW"')
             ->andWhere('o.discounttype="CD"')
             ->andWhere('o.Visability != "MEM"')
@@ -337,12 +337,12 @@ class Offer extends BaseOffer
 
     public static function updateCache($offerId)
     {
-        $offer  = Doctrine_Query::create()->select("o.id,s.id")
+        $offerDetails  = Doctrine_Query::create()->select("o.id,s.id")
                   ->from('Offer o')
                   ->leftJoin("o.shop s")
                   ->where("o.id=? ", $offerId)
                   ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        $shopId = $offer['shop']['id'];
+        $shopId = $offerDetails['shop']['id'];
         $key = 'all_shopdetail'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_offerInStore'  . $shopId . '_list';
@@ -362,21 +362,21 @@ class Offer extends BaseOffer
 
     public static function getSpecialPageOffers($specialPage)
     {
-        $currentDateAndTime = date('Y-m-d 00:00:00');
-        $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDateAndTime);
-        $constraintsRelatedOffers = self::getOfferByPageConstraints($specialPage, $currentDateAndTime);
+        $currentDate = date('Y-m-d 00:00:00');
+        $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDate);
+        $constraintsRelatedOffers = self::getOffersByPageConstraints($specialPage, $currentDate);
         $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
         $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
         return $specialOffers;
     }
 
-    public static function getSpecialOffersByPage($pageId, $currentDateAndTime)
+    public static function getSpecialOffersByPage($pageId, $currentDate)
     {
-        $specialPageOffers = self::getOffersByPageId($pageId, $currentDateAndTime);
+        $specialPageOffers = self::getOffersByPageId($pageId, $currentDate);
         return self::removeDuplicateOffers($specialPageOffers);
     }
 
-    public static function getOffersByPageId($pageId, $currentDateAndTime)
+    public static function getOffersByPageId($pageId, $currentDate)
     {
         $specialPageOffers = Doctrine_Query::create()
         ->select(
@@ -398,8 +398,8 @@ class Offer extends BaseOffer
         ->leftJoin('s.logo l')
         ->leftJoin('s.favoriteshops fv')
         ->where('op.pageId = '.$pageId)
-        ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
-        ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+        ->andWhere('o.enddate > "'.$currentDate.'"')
+        ->andWhere('o.startdate <= "'.$currentDate.'"')
         ->andWhere('o.deleted =0')
         ->andWhere('s.deleted =0')
         ->andWhere('s.status = 1')
@@ -423,13 +423,13 @@ class Offer extends BaseOffer
         return $specialOffersWithoutDuplication;
     }
 
-    public static function getOfferByPageConstraints($specialPage, $currentDateAndTime)
+    public static function getOffersByPageConstraints($specialPage, $currentDate)
     {
-        $specialOffersByConstraints = self::getSpecialOffersByPageConstraints($specialPage, $currentDateAndTime);
-        return self::getFilteredOffersByConstraints($specialPage, $specialOffersByConstraints);
+        $specialOffersByPageConstraints = self::getSpecialOffersByPageConstraints($specialPage, $currentDate);
+        return self::getFilteredOffersByConstraints($specialPage, $specialOffersByPageConstraints);
     }
 
-    public static function getSpecialOffersByPageConstraints($specialPage, $currentDateAndTime)
+    public static function getSpecialOffersByPageConstraints($specialPage, $currentDate)
     {
         $offersConstraintsQuery = Doctrine_Query::create()
         ->select(
@@ -451,8 +451,8 @@ class Offer extends BaseOffer
         ->andWhere('o.deleted =0')
         ->andWhere("o.userGenerated = 0")
         ->andWhere('s.deleted =0')
-        ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
-        ->andWhere('o.startdate <= "'.$currentDateAndTime.'"')
+        ->andWhere('o.enddate > "'.$currentDate.'"')
+        ->andWhere('o.startdate <= "'.$currentDate.'"')
         ->andWhere('o.Visability!="MEM"')
         ->andWhere('o.discounttype!="SL" and o.discounttype!="PA"')
         ->orderBy('o.exclusiveCode DESC')
@@ -481,14 +481,14 @@ class Offer extends BaseOffer
         $offerExclusive = $specialPage['couponExclusive'] == 1 ? $specialPage['couponExclusive'] : 0;
         $offerRegular = $specialPage['couponRegular'] == 1 ? $specialPage['couponRegular'] : 0;
         if ($offerRegular == 0) {
-            $offersConstraintsQuery = self::offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
+            $offersConstraintsQuery = self::offersWithNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
         } else {
-            $offersConstraintsQuery = self::offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
+            $offersConstraintsQuery = self::offersWithYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive);
         }
         return $offersConstraintsQuery;
     }
 
-    public static function offersNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
+    public static function offersWithNoRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
     {
         if ($offerEditorpick == 0) {
             if ($offerExclusive == 0) {
@@ -507,7 +507,7 @@ class Offer extends BaseOffer
         return $offersConstraintsQuery;
     }
 
-    public static function offersYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
+    public static function offersWithYesRegular($offersConstraintsQuery, $offerEditorpick, $offerExclusive)
     {
         if ($offerEditorpick == 0) {
             if ($offerExclusive == 0) {
@@ -682,7 +682,7 @@ class Offer extends BaseOffer
 
     public static function getActiveCoupons($keyword)
     {
-        $currentDateAndTime = date("Y-m-d 00:00:00");
+        $currentDate = date("Y-m-d 00:00:00");
         $activeCoupons = Doctrine_Query::create()
         ->select(
             's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer,
@@ -693,7 +693,7 @@ class Offer extends BaseOffer
         ->where('o.deleted=0')
         ->andWhere('o.userGenerated=0')
         ->andWhere("o.title LIKE '%$keyword%'")
-        ->andWhere('o.enddate>'."'".$currentDateAndTime."'")
+        ->andWhere('o.enddate>'."'".$currentDate."'")
         ->andWhere('o.discounttype="CD"')
         ->andWhere('s.deleted = 0')
         ->orderBy('o.id DESC')
@@ -755,7 +755,7 @@ class Offer extends BaseOffer
             $searchKeyword = $searchParameters['searchField'];
         endif;
 
-        $currentDate = date('Y-m-d H:i:s');
+        $currentDate = date('Y-m-d 00:00:00');
         $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
         $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
         $mergedOffersBySearchedKeywords = array_merge($searchedOffersByIds, $offersBySearchedKeywords);
@@ -912,7 +912,7 @@ class Offer extends BaseOffer
 
     public static function getCloakLink($offerId, $checkRefUrl = false)
     {
-        $data = Doctrine_Query::create()
+        $shopData = Doctrine_Query::create()
         ->select(
             's.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl, o.refOfferUrl, o.refUrl'
         )
@@ -921,7 +921,7 @@ class Offer extends BaseOffer
         ->where('o.id = "'.$offerId.'"')
         ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-        $network = Shop::getAffliateNetworkDetail($data['shop']['id']);
+        $network = Shop::getAffliateNetworkDetail($shopData['shop']['id']);
 
         if ($checkRefUrl) {
             # retur false if s shop is not associated with any network
@@ -929,10 +929,10 @@ class Offer extends BaseOffer
                 return false;
             }
 
-            if ($data['refURL'] != "") {
+            if ($shopData['refURL'] != "") {
                 return true ;
 
-            } else if ($data['shop']['refUrl'] != "") {
+            } else if ($shopData['shop']['refUrl'] != "") {
                 return true;
             } else {
                 return true;
