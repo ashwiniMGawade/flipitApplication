@@ -384,11 +384,8 @@ EOD;
 
     public static function getSplashInformation()
     {
-        $splashInformation = Doctrine_Query::create()
-            ->select('*')
-            ->from('Splash s')
-            ->fetchArray();
-        return $splashInformation;
+        $splash = new Splash();
+        return $splash->getSplashInformation();
     }
 
     public static function getCountryNameByLocale($locale)
