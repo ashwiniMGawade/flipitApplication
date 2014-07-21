@@ -12,7 +12,58 @@
  */
 class ViewCount extends BaseViewCount
 {
+    ##########################################
+    ########### REFACTORED CODE ##############
+    ##########################################
+    public static function getOfferClick($offerId, $clientIp)
+    {
+        $offerClick = Doctrine_Query::create()
+            ->select('count(v.id) as exists')
+            ->addSelect("(SELECT  id FROM ViewCount  click WHERE click.id = v.id) as clickId")
+            ->from('ViewCount v')
+            ->where('onClick!=0')
+            ->andWhere('offerId="'.$offerId.'"')
+            ->andWhere('IP="'.$clientIp.'"')
+            ->fetchArray();
+        return $offerClick[0]['exists'];
+    }
 
+    public static function saveOfferClick($offerId, $clientIp)
+    {
+        $offerClick  = new ViewCount();
+        $offerClick->offerId = $offerId;
+        $offerClick->onClick = 1;
+        $offerClick->onLoad = 0;
+        $offerClick->IP = $clientIp;
+        $offerClick->save();
+        return true;
+    }
+
+    public static function getOfferOnload($offerId, $clientIp)
+    {
+        $offerOnload = Doctrine_Query::create()
+            ->select('count(*) as exists')
+            ->from('ViewCount')
+            ->where('onLoad!=0')
+            ->andWhere('offerId="'.$id.'"')
+            ->andWhere('IP="'.$ip.'"')
+            ->fetchArray();
+        return $offerOnload[0]['exists'];
+    }
+
+    public static function saveOfferOnload($offerId, $clientIp)
+    {
+        $offerOnload  = new ViewCount();
+        $offerOnload->offerId = $offerId;
+        $offerOnload->onLoad = 1;
+        $offerOnload->onClick = 0;
+        $offerOnload->IP = $clientIp;
+        $offerOnload->save();
+        return true;
+    }
+    ##########################################
+    ########### END REFACTORED CODE ##########
+    ##########################################
     /*============================Function for front-end ======================= */
     /**
      * get store from database according to type
