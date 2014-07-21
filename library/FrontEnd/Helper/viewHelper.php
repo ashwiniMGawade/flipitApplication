@@ -134,8 +134,7 @@ EOD;
         $paginationParameter,
         $itemCountPerPage,
         $paginationRange = 3
-    )
-    {
+    ) {
         $currentPageNumber = !empty($paginationParameter['page']) ? $paginationParameter['page'] : '1';
         $pagination = Zend_Paginator::factory($totalRecordsForPagination);
         $pagination->setCurrentPageNumber($currentPageNumber);
@@ -232,8 +231,7 @@ EOD;
         $dataKey = '',
         $relatedFunction = '',
         $replaceStringArrayCheck = '1'
-    )
-    {
+    ) {
         if ($relatedFunction['function'] == '') {
             $functionToBeCached = $relatedFunction['parameters'];
         } else {
@@ -274,6 +272,72 @@ EOD;
         return $counterValue;
     }
 
+    public static function checkIfThisArticleEntryExists($eventType, $articleId, $clientIp)
+    {
+        $artcileExistsOrNot = "false";
+        switch (strtolower($eventType)) {
+            case 'onclick':
+                if (ArticleViewCount::getArticleClick($articleId, $clientIp) == 0) {
+                    ArticleViewCount::saveArticleClick($articleId, $clientIp);
+                    $artcileExistsOrNot = "true";
+                }
+                break;
+            case 'onload':
+                if (ArticleViewCount::getArticleOnload($articleId, $clientIp) == 0) {
+                    ArticleViewCount::saveArticleOnLoad($articleId, $clientIp);
+                    $artcileExistsOrNot = "true";
+                }
+                break;
+            default:
+                break;
+        }
+        return $artcileExistsOrNot;
+    }
+    
+    public static function checkIfThisShopEntryExists($eventType, $shopId, $clientIp)
+    {
+        $resultStatus = "false";
+        switch (strtolower($eventType)) {
+            case 'onclick':
+                if (ShopViewCount::getShopClick($shopId, $clientIp) == 0) {
+                    ShopViewCount::getSaveShopClick($shopId, $clientIp);
+                    $resultStatus = "true";
+                }
+                break;
+            case 'onload':
+                if (ShopViewCount::getShopOnload($shopId, $clientIp) == 0) {
+                    ShopViewCount::getSaveShopOnload($shopId, $clientIp);
+                    $resultStatus = "true";
+                }
+                break;
+            default:
+                break;
+        }
+        return $resultStatus;
+    }
+
+    public static function checkIfThisOfferEntryExists($eventType, $offerId, $clientIp)
+    {
+        $resultStatus = "false";
+        switch (strtolower($eventType)) {
+            case 'onclick':
+                if (ViewCount::getOfferClick($offerId, $clientIp) == 0) {
+                    ViewCount::saveOfferClick($offerId, $clientIp);
+                    $resultStatus = "true";
+                }
+                break;
+            case 'onload':
+                if (ViewCount::getOfferOnload($offerId, $clientIp) == 0) {
+                    ViewCount::saveOfferOnload($offerId, $clientIp);
+                    $resultStatus = "true";
+                }
+                break;
+            default:
+                break;
+        }
+        return $resultStatus;
+    }
+
     public static function getStoreForFrontEnd($storeType, $limit = "")
     {
         $stores = '';
@@ -301,55 +365,6 @@ EOD;
             $clinetIp = Zend_Controller_Front::getInstance()->getRequest()->getServer('REMOTE_ADDR');
         }
         return $clinetIp;
-    }
-
-    public static function checkIfThisArticleEntryExists($eventType, $articleId, $clientIp)
-    {
-        $artcileExistsOrNot = "false";
-        switch (strtolower($eventType)) {
-            case 'onclick':
-                $article = Doctrine_Query::create()
-                    ->select('count(*) as exists')
-                    ->from('ArticleViewCount')
-                    ->where('deleted=0')
-                    ->andWhere('onclick!=0')
-                    ->andWhere('articleid="'.$articleId.'"')
-                    ->andWhere('ip="'.$clientIp.'"')
-                    ->fetchArray();
-                if ($article[0]['exists'] == 0) {
-                    $articleViewCount  = new ArticleViewCount();
-                    $onClick = 1;
-                    $articleViewCount->articleid = $articleId;
-                    $articleViewCount->onclick = $onClick;
-                    $articleViewCount->ip = $clientIp;
-                    $articleViewCount->save();
-                    $artcileExistsOrNot = "true";
-                }
-                break;
-            case 'onload':
-                $article = Doctrine_Query::create()
-                    ->select('count(*) as exists')
-                    ->from('ArticleViewCount')
-                    ->where('deleted=0')
-                    ->andWhere('onload!=0')
-                    ->andWhere('articleid="'.$articleId.'"')
-                    ->andWhere('ip="'.$clientIp.'"')
-                    ->fetchArray();
-                if ($article[0]['exists'] == 0) {
-                    $articleViewCount  = new ArticleViewCount();
-                    $onLoad = 1;
-                    $articleViewCount->articleid = $articleId;
-                    $articleViewCount->onload = $onLoad;
-                    $articleViewCount->ip = $clientIp;
-                    $articleViewCount->onclick = 0;
-                    $articleViewCount->save();
-                    $artcileExistsOrNot = "true";
-                }
-                break;
-            default:
-                break;
-        }
-        return $artcileExistsOrNot;
     }
 
     public function getHowToGuidesImage($howToGuideImages)
@@ -396,8 +411,7 @@ EOD;
         $permaLink = '',
         $image = '',
         $customHeader = ''
-    )
-    {
+    ) {
         if ($metaTitle == '') {
             $metaTitle = $title;
         }
@@ -615,83 +629,6 @@ EOD;
         }
         return $result;
     }
-    
-    public static function checkIfThisShopEntryExists($eventType, $shopId, $clientIp)
-    {
-        $res = "false";
-        switch (strtolower($eventType)) {
-            case 'onclick':
-                $data = Doctrine_Query::create()
-                ->select('count(*) as exists')
-                ->from('ShopViewCount')
-                ->where('deleted=0')
-                ->andWhere('onclick!=0')
-                ->andWhere('shopid="'.$shopId.'"')
-                ->andWhere('ip="'.$clientIp.'"')
-                ->fetchArray();
-
-                if ($data[0]['exists'] == 0) {
-                    $cnt  = new ShopViewCount();
-                    $view = 1;
-                    $cnt->shopid = $shopId;
-                    $cnt->onclick = $view;
-                    $cnt->ip = $clientIp;
-                    $cnt->save();
-                    $res = "true";
-                }
-                break;
-            case 'onload':
-                $data = Doctrine_Query::create()
-                ->select('count(*) as exists')
-                ->from('shopviewcount')
-                ->where('deleted=0')
-                ->andWhere('onload!=0')
-                ->andWhere('shopid="'.$shopId.'"')
-                ->andWhere('ip="'.$clientIp.'"')
-                ->fetchArray();
-                if ($data[0]['exists'] == 0) {
-                    $cnt  = new ArticleViewCount();
-                    $view = 1;
-                    $cnt->shopid = $shopId;
-                    $cnt->onload = $view;
-                    $cnt->ip = $clientIp;
-                    $cnt->save();
-                    $res = "true";
-                }
-                break;
-            default:
-                break;
-        }
-        return $res;
-    }
-
-    public static function checkIfThisOfferEntryExists($eventType, $offerId, $clientIp)
-    {
-
-        $res = "false";
-        switch (strtolower($eventType)) {
-            case 'onclick':
-                $data = Doctrine_Query::create()
-                    ->select('count(v.id) as exists')
-                    ->addSelect("(SELECT  id FROM ViewCount  click WHERE click.id = v.id) as clickId")
-                    ->from('ViewCount v')
-                    ->where('onClick!=0')
-                    ->andWhere('offerId="'.$offerId.'"')
-                    ->andWhere('IP="'.$clientIp.'"')
-                    ->fetchArray();
-                if ($data[0]['exists'] == 0) {
-                    $cnt  = new ViewCount();
-                    $view = 1;
-                    $cnt->offerId = $offerId;
-                    $cnt->onClick = $view;
-                    $cnt->IP = $clientIp;
-                    $cnt->save();
-                    $res = "true";
-                }
-                break;
-        }
-        return $res;
-    }
 
     public static function getAuthorId($offerId)
     {
@@ -792,8 +729,7 @@ EOD;
         $footerContent,
         $pathConstants = '',
         $emailHeaderText = ''
-    )
-    {
+    ) {
         $basePath = new Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
         $content = array(
