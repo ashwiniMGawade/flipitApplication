@@ -12,6 +12,60 @@
  */
 class ShopViewCount extends BaseShopViewCount
 {
+    ##########################################
+    ########### REFACTORED CODE ##############
+    ##########################################
+    public static function getShopClick($shopId, $clientIp)
+    {
+        $shopClick = Doctrine_Query::create()
+            ->select('count(*) as exists')
+            ->from('ShopViewCount')
+            ->where('deleted=0')
+            ->andWhere('onclick!=0')
+            ->andWhere('shopid="'.$shopId.'"')
+            ->andWhere('ip="'.$clientIp.'"')
+            ->fetchArray();
+        return $shopClick[0]['exists'];
+    }
+
+    public static function getSaveShopClick($shopId, $clientIp)
+    {
+        $shopClick  = new ShopViewCount();
+        $shopClick->shopid = $shopId;
+        $shopClick->onclick = 1;
+        $shopClick->onload = 0;
+        $shopClick->ip = $clientIp;
+        $shopClick->save();
+        return true;
+    }
+
+    public static function getShopOnload($shopId, $clientIp)
+    {
+        $shopOnload = Doctrine_Query::create()
+            ->select('count(*) as exists')
+            ->from('ShopViewCount')
+            ->where('deleted=0')
+            ->andWhere('onload!=0')
+            ->andWhere('shopid="'.$shopId.'"')
+            ->andWhere('ip="'.$clientIp.'"')
+            ->fetchArray();
+        return $shopOnload[0]['exists'];
+    }
+
+    public static function getSaveShopOnload($shopId, $clientIp)
+    {
+        $shopOnLoad  = new ShopViewCount();
+        $shopOnLoad->shopid = $shopId;
+        $shopOnLoad->onload = 1;
+        $shopOnLoad->onclick = 0;
+        $shopOnLoad->ip = $clientIp;
+        $shopOnLoad->save();
+        return true;
+    }
+
+    ##########################################
+    ########### END REFACTORED CODE ##########
+    ##########################################
     /**
      * get No Shops clickouts last seven days
      * @author Raman

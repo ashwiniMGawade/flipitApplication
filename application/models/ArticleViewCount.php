@@ -13,6 +13,60 @@
 class ArticleViewCount extends BaseArticleViewCount
 {
 
+    ##########################################
+    ########### REFACTORED CODE ##############
+    ##########################################
+    public static function getArticleClick($articleId, $clientIp)
+    {
+        $articleClick = Doctrine_Query::create()
+            ->select('count(*) as exists')
+            ->from('ArticleViewCount')
+            ->where('deleted=0')
+            ->andWhere('onclick!=0')
+            ->andWhere('articleid="'.$articleId.'"')
+            ->andWhere('ip="'.$clientIp.'"')
+            ->fetchArray();
+        return $articleClick[0]['exists'];
+    }
+
+    public static function saveArticleClick($articleId, $clientIp)
+    {
+        $articleViewCount  = new ArticleViewCount();
+        $articleViewCount->articleid = $articleId;
+        $articleViewCount->onclick = 1;
+        $articleViewCount->ip = $clientIp;
+        $articleViewCount->onload = 0;
+        $articleViewCount->save();
+        return true;
+    }
+
+    public static function getArticleOnload($articleId, $clientIp)
+    {
+        $articleOnLoad = Doctrine_Query::create()
+            ->select('count(*) as exists')
+            ->from('ArticleViewCount')
+            ->where('deleted=0')
+            ->andWhere('onload!=0')
+            ->andWhere('articleid="'.$articleId.'"')
+            ->andWhere('ip="'.$clientIp.'"')
+            ->fetchArray();
+        return $articleOnLoad[0]['exists'];
+    }
+
+    public static function saveArticleOnLoad($articleId, $clientIp)
+    {
+        $articleViewCount  = new ArticleViewCount();
+        $articleViewCount->articleid = $articleId;
+        $articleViewCount->onload = 1;
+        $articleViewCount->ip = $clientIp;
+        $articleViewCount->onclick = 0;
+        $articleViewCount->save();
+        return true;
+    }
+
+    ##########################################
+    ########### END REFACTORED CODE ##########
+    ##########################################
 
     /**
      * generate papular Articles at the moment by formula
