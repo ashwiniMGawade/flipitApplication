@@ -1299,7 +1299,7 @@ function validateFormAddNewOffer(){
 							else 
 								return false ;
 						} ,
-						regex  : /\b([\d\w\.\/\+\-\?\:]*)((ht|f)tp(s|)\:\/\/|[\d\d\d|\d\d]\.[\d\d\d|\d\d]\.|www\.|\.tv|\.ac|\.com|\.edu|\.gov|\.int|\.mil|\.net|\.org|\.biz|\.info|\.name|\.pro|\.museum|\.co)([\d\w\.\/\%\+\-\=\&amp;\?\:\\\&quot;\'\,\|\~\;]*)\b/
+						url : true
 							
 					},
 					offerrefurlPR : {
@@ -1407,7 +1407,7 @@ function validateFormAddNewOffer(){
 					},
 					offerRefUrl : {
 						required  : __("Please enter ref Url"),
-						regex : __("Invalid Url")
+						url : __("Invalid Url")
 					},
 					extendedOfferTitle :{
 						required  : __("Please enter title")
