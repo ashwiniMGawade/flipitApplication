@@ -289,6 +289,7 @@ class Articlecategory extends BaseArticlecategory
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
 
                 foreach($page_ids as $ids):
 
@@ -347,6 +348,7 @@ class Articlecategory extends BaseArticlecategory
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
 
         foreach($page_ids as $ids):
 

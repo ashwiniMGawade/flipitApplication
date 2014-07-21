@@ -338,6 +338,7 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
 
 
 
@@ -427,6 +428,7 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
 
         foreach($page_ids as $ids):
 
@@ -704,6 +706,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
 
             foreach($page_ids as $ids):
 
@@ -772,6 +775,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
 
             foreach($page_ids as $ids):
 
@@ -841,6 +845,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
 
             foreach($page_ids as $ids):
 
