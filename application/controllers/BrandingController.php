@@ -18,7 +18,7 @@ class BrandingController extends Zend_Controller_Action
     public function saveAction()
     {
         $this->_helper->branding->save();
-        $this->_redirect($_SERVER['HTTP_REFERER']);
+        $this->_redirect('http://www.flipit.com/admin/shop');
     }
 
     public function stopAction()
