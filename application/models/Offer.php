@@ -966,7 +966,6 @@ class Offer extends BaseOffer
             $urll = $shopData['shop']['permalink'];
             $url = HTTP_PATH_LOCALE.$urll;
         }
-        echo $url; die;
         return $url;
     }
 
