@@ -148,6 +148,7 @@ EOD;
         $requestUri = Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI');
         $permalink = ltrim($requestUri, '/');
         $permalink = rtrim($permalink, '/');
+        $canocalUrl = $permalink;
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
         if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :
             if (intval($permalinkMatches[0]) > intval($pageCount)) :
@@ -175,7 +176,7 @@ EOD;
         endif;
         $permalinkAfterQueryString = explode('?', $permalink);
         $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
-        $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($permalinkAfterQueryString[0])));
+        $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($canocalUrl)));
         if ($pageCount > 1) :
             if ($currentPage <= 2) :
                 if ($currentPage == 1) :
