@@ -92,7 +92,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         $defaultStyles['store_title']['css-property']                   = 'color';
         $defaultStyles['store_title']['value']                          = '#32383e';
 
-        $defaultStyles['store_sub_title']['css-selector']               = '.header-block strong';
+        $defaultStyles['store_sub_title']['css-selector']               = '.header-block h2';
         $defaultStyles['store_sub_title']['css-property']               = 'color';
         $defaultStyles['store_sub_title']['value']                      = '#878a8d';
 
