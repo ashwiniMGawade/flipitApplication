@@ -77,14 +77,15 @@ class createSiteMaps
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
         $sitemap_main = $sitemaps.'_'.$main.'.xml';
+        $localeSlash = $locale != "" ? "/" : "";
         $robotTextContent ="User-agent: *
             \r\nDisallow:/".$info."/
             \r\nDisallow:/".$rssfeed."/
             \r\nDisallow:/out/
             \r\nDisallow:/".$zoeken."/
             \r\nDisallow:/admin/
-            \r\nDisallow:/".ltrim(strtolower($locale), '_')."/".$login."
-            \r\nDisallow:/".ltrim(strtolower($locale), '_')."/".$signup."
+            \r\nDisallow:/".ltrim(strtolower($locale), '_').$localeSlash.$login."
+            \r\nDisallow:/".ltrim(strtolower($locale), '_').$localeSlash.$signup."
             \r\n\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_shops."
             \r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_plus."
             \r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_main;
