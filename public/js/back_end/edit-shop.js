@@ -572,11 +572,10 @@ function validateFormAddNewShop(){
 						regex :  /((http|ftp|gopher|telnet|news|com|edu|gov):\/\/|)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
 					},
 					shopRefUrl :{
-						//required : true ,
-						regex  :/((http|ftp|gopher|telnet|news|com|edu|gov):\/\/|)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/					},
+						regex  :/((http|https):\/\/)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
+					},
 					shopActualUrl :{
-						//required : true ,
-						regex  : /((http|ftp|gopher|telnet|news|com|edu|gov):\/\/|)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
+						regex  : /((http|https):\/\/)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
 					},
 					shopViewCount : {
 						regex : /^\d+$/  

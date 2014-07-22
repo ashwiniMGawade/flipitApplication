@@ -1,10 +1,22 @@
 User-agent: *
+            
 Disallow:/info/
+            
 Disallow:/rssfeed/
+            
 Disallow:/out/
+            
 Disallow:/link_zoeken/
+            
 Disallow:/admin/
+            
+Disallow:/au/accountlogin
+            
+Disallow:/au/subscription
+            
 
-Sitemap:http://www.flipit.com/au/sitemaps/form_sitemap_form_shops.xml
-Sitemap:http://www.flipit.com/au/sitemaps/form_sitemap_form_plus.xml
-Sitemap:http://www.flipit.com/au/sitemaps/form_sitemap_form_main.xml
+Sitemap:http://www.flipit.com/public/au/sitemaps/form_sitemap_form_shops.xml
+            
+Sitemap:http://www.flipit.com/public/au/sitemaps/form_sitemap_form_plus.xml
+            
+Sitemap:http://www.flipit.com/public/au/sitemaps/form_sitemap_form_main.xml
