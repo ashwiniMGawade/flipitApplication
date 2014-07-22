@@ -138,7 +138,7 @@ class GlobalShopExport
                 $this->_trans->addTranslation(
                     array(
                             'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath)
-                            .'language/frontend_php' . $suffix . '.mo',
+                            .'language/fallback/frontend_php' . $suffix . '.mo',
                             'locale' => $data['customLocale'],
                     )
                 );

@@ -222,6 +222,7 @@ class SendNewsletter
         $mandrillSenderName = $settings[0]['sendername'];
         $categoryName = $topCategories[0]['category']['name'];
         $categoryPermalink = $topCategories[0]['category']['permaLink'];
+        $newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
         try {
             FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                 $topVouchercodes,
@@ -241,7 +242,7 @@ class SendNewsletter
                     'publicPathCdn' => $this->_public_cdn_path,
                     'mandrillKey' => $this->_mandrillKey
                 ),
-                FrontEnd_Helper_viewHelper::__email('email_Newsletter header')
+                $newsletterHeader['email_header']
             );
             Signupmaxaccount::updateNewsletterSchedulingStatus();
             $message = 'Newsletter has been sent successfully' ;

@@ -176,6 +176,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
             $categoryName = $topCategories[0]['category']['name'];
             $categoryPermalink = $topCategories[0]['category']['permaLink'];
+            $newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
             try {
                 FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                     $topVouchercodes,
@@ -189,7 +190,7 @@ class Admin_AccountsettingController extends Zend_Controller_Action
                     $this->_to,
                     $this->footerContent,
                     '',
-                    FrontEnd_Helper_viewHelper::__email('email_Newsletter header')
+                    $newsletterHeader['email_header']
                 );
                 $message = $this->view->translate('Newsletter has been sent successfully');
             } catch (Mandrill_Error $e) {
