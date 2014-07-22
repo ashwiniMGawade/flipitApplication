@@ -946,26 +946,27 @@ class Offer extends BaseOffer
                  $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
                  $clientProperAddress = ip2long($clientIP);
                  # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId($data['id'], $clientProperAddress, 'offer');
+                 $conversion = Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
                  $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
             }
         }
 
-        if ($data['refURL'] != "") {
-            $url = $data['refURL'];
+        if ($shopData['refURL'] != "") {
+            $url = $shopData['refURL'];
             $url .= $subid;
 
-        } else if ($data['shop']['refUrl'] != "") {
+        } else if ($shopData['shop']['refUrl'] != "") {
 
-            $url = $data['shop']['refUrl'];
+            $url = $shopData['shop']['refUrl'];
             $url .=  $subid;
 
-        } else if ($data['shop']['actualUrl'] != "") {
-            $url = $data['shop']['actualUrl'];
+        } else if ($shopData['shop']['actualUrl'] != "") {
+            $url = $shopData['shop']['actualUrl'];
         } else {
-            $urll = $data['shop']['permalink'];
+            $urll = $shopData['shop']['permalink'];
             $url = HTTP_PATH_LOCALE.$urll;
         }
+        echo $url; die;
         return $url;
     }
 

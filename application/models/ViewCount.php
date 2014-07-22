@@ -45,8 +45,8 @@ class ViewCount extends BaseViewCount
             ->select('count(*) as exists')
             ->from('ViewCount')
             ->where('onLoad!=0')
-            ->andWhere('offerId="'.$id.'"')
-            ->andWhere('IP="'.$ip.'"')
+            ->andWhere('offerId="'.$offerId.'"')
+            ->andWhere('IP="'.$clientIp.'"')
             ->fetchArray();
         return $offerOnload[0]['exists'];
     }
