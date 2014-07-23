@@ -1299,7 +1299,7 @@ function validateFormAddNewOffer(){
 							else 
 								return false ;
 						} ,
-						url : true
+						regex  :/((http|https):\/\/)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
 							
 					},
 					offerrefurlPR : {
@@ -1407,7 +1407,7 @@ function validateFormAddNewOffer(){
 					},
 					offerRefUrl : {
 						required  : __("Please enter ref Url"),
-						url : __("Invalid Url")
+						regex : __("Invalid Url")
 					},
 					extendedOfferTitle :{
 						required  : __("Please enter title")
