@@ -204,35 +204,24 @@ class Admin_AccountsettingController extends Zend_Controller_Action
         exit;
     }
 
-    /**
-     * emailHeaderFooter
-     *
-     * save email header/footer content
-     *
-     * @author Surinderpal Singh
-     */
     public function emailHeaderFooterAction()
     {
-        # sanitize data
-        $data = mysql_escape_string(
-                BackEnd_Helper_viewHelper::stripSlashesFromString(
-                        $this->getRequest()->getParam('data'))) ;
+        $headerFooterContent = mysqli_real_escape_string(
+            FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
+            BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $this->getRequest()->getParam('data')
+            )
+        );
 
-
-        # check tepmlete type
         switch($this->getRequest()->getParam('template')) {
             case 'email-header':
-                # update headet template content
-                Signupmaxaccount::updateHeaderContent($data);
-            break;
-
+                Signupmaxaccount::updateHeaderContent($headerFooterContent);
+                break;
             case 'email-footer':
-                # update footer template content
-                Signupmaxaccount::updateFooterContent($data);
-            break;
+                Signupmaxaccount::updateFooterContent($headerFooterContent);
+                break;
         }
-
-        die ;
+        die;
     }
 
     public function emailcontentAction()

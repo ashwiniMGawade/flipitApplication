@@ -82,15 +82,6 @@ abstract class BaseSignupmaxaccount extends Doctrine_Record
                 'default' => 0,
                 'type' => 'boolean',
         ));
-        $this->hasColumn('locale', 'string', 50, array(
-                'type' => 'string',
-                'length' => 50,
-                'fixed' => false,
-                'unsigned' => false,
-                'primary' => false,
-                'notnull' => true,
-                'autoincrement' => false,
-        ));
         $this->hasColumn('sendername', 'string', 50, array(
                 'type' => 'string',
                 'length' => 50,
@@ -150,10 +141,6 @@ abstract class BaseSignupmaxaccount extends Doctrine_Record
         $this->hasColumn('homepage_widget_banner_path', 'string', 255, array(
                 'type' => 'string',
                 'default' => 0,
-        ));
-
-        $this->hasColumn('timezone', 'string', 255, array(
-                'type' => 'string'
         ));
         $this->hasColumn('newletter_is_scheduled', 'boolean', 1, array(
                 'type' => 'boolean',
