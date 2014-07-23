@@ -12,7 +12,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 
         if (!empty($shopBranding)) {
             $session->data = $shopBranding;
-        }else{
+        } else {
             $session->data = $this->defaultStyles();
         }
 
@@ -20,12 +20,12 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
             $securityCheckHash = md5($shopID.date('Y').'-'.date('m').'-'.date('d').':'.date('H'));
             if ($securityCheckHash == $linkValidationHash) {
                 $session->brandingActivated = true;
-            }else{
+            } else {
                 echo "Error - Wrong linkValidationHash, please try the link again from Admin";
                 exit;
             }
 
-        }else{
+        } else {
             $session->brandingActivated = false;
             echo "Error - This function can only be activated from the admin";
             exit;
@@ -35,9 +35,12 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 
     public function save()
     {
+        $redirectUrl = $_SERVER['HTTP_REFERER'];
         $session = new Zend_Session_Namespace('Branding');
         foreach ($_POST as $cssSelector => $value) {
-            if(!empty($session->data[$cssSelector])) $session->data[$cssSelector]['value'] = $value;
+            if (!empty($session->data[$cssSelector])) {
+                $session->data[$cssSelector]['value'] = $value;
+            }
         }
 
         if (!empty($_POST['delete'])) {
@@ -47,13 +50,13 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
             }
         }
 
-        if (!empty($_FILES["newsletter_store_logo"]["tmp_name"])){
+        if (!empty($_FILES["newsletter_store_logo"]["tmp_name"])) {
             $newletterStoreLogo = "images/upload/shop/".time().'_'.$_FILES["newsletter_store_logo"]["name"];
             move_uploaded_file($_FILES["newsletter_store_logo"]["tmp_name"], ROOT_PATH.$newletterStoreLogo);
             $session->data['newsletter_store_logo']['img'] = $newletterStoreLogo;
         }
 
-        if (!empty($_FILES["header_background"]["tmp_name"])){
+        if (!empty($_FILES["header_background"]["tmp_name"])) {
             $headerBackgroundImage = "images/upload/shop/".time().'_'.$_FILES["header_background"]["name"];
             move_uploaded_file($_FILES["header_background"]["tmp_name"], ROOT_PATH.$headerBackgroundImage);
             $session->data['header_background']['img'] = $headerBackgroundImage;
@@ -63,21 +66,23 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
             $shop =  Doctrine_Core::getTable("Shop")->find($_POST['shop_id']);
             if (empty($_POST['reset'])) {
                 $shop->brandingcss =  serialize($session->data);
-            }else{
+                $redirectUrl = self::stop();
+            } else {
                 $shop->brandingcss  = null;
                 $session->data = $this->defaultStyles();
             }
             $shop->save();
         }
+        return $redirectUrl;
     }
 
     public function stop()
     {
-        setcookie('passCache', '1' , '1' , '/');
+        setcookie('passCache', '1', '1', '/');
         $session = new Zend_Session_Namespace('Branding');
         $session->data = array();
         $session->brandingActivated = false;
-        return 'http://www.flipit.com/admin';
+        return 'http://www.flipit.com/admin/shop';
     }
 
     private function defaultStyles()
@@ -100,7 +105,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         $defaultStyles['newsletter_background_color']['css-property']   = 'background-color';
         $defaultStyles['newsletter_background_color']['value']          = '#f6f6f6';
 
-        $defaultStyles['newsletter_title_color']['css-selector']        = '.section .block-form h2';
+        $defaultStyles['newsletter_title_color']['css-selector']        = '.section .block-form h4';
         $defaultStyles['newsletter_title_color']['css-property']        = 'color';
         $defaultStyles['newsletter_title_color']['value']               = '#33383e';
 

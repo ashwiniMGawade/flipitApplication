@@ -17,8 +17,7 @@ class Admin_BrandingController extends Zend_Controller_Action
 
     public function saveAction()
     {
-        $this->_helper->branding->save();
-        $this->_redirect( $_SERVER['HTTP_REFERER'] );
+        $this->_redirect($this->_helper->branding->save());
     }
 
     public function stopAction()
