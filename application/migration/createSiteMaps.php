@@ -61,6 +61,7 @@ class createSiteMaps
         $databaseLocale = !empty($databaseLocale [0] ['locale'] ) ? $databaseLocale [0] ['locale'] : 'nl_NL';
         $this->_translate = new Zend_Translate(array('adapter' => 'gettext', 'disableNotices' => true));
         $this->_translate->addTranslation(array('content' => PUBLIC_PATH . strtolower ( $this->_localePath ) . 'language/po_links' . $locale . '.mo', 'locale' => $databaseLocale));
+        $this->_translate->addTranslation(array('content' => PUBLIC_PATH . strtolower ( $this->_localePath ) . 'language/form' . $locale . '.mo', 'locale' => $databaseLocale));
         $pathToXMLFile = PUBLIC_PATH . $this->_localePath;
         Zend_Registry::set('Zend_Translate', $this->_translate);
         set_time_limit(0);
