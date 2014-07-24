@@ -82,12 +82,14 @@ EOD;
     public function popularCategoryWidget()
     {
         $allCategories = Category::getAllCategories();
+        $allCategories = array_slice($allCategories, 0, 10, true);
         $categoriesSidebarWidget =
         '<div class="block">
             <div class="intro">
             <h4 class="sidebar-heading">'. $this->__translate('All Categories').'</h4></div>
                 <ul class="tags">';
-        foreach ($allCategories  as $category) {
+        foreach ($allCategories as $category) {
+
             $categoriesSidebarWidget.='
                     <li>
                         <a href="'. HTTP_PATH_LOCALE .
@@ -121,7 +123,7 @@ EOD;
     
     public function popularShopWidget()
     {
-        $popularStores = self::getStoreForFrontEnd('popular', 25);
+        $popularStores = self::getStoreForFrontEnd('popular', 10);
         $popularStoresContent = '<div class="block"><div class="intro">
                    <h4>'.$this->__translate('Populaire Winkels').'</h4>
                    <span>'
