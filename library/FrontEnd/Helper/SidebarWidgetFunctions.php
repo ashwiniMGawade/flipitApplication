@@ -101,31 +101,6 @@ EOD;
         return $categoriesSidebarWidget;
     }
 
-
-    public function browseByStoreWidget()
-    {
-        $browseByStoreWidget =
-        '<div class="block">
-            <div class="intro">
-               <h4>'.$this->__translate('Browse by Store') .'</h4>
-            </div>
-            <div class="alphabet-holder">
-                <ul class="alphabet">';
-        foreach (range('A', 'Z') as $oneCharacter) {
-            $redirectUrl = 
-                HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_alle-winkels')."#".strtolower($oneCharacter);
-            $browseByStoreWidget .=
-                    '<li>
-                        <a href="' .$redirectUrl.'">'.$this->__translate($oneCharacter).'</a>
-                    </li>';
-        };
-        $browseByStoreWidget.=
-                '</ul>
-            </div>
-        </div>';
-        return $browseByStoreWidget;
-    }
-
     public function getSidebarWidget($array = array(), $page = '')
     {
         $pageWidgets = Doctrine_Query::create()
