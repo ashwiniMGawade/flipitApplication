@@ -67,9 +67,9 @@ EOD;
                 <div class='social-networks'>
                     <div class='intro'>".$socialMediaTitle."</div>
                     <ul class='share-list'>
-                        <li><a class='facebook' href='".$facebookPageLink."' target='_blank'></a></li>
-                        <li><a class='twitter' href='".$twitterPageLink."' target='_blank'></a></li>
-                        <li><a class='google' href='".$googlePlusPageLink."' target='_blank'></a></li>
+                        <li><a class='facebook' href='".$facebookPageLink."' target='_blank' rel='nofollow'></a></li>
+                        <li><a class='twitter' href='".$twitterPageLink."' target='_blank' rel='nofollow'></a></li>
+                        <li><a class='google' href='".$googlePlusPageLink."' target='_blank' rel='nofollow'></a></li>
                         <li class='share-text'>"
                         .$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')
                         ."</li>
