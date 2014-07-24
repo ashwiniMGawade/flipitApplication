@@ -57,7 +57,7 @@ class ErrorController extends Zend_Controller_Action
                         $specialPageOffers,
                         $paginationNumber,
                         30,
-                        4
+                        5
                     );
                     if (empty($specialPageOffers) && $pageDetails['pageType'] == 'offer') {
                         $pageNumber = 4;
