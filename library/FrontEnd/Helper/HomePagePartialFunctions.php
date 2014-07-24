@@ -311,7 +311,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
             PUBLIC_PATH_CDN.ltrim($offer['shop']['logo']['path'], "/") .'thum_medium_'. $offer['shop']['logo']['name'];
         $shopPermalink = $offer['shop']['permalink'];
         $shopName = $offer['shop']['name'];
-        $offerTitle = $offer['title'];
+        $offerTitle = mb_strlen($offer['title'], 'UTF-8') > 170
+            ? mb_substr($offer['title'], 0, 170, 'UTF-8') . "..."
+            : $offer['title'];
         $offerExclusiveText = $this->getOfferOptionText($offer['exclusiveCode']);
         return $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
     }
