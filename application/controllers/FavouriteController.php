@@ -41,7 +41,7 @@ class FavouriteController extends Zend_Controller_Action
                 $offers,
                 $this->_getAllParams(),
                 30,
-                3
+                4
             );
             $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
             $this->view->favouriteShopsOffers = $favouriteShopsOffersWithPagination;
