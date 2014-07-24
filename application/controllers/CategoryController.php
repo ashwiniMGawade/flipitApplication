@@ -27,7 +27,7 @@ class CategoryController extends Zend_Controller_Action
                 $categoryVoucherCodes,
                 $this->_getAllParams(),
                 27,
-                3
+                4
             );
             $this->view->offersWithPagination = $offersWithPagination;
             $this->view->categoryDetails = $categoryDetails;
