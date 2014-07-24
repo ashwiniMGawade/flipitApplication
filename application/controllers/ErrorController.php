@@ -56,7 +56,7 @@ class ErrorController extends Zend_Controller_Action
                     $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
                         $paginationNumber,
-                        30,
+                        20,
                         5
                     );
                     if (empty($specialPageOffers) && $pageDetails['pageType'] == 'offer') {
