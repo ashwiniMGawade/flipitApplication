@@ -82,12 +82,14 @@ EOD;
     public function popularCategoryWidget()
     {
         $allCategories = Category::getAllCategories();
+        $allCategories = array_slice($allCategories, 0, 10, true);
         $categoriesSidebarWidget =
         '<div class="block">
             <div class="intro">
             <h4 class="sidebar-heading">'. $this->__translate('All Categories').'</h4></div>
                 <ul class="tags">';
-        foreach ($allCategories  as $category) {
+        foreach ($allCategories as $category) {
+
             $categoriesSidebarWidget.='
                     <li>
                         <a href="'. HTTP_PATH_LOCALE .
@@ -112,7 +114,7 @@ EOD;
             <div class="alphabet-holder">
                 <ul class="alphabet">';
         foreach (range('A', 'Z') as $oneCharacter) {
-            $redirectUrl = 
+            $redirectUrl =
                 HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_alle-winkels')."#".strtolower($oneCharacter);
             $browseByStoreWidget .=
                     '<li>
