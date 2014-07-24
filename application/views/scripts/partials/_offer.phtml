@@ -16,7 +16,7 @@ foreach ($this->offers as $offer) {
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     $couponCode = $offer->couponCode;
-    if ($offer->couponCodeType  == 'UN') {
+    if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
         $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offer->id);
         if (!empty($getOfferUniqueCode)) {
             $couponCode = $getOfferUniqueCode['code'];

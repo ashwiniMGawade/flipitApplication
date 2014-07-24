@@ -67,9 +67,9 @@ EOD;
                 <div class='social-networks'>
                     <div class='intro'>".$socialMediaTitle."</div>
                     <ul class='share-list'>
-                        <li><a class='facebook' href='".$facebookPageLink."' target='_blank'></a></li>
-                        <li><a class='twitter' href='".$twitterPageLink."' target='_blank'></a></li>
-                        <li><a class='google' href='".$googlePlusPageLink."' target='_blank'></a></li>
+                        <li><a class='facebook' href='".$facebookPageLink."' target='_blank' rel='nofollow'></a></li>
+                        <li><a class='twitter' href='".$twitterPageLink."' target='_blank' rel='nofollow'></a></li>
+                        <li><a class='google' href='".$googlePlusPageLink."' target='_blank' rel='nofollow'></a></li>
                         <li class='share-text'>"
                         .$this->__translate('Follow us for the latest vaucher codes, plus a daily digest of our biggest offers')
                         ."</li>
@@ -82,12 +82,14 @@ EOD;
     public function popularCategoryWidget()
     {
         $allCategories = Category::getAllCategories();
+        $allCategories = array_slice($allCategories, 0, 10, true);
         $categoriesSidebarWidget =
         '<div class="block">
             <div class="intro">
             <h4 class="sidebar-heading">'. $this->__translate('All Categories').'</h4></div>
                 <ul class="tags">';
-        foreach ($allCategories  as $category) {
+        foreach ($allCategories as $category) {
+
             $categoriesSidebarWidget.='
                     <li>
                         <a href="'. HTTP_PATH_LOCALE .
@@ -99,31 +101,6 @@ EOD;
         $categoriesSidebarWidget.=
                 '</ul></div>';
         return $categoriesSidebarWidget;
-    }
-
-
-    public function browseByStoreWidget()
-    {
-        $browseByStoreWidget =
-        '<div class="block">
-            <div class="intro">
-               <h4>'.$this->__translate('Browse by Store') .'</h4>
-            </div>
-            <div class="alphabet-holder">
-                <ul class="alphabet">';
-        foreach (range('A', 'Z') as $oneCharacter) {
-            $redirectUrl = 
-                HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_alle-winkels')."#".strtolower($oneCharacter);
-            $browseByStoreWidget .=
-                    '<li>
-                        <a href="' .$redirectUrl.'">'.$this->__translate($oneCharacter).'</a>
-                    </li>';
-        };
-        $browseByStoreWidget.=
-                '</ul>
-            </div>
-        </div>';
-        return $browseByStoreWidget;
     }
 
     public function getSidebarWidget($array = array(), $page = '')
@@ -146,7 +123,7 @@ EOD;
     
     public function popularShopWidget()
     {
-        $popularStores = self::getStoreForFrontEnd('popular', 25);
+        $popularStores = self::getStoreForFrontEnd('popular', 10);
         $popularStoresContent = '<div class="block"><div class="intro">
                    <h4>'.$this->__translate('Populaire Winkels').'</h4>
                    <span>'
