@@ -28,7 +28,6 @@ class Logo extends BaseLogo
         ->from('logo l')
         ->where("l.id = ?", $logoId)
         ->fetchArray();
-        print_r($pageLogo); die;
         return  !empty($pageLogo[0]) ? $pageLogo[0] : '';
     }
     #################################################
