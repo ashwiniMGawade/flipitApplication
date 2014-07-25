@@ -9,13 +9,13 @@ class SearchController extends Zend_Controller_Action
         $action     = strtolower($this->getRequest()->getActionName());
 
         if (
-        	file_exists (
-        		APPLICATION_PATH . '/modules/'. $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
-        	)
+            file_exists(
+                APPLICATION_PATH . '/modules/'. $module . '/views/scripts/' . $controller . '/' . $action . ".phtml"
+            )
         ) {
-            $this->view->setScriptPath( APPLICATION_PATH . '/modules/'  . $module . '/views/scripts' );
-        } else{
-            $this->view->setScriptPath( APPLICATION_PATH . '/views/scripts' );
+            $this->view->setScriptPath(APPLICATION_PATH . '/modules/'  . $module . '/views/scripts');
+        } else {
+            $this->view->setScriptPath(APPLICATION_PATH . '/views/scripts');
         }
         $this->viewHelperObject = new FrontEnd_Helper_viewHelper();
     }
@@ -37,14 +37,14 @@ class SearchController extends Zend_Controller_Action
         $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
         $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-        	'all_popularshop_list',
-        	array('function' => 'Shop::getAllPopularStores',
-        		'parameters' => array(10)),
-        	true
+            'all_popularshop_list',
+            array('function' => 'Shop::getAllPopularStores',
+                'parameters' => array(10)),
+            true
         );
         $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
 
-        if($searchedKeywords == '') {
+        if ($searchedKeywords == '') {
             $this->view->popularStores = $popularStores;
             $this->view->offers = array();
         } else {
@@ -66,8 +66,8 @@ class SearchController extends Zend_Controller_Action
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
-        	'formSignupSidebarWidget',
-        	'SignUp '
+            'formSignupSidebarWidget',
+            'SignUp '
         );
         FrontEnd_Helper_SignUpPartialFunction::validateZendForm($this, '', $signUpFormSidebarWidget);
         $this->view->sidebarWidgetForm = $signUpFormSidebarWidget;
