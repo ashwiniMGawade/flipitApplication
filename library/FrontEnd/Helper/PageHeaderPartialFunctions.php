@@ -3,12 +3,7 @@ class FrontEnd_Helper_PageHeaderPartialFunctions
 {
     public function getCategoryOrPageHeader($headerText, $headerImage, $pageType = '')
     {
-        if ($pageType == 'info') {
-            $headertitle = '<h1>' . $headerText . '</h1>';
-        } else {
-            $headertitle = '<span>' . $headerText . '</span>';
-        }
-
+        $headertitle = '<h1>' . $headerText . '</h1>';
         $header = '<div class="banner-block">
             <img alt="' . $headerText . '" src="' .  $headerImage . '" class="image">
             <div class="bar">' . $headertitle . '</div>
