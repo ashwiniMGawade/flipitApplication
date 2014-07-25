@@ -15,9 +15,10 @@ if ($this->pageMode == true) {
         $this->minifyHeadScript()->appendFile("/public/js/front_end/faq.js");
         $pageContent =  stripslashes($this->page['content']);                  
     } else {
+        $internalDivClass = $this->pageCssClass == 'contact-page' ? '' : 'inner-section-wrapper';
         $pageContent =
             '<div class="section">
-                <div class="inner-section-wrapper">'
+                <div class="'.$internalDivClass.'">'
                     .stripslashes($this->page['content']) 
                 .'</div>
             </div>';
