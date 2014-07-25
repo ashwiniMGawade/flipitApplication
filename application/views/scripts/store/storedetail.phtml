@@ -77,8 +77,7 @@ $expiredOffers ='';
 if(count($this->expiredOffers) >0):
       $expiredOffers = $this->partial(
           $storeViewPartialPath.'_expiredOffer.phtml',
-          array('expiredOffers'=>$this->expiredOffers,'shopName'=>$this->currentStoreInformation[0]['name'],
-            'shopRefUrl'=>$this->currentStoreInformation[0]['refUrl'])
+          array('expiredOffers'=>$this->expiredOffers,'shopName'=>$this->currentStoreInformation[0]['name'])
       );
 endif;
 

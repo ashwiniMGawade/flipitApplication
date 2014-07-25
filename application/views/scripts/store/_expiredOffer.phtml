@@ -8,7 +8,7 @@ foreach ($this->expiredOffers as $offer) :
     $offer = (object) $offer;
     ?>
     <div class="line">
-      <a href="<?php echo $this->shopRefUrl;?>"
+      <a href="<?php echo $expiredOffersPartialClass->getExpiredOfferUrl($offer);?>"
       rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
         <div class="holder">
             <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
