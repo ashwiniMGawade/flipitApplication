@@ -98,9 +98,9 @@ class createSiteMaps
             \r\nDisallow:/admin/
             \r\nDisallow:/".ltrim(strtolower($locale), '_').$localeSlash.$login."
             \r\nDisallow:/".ltrim(strtolower($locale), '_').$localeSlash.$signup."
-            \r\n\r\nSitemap:".$robotSitemapShops."
-            \r\nSitemap:".$robotSitemapPlus."
-            \r\nSitemap:".$robotSitemapMain;
+            \r\n\r\nSitemap: ".$robotSitemapShops."
+            \r\nSitemap: ".$robotSitemapPlus."
+            \r\nSitemap: ".$robotSitemapMain;
         $robotTextFile = $pathToXMLFile."robots.txt";
         $robotTextHandle = fopen($robotTextFile, 'w');
         fwrite($robotTextHandle, $robotTextContent);
