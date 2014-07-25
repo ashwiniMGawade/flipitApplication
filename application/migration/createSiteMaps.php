@@ -90,17 +90,7 @@ class createSiteMaps
             $robotSitemapMain = $domainForRobot."sitemaps/".$sitemap_main;
         }
 
-        $robotTextContent ="User-agent: *
-            \r\nDisallow:/".$info."/
-            \r\nDisallow:/".$rssfeed."/
-            \r\nDisallow:/out/
-            \r\nDisallow:/".$zoeken."/
-            \r\nDisallow:/admin/
-            \r\nDisallow:/".ltrim(strtolower($locale), '_').$localeSlash.$login."
-            \r\nDisallow:/".ltrim(strtolower($locale), '_').$localeSlash.$signup."
-            \r\n\r\nSitemap: ".$robotSitemapShops."
-            \r\nSitemap: ".$robotSitemapPlus."
-            \r\nSitemap: ".$robotSitemapMain;
+        $robotTextContent ="User-agent: *\nDisallow: /".$info."/\nDisallow: /".$rssfeed."/\nDisallow: /out/\nDisallow: /".$zoeken."/\nDisallow: /admin/\nDisallow: /".ltrim(strtolower($locale), '_').$localeSlash.$login."\nDisallow: /".ltrim(strtolower($locale), '_').$localeSlash.$signup."\r\n\r\nSitemap: ".$robotSitemapShops."\nSitemap: ".$robotSitemapPlus."\nSitemap: ".$robotSitemapMain;
         $robotTextFile = $pathToXMLFile."robots.txt";
         $robotTextHandle = fopen($robotTextFile, 'w');
         fwrite($robotTextHandle, $robotTextContent);
