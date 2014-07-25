@@ -6,9 +6,11 @@ echo $expiredOffersPartialClass->getExpiredOffersHeader($this->shopName);?>
 <?php
 foreach ($this->expiredOffers as $offer) :
     $offer = (object) $offer;
+    $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
+    $shopUrl = $domainName.'out/shop/'.$offer->shop['id'];
     ?>
     <div class="line">
-      <a href="<?php echo $expiredOffersPartialClass->getExpiredOfferUrl($offer);?>"
+      <a href="<?php echo $shopUrl;?>"
       rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
         <div class="holder">
             <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
