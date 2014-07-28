@@ -1,10 +1,5 @@
 <?php
-/**
- * Send scheduled newsletter of all countries
- *
- * @author Sp Singh
- *
- */
+
 class SendNewsletter
 {
     public $_localePath = '/';
@@ -27,82 +22,69 @@ class SendNewsletter
     public function __construct()
     {
         ini_set('memory_limit', '-1');
-
         set_time_limit(0);
-
-        // Define path to application directory
         defined('APPLICATION_PATH')
-        || define('APPLICATION_PATH',
-                dirname(dirname(__FILE__)));
-
+            || define(
+                'APPLICATION_PATH',
+                dirname(dirname(__FILE__))
+            );
         defined('LIBRARY_PATH')
-        || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-
+            || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
         defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
-
-        // Define application environment
         defined('APPLICATION_ENV')
-        || define('APPLICATION_ENV',
-                (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-                        : 'production'));
-
-
-        //Ensure library/ is on include_path
+        || define(
+            'APPLICATION_ENV',
+            (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
+                : 'production')
+        );
         set_include_path(
-                implode(PATH_SEPARATOR,
-                        array(realpath(APPLICATION_PATH . '/../library'),
-                                get_include_path(),)));
+            implode(
+                PATH_SEPARATOR,
+                array(
+                    realpath(APPLICATION_PATH . '/../library'),
+                    get_include_path(),)
+            )
+        );
         set_include_path(
-                implode(PATH_SEPARATOR,
-                        array(realpath(DOCTRINE_PATH), get_include_path(),)));
+            implode(
+                PATH_SEPARATOR,
+                array(realpath(DOCTRINE_PATH), get_include_path(),)
+            )
+        );
 
-        /** Zend_Application */
         require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
         require_once(LIBRARY_PATH.'/BackEnd/Helper/viewHelper.php');
         require_once (LIBRARY_PATH . '/Zend/Application.php');
         require_once(DOCTRINE_PATH . '/Doctrine.php');
-
-        // Create application, bootstrap, and run
-        $application = new Zend_Application(APPLICATION_ENV,
-                APPLICATION_PATH . '/configs/application.ini');
-
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
         $frontControlerObject = $application->getOption('resources');
-
-
         $this->_mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
         $this->_template = $frontControlerObject['frontController']['params']['newsletterTemplate'];
-
         $connections = $application->getOption('doctrine');
         spl_autoload_register(array('Doctrine', 'autoload'));
-
         $manager = Doctrine_Manager::getInstance();
-
         $imbull = $connections['imbull'];
-
-        // cycle htoruh all site database
         $DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
 
-
-        // cycle thoruh all site database
-        foreach ( $connections as $key => $connection ) {
-            // check database is being must be site
+        foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->send( $connection ['dsn'], $key ,$imbull );
-                } catch ( Exception $e ) {
-                    echo $e->getMessage ();
+                    $this->send($connection ['dsn'], $key, $imbull);
+                } catch (Exception $e) {
+                    echo $e->getMessage();
                     echo "\n\n";
                 }
                 echo "\n\n";
             }
         }
-
         $manager->closeConnection($DMC1);
     }
 
-    protected function send($dsn, $key,$imbull)
+    protected function send($dsn, $key, $imbull)
     {
-        # setup appropriate vaues according to locale
         if ($key == 'en') {
             $this->_localePath = '';
             $this->_hostName = "http://www.kortingscode.nl";
@@ -122,88 +104,79 @@ class SendNewsletter
         }
 
         defined('PUBLIC_PATH')
-            || define('PUBLIC_PATH',
-                dirname(dirname(dirname(__FILE__)))."/public/");
+            || define(
+                'PUBLIC_PATH',
+                dirname(dirname(dirname(__FILE__)))."/public/"
+            );
 
         $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
         spl_autoload_register(array('Doctrine', 'modelsAutoload'));
-
         $manager = Doctrine_Manager::getInstance();
-        //Doctrine_Core::loadModels(APPLICATION_PATH . '/models/generated');
-
         $manager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING, Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
         $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
 
         try {
-
             $settings = Signupmaxaccount::getAllMaxAccounts();
             $localeSettings = LocaleSettings::getLocaleSettings();
-            # check if newsletter is scheduled and still not sent then proceed with  newsletter sending
-            if($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
+            if ($settings[0]['newletter_is_scheduled'] && $settings[0]['newletter_status'] ==  0) {
                 $cutsomLocale = !empty( $localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
-
-
                 $this->_trans = new Zend_Translate(array(
                         'adapter' => 'gettext',
                         'disableNotices' => true));
-
                 $this->_trans->addTranslation(
-                        array(
-                                'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).'language/frontend_php' . $suffix . '.mo',
-                                'locale' => $cutsomLocale,
-                        )
+                    array(
+                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                        'language/frontend_php' . $suffix . '.mo',
+                        'locale' => $cutsomLocale,
+                    )
                 );
-
                 $this->_trans->addTranslation(
-                        array(
-                                'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links' . $suffix . '.mo',
-                                'locale' => $cutsomLocale ,
-                        )
+                    array(
+                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                        'language/email' . $suffix . '.mo',
+                        'locale' => $cutsomLocale
+                    )
                 );
-
-
-
+                $this->_trans->addTranslation(
+                    array(
+                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                        'language/form' . $suffix . '.mo',
+                        'locale' => $cutsomLocale
+                    )
+                );
+                $this->_trans->addTranslation(
+                    array(
+                        'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                        'language/po_links' . $suffix . '.mo',
+                        'locale'    => $cutsomLocale
+                    )
+                );
                 Zend_Registry::set('Zend_Translate', $this->_trans);
                 Zend_Registry::set('Zend_Locale', $cutsomLocale);
-
                 $timezone = $localeSettings[0]['timezone'];
-
                 echo "\n" ;
-
                 $sentTime = new Zend_Date($settings[0]['newletter_scheduled_time']);
                 $sentTime->get('YYYY-MM-dd HH:mm:ss');
-
                 $currentTime = new Zend_Date();
                 $currentTime->setTimezone($timezone);
-
                 echo "\n" ;
                 $currentTime->get('YYYY-MM-dd HH:mm:ss');
-
-                # if sent time is passed then send newsletter
                 if ($currentTime->isLater($sentTime)) {
-
                     echo "\nSending newletter...\n" ;
-
                     $this->mandrilHandler($key, $settings);
                 }
-
             } else {
-
                 echo "\n";
                 print "$key - Already sent";
-
             }
-
         } catch (Exception $e) {
-
             echo "\n";
             echo $e->getMessage();
         }
 
         $manager->closeConnection($DMC);
-
     }
 
 
