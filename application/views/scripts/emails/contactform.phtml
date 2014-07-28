@@ -1,9 +1,8 @@
 <?php
 $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName();
-$locale = LOCALE != '' ? LOCALE.'/' : '';
 $publicPath = HTTP_PATH.'public/images/front_end/';
 $logo = FrontEnd_Helper_viewHelper::setEmailLogos(
-    $locale,
+    LOCALE,
     PUBLIC_PATH.'images/front_end/',
     $publicPath,
     'email-header-password.png'
@@ -14,7 +13,7 @@ $logo = FrontEnd_Helper_viewHelper::setEmailLogos(
         <td bgcolor="#0077cc">
             <table width="600" align="center" bgcolor="#0077cc" cellpadding="0" cellspacing="0"
                 style="background:url(<?php
-            echo $locale != '' ? $publicPath.'emails/stamp_01.jpg' : $publicPath.'emails/KC-stamp.png';
+            echo LOCALE != '' ? $publicPath.'emails/stamp_01.jpg' : $publicPath.'emails/KC-stamp.png';
             ?>) no-repeat right bottom;">
                 <tr><td colspan="2" height="22"></td></tr>
                 <tr>
