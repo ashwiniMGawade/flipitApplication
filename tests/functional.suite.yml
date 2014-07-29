@@ -9,6 +9,6 @@ modules:
     enabled: [ZF1, Doctrine1, Filesystem, FunctionalHelper, PhpBrowser]
     config:
         Doctrine1:
-            cleanup: true
+            cleanup: false
         PhpBrowser:
             url: 'http://www.flipit.com'

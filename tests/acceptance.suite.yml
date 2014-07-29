@@ -7,8 +7,9 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser
+        - WebDriver
         - AcceptanceHelper
     config:
-        PhpBrowser:
-            url: 'http://www.flipit.com'
+        WebDriver:
+            url: 'http://flipit.com/'
+            browser: 'firefox'

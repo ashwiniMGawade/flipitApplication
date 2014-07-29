@@ -11,8 +11,7 @@ settings:
 modules:
     config:
         Db:
-            dsn: 'mysql:host=localhost;dbname=flipit_test'
-            user: 'root'
-            password: 'password'
-            dump: tests/_data/flipit_test.sql
-            cleanup: false
+            dsn: ''
+            user: ''
+            password: ''
+            dump: tests/_data/dump.sql
