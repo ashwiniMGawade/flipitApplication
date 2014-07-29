@@ -134,8 +134,8 @@ class BackEnd_Helper_MandrillHelper
 
     public static function getOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $stringAdded = FrontEnd_Helper_viewHelper::__email('Added');
-        $stringOnly = FrontEnd_Helper_viewHelper::__email('Only');
+        $stringAdded = FrontEnd_Helper_viewHelper::__email('email_Added');
+        $stringOnly = FrontEnd_Helper_viewHelper::__email('email_Only');
         $startDate = new Zend_Date(strtotime($currentOffer->startDate));
         $offerDates = '';
         if($currentOffer->discountType == "CD"):
@@ -154,18 +154,18 @@ class BackEnd_Helper_MandrillHelper
                 $offerDates .= '&nbsp;';
                 $offerDates .= $daysTillOfferExpires;
                 $offerDates .= '&nbsp;';
-                $offerDates .= FrontEnd_Helper_viewHelper::__email('days left!');
+                $offerDates .= FrontEnd_Helper_viewHelper::__email('email_days left!');
             } elseif ($daysTillOfferExpires == 1) {
                 $offerDates .= $stringOnly;
                 $offerDates .= '&nbsp;';
                 $offerDates .= $daysTillOfferExpires;
                 $offerDates .= '&nbsp;';
-                $offerDates .= FrontEnd_Helper_viewHelper::__email('day left!');
+                $offerDates .= FrontEnd_Helper_viewHelper::__email('email_day left!');
             } elseif ($daysTillOfferExpires == 0) {
-                    $offerDates .= FrontEnd_Helper_viewHelper::__email('Expires today');
+                    $offerDates .= FrontEnd_Helper_viewHelper::__email('email_Expires today');
             } else {
                     $endDate = new Zend_Date(strtotime($currentOffer->endDate));
-                    $offerDates .= FrontEnd_Helper_viewHelper::__email('Expires on').': ';
+                    $offerDates .= FrontEnd_Helper_viewHelper::__email('email_Expires on:').' ';
                     $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
             } elseif (
                 $currentOffer->discountType == "PR"
