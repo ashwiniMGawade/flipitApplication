@@ -134,8 +134,8 @@ class BackEnd_Helper_MandrillHelper
 
     public static function getOfferDates($currentOffer, $daysTillOfferExpires)
     {
-        $stringAdded = FrontEnd_Helper_viewHelper::__email('email_Added');
-        $stringOnly = FrontEnd_Helper_viewHelper::__email('email_Only');
+        $stringAdded = FrontEnd_Helper_viewHelper::__email('email_added');
+        $stringOnly = FrontEnd_Helper_viewHelper::__email('email_only');
         $startDate = new Zend_Date(strtotime($currentOffer->startDate));
         $offerDates = '';
         if($currentOffer->discountType == "CD"):
@@ -162,10 +162,10 @@ class BackEnd_Helper_MandrillHelper
                 $offerDates .= '&nbsp;';
                 $offerDates .= FrontEnd_Helper_viewHelper::__email('email_day left!');
             } elseif ($daysTillOfferExpires == 0) {
-                    $offerDates .= FrontEnd_Helper_viewHelper::__email('email_Expires today');
+                    $offerDates .= FrontEnd_Helper_viewHelper::__email('email_expires today');
             } else {
                     $endDate = new Zend_Date(strtotime($currentOffer->endDate));
-                    $offerDates .= FrontEnd_Helper_viewHelper::__email('email_Expires on:').' ';
+                    $offerDates .= FrontEnd_Helper_viewHelper::__email('email_expires on:').' ';
                     $offerDates .= ucwords($endDate->get(Zend_Date::DATE_MEDIUM));
             } elseif (
                 $currentOffer->discountType == "PR"
