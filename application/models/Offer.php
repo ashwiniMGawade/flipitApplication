@@ -1347,8 +1347,8 @@ class Offer extends BaseOffer
         }
 
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
-            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('00:00:00');
-            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate']));
+            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate']));
         }
 
         if (isset($params['attachedpages'])) {
@@ -1647,8 +1647,8 @@ class Offer extends BaseOffer
         }
 
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
-            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
-            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate']));
+            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate']));
         }
 
         $this->refOfferPage->delete();
