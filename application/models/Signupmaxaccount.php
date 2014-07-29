@@ -611,8 +611,9 @@ class Signupmaxaccount extends BaseSignupmaxaccount
         $scheduledDate = $request->getParam("sendDate", false);
         $scheduledTime = $request->getParam("sendTime", false);
         $timezone = $request->getParam("timezone", false);
+        $scheduledDate = explode('-', $scheduledDate);
+        $scheduledDate = $scheduledDate[1].'-'.$scheduledDate[0].'-'.$scheduledDate[2];
         $timestamp = date('Y-m-d', strtotime($scheduledDate)).' '.date('H:i:s', strtotime($scheduledTime));
-
         try {
             $getRecord = Doctrine_Query::create()->select()->from("Signupmaxaccount")->where('id = 1')->fetchArray();
             if (empty($getRecord)) {

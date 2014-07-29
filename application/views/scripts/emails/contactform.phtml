@@ -1,17 +1,20 @@
 <?php
 $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName();
 $publicPath = HTTP_PATH.'public/images/front_end/';
-if(LOCALE == ''):
-    $logo = $publicPath.'emails/kortingscode-logo.png';
-else :
-    $logo = $publicPath.'emails/logo-forgotpassword.png';
-endif;
- ?>
+$logo = FrontEnd_Helper_viewHelper::setEmailLogos(
+    LOCALE,
+    PUBLIC_PATH.'images/front_end/',
+    $publicPath,
+    'email-header-password.png'
+);
+?>
 <table width="100%" align="center" cellpadding="0" cellspacing="0">
     <tr>
         <td bgcolor="#0077cc">
             <table width="600" align="center" bgcolor="#0077cc" cellpadding="0" cellspacing="0"
-                style="background:url(<?php echo $publicPath.'emails/stamp_01.jpg'; ?>) no-repeat right bottom;">
+                style="background:url(<?php
+            echo LOCALE != '' ? $publicPath.'emails/stamp_01.jpg' : $publicPath.'emails/stamp_01-kc.jpg';
+            ?>) no-repeat right bottom;">
                 <tr><td colspan="2" height="22"></td></tr>
                 <tr>
                     <td width="205"></td>

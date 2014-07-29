@@ -79,17 +79,18 @@ class createSiteMaps
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
         $sitemap_main = $sitemaps.'_'.$main.'.xml';
         $localeSlash = $locale != "" ? "/" : "";
-        $robotTextContent ="User-agent: *
-            \r\nDisallow:/".$info."/
-            \r\nDisallow:/".$rssfeed."/
-            \r\nDisallow:/out/
-            \r\nDisallow:/".$zoeken."/
-            \r\nDisallow:/admin/
-            \r\nDisallow:/".ltrim(strtolower($locale), '_').$localeSlash.$login."
-            \r\nDisallow:/".ltrim(strtolower($locale), '_').$localeSlash.$signup."
-            \r\n\r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_shops."
-            \r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_plus."
-            \r\nSitemap:".$domainForRobot."sitemaps/".$sitemap_main;
+
+        if ($key == 'en') {
+            $robotSitemapShops = 'http://a63398.hostedsitemaps.com/3927973/sitemap.xml';
+            $robotSitemapPlus = 'http://a63398.hostedsitemaps.com/3927973/sitemap_images.xml';
+            $robotSitemapMain = 'http://a63398.hostedsitemaps.com/3927973/sitemap_video.xml';
+        } else {
+            $robotSitemapShops = $domainForRobot."sitemaps/".$sitemap_shops;
+            $robotSitemapPlus = $domainForRobot."sitemaps/".$sitemap_plus;
+            $robotSitemapMain = $domainForRobot."sitemaps/".$sitemap_main;
+        }
+
+        $robotTextContent ="User-agent: *\r\nDisallow: /".$info."/\r\nDisallow: /".$rssfeed."/\r\nDisallow: /out/\r\nDisallow: /".$zoeken."/\r\nDisallow: /admin/\r\nDisallow: /".ltrim(strtolower($locale), '_').$localeSlash.$login."\r\nDisallow: /".ltrim(strtolower($locale), '_').$localeSlash.$signup."\r\n\r\nSitemap: ".$robotSitemapShops."\r\nSitemap: ".$robotSitemapPlus."\r\nSitemap: ".$robotSitemapMain;
         $robotTextFile = $pathToXMLFile."robots.txt";
         $robotTextHandle = fopen($robotTextFile, 'w');
         fwrite($robotTextHandle, $robotTextContent);

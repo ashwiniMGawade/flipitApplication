@@ -886,9 +886,8 @@ EOD;
 
     public static function setEmailLogos($locale = '', $publicLocalePath = '', $publicPath = '', $logoName = '')
     {
-        $documentRoot = Zend_Controller_Front::getInstance()->getRequest()->getServer('DOCUMENT_ROOT');
-        $documentRoot != '' ? $documentRoot : dirname(dirname(dirname(dirname(__FILE__))));
-            
+        $documentRoot = dirname(dirname(dirname(dirname(__FILE__))));
+
         if (file_exists($documentRoot.'/public/'.$locale.'images/front_end/emails/'.$logoName)) {
             $emailLogo = $publicLocalePath.'emails/'.$logoName;
         } else {

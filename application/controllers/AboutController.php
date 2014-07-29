@@ -43,7 +43,7 @@ class AboutController extends Zend_Controller_Action
             $allAuthorsDetails,
             $this->_getAllParams(),
             20,
-            7
+            4
         );
         
         $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
