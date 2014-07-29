@@ -37,7 +37,7 @@ class FrontEnd_Helper_ExpiredOffersPartialFunction{
         $offerExpiredOn = '';
         $offerExpiredOn =  FrontEnd_Helper_viewHelper::__translate('Expired on:');
         $expiredOfferDate = new Zend_Date($offerEndDate);
-        $offerExpiredOn = $offerExpiredOn.ucwords($expiredOfferDate->get(Zend_Date::DATE_MEDIUM));
+        $offerExpiredOn = $offerExpiredOn.$expiredOfferDate->get(Zend_Date::DATE_MEDIUM);
         return $offerExpiredOn;
     }
     
