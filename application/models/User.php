@@ -75,7 +75,10 @@ class User extends BaseUser
     public static function getUserDetails($userId)
     {
         $userDetails = Doctrine_Query::create()
-            ->select("u.id,u.firstName,u.lastName,u.addtosearch, u.mainText, u.slug, u.google, pi.name, pi.path")
+            ->select(
+                "u.id, u.firstName,u.lastName,u.addtosearch, u.mainText, u.editorText, u.slug,
+              u.google, pi.name, pi.path"
+            )
             ->from('User u')
             ->leftJoin("u.profileimage pi")
             ->where("u.id = ?", $userId)
@@ -244,6 +247,7 @@ class User extends BaseUser
         $this->likes = BackEnd_Helper_viewHelper::stripSlashesFromString($params['likes']);
         $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString($params['dislike']);
         $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
+        $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
         //get user from zend auth
@@ -446,6 +450,7 @@ class User extends BaseUser
         $this->likes =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['likes']);
         $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['dislike']);
         $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
+        $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
         $this->countryLocale = $params['locale'];
 
