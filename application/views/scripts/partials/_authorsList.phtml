@@ -5,7 +5,7 @@
 foreach ($this->authors as $author) :
     $authorPicture = 
     !empty($author['profileimage']) 
-    ? HTTP_PATH_CDN.ltrim($author['profileimage']['path'], "/")."thum_large_widget_".$author['profileimage']['name'] 
+    ? HTTP_PATH_CDN.ltrim($author['profileimage']['path'], "/").$author['profileimage']['name']
     : '';
     ?>
             <li>
