@@ -660,11 +660,13 @@ EOD;
     public static function replaceStringVariable($variable)
     {
         $variable = str_replace(
-            array('[month]', '[year]', '[day]', '[offers]', '[coupons]', '[accounts]'),
+            array('[month]', '[year]', '[day]', '[offers]', '[coupons]', '[accounts]', '[visitors]', '[shops]'),
             array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY,
             Dashboard::getDashboardValueToDispaly("total_no_of_offers"),
             Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code"),
-            Dashboard::getDashboardValueToDispaly("total_no_members")),
+            Dashboard::getDashboardValueToDispaly("total_no_members"),
+            Dashboard::getDashboardValueToDispaly("total_no_members"),
+            Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code")),
             $variable
         );
         return $variable;

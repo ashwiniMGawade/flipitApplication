@@ -47,7 +47,7 @@ endif;
     <div class="container bottom-nav">
         <div class="row">
             <?php echo $footer[0]['middleColumn1'];?>
-            <?php echo $footer[0]['middleColumn2'];?>
+            <?php echo FrontEnd_Helper_viewHelper::replaceStringVariable($footer[0]['middleColumn2']);?>
             <?php echo $footer[0]['middleColumn3'];?>
         </div>
     </div>
