@@ -48,7 +48,7 @@ $mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(
     <div id="wrapper">
         <div class="container">
             <div class="panel-box win-min-height">
-                <strong class="logo-panel"><a href="http://www.flipit.com/">flipt Changing the way we save</a></strong>
+                <strong class="logo-panel"><a href="http://www.flipit.com/"><h1>flipt Changing the way we save</h1></a></strong>
                 <span class="alt-text">CHoose RegioN:</span>
                 <div id="selectedByIP" style="display:none;" class="region-box"></div>
                 <div class="links-cols">
@@ -114,7 +114,10 @@ $mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(
                             <?php echo $mostPopularCoupon['mostPopularCoupon'][1]['name']; ?>
                             </strong>
                         </a>
-                        <p><span class="mark"><?php echo $offerExpiryDate; ?></span>
+                        <p><span class="mark"><?php echo 'Added: '.
+                        date('M d, Y', strtotime($mostPopularCoupon['mostPopularCoupon'][0]['startDate'])).
+                        ', Expires on: '.
+                        date('M d, Y', strtotime($mostPopularCoupon['mostPopularCoupon'][0]['endDate'])); ?></span>
                             <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['exclusiveCode'] != '' ? 
                             '<span class="mark2">Exclusive</span>' : '' ; ?></p>
                         <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">
