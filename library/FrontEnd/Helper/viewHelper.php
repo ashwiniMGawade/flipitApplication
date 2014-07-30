@@ -374,7 +374,7 @@ EOD;
         $howToGuideImageAltText = '';
         if (!empty($howToGuideImages)) {
             $howToGuideImagePath =
-                PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'], "/")."thum_bigLogoFile_".$howToGuideImages['name'];
+                PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'], "/").$howToGuideImages['name'];
             $howToGuideImageAltText = $howToGuideImages['name'];
         }
         return array(
