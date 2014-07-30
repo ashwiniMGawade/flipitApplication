@@ -386,7 +386,7 @@ class FrontEnd_Helper_OffersPartialFunctions
             href="javascript:void(0);">'
             . FrontEnd_Helper_viewHelper::__translate('Terms &amp; Conditions') . '</a>';
             if ($termsAndConditions!='' && $termsAndConditions!=null && $currentOffer->extendedOffer =='1') {
-                $termAndConditionLink.='&nbsp; | &nbsp;';
+                $termAndConditionLink.='&nbsp; - &nbsp;';
             }
         }
         return $termAndConditionLink ."</li>";
