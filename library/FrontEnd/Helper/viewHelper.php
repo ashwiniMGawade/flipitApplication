@@ -395,7 +395,7 @@ EOD;
         if(!empty($locale)) :
             $locale = $locale == 'en' ? 'nl' : $locale;
             $locale = new Zend_Locale(strtoupper($locale));
-            $countries = $locale->getTranslationList('Territory');
+            $countries = $locale->getTranslationList('Territory', 'en');
             $countryName = ($countries[$locale->getRegion()]);
         endif;
         return $countryName;
