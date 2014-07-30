@@ -25,7 +25,9 @@ foreach ($this->authorMostReadArticles as $authorMostReadArticle) {
         <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$authorMostReadArticle['permalink']?>">
             <div class="image saving-guide-image-wrapper">
                 <img src="<?php echo $articleImage;?>" width="135" alt="<?php echo $authorMostReadArticle['title'];?>">
-                <span class="title"><?php echo FrontEnd_Helper_viewHelper::__translate('FLIPIT PLUS');?></span>
+                <span class="title">
+                <?php echo FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE).' PLUS';?>
+                </span>
             </div>
             <div class="box">
                 <h3><?php echo $authorMostReadArticle['title'];?></h3>
