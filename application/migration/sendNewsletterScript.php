@@ -210,7 +210,7 @@ class SendNewsletter
                 $settings[0]['email_footer'],
                 array(
                     'httpPath' => $this->_hostName,
-                    'locale' => $key,
+                    'locale' => $this->_locale,
                     'httpPathLocale' => $this->_linkPath,
                     'publicPathCdn' => $this->_public_cdn_path,
                     'mandrillKey' => $this->_mandrillKey
