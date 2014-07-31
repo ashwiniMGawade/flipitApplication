@@ -43,7 +43,7 @@ class User extends BaseUser
         return !empty($userDetails) ? $userDetails['id'] : '';
     }
 
-    public static function getUserProfileDetails($userId)
+    public static function getUserProfileDetails($userId, $websiteName)
     {
         $userDetails = Doctrine_Query::create()
         ->select("u.* , w.id, pi.name, pi.path")
@@ -54,6 +54,7 @@ class User extends BaseUser
         ->where("u.id = ?", $userId)
         ->andWhere("u.showInAboutListing = 1")
         ->andWhere("u.deleted = 0")
+        ->andWhere("w.url ='".$websiteName."'")
         ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return $userDetails;
     }
