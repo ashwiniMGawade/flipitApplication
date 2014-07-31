@@ -267,8 +267,8 @@ class Admin_UserController extends Zend_Controller_Action
         $flash->addMessage(array('success' => $message ));
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        $alluserkey ="all_about_pages_users_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_aboutPagesusers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
 
         echo Zend_Json::encode($id);
         die();
@@ -511,9 +511,8 @@ class Admin_UserController extends Zend_Controller_Action
         $flash->addMessage(array('success' => $message ));
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        $alluserkey ="all_about_pages_users_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
-
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_aboutPagesusers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
         echo Zend_Json::encode($id);
         die();
     }
@@ -554,8 +553,8 @@ class Admin_UserController extends Zend_Controller_Action
         $flash->addMessage(array('success' => $message ));
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        $alluserkey ="all_about_pages_users_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_aboutPagesusers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
 
         echo Zend_Json::encode($id);
         die();

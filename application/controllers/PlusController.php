@@ -49,7 +49,7 @@ class PlusController extends Zend_Controller_Action
             );
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)'all_plus_popularshop_list',
+            (string)'all_plusPopularshops_list',
             array('function' => 'Shop::getAllPopularStores', 'parameters' => array(7)),
             true
         );
@@ -66,7 +66,13 @@ class PlusController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'plus_pageHeader_image',
+            array(
+                'function' => 'Logo::getPageLogo',
+                'parameters' => array($pageDetails->pageHeaderImageId)
+            )
+        );
         $this->view->popularStores = $popularStores;
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->allArticles =  $allArticlesWithAuthorDetails;
@@ -76,9 +82,19 @@ class PlusController extends Zend_Controller_Action
 
     public function guidedetailAction()
     {
-        $articleDetails = Articles::getArticleByPermalink($this->getRequest()->getParam('permalink'));
+        $articleDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                (string)"article_detailsBy_permalink",
+                array('function' =>
+                'Articles::getArticleByPermalink', 'parameters' => array($this->getRequest()->getParam('permalink')))
+            );
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
-        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles(4);
+        $categoryWiseArticles = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                (string)"categoryWiseArticles_list",
+                array('function' =>
+                'MoneySaving::getCategoryWiseArticles', 'parameters' => array(4))
+            );
         $articlesRelatedToCurrentCategory =
             !empty($categoryWiseArticles[$currentArticleCategory])
             ? $categoryWiseArticles[$currentArticleCategory]
@@ -99,8 +115,12 @@ class PlusController extends Zend_Controller_Action
             $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
-            $this->view->topPopularOffers = Offer::getTopOffers(5);
-            $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
+            $this->view->topPopularOffers = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache("plus_topPopular_offers", array('function' =>
+                'Offer::getTopOffers', 'parameters' => array(5)));
+            $this->view->userDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache('user_'.$articleDetails[0]['authorid'].'_details', array('function' =>
+                'User::getUserDetails', 'parameters' => array($articleDetails[0]['authorid'])));
             $articleThumbNailImage = FACEBOOK_IMAGE;
             if (!empty($articleDetails[0]['thumbnail'])) {
                 $articleThumbNailImage = PUBLIC_PATH_CDN

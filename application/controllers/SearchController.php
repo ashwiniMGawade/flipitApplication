@@ -28,7 +28,13 @@ class SearchController extends Zend_Controller_Action
 
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::__link('link_zoeken'));
-        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'search_pageHeader_image',
+            array(
+                'function' => 'Logo::getPageLogo',
+                'parameters' => array($pageDetails->pageHeaderImageId)
+            )
+        );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $searchedKeywords = $this->getRequest()->getParam('searchField');
         $shopIds = "";
@@ -37,7 +43,7 @@ class SearchController extends Zend_Controller_Action
         $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
         $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_popularshop_list',
+            'all_popularShops_list',
             array('function' => 'Shop::getAllPopularStores',
                 'parameters' => array(10)),
             true

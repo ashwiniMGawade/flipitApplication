@@ -33,8 +33,10 @@ endif;
                     </a>
                 </span>
                 <div class="photo">
-                <?php 
-                    $editorText = isset($this->shopEditor['editorText']) ? $this->shopEditor['editorText'] : 'Hello';
+                <?php
+
+                    $editorText = isset($this->shopEditor['editorText']) ? $this->shopEditor['editorText']
+                    : $this->translate('Hello');
                 ?>
                     <span class="text-box"><?php echo $editorText ; ?></span>
                     <a href="<?php echo $profileLink;?>">

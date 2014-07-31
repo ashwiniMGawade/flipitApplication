@@ -134,7 +134,9 @@ class Category extends BaseCategory
         $category->categoryFeaturedImageId = $categoryFeaturedImageId;
         $category->categoryHeaderImageId = $categoryHeaderImageId;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_details');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_VoucherCodes');
 
         try {
             $category->save();
@@ -247,7 +249,10 @@ class Category extends BaseCategory
         }
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_details');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_VoucherCodes');
+
         try {
             $category->save();
             self::updateFeaturedCategory($categoryParameter['id']);
@@ -532,7 +537,9 @@ class Category extends BaseCategory
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_details');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_VoucherCodes');
 
     }
     /**
@@ -549,7 +556,9 @@ class Category extends BaseCategory
                                     ->execute();
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_details');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_VoucherCodes');
     }
 
 /******************functions to be used on frontend*******************/

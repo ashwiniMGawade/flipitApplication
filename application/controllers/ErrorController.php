@@ -51,7 +51,13 @@ class ErrorController extends Zend_Controller_Action
                     if ($pageDetails['customHeader']) {
                         $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
                     }
-                    $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
+                    $specialPageOffers = FrontEnd_Helper_viewHelper::
+                        getRequestedDataBySetGetCache(
+                            'error_specialPage_offers',
+                            array(
+                                'function' => 'Offer::getSpecialPageOffers', 'parameters' => array($pageDetails)
+                            )
+                        );
                     $paginationNumber['page'] = $pageNumber;
                     $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
@@ -75,7 +81,15 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->headMeta()->setName('description', trim($pageDetails['metaDescription']));
                     $this->view->matches = $pageNumber;
                     $this->view->page = $pageDetails;
-                    $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails['pageHeaderImageId']);
+                    $this->view->pageHeaderImage =
+                    FrontEnd_Helper_viewHelper::
+                        getRequestedDataBySetGetCache(
+                            'error_pageHeader_image',
+                            array(
+                                'function' => 'Logo::getPageLogo',
+                                'parameters' => array($pageDetails['pageHeaderImageId'])
+                            )
+                        );
                     $this->view->offercount = count($specialPageOffers);
                     $this->view->offersPaginator = $specialOffersPaginator;
                     $this->view->widget = $sidebarWidget;
@@ -90,9 +104,14 @@ class ErrorController extends Zend_Controller_Action
                 $this->getResponse()->setHttpResponseCode(500);
                 $priority = Zend_Log::CRIT;
                 $this->view->message = 'Application error';
-                $this->view->popularShops = Shop::getPopularStores(12);
-                $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
-                $this->view->flipitLocales = $websitesWithLocales;
+                $this->view->popularShops = FrontEnd_Helper_viewHelper::
+                        getRequestedDataBySetGetCache(
+                            'error_pagePopular_shops',
+                            array(
+                                'function' => 'Shop::getPopularStores', 'parameters' => array(12)
+                            )
+                        );
+                $this->view->flipitLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
                 break;
         }
         if ($log = $this->getLog()) {
@@ -135,7 +154,13 @@ class ErrorController extends Zend_Controller_Action
         }
         
         $this->pagePermalink = $pagePermalink;
-        $pagedata = Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
+        $pagedata = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'pageDetails_in_error',
+                array(
+                    'function' => 'Page::getPageDetailsInError', 'parameters' => array(rtrim($pagePermalink, '/'))
+                )
+            );
         return $pagedata;
     }
 }

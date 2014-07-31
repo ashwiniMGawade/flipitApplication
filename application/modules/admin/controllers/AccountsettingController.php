@@ -158,12 +158,12 @@ class Admin_AccountsettingController extends Zend_Controller_Action
             ini_set("memory_limit", "1024M");
 
             $topVouchercodes = Offer::getTopOffers(10);
-            $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularcategory_list');
+            $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularCategories_list');
             if ($categoryflag) {
                 $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
-                FrontEnd_Helper_viewHelper::setInCache('all_popularcategory_list', $topCategories);
+                FrontEnd_Helper_viewHelper::setInCache('all_popularCategories_list', $topCategories);
             } else {
-                $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularcategory_list');
+                $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularCategories_list');
             }
 
             $emailDetails = Signupmaxaccount::getAllMaxAccounts();

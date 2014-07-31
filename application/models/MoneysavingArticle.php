@@ -108,7 +108,7 @@ class MoneysavingArticle extends BaseMoneysavingArticle
         $mostreadkey ="all_". "mostread".$uid ."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($mostreadkey);
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeMoneySaving_list');
         return $flag;
     }
     /**
@@ -130,7 +130,7 @@ class MoneysavingArticle extends BaseMoneysavingArticle
             ->set('p.position', 'p.position -1')
             ->where('p.position >' . $position)->execute();
         }
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeMoneySaving_list');
 
         $art_id = $id;
         $authorId = self::getAuthorId($art_id);
@@ -169,7 +169,7 @@ class MoneysavingArticle extends BaseMoneysavingArticle
             $pc = Doctrine_Core::getTable('MoneysavingArticle')->find($id);
             $pc->position = $pos;
             $pc->save();
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeMoneySaving_list');
 
             return true ;
         }
@@ -201,7 +201,7 @@ class MoneysavingArticle extends BaseMoneysavingArticle
             $pc = Doctrine_Core::getTable('MoneysavingArticle')->find($id);
             $pc->position = $pos;
             $pc->save();
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeMoneySaving_list');
 
             return true ;
         }

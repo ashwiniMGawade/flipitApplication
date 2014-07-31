@@ -20,9 +20,23 @@ class CategoryController extends Zend_Controller_Action
     public function showAction()
     {
         $categoryPermalink = $this->getRequest()->getParam('permalink');
-        $categoryDetails = Category::getCategoryDetails($categoryPermalink);
+        $categoryDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_category_details',
+                array(
+                    'function' => 'Category::getCategoryDetails', 'parameters' => array($categoryPermalink)
+                )
+            );
+
         if (count($categoryDetails) > 0) {
-            $categoryVoucherCodes = Category::getCategoryVoucherCodes($categoryDetails[0]['id'], 71);
+            $categoryVoucherCodes = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_category_VoucherCodes',
+                array(
+                    'function' => 'Category::getCategoryVoucherCodes',
+                    'parameters' => array($categoryDetails[0]['id'], 71)
+                )
+            );
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
                 $this->_getAllParams(),
@@ -77,7 +91,7 @@ class CategoryController extends Zend_Controller_Action
             );
         $specialPagesList = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'all_categoryspeciallist_list',
+                'all_categorySpecial_list',
                 array(
                     'function' => 'Page::getSpecialListPages', 'parameters' => array()
                 )

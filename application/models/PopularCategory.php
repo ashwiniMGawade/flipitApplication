@@ -107,7 +107,7 @@ class PopularCategory extends BasePopularCategory
         }
 
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
         return $flag;
 
     }
@@ -131,7 +131,7 @@ class PopularCategory extends BasePopularCategory
             ->set('p.position', 'p.position -1')
             ->where('p.position >' . $position)->execute();
             //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
 
             return true ;
         }
@@ -168,7 +168,7 @@ class PopularCategory extends BasePopularCategory
             $pc->save();
 
             //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
 
             return true ;
         }
@@ -202,7 +202,7 @@ class PopularCategory extends BasePopularCategory
             $pc->save();
 
             //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
             return true ;
         }
         return false;

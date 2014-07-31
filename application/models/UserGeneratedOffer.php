@@ -91,13 +91,13 @@ class UserGeneratedOffer extends BaseOffer
             //find record by id
             $u = Doctrine_Core::getTable("UserGeneratedOffer")->find($id);
 
-            $key = 'all_offerInStore'  . $u->shopId . '_list';
+            $key = 'all_offersInStore'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
+            $key = 'all_latestUpdatesInStore'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
+            $key = 'all_expiredOffersInStore'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'all_relatedShopInStore'  . $u->shopId . '_list';
@@ -108,8 +108,9 @@ class UserGeneratedOffer extends BaseOffer
 
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
 
             $u->delete();
 
@@ -134,13 +135,13 @@ class UserGeneratedOffer extends BaseOffer
             //find record by id and change status (deleted=1)
             $u = Doctrine_Core::getTable("Offer")->find($id);
 
-            $key = 'all_offerInStore'  . $u->shopId . '_list';
+            $key = 'all_offersInStore'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
+            $key = 'all_latestUpdatesInStore'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
+            $key = 'all_expiredOffersInStore'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'all_relatedShopInStore'  . $u->shopId . '_list';
@@ -151,8 +152,9 @@ class UserGeneratedOffer extends BaseOffer
 
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
 
             $del = Doctrine_Query::create()->delete()
             ->from('Offer o')
@@ -177,13 +179,13 @@ class UserGeneratedOffer extends BaseOffer
 
             $u = Doctrine_Core::getTable("UserGeneratedOffer")->find($id);
 
-            $key = 'all_offerInStore'  . $u->shopId . '_list';
+            $key = 'all_offersInStore'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
+            $key = 'all_latestUpdatesInStore'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
+            $key = 'all_expiredOffersInStore'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'all_relatedShopInStore'  . $u->shopId . '_list';
@@ -194,8 +196,9 @@ class UserGeneratedOffer extends BaseOffer
 
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
 
 
             //update status of record by id(deleted=0)
@@ -221,13 +224,13 @@ class UserGeneratedOffer extends BaseOffer
 
             $u = Doctrine_Core::getTable("UserGeneratedOffer")->find($id);
 
-            $key = 'all_offerInStore'  . $u->shopId . '_list';
+            $key = 'all_offersInStore'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'all_latestupdatesInStore'  .$u->shopId . '_list';
+            $key = 'all_latestUpdatesInStore'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'all_expiredOfferInStore'  . $u->shopId . '_list';
+            $key = 'all_expiredOffersInStore'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'all_relatedShopInStore'  . $u->shopId . '_list';
@@ -238,8 +241,9 @@ class UserGeneratedOffer extends BaseOffer
 
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
 
             //update record of offer offline = 1
             $O = Doctrine_Query::create()->update('UserGeneratedOffer')
@@ -392,13 +396,13 @@ class UserGeneratedOffer extends BaseOffer
         $this->save();
 
         //call cache function
-        $key = 'all_offerInStore'  . intval($params['selctedshop']) . '_list';
+        $key = 'all_offersInStore'  . intval($params['selctedshop']) . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-        $key = 'all_latestupdatesInStore'  . intval($params['selctedshop']) . '_list';
+        $key = 'all_latestUpdatesInStore'  . intval($params['selctedshop']) . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-        $key = 'all_expiredOfferInStore'  . intval($params['selctedshop']) . '_list';
+        $key = 'all_expiredOffersInStore'  . intval($params['selctedshop']) . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         $key = 'all_relatedShopInStore'  . intval($params['selctedshop']) . '_list';
@@ -409,8 +413,9 @@ class UserGeneratedOffer extends BaseOffer
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
         ;
     }
 
@@ -504,13 +509,13 @@ class UserGeneratedOffer extends BaseOffer
 
 
     $this->save();
-    $key = 'all_offerInStore'  . intval($params['selctedshop']) . '_list';
+    $key = 'all_offersInStore'  . intval($params['selctedshop']) . '_list';
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-    $key = 'all_latestupdatesInStore'  . intval($params['selctedshop']) . '_list';
+    $key = 'all_latestUpdatesInStore'  . intval($params['selctedshop']) . '_list';
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-    $key = 'all_expiredOfferInStore'  .intval($params['selctedshop']) . '_list';
+    $key = 'all_expiredOffersInStore'  .intval($params['selctedshop']) . '_list';
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
     $key = 'all_relatedShopInStore'  . intval($params['selctedshop']) . '_list';
@@ -521,8 +526,9 @@ class UserGeneratedOffer extends BaseOffer
 
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newoffer_list');
+    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homenewoffer_list');
+    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
 
     }
 

@@ -23,8 +23,22 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops(Shop::getPopularStores(25));
-            $this->view->favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
+            $this->view->popularShops = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'alreadyFavourite_'.Auth_VisitorAdapter::getIdentity()->id.'_shops',
+                array(
+                    'function' => 'FavoriteShop::filterAlreadyFavouriteShops',
+                    'parameters' => array(Shop::getPopularStores(25))
+                )
+            );
+            $this->view->favouriteShops = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'get_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
+                array(
+                    'function' => 'Visitor::getFavoriteShops',
+                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
+                )
+            );
             $this->view->pageCssClass = 'brands-page';
         } else {
             $this->_redirect('/');
@@ -35,7 +49,14 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
+            $favoriteShopsOffers = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'get_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShopOffers',
+                array(
+                    'function' => 'Visitor::getFavoriteShopsOffers',
+                    'parameters' => array()
+                )
+            );
             $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
             $favouriteShopsOffersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
                 $offers,
@@ -43,7 +64,14 @@ class FavouriteController extends Zend_Controller_Action
                 30,
                 4
             );
-            $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+            $userDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'get_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
+                array(
+                    'function' => 'Visitor::getUserDetails',
+                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
+                )
+            );
             $this->view->favouriteShopsOffers = $favouriteShopsOffersWithPagination;
             $this->view->userDetails = $userDetails[0];
             $this->view->pageCssClass = 'youroffers-page';
