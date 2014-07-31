@@ -17,7 +17,7 @@
                     <li>
                         <h2><?php echo $howToGuide['chapterTitle']; ?></h2>
                         <p><?php echo preg_replace("/<img[^>]+\>/i", "", $howToGuide['chapterDescription']); ?></p>
-                        <div class="visual-img">
+                        <div id="visual-img" class="visual-img">
                             <?php
                             foreach ($howToGuideImages['src'] as $howToGuideImageSource) {
                                 echo '<img src="'.HTTP_PATH.ltrim($howToGuideImageSource, '/').'"

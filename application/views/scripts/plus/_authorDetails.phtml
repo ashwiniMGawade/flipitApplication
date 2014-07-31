@@ -16,7 +16,8 @@ $profileLink = $this->profileLink;
     <div class="text-box">
         <p>
             <strong><?php echo $this->translate('About').' '.$authorName; ?></strong>, 
-            <?php echo $userDetails['mainText'];?>
+            <?php echo strlen($userDetails['mainText']) >= 250 ? mb_substr($userDetails['mainText'], 0, 250).'...' :
+                $userDetails['mainText'];?>
         </p>
         <p>
             <a href="<?php echo $profileLink; ?>">
