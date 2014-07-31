@@ -93,4 +93,38 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
             </div>
         </div>
     </div>
+    <div class="mainpage-content">
+        <form name="localeChain" method="post" id="localeChain">
+            <div class="mainpage-content-line mb10">
+                <div class="mainpage-content-left">
+                    <label>
+                        <strong><?php echo FrontEnd_Helper_viewHelper::__form('Chain'); ?></strong>
+                    </label>
+                </div>
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-left-other">
+                        <div class="mainpage-content-right-inner-right-other"></div>
+                        <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
+                            <input type="text"
+                            value="<?php echo isset($this->chain) ? $this->chain : '';?>"
+                            placeholder=<?php echo FrontEnd_Helper_viewHelper::__form('Chain')?>
+                            name="chain" id="chain" class="span3">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mainpage-content-line mb10">
+                <div class="mainpage-content-left"><label></label></div>
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-left-other">
+                    <div class="btn-group" data-toggle="buttons-checkbox">
+                        <button class="btn btn-primary" type="submit">
+                            <?php echo FrontEnd_Helper_viewHelper::__form('Submit'); ?>
+                        </button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>

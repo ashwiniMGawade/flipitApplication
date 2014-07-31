@@ -21,6 +21,10 @@ abstract class BaseLocaleSettings extends Doctrine_Record
                 'type' => 'string',
                 'length' => '255'
         ));
+        $this->hasColumn('chain', 'string', 255, array(
+                'type' => 'string',
+                'length' => '255'
+        ));
     }
 
     public function setUp()
