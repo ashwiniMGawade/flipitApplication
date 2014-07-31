@@ -890,10 +890,11 @@ EOD;
     {
         $documentRoot = dirname(dirname(dirname(dirname(__FILE__))));
 
-        if (file_exists($documentRoot.'/public/'.$locale.'images/front_end/emails/'.$logoName)) {
-            $emailLogo = $publicLocalePath.'emails/'.$logoName;
+        if (file_exists($documentRoot.'/public/'.$locale.'images/front_end/emails/'.$logoName.'.png')) {
+            $emailLogo = $publicLocalePath.'emails/'.$logoName.'.png';
         } else {
-            $emailLogo = $publicPath.'emails/'.$logoName;
+            $emailLogo = $locale != '' ? $publicPath.'emails/'.$logoName.'-flipit.png'
+                : $publicPath.'emails/'.$logoName.'.png';
         }
         return $emailLogo;
     }
