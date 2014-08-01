@@ -30,6 +30,14 @@ class Admin_LocaleController extends Zend_Controller_Action
         $this->view->localeSettings = LocaleSettings::getLocaleSettings();
         $this->view->timezones_list = Signupmaxaccount::$timezones;
         $this->view->localeStatus = Website::getLocaleStatus($_COOKIE['site_name']);
+        $this->view->chainHrefLang = Website::getWebsiteDetails('', $_COOKIE['site_name']);
+
+        if ($this->getRequest()->isPost()) {
+            $chainParameters = $this->getRequest()->getParams();
+            Website::saveChain($chainParameters['chain'], $_COOKIE['site_name']);
+            $this->setFlashMessage($this, 'Chain has been updated successfully');
+            $this->_redirect(HTTP_PATH . 'admin/locale/locale-settings');
+        }
     }
 
     public function savelocaleAction()

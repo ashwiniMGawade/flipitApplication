@@ -98,13 +98,18 @@ EOD;
         } else {
             $site_name = "Flipit.com";
         }
+        $locale = LOCALE != '' ? '/'.LOCALE : '';
+        $chainLocale = Website::getWebsiteDetails('', strtolower($site_name).$locale);
+        $ogLocale = !empty($chainLocale) && $chainLocale['chain'] != '' ?
+            $chainLocale['chain'] : $headMetaValue->facebookLocale;
+
         $socialMediaValue =
             array(
                 'og:title'=>$headMetaValue->facebookTitle,
                 'og:type'=>'website',
                 'og:url'=> $headMetaValue->facebookShareUrl,
                 'og:description'=>$headMetaValue->facebookDescription,
-                'og:locale'=>$headMetaValue->facebookLocale,
+                'og:locale'=>$ogLocale,
                 'og:image'=>$headMetaValue->facebookImage,
                 'og:site_name'=>$site_name,
                 'twitter:description'=>$headMetaValue->twitterDescription,
