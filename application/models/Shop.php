@@ -1784,7 +1784,7 @@ public static function getShopDetail($shopId)
         ->andWhere('o.discounttype="CD"')
         ->fetchArray();
 
-        $Days = "Never had any coupon online";
+        $Days = 0;
         $noOfDays = $Days;
         if(empty($anyOffer)){
 
