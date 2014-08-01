@@ -1,5 +1,5 @@
 <?php
-class AddColumnChainLocaleSettings extends Doctrine_Migration_Base
+class AddColumnChainWebsite extends Doctrine_Migration_Base
 {
 
     public function up()
