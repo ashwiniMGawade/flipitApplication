@@ -326,7 +326,6 @@ class User extends BaseUser
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_aboutPagesUsers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
         return $this->id;
     }
 
@@ -622,7 +621,7 @@ class User extends BaseUser
         //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
         //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
 
-        $alluserIdkey ="all_". "users".$this->id ."_list";
+        $alluserIdkey ="user_".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
 
         $key = 'user_'.$this->id.'_details';
@@ -631,7 +630,7 @@ class User extends BaseUser
         $interestkey ="all_". "interesting".$this->id."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
 
-        $favouriteShopkey ="all_". "favouriteshop".$this->id ."_list";
+        $favouriteShopkey ="user_". "favouriteShop_".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
 
         self::updateInDatabase($this->id,$fullName,0);//change name of the author etc

@@ -199,7 +199,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($permalink);
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_storesHeader_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)

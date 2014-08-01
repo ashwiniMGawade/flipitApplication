@@ -71,7 +71,7 @@ class AboutController extends Zend_Controller_Action
             0
         );
         $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_'. 'users'.$authorId .'_list',
+            'user'.$authorId .'_data',
             array('function' => 'User::getUserProfileDetails', 'parameters' => array($authorId)),
             0
         );
@@ -82,12 +82,12 @@ class AboutController extends Zend_Controller_Action
 
         $authorDetails = $authorDetails[0];
         $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_'. 'favouriteshop'.$authorId .'_list',
+            'user_'. 'favouriteShop_'.$authorId .'_data',
             array('function' => 'User::getUserFavouriteStores', 'parameters' => array($authorId)),
             0
         );
         $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_'. 'mostread'.$authorId .'_list',
+            'user_'. 'mostRead_'.$authorId .'_data',
             array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
             0
         );
