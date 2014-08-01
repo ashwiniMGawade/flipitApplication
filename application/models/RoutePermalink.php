@@ -22,7 +22,7 @@ class RoutePermalink extends BaseRoutePermalink
         $data = Doctrine_Query::create()
                         ->select()
                         ->from('RoutePermalink')
-                        ->where("BINARY permalink = ?", $permalink)
+                        ->where("permalink = ?", $permalink)
                         ->fetchArray();
         return $data;
     }
