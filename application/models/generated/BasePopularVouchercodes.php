@@ -22,7 +22,7 @@ abstract class BasePopularVouchercodes extends Doctrine_Record
 {
     public function setTableDefinition()
     {
-        $this->setTableName('popular_vouchercodes');
+        $this->setTableName('popular_voucherCodes');
         $this->hasColumn('id', 'integer', 20, array(
              'primary' => true,
              'type' => 'integer',

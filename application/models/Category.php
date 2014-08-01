@@ -136,7 +136,7 @@ class Category extends BaseCategory
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_data');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_VoucherCodes');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_voucherCodes');
 
         try {
             $category->save();
@@ -251,7 +251,7 @@ class Category extends BaseCategory
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_data');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_VoucherCodes');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_voucherCodes');
 
         try {
             $category->save();
@@ -539,7 +539,7 @@ class Category extends BaseCategory
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_data');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_VoucherCodes');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_voucherCodes');
 
     }
     /**
@@ -558,7 +558,7 @@ class Category extends BaseCategory
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_data');
-       FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_VoucherCodes');
+       FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_voucherCodes');
     }
 
 /******************functions to be used on frontend*******************/

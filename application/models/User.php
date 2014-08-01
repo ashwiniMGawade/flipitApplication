@@ -630,7 +630,7 @@ class User extends BaseUser
         $interestkey ="all_". "interesting".$this->id."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
 
-        $favouriteShopkey ="user_". "favouriteShop_".$this->id ."_data";
+        $favouriteShopkey ="user_". "favouriteShop".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
 
         self::updateInDatabase($this->id,$fullName,0);//change name of the author etc
