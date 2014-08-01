@@ -326,14 +326,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     public function getLocaleNameForDbConnection()
     {
-        if (strlen($this->moduleDirectoryName) == 2) {
+        if (strlen($this->moduleDirectoryName) == 2 && HTTP_HOST=='www.flipit.com') {
             $locale = $this->moduleDirectoryName;
         } elseif ($this->moduleDirectoryName == 'admin') {
             $locale =  isset($this->localeCookieData) ? $this->localeCookieData : 'en';
         } elseif ($this->moduleDirectoryName == "default") {
             $locale = 'en';
+        } elseif (strlen($this->moduleDirectoryName) == 2 && HTTP_HOST=='www.kortingscode.nl') {
+            $locale = 'en';
         }
-
         return $locale;
     }
 
@@ -606,7 +607,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         if ($this->routeProperties[0] != 'admin' &&
             in_array(strtolower($this->routeProperties[0]), $this->moduleName)) {
-                self::setRouteForLocale();
+            if (HTTP_HOST == 'www.kortingscode.nl') {
+                $this->route->addRoute(
+                    'kortingscode_error',
+                    new Zend_Controller_Router_Route(
+                        'kortingscode_error',
+                        array(
+                            'action' => "error",
+                            'controller' => "error"
+                        )
+                    )
+                );
+                return;
+            }
+            self::setRouteForLocale();
         } else {
              // trigger error for flipt.com
             if (HTTP_HOST == 'www.flipit.com') {

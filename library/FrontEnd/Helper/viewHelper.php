@@ -166,7 +166,7 @@ EOD;
                     header('location:'. HTTP_PATH.$baseLink[0]);
                     exit;
                 endif;
-                header('location:'. HTTP_PATH.$baseLink[0] ."/" .$baseLink[1]);
+                throw new Exception('Error occured');
                 exit;
             endif;
             $permalink = explode('/'.$permalinkMatches[0], $permalink);
