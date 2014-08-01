@@ -99,7 +99,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
             <div class="mainpage-content-line mb10">
                 <div class="mainpage-content-left">
                     <label>
-                        <strong><?php echo FrontEnd_Helper_viewHelper::__form('form_Chain hreflang'); ?></strong>
+                        <strong><?php echo $this->translate('form_Chain hreflang'); ?></strong>
                     </label>
                 </div>
                 <div class="mainpage-content-right">
@@ -109,7 +109,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                             <input type="text"
                             value="<?php echo isset($this->chainHrefLang['chain']) ?
                                 $this->chainHrefLang['chain'] : '';?>"
-                            placeholder=<?php echo FrontEnd_Helper_viewHelper::__form('form_Chain hreflang')?>
+                            placeholder=<?php echo $this->translate('form_Chain hreflang')?>
                             name="chain" id="chain" class="span3">
                         </div>
                     </div>
@@ -121,7 +121,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                     <div class="mainpage-content-right-inner-left-other">
                     <div class="btn-group" data-toggle="buttons-checkbox">
                         <button class="btn btn-primary" type="submit">
-                            <?php echo FrontEnd_Helper_viewHelper::__form('form_Submit'); ?>
+                            <?php echo $this->translate('form_Submit'); ?>
                         </button>
                     </div>
                     </div>
