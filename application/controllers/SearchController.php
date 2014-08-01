@@ -29,7 +29,7 @@ class SearchController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::__link('link_zoeken'));
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'search_pageHeader_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)
@@ -43,12 +43,17 @@ class SearchController extends Zend_Controller_Action
         $popularShops = $this->_helper->Search->getPopularStores($searchedKeywords);
         $shopsForSearchPage = $this->_helper->Search->getStoresForSearchResults($shopsByShopIds, $popularShops);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_popularShops_list',
+            '10_popularShops_list',
             array('function' => 'Shop::getAllPopularStores',
                 'parameters' => array(10)),
             true
         );
-        $offersBySearchedKeywords = Offer::searchOffers($this->_getAllParams(), $shopIds, 12);
+        $offersBySearchedKeywords = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'offersBySearchedKeywords',
+            array('function' => 'Offer::searchOffers',
+                'parameters' => array($this->_getAllParams(), $shopIds, 12)),
+            true
+        );
 
         if ($searchedKeywords == '') {
             $this->view->popularStores = $popularStores;

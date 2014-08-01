@@ -135,8 +135,8 @@ class Category extends BaseCategory
         $category->categoryHeaderImageId = $categoryHeaderImageId;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_VoucherCodes');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_VoucherCodes');
 
         try {
             $category->save();
@@ -250,8 +250,8 @@ class Category extends BaseCategory
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_VoucherCodes');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_VoucherCodes');
 
         try {
             $category->save();
@@ -538,8 +538,8 @@ class Category extends BaseCategory
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_VoucherCodes');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_VoucherCodes');
 
     }
     /**
@@ -557,8 +557,8 @@ class Category extends BaseCategory
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_VoucherCodes');
+       FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_data');
+       FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_VoucherCodes');
     }
 
 /******************functions to be used on frontend*******************/

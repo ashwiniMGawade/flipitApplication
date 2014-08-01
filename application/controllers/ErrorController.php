@@ -84,7 +84,7 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->pageHeaderImage =
                     FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            'error_pageHeader_image',
+                            'page_header'.$pageDetails->id.'_image',
                             array(
                                 'function' => 'Logo::getPageLogo',
                                 'parameters' => array($pageDetails['pageHeaderImageId'])
@@ -106,7 +106,7 @@ class ErrorController extends Zend_Controller_Action
                 $this->view->message = 'Application error';
                 $this->view->popularShops = FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            'error_pagePopular_shops',
+                            '12_popular_shops',
                             array(
                                 'function' => 'Shop::getPopularStores', 'parameters' => array(12)
                             )
@@ -156,7 +156,7 @@ class ErrorController extends Zend_Controller_Action
         $this->pagePermalink = $pagePermalink;
         $pagedata = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'pageDetails_in_error',
+                'page_'.$pagePermalink.'_data',
                 array(
                     'function' => 'Page::getPageDetailsInError', 'parameters' => array(rtrim($pagePermalink, '/'))
                 )

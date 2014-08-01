@@ -22,7 +22,7 @@ class AboutController extends Zend_Controller_Action
     {
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'about_pageHeader_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)
@@ -39,7 +39,7 @@ class AboutController extends Zend_Controller_Action
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_aboutPagesusers_list',
+            'all_aboutPagesUsers_list',
             array(
                 'function' => 'User::getAllUsersDetails',
                 'parameters' => array($this->_helper->About->getWebsiteNameWithLocale())
@@ -66,7 +66,7 @@ class AboutController extends Zend_Controller_Action
     {
         $authorSlugName = $this->getRequest()->getParam('slug');
         $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_'. 'users'. str_replace('-', '_', $authorSlugName) .'_list',
+            'user_'. str_replace('-', '_', $authorSlugName) .'_data',
             array('function' => 'User::getUserIdBySlugName', 'parameters' => array($authorSlugName)),
             0
         );

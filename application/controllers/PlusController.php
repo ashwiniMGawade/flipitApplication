@@ -33,7 +33,7 @@ class PlusController extends Zend_Controller_Action
 
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                (string)"all_categoryWiseArticles_list",
+                (string)"all_categories_articles_list",
                 array('function' =>
                 'MoneySaving::getCategoryWiseArticles', 'parameters' => array())
             );
@@ -43,13 +43,13 @@ class PlusController extends Zend_Controller_Action
 
         $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                (string)"all_recentlyAddedArticles_list",
+                (string)"2_recentlyAddedArticles_list",
                 array('function' =>
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2))
             );
 
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)'all_plusPopularshops_list',
+            (string)'7_popularShops_list',
             array('function' => 'Shop::getAllPopularStores', 'parameters' => array(7)),
             true
         );
@@ -67,7 +67,7 @@ class PlusController extends Zend_Controller_Action
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'plus_pageHeader_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)
@@ -82,16 +82,17 @@ class PlusController extends Zend_Controller_Action
 
     public function guidedetailAction()
     {
+        $permalink = $this->getRequest()->getParam('permalink');
         $articleDetails = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                (string)"article_detailsBy_permalink",
+                (string)"article_".$permalink."_details ",
                 array('function' =>
-                'Articles::getArticleByPermalink', 'parameters' => array($this->getRequest()->getParam('permalink')))
+                'Articles::getArticleByPermalink', 'parameters' => array($permalink))
             );
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                (string)"categoryWiseArticles_list",
+                (string)"categories_articles_list",
                 array('function' =>
                 'MoneySaving::getCategoryWiseArticles', 'parameters' => array(4))
             );
@@ -113,10 +114,10 @@ class PlusController extends Zend_Controller_Action
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
+            getRequestedDataBySetGetCache("2_recentlyAddedArticles_list", array('function' =>
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
             $this->view->topPopularOffers = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("plus_topPopular_offers", array('function' =>
+            getRequestedDataBySetGetCache("5_topOffers_offers", array('function' =>
                 'Offer::getTopOffers', 'parameters' => array(5)));
             $this->view->userDetails = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache('user_'.$articleDetails[0]['authorid'].'_details', array('function' =>

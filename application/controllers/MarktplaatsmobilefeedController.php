@@ -14,7 +14,7 @@ class MarktplaatsmobilefeedController extends Zend_Controller_Action
     {
 
         # fetch Popular voucher offers KORTINGSCODES list
-        $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularVoucherCodes_list');
+        $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShopsForHomePage_list');
 
         //key not exist in cache
         if ($voucherflag) {

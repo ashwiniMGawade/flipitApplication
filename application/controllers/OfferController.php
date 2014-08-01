@@ -23,7 +23,7 @@ class OfferController extends Zend_Controller_Action
         $pageName = 'top-20';
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'top20_pageHeader_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)
@@ -40,11 +40,11 @@ class OfferController extends Zend_Controller_Action
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)'top20_offers_list',
+            (string)'20_topOffers_list',
             (array)array('function' => 'Offer::getTopOffers', 'parameters' => array(20))
         );
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)'all_popularShops_list',
+            (string)'10_popularShops_list',
             (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10))
         );
         $this->view->popularStores = $popularStores;
@@ -70,8 +70,8 @@ class OfferController extends Zend_Controller_Action
             'extended_'.$extendedUrl.'_couponDetails',
             array('function' => 'Offer::getCouponDetails', 'parameters' => array($extendedUrl))
         );
-        $ShopList = $couponDetails[0]['shop']['id'].'_list';
-        $allShopDetailKey = 'all_shopdetail'.$ShopList;
+        $shopList = $couponDetails[0]['shop']['id'].'_list';
+        $allShopDetailKey = 'shop_details_'.$shopList;
         $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allShopDetailKey,
             (array)array('function' => 'Shop::getStoreDetails', 'parameters' => array($couponDetails[0]['shop']['id']))
@@ -80,7 +80,7 @@ class OfferController extends Zend_Controller_Action
             PUBLIC_PATH_CDN
             .$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'
             . $couponDetails[0]['shop']['logo']['name'];
-        $allLatestUpdatesInStoreKey = 'all_latestUpdatesInStore'.$ShopList;
+        $allLatestUpdatesInStoreKey = 'shop_latestUpdates_'.$shopList;
         $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allLatestUpdatesInStoreKey,
             (array)array(
@@ -179,15 +179,15 @@ class OfferController extends Zend_Controller_Action
     {
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $params = $this->_getAllParams();
-        $cacheKeyForNewOffers =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newoffer_list');
+        $cacheKeyForNewOffers =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_newOffer_list');
         if ($cacheKeyForNewOffers) {
             $offers = Offer::getCommonNewestOffers('newest', 40, $this->view->shopId);
-            FrontEnd_Helper_viewHelper::setInCache('all_newoffer_list', $offers);
+            FrontEnd_Helper_viewHelper::setInCache('all_newOffer_list', $offers);
         } else {
-            $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newoffer_list');
+            $offers = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_newOffer_list');
         }
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'new_offersPageHeader_image',
+            'page_header'.$pageDetails->id.'_image',
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)

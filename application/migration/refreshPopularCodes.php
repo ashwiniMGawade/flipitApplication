@@ -252,7 +252,7 @@ Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
 
 
         //call cache function
-        $popularcodekey1 ="all_popularVoucherCodes_list";
+        $popularcodekey1 ="10_popularShopsForHomePage_list";
         $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($popularcodekey1);
         if($flag) {
 

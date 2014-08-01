@@ -165,8 +165,9 @@ class PopularShop extends BasePopularShop
             }
             }
             //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
             //die();
             }
 
@@ -234,9 +235,9 @@ public static function addShopInList($title)
 
 }
 //call cache function
-FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
-
+FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
 return $flag;
 
     }
@@ -258,8 +259,9 @@ return $flag;
                             ->set('p.position', 'p.position -1')
                             ->where('p.position >' . $position)->execute();
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
 
                         }
                     }
@@ -291,8 +293,9 @@ return $flag;
                             $pc->position = $pos;
                             $pc->save();
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
                              FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
+                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
                             return true ;
                         }
                         return false ;
@@ -326,8 +329,9 @@ return $flag;
                             $pc->position = $pos;
                             $pc->save();
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
                             return true ;
                         }
                         return false ;

@@ -371,15 +371,11 @@ class Page extends BasePage
         //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categorySpecial_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('pageDetails_in_error');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_SpecialPages_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
 
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_pageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top20_pageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('plus_pageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_storesHeader_image');
+        
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
 
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -710,15 +706,10 @@ class Page extends BasePage
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categorySpecial_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_SpecialPages_list');
 
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_pageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top20_pageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('plus_pageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_storesHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('pageDetails_in_error');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
 
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -886,12 +877,8 @@ public static function exportpagelist()
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top20_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('plus_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_storesHeader_image');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+       
 
         return $id;
     }
@@ -917,12 +904,7 @@ public static function exportpagelist()
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top20_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('plus_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_storesHeader_image');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
 
         return 1;
     }
@@ -952,12 +934,7 @@ public static function exportpagelist()
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top20_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('plus_pageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_storesHeader_image');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
 
         return $id;
 

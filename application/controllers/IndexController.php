@@ -37,7 +37,7 @@ class IndexController extends Zend_Controller_Action
         );
         if (FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_popularVoucherCodes_list",
+                "10_popularShopsForHomePage_list",
                 array('function' => 'Offer::getTopOffers', 'parameters' => array(10))
             );
             $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -51,7 +51,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->topCategories = $topCategories;
             $topCategoriesIds = $this->_helper->Index->getTopCategoriesIds($topCategories);
             $topCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_homeTopCategoriesoffers_list",
+                "all_homeTopCategoriesOffers_list",
                 array(
                     'function' => 'Category::getCategoryVoucherCodes',
                     'parameters' => array($topCategoriesIds, 0, 'home')
@@ -79,7 +79,7 @@ class IndexController extends Zend_Controller_Action
                 array('function' => 'Articles::getAllArticles', 'parameters' => array())
             );
             $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_popularShopsForHomePage_list",
+                "all_homePopularShops_list",
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
                     'parameters' => array("popular", 24)

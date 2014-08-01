@@ -33,7 +33,7 @@ class FavouriteController extends Zend_Controller_Action
             );
             $this->view->favouriteShops = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'get_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
+                'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
                 array(
                     'function' => 'Visitor::getFavoriteShops',
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
