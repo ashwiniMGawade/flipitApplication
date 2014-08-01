@@ -140,72 +140,53 @@ class Chain extends BaseChain
     * @param integer $shopId shop if on which chain is being rendered
     * @return array
     */
-    public static function returnChainData($chainItemId,$shopId)
+    public static function returnChainData($chainItemId, $shopId)
     {
-
-
         $pattern = "~((?:.+://|)(?:www.|))(flipit.com/[a-z]{2}|kortingscode.nl)~";
-
-        $subject = trim(HTTP_PATH_LOCALE,'/');
-
+        $subject = trim(HTTP_PATH_LOCALE, '/');
         $replacement = '$2';
-        $curSite = preg_replace($pattern, $replacement, $subject);
-
-
-         $chainData = Doctrine_Query::create ()
+        $currentSite = preg_replace($pattern, $replacement, $subject);
+        $chainInformation = Doctrine_Query::create()
             ->select("c.name,ci.shopName,ci.permalink,w.name,w.url,ci.locale as locale,ci.shopId as shopId,w.chain")
-            ->from ( "Chain c")
+            ->from("Chain c")
             ->leftJoin("c.chainItem ci")
             ->leftJoin("ci.website w")
             ->where("c.id = (SELECT cii.chainId FROM ChainItem cii where cii.id = ?)", $chainItemId)
             ->andWhere("ci.status = 1")
             ->orderBy("w.name ASC")
             ->fetchArray();
-
         $chain = array();
 
-        if(! @ $chainData[0]) {
-            return false ;
+        if (!@$chainInformation[0]) {
+            return false;
         }
 
-
-        $chainData = $chainData[0];
-
-        foreach ($chainData['chainItem'] as $value) {
-
-            # fetch chain detail
-
-            $locale = explode('_' , $value['locale']);
+        $chainInformation = $chainInformation[0];
+        foreach ($chainInformation['chainItem'] as $chainValue) {
+            $locale = explode('_', $chainValue['locale']);
             $locale = isset($locale[1]) ? $locale[1] : $locale[0];
-
-
-             $hrefLocale = isset($value['locale']) ? $value['locale'] : 'nl_NL';
-
-             
-
-            $url  = $value['website']['url'] . '/' . $value['permalink'] ;
-
-            $hrefLang = isset($value['website']['chain']) && $value['website']['chain'] != '' ?
-                $value['website']['chain'] : preg_replace('~_~', '-', $hrefLocale);
- 
-            $headLink = sprintf('<link rel="alternate" hreflang="%s" href="%s"/>',
-                                    $hrefLang, $url );
-
+            $hrefLocale = isset($chainValue['locale']) ? $chainValue['locale'] : 'nl_NL';
+            $url  = $chainValue['website']['url'] . '/' . $chainValue['permalink'] ;
+            $hrefLang = isset($chainValue['website']['chain']) && $chainValue['website']['chain'] != '' ?
+                $chainValue['website']['chain'] : preg_replace('~_~', '-', $hrefLocale);
+            $headLink = sprintf(
+                '<link rel="alternate" hreflang="%s" href="%s"/>',
+                $hrefLang,
+                $url
+            );
             $shop = array();
 
-            # remove current site from chain list
-            if($value['website']['name'] != $curSite || $shopId != $value['shopId']) {
-
-                $shop = array( 'name' => $chainData['name'],
-                                'shop' => $value['shopName'],
-                                'locale' => strtoupper( $locale) ,
-                                'url' => $url);
+            if ($chainValue['website']['name'] != $currentSite || $shopId != $chainValue['shopId']) {
+                $shop = array(
+                    'name' => $chainInformation['name'],
+                    'shop' => $chainValue['shopName'],
+                    'locale' => strtoupper($locale),
+                    'url' => $url
+                );
             }
 
-
-            $chain[] = array( 'shops' => $shop,'headLink' => $headLink );
+            $chain[] = array('shops' => $shop, 'headLink' => $headLink);
         }
-
         return $chain;
     }
 
