@@ -1,6 +1,7 @@
 <?php
 $this->headTitle()->append($this->translate('Locale Settings'));
 $this->headMeta('keyword', 'Description');
+$this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/jquery.validate.js");
 $this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/locale-settings.js" );
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
 ?>
@@ -98,7 +99,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
             <div class="mainpage-content-line mb10">
                 <div class="mainpage-content-left">
                     <label>
-                        <strong><?php echo FrontEnd_Helper_viewHelper::__form('Chain'); ?></strong>
+                        <strong><?php echo FrontEnd_Helper_viewHelper::__form('form_Chain hreflang'); ?></strong>
                     </label>
                 </div>
                 <div class="mainpage-content-right">
@@ -106,8 +107,9 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
                             <input type="text"
-                            value="<?php echo isset($this->chain) ? $this->chain : '';?>"
-                            placeholder=<?php echo FrontEnd_Helper_viewHelper::__form('Chain')?>
+                            value="<?php echo isset($this->chainHrefLang['chain']) ?
+                                $this->chainHrefLang['chain'] : '';?>"
+                            placeholder=<?php echo FrontEnd_Helper_viewHelper::__form('form_Chain hreflang')?>
                             name="chain" id="chain" class="span3">
                         </div>
                     </div>
@@ -119,7 +121,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                     <div class="mainpage-content-right-inner-left-other">
                     <div class="btn-group" data-toggle="buttons-checkbox">
                         <button class="btn btn-primary" type="submit">
-                            <?php echo FrontEnd_Helper_viewHelper::__form('Submit'); ?>
+                            <?php echo FrontEnd_Helper_viewHelper::__form('form_Submit'); ?>
                         </button>
                     </div>
                     </div>

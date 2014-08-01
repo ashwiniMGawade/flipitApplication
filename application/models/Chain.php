@@ -153,7 +153,7 @@ class Chain extends BaseChain
 
 
          $chainData = Doctrine_Query::create ()
-            ->select("c.name,ci.shopName,ci.permalink,w.name,w.url,ci.locale as locale,ci.shopId as shopId")
+            ->select("c.name,ci.shopName,ci.permalink,w.name,w.url,ci.locale as locale,ci.shopId as shopId,w.chain")
             ->from ( "Chain c")
             ->leftJoin("c.chainItem ci")
             ->leftJoin("ci.website w")
@@ -181,10 +181,13 @@ class Chain extends BaseChain
 
              $hrefLocale = isset($value['locale']) ? $value['locale'] : 'nl_NL';
 
-             $hrefLang = preg_replace( '~_~' , '-' ,$hrefLocale ) ;
+             
 
             $url  = $value['website']['url'] . '/' . $value['permalink'] ;
 
+            $hrefLang = isset($value['website']['chain']) && $value['website']['chain'] != '' ?
+                $value['website']['chain'] : preg_replace('~_~', '-', $hrefLocale);
+ 
             $headLink = sprintf('<link rel="alternate" hreflang="%s" href="%s"/>',
                                     $hrefLang, $url );
 

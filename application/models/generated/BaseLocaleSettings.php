@@ -1,5 +1,5 @@
 <?php
-//Doctrine_Manager::getInstance()->bindComponent('LocaleSettings', 'doctrine_site');
+Doctrine_Manager::getInstance()->bindComponent('LocaleSettings', 'doctrine_site');
 
 abstract class BaseLocaleSettings extends Doctrine_Record
 {
@@ -18,10 +18,6 @@ abstract class BaseLocaleSettings extends Doctrine_Record
                 'length' => '10'
         ));
         $this->hasColumn('timezone', 'string', 255, array(
-                'type' => 'string',
-                'length' => '255'
-        ));
-        $this->hasColumn('chain', 'string', 255, array(
                 'type' => 'string',
                 'length' => '255'
         ));
