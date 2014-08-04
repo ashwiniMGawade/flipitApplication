@@ -24,7 +24,7 @@ TRUNCATE `offer_tiles`;
 TRUNCATE `popular_category`;
 TRUNCATE `popular_code`;
 TRUNCATE `popular_shop`;
-TRUNCATE `popular_voucherCodes`;
+TRUNCATE `popular_vouchercodes`;
 TRUNCATE `ref_articlecategory_relatedcategory`;
 TRUNCATE `ref_article_category`;
 TRUNCATE `ref_article_store`;

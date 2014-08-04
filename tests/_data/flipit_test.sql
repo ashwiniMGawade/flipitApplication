@@ -811,7 +811,7 @@ CREATE TABLE IF NOT EXISTS `popular_shop` (
 -- Table structure for table `popular_voucherCodes`
 --
 
-CREATE TABLE IF NOT EXISTS `popular_voucherCodes` (
+CREATE TABLE IF NOT EXISTS `popular_vouchercodes` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'PK',
   `type` varchar(255) DEFAULT NULL,
   `position` bigint(20) DEFAULT NULL COMMENT 'Holds the shop position among popular offer list',
