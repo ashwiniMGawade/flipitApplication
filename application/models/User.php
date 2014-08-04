@@ -1023,7 +1023,6 @@ class User extends BaseUser
     //call cache function
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
     return $flag;
 
   }

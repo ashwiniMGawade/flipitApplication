@@ -282,7 +282,7 @@ class StoreController extends Zend_Controller_Action
             }
         }
 
-        $allLatestUpdatesInStoreKey = 'shop_latestUpdates_'.$ShopList;
+        $allLatestUpdatesInStoreKey = 'ShoplatestUpdates_'.$ShopList;
         $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allLatestUpdatesInStoreKey,
             array('function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode', 'parameters' => array(

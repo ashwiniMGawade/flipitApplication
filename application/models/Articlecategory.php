@@ -290,8 +290,6 @@ class Articlecategory extends BaseArticlecategory
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('plus_pageHeader_image');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$params['permaLink'].'_details ');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');
@@ -354,8 +352,6 @@ class Articlecategory extends BaseArticlecategory
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('plus_pageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$params['permaLink'].'_details ');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');

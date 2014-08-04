@@ -166,7 +166,6 @@ class PopularShop extends BasePopularShop
             }
             //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
             //die();
             }
@@ -236,7 +235,6 @@ public static function addShopInList($title)
 }
 //call cache function
 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
 return $flag;
 
@@ -294,7 +292,6 @@ return $flag;
                             $pc->save();
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
                              FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
                             return true ;
                         }
@@ -330,7 +327,6 @@ return $flag;
                             $pc->save();
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
                             return true ;
                         }
