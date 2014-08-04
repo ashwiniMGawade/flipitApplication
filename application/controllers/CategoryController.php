@@ -31,7 +31,7 @@ class CategoryController extends Zend_Controller_Action
         if (count($categoryDetails) > 0) {
             $categoryVoucherCodes = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'category_'.$categoryPermalink.'_VoucherCodes',
+                'category_'.$categoryPermalink.'_voucherCodes',
                 array(
                     'function' => 'Category::getCategoryVoucherCodes',
                     'parameters' => array($categoryDetails[0]['id'], 71)
@@ -91,7 +91,7 @@ class CategoryController extends Zend_Controller_Action
             );
         $specialPagesList = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'all_SpecialPages_list',
+                'all_specialPages_list',
                 array(
                     'function' => 'Page::getSpecialListPages', 'parameters' => array()
                 )

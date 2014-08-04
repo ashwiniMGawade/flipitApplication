@@ -106,7 +106,7 @@ class ErrorController extends Zend_Controller_Action
                 $this->view->message = 'Application error';
                 $this->view->popularShops = FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            '12_popular_shops',
+                            '12_popularShops_list',
                             array(
                                 'function' => 'Shop::getPopularStores', 'parameters' => array(12)
                             )

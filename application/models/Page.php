@@ -371,7 +371,7 @@ class Page extends BasePage
         //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_SpecialPages_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
 
         
@@ -706,7 +706,7 @@ class Page extends BasePage
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_SpecialPages_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');

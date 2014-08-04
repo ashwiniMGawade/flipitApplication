@@ -33,7 +33,7 @@ class PlusController extends Zend_Controller_Action
 
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                (string)"all_categories_articles_list",
+                (string)"all_categoriesArticles_list",
                 array('function' =>
                 'MoneySaving::getCategoryWiseArticles', 'parameters' => array())
             );
@@ -92,7 +92,7 @@ class PlusController extends Zend_Controller_Action
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                (string)"categories_articles_list",
+                (string)"4_categoriesArticles_list",
                 array('function' =>
                 'MoneySaving::getCategoryWiseArticles', 'parameters' => array(4))
             );

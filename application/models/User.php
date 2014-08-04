@@ -325,7 +325,7 @@ class User extends BaseUser
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_aboutPagesUsers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
         return $this->id;
     }
 
@@ -616,7 +616,7 @@ class User extends BaseUser
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_aboutPagesUsers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
         //die("test");
         //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
         //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
@@ -1022,7 +1022,7 @@ class User extends BaseUser
     }
     //call cache function
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_aboutPagesUsers_list');
+    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('about_pageHeader_image');
     return $flag;
 

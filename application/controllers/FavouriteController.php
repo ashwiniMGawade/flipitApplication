@@ -51,7 +51,7 @@ class FavouriteController extends Zend_Controller_Action
         if (Auth_VisitorAdapter::hasIdentity()) {
             $favoriteShopsOffers = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'get_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShopOffers',
+                'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShopOffers',
                 array(
                     'function' => 'Visitor::getFavoriteShopsOffers',
                     'parameters' => array()
@@ -66,7 +66,7 @@ class FavouriteController extends Zend_Controller_Action
             );
             $userDetails = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'get_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
+                'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
                 array(
                     'function' => 'Visitor::getUserDetails',
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)

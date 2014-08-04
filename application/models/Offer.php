@@ -1107,8 +1107,8 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
 
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
@@ -1180,8 +1180,8 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
 
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
@@ -1235,8 +1235,8 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
@@ -1300,8 +1300,8 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
@@ -1618,8 +1618,8 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
 
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
@@ -1937,8 +1937,8 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
 
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 

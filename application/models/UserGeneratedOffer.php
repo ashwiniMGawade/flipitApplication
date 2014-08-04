@@ -110,7 +110,7 @@ class UserGeneratedOffer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
 
             $u->delete();
 
@@ -154,7 +154,7 @@ class UserGeneratedOffer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
 
             $del = Doctrine_Query::create()->delete()
             ->from('Offer o')
@@ -198,7 +198,7 @@ class UserGeneratedOffer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
 
 
             //update status of record by id(deleted=0)
@@ -243,7 +243,7 @@ class UserGeneratedOffer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
 
             //update record of offer offline = 1
             $O = Doctrine_Query::create()->update('UserGeneratedOffer')
@@ -415,7 +415,7 @@ class UserGeneratedOffer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         ;
     }
 
@@ -528,7 +528,7 @@ class UserGeneratedOffer extends BaseOffer
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
+    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
 
     }
 

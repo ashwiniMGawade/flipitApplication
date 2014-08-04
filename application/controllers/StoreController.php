@@ -47,7 +47,7 @@ class StoreController extends Zend_Controller_Action
 
         if ($shopId) {
             $ShopList = $shopId.'_list';
-            $allShopDetailKey = 'shop_details_'.$ShopList;
+            $allShopDetailKey = 'shopDetails_'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allShopDetailKey,
                 array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
@@ -68,7 +68,7 @@ class StoreController extends Zend_Controller_Action
                     'parameters' => array("expired", 8, $shopId)
                 )
             );
-            $allLatestUpdatesInStoreKey = 'shop_latestUpdates_'.$ShopList;
+            $allLatestUpdatesInStoreKey = '4_shopLatestUpdates_'.$ShopList;
             $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allLatestUpdatesInStoreKey,
                 array(
@@ -106,7 +106,7 @@ class StoreController extends Zend_Controller_Action
                 }
             }
 
-            $ShopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/")
+            $shopImage = PUBLIC_PATH_CDN.ltrim($shopInformation[0]['logo']['path'], "/")
                 .'thum_medium_store_'.$shopInformation[0]['logo']['name'];
             $this->view->shopBranding = Shop::getShopBranding($shopId);
         } else {
@@ -140,7 +140,7 @@ class StoreController extends Zend_Controller_Action
             FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId)
         );
         $this->view->controllerName = $this->getRequest()->getParam('controller');
-        $this->view->storeImage = $ShopImage;
+        $this->view->storeImage = $shopImage;
         $this->view->shareUrl = HTTP_PATH_LOCALE . $shopInformation[0]['permaLink'];
         $this->view->shopEditor = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
@@ -158,7 +158,7 @@ class StoreController extends Zend_Controller_Action
             '',
             trim($shopInformation[0]['metaDescription']),
             $shopInformation[0]['permaLink'],
-            $ShopImage,
+            $shopImage,
             $customHeader
         );
 
@@ -264,7 +264,7 @@ class StoreController extends Zend_Controller_Action
         }
 
         $ShopList = $howToGuides[0]['id'].'_list';
-        $allShopDetailKey = 'shop_details_'.$ShopList;
+        $allShopDetailKey = 'shopDetails_'.$ShopList;
         $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allShopDetailKey,
             array('function' => 'Shop::getStoreDetails', 'parameters' => array($howToGuides[0]['id']))

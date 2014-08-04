@@ -369,7 +369,7 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvouchercode_list_shoppage');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage_'. $id);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
 
         return $id;
@@ -450,8 +450,8 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsForHomePage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popular_shops');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
 
 
@@ -483,8 +483,8 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top20_pageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popular_shops');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
         return $id;
 
@@ -517,8 +517,8 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
     
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popular_shops');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
         return $id;
     }
@@ -823,8 +823,8 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
      
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage_'. $this->id);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popular_shops');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
 
 
@@ -1627,7 +1627,7 @@ public static function getShopDetail($shopId)
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeNewOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');

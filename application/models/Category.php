@@ -134,7 +134,7 @@ class Category extends BaseCategory
         $category->categoryFeaturedImageId = $categoryFeaturedImageId;
         $category->categoryHeaderImageId = $categoryHeaderImageId;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_data');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_voucherCodes');
 
@@ -249,7 +249,7 @@ class Category extends BaseCategory
         }
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_data');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_voucherCodes');
 
@@ -537,7 +537,7 @@ class Category extends BaseCategory
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_data');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_voucherCodes');
 
@@ -556,7 +556,7 @@ class Category extends BaseCategory
                                     ->execute();
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularCategories_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_data');
        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_voucherCodes');
     }

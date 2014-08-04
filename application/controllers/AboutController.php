@@ -39,7 +39,7 @@ class AboutController extends Zend_Controller_Action
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_aboutPagesUsers_list',
+            'all_users_list',
             array(
                 'function' => 'User::getAllUsersDetails',
                 'parameters' => array($this->_helper->About->getWebsiteNameWithLocale())

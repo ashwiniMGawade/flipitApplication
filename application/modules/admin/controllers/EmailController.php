@@ -179,7 +179,7 @@ class Admin_EmailController extends Zend_Controller_Action
                 $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShopsForHomePage_list');
             }
 
-            $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('all_popularCategories_list');
+            $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
 
             //key not exist in cache
 
@@ -187,11 +187,11 @@ class Admin_EmailController extends Zend_Controller_Action
 
                 $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10),0,1);
 
-                FrontEnd_Helper_viewHelper::setInCache('all_popularCategories_list', $topCategories);
+                FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
 
             } else {
 
-                $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('all_popularCategories_list');
+                $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
 
             }
 

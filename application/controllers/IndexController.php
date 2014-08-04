@@ -41,11 +41,11 @@ class IndexController extends Zend_Controller_Action
                 array('function' => 'Offer::getTopOffers', 'parameters' => array(10))
             );
             $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_homeNewOffers_list",
+                "10_newOffers_list",
                 array('function' => 'Offer::getNewestOffers', 'parameters' => array('newest', 10))
             );
             $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_popularCategories_list",
+                "10_popularCategories_list",
                 array('function' => 'Category::getPopularCategories', 'parameters' => array(10))
             );
             $this->view->topCategories = $topCategories;
@@ -75,11 +75,11 @@ class IndexController extends Zend_Controller_Action
 
             $this->view->specialPagesOffers = $specialPagesOffers;
             $this->view->moneySavingGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_homeMoneySaving_list",
+                "all_moneySaving_list",
                 array('function' => 'Articles::getAllArticles', 'parameters' => array())
             );
             $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_homePopularShops_list",
+                "all_popularShops_list",
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
                     'parameters' => array("popular", 24)

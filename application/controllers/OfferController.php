@@ -71,7 +71,7 @@ class OfferController extends Zend_Controller_Action
             array('function' => 'Offer::getCouponDetails', 'parameters' => array($extendedUrl))
         );
         $shopList = $couponDetails[0]['shop']['id'].'_list';
-        $allShopDetailKey = 'shop_details_'.$shopList;
+        $allShopDetailKey = 'shopDetails_'.$shopList;
         $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allShopDetailKey,
             (array)array('function' => 'Shop::getStoreDetails', 'parameters' => array($couponDetails[0]['shop']['id']))
@@ -80,7 +80,7 @@ class OfferController extends Zend_Controller_Action
             PUBLIC_PATH_CDN
             .$couponDetails[0]['shop']['logo']['path'].'thum_medium_store_'
             . $couponDetails[0]['shop']['logo']['name'];
-        $allLatestUpdatesInStoreKey = 'shop_latestUpdates_'.$shopList;
+        $allLatestUpdatesInStoreKey = 'shop_latestUpdates'.$shopList;
         $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allLatestUpdatesInStoreKey,
             (array)array(
