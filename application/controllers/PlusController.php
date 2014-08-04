@@ -117,7 +117,7 @@ class PlusController extends Zend_Controller_Action
             getRequestedDataBySetGetCache("2_recentlyAddedArticles_list", array('function' =>
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
             $this->view->topPopularOffers = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("5_topOffers_offers", array('function' =>
+            getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
                 'Offer::getTopOffers', 'parameters' => array(5)));
             $this->view->userDetails = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache('user_'.$articleDetails[0]['authorid'].'_details', array('function' =>

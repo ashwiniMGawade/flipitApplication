@@ -165,7 +165,7 @@ class Admin_EmailController extends Zend_Controller_Action
 
             //get offers from top ten popular shops and top one cateory as in homepage
 
-            $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShopsForHomePage_list');
+            $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShops_list');
 
             //key not exist in cache
 
@@ -176,7 +176,7 @@ class Admin_EmailController extends Zend_Controller_Action
                 $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
 
             } else {
-                $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShopsForHomePage_list');
+                $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShops_list');
             }
 
             $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');

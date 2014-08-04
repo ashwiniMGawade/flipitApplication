@@ -341,7 +341,7 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$params['articlepermalink'].'_details');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
 
 
@@ -434,7 +434,7 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$params['articlepermalink'].'_details');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
         foreach($page_ids as $ids):
 
@@ -716,7 +716,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
             foreach($page_ids as $ids):
 
@@ -789,7 +789,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
             foreach($page_ids as $ids):
 
@@ -863,7 +863,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
             foreach($page_ids as $ids):
 

@@ -292,7 +292,7 @@ class Articlecategory extends BaseArticlecategory
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$params['permaLink'].'_details ');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
                 foreach($page_ids as $ids):
 
@@ -354,7 +354,7 @@ class Articlecategory extends BaseArticlecategory
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$params['permaLink'].'_details ');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_offers');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
         foreach($page_ids as $ids):
 
