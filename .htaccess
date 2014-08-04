@@ -18,6 +18,12 @@ RewriteRule ^sitemaps$ public/flipit/robots.txt [NC,L]
 
 RewriteRule ^(.*)/$ /$1 [L,R=301]
 
+#Rule for removing the number of slashes in url
+Options +FollowSymLinks
+RewriteEngine On
+RewriteCond %{THE_REQUEST} \ (.*)//+(.*)\  [NC]
+RewriteRule .* %1/%2 [R=301,L]
+
 RewriteRule ^bespaarwijzer?$ http://www.kortingscode.nl/plus? [R=301,L]
 RewriteRule ^bespaarwijzer/aanbiedingen-folders?$ http://www.kortingscode.nl/plus/aanbiedingen-folders? [R=301,L]
 RewriteRule ^bespaarwijzer/akortingscodes-populair-onder-miljonairs?$ http://www.kortingscode.nl/plus/akortingscodes-populair-onder-miljonairs? [R=301,L]

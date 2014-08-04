@@ -83,7 +83,7 @@ foreach ($this->offers as $offer) {
     } else {
         $extendedOffer = 0;
     }
-    $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '<li>|</li>' : '';
+    $showHyphen = $termsAndConditions != '' || $extendedOffer == 1 ? '<li> -</li>' : '';
     if ($this->offersType!='extendedOffer') {
         if ($termsAndConditions != '') {
             echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);

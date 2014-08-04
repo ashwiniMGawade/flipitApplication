@@ -98,13 +98,18 @@ EOD;
         } else {
             $site_name = "Flipit.com";
         }
+        $locale = LOCALE != '' ? '/'.LOCALE : '';
+        $chainLocale = Website::getWebsiteDetails('', strtolower($site_name).$locale);
+        $ogLocale = !empty($chainLocale) && $chainLocale['chain'] != '' ?
+            $chainLocale['chain'] : $headMetaValue->facebookLocale;
+
         $socialMediaValue =
             array(
                 'og:title'=>$headMetaValue->facebookTitle,
                 'og:type'=>'website',
                 'og:url'=> $headMetaValue->facebookShareUrl,
                 'og:description'=>$headMetaValue->facebookDescription,
-                'og:locale'=>$headMetaValue->facebookLocale,
+                'og:locale'=>$ogLocale,
                 'og:image'=>$headMetaValue->facebookImage,
                 'og:site_name'=>$site_name,
                 'twitter:description'=>$headMetaValue->twitterDescription,
@@ -161,7 +166,7 @@ EOD;
                     header('location:'. HTTP_PATH.$baseLink[0]);
                     exit;
                 endif;
-                header('location:'. HTTP_PATH.$baseLink[0] ."/" .$baseLink[1]);
+                throw new Exception('Error occured');
                 exit;
             endif;
             $permalink = explode('/'.$permalinkMatches[0], $permalink);
@@ -374,7 +379,7 @@ EOD;
         $howToGuideImageAltText = '';
         if (!empty($howToGuideImages)) {
             $howToGuideImagePath =
-                PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'], "/")."thum_bigLogoFile_".$howToGuideImages['name'];
+                PUBLIC_PATH_CDN.ltrim($howToGuideImages['path'], "/").$howToGuideImages['name'];
             $howToGuideImageAltText = $howToGuideImages['name'];
         }
         return array(
@@ -395,7 +400,7 @@ EOD;
         if(!empty($locale)) :
             $locale = $locale == 'en' ? 'nl' : $locale;
             $locale = new Zend_Locale(strtoupper($locale));
-            $countries = $locale->getTranslationList('Territory');
+            $countries = $locale->getTranslationList('Territory', 'en');
             $countryName = ($countries[$locale->getRegion()]);
         endif;
         return $countryName;
@@ -660,11 +665,13 @@ EOD;
     public static function replaceStringVariable($variable)
     {
         $variable = str_replace(
-            array('[month]', '[year]', '[day]', '[offers]', '[coupons]', '[accounts]'),
+            array('[month]', '[year]', '[day]', '[offers]', '[coupons]', '[accounts]', '[visitors]', '[shops]'),
             array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY,
             Dashboard::getDashboardValueToDispaly("total_no_of_offers"),
             Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code"),
-            Dashboard::getDashboardValueToDispaly("total_no_members")),
+            Dashboard::getDashboardValueToDispaly("total_no_members"),
+            Dashboard::getDashboardValueToDispaly("total_no_members"),
+            Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code")),
             $variable
         );
         return $variable;
@@ -888,10 +895,11 @@ EOD;
     {
         $documentRoot = dirname(dirname(dirname(dirname(__FILE__))));
 
-        if (file_exists($documentRoot.'/public/'.$locale.'images/front_end/emails/'.$logoName)) {
-            $emailLogo = $publicLocalePath.'emails/'.$logoName;
+        if (file_exists($documentRoot.'/public/'.$locale.'images/front_end/emails/'.$logoName.'.png')) {
+            $emailLogo = $publicLocalePath.'emails/'.$logoName.'.png';
         } else {
-            $emailLogo = $publicPath.'emails/'.$logoName;
+            $emailLogo = $locale != '' ? $publicPath.'emails/'.$logoName.'-flipit.png'
+                : $publicPath.'emails/'.$logoName.'.png';
         }
         return $emailLogo;
     }

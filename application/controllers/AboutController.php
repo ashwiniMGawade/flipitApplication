@@ -72,10 +72,12 @@ class AboutController extends Zend_Controller_Action
         );
         $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'.$authorId .'_data',
-            array('function' => 'User::getUserProfileDetails', 'parameters' => array($authorId)),
+            array(
+                'function' => 'User::getUserProfileDetails',
+                'parameters' => array($authorId, $this->_helper->About->getWebsiteNameWithLocale())
+            ),
             0
         );
-
         if (empty($authorDetails)) {
             throw new Zend_Controller_Action_Exception('', 404);
         }

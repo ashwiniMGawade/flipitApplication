@@ -7,7 +7,7 @@ if($this->categoryInformation != null) {
     <tr><td height="45"></td></tr>
     <tr>
         <td style="padding:0 0 25px 29px; font:24px/27px Arial, Helvetica, sans-serif; color:#32383e;">
-            <?php echo FrontEnd_Helper_viewHelper::__email('Popular category:'). ' ' .$categoryInformation[0]; ?>
+            <?php echo FrontEnd_Helper_viewHelper::__email('email_Popular category:'). ' ' .$categoryInformation[0]; ?>
         </td>
     </tr>
     <?php 
@@ -23,8 +23,14 @@ if($this->categoryInformation != null) {
                         $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
                         $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($topOffer->endDate);
                         $urlToShow = $offerPartial->getUrlToShow($topOffer, $this->httpPathLocale);
+                        $exclusiveCode = '';
+                        $exclusiveImage = '';
+                        if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
+                            $exclusiveCode = FrontEnd_Helper_viewHelper::__email('email_exclusive');
+                            $exclusiveImage = "style='background:url(".$this->httpPath."public/images/exclusive-star.png) no-repeat right top #fef6ec;'";                 
+                        }
                  ?>
-                <tr>
+                <tr <?php echo $exclusiveImage; ?>>
                     <td style="padding:28px 10px 30px 29px; border-bottom:1px solid #eaeaea;">
                         <table width="100%" cellpadding="0" cellspacing="0">
                             <tbody><tr>
@@ -34,7 +40,7 @@ if($this->categoryInformation != null) {
                                             <td height="66" align="center"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink']; ?>" style="text-decoration:none; color:#fff;"><img src="<?php echo $this->publicPathCdn.ltrim($topOffer->shop['logo']['path'],'/').'thum_big_'.$topOffer->shop['logo']['name']; ?>" style="vertical-align:top;" width="132" height="66" alt="<?php echo $topOffer->shop['name']; ?>"></a></td>
                                         </tr>
                                         <tr>
-                                            <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; box-shadow:0 0 4px rgba(0,0,0,0.15); padding:6px 0 5px; font:11px/17px Arial, Helvetica, sans-serif; color:#fff;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink']; ?>" style="text-decoration:none; color:#fff;"><?php echo FrontEnd_Helper_viewHelper::__email('CODE'); ?></a></td>
+                                            <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; box-shadow:0 0 4px rgba(0,0,0,0.15); padding:6px 0 5px; font:11px/17px Arial, Helvetica, sans-serif; color:#fff;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink']; ?>" style="text-decoration:none; color:#fff;"><?php echo FrontEnd_Helper_viewHelper::__email('email_CODE'); ?></a></td>
                                         </tr>
                                     </tbody></table>
                                 </td>
@@ -42,7 +48,7 @@ if($this->categoryInformation != null) {
                                 <td valign="top">
                                     <table width="100%" cellpadding="0" cellspacing="0">
                                         <tbody><tr>
-                                            <td style="padding:0 0 2px; font:14px/17px Arial, Helvetica, sans-serif; color:#363636;"><?php echo $topOffer->shop['name']; ?></td>
+                                            <td style="padding:0 0 2px; font:14px/17px Arial, Helvetica, sans-serif; color:#363636;"><?php echo $topOffer->shop['name']; ?>&nbsp;<span style="color: #e89438; display: inline-block;"><?php echo $exclusiveCode; ?></span></td>
                                         </tr>
                                         <tr>
                                             <td style="padding:0 0 15px; font:16px/22px Arial, Helvetica, sans-serif; color:#0077cc;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink']; ?>" style="text-decoration:underline; color:#0077cc;"><?php echo $topOffer->title; ?></a></td>
