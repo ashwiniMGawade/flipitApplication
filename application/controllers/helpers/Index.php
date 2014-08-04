@@ -16,7 +16,7 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
         $topCategoriesOffersWithCategoriesPermalinkIndex = '';
         foreach ($topCategoriesOffers as $topCategoriesOffer) {
             $categoryIndex = $topCategoriesOffer['categoryPermalink'] . "," .$topCategoriesOffer['categoryName'];
-            $topCategoriesOffersWithCategoriesPermalinkIndex[$categoryIndex][] =
+            $topCategoriesOffersWithCategoriesPermalinkIndex[$categoryIndex][$topCategoriesOffer['shopId']] =
             $topCategoriesOffer['Offer'];
         }
 

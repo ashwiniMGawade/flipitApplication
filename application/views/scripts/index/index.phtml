@@ -1,6 +1,9 @@
 <?php
 $this->minifyHeadScript()->appendFile("/public/js/front_end/home.js");
 $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
+//echo "<pre>";
+//print_r($this->newOffers);
+//die;
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
     'topOffers'=>$this->topOffers,
     'newOffers'=>$this->newOffers,

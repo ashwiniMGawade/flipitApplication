@@ -290,7 +290,7 @@ class Offer extends BaseOffer
         return $topCouponCodes;
     }
 
-    public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "")
+    public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "", $homeSection='')
     {
         $currentDate = date('Y-m-d 00:00:00');
         $newestCouponCodes = Doctrine_Query::create()
@@ -330,6 +330,9 @@ class Offer extends BaseOffer
         }
         if ($userId!="") {
             $newestCouponCodes->andWhere('o.authorId = '.$userId.'');
+        }
+        if ($homeSection!='') {
+            $newestCouponCodes->groupBy('s.id');
         }
         $newestCouponCodes = $newestCouponCodes->limit($limit)->fetchArray();
         return $newestCouponCodes;

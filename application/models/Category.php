@@ -22,7 +22,7 @@ class Category extends BaseCategory
         $categoryOffersList = Doctrine_Query::create()
         ->select(
             "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,c.name as categoryName,
-            o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,
+            o.*,s.id as shopId, s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,
             fv.shopId,fv.visitorId,fv.Id,terms.content"
         )
         ->from("refOfferCategory roc")
