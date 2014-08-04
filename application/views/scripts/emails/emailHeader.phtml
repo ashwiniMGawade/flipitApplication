@@ -4,13 +4,13 @@ $welcomelogo = FrontEnd_Helper_viewHelper::setEmailLogos(
     $locale,
     $this->publicLocalePath,
     $this->publicPath,
-    'email-header-welcome.png'
+    'email-header-welcome'
 );
 $newsLetterlogo = FrontEnd_Helper_viewHelper::setEmailLogos(
     $locale,
     $this->publicLocalePath,
     $this->publicPath,
-    'email-header-best.png'
+    'email-header-best'
 );
 $logo = $this->mailType == 'welcome'
     ? $welcomelogo : $newsLetterlogo;

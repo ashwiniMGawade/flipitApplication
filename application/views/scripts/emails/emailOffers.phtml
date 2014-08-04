@@ -7,7 +7,7 @@ if($this->categoryInformation != null) {
     <tr><td height="45"></td></tr>
     <tr>
         <td style="padding:0 0 25px 29px; font:24px/27px Arial, Helvetica, sans-serif; color:#32383e;">
-            <?php echo FrontEnd_Helper_viewHelper::__email('Popular category:'). ' ' .$categoryInformation[0]; ?>
+            <?php echo FrontEnd_Helper_viewHelper::__email('email_Popular category:'). ' ' .$categoryInformation[0]; ?>
         </td>
     </tr>
     <?php 
@@ -26,7 +26,7 @@ if($this->categoryInformation != null) {
                         $exclusiveCode = '';
                         $exclusiveImage = '';
                         if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
-                            $exclusiveCode = FrontEnd_Helper_viewHelper::__email('exclusive');
+                            $exclusiveCode = FrontEnd_Helper_viewHelper::__email('email_exclusive');
                             $exclusiveImage = "style='background:url(".$this->httpPath."public/images/exclusive-star.png) no-repeat right top #fef6ec;'";                 
                         }
                  ?>
@@ -40,7 +40,7 @@ if($this->categoryInformation != null) {
                                             <td height="66" align="center"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink']; ?>" style="text-decoration:none; color:#fff;"><img src="<?php echo $this->publicPathCdn.ltrim($topOffer->shop['logo']['path'],'/').'thum_big_'.$topOffer->shop['logo']['name']; ?>" style="vertical-align:top;" width="132" height="66" alt="<?php echo $topOffer->shop['name']; ?>"></a></td>
                                         </tr>
                                         <tr>
-                                            <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; box-shadow:0 0 4px rgba(0,0,0,0.15); padding:6px 0 5px; font:11px/17px Arial, Helvetica, sans-serif; color:#fff;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink']; ?>" style="text-decoration:none; color:#fff;"><?php echo FrontEnd_Helper_viewHelper::__email('CODE'); ?></a></td>
+                                            <td bgcolor="#ea973d" align="center" style="border-radius:0 0 4px 4px; box-shadow:0 0 4px rgba(0,0,0,0.15); padding:6px 0 5px; font:11px/17px Arial, Helvetica, sans-serif; color:#fff;"><a href="<?php echo $this->httpPathLocale.$topOffer->shop['permalink']; ?>" style="text-decoration:none; color:#fff;"><?php echo FrontEnd_Helper_viewHelper::__email('email_CODE'); ?></a></td>
                                         </tr>
                                     </tbody></table>
                                 </td>

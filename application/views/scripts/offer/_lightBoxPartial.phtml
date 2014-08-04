@@ -26,8 +26,8 @@
             <div id="code-hint"><?php echo $this->translate('Press Ctrl + C to copy the code');?></div>
             <div class="holder">
                 <input id="couponCode" class="default form-control" type="text"
-                value="<?php echo strtoupper($this->couponCode); ?>">
-                <a data-clipboard-text="<?php echo strtoupper($this->couponCode); ?>"
+                value="<?php echo $this->couponCode; ?>">
+                <a data-clipboard-text="<?php echo $this->couponCode; ?>"
                  id='code-button' class="btn orange btn-warning">
                     <?php echo $this->translate('Copy Code');?>
                 </a>

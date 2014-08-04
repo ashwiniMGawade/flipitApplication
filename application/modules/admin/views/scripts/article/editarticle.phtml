@@ -47,9 +47,9 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                         <?php echo $this->translate('Status:'); ?> 
                             <strong>
                             <?php
-                                if($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate'])) <= date('d-m-Y 00:00:00')){
+                                if($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) <= date('d-m-Y H:i')){
                                     echo $this->translate('Published');
-                                }else if ($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate'])) > date('d-m-Y 00:00:00')){
+                                }else if ($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) > date('d-m-Y H:i')){
                                     echo $this->translate('Scheduled');
                                 }else{
                                     echo $this->translate('Draft');
@@ -59,9 +59,9 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                         </div>
                      <div class="sidebar-content-box" style="width : 225px;">
                         <?php 
-                        if($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate'])) <= date('d-m-Y 00:00:00')){
+                        if($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) <= date('d-m-Y H:i')){
                         echo $this->translate('Published on:');
-                        }else if ($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate'])) > date('d-m-Y 00:00:00')){
+                        }else if ($this->articleData[0]['publish'] == 1 && date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) > date('d-m-Y H:i')){
                         echo $this->translate('Scheduled for:');
                         }else{
                         echo $this->translate('Published on:');
@@ -71,15 +71,19 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                         <?php 
                         echo 
                         $this->articleData[0]['publish'] == 1 
-                        ? date('d-m-Y',strtotime($this->articleData[0]['publishdate'])): $this->translate(' immediately');?>
-                        </strong> 
+                        ? date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) 
+                       : $this->translate(' immediately');?>
+                       </strong> 
                         <a href="javascript:;" onClick="showPublishDate()" 
                         id="editpublishLink"><?php echo $this->translate('Edit'); ?></a>
                         <span id="publishlater" class="display-none">
                         <input type="text" style="width:110px;margin-top:3px;" 
                         value="<?php echo date('d-m-Y',strtotime($this->articleData[0]['publishdate']));?>" 
                         placeholder="Publish Date"  id="publishDate" name="publishDate" class="span3">
-                         </span>
+                        <input type="text" style="width:48px;margin-top:3px;" placeholder="HH" id="publishTimehh"
+                         name="publishTimehh" class="span3" 
+                         value="<?php echo date('H:i:s',strtotime($this->articleData[0]['publishdate']));?>">
+                        </span>
                     </div>
                     <div class="sidebar-box-footer">
                     <?php 
