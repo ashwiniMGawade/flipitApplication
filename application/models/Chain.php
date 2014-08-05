@@ -157,7 +157,7 @@ class Chain extends BaseChain
             ->fetchArray();
         $chain = array();
 
-        if (!$chainInformation[0]) {
+        if (!isset($chainInformation[0])) {
             return false;
         }
 
