@@ -22,4 +22,17 @@ class Zend_Controller_Action_Helper_Store extends Zend_Controller_Action_Helper_
         }
         return $offers;
     }
+
+    public static function removeDuplicateShopsOffers($similarShopsOffers)
+    {
+        $removeDuplicateShop = '';
+        foreach ($similarShopsOffers as $offerIndex => $offer) {
+            $removeDuplicateShop[$offer['shop']['id']] = $similarShopsOffers[$offerIndex];
+        }
+        $offersUnique = '';
+        foreach ($removeDuplicateShop as $shopIndex => $offer) {
+            $offersUnique[] = $removeDuplicateShop[$shopIndex];
+        }
+        return  $offersUnique;
+    }
 }

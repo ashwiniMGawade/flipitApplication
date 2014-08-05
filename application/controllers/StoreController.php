@@ -134,8 +134,9 @@ class StoreController extends Zend_Controller_Action
             $numberOfSimilarOffers,
             $shopId
         );
-        $this->view->similarShopsAndSimilarCategoriesOffers = $similarShopsAndSimilarCategoriesOffers;
-
+        $this->view->similarShopsAndSimilarCategoriesOffers = $this->_helper->Store->removeDuplicateShopsOffers(
+            $similarShopsAndSimilarCategoriesOffers
+        );
         $this->view->countPopularOffers = count(
             FrontEnd_Helper_viewHelper::commonfrontendGetCode('popular', $shopRecordsLimit, $currentShopId)
         );

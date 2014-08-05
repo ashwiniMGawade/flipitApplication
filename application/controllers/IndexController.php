@@ -46,7 +46,7 @@ class IndexController extends Zend_Controller_Action
             );
             $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_popularcategory_list",
-                array('function' => 'Category::getPopularCategories', 'parameters' => array(10))
+                array('function' => 'Category::getPopularCategories', 'parameters' => array(10, 'home'))
             );
             $this->view->topCategories = $topCategories;
             $topCategoriesIds = $this->_helper->Index->getTopCategoriesIds($topCategories);
