@@ -60,7 +60,7 @@ function showCodePopUp(event) {
     }
     
     $('#element_to_pop_up').html('');
-    if(! ( /(iPod|iPhone|iPad)/i.test(navigator.userAgent) )) {
+    if(! ( /(Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini)/i.test(navigator.userAgent) )) {
     customPopUp('element_to_pop_up');
             $.ajax({
                 url : HOST_PATH_LOCALE + "offer/offer-detail",
