@@ -285,7 +285,6 @@ class Articlecategory extends BaseArticlecategory
                     $artArr[] = $pageIds[$i]['pageid'];
                 }
                 $page_ids = array_unique($artArr);
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
@@ -347,7 +346,6 @@ class Articlecategory extends BaseArticlecategory
             $artArr[] = $pageIds[$i]['pageid'];
         }
         $page_ids = array_unique($artArr);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');

@@ -249,8 +249,6 @@ class Shop extends BaseShop
             $shopName = Doctrine_Core::getTable("Shop")->findOneBy('id', $shopId);
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
-            $cacheKeyRelatedShop = 'all_relatedShopInStore'  . $shopId  . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyRelatedShop);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');       
@@ -364,7 +362,7 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvouchercode_list_shoppage');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage_'. $id);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
 
@@ -432,7 +430,7 @@ class Shop extends BaseShop
             $delPermalink = Doctrine_Query::create()->delete()->from('RoutePermalink p')
             ->where("permalink=". "'$this->permaLink'")->execute();
 
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage_'. $id);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
 
             //call cache function
             $key = 'shop_'.$this->id.'_similarShops';
@@ -794,9 +792,6 @@ class Shop extends BaseShop
         $key = 'shopDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-        $key = 'all_relatedShopInStore'  . $this->id  . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
         
         $key = 'shop_'.$this->id.'_similarShops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -812,7 +807,7 @@ class Shop extends BaseShop
        
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
      
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage_'. $this->id);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
@@ -833,8 +828,7 @@ class Shop extends BaseShop
             $this->refShopRelatedshop->delete();
             $this->save();
 
-            $key = 'all_relatedShopInStore'  . $this->id  . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        
 
             $key = 'shop_'.$this->id.'_similarShops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -1627,10 +1621,8 @@ public static function getShopDetail($shopId)
         $key = 'shopDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-        $key = 'all_relatedShopInStore'  . $this->id  . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage_'. $this->id);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
 
 
         try {

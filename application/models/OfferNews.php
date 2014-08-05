@@ -24,7 +24,7 @@ class OfferNews extends BaseOfferNews
             $savenews->save();
 
             //call cache
-            $key = 'shop_latestUpdates_'  . intval($savenews->shopId) . '_list';
+            $key = 'shop_latestUpdates'  . intval($savenews->shopId) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             return $savenews->id ;
     }
@@ -67,7 +67,7 @@ class OfferNews extends BaseOfferNews
                ->execute();
 
         //call cache
-        $key = 'shop_latestUpdates_'  . intval($savenews->shopId) . '_list';
+        $key = 'shop_latestUpdates'  . intval($savenews->shopId) . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
     }
@@ -110,7 +110,7 @@ class OfferNews extends BaseOfferNews
             $data->save();
 
             //call cache
-            $key = 'shop_latestUpdates_'  . intval($data->shopId) . '_list';
+            $key = 'shop_latestUpdates'  . intval($data->shopId) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             return $savenews->id ;
     }

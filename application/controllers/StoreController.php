@@ -52,7 +52,7 @@ class StoreController extends Zend_Controller_Action
                 (string)$allShopDetailKey,
                 array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
             );
-            $allOffersInStoreKey = '6_topOffers_'.$ShopList;
+            $allOffersInStoreKey = '6_topOffers'.$ShopList;
             $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allOffersInStoreKey,
                 array(
@@ -60,7 +60,7 @@ class StoreController extends Zend_Controller_Action
                     'parameters' => array("all", 10, $shopId, 0)
                 )
             );
-            $allExpiredOfferKey = 'shop_expiredOffers_'.$ShopList;
+            $allExpiredOfferKey = 'shop_expiredOffers'.$ShopList;
             $expiredOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allExpiredOfferKey,
                 array(
@@ -291,7 +291,7 @@ class StoreController extends Zend_Controller_Action
                 $howToGuides[0]['id'])
             )
         );
-        $allOffersInStoreKey = '6_topOffers_'.$ShopList;
+        $allOffersInStoreKey = '6_topOffers'.$ShopList;
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allOffersInStoreKey,
             array('function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
