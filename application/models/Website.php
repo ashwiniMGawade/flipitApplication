@@ -13,7 +13,7 @@ class Website extends BaseWebsite
     public static function getWebsiteDetails($websiteId = null, $websiteName = null)
     {
         $websiteId =  FrontEnd_Helper_viewHelper::sanitize($websiteId);
-        $websites = Doctrine_Query::create()->select("id, name, url")
+        $websites = Doctrine_Query::create()->select("id, name, url, chain")
             ->from("Website")
             ->where("deleted=0");
 
@@ -42,5 +42,13 @@ class Website extends BaseWebsite
             ->where("name = "."'".$websiteName."'")
             ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
         return $localeStatus;
+    }
+
+    public function saveChain($chain, $websiteName)
+    {
+        return Doctrine_Query::create()->update('Website')
+            ->set('chain', "'". $chain . "'")
+            ->where("name = "."'".$websiteName."'")
+            ->execute();
     }
 }

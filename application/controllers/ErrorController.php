@@ -21,7 +21,7 @@ class ErrorController extends Zend_Controller_Action
                 $pagePermalink = $this->_helper->Error->getPageParmalink(ltrim($this->_request->getPathInfo(), '/'));
                 $pageNumber = $this->_helper->Error->getPageNumbering($pagePermalink);
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
-                if ($pageDetails['pageType']=='default') {
+                if (isset($pageDetails['pageType']) && $pageDetails['pageType']=='default') {
                     if ($pageNumber > 0) {
                         $pageNumber = 4;
                     }
@@ -133,9 +133,14 @@ class ErrorController extends Zend_Controller_Action
         } else {
             $pagePermalink = $this->_helper->Error->getPermalinkForFlipit($pagePermalink);
         }
+
+        if ($pagePermalink!='') {
+            $this->pagePermalink = $pagePermalink;
+            $pagedata = Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
+        } else {
+            $pagedata= '';
+        }
         
-        $this->pagePermalink = $pagePermalink;
-        $pagedata = Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
         return $pagedata;
     }
 }
