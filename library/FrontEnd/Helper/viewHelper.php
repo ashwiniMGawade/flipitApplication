@@ -153,6 +153,10 @@ EOD;
         $requestUri = Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI');
         $permalink = ltrim($requestUri, '/');
         $permalink = rtrim($permalink, '/');
+        $permalinkWithoutQueryString = explode('?', $permalink);
+        if (!empty($permalinkWithoutQueryString)) {
+            $permalink = $permalinkWithoutQueryString[0];
+        }
         $canocalUrl = $permalink;
         preg_match("/[^\/]+$/", $permalink, $permalinkMatches);
         if (intval($permalinkMatches[0]) > 0 && intval($permalinkMatches[0]) < 4) :

@@ -22,7 +22,7 @@ class Category extends BaseCategory
         $categoryOffersList = Doctrine_Query::create()
         ->select(
             "roc.offerId as oid,roc.categoryId as cid,c.permalink as categoryPermalink,c.name as categoryName,
-            o.*,s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,
+            o.*,s.id as shopId, s.refUrl, s.actualUrl, s.name,s.permalink as permalink,l.path,l.name,
             fv.shopId,fv.visitorId,fv.Id,terms.content"
         )
         ->from("refOfferCategory roc")
@@ -71,15 +71,19 @@ class Category extends BaseCategory
         return $categoryOffers;
     }
     
-    public static function getPopularCategories($categoriesLimit = 0)
+    public static function getPopularCategories($categoriesLimit = 0, $pageName = '')
     {
+        $couponsCount = '*';
+        if ($pageName!='') {
+            $couponsCount = 'DISTINCT s.id';
+        }
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $popularCategories = Doctrine_Query::create()
         ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
         ->from('PopularCategory p')
         ->addSelect(
             "(
-                SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  
+                SELECT  count($couponsCount) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  
                 off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'"
             .$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff"
         )
