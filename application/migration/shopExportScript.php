@@ -44,10 +44,12 @@ class ShopExport
             $this->_hostName = "http://www.kortingscode.nl";
             $this->_logo = $this->_hostName . "/public/images/front_end/logo-popup.png";
             $suffix = "" ;
+            $locale = "";
         } else {
             $this->_localePath = $key . "/";
             $this->_hostName = "http://www.flipit.com";
             $suffix = "_" . strtoupper($key) ;
+            $locale = "-".strtoupper($key);
         }
 
         defined('PUBLIC_PATH')
@@ -107,41 +109,42 @@ class ShopExport
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->_trans->translate('Shopname'));
         $objPHPExcel->getActiveSheet()->setCellValue('B1', $this->_trans->translate('Navigation URL'));
         $objPHPExcel->getActiveSheet()->setCellValue('C1', $this->_trans->translate('Money shop'));
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', $this->_trans->translate('Start'));
-        $objPHPExcel->getActiveSheet()->setCellValue('E1', $this->_trans->translate('Network'));
-        $objPHPExcel->getActiveSheet()->setCellValue('F1', $this->_trans->translate('Online'));
-        $objPHPExcel->getActiveSheet()->setCellValue('G1', $this->_trans->translate('Offline since'));
-        $objPHPExcel->getActiveSheet()->setCellValue('H1', $this->_trans->translate('Overwrite Title'));
-        $objPHPExcel->getActiveSheet()->setCellValue('I1', $this->_trans->translate('Meta Description'));
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', $this->_trans->translate('Allow user generated content'));
-        $objPHPExcel->getActiveSheet()->setCellValue('K1', $this->_trans->translate('Allow Discussions'));
-        $objPHPExcel->getActiveSheet()->setCellValue('L1', $this->_trans->translate('Title'));
-        $objPHPExcel->getActiveSheet()->setCellValue('M1', $this->_trans->translate('Sub-title'));
-        $objPHPExcel->getActiveSheet()->setCellValue('N1', $this->_trans->translate('Notes'));
-        $objPHPExcel->getActiveSheet()->setCellValue('O1', $this->_trans->translate('Editor'));
-        $objPHPExcel->getActiveSheet()->setCellValue('P1', $this->_trans->translate('Category'));
-        $objPHPExcel->getActiveSheet()->setCellValue('Q1', $this->_trans->translate('Similar Shops'));
-        $objPHPExcel->getActiveSheet()->setCellValue('R1', $this->_trans->translate('Deeplinking code'));
-        $objPHPExcel->getActiveSheet()->setCellValue('S1', $this->_trans->translate('Ref URL'));
-        $objPHPExcel->getActiveSheet()->setCellValue('T1', $this->_trans->translate('Actual URL'));
-        $objPHPExcel->getActiveSheet()->setCellValue('U1', $this->_trans->translate('Shop Text'));
-        $objPHPExcel->getActiveSheet()->setCellValue('V1', $this->_trans->translate('Days Without Online Coupons'));
+        $objPHPExcel->getActiveSheet()->setCellValue('D1', $this->_trans->translate('Account manager'));
+        $objPHPExcel->getActiveSheet()->setCellValue('E1', $this->_trans->translate('Start'));
+        $objPHPExcel->getActiveSheet()->setCellValue('F1', $this->_trans->translate('Network'));
+        $objPHPExcel->getActiveSheet()->setCellValue('G1', $this->_trans->translate('Online'));
+        $objPHPExcel->getActiveSheet()->setCellValue('H1', $this->_trans->translate('Offline since'));
+        $objPHPExcel->getActiveSheet()->setCellValue('I1', $this->_trans->translate('Overwrite Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('J1', $this->_trans->translate('Meta Description'));
+        $objPHPExcel->getActiveSheet()->setCellValue('K1', $this->_trans->translate('Allow user generated content'));
+        $objPHPExcel->getActiveSheet()->setCellValue('L1', $this->_trans->translate('Allow Discussions'));
+        $objPHPExcel->getActiveSheet()->setCellValue('M1', $this->_trans->translate('Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('N1', $this->_trans->translate('Sub-title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('O1', $this->_trans->translate('Notes'));
+        $objPHPExcel->getActiveSheet()->setCellValue('P1', $this->_trans->translate('Editor'));
+        $objPHPExcel->getActiveSheet()->setCellValue('Q1', $this->_trans->translate('Category'));
+        $objPHPExcel->getActiveSheet()->setCellValue('R1', $this->_trans->translate('Similar Shops'));
+        $objPHPExcel->getActiveSheet()->setCellValue('S1', $this->_trans->translate('Deeplinking code'));
+        $objPHPExcel->getActiveSheet()->setCellValue('T1', $this->_trans->translate('Ref URL'));
+        $objPHPExcel->getActiveSheet()->setCellValue('U1', $this->_trans->translate('Actual URL'));
+        $objPHPExcel->getActiveSheet()->setCellValue('V1', $this->_trans->translate('Shop Text'));
+        $objPHPExcel->getActiveSheet()->setCellValue('W1', $this->_trans->translate('Days Without Online Coupons'));
         $objPHPExcel->getActiveSheet()->setCellValue(
-            'W1',
+            'X1',
             $this->_trans->translate('No. of Times Shop became Favourite')
         );
-        $objPHPExcel->getActiveSheet()->setCellValue('X1', $this->_trans->translate('Last week Clickouts'));
-        $objPHPExcel->getActiveSheet()->setCellValue('Y1', $this->_trans->translate('Total Clickouts'));
-        $objPHPExcel->getActiveSheet()->setCellValue('Z1', $this->_trans->translate('Amount of Coupons'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AA1', $this->_trans->translate('Amount of Offers'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AB1', $this->_trans->translate('How To Guide'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AC1', $this->_trans->translate('News Ticker'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AD1', $this->_trans->translate('Display singup option'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AE1', $this->_trans->translate('Display similar shops'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AF1', $this->_trans->translate('Display chains'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AG1', $this->_trans->translate('Custom Header Text'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AH1', $this->_trans->translate('Extra opties'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AI1', $this->_trans->translate('Last Updated'));
+        $objPHPExcel->getActiveSheet()->setCellValue('Y1', $this->_trans->translate('Last week Clickouts'));
+        $objPHPExcel->getActiveSheet()->setCellValue('Z1', $this->_trans->translate('Total Clickouts'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AA1', $this->_trans->translate('Amount of Coupons'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AB1', $this->_trans->translate('Amount of Offers'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AC1', $this->_trans->translate('How To Guide'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AD1', $this->_trans->translate('News Ticker'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AE1', $this->_trans->translate('Display singup option'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AF1', $this->_trans->translate('Display similar shops'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AG1', $this->_trans->translate('Display chains'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AH1', $this->_trans->translate('Custom Header Text'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AI1', $this->_trans->translate('Extra opties'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AJ1', $this->_trans->translate('Last Updated'));
 
         $column = 2;
         $row = 2;
@@ -153,6 +156,16 @@ class ShopExport
                 $prog = $this->_trans->translate('Yes');
             } else {
                 $prog = $this->_trans->translate('No');
+            }
+
+            $accountManagername = '';
+            if ($shop['accountManagerName']==''
+                    ||$shop['accountManagerName']=='undefined'
+                    ||$shop['accountManagerName']==null
+                    ||$shop['accountManagerName']=='0') {
+                $accountManagername ='';
+            } else {
+                $accountManagername = User::getUserName($shop['accoutManagerId']);
             }
 
             $startDate =  date("d-m-Y", strtotime($shop['created_at']));
@@ -225,7 +238,7 @@ class ShopExport
             $shopTime = strtotime(@$shop['updated_at']);
             $newTickerTime = isset($shop['newsTickerTime'])
             ? strtotime($shop['newsTickerTime']) : false;
-            $offerTime =	 isset($shop['offerTime'])
+            $offerTime =     isset($shop['offerTime'])
             ? strtotime($shop['offerTime']) : false;
             $lastUpdated = max($shopTime, $newTickerTime, $offerTime);
             $lastUpdated = date("d-m-Y H:i:s", $lastUpdated);
@@ -371,40 +384,39 @@ class ShopExport
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $shop['permaLink']);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $prog);
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $startDate);
-            $objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $affilateNetwork);
-            $objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $offLine);
-            $objPHPExcel->getActiveSheet()->setCellValue('G'.$column, $offLineSince);
-            $objPHPExcel->getActiveSheet()->setCellValue('H'.$column, $overriteTitle);
-            $objPHPExcel->getActiveSheet()->setCellValue('I'.$column, $metaDesc);
-            $objPHPExcel->getActiveSheet()->setCellValue('J'.$column, $userGenerated);
-            $objPHPExcel->getActiveSheet()->setCellValue('K'.$column, $discussion);
-            $objPHPExcel->getActiveSheet()->setCellValue('L'.$column, $title);
-            $objPHPExcel->getActiveSheet()->setCellValue('M'.$column, $subTitle);
-            $objPHPExcel->getActiveSheet()->setCellValue('N'.$column, $notes);
-            $objPHPExcel->getActiveSheet()->setCellValue('O'.$column, $contentManagerName);
-            $objPHPExcel->getActiveSheet()->setCellValue('P'.$column, $categories);
-            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$column, $relatedshops);
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$column, $deeplink);
-            $objPHPExcel->getActiveSheet()->setCellValue('S'.$column, $refUrl);
-            $objPHPExcel->getActiveSheet()->setCellValue('T'.$column, $actualUrl);
-            $objPHPExcel->getActiveSheet()->setCellValue('U'.$column, $shopText);
-            $objPHPExcel->getActiveSheet()->setCellValue('V'.$column, $daysWithoutCoupon);
-            $objPHPExcel->getActiveSheet()->setCellValue('W'.$column, $timesShopFavourite);
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$column, $lastWeekClicks);
-            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$column, $totalClicks);
-            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$column, $totalAmountCoupons);
-            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$column, $totalAmountOffers);
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$column, $howToGuide);
-            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$column, $newsTicker);
-            $objPHPExcel->getActiveSheet()->setCellValue('AD'.$column, $showSignupOption);
-            $objPHPExcel->getActiveSheet()->setCellValue('AE'.$column, $showSimliarShops);
-            $objPHPExcel->getActiveSheet()->setCellValue('AF'.$column, $showChains);
-            $objPHPExcel->getActiveSheet()->setCellValue('AG'.$column, $customHeader);
-            $objPHPExcel->getActiveSheet()->setCellValue('AH'.$column, $displayExtraProperties);
-            $objPHPExcel->getActiveSheet()->setCellValue('AI'.$column, $lastUpdated);
-
-
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $accountManagername);
+            $objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $startDate);
+            $objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $affilateNetwork);
+            $objPHPExcel->getActiveSheet()->setCellValue('G'.$column, $offLine);
+            $objPHPExcel->getActiveSheet()->setCellValue('H'.$column, $offLineSince);
+            $objPHPExcel->getActiveSheet()->setCellValue('I'.$column, $overriteTitle);
+            $objPHPExcel->getActiveSheet()->setCellValue('J'.$column, $metaDesc);
+            $objPHPExcel->getActiveSheet()->setCellValue('K'.$column, $userGenerated);
+            $objPHPExcel->getActiveSheet()->setCellValue('L'.$column, $discussion);
+            $objPHPExcel->getActiveSheet()->setCellValue('M'.$column, $title);
+            $objPHPExcel->getActiveSheet()->setCellValue('N'.$column, $subTitle);
+            $objPHPExcel->getActiveSheet()->setCellValue('O'.$column, $notes);
+            $objPHPExcel->getActiveSheet()->setCellValue('P'.$column, $contentManagerName);
+            $objPHPExcel->getActiveSheet()->setCellValue('Q'.$column, $categories);
+            $objPHPExcel->getActiveSheet()->setCellValue('R'.$column, $relatedshops);
+            $objPHPExcel->getActiveSheet()->setCellValue('S'.$column, $deeplink);
+            $objPHPExcel->getActiveSheet()->setCellValue('T'.$column, $refUrl);
+            $objPHPExcel->getActiveSheet()->setCellValue('U'.$column, $actualUrl);
+            $objPHPExcel->getActiveSheet()->setCellValue('V'.$column, $shopText);
+            $objPHPExcel->getActiveSheet()->setCellValue('W'.$column, $daysWithoutCoupon);
+            $objPHPExcel->getActiveSheet()->setCellValue('X'.$column, $timesShopFavourite);
+            $objPHPExcel->getActiveSheet()->setCellValue('Y'.$column, $lastWeekClicks);
+            $objPHPExcel->getActiveSheet()->setCellValue('Z'.$column, $totalClicks);
+            $objPHPExcel->getActiveSheet()->setCellValue('AA'.$column, $totalAmountCoupons);
+            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$column, $totalAmountOffers);
+            $objPHPExcel->getActiveSheet()->setCellValue('AC'.$column, $howToGuide);
+            $objPHPExcel->getActiveSheet()->setCellValue('AD'.$column, $newsTicker);
+            $objPHPExcel->getActiveSheet()->setCellValue('AE'.$column, $showSignupOption);
+            $objPHPExcel->getActiveSheet()->setCellValue('AF'.$column, $showSimliarShops);
+            $objPHPExcel->getActiveSheet()->setCellValue('AG'.$column, $showChains);
+            $objPHPExcel->getActiveSheet()->setCellValue('AH'.$column, $customHeader);
+            $objPHPExcel->getActiveSheet()->setCellValue('AI'.$column, $displayExtraProperties);
+            $objPHPExcel->getActiveSheet()->setCellValue('AJ'.$column, $lastUpdated);
 
             $column++;
             $row++;
@@ -422,18 +434,18 @@ class ShopExport
         $borderStyle = array('borders' =>
                 array('outline' =>
                         array('style' => PHPExcel_Style_Border::BORDER_THICK,
-                                'color' => array('argb' => '000000'),	),),);
+                                'color' => array('argb' => '000000'),   ),),);
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AI1')->applyFromArray($headerStyle);
-        $objPHPExcel->getActiveSheet()->getStyle('A1:AI1')->getAlignment()->setHorizontal(
+        $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AJ1')->applyFromArray($headerStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:AJ1')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER
         );
-        $objPHPExcel->getActiveSheet()->getStyle('B2:AI'.$row)->getAlignment()->setVertical(
+        $objPHPExcel->getActiveSheet()->getStyle('B2:AJ'.$row)->getAlignment()->setVertical(
             PHPExcel_Style_Alignment::VERTICAL_TOP
         );
-        $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AI1')->applyFromArray($borderStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AJ1')->applyFromArray($borderStyle);
         $borderColumn =  (intval($column) -1 );
-        $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AI'.$borderColumn)->applyFromArray($borderStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A1:'.'AJ'.$borderColumn)->applyFromArray($borderStyle);
 
         //SET SIZE OF THE CELL
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
@@ -466,6 +478,7 @@ class ShopExport
         $objPHPExcel->getActiveSheet()->getColumnDimension('AB')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AC')->setAutoSize(true);
         $objPHPExcel->getActiveSheet()->getColumnDimension('AD')->setAutoSize(true);
+        $objPHPExcel->getActiveSheet()->getColumnDimension('AE')->setAutoSize(true);
 
         $pathToFile = UPLOAD_EXCEL_TMP_PATH . strtolower($this->_localePath) . 'excels/' ;
 
@@ -473,7 +486,7 @@ class ShopExport
             mkdir($pathToFile, 0774, true);
         }
 
-        $filepath = $pathToFile . "shopList.xlsx" ;
+        $filepath = $pathToFile . "shopList".$locale.".xlsx" ;
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($filepath);
         $manager->closeConnection($DMC);

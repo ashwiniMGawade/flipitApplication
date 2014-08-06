@@ -1528,8 +1528,8 @@ class Admin_ShopController extends Zend_Controller_Action
     public function localExportXlxAction()
     {
         # set fiel and its translattions
-        $file =  UPLOAD_EXCEL_PATH . 'shopList.xlsx' ;
-        $fileName =  $this->view->translate($file);
+        $locale = LOCALE != "" ? "-".strtoupper(LOCALE) : "";
+        $file =  UPLOAD_EXCEL_PATH . 'shopList'.$locale.'.xlsx' ;
 
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
