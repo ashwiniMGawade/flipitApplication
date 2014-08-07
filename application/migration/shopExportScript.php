@@ -44,10 +44,12 @@ class ShopExport
             $this->_hostName = "http://www.kortingscode.nl";
             $this->_logo = $this->_hostName . "/public/images/front_end/logo-popup.png";
             $suffix = "" ;
+            $locale = "";
         } else {
             $this->_localePath = $key . "/";
             $this->_hostName = "http://www.flipit.com";
             $suffix = "_" . strtoupper($key) ;
+            $locale = "-".strtoupper($key);
         }
 
         defined('PUBLIC_PATH')
@@ -475,7 +477,7 @@ class ShopExport
             mkdir($pathToFile, 0774, true);
         }
 
-        $filepath = $pathToFile . "shopList.xlsx" ;
+        $filepath = $pathToFile . "shopList".$locale.".xlsx" ;
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($filepath);
         $manager->closeConnection($DMC);
