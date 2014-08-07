@@ -12,3 +12,4 @@ modules:
             cleanup: false
         PhpBrowser:
             url: 'http://www.flipit.com'
+            adminUsername: 'asdsadasdasdsad'
