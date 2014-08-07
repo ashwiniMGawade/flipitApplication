@@ -290,7 +290,7 @@ class Offer extends BaseOffer
         return $topCouponCodes;
     }
 
-    public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "")
+    public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "", $homeSection='')
     {
         $currentDate = date('Y-m-d 00:00:00');
         $newestCouponCodes = Doctrine_Query::create()
@@ -330,6 +330,9 @@ class Offer extends BaseOffer
         }
         if ($userId!="") {
             $newestCouponCodes->andWhere('o.authorId = '.$userId.'');
+        }
+        if ($homeSection!='') {
+            $newestCouponCodes->groupBy('s.id');
         }
         $newestCouponCodes = $newestCouponCodes->limit($limit)->fetchArray();
         return $newestCouponCodes;
@@ -1347,8 +1350,10 @@ class Offer extends BaseOffer
         }
 
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
-            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('00:00:00');
-            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+             $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('00:00:00');
+             $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+
+
         }
 
         if (isset($params['attachedpages'])) {
@@ -1649,6 +1654,8 @@ class Offer extends BaseOffer
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
             $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
             $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+
+
         }
 
         $this->refOfferPage->delete();

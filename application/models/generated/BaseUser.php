@@ -139,6 +139,9 @@ abstract class BaseUser extends Doctrine_Record
         $this->hasColumn('countryLocale', 'string', 10, array(
                 'type' => 'string',
         ));
+        $this->hasColumn('editorText', 'string', 100, array(
+                'type' => 'string',
+        ));
 
     }
 

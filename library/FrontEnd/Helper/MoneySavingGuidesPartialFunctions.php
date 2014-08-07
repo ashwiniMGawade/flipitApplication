@@ -7,7 +7,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
         foreach ($categoryWiseAllArticles as $article) {
             $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
                     . $article['authorDetails']['slug'];
-            $articleUpdatedAtDate = new Zend_Date($article['created_at']);
+            $articleUpdatedAtDate = new Zend_Date($article['publishdate']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
             $authorName = $article['authorDetails']['firstName'] != ''
                 ? $article['authorDetails']['firstName'] : '';

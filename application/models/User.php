@@ -43,7 +43,7 @@ class User extends BaseUser
         return !empty($userDetails) ? $userDetails['id'] : '';
     }
 
-    public static function getUserProfileDetails($userId)
+    public static function getUserProfileDetails($userId, $websiteName)
     {
         $userDetails = Doctrine_Query::create()
         ->select("u.* , w.id, pi.name, pi.path")
@@ -54,6 +54,7 @@ class User extends BaseUser
         ->where("u.id = ?", $userId)
         ->andWhere("u.showInAboutListing = 1")
         ->andWhere("u.deleted = 0")
+        ->andWhere("w.url ='".$websiteName."'")
         ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return $userDetails;
     }
@@ -75,7 +76,10 @@ class User extends BaseUser
     public static function getUserDetails($userId)
     {
         $userDetails = Doctrine_Query::create()
-            ->select("u.id,u.firstName,u.lastName,u.addtosearch, u.mainText, u.slug, u.google, pi.name, pi.path")
+            ->select(
+                "u.id, u.firstName,u.lastName,u.addtosearch, u.mainText, u.editorText, u.slug,
+              u.google, pi.name, pi.path"
+            )
             ->from('User u')
             ->leftJoin("u.profileimage pi")
             ->where("u.id = ?", $userId)
@@ -244,6 +248,7 @@ class User extends BaseUser
         $this->likes = BackEnd_Helper_viewHelper::stripSlashesFromString($params['likes']);
         $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString($params['dislike']);
         $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
+        $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
         //get user from zend auth
@@ -446,6 +451,7 @@ class User extends BaseUser
         $this->likes =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['likes']);
         $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['dislike']);
         $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
+        $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
         $this->countryLocale = $params['locale'];
 

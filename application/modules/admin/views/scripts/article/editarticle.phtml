@@ -13,7 +13,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js"
 $this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
 $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
 ?>
-<?php echo $this->headTitle()->append('Edit Article');?>
+<?php echo $this->headTitle()->append('Edit Article');
+?>
 <script type="text/javascript">
     var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
 </script>
@@ -71,17 +72,18 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                         echo 
                         $this->articleData[0]['publish'] == 1 
                         ? date('d-m-Y',strtotime($this->articleData[0]['publishdate']))." ".date('H:i',strtotime($this->articleData[0]['publishdate'])) 
-                        : $this->translate(' immediately');?></strong> 
+                       : $this->translate(' immediately');?>
+                       </strong> 
                         <a href="javascript:;" onClick="showPublishDate()" 
                         id="editpublishLink"><?php echo $this->translate('Edit'); ?></a>
                         <span id="publishlater" class="display-none">
                         <input type="text" style="width:110px;margin-top:3px;" 
                         value="<?php echo date('d-m-Y',strtotime($this->articleData[0]['publishdate']));?>" 
                         placeholder="Publish Date"  id="publishDate" name="publishDate" class="span3">
-                         <input type="text" style="width:48px;margin-top:3px;" placeholder="HH" id="publishTimehh" 
+                        <input type="text" style="width:48px;margin-top:3px;" placeholder="HH" id="publishTimehh"
                          name="publishTimehh" class="span3" 
                          value="<?php echo date('H:i:s',strtotime($this->articleData[0]['publishdate']));?>">
-                         </span>
+                        </span>
                     </div>
                     <div class="sidebar-box-footer">
                     <?php 

@@ -201,6 +201,7 @@ class Admin_LanguageController extends Zend_Controller_Action
             $scanPath[1] = APPLICATION_PATH . '/views';
             $scanPath[2] = APPLICATION_PATH . '/modules';
             $scanPath[3] = APPLICATION_PATH . '/migration';
+            $scanPath[4] = LIBRARY_PATH . '/BackEnd';
             $obj->set_exts('php|phtml');
             $obj->set_regular('/(__email)\([^)]*\)/');
         }

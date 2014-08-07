@@ -42,11 +42,11 @@ class IndexController extends Zend_Controller_Action
             );
             $this->view->newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_homenewoffer_list",
-                array('function' => 'Offer::getNewestOffers', 'parameters' => array('newest', 10))
+                array('function' => 'Offer::getNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
             );
             $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_popularcategory_list",
-                array('function' => 'Category::getPopularCategories', 'parameters' => array(10))
+                array('function' => 'Category::getPopularCategories', 'parameters' => array(10, 'home'))
             );
             $this->view->topCategories = $topCategories;
             $topCategoriesIds = $this->_helper->Index->getTopCategoriesIds($topCategories);

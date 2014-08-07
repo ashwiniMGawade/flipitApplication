@@ -6,7 +6,7 @@
                 $userDetails =  $userInformationObject->getUserDetails($recentlyAddedArticle['authorid']);
                 $profileLink =
                     HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_redactie').'/'. $userDetails['slug'];
-                $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['updated_at']);
+                $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['publishdate']);
                 $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
                 $articleImage = !empty($recentlyAddedArticle['thumbnail']) ? PUBLIC_PATH_CDN
                     .$recentlyAddedArticle['thumbnail']['path'].$recentlyAddedArticle['thumbnail']['name'] : '';

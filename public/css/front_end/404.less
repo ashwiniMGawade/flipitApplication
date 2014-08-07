@@ -2,6 +2,16 @@
 @import "custom-mixins.less";
 @flagWidth : '16px';
 @flagHeight : '11px';
+.kortingcode-logo{
+	width:308px;
+	height:49px;
+	background:url(../../images/kortingscode-logo.png) no-repeat;
+}
+.flipit-logo{
+	width:109px;
+	height:49px;
+	background:url(../../images/flipit-logo.png) no-repeat;
+}
 .page404 {
 	#footer{
 		text-shadow:none;
@@ -101,6 +111,12 @@
 			float:none;
 			margin:0 auto 21px;
 		}
+		.kortingscode{
+			.kortingcode-logo;
+		}
+		.flipit{
+			.flipit-logo;
+		}
 		.copy{
 			font-size:11px;
 			line-height:20px;
@@ -131,6 +147,12 @@
 			float:none;
 			display:block;
 			margin:0 auto 69px;
+		}
+		strong.kortingscode{
+			.kortingcode-logo;
+		}
+		.flipit{
+			.flipit-logo;
 		}
 		.text-block {
 			width:571px;

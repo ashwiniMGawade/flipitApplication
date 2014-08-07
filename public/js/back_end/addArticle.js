@@ -40,7 +40,7 @@ var searchedValue  = "";
 		
       	
 		manageWidgets();
-		$('#publishDate').datepicker({'startDate': 'today','autoclose':true,'format': 'dd-mm-yyyy'});
+		$('#publishDate').datepicker({'autoclose':true,'format': 'dd-mm-yyyy'});
 		$('#publishTimehh').timepicker({
 		 	minuteStep: 5,
 	        template: 'modal',
