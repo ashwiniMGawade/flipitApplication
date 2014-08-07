@@ -29,6 +29,8 @@
 ?>
     <a href='javascript:void(0)' onclick="showLightBox(<?php echo "'$refresLink'" ?>)" style="margin-left:10px;color:white;"><?php echo $refresLink ;?></a>
     <a href='<?php echo $varnishSetPassCacheUrl; ?>' style="margin-left:10px;color:white;"><?php echo $varnishCacheOnOff ;?></a>
+    <span class="varnish-count"><?php
+    echo $this->translate('Varnish urls count:').' '.BackEnd_Helper_viewHelper::getVarnishUrlsCount();?></span>
     <p class="toplinks-outer" style="width:480px;"><span class="text"><?php echo $this->translate('Welcome');?>,</span> <a class="userFirstName" href="<?php echo HTTP_PATH;?>admin/user/profile"><?php 
 		$firstName =  Zend_Auth::getInstance()->getIdentity()->firstName;
 					if( strlen( $firstName ) > 20 ) {

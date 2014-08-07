@@ -3451,3 +3451,6 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 .borderradius4px{
 	border-radius:0 4px 4px 0 !important;
 }
+.varnish-count{
+	color: #fff;
+}
