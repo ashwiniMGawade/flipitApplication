@@ -20,3 +20,4 @@ Sitemap:http://www.kortingscode.nl/public/sitemaps/form_sitemap_form_shops.xml
 Sitemap:http://www.kortingscode.nl/public/sitemaps/form_sitemap_form_plus.xml
             
 Sitemap:http://www.kortingscode.nl/public/sitemaps/form_sitemap_form_main.xml
+Sitemap:http://www.kortingscode.nl/public/sitemaps/form_sitemap_form_main.xml
