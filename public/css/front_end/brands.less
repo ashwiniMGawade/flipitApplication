@@ -64,6 +64,15 @@
 				border-style:solid;
 				border-color:@page-header-border-color;
 			}
+			&:nth-child(odd){
+                border-width:1px 1px 0 1px;
+			}
+			&:nth-child(even){
+	            border-width:1px 0 0 0;
+			}
+			&:nth-last-child(2){
+				border-width:1px 0 1px 0;
+			}
 			.link{
 				display:inline-block;
 				vertical-align:top;
@@ -78,15 +87,6 @@
 				min-height:20px;
 				p{margin:0 0 10px;}
 			}
-		}
-		.block:nth-child(odd){
-            border-width:1px 1px 0 1px;
-		}
-		.block:nth-child(even){
-            border-width:1px 0 0 0;
-		}
-		.block:nth-last-child(2){
-			border-width:1px 0 1px 0;
 		}
 		.block.hover{
 			background:#f9f9f9;
