@@ -38,7 +38,20 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
             $request->getModuleName() != 'admin'
             && preg_match('/[A-Z]/', Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'))
         ) {
-            if (strpos(Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'), 'branding') !== false) {
+            if (
+                strpos(
+                    Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'),
+                    'branding'
+                ) !== false
+                || strpos(
+                    Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'),
+                    'startinlinetranslation'
+                ) !== false
+                || strpos(
+                    Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'),
+                    'NoCache'
+                ) !== false
+            ) {
                 return;
             }
             header(
