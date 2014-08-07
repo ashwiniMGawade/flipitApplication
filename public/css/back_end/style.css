@@ -3454,3 +3454,9 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 .varnish-count{
 	color: #fff;
 }
+.footer-warning{
+	color: red;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
