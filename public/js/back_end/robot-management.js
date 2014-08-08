@@ -10,7 +10,9 @@ function getContent(el)
                 $("#robotContent").show();
                 $("#updateButton").show();
                 $("#fileContent").html(data);
-            }    
+            } else {
+                $("#fileContent").show();
+            }
         }
     });
 }

@@ -35,12 +35,13 @@ class Admin_RobotController extends Zend_Controller_Action
     }
 
     public function getrobotfilecontentAction()
-    {   $this->_helper->layout->disableLayout();
+    {
+        $this->_helper->layout->disableLayout();
         if ($this->_request->isXmlHttpRequest()) {
             $websiteId = intval($this->getRequest()->getParam('websiteId', false));
             if ($websiteId) {
-                $fileContent = $this->robotObject->getRobotTextFileInformation($websiteId);
-                echo json_encode($fileContent[0]['content']);
+                $robotsFileContent = $this->robotObject->getRobotTextFileInformation($websiteId);
+                echo json_encode($robotsFileContent[0]['content']);
                 exit();
             }
             
@@ -49,17 +50,18 @@ class Admin_RobotController extends Zend_Controller_Action
 
     public function updaterobotcontentAction()
     {
-        $robotFileParameters = $this->_getAllParams();
+        $robotsFileParameters = $this->_getAllParams();
         $updateFileContent = $this->robotObject->updateFileInformation(
-            $robotFileParameters['website'],
-            $robotFileParameters['content']
+            $robotsFileParameters['website'],
+            $robotsFileParameters['content']
         );
         if ($updateFileContent) {
-            $pathToFile = $robotFileParameters['website'] == 1 ? $_SERVER['DOCUMENT_ROOT'] . '/public/flipit/' : $_SERVER['DOCUMENT_ROOT'] . '/public/';
-            $robotTextFile = $pathToFile."robots.txt";
-            $robotTextHandle = fopen($robotTextFile, 'w');
-            fwrite($robotTextHandle, $robotFileParameters['content']);
-            fclose($robotTextHandle);
+            $pathToFile = $robotsFileParameters['website'] == 1 ? $_SERVER['DOCUMENT_ROOT'] . '/public/flipit/'
+            : $_SERVER['DOCUMENT_ROOT'] . '/public/';
+            $robotsTextFile = $pathToFile."robots.txt";
+            $robotsTextHandle = fopen($robotsTextFile, 'w');
+            fwrite($robotsTextHandle, $robotsFileParameters['content']);
+            fclose($robotsTextHandle);
             $this->setFlashMessage('Robot.txt has been updated!!!');
             $this->_redirect(HTTP_PATH . 'admin/robot');
         }
