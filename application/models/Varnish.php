@@ -86,4 +86,11 @@ class Varnish extends BaseVarnish
 
     }
 
+    public static function getVarnishUrlsCount()
+    {
+        $varnishUrlsCount = Doctrine_Query::create()->select('count(*)')
+            ->from("Varnish")
+            ->fetchArray();
+        return !empty($varnishUrlsCount) ? $varnishUrlsCount[0]['count'] : 0;
+    }
 }

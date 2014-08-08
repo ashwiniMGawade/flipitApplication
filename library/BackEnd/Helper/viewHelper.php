@@ -50,6 +50,12 @@ class BackEnd_Helper_viewHelper
             type="button">'.$this->zendTranslate->translate('Offline').'</button>';
         return $localeStatusButton;
     }
+
+    public static function getVarnishUrlsCount()
+    {
+        $varnishUrlsCount = Varnish::getVarnishUrlsCount();
+        return $varnishUrlsCount;
+    }
     #####################################################
     ############# END REFACORED CODE ####################
     #####################################################

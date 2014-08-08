@@ -59,11 +59,7 @@ class ErrorController extends Zend_Controller_Action
                         20,
                         5
                     );
-                    if (empty($specialPageOffers) && $pageDetails['pageType'] == 'offer') {
-                        $pageNumber = 4;
-                        $this->_helper->layout()->disableLayout();
-                        FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
-                    }
+
                     $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),
