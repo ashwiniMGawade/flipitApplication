@@ -6,57 +6,47 @@
                 $userDetails =  $userInformationObject->getUserDetails($recentlyAddedArticle['authorid']);
                 $profileLink =
                     HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_redactie').'/'. $userDetails['slug'];
+
                 $articleUpdatedAtDate = new Zend_Date($recentlyAddedArticle['publishdate']);
                 $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
                 $articleImage = !empty($recentlyAddedArticle['thumbnail']) ? PUBLIC_PATH_CDN
                     .$recentlyAddedArticle['thumbnail']['path'].$recentlyAddedArticle['thumbnail']['name'] : '';
-    ?>            
-    <article class="box">
-        <span class="image">
-            <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus').'/'
-                .$recentlyAddedArticle['permalink'];?>">
-                <div class="latest-article-thumbnail">
-                    <img src="<?php echo $articleImage;?>" alt="<?php echo $recentlyAddedArticle['title'];?>" 
-                        height="118" />
-                </div>
-            </a>    
-        </span>
-        <div class="text-box">
-                    
-            <h1>
-                <a href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus').'/'
-                .$recentlyAddedArticle['permalink'];?>">
-                    <?php echo $recentlyAddedArticle['title'];?>
-                </a>
-            </h1>
-            <p>
-                <?php
-                    if(empty($recentlyAddedArticle['authorname'])) {
-                        $byAuthorName = '';
-                        $authorRedirectLink =  '';
-                    } else {
-                        $authorNameExplodedBySpace = explode(' ', $recentlyAddedArticle['authorname']);
-                        $byAuthorName = 
-                            FrontEnd_Helper_AuthorPartialFunctions::
-                            getAuthorName($authorNameExplodedBySpace[0], $authorNameExplodedBySpace[1]);
-                        $authorRedirectLink =  '<a href="'.$profileLink.'">
-                        '.$byAuthorName.'</a>, ';
-                    }
-                ?>
-                <em>
-                    <?php 
-                        echo empty($byAuthorName) ? '' : $this->translate('by ');
-                        echo $authorRedirectLink;
-                        echo $articleUpdatedAtDate; 
-                    ?>
-                </em>
-            </p>
-            <a href="<?php echo  HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus').'/'
-            .$recentlyAddedArticle['permalink'];?>" class="more">
-                <span><?php echo FrontEnd_Helper_viewHelper::__translate('Read More');?></span>
-            </a>
-        </div>
-    </article>
+                $authorName = 
+                        FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
+                            $userDetails['firstName'],
+                            $userDetails['lastName']
+                );
+                $articleTitle = mb_strlen($recentlyAddedArticle['title']) > 50 ?
+                                        mb_substr($recentlyAddedArticle['title'], 0, 50).'..' :
+                                        $recentlyAddedArticle['title'];
+                $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
+    ?>
+                <article class="article col-md-3 col-sm-4 col-xs-6">
+                    <div class="image">
+                        <span class="category">
+                            <?php echo $recentlyAddedArticle['articlecategory'][0]['name'];?>
+                        </span>
+                        <a href= "<?php echo HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>">
+                            <img src="<?php echo $articleImage; ?>" width="100" height="100"
+                            alt="<?php echo $articleTitle;?>">
+                        </a>    
+                    </div>
+                    <div class="holder">
+                        <div class="box">
+                            <h2>
+                                <a href="<?php echo HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>">
+                                <?php echo $articleTitle;?>
+                                </a>
+                            </h2>
+                        </div>
+                        <div class="meta">
+                            <span class="author"><?php echo $articleBy;?>
+                                <a href="<?php echo $profileLink;?>"><?php echo $authorName;?></a>
+                            </span>
+                            <em class="date"><?php echo $articleUpdatedAtDate;?></em>
+                        </div>
+                    </div>
+                </article>
     <?php    
             endforeach;
         }

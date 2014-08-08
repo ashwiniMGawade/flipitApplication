@@ -44,14 +44,14 @@ class MoneySaving extends BaseMoneySaving
         $recentlyAddedArticles = Doctrine_Query::create()
             ->select(
                 'DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,
-                a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name'
+                a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name, ac.name'
             )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
-            ->leftJoin('a.refarticlecategory r')
+            ->leftJoin('a.articlecategory ac')
             ->leftJoin('a.chapters chap')
-            ->andWhere('a.deleted=0')
+            ->where('a.deleted=0')
             ->orderBy('a.publishdate DESC')
             ->limit($limit)
             ->fetchArray();

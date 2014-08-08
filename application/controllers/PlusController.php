@@ -98,7 +98,7 @@ class PlusController extends Zend_Controller_Action
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
-                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
+                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(3)));
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
             $articleThumbNailImage = FACEBOOK_IMAGE;
@@ -116,7 +116,7 @@ class PlusController extends Zend_Controller_Action
                 $articleThumbNailImage,
                 ''
             );
-            $this->view->pageCssClass = 'in-savings-page author-page';
+            $this->view->pageCssClass = 'in-savings-page article-page author-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
         }
