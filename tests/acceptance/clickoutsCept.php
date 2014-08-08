@@ -1,9 +1,22 @@
 <?php
 $I = new AcceptanceTester($scenario);
-$I->amOnPage('/be');
-$I->click('img[alt=Zalando]');
-$I->amOnPage('/be/zalando');
+$I->amOnPage('/in/acceptance-shop');
 $I->click('.icon a');
-$I->wait(100);
 $I->switchToWindow();
+$I->seeInCurrentUrl('/in');
+$I->wait(10);
+$I->amOnPage('/in/acceptance-shop');
+$I->click('.header-block-2 .box');
+$I->switchToWindow();
+$I->seeInCurrentUrl('/in');
+$I->wait(10);
+$I->amOnPage('/in/acceptance-shop');
+$I->maximizeWindow();
+$I->wait(10);
+$I->click('.web a');
+$I->switchToWindow();
+$I->seeInCurrentUrl('/in');
+$I->wait(10);
+$I->amOnPage('/in/acceptance-shop');
+$I->click('.offer-holder .buttons > a');
 $I->wait(10);
