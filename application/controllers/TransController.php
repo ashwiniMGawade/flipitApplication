@@ -71,7 +71,7 @@ class TransController extends Zend_Controller_Action
             .'/language/translations.csv';
 
         self::writeTranslationsToCsv($localLanguageFilePath);
-        //self::writeCsvToS3($localLanguageFilePath);
+        self::writeCsvToS3($localLanguageFilePath);
 
         $session = new Zend_Session_Namespace('Transl8');
         $session->onlineTranslationActivated = false;
