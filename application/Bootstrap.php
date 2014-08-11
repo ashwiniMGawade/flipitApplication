@@ -326,15 +326,21 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     public function getLocaleNameForDbConnection()
     {
-        if (strlen($this->moduleDirectoryName) == 2 && HTTP_HOST=='www.flipit.com') {
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        if (strlen($this->moduleDirectoryName) == 2 && HTTP_HOST== $httpScheme.'.flipit.com') {
             $locale = $this->moduleDirectoryName;
         } elseif ($this->moduleDirectoryName == 'admin') {
             $locale =  isset($this->localeCookieData) ? $this->localeCookieData : 'en';
+        } elseif (HTTP_HOST=='acceptance.flipit.com') {
+            $locale = 'be';
+        } elseif (HTTP_HOST=='test.flipit.com') {
+            $locale = 'be';
         } elseif ($this->moduleDirectoryName == "default") {
             $locale = 'en';
         } elseif (strlen($this->moduleDirectoryName) == 2 && HTTP_HOST=='www.kortingscode.nl') {
             $locale = 'en';
         }
+
         return $locale;
     }
 
@@ -585,6 +591,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $this->routeProperties = explode('/', $permalink);
         $permalink = self::splitRouteProperties($permalink);
         $permalink = self::replacePermalinkString($permalink);
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
         // get last word in permalink using regex match
         preg_match('/[^\/]+$/', $permalink, $matches);
         // if url match with database permalink then get permalink from database and add in zend route
@@ -607,7 +614,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         if ($this->routeProperties[0] != 'admin' &&
             in_array(strtolower($this->routeProperties[0]), $this->moduleName)) {
-            if (HTTP_HOST == 'www.kortingscode.nl') {
+            if (HTTP_HOST == $httpScheme.'.kortingscode.nl') {
                 $this->route->addRoute(
                     'kortingscode_error',
                     new Zend_Controller_Router_Route(
@@ -623,7 +630,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             self::setRouteForLocale();
         } else {
              // trigger error for flipt.com
-            if (HTTP_HOST == 'www.flipit.com') {
+            if (HTTP_HOST == $httpScheme.'.flipit.com') {
                 self::errorRouteForFlipit();
             }
             //route redirection instance for rules written in routes.ini

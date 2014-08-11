@@ -29,7 +29,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 		<hr>
 
      	<?php
-			$storeUrl 			= (empty($_COOKIE['site_name'])) ? 'http://www.kortingscode.nl' : 'http://www.'.$_COOKIE['site_name'];
+         	$httpUrlScheme = parse_url($_SERVER['SERVER_NAME']);
+         	$httpUrlScheme = isset($httpUrlScheme['path']) ? explode('.', $httpUrlScheme['path']) : '';
+         	$httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : '';
+			$storeUrl 			= (empty($_COOKIE['site_name'])) ? 'http://www.kortingscode.nl' : 'http://'.$httpUrlScheme.'.'.$_COOKIE['site_name'];
 			$domainUrl 			= ($storeUrl == 'http://www.kortingscode.nl') ? $storeUrl : HTTP_PATH;
 			$storeTranslateLink = $domainUrl.'/trans/startinlinetranslation?storeUrl='.$storeUrl.'&hash='.$this->inlineTranslationHash();
 		?>

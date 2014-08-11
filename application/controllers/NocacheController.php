@@ -15,7 +15,7 @@ class NocacheController extends Zend_Controller_Action
 
     protected function settingCookie($cookieExpireTime)
     {
-        setcookie('passCache', '1' , $cookieExpireTime , '/');
+        setcookie('passCache', '1', $cookieExpireTime, '/');
     }
 
     /**
@@ -30,22 +30,25 @@ class NocacheController extends Zend_Controller_Action
 
     protected function redirectUrl()
     {
-        $link = 'http://www.flipit.com/admin';
+        $refererUrl = FrontEnd_Helper_viewHelper::getRefererHostUrl();
+        $link = 'http://'.$refererUrl.'/admin';
         $this->_redirect($link);
     }
 
     protected function setUnsetFlipitCookie($setOrUnset)
     {
-        $link = 'http://www.flipit.com/NoCache/'.$setOrUnset;
+        $refererUrl = FrontEnd_Helper_viewHelper::getRefererHostUrl();
+        $link = 'http://'.$refererUrl.'/NoCache/'.$setOrUnset;
         $this->_redirect($link);
     }
 
     protected function commonFunctionForSetUnsetCookie()
     {
         $actionName = $this->getRequest()->getActionName();
-        if(HTTP_PATH == 'http://www.kortingscode.nl/') {
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        if (HTTP_PATH == 'http://'.$httpScheme.'.kortingscode.nl/') {
             self::setUnsetFlipitCookie($actionName);
-        }else {
+        } else {
             self::redirectUrl();
 
         }

@@ -907,4 +907,18 @@ EOD;
         }
         return $emailLogo;
     }
+
+    public static function getRefererHostUrl()
+    {
+        $refererUrl = parse_url($_SERVER['HTTP_REFERER']);
+        return isset($refererUrl['host']) ? $refererUrl['host'] : '';
+    }
+
+    public static function getServerNameScheme()
+    {
+        $httpUrlScheme = parse_url($_SERVER['SERVER_NAME']);
+        $httpUrlScheme = isset($httpUrlScheme['path']) ? explode('.', $httpUrlScheme['path']) : '';
+        $httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : '';
+        return $httpUrlScheme;
+    }
 }
