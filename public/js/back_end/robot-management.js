@@ -11,7 +11,9 @@ function getContent(el)
                 $("#updateButton").show();
                 $("#fileContent").html(data);
             } else {
-                $("#fileContent").show();
+                $("#robotContent").show();
+                $("#updateButton").show();
+                $("#fileContent").html();
             }
         }
     });

@@ -14,7 +14,9 @@ class Robot extends BaseRobot
 
     public function updateFileInformation($robotWebsiteId = '', $robotsTextFileContent = '')
     {
-        Doctrine_Query::create()
+        $robotFileContentExistsOrNot = self::getRobotTextFileInformation($robotWebsiteId);
+        if (!empty($robotFileContentExistsOrNot)) {
+            Doctrine_Query::create()
             ->update('Robot')
             ->set('content', '"'.mysqli_real_escape_string(
                 FrontEnd_Helper_viewHelper::getDbConnectionDetails(),
@@ -22,6 +24,12 @@ class Robot extends BaseRobot
             ).'"')
             ->where('id = "'.$robotWebsiteId.'"')
             ->execute();
-        return true;
+        } else {
+            $this->website = $robotWebsiteId == 1 ? 'Flipit' : 'Kortingscode';
+            $this->content = $robotsTextFileContent;
+            $this->deleted = 0;
+            $this->save();
+        }
+         return true;
     }
 }

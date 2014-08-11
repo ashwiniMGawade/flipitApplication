@@ -41,10 +41,13 @@ class Admin_RobotController extends Zend_Controller_Action
             $websiteId = intval($this->getRequest()->getParam('websiteId', false));
             if ($websiteId) {
                 $robotsFileContent = $this->robotObject->getRobotTextFileInformation($websiteId);
-                echo json_encode($robotsFileContent[0]['content']);
+                if (!empty($robotsFileContent)) {
+                    echo json_encode($robotsFileContent[0]['content']);
+                } else {
+                    echo '';
+                }
                 exit();
             }
-            
         }
     }
 

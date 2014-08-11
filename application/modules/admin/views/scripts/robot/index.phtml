@@ -9,8 +9,10 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
         if ($this->messageSuccess!='' || $this->messageError!='' ) {?>
            <br>
             <div class ="mainpage-content-colorbox success">
-                <?php if ($this->messageSuccess!='') {?>
+                <?php if ($this->messageSuccess!='') { ?>
                         <span class="successserver"><?php echo $this->messageSuccess; ?></span>
+                <?php } if ($this->messageError!='') { ?>
+                            <span class="errorserver"><?php echo $this->messageError; ?></span>
                 <?php } ?>
             </div>
     <?php } ?>
@@ -48,7 +50,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
                     </label>
                 </div>
                 <div class="mainpage-content-right">
-                    <textarea name = "content" rows = "10" cols = "7" id="fileContent"><?php echo $content;?></textarea> 
+                    <textarea name = "content" rows = "10" cols = "7" id="fileContent"></textarea> 
                     <div class="clear"></div>
                 </div>
             </div>
