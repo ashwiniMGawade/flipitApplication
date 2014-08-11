@@ -51,10 +51,10 @@ class ContactController extends Zend_Controller_Action
                 $visitorName,
                 $visitorEmail,
                 FrontEnd_Helper_viewHelper::__email('email_sitename'),
-                $adminEmail,
+                $adminEmail[0]['emailperlocale'],
                 FrontEnd_Helper_viewHelper::__email('email_'.$subject),
                 $content,
-                FrontEnd_Helper_viewHelper::__email('email_Forgot password header'),
+                FrontEnd_Helper_viewHelper::__email('email_Contact header'),
                 '',
                 $this->_loginLinkAndData
             );
