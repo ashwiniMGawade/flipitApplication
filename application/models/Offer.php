@@ -1873,7 +1873,7 @@ class Offer extends BaseOffer
 
     public static function getOfferDetail($offerId)
     {
-        $shopDetail = Doctrine_Query::create()
+        $offerDetails = Doctrine_Query::create()
         ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
         ->from("Offer o")
         ->leftJoin('o.shop s')
@@ -1888,7 +1888,7 @@ class Offer extends BaseOffer
         ->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")
         ->andWhere("o.id =$offerId")->andWhere("o.userGenerated = '0'")->fetchArray();
 
-        return $shopDetail;
+        return $offerDetails;
     }
 
     

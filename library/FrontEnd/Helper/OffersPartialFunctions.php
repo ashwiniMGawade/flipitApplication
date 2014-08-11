@@ -227,7 +227,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getPopupLink($currentOffer, $urlToShow)
     {
         if ($currentOffer->discountType == "CD") {
-            $popupLink = "?popup=$currentOffer->id&type=code#$currentOffer->id";
+            $popupLink = "?popup=$currentOffer->id&type=code#$currentOffer->id&code=$currentOffer->couponCodeType";
         } else if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $popupLink = "?popup=$currentOffer->id&printable=$urlToShow#$currentOffer->id";
         } else {
