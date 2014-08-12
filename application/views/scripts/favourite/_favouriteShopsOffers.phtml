@@ -15,6 +15,14 @@ foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
     $activeOffers = isset($favouriteShopsOffer['activeCount']) 
         ? $activeOffers 
         : $activeOffers[0]['activeCount'];
+    $showFavouriteButton = true;
+    if(!empty($favouriteShopsOffer['shop']['favoriteshops'])) {
+        foreach ($favouriteShopsOffer['shop']['favoriteshops'] as $favouriteShops) {
+            if($favouriteShops['visitorId'] == Auth_VisitorAdapter::getIdentity()->id) {
+                $flag = false;
+            }
+        }
+    }
     ?>
     <article class="block col-sm-6">
         <div class="holder">
@@ -45,6 +53,15 @@ foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
                     </p>
                 </div>
             </div>
+            <?php if($showFavouriteButton) { ?>
+            <a
+            href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
+            . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') .'&shopId='
+            . base64_encode($favouriteShopsOffer['shop']['id']);?>' class="pop btn btn-default">
+                <span class="glyphicon red-heart glyphicon-heart"></span>
+                <span><?php echo $this->translate('Favourite');?></span>
+            </a>
+            <?php } ?>
         </div>
     </article>
     <?php

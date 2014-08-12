@@ -38,6 +38,9 @@ class FavouriteController extends Zend_Controller_Action
             $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
             $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
             $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+            /*echo "<pre>";
+            print_r($offers);
+            die;*/
             $this->view->favouriteShopsOffers = $offers;
             $this->view->userDetails = $userDetails[0];
             $this->view->pageCssClass = 'youroffers-page';
