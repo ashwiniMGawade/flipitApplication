@@ -10,7 +10,8 @@ class Admin_BrandingController extends Zend_Controller_Action
     public function startAction()
     {
         $session = new Zend_Session_Namespace('Branding');
-        $session->saveUrl = 'http://www.flipit.com/admin/';
+        $refererUrl = FrontEnd_Helper_viewHelper::getRefererHostUrl();
+        $session->saveUrl = 'http://'.$refererUrl.'/admin/';
         $storeUrl = $this->_helper->branding->start();
         $this->_redirect( $storeUrl );
     }

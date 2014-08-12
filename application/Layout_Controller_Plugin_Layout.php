@@ -36,33 +36,19 @@ class Layout_Controller_Plugin_Layout extends Zend_Controller_Plugin_Abstract
 
         if (
             $request->getModuleName() != 'admin'
-            && preg_match('/[A-Z]/', Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'))
+            && $this->getRequest()->getActionName() == 'storedetail'
         ) {
-            if (
-                strpos(
-                    Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'),
-                    'branding'
-                ) !== false
-                || strpos(
-                    Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'),
-                    'startinlinetranslation'
-                ) !== false
-                || strpos(
-                    Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'),
-                    'NoCache'
-                ) !== false
-            ) {
-                return;
+            if (preg_match('/[A-Z]/', Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI'))) {
+                header(
+                    'Location: http://'.$_SERVER['HTTP_HOST'].
+                    strtolower(
+                        Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI')
+                    ),
+                    true,
+                    301
+                );
+                exit();
             }
-            header(
-                'Location: http://'.$_SERVER['HTTP_HOST'].
-                strtolower(
-                    Zend_Controller_Front::getInstance()->getRequest()->getServer('REQUEST_URI')
-                ),
-                true,
-                301
-            );
-            exit();
         }
 
 

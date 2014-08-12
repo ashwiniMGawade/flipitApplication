@@ -82,7 +82,8 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         $session = new Zend_Session_Namespace('Branding');
         $session->data = array();
         $session->brandingActivated = false;
-        return 'http://www.flipit.com/admin/shop';
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        return 'http://'.$httpScheme.'.flipit.com/admin/shop';
     }
 
     private function defaultStyles()

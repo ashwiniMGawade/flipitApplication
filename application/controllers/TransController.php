@@ -42,10 +42,11 @@ class TransController extends Zend_Controller_Action
         $this->_helper->viewRenderer->setNoRender();
 
         $session 	= new Zend_Session_Namespace('Transl8');
-        $storeUrl 	= $this->_getParam('storeUrl', 'http://www.flipit.com');
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $storeUrl 	= $this->_getParam('storeUrl', 'http://'.$httpScheme.'.flipit.com');
         $hash 		= $this->_getParam('hash', false);
 
-        if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'flipit.com')) {
+        if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], $httpScheme.'.flipit.com')) {
             if ($hash == $this->view->inlineTranslationHash()) {
                 $session->onlineTranslationActivated = true;
                 $this->_redirect($storeUrl);
@@ -74,8 +75,8 @@ class TransController extends Zend_Controller_Action
 
         $session = new Zend_Session_Namespace('Transl8');
         $session->onlineTranslationActivated = false;
-
-        $this->_redirect('http://www.flipit.com/admin');
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $this->_redirect('http://'.$httpScheme.'.flipit.com/admin');
     }
 
     protected function writeTranslationsToCsv($localLanguageFilePath)
