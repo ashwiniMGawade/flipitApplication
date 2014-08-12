@@ -1,6 +1,23 @@
 $(document).ready(function(){
     validateRegistration();
  });
+function ltrim(src){
+    if (src.indexOf('/') === 0){
+        src = src.substring(1);
+      }
+    return src;
+}
+$('#submit').click( function() {
+  var submitUrl = $('#contactform').attr('action', HOST_PATH_LOCALE+ltrim($('#contactform').attr('action')));
+    $.ajax({
+        url : submitUrl,
+        type: 'post',
+        dataType: 'json',
+        data: $('form#contactform').serialize(),
+        success: function(data) {
+        }
+    });
+});
 var validator =  null;
 function validateRegistration() {
     validator = $('form#contactform')

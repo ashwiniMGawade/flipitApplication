@@ -185,7 +185,7 @@ class Page extends BasePage
      */
     public function gettrashedPages($params)
     {
-        $srhPage    =   (isset($params["searchText"]) && trim($params["searchText"])!='') ? $params["searchText"] : '';
+        $srhPage    =   (isset($params["searchText"]) && trim($params["searchText"])!='undefined') ? $params["searchText"] : '';
         $pageList = Doctrine_Query::create()
         ->select('p.pageTitle,p.created_at,p.updated_at,p.contentManagerName')
         ->from('Page p')

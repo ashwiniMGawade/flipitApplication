@@ -6,7 +6,8 @@ class FrontEnd_Helper_LayoutContent
         $htmlPath = '';
         $flipit = new Zend_View();
         $flipit->setBasePath(APPLICATION_PATH . '/modules/flipit/views');
-        if($flipitUrl == 'http://www.flipit.com'
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        if($flipitUrl == 'http://'.$httpScheme.'.flipit.com'
             || $flipitUrl == 'flipit.com'
             || $flipitUrl =='http://flipit.com') :
             zend_Controller_Front::getInstance()->getRequest()

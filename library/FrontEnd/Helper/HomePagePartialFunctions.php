@@ -390,7 +390,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
     public static function getFlipitHomePageStatus()
     {
-        if (HTTP_HOST == 'www.flipit.com' && $_SERVER['REQUEST_URI'] == '/') {
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        if (HTTP_HOST == $httpScheme.'.flipit.com' && $_SERVER['REQUEST_URI'] == '/') {
             return false;
         } else {
             return true;
