@@ -918,7 +918,7 @@ EOD;
     {
         $httpUrlScheme = parse_url($_SERVER['SERVER_NAME']);
         $httpUrlScheme = isset($httpUrlScheme['path']) ? explode('.', $httpUrlScheme['path']) : '';
-        $httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : '';
+        $httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : 'www';
         return $httpUrlScheme;
     }
 }

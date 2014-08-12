@@ -331,10 +331,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $locale = $this->moduleDirectoryName;
         } elseif ($this->moduleDirectoryName == 'admin') {
             $locale =  isset($this->localeCookieData) ? $this->localeCookieData : 'en';
-        } elseif (HTTP_HOST=='acceptance.flipit.com') {
-            $locale = 'be';
-        } elseif (HTTP_HOST=='test.flipit.com') {
-            $locale = 'be';
         } elseif ($this->moduleDirectoryName == "default") {
             $locale = 'en';
         } elseif (strlen($this->moduleDirectoryName) == 2 && HTTP_HOST=='www.kortingscode.nl') {
