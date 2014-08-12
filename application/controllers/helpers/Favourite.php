@@ -4,8 +4,9 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
     public static function getOffers($favoriteShopsOffers)
     {
         $topOffers = array();
-        if (count($favoriteShopsOffers)  < 4) {
-            $topOffers =Offer::getTopOffers(4);
+        if (count($favoriteShopsOffers)  < 40) {
+            $limitOfTopOffers = (40 - count($favoriteShopsOffers));
+            $topOffers = Offer::getTopOffers($limitOfTopOffers);
         }
         $mergedTopOffersAndFavouriteShopsOffers = array_merge($topOffers, $favoriteShopsOffers);
         return self::removeDuplicateOffers($mergedTopOffersAndFavouriteShopsOffers);
