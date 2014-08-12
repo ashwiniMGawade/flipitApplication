@@ -19,7 +19,7 @@ foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
     if(!empty($favouriteShopsOffer['shop']['favoriteshops'])) {
         foreach ($favouriteShopsOffer['shop']['favoriteshops'] as $favouriteShops) {
             if($favouriteShops['visitorId'] == Auth_VisitorAdapter::getIdentity()->id) {
-                $flag = false;
+                $showFavouriteButton = false;
             }
         }
     }
