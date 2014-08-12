@@ -12,18 +12,34 @@ class clickoutsCest
     }
 
     // tests
-    public function update(FunctionalTester $I, \Codeception\Scenario $scenario)
+    public function clickout(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
-         $I = new FunctionalTester\AdminSteps($scenario);
-        $I->login('kim@web-flight.nl', 'Mind@123');
-        $I->canSee('Email Settings');
-        $I->click('Email Settings');
-        $I->fillField('#senderEmail', 'kim@web-flight.nl');
-        $I->fillField('#senderName', 'kimvvvvvvvvvvvvvv');
-        $I->click('button[type=submit]');
-        $I->amOnPage('/admin/email/email-settings');
-        $I->seeInField('#senderEmail', 'kim@web-flight.nl');
-        $I->seeInField('#senderEmail', 'kim@web-flight.nl');
-        $I->seeInField('#senderName', 'kimvvvvvvvvvvvvvv');
+        $I = new FunctionalTester\AdminSteps($scenario);
+        $I->amOnPage('/in/acceptance-shop');
+        $I->click('.icon a');
+        $I->switchToWindow();
+        $I->seeInCurrentUrl('/in');
+        $I->amOnPage('/in/acceptance-shop');
+        $I->click('.header-block-2 .box');
+        $I->switchToWindow();
+        $I->seeInCurrentUrl('/in');
+        $I->amOnPage('/in/acceptance-shop');
+        $I->maximizeWindow();
+        $I->click('.web a');
+        $I->switchToWindow();
+        $I->seeInCurrentUrl('/in');
+        $I->amOnPage('/in/acceptance-shop');
+        $I->click('.offer-holder .buttons > a');
+        $I->executeInSelenium(function (\Webdriver $webdriver) {
+            $handles=$webdriver->getWindowHandles();
+            $last_window = end($handles);
+            $webdriver->switchTo()->window($last_window);
+        });
+        $I->wait(10);
+        $I->canSeeInPageSource('id="code-lightbox"');
+        $I->canSeeInPageSource('id="code-button"');
+        $I->amOnPage('/in/acceptance-shop');
+        $I->click('.line a');
+        $I->switchToWindow();
     }
 }

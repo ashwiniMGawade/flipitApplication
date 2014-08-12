@@ -12,6 +12,4 @@ modules:
     config:
         WebDriver:
             url: 'http://flipit.com/'
-            browser: phantomjs
-            capabilities:
-                phantomjs.cli.args: ['--ignore-ssl-errors=true']
+            browser: firefox
