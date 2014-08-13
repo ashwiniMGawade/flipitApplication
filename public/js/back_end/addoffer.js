@@ -1301,6 +1301,7 @@ function validateFormAddNewOffer(){
 					
 					    jQuery(label).append( validRules[element.name] ) ;
 					    label.addClass('valid') ;
+					    jQuery('div#error-message').html('').removeClass('error-message');
 				}
              });
 }
@@ -1768,7 +1769,7 @@ function selectOfferImage(id) {
 function showHidedDiv() {
 	
 	id = jQuery(this).attr('id');
-	console.log(id);
+	//console.log(id);
 	jQuery(this).children('div#divShow_'+id).show();
 	
 }
@@ -1855,7 +1856,7 @@ function renderDataInLi(tiles) {
 	
 		 	for(i in tiles){
 		 		//jQuery('input#offerImageSelect').val(tiles[i].id);
-		 		console.log(tiles);
+		 		//console.log(tiles);
 		 		switch(i){
 				case 'sale':
 					for (var j in tiles[i]){
@@ -1906,8 +1907,11 @@ jQuery.extend(jQuery.validator.prototype , {
 					break;
 					
 					case 'selectedcategories[]' :
-					
+				
 						el = jQuery("input[name='selectedcategories[]']:first").focus().click().removeAttr('checked');
+						if(jQuery("input[name='selectedcategories[]']:first").hasClass('success') == false) {
+							jQuery('div#error-message').html(__('please select a category')).addClass('error-message');
+						}
 					break;
 					
 					default :

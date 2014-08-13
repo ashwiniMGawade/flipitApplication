@@ -1303,8 +1303,10 @@ class Offer extends BaseOffer
         if (isset($params['couponCodeCheckbox'])) {             // discount type coupon
             $this->discountType = 'CD';
             $this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
-            $this->discount = BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
-            $this->discountvalueType =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['discountchk']);
+            $this->discount = BackEnd_Helper_viewHelper::stripSlashesFromString(
+                isset($params['discountamount']) ? $params['discountamount'] : 0);
+            $this->discountvalueType =BackEnd_Helper_viewHelper::stripSlashesFromString (
+                isset($params['discountchk']) ? $params['discountchk'] : 0);
             if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
 
@@ -1388,8 +1390,8 @@ class Offer extends BaseOffer
             $this->editorPicks=1;
         }
 
-        $this->maxlimit=$this->maxcode='0';
-
+        $this->maxlimit = 0;
+        $this->maxcode = 0;
         if (isset($params['maxoffercheckbox'])) {
             $this->maxlimit='1';
             $this->maxcode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxoffertxt']);
@@ -1460,28 +1462,28 @@ class Offer extends BaseOffer
                 return array('result' => true , 'errType' => 'shop' );
             }
 
-    /***************** Start Add news code ********************/
-        $lId = $this->id;
-        if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
-            $newstitleloop = @$params['newsTitle'];
-            for ($n=0;$n<count($newstitleloop);$n++) {
-                $savenews = new OfferNews();
-                $savenews->shopId = @$params['selctedshop'];
-                $savenews->offerId = @$lId;
-                $savenews->title = @$newstitleloop[$n] != "" ?
-                                        BackEnd_Helper_viewHelper::stripSlashesFromString($newstitleloop[$n]) : "";
+            /***************** Start Add news code ********************/
+            $lId = $this->id;
+            if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
+                $newstitleloop = @$params['newsTitle'];
+                for ($n=0;$n<count($newstitleloop);$n++) {
+                    $savenews = new OfferNews();
+                    $savenews->shopId = @$params['selctedshop'];
+                    $savenews->offerId = @$lId;
+                    $savenews->title = @$newstitleloop[$n] != "" ?
+                                            BackEnd_Helper_viewHelper::stripSlashesFromString($newstitleloop[$n]) : "";
 
-                $savenews->url = @$params['newsrefUrl'][$n] != "" ?
-                                BackEnd_Helper_viewHelper::stripSlashesFromString( $params['newsrefUrl'][$n]) : "";
+                    $savenews->url = @$params['newsrefUrl'][$n] != "" ?
+                                    BackEnd_Helper_viewHelper::stripSlashesFromString( $params['newsrefUrl'][$n]) : "";
 
-                $savenews->content = @$params['newsDescription'][$n] != "" ?
-                        BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsDescription'][$n]) : "";
+                    $savenews->content = @$params['newsDescription'][$n] != "" ?
+                            BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsDescription'][$n]) : "";
 
-                $savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
-                $savenews->save();
+                    $savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
+                    $savenews->save();
+                }
             }
-        }
-    /***************** End Add news code ********************/
+            /***************** End Add news code ********************/
             $offer_id = $this->id;
             $authorId = self::getAuthorId($offer_id);
 
@@ -1581,7 +1583,8 @@ class Offer extends BaseOffer
             $this->discountType = 'CD';
             $this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
             $this->discount = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
-            $this->discountvalueType = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountchk']);
+            $this->discountvalueType = BackEnd_Helper_viewHelper::stripSlashesFromString (
+                isset($params['discountchk']) ? $params['discountchk'] : 0);
             $this->refOfferCategory->delete();
             if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
