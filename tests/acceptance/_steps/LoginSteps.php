@@ -1,7 +1,7 @@
 <?php
-namespace FunctionalTester;
+namespace AcceptanceTester;
 
-class AdminSteps extends \FunctionalTester
+class LoginSteps extends \AcceptanceTester
 {
     public function login()
     {
