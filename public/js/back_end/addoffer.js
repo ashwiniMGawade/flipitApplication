@@ -1769,7 +1769,7 @@ function selectOfferImage(id) {
 function showHidedDiv() {
 	
 	id = jQuery(this).attr('id');
-	console.log(id);
+	//console.log(id);
 	jQuery(this).children('div#divShow_'+id).show();
 	
 }
@@ -1856,7 +1856,7 @@ function renderDataInLi(tiles) {
 	
 		 	for(i in tiles){
 		 		//jQuery('input#offerImageSelect').val(tiles[i].id);
-		 		console.log(tiles);
+		 		//console.log(tiles);
 		 		switch(i){
 				case 'sale':
 					for (var j in tiles[i]){

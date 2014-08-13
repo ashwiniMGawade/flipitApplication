@@ -1583,7 +1583,8 @@ class Offer extends BaseOffer
             $this->discountType = 'CD';
             $this->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
             $this->discount = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
-            $this->discountvalueType = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountchk']);
+            $this->discountvalueType = BackEnd_Helper_viewHelper::stripSlashesFromString (
+                isset($params['discountchk']) ? $params['discountchk'] : 0);
             $this->refOfferCategory->delete();
             if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {

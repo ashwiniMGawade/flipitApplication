@@ -1607,6 +1607,7 @@ function validateFormAddNewOffer(){
 					
 					    jQuery(label).append( validRules[element.name] ) ;
 					    label.addClass('valid') ;
+					    jQuery('div#error-message').html('').removeClass('error-message');
 				}
              });
 
@@ -2195,6 +2196,9 @@ jQuery.extend(jQuery.validator.prototype , {
 					case 'selectedcategories[]' :
 					
 						el = jQuery("input[name='selectedcategories[]']:first").focus().click().removeAttr('checked');
+						if(jQuery("input[name='selectedcategories[]']:first").hasClass('success') == false) {
+							jQuery('div#error-message').html(__('please select a category')).addClass('error-message');
+						}
 					break;
 					
 					default :
