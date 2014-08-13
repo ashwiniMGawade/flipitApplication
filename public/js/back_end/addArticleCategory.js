@@ -17,6 +17,12 @@ $(document).ready(function(){
 	});
 });
 
+function selectedColor(value){
+	$('#titlecolor').val(value);
+	$($('.color-box')).removeClass('color-box-selected-border');
+	$('#'+value).addClass('color-box-selected-border');
+}
+
 function word_count() {
 	
 	var number = 0;
@@ -198,6 +204,9 @@ function validateFormAddNewCategory(){
 					 },
 					'selectedCategoryies[]':{ 
 				    	  required:true 
+					 },
+					 titlecolor:{
+					 	required : true
 					 }
 					 
 					},
@@ -210,6 +219,9 @@ function validateFormAddNewCategory(){
 						required : __("Please type permalink"),
 						remote : __("Invalid Url")
 						
+					},
+					titlecolor : {
+						required : __("Please select category title color")
 					},
 					metaTitle : {
 						required : __("Please enter a meta title")
