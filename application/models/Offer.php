@@ -1306,7 +1306,7 @@ class Offer extends BaseOffer
             $this->discount = BackEnd_Helper_viewHelper::stripSlashesFromString(
                 isset($params['discountamount']) ? $params['discountamount'] : 0);
             $this->discountvalueType =BackEnd_Helper_viewHelper::stripSlashesFromString (
-                isset($params['discountchk']) ? $params['discountchk'] : '');
+                isset($params['discountchk']) ? $params['discountchk'] : 0);
             if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
 
@@ -1390,8 +1390,8 @@ class Offer extends BaseOffer
             $this->editorPicks=1;
         }
 
-        $this->maxlimit=$this->maxcode='0';
-
+        $this->maxlimit = 0;
+        $this->maxcode = 0;
         if (isset($params['maxoffercheckbox'])) {
             $this->maxlimit='1';
             $this->maxcode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxoffertxt']);
