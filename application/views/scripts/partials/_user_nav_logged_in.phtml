@@ -2,22 +2,7 @@
 $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
 ?>
 <nav class="account-box">
-    <ul>
-        <li>
-           <span class="glyphicon glyphicon-user"></span>
-           <span class='show-on-web'>
-               <a href="<?php echo HTTP_PATH_LOCALE 
-               . FrontEnd_Helper_viewHelper::__link('link_inschrijven') . "/" 
-               . FrontEnd_Helper_viewHelper::__link('link_profiel');?>">
-               <?php echo FrontEnd_Helper_viewHelper::__form('form_Welcome') . " ";?>
-               </a>
-            </span>
-           <!--<a href="<?php echo HTTP_PATH_LOCALE 
-               . FrontEnd_Helper_viewHelper::__link('link_inschrijven') . "/" 
-               . FrontEnd_Helper_viewHelper::__link('link_profiel');?>" class="name">
-               <?php //echo $visitorInformation[0]['firstName'];?>
-           </a>-->
-        </li>
+    <ul class=''>
         <li>
           <a href="<?php echo HTTP_PATH_LOCALE 
           . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/" 
@@ -30,12 +15,29 @@ $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()
           <?php echo FrontEnd_Helper_viewHelper::__form('form_Your brands');?>
           </a>
         </li>
-        <li>
-            <a href=" <?php echo HTTP_PATH_LOCALE 
-            . FrontEnd_Helper_viewHelper::__link('link_login') .'/'
-            . FrontEnd_Helper_viewHelper::__link('link_logout'); ?>">
-              <?php echo FrontEnd_Helper_viewHelper::__form('form_Sign Out');?>
-            </a>
+
+        <li class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+             <?php echo $visitorInformation[0]['firstName'];?>
+             <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
+            <li class="full-width-li border-bottom">
+              <a class="name" href="<?php echo HTTP_PATH_LOCALE 
+               . FrontEnd_Helper_viewHelper::__link('link_inschrijven') . "/" 
+               . FrontEnd_Helper_viewHelper::__link('link_profiel');?>">
+               <?php echo FrontEnd_Helper_viewHelper::__form('form_Account Settings');?>
+              </a>
+            </li>
+            <li class="full-width-li">
+              <a href=" <?php echo HTTP_PATH_LOCALE 
+              . FrontEnd_Helper_viewHelper::__link('link_login') .'/'
+              . FrontEnd_Helper_viewHelper::__link('link_logout'); ?>">
+                <?php echo FrontEnd_Helper_viewHelper::__form('form_Sign Out');?>
+              </a>
+            </li>
+          </ul>
         </li>
+
     </ul>
 </nav>
