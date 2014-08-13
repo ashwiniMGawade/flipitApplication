@@ -173,7 +173,7 @@ class PopularCode extends BasePopularCode
         $Q = Doctrine_Query::create()->delete()->from('PopularCode s')->where("s.type='AT'")->execute();
         foreach ($newArray as $p) {
 
-            if ($p['type']!='MN') {
+            if ($p['type']!='MN' && $p['offerId']!='') {
 
                 //save popular code in database if new
                 $pc = new PopularCode();
@@ -542,14 +542,13 @@ class PopularCode extends BasePopularCode
             $pc = Doctrine_Query::create()->delete('PopularCode')
             ->where('offerId=' . $id)->execute();
 
-
-            //change position by 1 of each below element
-            $q = Doctrine_Query::create()->update('PopularCode p')
-            ->set('p.position', 'p.position -1')
-            ->where('p.position >' . $position)
-            ->execute();
-
             if ($flagForCache==true) {
+                //change position by 1 of each below element
+                $q = Doctrine_Query::create()->update('PopularCode p')
+                ->set('p.position', 'p.position -1')
+                ->where('p.position >' . $position)
+                ->execute();
+
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
