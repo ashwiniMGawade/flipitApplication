@@ -90,7 +90,7 @@ class PlusController extends Zend_Controller_Action
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
-                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array($articleDetails[0]['id'], 2)));
+                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array($articleDetails[0]['id'], 3)));
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
             $articleThumbNailImage = FACEBOOK_IMAGE;
