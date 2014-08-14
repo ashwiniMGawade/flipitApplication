@@ -17,8 +17,6 @@ $I->click('button[name=selectCategory]');
 $I->fillField('input[name=shopRefUrl]', 'http://www.flipit.com/in');
 $I->fillField('input[name=shopActualUrl]', 'http://www.flipit.com/in');
 $I->click('button[onclick="setOnOff(event,\'howtouse\',\'on\');$(\'#howToUseContent\').removeClass(\'display-none\');"]');
-$I->attachFile('input[name=smallLogoFile]', 'Chrysanthemum.jpg');
-$I->attachFile('input[name=bigLogoFile]', 'Chrysanthemum.jpg');
 $I->fillField('#pageTitle', 'how to test');
 $I->fillField('#pageSubTitle', 'how to test');
 $I->fillField('#pagemetaTitle', 'how to test');
