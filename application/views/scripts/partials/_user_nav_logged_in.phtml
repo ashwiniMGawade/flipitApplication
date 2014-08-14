@@ -17,11 +17,12 @@ $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()
         </li>
 
         <li class="dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+          <a class="dropdown-toggle" onclick="showErrow();" data-toggle="dropdown" href="#">
              <?php echo $visitorInformation[0]['firstName'];?>
-             <b class="caret"></b>
+             <b class="arrow-menu-up"></b>
           </a>
           <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="dLabel">
+            <li class='arrow-up'></li>
             <li class="full-width-li border-bottom">
               <a class="name" href="<?php echo HTTP_PATH_LOCALE 
                . FrontEnd_Helper_viewHelper::__link('link_inschrijven') . "/" 
