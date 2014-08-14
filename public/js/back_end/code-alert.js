@@ -5,10 +5,10 @@ function init() {
 	var iSortCol = $.bbq.getState( 'iSortCol' , true ) || 1;
 	var iSortDir = $.bbq.getState( 'iSortDir' , true ) || 'ASC';
 	getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir);
-	$('#codeAlertListtable_filter').css('display', 'none');
+	$('#codeAlertListTable_filter').css('display', 'none');
 	$(window).bind( 'hashchange', function(e) {
 		if(hashValue != location.hash && click == false){
-			codeAlertListtable.fnCustomRedraw();
+			codeAlertListTable.fnCustomRedraw();
 		}
 	});
 }
@@ -20,14 +20,14 @@ function ucfirst(str) {
 	}
 }
  
-var codeAlertListtable = null ;
+var codeAlertListTable = null ;
 var hashValue = "";
 var click = false;
 function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
-	$('#codeAlertListtable').addClass('widthTB');
+	$('#codeAlertListTable').addClass('widthTB');
 	$("ul.ui-autocomplete").css('display','none');
 	addOverLay();
-	codeAlertListtable = $("#codeAlertListtable").dataTable(
+	codeAlertListTable = $("#codeAlertListTable").dataTable(
 		{
 			"bLengthChange" : false,
 			"bInfo" : true,
@@ -76,10 +76,10 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
 	               },
 			],
 			"fnPreDrawCallback": function( oSettings ) {
-				$('#codeAlertListtable').css('opacity',0.5);
+				$('#codeAlertListTable').css('opacity',0.5);
 			 },		
 			"fnDrawCallback" : function(obj) {
-				$('#codeAlertListtable').css('opacity',1);
+				$('#codeAlertListTable').css('opacity',1);
 					var state = {};
 					state[ 'iStart' ] = obj._iDisplayStart ;
 					state[ 'iSortCol' ] = obj.aaSorting[0][0] ;
@@ -92,7 +92,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
 				  
 				    $.bbq.pushState( state );
 				    hashValue = location.hash;
-				    var aTrs = codeAlertListtable.fnGetNodes();
+				    var aTrs = codeAlertListTable.fnGetNodes();
 	
 					for ( var i=0 ; i<aTrs.length ; i++ )
 					{
