@@ -1,6 +1,8 @@
 @import "custom-variables.less";
 @import "custom-mixins.less";
-
+.clear-both{
+	clear: both;
+}
 .latest-article-thumbnail{
 	width:118px; width:118px; overflow:hidden;
 }
@@ -71,13 +73,11 @@
 			font-size: 12px;
     		line-height: 15px;
     		margin-bottom: 30px;
-    		width: 385px;
+    		width: 100%;
+    		 padding: 0;
     		.image{
-    			.img {
-	    			display: block;
-	    			height: 150px;
-	    			width: 355px;
-	    		}
+    			height: 150px;
+    			overflow: hidden;
     		}
     		.category{
     			color:@white-color;
