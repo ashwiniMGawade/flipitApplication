@@ -20,13 +20,18 @@
                                         mb_substr($recentlyAddedArticle['title'], 0, 50).'..' :
                                         $recentlyAddedArticle['title'];
                 $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
-                //$categoryTitleBackgroundColor = $recentlyAddedArticle['articlecategory'][0]['categorytitlecolor'];
-                $categoryTitleBackgroundColor = 'f30580';
+                $categoryTitleBackgroundColor = !empty($recentlyAddedArticle['articlecategory'][0]['categorytitlecolor'])
+                                                    ? $recentlyAddedArticle['articlecategory'][0]['categorytitlecolor']
+                                                    : 'e69342';
     ?>
                 <article class="article col-md-3 col-sm-4 col-xs-6">
                     <div class="image">
                         <span class="category" style = "background :#<?php echo $categoryTitleBackgroundColor;?>;">
-                            <?php echo $recentlyAddedArticle['articlecategory'][0]['name'];?>
+                            <?php 
+                                echo !empty($recentlyAddedArticle['articlecategory'])
+                                    ? $recentlyAddedArticle['articlecategory'][0]['name']
+                                    : '';
+                            ?>
                         </span>
                         <a href= "<?php echo HTTP_PATH_LOCALE.'plus/'.$recentlyAddedArticle['permalink'];?>">
                             <img src="<?php echo $articleImage; ?>" alt="<?php echo $articleTitle;?>">
