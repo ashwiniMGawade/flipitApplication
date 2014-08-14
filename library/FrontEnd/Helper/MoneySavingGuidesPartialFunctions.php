@@ -16,7 +16,9 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             $articleTitle = mb_strlen($article['title']) > 50 ?
                                         mb_substr($article['title'], 0, 50).'..' : $article['title'];
             $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
-            $categoryTitleBackgroundColor = $article['articlecategory'][0]['categorytitlecolor'];
+            $categoryTitleBackgroundColor = isset($article['articlecategory'][0]['categorytitlecolor'])
+                                                ? $article['articlecategory'][0]['categorytitlecolor']
+                                                : 'e69342';
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
                         <div class="image">

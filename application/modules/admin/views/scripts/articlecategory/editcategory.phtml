@@ -7,7 +7,6 @@
   $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
   
 ?>
-<?php //echo "<pre>"; print_r($this->data); echo "</pre>";die;?>
 <div class="wrap columns-2" id="createCategory">
 	<form action="<?php echo HTTP_PATH ;?>admin/articlecategory/editcategory/id/<?php echo $this->data['id']?>" method="POST" id="saveCategoryForm" name="saveCategoryForm" enctype="multipart/form-data">
 	  
@@ -177,11 +176,13 @@
 						</div>
 						<div class="mainpage-content-line">
 							<div class="mainpage-content-left">
-								<label> <strong>
-	                            	<?php echo $this->translate ('Category Title Color');?>
-	                            </strong></label>
+								<label>
+									<strong>
+	                            		<?php echo $this->translate ('Category Title Color');?>
+	                            	</strong>
+	                            </label>
 							</div>
-						<div class="mainpage-content-right">
+							<div class="mainpage-content-right">
 								<div class="mainpage-content-right-inner-right-other"></div>
 								<div class="mainpage-content-right-inner-left-other">
 									<?php 
@@ -220,13 +221,11 @@
 										onclick = "selectedColor('47e64b')" style="background-color: #47e64b;">
 									</div>
 									<input type = "hidden" id = "titlecolor"
-										value = "<?php echo $this->data['categorytitlecolor'];?>" name = "titlecolor">								
+										value = "<?php echo $this->data['categorytitlecolor'];?>" name = "titlecolor">			
 								</div>
 							</div>
 						</div>
-
 					</div>
-
 				</div>
 			</div>
 			<br class="clear">
