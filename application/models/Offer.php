@@ -24,7 +24,7 @@ class Offer extends BaseOffer
     
     public static function getExpiredOffers($type, $limit, $shopId = 0)
     {
-        $expiredDate = date("Y-m-d 00:00:00");
+        $expiredDate = date("Y-m-d H:i");
         $expiredOffers = Doctrine_Query::create()
         ->select(
             's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate,
@@ -50,7 +50,7 @@ class Offer extends BaseOffer
     
     public static function similarStoresAndSimilarCategoriesOffers($type, $limit, $shopId = 0)
     {
-        $date = date('Y-m-d 00:00:00');
+        $date = date("Y-m-d H:i");
         $similarShopsOffers = self::getOffersBySimilarShops($date, $limit, $shopId);
         $similarCategoriesOffers = self::getOffersBySimilarCategories($date, $limit, $shopId);
         $similarShopsAndSimilarCategoriesOffers = self::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
@@ -250,7 +250,7 @@ class Offer extends BaseOffer
     
     public static function getTopCouponCodes($shopCategories, $limit = 5)
     {
-        $currentDate = date('Y-m-d 00:00:00');
+        $currentDate = date("Y-m-d H:i");
         $topCouponCodes = Doctrine_Query::create()
         ->select(
             'p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
@@ -290,9 +290,9 @@ class Offer extends BaseOffer
         return $topCouponCodes;
     }
 
-    public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "", $homeSection='')
+    public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "", $homeSection = '')
     {
-        $currentDate = date('Y-m-d 00:00:00');
+        $currentDate = date("Y-m-d H:i");
         $newestCouponCodes = Doctrine_Query::create()
             ->select(
                 's.id,s.name,
@@ -365,7 +365,7 @@ class Offer extends BaseOffer
 
     public static function getSpecialPageOffers($specialPage)
     {
-        $currentDate = date('Y-m-d 00:00:00');
+        $currentDate = date("Y-m-d H:i");
         $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDate);
         $constraintsRelatedOffers = self::getOffersByPageConstraints($specialPage, $currentDate);
         $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
@@ -685,7 +685,7 @@ class Offer extends BaseOffer
 
     public static function getActiveCoupons($keyword)
     {
-        $currentDate = date("Y-m-d 00:00:00");
+        $currentDate = date("Y-m-d H:i");
         $activeCoupons = Doctrine_Query::create()
         ->select(
             's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer,
@@ -758,7 +758,7 @@ class Offer extends BaseOffer
             $searchKeyword = $searchParameters['searchField'];
         endif;
 
-        $currentDate = date('Y-m-d 00:00:00');
+        $currentDate = date("Y-m-d H:i");
         $searchedOffersByIds = self::getOffersByShopIds($shopIds, $currentDate);
         $offersBySearchedKeywords = self::getOffersBySearchedKeywords($searchKeyword, $currentDate);
         $mergedOffersBySearchedKeywords = array_merge($searchedOffersByIds, $offersBySearchedKeywords);
@@ -1352,8 +1352,8 @@ class Offer extends BaseOffer
         }
 
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
-             $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('00:00:00');
-             $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+             $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i',strtotime($params['offerstartTime']));
+             $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i',strtotime($params['offerendTime'])) ;
 
 
         }
@@ -1655,8 +1655,8 @@ class Offer extends BaseOffer
         }
 
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
-            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i:s',strtotime($params['offerstartTime'])) ;
-            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i:s',strtotime($params['offerendTime'])) ;
+            $this->startDate = date('Y-m-d',strtotime($params['offerStartDate'])).' '.date('H:i',strtotime($params['offerstartTime'])) ;
+            $this->endDate = date('Y-m-d',strtotime($params['offerEndDate'])).' '.date('H:i',strtotime($params['offerendTime'])) ;
 
 
         }
@@ -1876,7 +1876,7 @@ class Offer extends BaseOffer
 
     public static function getOfferDetail($offerId)
     {
-        $shopDetail = Doctrine_Query::create()
+        $offerDetails = Doctrine_Query::create()
         ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
         ->from("Offer o")
         ->leftJoin('o.shop s')
@@ -1891,7 +1891,7 @@ class Offer extends BaseOffer
         ->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")
         ->andWhere("o.id =$offerId")->andWhere("o.userGenerated = '0'")->fetchArray();
 
-        return $shopDetail;
+        return $offerDetails;
     }
 
     

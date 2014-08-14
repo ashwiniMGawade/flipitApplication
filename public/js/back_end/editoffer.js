@@ -1271,7 +1271,7 @@ function validateFormAddNewOffer(){
 							if(  jQuery("input[name=couponCodeCheckbox]")
 									.is(":checked") ){
 								
-								if(jQuery("input#couponCodeType").val() == 'UN'){
+								if(jQuery("input#couponCodeType").val() == 'GN'){
 									
 									return true ;
 									

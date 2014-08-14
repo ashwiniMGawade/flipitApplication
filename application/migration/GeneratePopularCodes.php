@@ -23,7 +23,7 @@ class GeneratePopularCodes
             'get all popular codes data from databases of all locales'
         );
 
-        foreach ($connections as $key => $connection) {
+        /*foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
                     $this->genereatePopularOffers($connection['dsn'], $key, $imbull);
@@ -33,10 +33,10 @@ class GeneratePopularCodes
                 }
                 echo "\n\n";
             }
-        }
+        }*/
 
         //uncomment this line when you run for one locale
-        //$this->genereatePopularOffers($connections['be']['dsn'], 'be', $imbull);
+        $this->genereatePopularOffers($connections['be']['dsn'], 'be', $imbull);
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
@@ -47,7 +47,9 @@ class GeneratePopularCodes
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - deleting expired  popular codes!!!"
         );
-        PopularCode::generatePopularCode(false);
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        PopularCode::deleteExpiredPopularCode( $date, false);
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Popular codes has been created successfully!!!"

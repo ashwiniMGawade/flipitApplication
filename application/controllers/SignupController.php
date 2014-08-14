@@ -2,7 +2,7 @@
 require_once 'Zend/Controller/Action.php';
 class SignupController extends Zend_Controller_Action
 {
-    public $_loginLinkAndData = array();
+    public $loginLinkAndData = array();
     public function init()
     {
         $module = strtolower($this->getRequest()->getParam('lang'));
@@ -48,7 +48,7 @@ class SignupController extends Zend_Controller_Action
             );
         }
 
-        $pageDetails =  Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
 
         $this->viewHelperObject->getMetaTags($this);
@@ -73,7 +73,8 @@ class SignupController extends Zend_Controller_Action
                 $visitorInformation = $registrationForm->getValues();
                 if (Visitor::checkDuplicateUser($visitorInformation['emailAddress']) > 0) {
                     self::showFlashMessage(
-                        FrontEnd_Helper_viewHelper::__translate('Please change you E-mail address this user already exist'),
+                        FrontEnd_Helper_viewHelper::
+                        __translate('Please change you E-mail address this user already exist'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'error'
                     );
@@ -125,12 +126,14 @@ class SignupController extends Zend_Controller_Action
             } else {
                 $mandrillFunctions = new FrontEnd_Helper_MandrillMailFunctions();
                 if (Signupmaxaccount::getemailConfirmationStatus()) {
-                    $message = FrontEnd_Helper_viewHelper::__translate('Please check your mail and confirm your email address');
+                    $message = FrontEnd_Helper_viewHelper::
+                    __translate('Please check your mail and confirm your email address');
                     $mandrillFunctions->sendConfirmationMail($visitorEmail, $this);
                 } else {
                     Visitor::setVisitorLoggedIn($visitorId);
                     FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
-                    $message = FrontEnd_Helper_viewHelper::__translate('Thanks for registration now enjoy the more coupons');
+                    $message = FrontEnd_Helper_viewHelper::
+                    __translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
                 self::showFlashMessage(
@@ -168,7 +171,7 @@ class SignupController extends Zend_Controller_Action
             $content,
             FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
             '',
-            $this->_loginLinkAndData
+            $this->loginLinkAndData
         );
         return true;
     }
@@ -181,7 +184,7 @@ class SignupController extends Zend_Controller_Action
         $recipents = array("to" => $visitoremailMail);
         $subject = FrontEnd_Helper_viewHelper::__translate("Welcome to Kortingscode.nl");
         $body = $bodyText;
-        $sendEmail = BackEnd_Helper_viewHelper::SendMail($recipents, $subject, $body);
+        BackEnd_Helper_viewHelper::SendMail($recipents, $subject, $body);
         return true;
     }
 

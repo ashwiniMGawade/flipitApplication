@@ -41,13 +41,6 @@ class PlusController extends Zend_Controller_Action
         $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
         $allArticlesWithAuthorDetails = $moneySavingPartialFunctions->addAuthorDetailsInArticles($categoryWiseArticles);
 
-        $recentlyAddedArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache(
-                (string)"all_recentlyAddedArticles_list",
-                array('function' =>
-                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2))
-            );
-
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'all_plus_popularshop_list',
             array('function' => 'Shop::getAllPopularStores', 'parameters' => array(7)),
@@ -70,7 +63,6 @@ class PlusController extends Zend_Controller_Action
         $this->view->popularStores = $popularStores;
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->allArticles =  $allArticlesWithAuthorDetails;
-        $this->view->recentlyAddedArticles = $recentlyAddedArticles;
         $this->view->pageCssClass = 'article-page';
     }
 
@@ -98,7 +90,7 @@ class PlusController extends Zend_Controller_Action
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
-                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array(2)));
+                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array($articleDetails[0]['id'], 3)));
             $this->view->topPopularOffers = Offer::getTopOffers(5);
             $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
             $articleThumbNailImage = FACEBOOK_IMAGE;
