@@ -82,7 +82,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $totalOffers = intval($specialListPage['totalOffers']);
             $specialPageListIndex = $specialListPage['page'][0]['permaLink'] .','
                .$specialListPage['page'][0]['pageTitle'];
-            $totalCouponsCount = count($this->homePageData['specialPagesOffers'][$specialPageListIndex]);
+
+            $totalCouponsCount =
+                is_array($this->homePageData['specialPagesOffers'][$specialPageListIndex])==true
+                ? count($this->homePageData['specialPagesOffers'][$specialPageListIndex])
+                : 0;
             $specialListPageOffers = $totalCouponsCount . " " . FrontEnd_Helper_viewHelper::__form('form_coupons');
             $specialPageHtml .=
                 $this->getLeftColumnContent(
@@ -298,11 +302,14 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getSpecialPageRightCoulumnList($dynamicDivId)
     {
         $specialOffersRightHtml = '';
-        $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId], 0, 10);
-        foreach ($topTenSpecialListPageOffers as $specialOffer) {
-            $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer);
+        if (is_array($this->homePageData['specialPagesOffers'][$dynamicDivId])) {
+            $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId], 0, 10);
+            foreach ($topTenSpecialListPageOffers as $specialOffer) {
+                $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer);
+            }
         }
         return $specialOffersRightHtml;
+
     }
 
     public function getRightColumnOffersHtmlForAllOffersTypes($offer)
