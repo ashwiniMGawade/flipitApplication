@@ -16,7 +16,13 @@ function showArticleOnClick(id) {
     }
 
 }
-
+function showErrow(){
+    if($('ul li.dropdown').hasClass('open')==false) {
+        $('a.dropdown-toggle b').removeClass('arrow-menu-up').addClass('arrow-menu-down');
+    } else{
+        $('a.dropdown-toggle b').removeClass('arrow-menu-down').addClass('arrow-menu-up');
+    }
+}
 function viewCounter(eventType, type, id) {
     $.ajax({
         type : "POST",
