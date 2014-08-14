@@ -95,6 +95,7 @@ class FrontEnd_Helper_LayoutContent
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
             ga('create', '$googleAnalyticsKey' , '$websiteName');
+            ga('require', 'displayfeatures');
             ga('send', 'pageview');
             ga('send', 'event', 'error', '404', 'page:ref' , document.location.pathname
            + document.location.search + ':' + document.referrer  );
@@ -107,6 +108,7 @@ class FrontEnd_Helper_LayoutContent
             })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
             ga('create', '$googleAnalyticsKey' , '$websiteName');
+            ga('require', 'displayfeatures');
             ga('send', 'pageview');";
 
             if ($pushSetAccount!='') :
