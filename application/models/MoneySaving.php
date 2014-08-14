@@ -93,7 +93,7 @@ class MoneySaving extends BaseMoneySaving
     public static function getAllArticleCategories()
     {
         $allArticleCategoryDetails = Doctrine_Query::create()
-        ->select('id, name')
+        ->select('id, name, categorytitlecolor')
         ->from('Articlecategory ac')
         ->where('ac.deleted=0')
         ->fetchArray();
@@ -128,12 +128,13 @@ class MoneySaving extends BaseMoneySaving
         $articles = Doctrine_Query::create()
             ->select(
                 'chap.*, a.id, a.title, a.permalink, a.content, a.authorid, 
-                    a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name'
+                    a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name, ac.categorytitlecolor'
             )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
             ->leftJoin('a.refarticlecategory r')
+            ->leftjoin('a.articlecategory ac')
             ->leftJoin('a.chapters chap')
             ->where('r.relatedcategoryid ='.  "'$categoryId'")
             ->andWhere('a.deleted=0')
