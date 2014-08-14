@@ -116,7 +116,7 @@ class PlusController extends Zend_Controller_Action
                 $articleThumbNailImage,
                 ''
             );
-            $this->view->pageCssClass = 'in-savings-page article-page author-page';
+            $this->view->pageCssClass = 'in-savings-page author-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);
         }
