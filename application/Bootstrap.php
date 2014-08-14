@@ -83,21 +83,22 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public function constantsForFacebookImageAndLocale()
     {
         if (LOCALE == '') {
-            define('FACEBOOK_IMAGE', HTTP_PATH."public/images/logo_og.png");
-            define('FACEBOOK_LOCALE', '');
+            defined('FACEBOOK_IMAGE') || define('FACEBOOK_IMAGE', HTTP_PATH."public/images/logo_og.png");
+            defined('FACEBOOK_LOCALE') || define('FACEBOOK_LOCALE', '');
         } else {
-            define('FACEBOOK_IMAGE', HTTP_PATH."public/images/flipit.png");
-            define('FACEBOOK_LOCALE', LOCALE);
+            defined('FACEBOOK_IMAGE') || define('FACEBOOK_IMAGE', HTTP_PATH."public/images/flipit.png");
+            defined('FACEBOOK_LOCALE') || define('FACEBOOK_LOCALE', LOCALE);
         }
     }
 
     public function constantForCacheDirectory()
     {
-        define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
+        defined('HTTP_PATH') || define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
+
         if (APPLICATION_ENV == 'testing') {
-            define('CACHE_DIRECTORY_PATH', $this->getOption['CACHE_DIRECTORY_PATH']);
+            defined('CACHE_DIRECTORY_PATH') || define('CACHE_DIRECTORY_PATH', $this->getOption['CACHE_DIRECTORY_PATH']);
         } else {
-            define('CACHE_DIRECTORY_PATH', './tmp/');
+            defined('CACHE_DIRECTORY_PATH') || define('CACHE_DIRECTORY_PATH', './tmp/');
         }
     }
 
@@ -105,23 +106,23 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
         $this->cdnUrl = $this->getOption('cdn');
         if (isset($this->cdnUrl) && isset($this->cdnUrl[HTTP_HOST])) {
-            define('HTTP_PATH_CDN', trim('http://'. $this->cdnUrl[HTTP_HOST] . '/'));
+            defined('HTTP_PATH_CDN') || define('HTTP_PATH_CDN', trim('http://'. $this->cdnUrl[HTTP_HOST] . '/'));
         } else {
-            define('HTTP_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
+            defined('HTTP_PATH_CDN') || define('HTTP_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
         }
     }
 
     public function s3ConstantDefines()
     {
         $s3Credentials = $this->getOption('s3');
-        define('S3BUCKET', $s3Credentials['bucket']);
-        define('S3KEY', $s3Credentials['key']);
-        define('S3SECRET', $s3Credentials['secret']);
+        defined('S3BUCKET') || define('S3BUCKET', $s3Credentials['bucket']);
+        defined('S3KEY') || define('S3KEY', $s3Credentials['key']);
+        defined('S3SECRET') || define('S3SECRET', $s3Credentials['secret']);
     }
 
     public function constantsForLocale()
     {
-        define('LOCALE', trim(strtolower($this->moduleDirectoryName)));
+        defined('LOCALE') || define('LOCALE', trim(strtolower($this->moduleDirectoryName)));
         define(
             'HTTP_PATH_LOCALE',
             trim('http://' . HTTP_HOST . '/' . $this->moduleDirectoryName .'/')
@@ -265,8 +266,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     
     public function constantsForDefaultModule()
     {
-        define('LOCALE', '');
-        define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/'));
+        defined('LOCALE') || define('LOCALE', '');
+        defined('HTTP_PATH_LOCALE') || define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/'));
         defined('PUBLIC_PATH')
         || define(
             'PUBLIC_PATH',
@@ -275,9 +276,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
 
         if (isset($this->cdnUrl) && isset($this->cdnUrl[HTTP_HOST])) {
-            define('PUBLIC_PATH_CDN', trim('http://'. $this->cdnUrl[HTTP_HOST] . '/'));
+            defined('PUBLIC_PATH_CDN') || define('PUBLIC_PATH_CDN', trim('http://'. $this->cdnUrl[HTTP_HOST] . '/'));
         } else {
-            define('PUBLIC_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
+            defined('PUBLIC_PATH_CDN') || define('PUBLIC_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
         }
 
         defined('ROOT_PATH')

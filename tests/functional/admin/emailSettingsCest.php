@@ -6,7 +6,6 @@ class emailSettingsCest
 {
     public function _before()
     {
-       
 
     }
 
@@ -17,7 +16,7 @@ class emailSettingsCest
     public function emailSettingsUpdate(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $I = new FunctionalTester\AdminSteps($scenario);
-        $I->login('kim@web-flight.nl', 'Mind@123');
+        $I->login();
         $I->canSee('Email Settings');
         $I->click('Email Settings');
         $I->fillField('#senderEmail', 'kim@web-flight.nl');
