@@ -1,5 +1,4 @@
 <?php 
-$this->minifyHeadScript()->prependFile("public/js/front_end/socialmedia.js");
 $searchString = FrontEnd_Helper_viewHelper::__form('form_Results for'). " " . $this->searchedKeyword;
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
 echo $pageHeader->getCategoryOrPageHeader(
