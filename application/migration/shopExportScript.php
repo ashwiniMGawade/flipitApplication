@@ -44,7 +44,7 @@ class ShopExport
             $this->_hostName = "http://www.kortingscode.nl";
             $this->_logo = $this->_hostName . "/public/images/front_end/logo-popup.png";
             $suffix = "" ;
-            $locale = "";
+            $locale = "-NL";
         } else {
             $this->_localePath = $key . "/";
             $this->_hostName = "http://www.flipit.com";
