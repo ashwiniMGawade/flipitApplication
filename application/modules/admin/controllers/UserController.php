@@ -752,6 +752,7 @@ class Admin_UserController extends Zend_Controller_Action
         $connUser = BackEnd_Helper_viewHelper::addConnection();
         BackEnd_Helper_viewHelper::closeConnection($connUser);
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
+        $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
             //get category list from category table
             $categoryList =  Category::getCategoryList() ;
             //get favorites store of currect user(admin)
@@ -814,7 +815,7 @@ class Admin_UserController extends Zend_Controller_Action
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];
                 $user->save();
-                $result = $user->update($params,$uesrPicName);
+                $result = $user->update($params, $uesrPicName, 'profileupdate');
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
 
