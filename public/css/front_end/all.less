@@ -4563,46 +4563,52 @@ img.logo.kortingscode{
 }
 .top-panel {
 	.account-box {
-		ul.dropdown-menu{
-			background: none repeat scroll 0 0 #2d2c2c;
-			box-shadow: 1px 0 2px 1px #2d2c2c;
-			margin-top: 4px;
-			.full-width-li {
-				width: 100%;
-				a{
+		li.dropdown {
+			a{
+				text-decoration: none;
+			}
+			ul.dropdown-menu{
+				background: none repeat scroll 0 0 #2d2c2c;
+				box-shadow: 1px 0 2px 1px #2d2c2c;
+				min-width: 210px;
+				margin-top: 4px;
+				.full-width-li {
 					width: 100%;
+					a{
+						width: 100%;
+					}
+				}
+				.border-bottom{
+				 	border-bottom: 1px solid @grey-color;
 				}
 			}
-			.border-bottom{
-			 	border-bottom: 1px solid @grey-color;
+			.arrow-menu-down {
+				content:'';
+				display:inline-block;
+				vertical-align:middle;
+				background:url(../../images/sprite.png) no-repeat -297px -511px;
+				width: 15px;
+				height: 9px;
 			}
-		}
-		.arrow-menu-down {
-			content:'';
-			display:inline-block;
-			vertical-align:middle;
-			background:url(../../images/sprite.png) no-repeat -288px -515px;
-			width: 10px;
-			height: 8px;
-		}
-		.arrow-menu-up {
-			content:'';
-			display:inline-block;
-			vertical-align:middle;
-			background:url(../../images/sprite.png) no-repeat -275px -516px;
-			width: 10px;
-			height: 8px;
-		}
-		.arrow-up {
-			content:'';
-			width: 0; 
-			height: 0; 
-			border-left: 15px solid transparent;
-			border-right: 15px solid transparent;
-			border-bottom: 15px solid #2d2c2c;
-			float: right;
-	    	margin-right: 23px;
-    		margin-top: -9px;
+			.arrow-menu-up {
+				content:'';
+				display:inline-block;
+				vertical-align:middle;
+				background:url(../../images/sprite.png) no-repeat -278px -514px;
+				width: 15px;
+				height: 9px;
+			}
+			.arrow-up {
+				content:'';
+				width: 0; 
+				height: 0; 
+				border-left: 15px solid transparent;
+				border-right: 15px solid transparent;
+				border-bottom: 15px solid #2d2c2c;
+				float: right;
+		    	margin-right: 23px;
+	    		margin-top: -9px;
+			}
 		}
 	}
 }

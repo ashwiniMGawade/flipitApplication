@@ -304,8 +304,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 					             	}
 				             	?>
 
-						        	<button type="button" name="selectCategory" title="<?php echo $this->catList[$i]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->catList[$i]['id']; ?>')">
-						        		<img onclick="jQuery('#categoryBtn-<?php echo $this->catList[$i]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
+						        	<button type="button" name="selectCategory" title="<?php echo $this->catList[$i]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" onClick="addCategory('<?php echo $this->catList[$i]['id']; ?>')">
+						        		<img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
 
 				  					 </button>
 				  					 <div class="clear"></div>

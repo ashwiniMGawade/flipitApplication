@@ -987,19 +987,14 @@ function selectDiscountType(dIv){
 }
 
 
-function addCategory(e,catgory){
-	var btn = e.target  ? e.target :  e.srcElement ;
-	if(jQuery(btn).hasClass('btn-primary'))
-	{
-		jQuery(btn).removeClass('btn-primary') ;
-		jQuery("input#category-" + catgory).removeAttr('checked');//.valid();
-		
-	} else	{
-		
-		jQuery(btn).addClass('btn-primary');
-		jQuery("input#category-" + catgory).attr('checked' , 'checked');//.valid();
+function addCategory(catgory){
+	if(jQuery("button#categoryBtn-" + catgory).hasClass('btn-primary')==true) {
+		jQuery("button#categoryBtn-" + catgory).removeClass('btn-primary') ;
+		jQuery("input#category-" + catgory).removeAttr('checked');
+	} else {
+		jQuery("button#categoryBtn-"+ catgory).addClass('btn-primary');
+		jQuery("input#category-" + catgory).attr('checked' , 'checked');
 	} 
-	
 }
 
 function printOption(dIv){
