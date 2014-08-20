@@ -56,7 +56,8 @@ foreach ($this->favouriteShopsOffers as $favouriteShopsOffer) {
             <?php if($showFavouriteButton) { ?>
             <a
             href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
-            . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') .'&shopId='
+            . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') ."/"
+            . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes').'&shopId='
             . base64_encode($favouriteShopsOffer['shop']['id']);?>' class="pop btn btn-default">
                 <span class="glyphicon red-heart glyphicon-heart"></span>
                 <span><?php echo $this->translate('Favourite');?></span>
