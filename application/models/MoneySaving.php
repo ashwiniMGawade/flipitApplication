@@ -82,10 +82,10 @@ class MoneySaving extends BaseMoneySaving
 
     }
 
-    public static function getCategoryWiseArticles($limit = 0, $articleId = 0)
+    public static function getCategoryWiseArticles($limit = 0)
     {
         $allCategoryDetails = self::getAllArticleCategories();
-        $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails, $limit, $articleId);
+        $categoryRelatedArticles = self::getCategoryRelatedArticles($allCategoryDetails, $limit);
         return  $categoryRelatedArticles;
 
     }
@@ -100,30 +100,30 @@ class MoneySaving extends BaseMoneySaving
         return $allArticleCategoryDetails;
     }
 
-    public static function getCategoryRelatedArticles($allCategoryDetails, $limit, $articleId)
+    public static function getCategoryRelatedArticles($allCategoryDetails, $limit)
     {
         $categoryRelatedArticles = array();
         foreach ($allCategoryDetails as $categoryDetails) {
             $categoryRelatedArticles[$categoryDetails['name']] =
-                self::getArticlesRelatedToCategory($categoryDetails['id'], $limit, $articleId);
+                self::getArticlesRelatedToCategory($categoryDetails['id'], $limit);
         }
         return $categoryRelatedArticles;
     }
 
-    public static function getArticlesRelatedToCategory($categoryId, $limit, $articleId)
+    public static function getArticlesRelatedToCategory($categoryId, $limit)
     {
 
         $allArticlesRelatedToCategory = $limit == 0 ?
         self:: getAllMoneySavingArticlesOfCategory($categoryId) :
-            self:: getTopMoneySavingArticlesOfCategory($categoryId, $limit, $articleId) ;
+            self:: getTopMoneySavingArticlesOfCategory($categoryId, $limit) ;
         return $allArticlesRelatedToCategory;
     }
 
-    public static function getTopMoneySavingArticlesOfCategory($categoryId, $limit, $articleId)
+    public static function getTopMoneySavingArticlesOfCategory($categoryId, $limit)
     {
-        return  self::getAllMoneySavingArticlesOfCategory($categoryId, $limit, $articleId);
+        return  self::getAllMoneySavingArticlesOfCategory($categoryId, $limit);
     }
-    public static function getAllMoneySavingArticlesOfCategory($categoryId, $limit = 0, $articleId=0)
+    public static function getAllMoneySavingArticlesOfCategory($categoryId, $limit = 0)
     {
         $articles = Doctrine_Query::create()
             ->select(

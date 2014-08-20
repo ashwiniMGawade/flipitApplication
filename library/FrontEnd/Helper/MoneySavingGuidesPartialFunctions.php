@@ -67,4 +67,15 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
     {
         return strtotime($articleCreatedDateDesc['created_at']) - strtotime($articleCreatedDateAsc['created_at']);
     }
+
+    public function excludeSelectedArticle($allArticlesArray, $selectedArticleId)
+    {
+        $excludedArticles = array();
+        foreach ($allArticlesArray as $article) {
+            if ($article['id'] != $selectedArticleId) {
+                $excludedArticles[] = $article;
+            }
+        }
+        return $excludedArticles;
+    }
 }
