@@ -100,11 +100,14 @@ function moveUp() {
 	addSelectedClassOnButton(flag);
 	//get id form slected li by attr
 	var id = $('ul#mostPopularCode li.selected').attr('id');
+	var previousCodeId = $('ul#mostPopularCode li.selected').prev('li').attr('id');
 	//get postion form slected li by attr
 	var pos = $('ul#mostPopularCode li.selected').attr('relpos');
+	var previousCodePosition = $('ul#mostPopularCode li.selected').prev('li').attr('relpos');
+	console.log(previousCodePosition);
 	if(parseInt(id) > 0){
 		$.ajax({
-			url : HOST_PATH + "admin/popularcode/moveup/id/" + id + "/pos/" + pos,
+			url : HOST_PATH + "admin/popularcode/moveup/id/" + id + "/pos/" + pos + "/previousCodeId/" + previousCodeId + "/previousCodePosition/"+ previousCodePosition,
 				method : "post",
 				dataType : "json",
 				type : "post",
@@ -238,12 +241,15 @@ function moveDown() {
 	$('#moveDown').attr('disabled' ,"disabled");
 	//apply selected class on current button
 	addSelectedClassOnButton(flag);
+
 	var id = $('ul#mostPopularCode li.selected').attr('id');
+	var nextCodeId = $('ul#mostPopularCode li.selected').next('li').attr('id');
+	//get postion form slected li by attr
 	var pos = $('ul#mostPopularCode li.selected').attr('relpos');
 	
 	if(parseInt(id) > 0) {
 		$.ajax({
-			url : HOST_PATH + "admin/popularcode/movedown/id/" + id + "/pos/" + pos,
+			url : HOST_PATH + "admin/popularcode/movedown/id/" + id + "/pos/" + pos+ "/nextCodeId/" + nextCodeId,
 				method : "post",
 				dataType : "json",
 				type : "post",
