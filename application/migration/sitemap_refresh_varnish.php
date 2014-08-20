@@ -123,14 +123,19 @@ class SitemapRefreshVarnish
                         'locale' => $cutsomLocale ,
                 )
         );
-
+        $this->_trans->addTranslation(
+            array(
+                'content' => APPLICATION_PATH.'/../public/' . strtolower ( $this->_localePath ) . 'language/form' . $suffix . '.mo', 
+                'locale' => $cutsomLocale
+                )
+            );
         Zend_Registry::set('Zend_Translate', $this->_trans);
 
         #translating sitemaps names
-        $sitemaps = FrontEnd_Helper_viewHelper::__link('link_sitemap');
-        $plus = FrontEnd_Helper_viewHelper::__link('link_plus');
-        $main = FrontEnd_Helper_viewHelper::__link('link_main');
-        $shops = FrontEnd_Helper_viewHelper::__link('link_shops');
+        $sitemaps = FrontEnd_Helper_viewHelper::__form('form_sitemap');
+        $plus = FrontEnd_Helper_viewHelper::__form('form_plus');
+        $main = FrontEnd_Helper_viewHelper::__form('form_main');
+        $shops = FrontEnd_Helper_viewHelper::__form('form_shops');
 
         $sitemap_shops = $sitemaps.'_'.$shops.'.xml';
         $sitemap_plus = $sitemaps.'_'.$plus.'.xml';
@@ -149,7 +154,8 @@ class SitemapRefreshVarnish
         $varnishObj = new Varnish($connName);
 
 
-       $shopFile =  realpath(PUBLIC_PATH.$loc.'sitemaps/'.$sitemap_shops) ;
+       $shopFile =  PUBLIC_PATH.$loc.'sitemaps/'.$sitemap_shops;
+      
 
         if(file_exists( $shopFile)) {
 
@@ -164,7 +170,8 @@ class SitemapRefreshVarnish
         }
 
 
-        $mainFile = realpath(PUBLIC_PATH.$loc.'sitemaps/'.$sitemap_main) ;
+        $mainFile = PUBLIC_PATH.$loc.'sitemaps/'.$sitemap_main ;
+       
         if(file_exists( $mainFile)) {
             $main_urls = simplexml_load_file($mainFile);
             if (!empty($main_urls) ) {
@@ -175,7 +182,8 @@ class SitemapRefreshVarnish
         }
 
 
-        $bespaarFile = realpath(PUBLIC_PATH.$loc.'sitemaps/'.$sitemap_plus) ;
+        $bespaarFile = PUBLIC_PATH.$loc.'sitemaps/'.$sitemap_plus ;
+       
         if(file_exists( $bespaarFile)) {
                 $bespaar_urls = simplexml_load_file($bespaarFile);
                 if (!empty($bespaar_urls)) {
@@ -188,7 +196,7 @@ class SitemapRefreshVarnish
         #close connection
         $manager->closeConnection($DMC);
 
-        print "\n$key : Varnish has been successfully refreshed!!!" ;
+        print "\n$key : Varnish has been successfully refreshed!!!\n" ;
 
     }
 
