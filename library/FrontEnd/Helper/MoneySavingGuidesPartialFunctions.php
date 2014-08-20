@@ -9,17 +9,22 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                     . $article['authorDetails']['slug'];
             $articleUpdatedAtDate = new Zend_Date($article['publishdate']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
-            $authorName = $article['authorDetails']['firstName'] != ''
-                ? $article['authorDetails']['firstName'] : '';
+            $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
+                $article['authorDetails']['firstName'],
+                $article['authorDetails']['lastName']
+            );
             $articleImage = !empty($article['thumbnail']) ?
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
             $articleTitle = mb_strlen($article['title']) > 50 ?
                                         mb_substr($article['title'], 0, 50).'..' : $article['title'];
             $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
+            $categoryTitleBackgroundColor = !empty($article['articlecategory'][0]['categorytitlecolor'])
+                                                ? $article['articlecategory'][0]['categorytitlecolor']
+                                                : 'e69342';
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
                         <div class="image">
-                            <span class="category">
+                            <span class="category" style = "background :#'.$categoryTitleBackgroundColor.';">
                                 '.$article['artcileCategoryType'].'
                             </span>
                             <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
@@ -66,5 +71,16 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
     public static function getArticlesAccordingToDescendingOrder($articleCreatedDateAsc, $articleCreatedDateDesc)
     {
         return strtotime($articleCreatedDateDesc['created_at']) - strtotime($articleCreatedDateAsc['created_at']);
+    }
+
+    public function excludeSelectedArticle($allArticlesArray, $selectedArticleId)
+    {
+        $excludedArticles = array();
+        foreach ($allArticlesArray as $article) {
+            if ($article['id'] != $selectedArticleId) {
+                $excludedArticles[] = $article;
+            }
+        }
+        return $excludedArticles;
     }
 }

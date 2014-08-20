@@ -198,7 +198,7 @@ public static function addShopInList($title)
             //find SHOP by title
                 $title = addslashes($title);
             $shop = Doctrine_query::create()->from('Shop')
-            ->where('name=' . "'$title'")->limit(1)->fetchArray();
+            ->where('name=' . "'$title'")->andWhere('status=1')->andWhere('deleted=0')->limit(1)->fetchArray();
 
             $flag = '2';
             if (sizeof($shop) > 0) {

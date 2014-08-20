@@ -19,10 +19,37 @@ function showPopupTermAndConditions(id) {
     $('a#termAndConditionLinkPopup'+id).toggleClass('uparrow'); 
 }
 function showCodeInformation(id) {
+    var codeType = getQueryStringParams("codetype");
+    if (codeType == 'un') {
+        $.ajax({
+            url : HOST_PATH_LOCALE + "offer/offer-code",
+            method : "post",
+            data : {
+                'id' : id
+            },
+            type : "post",
+            success : function(data) {
+                $('div#offerCodeDiv'+id+' .code-value').text(data);
+
+                $.ajax({
+                    url : HOST_PATH_LOCALE + "offer/offer-unique-code-update",
+                    method : "post",
+                    data : {
+                        'id' : id
+                    },
+                    type : "post",
+                    success : function(data) {
+                        
+                    }
+                });
+            }
+        });
+    }
     $('div#offerCodeDiv'+id).show();
     $('div#websiteOfferLink'+id).show();
     $('div#offerButton'+id).hide();
 }
+
 function printIt(urlToShow) {
     var windowObject = window.open();
     self.focus();

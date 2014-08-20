@@ -1786,7 +1786,12 @@ hr.alt2{
 				line-height:24px;
 				margin:0 6px 0 0;
 			}
-			p{margin:0 0 26px;}
+			p{
+				margin:0 0 26px;
+				color: #878a8d;
+				font-size: 14px;
+				line-height: 21px;
+			}
 		}
 		h2{
 			font-size:21px;
@@ -2176,6 +2181,9 @@ hr.alt2{
 				padding-top:0;
 			}
 		}
+	}
+	.countries li{
+		float: left;
 	}
 }
 .alphabet-holder{
@@ -3132,7 +3140,9 @@ input[type="submit"]::-moz-focus-inner{
 			h1{
 				text-transform: uppercase;
 				font-weight: bold;
-				font-size: 13px;
+				bottom: -12px;
+    			font-size: 18px;
+    			position: absolute;
 			}
 		}
 	}
@@ -4550,4 +4560,55 @@ img.logo.kortingscode{
 } 
 #wrapper label.input-error {
    display: none !important;
+}
+.top-panel {
+	.account-box {
+		li.dropdown {
+			a{
+				text-decoration: none;
+			}
+			ul.dropdown-menu{
+				background: none repeat scroll 0 0 #2d2c2c;
+				box-shadow: 1px 0 2px 1px #2d2c2c;
+				min-width: 210px;
+				margin-top: 4px;
+				.full-width-li {
+					width: 100%;
+					a{
+						width: 100%;
+					}
+				}
+				.border-bottom{
+				 	border-bottom: 1px solid @grey-color;
+				}
+			}
+			.arrow-menu-down {
+				content:'';
+				display:inline-block;
+				vertical-align:middle;
+				background:url(../../images/sprite.png) no-repeat -297px -511px;
+				width: 15px;
+				height: 9px;
+			}
+			.arrow-menu-up {
+				content:'';
+				display:inline-block;
+				vertical-align:middle;
+				background:url(../../images/sprite.png) no-repeat -278px -514px;
+				width: 15px;
+				height: 9px;
+			}
+			.arrow-up {
+				content:'';
+				width: 0; 
+				height: 0; 
+				border-left: 15px solid transparent;
+				border-right: 15px solid transparent;
+				border-bottom: 15px solid #2d2c2c;
+				float: right;
+		    	margin-right: 23px;
+	    		margin-top: -9px;
+			}
+		}
+	}
 }

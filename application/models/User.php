@@ -211,33 +211,32 @@ class User extends BaseUser
      */
     public function addUser($params,$imageName)
     {
-        //get extension of the file
-        //echo "<pre>";
-        //print_r($params); die("dddd");
-
         $addto = isset($params['addtosearch']) ? $params['addtosearch'] : false;
         if($addto == 'on'){
             $addtosearch = 1;
         } else {
             $addtosearch = 0;
         }
-
         $ext =  BackEnd_Helper_viewHelper::getImageExtension($params['imageName']);
         $this->firstName = BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
         $this->email = BackEnd_Helper_viewHelper::stripSlashesFromString($params['email']);
         $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
         $this->countryLocale = $params['locale'];
-
-        if($this->isValidPassword($params['password'])) {
+        $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString(
+            isset($params['maintext']) ? $params['maintext'] : ''
+        );
+        $this->currentLogIn = date('Y-m-d');
+        $this->lastLogIn = date('Y-m-d');
+        if ($this->isValidPassword($params['password'])) {
             self::setPassword($params['password']) ;
             $this->save();
 
-        }else {
-
-            return  array('error' => true,
-                    'message' => 'New password must contain a number, capital letter and a special character');
+        } else {
+            return  array(
+                'error' => true,
+                'message' => 'New password must contain a number, capital letter and a special character'
+            );
         }
-
 
         $this->roleId =BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']);
         $this->showInAboutListing =BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
@@ -247,24 +246,17 @@ class User extends BaseUser
         $this->pinterest =BackEnd_Helper_viewHelper::stripSlashesFromString($params['pintrest']);
         $this->likes = BackEnd_Helper_viewHelper::stripSlashesFromString($params['likes']);
         $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString($params['dislike']);
-        $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
         $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
-        //get user from zend auth
         $this->createdBy = Auth_StaffAdapter::getIdentity()->id;
-
-
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
-
         $this->slug = BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
         //  if(isset($params['imageName']))
         $pattern = '/^[0-9]{10}_(.+)/i' ;
         preg_match($pattern, $imageName , $matches );
-        if(@$matches[1]) {
-
-            //$this->profileImageId = '44';
+        if (@$matches[1]) {
             $ext =  BackEnd_Helper_viewHelper::getImageExtension($imageName);
             $pImage  = new ProfileImage();
             $pImage->ext = $ext;
@@ -276,14 +268,10 @@ class User extends BaseUser
         }
         //save user website access
         if(isset($params['websites'])) {
-
             foreach ($params['websites'] as $web) {
-
                 $this->refUserWebsite[]->websiteId = $web ;
             }
         }
-
-        //call doctrine save function
         $this->save();
         //save interesting category in database
         if (isset($params['selectedCategoryies'])) {
@@ -291,36 +279,31 @@ class User extends BaseUser
             BackEnd_Helper_viewHelper::closeConnection($connUser);
             $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
             foreach ($params['selectedCategoryies'] as $categories) {
-                    $cat = New Interestingcategory();
-                    $cat->categoryId  =$categories;
-                    $cat->userId = $this->id;
-                    $cat->save();//save object
+                $cat = New Interestingcategory();
+                $cat->categoryId  =$categories;
+                $cat->userId = $this->id;
+                $cat->save();//save object
              }
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
-
         //end code of enteresting category in database
-
         //save favorite store in database
-        if (isset($params['fevoriteStore'])) {
+        if (!empty($params['fevoriteStore'])) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
             BackEnd_Helper_viewHelper::closeConnection($connUser);
             $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
             $splitStore  =explode(",",$params['fevoriteStore']);
-                //print_r($splitStore);
             foreach ($splitStore as $str) {
-
-                        $store = New Adminfavoriteshop();
-                        $store->shopId  = $str;
-                        $store->userId = $this->id;
-                        $store->save();//save object
+                $store = New Adminfavoriteshop();
+                $store->shopId  = $str;
+                $store->userId = $this->id;
+                $store->save();//save object
 
                 }
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
-
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         $alluserkey ="all_about_pages_users_list";
@@ -428,151 +411,110 @@ class User extends BaseUser
      * @param array $params
      * @author spsingh
      */
-    public function update($params,$imageName='')
+    public function update($params, $imageName='' , $normalUser ='' )
     {
-        //echo "<pre>";
-        //print_r($params); die("dddd");
-        $addto = BackEnd_Helper_viewHelper::stripSlashesFromString(isset($params['addtosearch']) ? $params['addtosearch'] : '');
+        $addto = BackEnd_Helper_viewHelper::stripSlashesFromString(
+          isset($params['addtosearch']) 
+          ? $params['addtosearch'] 
+          : ''
+        );
         if($addto == 'on'){
             $addtosearch = 1;
         } else {
             $addtosearch = 0;
         }
-        $this->firstName =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['firstName']);
-        $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['lastName']);
-        $this->firstName =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['firstName']);
-        $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['lastName']);
+        $this->firstName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
+        $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
+        $this->firstName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
+        $this->lastName =BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
         $this->roleId =  $params['role'];
         $this->showInAboutListing =BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
         $this->addtosearch =$addtosearch;
-        $this->google =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['google']);
-        $this->twitter =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['twitter']);
-        $this->pinterest =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['pintrest']);
-        $this->likes =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['likes']);
-        $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['dislike']);
-        $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
+        $this->google =BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
+        $this->twitter =BackEnd_Helper_viewHelper::stripSlashesFromString($params['twitter']);
+        $this->pinterest =BackEnd_Helper_viewHelper::stripSlashesFromString($params['pintrest']);
+        $this->likes =BackEnd_Helper_viewHelper::stripSlashesFromString($params['likes']);
+        $this->dislike =BackEnd_Helper_viewHelper::stripSlashesFromString($params['dislike']);
+        $this->mainText = BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
         $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
-        $this->countryLocale = $params['locale'];
+        $this->countryLocale = isset($params['locale']) ? $params['locale'] : '';
 
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
-
         $this->slug = BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
 
-
-
-
-        // check for profile image
-        if( strlen($imageName) > 0) {
-
+        if (strlen($imageName) > 0) {
             $pattern = '/^[0-9]{10}_(.+)/i' ;
-            preg_match($pattern, $imageName , $matches);
-
-            if(@$matches[1]) {
-
-                //$this->profileImageId = '44';
+            preg_match($pattern, $imageName, $matches);
+            if (@$matches[1]) {
                 $ext =  BackEnd_Helper_viewHelper::getImageExtension($imageName);
-                //$id =  Doctrine_Core::getTable('')
-                if(intval($params['pImageId']) > 0){
-
+                if (intval($params['pImageId']) > 0) {
                     $pImage = Doctrine_Core::getTable('ProfileImage')->find($params['pImageId']);
-
                 } else {
-
                     $pImage  = new ProfileImage();
                 }
                 $pImage->ext = $ext;
                 $pImage->path ='images/upload/';
                 $pImage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
                 $pImage->save();
-
                 $this->profileImageId =  $pImage->id;
             }
         }
-
-
         // check user want to update password or not based upon old password
-        if(isset($params['confirmNewPassword']) && ! empty($params['confirmNewPassword'])){
-
+        if (isset($params['confirmNewPassword']) && !empty($params['confirmNewPassword'])) {
             # apply validation on password like it should strong enough and not same as previous one
-            if(! $this->isPasswordDifferent($params['confirmNewPassword'])) {
+            if (! $this->isPasswordDifferent($params['confirmNewPassword'])) {
                 return  array('error' => true, 'message' => 'New password can\'t be same as previous password');
             }
-
-            if($this->isValidPassword($params['confirmNewPassword'])) {
+            if ($this->isValidPassword($params['confirmNewPassword'])) {
                 self::setPassword($params['confirmNewPassword']) ;
                 $this->save();
-
-            }else {
-
-                return  array('error' => true,
-                             'message' => 'New password must contain a number, capital letter and a special character');
+            } else {
+                return  array(
+                  'error' => true,
+                  'message' => 'New password must contain a number, capital letter and a special character'
+                );
             }
-
-
         }
-
         // check logged in user or not
         // if yes then deleted reference websites otherwise skip
-        if($this->id != Auth_StaffAdapter::getIdentity()->id) {
-
-            if(isset($params['role'])) {
-
-                $this->roleId = $params['role'];
-            }
-
-            $this->createdBy = Auth_StaffAdapter::getIdentity()->id;
-            $this->refUserWebsite->delete();
-
-            //$this->refUserWebsite->delete();
-
-            // check for websites
-            if(isset($params['websites'])) {
-                foreach ($params['websites'] as $web) {
-                    $this->refUserWebsite[]->websiteId = $web ;
+        if ($normalUser=='') {
+            if ($this->id != Auth_StaffAdapter::getIdentity()->id) {
+                if (isset($params['role'])) {
+                    $this->roleId = $params['role'];
                 }
-            }
-        }
-
-        $this->save();
-
-        $fullName = $params['firstName'] . " " . $params['lastName'];
-
-
-
-        // update session if profile is being updated
-        if($this->id == Auth_StaffAdapter::getIdentity()->id) {
-                new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this);
-        }
-
-        if($params['pImageName']  !== @$params['prevImageName'] ) {
-
-                if(@$matches[1]) {
-
-                    $pattern = '/^[0-9]{10}_(.+)/i' ;
-                    preg_match($pattern, @$params['prevImageName'] , $matches );
-
-                    //var_dump($matches);
-                    if(@$matches[1])  {
-
-                        $uploadPath = "images/upload/";
-                        $user_path = ROOT_PATH . $uploadPath;
-                        $img =  @$params['prevImageName'] ;
-
-                        //echo $img ;
-
-                        //unlink image file from folder if exist
-                        if ($img) {
-
-                        //  echo realpath($user_path . $img )  ;
-                            @unlink($user_path . $img);
-                            @unlink($user_path . "thum_" . $img);
-                            @unlink($user_path . "thum_large" . $img);
-                        }
+                $this->createdBy = Auth_StaffAdapter::getIdentity()->id;
+                $this->refUserWebsite->delete();
+                if (isset($params['websites'])) {
+                    foreach ($params['websites'] as $web) {
+                        $this->refUserWebsite[]->websiteId = $web ;
                     }
                 }
+            }
+        }
+        $this->save();
+        $fullName = $params['firstName'] . " " . $params['lastName'];
+        // update session if profile is being updated
+        if ($this->id == Auth_StaffAdapter::getIdentity()->id) {
+          new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this);
+        }
 
+        if ($params['pImageName']!== @$params['prevImageName']) {
+            if (@$matches[1]) {
+                $pattern = '/^[0-9]{10}_(.+)/i' ;
+                preg_match($pattern, @$params['prevImageName'], $matches);
+                if (@$matches[1]) {
+                $uploadPath = "images/upload/";
+                    $user_path = ROOT_PATH . $uploadPath;
+                    $img =  @$params['prevImageName'];
+                    if ($img) {
+                        @unlink($user_path . $img);
+                        @unlink($user_path . "thum_" . $img);
+                        @unlink($user_path . "thum_large" . $img);
+                    }
+                }
+            }
         }
 
         if (isset($params['selectedCategoryies'])) {
@@ -581,60 +523,48 @@ class User extends BaseUser
             $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
             Doctrine_Query::create()->delete()->from('Interestingcategory')->where("userId=".$this->id)->execute();
             foreach ($params['selectedCategoryies'] as $categories) {
-                $cat = New Interestingcategory();
+                $cat = new Interestingcategory();
                 $cat->categoryId  =$categories;
                 $cat->userId = $this->id;
-                $cat->save();//save object
+                $cat->save();
             }
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
         //end code of enteresting category in database
         //save favorite store in database
-        if (isset($params['fevoriteStore'])) {
-
+        if (!empty($params['fevoriteStore'])) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
             BackEnd_Helper_viewHelper::closeConnection($connUser);
             $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
             Doctrine_Query::create()->delete()->from('Adminfavoriteshop')->where("userId=".$this->id)->execute();
-            $splitStore  =explode(",",$params['fevoriteStore']);
-            print_r($splitStore);
-
+            $splitStore  =explode(",", $params['fevoriteStore']);
             foreach ($splitStore as $str) {
-
-                    $store = New Adminfavoriteshop();
-                    $store->shopId  = $str;
-                    $store->userId = $this->id;
-                    $store->save();
+                $store = new Adminfavoriteshop();
+                $store->shopId  = $str;
+                $store->userId = $this->id;
+                $store->save();
             }
-
             BackEnd_Helper_viewHelper::closeConnection($connSite);
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
-
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         $alluserkey ="all_about_pages_users_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
-
-        //die("test");
-        //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
-        //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
-
         $alluserIdkey ="all_". "users".$this->id ."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
-
         $interestkey ="all_". "interesting".$this->id."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
-
         $favouriteShopkey ="all_". "favouriteshop".$this->id ."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
-
-        self::updateInDatabase($this->id,$fullName,0);//change name of the author etc
-
-        return array("ret" => $this->id , "status" => self::SUCCESS,
-                "message" => "Record has been updated successfully");
+        self::updateInDatabase($this->id, $fullName, 0);//change name of the author etc
+        return array(
+          "ret" => $this->id ,
+          "status" => self::SUCCESS,
+          "message" => "Record has been updated successfully"
+        );
     }
     /**
      * Change username or editor in all other databases

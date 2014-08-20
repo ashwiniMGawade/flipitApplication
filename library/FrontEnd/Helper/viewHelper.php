@@ -100,8 +100,10 @@ EOD;
         }
         $locale = LOCALE != '' ? '/'.LOCALE : '';
         $chainLocale = Website::getWebsiteDetails('', strtolower($site_name).$locale);
+        $ogCustomLocale = explode('_', $chainLocale['chain']);
+        $ogCustomLocale = isset($ogCustomLocale[1]) ? $ogCustomLocale[1] : $ogCustomLocale[0];
         $ogLocale = !empty($chainLocale) && $chainLocale['chain'] != '' ?
-            $chainLocale['chain'] : $headMetaValue->facebookLocale;
+            strtolower($ogCustomLocale) : $headMetaValue->facebookLocale;
 
         $socialMediaValue =
             array(

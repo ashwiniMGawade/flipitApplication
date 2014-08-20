@@ -57,13 +57,21 @@
 	.section{
 		.block{
 			padding:47px 5% 47px 9%;
-			border-width:1px 0 0 1px;
 			border-style:solid;
 			border-color:@page-header-border-color;
 			&:first-child{
 				border-width:1px 0 0 1px;
 				border-style:solid;
 				border-color:@page-header-border-color;
+			}
+			&:nth-child(odd){
+                border-width:1px 1px 0 1px;
+			}
+			&:nth-child(even){
+	            border-width:1px 0 0 0;
+			}
+			&:nth-last-child(2){
+				border-width:1px 0 1px 0;
 			}
 			.link{
 				display:inline-block;

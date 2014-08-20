@@ -66,7 +66,6 @@ function addSelectedClassOnButton(flag) {
 		$('button#deleteOne').removeClass('btn-primary');
 		$('button#addNewOffer').addClass('btn-primary');
 		$('button#lock').removeClass('btn-primary');
-		$('button#runScript').removeClass('btn-primary');
 		
 	} else if(flag==2){
 		
@@ -75,7 +74,7 @@ function addSelectedClassOnButton(flag) {
 		$('button#deleteOne').addClass('btn-primary');
 		$('button#addNewOffer').removeClass('btn-primary');
 		$('button#lock').addClass('btn-primary');
-		$('button#runScript').addClass('btn-primary');
+
 		
 	} else {
 		
@@ -84,7 +83,7 @@ function addSelectedClassOnButton(flag) {
 		$('button#deleteOne').removeClass('btn-primary');
 		$('button#addNewOffer').removeClass('btn-primary');
 		$('button#lock').removeClass('btn-primary');
-		$('button#runScript').removeClass('btn-primary');
+
 		$(flag).addClass('btn-primary');
 	}
 }
@@ -101,11 +100,14 @@ function moveUp() {
 	addSelectedClassOnButton(flag);
 	//get id form slected li by attr
 	var id = $('ul#mostPopularCode li.selected').attr('id');
+	var previousCodeId = $('ul#mostPopularCode li.selected').prev('li').attr('id');
 	//get postion form slected li by attr
 	var pos = $('ul#mostPopularCode li.selected').attr('relpos');
+	var previousCodePosition = $('ul#mostPopularCode li.selected').prev('li').attr('relpos');
+	console.log(previousCodePosition);
 	if(parseInt(id) > 0){
 		$.ajax({
-			url : HOST_PATH + "admin/popularcode/moveup/id/" + id + "/pos/" + pos,
+			url : HOST_PATH + "admin/popularcode/moveup/id/" + id + "/pos/" + pos + "/previousCodeId/" + previousCodeId + "/previousCodePosition/"+ previousCodePosition,
 				method : "post",
 				dataType : "json",
 				type : "post",
@@ -239,12 +241,15 @@ function moveDown() {
 	$('#moveDown').attr('disabled' ,"disabled");
 	//apply selected class on current button
 	addSelectedClassOnButton(flag);
+
 	var id = $('ul#mostPopularCode li.selected').attr('id');
+	var nextCodeId = $('ul#mostPopularCode li.selected').next('li').attr('id');
+	//get postion form slected li by attr
 	var pos = $('ul#mostPopularCode li.selected').attr('relpos');
 	
 	if(parseInt(id) > 0) {
 		$.ajax({
-			url : HOST_PATH + "admin/popularcode/movedown/id/" + id + "/pos/" + pos,
+			url : HOST_PATH + "admin/popularcode/movedown/id/" + id + "/pos/" + pos+ "/nextCodeId/" + nextCodeId,
 				method : "post",
 				dataType : "json",
 				type : "post",
@@ -422,39 +427,3 @@ function lock() {
 	
 }
 
-/**
- * Refresh popular codes
- * @author Raman 
- * @version 1.0
- */
-function runScript() {
-	var flag =  '#runScript';
-	//$('#moveDown').attr('disabled' ,"disabled");
-	//apply selected class on current button
-	addSelectedClassOnButton(flag);
-	$.ajax({
-			url : HOST_PATH + "admin/popularcode/runscript",
-			type : "post",
-			dataType : "json",
-			success : function(json) {
-				$('ul#mostPopularCode li').remove();
-				var li = '';
-				for(var i in json) {
-					if(json[i].type == "MN"){
-						lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
-						image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
-					}else{
-						image = "";
-					}
-					li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" + json[i].offer.title + "</span>" +image+"</li>";
-						
-					}
-				$('ul#mostPopularCode').append(li);
-				$('ul#mostPopularCode li').click(changeSelectedClass);
-				$('#runScript').removeAttr('disabled');
-			}
-	});
-		
-
-	
-}

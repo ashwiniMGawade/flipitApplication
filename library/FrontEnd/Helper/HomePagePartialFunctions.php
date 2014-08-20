@@ -82,7 +82,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $totalOffers = intval($specialListPage['totalOffers']);
             $specialPageListIndex = $specialListPage['page'][0]['permaLink'] .','
                .$specialListPage['page'][0]['pageTitle'];
-            $totalCouponsCount = count($this->homePageData['specialPagesOffers'][$specialPageListIndex]);
+
+            $totalCouponsCount =
+                is_array($this->homePageData['specialPagesOffers'][$specialPageListIndex])==true
+                ? count($this->homePageData['specialPagesOffers'][$specialPageListIndex])
+                : 0;
             $specialListPageOffers = $totalCouponsCount . " " . FrontEnd_Helper_viewHelper::__form('form_coupons');
             $specialPageHtml .=
                 $this->getLeftColumnContent(
@@ -298,11 +302,14 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getSpecialPageRightCoulumnList($dynamicDivId)
     {
         $specialOffersRightHtml = '';
-        $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId], 0, 10);
-        foreach ($topTenSpecialListPageOffers as $specialOffer) {
-            $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer);
+        if (is_array($this->homePageData['specialPagesOffers'][$dynamicDivId])) {
+            $topTenSpecialListPageOffers = array_slice($this->homePageData['specialPagesOffers'][$dynamicDivId], 0, 10);
+            foreach ($topTenSpecialListPageOffers as $specialOffer) {
+                $specialOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($specialOffer);
+            }
         }
         return $specialOffersRightHtml;
+
     }
 
     public function getRightColumnOffersHtmlForAllOffersTypes($offer)
@@ -326,15 +333,19 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/")
                 . $savingGuide['thumbnail']['name'];
             $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
-            $savingTitle = $savingGuide['title'];
+
+            $savingTitle = mb_strlen($savingGuide['title'], 'UTF-8') > 50
+                ? mb_substr($savingGuide['title'], 0, 50, 'UTF-8') . "..."
+                : $savingGuide['title'];
+                
             $allowed_tags = '';
             $guideDescription = strip_tags(
                 isset($savingGuide['chapters'][0]['content'])
                 ? $savingGuide['chapters'][0]['content'] : '',
                 $allowed_tags
             );
-            $savingContent = mb_strlen($guideDescription, 'UTF-8') > 170
-                ? mb_substr($guideDescription, 0, 170, 'UTF-8') . "..."
+            $savingContent = mb_strlen($guideDescription, 'UTF-8') > 85
+                ? mb_substr($guideDescription, 0, 85, 'UTF-8') . "..."
                 : $guideDescription;
             $moneySavingGuidestHtml .= $this->getRighColumnContent(
                 $savingImage,

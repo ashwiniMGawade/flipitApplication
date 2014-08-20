@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Script for generating popular codes for all locales
+ * Script for deleting expired popular codes for all locales
  *
  */
 class GeneratePopularCodes
@@ -35,8 +35,6 @@ class GeneratePopularCodes
             }
         }
 
-        //uncomment this line when you run for one locale
-        //$this->genereatePopularOffers($connections['be']['dsn'], 'be', $imbull);
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
@@ -47,7 +45,9 @@ class GeneratePopularCodes
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - deleting expired  popular codes!!!"
         );
-        PopularCode::generatePopularCode(false);
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        PopularCode::deleteExpiredPopularCode($date, false);
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - Popular codes has been created successfully!!!"

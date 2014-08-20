@@ -39,19 +39,20 @@ class MoneySaving extends BaseMoneySaving
         $mostReadArticles = $mostReadArticles->limit($limit)->fetchArray();
         return $mostReadArticles;
     }
-    public static function getRecentlyAddedArticles($limit)
+    public static function getRecentlyAddedArticles($articleId, $limit)
     {
         $recentlyAddedArticles = Doctrine_Query::create()
             ->select(
                 'DISTINCT a.id, a.title, a.permalink, a.content, a.authorid, a.authorname, a.updated_at,
-                a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name'
+                a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name, ac.name, ac.categorytitlecolor'
             )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
-            ->leftJoin('a.refarticlecategory r')
+            ->leftJoin('a.articlecategory ac')
             ->leftJoin('a.chapters chap')
-            ->andWhere('a.deleted=0')
+            ->Where('a.deleted = 0')
+            ->andWhere('a.id !='.$articleId)
             ->orderBy('a.publishdate DESC')
             ->limit($limit)
             ->fetchArray();
@@ -92,7 +93,7 @@ class MoneySaving extends BaseMoneySaving
     public static function getAllArticleCategories()
     {
         $allArticleCategoryDetails = Doctrine_Query::create()
-        ->select('id, name')
+        ->select('id, name, categorytitlecolor')
         ->from('Articlecategory ac')
         ->where('ac.deleted=0')
         ->fetchArray();
@@ -127,12 +128,13 @@ class MoneySaving extends BaseMoneySaving
         $articles = Doctrine_Query::create()
             ->select(
                 'chap.*, a.id, a.title, a.permalink, a.content, a.authorid, 
-                    a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name'
+                    a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name, ac.categorytitlecolor'
             )
             ->from('Articles a')
             ->leftJoin('a.thumbnail ai')
             ->leftJoin('a.articleImage aai')
             ->leftJoin('a.refarticlecategory r')
+            ->leftjoin('a.articlecategory ac')
             ->leftJoin('a.chapters chap')
             ->where('r.relatedcategoryid ='.  "'$categoryId'")
             ->andWhere('a.deleted=0')

@@ -987,19 +987,14 @@ function selectDiscountType(dIv){
 }
 
 
-function addCategory(e,catgory){
-	var btn = e.target  ? e.target :  e.srcElement ;
-	if(jQuery(btn).hasClass('btn-primary'))
-	{
-		jQuery(btn).removeClass('btn-primary') ;
-		jQuery("input#category-" + catgory).removeAttr('checked');//.valid();
-		
-	} else	{
-		
-		jQuery(btn).addClass('btn-primary');
-		jQuery("input#category-" + catgory).attr('checked' , 'checked');//.valid();
+function addCategory(catgory){
+	if(jQuery("button#categoryBtn-" + catgory).hasClass('btn-primary')==true) {
+		jQuery("button#categoryBtn-" + catgory).removeClass('btn-primary') ;
+		jQuery("input#category-" + catgory).removeAttr('checked');
+	} else {
+		jQuery("button#categoryBtn-"+ catgory).addClass('btn-primary');
+		jQuery("input#category-" + catgory).attr('checked' , 'checked');
 	} 
-	
 }
 
 function printOption(dIv){
@@ -1271,7 +1266,7 @@ function validateFormAddNewOffer(){
 							if(  jQuery("input[name=couponCodeCheckbox]")
 									.is(":checked") ){
 								
-								if(jQuery("input#couponCodeType").val() == 'UN'){
+								if(jQuery("input#couponCodeType").val() == 'GN'){
 									
 									return true ;
 									
@@ -1607,6 +1602,7 @@ function validateFormAddNewOffer(){
 					
 					    jQuery(label).append( validRules[element.name] ) ;
 					    label.addClass('valid') ;
+					    jQuery('div#error-message').html('').removeClass('error-message');
 				}
              });
 
@@ -2195,6 +2191,9 @@ jQuery.extend(jQuery.validator.prototype , {
 					case 'selectedcategories[]' :
 					
 						el = jQuery("input[name='selectedcategories[]']:first").focus().click().removeAttr('checked');
+						if(jQuery("input[name='selectedcategories[]']:first").hasClass('success') == false) {
+							jQuery('div#error-message').html(__('please select a category')).addClass('error-message');
+						}
 					break;
 					
 					default :

@@ -171,7 +171,7 @@
 	                      	  	<input type="text" name="couponCode" id="couponCodeTxt" placeholder="<?php echo $this->translate('centerparks'); ?>" class="span3">
 	                      	  </div>
 
-	                     	<!----offer tiles code starts here----->
+	            
 					       	<div style='margin-left: 0px' class="mainpage-content-right">
 			                	<div class="category-error"></div>
 			                     <div class="categories" style="position:relative;" name="tiles">
@@ -215,9 +215,9 @@
 					        	</ul>
 					       </div>
 					     </div>
-	         			<!----offer tiles code ends here------->
+	         			
 	                    	<div style='margin-left: 0px' class="mainpage-content-right">
-			                	<div class="category-error mainpage-content-right-inner-right-other"></div>
+			                	<div id='error-message' class="error-message category-error mainpage-content-right-inner-right-other"></div>
 			                     <div class="categories" style="position:relative;" name="category">
 
 					              <?php   for($i = 0;  $i < count($this->catList) ; $i++ ){ ?>
@@ -240,9 +240,8 @@
 					             	}
 				             	?>
 
-						        	<button type="button" name="selectCategory" title="<?php echo $this->catList[$i]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->catList[$i]['id']; ?>')">
-						        		<img onclick="jQuery('#categoryBtn-<?php echo $this->catList[$i]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
-
+						        	<button type="button" name="selectCategory" title="<?php echo $this->catList[$i]['name'];?>" class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" onClick="addCategory('<?php echo $this->catList[$i]['id']; ?>')">
+						        		<img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
 				  					 </button>
 				  					 <div class="clear"></div>
 							        	 <span class="image-description-text">

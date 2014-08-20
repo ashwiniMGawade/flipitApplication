@@ -3451,3 +3451,15 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 .borderradius4px{
 	border-radius:0 4px 4px 0 !important;
 }
+.varnish-count{
+	color: #fff;
+}
+.footer-warning{
+	color: red;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+div#error-message {
+	color: #B94A48;
+}

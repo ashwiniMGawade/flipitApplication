@@ -41,6 +41,7 @@ class Articlecategory extends BaseArticlecategory
         $this->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaTitle']);
         $this->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['metaDescription']);
         $this->description = BackEnd_Helper_viewHelper::stripSlashesFromString($params['description']);
+        $this->categorytitlecolor = BackEnd_Helper_viewHelper::stripSlashesFromString($params['titlecolor']);
 
         if ($_FILES['categoryIconNameHidden']['name']!=null) {
             $result = self::uploadImage('categoryIconNameHidden');
@@ -221,6 +222,7 @@ class Articlecategory extends BaseArticlecategory
             $edit->metatitle =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['metaTitle']);
             $edit->metadescription =BackEnd_Helper_viewHelper::stripSlashesFromString ($params['metaDescription']);
             $edit->description = BackEnd_Helper_viewHelper::stripSlashesFromString( $params['description']);
+            $edit->categorytitlecolor = BackEnd_Helper_viewHelper::stripSlashesFromString($params['titlecolor']);
 
             if (isset($_FILES['categoryIconNameHidden']) && $_FILES['categoryIconNameHidden']['name'] != '') {
 
