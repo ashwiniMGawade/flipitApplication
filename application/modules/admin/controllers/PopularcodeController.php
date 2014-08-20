@@ -147,7 +147,6 @@ class Admin_PopularcodeController extends Zend_Controller_Action
      */
     public function moveupAction()
     {
-        PopularCode::generatePopularCode(true);
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
@@ -170,7 +169,6 @@ class Admin_PopularcodeController extends Zend_Controller_Action
      */
     public function movedownAction()
     {
-        PopularCode::generatePopularCode(true);
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id

@@ -573,6 +573,9 @@ class PopularCode extends BasePopularCode
      */
     public static function moveUp($id, $position)
     {
+       
+        
+        self::changePositionOfPopularCodeMoveUp();
         $pos = (intval($position) - 1);
         //find prev element from database based of current
         $PrevPc = Doctrine_Core::getTable('PopularCode')
@@ -613,6 +616,34 @@ class PopularCode extends BasePopularCode
 
         return false ;
     }
+
+    public static function changePositionOfPopularCodeMoveUp()
+    {
+        $allExistingPopularCodes =  self::getAllExistingPopularCode();
+        foreach ($allExistingPopularCodes as $p) {
+
+
+            if ($p['type']!='MN' && $p['offer']['id']!='') {
+
+                //save popular code in database if new
+                $pc = new PopularCode();
+                $pc->type = $p['type'];
+                $pc->offerId = $p['offer']['id'];
+                $pc->position = $p['position'];
+                echo "<pre>";print_r($pc);die;
+                $pc->save();
+
+                $offerID = $p['offer']['id'];
+                $authorId = self::getAuthorId($offerID);
+                
+                $uid = $authorId[0]['authorId'];
+                $popularcodekey ="all_". "popularcode".$uid ."_list";
+
+            }
+        }
+        return true;
+    }
+
     /**
      * move down popular code from list
      * @param integer $id
