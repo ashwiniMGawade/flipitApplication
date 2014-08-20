@@ -63,15 +63,15 @@ class BackEnd_Helper_viewHelper
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $doctrineSiteConnection = Doctrine_Manager::connection($connection['dsn'], 'doctrine_site');
-                    $manager = Doctrine_Manager::getInstance();
-                    $varnishUrlsCount[] = Varnish::getVarnishUrlsCount();
-                    $manager->closeConnection($doctrineSiteConnection);
+                    $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($key);
+                    $varnish = new Varnish($connectionObject['connName']);
+                    $varnishUrlsCount[] = $varnish->getVarnishUrlsCount();
+                    BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
                 } catch (Exception $e) {
                 }
             }
         }
-
+ 
         return !empty($varnishUrlsCount) ? array_sum($varnishUrlsCount) : 0;
     }
     #####################################################
