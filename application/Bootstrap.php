@@ -321,9 +321,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 'doctrine_site'
             );
         $locale = LocaleSettings::getLocaleSettings();
+        $localeValue = explode('_', $locale[0]['locale']);
         if (LOCALE == '') {
             date_default_timezone_set('Europe/Amsterdam');
-        } else if ($locale[0]['locale'] == LOCALE) {
+        } else if (strtolower($localeValue[1]) == LOCALE) {
             date_default_timezone_set($locale[0]['timezone']);
         }
 
