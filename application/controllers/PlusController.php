@@ -70,10 +70,14 @@ class PlusController extends Zend_Controller_Action
     {
         $articleDetails = Articles::getArticleByPermalink($this->getRequest()->getParam('permalink'));
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
-        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles(4);
+        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles(5);
+        $articleObject = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
         $articlesRelatedToCurrentCategory =
             !empty($categoryWiseArticles[$currentArticleCategory])
-            ? $categoryWiseArticles[$currentArticleCategory]
+            ? $articleObject->excludeSelectedArticle(
+                $categoryWiseArticles[$currentArticleCategory],
+                $articleDetails[0]['id']
+            )
             : '';
         $incrementArticleViewCountValue  = FrontEnd_Helper_viewHelper::
             viewCounter('article', 'onload', $articleDetails[0]['id']);
