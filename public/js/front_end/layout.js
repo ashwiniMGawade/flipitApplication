@@ -1,3 +1,11 @@
+
+$(document).ready(function(){
+    $(document).click('click', function(e) {
+        if(!$(e.target).is('.dropdown-toggle')) {
+            $('a.dropdown-toggle b').removeClass('arrow-menu-down').addClass('arrow-menu-up');
+        }
+    });
+});
 function showArticleOnClick(id) {
     if(id == 0) {
         $("#first").addClass("active");
