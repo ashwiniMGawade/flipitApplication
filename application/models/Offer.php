@@ -293,7 +293,6 @@ class Offer extends BaseOffer
     public static function getNewestOffers($type, $limit, $shopId = 0, $userId = "", $homeSection = '')
     {
         $currentDate = date("Y-m-d H:i");
-        echo $currentDate;
         $newestCouponCodes = Doctrine_Query::create()
             ->select(
                 's.id,s.name,
