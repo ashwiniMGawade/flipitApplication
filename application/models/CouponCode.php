@@ -26,9 +26,6 @@ class CouponCode extends BaseCouponCode
         ->andWhere('c.status=1')
         ->limit(1)
         ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-        if ($pageType == 'offerDetail') {
-            self::updateCodeStatus($id, $availableCoupon['code']);
-        }
         return $availableCoupon;
     }
 
