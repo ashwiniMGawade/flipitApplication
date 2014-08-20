@@ -30,6 +30,18 @@ function showCodeInformation(id) {
             type : "post",
             success : function(data) {
                 $('div#offerCodeDiv'+id+' .code-value').text(data);
+
+                $.ajax({
+                    url : HOST_PATH_LOCALE + "offer/offer-unique-code-update",
+                    method : "post",
+                    data : {
+                        'id' : id
+                    },
+                    type : "post",
+                    success : function(data) {
+                        
+                    }
+                });
             }
         });
     }
