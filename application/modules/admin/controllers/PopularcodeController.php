@@ -147,18 +147,15 @@ class Admin_PopularcodeController extends Zend_Controller_Action
      */
     public function moveupAction()
     {
-        PopularCode::generatePopularCode(true);
-        $id = $this->getRequest()->getParam('id');
-        $position = $this->getRequest()->getParam('pos');
-        //call model class function pass position and id
-        $isUpdated = PopularCode::moveUp($id, $position);
-
-        #if popular code is addedd then update varnsih as well
-        if($isUpdated) {
+        $currentCodeId = $this->getRequest()->getParam('id');
+        $currentPosition = $this->getRequest()->getParam('pos');
+        $previousCodeId = $this->getRequest()->getParam('previousCodeId');
+        $previousCodePosition = $this->getRequest()->getParam('previousCodePosition');
+        $isUpdated = PopularCode::moveUp($currentCodeId, $currentPosition, $previousCodeId, $previousCodePosition);
+        
+        if ($isUpdated) {
             self::updateVarnish();
         }
-
-        //get popular code from database
         $data = PopularCode::getPopularCode();
         echo Zend_Json::encode($data);
         die();
@@ -170,18 +167,15 @@ class Admin_PopularcodeController extends Zend_Controller_Action
      */
     public function movedownAction()
     {
-        PopularCode::generatePopularCode(true);
-        $id = $this->getRequest()->getParam('id');
-        $position = $this->getRequest()->getParam('pos');
-        //call model class function pass position and id
-        $isUpdated  = PopularCode::moveDown($id, $position);
+        $currentCodeId = $this->getRequest()->getParam('id');
+        $currentPosition = $this->getRequest()->getParam('pos');
+        $nextCodeId = $this->getRequest()->getParam('nextCodeId');
+        $isUpdated  = PopularCode::moveDown($currentCodeId, $currentPosition, $nextCodeId);
 
-        #if popular code is addedd then update varnsih as well
-        if($isUpdated) {
+        if ($isUpdated) {
             self::updateVarnish();
         }
 
-        //get popular code from database
         $data = PopularCode::getPopularCode();
         echo Zend_Json::encode($data);
         die();
@@ -207,22 +201,6 @@ class Admin_PopularcodeController extends Zend_Controller_Action
 
         //get popular code from database
         $data = PopularCode::getPopularCode();
-        echo Zend_Json::encode($data);
-        die();
-    }
-
-    /**
-     * refresh popular codes
-     * @author Raman
-     * @version 1.0
-     */
-
-    public function runscriptAction()
-    {
-        ini_set('max_execution_time', 300);
-        PopularCode::generatePopularCode(true);
-        $data = PopularCode::getPopularCode();
-        self:: updateVarnish();
         echo Zend_Json::encode($data);
         die();
     }
