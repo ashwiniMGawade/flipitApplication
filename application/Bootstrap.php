@@ -320,7 +320,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $doctrineOptions[strtolower(self::getLocaleNameForDbConnection())]['dsn'],
                 'doctrine_site'
             );
-        date_default_timezone_set('Europe/Amsterdam');
+        $locale = LocaleSettings::getLocaleSettings();
+        if (LOCALE == '') {
+            date_default_timezone_set('Europe/Amsterdam');
+        } else if ($locale[0]['locale'] == LOCALE) {
+            date_default_timezone_set($locale[0]['timezone']);
+        }
 
         return $imbullDbConnection;
     }

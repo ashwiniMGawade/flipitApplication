@@ -53,8 +53,26 @@ class BackEnd_Helper_viewHelper
 
     public static function getVarnishUrlsCount()
     {
-        $varnishUrlsCount = Varnish::getVarnishUrlsCount();
-        return $varnishUrlsCount;
+        $varnishUrlsCount = array();
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        $connections = $application->getOption('doctrine');
+
+        foreach ($connections as $key => $connection) {
+            if ($key != 'imbull') {
+                try {
+                    $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($key);
+                    $varnish = new Varnish($connectionObject['connName']);
+                    $varnishUrlsCount[] = $varnish->getVarnishUrlsCount();
+                    BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
+                } catch (Exception $e) {
+                }
+            }
+        }
+ 
+        return !empty($varnishUrlsCount) ? array_sum($varnishUrlsCount) : 0;
     }
     #####################################################
     ############# END REFACORED CODE ####################
