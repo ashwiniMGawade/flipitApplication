@@ -27,8 +27,8 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
         return $offers;
     }
 
-    public static function usortFavouriteOffers($favidAsc, $favidDesc)
+    public static function usortFavouriteOffers($favouriteOffersAsc, $favouriteOffersDesc)
     {
-        return isset($favidDesc['fvid']) ? $favidDesc['fvid'] : '' - isset($favidDesc['fvid']) ? $favidDesc['fvid'] : '';
+        return isset($favouriteOffersDesc['fvid']) ? $favouriteOffersDesc['fvid'] : '';
     }
 }
