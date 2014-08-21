@@ -4,6 +4,19 @@ class Articles extends BaseArticles
     ##############################################
     ####### REFACTORED CODE ######################
     ##############################################
+    public static function getAllArticlesCount()
+    {
+        $currentDateTime = date('Y-m-d 00:00:00');
+        $allArticles = Doctrine_Query::create()
+            ->select('count(*)')
+            ->from("Articles a")
+            ->where('a.publish = "1"')
+            ->andWhere("a.deleted= 0")
+            ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+            ->fetchArray();
+        return isset($allArticles[0]['count']) ? $allArticles[0]['count'] : 0;
+    }
+ 
     public static function getMoneySavingArticles($limit = 0)
     {
         $moneySavingArticles = Doctrine_Query::create()
