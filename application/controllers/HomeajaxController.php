@@ -1,0 +1,63 @@
+<?php
+require_once 'Zend/Controller/Action.php';
+class HomeajaxController extends Zend_Controller_Action
+{
+    public function getcategoryoffersAction()
+    {
+        $categoryId = $this->getRequest()->getParam('categoryid');
+        $categoryPermalink = $this->getRequest()->getParam('permalink');
+        $topCategoriesOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            "all_hometocategoryoffers". $categoryId ."_list",
+            array(
+                'function' => 'Category::getCategoryVoucherCodes',
+                'parameters' => array($categoryId, 0)
+            )
+        );
+        $removedDuplicateShops = $this->_helper->Index->removeDuplicateCode($topCategoriesOffers);
+        $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
+        $rightDivWithContent = $homePagePartials->getRightDivByAjax(
+            $removedDuplicateShops,
+            $categoryPermalink,
+            FrontEnd_Helper_viewHelper::__form('form_All') . " " . $categoryPermalink. " "
+            . FrontEnd_Helper_viewHelper::__form('form_Code'),
+            HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $categoryPermalink
+        );
+        echo Zend_Json::encode($rightDivWithContent);
+        die;
+    }
+
+    public function getnewestoffersAction()
+    {
+        $newOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            "all_homenewoffer_list",
+            array('function' => 'Offer::getNewestOffers', 'parameters' => array('newest', 10, '', '', 'homePage'))
+        );
+        $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
+        $rightDivWithContent = $homePagePartials->getRightDivByAjax(
+            $newOffers,
+            'newOffers',
+            FrontEnd_Helper_viewHelper::__form('form_All New Codes'),
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw')
+        );
+        echo Zend_Json::encode($rightDivWithContent);
+        die;
+    }
+
+    public function getmoneysavingguidesAction()
+    {
+        $moneySavingGuidesList = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            "all_homemanisaving_list",
+            array('function' => 'Articles::getAllArticles', 'parameters' => array())
+        );
+        $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
+        $guidesHtml = $homePagePartials->getMoneySavingGuidesRightForAjax(
+            $moneySavingGuidesList,
+            'moneysaving',
+            FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('form_moneysaving')
+        );
+        echo Zend_Json::encode($guidesHtml);
+        die;
+    }
+}
+
