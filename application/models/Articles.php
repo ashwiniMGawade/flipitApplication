@@ -48,7 +48,7 @@ class Articles extends BaseArticles
         return $articleDetails;
     }
 
-    public static function getAllArticles()
+    public static function getAllArticles($limit = 0)
     {
         $currentDateTime = date('Y-m-d 00:00:00');
         $allArticles = Doctrine_Query::create()->select()
@@ -62,6 +62,7 @@ class Articles extends BaseArticles
                 ->where('a.publish = "1"')
                 ->andWhere("a.deleted= 0")
                 ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+                ->limit($limit)
                 ->fetchArray();
         return $allArticles;
     }
