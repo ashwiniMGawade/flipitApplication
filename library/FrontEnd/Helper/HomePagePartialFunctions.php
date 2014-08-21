@@ -1,7 +1,6 @@
 <?php
 class FrontEnd_Helper_HomePagePartialFunctions
 {
-
     public $homePageData = '';
     public function getHomePageLeftColumn($homePageData)
     {
@@ -44,7 +43,9 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $imageName,
             FrontEnd_Helper_viewHelper::__form($headerText),
             36,
-            $offerType
+            $offerType,
+            '',
+            $offerType=='topOffers' ? '' : 'newOffer'
         );
     }
 
@@ -59,7 +60,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 . $category['category']['categoryicon']['name'];
             $categoriesOffers =
                 $category['totalOffers'] . ' '
-                . FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff'] . " "
+                . FrontEnd_Helper_viewHelper::__form('form_Offers'). ' ' . $category['countOff']
+                . " "
                 . FrontEnd_Helper_viewHelper::__form('form_coupons');
             $categoriesHtml .= $this->getLeftColumnContent(
                 'categories',
@@ -67,7 +69,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 $category['category']['name'],
                 70,
                 $category['category']['permaLink'],
-                $categoriesOffers
+                $categoriesOffers,
+                $category['category']['id']
             );
         }
         return $categoriesHtml;
@@ -78,11 +81,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $specialPageHtml = '';
         $specialListPages = $this->homePageData['specialPages'];
         foreach ($specialListPages as $indexOfPage => $specialListPage) {
-            $totalCoupon = intval($specialListPage['totalCoupons']);
-            $totalOffers = intval($specialListPage['totalOffers']);
             $specialPageListIndex = $specialListPage['page'][0]['permaLink'] .','
                .$specialListPage['page'][0]['pageTitle'];
-
             $totalCouponsCount =
                 is_array($this->homePageData['specialPagesOffers'][$specialPageListIndex])==true
                 ? count($this->homePageData['specialPagesOffers'][$specialPageListIndex])
@@ -103,8 +103,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
     public function getLeftColumnSavingGuidesListHtml()
     {
-        $savingGuideOffers =
-            count($this->homePageData['moneySavingGuides']) . " "
+        $savingGuideText = $this->homePageData['moneySavingGuidesCount'] . " "
             . FrontEnd_Helper_viewHelper::__form('form_articles worth your time');
         return $this->getLeftColumnContent(
             'savingGuide',
@@ -112,7 +111,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
             FrontEnd_Helper_viewHelper::__form('form_Smarter shopping'),
             70,
             'moneysaving',
-            $savingGuideOffers
+            $savingGuideText,
+            'moneysaving'
         );
     }
 
@@ -122,11 +122,12 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $headerText,
         $imageSize,
         $imageDescription,
-        $numberOfOffersContent = ''
+        $numberOfOffersContent = '',
+        $leftContentId = ''
     ) {
         $leftColumnsLiContent =
         '<li>
-            <a id="div_'.$imageDescription.'" href="javascript:void(0)" class="" onclick="showRelatedDiv(this)">
+            <a data="'. $leftContentId .'" id="div_'.$imageDescription.'" href="javascript:void(0)" class="" onclick="showRelatedDiv(this)">
                 <div class="left-box">'
                 .  $this->getImageOrSpanTag($LisDescription, $imageName, $imageSize, $imageDescription) .
                 '</div>
@@ -171,25 +172,26 @@ class FrontEnd_Helper_HomePagePartialFunctions
             HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_top-20'),
             FrontEnd_Helper_viewHelper::__form('form_All Top Codes')
         );
-        $newOffer = $this->getRightColumnOffersHtml(
-            'newOffers',
-            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_nieuw'),
-            FrontEnd_Helper_viewHelper::__form('form_All New Codes')
-        );
-        $categories = $this->getRighColumnCategoriesHtml();
         $specialListPage = $this->getRightColumnSpicialListHtml();
-        $savingGuides = $this->getRightColumnSavingGuidesListHtml();
-        return $topOffer . $newOffer . $categories . $specialListPage.$savingGuides;
+        return $topOffer . $specialListPage;
     }
-
-    public function getRightColumnSavingGuidesListHtml()
+    
+    public function getRightColumnOffersHtml($offerDivName, $goToAllLink, $linkText, $dynamicDivId = '')
     {
-        return $this->getRightColumnOffersHtml(
-            'moneysaving',
-            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_plus'),
-            FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
-            FrontEnd_Helper_viewHelper::__form('form_moneysaving')
-        );
+        if ($offerDivName == 'special') {
+            $splittedDivId = explode(',', $dynamicDivId);
+            $divId = $splittedDivId[0];
+        } else {
+            $divId = $offerDivName;
+        }
+        $rightOfferColumnHtml =
+        '<div id="div_' . $divId .'" class="vouchers">
+            <a href="'. $goToAllLink.'" class="all">'.FrontEnd_Helper_viewHelper::__form($linkText).'</a>
+            <ul>'.
+            $this->getRightColumnOffersList($offerDivName, $dynamicDivId).
+           '</ul>
+        </div>';
+        return $rightOfferColumnHtml;
     }
 
     public function getRightColumnSpicialListHtml()
@@ -208,40 +210,6 @@ class FrontEnd_Helper_HomePagePartialFunctions
         return $specialListHtml;
     }
 
-    public function getRighColumnCategoriesHtml()
-    {
-        $categegoriesHtml = '';
-        foreach ($this->homePageData['topCategoriesOffers'] as $categoryId => $topCategoryOffers) {
-            $splitedCategoryId = explode(',', $categoryId);
-            $categegoriesHtml .= $this->getRightColumnOffersHtml(
-                'categories',
-                HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/'. $splitedCategoryId[0],
-                FrontEnd_Helper_viewHelper::__form('form_All') . " " . $splitedCategoryId[1] . " "
-                . FrontEnd_Helper_viewHelper::__form('form_Code'),
-                $categoryId
-            );
-        }
-         return $categegoriesHtml;
-    }
-
-    public function getRightColumnOffersHtml($offerDivName, $goToAllLink, $linkText, $dynamicDivId = '')
-    {
-        if ($offerDivName == 'categories' || $offerDivName == 'special') {
-            $splitedDivId = explode(',', $dynamicDivId);
-            $divId = $splitedDivId[0];
-        } else {
-            $divId = $offerDivName;
-        }
-        $rightOfferColumnHtml =
-        '<div id="div_' . $divId .'" class="vouchers">
-            <a href="'. $goToAllLink.'" class="all">'.FrontEnd_Helper_viewHelper::__form($linkText).'</a>
-            <ul>'.
-            $this->getRightColumnOffersList($offerDivName, $dynamicDivId).
-           '</ul>
-        </div>';
-        return $rightOfferColumnHtml;
-    }
-
     public function getRightColumnOffersList($offerDivName, $dynamicDivId)
     {
         $offersHtml = '';
@@ -249,21 +217,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
             case 'topOffers':
                 $offersHtml = $this->getTopOffersRightCoulumnList();
                 break;
-
-            case 'newOffers':
-                $offersHtml = $this->getNewestOffersRightCoulumnList();
-                break;
-
-            case 'categories':
-                $offersHtml = $this->getToCategoryRightCoulumnList($dynamicDivId);
-                break;
-
             case 'special':
                 $offersHtml = $this->getSpecialPageRightCoulumnList($dynamicDivId);
-                break;
-
-            case 'moneysaving':
-                $offersHtml = $this->getMoneySavingGuidesRightCoulumnList($dynamicDivId);
                 break;
             default:
                 break;
@@ -278,25 +233,6 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $topOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($topOffer);
         }
         return $topOfferRightHtml;
-    }
-
-    public function getNewestOffersRightCoulumnList()
-    {
-        $newestOfferRightHtml = '';
-        foreach ($this->homePageData['newOffers'] as $newOffer) {
-            $newestOfferRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($newOffer);
-        }
-        return $newestOfferRightHtml;
-    }
-
-    public function getToCategoryRightCoulumnList($dynamicDivId)
-    {
-        $categoryOffersRightHtml = '';
-        $topTenCategoryOffers = array_slice($this->homePageData['topCategoriesOffers'][$dynamicDivId], 0, 10);
-        foreach ($topTenCategoryOffers as $categoryOffer) {
-            $categoryOffersRightHtml .= $this->getRightColumnOffersHtmlForAllOffersTypes($categoryOffer);
-        }
-        return $categoryOffersRightHtml;
     }
 
     public function getSpecialPageRightCoulumnList($dynamicDivId)
@@ -323,40 +259,6 @@ class FrontEnd_Helper_HomePagePartialFunctions
             : $offer['title'];
         $offerExclusiveText = $this->getOfferOptionText($offer['exclusiveCode']);
         return $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
-    }
-
-    public function getMoneySavingGuidesRightCoulumnList($dynamicDivId)
-    {
-        $moneySavingGuidestHtml = '';
-        $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
-        foreach ($topTenMoneySavingGuides as $savingGuide) {
-            $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/")
-                . $savingGuide['thumbnail']['name'];
-            $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
-
-            $savingTitle = mb_strlen($savingGuide['title'], 'UTF-8') > 50
-                ? mb_substr($savingGuide['title'], 0, 50, 'UTF-8') . "..."
-                : $savingGuide['title'];
-                
-            $allowed_tags = '';
-            $guideDescription = strip_tags(
-                isset($savingGuide['chapters'][0]['content'])
-                ? $savingGuide['chapters'][0]['content'] : '',
-                $allowed_tags
-            );
-            $savingContent = mb_strlen($guideDescription, 'UTF-8') > 85
-                ? mb_substr($guideDescription, 0, 85, 'UTF-8') . "..."
-                : $guideDescription;
-            $moneySavingGuidestHtml .= $this->getRighColumnContent(
-                $savingImage,
-                $savingPermalink,
-                $savingTitle,
-                $savingContent,
-                '',
-                'saving-guides'
-            );
-        }
-        return $moneySavingGuidestHtml;
     }
 
     public function getRighColumnContent(
@@ -407,5 +309,55 @@ class FrontEnd_Helper_HomePagePartialFunctions
         } else {
             return true;
         }
+    }
+
+    public function getRightDivByAjax($offers, $divId, $textButtomLink, $link)
+    {
+        $rightDiv =
+            '<div id="div_'. $divId .'" class="vouchers">
+                <a href="'. $link.'" class="all">'.$textButtomLink.'</a><ul>';
+        foreach ($offers as $offer) {
+            $rightDiv.= $this->getRightColumnOffersHtmlForAllOffersTypes($offer);
+        }
+        $rightDiv.='</ul></div>';
+        return $rightDiv;
+    }
+
+    public function getMoneySavingGuidesRightForAjax($savingGuides, $divId, $textButtomLink, $link)
+    {
+        $rightDiv =
+            '<div id="div_'. $divId .'" class="vouchers">
+                <a href="'. $link.'" class="all">'.$textButtomLink.'</a><ul>';
+        $moneySavingGuidestHtml = '';
+        $topTenMoneySavingGuides = array_slice($savingGuides, 0, 10);
+        foreach ($topTenMoneySavingGuides as $savingGuide) {
+            $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/")
+                . $savingGuide['thumbnail']['name'];
+            $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
+
+            $savingTitle = mb_strlen($savingGuide['title'], 'UTF-8') > 50
+                ? mb_substr($savingGuide['title'], 0, 50, 'UTF-8') . "..."
+                : $savingGuide['title'];
+                
+            $allowedTags = '';
+            $guideDescription = strip_tags(
+                isset($savingGuide['chapters'][0]['content'])
+                ? $savingGuide['chapters'][0]['content'] : '',
+                $allowedTags
+            );
+            $savingContent = mb_strlen($guideDescription, 'UTF-8') > 85
+                ? mb_substr($guideDescription, 0, 85, 'UTF-8') . "..."
+                : $guideDescription;
+            $moneySavingGuidestHtml .= $this->getRighColumnContent(
+                $savingImage,
+                $savingPermalink,
+                $savingTitle,
+                $savingContent,
+                '',
+                'saving-guides'
+            );
+        }
+        $rightDiv.=$moneySavingGuidestHtml .'</ul></div>';
+        return $rightDiv;
     }
 }
