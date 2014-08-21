@@ -51,7 +51,13 @@ class ErrorController extends Zend_Controller_Action
                     if ($pageDetails['customHeader']) {
                         $this->view->layout()->customHeader = "\n" . $pageDetails['customHeader'];
                     }
-                    $specialPageOffers = Offer::getSpecialPageOffers($pageDetails);
+                    $specialPageOffers = FrontEnd_Helper_viewHelper::
+                        getRequestedDataBySetGetCache(
+                            'error_specialPage_offers',
+                            array(
+                                'function' => 'Offer::getSpecialPageOffers', 'parameters' => array($pageDetails)
+                            )
+                        );
                     $paginationNumber['page'] = $pageNumber;
                     $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
                         $specialPageOffers,
@@ -59,7 +65,11 @@ class ErrorController extends Zend_Controller_Action
                         20,
                         5
                     );
-
+                    if (empty($specialPageOffers) && $pageDetails['pageType'] == 'offer') {
+                        $pageNumber = 4;
+                        $this->_helper->layout()->disableLayout();
+                        FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
+                    }
                     $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
                     $sidebarWidget = $frontendViewHelper->getSidebarWidget(
                         $sidebarParameters = array(),
@@ -71,7 +81,15 @@ class ErrorController extends Zend_Controller_Action
                     $this->view->headMeta()->setName('description', trim($pageDetails['metaDescription']));
                     $this->view->matches = $pageNumber;
                     $this->view->page = $pageDetails;
-                    $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails['pageHeaderImageId']);
+                    $this->view->pageHeaderImage =
+                    FrontEnd_Helper_viewHelper::
+                        getRequestedDataBySetGetCache(
+                            'page_header'.$pageDetails->id.'_image',
+                            array(
+                                'function' => 'Logo::getPageLogo',
+                                'parameters' => array($pageDetails['pageHeaderImageId'])
+                            )
+                        );
                     $this->view->offercount = count($specialPageOffers);
                     $this->view->offersPaginator = $specialOffersPaginator;
                     $this->view->widget = $sidebarWidget;
@@ -86,9 +104,14 @@ class ErrorController extends Zend_Controller_Action
                 $this->getResponse()->setHttpResponseCode(500);
                 $priority = Zend_Log::CRIT;
                 $this->view->message = 'Application error';
-                $this->view->popularShops = Shop::getPopularStores(12);
-                $websitesWithLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
-                $this->view->flipitLocales = $websitesWithLocales;
+                $this->view->popularShops = FrontEnd_Helper_viewHelper::
+                        getRequestedDataBySetGetCache(
+                            '12_popularShops_list',
+                            array(
+                                'function' => 'Shop::getPopularStores', 'parameters' => array(12)
+                            )
+                        );
+                $this->view->flipitLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
                 break;
         }
         if ($log = $this->getLog()) {
@@ -137,6 +160,14 @@ class ErrorController extends Zend_Controller_Action
             $pagedata= '';
         }
         
+        $this->pagePermalink = $pagePermalink;
+        $pagedata = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'page_'.$pagePermalink.'_data',
+                array(
+                    'function' => 'Page::getPageDetailsInError', 'parameters' => array(rtrim($pagePermalink, '/'))
+                )
+            );
         return $pagedata;
     }
 }
