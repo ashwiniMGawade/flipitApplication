@@ -42,7 +42,9 @@ function viewCounter(eventType, type, id) {
 }
 function ___addOverLay() {
     if( jQuery("div#overlay").length == 0) {
-        var overlay = jQuery("<div id='overlay'><img id='img-load' src='" +  HOST_PATH  + "/public/images/back_end/ajax-loader.gif'/></div>");
+        var overlay = jQuery("<div id='overlay'>" + 
+            "<img id='img-load' src='" +  HOST_PATH  + "/public/images/back_end/ajax-loader.gif'/>" + 
+            "</div>");
         overlay.appendTo(document.body);
         return true;
     }

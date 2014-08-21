@@ -123,11 +123,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
         $imageSize,
         $imageDescription,
         $numberOfOffersContent = '',
-        $relValue = ''
+        $leftContentId = ''
     ) {
         $leftColumnsLiContent =
         '<li>
-            <a data="'. $relValue .'" id="div_'.$imageDescription.'" href="javascript:void(0)" class="" onclick="showRelatedDiv(this)">
+            <a data="'. $leftContentId .'" id="div_'.$imageDescription.'" href="javascript:void(0)" class="" onclick="showRelatedDiv(this)">
                 <div class="left-box">'
                 .  $this->getImageOrSpanTag($LisDescription, $imageName, $imageSize, $imageDescription) .
                 '</div>
@@ -179,8 +179,8 @@ class FrontEnd_Helper_HomePagePartialFunctions
     public function getRightColumnOffersHtml($offerDivName, $goToAllLink, $linkText, $dynamicDivId = '')
     {
         if ($offerDivName == 'special') {
-            $splitedDivId = explode(',', $dynamicDivId);
-            $divId = $splitedDivId[0];
+            $splittedDivId = explode(',', $dynamicDivId);
+            $divId = $splittedDivId[0];
         } else {
             $divId = $offerDivName;
         }
@@ -339,11 +339,11 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 ? mb_substr($savingGuide['title'], 0, 50, 'UTF-8') . "..."
                 : $savingGuide['title'];
                 
-            $allowed_tags = '';
+            $allowedTags = '';
             $guideDescription = strip_tags(
                 isset($savingGuide['chapters'][0]['content'])
                 ? $savingGuide['chapters'][0]['content'] : '',
-                $allowed_tags
+                $allowedTags
             );
             $savingContent = mb_strlen($guideDescription, 'UTF-8') > 85
                 ? mb_substr($guideDescription, 0, 85, 'UTF-8') . "..."
