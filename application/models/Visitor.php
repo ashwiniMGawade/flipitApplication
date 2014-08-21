@@ -193,7 +193,7 @@ class Visitor extends BaseVisitor
         return $favouriteShops;
     }
     
-    public static function getFavoriteShopsOffers()
+    public static function getFavoriteShopsOffers($limit=40)
     {
         $currentDate = date('Y-m-d 00:00:00');
         $favouriteShopsOffers = Doctrine_Query::create()
@@ -222,6 +222,7 @@ class Visitor extends BaseVisitor
         ->andWhere('o.userGenerated=0')
         ->orderBy('o.exclusiveCode DESC')
         ->addOrderBy('o.startdate DESC')
+        ->limit($limit)
         ->fetchArray();
         return $favouriteShopsOffers;
     }

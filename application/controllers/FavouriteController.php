@@ -37,14 +37,11 @@ class FavouriteController extends Zend_Controller_Action
         if (Auth_VisitorAdapter::hasIdentity()) {
             $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
             $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
-            $favouriteShopsOffersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
-                $offers,
-                $this->_getAllParams(),
-                30,
-                4
-            );
             $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-            $this->view->favouriteShopsOffers = $favouriteShopsOffersWithPagination;
+            /*echo "<pre>";
+            print_r($offers);
+            die;*/
+            $this->view->favouriteShopsOffers = $offers;
             $this->view->userDetails = $userDetails[0];
             $this->view->pageCssClass = 'youroffers-page';
         } else {

@@ -234,6 +234,19 @@
 	    <a <?php if($controller == 'email' && $action == 'emailSettings'){ echo 'style=color:#0088CC';} ?> href="<?php echo HTTP_PATH;?>admin/email/email-settings" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Email Settings');?></a>
 	 	</li>
 
+        <li <?php if($controller == 'email' && $action == 'code-alert') { ?> 
+        	class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-has-current-submenu" 
+        	<?php } else { ?> 
+        	class="imbull-has-submenu menu-top menu-icon-lightbox imbull-menu-open imbull-not-current-submenu" 
+        	<?php }?> id="menu-links">
+      		<div class="imbull-menu-image"><a href="<?php echo HTTP_PATH;?>admin/email/codealert"><br></a></div>
+	    	<div class=""><div></div></div>
+	    	<a <?php if($controller == 'email' && $action == 'code-alert'){ echo 'style=color:#0088CC';} ?> 
+	    		href="<?php echo HTTP_PATH;?>admin/email/code-alert" 
+	    		class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" >
+	    		<?php echo $this->translate('Code alert');?>
+	    	</a>
+	 	</li>
         <?php } ?>
 
     </ul>
@@ -357,10 +370,15 @@
 		        <div class=""><div></div></div>
 		        <a href="<?php echo HTTP_PATH?>admin/chain" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" tabindex="1"><?php echo $this->translate('Chains');?></a>
 		    </li>
-		     	<li <?php if($controller == 'splash') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php }?> id="menu-links">
+		    <li <?php if($controller == 'splash') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php }?> id="menu-links">
 		        <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH?>admin/splash/"><br></a></div>
 		        <div class=""><div></div></div>
 		        <a href="<?php echo HTTP_PATH?>admin/splash/" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" tabindex="1"><?php echo $this->translate('Splash');?></a>
+		    </li>
+		    <li <?php if($controller == 'robot') { ?> class="imbull-has-submenu imbull-has-current-submenu menu-top menu-icon-home current" <?php } else { ?> class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" <?php }?> id="menu-links">
+		        <div class="imbull-menu-image artImageGreyShop"><a href="<?php echo HTTP_PATH?>admin/robot/"><br></a></div>
+		        <div class=""><div></div></div>
+		        <a href="<?php echo HTTP_PATH?>admin/robot/" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-home" tabindex="1"><?php echo $this->translate('Robot Files');?></a>
 		    </li>
 	     </ul>
 	 <?php endif;

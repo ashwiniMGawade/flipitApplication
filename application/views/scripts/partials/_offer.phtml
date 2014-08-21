@@ -17,10 +17,7 @@ foreach ($this->offers as $offer) {
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     $couponCode = $offer->couponCode;
     if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
-        $getOfferUniqueCode = CouponCode::returnAvailableCoupon($offer->id);
-        if (!empty($getOfferUniqueCode)) {
-            $couponCode = $getOfferUniqueCode['code'];
-        }
+         $couponCode = '';
     }
     ?>
     <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">

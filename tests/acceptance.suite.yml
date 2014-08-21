@@ -7,8 +7,11 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser
+        - WebDriver
         - AcceptanceHelper
     config:
-        PhpBrowser:
-            url: 'http://www.flipit.com'
+        WebDriver:
+            url: 'http://www.flipit.com/'
+            browser: phantomjs
+            capabilities:
+                phantomjs.cli.args: ['--ignore-ssl-errors=true']

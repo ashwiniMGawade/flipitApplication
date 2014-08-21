@@ -124,6 +124,14 @@ abstract class BaseArticlecategory extends Doctrine_Record
              'notnull' => true,
              'autoincrement' => false,
              ));
+        $this->hasColumn('categorytitlecolor', 'string', null, array(
+             'type' => 'string',
+             'fixed' => false,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => true,
+             'autoincrement' => false,
+             ));
     }
 
     public function setUp()

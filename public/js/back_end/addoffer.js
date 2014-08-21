@@ -692,22 +692,14 @@ function selectDiscountType(dIv){
 	}
 }
 
-function addCategory(e,catgory){
-	
-	var btn = e.target  ? e.target :  e.srcElement ;
-
-
-	if(jQuery(btn).hasClass('btn-primary')) {
-		
-		jQuery(btn).removeClass('btn-primary') ;
-		jQuery("input#category-" + catgory).removeAttr('checked');//.valid();
-		
+function addCategory(catgory){
+	if(jQuery("button#categoryBtn-" + catgory).hasClass('btn-primary')==true) {
+		jQuery("button#categoryBtn-" + catgory).removeClass('btn-primary') ;
+		jQuery("input#category-" + catgory).removeAttr('checked');
 	} else {
-		
-		jQuery(btn).addClass('btn-primary');
-		jQuery("input#category-" + catgory).attr('checked' , 'checked');//.valid();
+		jQuery("button#categoryBtn-"+ catgory).addClass('btn-primary');
+		jQuery("input#category-" + catgory).attr('checked' , 'checked');
 	} 
-	
 }
 
 function printOption(dIv){
@@ -1301,6 +1293,7 @@ function validateFormAddNewOffer(){
 					
 					    jQuery(label).append( validRules[element.name] ) ;
 					    label.addClass('valid') ;
+					    jQuery('div#error-message').html('').removeClass('error-message');
 				}
              });
 }
@@ -1768,7 +1761,7 @@ function selectOfferImage(id) {
 function showHidedDiv() {
 	
 	id = jQuery(this).attr('id');
-	console.log(id);
+	//console.log(id);
 	jQuery(this).children('div#divShow_'+id).show();
 	
 }
@@ -1855,7 +1848,7 @@ function renderDataInLi(tiles) {
 	
 		 	for(i in tiles){
 		 		//jQuery('input#offerImageSelect').val(tiles[i].id);
-		 		console.log(tiles);
+		 		//console.log(tiles);
 		 		switch(i){
 				case 'sale':
 					for (var j in tiles[i]){
@@ -1906,8 +1899,11 @@ jQuery.extend(jQuery.validator.prototype , {
 					break;
 					
 					case 'selectedcategories[]' :
-					
+				
 						el = jQuery("input[name='selectedcategories[]']:first").focus().click().removeAttr('checked');
+						if(jQuery("input[name='selectedcategories[]']:first").hasClass('success') == false) {
+							jQuery('div#error-message').html(__('please select a category')).addClass('error-message');
+						}
 					break;
 					
 					default :

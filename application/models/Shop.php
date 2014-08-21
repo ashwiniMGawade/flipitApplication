@@ -46,10 +46,10 @@ class Shop extends BaseShop
                 "s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink,
                 c.id,ss.name, ss.permaLink"
             )
-            ->where("s.id = ?", $shopId)
-            ->andWhere("s.deleted = 0")
-            ->andWhere("s.status = 1")
+            ->where("s.id = ".$shopId)
             ->leftJoin("s.relatedshops rs")
+            ->andWhere("rs.status = 1")
+            ->andWhere("rs.deleted = 0")
             ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
             ->leftJoin('c.shop ss')

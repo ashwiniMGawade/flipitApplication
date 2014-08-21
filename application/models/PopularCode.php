@@ -173,7 +173,7 @@ class PopularCode extends BasePopularCode
         $Q = Doctrine_Query::create()->delete()->from('PopularCode s')->where("s.type='AT'")->execute();
         foreach ($newArray as $p) {
 
-            if ($p['type']!='MN') {
+            if ($p['type']!='MN' && $p['offerId']!='') {
 
                 //save popular code in database if new
                 $pc = new PopularCode();
@@ -542,14 +542,13 @@ class PopularCode extends BasePopularCode
             $pc = Doctrine_Query::create()->delete('PopularCode')
             ->where('offerId=' . $id)->execute();
 
-
-            //change position by 1 of each below element
-            $q = Doctrine_Query::create()->update('PopularCode p')
-            ->set('p.position', 'p.position -1')
-            ->where('p.position >' . $position)
-            ->execute();
-
             if ($flagForCache==true) {
+                //change position by 1 of each below element
+                $q = Doctrine_Query::create()->update('PopularCode p')
+                ->set('p.position', 'p.position -1')
+                ->where('p.position >' . $position)
+                ->execute();
+
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
@@ -572,48 +571,36 @@ class PopularCode extends BasePopularCode
      * @author kraj
      * @version 1.0
      */
-    public static function moveUp($id, $position)
+    public static function moveUp($currentCodeId, $currentPosition, $previousCodeId, $previousCodePosition)
     {
-        $pos = (intval($position) - 1);
-        //find prev element from database based of current
-        $PrevPc = Doctrine_Core::getTable('PopularCode')
-                ->findBy('position', $pos)->toArray();
-        //change position of prev element with current
-        //$flag =  1;
-        if (count($PrevPc) > 0) {
+       
+        $changeCurrentCodePosition = Doctrine_Query::create()
+            ->update('PopularCode')
+            ->set('position', $previousCodePosition)
+            ->where('id ='. $currentCodeId)
+            ->execute();
 
-        //$flag =2;
-        $changePrevPc = Doctrine_Core::getTable('PopularCode')
-                ->find($PrevPc[0]['id']);
-        $changePrevPc->position = $position;
-        $changePrevPc->save();
-        //change position of current element with postition + 1
-        //$pc = Doctrine_Core::getTable('PopularCode')->find($id);
-        //$pc->position = $pos;
-        //$pc->save();
+        $nextCodePosition = (intval($previousCodePosition) + 1);
 
-        $O = Doctrine_Query::create()->update('PopularCode')->set('position', $pos)
-             ->where('id = ?' , $id);
-        $O->execute();
-
-            //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-            $key = 'all_widget5_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'all_widget6_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-            return true ;
-            //return $flag;
-        }
-
-        return false ;
+        $changePreviousCodePosition = Doctrine_Query::create()
+            ->update('PopularCode')
+            ->set('position', $nextCodePosition)
+            ->where('id ='.$previousCodeId)
+            ->execute();
+      
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+        $key = 'all_widget5_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_widget6_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        return true ;
     }
+
     /**
      * move down popular code from list
      * @param integer $id
@@ -621,39 +608,33 @@ class PopularCode extends BasePopularCode
      * @author kraj
      * @version 1.0
      */
-    public static function moveDown($id, $position)
+    public static function moveDown($currentCodeId, $currentPosition, $nextCodeId)
     {
-        $pos = (intval($position) + 1);
-        //find next element from database based of current
-        $PrevPc = Doctrine_Core::getTable('PopularCode')
-                ->findBy('position', $pos)->toArray();
-        //change position of next element with current
-        if (count($PrevPc) > 0) {
+        $nextCodePosition = (intval($currentPosition) + 1);
 
-            $changePrevPc = Doctrine_Core::getTable('PopularCode')
-                    ->find($PrevPc[0]['id']);
-            $changePrevPc->position = $position;
-            $changePrevPc->save();
-            //change position of current element with postition - 1
-            $pc = Doctrine_Core::getTable('PopularCode')->find($id);
-            $pc->position = $pos;
-            $pc->save();
-                //call cache function
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-                $key = 'all_widget5_list';
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                $key = 'all_widget6_list';
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $changeCurrentCodePosition = Doctrine_Query::create()
+            ->update('PopularCode')
+            ->set('position', $nextCodePosition)
+            ->where('id ='. $currentCodeId)
+            ->execute();
 
-                return true ;
-            }
+        $changePreviousCodePosition = Doctrine_Query::create()
+            ->update('PopularCode')
+            ->set('position', $currentPosition)
+            ->where('id ='.$nextCodeId)
+            ->execute();
 
-            return false ;
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+        $key = 'all_widget5_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'all_widget6_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        return true ;
     }
 
     /**

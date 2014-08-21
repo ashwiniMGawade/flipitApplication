@@ -227,7 +227,9 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getPopupLink($currentOffer, $urlToShow)
     {
         if ($currentOffer->discountType == "CD") {
-            $popupLink = "?popup=$currentOffer->id&type=code#$currentOffer->id";
+            $popupLink = $currentOffer->couponCodeType == 'UN'
+            ? "?popup=$currentOffer->id&codetype=$currentOffer->couponCodeType&type=code#$currentOffer->id"
+            : "?popup=$currentOffer->id&type=code#$currentOffer->id";
         } else if ($currentOffer->discountType == "PR" || $currentOffer->discountType == "PA") {
             $popupLink = "?popup=$currentOffer->id&printable=$urlToShow#$currentOffer->id";
         } else {
@@ -356,10 +358,11 @@ class FrontEnd_Helper_OffersPartialFunctions
                 .FrontEnd_Helper_viewHelper::__translate('print now').'<span class="ico-print"></span>
             </a>';
         } else if ($currentOffer->discountType=='CD') {
+            $popupLink = self::getPopupLink($currentOffer, $urlToShow);
             $onClick =
                 "showCodeInformation($currentOffer->id), showCodePopUp(this),
                 ga('send','event', 'aff','$offerBounceRate'),
-                OpenInNewTab('".HTTP_PATH_LOCALE. $permalink. "?popup=$currentOffer->id&type=code#$currentOffer->id')";
+                OpenInNewTab('".HTTP_PATH_LOCALE. $permalink.$popupLink."')";
             $buttonWithCodeforOffer =
             '<a id="'.$currentOffer->id.'" 
             class = "btn orange btn-warning btn-code" vote="0" href="'.$urlToShow.'" 

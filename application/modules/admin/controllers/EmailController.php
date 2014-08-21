@@ -327,6 +327,10 @@ class Admin_EmailController extends Zend_Controller_Action
         $this->view->sendersEmailAddress = $sendersEmailAddress;
         $this->view->sendersName = Settings::getEmailSettings('sender_name');
     }
+    public function codeAlertAction()
+    {
+
+    }
 
     public function getFlashMessage()
     {

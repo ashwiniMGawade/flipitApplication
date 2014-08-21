@@ -1,0 +1,25 @@
+<?php 
+$I = new AcceptanceTester($scenario);
+$I = new AcceptanceTester\LoginSteps($scenario);
+$I->login();
+$I->selectOption('.websites-access-list select', 'flipit.com/in');
+$I->canSee('Shops');
+$I->click('Shops');
+$I->amOnPage('/admin/shop/');
+$I->click('.fl button');
+$I->amOnPage('/admin/shop/createshop');
+$I->fillField('#shopName', 'acceptance shop');
+$I->fillField('#shopNavUrl', 'acceptance-shop');
+$I->fillField('#shopTitle', 'acc shop');
+$I->fillField('#shopSubTitle', 'test acc shop');
+$I->selectOption('#selecteditors', 'Joanna Jaoudie');
+$I->click('button[name=selectCategory]');
+$I->fillField('input[name=shopRefUrl]', 'http://www.flipit.com/in');
+$I->fillField('input[name=shopActualUrl]', 'http://www.flipit.com/in');
+$I->click('button[onclick="setOnOff(event,\'howtouse\',\'on\');$(\'#howToUseContent\').removeClass(\'display-none\');"]');
+$I->fillField('#pageTitle', 'how to test');
+$I->fillField('#pageSubTitle', 'how to test');
+$I->fillField('#pagemetaTitle', 'how to test');
+$I->fillField('#pagemetaDesc', 'how to test');
+$I->click('#publishShopButton');
+$I->amOnPage('/admin/shop/');
