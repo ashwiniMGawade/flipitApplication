@@ -256,10 +256,8 @@ class FrontEnd_Helper_OffersPartialFunctions
         }
         if ($offerImage == 'offerImage') {
             $offerLink =
-                '<a id="'.$currentOffer->id.'" class="'.$class.'" 
-                href="#" vote="0" rel="nofollow" 
-                >
-                '.$offerAnchorTagContent.' </a>';
+                '<div class="'.$class.'">
+                '.$offerAnchorTagContent.' </div>';
         } else {
             if ($currentOffer->discountType == "CD") {
                 $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
