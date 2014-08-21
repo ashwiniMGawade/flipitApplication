@@ -21,7 +21,7 @@ if (!empty($this->similarShopsAndSimilarCategoryShops)) {
             '<li><a href="%s"><img alt="%s" src="%s"></a></li>',
             HTTP_PATH_LOCALE  . $shop['permaLink'],
             $shop['name'],
-            PUBLIC_PATH_CDN . $shop['logo']['path'] . 'thum_small_'. $shop['logo']['name']
+            PUBLIC_PATH_CDN . ltrim($shop['logo']['path'], "/") . 'thum_small_'. $shop['logo']['name']
         );
     }
 }
