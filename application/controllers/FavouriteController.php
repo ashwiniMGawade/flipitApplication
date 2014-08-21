@@ -23,7 +23,25 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops(Shop::getPopularStores(25));
+            $searchBrandForm = new Application_Form_SearchBrand();
+            $this->view->form = $searchBrandForm;
+            if ($this->getRequest()->isPost()) {
+                if ($searchBrandForm->isValid($this->getRequest()->getPost())) {
+                    $searchBrandForm->getValue('searchBrand');
+                    $stores = Shop::getStoresForSearchByKeyword($searchBrandForm->getValue('searchBrand'), 25);
+                    echo "<pre>";
+                    print_r($stores);
+                    die;
+                } else {
+                    $searchBrandForm->highlightErrorElements();
+                }
+            } else {
+                $stores = Shop::getPopularStores(25);
+                echo "<pre>";
+                print_r($stores);
+                die;
+            }
+            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops($stores);
             $this->view->favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
             $this->view->pageCssClass = 'brands-page';
         } else {
