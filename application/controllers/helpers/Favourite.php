@@ -34,9 +34,9 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
 
     public static function changeStoresPositions($stores)
     {
-        $changesStorePosition = '';
+        $changeStoresPositions = '';
         foreach ($stores as $store) {
-            $changesStorePosition[] =  array(
+            $changeStoresPositions[] =  array(
                 'id' => $store['shop']['id'],
                 'imgpath'=>$store['imgpath'],
                 'imgname'=>$store['imgname'],
@@ -45,19 +45,19 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
                  'activeCount'=>$store['activeCount']
             );
         }
-        return $changesStorePosition;
+        return $changeStoresPositions;
     }
 
     public static function getPopularStores()
     {
-        $topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+        $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "25_popularshop_list",
             array(
                 'function' => 'Shop::getPopularStores',
                 'parameters' => array(25)
             )
         );
-        $stores = self::changeStoresPositions($topStores);
+        $stores = self::changeStoresPositions($popularStores);
         return $stores;
     }
 }

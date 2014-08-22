@@ -30,7 +30,7 @@ class FavouriteController extends Zend_Controller_Action
                     $stores = Shop::getStoresForSearchByKeyword(
                         $searchBrandForm->getValue('searchBrand'),
                         25,
-                        'fovourite'
+                        'favourite'
                     );
                 } else {
                     $searchBrandForm->highlightErrorElements();
