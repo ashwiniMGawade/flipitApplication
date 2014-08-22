@@ -34,10 +34,10 @@ class FavouriteController extends Zend_Controller_Action
                     );
                 } else {
                     $searchBrandForm->highlightErrorElements();
-                    $stores = $this->_helper->Favourite->getPopularStore();
+                    $stores = $this->_helper->Favourite->getPopularStores();
                 }
             } else {
-                $stores = $this->_helper->Favourite->getPopularStore();
+                $stores = $this->_helper->Favourite->getPopularStores();
             }
             $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops($stores);
             $this->view->favouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(

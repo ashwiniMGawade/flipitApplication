@@ -32,7 +32,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
         return isset($favouriteOffersDesc['fvid']) ? $favouriteOffersDesc['fvid'] : '';
     }
 
-    public static function changeStoresPoistion($stores)
+    public static function changeStoresPositions($stores)
     {
         $changesStorePosition = '';
         foreach ($stores as $store) {
@@ -48,7 +48,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
         return $changesStorePosition;
     }
 
-    public static function getPopularStore()
+    public static function getPopularStores()
     {
         $topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             "25_popularshop_list",
@@ -57,7 +57,7 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
                 'parameters' => array(25)
             )
         );
-        $stores = self::changeStoresPoistion($topStores);
+        $stores = self::changeStoresPositions($topStores);
         return $stores;
     }
 }
