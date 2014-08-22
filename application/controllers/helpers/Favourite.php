@@ -31,4 +31,33 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
     {
         return isset($favouriteOffersDesc['fvid']) ? $favouriteOffersDesc['fvid'] : '';
     }
+
+    public static function changeStoresPoistion($stores)
+    {
+        $changesStorePosition = '';
+        foreach ($stores as $store) {
+            $changesStorePosition[] =  array(
+                'id' => $store['shop']['id'],
+                'imgpath'=>$store['imgpath'],
+                'imgname'=>$store['imgname'],
+                'name'=>$store['shop']['name'],
+                'permaLink'=>$store['shop']['permaLink'],
+                 'activeCount'=>$store['activeCount']
+            );
+        }
+        return $changesStorePosition;
+    }
+
+    public static function getPopularStore()
+    {
+        $topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            "25_popularshop_list",
+            array(
+                'function' => 'Shop::getPopularStores',
+                'parameters' => array(25)
+            )
+        );
+        $stores = self::changeStoresPoistion($topStores);
+        return $stores;
+    }
 }

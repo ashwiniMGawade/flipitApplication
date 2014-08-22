@@ -234,7 +234,7 @@ public static function addShopInList($title)
 }
 //call cache function
 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
-
+FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
 return $flag;
 
     }
@@ -257,6 +257,7 @@ return $flag;
                             ->where('p.position >' . $position)->execute();
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
 
                         }
                     }
@@ -289,6 +290,7 @@ return $flag;
                             $pc->save();
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
                             return true ;
                         }
                         return false ;
@@ -323,6 +325,7 @@ return $flag;
                             $pc->save();
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
                             return true ;
                         }
                         return false ;
