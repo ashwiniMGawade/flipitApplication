@@ -1,5 +1,5 @@
 <?php
-require_once 'BootstrapConstant.php';
+require_once 'BootstrapApplicationConstants.php';
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {
