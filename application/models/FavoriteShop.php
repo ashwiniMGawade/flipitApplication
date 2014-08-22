@@ -25,7 +25,7 @@ class FavoriteShop extends BaseFavoriteShop
         }
         $removeAlreayAddedFavouriteShops = array();
         foreach ($popularShops as $popularShop) {
-            if (!in_array($popularShop['shopId'], $favouriteShops)) {
+            if (!in_array($popularShop['id'], $favouriteShops)) {
                 $removeAlreayAddedFavouriteShops[] = $popularShop;
             }
         }

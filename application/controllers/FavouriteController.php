@@ -23,8 +23,30 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops(Shop::getPopularStores(25));
-            $this->view->favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
+            $searchBrandForm = new Application_Form_SearchBrand();
+            $this->view->form = $searchBrandForm;
+            if ($this->getRequest()->isPost()) {
+                if ($searchBrandForm->isValid($this->getRequest()->getPost())) {
+                    $stores = Shop::getStoresForSearchByKeyword(
+                        $searchBrandForm->getValue('searchBrand'),
+                        25,
+                        'favourite'
+                    );
+                } else {
+                    $searchBrandForm->highlightErrorElements();
+                    $stores = $this->_helper->Favourite->getPopularStores();
+                }
+            } else {
+                $stores = $this->_helper->Favourite->getPopularStores();
+            }
+            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops($stores);
+            $this->view->favouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                "all_favouriteShop". Auth_VisitorAdapter::getIdentity()->id."_list",
+                array(
+                    'function' => 'Visitor::getFavoriteShops',
+                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
+                )
+            );
             $this->view->pageCssClass = 'brands-page';
         } else {
             $this->_redirect('/');
@@ -38,9 +60,6 @@ class FavouriteController extends Zend_Controller_Action
             $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
             $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
             $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-            /*echo "<pre>";
-            print_r($offers);
-            die;*/
             $this->view->favouriteShopsOffers = $offers;
             $this->view->userDetails = $userDetails[0];
             $this->view->pageCssClass = 'youroffers-page';
