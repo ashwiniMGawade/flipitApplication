@@ -1,3 +1,4 @@
+
 # Noindex on static files which are not allowed to be cached.
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^www.kortingscode.nl$
@@ -28,7 +29,6 @@ RewriteCond %{HTTP_HOST} ^www.flipit.com$
 RewriteRule ^sitemaps$ public/flipit/robots.txt [NC,L]
 
 RewriteRule ^(.*)/$ /$1 [L,R=301]
-
 
 # wp redirects
 RewriteRule ^nieuws/?$ http://www.kortingscode.nl/bespaarwijzer? [R=301,L]

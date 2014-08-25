@@ -1,0 +1,464 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: links_kortingscode\n"
+"POT-Creation-Date: 2013-10-18 13:38+0530\n"
+"PO-Revision-Date: 2013-10-18 11:20+0100\n"
+"Last-Translator: Chetan <cbhopal@seasiaconsulting.com>\n"
+"Language-Team: KC-Team <kortingscode@seasiaconsulting.com>\n"
+"Language: dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: __link\n"
+"X-Poedit-Basepath: C:\\wamp\\www\\kortingscode.nl\\kortingscode.nl\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: application/controllers\n"
+"X-Poedit-SearchPath-1: application/views\n"
+"X-Poedit-SearchPath-2: public/js/front_end\n"
+
+#: profileImage.js:25
+msgid "Dit bestand wordt niet ondersteund! Upload een .jpg of .png"
+msgstr "This file is not supported! Upload a. Jpg or. Png"
+
+#: myfavorite.js:35
+msgid "Favorieten"
+msgstr "Favorites"
+
+#: myfavorite.js:38
+msgid "Onze suggesties voor favorieten winkels"
+msgstr "Our suggestions for shops you might like"
+
+#: myfavorite.js:45
+msgid "Toevoegen"
+msgstr "Add"
+
+#: myfavorite.js:67
+msgid "Jouw geselecteerde favorieten"
+msgstr "Your favorites"
+
+#: myfavorite.js:73
+msgid "verwijderen"
+msgstr "Delete"
+
+#: myfavorite.js:96 storeDetal.js:22
+msgid "is toegevoegd aan uw favorieten"
+msgstr "has been added to your favorites"
+
+#: myfavorite.js:98 storeDetal.js:30
+msgid "is verwijderd uit uw favorieten"
+msgstr "has been removed from your favorites"
+
+#: storeDetal.js:20
+msgid "is toegevoegd aan favorieten"
+msgstr "has been added to favorites"
+
+#: storeDetal.js:28
+msgid "toevoegen aan favorieten"
+msgstr "Add to favorites"
+
+#: storeDetal.js:65 storeDetal.js:71
+msgid "Read More"
+msgstr ""
+
+#: storeDetal.js:66 storeDetal.js:72
+msgid "Less More"
+msgstr ""
+
+#: storeDetal.js:112
+msgid "Your vote is succesfully registered"
+msgstr ""
+
+#: storeDetal.js:114
+msgid "You have already voted it"
+msgstr ""
+
+#: resetpwd.js:103
+msgid "Voer je nieuwe wachtwoord in"
+msgstr "Type your new password"
+
+#: resetpwd.js:104 resetpwd.js:109
+#, fuzzy
+msgid "Please enter minimum 6 characters"
+msgstr "Please enter a maximum 10 of characters"
+
+#: resetpwd.js:105 resetpwd.js:110
+msgid "Please enter maximum 20 characters"
+msgstr ""
+
+#: resetpwd.js:108
+msgid "Herhaal je nieuwe wachtwoord"
+msgstr "Confirm your new password"
+
+#: step3.js:3
+msgid "Password = OK"
+msgstr ""
+
+#: step3.js:4
+msgid "ConfirmPassword = OK"
+msgstr ""
+
+#: step3.js:5
+msgid "Firstname = OK"
+msgstr ""
+
+#: step3.js:6
+msgid "Lastname = OK"
+msgstr ""
+
+#: step3.js:7
+msgid "Gender = OK"
+msgstr ""
+
+#: step3.js:8
+msgid "Day = OK"
+msgstr ""
+
+#: step3.js:9
+msgid "Month = OK"
+msgstr ""
+
+#: step3.js:10
+msgid "Year = OK"
+msgstr ""
+
+#: step3.js:11
+msgid "PostCode = OK"
+msgstr ""
+
+#: step3.js:72 profile.js:167
+msgid "Voer uw voornaam in"
+msgstr "Enter your first name"
+
+#: step3.js:75 profile.js:172
+#, fuzzy
+msgid "Voer uw achternaam in"
+msgstr "Type your new password"
+
+#: step3.js:78 profile.js:177
+msgid "Selecteer uw geslacht"
+msgstr "Select your sex"
+
+#: step3.js:81 profile.js:180
+msgid "Selecteer uw geboorte dag"
+msgstr "Select your birthday"
+
+#: step3.js:84 profile.js:183
+msgid "Selecteer uw geboorte maand"
+msgstr "Select your birth month"
+
+#: step3.js:87 profile.js:186
+msgid "Selecteer uw geboorte jaar"
+msgstr "Select your birth year"
+
+#: step3.js:90 profile.js:189
+msgid "Voer uw postcode in"
+msgstr "Enter your postcode"
+
+#: step3.js:91
+msgid "Voer uw juiste postcode in 1234AB"
+msgstr "Enter your correct postcode"
+
+#: step3.js:94
+#, fuzzy
+msgid "Voer uw wachtwoord in"
+msgstr "Type your new password"
+
+#: step3.js:97
+#, fuzzy
+msgid "Voer hetzelfde wachtwoord in"
+msgstr "Type your new password"
+
+#: step3.js:98
+msgid "Uw wachtwoorden komen niet overeen"
+msgstr "Your passwords do not match"
+
+#: signupnomorefree.js:18 moneysaving.js:15
+msgid "Email looks great"
+msgstr ""
+
+#: signupnomorefree.js:19
+msgid "Actiecode looks great"
+msgstr ""
+
+#: signupnomorefree.js:28
+msgid "Enter valid email address"
+msgstr ""
+
+#: signupnomorefree.js:29
+msgid "Enter valid actiecode"
+msgstr ""
+
+#: signupnomorefree.js:88
+msgid "Please enter your email address"
+msgstr ""
+
+#: signupnomorefree.js:89 signupnomorefree.js:90
+msgid "Please enter valid email address"
+msgstr ""
+
+#: signupnomorefree.js:172
+#, fuzzy
+msgid "Please enter your actiecode"
+msgstr "Please enter at least 2 characters"
+
+#: moneysaving.js:26
+msgid "Enter  email address"
+msgstr ""
+
+#: moneysaving.js:54
+msgid "Click Here to create a profile!"
+msgstr ""
+
+#: layout.js:35
+msgid "freesignup"
+msgstr ""
+
+#: layout.js:143
+msgid "zoeken"
+msgstr "search"
+
+#: layout.js:428
+msgid "Store does not exist"
+msgstr ""
+
+#: layout.js:459
+msgid "Your offer has been added successfully !"
+msgstr ""
+
+#: layout.js:464
+#, fuzzy
+msgid "Please select atleast one shop !"
+msgstr "Please enter at least 2 characters"
+
+#: layout.js:496
+#, fuzzy
+msgid "Please add a shop"
+msgstr "Please upload an icon"
+
+#: layout.js:499
+#, fuzzy
+msgid "Please add discount code"
+msgstr "Please upload an icon"
+
+#: layout.js:502
+msgid "Please add the discription of the code"
+msgstr ""
+
+#: layout.js:1118 profile.js:120
+msgid "Valideren..."
+msgstr "Validating..."
+
+#: layout.js:1129 layout.js:1137 layout.js:1150 step1.js:115
+msgid "Voer uw e-mailadres in"
+msgstr "Enter your email address"
+
+#: layout.js:1151 step1.js:116
+msgid "Voer een geldig e-mailadres"
+msgstr "Please enter a valid email address"
+
+#: layout.js:1152
+msgid "E-mail bestaat al"
+msgstr "Email already exists"
+
+#: step1.js:18
+msgid "E-mail = OK"
+msgstr "E-mail = OK"
+
+#: step1.js:117
+msgid "Vul minimaal 6 karakters"
+msgstr "Enter at least 6 characters"
+
+#: step1.js:118
+msgid "Dit e-mailadres is al in gebruik"
+msgstr "This email address is already in use"
+
+#: profile.js:2 login.js:14
+msgid "E-mail ziet er geweldig uit"
+msgstr "Email looks great"
+
+#: profile.js:3 login.js:15
+msgid "ok! goed wachtwoord"
+msgstr "ok! password seems to be good"
+
+#: profile.js:4
+msgid "ok! wachtwoord wedstrijd"
+msgstr "ok! password match"
+
+#: profile.js:5
+msgid "voornaam ziet er geweldig uit"
+msgstr "name seems correct"
+
+#: profile.js:6
+msgid "achternaam ziet er geweldig uit"
+msgstr "surname seems correct"
+
+#: profile.js:7
+msgid "geslacht ziet er geweldig uit"
+msgstr "correct"
+
+#: profile.js:8
+msgid "dag ziet er geweldig uit"
+msgstr "correct"
+
+#: profile.js:9
+msgid "maand ziet er geweldig uit"
+msgstr "correct"
+
+#: profile.js:10
+msgid "jaar ziet er geweldig uit"
+msgstr "correct"
+
+#: profile.js:11
+msgid "postcode er geweldig uit"
+msgstr "postcode looks correct"
+
+#: profile.js:21 profile.js:22 profile.js:23 profile.js:24 profile.js:25
+#: profile.js:26 profile.js:27 profile.js:28 profile.js:29 profile.js:30
+#: profile.js:138
+msgid "Geldig E-mail"
+msgstr "Valid Email"
+
+#: profile.js:168
+#, fuzzy
+msgid "Vul minimaal 3 karakters"
+msgstr "It should be a minimum of 3 characters"
+
+#: profile.js:169
+msgid "Vul maximaal 20 karakters"
+msgstr "Enter up to 20 characters"
+
+#: profile.js:173
+msgid "Vul minimaal 2 tekens"
+msgstr "Enter at least 2 characters"
+
+#: profile.js:174
+msgid "Vul maximaal 200 tekens"
+msgstr "Enter up to 200 characters"
+
+#: profile.js:190
+msgid "Voer uw juiste postcode in"
+msgstr "Enter your postcode"
+
+#: allStore.js:49
+msgid "Sorry guys, no record found!"
+msgstr ""
+
+#: jquery-1.7.1.min.js:2 jquery-1.7.1.min.js:4 login.js:104 login.js:105
+#: forgotpwd.js:101 forgotpwd.js:102
+msgid "Voer een geldig email adres in"
+msgstr "Please enter a valid email address"
+
+#: login.js:206
+msgid "aanmelden"
+msgstr "sign up"
+
+#: forgotpwd.js:106
+msgid "Voer minimaal 6 karakters in"
+msgstr "Enter at least 6 characters"
+
+#: forgotpwd.js:107
+msgid "Voer maximaal 20 karakters in"
+msgstr "Enter up to 20 characters"
+
+#: forgotpwd.js:220 forgotpwd.js:226
+msgid "verstuur"
+msgstr "Send"
+
+#~ msgid "Please not enter more than 10 digits"
+#~ msgstr "Please do not enter more than 10 digits"
+
+#~ msgid ""
+#~ "<span class='error help-inline'>End date should be greater than start "
+#~ "date</span>"
+#~ msgstr ""
+#~ "<span class='error help-inline'>Ending date should be higher than "
+#~ "starting date</span>"
+
+#~ msgid ""
+#~ "<span class='error help-inline'>Please upload only jpg or png image</span>"
+#~ msgstr ""
+#~ "<span class='error help-inline'>Please upload only jpg or png images</"
+#~ "span>"
+
+#~ msgid ""
+#~ "store list can have maximum 25 records, please delete one if you want to "
+#~ "add more store"
+#~ msgstr ""
+#~ "store list can have maximum 25 records, please delete one if you want to "
+#~ "add more stores"
+
+#~ msgid "Are you sure you want to make this offer offline?"
+#~ msgstr "Are you sure you want to mark this offer as offline?"
+
+#~ msgid "Are you sure you want to make this offer online?"
+#~ msgstr "Are you sure you want to mark this offer as online?"
+
+#~ msgid " - Kortingscode.nl "
+#~ msgstr "- Flipit.com"
+
+#~ msgid " Kortingscodes "
+#~ msgstr "Voucher Codes"
+
+#~ msgid "De meest actuele "
+#~ msgstr "The most recent"
+
+#~ msgid " kortingscodes, aanbiedingen en kortingsbonnen. Pak gratis een "
+#~ msgstr "voucher codes, offers and vouchers. Take one for free"
+
+#~ msgid "kortingscode en bespaar!"
+#~ msgstr "Voucher Code and Discount!"
+
+#~ msgid "Actuele "
+#~ msgstr "recent"
+
+#~ msgid "aanbiedingen & kortingscodes -"
+#~ msgstr "offers & voucher codes -"
+
+#~ msgid "- Kortingscode.nl"
+#~ msgstr "- Flipit.com"
+
+#~ msgid "Kortingscodes"
+#~ msgstr "Voucher Codes"
+
+#~ msgid "kortingscodes, aanbiedingen en kortingsbonnen. Pak gratis een"
+#~ msgstr "voucher codes, offers and vouchers. Take one for free"
+
+#~ msgid "Actuele"
+#~ msgstr "Recent"
+
+#~ msgid " aanbiedingen & kortingscodes - "
+#~ msgstr "offers & voucher codes -"
+
+#~ msgid "De meest actuele"
+#~ msgstr "The most recent"
+
+#~ msgid "Are you sure you want to send the newsletter?"
+#~ msgstr "Are you sure you want to mark this offer as online?"
+
+#~ msgid "Tab can not delete"
+#~ msgstr "Tab cannot be deleted"
+
+#~ msgid ""
+#~ "Popular Voucher code list can have maximum 25 records, please delete one "
+#~ "if you want to add more popular voucher code"
+#~ msgstr ""
+#~ "Popular Voucher code list can have maximum 25 records, please delete one "
+#~ "if you want to add more popular voucher codes"
+
+#~ msgid ""
+#~ "Popular Categories list can have maximum 25 records, please delete one if "
+#~ "you want to add more popular Category"
+#~ msgstr ""
+#~ "Popular Categories list can have maximum 25 records, please delete one if "
+#~ "you want to add more popular Categories"
+
+#~ msgid ""
+#~ "Special offer list can have maximum 25 records, please delete one if you "
+#~ "want to add more Special list"
+#~ msgstr ""
+#~ "Special offer list can have maximum 25 records, please delete one if you "
+#~ "want to add more Special lists"
+
+#~ msgid "Are you sure you want to permanent delete this record?"
+#~ msgstr "Are you sure you want to permanently delete this record?"

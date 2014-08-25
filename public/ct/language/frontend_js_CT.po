@@ -1,0 +1,328 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: links_kortingscode\n"
+"POT-Creation-Date: 2013-06-11 13:34+0530\n"
+"PO-Revision-Date: 2013-06-11 10:06+0100\n"
+"Last-Translator: Chetan <cbhopal@seasiaconsulting.com>\n"
+"Language-Team: KC-Team <kortingscode@seasiaconsulting.com>\n"
+"Language: dutch\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.5\n"
+"X-Poedit-KeywordsList: __link\n"
+"X-Poedit-Basepath: C:\\wamp\\www\\kortingscode.nl\\kortingscode.nl\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-SearchPath-0: application/controllers\n"
+"X-Poedit-SearchPath-1: application/views\n"
+"X-Poedit-SearchPath-2: public/js/front_end\n"
+
+#: resetpwd.js:101
+msgid "Voer je nieuwe wachtwoord in"
+msgstr "Enter your new password"
+
+#: resetpwd.js:102 resetpwd.js:107
+msgid "Please enter minimum 6 characters"
+msgstr "Please enter at least 6 characters"
+
+#: resetpwd.js:103 resetpwd.js:108
+msgid "Please enter maximum 20 characters"
+msgstr "Please enter a maximum of 20 characters"
+
+#: resetpwd.js:106
+msgid "Herhaal je nieuwe wachtwoord"
+msgstr "Repeat your new password"
+
+#: step3.js:3
+msgid "Password = OK"
+msgstr ""
+
+#: step3.js:4
+msgid "ConfirmPassword = OK"
+msgstr ""
+
+#: step3.js:5
+msgid "Firstname = OK"
+msgstr ""
+
+#: step3.js:6
+msgid "Lastname = OK"
+msgstr ""
+
+#: step3.js:7
+msgid "Gender = OK"
+msgstr ""
+
+#: step3.js:8
+msgid "Day = OK"
+msgstr ""
+
+#: step3.js:9
+msgid "Month = OK"
+msgstr ""
+
+#: step3.js:10
+msgid "Year = OK"
+msgstr ""
+
+#: step3.js:11
+msgid "PostCode = OK"
+msgstr "Postal Code = OK"
+
+#: step3.js:72 profile.js:167
+msgid "Voer uw voornaam in"
+msgstr "Enter your first name"
+
+#: step3.js:75 profile.js:172
+msgid "Voer uw achternaam in"
+msgstr "Enter your last name"
+
+#: step3.js:78 profile.js:177
+msgid "Selecteer uw geslacht"
+msgstr "Select your gender"
+
+#: step3.js:81 profile.js:180
+msgid "Selecteer uw geboorte dag"
+msgstr "Select your birth day"
+
+#: step3.js:84 profile.js:183
+msgid "Selecteer uw geboorte maand"
+msgstr "Select your birth month"
+
+#: step3.js:87 profile.js:186
+msgid "Selecteer uw geboorte jaar"
+msgstr "Select your birth year"
+
+#: step3.js:90 profile.js:189
+msgid "Voer uw postcode in"
+msgstr "Enter your postal code"
+
+#: step3.js:91
+msgid "Voer uw juiste postcode in 1234AB"
+msgstr "Enter your correct postal code 110002"
+
+#: step3.js:94
+msgid "Voer uw wachtwoord in"
+msgstr "Enter your password"
+
+#: step3.js:97
+msgid "Voer hetzelfde wachtwoord in"
+msgstr "Enter the same password"
+
+#: step3.js:98
+msgid "Uw wachtwoorden komen niet overeen"
+msgstr "Your passwords do not match"
+
+#: layout.js:35
+msgid "freesignup"
+msgstr ""
+
+#: layout.js:147
+msgid "zoeken"
+msgstr "search"
+
+#: layout.js:429
+msgid "Store does not exist"
+msgstr ""
+
+#: layout.js:450
+msgid "Your offer has been added successfully !"
+msgstr ""
+
+#: layout.js:1089 profile.js:120
+msgid "Valideren..."
+msgstr "Validating ..."
+
+#: layout.js:1100 layout.js:1108 layout.js:1121 step1.js:115
+msgid "Voer uw e-mailadres in"
+msgstr "Enter your email address"
+
+#: layout.js:1122 step1.js:116
+msgid "Voer een geldig e-mailadres"
+msgstr "Please enter a valid email address"
+
+#: layout.js:1123
+msgid "E-mail bestaat al"
+msgstr "Email already exists"
+
+#: forgotpwd.js:101 forgotpwd.js:102 login.js:104 login.js:105
+msgid "Voer een geldig email adres in"
+msgstr "Please enter a valid email address"
+
+#: forgotpwd.js:106
+msgid "Voer minimaal 6 karakters in"
+msgstr "Enter at least 6 characters"
+
+#: forgotpwd.js:107
+msgid "Voer maximaal 20 karakters in"
+msgstr "Enter up to 20 characters"
+
+#: step1.js:18
+msgid "E-mail = OK"
+msgstr ""
+
+#: step1.js:117
+msgid "Vul minimaal 6 karakters"
+msgstr "Enter at least 6 characters"
+
+#: step1.js:118
+msgid "Dit e-mailadres is al in gebruik"
+msgstr "This email address is already in use"
+
+#: moneysaving.js:15 signupnomorefree.js:18
+msgid "Email looks great"
+msgstr ""
+
+#: moneysaving.js:26
+msgid "Enter  email address"
+msgstr "Enter email address"
+
+#: moneysaving.js:54
+msgid "Click Here to create a profile!"
+msgstr ""
+
+#: profile.js:2 login.js:14
+msgid "E-mail ziet er geweldig uit"
+msgstr "Email looks great"
+
+#: profile.js:3 login.js:15
+msgid "ok! goed wachtwoord"
+msgstr "ok! good password"
+
+#: profile.js:4
+msgid "ok! wachtwoord wedstrijd"
+msgstr "ok! password match"
+
+#: profile.js:5
+msgid "voornaam ziet er geweldig uit"
+msgstr "First Name looks great"
+
+#: profile.js:6
+msgid "achternaam ziet er geweldig uit"
+msgstr "surname looks great"
+
+#: profile.js:7
+msgid "geslacht ziet er geweldig uit"
+msgstr "gender looks great"
+
+#: profile.js:8
+msgid "dag ziet er geweldig uit"
+msgstr "day looks great"
+
+#: profile.js:9
+msgid "maand ziet er geweldig uit"
+msgstr "month looks great"
+
+#: profile.js:10
+msgid "jaar ziet er geweldig uit"
+msgstr "year looks great"
+
+#: profile.js:11
+msgid "postcode er geweldig uit"
+msgstr "postal code looks great"
+
+#: profile.js:21 profile.js:22 profile.js:23 profile.js:24 profile.js:25
+#: profile.js:26 profile.js:27 profile.js:28 profile.js:29 profile.js:30
+#: profile.js:138
+msgid "Geldig E-mail"
+msgstr "Valid Email"
+
+#: profile.js:168
+msgid "Vul minimaal 3 karakters"
+msgstr "Enter at least 3 characters"
+
+#: profile.js:169
+msgid "Vul maximaal 20 karakters"
+msgstr "Enter up to 20 characters"
+
+#: profile.js:173
+msgid "Vul minimaal 2 tekens"
+msgstr "Enter at least 2 characters"
+
+#: profile.js:174
+msgid "Vul maximaal 200 tekens"
+msgstr "Enter up to 200 characters"
+
+#: profile.js:190
+msgid "Voer uw juiste postcode in"
+msgstr "Enter your correct postal code"
+
+#: profileImage.js:25
+msgid "Dit bestand wordt niet ondersteund! Upload een .jpg of .png"
+msgstr "This file is not supported! Upload a. jpg or. png"
+
+#: allStore.js:49
+msgid "Sorry guys, no record found!"
+msgstr ""
+
+#: storeDetal.js:20
+msgid "is toegevoegd aan favorieten"
+msgstr "has been added to your favourites"
+
+#: storeDetal.js:22 myfavorite.js:96
+msgid "is toegevoegd aan uw favorieten"
+msgstr "has been added to your favourites"
+
+#: storeDetal.js:28
+msgid "toevoegen aan favorieten"
+msgstr "Add to favourites"
+
+#: storeDetal.js:30 myfavorite.js:98
+msgid "is verwijderd uit uw favorieten"
+msgstr "has been removed from your favourites"
+
+#: storeDetal.js:63 storeDetal.js:69
+msgid "Read More"
+msgstr ""
+
+#: storeDetal.js:64 storeDetal.js:70
+msgid "Less More"
+msgstr ""
+
+#: signupnomorefree.js:19
+msgid "Actiecode looks great"
+msgstr "Coupon looks great"
+
+#: signupnomorefree.js:28
+msgid "Enter valid email address"
+msgstr "Enter valid email address"
+
+#: signupnomorefree.js:29
+msgid "Enter valid actiecode"
+msgstr "Enter valid actiecode"
+
+#: signupnomorefree.js:88
+msgid "Please enter your email address"
+msgstr "Please enter your email address"
+
+#: signupnomorefree.js:89 signupnomorefree.js:90
+msgid "Please enter valid email address"
+msgstr "Please enter valid email address"
+
+#: signupnomorefree.js:172
+msgid "Please enter your actiecode"
+msgstr "Please enter your coupon"
+
+#: login.js:206
+msgid "aanmelden"
+msgstr "login"
+
+#: jquery-1.7.1.min.js:2 jquery-1.7.1.min.js:4 myfavorite.js:35
+msgid "Favorieten"
+msgstr "Favourites"
+
+#: myfavorite.js:38
+msgid "Onze suggesties voor favorieten winkels"
+msgstr "Our suggestions for favourite shops"
+
+#: myfavorite.js:45
+msgid "Toevoegen"
+msgstr "Add"
+
+#: myfavorite.js:67
+msgid "Jouw geselecteerde favorieten"
+msgstr "Your selected favourites"
+
+#: myfavorite.js:73
+msgid "verwijderen"
+msgstr "remove"

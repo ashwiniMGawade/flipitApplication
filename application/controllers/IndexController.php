@@ -20,7 +20,7 @@ class IndexController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {
+    { 
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();

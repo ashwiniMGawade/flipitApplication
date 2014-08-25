@@ -9,9 +9,12 @@ modules:
     enabled:
         - WebDriver
         - AcceptanceHelper
+        - Db
     config:
         WebDriver:
             url: 'http://www.flipit.com/'
             browser: phantomjs
             capabilities:
                 phantomjs.cli.args: ['--ignore-ssl-errors=true']
+        Db:
+            cleanup: true
