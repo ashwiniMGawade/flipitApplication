@@ -13,7 +13,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected $request = null;
     protected $httpHost = null;
     protected $siteName = "kortingscode.nl";
-    protected $route = array();
+    protected $route = null;
     protected $routeProperties = array();
     protected $cdnUrl = '';
     protected $scriptFileName = '';
@@ -73,6 +73,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $s3Credentials = $this->getOption('s3');
         BootstrapConstantsFunctions::s3ConstantDefines($s3Credentials);
         defined('BASE_ROOT') || define('BASE_ROOT', dirname($this->scriptFileName) . '/');
+        self::setContantsForLocaleAndAdmin();
+    }
+
+    public function setContantsForLocaleAndAdmin()
+    {
         if (strlen(strtolower($this->moduleDirectoryName))==2 && $this->httpHost != "www.kortingscode.nl") {
             BootstraplocaleConstantsFunctions::constantsForLocale(
                 $this->moduleDirectoryName,
@@ -116,18 +121,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 'basePath' => APPLICATION_PATH,
                 'namespace' => 'Application',
                 'resourceTypes' => array(
-                    'form' => array(
-                        'path' => 'forms/',
-                        'namespace' => 'Form'
-                    ),
-                    'model' => array(
-                        'path' => 'models/',
-                        'namespace' => 'Model'
-                    ),
-                    'service' => array(
-                        'path' => 'services/',
-                        'namespace' => 'Service'
-                    )
+                    'form' => array('path' => 'forms/', 'namespace' => 'Form'),
+                    'model' => array('path' => 'models/', 'namespace' => 'Model'),
+                    'service' => array('path' => 'services/', 'namespace' => 'Service')
                 )
             )
         );
@@ -198,7 +194,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $getPermalinkFromDb = RoutePermalink::getRoute($permalink);
             $actualPermalink = $permalink;
         }
-
         // check if permalink exists in route permalink table
         if (count($getPermalinkFromDb) > 0) {
             BootstrapRouterFunctions::setRouteForPermalink(
@@ -209,6 +204,11 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $this->moduleName
             );
         }
+        self::setRoutersByRules($permalink, $httpScheme);
+    }
+
+    public function setRoutersByRules($permalink, $httpScheme)
+    {
         // for 301 redirections of old indexed pages
         BootstrapRouterFunctions::redirectionForOldWebsiteUrls($permalink);
         if ($this->routeProperties[0] != 'admin' &&
@@ -221,6 +221,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             }
             BootstrapRouterFunctions::getRouteFromRuleFile($this->route);
         }
+        return;
     }
 
     protected function _initCache()
