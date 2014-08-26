@@ -12,7 +12,7 @@ modules:
         - Db
     config:
         WebDriver:
-            url: 'http://www.flipit.com/'
+            url: 'http://www.kortingscode.nl'
             browser: phantomjs
             capabilities:
                 phantomjs.cli.args: ['--ignore-ssl-errors=true']
