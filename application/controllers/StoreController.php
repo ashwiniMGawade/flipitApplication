@@ -123,6 +123,11 @@ class StoreController extends Zend_Controller_Action
             $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
             $this->view->topPopularOffers = $offers;
         }
+
+        if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
+            $this->view->discussionComments =
+                DisqusComments::getPageUrlBasedComments(HTTP_PATH_LOCALE.$this->view->canonical);
+        }
         $this->view->expiredOffers = $expiredOffers;
         if ($shopInformation[0]['affliateProgram'] == 0) {
             $numberOfSimilarOffers = 10;
