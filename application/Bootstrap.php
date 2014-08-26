@@ -67,7 +67,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         BootstrapConstantsFunctions::constantForCacheDirectory($this->getOption['CACHE_DIRECTORY_PATH']);
         $this->cdnUrl = $this->getOption('cdn');
-        BootstrapConstantsFunctions::httpPathConstantForCdn($this->cdnUrl);
+        BootstrapConstantsFunctions::httpPathConstantForCdn($this->cdnUrl , 'HTTP_PATH_CDN');
         $s3Credentials = $this->getOption('s3');
         BootstrapConstantsFunctions::s3ConstantDefines($s3Credentials);
         defined('BASE_ROOT') || define('BASE_ROOT', dirname($this->scriptFileName) . '/');

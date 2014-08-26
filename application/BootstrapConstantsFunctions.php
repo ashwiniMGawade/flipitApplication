@@ -1,6 +1,6 @@
 <?php
-class BootstrapConstantsFunctions {
-
+class BootstrapConstantsFunctions
+{
     public static function constantForCacheDirectory($cacheDirectoryPath)
     {
         defined('HTTP_PATH') || define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
@@ -12,12 +12,12 @@ class BootstrapConstantsFunctions {
         }
     }
 
-    public static function httpPathConstantForCdn($cdnUrl)
+    public static function httpPathConstantForCdn($cdnUrl, $contantsName)
     {
         if (isset($cdnUrl) && isset($cdnUrl[HTTP_HOST])) {
-            defined('HTTP_PATH_CDN') || define('HTTP_PATH_CDN', trim('http://'. $cdnUrl[HTTP_HOST] . '/'));
+            defined($contantsName) || define($contantsName, trim('http://'. $cdnUrl[HTTP_HOST] . '/'));
         } else {
-            defined('HTTP_PATH_CDN') || define('HTTP_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
+            defined($contantsName) || define($contantsName, trim('http://' . HTTP_HOST . '/'));
         }
     }
 
@@ -192,14 +192,9 @@ class BootstrapConstantsFunctions {
             'http://' . HTTP_HOST
             . dirname($scriptName) . '/'
         );
-
-        if (isset($cdnUrlForDefaultModule) && isset($cdnUrlForDefaultModule[HTTP_HOST])) {
-            defined('PUBLIC_PATH_CDN')
-            || define('PUBLIC_PATH_CDN', trim('http://'. $cdnUrlForDefaultModule[HTTP_HOST] . '/'));
-        } else {
-            defined('PUBLIC_PATH_CDN') || define('PUBLIC_PATH_CDN', trim('http://' . HTTP_HOST . '/'));
-        }
-
+        
+        self::httpPathConstantForCdn($cdnUrlForDefaultModule, 'PUBLIC_PATH_CDN');
+        
         defined('ROOT_PATH')
         || define('ROOT_PATH', dirname($scriptFileName) . '/');
 

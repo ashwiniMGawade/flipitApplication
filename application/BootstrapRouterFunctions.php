@@ -1,6 +1,6 @@
 <?php
-class BootstrapRouterFunctions {
-
+class BootstrapRouterFunctions
+{
     public static function getPermalink()
     {
         $permalinkWithoutLeftSlash = ltrim(REQUEST_URI, '/');
@@ -228,7 +228,6 @@ class BootstrapRouterFunctions {
                     case 'userfooter':
                     case 'usersignup':
                         $module  = isset($r->defaults->module) ? $r->defaults->module : 'default';
-                        $page = isset($r->defaults->page) ? 1 : null;
                         $routeObject->addRoute(
                             'langmod_'. $key,
                             new Zend_Controller_Router_Route(
@@ -296,44 +295,39 @@ class BootstrapRouterFunctions {
                     case 'profilepage':
                         $page = new Zend_Controller_Router_Route_Regex(
                             '^(\d?+)$',
-                            array(
-                                'page' => '1',
-                                'action' => 'index'),
-                            array(
-                                1 => 'page'
-                            ),
+                            array('page' => '1', 'action' => 'index'),
+                            array(1 => 'page'),
                             '%d'
                         );
-                        $chainedRoute = new Zend_Controller_Router_Route_Chain();
-                        $pageChained = $chainedRoute->chain($routeLanguage)
-                            ->chain($baseChain)
-                            ->chain($page);
-                        // add routes to router
-                        $routeObject->addRoute('redactier_page', $pageChained);
+
+                        self::addRouteForChain($routeLanguage, $baseChain, $page, $routeObject, 'redactier_page');
+
                         break;
                     case 'aboutdefault':
                         // validate slug parameter with regex i.e name of redactie
                         $slug = new Zend_Controller_Router_Route_Regex(
                             '^([a-zA-Z]+(?:-[a-zA-Z]+)?+)+$',
-                            array( 'slug' => '',
-                                'action' => 'profile'
-                            ),
+                            array( 'slug' => '','action' => 'profile'),
                             array( 1 => 'slug' ),
                             '%d'
                         );
-                        // cretae slug route chain
-                        $chainedRouteSlug = new Zend_Controller_Router_Route_Chain();
-                        $slugChained = $chainedRouteSlug->chain($routeLanguage)
-                            ->chain($baseChain)
-                            ->chain($slug);
-                        // add routes to router
-                        $routeObject->addRoute('redactier_slug', $slugChained);
+
+                        self::addRouteForChain($routeLanguage, $baseChain, $slug, $routeObject, "redactier_slug");
+                        
                         break;
                 }
 
             }
         }
         return;
+    }
+
+    public static function addRouteForChain($routeLanguage, $baseChain, $slug, $routeObject, $routeName)
+    {
+        $chainedRouteSlug = new Zend_Controller_Router_Route_Chain();
+        $slugChained = $chainedRouteSlug->chain($routeLanguage)->chain($baseChain)->chain($slug);
+        $routeObject->addRoute($routeName, $slugChained);
+        return true;
     }
 
     public static function errorRouteForFlipit($routeObject)
