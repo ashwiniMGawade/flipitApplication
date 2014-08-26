@@ -4,7 +4,6 @@ class BootstrapConstantsFunctions
     public static function constantForCacheDirectory($cacheDirectoryPath)
     {
         defined('HTTP_PATH') || define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
-
         if (APPLICATION_ENV == 'testing') {
             defined('CACHE_DIRECTORY_PATH') || define('CACHE_DIRECTORY_PATH', $cacheDirectoryPath);
         } else {
@@ -28,70 +27,37 @@ class BootstrapConstantsFunctions
         defined('S3SECRET') || define('S3SECRET', $s3Credentials['secret']);
     }
 
-    public static function constantsForLocale(
-        $moduleDirectoryName,
-        $scriptName,
-        $cdnUrl,
-        $scriptFileName
-    ) {
+    public static function constantsForLocale($moduleDirectoryName, $scriptName, $cdnUrl, $scriptFileName)
+    {
         defined('LOCALE') || define('LOCALE', trim(strtolower($moduleDirectoryName)));
-        define(
-            'HTTP_PATH_LOCALE',
-            trim('http://' . HTTP_HOST . '/' . $moduleDirectoryName .'/')
-        );
-        defined('PUBLIC_PATH')
-        || define(
-            'PUBLIC_PATH',
-            'http://' . HTTP_HOST. dirname(
-                $scriptName
-            ) . '/'.strtolower($moduleDirectoryName) .'/'
-        );
-
-        if (isset($cdnUrl) && isset($cdnUrl[HTTP_HOST])) {
-            define(
-                'PUBLIC_PATH_CDN',
-                trim(
-                    'http://'. $cdnUrl[HTTP_HOST]
-                    .'/'. strtolower($moduleDirectoryName) .'/'
-                )
-            );
-        } else {
-            define(
-                'PUBLIC_PATH_CDN',
-                trim(
-                    'http://' . HTTP_HOST
-                    . '/'. strtolower($moduleDirectoryName) .'/'
-                )
-            );
-        }
-        defined('ROOT_PATH')
-        || define(
-            'ROOT_PATH',
-            dirname($scriptFileName) . '/'
-            . strtolower($moduleDirectoryName) .'/'
-        );
+        define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/' . $moduleDirectoryName .'/'));
+        self::constantsPublicPathForLocale($scriptName, $moduleDirectoryName, $cdnUrl);
+        defined('ROOT_PATH') || define('ROOT_PATH', dirname($scriptFileName).'/'.strtolower($moduleDirectoryName).'/');
         self::constantsImagesForLocale($moduleDirectoryName);
+    }
+    
+    public static function constantsPublicPathForLocale($scriptName, $moduleDirectoryName, $cdnUrl)
+    {
+        defined('PUBLIC_PATH') || define(
+            'PUBLIC_PATH',
+            'http://' . HTTP_HOST. dirname($scriptName) . '/'.strtolower($moduleDirectoryName) .'/'
+        );
+        if (isset($cdnUrl) && isset($cdnUrl[HTTP_HOST])) {
+            define('PUBLIC_PATH_CDN', trim('http://'. $cdnUrl[HTTP_HOST].'/'. strtolower($moduleDirectoryName) .'/'));
+        } else {
+            define('PUBLIC_PATH_CDN', trim('http://' . HTTP_HOST. '/'. strtolower($moduleDirectoryName) .'/'));
+        }
     }
 
     public static function constantsImagesForLocale($moduleDirectoryName)
     {
-        defined('UPLOAD_PATH')
-        || define(
-            'UPLOAD_PATH',
-            strtolower($moduleDirectoryName) .'/images/'
-        );
-
-        defined('UPLOAD_IMG_PATH')
-        || define('UPLOAD_IMG_PATH', UPLOAD_PATH . 'upload/');
-
-        defined('UPLOAD_EXCEL_PATH')
-        || define(
+        defined('UPLOAD_PATH') || define('UPLOAD_PATH', strtolower($moduleDirectoryName) .'/images/');
+        defined('UPLOAD_IMG_PATH') || define('UPLOAD_IMG_PATH', UPLOAD_PATH . 'upload/');
+        defined('UPLOAD_EXCEL_PATH') || define(
             'UPLOAD_EXCEL_PATH',
             APPLICATION_PATH. '/../data/' .strtolower($moduleDirectoryName) .'/excels/'
         );
-
-        defined('IMG_PATH')
-        || define('IMG_PATH', PUBLIC_PATH . 'images/');
+        defined('IMG_PATH') || define('IMG_PATH', PUBLIC_PATH . 'images/');
     }
     
     public static function constantsForAdminModule(
@@ -114,55 +80,40 @@ class BootstrapConstantsFunctions
         if (!defined('HTTP_PATH_FRONTEND')) {
             define('HTTP_PATH_FRONTEND', trim('http://www.' . $siteName .'/'));
         }
-
-        defined('PUBLIC_PATH')
-        || define(
-            'PUBLIC_PATH',
-            'http://' . HTTP_HOST
-            . dirname($scriptName) . '/'
-        );
-
-        defined('PUBLIC_PATH_LOCALE')
-        || define(
-            'PUBLIC_PATH_LOCALE',
-            'http://' . HTTP_HOST
-            . dirname($scriptName) . '/' . $localeAbbreviation
-        );
-
-        defined('ROOT_PATH')
-        || define(
-            'ROOT_PATH',
-            dirname($scriptFileName) . '/' . $localeAbbreviation
-        );
+        self::constantsPublicPathForAdminModule($scriptName, $localeAbbreviation, $scriptFileName);
         self::constantsImagesForAdminModule($localeAbbreviation, $scriptName, $moduleDirectoryName);
         self::constantsCdnForAdminModule($cdnUrl);
     }
 
+    public static function constantsPublicAndRootPathForAdminModule($scriptName, $localeAbbreviation, $scriptFileName)
+    {
+        defined('PUBLIC_PATH') || define('PUBLIC_PATH', 'http://' . HTTP_HOST . dirname($scriptName) . '/');
+        defined('PUBLIC_PATH_LOCALE') || define(
+            'PUBLIC_PATH_LOCALE',
+            'http://' . HTTP_HOST. dirname($scriptName) . '/' . $localeAbbreviation
+        );
+        defined('ROOT_PATH') || define('ROOT_PATH', dirname($scriptFileName) . '/' . $localeAbbreviation);
+    }
+
     public static function constantsImagesForAdminModule($localeAbbreviation, $scriptName, $moduleDirectoryName)
     {
-        defined('UPLOAD_PATH')
-        || define('UPLOAD_PATH', 'images/');
-
-        defined('UPLOAD_PATH1')
-        || define('UPLOAD_PATH1', $localeAbbreviation);
-
-        defined('UPLOAD_IMG_PATH')
-        || define('UPLOAD_IMG_PATH', UPLOAD_PATH . 'upload/');
-
-        defined('UPLOAD_EXCEL_PATH')
-        || define(
-            'UPLOAD_EXCEL_PATH',
-            APPLICATION_PATH. '/../data/' . strtolower($localeAbbreviation) . 'excels/'
-        );
-
-        defined('IMG_PATH')
-        || define('IMG_PATH', PUBLIC_PATH . 'images/');
-
-        defined('HTTP_PATH_LOCALE')
-        || define(
+        self::constantsUploadImagesForAdminModule($localeAbbreviation);
+        defined('IMG_PATH') || define('IMG_PATH', PUBLIC_PATH . 'images/');
+        defined('HTTP_PATH_LOCALE') || define(
             'HTTP_PATH_LOCALE',
             'http://' . HTTP_HOST
             . dirname($scriptName) . '/'. strtolower($moduleDirectoryName) .'/'
+        );
+    }
+
+    public function constantsUploadImagesForAdminModule($localeAbbreviation)
+    {
+        defined('UPLOAD_PATH') || define('UPLOAD_PATH', 'images/');
+        defined('UPLOAD_PATH1') || define('UPLOAD_PATH1', $localeAbbreviation);
+        defined('UPLOAD_IMG_PATH') || define('UPLOAD_IMG_PATH', UPLOAD_PATH . 'upload/');
+        defined('UPLOAD_EXCEL_PATH') || define(
+            'UPLOAD_EXCEL_PATH',
+            APPLICATION_PATH. '/../data/' . strtolower($localeAbbreviation) . 'excels/'
         );
     }
 
@@ -170,15 +121,9 @@ class BootstrapConstantsFunctions
     {
         $localePath = LOCALE =='' ? '/' : '/'. strtolower(LOCALE) .'/';
         if (isset($cdnUrlForAdmin) && isset($cdnUrlForAdmin[HTTP_HOST])) {
-            define(
-                'PUBLIC_PATH_CDN',
-                trim('http://'. $cdnUrlForAdmin[HTTP_HOST] .$localePath)
-            );
+            define('PUBLIC_PATH_CDN', trim('http://'. $cdnUrlForAdmin[HTTP_HOST] .$localePath));
         } else {
-            define(
-                'PUBLIC_PATH_CDN',
-                trim('http://' . HTTP_HOST . $localePath)
-            );
+            define('PUBLIC_PATH_CDN', trim('http://' . HTTP_HOST . $localePath));
         }
     }
     
@@ -186,31 +131,18 @@ class BootstrapConstantsFunctions
     {
         defined('LOCALE') || define('LOCALE', '');
         defined('HTTP_PATH_LOCALE') || define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/'));
-        defined('PUBLIC_PATH')
-        || define(
-            'PUBLIC_PATH',
-            'http://' . HTTP_HOST
-            . dirname($scriptName) . '/'
-        );
-        
+        defined('PUBLIC_PATH') || define('PUBLIC_PATH', 'http://' . HTTP_HOST. dirname($scriptName) . '/');
         self::httpPathConstantForCdn($cdnUrlForDefaultModule, 'PUBLIC_PATH_CDN');
-        
-        defined('ROOT_PATH')
-        || define('ROOT_PATH', dirname($scriptFileName) . '/');
-
-        defined('UPLOAD_PATH')
-        || define('UPLOAD_PATH', 'images/');
-
-        defined('UPLOAD_IMG_PATH')
-        || define('UPLOAD_IMG_PATH', UPLOAD_PATH . 'upload/');
-
-        defined('UPLOAD_EXCEL_PATH')
-        || define('UPLOAD_EXCEL_PATH', 'excels/');
-
-        defined('IMG_PATH')
-        || define('IMG_PATH', PUBLIC_PATH . 'images/');
+        self::constantsUploadAndRootPathForDefaultModule($scriptFileName);
+        defined('IMG_PATH') || define('IMG_PATH', PUBLIC_PATH . 'images/');
     }
-
+    public static function constantsUploadAndRootPathForDefaultModule($scriptFileName)
+    {
+        defined('ROOT_PATH') || define('ROOT_PATH', dirname($scriptFileName) . '/');
+        defined('UPLOAD_PATH') || define('UPLOAD_PATH', 'images/');
+        defined('UPLOAD_IMG_PATH') || define('UPLOAD_IMG_PATH', UPLOAD_PATH . 'upload/');
+        defined('UPLOAD_EXCEL_PATH') || define('UPLOAD_EXCEL_PATH', 'excels/');
+    }
     public static function constantsForFacebookImageAndLocale()
     {
         if (LOCALE == '') {
