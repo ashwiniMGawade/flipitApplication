@@ -1,6 +1,8 @@
 <?php
 require_once 'BootstrapApplicationConstants.php';
 require_once 'BootstrapConstantsFunctions.php';
+require_once 'BootstrapAdminConstantsFunctions.php';
+require_once 'BootstraplocaleConstantsFunctions.php';
 require_once 'BootstrapDoctrineConnectionFunctions.php';
 require_once 'BootstrapTranslationFunctions.php';
 require_once 'BootstrapRouterFunctions.php';
@@ -72,14 +74,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         BootstrapConstantsFunctions::s3ConstantDefines($s3Credentials);
         defined('BASE_ROOT') || define('BASE_ROOT', dirname($this->scriptFileName) . '/');
         if (strlen(strtolower($this->moduleDirectoryName))==2 && $this->httpHost != "www.kortingscode.nl") {
-            BootstrapConstantsFunctions::constantsForLocale(
+            BootstraplocaleConstantsFunctions::constantsForLocale(
                 $this->moduleDirectoryName,
                 $this->scriptName,
                 $this->cdnUrl,
                 $this->scriptFileName
             );
         } elseif (trim(strtolower($this->moduleDirectoryName)) == 'admin') {
-            BootstrapConstantsFunctions::constantsForAdminModule(
+            BootstrapAdminConstantsFunctions::constantsForAdminModule(
                 $this->localeCookieData,
                 $this->siteName,
                 $this->scriptName,
@@ -214,11 +216,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             BootstrapRouterFunctions::setRouteIfModuelNotExist($this->route, $httpScheme);
             BootstrapRouterFunctions::setRouteForLocale($this->request, $this->route, $this->routeProperties);
         } else {
-             // trigger error for flipt.com
             if (HTTP_HOST == $httpScheme.'.flipit.com') {
                 BootstrapRouterFunctions::errorRouteForFlipit($this->route);
             }
-            //route redirection instance for rules written in routes.ini
             BootstrapRouterFunctions::getRouteFromRuleFile($this->route);
         }
     }
