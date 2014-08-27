@@ -1,6 +1,7 @@
 <?php
 // This is global bootstrap for autoloading 
-define('APPLICATION_ENV_TESTING', 'testing');
+define('APPLICATION_ENV', 'testing');
+
 require_once(dirname(__FILE__) . '/../library/Doctrine/Doctrine.php');
 spl_autoload_register(array('Doctrine', 'autoload'));
 $manager = Doctrine_Manager::getInstance();

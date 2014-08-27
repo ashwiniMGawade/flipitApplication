@@ -29,7 +29,6 @@ RewriteRule ^sitemaps$ public/flipit/robots.txt [NC,L]
 
 RewriteRule ^(.*)/$ /$1 [L,R=301]
 
-
 # wp redirects
 RewriteRule ^nieuws/?$ http://www.kortingscode.nl/bespaarwijzer? [R=301,L]
 RewriteRule ^nieuws/mannen-shoppen-vaker-online-onder-werktijd-dan-vrouwen/?$ http://www.kortingscode.nl/bespaarwijzer/mannen-shoppen-vaker-online-onder-werktijd-dan-vrouwen? [R=301,L]
