@@ -101,6 +101,15 @@ class Page extends BasePage
         return true;
     }
 
+    public static function addSpecialPagesOffersCount($spcialPageId, $offersCount)
+    {
+        $updatePage = Doctrine_Query::create()
+            ->update('Page p')
+            ->set('p.offersCount', $offersCount)
+            ->where('p.id='.$spcialPageId)
+            ->execute();
+        return true;
+    }
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
