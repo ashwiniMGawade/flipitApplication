@@ -10,9 +10,10 @@ class clickoutsCest
     public function _after()
     {
     }
-/*
+
     public function sidebarClickout(AcceptanceTester $I, \Codeception\Scenario $scenario)
     {
+        $this->unlinkFilesFromTmp();
         $I = new AcceptanceTester($scenario);
         $this->createShop($I);
         $this->commonClickouts($I, '.web a');
@@ -20,6 +21,7 @@ class clickoutsCest
 
     public function headerLinkClickout(AcceptanceTester $I, \Codeception\Scenario $scenario)
     {
+        $this->unlinkFilesFromTmp();
         $I = new AcceptanceTester($scenario);
         $this->createShop($I);
         $this->commonClickouts($I, '.header-block-2 .box');
@@ -27,11 +29,12 @@ class clickoutsCest
 
     public function headerImageClickout(AcceptanceTester $I, \Codeception\Scenario $scenario)
     {
+        $this->unlinkFilesFromTmp();
         $I->wait(10);
         $I = new AcceptanceTester($scenario);
         $this->createShop($I);
         $this->commonClickouts($I, '.icon a');
-    }*/
+    }
     public function couponCodeClickout(AcceptanceTester $I, \Codeception\Scenario $scenario)
     {
         $this->unlinkFilesFromTmp();
@@ -40,7 +43,7 @@ class clickoutsCest
         $this->createOffer($I, 'CD', 'couponCode', '2', 'coupon code offer');
         $this->switchOfferClickouts('couponCode', 'Get code & Open site', '', $I);
     }
-    /*
+    
     public function saleClickout(AcceptanceTester $I, \Codeception\Scenario $scenario)
     {
         $this->unlinkFilesFromTmp();
@@ -67,7 +70,7 @@ class clickoutsCest
         $this->createOffer($I, 'PA', 'printable', '0', 'printable offer');
         $this->switchOfferClickouts('printable', 'Click to View Information', '.clickout-title a', $I);
     }
-*/
+
     protected function createOffer($I, $codeType, $codeTilesType, $discountvalueType, $title)
     {
         $I->haveInDatabase(
@@ -115,13 +118,7 @@ class clickoutsCest
     protected function createShop($I)
     {
         $I->initializeDb('Db', $I->flipitTestUserDb());
-        $I->haveInDatabase(
-            'role',
-            array(
-                'id' => '4',
-                'name' => 'Editor'
-            )
-        );
+
         $I->haveInDatabase(
             'user',
             array(
@@ -174,8 +171,8 @@ class clickoutsCest
                 'subTitle' => 'acceptance shop title',
                 'contentmanagerid' => '1',
                 'affliateprogram' => 1,
-                'refurl' => 'http://www.flipit.com/ct',
-                'actualurl' => 'http://www.flipit.com/ct',
+                'refurl' => 'http://www.kortingscode.nl/',
+                'actualurl' => 'http://www.kortingscode.nl/',
                 'howtouse' => '1',
                 'howtoTitle' => 'acceptance shop title',
                 'howtoSubtitle' => 'acceptance shop title',

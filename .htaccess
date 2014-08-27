@@ -1,4 +1,3 @@
-
 # Noindex on static files which are not allowed to be cached.
 RewriteEngine On
 RewriteCond %{HTTP_HOST} ^www.kortingscode.nl$

@@ -249,7 +249,7 @@ class User extends BaseUser
         $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
-        $this->createdBy = Auth_StaffAdapter::getIdentity()->id;
+        $this->createdBy = isset(Auth_StaffAdapter::getIdentity()->id) ? Auth_StaffAdapter::getIdentity()->id : '';
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
         $this->slug = BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
@@ -1272,4 +1272,16 @@ class User extends BaseUser
 
 
   }
+
+    public function truncateTables()
+    {
+        $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine')->getDbh();
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
+        $databaseConnection->query('TRUNCATE TABLE user');
+        $databaseConnection->query('TRUNCATE TABLE role');
+        $databaseConnection->query('TRUNCATE TABLE rights');
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
+        unset($databaseConnection);
+        return true;
+    }
 }

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 26, 2014 at 03:55 AM
+-- Generation Time: Aug 27, 2014 at 06:03 AM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.16
 
@@ -445,7 +445,14 @@ CREATE TABLE IF NOT EXISTS `locale_settings` (
   `locale` varchar(10) DEFAULT NULL,
   `timezone` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `locale_settings`
+--
+
+INSERT INTO `locale_settings` (`id`, `locale`, `timezone`) VALUES
+(1, 'en_IN', 'Asia/Calcutta');
 
 -- --------------------------------------------------------
 
@@ -1051,7 +1058,27 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40 ;
+
+--
+-- Dumping data for table `settings`
+--
+
+INSERT INTO `settings` (`id`, `name`, `value`, `status`, `created_at`, `updated_at`, `deleted`) VALUES
+(26, 'about_1', '10', NULL, '2012-12-14 20:14:54', '2012-12-14 20:14:54', 0),
+(27, 'seenin_1', '1', NULL, '2012-12-14 20:16:39', '2012-12-14 20:16:39', 0),
+(28, 'seenin_2', '2', NULL, '2012-12-14 20:16:40', '2012-12-14 20:16:40', 0),
+(29, 'seenin_3', '3', NULL, '2012-12-14 20:16:40', '2012-12-14 20:16:40', 0),
+(30, 'seenin_4', '4', NULL, '2012-12-14 20:16:40', '2012-12-14 20:16:40', 0),
+(31, 'seenin_5', '5', NULL, '2012-12-14 20:16:40', '2012-12-14 20:16:40', 0),
+(32, 'seenin_6', '6', NULL, '2012-12-14 20:16:40', '2012-12-14 20:16:40', 0),
+(33, 'special', '1', NULL, '2012-12-17 16:04:49', '2012-12-17 16:04:49', 0),
+(34, 'footer', '2', NULL, '2012-12-18 19:17:25', '2012-12-18 19:17:25', 0),
+(35, 'about_2', '11', NULL, '2012-12-28 16:28:00', '2012-12-28 16:28:00', 0),
+(36, 'about_3', '12', NULL, '2012-12-28 16:28:00', '2012-12-28 16:28:00', 0),
+(37, 'about_4', '13', NULL, '2012-12-28 16:28:00', '2012-12-28 16:28:00', 0),
+(38, 'sender_email_address', 'kim@web-flight.nl', NULL, '2014-08-26 10:40:49', '2014-08-26 10:40:49', 0),
+(39, 'sender_name', 'kim', NULL, '2014-08-26 10:40:49', '2014-08-26 10:40:49', 0);
 
 -- --------------------------------------------------------
 

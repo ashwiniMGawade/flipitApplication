@@ -919,12 +919,13 @@ EOD;
     public static function getServerNameScheme()
     {
         if (php_sapi_name() != 'cli') {
-            $httpUrlScheme = parse_url($_SERVER['SERVER_NAME']);
+            $httpUrlScheme = parse_url($_SERVER['HTTP_HOST']);
             $httpUrlScheme = isset($httpUrlScheme['path']) ? explode('.', $httpUrlScheme['path']) : '';
             $httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : 'www';
         } else {
             $httpUrlScheme = 'www';
         }
+        
         return $httpUrlScheme;
     }
 }
