@@ -159,23 +159,6 @@ class ErrorController extends Zend_Controller_Action
         } else {
             $pagedata= '';
         }
-        
-        $this->pagePermalink = $pagePermalink;
-        $positionOfSpecialCharactetr = strpos($pagePermalink, "-");
-        if ($positionOfSpecialCharactetr) {
-            $stringWithoutSpecilaChracter = str_replace("-", "", $pagePermalink);
-                $cacheKey = $stringWithoutSpecilaChracter;
-        } else {
-            $cacheKey = $pagePermalink;
-        }
-        
-        $pagedata = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache(
-                'page_'.$cacheKey.'_data',
-                array(
-                    'function' => 'Page::getPageDetailsInError', 'parameters' => array(rtrim($pagePermalink, '/'))
-                )
-            );
         return $pagedata;
     }
 }
