@@ -129,7 +129,7 @@ class StoreController extends Zend_Controller_Action
                 FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                     'get_disqus_comments',
                     array(
-                        'function' => 'DisqusComments::getPageUrlBasedComments',
+                        'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
                         'parameters' => array(HTTP_PATH_LOCALE.$shopPermalink)
                     )
                 );

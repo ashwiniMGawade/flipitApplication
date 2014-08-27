@@ -1,5 +1,4 @@
 <?php
-//Doctrine_Manager::getInstance()->bindComponent('DisqusComments', 'doctrine');
 
 abstract class BaseDisqusComments extends Doctrine_Record
 {

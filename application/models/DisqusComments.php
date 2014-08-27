@@ -17,17 +17,18 @@ class DisqusComments extends BaseDisqusComments
             $disqusComment[$key]->author_avtar =  $comment['authorAvatar'];
         }
         $disqusComment->save();
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('get_disqus_comments');
     }
 
-    public static function getPageUrlBasedComments($pageUrl)
+    public static function getPageUrlBasedDisqusComments($pageUrl)
     {
         $commentInformation = Doctrine_Query::create()
-            ->select('*')
+            ->select('message')
             ->from('DisqusComments')
             ->where('page_url = '."'".$pageUrl."'")
             ->fetchArray();
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('get_disqus_comments');
-        return $commentInformation;
+        $disqusCommentMessages = $commentInformation != '' ?  $commentInformation : '';
+        return $disqusCommentMessages;
 
     }
 }

@@ -10,20 +10,15 @@ class GetDisqusComments
     {
         require_once('ConstantForMigration.php');
         require_once('CommonMigrationFunctions.php');
-        require_once(LIBRARY_PATH.'/DisqusComments/DQRecentComments.php');
-
+        require_once(LIBRARY_PATH.'/DisqusComments/DisqusRecentComments.php');
         CommonMigrationFunctions::setTimeAndMemoryLimit();
-
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
-
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
         $imbull = $connections['imbull'];
-
         echo CommonMigrationFunctions::showProgressMessage(
             'getting all Disqus comments and saving them into databases of all locales'
         );
-
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
@@ -52,7 +47,14 @@ class GetDisqusComments
         );
         $frontControllerObject = $application->getOption('resources');
         $disqusAPIKey = $frontControllerObject['frontController']['params']['disqusKey'];
-        $siteName = $key == 'en' ? 'kortingscodes' : 'flipitcom'.$key;
+        if ($key == 'en') {
+            $siteName = 'kortingscodes';
+        } elseif ($key == 'in') {
+            $siteName = 'wwwflipitcom'.$key;
+        } else {
+            $siteName = 'flipitcom'.$key;
+        } 
+
         $DisqusParameters = array(
             'APIKey' => $disqusAPIKey,
             'forumName' => $siteName,
@@ -60,7 +62,7 @@ class GetDisqusComments
             'commentLength' => 255
         );
         //get Recent Comments with API
-        $DisqusComments = DQGetRecentComments($DisqusParameters);
+        $DisqusComments = getDisqusRecentComments($DisqusParameters);
         if (!empty($DisqusComments)) {
             DisqusComments::saveComments($DisqusComments);
         }
