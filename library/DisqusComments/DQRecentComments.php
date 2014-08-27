@@ -1,7 +1,6 @@
 <?php
     
     function DQGetRecentComments($parameters) {
-        
         // If API key or forum name is not defined, return false.
         if(!isset($parameters['APIKey']) || !isset($parameters['forumName'])) return FALSE;
         

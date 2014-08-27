@@ -10,7 +10,7 @@ class GetDisqusComments
     {
         require_once('ConstantForMigration.php');
         require_once('CommonMigrationFunctions.php');
-        require_once('DQRecentComments.php');
+        require_once(LIBRARY_PATH.'/DisqusComments/DQRecentComments.php');
 
         CommonMigrationFunctions::setTimeAndMemoryLimit();
 
@@ -46,9 +46,15 @@ class GetDisqusComments
         echo CommonMigrationFunctions::showProgressMessage(
             "$key - saving Disqus Comments!!!"
         );
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        $frontControllerObject = $application->getOption('resources');
+        $disqusAPIKey = $frontControllerObject['frontController']['params']['disqusKey'];
         $siteName = $key == 'en' ? 'kortingscodes' : 'flipitcom'.$key;
         $DisqusParameters = array(
-            'APIKey' => 'VhkrRabshw6kVf2U04xqUvEBoN3k26HVoLY3mHA2ecm4EACr8ix7R1DXiUQXbo7H',
+            'APIKey' => $disqusAPIKey,
             'forumName' => $siteName,
             'commentCount' => 100,
             'commentLength' => 255

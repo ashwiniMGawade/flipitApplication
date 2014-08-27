@@ -112,6 +112,14 @@ class PlusController extends Zend_Controller_Action
                 $articleThumbNailImage,
                 ''
             );
+            $this->view->discussionComments =
+                FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    'get_disqus_comments',
+                    array(
+                        'function' => 'DisqusComments::getPageUrlBasedComments',
+                        'parameters' => array(HTTP_PATH_LOCALE.$this->getRequest()->getParam('permalink'))
+                    )
+                );
             $this->view->pageCssClass = 'in-savings-page author-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);

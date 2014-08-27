@@ -26,6 +26,8 @@ class DisqusComments extends BaseDisqusComments
             ->from('DisqusComments')
             ->where('page_url = '."'".$pageUrl."'")
             ->fetchArray();
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('get_disqus_comments');
         return $commentInformation;
+
     }
 }

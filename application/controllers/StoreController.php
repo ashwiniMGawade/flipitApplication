@@ -126,8 +126,15 @@ class StoreController extends Zend_Controller_Action
 
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
             $this->view->discussionComments =
-                DisqusComments::getPageUrlBasedComments(HTTP_PATH_LOCALE.$this->view->canonical);
+                FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    'get_disqus_comments',
+                    array(
+                        'function' => 'DisqusComments::getPageUrlBasedComments',
+                        'parameters' => array(HTTP_PATH_LOCALE.$shopPermalink)
+                    )
+                );
         }
+
         $this->view->expiredOffers = $expiredOffers;
         if ($shopInformation[0]['affliateProgram'] == 0) {
             $numberOfSimilarOffers = 10;
