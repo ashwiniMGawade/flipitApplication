@@ -20,9 +20,17 @@ class CategoryController extends Zend_Controller_Action
     public function showAction()
     {
         $categoryPermalink = $this->getRequest()->getParam('permalink');
+        $positionOfSpecialCharactetr = strpos($categoryPermalink, "-");
+        if ($positionOfSpecialCharactetr) {
+            $stringWithoutSpecilaChracter = str_replace("-", "", $categoryPermalink);
+            $cacheKey = $stringWithoutSpecilaChracter;
+        } else {
+            $cacheKey = $categoryPermalink;
+        }
+
         $categoryDetails = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'category_'.$categoryPermalink.'_data',
+                'category_'.$cacheKey.'_data',
                 array(
                     'function' => 'Category::getCategoryDetails', 'parameters' => array($categoryPermalink)
                 )
@@ -31,7 +39,7 @@ class CategoryController extends Zend_Controller_Action
         if (count($categoryDetails) > 0) {
             $categoryVoucherCodes = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'category_'.$categoryPermalink.'_voucherCodes',
+                'category_'.$cacheKey.'_voucherCodes',
                 array(
                     'function' => 'Category::getCategoryVoucherCodes',
                     'parameters' => array($categoryDetails[0]['id'], 71)

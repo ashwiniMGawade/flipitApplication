@@ -135,8 +135,9 @@ class Category extends BaseCategory
         $category->categoryHeaderImageId = $categoryHeaderImageId;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_data');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_voucherCodes');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
 
         try {
             $category->save();
@@ -250,8 +251,9 @@ class Category extends BaseCategory
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_data');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$categoryParameter["permaLink"].'_voucherCodes');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
 
         try {
             $category->save();
@@ -538,8 +540,9 @@ class Category extends BaseCategory
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_data');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_voucherCodes');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
 
     }
     /**
@@ -557,8 +560,9 @@ class Category extends BaseCategory
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
-       FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_data');
-       FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$params["permaLink"].'_voucherCodes');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
     }
 
 /******************functions to be used on frontend*******************/

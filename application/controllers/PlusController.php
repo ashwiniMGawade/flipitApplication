@@ -83,9 +83,18 @@ class PlusController extends Zend_Controller_Action
     public function guidedetailAction()
     {
         $permalink = $this->getRequest()->getParam('permalink');
+        $positionOfSpecialCharactetr = strpos($permalink, "-");
+        if ($positionOfSpecialCharactetr) {
+            $stringWithoutSpecilaChracter = str_replace("-", "", $permalink);
+            $cacheKey = $stringWithoutSpecilaChracter;
+
+        } else {
+            $cacheKey = $permalink;
+        }
+
         $articleDetails = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                (string)"article_".$permalink."_details ",
+                (string)"article_".$cacheKey."_details",
                 array('function' =>
                 'Articles::getArticleByPermalink', 'parameters' => array($permalink))
             );

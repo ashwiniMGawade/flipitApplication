@@ -337,7 +337,8 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$params['articlepermalink'].'_details');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
@@ -418,7 +419,8 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$params['articlepermalink'].'_details');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
@@ -675,7 +677,8 @@ class Articles extends BaseArticles
             foreach ($getVal[0]['relatedstores'] as $st):
                 $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                $key = 'article_'.$st['permalink'].'_details';
+                $permalinkWithoutSpecilaChracter = str_replace("-", "", $st['permalink']);
+                $key = 'article_'.$permalinkWithoutSpecilaChracter.'_details';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             endforeach;
 
