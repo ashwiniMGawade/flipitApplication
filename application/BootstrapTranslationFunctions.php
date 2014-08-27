@@ -31,8 +31,11 @@ class BootstrapTranslationFunctions {
     {
         $transSettings = self::getTranslationSettings($domain, $moduleDirectoryName, $localeCookieData);
         $locale = $transSettings['locale'];
-
         Zend_Registry::set('Zend_Locale', $locale);
+    }
+
+    public static function setDateConstantsForLocale()
+    {
         $date = new Zend_Date();
         $month = $date->get(Zend_Date::MONTH_NAME);
         $year = $date->get(Zend_Date::YEAR);
@@ -48,7 +51,7 @@ class BootstrapTranslationFunctions {
         || define('CURRENT_DAY', $day);
     }
 
-    public static function translationLivePlugin($domain, $moduleDirectoryName, $localeCookieData)
+    public static function activateInlineTranslationForAdmin($domain, $moduleDirectoryName, $localeCookieData)
     {
         $transSettings = self::getTranslationSettings($domain, $moduleDirectoryName, $localeCookieData);
         if ($moduleDirectoryName != 'admin') {

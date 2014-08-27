@@ -1,9 +1,16 @@
 <?php
+
 class BootstrapConstantsFunctions
 {
+    public static function constantsForSettingRequestHeaders()
+    {
+        define('REQUEST_URI', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '/');
+        define('HTTP_HOST', isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : 'www.kortingscode.nl');
+        defined('HTTP_PATH') || define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
+    }
+
     public static function constantForCacheDirectory($cacheDirectoryPath)
     {
-        defined('HTTP_PATH') || define('HTTP_PATH', trim('http://' . HTTP_HOST . '/'));
         if (APPLICATION_ENV == 'testing') {
             defined('CACHE_DIRECTORY_PATH') || define('CACHE_DIRECTORY_PATH', $cacheDirectoryPath);
         } else {

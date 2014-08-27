@@ -1,8 +1,7 @@
 <?php
-require_once 'BootstrapApplicationConstants.php';
 require_once 'BootstrapConstantsFunctions.php';
 require_once 'BootstrapAdminConstantsFunctions.php';
-require_once 'BootstraplocaleConstantsFunctions.php';
+require_once 'BootstrapLocaleConstantsFunctions.php';
 require_once 'BootstrapDoctrineConnectionFunctions.php';
 require_once 'BootstrapTranslationFunctions.php';
 require_once 'BootstrapRouterFunctions.php';
@@ -55,6 +54,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
     public function _initContants()
     {
+        BootstrapConstantsFunctions::constantsForSettingRequestHeaders();
         $routeUrl = ltrim(REQUEST_URI, '/');
         $this->routeProperties = preg_split('/[\/\?]+/', $routeUrl);
         $routeUrlWithoutSlash  = rtrim($this->routeProperties[0], '/');
@@ -79,7 +79,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     public function setContantsForLocaleAndAdmin()
     {
         if (strlen(strtolower($this->moduleDirectoryName))==2 && $this->httpHost != "www.kortingscode.nl") {
-            BootstraplocaleConstantsFunctions::constantsForLocale(
+            BootstrapLocaleConstantsFunctions::constantsForLocale(
                 $this->moduleDirectoryName,
                 $this->scriptName,
                 $this->cdnUrl,
@@ -137,11 +137,12 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
             $this->moduleDirectoryName,
             $this->localeCookieData
         );
+        BootstrapTranslationFunctions::setDateConstantsForLocale();
     }
 
     protected function _initPluginLiveTranslation()
     {
-        BootstrapTranslationFunctions::translationLivePlugin(
+        BootstrapTranslationFunctions::activateInlineTranslationForAdmin(
             $this->request->getServer('HTTP_HOST'),
             $this->moduleDirectoryName,
             $this->localeCookieData
@@ -181,11 +182,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $permalink = BootstrapRouterFunctions::splitRouteProperties($permalink, $this->routeProperties);
         $permalink = BootstrapRouterFunctions::replacePermalinkString($permalink);
         $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
-        // get last word in permalink using regex match
         preg_match('/[^\/]+$/', $permalink, $matches);
-        // if url match with database permalink then get permalink from database and add in zend route
-        // if not then check url exist in redirect then make a 301 redirect
-         $matches = isset($matches[0]) ? $matches[0] : 0;
+        $matches = isset($matches[0]) ? $matches[0] : 0;
         if (intval($matches) > 0) {
             $permalink = explode('/'.$matches[0], $permalink);
             $getPermalinkFromDb = RoutePermalink::getRoute($permalink[0]);
