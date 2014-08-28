@@ -14,15 +14,15 @@
  *
  * @category   Zend
  * @package    Zend_Application
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: Application.php 23844 2011-04-06 00:34:03Z wilmoore $
+ * @version    $Id$
  */
 
 /**
  * @category   Zend
  * @package    Zend_Application
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 class Zend_Application
@@ -395,6 +395,7 @@ class Zend_Application
                 break;
 
             case 'yaml':
+            case 'yml':
                 $config = new Zend_Config_Yaml($file, $environment);
                 break;
 

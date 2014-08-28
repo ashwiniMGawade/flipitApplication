@@ -14,19 +14,10 @@
  *
  * @category   Zend
  * @package    Zend_Test
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
- * @version    $Id: ControllerTestCase.php 23775 2011-03-01 17:25:24Z ralph $
+ * @version    $Id$
  */
-
-/** @see PHPUnit_Runner_Version */
-require_once 'PHPUnit/Runner/Version.php';
-
-/**
- * Depending on version, include the proper PHPUnit support
- * @see PHPUnit_Autoload
- */
-require_once (version_compare(PHPUnit_Runner_Version::id(), '3.5.0', '>=')) ? 'PHPUnit/Autoload.php' : 'PHPUnit/Framework.php';
 
 /** @see Zend_Controller_Front */
 require_once 'Zend/Controller/Front.php';
@@ -50,7 +41,7 @@ require_once 'Zend/Registry.php';
  * @category   Zend
  * @package    Zend_Test
  * @subpackage PHPUnit
- * @copyright  Copyright (c) 2005-2011 Zend Technologies USA Inc. (http://www.zend.com)
+ * @copyright  Copyright (c) 2005-2014 Zend Technologies USA Inc. (http://www.zend.com)
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  */
 abstract class Zend_Test_PHPUnit_ControllerTestCase extends PHPUnit_Framework_TestCase
@@ -1120,7 +1111,7 @@ abstract class Zend_Test_PHPUnit_ControllerTestCase extends PHPUnit_Framework_Te
     /**
      * Retrieve test case request object
      *
-     * @return Zend_Controller_Request_Abstract
+     * @return Zend_Controller_Request_HttpTestCase
      */
     public function getRequest()
     {
@@ -1134,7 +1125,7 @@ abstract class Zend_Test_PHPUnit_ControllerTestCase extends PHPUnit_Framework_Te
     /**
      * Retrieve test case response object
      *
-     * @return Zend_Controller_Response_Abstract
+     * @return Zend_Controller_Response_HttpTestCase
      */
     public function getResponse()
     {

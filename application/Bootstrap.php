@@ -104,15 +104,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         BootstrapConstantsFunctions::constantsForFacebookImageAndLocale();
     }
 
-    protected function _initDoctrine()
-    {
-        return BootstrapDoctrineConnectionFunctions::doctrineConnection(
-            $this->getOption('doctrine'),
-            $this->moduleDirectoryName,
-            $this->localeCookieData
-        );
-    }
-
     protected function _initAutoLoad()
     {
         $autoLoader = Zend_Loader_Autoloader::getInstance();
@@ -129,35 +120,14 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
         return $autoLoader;
     }
+     public function _initAutoloaderNamespaces()
+     {
+         require_once APPLICATION_PATH.'/../library/Doctrine/Common/ClassLoader.php';
 
-    public function _initTranslation()
-    {
-        BootstrapTranslationFunctions::setTranslationInZendRegistery(
-            $this->request->getServer('HTTP_HOST'),
-            $this->moduleDirectoryName,
-            $this->localeCookieData
-        );
-        BootstrapTranslationFunctions::setDateConstantsForLocale();
-    }
-
-    protected function _initPluginLiveTranslation()
-    {
-        BootstrapTranslationFunctions::activateInlineTranslationForAdmin(
-            $this->request->getServer('HTTP_HOST'),
-            $this->moduleDirectoryName,
-            $this->localeCookieData
-        );
-    }
-
-    protected function _initI18n()
-    {
-        BootstrapTranslationFunctions::setTranslationFilesForLocale(
-            $this->request->getServer('HTTP_HOST'),
-            $this->moduleDirectoryName,
-            $this->localeCookieData
-        );
-    }
-
+         $autoloader = \Zend_Loader_Autoloader::getInstance();
+         $symfonyAutoloader = new \Doctrine\Common\ClassLoader('Symfony', 'Doctrine');
+         $autoloader->pushAutoloader(array($symfonyAutoloader, 'loadClass'), 'Symfony');
+     }
     protected function _initViewScripts()
     {
         $this->bootstrap('view');
@@ -175,35 +145,6 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->headMeta()->appendHttpEquiv('Content-type', 'text/html; charset=UTF-8');
     }
 
-    public function _initRouter()
-    {
-        $permalink = BootstrapRouterFunctions::getPermalink();
-        $this->routeProperties = explode('/', $permalink);
-        $permalink = BootstrapRouterFunctions::splitRouteProperties($permalink, $this->routeProperties);
-        $permalink = BootstrapRouterFunctions::replacePermalinkString($permalink);
-        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
-        preg_match('/[^\/]+$/', $permalink, $matches);
-        $matches = isset($matches[0]) ? $matches[0] : 0;
-        if (intval($matches) > 0) {
-            $permalink = explode('/'.$matches[0], $permalink);
-            $getPermalinkFromDb = RoutePermalink::getRoute($permalink[0]);
-            $actualPermalink = $permalink[0];
-        } else {
-            $getPermalinkFromDb = RoutePermalink::getRoute($permalink);
-            $actualPermalink = $permalink;
-        }
-        // check if permalink exists in route permalink table
-        if (count($getPermalinkFromDb) > 0) {
-            BootstrapRouterFunctions::setRouteForPermalink(
-                $getPermalinkFromDb,
-                $actualPermalink,
-                $this->routeProperties,
-                $this->route,
-                $this->moduleName
-            );
-        }
-        self::setRoutersByRules($permalink, $httpScheme);
-    }
 
     public function setRoutersByRules($permalink, $httpScheme)
     {
@@ -222,20 +163,5 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return;
     }
 
-    protected function _initCache()
-    {
-        $frontendOptions = array(
-           'lifetime' => 300,
-           'automatic_serialization' => true
-        );
-        $backendOptions = array('cache_dir' => CACHE_DIRECTORY_PATH);
-        $cache = Zend_Cache::factory(
-            'Output',
-            'File',
-            $frontendOptions,
-            $backendOptions
-        );
-        Zend_Registry::set('cache', $cache);
-    }
 }
 require_once 'Layout_Controller_Plugin_Layout.php';
