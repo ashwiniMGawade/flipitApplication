@@ -18,6 +18,17 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
         foreach ($mergedTopOffersAndFavouriteShopsOffers as $mergedTopOffersAndFavouriteShopsOffer) {
             $offers[$mergedTopOffersAndFavouriteShopsOffer['id']] = $mergedTopOffersAndFavouriteShopsOffer;
         }
+
+        usort(
+            $offers,
+            "self::usortFavouriteOffers"
+        );
+        
         return $offers;
+    }
+
+    public static function usortFavouriteOffers($favouriteOffersAsc, $favouriteOffersDesc)
+    {
+        return isset($favouriteOffersDesc['fvid']) ? $favouriteOffersDesc['fvid'] : '';
     }
 }
