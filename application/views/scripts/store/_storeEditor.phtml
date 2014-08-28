@@ -11,17 +11,16 @@ $shopEditorPath =
 	.'thum_large_widget_' .$this->shopEditor['profileimage']['name'];
 $shopAbout = $this->translate('About').' '.$this->shop['name'];
 
-$howToUse = '';
-if($this->shop['howToUse']):
-    $howToUse = $this->partial(
-        'store/_howToUseGuide.phtml',
-        array(
-           'shop' => $this->shop,
-           'howToUseGuidePermalink' => $this->howToUseGuidePermalink,
-           'actualUrl'=>$this->actualUrl
-        )
-    );
-endif;
+
+$howToUse = $this->partial(
+    'store/_howToUseGuide.phtml',
+    array(
+       'shop' => $this->shop,
+       'howToUseGuidePermalink' => $this->howToUseGuidePermalink,
+       'actualUrl'=>$this->actualUrl
+    )
+);
+
 ?>
 <article class="block">
     <div class="intro intro-2">
