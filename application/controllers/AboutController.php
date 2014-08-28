@@ -106,7 +106,8 @@ class AboutController extends Zend_Controller_Action
                     array(
                         'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
                         'parameters' => array(HTTP_PATH_LOCALE.$authorSlugName)
-                    )
+                    ),
+                    ''
                 );
         $this->view->authorDetails = $authorDetails;
         $this->view->authorFavouriteShops = $authorFavouriteShops;

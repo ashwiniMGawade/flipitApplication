@@ -131,10 +131,10 @@ class StoreController extends Zend_Controller_Action
                     array(
                         'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
                         'parameters' => array(HTTP_PATH_LOCALE.$shopPermalink)
-                    )
+                    ),
+                    ''
                 );
         }
-
         $this->view->expiredOffers = $expiredOffers;
         if ($shopInformation[0]['affliateProgram'] == 0) {
             $numberOfSimilarOffers = 10;

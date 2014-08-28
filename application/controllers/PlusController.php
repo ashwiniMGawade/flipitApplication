@@ -118,7 +118,8 @@ class PlusController extends Zend_Controller_Action
                     array(
                         'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
                         'parameters' => array(HTTP_PATH_LOCALE.$this->getRequest()->getParam('permalink'))
-                    )
+                    ),
+                    ''
                 );
             $this->view->pageCssClass = 'in-savings-page author-page';
         } else {
