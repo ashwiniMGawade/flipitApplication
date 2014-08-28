@@ -13,8 +13,7 @@ function getDisqusRecentComments($parameters)
     }
 
     $DisqusCommentsAPILink =
-    "http://disqus.com/api/3.0/posts/list.json?limit={$parameters['commentCount']}
-    &api_key={$parameters['APIKey']}&forum={$parameters['forumName']}&include=approved";
+    "http://disqus.com/api/3.0/posts/list.json?limit={$parameters['commentCount']}&api_key={$parameters['APIKey']}&forum={$parameters['forumName']}&include=approved";
     $DisqusJsonCommentResponse = DisqusGetJson($DisqusCommentsAPILink);
     $DisqusRawComments = json_decode($DisqusJsonCommentResponse, true);
 
@@ -23,12 +22,10 @@ function getDisqusRecentComments($parameters)
         $DisqusComments = $DisqusRawComments['response'];
 
         for ($index = 0; $index < count($DisqusComments); $index++) {
-
-            $DisqusThreadAPILink =
-            "http://disqus.com/api/3.0/threads/details.json?api_key={$parameters['APIKey']}
-            &thread={$DisqusComments[$index]['thread']}";
+            $DisqusThreadAPILink ="http://disqus.com/api/3.0/threads/details.json?api_key={$parameters['APIKey']}&thread={$DisqusComments[$index]['thread']}";
             $DisqusJsonThreadResponse = DisqusGetJson($DisqusThreadAPILink);
             $DisqusRawThread = json_decode($DisqusJsonThreadResponse, true);
+         
             $DisqusThread = $DisqusRawThread['response'];
 
             if ($DisqusThread != false) {

@@ -53,8 +53,7 @@ class GetDisqusComments
             $siteName = 'wwwflipitcom'.$key;
         } else {
             $siteName = 'flipitcom'.$key;
-        } 
-
+        }
         $DisqusParameters = array(
             'APIKey' => $disqusAPIKey,
             'forumName' => $siteName,
@@ -68,7 +67,7 @@ class GetDisqusComments
         }
         $manager->closeConnection($doctrineSiteDbConnection);
         echo CommonMigrationFunctions::showProgressMessage(
-            "$key - Comments have been saved successfully!!!"
+            "$key - Old Comments have been Deleted and New are saved successfully!!!"
         );
     }
 }

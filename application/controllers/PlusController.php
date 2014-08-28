@@ -68,7 +68,8 @@ class PlusController extends Zend_Controller_Action
 
     public function guidedetailAction()
     {
-        $articleDetails = Articles::getArticleByPermalink($this->getRequest()->getParam('permalink'));
+        $permalink = $this->getRequest()->getParam('permalink');
+        $articleDetails = Articles::getArticleByPermalink($permalink);
         $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
         $categoryWiseArticles = MoneySaving::getCategoryWiseArticles(5);
         $articleObject = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
@@ -85,7 +86,7 @@ class PlusController extends Zend_Controller_Action
         if (!empty($articleDetails)) {
             $this->view->canonical =
                 FrontEnd_Helper_viewHelper::generateCononical(
-                    $this->getRequest()->getControllerName() .'/'. $this->getRequest()->getParam('permalink')
+                    $this->getRequest()->getControllerName() .'/'. $permalink
                 );
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array(
@@ -112,12 +113,13 @@ class PlusController extends Zend_Controller_Action
                 $articleThumbNailImage,
                 ''
             );
+            $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($permalink);
             $this->view->discussionComments =
                 FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                    'get_disqus_comments',
+                    'get_'.$cacheKey.'_disqusComments',
                     array(
                         'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
-                        'parameters' => array(HTTP_PATH_LOCALE.$this->getRequest()->getParam('permalink'))
+                        'parameters' => array(HTTP_PATH_LOCALE.$permalink)
                     ),
                     ''
                 );

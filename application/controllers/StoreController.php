@@ -124,10 +124,15 @@ class StoreController extends Zend_Controller_Action
             $this->view->topPopularOffers = $offers;
         }
 
+        if (LOCALE != '') {
+            $explodedPermalink = explode("/", $shopPermalink);
+            $shopPermalink = $explodedPermalink[1];
+        }
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopPermalink);
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
             $this->view->discussionComments =
                 FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                    'get_disqus_comments',
+                    'get_'.$cacheKey.'_disqusComments',
                     array(
                         'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
                         'parameters' => array(HTTP_PATH_LOCALE.$shopPermalink)
