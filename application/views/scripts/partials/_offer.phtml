@@ -108,7 +108,7 @@ foreach ($this->offers as $offer) {
             <hr class="alt2">
             <div class="offer">
                 <span><?php echo $this->translate('Grab this offer now:');?></span>
-                <a target = "_blank" href="<?php echo $urlToShow;?>">
+                <a target = "_blank" href="<?php echo $urlToShow;?>" rel= "nofollow">
                 <?php echo $this->translate('Open ');?>
                 <?php echo $offer->shop['name']; ?>
                 <?php echo $this->translate(' website');?>

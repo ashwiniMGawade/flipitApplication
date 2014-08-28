@@ -261,6 +261,40 @@ class FrontEnd_Helper_HomePagePartialFunctions
         return $this->getRighColumnContent($shopImage, $shopPermalink, $shopName, $offerTitle, $offerExclusiveText);
     }
 
+    public function getMoneySavingGuidesRightCoulumnList($dynamicDivId)
+    {
+        $moneySavingGuidestHtml = '';
+        $topTenMoneySavingGuides = array_slice($this->homePageData['moneySavingGuides'], 0, 10);
+        foreach ($topTenMoneySavingGuides as $savingGuide) {
+            $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/")
+                . $savingGuide['thumbnail']['name'];
+            $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
+
+            $savingTitle = mb_strlen($savingGuide['title'], 'UTF-8') > 50
+                ? mb_substr($savingGuide['title'], 0, 50, 'UTF-8') . "..."
+                : $savingGuide['title'];
+                
+            $allowed_tags = '';
+            $guideDescription = strip_tags(
+                isset($savingGuide['chapters'][0]['content'])
+                ? $savingGuide['chapters'][0]['content'] : '',
+                $allowed_tags
+            );
+            $savingContent = mb_strlen($guideDescription, 'UTF-8') > 50
+                ? mb_substr($guideDescription, 0, 50, 'UTF-8') . "..."
+                : $guideDescription;
+            $moneySavingGuidestHtml .= $this->getRighColumnContent(
+                $savingImage,
+                $savingPermalink,
+                $savingTitle,
+                $savingContent,
+                '',
+                'saving-guides'
+            );
+        }
+        return $moneySavingGuidestHtml;
+    }
+
     public function getRighColumnContent(
         $shopImage,
         $shopPermalink,

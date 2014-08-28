@@ -990,6 +990,58 @@ class Offer extends BaseOffer
         ->fetchArray();
         return $OfferDetails;
     }
+
+    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false)
+    {
+        $nowDate = date("Y-m-d H:i");
+        $offers = Doctrine_Query::create()
+        ->select(
+            'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
+            o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
+            o.endDate,o.refOfferUrl,o.couponCodeType, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
+            s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
+            img.name,vot.id,vot.vote'
+        )
+        ->from('Offer o')
+        ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.logo l')
+        ->leftJoin('s.logo img')
+        ->leftJoin('o.termandcondition terms')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('o.tiles t')
+        ->where('o.deleted = 0');
+
+        if (!$includingOffline) {
+            $offers = $offers->andWhere('o.offline = 0')
+            ->andWhere('o.endDate >='."'$nowDate'")
+            ->andWhere('o.startdate <= "'.$nowDate.'"');
+        }
+
+        $offers= $offers->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+            ->andWhere('s.id='.$id)
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.Visability!="MEM"')
+            ->orderBy('o.editorPicks DESC')
+            ->addOrderBy('o.exclusiveCode DESC')
+            ->addOrderBy('o.discountType ASC')
+            ->addOrderBy('o.startdate DESC')
+            ->addOrderBy('o.popularityCount DESC')
+            ->addOrderBy('o.title ASC');
+
+        if ($getExclusiveOnly) {
+            $offers = $offers->andWhere('o.exclusiveCode = 1');
+        }
+
+        if ($limit) {
+            $offers = $offers->limit($limit);
+
+        }
+
+        $offers = $offers->fetchArray();
+        return $offers;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -2555,56 +2607,7 @@ class Offer extends BaseOffer
       * @return array $data
       */
 
-    public static function getAllOfferOnShop($id , $limit = null , $getExclusiveOnly = false , $includingOffline = false)
-    {
-        $nowDate = date('Y-m-d 00:00:00');
-        $data = Doctrine_Query::create()
-
-        ->select('o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,o.endDate,o.refOfferUrl,
-                o.couponCodeType, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name,vot.id,vot.vote')
-        ->from('Offer o')
-
-        ->addSelect("(SELECT count(id)  FROM CouponCode WHERE offerid = o.id and status=1) as totalAvailableCodes")
-        ->leftJoin('o.shop s')
-        ->leftJoin('o.logo l')
-        ->leftJoin('s.logo img')
-        ->leftJoin('o.termandcondition terms')
-        ->leftJoin('o.vote vot')
-        ->leftJoin('o.tiles t')
-        ->where('o.deleted = 0' );
-
-        if (!$includingOffline) {
-            $data = $data->andWhere('o.offline = 0')
-            ->andWhere('o.endDate >='."'$nowDate'")
-            ->andWhere('o.startdate <= "'.$nowDate.'"');
-        }
-
-        $data= $data->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
-            ->andWhere('s.id='.$id)
-            ->andWhere('s.deleted = 0')
-            ->andWhere('o.discountType != "NW"')
-            ->andWhere('o.Visability!="MEM"')
-            ->orderBy('o.editorPicks DESC')
-            ->addOrderBy('o.exclusiveCode DESC')
-            ->addOrderBy('o.discountType ASC')
-            ->addOrderBy('o.startdate DESC')
-            //      ->addOrderBy('clicks DESC')
-            ->addOrderBy('o.popularityCount DESC')
-            ->addOrderBy('o.title ASC');
-
-        // check need to get exclusive offers or not
-        if ($getExclusiveOnly) {
-            $data = $data->andWhere('o.exclusiveCode = 1' ) ;
-        }
-        // check $limit if passed or not
-        if ($limit) {
-            $data = $data->limit($limit);
-
-        }
-
-        $data = $data->fetchArray();
-        return $data;
-    }
+    
 
     /**
      * get top kortingscode same as home page but it displayed on shop page(only used when a shop is no money with no offers)
