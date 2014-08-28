@@ -3,6 +3,9 @@ $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
 $shopUrl = $domainName.'out/shop/'.$this->shop['id'];
 ?>
 <ul class="add-info">
+<?php
+if($this->shop['howToUse']):
+?>
     <li>
         <h4><?php echo $this->translate('How to use code'); ?></h4>
         <p>
@@ -15,6 +18,7 @@ $shopUrl = $domainName.'out/shop/'.$this->shop['id'];
             <?php echo $this->translate('help guide'); ?>.
         </p>
     </li>
+<?php endif; ?>    
     <li class="web">
         <h4><?php echo $this->translate('Official website'); ?></h4>
         <a href="<?php echo $shopUrl; ?>" rel="nofollow" target="_blank"><?php echo $this->actualUrl;?></a>
