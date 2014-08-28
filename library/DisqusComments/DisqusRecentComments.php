@@ -12,82 +12,82 @@ function getDisqusRecentComments($parameters)
         $parameters['commentLength'] = 100;
     }
 
-    $DQCommentsAPILink =
+    $DisqusCommentsAPILink =
     "http://disqus.com/api/3.0/posts/list.json?limit={$parameters['commentCount']}
     &api_key={$parameters['APIKey']}&forum={$parameters['forumName']}&include=approved";
-    $DQJsonCommentResponse = DQGetJson($DQCommentsAPILink);
-    $DQRawComments = @json_decode($DQJsonCommentResponse, true);
+    $DisqusJsonCommentResponse = DisqusGetJson($DisqusCommentsAPILink);
+    $DisqusRawComments = json_decode($DisqusJsonCommentResponse, true);
 
-    if ($DQJsonCommentResponse != false && $DQRawComments['code'] != 2) {
-        $DQRawComments = json_decode($DQJsonCommentResponse, true);
-        $DQComments = $DQRawComments['response'];
+    if ($DisqusJsonCommentResponse != false && $DisqusRawComments['code'] != 2) {
+        $DisqusRawComments = json_decode($DisqusJsonCommentResponse, true);
+        $DisqusComments = $DisqusRawComments['response'];
 
-        for ($index = 0; $index < count($DQComments); $index++) {
+        for ($index = 0; $index < count($DisqusComments); $index++) {
 
-            $DQThreadAPILink =
+            $DisqusThreadAPILink =
             "http://disqus.com/api/3.0/threads/details.json?api_key={$parameters['APIKey']}
-            &thread={$DQComments[$index]['thread']}";
-            $DQJsonThreadResponse = DQGetJson($DQThreadAPILink);
-            $DQRawThread = json_decode($DQJsonThreadResponse, true);
-            $DQThread = $DQRawThread['response'];
+            &thread={$DisqusComments[$index]['thread']}";
+            $DisqusJsonThreadResponse = DisqusGetJson($DisqusThreadAPILink);
+            $DisqusRawThread = json_decode($DisqusJsonThreadResponse, true);
+            $DisqusThread = $DisqusRawThread['response'];
 
-            if ($DQThread != false) {
-                $DQComments[$index]['pageTitle'] = $DQThread['title'];
-                $DQComments[$index]['pageURL'] = $DQThread['link'];
+            if ($DisqusThread != false) {
+                $DisqusComments[$index]['pageTitle'] = $DisqusThread['title'];
+                $DisqusComments[$index]['pageURL'] = $DisqusThread['link'];
             } else {
-                $DQComments[$index]['pageTitle'] = 'Page Not Found';
-                $DQComments[$index]['pageURL'] = '#';
+                $DisqusComments[$index]['pageTitle'] = 'Page Not Found';
+                $DisqusComments[$index]['pageURL'] = '#';
             }
-            $DQComments[$index]['commentId'] = $DQComments[$index]['id'];
-            $DQComments[$index]['authorName'] = $DQComments[$index]['author']['name'];
-            $DQComments[$index]['authorProfileURL'] = $DQComments[$index]['author']['profileUrl'];
-            $DQComments[$index]['authorAvatar'] = $DQComments[$index]['author']['avatar']['cache'];
-            $DQComments[$index]['message'] =
-            DQLimitLength($DQComments[$index]['raw_message'], $parameters['commentLength']);
-            unset($DQComments[$index]['isJuliaFlagged']);
-            unset($DQComments[$index]['isFlagged']);
-            unset($DQComments[$index]['forum']);
-            unset($DQComments[$index]['parent']);
-            unset($DQComments[$index]['author']);
-            unset($DQComments[$index]['media']);
-            unset($DQComments[$index]['isDeleted']);
-            unset($DQComments[$index]['isApproved']);
-            unset($DQComments[$index]['dislikes']);
-            unset($DQComments[$index]['raw_message']);
-            unset($DQComments[$index]['id']);
-            unset($DQComments[$index]['thread']);
-            unset($DQComments[$index]['numReports']);
-            unset($DQComments[$index]['isEdited']);
-            unset($DQComments[$index]['isSpam']);
-            unset($DQComments[$index]['isHighlighted']);
-            unset($DQComments[$index]['points']);
-            unset($DQComments[$index]['likes']);
+            $DisqusComments[$index]['commentId'] = $DisqusComments[$index]['id'];
+            $DisqusComments[$index]['authorName'] = $DisqusComments[$index]['author']['name'];
+            $DisqusComments[$index]['authorProfileURL'] = $DisqusComments[$index]['author']['profileUrl'];
+            $DisqusComments[$index]['authorAvatar'] = $DisqusComments[$index]['author']['avatar']['cache'];
+            $DisqusComments[$index]['message'] =
+            DisqusLimitLength($DisqusComments[$index]['raw_message'], $parameters['commentLength']);
+            unset($DisqusComments[$index]['isJuliaFlagged']);
+            unset($DisqusComments[$index]['isFlagged']);
+            unset($DisqusComments[$index]['forum']);
+            unset($DisqusComments[$index]['parent']);
+            unset($DisqusComments[$index]['author']);
+            unset($DisqusComments[$index]['media']);
+            unset($DisqusComments[$index]['isDeleted']);
+            unset($DisqusComments[$index]['isApproved']);
+            unset($DisqusComments[$index]['dislikes']);
+            unset($DisqusComments[$index]['raw_message']);
+            unset($DisqusComments[$index]['id']);
+            unset($DisqusComments[$index]['thread']);
+            unset($DisqusComments[$index]['numReports']);
+            unset($DisqusComments[$index]['isEdited']);
+            unset($DisqusComments[$index]['isSpam']);
+            unset($DisqusComments[$index]['isHighlighted']);
+            unset($DisqusComments[$index]['points']);
+            unset($DisqusComments[$index]['likes']);
         }
-        return $DQComments;
+        return $DisqusComments;
     } else {
-        $DQComments = '';
-        return $DQComments;
+        $DisqusComments = '';
+        return $DisqusComments;
     }
 }
 
-function DQGetJson($DQAPILink)
+function DisqusGetJson($DisqusCommentsAPILink)
 {
-    $DQcURL = curl_init();
-    curl_setopt($DQcURL, CURLOPT_HEADER, false);
-    curl_setopt($DQcURL, CURLOPT_URL, $DQAPILink);
-    curl_setopt($DQcURL, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($DQcURL, CURLOPT_FRESH_CONNECT, true);
-    curl_setopt($DQcURL, CURLOPT_FORBID_REUSE, true);
-    $DQJsonResponse = curl_exec($DQcURL);
-    curl_close($DQcURL);
-    return $DQJsonResponse;
+    $DisqusCURL = curl_init();
+    curl_setopt($DisqusCURL, CURLOPT_HEADER, false);
+    curl_setopt($DisqusCURL, CURLOPT_URL, $DisqusCommentsAPILink);
+    curl_setopt($DisqusCURL, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($DisqusCURL, CURLOPT_FRESH_CONNECT, true);
+    curl_setopt($DisqusCURL, CURLOPT_FORBID_REUSE, true);
+    $DisqusJsonResponse = curl_exec($DisqusCURL);
+    curl_close($DisqusCURL);
+    return $DisqusJsonResponse;
 }
 
-function DQLimitLength($string, $maxLength)
+function DisqusLimitLength($message, $maxLength)
 {
-    if (strlen($string) <= $maxLength) {
-        return $string;
+    if (strlen($message) <= $maxLength) {
+        return $message;
     } else {
-        return substr($string, 0, $maxLength)."...";
+        return substr($message, 0, $maxLength)."...";
     }
 }

@@ -27,7 +27,7 @@ class DisqusComments extends BaseDisqusComments
             ->from('DisqusComments')
             ->where('page_url = '."'".$pageUrl."'")
             ->fetchArray();
-        $disqusCommentMessages = $commentInformation != '' ?  $commentInformation : '';
+        $disqusCommentMessages = !empty($commentInformation) ?  $commentInformation : '';
         return $disqusCommentMessages;
 
     }

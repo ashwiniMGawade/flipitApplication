@@ -8,8 +8,7 @@ class AddIndexOnDisqusCommentsTable extends Doctrine_Migration_Base
             'page_url_comments',
             array(
                 'fields' => array(
-                    'page_url' => array(),
-                    'comment_id' => array()
+                    'page_url' => array()
                 )
             )
         );
@@ -19,8 +18,7 @@ class AddIndexOnDisqusCommentsTable extends Doctrine_Migration_Base
             'message_comments',
             array(
                 'fields' => array(
-                    'message' => array(),
-                    'comment_id' => array()
+                    'message' => array()
                 )
             )
         );
