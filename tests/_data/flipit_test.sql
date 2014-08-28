@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Aug 27, 2014 at 06:03 AM
+-- Generation Time: Aug 28, 2014 at 04:09 AM
 -- Server version: 5.6.12-log
 -- PHP Version: 5.4.16
 
@@ -729,6 +729,7 @@ CREATE TABLE IF NOT EXISTS `page` (
   `customheader` text,
   `pageHeaderImageId` bigint(20) DEFAULT NULL,
   `showsitemap` tinyint(4) NOT NULL DEFAULT '0',
+  `offersCount` int(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pageattributeid_idx` (`pageattributeid`),
   KEY `pageHeaderImageId_foreign_key` (`pageHeaderImageId`)
