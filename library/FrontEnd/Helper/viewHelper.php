@@ -928,4 +928,20 @@ EOD;
         
         return $httpUrlScheme;
     }
+
+    public static function getPermalinkAfterRemovingSpecialChracter($permalink)
+    {
+        $positionOfSpecialCharacter = strpos($permalink, "-");
+        $positionOfSpecialCharacterDot = strpos($permalink, ".");
+        if ($positionOfSpecialCharacter) {
+            $stringWithoutSpecilaChracter = str_replace("-", "", $permalink);
+            $cacheKey = $stringWithoutSpecilaChracter;
+        } else if ($positionOfSpecialCharacterDot) {
+            $positionOfSpecialCharacterDot = str_replace(".", "", $permalink);
+            $cacheKey = $positionOfSpecialCharacterDot;
+        } else {
+            $cacheKey = $permalink;
+        }
+        return $cacheKey;
+    }
 }

@@ -39,3 +39,14 @@ echo $this->translate('Disqus');
 ?>
     </span>
 </a>
+<div style = "display:none;">
+    <?php
+    if (!empty($this->discussionComments)) {
+        foreach ($this->discussionComments as $discussionComment) {
+        ?>
+            <p><?php echo $discussionComment['message'];?></p>
+        <?php      
+        }
+    }
+    ?>
+</div>

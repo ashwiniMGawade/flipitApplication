@@ -123,6 +123,23 @@ class StoreController extends Zend_Controller_Action
             $offers = $this->_helper->Store->topStorePopularOffers($shopId, $offers);
             $this->view->topPopularOffers = $offers;
         }
+
+        if (LOCALE != '') {
+            $explodedPermalink = explode("/", $shopPermalink);
+            $shopPermalink = $explodedPermalink[1];
+        }
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopPermalink);
+        if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
+            $this->view->discussionComments =
+                FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    'get_'.$cacheKey.'_disqusComments',
+                    array(
+                        'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
+                        'parameters' => array(HTTP_PATH_LOCALE.$shopPermalink)
+                    ),
+                    ''
+                );
+        }
         $this->view->expiredOffers = $expiredOffers;
         if ($shopInformation[0]['affliateProgram'] == 0) {
             $numberOfSimilarOffers = 10;

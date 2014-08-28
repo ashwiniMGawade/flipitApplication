@@ -100,6 +100,17 @@ class AboutController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             $customHeader
         );
+
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($authorSlugName);
+        $this->view->discussionComments =
+            FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                'get_'.$cacheKey.'_disqusComments',
+                array(
+                    'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
+                    'parameters' => array(HTTP_PATH_LOCALE.$authorSlugName)
+                ),
+                ''
+            );
         $this->view->authorDetails = $authorDetails;
         $this->view->authorFavouriteShops = $authorFavouriteShops;
         $this->view->authorMostReadArticles = $authorMostReadArticles;
