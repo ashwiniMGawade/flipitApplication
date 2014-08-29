@@ -1,4 +1,10 @@
 <?php
+use Doctrine\ORM\Tools\Setup;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\Common\Annotations\AnnotationReader;
+use Doctrine\Common\Annotations\AnnotationRegistry;
+
 require_once 'BootstrapConstantsFunctions.php';
 require_once 'BootstrapAdminConstantsFunctions.php';
 require_once 'BootstrapLocaleConstantsFunctions.php';
@@ -19,6 +25,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     protected $scriptName = '';
     protected $localeCookieData = '';
     public $frontController = null;
+    protected $em;
 
     public function _initRequest()
     {
@@ -120,14 +127,60 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
         return $autoLoader;
     }
-     public function _initAutoloaderNamespaces()
-     {
-         require_once APPLICATION_PATH.'/../library/Doctrine/Common/ClassLoader.php';
+    /*
+    public function _initTranslation()
+    {
+        BootstrapTranslationFunctions::setTranslationInZendRegistery(
+            $this->request->getServer('HTTP_HOST'),
+            $this->moduleDirectoryName,
+            $this->localeCookieData
+        );
+        BootstrapTranslationFunctions::setDateConstantsForLocale();
+    }
 
-         $autoloader = \Zend_Loader_Autoloader::getInstance();
-         $symfonyAutoloader = new \Doctrine\Common\ClassLoader('Symfony', 'Doctrine');
-         $autoloader->pushAutoloader(array($symfonyAutoloader, 'loadClass'), 'Symfony');
-     }
+    protected function _initPluginLiveTranslation()
+    {
+        BootstrapTranslationFunctions::activateInlineTranslationForAdmin(
+            $this->request->getServer('HTTP_HOST'),
+            $this->moduleDirectoryName,
+            $this->localeCookieData
+        );
+    }
+
+    protected function _initI18n()
+    {
+        BootstrapTranslationFunctions::setTranslationFilesForLocale(
+            $this->request->getServer('HTTP_HOST'),
+            $this->moduleDirectoryName,
+            $this->localeCookieData
+        );
+    }
+    */
+    
+
+    public function _initDoctrine() {
+        $paths            = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $isDevMode        = false;
+        $connectionParams = array(
+            'driver'   => 'pdo_mysql',
+            'user'     => 'root',
+            'password' => 'password',
+            'dbname'   => 'kc',
+        );
+
+        $config = Setup::createConfiguration($isDevMode);
+        $driver = new AnnotationDriver(new AnnotationReader(), $paths);
+
+        // registering noop annotation autoloader - allow all annotations by default
+        AnnotationRegistry::registerLoader('class_exists');
+        $config->setMetadataDriverImpl($driver);
+
+        $em = EntityManager::create($connectionParams, $config);
+        Zend_Registry::set('em', $em);
+        
+        return $em;
+    }
+
     protected function _initViewScripts()
     {
         $this->bootstrap('view');
@@ -144,8 +197,37 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view->doctype('HTML5');
         $view->headMeta()->appendHttpEquiv('Content-type', 'text/html; charset=UTF-8');
     }
-
-
+    /*
+    public function _initRouter()
+    {
+        $permalink = BootstrapRouterFunctions::getPermalink();
+        $this->routeProperties = explode('/', $permalink);
+        $permalink = BootstrapRouterFunctions::splitRouteProperties($permalink, $this->routeProperties);
+        $permalink = BootstrapRouterFunctions::replacePermalinkString($permalink);
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        preg_match('/[^\/]+$/', $permalink, $matches);
+        $matches = isset($matches[0]) ? $matches[0] : 0;
+        if (intval($matches) > 0) {
+            $permalink = explode('/'.$matches[0], $permalink);
+            $getPermalinkFromDb = RoutePermalink::getRoute($permalink[0]);
+            $actualPermalink = $permalink[0];
+        } else {
+            $getPermalinkFromDb = RoutePermalink::getRoute($permalink);
+            $actualPermalink = $permalink;
+        }
+        // check if permalink exists in route permalink table
+        if (count($getPermalinkFromDb) > 0) {
+            BootstrapRouterFunctions::setRouteForPermalink(
+                $getPermalinkFromDb,
+                $actualPermalink,
+                $this->routeProperties,
+                $this->route,
+                $this->moduleName
+            );
+        }
+        self::setRoutersByRules($permalink, $httpScheme);
+    }
+    */
     public function setRoutersByRules($permalink, $httpScheme)
     {
         // for 301 redirections of old indexed pages
@@ -163,5 +245,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         return;
     }
 
+    /*protected function _initCache()
+    {
+        $frontendOptions = array(
+           'lifetime' => 300,
+           'automatic_serialization' => true
+        );
+        $backendOptions = array('cache_dir' => CACHE_DIRECTORY_PATH);
+        $cache = Zend_Cache::factory(
+            'Output',
+            'File',
+            $frontendOptions,
+            $backendOptions
+        );
+        Zend_Registry::set('cache', $cache);
+    }*/
 }
 require_once 'Layout_Controller_Plugin_Layout.php';

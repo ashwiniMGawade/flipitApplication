@@ -8,8 +8,18 @@ if(LOCALE=='') :
     echo $flipitHomePage['htmlPath']!='' ? die : '';
 endif;
 
+
+$em = \Zend_Registry::get('em');
+$u  =  new KC\Entity\User();
+$u->firstname = 'Test';
+$u->id = 1;
+$u->lastname = "By Dev";
+$em->persist( $u );
+$em->flush();
+print_r($u); die;
+//var_dump($u); die;
 echo $this->doctype();
-die('Hello'); die;
+
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
 $localeName = LocaleSettings::getLocaleSettings();
 $countryLocale = isset($localeName[0]['locale']) ?

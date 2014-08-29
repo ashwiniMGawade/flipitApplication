@@ -5,15 +5,14 @@ namespace KC\Entity;
 use Doctrine\ORM\Mapping as ORM;
  
 /**
- * Album
+ * User
  *
- * @ORM\Table(name="album")
+ * @ORM\Table(name="users")
  * @ORM\Entity
  */
-class Album
+class User
 {
     /**
-     * @var integer
      *
      * @ORM\Column(name="id", type="bigint", nullable=false)
      * @ORM\Id
@@ -21,74 +20,24 @@ class Album
     private $id;
  
     /**
-     * @var string
      *
-     * @ORM\Column(name="artist", type="string", length=255, nullable=true)
+     * @ORM\Column(name="firstname", type="string", length=255, nullable=true)
      */
-    private $artist;
+    private $firstname;
  
     /**
-     * @var string
-     *
-     * @ORM\Column(name="title", type="string", length=255, nullable=true)
+     * 
+     * @ORM\Column(name="lastname", type="string", length=255, nullable=true)
      */
-    private $title;
- 
- 
- 
-    /**
-     * Get id
-     *
-     * @return integer 
-     */
-    public function getId()
+    private $lastname;
+
+    public function __get($property)
     {
-        return $this->id;
+        return $this->$property;
     }
- 
-    /**
-     * Set artist
-     *
-     * @param string $artist
-     * @return Album
-     */
-    public function setArtist($artist)
+
+    public function __set($property, $value)
     {
-        $this->artist = $artist;
-     
-        return $this;
-    }
- 
-    /**
-     * Get artist
-     *
-     * @return string 
-     */
-    public function getArtist()
-    {
-        return $this->artist;
-    }
- 
-    /**
-     * Set title
-     *
-     * @param string $title
-     * @return Album
-     */
-    public function setTitle($title)
-    {
-        $this->title = $title;
-     
-        return $this;
-    }
- 
-    /**
-     * Get title
-     *
-     * @return string 
-     */
-    public function getTitle()
-    {
-        return $this->title;
+        $this->$property = $value;
     }
 }
