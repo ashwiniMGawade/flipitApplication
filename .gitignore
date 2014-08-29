@@ -220,4 +220,3 @@ tests/_output/*
 tests/_log/
 
 tests/_output/*
-codeception.yml
