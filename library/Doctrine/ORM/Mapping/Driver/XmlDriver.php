@@ -19,11 +19,10 @@
 
 namespace Doctrine\ORM\Mapping\Driver;
 
-use SimpleXMLElement;
-use Doctrine\Common\Persistence\Mapping\Driver\FileDriver;
-use Doctrine\ORM\Mapping\Builder\EntityListenerBuilder;
-use Doctrine\Common\Persistence\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\MappingException;
+use SimpleXMLElement,
+    Doctrine\Common\Persistence\Mapping\Driver\FileDriver,
+    Doctrine\Common\Persistence\Mapping\ClassMetadata,
+    Doctrine\ORM\Mapping\MappingException;
 
 /**
  * XmlDriver is a metadata driver that enables mapping through XML files.
@@ -61,7 +60,7 @@ class XmlDriver extends FileDriver
             if (isset($xmlRoot['repository-class'])) {
                 $metadata->setCustomRepositoryClass((string)$xmlRoot['repository-class']);
             }
-            if (isset($xmlRoot['read-only']) && $this->evaluateBoolean($xmlRoot['read-only'])) {
+            if (isset($xmlRoot['read-only']) && $xmlRoot['read-only'] == "true") {
                 $metadata->markReadOnly();
             }
         } else if ($xmlRoot->getName() == 'mapped-superclass') {
@@ -224,35 +223,25 @@ class XmlDriver extends FileDriver
             $metadata->table['options'] = $this->_parseOptions($xmlRoot->options->children());
         }
 
-        // The mapping assignment is done in 2 times as a bug might occurs on some php/xml lib versions
+        // The mapping assignement is done in 2 times as a bug might occurs on some php/xml lib versions
         // The internal SimpleXmlIterator get resetted, to this generate a duplicate field exception
         $mappings = array();
         // Evaluate <field ...> mappings
         if (isset($xmlRoot->field)) {
             foreach ($xmlRoot->field as $fieldMapping) {
                 $mapping = $this->columnToArray($fieldMapping);
-
-                if (isset($mapping['version'])) {
-                    $metadata->setVersionMapping($mapping);
-                    unset($mapping['version']);
-                }
-
                 $metadata->mapField($mapping);
             }
         }
 
         foreach ($mappings as $mapping) {
-            if (isset($mapping['version'])) {
-                $metadata->setVersionMapping($mapping);
-            }
-
-            $metadata->mapField($mapping);
+             $metadata->mapField($mapping);
         }
 
         // Evaluate <id ...> mappings
         $associationIds = array();
         foreach ($xmlRoot->id as $idElement) {
-            if (isset($idElement['association-key']) && $this->evaluateBoolean($idElement['association-key'])) {
+            if ((bool)$idElement['association-key'] == true) {
                 $associationIds[(string)$idElement['name']] = true;
                 continue;
             }
@@ -276,10 +265,6 @@ class XmlDriver extends FileDriver
 
             if (isset($idElement['column-definition'])) {
                 $mapping['columnDefinition'] = (string)$idElement['column-definition'];
-            }
-
-            if (isset($idElement->options)) {
-                $mapping['options'] = $this->_parseOptions($idElement->options->children());
             }
 
             $metadata->mapField($mapping);
@@ -349,7 +334,7 @@ class XmlDriver extends FileDriver
                 }
 
                 if (isset($oneToOneElement['orphan-removal'])) {
-                    $mapping['orphanRemoval'] = $this->evaluateBoolean($oneToOneElement['orphan-removal']);
+                    $mapping['orphanRemoval'] = (bool)$oneToOneElement['orphan-removal'];
                 }
 
                 $metadata->mapOneToOne($mapping);
@@ -374,7 +359,7 @@ class XmlDriver extends FileDriver
                 }
 
                 if (isset($oneToManyElement['orphan-removal'])) {
-                    $mapping['orphanRemoval'] = $this->evaluateBoolean($oneToManyElement['orphan-removal']);
+                    $mapping['orphanRemoval'] = (bool)$oneToManyElement['orphan-removal'];
                 }
 
                 if (isset($oneToManyElement->{'order-by'})) {
@@ -448,7 +433,7 @@ class XmlDriver extends FileDriver
                 }
 
                 if (isset($manyToManyElement['orphan-removal'])) {
-                    $mapping['orphanRemoval'] = $this->evaluateBoolean($manyToManyElement['orphan-removal']);
+                    $mapping['orphanRemoval'] = (bool)$manyToManyElement['orphan-removal'];
                 }
 
                 if (isset($manyToManyElement['mapped-by'])) {
@@ -562,33 +547,12 @@ class XmlDriver extends FileDriver
                 $metadata->addLifecycleCallback((string)$lifecycleCallback['method'], constant('Doctrine\ORM\Events::' . (string)$lifecycleCallback['type']));
             }
         }
-
-        // Evaluate entity listener
-        if (isset($xmlRoot->{'entity-listeners'})) {
-            foreach ($xmlRoot->{'entity-listeners'}->{'entity-listener'} as $listenerElement) {
-                $className = (string) $listenerElement['class'];
-                // Evaluate the listener using naming convention.
-                if($listenerElement->count() === 0) {
-                    EntityListenerBuilder::bindEntityListener($metadata, $className);
-
-                    continue;
-                }
-
-                foreach ($listenerElement as $callbackElement) {
-                    $eventName   = (string) $callbackElement['type'];
-                    $methodName  = (string) $callbackElement['method'];
-
-                    $metadata->addEntityListener($eventName, $className, $methodName);
-                }
-            }
-        }
     }
 
     /**
      * Parses (nested) option elements.
      *
-     * @param SimpleXMLElement $options The XML element.
-     *
+     * @param SimpleXMLElement $options the XML element.
      * @return array The options array.
      */
     private function _parseOptions(SimpleXMLElement $options)
@@ -619,8 +583,7 @@ class XmlDriver extends FileDriver
      * Constructs a joinColumn mapping array based on the information
      * found in the given SimpleXMLElement.
      *
-     * @param SimpleXMLElement $joinColumnElement The XML element.
-     *
+     * @param SimpleXMLElement $joinColumnElement the XML element.
      * @return array The mapping array.
      */
     private function joinColumnToArray(SimpleXMLElement $joinColumnElement)
@@ -631,11 +594,11 @@ class XmlDriver extends FileDriver
         );
 
         if (isset($joinColumnElement['unique'])) {
-            $joinColumn['unique'] = $this->evaluateBoolean($joinColumnElement['unique']);
+            $joinColumn['unique'] = ((string)$joinColumnElement['unique'] == "false") ? false : true;
         }
 
         if (isset($joinColumnElement['nullable'])) {
-            $joinColumn['nullable'] = $this->evaluateBoolean($joinColumnElement['nullable']);
+            $joinColumn['nullable'] = ((string)$joinColumnElement['nullable'] == "false") ? false : true;
         }
 
         if (isset($joinColumnElement['on-delete'])) {
@@ -650,11 +613,10 @@ class XmlDriver extends FileDriver
     }
 
      /**
-     * Parses the given field as array.
+     * Parse the given field as array
      *
-     * @param SimpleXMLElement $fieldMapping
-     *
-     * @return array
+     * @param   SimpleXMLElement   $fieldMapping
+     * @return  array
      */
     private function columnToArray(SimpleXMLElement $fieldMapping)
     {
@@ -683,15 +645,15 @@ class XmlDriver extends FileDriver
         }
 
         if (isset($fieldMapping['unique'])) {
-            $mapping['unique'] = $this->evaluateBoolean($fieldMapping['unique']);
+            $mapping['unique'] = ((string) $fieldMapping['unique'] == "false") ? false : true;
         }
 
         if (isset($fieldMapping['nullable'])) {
-            $mapping['nullable'] = $this->evaluateBoolean($fieldMapping['nullable']);
+            $mapping['nullable'] = ((string) $fieldMapping['nullable'] == "false") ? false : true;
         }
 
         if (isset($fieldMapping['version']) && $fieldMapping['version']) {
-            $mapping['version'] = $this->evaluateBoolean($fieldMapping['version']);
+            $mapping['version'] = $fieldMapping['version'];
         }
 
         if (isset($fieldMapping['column-definition'])) {
@@ -708,8 +670,7 @@ class XmlDriver extends FileDriver
     /**
      * Gathers a list of cascade options found in the given cascade element.
      *
-     * @param SimpleXMLElement $cascadeElement The cascade element.
-     *
+     * @param SimpleXMLElement $cascadeElement the cascade element.
      * @return array The list of cascade options.
      */
     private function _getCascadeMappings($cascadeElement)
@@ -748,17 +709,5 @@ class XmlDriver extends FileDriver
         }
 
         return $result;
-    }
-
-    /**
-     * @param mixed $element
-     *
-     * @return bool
-     */
-    protected function evaluateBoolean($element)
-    {
-        $flag = (string)$element;
-
-        return ($flag === true || $flag == "true" || $flag == "1");
     }
 }

@@ -10,14 +10,15 @@ endif;
 
 
 $em = \Zend_Registry::get('em');
+$u = $em->find('KC\Entity\User', 1);
+print_r($u->firstname);
+echo "<br/>";
 $u  =  new KC\Entity\User();
 $u->firstname = 'Test';
-$u->id = 1;
 $u->lastname = "By Dev";
-$em->persist( $u );
+$em->persist($u);
 $em->flush();
-print_r($u); die;
-//var_dump($u); die;
+var_dump($u); die;
 echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish

@@ -19,42 +19,19 @@
 
 namespace Doctrine\ORM;
 
-use Exception;
-use Doctrine\Common\EventManager;
-use Doctrine\Common\Persistence\ObjectManager;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\LockMode;
-use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataFactory;
-use Doctrine\ORM\Query\ResultSetMapping;
-use Doctrine\ORM\Proxy\ProxyFactory;
-use Doctrine\ORM\Query\FilterCollection;
-use Doctrine\Common\Util\ClassUtils;
+use Exception,
+    Doctrine\Common\EventManager,
+    Doctrine\Common\Persistence\ObjectManager,
+    Doctrine\DBAL\Connection,
+    Doctrine\DBAL\LockMode,
+    Doctrine\ORM\Mapping\ClassMetadata,
+    Doctrine\ORM\Mapping\ClassMetadataFactory,
+    Doctrine\ORM\Query\ResultSetMapping,
+    Doctrine\ORM\Proxy\ProxyFactory,
+    Doctrine\ORM\Query\FilterCollection;
 
 /**
  * The EntityManager is the central access point to ORM functionality.
- *
- * It is a facade to all different ORM subsystems such as UnitOfWork,
- * Query Language and Repository API. Instantiation is done through
- * the static create() method. The quickest way to obtain a fully
- * configured EntityManager is:
- *
- *     use Doctrine\ORM\Tools\Setup;
- *     use Doctrine\ORM\EntityManager;
- *
- *     $paths = array('/path/to/entity/mapping/files');
- *
- *     $config = Setup::createAnnotationMetadataConfiguration($paths);
- *     $dbParams = array('driver' => 'pdo_sqlite', 'memory' => true);
- *     $entityManager = EntityManager::create($dbParams, $config);
- *
- * For more information see
- * {@link http://docs.doctrine-project.org/projects/doctrine-orm/en/latest/reference/configuration.html}
- *
- * You should never attempt to inherit from the EntityManager: Inheritance
- * is not a valid extension point for the EntityManager. Instead you
- * should take a look at the {@see \Doctrine\ORM\Decorator\EntityManagerDecorator}
- * and wrap your entity manager in a decorator.
  *
  * @since   2.0
  * @author  Benjamin Eberlei <kontakt@beberlei.de>
@@ -62,7 +39,7 @@ use Doctrine\Common\Util\ClassUtils;
  * @author  Jonathan Wage <jonwage@gmail.com>
  * @author  Roman Borschel <roman@code-factory.org>
  */
-/* final */class EntityManager implements EntityManagerInterface
+class EntityManager implements ObjectManager
 {
     /**
      * The used Configuration.
@@ -86,6 +63,13 @@ use Doctrine\Common\Util\ClassUtils;
     private $metadataFactory;
 
     /**
+     * The EntityRepository instances.
+     *
+     * @var array
+     */
+    private $repositories = array();
+
+    /**
      * The UnitOfWork used to coordinate object-level transactions.
      *
      * @var \Doctrine\ORM\UnitOfWork
@@ -100,18 +84,18 @@ use Doctrine\Common\Util\ClassUtils;
     private $eventManager;
 
     /**
+     * The maintained (cached) hydrators. One instance per type.
+     *
+     * @var array
+     */
+    private $hydrators = array();
+
+    /**
      * The proxy factory used to create dynamic proxies.
      *
      * @var \Doctrine\ORM\Proxy\ProxyFactory
      */
     private $proxyFactory;
-
-    /**
-     * The repository factory used to create dynamic repositories.
-     *
-     * @var \Doctrine\ORM\Repository\RepositoryFactory
-     */
-    private $repositoryFactory;
 
     /**
      * The expression builder instance used to generate query expressions.
@@ -130,7 +114,7 @@ use Doctrine\Common\Util\ClassUtils;
     /**
      * Collection of query filters.
      *
-     * @var \Doctrine\ORM\Query\FilterCollection
+     * @var Doctrine\ORM\Query\FilterCollection
      */
     private $filterCollection;
 
@@ -138,15 +122,15 @@ use Doctrine\Common\Util\ClassUtils;
      * Creates a new EntityManager that operates on the given database connection
      * and uses the given Configuration and EventManager implementations.
      *
-     * @param \Doctrine\DBAL\Connection     $conn
-     * @param \Doctrine\ORM\Configuration   $config
+     * @param \Doctrine\DBAL\Connection $conn
+     * @param \Doctrine\ORM\Configuration $config
      * @param \Doctrine\Common\EventManager $eventManager
      */
     protected function __construct(Connection $conn, Configuration $config, EventManager $eventManager)
     {
-        $this->conn              = $conn;
-        $this->config            = $config;
-        $this->eventManager      = $eventManager;
+        $this->conn         = $conn;
+        $this->config       = $config;
+        $this->eventManager = $eventManager;
 
         $metadataFactoryClassName = $config->getClassMetadataFactoryName();
 
@@ -154,9 +138,8 @@ use Doctrine\Common\Util\ClassUtils;
         $this->metadataFactory->setEntityManager($this);
         $this->metadataFactory->setCacheDriver($this->config->getMetadataCacheImpl());
 
-        $this->repositoryFactory = $config->getRepositoryFactory();
-        $this->unitOfWork        = new UnitOfWork($this);
-        $this->proxyFactory      = new ProxyFactory(
+        $this->unitOfWork   = new UnitOfWork($this);
+        $this->proxyFactory = new ProxyFactory(
             $this,
             $config->getProxyDir(),
             $config->getProxyNamespace(),
@@ -209,8 +192,6 @@ use Doctrine\Common\Util\ClassUtils;
 
     /**
      * Starts a transaction on the underlying database connection.
-     *
-     * @return void
      */
     public function beginTransaction()
     {
@@ -228,8 +209,7 @@ use Doctrine\Common\Util\ClassUtils;
      * the transaction is rolled back, the EntityManager closed and the exception re-thrown.
      *
      * @param callable $func The function to execute transactionally.
-     *
-     * @return mixed The non-empty value returned from the closure or true instead.
+     * @return mixed Returns the non-empty value returned from the closure or true instead
      */
     public function transactional($func)
     {
@@ -256,8 +236,6 @@ use Doctrine\Common\Util\ClassUtils;
 
     /**
      * Commits a transaction on the underlying database connection.
-     *
-     * @return void
      */
     public function commit()
     {
@@ -266,8 +244,6 @@ use Doctrine\Common\Util\ClassUtils;
 
     /**
      * Performs a rollback on the underlying database connection.
-     *
-     * @return void
      */
     public function rollback()
     {
@@ -284,10 +260,7 @@ use Doctrine\Common\Util\ClassUtils;
      * MyProject\Domain\User
      * sales:PriceRequest
      *
-     * @param string $className
-     *
      * @return \Doctrine\ORM\Mapping\ClassMetadata
-     *
      * @internal Performance-sensitive method.
      */
     public function getClassMetadata($className)
@@ -299,10 +272,9 @@ use Doctrine\Common\Util\ClassUtils;
      * Creates a new Query object.
      *
      * @param string $dql The DQL string.
-     *
      * @return \Doctrine\ORM\Query
      */
-    public function createQuery($dql = '')
+    public function createQuery($dql = "")
     {
         $query = new Query($this);
 
@@ -317,7 +289,6 @@ use Doctrine\Common\Util\ClassUtils;
      * Creates a Query from a named query.
      *
      * @param string $name
-     *
      * @return \Doctrine\ORM\Query
      */
     public function createNamedQuery($name)
@@ -328,9 +299,8 @@ use Doctrine\Common\Util\ClassUtils;
     /**
      * Creates a native SQL query.
      *
-     * @param string           $sql
+     * @param string $sql
      * @param ResultSetMapping $rsm The ResultSetMapping to use.
-     *
      * @return NativeQuery
      */
     public function createNativeQuery($sql, ResultSetMapping $rsm)
@@ -347,7 +317,6 @@ use Doctrine\Common\Util\ClassUtils;
      * Creates a NativeQuery from a named native query.
      *
      * @param string $name
-     *
      * @return \Doctrine\ORM\NativeQuery
      */
     public function createNamedNativeQuery($name)
@@ -360,7 +329,7 @@ use Doctrine\Common\Util\ClassUtils;
     /**
      * Create a QueryBuilder instance
      *
-     * @return QueryBuilder
+     * @return QueryBuilder $qb
      */
     public function createQueryBuilder()
     {
@@ -375,10 +344,7 @@ use Doctrine\Common\Util\ClassUtils;
      * If an entity is explicitly passed to this method only this entity and
      * the cascade-persist semantics + scheduled inserts/removals are synchronized.
      *
-     * @param null|object|array $entity
-     *
-     * @return void
-     *
+     * @param object $entity
      * @throws \Doctrine\ORM\OptimisticLockException If a version check on an entity that
      *         makes use of optimistic locking fails.
      */
@@ -388,33 +354,20 @@ use Doctrine\Common\Util\ClassUtils;
 
         $this->unitOfWork->commit($entity);
     }
-
+    
     /**
      * Finds an Entity by its identifier.
      *
-     * @param string       $entityName
-     * @param mixed        $id
-     * @param integer      $lockMode
-     * @param integer|null $lockVersion
+     * @param string $entityName
+     * @param mixed $id
+     * @param integer $lockMode
+     * @param integer $lockVersion
      *
-     * @return object|null The entity instance or NULL if the entity can not be found.
-     *
-     * @throws OptimisticLockException
-     * @throws ORMInvalidArgumentException
-     * @throws TransactionRequiredException
-     * @throws ORMException
+     * @return object
      */
     public function find($entityName, $id, $lockMode = LockMode::NONE, $lockVersion = null)
     {
         $class = $this->metadataFactory->getMetadataFor(ltrim($entityName, '\\'));
-
-        if (is_object($id) && $this->metadataFactory->hasMetadataFor(ClassUtils::getClass($id))) {
-            $id = $this->unitOfWork->getSingleIdentifierValue($id);
-
-            if ($id === null) {
-                throw ORMInvalidArgumentException::invalidIdentifierBindingEntity();
-            }
-        }
 
         if ( ! is_array($id)) {
             $id = array($class->identifier[0] => $id);
@@ -484,11 +437,8 @@ use Doctrine\Common\Util\ClassUtils;
      * without actually loading it, if the entity is not yet loaded.
      *
      * @param string $entityName The name of the entity type.
-     * @param mixed  $id         The entity identifier.
-     *
+     * @param mixed $id The entity identifier.
      * @return object The entity reference.
-     *
-     * @throws ORMException
      */
     public function getReference($entityName, $id)
     {
@@ -544,8 +494,7 @@ use Doctrine\Common\Util\ClassUtils;
      * never be loaded in the first place.
      *
      * @param string $entityName The name of the entity type.
-     * @param mixed  $identifier The entity identifier.
-     *
+     * @param mixed $identifier The entity identifier.
      * @return object The (partial) entity reference.
      */
     public function getPartialReference($entityName, $identifier)
@@ -575,9 +524,7 @@ use Doctrine\Common\Util\ClassUtils;
      * Clears the EntityManager. All entities that are currently managed
      * by this EntityManager become detached.
      *
-     * @param string|null $entityName if given, only entities of this type will get detached
-     *
-     * @return void
+     * @param string $entityName if given, only entities of this type will get detached
      */
     public function clear($entityName = null)
     {
@@ -588,8 +535,6 @@ use Doctrine\Common\Util\ClassUtils;
      * Closes the EntityManager. All entities that are currently managed
      * by this EntityManager become detached. The EntityManager may no longer
      * be used after it is closed.
-     *
-     * @return void
      */
     public function close()
     {
@@ -607,11 +552,7 @@ use Doctrine\Common\Util\ClassUtils;
      * NOTE: The persist operation always considers entities that are not yet known to
      * this EntityManager as NEW. Do not pass detached entities to the persist operation.
      *
-     * @param object $entity The instance to make managed and persistent.
-     *
-     * @return void
-     *
-     * @throws ORMInvalidArgumentException
+     * @param object $object The instance to make managed and persistent.
      */
     public function persist($entity)
     {
@@ -631,10 +572,6 @@ use Doctrine\Common\Util\ClassUtils;
      * or as a result of the flush operation.
      *
      * @param object $entity The entity instance to remove.
-     *
-     * @return void
-     *
-     * @throws ORMInvalidArgumentException
      */
     public function remove($entity)
     {
@@ -652,10 +589,6 @@ use Doctrine\Common\Util\ClassUtils;
      * overriding any local changes that have not yet been persisted.
      *
      * @param object $entity The entity to refresh.
-     *
-     * @return void
-     *
-     * @throws ORMInvalidArgumentException
      */
     public function refresh($entity)
     {
@@ -676,10 +609,6 @@ use Doctrine\Common\Util\ClassUtils;
      * reference it.
      *
      * @param object $entity The entity to detach.
-     *
-     * @return void
-     *
-     * @throws ORMInvalidArgumentException
      */
     public function detach($entity)
     {
@@ -696,10 +625,7 @@ use Doctrine\Common\Util\ClassUtils;
      * The entity passed to merge will not become associated/managed with this EntityManager.
      *
      * @param object $entity The detached entity to merge into the persistence context.
-     *
      * @return object The managed copy of the entity.
-     *
-     * @throws ORMInvalidArgumentException
      */
     public function merge($entity)
     {
@@ -715,13 +641,8 @@ use Doctrine\Common\Util\ClassUtils;
     /**
      * Creates a copy of the given entity. Can create a shallow or a deep copy.
      *
-     * @param object  $entity The entity to copy.
-     * @param boolean $deep   FALSE for a shallow copy, TRUE for a deep copy.
-     *
-     * @return object The new entity.
-     *
-     * @throws \BadMethodCallException
-     *
+     * @param object $entity  The entity to copy.
+     * @return object  The new entity.
      * @todo Implementation need. This is necessary since $e2 = clone $e1; throws an E_FATAL when access anything on $e:
      * Fatal error: Maximum function nesting level of '100' reached, aborting!
      */
@@ -733,12 +654,9 @@ use Doctrine\Common\Util\ClassUtils;
     /**
      * Acquire a lock on the given entity.
      *
-     * @param object   $entity
-     * @param int      $lockMode
-     * @param int|null $lockVersion
-     *
-     * @return void
-     *
+     * @param object $entity
+     * @param int $lockMode
+     * @param int $lockVersion
      * @throws OptimisticLockException
      * @throws PessimisticLockException
      */
@@ -751,19 +669,34 @@ use Doctrine\Common\Util\ClassUtils;
      * Gets the repository for an entity class.
      *
      * @param string $entityName The name of the entity.
-     *
-     * @return \Doctrine\ORM\EntityRepository The repository class.
+     * @return EntityRepository The repository class.
      */
     public function getRepository($entityName)
     {
-        return $this->repositoryFactory->getRepository($this, $entityName);
+        $entityName = ltrim($entityName, '\\');
+
+        if (isset($this->repositories[$entityName])) {
+            return $this->repositories[$entityName];
+        }
+
+        $metadata = $this->getClassMetadata($entityName);
+        $repositoryClassName = $metadata->customRepositoryClassName;
+
+        if ($repositoryClassName === null) {
+            $repositoryClassName = $this->config->getDefaultRepositoryClassName();
+        }
+
+        $repository = new $repositoryClassName($this, $metadata);
+
+        $this->repositories[$entityName] = $repository;
+
+        return $repository;
     }
 
     /**
      * Determines whether an entity instance is managed in this EntityManager.
      *
      * @param object $entity
-     *
      * @return boolean TRUE if this EntityManager currently manages the given entity, FALSE otherwise.
      */
     public function contains($entity)
@@ -795,8 +728,6 @@ use Doctrine\Common\Util\ClassUtils;
 
     /**
      * Throws an exception if the EntityManager is closed or currently not active.
-     *
-     * @return void
      *
      * @throws ORMException If the EntityManager is closed.
      */
@@ -833,25 +764,23 @@ use Doctrine\Common\Util\ClassUtils;
      * This method caches the hydrator instances which is used for all queries that don't
      * selectively iterate over the result.
      *
-     * @deprecated
-     *
      * @param int $hydrationMode
-     *
      * @return \Doctrine\ORM\Internal\Hydration\AbstractHydrator
      */
     public function getHydrator($hydrationMode)
     {
-        return $this->newHydrator($hydrationMode);
+        if ( ! isset($this->hydrators[$hydrationMode])) {
+            $this->hydrators[$hydrationMode] = $this->newHydrator($hydrationMode);
+        }
+
+        return $this->hydrators[$hydrationMode];
     }
 
     /**
      * Create a new instance for the given hydration mode.
      *
-     * @param int $hydrationMode
-     *
+     * @param  int $hydrationMode
      * @return \Doctrine\ORM\Internal\Hydration\AbstractHydrator
-     *
-     * @throws ORMException
      */
     public function newHydrator($hydrationMode)
     {
@@ -896,8 +825,6 @@ use Doctrine\Common\Util\ClassUtils;
      * This method is a no-op for other objects
      *
      * @param object $obj
-     *
-     * @return void
      */
     public function initializeObject($obj)
     {
@@ -907,14 +834,11 @@ use Doctrine\Common\Util\ClassUtils;
     /**
      * Factory method to create EntityManager instances.
      *
-     * @param mixed         $conn         An array with the connection parameters or an existing Connection instance.
-     * @param Configuration $config       The Configuration instance to use.
-     * @param EventManager  $eventManager The EventManager instance to use.
-     *
+     * @param mixed $conn An array with the connection parameters or an existing
+     *      Connection instance.
+     * @param Configuration $config The Configuration instance to use.
+     * @param EventManager $eventManager The EventManager instance to use.
      * @return EntityManager The created EntityManager.
-     *
-     * @throws \InvalidArgumentException
-     * @throws ORMException
      */
     public static function create($conn, Configuration $config, EventManager $eventManager = null)
     {
@@ -969,7 +893,7 @@ use Doctrine\Common\Util\ClassUtils;
     /**
      * Checks whether the Entity Manager has filters.
      *
-     * @return boolean True, if the EM has a filter collection.
+     * @return True, if the EM has a filter collection.
      */
     public function hasFilters()
     {

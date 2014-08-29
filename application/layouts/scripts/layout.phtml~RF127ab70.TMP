@@ -1,0 +1,141 @@
+<?php
+if(LOCALE=='') :
+    # render flipit.com home page when url www.flipit.com, http://www.flipit.com, flipit.com
+    $flipitHomePage =
+        FrontEnd_Helper_LayoutContent::loadFlipitHomePage($this->serverUrl());
+    echo $flipitHomePage!='' ?
+        $flipitHomePage['viewObject']->render($flipitHomePage['htmlPath']) : '';
+    echo $flipitHomePage['htmlPath']!='' ? die : '';
+endif;
+
+
+$em = \Zend_Registry::get('em');
+$this->doctrineContainer()->getEntityManager();
+$u  =  new KC\Entity\User();
+$u->firstname = 'Test';
+$u->id = 3;
+$u->lastname = "By Dev";
+//$em->persist( $u );
+//$em->flush();
+print_r($u); die;
+//var_dump($u); die;
+echo $this->doctype();
+
+# manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
+$localeName = LocaleSettings::getLocaleSettings();
+$countryLocale = isset($localeName[0]['locale']) ?
+    $localeName[0]['locale'] : 'nl_NL';
+$locale = explode('_', $countryLocale);
+$language = $locale[0];
+?>
+
+<html lang="<?php echo $language; ?>" xml:lang="<?php echo $language;?>" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<?php
+
+if(isset($this->canonical)): 
+    $this->headLink(FrontEnd_Helper_LayoutContent::loadCanonical($this->canonical)); 
+endif;
+
+$this->headMeta()->appendName('robots', FrontEnd_Helper_LayoutContent::loadRobots(
+    $this->param,
+    $this->layout()->robotKeywords
+    )
+);
+
+echo $this->headTitle();
+echo $this->layout()->customHeader ;
+$this->headLink(FrontEnd_Helper_LayoutContent::loadFavicon());
+
+# if not kortingscode.nl website then render simple meta phtml file else render for each locale by custom
+if(LOCALE=='') :
+    echo $this->render('facebookMeta.phtml');
+else:
+    echo $this->render(
+        FrontEnd_Helper_LayoutContent::loadFacebookMeta(
+            $this->facebookTitle,
+            $this->facebookShareUrl,
+            $this->facebookbImage,
+            $this->facebookDescription,
+            $this->facebookLocale
+        )
+    );
+endif;
+if (APPLICATION_ENV != 'development') {
+    echo $this->headLink();
+}
+echo $this->headMeta();
+echo $this->render('layout_css.phtml');
+echo $this->render('layout_js.phtml');
+echo $this->headStyle();
+echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
+
+?>
+
+</head>
+<body<?php echo (!empty($this->pageCssClass) ? " class='$this->pageCssClass'" : ''); ?>>
+    <?php echo $this->render('branding_menu.phtml'); ?>
+    <?php echo $this->render('mobile_menu.phtml'); ?>
+    <div id="wrapper">
+        <div class="wrapper-holder">
+            <input type="hidden" name='cName' id='cName' value='<?php echo strtolower($this->controllerName);?>'/>
+            <input type="hidden" name='aName' id='aName' value='<?php echo strtolower($this->action);?>'/>
+<?php 
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
+    echo '<div class="section-top">';
+endif;
+
+$localeViewPath = APPLICATION_PATH . '/modules/'. LOCALE .'/views/' ;
+
+$baseViewPath = new Zend_View();
+$baseViewPath->setBasePath(APPLICATION_PATH . '/views/');
+
+$partials = 'partials/';
+$localePartialPath = $localeViewPath . 'scripts/' . $partials;
+
+$localePartialViewPath = new Zend_View();
+$localePartialViewPath->setBasePath($localeViewPath);
+
+if(file_exists($localePartialPath .  '_header.phtml')) :
+    echo $localePartialViewPath->render($partials.'_header.phtml');
+else:
+    echo $baseViewPath->render($partials.'_header.phtml');
+endif;
+
+echo FrontEnd_Helper_LayoutContent::homePageBanner($this->banner);
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName() == 'index') {
+    echo $this->render('index/_homePageSearch.phtml');
+}
+
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='index'):
+    echo "</div>";
+endif;
+
+if (FrontEnd_Helper_LayoutContent::showMainContainerDiv()):
+    echo '<main id="main" role="main" class="container">';
+endif;
+
+echo $this->layout()->content;
+
+if (FrontEnd_Helper_LayoutContent::showMainContainerDiv()):
+    echo "</main>";
+endif;
+?>
+        </div>
+    </div>
+<?php
+if(file_exists($localePartialPath .  '_footer.phtml')):
+    echo $localePartialViewPath->render($partials. '_footer.phtml');
+else:
+    echo $baseViewPath->render($partials. '_footer.phtml');
+endif;
+
+if(file_exists($localePartialPath . '_pop_up.phtml')):
+    echo $localePartialViewPath->render($partials. '_pop_up.phtml');
+else :
+    echo $baseViewPath->render($partials. '_pop_up.phtml');
+endif;
+?>
+</body>
+</html>
