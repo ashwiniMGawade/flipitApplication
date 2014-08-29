@@ -1009,7 +1009,7 @@ function resetBorders(el)
  * @author cbhopal
  */
 function deleteVisitor(id) {
-	bootbox.confirm(__('Are you sure you want to move this visitor to trash?'), function(r){
+	bootbox.confirm(__('Are you sure you want to delete this visitor Permanently?'), function(r){
 		if(!r){
 			return false;
 		}else{
@@ -1026,7 +1026,7 @@ function deleteVisitor(id) {
 function moverToTrash(id) {
 	addOverLay();
 	$.ajax({
-		url : HOST_PATH + "admin/visitor/deletevisitor",
+		url : HOST_PATH + "admin/visitor/permanentdelete",
 		method : "post",
 		data : {'id' : id},
 		dataType : "json",

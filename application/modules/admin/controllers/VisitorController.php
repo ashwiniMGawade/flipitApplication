@@ -68,6 +68,37 @@ class Admin_VisitorController extends Zend_Controller_Action
         $message[0]['error'] : '';
     }
 
+
+    ############################# Refactored Block ###########
+    public function permanentdeleteAction()
+    {
+        $visitorId = $this->getRequest()->getParam('id');
+        if ($visitorId) {
+            $visitorInformation = Doctrine_Core::getTable("Visitor")
+            ->find($visitorId);
+            $deleteVisitorEnrty = Doctrine_Query::create()
+            ->delete()
+            ->from('Visitor v')
+            ->where("v.id=" . $visitorId)
+            ->execute();
+            if ((intval($visitorInformation->imageId)) > 0) {
+                Doctrine_Query::create()
+                ->delete()
+                ->from('VisitorImage i')
+                ->where("i.id=" . $visitorInformation->imageId)
+                ->execute();
+            }
+        } else {
+            $visitorId = null;
+        }
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $this->view->translate('Visitor has been deleted Permanently.');
+        $flash->addMessage(array('success' => $message ));
+        echo Zend_Json::encode($visitorId);
+        die();
+    }
+    ############################# Refactored Block ###########
+
    public function indexAction()
     {
 
@@ -100,68 +131,7 @@ class Admin_VisitorController extends Zend_Controller_Action
         die();
    }
 
-   /**
-     * function use for delete Visitor from database
-     * @return boolean true/false
-     * @version 1.0
-     * @author mkaur
-     */
-    public function deletevisitorAction()
-    {
-        $id = $this->getRequest()->getParam('id');
-        if ($id) {
 
-            $uDel = Doctrine_Core::getTable('Visitor')->find($id);
-            $uDel->delete();
-
-        } else {
-
-            $id = null;
-        }
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Visitor has been deleted successfully.');
-        $flash->addMessage(array('success' => $message ));
-        echo Zend_Json::encode($id);
-        die();
-    }
-    /**
-     * Trash action use only for view of the trashed visitor
-     * @version 1.0
-     * @author mkaur
-     */
-    public function trashAction()
-    {
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-    }
-
-
-    /**
-     * Restore visitor only change status of deleleted
-     * column value
-     * @param integer $id
-     * @version 1.0
-     * @author mkaur
-     */
-    public function restorevisitorAction()
-    {
-        $id = $this->getRequest()->getParam('id');
-        if ($id) {
-            $uRes = Doctrine_Query::create()->update('Visitor')
-                    ->set('deleted', '0')->where('id=' . $id);
-            $uRes->execute();
-        } else {
-            $id = null;
-        }
-
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Visitor has been restored successfully.');
-        $flash->addMessage(array('success' => $message ));
-        echo Zend_Json::encode($id);
-        die();
-    }
 
     /**
      * Permanent delete User from database
@@ -169,28 +139,7 @@ class Admin_VisitorController extends Zend_Controller_Action
      * @version 1.0
      * @author mkaur
      */
-    public function permanentdeleteAction()
-    {
-        $id = $this->getRequest()->getParam('id');
-        if ($id) {
-
-            $v= Doctrine_Core::getTable("Visitor")->find($id);
-            $del = Doctrine_Query::create()->delete()->from('Visitor v')
-            ->where("v.id=" . $id)->execute();
-            if( (intval($v->imageId)) > 0) {
-                $del2 = Doctrine_Query::create()->delete()->from('VisitorImage i')
-                ->where("i.id=" . $v->imageId)->execute();
-            }
-
-        } else {
-        $id = null;
-        }
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $this->view->translate('Visitor has been deleted Permanently.');
-        $flash->addMessage(array('success' => $message ));
-        echo Zend_Json::encode($id);
-        die();
-    }
+   
 
     /**
      * function for edit visitor and  fetch data form database
