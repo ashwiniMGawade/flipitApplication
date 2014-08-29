@@ -24,23 +24,6 @@ class AddIndexOnRequiredTables extends Doctrine_Migration_Base
         );
 
         $this->addIndex(
-            'offer',
-            'offer_category',
-            array(
-                'fields' => array(
-                    'couponcodetype' => array(),
-                    'deleted' => array(),
-                    'userGenerated' => array(),
-                    'enddate' => array(),
-                    'startdate' => array(),
-                    'visability' => array(),
-                    'discounttype' => array(),
-                    'title' => array()
-                )
-            )
-        );
-
-        $this->addIndex(
             'couponcode',
             'couponcode',
             array(
@@ -87,7 +70,6 @@ class AddIndexOnRequiredTables extends Doctrine_Migration_Base
     {
         $this->removeIndex('votes', 'offer_id');
         $this->removeIndex('image', 'type');
-        $this->removeIndex('offer', 'offer_category');
         $this->removeIndex('couponcode', 'couponcode');
         $this->removeIndex('visitor', 'createdby');
         $this->removeIndex('view_count', 'memberid');
