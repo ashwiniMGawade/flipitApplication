@@ -4,7 +4,7 @@ class DisqusComments extends BaseDisqusComments
 {
     
     public static function saveComments($comments)
-    { 
+    {
         $databaseConnection = Doctrine_Manager::getInstance()->getCurrentConnection()->getDbh();
         $databaseConnection->query('TRUNCATE TABLE disqus_comments');
         $disqusComment = new Doctrine_Collection('DisqusComments');
@@ -19,6 +19,12 @@ class DisqusComments extends BaseDisqusComments
             $disqusComment[$key]->author_avtar =  $comment['authorAvatar'];
         }
         $disqusComment->save();
+        $tempFiles = glob(PUBLIC_PATH.'tmp/*');
+        foreach ($tempFiles as $tempFile) {
+            if (is_file($tempFile)) {
+                unlink($tempFile);
+            }
+        }
     }
 
     public static function getPageUrlBasedDisqusComments($pageUrl)
