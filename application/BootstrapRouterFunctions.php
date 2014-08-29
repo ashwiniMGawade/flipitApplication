@@ -130,7 +130,7 @@ class BootstrapRouterFunctions
         if (!empty($permalinkUrl)) {
             for ($index = 2; $index < count($permalinkUrl); $index++) {
                 if ($index % 2 == 0) {
-                    if (isset($permalinkUrl[$index])) {
+                    if (isset($permalinkUrl[$index]) && isset($permalinkUrl[$index+1])) {
                         $urlArray[$permalinkUrl[$index]] = $permalinkUrl[$index+1];
                     }
                 }
