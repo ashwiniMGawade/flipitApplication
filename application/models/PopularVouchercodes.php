@@ -106,10 +106,10 @@ class PopularVouchercodes extends BasePopularVouchercodes
 
         }
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+       
         return $flag;
 
     }
@@ -133,10 +133,10 @@ class PopularVouchercodes extends BasePopularVouchercodes
             ->set('p.position', 'p.position -1')
             ->where('p.position >' . $position)->execute();
             //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+            
 
         }
     }
@@ -171,10 +171,10 @@ class PopularVouchercodes extends BasePopularVouchercodes
 
         }
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+       
 
         //return $flag;
     }
@@ -206,9 +206,9 @@ class PopularVouchercodes extends BasePopularVouchercodes
 
         }
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
 
     }

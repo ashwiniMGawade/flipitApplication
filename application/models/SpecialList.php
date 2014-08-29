@@ -133,7 +133,7 @@ class SpecialList extends BaseSpecialList
 
                             }
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
                             return $flag;
 
@@ -157,7 +157,7 @@ class SpecialList extends BaseSpecialList
                     ->set('p.position', 'p.position -1')
                     ->where('p.position >' . $position)->execute();
                     //call cache function
-                    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+                    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
                     return true ;
             }
 
@@ -193,7 +193,7 @@ class SpecialList extends BaseSpecialList
                 $pc->position = $pos;
                 $pc->save();
                 //call cache function
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
                 return true ;
             }
@@ -226,7 +226,7 @@ class SpecialList extends BaseSpecialList
                     $pc->position = $pos;
                     $pc->save();
                     //call cache function
-                    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+                    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
                     return true ;
             }

@@ -18,7 +18,8 @@ class MetronieuwsController extends  Zend_Controller_Action
         # fetch 10 Popular voucher offers for http://www.metronieuws.nl
 
         $topVouchercodes = PopularCode::gethomePopularvoucherCodeForMarktplaatFeeds(10);
-        $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
+
+        $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
 
 
         $domain1 = $_SERVER['HTTP_HOST'];
@@ -45,21 +46,21 @@ class MetronieuwsController extends  Zend_Controller_Action
         //title, desc, link, date
         $xml->writeElement('title', $title);
         $xml->writeElement('description', $desc);
-        $xml->writeElement('link', $link );
+        $xml->writeElement('link', $link);
         $xml->writeElement('language', 'nl');
 
         // Cycle through the rankings, creating an array storing
         // each, and push the array onto the $entries array
 
-        foreach ($topVouchercodes as  $offer) {
+        foreach ($topVouchercodes as $offer) {
 
             $offerData = $offer['offer'] ;
 
             //item !
             $xml->startElement("item");
             $xml->writeElement('shopname', $offerData['shop']['name']);
-            if(mb_strlen($offerData['title'], 'UTF-8') > 42) {
-                $xml->writeElement('title', mb_substr($offerData['title'], 0,42,  'UTF-8')."...");
+            if (mb_strlen($offerData['title'], 'UTF-8') > 42) {
+                $xml->writeElement('title', mb_substr($offerData['title'], 0, 42, 'UTF-8')."...");
             } else {
                 $xml->writeElement('title', $offerData['title']);
             }

@@ -610,23 +610,23 @@ EOD;
         return $text;
     }
    
-    public static function gethomeSections($offertype, $flag = "")
+    public static function gethomeSections($offertype, $limit = "")
     {
         switch ($offertype) {
             case "popular":
-                $result = PopularCode::gethomePopularvoucherCode($flag);
+                $result = PopularCode::gethomePopularvoucherCode($limit);
                 break;
             case "newest":
-                $result = PopularVouchercodes::getNewstoffer($flag);
+                $result = PopularVouchercodes::getNewstoffer($limit);
                 break;
             case "category":
-                $result = Category::getPopularCategories($flag);
+                $result = Category::getPopularCategories($limit);
                 break;
             case "specialList":
-                $result = $data = SpecialList::getfronendsplpage($flag);
+                $result = $data = SpecialList::getfronendsplpage($limit);
                 break;
             case "moneySaving":
-                $result = Articles::getmoneySavingArticles($flag);
+                $result = Articles::getmoneySavingArticles($limit);
                 break;
             case "asseenin":
                 $result = SeenIn::getSeenInContent();

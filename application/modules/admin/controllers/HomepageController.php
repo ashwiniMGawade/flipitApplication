@@ -330,7 +330,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshopForHomePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
     }
 
@@ -356,7 +356,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshopForHomePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
     }
     /**
@@ -384,7 +384,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshopForHomePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
     }
     /**
@@ -411,7 +411,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshopForHomePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
     }
 

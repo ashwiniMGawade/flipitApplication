@@ -379,8 +379,13 @@ class Page extends BasePage
         try {
         //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryspeciallist_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
+
+        
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
+
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             //$getPage = Doctrine_Core::getTable ( 'Page' )->findOneBy ( "permalink", $params['pagepermalink'] );
@@ -709,8 +714,12 @@ class Page extends BasePage
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pageKey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryspeciallist_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
+
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -876,7 +885,10 @@ public static function exportpagelist()
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+       
+
         return $id;
     }
 
@@ -900,7 +912,9 @@ public static function exportpagelist()
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+
         return 1;
     }
     /**
@@ -928,7 +942,9 @@ public static function exportpagelist()
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+
         return $id;
 
     }

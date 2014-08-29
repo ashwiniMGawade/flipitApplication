@@ -38,23 +38,22 @@ class IndexController extends Zend_Controller_Action
         if (FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
 
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_popularvaouchercode_list",
+                "10_popularShops_list",
                 array('function' => 'Offer::getTopOffers', 'parameters' => array(10))
             );
             
             $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_popularcategory_list",
+                "10_popularCategories_list",
                 array('function' => 'Category::getPopularCategories', 'parameters' => array(10, 'home'))
             );
             $this->view->topCategories = $topCategories;
-            
             $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_speciallist_list",
+                "all_specialPages_list",
                 array('function' => 'SpecialList::getSpecialPages', 'parameters' => array())
             );
             $this->view->specialListPages = $specialListPages;
 
-            $specialListCountKey ="all_speciallist_count";
+            $specialListCountKey ="all_specialPages_count";
             $cacheStatus =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($specialListCountKey);
             if ($cacheStatus) {
                 $specialPagesOffers = $this->_helper->Index->getSpecialListPagesOffers($specialListPages);
@@ -63,15 +62,15 @@ class IndexController extends Zend_Controller_Action
                 $specialPagesOffers  = FrontEnd_Helper_viewHelper::getFromCacheByKey($specialListCountKey);
             }
             $this->view->specialPagesOffers = $specialPagesOffers;
-
             $this->view->moneySavingGuidesCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_homemanisaving_count",
+                "all_moneySaving_list",
                 array('function' => 'Articles::getAllArticlesCount', 'parameters' => array())
+
             );
 
 
             $this->view->topStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_popularshopForHomePage_list",
+                "all_popularShops_list",
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::getStoreForFrontEnd',
                     'parameters' => array("popular", 24)
@@ -79,7 +78,7 @@ class IndexController extends Zend_Controller_Action
             );
 
             $this->view->seeninContents = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_homeseenin_list",
+                "all_homeSeenIn_list",
                 array('function' => 'SeenIn::getSeenInContent', 'parameters' => array(10))
             );
             $this->view->aboutTabs = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(

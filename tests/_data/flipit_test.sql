@@ -813,7 +813,7 @@ CREATE TABLE IF NOT EXISTS `popular_shop` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `popular_vouchercodes`
+-- Table structure for table `popular_voucherCodes`
 --
 
 CREATE TABLE IF NOT EXISTS `popular_vouchercodes` (

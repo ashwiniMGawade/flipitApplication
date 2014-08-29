@@ -305,9 +305,11 @@ class User extends BaseUser
             $connUser = BackEnd_Helper_viewHelper::addConnection();
         }
         //call cache function
+        $key = 'user_'.$this->id.'_details';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        $alluserkey ="all_about_pages_users_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
         return $this->id;
     }
 
@@ -551,13 +553,21 @@ class User extends BaseUser
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        $alluserkey ="all_about_pages_users_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
-        $alluserIdkey ="all_". "users".$this->id ."_list";
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
+        //die("test");
+        //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
+        //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
+
+        $alluserIdkey ="user_".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
+
+        $key = 'user_'.$this->id.'_details';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
         $interestkey ="all_". "interesting".$this->id."_list";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
-        $favouriteShopkey ="all_". "favouriteshop".$this->id ."_list";
+
+        $favouriteShopkey ="user_". "favouriteShop".$this->id ."_data";
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
         self::updateInDatabase($this->id, $fullName, 0);//change name of the author etc
         return array(
@@ -950,8 +960,7 @@ class User extends BaseUser
     }
     //call cache function
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-    $alluserkey ="all_about_pages_users_list";
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
+    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
     return $flag;
 
   }

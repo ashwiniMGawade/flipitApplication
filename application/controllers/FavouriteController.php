@@ -39,9 +39,18 @@ class FavouriteController extends Zend_Controller_Action
             } else {
                 $stores = $this->_helper->Favourite->getPopularStores();
             }
-            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops($stores);
-            $this->view->favouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_favouriteShop". Auth_VisitorAdapter::getIdentity()->id."_list",
+            $this->view->popularShops = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'alreadyFavourite_'.Auth_VisitorAdapter::getIdentity()->id.'_shops',
+                array(
+                    'function' => 'FavoriteShop::filterAlreadyFavouriteShops',
+                    'parameters' => array($stores)
+                )
+            );
+
+            $this->view->favouriteShops = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
                 array(
                     'function' => 'Visitor::getFavoriteShops',
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
@@ -57,9 +66,23 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
+            $favoriteShopsOffers = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShopOffers',
+                array(
+                    'function' => 'Visitor::getFavoriteShopsOffers',
+                    'parameters' => array()
+                )
+            );
             $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
-            $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+            $userDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
+                array(
+                    'function' => 'Visitor::getUserDetails',
+                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
+                )
+            );
             $this->view->favouriteShopsOffers = $offers;
             $this->view->userDetails = $userDetails[0];
             $this->view->pageCssClass = 'youroffers-page';
