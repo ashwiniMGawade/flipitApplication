@@ -64,7 +64,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->specialPagesOffers = $specialPagesOffers;
             $this->view->moneySavingGuidesCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_moneySaving_list",
-                array('function' => 'Articles::getAllArticlesCount', 'parameters' => array())
+                array('function' => 'Articles::getAllArticlesCount', 'parameters' => array()),''
 
             );
 
