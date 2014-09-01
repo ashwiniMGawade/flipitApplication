@@ -8,17 +8,24 @@ if(LOCALE=='') :
     echo $flipitHomePage['htmlPath']!='' ? die : '';
 endif;
 
-
-$em = \Zend_Registry::get('em');
-$u = $em->find('KC\Entity\User', 1);
-print_r($u->firstname);
-echo "<br/>";
+//ONE TO ONE RELATION EXAMPLE
+/*$em = \Zend_Registry::get('em');
+$em1 = \Zend_Registry::get('em');
 $u  =  new KC\Entity\User();
 $u->firstname = 'Test';
 $u->lastname = "By Dev";
+$u->role = ($em->find('KC\Entity\Role', 1));
 $em->persist($u);
 $em->flush();
-var_dump($u); die;
+*/
+
+$em = \Zend_Registry::get('em');
+$u  =  new KC\Entity\User();
+$u->firstname = 'Test';
+$u->lastname = "By Dev";
+$u->userwebsite[] = $em->find('KC\Entity\Website', 1);
+$em->persist($u);
+$em->flush();
 echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish

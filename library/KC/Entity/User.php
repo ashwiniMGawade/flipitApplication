@@ -3,7 +3,7 @@
 namespace KC\Entity;
  
 use Doctrine\ORM\Mapping as ORM;
- 
+use Doctrine\Common\Collections\ArrayCollection;
 /**
  * User
  *
@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
+    public function __construct()
+    {
+        $this->userwebsite = new ArrayCollection();
+    }
+
     /**
      *
      * @ORM\Column(name="id", type="bigint", nullable=false)
@@ -32,6 +37,23 @@ class User
      */
     private $lastname;
 
+    /**
+     * Unidirectional - Many-To-One
+     *
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Role", inversedBy="role")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="roleid", referencedColumnName="id")
+     * })
+     */
+    private $role;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Website", inversedBy="refwebsite")
+     * @ORM\JoinTable(name="ref_user_website")
+     **/
+    private $userwebsite;
+
+
     public function __get($property)
     {
         return $this->$property;
@@ -40,5 +62,12 @@ class User
     public function __set($property, $value)
     {
         $this->$property = $value;
+    }
+    private $tags;
+
+    public function addWebsite(Website $tag)
+    {
+        $tag->addArticle($this); // synchronously updating inverse side
+        $this->tags[] = $tag;
     }
 }
