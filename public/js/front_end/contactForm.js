@@ -1,5 +1,10 @@
 $(document).ready(function(){
     validateRegistration();
+    var number1 = Math.floor((Math.random() * 10) + 1); 
+    var number2 = Math.floor((Math.random() * 10) + 1);
+    $("#number1").val(number1);
+    $("#number2").val(number2);
+
  });
 function ltrim(src){
     if (src.indexOf('/') === 0){
@@ -18,6 +23,15 @@ $('#submit').click( function() {
         }
     });
 });
+$.validator.addMethod('captcha',
+  function(value) {
+    $result = ( parseInt($('#number1').val()) + parseInt($('#number2').val()) == parseInt($('#captcha').val()) ) ;
+    $('#spambot').fadeOut('fast');
+        return $result;
+    },
+        'Incorrect value, please try again.'
+);
+
 var validator =  null;
 function validateRegistration() {
     validator = $('form#contactform')
@@ -31,13 +45,17 @@ function validateRegistration() {
                 
             },
             name: {
-                required: true
+              required: true
             },
             subject: {
-                required: true
+              required: true
             },
             message: {
-                required: true
+              required: true
+            },
+            captcha: {
+              required: true,
+              captcha: true
             }
         },
         messages : {
@@ -53,6 +71,9 @@ function validateRegistration() {
                },
               message: {
                   required: ''
+              },
+              captcha: {
+                required: ''
               }
         },
         onfocusin : function(element) {
