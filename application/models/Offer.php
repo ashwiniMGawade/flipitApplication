@@ -771,7 +771,6 @@ class Offer extends BaseOffer
     {
         $shopOffersByShopIds = array();
         if(!empty($shopIds)) :
-            $shopIds = array_map("mysql_real_escape_string", $shopIds);
             $shopIds = ("'" . implode("', '", $shopIds) . "'");
             $shopOffersByShopIds = Doctrine_Query::create()
             ->select(
