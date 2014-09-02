@@ -65,7 +65,7 @@ class OfferController extends Zend_Controller_Action
         $permalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $parameters = $this->_getAllParams();
         $extendedUrl = $parameters['permalink'];
-        $currentDate = date('Y-m-d');
+
         $couponDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'extended_'.$extendedUrl.'_couponDetails',
             array('function' => 'Offer::getCouponDetails', 'parameters' => array($extendedUrl))
@@ -89,15 +89,16 @@ class OfferController extends Zend_Controller_Action
             )
         );
 
-        if (count($couponDetails)==0) {
+        if (count($couponDetails)== 0) {
             $this->_redirect(HTTP_PATH_LOCALE.'error');
         }
 
         $topOfferFromStore = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'extendedTopOffer_of_'.$couponDetails[0]['shopId'],
             array('function' => 'Offer::getrelatedOffers',
-                'parameters' => array($couponDetails[0]['shopId'], $currentDate))
+                'parameters' => array($couponDetails[0]['shopId']))
         );
+
         $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
         $this->view->popularStoresList = $frontendSidebarHelper->PopularShopWidget();
         $this->view->latestShopUpdates = $latestShopUpdates;
