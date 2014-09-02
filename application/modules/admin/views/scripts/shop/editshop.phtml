@@ -37,10 +37,11 @@ echo $this->headTitle()->append('Edit Shop');?>
                 <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop<?php echo '#'.$this->qstring; ?>'"><?php echo $this->translate('Cancel'); ?></button>
                 <button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button>	
                 <?php 
-                $host = 'www.kortingscode.nl';
+                $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+                $host = $httpScheme.'.kortingscode.nl';
                 if ($_COOKIE['site_name'] != 'kortingscode.nl') 
                 {
-                    $host = 'www.flipit.com/admin';
+                    $host = $httpScheme.'.flipit.com/admin';
                 } 
                 date_default_timezone_set('Europe/Amsterdam');
                 $hash = md5($this->data['id'].date('Y').'-'.date('m').'-'.date('d').':'.date('H')); 
