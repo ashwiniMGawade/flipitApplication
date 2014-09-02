@@ -10,7 +10,8 @@ class BrandingController extends Zend_Controller_Action
     public function startAction()
     {
         $session = new Zend_Session_Namespace('Branding');
-        $session->saveUrl = 'http://www.kortingscode.nl/';
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $session->saveUrl = 'http://'.$httpScheme.'.kortingscode.nl/';
         $storeUrl = $this->_helper->branding->start();
         $this->_redirect($storeUrl);
     }
