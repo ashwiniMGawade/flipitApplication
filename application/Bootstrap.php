@@ -177,7 +177,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $em = EntityManager::create($connectionParams, $config);
         Zend_Registry::set('em', $em);
-        
+        $platform = $em->getConnection()->getDatabasePlatform();
+        $platform->registerDoctrineTypeMapping('enum', 'string');
         return $em;
     }
 
