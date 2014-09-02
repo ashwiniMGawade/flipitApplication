@@ -1,0 +1,1682 @@
+<?xml version="1.0"?>
+<skipper version="3.0.0.1104" name="FlipitApplication" mvc="Zend Framework" orm="Doctrine2" uuid="07ed96cc-5f8b-425d-ba86-f19eca37d2d1">
+  <module name="Name of the project" import-format="Doctrine2Php" import-path="../export" uuid="02c19c1b-a9f9-495b-be4d-8deda361aba6">
+    <entity name="about" uuid="77D5D4D4-AAF7-439B-A3FB-D7E532F5DAF5">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="241c3229-6937-4e26-a332-0d2040a3dfd1"/>
+      <field name="title" type="string" size="100" default="NULL" uuid="38557f3c-8220-4c29-bd6b-c85ca360d47d"/>
+      <field name="content" type="unknown:@longblob" default="NULL" uuid="ca8bb996-d427-45f0-9800-433e0f7858c9"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="54ebbc99-31ce-4b0d-a1c4-8276f9736117"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="8ab95e49-b79d-4d53-b63e-1fa0f6649c6d"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="696e769d-9731-4572-b33d-5f0991277ba1"/>
+      <orm-attributes>
+        <attribute name="table">about</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="adminfavoriteshp" uuid="12EE973E-88C5-476A-A005-F0AB474D0BDB">
+      <field name="id" description="PK" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="43377bfa-9f9d-4358-a46a-3832ba981dee"/>
+      <field name="shopId" description="FK to shop.id" type="integer" size="11" required="true" uuid="8c7b17f6-852e-48c3-b43e-486e7bec52b0"/>
+      <field name="userId" description="FK to user.id" type="integer" size="11" required="true" uuid="30366ab0-d356-4ec1-b969-c7ed5036a804"/>
+      <index name="shopId_idx">
+        <index-field name="shopId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">adminfavoriteshp</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="affliate_network" uuid="CBA1FD26-3D71-4C5D-9A9F-A68B5863AEC5">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="0d3ff2f3-b248-4a1e-830e-747d5189dfeb"/>
+      <field name="name" type="string" default="NULL" uuid="578e47da-b32a-41ca-a55a-e87de0230c6c"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="a54542de-2833-442a-9585-22386224149e"/>
+      <field name="replacewithid" description="FK to affliate_network.id , Defines a network is merged or not" type="integer" size="8" default="NULL" uuid="1e7ab169-5032-4238-9d32-2549e865fedc"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="b991f979-d003-4889-a227-ed15aa849545"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="6a94fd36-566b-4e51-b114-ea9d399791ae"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="f01da8cb-91e6-4a46-82d6-573024a1a843"/>
+      <field name="subId" type="string" default="NULL" uuid="9d8ce4a5-04ff-4e3a-b0bc-67b50acff54e"/>
+      <index name="replacewithid_idx">
+        <index-field name="replacewithid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">affliate_network</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="affliate_network" to="affliate_network" caption="affliate_network_replacewithid_affliate_network_id" uuid="FC5D97A2-4E94-470A-A9B5-1BA82E099696">
+      <association-field from="replacewithid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="article_chapter" uuid="B5762105-A68D-4622-AB84-23267D9B5F4C">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="2604d14b-abaf-4223-9bed-10e4d4064b9b"/>
+      <field name="articleId" type="integer" size="8" default="NULL" uuid="d3377ce5-70ca-4e0d-a08b-e507d372296b"/>
+      <field name="title" type="string" default="NULL" uuid="fe38ed5a-ad6c-4658-9f41-ffccadd74778"/>
+      <field name="content" type="unknown:@longblob" default="NULL" uuid="28008722-9073-4bb2-8c75-8311224cfd48"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="955ab04f-79c7-4883-9947-1c0abfd02529"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="497545f8-a0df-4d5a-9db3-d9419c683325"/>
+      <orm-attributes>
+        <attribute name="table">article_chapter</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="articlecategory" uuid="243B9E45-8562-4410-B8BA-2E85D2B64A21">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3b35c10e-2a14-4da5-a6fa-62b832c02bf9"/>
+      <field name="name" type="string" size="100" default="NULL" uuid="f5528e61-03bf-4a24-92a3-0630ef80ba68"/>
+      <field name="permalink" type="string" size="255" default="NULL" uuid="a887ab14-f39a-49e2-821a-729b6f323606"/>
+      <field name="metatitle" type="string" default="NULL" uuid="e573c993-a854-4dab-8ac7-8f18c57f4fcf"/>
+      <field name="metadescription" type="string" default="NULL" uuid="3372d164-f058-473d-aa15-7e2c5c4dd2a5"/>
+      <field name="description" type="unknown:@longblob" default="NULL" uuid="27fb96ca-f3a8-4734-8491-036fb848c8f1"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="ffa35d60-1fb1-450e-ac00-a1985ea50694"/>
+      <field name="categoryiconid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="96fd199d-044b-4682-8cbb-dae05f9c4b3b"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="df2d926f-b1fa-473b-89ff-ffb17dd8c900"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="71530182-ab58-4521-9780-962c51a9a9eb"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="37ef3fff-63cd-4835-868a-9a6b0b0e3431"/>
+      <field name="categorytitlecolor" type="string" required="true" uuid="9ed7c171-cab8-42f0-82e9-2bceb73fa079"/>
+      <index name="categoryiconid" unique="true">
+        <index-field name="categoryiconid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="categoryiconid_idx">
+        <index-field name="categoryiconid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">articlecategory</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="articlecategory" to="image" caption="articlecategory_ibfk_1" uuid="977FDEAE-D7BE-4E4D-A9D6-7BF4FBCEEA31">
+      <association-field from="categoryiconid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="articles" uuid="CC5ADAF4-1930-4315-AD7A-18AB123FB385">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="5144411f-eabe-459f-9f81-1b4e61bfde0e"/>
+      <field name="title" type="string" size="255" default="NULL" uuid="ca578ee8-e878-4919-b7dd-b296a3efed8f"/>
+      <field name="permalink" type="string" size="255" default="NULL" uuid="5440a97d-7fa0-4c4c-a39a-a862c46ee621"/>
+      <field name="thumbnailid" type="integer" size="8" default="NULL" uuid="12dd9259-f857-4c93-b242-ce9776917f99"/>
+      <field name="metatitle" type="string" default="NULL" uuid="725ce2cb-6b50-45e8-805f-ee2a6a6deadd"/>
+      <field name="metadescription" type="string" default="NULL" uuid="956ac111-ab0a-4c68-b749-62bdf4d2b030"/>
+      <field name="content" type="string" default="NULL" uuid="811ccaad-fbd9-4cbf-8dd1-650730eea2c7"/>
+      <field name="publish" type="integer" size="1" required="true" uuid="bb821a0c-4d26-4db7-9b32-7316f27810f8"/>
+      <field name="publishdate" type="unknown:@datetime_f" required="true" uuid="cc0532d1-d888-4342-b33f-43a46ea276f3"/>
+      <field name="authorid" type="integer" size="8" required="true" uuid="214c44fc-4ec7-4616-970b-7090946766cd"/>
+      <field name="authorname" type="string" size="255" default="NULL" uuid="a52c0604-fe01-4103-85fe-58ba974895c4"/>
+      <field name="deleted" type="integer" size="1" required="true" uuid="80e66abc-5920-46cf-affc-2b1ace1467f7"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="d5476fd4-c15b-46e4-a06d-522282d23073"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="ad09dbdc-0c83-4000-9913-c265aa01f4e4"/>
+      <field name="thumbnailsmallid" type="integer" size="8" default="NULL" uuid="79455244-46b3-498f-8899-0dd97e2f6c64"/>
+      <index name="thumbnailid">
+        <index-field name="thumbnailid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">articles</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="articles" to="image" caption="articles_ibfk_2" owner-alias="image" inverse-alias="articleImage" uuid="DF786E61-0CFA-4140-B0ED-CB748A04658C">
+      <association-field from="thumbnailid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="articleviewcount" uuid="35891A06-7651-49CC-801D-6DABBB65D603">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="8ab14af7-be83-4951-bc73-5b2dfe560b45"/>
+      <field name="articleid" type="integer" size="8" required="true" uuid="28734942-6725-4ec8-9a6a-df5901d80b4e"/>
+      <field name="onclick" type="integer" size="8" required="true" uuid="49e39c9a-4c45-4c24-8596-e40a6943a6f8"/>
+      <field name="onload" type="integer" size="8" default="NULL" uuid="8075af8c-d85d-4115-a6af-312021d3eeb6"/>
+      <field name="ip" type="string" size="255" default="NULL" uuid="75eb1ea2-0d38-4ae3-84d9-1119ceffc469"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="8334f3ee-aece-43d4-b990-97e6e2f38509"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="85b05ff2-23ab-45a3-ad55-222f6a248dbe"/>
+      <field name="deleted" type="integer" size="11" default="'0'" required="true" uuid="6e13943c-864f-466b-b185-1b8dfdf0786d"/>
+      <index name="articleid_idx">
+        <index-field name="articleid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">articleviewcount</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="category" uuid="4A0B8E33-AF38-4FA2-98EA-6D9D13BE36D8">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="0640109a-2e62-4b90-8cbb-0e1d4d8bcd9e"/>
+      <field name="name" type="string" size="100" default="NULL" uuid="b271340b-8812-46ef-90cc-a238b43bb261"/>
+      <field name="permalink" type="string" size="255" default="NULL" uuid="c6d57928-fee8-408e-8c56-17bfe4649e23"/>
+      <field name="metatitle" type="string" default="NULL" uuid="8e310b24-ce71-4d9f-ad7d-ba8c1db55e65"/>
+      <field name="metadescription" type="string" default="NULL" uuid="645ae59b-ffb3-4587-8111-b67673b89929"/>
+      <field name="description" type="unknown:@longblob" default="NULL" uuid="e801c1d9-0b81-4d57-859f-faed96422ef7"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="5722d4b5-9d05-4605-bc5b-f02e4038379d"/>
+      <field name="categoryiconid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="58dfb5c1-a9a3-4c2a-a18d-c50c8a82aaaa"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="4d762bc4-58ff-4138-8a66-abd369b43d5d"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="866468c8-7a6c-4b9b-94b4-57befc67272d"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="df75385e-960a-4f2b-a8eb-d856cc4666cd"/>
+      <field name="featured_category" type="integer" size="1" default="NULL" uuid="4e22e6bc-16a9-41b9-9de5-7778781d3f39"/>
+      <field name="categoryFeaturedImageId" type="integer" size="8" default="NULL" uuid="2ad021c2-41b8-4edb-9218-6feef8ec33b5"/>
+      <field name="categoryHeaderImageId" type="integer" size="8" default="NULL" uuid="b9ad8e2f-3893-46ba-bce0-9c240ef16858"/>
+      <index name="categoryiconid" unique="true">
+        <index-field name="categoryiconid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="categoryiconid_idx">
+        <index-field name="categoryiconid"/>
+      </index>
+      <index name="name">
+        <index-field name="name"/>
+      </index>
+      <index name="name_2">
+        <index-field name="name"/>
+      </index>
+      <index name="name_3">
+        <index-field name="name"/>
+      </index>
+      <index name="name_4">
+        <index-field name="name"/>
+      </index>
+      <index name="name_5">
+        <index-field name="name"/>
+      </index>
+      <index name="name_6">
+        <index-field name="name"/>
+      </index>
+      <index name="name_7">
+        <index-field name="name"/>
+      </index>
+      <index name="name_8">
+        <index-field name="name"/>
+      </index>
+      <index name="name_9">
+        <index-field name="name"/>
+      </index>
+      <index name="name_10">
+        <index-field name="name"/>
+      </index>
+      <index name="categoryFeaturedImageId_foreign_key">
+        <index-field name="categoryFeaturedImageId"/>
+      </index>
+      <index name="categoryHeaderImageId_foreign_key">
+        <index-field name="categoryHeaderImageId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">category</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="category" to="image" caption="categoryFeaturedImageId_foreign_key" uuid="5E7FF363-D9F1-4536-AFC3-49FCE4EB9E80">
+      <association-field from="categoryFeaturedImageId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">cascade</attribute>
+      </orm-attributes>
+    </association>
+    <association from="category" to="image" caption="categoryHeaderImageId_foreign_key" uuid="DF2D7A50-3246-4752-8462-6286A329C350">
+      <association-field from="categoryHeaderImageId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">cascade</attribute>
+      </orm-attributes>
+    </association>
+    <association from="category" to="image" caption="category_categoryiconid_image_id" uuid="FF943094-2E32-4C7B-A07C-38616909006A">
+      <association-field from="categoryiconid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="conversions" uuid="B60B73DA-789D-47C6-9071-751BE20EA8F6">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="f2168319-de52-4a26-94f5-50fe6552dc5f"/>
+      <field name="IP" type="string" size="50" default="NULL" uuid="8e6970b5-74c1-49e3-8609-c7be439f45af"/>
+      <field name="subid" type="string" size="50" default="NULL" uuid="f1cdb313-c8aa-4d6e-a93c-5e326efd6833"/>
+      <field name="utma" type="string" size="255" default="NULL" uuid="eba9ea0b-cc4b-4230-9f84-ab248735ff14"/>
+      <field name="utmz" type="string" size="255" default="NULL" uuid="5327eaf0-27e2-47f7-9eac-bd945c85e042"/>
+      <field name="utmv" type="string" size="255" default="NULL" uuid="60b22dde-52b0-4ac6-a344-f3a419895800"/>
+      <field name="utmx" type="string" size="255" default="NULL" uuid="4015f4ef-8e58-4212-a98f-c4ed7965f47a"/>
+      <field name="shopId" type="integer" size="8" default="NULL" uuid="191200f2-240a-422f-8ab0-ad4a6c94a1fd"/>
+      <field name="offerId" type="integer" size="8" default="NULL" uuid="1a709287-1e54-411a-8bab-045dbb676bdf"/>
+      <field name="visitorId" type="integer" size="8" default="NULL" uuid="87ed3b1e-f59e-4d66-9a43-b5f82361c0bf"/>
+      <field name="converted" type="integer" size="1" default="'0'" uuid="eaebbd37-1016-4ed7-9a4b-c3f525e74f13"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="61c15fb5-ade0-4b9a-ad28-6327e3a728aa"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="6b2ffc19-c5b6-4987-90f9-d1a81b174976"/>
+      <index name="offer_conversion_idx">
+        <index-field name="offerId"/>
+        <index-field name="converted"/>
+        <index-field name="IP"/>
+      </index>
+      <index name="shop_conversion_idx">
+        <index-field name="shopId"/>
+        <index-field name="converted"/>
+        <index-field name="IP"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">conversions</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="couponcode" uuid="A07BACFA-74E8-47B9-AA27-3D071545E43A">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="2f30832d-ecde-4b74-9423-11d806ecff82"/>
+      <field name="offerid" type="integer" size="8" default="NULL" uuid="86a83f04-823d-4aca-a1b8-e58910f0c7cd"/>
+      <field name="code" type="string" size="255" default="NULL" uuid="85367737-2801-40f0-93c8-63bab6e5260c"/>
+      <field name="status" description="1-available ,0-used" type="integer" size="1" default="'1'" uuid="7186423f-6a59-49ad-acd1-3e1dc763fdbe"/>
+      <index name="offerid_idx">
+        <index-field name="offerid"/>
+      </index>
+      <index name="couponcode_idx">
+        <index-field name="offerid"/>
+        <index-field name="status"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">couponcode</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="dashboard" uuid="53F00A2C-2B88-4ED8-B155-F653D27E4317">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="86537569-c3da-4f02-bf0c-adb613501014"/>
+      <field name="message" type="string" default="NULL" uuid="f5af00bb-e6ae-46ab-8e2f-b2076009e03a"/>
+      <field name="no_of_offers" type="integer" size="8" default="NULL" uuid="6a3ab87c-4ff2-4bf6-b7a6-23f57eb87a6e"/>
+      <field name="no_of_shops" type="integer" size="8" default="NULL" uuid="40ae2a2a-7b16-40d1-ae19-d0ada6243998"/>
+      <field name="no_of_clickouts" type="integer" size="8" default="NULL" uuid="2383d467-ceae-4c0f-85a4-9ec0d6d15f75"/>
+      <field name="no_of_subscribers" type="integer" size="8" default="NULL" uuid="afe9ff7d-2033-4d5a-ada2-1de2aa78dd7d"/>
+      <field name="total_no_of_offers" type="integer" size="8" default="NULL" uuid="48667fbc-5376-4b72-be36-26972539a61e"/>
+      <field name="total_no_of_shops" type="integer" size="8" default="NULL" uuid="38cd7400-198e-482f-8d66-aa3ad094cb42"/>
+      <field name="total_no_of_shops_online_code" type="integer" size="8" default="NULL" uuid="b4f30a93-cfc8-412a-bdb7-e8fbeda40877"/>
+      <field name="total_no_of_shops_online_code_lastweek" type="integer" size="8" default="NULL" uuid="819b3fa7-6be8-42ce-a6e3-2ebc79200600"/>
+      <field name="total_no_members" type="integer" size="8" default="NULL" uuid="b91d5151-3aa4-451d-a865-d0987f2b1c11"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="e21d1212-6107-4cef-818a-aea7fd526314"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="0eed1ff9-ea68-496b-97bd-e25923c13c62"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="6fdecc1d-e201-4e74-b17d-4061e051bf22"/>
+      <field name="total_no_of_shops_online_code_thisweek" type="integer" size="11" default="'0'" required="true" uuid="b4882f4a-a271-487d-a9c5-9043f9b174fe"/>
+      <orm-attributes>
+        <attribute name="table">dashboard</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="disqus_comments" uuid="D0CA9B8D-FEF7-4E4E-A89F-0D0818029BB5">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="61c9d8de-33fa-417f-9e14-f735f770a85d"/>
+      <field name="comment_id" type="integer" size="8" default="NULL" uuid="47fd7f66-2480-4424-b1da-b347b97acb0d"/>
+      <field name="message" type="string" size="255" default="NULL" uuid="867518d4-77aa-4db5-b1ec-07d14f9a07f6"/>
+      <field name="page_title" type="string" size="255" default="NULL" uuid="d51d72f0-540e-43ad-b6f3-550ebe0f1dd7"/>
+      <field name="page_url" type="string" size="255" default="NULL" uuid="08544577-1109-4d1e-a645-6c2eaa5758c3"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="f735ca88-b25d-4b29-b2ea-fa6fecb51244"/>
+      <field name="author_name" type="string" size="255" default="NULL" uuid="ff8431c4-d85c-4042-96c7-5ce9abefb9bc"/>
+      <field name="author_profile_url" type="string" size="255" default="NULL" uuid="a07d5a98-9d02-49c5-aeed-eee59216be3d"/>
+      <field name="author_avtar" type="string" size="255" default="NULL" uuid="1cea4040-dbfa-44eb-a3cb-627b2833b2ee"/>
+      <index name="page_url_comments_idx">
+        <index-field name="page_url"/>
+      </index>
+      <index name="message_comments_idx">
+        <index-field name="message"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">disqus_comments</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="email_light_box" uuid="51E5A031-0344-45F1-96A9-58D3D0E4F665">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e1d74de6-d934-45cb-ab17-6b5a808358b2"/>
+      <field name="title" type="string" size="100" default="NULL" uuid="c36e565b-3c51-4c4d-bfd0-9244f8bfccf3"/>
+      <field name="content" type="unknown:@longblob" default="NULL" uuid="7434c4d1-746d-4c2b-bef5-67d953383d6c"/>
+      <field name="status" type="integer" size="1" default="'0'" uuid="68672ecd-27ba-45c2-9659-c5a7aab30b86"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="969ce3f1-65f0-4d79-9ff3-fa0c06b9d0bc"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="a165ff3e-9517-43b8-b68f-878a8e9db9a3"/>
+      <orm-attributes>
+        <attribute name="table">email_light_box</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="email_subscribe" uuid="75DF6316-F9FA-4B54-851B-DC6182E19263">
+      <field name="id" type="integer" size="20" required="true" primary="true" auto-increment="true" uuid="c002dc64-4a65-4e64-81f3-c493e8336e04"/>
+      <field name="email" type="string" size="255" default="NULL" uuid="356e7d44-48c2-4d29-9d5e-77ac0ef2f6f7"/>
+      <field name="send" type="integer" size="20" required="true" uuid="bfee724e-69aa-45ca-887c-a51329ffe9c5"/>
+      <field name="deleted" type="integer" size="20" required="true" uuid="6b9a0446-1a46-46fb-a2e1-85eb4cd53157"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="c0e6c330-f93a-453f-a6d0-1c30daf61f8c"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="0bc0b797-bbd6-40dd-b78d-4bb8f8333575"/>
+      <orm-attributes>
+        <attribute name="table">email_subscribe</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="emails" uuid="44585886-ABBB-4292-BE21-772E7DD19D07">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6bc543b9-c23f-4df1-8cae-36858e4dc407"/>
+      <field name="type" type="string" default="NULL" uuid="20b6a384-7845-469a-9ab9-9211a6ea5f7c"/>
+      <field name="header" type="string" default="NULL" uuid="281ec657-8061-48b3-a77d-27ea279b1004"/>
+      <field name="body" type="string" default="NULL" uuid="3ef0eb21-76fd-4103-bbb4-8a83dcf736c1"/>
+      <field name="footer" type="string" default="NULL" uuid="f3f9f96c-4cd4-45b4-90c7-e5899418d00a"/>
+      <field name="schedule" type="string" default="NULL" uuid="f8adcf81-aa6f-401f-be54-a4a8352b640d"/>
+      <field name="test" type="string" default="NULL" uuid="d297711c-a893-4556-a2a4-486b9bae5029"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="24f7948b-27ac-4a93-a041-27ecd725c362"/>
+      <field name="send_date" type="date" default="NULL" uuid="4b7e7216-ee1c-4543-a167-1af412f34cf3"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="874cd8a4-8daf-4b82-adae-02a817288a43"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="c70e9518-6a22-4624-9688-4124c18c4fb3"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="b9b72216-9188-4b6e-a317-d1da7020ecb9"/>
+      <field name="send_counter" type="integer" size="8" default="NULL" uuid="46524cb5-5577-4321-bb67-63b84be20e22"/>
+      <orm-attributes>
+        <attribute name="table">emails</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="emailsettings" uuid="3590530E-ED44-414C-97B3-93A6E1B81136">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="72a8c190-a978-435d-845d-c9c6e240c4c1"/>
+      <field name="email" type="string" default="NULL" uuid="76e67cf0-cb56-4940-8c13-bc22282eead5"/>
+      <field name="name" type="string" default="NULL" uuid="80ecb43f-c34f-46e4-8170-f08e3c80a44b"/>
+      <field name="locale" type="string" default="NULL" uuid="ca854e6c-cfa5-4c60-9c3c-9d25c13b81a5"/>
+      <field name="timezone" type="string" default="NULL" uuid="86e38a03-2300-4368-bef0-2802dc5ffd87"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="9b9e1137-cc8d-4862-ae51-de000db2da0a"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="d30d910f-df4e-413c-a5ad-ea76df652ae0"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="04789ccb-aec6-43c3-9276-725c612011f0"/>
+      <orm-attributes>
+        <attribute name="table">emailsettings</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="excluded_keyword" uuid="A68035EB-6915-4224-A972-EABDA8F24915">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b91a8ac0-bb15-4f13-ba3d-a27c460c4fc5"/>
+      <field name="keyword" type="string" size="255" default="NULL" uuid="29ed329d-211d-4759-a4bc-aa93b8f7aadf"/>
+      <field name="url" type="string" size="255" default="NULL" uuid="667e6dc1-375f-481b-b90c-7191109e86b2"/>
+      <field name="action" type="enum" default="NULL" enum-values="'0','1'" uuid="35b80d6a-9f9d-4b83-a132-864984b0239c"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="69c8c827-7bdd-445b-aaff-e3b0a66c6ece"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="65a272df-fb9b-4fd9-8807-0993424df180"/>
+      <orm-attributes>
+        <attribute name="table">excluded_keyword</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="favorite_offer" uuid="0F7594D5-DC32-4F10-9A24-66AE334FAA5E">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="748c08ab-b24d-4413-9474-c17bb43bd376"/>
+      <field name="offerId" type="integer" size="8" required="true" uuid="e66291dc-8b09-4cb8-b061-4305120cb455"/>
+      <field name="visitorId" type="integer" size="8" required="true" uuid="04c1aefe-bb1a-457d-83b7-e755f4640d56"/>
+      <field name="deleted" type="integer" size="1" required="true" uuid="2a39a3a1-523c-467b-82bb-0331e028849a"/>
+      <field name="created_at" type="unknown:@timestamp_f" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="ac8412f1-5859-4db2-abf2-37a164917af7"/>
+      <index name="offer_visitor_id_idx">
+        <index-field name="offerId"/>
+        <index-field name="visitorId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">favorite_offer</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="favorite_shop" uuid="28C6FA25-4603-4114-98BE-087602527BF5">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="eb406ba6-b4bf-4fad-999c-37a3aa833b3f"/>
+      <field name="shopId" type="integer" size="8" required="true" uuid="fa7de6b3-4c4b-487d-b00c-3542d1528283"/>
+      <field name="visitorId" type="integer" size="8" required="true" uuid="55c9ce7f-b819-4cde-98bd-aa7bf72e6c53"/>
+      <field name="created_at" type="unknown:@timestamp_f" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="b1cf972b-4629-49fe-a2ff-cffb5fd6e783"/>
+      <field name="deleted" type="integer" size="11" default="'0'" required="true" uuid="cbf3e663-99d5-43d8-99b2-8be65934ccc8"/>
+      <index name="ind_fvshop_sid">
+        <index-field name="shopId"/>
+      </index>
+      <index name="fav_cascade">
+        <index-field name="visitorId"/>
+      </index>
+      <index name="shop_visitor_id_idx">
+        <index-field name="shopId"/>
+        <index-field name="visitorId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">favorite_shop</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="favorite_shop" to="visitor" caption="fav_cascade" uuid="FC47B8D5-7A9F-4561-AC99-6D4FA6EBFA18">
+      <association-field from="visitorId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">cascade</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="footer" uuid="FB458A3F-E943-497C-861D-F95B804BBA3D">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="d9d300a2-129f-41c8-ad44-520da4729398"/>
+      <field name="topfooter" type="unknown:@longtext" default="NULL" uuid="15d5fb62-5a6b-4473-8be1-35097ac29357"/>
+      <field name="middlecolumn1" type="unknown:@longtext" default="NULL" uuid="cf8d50f3-4874-4957-94d3-f29fe738e321"/>
+      <field name="middlecolumn2" type="unknown:@longtext" default="NULL" uuid="570a4c11-2615-4732-8100-ef8976e2aaca"/>
+      <field name="middlecolumn3" type="unknown:@longtext" default="NULL" uuid="16a05133-408f-4bff-9236-3255a0723d43"/>
+      <field name="middlecolumn4" type="unknown:@longtext" default="NULL" uuid="0050b92d-7058-4ede-be4b-b9bace28c544"/>
+      <field name="bottomfooter" type="unknown:@longtext" default="NULL" uuid="773e27f8-0fa8-427b-ada3-08b00ad05f09"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="96ac9fe6-2126-4692-83bb-2501b95415f6"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="65d7c8dc-94a2-4732-9de4-015b12a923c9"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="4f95487d-efeb-46f1-91fd-2095daac04d9"/>
+      <orm-attributes>
+        <attribute name="table">footer</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="image" uuid="B5A7794F-2D5B-4B16-ABB1-973FE7CF0E35">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1a7df568-3386-421f-9706-9d5ba65ee5bd"/>
+      <field name="ext" type="string" size="5" default="NULL" uuid="c5aa184b-8286-4e47-82d6-3f995efd97e8"/>
+      <field name="type" type="string" size="10" default="NULL" uuid="5c8b6123-25aa-43c4-aec3-3ff59e7f07da"/>
+      <field name="path" type="string" size="255" default="NULL" uuid="714aafbb-b4e3-4a29-9fb8-87bff4ba2ba9"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="d9b7c29d-1950-41d1-9da3-d9f1885622b3"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="d644f55e-6bb7-4a8b-b0c5-494a2468d2d2"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="ecef85f5-258d-4a39-9697-03766b446aa8"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="c2fb11b8-505c-4e54-a7bf-58ebf26ba305"/>
+      <index name="type_idx">
+        <index-field name="type"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">image</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="interestingcategory" uuid="CFA84A97-3A0E-46DD-A191-46BDEFA6F191">
+      <field name="id" description="PK" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="f4273902-99b3-44e9-ad2e-24d4239feff0"/>
+      <field name="userId" description="FK to user.id" type="integer" size="11" required="true" uuid="cb5b146a-accf-47fd-90dd-be249dec4039"/>
+      <field name="categoryid" description="FK to category.id" type="integer" size="8" required="true" uuid="0d55e38d-2107-437d-a9cd-4c8045b9c3ec"/>
+      <orm-attributes>
+        <attribute name="table">interestingcategory</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="locale_settings" uuid="9541C8AB-130B-43D8-8E79-099FDEAE8F46">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="20ffbd5a-ee7c-4e84-9125-785a3e88578c"/>
+      <field name="locale" type="string" size="10" default="NULL" uuid="bd2b7d34-3e21-4014-bc35-b94cc116d13d"/>
+      <field name="timezone" type="string" size="255" default="NULL" uuid="a6e5142f-8a53-4722-911d-dfad9e9e6810"/>
+      <orm-attributes>
+        <attribute name="table">locale_settings</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="mainmenu" uuid="0F86D2E0-F5C3-42E9-A013-A9D9490057CF">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="4b5c14ed-7495-413e-aa84-f65112aec0a3"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="670c284c-3cfa-4f57-afc9-7b11744c604c"/>
+      <field name="parentId" type="integer" size="8" default="NULL" uuid="752c62ff-a11d-4c8a-98e2-4ef5436485a8"/>
+      <field name="root_id" type="integer" size="8" default="NULL" uuid="8e021e1e-c7a2-4b24-bbf5-22f92a9c7fe6"/>
+      <field name="lft" type="integer" size="11" default="NULL" uuid="fa71368b-e340-4b25-908a-f2c5426da3ce"/>
+      <field name="rgt" type="integer" size="11" default="NULL" uuid="9a7ed0a5-a299-4cbf-afba-8f7a605acf9b"/>
+      <field name="level" type="integer" size="2" default="NULL" uuid="fb42d06a-96be-4c8d-9cc8-70df8c9039dc"/>
+      <field name="iconId" type="integer" size="8" default="NULL" uuid="f4729f54-6b21-4924-9152-954adee673f8"/>
+      <field name="url" type="string" size="255" default="NULL" uuid="4611fe6c-b147-4317-9c14-a9e10137eb55"/>
+      <field name="position" type="integer" size="11" default="'0'" required="true" uuid="032de7c5-89e4-45a9-a103-4ab66afe13fc"/>
+      <orm-attributes>
+        <attribute name="table">mainmenu</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="media" uuid="F15BDDA8-E4F1-4A93-A8F9-32743E80DA42">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="823e9865-cf1a-413e-aaa5-9c073fbcd7c3"/>
+      <field name="name" type="string" size="100" default="NULL" uuid="573283f7-55b7-420e-931b-eac48f35bd12"/>
+      <field name="alternatetext" type="string" size="255" default="NULL" uuid="85c15e6b-182e-4aff-a1b1-796fb54a30ee"/>
+      <field name="caption" type="string" size="150" default="NULL" uuid="5057c2db-41e3-4587-82c9-9087549d9bb8"/>
+      <field name="fileurl" type="string" size="255" default="NULL" uuid="937ac4ba-cc73-44b7-945b-ef85dfc6142c"/>
+      <field name="mediaimageid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="7c07b23a-a854-4845-9163-a700e6bd0118"/>
+      <field name="authorName" type="string" size="255" default="NULL" uuid="1e4392ba-92ca-4aab-89bb-b1c302476704"/>
+      <field name="authorId" type="integer" size="11" required="true" uuid="f5059a12-14e0-4442-8eed-488df9416eb4"/>
+      <field name="description" type="string" default="NULL" uuid="2a968dca-b457-4622-84eb-5397431e1cb2"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="ddc63fb7-c401-4aa9-866a-db851de3c378"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="49489428-e668-4ece-9ba6-84c8fcd57201"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="448f79d0-4d6c-42a7-8d6c-f50b61fe27f2"/>
+      <index name="mediaimageid_idx">
+        <index-field name="mediaimageid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">media</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="media" to="image" caption="media_mediaimageid_image_id" uuid="6E70CEF1-0FC1-4255-A7D8-2DE37856C741">
+      <association-field from="mediaimageid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="menu" uuid="1E0CD62B-5BF3-49A9-8C02-78BFC09B5670">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="0b69fc20-33ef-41a7-9cea-f7eee5bb8f19"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="92bc8f9f-76bf-47af-bdba-0a77d3c83dd5"/>
+      <field name="parentId" type="integer" size="8" default="NULL" uuid="abb77e0a-cdcd-4ebb-8629-787ab17ca99f"/>
+      <field name="root_id" type="integer" size="8" default="NULL" uuid="6ec14588-3103-4ecf-995d-40aa2faaf060"/>
+      <field name="lft" type="integer" size="11" default="NULL" uuid="a45720a8-3a13-4e4a-b1e2-1f126252f6c8"/>
+      <field name="rgt" type="integer" size="11" default="NULL" uuid="37eb08ba-18f2-474b-a000-c46bd5d9df5b"/>
+      <field name="level" type="integer" size="2" default="NULL" uuid="9975964a-d098-4340-b2cb-d9bf5a5e0b99"/>
+      <field name="iconId" type="integer" size="8" default="NULL" uuid="94e401cd-bdb4-44fe-be01-8aab401bed58"/>
+      <field name="url" type="string" size="255" default="NULL" uuid="c75322bc-8e13-4ad8-865d-e6f559b9015c"/>
+      <field name="position" type="integer" size="11" default="'0'" required="true" uuid="17868f3b-30d9-4e5c-9758-0eca822bc915"/>
+      <orm-attributes>
+        <attribute name="table">menu</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="migration_version" uuid="C2F217C7-3475-4DB4-AAB3-E419BDD9D1F3">
+      <field name="version" type="integer" size="11" default="NULL" uuid="fbe20688-47fc-4b19-9c0d-0c94934f44ba"/>
+      <orm-attributes>
+        <attribute name="table">migration_version</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="moneysaving" uuid="825590B0-7F30-4E1C-BE83-DBD49D7C3AE5">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="dd520df4-b149-491e-b14f-cf06a6c78db3"/>
+      <field name="pageid" type="integer" size="8" required="true" uuid="76c8904a-fb1a-455f-80e9-5d6e0df521ce"/>
+      <field name="categoryid" type="integer" size="8" required="true" uuid="e5720bf1-3a3a-440e-946b-75440212a00e"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="4170742c-3f2c-4a2b-9433-e2f8232801aa"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="f6bc5654-a8b2-4c73-9c7a-c789365a3b52"/>
+      <field name="deleted" type="integer" size="11" default="'0'" required="true" uuid="fa9e3e23-f26f-45d5-a64f-c7dbb77563c1"/>
+      <index name="pageid">
+        <index-field name="pageid"/>
+      </index>
+      <index name="categoryid">
+        <index-field name="categoryid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">moneysaving</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="moneysaving_article" uuid="DEC0FE11-6902-4008-BD3B-19FF49ED6A33">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="7769eaf7-ed60-4de0-a92e-95d5130f799e"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="29c0c047-8415-4c72-b744-658e49d5bb06"/>
+      <field name="position" description="Holds the code position among popular code list" type="integer" size="8" default="NULL" uuid="78b0abf8-ea66-4046-8cf4-0192989142ec"/>
+      <field name="status" description="1 ? enable , 0 ? disable" type="integer" size="1" default="'0'" uuid="dd46adaa-f1ed-42e8-b1e8-c8b589efb404"/>
+      <field name="articleid" description="FK to articles.id" type="integer" size="8" default="NULL" uuid="806b0fbf-cf95-493d-a155-8ac315e0e52b"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="ce00cb14-7cbf-4068-a7ca-cbb04f037275"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="8a50b306-5141-4c6b-805d-d3fe8ec46f21"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="da2cf320-e83f-4ee2-87db-fd43f3c30d7f"/>
+      <index name="articleid" unique="true">
+        <index-field name="articleid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="articleid_idx">
+        <index-field name="articleid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">moneysaving_article</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="moneysaving_article" to="articles" caption="moneysaving_article_ibfk_1" uuid="049B4877-E07F-4CBC-805E-3E6D071F41E4">
+      <association-field from="articleid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="newslettersub" uuid="64D72406-57C3-4212-B574-9B4301E48483">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="cedd4e64-50ac-4898-bf79-bb24ca4d3a86"/>
+      <field name="email" type="string" size="255" required="true" uuid="09d702f0-09c0-4a7b-9dd2-4da2499f71a9"/>
+      <field name="deleted" type="integer" size="11" default="'0'" required="true" uuid="164ac88d-96da-4766-8dd3-cc0233c3d46d"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="7f299d98-b84a-4f14-ba6e-9bbefa00d8b5"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="f94bceef-2a23-46ea-a91c-c89ec7274c0c"/>
+      <orm-attributes>
+        <attribute name="table">newslettersub</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="offer" uuid="F37C454F-34C9-4BC8-BED3-090A7FBB0DF2">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="69d86d32-ed9c-4add-ab42-90fa270de198"/>
+      <field name="title" type="string" size="255" default="NULL" uuid="37710e28-68cf-4b8c-a678-fd2ad7618ed0"/>
+      <field name="visability" type="string" size="255" default="NULL" uuid="33f7647b-5981-4749-b768-17d6fd4a206f"/>
+      <field name="discounttype" type="string" size="255" default="NULL" uuid="e80ba5fb-a608-4a21-b891-4e110bb18dcc"/>
+      <field name="couponcode" type="string" size="50" default="NULL" uuid="019fe28a-ec80-4265-8fe8-b58b13cb5518"/>
+      <field name="refOfferUrl" type="string" default="NULL" uuid="3d56cb79-2799-4934-82b8-2748a5223971"/>
+      <field name="refurl" type="string" default="NULL" uuid="00e85a65-dd4f-4c4b-98d7-8c060606768c"/>
+      <field name="startdate" type="unknown:@datetime_f" default="NULL" uuid="a33b6066-fb2a-4b55-83b9-2380d6842293"/>
+      <field name="enddate" type="unknown:@datetime_f" default="NULL" uuid="49cc3315-021a-4c84-a68b-c5ef793bcdb5"/>
+      <field name="exclusivecode" type="integer" size="1" default="'0'" uuid="cb84fefb-e1c1-4921-a216-c1c86c4503d4"/>
+      <field name="editorpicks" type="integer" size="1" default="'0'" uuid="6267a13d-f3f3-43c6-bd13-3ea96993f731"/>
+      <field name="extendedoffer" type="integer" size="1" default="'0'" uuid="964569fe-13c2-49a7-9b74-fbce419f7a9e"/>
+      <field name="extendedtitle" type="string" size="255" default="NULL" uuid="e71c993c-030a-4933-b86b-41dca857f144"/>
+      <field name="extendedurl" type="string" size="255" default="NULL" uuid="731f4dfb-a12e-4b1f-b4f8-666449d7e94f"/>
+      <field name="extendedmetadescription" type="string" default="NULL" uuid="ffc9a06a-cbda-44e6-b750-8f97339989c6"/>
+      <field name="extendedfulldescription" type="unknown:@longblob" default="NULL" uuid="daf5fc9d-418a-4b96-90ca-d5d3232c7b06"/>
+      <field name="discount" type="string" default="NULL" uuid="0fce2d96-f839-4051-bebb-4d5a2efd2db6"/>
+      <field name="discountvalueType" type="enum" default="NULL" enum-values="'0','1','2'" uuid="607b35a1-b338-434c-8327-ab39e5f0b140"/>
+      <field name="authorId" type="integer" size="8" default="NULL" uuid="4a468a64-0a73-45c7-9409-31bc8a30b669"/>
+      <field name="authorName" type="string" size="255" default="NULL" uuid="831b424f-906a-444a-9426-08874bd0c374"/>
+      <field name="shopid" description="FK to shop.id" type="integer" size="8" default="NULL" uuid="26479627-44ab-4765-8b83-1532e26b323b"/>
+      <field name="offerlogoid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="d161f28e-49e0-4b85-8cfa-145e6381b732"/>
+      <field name="maxlimit" type="enum" default="NULL" enum-values="'0','1'" uuid="43f1b064-01fb-466a-9bb8-fd5553143332"/>
+      <field name="maxcode" type="integer" size="11" required="true" uuid="68aa4939-cb6e-470d-a363-011af21e4874"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="7b73d0d5-2120-4171-935a-f81454a605ab"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="1d732472-b496-4237-b42c-d8cf71260d61"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="e1896f6e-3c2e-45cd-8937-b5bb68af1ce6"/>
+      <field name="userGenerated" type="integer" size="1" default="'0'" required="true" uuid="761e7a63-ae01-4e4a-a7f2-ed65d0b260a2"/>
+      <field name="approved" type="enum" default="'0'" enum-values="'0','1'" required="true" uuid="049a3b84-b7a9-4956-abed-069ceeb0c7fd"/>
+      <field name="offline" type="integer" size="11" default="'0'" required="true" uuid="1dc6083e-16b9-4875-8bec-0e0caddaed2a"/>
+      <field name="tilesId" type="integer" size="8" default="NULL" uuid="09afbff9-44f1-48de-9c54-0a03adc43e7a"/>
+      <field name="shopexist" type="integer" size="1" default="NULL" uuid="e2252aaf-0e53-4f5c-889b-bafbf5407223"/>
+      <field name="totalviewcount" type="integer" size="8" default="NULL" uuid="754d49e7-659b-46ea-8fc0-517aae7b3324"/>
+      <field name="popularitycount" type="decimal" size="16" default="NULL" uuid="f3789866-fb65-447c-8c36-a274b4039b53">
+        <orm-attributes>
+          <attribute name="scale">4</attribute>
+        </orm-attributes>
+      </field>
+      <field name="couponcodetype" description="GN-general ,UN-unique" type="string" size="255" default="'GN'" uuid="9a6e9c7c-acf3-426e-a6ec-5d9bad103137"/>
+      <index name="offerlogoid" unique="true">
+        <index-field name="offerlogoid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="shopid_idx">
+        <index-field name="shopid"/>
+      </index>
+      <index name="ind_offer_exdist">
+        <index-field name="exclusivecode"/>
+        <index-field name="discounttype"/>
+        <index-field name="startdate"/>
+        <index-field name="title"/>
+        <index-field name="enddate"/>
+        <index-field name="visability"/>
+        <index-field name="approved"/>
+      </index>
+      <index name="ind_offer_shenex">
+        <index-field name="shopid"/>
+        <index-field name="enddate"/>
+        <index-field name="exclusivecode"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">offer</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="offer" to="image" caption="offer_offerlogoid_image_id" uuid="0A569F2D-FD28-47B2-9AD1-F7C7E2A12CC0">
+      <association-field from="offerlogoid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="offer" to="shop" caption="offer_shopid_shop_id" uuid="006F1771-F83F-4343-9662-EFBEC2A11DC1">
+      <association-field from="shopid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="offer_news" uuid="48ED59A4-436A-48F7-BD6F-7EB80F7F38DB">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="f6092819-66b2-4971-a61f-fb7e5812f4b2"/>
+      <field name="shopId" type="integer" size="8" default="NULL" uuid="90d5c8e1-02f3-4a54-8bbd-1639ad063eba"/>
+      <field name="offerId" type="integer" size="8" default="NULL" uuid="c8830ed5-d918-4122-a16b-4a6c224b0af7"/>
+      <field name="title" type="string" size="225" default="NULL" uuid="0411359e-4310-4c86-b80a-b3cb7dddbf61"/>
+      <field name="url" type="string" size="225" default="NULL" uuid="534a8eb8-e852-4ca8-af51-9db31dbbdd8a"/>
+      <field name="content" type="string" default="NULL" uuid="4e9b99b7-1be0-48ec-9502-1b6092e82dd8"/>
+      <field name="linkstatus" type="string" size="255" default="NULL" uuid="9a317a96-a932-45c5-a70d-f6a2ab8a41ab"/>
+      <field name="startdate" type="unknown:@datetime_f" default="NULL" uuid="72956ebc-d6d1-4eec-8353-df87a11b23bb"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="00db6620-c204-4e7d-a8cc-5ce502856b2f"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="9fa6cae4-bb1f-44dc-bebf-710431746417"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="74f2bfa0-3279-4a22-93f6-6d0cf128fae5"/>
+      <orm-attributes>
+        <attribute name="table">offer_news</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="offer_tiles" uuid="9502A0E7-CC47-4237-8137-1FCA60F1D1CF">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="c47e43ff-3b0a-4288-9521-ff6b42ce7570"/>
+      <field name="label" type="string" size="255" default="NULL" uuid="f63b32e8-53b7-4523-ab2c-670cbf94dee9"/>
+      <field name="offerId" type="integer" size="8" default="NULL" uuid="e1c012a4-6cd4-4cfa-b2fd-47227ff703e4"/>
+      <field name="type" type="string" size="50" default="NULL" uuid="714e34b9-7e05-4664-820c-5d93c3474a05"/>
+      <field name="ext" type="string" size="100" default="NULL" uuid="72cd8d5c-1245-4cfd-a48d-f7b53611d9e4"/>
+      <field name="path" type="string" size="255" default="NULL" uuid="34bd10ec-e137-45a0-9bef-d06864580bfd"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="3c8fe59e-65ce-4493-a626-ea7cb6260f8b"/>
+      <field name="position" type="integer" size="8" default="NULL" uuid="18603823-1ae0-4b39-a9f5-c55d2b13ac42"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="fd3aa74c-96af-4438-8c7c-b72ca0c89950"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="9b194bed-e033-4e44-b97c-61e83492d13d"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="138a96ac-4e23-45d6-a131-d96a0b80ed8a"/>
+      <index name="offerId" unique="true">
+        <index-field name="offerId"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">offer_tiles</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="page" uuid="712F69A5-DF0C-49D9-9333-1AA2996E654A">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="f6acdc0a-28bc-4029-a8a5-5e848ba8c8dc"/>
+      <field name="pagetype" type="string" size="10" default="NULL" uuid="9d64876a-e0fe-4bb5-8b97-1dd4796cf8b3"/>
+      <field name="pagetitle" type="string" size="255" default="NULL" uuid="28cb484b-22a4-497c-826b-963d26713f84"/>
+      <field name="slug" type="string" size="255" default="NULL" uuid="eb6eecc4-9881-4dda-96ef-898683120127"/>
+      <field name="permalink" type="string" size="255" default="NULL" uuid="f1185de8-a76c-4096-bcea-57cef06395bc"/>
+      <field name="metatitle" type="string" default="NULL" uuid="a871d001-42e6-4d79-8f54-1acac116c753"/>
+      <field name="metadescription" type="string" default="NULL" uuid="acc45772-d0af-425a-b83d-27fe946de14f"/>
+      <field name="content" type="unknown:@longblob" default="NULL" uuid="b8f536f9-1704-4010-a533-61f37e5db108"/>
+      <field name="publish" type="integer" size="1" default="NULL" uuid="b08063de-a8bd-47fc-98c3-b79cd95ca81e"/>
+      <field name="pagelock" type="integer" size="1" default="'0'" uuid="ac618855-257f-42b2-aafd-a2af81d50d47"/>
+      <field name="pageattributeid" description="Fk to page_attribute.id" type="integer" size="8" default="NULL" uuid="c5feadb7-e03c-44d9-8a03-4e13bfb99838"/>
+      <field name="contentManagerId" type="integer" size="8" required="true" uuid="6f367da8-1e85-44b8-8cb4-8739ddadf098"/>
+      <field name="contentManagerName" type="string" size="256" default="NULL" uuid="a0a9b659-b269-4dbc-9674-518eb856aeb8"/>
+      <field name="enabletimeconstraint" type="integer" size="1" default="NULL" uuid="732f5f6a-ce02-4e52-b6f8-fdded2c296d0"/>
+      <field name="timenumberofdays" type="integer" size="8" default="NULL" uuid="2a6da534-494f-473c-aec3-06e44cc4ccfc"/>
+      <field name="timetype" description="0 - no option selected" type="integer" size="8" default="NULL" uuid="4da52818-e654-411d-94a3-0647b00b21ae"/>
+      <field name="timemaxoffer" type="integer" size="8" default="NULL" uuid="e13763c1-7b81-49a3-ac6d-80e62f9cd114"/>
+      <field name="timeorder" type="integer" size="1" default="'0'" uuid="e08f3e54-212f-4457-8e35-f9bd0821eda9"/>
+      <field name="enablewordconstraint" type="integer" size="1" default="NULL" uuid="6763923a-2184-42a1-875d-5e273ab3dd3a"/>
+      <field name="wordtitle" type="string" size="100" default="NULL" uuid="a51de9b8-8169-4004-b418-b424c6043074"/>
+      <field name="wordmaxoffer" type="integer" size="8" default="NULL" uuid="238993f8-c76e-4b87-bfb6-adbbfe8667cf"/>
+      <field name="publishdate" type="unknown:@datetime_f" required="true" uuid="64ac9303-25f7-4b53-a469-204d966162cc"/>
+      <field name="wordorder" type="integer" size="1" default="NULL" uuid="9b35c03c-c0b6-45dd-b0a5-8f78f2f63cf7"/>
+      <field name="awardconstratint" type="integer" size="1" default="NULL" uuid="9ad57452-1d5b-432f-baec-bfce7aa94520"/>
+      <field name="awardtype" type="string" size="5" default="NULL" uuid="3561a227-01eb-48bc-8666-5db1fa22129b"/>
+      <field name="awardmaxoffer" type="integer" size="8" default="NULL" uuid="10792cb6-6870-48cc-bd12-61e4c495da8a"/>
+      <field name="awardorder" type="integer" size="1" default="NULL" uuid="b10c05f9-001c-4d17-811b-3c41fa7379e0"/>
+      <field name="enableclickconstraint" type="integer" size="1" default="NULL" uuid="56ba695c-c741-4e96-8711-e3e8c516a189"/>
+      <field name="numberofclicks" type="integer" size="8" default="NULL" uuid="50b5a18a-a933-4293-8c5a-53eaf873a335"/>
+      <field name="clickmaxoffer" type="integer" size="8" default="NULL" uuid="ee6daad6-5913-468c-b9e4-18ccae6c20e2"/>
+      <field name="clickorder" type="integer" size="1" default="NULL" uuid="1b2a9af3-f1aa-4ef0-8fda-811354e67dca"/>
+      <field name="maxOffers" type="integer" size="11" required="true" uuid="84329aa1-a789-4949-8c83-95235fab92a9"/>
+      <field name="oderOffers" type="integer" size="11" required="true" uuid="0c229197-3143-4223-92f9-c2ed780c7897"/>
+      <field name="couponregular" type="integer" size="1" default="NULL" uuid="57651956-8ed3-4f82-8ff4-92f9a0c94c50"/>
+      <field name="couponeditorpick" type="integer" size="1" default="NULL" uuid="cf56426f-f93c-467e-80d4-c081c0e20254"/>
+      <field name="couponexclusive" type="integer" size="1" default="NULL" uuid="053180c6-8f81-48dc-9de2-a89fb98d03c5"/>
+      <field name="saleregular" type="integer" size="1" default="NULL" uuid="2a7dbc82-deee-4584-ba17-81df9fc7838f"/>
+      <field name="saleeditorpick" type="integer" size="1" default="NULL" uuid="35ce1f11-1e9a-4a21-845c-5e78cf8b20fa"/>
+      <field name="saleexclusive" type="integer" size="1" default="NULL" uuid="837b17bd-130c-4a91-b5ef-7896a23b27d9"/>
+      <field name="printableregular" type="integer" size="1" default="NULL" uuid="6405b27d-0207-43bf-894a-d24e9d8ee880"/>
+      <field name="printableeditorpick" type="integer" size="1" default="NULL" uuid="a8e21394-2a9d-4858-a52b-4779a242eb01"/>
+      <field name="printableexclusive" type="integer" size="1" default="NULL" uuid="e12de5bb-4a45-4ea7-a084-44b1988ba327"/>
+      <field name="showpage" description="Show as page when creating offers." type="integer" size="1" default="NULL" uuid="9bf081f2-bedf-4582-ae1e-8a8b0c4414c3"/>
+      <field name="logoid" type="integer" size="8" default="NULL" uuid="d7ed9aa9-9943-43c8-b35a-edc7d2d441f8"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="2f92ebb0-b765-4a4d-8bda-65d26cddf45f"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="dfe0c842-2b3b-4b2b-964d-488550daa59b"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="1a0d783d-8fbe-42dc-b525-f03978f4f0a3"/>
+      <field name="customheader" type="string" default="NULL" uuid="fdf056ce-6553-4c0a-8a5a-7e52c7ced552"/>
+      <field name="pageHeaderImageId" type="integer" size="8" default="NULL" uuid="394c8235-3346-4847-a7b0-dad0508a0fd5"/>
+      <field name="showsitemap" type="integer" size="1" default="'0'" required="true" uuid="28f3883d-d9e6-4922-932f-5d2dce8fbed3"/>
+      <field name="offersCount" type="integer" size="8" default="NULL" uuid="974ec940-a64c-48ce-99a7-19e928d3340e"/>
+      <index name="pageattributeid_idx">
+        <index-field name="pageattributeid"/>
+      </index>
+      <index name="pageHeaderImageId_foreign_key">
+        <index-field name="pageHeaderImageId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">page</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="page" to="image" caption="pageHeaderImageId_foreign_key" uuid="4CE2B926-50C5-4127-BAEC-90DFB149687C">
+      <association-field from="pageHeaderImageId" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">cascade</attribute>
+      </orm-attributes>
+    </association>
+    <association from="page" to="page_attribute" caption="page_pageattributeid_page_attribute_id" uuid="ECD0312B-4438-4B14-82ED-3958E4DB9BBA">
+      <association-field from="pageattributeid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="page_attribute" uuid="B69F4699-5A5B-4C01-B11A-66ECBA047FFD">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="d24c06b6-311d-496a-b0dd-4aef01603676"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="803d5f49-a499-42cd-954b-8f807fe9826b"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="2b4eb67b-1b3b-483e-8de6-66558de1069f"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="326b9469-e5b1-4393-86c6-95c1b6481c64"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="0df54e54-8a77-4b71-978c-6513907c0d3e"/>
+      <orm-attributes>
+        <attribute name="table">page_attribute</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="popular_category" uuid="98548E19-8BE3-4DDA-896C-A2E3416FEC70">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e66bc46c-855d-43ec-a2b8-15cdfdb8bca9"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="24a93794-b04b-4b55-8508-1ba64f12d3aa"/>
+      <field name="position" description="Holds the shop position among popular category list" type="integer" size="8" default="NULL" uuid="62df49b2-6ae5-4848-876e-747c4708696b"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="ff50de72-305d-4348-8b2e-50462be90d4f"/>
+      <field name="categoryid" description="FK to category.id" type="integer" size="8" default="NULL" uuid="0ad03014-3858-4bbb-9a2d-1858d2f84740"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="1f4934f3-9d4d-4e7c-bdfd-a706b566cb8f"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="12e78b92-78d9-43ba-91d5-4607fd663aa9"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="1fa29b65-aadf-415d-8934-9287af94932f"/>
+      <index name="categoryid" unique="true">
+        <index-field name="categoryid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="categoryid_idx">
+        <index-field name="categoryid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">popular_category</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="popular_code" uuid="8201FC51-48F9-43F8-B691-616F7F604523">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="8fb48d0c-851f-4215-a5bb-adf936c9f5ed"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="66c05ae9-414a-45fc-baf3-6101b23c5b1f"/>
+      <field name="position" description="Holds the code position among popular code list" type="integer" size="8" default="NULL" uuid="84084dc4-af67-460a-b52a-68fb4b85bdf3"/>
+      <field name="status" description="1 ? enable , 0 ? disable" type="integer" size="1" default="'0'" uuid="8fd8abeb-6a98-40de-84b6-3764af56bf8c"/>
+      <field name="offerid" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="16f56e8b-34bc-4aad-b44b-90874316934a"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="6dc361f0-0cc1-4fe5-84c6-c538357bbdeb"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="c070699f-1416-4688-9830-bb876839d5dc"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="476321bd-f8b5-42c1-9db0-554085ee6b63"/>
+      <index name="offerid" unique="true">
+        <index-field name="offerid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">popular_code</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="popular_code" to="offer" caption="popular_code_offerid_offer_id" uuid="DCC80E40-0FEF-478B-85FB-5B0D140D2D04">
+      <association-field from="offerid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="popular_shop" uuid="B4520C1E-5AEF-4D35-A65A-991B559CC0C9">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="9cb8c954-9fb4-4e48-9cb4-4fa78df93a94"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="4db20a83-5572-4fdd-8d33-48a1a8e78e01"/>
+      <field name="position" type="integer" size="8" default="NULL" uuid="66be0fd6-c1f5-4592-8f74-5599a8cdf4ab"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="04f95233-8a8c-4636-9ff7-df8c12ba41a1"/>
+      <field name="shopid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="a7aa84bc-8656-4c79-8fe4-eced13f9557c"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="cab080e7-6e02-4952-b07b-3c13da2e7737"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="914bc991-d503-4485-9c98-f653ca621dfb"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="dfb18ed6-af9b-47b6-978b-98eb26404a39"/>
+      <index name="shopid" unique="true">
+        <index-field name="shopid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="shopid_idx">
+        <index-field name="shopid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">popular_shop</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="popular_shop" to="shop" caption="popular_shop_shopid_shop_id" uuid="4C11230B-B6E1-4AB9-B011-48F247D25CE2">
+      <association-field from="shopid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="popular_vouchercodes" uuid="EB2AA421-7EF7-44E8-BF29-696180F3A253">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6100e2ef-1e69-46f5-a707-563decf7b450"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="b877345c-4c92-4256-956e-fb92c616c469"/>
+      <field name="position" description="Holds the shop position among popular offer list" type="integer" size="8" default="NULL" uuid="e680d36b-3158-4410-b301-40f27487c4ad"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="13982885-158d-4377-a24e-835ab3aa4c4b"/>
+      <field name="vaoucherofferid" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="d483b8b9-feb1-4528-bc68-1aafd6c2fbf8"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="b6a820a6-fbaa-4ac3-8fc7-43d40a0c2548"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="cb760c26-9fa9-4c3d-b0a1-2baa25683427"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="1559454f-d027-4066-9f95-ed81c8c5fc6a"/>
+      <index name="vaoucherofferid" unique="true">
+        <index-field name="vaoucherofferid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="vaoucherofferid_idx">
+        <index-field name="vaoucherofferid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">popular_vouchercodes</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="ref_article_category" uuid="3092EF4B-6C59-474F-9D26-90A76BB001ED">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="76cf17f4-48f4-499b-a73d-e7c0287c29ae"/>
+      <field name="articleid" description="FK to articles.id" type="integer" size="8" required="true" uuid="e0329385-60e1-403f-9796-389743c944d5"/>
+      <field name="relatedcategoryid" description="FK to articlecatgory.id" type="integer" size="8" required="true" uuid="e2f36020-7efd-4f46-bd97-370a245180a7"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="9e86bdb6-d907-4463-ae28-1ae5e74cdb8b"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="6ae2b26c-35fa-460c-ad96-4fe00650a978"/>
+      <orm-attributes>
+        <attribute name="table">ref_article_category</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="ref_article_store" uuid="7F317F70-385A-45A3-A6A2-C648FC78A01A">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6d531bb9-35b9-471b-bd67-f2d5f210d6fd"/>
+      <field name="articleid" description="FK to article.id" type="integer" size="8" required="true" uuid="5111a688-077b-4d0d-ad31-865c6929e8db"/>
+      <field name="storeid" description="FK to shop.id" type="integer" size="8" required="true" uuid="12e12f8b-2706-4658-a593-ece825222db6"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="88906555-2fa5-4fe8-a5a4-8b3aef51264c"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="8b76f593-2d0d-4968-a43e-3c7bc93225ed"/>
+      <index name="articleid">
+        <index-field name="articleid"/>
+      </index>
+      <index name="storeid">
+        <index-field name="storeid"/>
+      </index>
+      <index name="article_shop_id_idx">
+        <index-field name="articleid"/>
+        <index-field name="storeid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_article_store</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ref_article_store" to="articles" caption="ref_article_store_ibfk_1" uuid="116BCD2A-B6C7-479B-986D-42890E3EC209">
+      <association-field from="articleid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ref_article_store" to="shop" caption="ref_article_store_ibfk_2" uuid="D2541411-2267-4E76-B6BB-19BD6999B8CE">
+      <association-field from="storeid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ref_articlecategory_relatedcategory" uuid="29ADDD3D-F702-4D3A-8F92-71E5A89DE4DB">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="619c46dd-1249-4ea4-8c96-d7f55ce772a6"/>
+      <field name="articlecategoryid" description="FK to articlecategory.id" type="integer" size="8" required="true" uuid="5ba46d06-808a-4b2b-b311-aa2993837260"/>
+      <field name="relatedcategoryid" description="FK to category.id" type="integer" size="8" required="true" uuid="bb917298-3d8c-4eac-ad11-d49faf50a727"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="edb2626f-1608-450a-8994-d87f03628041"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="8a190935-8c1b-4a56-8650-96b030e94927"/>
+      <orm-attributes>
+        <attribute name="table">ref_articlecategory_relatedcategory</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="ref_excludedkeyword_shop" uuid="7AD03DCA-1349-4544-9445-7E1363B2F5F6">
+      <field name="id" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="17418c61-05a0-4224-930e-604780ae25f1"/>
+      <field name="keywordid" type="integer" size="11" required="true" uuid="0f8b9936-e2f5-491f-9c72-6bb8d77a15d3"/>
+      <field name="keywordname" type="string" size="256" default="NULL" uuid="f6c76385-e4f3-491d-aefe-655f88c6b91b"/>
+      <field name="shopid" type="integer" size="11" required="true" uuid="1a90472d-abd0-43e2-be74-39066fde97c0"/>
+      <field name="deleted" type="integer" size="1" required="true" uuid="f3f13222-cb7d-4ce7-be68-0b2a08841156"/>
+      <field name="created_at" type="unknown:@timestamp_f" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="d299482f-e394-45f3-b73b-08fd7092f897"/>
+      <field name="updated_at" type="unknown:@timestamp_f" default="'0000-00-00 00:00:00'" required="true" uuid="635b72d3-0599-4997-a792-f3e09715f78d"/>
+      <index name="keyword_shop_id_idx">
+        <index-field name="keywordid"/>
+        <index-field name="shopid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_excludedkeyword_shop</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="ref_offer_category" uuid="65B23FEB-C6A3-4F80-8830-5281B44FF4C6">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6b2b7fed-298b-4b26-b72b-09ba73fa0e2d"/>
+      <field name="offerid" description="FK to offer.id" type="integer" size="8" required="true" uuid="5ab4c3c0-977b-4552-88d7-ef8861cd18ea"/>
+      <field name="categoryid" description="FK to category.id" type="integer" size="8" required="true" uuid="ade0eef8-46b9-4f9e-9c0c-5dcb7ae24aa7"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="d8d5e228-f0d8-4dd0-8d41-4d5a66b55071"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="58e5577a-ed6c-4a00-8e2e-2284c70a835c"/>
+      <index name="offerid_idx">
+        <index-field name="offerid"/>
+      </index>
+      <index name="categoryid_idx">
+        <index-field name="categoryid"/>
+      </index>
+      <index name="offer_category_id_idx">
+        <index-field name="categoryid"/>
+        <index-field name="offerid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_offer_category</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ref_offer_category" to="category" caption="ref_offer_category_categoryid_category_id" uuid="A2D1B036-E1D9-4F7D-81D3-1D54EFC52868">
+      <association-field from="categoryid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ref_offer_category" to="offer" caption="ref_offer_category_offerid_offer_id" uuid="46068818-53C5-4A20-B201-04135F12527F">
+      <association-field from="offerid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ref_offer_page" uuid="8BA194AF-9E93-48C2-AAA3-63018330F1FE">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3384dfd0-1a53-44a8-8ae9-b9c839cee729"/>
+      <field name="pageid" description="FK to page.id" type="integer" size="8" required="true" uuid="6ca6a4b5-1767-46b2-862b-a08622b74fca"/>
+      <field name="offerid" description="FK to offer.id" type="integer" size="8" required="true" uuid="1c98f07b-b8ea-4b68-b9d6-78f9f510f891"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="63f566eb-6a5e-4cc3-a788-fc8607144e9b"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="f47006a3-f5b8-4bc1-9f59-2ffb652037fe"/>
+      <index name="offerid_idx">
+        <index-field name="offerid"/>
+      </index>
+      <index name="pageid_idx">
+        <index-field name="pageid"/>
+      </index>
+      <index name="offer_page_id_idx">
+        <index-field name="pageid"/>
+        <index-field name="offerid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_offer_page</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ref_offer_page" to="offer" caption="ref_offer_page_offerid_offer_id" uuid="C703223F-921D-4563-A140-D55C44C4BA97">
+      <association-field from="offerid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ref_offer_page" to="page" caption="ref_offer_page_pageid_page_id" uuid="DD435834-83C6-4F81-A062-A6773442856D">
+      <association-field from="pageid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ref_page_widget" uuid="86B033CF-0681-4A9C-9FB3-2B75FBB869B4">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="0fd3af81-e5bb-4f11-9841-affdc3a1c970"/>
+      <field name="pageid" description="FK to page.id" type="integer" size="8" required="true" uuid="5754ed23-3e12-4810-9abc-f3e72dd398a3"/>
+      <field name="widgetid" description="FK to widget.id" type="integer" size="8" required="true" uuid="53821732-179d-4c33-99a6-359164fc4056"/>
+      <field name="stauts" description="if status true than widget is displayed on page" type="integer" size="1" default="'0'" uuid="025c071c-7347-4f4c-b00b-f93911d43a5f"/>
+      <field name="position" description="display in which order" type="integer" size="8" default="NULL" uuid="f6e497a5-d582-4b08-a920-03265c6e0dec"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="2482d28a-afa0-49f6-b008-5a7e1a653cd9"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="2c38069d-63c0-47ae-9dcd-94baf0a37a5c"/>
+      <index name="pageid_idx">
+        <index-field name="pageid"/>
+      </index>
+      <index name="widgetid_idx">
+        <index-field name="widgetid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_page_widget</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ref_page_widget" to="page" caption="ref_page_widget_pageid_page_id" uuid="EDDB9E39-817B-4CFA-8830-69D9BECCF3EF">
+      <association-field from="pageid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ref_page_widget" to="widget" caption="ref_page_widget_widgetid_widget_id" uuid="799F43F2-194D-4426-B068-8945FF110C50">
+      <association-field from="widgetid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ref_shop_category" uuid="36431773-8AE3-4F33-84C4-EF763A6337A4">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="ecea8a14-62fa-42f8-909c-34cbf0dd70d1"/>
+      <field name="shopid" description="FK to shop.id" type="integer" size="8" default="NULL" uuid="b9a79769-36c9-4dce-905a-b61df811b4b5"/>
+      <field name="categoryid" description="FK to category.id" type="integer" size="8" default="NULL" uuid="48fdf2e6-d2b0-49f3-80f2-8718d93a4a91"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="66c2299a-170b-444f-9c23-e0d358fd358e"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="da7ad524-c444-4493-b685-66760e74f9b7"/>
+      <index name="shopid_idx">
+        <index-field name="shopid"/>
+      </index>
+      <index name="categoryid_idx">
+        <index-field name="categoryid"/>
+      </index>
+      <index name="shop_category_id_idx">
+        <index-field name="shopid"/>
+        <index-field name="categoryid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_shop_category</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="ref_shop_category" to="category" caption="ref_shop_category_categoryid_category_id" uuid="54BC886C-4D0D-4ADD-9CA1-12B9D066405D">
+      <association-field from="categoryid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="ref_shop_category" to="shop" caption="ref_shop_category_shopid_shop_id" uuid="3BFD5484-D4BD-4605-84C0-B66B5CD208A6">
+      <association-field from="shopid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="ref_shop_relatedshop" uuid="741F42C7-7820-401C-AF57-76872BED428F">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="525e96a6-a39f-4500-9fbc-c4c9983f1a21"/>
+      <field name="shopId" description="shop id forgien key to shop id" type="integer" size="8" required="true" uuid="c02adbdd-43b0-4986-9a57-6e1dbce87b73"/>
+      <field name="relatedshopId" description="related shop id forgien key to shop id" type="integer" size="8" required="true" uuid="f4916374-a85b-4367-8947-2ee3c37516bc"/>
+      <field name="position" type="integer" size="5" required="true" uuid="321ce394-7e86-4913-bc83-eb76ce55be61"/>
+      <field name="created_at" type="unknown:@timestamp_f" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="713c1eba-f948-4d0f-85ab-1af13091f866"/>
+      <field name="updated_at" type="unknown:@timestamp_f" default="'0000-00-00 00:00:00'" required="true" uuid="8110a14c-930b-4c72-bae2-e84acd4fe8eb"/>
+      <index name="shop_relatedshop_id_idx">
+        <index-field name="shopId"/>
+        <index-field name="relatedshopId"/>
+      </index>
+      <index name="shop_relatedshop_idx">
+        <index-field name="shopId"/>
+        <index-field name="relatedshopId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">ref_shop_relatedshop</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="route_permalink" uuid="6FAE9D2B-09B7-4A52-B29C-DABAF71FED80">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e3d7c2c3-09c5-4df4-85ca-a0f3b4065464"/>
+      <field name="permalink" type="string" size="255" required="true" uuid="4947eee0-6f34-4795-882e-6c8e9bf70f85"/>
+      <field name="type" type="string" size="255" required="true" uuid="b415d321-d34e-4db7-bacc-df318bfff3f0"/>
+      <field name="exactlink" type="string" size="255" required="true" uuid="2d2ed4d5-0270-4562-80a3-cf2218462ecf"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="18172d69-243b-4ead-8019-a209eb46ca01"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="a1c22b32-e33c-4fd5-b20b-9238538c7b68"/>
+      <field name="deleted" type="integer" size="1" required="true" uuid="6a83582a-5bea-4f1e-9e53-fa9082f6cbbf"/>
+      <index name="permalink_idx">
+        <index-field name="permalink"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">route_permalink</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="route_redirect" uuid="18157DDD-0B66-4555-9426-248D17ED3413">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3f971e30-a601-4db8-9873-1bf811cd3fad">
+        <orm-attributes>
+          <attribute name="unsigned">true</attribute>
+        </orm-attributes>
+      </field>
+      <field name="orignalurl" type="string" default="NULL" uuid="56927273-e007-4e73-b93b-8b56261eab56"/>
+      <field name="redirectto" type="string" default="NULL" uuid="e63b2b8c-37a9-4ade-bfbe-e4d4c85b4659"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="ed5759c1-ff3c-4c97-bb4e-3245c4390fba"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="b40077e8-fd36-44ed-b5db-3e68f3ca8078"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="1b476fcc-a6a3-488d-9d09-72e7deb6022e"/>
+      <index name="orignalurl_idx">
+        <index-field name="orignalurl"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">route_redirect</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="seen_in" uuid="83EE77FB-BFF3-43AE-8A8E-536547F02149">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="25e3139f-b353-4bd6-bedd-edf0991755bd"/>
+      <field name="name" type="string" size="50" default="NULL" uuid="3a1765c6-9113-4d75-adca-ba844650cbea"/>
+      <field name="url" type="string" size="255" default="NULL" uuid="26edb4fb-6e76-4831-9dc5-7ed237968176"/>
+      <field name="toolltip" type="string" default="NULL" uuid="018a88bd-5937-43be-913c-50b5f1977315"/>
+      <field name="status" description="1 = enable , 0 = disable" type="integer" size="1" default="'1'" uuid="0ee93db9-3bb6-417b-aff9-a645ac3d7964"/>
+      <field name="logoid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="7f3d2bdd-8797-4641-8648-4918ef34762a"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="285c720d-b2c3-4228-84dd-e26ca27b9234"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="d69ddf5d-8fc7-430b-84e2-daf5095e8b6a"/>
+      <field name="alttext" type="string" default="NULL" uuid="e3fa92dc-1a1a-4e61-9312-b9369c06a32f"/>
+      <index name="logoid" unique="true">
+        <index-field name="logoid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="logoid_idx">
+        <index-field name="logoid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">seen_in</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="seen_in" to="image" caption="seen_in_logoid_image_id" uuid="F2A070EE-D418-4A68-94C6-4927F029E056">
+      <association-field from="logoid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="settings" uuid="AF88BB60-317F-4B21-ADD9-CE93B5E00BA6">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="521c28bf-9a71-40a5-ba6c-bc05c734287a"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="e43c1df7-0849-448f-aa8d-7034226e8cda"/>
+      <field name="value" type="string" default="NULL" uuid="a8abfed1-14a6-4350-a44f-bcec463339eb"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="da49a71a-1464-4e64-a7db-6d73cd816876"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="4b5f7793-ea3c-4ec0-bbb5-fa9de4469601"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="f9692ad2-5aee-49af-9051-c8e9c75d7257"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="7b2935d3-4606-4906-bcae-23f719cfb631"/>
+      <index name="id" unique="true">
+        <index-field name="id"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">settings</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="shop" uuid="C62604C1-58F9-43D1-B43F-17F028F856BF">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="2ba318ce-c0aa-4243-beb2-f0e0f5799d94"/>
+      <field name="name" type="string" size="255" default="NULL" uuid="a6e3fb67-ffbf-498a-9817-40c6c3c19fa6"/>
+      <field name="permalink" type="string" size="255" default="NULL" uuid="c1e10a90-2a41-40ae-b75e-ffab60432f81"/>
+      <field name="metadescription" type="string" default="NULL" uuid="39515775-6d91-467c-be35-4fdbfd5b1761"/>
+      <field name="usergenratedcontent" type="enum" default="NULL" enum-values="'0','1'" uuid="73a70cff-7afa-4547-99fb-b8a21748ea10"/>
+      <field name="notes" type="string" default="NULL" uuid="3271e710-5f7b-410c-96f1-a7d21819d957"/>
+      <field name="deeplink" type="string" size="255" default="NULL" uuid="56a2e80a-f915-4f24-8801-c03ce50de38e"/>
+      <field name="deeplinkstatus" type="integer" size="1" default="NULL" uuid="c169c223-2ee3-4ead-8460-f3ab55c8a14d"/>
+      <field name="refurl" type="string" default="NULL" uuid="b2ebe0e4-c452-4f4a-b22d-c3df1432ebc0"/>
+      <field name="actualurl" type="string" default="NULL" uuid="14f79c96-a754-4743-a2a6-c44954f8a555"/>
+      <field name="affliateprogram" type="integer" size="1" default="NULL" uuid="f0d48f86-7463-4445-a1ca-a911da4b98aa"/>
+      <field name="title" type="string" size="255" default="NULL" uuid="4265106e-a7a6-4fe3-bb67-79a71c731402"/>
+      <field name="subTitle" type="string" size="255" default="NULL" uuid="7520f922-773a-4d70-bd72-cb88d9211412"/>
+      <field name="overritetitle" type="string" size="255" default="NULL" uuid="d68059c0-7fc4-4c20-a770-bcd003a1490e"/>
+      <field name="overritesubtitle" type="string" size="255" default="NULL" uuid="c7bdc0cc-25b1-4c04-a4f0-2a84f580fadf"/>
+      <field name="overritebrowsertitle" type="string" size="255" default="NULL" uuid="39538b50-60cc-40da-8b02-3bdabaafb109"/>
+      <field name="shoptext" type="unknown:@longblob" default="NULL" uuid="a89ad818-a5ab-4036-989a-50047fe347c2"/>
+      <field name="views" type="integer" size="8" default="NULL" uuid="4eac27a9-f43f-495f-bcaf-43bd7fa62a31"/>
+      <field name="howtouse" type="integer" size="1" default="'0'" required="true" uuid="ecf36630-1f67-4a6e-b8b3-0a2cefad3914"/>
+      <field name="Deliverytime" type="string" size="255" default="NULL" uuid="e7a6929c-b6fc-4447-85d8-857b54fec089"/>
+      <field name="returnPolicy" type="string" size="255" default="NULL" uuid="339d63dc-9e1d-4e1c-875f-e035de6140a1"/>
+      <field name="freeDelivery" type="enum" default="NULL" enum-values="'0','1','2','3'" uuid="33497d0c-69b8-45e9-a1ac-f5266575ad4a"/>
+      <field name="deliveryCost" type="string" size="255" default="NULL" uuid="400ce112-628e-4989-9eaa-7258680dba59"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="c2ee293c-0809-49ba-8ee0-71e9ade76bb2"/>
+      <field name="offlinesicne" type="unknown:@datetime_f" default="NULL" uuid="2ec17a79-8378-494f-bda6-ee5126628a15"/>
+      <field name="accoutmanagerid" description="associated account manager id" type="integer" size="8" default="NULL" uuid="5c6b7e74-d5cc-48c6-a6b8-da9d74b51c8a"/>
+      <field name="accountManagerName" type="string" size="255" default="NULL" uuid="dec383cf-42e6-4bc9-9ad1-c67945546f82"/>
+      <field name="contentmanagerid" description="associated content  manager id" type="integer" size="8" default="NULL" uuid="27f0658d-02db-4f18-9d65-86d660450365"/>
+      <field name="contentManagerName" type="string" size="255" default="NULL" uuid="e6caf618-abcc-442f-978f-8632f937dd96"/>
+      <field name="logoid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="3683456a-8fd3-48be-af26-a52d5bac470b"/>
+      <field name="screenshotid" type="integer" size="8" required="true" uuid="4af352da-f80a-4334-af99-a6f4141bb33c"/>
+      <field name="howtousesmallimageid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="b69f0370-70a2-44d4-9d3b-1875fa19f2dc"/>
+      <field name="howtousebigimageid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="0ed317be-cd95-4fa0-89bc-0e019a9a12e6"/>
+      <field name="affliatenetworkid" description="FK to affliate_network.id" type="integer" size="8" default="NULL" uuid="59e20e5a-8459-475a-b002-f102f2c54cc1"/>
+      <field name="howtousepageid" type="integer" size="8" default="NULL" uuid="b44587c6-fab7-414e-b0b3-84b613a2c5ba"/>
+      <field name="keywordlink" type="string" size="255" default="NULL" uuid="7b5343f6-eddd-4c1c-a189-cca105e80db1"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="47816dab-3b00-4f0f-9fcf-36a3572162bf"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="3505065f-e0fd-44df-bc6a-e34134837014"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="505800e3-013d-499c-9587-da55c1b1ee23"/>
+      <field name="howtoTitle" type="string" default="NULL" uuid="ed066fb7-2363-4616-932d-31017da3f748"/>
+      <field name="howtoSubtitle" type="string" default="NULL" uuid="b0faef7a-f1d7-4ce8-b74d-9550e6d30f73"/>
+      <field name="howtoMetaTitle" type="string" default="NULL" uuid="22f2f515-8785-4fe4-9c44-65fcb53e3bbe"/>
+      <field name="howtoMetaDescription" type="unknown:@longblob" default="NULL" uuid="35d67a14-b582-4580-9f46-25aac44afea4"/>
+      <field name="ideal" type="integer" size="1" default="NULL" uuid="96ebd718-650f-499c-86f0-19b96cc527a4"/>
+      <field name="qShops" type="integer" size="1" default="NULL" uuid="9f8f2698-b7e0-4f29-9185-e2dd82c20b35"/>
+      <field name="freeReturns" type="integer" size="1" default="NULL" uuid="82b7e652-4184-4022-a1ad-e09f1de8a725"/>
+      <field name="pickupPoints" type="integer" size="1" default="NULL" uuid="cc82de04-5a56-4b38-8339-ef17fb27f076"/>
+      <field name="mobileShop" type="integer" size="1" default="NULL" uuid="73e39fb3-de6f-4f86-80c1-cb2683fcd565"/>
+      <field name="service" type="integer" size="1" default="NULL" uuid="cb5d4846-b654-4caf-becb-400e69fb6a17"/>
+      <field name="serviceNumber" type="string" default="NULL" uuid="4d6d03f3-7a87-451f-861e-8096a04f1e2e"/>
+      <field name="discussions" type="integer" size="1" default="NULL" uuid="3e3b7fda-37ec-4062-be80-cf8b61ff6859"/>
+      <field name="displayExtraProperties" type="integer" size="1" default="'1'" required="true" uuid="9a7f2110-9a6c-44fd-9545-a7a254db5311"/>
+      <field name="showsignupoption" type="integer" size="1" default="'0'" required="true" uuid="11eea23e-72d0-4924-a111-d4832bb7c55b"/>
+      <field name="addtosearch" type="integer" size="1" default="'0'" required="true" uuid="7b64e477-906e-4672-b056-48b581d8987f"/>
+      <field name="customheader" type="string" default="NULL" uuid="c057bcc9-dcd5-40ce-b6c8-474220b46731"/>
+      <field name="totalviewcount" type="integer" size="8" default="NULL" uuid="cd4ffab2-b5af-46ea-af05-559debeef210"/>
+      <field name="showSimliarShops" description="if true then displays same shops as well as shop related to same category" type="integer" size="1" default="'0'" required="true" uuid="044b8480-47f9-44b5-a4fe-61e4f2a1a45f"/>
+      <field name="showchains" type="integer" size="1" default="'0'" required="true" uuid="163cb8b2-4577-4c9f-b89e-114c6736303c"/>
+      <field name="chainItemId" type="integer" size="8" default="NULL" uuid="3f26de33-27bb-4652-ad4f-e9a79989a9dd"/>
+      <field name="chainId" type="integer" size="8" default="NULL" uuid="ef52379c-2df6-4183-856c-bbc007ae76bb"/>
+      <field name="strictconfirmation" type="integer" size="1" default="'0'" required="true" uuid="fffc58c2-2fe7-4745-a1ea-c15a2a988b04"/>
+      <field name="howToIntroductionText" type="unknown:@longblob" default="NULL" uuid="09b131e8-6d12-44d0-9bb8-ee5b1c0d6c03"/>
+      <field name="brandingcss" type="string" default="NULL" uuid="579e0038-139f-4735-b043-e372f01ab60c"/>
+      <index name="logoid" unique="true">
+        <index-field name="logoid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="howtousesmallimageid" unique="true">
+        <index-field name="howtousesmallimageid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="howtousebigimageid" unique="true">
+        <index-field name="howtousebigimageid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="affliatenetworkid_idx">
+        <index-field name="affliatenetworkid"/>
+      </index>
+      <index name="howtousepageid_idx">
+        <index-field name="howtousepageid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">shop</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="shop" to="affliate_network" caption="shop_affliatenetworkid_affliate_network_id" uuid="F7DC016F-63F9-4523-8204-8378CFEEC85D">
+      <association-field from="affliatenetworkid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="shop" to="image" caption="shop_howtousebigid_image_id" uuid="98BFAB86-60B8-475B-8C9F-DB90CEF74B99">
+      <association-field from="howtousebigimageid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="shop" to="page" caption="shop_howtousepageid_page_id" uuid="16B5F5A5-D030-4B77-9BB4-AB93B57FE017">
+      <association-field from="howtousepageid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="shop" to="image" caption="shop_howtousesmallimageid_image_id" uuid="807C452D-29DE-4292-9652-D94ED9425541">
+      <association-field from="howtousesmallimageid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <association from="shop" to="image" caption="shop_logoid_image_id" uuid="07D3251B-72BC-41C7-A1A9-F3CE7D00AFBA">
+      <association-field from="logoid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="shop_howto_chapter" uuid="CE774E8E-7C9B-4FBC-B4DF-428A8F047DE4">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="085c437c-4724-4cff-b056-632453a6ccb2"/>
+      <field name="shopId" type="integer" size="8" default="NULL" uuid="f2fa9479-af2c-4147-9a71-4aef4e174646"/>
+      <field name="chapterTitle" type="string" default="NULL" uuid="2a7c9b7e-60da-4f5f-8fd3-0772e26937b5"/>
+      <field name="chapterDescription" type="unknown:@longblob" default="NULL" uuid="d8627414-42c1-4b58-8be4-67fcf33e6b3e"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="0e236c23-f9e8-43ab-afcd-ebd7f3b4a05a"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="4fc88c72-124f-449f-997f-3484786f1eed"/>
+      <orm-attributes>
+        <attribute name="table">shop_howto_chapter</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="shopviewcount" uuid="54ADB179-4EA3-48BB-B2A6-EB897B37A63D">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="687835d1-eed6-4042-9e53-c777684fc1d9"/>
+      <field name="shopid" type="integer" size="8" default="NULL" uuid="7115e821-d9a8-43aa-8f03-d74dd587d14d"/>
+      <field name="onclick" type="integer" size="8" default="NULL" uuid="a8c6f0c3-7210-4932-a716-cc2a882dfcb9"/>
+      <field name="onload" type="integer" size="8" default="NULL" uuid="96ac4cea-ac88-4b29-aca1-a151d375a787"/>
+      <field name="ip" type="string" size="255" default="NULL" uuid="5977205d-8b00-4ac6-82a5-a17b798f862c"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="0792e75b-4fbd-4f14-b3c5-497e7ea1e1b9"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="7f108b57-4e86-490e-b0cd-d65a3a347dd6"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="b6872b59-0027-4329-a77e-165258c3da95"/>
+      <index name="shopid_idx">
+        <index-field name="shopid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">shopviewcount</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="signupcodes" uuid="82B50004-3322-48C6-A029-5EBC6EAB0F21">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="c82012e0-7cb3-42f1-9597-f3ac5e834b4d"/>
+      <field name="entered_uid" type="integer" size="8" required="true" uuid="99c2725d-a62c-4a84-94f5-d5cc39311e88"/>
+      <field name="code" type="string" size="255" default="NULL" uuid="5a5b5535-ac87-4a89-96bd-de47eceb8cf3"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="9a7b9755-6331-4ccf-aec5-f37d9d2ba916"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="90a016ff-0c42-4182-a735-fe3ec4496a9d"/>
+      <index name="code" unique="true">
+        <index-field name="code"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">signupcodes</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="signupfavoriteshop" uuid="0C12E702-D840-4E70-ABE6-7E2AACE06E1F">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="a235d10a-9259-4223-8c88-1ad46c3b58ed"/>
+      <field name="entered_uid" type="integer" size="8" required="true" uuid="7137c340-e7ee-406f-aec5-fbc1d3dda8e0"/>
+      <field name="store_id" description="FK to shop.id" type="integer" size="8" required="true" uuid="c97aa29b-5697-40dd-93b5-fb6d8c145cd2"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="e822d83f-4d29-4757-95c0-7bb948341cd3"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="9a365ecb-96ef-46af-b4a8-f5497f76a339"/>
+      <index name="store_id" unique="true">
+        <index-field name="store_id"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <orm-attributes>
+        <attribute name="table">signupfavoriteshop</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="signupfavoriteshop" to="shop" caption="signupfavoriteshop_ibfk_1" uuid="8FDC24F5-8718-43E0-934D-1E099090D50D">
+      <association-field from="store_id" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="signupmaxaccount" uuid="E0DC21B4-9171-4350-9959-5F8ED05095B8">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="de7494ed-3fe7-4d6d-a29b-7a57b592d50a"/>
+      <field name="entered_uid" type="integer" size="20" required="true" uuid="be1853d4-5d6a-4202-ac63-35bb018e5867"/>
+      <field name="no_of_acc" type="string" size="255" default="NULL" uuid="504e6aa3-8b7f-48d6-8d6d-29749731ef3e"/>
+      <field name="status" type="integer" size="20" required="true" uuid="c7faf7e2-a5cf-4fbf-a12b-49560f09598a"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="18a9fd53-8456-4a9d-b713-ac3271fdcaa1"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="839961de-590e-43c0-b032-aceca8cf8073"/>
+      <field name="email_confirmation" type="integer" size="1" default="'0'" uuid="d1cc5269-3e94-4e21-aee5-e8d090e68347"/>
+      <field name="email_header" type="unknown:@longblob" default="NULL" uuid="bed01f6f-7553-45cb-bca0-00d696802018"/>
+      <field name="email_footer" type="unknown:@longblob" default="NULL" uuid="6a403034-1f16-4755-a216-8e474a4a2be1"/>
+      <field name="max_account" type="integer" size="8" default="NULL" uuid="1519b434-8d9d-437a-9fda-f87f4081c4d1"/>
+      <field name="emailperlocale" type="string" required="true" uuid="b87bc8a8-688b-4683-b85e-0fc26831ea1f"/>
+      <field name="sendername" type="string" size="255" default="''" required="true" uuid="cc4cb95a-ce4b-4fbd-a8d5-361b2b5892e1"/>
+      <field name="emailsubject" type="string" size="255" default="''" required="true" uuid="bf8d9438-5864-4509-adeb-735389554789"/>
+      <field name="testemail" type="string" size="255" default="''" required="true" uuid="b00771de-82a4-4078-a2b3-25d155f76cca"/>
+      <field name="testimonial1" type="string" default="NULL" uuid="53e4fd2e-1866-4f90-9899-31665292a40c"/>
+      <field name="testimonial2" type="string" default="NULL" uuid="88e78be6-82fc-4795-b73f-8b1bd6654845"/>
+      <field name="testimonial3" type="string" default="NULL" uuid="6ff9624d-c10c-41ae-88d3-05b6c943f39d"/>
+      <field name="showtestimonial" type="integer" size="1" default="'0'" required="true" uuid="5e720d39-209a-4d05-bc47-d5f19033a4fe"/>
+      <field name="homepagebanner_name" type="string" size="255" default="NULL" uuid="3d846a85-0817-4e41-a4c5-131d5989491f"/>
+      <field name="homepagebanner_path" type="string" size="255" default="NULL" uuid="75b31c24-372d-45cd-8116-d4f48179de30"/>
+      <field name="homepage_widget_banner_name" type="string" size="255" default="NULL" uuid="dbdd2f4e-8b19-4648-b0a0-c17428c2f07a"/>
+      <field name="homepage_widget_banner_path" type="string" size="255" default="NULL" uuid="cb14f671-e866-4449-ab8e-d3b375942dd5"/>
+      <field name="newletter_is_scheduled" description="1-scheduled ,0-manual" type="integer" size="1" default="'0'" uuid="d3e1f966-2cde-4fc4-aacd-2f1a92f6e6b6"/>
+      <field name="newletter_status" description="1-sent ,0-unsent, this is only used in case of scheduled newsletters" type="integer" size="1" default="'0'" uuid="fc8f1363-fcf7-40a7-a084-6801a49c8f1e"/>
+      <field name="newletter_scheduled_time" description="newsletter scheduled timestamp" type="unknown:@datetime_f" default="'2014-01-23 12:11:26'" uuid="528fa32d-ba22-4d3d-bad6-065c2c6be5d7"/>
+      <orm-attributes>
+        <attribute name="table">signupmaxaccount</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="special" uuid="2450D46D-6DC9-4DA8-8968-386AC0455DCE">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3b8da4e4-5d0e-4327-94e9-2e5d6fb2b3e9"/>
+      <field name="title" type="string" default="NULL" uuid="a5594ff2-fc45-4f09-9870-89c3d94bb8fd"/>
+      <field name="description" type="unknown:@longblob" default="NULL" uuid="0daaa9c7-f2a3-4b2a-a1d2-cc0b03554979"/>
+      <field name="status" type="integer" size="1" default="'1'" uuid="575bcb2a-04aa-49da-be54-9ea61faca727"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="ae8ac3b7-c6b0-4931-b6fc-b07046d15242"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="090bddc3-b6ff-40e2-a149-49e26aa687f9"/>
+      <orm-attributes>
+        <attribute name="table">special</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="special_list" uuid="C6906863-A7A8-4F16-A3D2-67C221B9334C">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="f719ed53-f475-4b0f-a290-a862a2c90eee"/>
+      <field name="type" type="string" size="255" default="NULL" uuid="82b1a3d1-7d35-4c2b-b64f-4d3ec504eb1e"/>
+      <field name="position" description="Holds the shop position among popular offer list" type="integer" size="8" default="NULL" uuid="adfe4636-0905-4a0c-8429-996121ac0426"/>
+      <field name="status" type="integer" size="1" default="NULL" uuid="b475870a-ef1e-4e37-ba24-a7ef068490b9"/>
+      <field name="specialpageid" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="24bd7a22-92f2-4ffc-9760-d0f4e0e33a5f"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="d63d0a60-8f20-4b21-83af-092cd54417fa"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="5b9ce110-da93-4988-a33f-ea29fedcb457"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="cfdc3a29-42b9-44d9-b8d9-69909cae6987"/>
+      <index name="specialofferid" unique="true">
+        <index-field name="specialpageid"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="specialofferid_idx">
+        <index-field name="specialpageid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">special_list</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="term_and_condition" uuid="DAE9167F-A668-4FF1-9452-CD148B7D52CD">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="aef835bb-ac30-489e-81c5-169f2d428d3d"/>
+      <field name="content" type="string" default="NULL" uuid="5157fca9-3d01-45bc-b4eb-5e59236ae77a"/>
+      <field name="offerid" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="17683cd3-6de6-4234-872f-12ce04d51b93"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="88935eef-c20a-4be8-8079-703e83847986"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="3bb90477-bcf8-4a34-be6f-db28abb6769f"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="bc865c6e-7c30-4ede-b2d5-16cc44851088"/>
+      <index name="offerid_idx">
+        <index-field name="offerid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">term_and_condition</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="term_and_condition" to="offer" caption="term_and_condition_offerid_offer_id" uuid="3DE8D6DE-8D33-4F5B-AA39-7AA0218C19D6">
+      <association-field from="offerid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="translations" uuid="03ACC6F8-94E6-4A79-9349-185B9DEAABA8">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="5c78b342-99a1-4ec3-8532-597aeef9adfd"/>
+      <field name="translationKey" type="string" default="NULL" uuid="a2aaae35-c372-4c9a-90ea-b10bae27819f"/>
+      <field name="translation" type="string" default="NULL" uuid="b0264a2e-2ef4-4fad-9f14-567261e7a648"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="149dd2f6-9514-4227-883d-b9d413071558"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="6437e77e-4a64-402a-b293-3780bdcedc76"/>
+      <field name="deleted" type="integer" size="1" default="NULL" uuid="92822848-fe48-403e-88d4-1b8a3b02618f"/>
+      <orm-attributes>
+        <attribute name="table">translations</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="varnish" uuid="51F0C34A-86E9-430E-A508-3AF5CBBD9A62">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6a2aece1-c382-434a-ab8d-1cdbcf9e19ed"/>
+      <field name="url" type="string" default="NULL" uuid="798402c6-57d7-4313-93ea-7c732dbdad29"/>
+      <field name="status" type="string" default="NULL" uuid="2010f87b-1edb-44f0-a4d4-66a09b5d27e4"/>
+      <field name="created_at" type="unknown:@datetime_f" default="NULL" uuid="ced13b3f-c3a6-4577-9c7c-588a3f7de2db"/>
+      <field name="updated_at" type="unknown:@datetime_f" default="NULL" uuid="cf103499-1838-4453-bf92-cb76badd7f5f"/>
+      <orm-attributes>
+        <attribute name="table">varnish</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="view_count" uuid="478F986B-B0A6-4A97-B773-5F6EFE51500D">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="396c532c-36c5-4bce-b3a8-e69979e377da"/>
+      <field name="loadtime" type="integer" size="8" default="NULL" uuid="376cfb56-ac6e-4633-90e5-c8fd40d4520a"/>
+      <field name="onclick" type="integer" size="8" default="'0'" uuid="60176031-02a1-4768-8656-dfc24c4113c2"/>
+      <field name="onload" type="integer" size="8" default="'0'" required="true" uuid="eb1636a8-59a2-4295-b282-e8fd03b89036"/>
+      <field name="onhover" type="integer" size="8" default="NULL" uuid="4b7d4e8c-01dd-4a88-ad0d-8f42131d2438"/>
+      <field name="ip" type="string" size="255" default="NULL" uuid="5ed764af-374d-49d4-96c8-810d3f0045de"/>
+      <field name="offerid" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="529a8bcc-c463-4fc1-b076-b2d5a8af727f"/>
+      <field name="memberid" description="FK of member who view offer (used for future reference)" type="integer" size="8" default="NULL" uuid="8af62570-944c-4a32-a93d-9ce73a15d348"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="6a78a78c-f99f-4b14-9b7f-372774087b9d"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="7ee3049a-0730-4f11-8f67-474dc03fb1b8"/>
+      <field name="counted" type="integer" size="1" default="'0'" uuid="2348e19e-319c-4f71-a689-ebf9abac79df"/>
+      <index name="offerid_idx">
+        <index-field name="offerid"/>
+      </index>
+      <index name="offer_click_count_idx">
+        <index-field name="offerid"/>
+        <index-field name="onclick"/>
+        <index-field name="counted"/>
+      </index>
+      <index name="memberid_idx">
+        <index-field name="memberid"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">view_count</attribute>
+      </orm-attributes>
+    </entity>
+    <association from="view_count" to="offer" caption="view_count_offerid_offer_id" uuid="C989AB73-2946-4800-9DB6-005ECBCDAD3C">
+      <association-field from="offerid" to="id"/>
+      <orm-attributes>
+        <attribute name="onDelete">restrict</attribute>
+      </orm-attributes>
+    </association>
+    <entity name="visitor" uuid="F1208E33-BE71-413C-BCE0-3C367D0CDB14">
+      <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6ad888f2-b382-4b1a-99f8-0b734293f62e"/>
+      <field name="firstname" type="string" default="NULL" uuid="27201872-1ed2-4def-b112-504d8107ab6a"/>
+      <field name="lastname" type="string" default="NULL" uuid="04d17608-b726-40c0-ae51-876bba93818c"/>
+      <field name="email" type="string" size="255" default="NULL" uuid="8272d463-4c4a-4c52-821e-ee0c547215b9"/>
+      <field name="username" type="string" size="255" default="NULL" uuid="437c9220-f1b0-403c-bdf8-7630e57cb1f6"/>
+      <field name="password" type="string" size="255" default="NULL" uuid="c24269d3-efa6-4737-8965-0acad96ae3bd"/>
+      <field name="pwd" type="string" size="50" default="NULL" uuid="2933b575-f282-4b41-b6ac-10e1be7781bf"/>
+      <field name="status" type="integer" size="1" default="'1'" uuid="99e85091-81c6-4c3a-b274-11eefb5d5ef8"/>
+      <field name="imageid" description="FK to image.id" type="integer" size="8" default="NULL" uuid="2cfaf7a4-7abb-49f7-aa96-4c73611c8b5e"/>
+      <field name="gender" type="integer" size="1" default="'0'" required="true" uuid="afb4325e-532f-412e-b921-229cd9c9f6b4"/>
+      <field name="dateofbirth" type="date" default="NULL" uuid="a6f42c37-d8f8-4512-afab-00804bd603cc"/>
+      <field name="postalcode" type="string" size="50" default="NULL" uuid="d25f8139-c3a5-4e4a-8804-d79814c6806a"/>
+      <field name="weeklynewsletter" type="integer" size="1" default="'0'" required="true" uuid="7652395a-5568-4d21-9d23-a3b4549091e9"/>
+      <field name="fashionnewsletter" type="integer" size="1" default="'0'" required="true" uuid="20352a0b-dd86-4a8f-a017-0abdd74675eb"/>
+      <field name="travelnewsletter" type="integer" size="1" default="'0'" required="true" uuid="3750af50-bb53-4800-9776-d4b1dffe5eab"/>
+      <field name="codealert" type="integer" size="1" default="'0'" required="true" uuid="362e7050-210b-4ced-883c-13dd6624a988"/>
+      <field name="createdby" description="FK to user.id" type="integer" size="8" default="NULL" uuid="0b525f33-2b0f-4d08-9c46-d8b98a482fe7"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="13ba8137-bde0-453b-ae77-03e956d71e3f"/>
+      <field name="currentlogin" description="current login timestamp" type="unknown:@datetime_f" required="true" uuid="33fb87e7-7225-4312-bdc9-dd279d4eb638"/>
+      <field name="lastlogin" description="last login timestamp" type="unknown:@datetime_f" required="true" uuid="77e07e49-ec7b-410d-8ad9-7fa6c7c3ebac"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="df9d30df-83a4-4c6f-b547-762b7604a0ed"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="f0f79b8f-dd0d-4af7-a382-fd90432f227f"/>
+      <field name="interested" type="string" size="255" default="NULL" uuid="2a456e2a-253c-41b4-85f5-bc86f2424675"/>
+      <field name="profile_img" type="string" size="255" default="NULL" uuid="1f45151d-323e-4ec0-b9b7-122c29a4e69f"/>
+      <field name="active_codeid" type="string" size="255" required="true" uuid="55e4ab62-b9df-4def-93d6-409c1c0f708b"/>
+      <field name="active" type="integer" size="1" default="NULL" uuid="c77181e8-0027-4cc0-b73c-aec743902f7a"/>
+      <field name="changepasswordrequest" type="integer" size="1" default="'1'" uuid="34c0c190-871f-4323-bdfe-08291181c83f"/>
+      <index name="email" unique="true">
+        <index-field name="email"/>
+        <orm-attributes>
+          <attribute name="type">UNIQUE</attribute>
+        </orm-attributes>
+      </index>
+      <index name="imageid_idx">
+        <index-field name="imageid"/>
+      </index>
+      <index name="createdby_idx">
+        <index-field name="createdby"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">visitor</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="visitor_keyword" uuid="4327992C-1E60-4136-AC7C-19C705666105">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="2fbf5a34-f3f1-4b1d-bf44-49a8847db9e8"/>
+      <field name="keyword" type="string" size="255" default="NULL" uuid="d53db3fc-5421-4917-af76-b1d1b7188007"/>
+      <field name="visitorId" type="integer" size="8" default="NULL" uuid="4525e839-e20b-4e4c-b69f-fb47cbff83b3"/>
+      <index name="visitorId_idx">
+        <index-field name="visitorId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">visitor_keyword</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="votes" uuid="B67EB9EE-1236-4CC4-AD1D-E5AD567A4DA3">
+      <field name="id" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="afa5b8d8-eb95-4f70-98d5-38ae9ff0ef18"/>
+      <field name="offerId" type="integer" size="11" required="true" uuid="8802f2fe-6abc-4719-9ca8-c6ebdbfbd048"/>
+      <field name="ipaddress" type="string" size="200" default="NULL" uuid="42ee8ca3-1c4d-4531-bb2b-c7d49f560b81"/>
+      <field name="date" type="unknown:@timestamp_f" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="92c17b55-087a-4dee-8559-8b3cfb79a784"/>
+      <field name="vote" type="string" size="200" default="NULL" uuid="1735d2fe-bf18-4ee5-ace6-88e70ce90c93"/>
+      <field name="moneySaved" type="float" required="true" uuid="c20967d0-5f75-4f70-89d9-14d94eea7ab9"/>
+      <field name="product" type="string" size="255" default="NULL" uuid="ac5edc7f-71f3-4570-ba2c-ca8f347b2823"/>
+      <field name="status" type="integer" size="11" default="'1'" required="true" uuid="70221acf-39f9-40c1-a689-6b612f824b0e"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="3135f16c-411e-4988-8c91-a0c2024bb761"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="5606f203-ea64-42ff-afef-ea8057c325f9"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="57b2a71f-78d2-4fd8-8b42-8d658cfc749e"/>
+      <field name="visitorid" type="integer" size="8" default="NULL" uuid="204783f7-f620-4d63-b4bf-fd4e48a1da3d"/>
+      <index name="offer_id_idx">
+        <index-field name="offerId"/>
+      </index>
+      <orm-attributes>
+        <attribute name="table">votes</attribute>
+      </orm-attributes>
+    </entity>
+    <entity name="widget" uuid="E0D0B794-2B9B-4447-B301-9ED435FE1DF8">
+      <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="f2155067-8141-4db4-9e6c-c70a9689e663"/>
+      <field name="title" type="string" default="NULL" uuid="8fc3d9f7-5cea-4eae-a61e-abde09585a4f"/>
+      <field name="slug" type="string" size="255" default="NULL" uuid="d6bff0a7-cb0c-4755-8a4c-034c07bb7d4e"/>
+      <field name="content" type="unknown:@longblob" default="NULL" uuid="9f2c3416-9592-4c5c-b587-fd335a94488d"/>
+      <field name="status" type="integer" size="1" default="'1'" required="true" uuid="d3e73e33-f4d4-4ac7-aac2-cedd855fb298"/>
+      <field name="userdefined" type="integer" size="1" default="'0'" uuid="552bdeb6-1fa8-4d00-a158-4151539a42a5"/>
+      <field name="showwithdefault" type="integer" size="1" default="'0'" uuid="a702214b-ff7f-47a1-8ee5-21d9de5bf99a"/>
+      <field name="created_at" type="unknown:@datetime_f" required="true" uuid="db8979d7-99f2-4c2b-a8ad-e3c369870737"/>
+      <field name="updated_at" type="unknown:@datetime_f" required="true" uuid="e3d0681c-8617-4705-95a8-2178f6c0fd7a"/>
+      <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="321078d8-cf97-4a89-99a4-1a2887ca58a6"/>
+      <orm-attributes>
+        <attribute name="table">widget</attribute>
+      </orm-attributes>
+    </entity>
+  </module>
+  <visual-data>
+    <association uuid="006F1771-F83F-4343-9662-EFBEC2A11DC1" color="4289243304"/>
+    <module uuid="02c19c1b-a9f9-495b-be4d-8deda361aba6" bg-color="4294831087" position-x="50" position-y="50" size-x="0" size-x2="2811" size-y="0" size-y2="2934"/>
+    <entity uuid="03ACC6F8-94E6-4A79-9349-185B9DEAABA8" bg-color="4294967295" hdr-color="4292006610" position-x="2524" position-y="2475"/>
+    <association uuid="049B4877-E07F-4CBC-805E-3E6D071F41E4" color="4281230255"/>
+    <association uuid="07D3251B-72BC-41C7-A1A9-F3CE7D00AFBA" color="4289243304"/>
+    <project uuid="07ed96cc-5f8b-425d-ba86-f19eca37d2d1" size-x="0" size-x2="2911" size-y="0" size-y2="2988"/>
+    <association uuid="0A569F2D-FD28-47B2-9AD1-F7C7E2A12CC0" color="4278236368"/>
+    <entity uuid="0C12E702-D840-4E70-ABE6-7E2AACE06E1F" bg-color="4294967295" hdr-color="4292006610" position-x="1096" position-y="1404"/>
+    <entity uuid="0F7594D5-DC32-4F10-9A24-66AE334FAA5E" bg-color="4294967295" hdr-color="4292006610" position-x="1096" position-y="333"/>
+    <entity uuid="0F86D2E0-F5C3-42E9-A013-A9D9490057CF" bg-color="4294967295" hdr-color="4292006610" position-x="1810" position-y="1404"/>
+    <association uuid="116BCD2A-B6C7-479B-986D-42890E3EC209" color="4289928996"/>
+    <entity uuid="12EE973E-88C5-476A-A005-F0AB474D0BDB" bg-color="4294967295" hdr-color="4292006610" position-x="739" position-y="1761"/>
+    <association uuid="16B5F5A5-D030-4B77-9BB4-AB93B57FE017" color="4281230255"/>
+    <entity uuid="18157DDD-0B66-4555-9426-248D17ED3413" bg-color="4294967295" hdr-color="4292006610" position-x="381" position-y="2762" size-x="0" size-x2="167" size-y="0" size-y2="101"/>
+    <entity uuid="1E0CD62B-5BF3-49A9-8C02-78BFC09B5670" bg-color="4294967295" hdr-color="4292006610" position-x="27" position-y="2757" size-x="0" size-x2="106" size-y="0" size-y2="157"/>
+    <entity uuid="243B9E45-8562-4410-B8BA-2E85D2B64A21" bg-color="4294967295" hdr-color="4292006610" position-x="1810" position-y="1761"/>
+    <entity uuid="2450D46D-6DC9-4DA8-8968-386AC0455DCE" bg-color="4294967295" hdr-color="4292006610" position-x="382" position-y="1761"/>
+    <entity uuid="28C6FA25-4603-4114-98BE-087602527BF5" bg-color="4294967295" hdr-color="4292006610" position-x="2165" position-y="941" size-x="0" size-x2="172" size-y="0" size-y2="87"/>
+    <entity uuid="29ADDD3D-F702-4D3A-8F92-71E5A89DE4DB" bg-color="4294967295" hdr-color="4292006610" position-x="739" position-y="333"/>
+    <entity uuid="3092EF4B-6C59-474F-9D26-90A76BB001ED" bg-color="4294967295" hdr-color="4292006610" position-x="2167" position-y="690"/>
+    <entity uuid="35891A06-7651-49CC-801D-6DABBB65D603" bg-color="4294967295" hdr-color="4292006610" position-x="2167" position-y="2475"/>
+    <entity uuid="3590530E-ED44-414C-97B3-93A6E1B81136" bg-color="4294967295" hdr-color="4292006610" position-x="25" position-y="333"/>
+    <entity uuid="36431773-8AE3-4F33-84C4-EF763A6337A4" bg-color="4294967295" hdr-color="4292006610" position-x="1973" position-y="1645" size-x="0" size-x2="167" size-y="0" size-y2="87"/>
+    <association uuid="3BFD5484-D4BD-4605-84C0-B66B5CD208A6" color="4294218527"/>
+    <association uuid="3DE8D6DE-8D33-4F5B-AA39-7AA0218C19D6" color="4284601169"/>
+    <entity uuid="4327992C-1E60-4136-AC7C-19C705666105" bg-color="4294967295" hdr-color="4292006610" position-x="1449" position-y="2762" size-x="0" size-x2="109" size-y="0" size-y2="59"/>
+    <entity uuid="44585886-ABBB-4292-BE21-772E7DD19D07" bg-color="4294967295" hdr-color="4292006610" position-x="1453" position-y="2118"/>
+    <association uuid="46068818-53C5-4A20-B201-04135F12527F" color="4281230255"/>
+    <entity uuid="478F986B-B0A6-4A97-B773-5F6EFE51500D" bg-color="4294967295" hdr-color="4292006610" position-x="382" position-y="690"/>
+    <entity uuid="48ED59A4-436A-48F7-BD6F-7EB80F7F38DB" bg-color="4294967295" hdr-color="4292006610" position-x="1096" position-y="1047"/>
+    <entity uuid="4A0B8E33-AF38-4FA2-98EA-6D9D13BE36D8" bg-color="4294967295" hdr-color="4292006610" position-x="1453" position-y="1404"/>
+    <association uuid="4C11230B-B6E1-4AB9-B011-48F247D25CE2" color="4294218527"/>
+    <association uuid="4CE2B926-50C5-4127-BAEC-90DFB149687C" color="4278876221"/>
+    <entity uuid="51E5A031-0344-45F1-96A9-58D3D0E4F665" bg-color="4294967295" hdr-color="4292006610" position-x="25" position-y="690"/>
+    <entity uuid="51F0C34A-86E9-430E-A508-3AF5CBBD9A62" bg-color="4294967295" hdr-color="4292006610" position-x="25" position-y="1761"/>
+    <entity uuid="53F00A2C-2B88-4ED8-B155-F653D27E4317" bg-color="4294967295" hdr-color="4292006610" position-x="382" position-y="2118"/>
+    <entity uuid="54ADB179-4EA3-48BB-B2A6-EB897B37A63D" bg-color="4294967295" hdr-color="4292006610" position-x="2167" position-y="333"/>
+    <association uuid="54BC886C-4D0D-4ADD-9CA1-12B9D066405D" color="4291674923"/>
+    <association uuid="5E7FF363-D9F1-4536-AFC3-49FCE4EB9E80" color="4291674923"/>
+    <entity uuid="64D72406-57C3-4212-B574-9B4301E48483" bg-color="4294967295" hdr-color="4292006610" position-x="2162" position-y="2773" size-x="0" size-x2="167" size-y="0" size-y2="87"/>
+    <entity uuid="65B23FEB-C6A3-4F80-8830-5281B44FF4C6" bg-color="4294967295" hdr-color="4292006610" position-x="1808" position-y="929" size-x="0" size-x2="167" size-y="0" size-y2="87"/>
+    <association uuid="6E70CEF1-0FC1-4255-A7D8-2DE37856C741" color="4287255714"/>
+    <entity uuid="6FAE9D2B-09B7-4A52-B29C-DABAF71FED80" bg-color="4294967295" hdr-color="4292006610" position-x="2524" position-y="2118"/>
+    <entity uuid="712F69A5-DF0C-49D9-9333-1AA2996E654A" bg-color="4294967295" hdr-color="4292006610" position-x="739" position-y="1761"/>
+    <entity uuid="741F42C7-7820-401C-AF57-76872BED428F" bg-color="4294967295" hdr-color="4292006610" position-x="25" position-y="2118"/>
+    <entity uuid="75DF6316-F9FA-4B54-851B-DC6182E19263" bg-color="4294967295" hdr-color="4292006610" position-x="1808" position-y="2769" size-x="0" size-x2="167" size-y="0" size-y2="101"/>
+    <entity uuid="77D5D4D4-AAF7-439B-A3FB-D7E532F5DAF5" bg-color="4294967295" hdr-color="4292006610" position-x="1088" position-y="2755" size-x="0" size-x2="167" size-y="0" size-y2="101"/>
+    <association uuid="799F43F2-194D-4426-B068-8945FF110C50" color="4284601169"/>
+    <entity uuid="7AD03DCA-1349-4544-9445-7E1363B2F5F6" bg-color="4294967295" hdr-color="4292006610" position-x="739" position-y="1047"/>
+    <entity uuid="7F317F70-385A-45A3-A6A2-C648FC78A01A" bg-color="4294967295" hdr-color="4292006610" position-x="1096" position-y="2118"/>
+    <association uuid="807C452D-29DE-4292-9652-D94ED9425541" color="4278236368"/>
+    <entity uuid="8201FC51-48F9-43F8-B691-616F7F604523" bg-color="4294967295" hdr-color="4292006610" position-x="2524" position-y="1047"/>
+    <entity uuid="825590B0-7F30-4E1C-BE83-DBD49D7C3AE5" bg-color="4294967295" hdr-color="4292006610" position-x="2165" position-y="1408" size-x="0" size-x2="167" size-y="0" size-y2="101"/>
+    <entity uuid="82B50004-3322-48C6-A029-5EBC6EAB0F21" bg-color="4294967295" hdr-color="4292006610" position-x="25" position-y="2475"/>
+    <entity uuid="83EE77FB-BFF3-43AE-8A8E-536547F02149" bg-color="4294967295" hdr-color="4292006610" position-x="1810" position-y="2475"/>
+    <entity uuid="86B033CF-0681-4A9C-9FB3-2B75FBB869B4" bg-color="4294967295" hdr-color="4292006610" position-x="1097" position-y="438" size-x="0" size-x2="167" size-y="0" size-y2="115"/>
+    <entity uuid="8BA194AF-9E93-48C2-AAA3-63018330F1FE" bg-color="4294967295" hdr-color="4292006610" position-x="1810" position-y="690"/>
+    <association uuid="8FDC24F5-8718-43E0-934D-1E099090D50D" color="4278876221"/>
+    <entity uuid="9502A0E7-CC47-4237-8137-1FCA60F1D1CF" bg-color="4294967295" hdr-color="4292006610" position-x="1810" position-y="1047"/>
+    <entity uuid="9541C8AB-130B-43D8-8E79-099FDEAE8F46" bg-color="4294967295" hdr-color="4292006610" position-x="739" position-y="1404"/>
+    <association uuid="977FDEAE-D7BE-4E4D-A9D6-7BF4FBCEEA31" color="4278876221"/>
+    <entity uuid="98548E19-8BE3-4DDA-896C-A2E3416FEC70" bg-color="4294967295" hdr-color="4292006610" position-x="382" position-y="2475"/>
+    <association uuid="98BFAB86-60B8-475B-8C9F-DB90CEF74B99" color="4287255714"/>
+    <entity uuid="A07BACFA-74E8-47B9-AA27-3D071545E43A" bg-color="4294967295" hdr-color="4292006610" position-x="382" position-y="1047"/>
+    <association uuid="A2D1B036-E1D9-4F7D-81D3-1D54EFC52868" color="4287255714"/>
+    <entity uuid="A68035EB-6915-4224-A972-EABDA8F24915" bg-color="4294967295" hdr-color="4292006610" position-x="2521" position-y="710" size-x="0" size-x2="167" size-y="0" size-y2="101"/>
+    <entity uuid="AF88BB60-317F-4B21-ADD9-CE93B5E00BA6" bg-color="4294967295" hdr-color="4292006610" position-x="1453" position-y="1047"/>
+    <entity uuid="B4520C1E-5AEF-4D35-A65A-991B559CC0C9" bg-color="4294967295" hdr-color="4292006610" position-x="739" position-y="1404"/>
+    <entity uuid="B5762105-A68D-4622-AB84-23267D9B5F4C" bg-color="4294967295" hdr-color="4292006610" position-x="2167" position-y="1047"/>
+    <entity uuid="B5A7794F-2D5B-4B16-ABB1-973FE7CF0E35" bg-color="4294967295" hdr-color="4292006610" position-x="2524" position-y="1404"/>
+    <entity uuid="B60B73DA-789D-47C6-9071-751BE20EA8F6" bg-color="4294967295" hdr-color="4292006610" position-x="1453" position-y="1761"/>
+    <entity uuid="B67EB9EE-1236-4CC4-AD1D-E5AD567A4DA3" bg-color="4294967295" hdr-color="4292006610" position-x="2167" position-y="1761"/>
+    <entity uuid="B69F4699-5A5B-4C01-B11A-66ECBA047FFD" bg-color="4294967295" hdr-color="4292006610" position-x="1453" position-y="690"/>
+    <entity uuid="C2F217C7-3475-4DB4-AAB3-E419BDD9D1F3" bg-color="4294967295" hdr-color="4292006610" position-x="738" position-y="2763" size-x="0" size-x2="104" size-y="0" size-y2="31"/>
+    <entity uuid="C62604C1-58F9-43D1-B43F-17F028F856BF" bg-color="4294967295" hdr-color="4292006610" position-x="1453" position-y="333"/>
+    <entity uuid="C6906863-A7A8-4F16-A3D2-67C221B9334C" bg-color="4294967295" hdr-color="4292006610" position-x="2524" position-y="1761"/>
+    <association uuid="C703223F-921D-4563-A140-D55C44C4BA97" color="4278236368"/>
+    <association uuid="C989AB73-2946-4800-9DB6-005ECBCDAD3C" color="4291674923"/>
+    <entity uuid="CBA1FD26-3D71-4C5D-9A9F-A68B5863AEC5" bg-color="4294967295" hdr-color="4292006610" position-x="739" position-y="2543" size-x="0" size-x2="167" size-y="0" size-y2="129"/>
+    <entity uuid="CC5ADAF4-1930-4315-AD7A-18AB123FB385" bg-color="4294967295" hdr-color="4292006610" position-x="382" position-y="333"/>
+    <entity uuid="CE774E8E-7C9B-4FBC-B4DF-428A8F047DE4" bg-color="4294967295" hdr-color="4292006610" position-x="1096" position-y="1761"/>
+    <entity uuid="CFA84A97-3A0E-46DD-A191-46BDEFA6F191" bg-color="4294967295" hdr-color="4292006610" position-x="25" position-y="477" size-x="0" size-x2="112" size-y="0" size-y2="59"/>
+    <entity uuid="D0CA9B8D-FEF7-4E4E-A89F-0D0818029BB5" bg-color="4294967295" hdr-color="4292006610" position-x="739" position-y="690"/>
+    <association uuid="D2541411-2267-4E76-B6BB-19BD6999B8CE" color="4291261615"/>
+    <entity uuid="DAE9167F-A668-4FF1-9452-CD148B7D52CD" bg-color="4294967295" hdr-color="4292006610" position-x="1453" position-y="2475"/>
+    <association uuid="DCC80E40-0FEF-478B-85FB-5B0D140D2D04" color="4291674923"/>
+    <association uuid="DD435834-83C6-4F81-A062-A6773442856D" color="4289243304"/>
+    <entity uuid="DEC0FE11-6902-4008-BD3B-19FF49ED6A33" bg-color="4294967295" hdr-color="4292006610" position-x="1096" position-y="2475"/>
+    <association uuid="DF2D7A50-3246-4752-8462-6286A329C350" color="4294218527"/>
+    <association uuid="DF786E61-0CFA-4140-B0ED-CB748A04658C" color="4284601169"/>
+    <entity uuid="E0D0B794-2B9B-4447-B301-9ED435FE1DF8" bg-color="4294967295" hdr-color="4292006610" position-x="1096" position-y="690"/>
+    <entity uuid="E0DC21B4-9171-4350-9959-5F8ED05095B8" bg-color="4294967295" hdr-color="4292006610" position-x="382" position-y="1047"/>
+    <entity uuid="EB2AA421-7EF7-44E8-BF29-696180F3A253" bg-color="4294967295" hdr-color="4292006610" position-x="2167" position-y="2118"/>
+    <association uuid="ECD0312B-4438-4B14-82ED-3958E4DB9BBA" color="4284601169"/>
+    <association uuid="EDDB9E39-817B-4CFA-8830-69D9BECCF3EF" color="4278876221"/>
+    <entity uuid="F1208E33-BE71-413C-BCE0-3C367D0CDB14" bg-color="4294967295" hdr-color="4292006610" position-x="1804" position-y="275" size-x="0" size-x2="169" size-y="0" size-y2="395"/>
+    <entity uuid="F15BDDA8-E4F1-4A93-A8F9-32743E80DA42" bg-color="4294967295" hdr-color="4292006610" position-x="2523" position-y="321" size-x="0" size-x2="167" size-y="0" size-y2="185"/>
+    <association uuid="F2A070EE-D418-4A68-94C6-4927F029E056" color="4289928996"/>
+    <entity uuid="F37C454F-34C9-4BC8-BED3-090A7FBB0DF2" bg-color="4294967295" hdr-color="4292006610" position-x="33" position-y="1043" size-x="0" size-x2="206" size-y="0" size-y2="507"/>
+    <association uuid="F7DC016F-63F9-4523-8204-8378CFEEC85D" color="4291261615"/>
+    <entity uuid="FB458A3F-E943-497C-861D-F95B804BBA3D" bg-color="4294967295" hdr-color="4292006610" position-x="1810" position-y="2118"/>
+    <association uuid="FC47B8D5-7A9F-4561-AC99-6D4FA6EBFA18" color="4291261615"/>
+    <association uuid="FC5D97A2-4E94-470A-A9B5-1BA82E099696" color="4289243304"/>
+    <association uuid="FF943094-2E32-4C7B-A07C-38616909006A" color="4289928996"/>
+  </visual-data>
+</skipper>
