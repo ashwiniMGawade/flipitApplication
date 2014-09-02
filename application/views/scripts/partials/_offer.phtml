@@ -32,15 +32,6 @@ foreach ($this->offers as $offer) {
     );
     ?>
             <div class="box">
-    <?php
-    if ($offer->discountType == 'PR' || $offer->discountType == 'PA') {
-                ?>
-                <div class="img-code">
-                    <img width="163" height="96" alt="image description" src="<?php echo $urlToShow; ?>">
-                </div>
-    <?php
-    }
-    ?>
                 <div class="text">
                     <p> <?php echo $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
                     <?php 
