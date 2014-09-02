@@ -1,0 +1,26 @@
+RouteRedirect:
+  type: entity
+  table: route_redirect
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    orignalurl:
+      type: text
+      nullable: true
+    redirectto:
+      type: text
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: true
+      column: updated_at
+    deleted:
+      type: boolean
+      nullable: true

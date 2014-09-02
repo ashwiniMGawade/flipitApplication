@@ -1,0 +1,23 @@
+RefArticleStore:
+  type: entity
+  table: ref_article_store
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    articleid:
+      type: bigint
+      nullable: false
+    storeid:
+      type: bigint
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

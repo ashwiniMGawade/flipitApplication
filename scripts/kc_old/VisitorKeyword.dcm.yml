@@ -1,0 +1,20 @@
+VisitorKeyword:
+  type: entity
+  table: visitor_keyword
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    keyword:
+      type: string
+      length: 255
+      nullable: true
+  manyToOne:
+    visitorid:
+      targetEntity: Visitor
+      orphanRemoval: false
+      joinColumns:
+        visitorId:
+          referencedColumnName: id

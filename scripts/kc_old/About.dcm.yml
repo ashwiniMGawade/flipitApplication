@@ -1,0 +1,27 @@
+About:
+  type: entity
+  table: about
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    title:
+      type: string
+      length: 100
+      nullable: true
+    content:
+      type: blob
+      nullable: true
+    status:
+      type: boolean
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

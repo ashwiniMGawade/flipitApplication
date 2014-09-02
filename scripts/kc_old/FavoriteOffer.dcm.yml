@@ -1,0 +1,24 @@
+FavoriteOffer:
+  type: entity
+  table: favorite_offer
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    offerid:
+      type: bigint
+      nullable: false
+      column: offerId
+    visitorid:
+      type: bigint
+      nullable: false
+      column: visitorId
+    deleted:
+      type: boolean
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at

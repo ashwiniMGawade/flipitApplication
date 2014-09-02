@@ -1,0 +1,33 @@
+PopularShop:
+  type: entity
+  table: popular_shop
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    type:
+      type: string
+      length: 255
+      nullable: true
+    position:
+      type: bigint
+      nullable: true
+    status:
+      type: boolean
+      nullable: true
+    shopid:
+      type: bigint
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

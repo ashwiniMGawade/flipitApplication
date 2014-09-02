@@ -1,0 +1,30 @@
+Settings:
+  type: entity
+  table: settings
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      nullable: true
+    value:
+      type: text
+      nullable: true
+    status:
+      type: boolean
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    deleted:
+      type: boolean
+      nullable: false

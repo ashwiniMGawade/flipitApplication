@@ -1,0 +1,177 @@
+Page:
+  type: entity
+  table: page
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    pagetype:
+      type: string
+      length: 10
+      nullable: true
+    pagetitle:
+      type: string
+      length: 255
+      nullable: true
+    slug:
+      type: string
+      length: 255
+      nullable: true
+    permalink:
+      type: string
+      length: 255
+      nullable: true
+    metatitle:
+      type: text
+      nullable: true
+    metadescription:
+      type: text
+      nullable: true
+    content:
+      type: blob
+      nullable: true
+    publish:
+      type: boolean
+      nullable: true
+    pagelock:
+      type: boolean
+      nullable: true
+    pageattributeid:
+      type: bigint
+      nullable: true
+    contentmanagerid:
+      type: bigint
+      nullable: false
+      column: contentManagerId
+    contentmanagername:
+      type: string
+      length: 256
+      nullable: true
+      column: contentManagerName
+    enabletimeconstraint:
+      type: boolean
+      nullable: true
+    timenumberofdays:
+      type: bigint
+      nullable: true
+    timetype:
+      type: bigint
+      nullable: true
+    timemaxoffer:
+      type: bigint
+      nullable: true
+    timeorder:
+      type: boolean
+      nullable: true
+    enablewordconstraint:
+      type: boolean
+      nullable: true
+    wordtitle:
+      type: string
+      length: 100
+      nullable: true
+    wordmaxoffer:
+      type: bigint
+      nullable: true
+    publishdate:
+      type: datetime
+      nullable: false
+    wordorder:
+      type: boolean
+      nullable: true
+    awardconstratint:
+      type: boolean
+      nullable: true
+    awardtype:
+      type: string
+      length: 5
+      nullable: true
+    awardmaxoffer:
+      type: bigint
+      nullable: true
+    awardorder:
+      type: boolean
+      nullable: true
+    enableclickconstraint:
+      type: boolean
+      nullable: true
+    numberofclicks:
+      type: bigint
+      nullable: true
+    clickmaxoffer:
+      type: bigint
+      nullable: true
+    clickorder:
+      type: boolean
+      nullable: true
+    maxoffers:
+      type: integer
+      nullable: false
+      column: maxOffers
+    oderoffers:
+      type: integer
+      nullable: false
+      column: oderOffers
+    couponregular:
+      type: boolean
+      nullable: true
+    couponeditorpick:
+      type: boolean
+      nullable: true
+    couponexclusive:
+      type: boolean
+      nullable: true
+    saleregular:
+      type: boolean
+      nullable: true
+    saleeditorpick:
+      type: boolean
+      nullable: true
+    saleexclusive:
+      type: boolean
+      nullable: true
+    printableregular:
+      type: boolean
+      nullable: true
+    printableeditorpick:
+      type: boolean
+      nullable: true
+    printableexclusive:
+      type: boolean
+      nullable: true
+    showpage:
+      type: boolean
+      nullable: true
+    logoid:
+      type: bigint
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    customheader:
+      type: text
+      nullable: true
+    showsitemap:
+      type: boolean
+      nullable: false
+    offerscount:
+      type: bigint
+      nullable: true
+      column: offersCount
+  manyToOne:
+    pageheaderimageid:
+      targetEntity: Image
+      orphanRemoval: false
+      joinColumns:
+        pageHeaderImageId:
+          referencedColumnName: id

@@ -1,0 +1,32 @@
+Emailsettings:
+  type: entity
+  table: emailsettings
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    email:
+      type: text
+      nullable: true
+    name:
+      type: text
+      nullable: true
+    locale:
+      type: text
+      nullable: true
+    timezone:
+      type: text
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: true
+      column: updated_at

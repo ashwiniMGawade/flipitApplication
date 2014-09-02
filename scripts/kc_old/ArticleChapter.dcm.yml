@@ -1,0 +1,27 @@
+ArticleChapter:
+  type: entity
+  table: article_chapter
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    articleid:
+      type: bigint
+      nullable: true
+      column: articleId
+    title:
+      type: text
+      nullable: true
+    content:
+      type: blob
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: true
+      column: updated_at

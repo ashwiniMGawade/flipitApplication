@@ -1,0 +1,27 @@
+Translations:
+  type: entity
+  table: translations
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    translationkey:
+      type: text
+      nullable: true
+      column: translationKey
+    translation:
+      type: text
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: true
+      column: updated_at
+    deleted:
+      type: boolean
+      nullable: true

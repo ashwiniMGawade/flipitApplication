@@ -1,0 +1,71 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="votes")
+ */
+class Votes
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false, name="offerId")
+     */
+    private $offerid;
+
+    /**
+     * @ORM\Column(type="string", length=200, nullable=true)
+     */
+    private $ipaddress;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $date;
+
+    /**
+     * @ORM\Column(type="string", length=200, nullable=true)
+     */
+    private $vote;
+
+    /**
+     * @ORM\Column(type="float", nullable=false, name="moneySaved")
+     */
+    private $moneysaved;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $product;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="updated_at")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $deleted;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $visitorid;
+}

@@ -1,0 +1,57 @@
+Conversions:
+  type: entity
+  table: conversions
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    ip:
+      type: string
+      length: 50
+      nullable: true
+      column: IP
+    subid:
+      type: string
+      length: 50
+      nullable: true
+    utma:
+      type: string
+      length: 255
+      nullable: true
+    utmz:
+      type: string
+      length: 255
+      nullable: true
+    utmv:
+      type: string
+      length: 255
+      nullable: true
+    utmx:
+      type: string
+      length: 255
+      nullable: true
+    shopid:
+      type: bigint
+      nullable: true
+      column: shopId
+    offerid:
+      type: bigint
+      nullable: true
+      column: offerId
+    visitorid:
+      type: bigint
+      nullable: true
+      column: visitorId
+    converted:
+      type: boolean
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: true
+      column: updated_at

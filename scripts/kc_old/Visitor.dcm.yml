@@ -1,0 +1,99 @@
+Visitor:
+  type: entity
+  table: visitor
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    firstname:
+      type: text
+      nullable: true
+    lastname:
+      type: text
+      nullable: true
+    email:
+      type: string
+      length: 255
+      nullable: true
+    username:
+      type: string
+      length: 255
+      nullable: true
+    password:
+      type: string
+      length: 255
+      nullable: true
+    pwd:
+      type: string
+      length: 50
+      nullable: true
+    status:
+      type: boolean
+      nullable: true
+    imageid:
+      type: bigint
+      nullable: true
+    gender:
+      type: boolean
+      nullable: false
+    dateofbirth:
+      type: date
+      nullable: true
+    postalcode:
+      type: string
+      length: 50
+      nullable: true
+    weeklynewsletter:
+      type: boolean
+      nullable: false
+    fashionnewsletter:
+      type: boolean
+      nullable: false
+    travelnewsletter:
+      type: boolean
+      nullable: false
+    codealert:
+      type: boolean
+      nullable: false
+    createdby:
+      type: bigint
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: false
+    currentlogin:
+      type: datetime
+      nullable: false
+    lastlogin:
+      type: datetime
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    interested:
+      type: string
+      length: 255
+      nullable: true
+    profileImg:
+      type: string
+      length: 255
+      nullable: true
+      column: profile_img
+    activeCodeid:
+      type: string
+      length: 255
+      nullable: false
+      column: active_codeid
+    changepasswordrequest:
+      type: boolean
+      nullable: false
+    active:
+      type: boolean
+      nullable: false

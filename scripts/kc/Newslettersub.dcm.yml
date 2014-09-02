@@ -1,0 +1,36 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="newslettersub")
+ */
+class Newslettersub
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $email;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $deleted;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="updated_at")
+     */
+    private $updatedAt;
+}

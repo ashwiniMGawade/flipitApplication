@@ -1,0 +1,37 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="favorite_shop")
+ */
+class FavoriteShop
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=false, name="shopId")
+     */
+    private $shopid;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $deleted;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Visitor", orphanRemoval=false)
+     * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
+     */
+    private $visitorid;
+}

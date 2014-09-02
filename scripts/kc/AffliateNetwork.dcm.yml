@@ -1,0 +1,52 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="affliate_network")
+ */
+class AffliateNetwork
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="text", nullable=true, name="subId")
+     */
+    private $subid;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $deleted;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="updated_at")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AffliateNetwork", orphanRemoval=false)
+     * @ORM\JoinColumn(name="replacewithid", referencedColumnName="id")
+     */
+    private $replacewithid;
+}

@@ -1,0 +1,25 @@
+Signupfavoriteshop:
+  type: entity
+  table: signupfavoriteshop
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    enteredUid:
+      type: bigint
+      nullable: false
+      column: entered_uid
+    storeId:
+      type: bigint
+      nullable: false
+      column: store_id
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

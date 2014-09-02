@@ -1,0 +1,36 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="signupfavoriteshop")
+ */
+class Signupfavoriteshop
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=false, name="entered_uid")
+     */
+    private $enteredUid;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=false, name="store_id")
+     */
+    private $storeId;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="updated_at")
+     */
+    private $updatedAt;
+}

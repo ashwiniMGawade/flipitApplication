@@ -1,0 +1,46 @@
+DisqusComments:
+  type: entity
+  table: disqus_comments
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    commentId:
+      type: bigint
+      nullable: true
+      column: comment_id
+    message:
+      type: string
+      length: 255
+      nullable: true
+    pageTitle:
+      type: string
+      length: 255
+      nullable: true
+      column: page_title
+    pageUrl:
+      type: string
+      length: 255
+      nullable: true
+      column: page_url
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+    authorName:
+      type: string
+      length: 255
+      nullable: true
+      column: author_name
+    authorProfileUrl:
+      type: string
+      length: 255
+      nullable: true
+      column: author_profile_url
+    authorAvtar:
+      type: string
+      length: 255
+      nullable: true
+      column: author_avtar

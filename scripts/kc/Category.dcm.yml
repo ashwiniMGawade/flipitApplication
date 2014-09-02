@@ -1,0 +1,83 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="category")
+ */
+class Category
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $permalink;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $metatitle;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $metadescription;
+
+    /**
+     * @ORM\Column(type="blob", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $status;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $categoryiconid;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $deleted;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="updated_at")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true, name="featured_category")
+     */
+    private $featuredCategory;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Image", orphanRemoval=false)
+     * @ORM\JoinColumn(name="categoryFeaturedImageId", referencedColumnName="id")
+     */
+    private $categoryfeaturedimageid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Image", orphanRemoval=false)
+     * @ORM\JoinColumn(name="categoryHeaderImageId", referencedColumnName="id")
+     */
+    private $categoryheaderimageid;
+}

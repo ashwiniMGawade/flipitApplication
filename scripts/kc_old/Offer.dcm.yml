@@ -1,0 +1,127 @@
+Offer:
+  type: entity
+  table: offer
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    title:
+      type: string
+      length: 255
+      nullable: true
+    visability:
+      type: string
+      length: 255
+      nullable: true
+    discounttype:
+      type: string
+      length: 255
+      nullable: true
+    couponcode:
+      type: string
+      length: 50
+      nullable: true
+    refofferurl:
+      type: text
+      nullable: true
+      column: refOfferUrl
+    refurl:
+      type: text
+      nullable: true
+    startdate:
+      type: datetime
+      nullable: true
+    enddate:
+      type: datetime
+      nullable: true
+    exclusivecode:
+      type: boolean
+      nullable: true
+    editorpicks:
+      type: boolean
+      nullable: true
+    extendedoffer:
+      type: boolean
+      nullable: true
+    extendedtitle:
+      type: string
+      length: 255
+      nullable: true
+    extendedurl:
+      type: string
+      length: 255
+      nullable: true
+    extendedmetadescription:
+      type: text
+      nullable: true
+    extendedfulldescription:
+      type: blob
+      nullable: true
+    discount:
+      type: text
+      nullable: true
+    discountvaluetype:
+      type: string
+      nullable: true
+      column: discountvalueType
+    authorid:
+      type: bigint
+      nullable: true
+      column: authorId
+    authorname:
+      type: string
+      length: 255
+      nullable: true
+      column: authorName
+    shopid:
+      type: bigint
+      nullable: true
+    offerlogoid:
+      type: bigint
+      nullable: true
+    maxlimit:
+      type: string
+      nullable: true
+    maxcode:
+      type: integer
+      nullable: false
+    deleted:
+      type: boolean
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    usergenerated:
+      type: boolean
+      nullable: false
+      column: userGenerated
+    approved:
+      type: string
+      nullable: false
+    offline:
+      type: integer
+      nullable: false
+    tilesid:
+      type: bigint
+      nullable: true
+      column: tilesId
+    shopexist:
+      type: boolean
+      nullable: true
+    totalviewcount:
+      type: bigint
+      nullable: true
+    popularitycount:
+      type: decimal
+      nullable: true
+    couponcodetype:
+      type: string
+      length: 255
+      nullable: true

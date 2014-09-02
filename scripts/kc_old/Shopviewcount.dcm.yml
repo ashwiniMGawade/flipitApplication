@@ -1,0 +1,33 @@
+Shopviewcount:
+  type: entity
+  table: shopviewcount
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    shopid:
+      type: bigint
+      nullable: true
+    onclick:
+      type: bigint
+      nullable: true
+    onload:
+      type: bigint
+      nullable: true
+    ip:
+      type: string
+      length: 255
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: true
+      column: updated_at

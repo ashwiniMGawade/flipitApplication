@@ -27,12 +27,28 @@ $application = new Zend_Application(
     APPLICATION_ENV,
     APPLICATION_PATH . '/configs/application.ini'
 );
-
-// bootstrap doctrine
 $application->getBootstrap()->bootstrap('doctrine');
 $em = $application->getBootstrap()->getResource('doctrine');
 
-// generate the Doctrine HelperSet
+// CODE FOR GENEREATE THE MODEL FROM YML FILE
+use \Doctrine\ORM\Tools\Setup;
+use \Doctrine\ORM\EntityManager;
+use \Doctrine\ORM\Mapping\Driver\YamlDriver;
+
+\Doctrine\ORM\Tools\Setup::registerAutoloadPEAR();
+$config = new \Doctrine\ORM\Configuration();
+$config->setProxyDir(APPLICATION_PATH . '/../library/KC/Proxy');
+$config->setProxyNamespace('Proxies');
+$config->setAutoGenerateProxyClasses((APPLICATION_ENV == "development"));
+$driver = new YamlDriver(array(APPLICATION_PATH . "/../scripts/kc"));
+ //$driver->setFileExtension('.yml');
+$config->setMetadataDriverImpl($driver);
+
+$paths = array(APPLICATION_PATH."/../scripts/kc");
+$config = Setup::createYAMLMetadataConfiguration($paths, false);
+$em = \Doctrine\ORM\EntityManager::create($em->getConnection(), $config);
+
+
 $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),
     'em' => new \Doctrine\ORM\Tools\Console\Helper\EntityManagerHelper($em)

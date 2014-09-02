@@ -1,0 +1,32 @@
+RoutePermalink:
+  type: entity
+  table: route_permalink
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    permalink:
+      type: string
+      length: 255
+      nullable: false
+    type:
+      type: string
+      length: 255
+      nullable: false
+    exactlink:
+      type: string
+      length: 255
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    deleted:
+      type: boolean
+      nullable: false

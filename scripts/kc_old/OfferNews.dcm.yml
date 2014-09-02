@@ -1,0 +1,46 @@
+OfferNews:
+  type: entity
+  table: offer_news
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    shopid:
+      type: bigint
+      nullable: true
+      column: shopId
+    offerid:
+      type: bigint
+      nullable: true
+      column: offerId
+    title:
+      type: string
+      length: 225
+      nullable: true
+    url:
+      type: string
+      length: 225
+      nullable: true
+    content:
+      type: text
+      nullable: true
+    linkstatus:
+      type: string
+      length: 255
+      nullable: true
+    startdate:
+      type: datetime
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: true
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: true
+      column: updated_at
+    deleted:
+      type: boolean
+      nullable: true

@@ -1,0 +1,104 @@
+Signupmaxaccount:
+  type: entity
+  table: signupmaxaccount
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    enteredUid:
+      type: integer
+      nullable: false
+      column: entered_uid
+    noOfAcc:
+      type: string
+      length: 255
+      nullable: true
+      column: no_of_acc
+    status:
+      type: integer
+      nullable: false
+    emailConfirmation:
+      type: boolean
+      nullable: false
+      column: email_confirmation
+    emailHeader:
+      type: blob
+      nullable: false
+      column: email_header
+    emailFooter:
+      type: blob
+      nullable: false
+      column: email_footer
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    maxAccount:
+      type: bigint
+      nullable: true
+      column: max_account
+    emailperlocale:
+      type: text
+      nullable: false
+    sendername:
+      type: string
+      length: 255
+      nullable: false
+    emailsubject:
+      type: string
+      length: 255
+      nullable: false
+    testemail:
+      type: string
+      length: 255
+      nullable: false
+    testimonial1:
+      type: text
+      nullable: true
+    testimonial2:
+      type: text
+      nullable: true
+    testimonial3:
+      type: text
+      nullable: true
+    showtestimonial:
+      type: boolean
+      nullable: false
+    homepagebannerName:
+      type: string
+      length: 255
+      nullable: true
+      column: homepagebanner_name
+    homepagebannerPath:
+      type: string
+      length: 255
+      nullable: true
+      column: homepagebanner_path
+    homepageWidgetBannerName:
+      type: string
+      length: 255
+      nullable: true
+      column: homepage_widget_banner_name
+    homepageWidgetBannerPath:
+      type: string
+      length: 255
+      nullable: true
+      column: homepage_widget_banner_path
+    newletterIsScheduled:
+      type: boolean
+      nullable: true
+      column: newletter_is_scheduled
+    newletterStatus:
+      type: boolean
+      nullable: true
+      column: newletter_status
+    newletterScheduledTime:
+      type: datetime
+      nullable: true
+      column: newletter_scheduled_time

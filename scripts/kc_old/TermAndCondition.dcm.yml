@@ -1,0 +1,26 @@
+TermAndCondition:
+  type: entity
+  table: term_and_condition
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    content:
+      type: text
+      nullable: true
+    offerid:
+      type: bigint
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

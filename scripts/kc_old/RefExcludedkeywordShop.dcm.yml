@@ -1,0 +1,30 @@
+RefExcludedkeywordShop:
+  type: entity
+  table: ref_excludedkeyword_shop
+  fields:
+    id:
+      id: true
+      type: integer
+      generator:
+        strategy: IDENTITY
+    keywordid:
+      type: integer
+      nullable: false
+    keywordname:
+      type: string
+      length: 256
+      nullable: true
+    shopid:
+      type: integer
+      nullable: false
+    deleted:
+      type: integer
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

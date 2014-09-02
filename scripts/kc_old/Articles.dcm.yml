@@ -1,0 +1,60 @@
+Articles:
+  type: entity
+  table: articles
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    title:
+      type: string
+      length: 255
+      nullable: true
+    permalink:
+      type: string
+      length: 255
+      nullable: true
+    metatitle:
+      type: text
+      nullable: true
+    metadescription:
+      type: text
+      nullable: true
+    content:
+      type: text
+      nullable: true
+    publish:
+      type: boolean
+      nullable: false
+    publishdate:
+      type: datetime
+      nullable: false
+    authorid:
+      type: bigint
+      nullable: false
+    authorname:
+      type: string
+      length: 255
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    thumbnailsmallid:
+      type: bigint
+      nullable: true
+  manyToOne:
+    thumbnailid:
+      targetEntity: Image
+      orphanRemoval: false
+      joinColumns:
+        thumbnailid:
+          referencedColumnName: id

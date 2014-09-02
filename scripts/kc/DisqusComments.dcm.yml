@@ -1,0 +1,56 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="disqus_comments")
+ */
+class DisqusComments
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true, name="comment_id")
+     */
+    private $commentId;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $message;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, name="page_title")
+     */
+    private $pageTitle;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, name="page_url")
+     */
+    private $pageUrl;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, name="author_name")
+     */
+    private $authorName;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, name="author_profile_url")
+     */
+    private $authorProfileUrl;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, name="author_avtar")
+     */
+    private $authorAvtar;
+}

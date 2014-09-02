@@ -1,0 +1,29 @@
+RefPageWidget:
+  type: entity
+  table: ref_page_widget
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    pageid:
+      type: bigint
+      nullable: false
+    widgetid:
+      type: bigint
+      nullable: false
+    stauts:
+      type: boolean
+      nullable: true
+    position:
+      type: bigint
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

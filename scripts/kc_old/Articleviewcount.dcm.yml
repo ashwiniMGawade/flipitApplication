@@ -1,0 +1,33 @@
+Articleviewcount:
+  type: entity
+  table: articleviewcount
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    articleid:
+      type: bigint
+      nullable: false
+    onclick:
+      type: bigint
+      nullable: false
+    onload:
+      type: bigint
+      nullable: true
+    ip:
+      type: string
+      length: 255
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    deleted:
+      type: integer
+      nullable: false

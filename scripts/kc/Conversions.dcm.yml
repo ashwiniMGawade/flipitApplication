@@ -1,0 +1,76 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="conversions")
+ */
+class Conversions
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true, name="IP")
+     */
+    private $ip;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $subid;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $utma;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $utmz;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $utmv;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $utmx;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true, name="shopId")
+     */
+    private $shopid;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true, name="offerId")
+     */
+    private $offerid;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true, name="visitorId")
+     */
+    private $visitorid;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $converted;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true, name="updated_at")
+     */
+    private $updatedAt;
+}

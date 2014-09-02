@@ -1,0 +1,23 @@
+RefOfferCategory:
+  type: entity
+  table: ref_offer_category
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    offerid:
+      type: bigint
+      nullable: false
+    categoryid:
+      type: bigint
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

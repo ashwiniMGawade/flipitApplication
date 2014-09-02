@@ -1,0 +1,87 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="articles")
+ */
+class Articles
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $title;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $permalink;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $metatitle;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $metadescription;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $content;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $publish;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false)
+     */
+    private $publishdate;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=false)
+     */
+    private $authorid;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $authorname;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $deleted;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="updated_at")
+     */
+    private $updatedAt;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $thumbnailsmallid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Image", orphanRemoval=false)
+     * @ORM\JoinColumn(name="thumbnailid", referencedColumnName="id")
+     */
+    private $thumbnailid;
+}

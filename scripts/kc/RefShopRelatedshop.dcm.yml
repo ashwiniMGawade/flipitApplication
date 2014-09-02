@@ -1,0 +1,41 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="ref_shop_relatedshop")
+ */
+class RefShopRelatedshop
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=false, name="shopId")
+     */
+    private $shopid;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=false, name="relatedshopId")
+     */
+    private $relatedshopid;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false)
+     */
+    private $position;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="updated_at")
+     */
+    private $updatedAt;
+}

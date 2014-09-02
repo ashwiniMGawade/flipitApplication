@@ -1,0 +1,23 @@
+RefShopCategory:
+  type: entity
+  table: ref_shop_category
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    shopid:
+      type: bigint
+      nullable: true
+    categoryid:
+      type: bigint
+      nullable: true
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

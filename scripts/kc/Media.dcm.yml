@@ -1,0 +1,71 @@
+<?php
+use Doctrine\ORM\Mapping AS ORM;
+
+/**
+ * @ORM\Entity
+ * @ORM\Table(name="media")
+ */
+class Media
+{
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="bigint")
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=100, nullable=true)
+     */
+    private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $alternatetext;
+
+    /**
+     * @ORM\Column(type="string", length=150, nullable=true)
+     */
+    private $caption;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $fileurl;
+
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $mediaimageid;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true, name="authorName")
+     */
+    private $authorname;
+
+    /**
+     * @ORM\Column(type="integer", nullable=false, name="authorId")
+     */
+    private $authorid;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false)
+     */
+    private $deleted;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="created_at")
+     */
+    private $createdAt;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=false, name="updated_at")
+     */
+    private $updatedAt;
+}

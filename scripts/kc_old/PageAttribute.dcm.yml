@@ -1,0 +1,24 @@
+PageAttribute:
+  type: entity
+  table: page_attribute
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 255
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at

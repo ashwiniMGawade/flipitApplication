@@ -1,0 +1,50 @@
+Articlecategory:
+  type: entity
+  table: articlecategory
+  fields:
+    id:
+      id: true
+      type: bigint
+      generator:
+        strategy: IDENTITY
+    name:
+      type: string
+      length: 100
+      nullable: true
+    permalink:
+      type: string
+      length: 255
+      nullable: true
+    metatitle:
+      type: text
+      nullable: true
+    metadescription:
+      type: text
+      nullable: true
+    description:
+      type: blob
+      nullable: true
+    status:
+      type: boolean
+      nullable: true
+    deleted:
+      type: boolean
+      nullable: false
+    createdAt:
+      type: datetime
+      nullable: false
+      column: created_at
+    updatedAt:
+      type: datetime
+      nullable: false
+      column: updated_at
+    categorytitlecolor:
+      type: text
+      nullable: false
+  manyToOne:
+    categoryiconid:
+      targetEntity: Image
+      orphanRemoval: false
+      joinColumns:
+        categoryiconid:
+          referencedColumnName: id

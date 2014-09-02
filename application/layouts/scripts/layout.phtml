@@ -23,7 +23,7 @@ $em = \Zend_Registry::get('em');
 $u  =  new KC\Entity\User();
 $u->firstname = 'Test';
 $u->lastname = "By Dev";
-$u->userwebsite[] = $em->find('KC\Entity\Website', 1);
+//$u->userwebsite[] = $em->find('KC\Entity\Website', 1);
 $em->persist($u);
 $em->flush();
 echo $this->doctype();
