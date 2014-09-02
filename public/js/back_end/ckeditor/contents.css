@@ -48,9 +48,9 @@ blockquote
 	border-right-width: 5px;
 }
 
-a
-{
-	color: #0782C1;
+a {
+   color: #0077cc;
+   text-decoration: underline;
 }
 
 ol,ul,dl
@@ -97,3 +97,4 @@ pre
 	white-space: pre-wrap; /* CSS 2.1 */
 	word-wrap: break-word; /* IE7 */
 }
+
