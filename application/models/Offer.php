@@ -1043,26 +1043,6 @@ class Offer extends BaseOffer
         return $offers;
     }
 
-    public static function getrelatedOffers($shopId, $currentDate)
-    {
-        $relatedOffers = Doctrine_Query::create()
-                        ->select('t.*, o.*,s.*,s.permaLink as permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
-                        ->from('offer o')
-                        ->leftJoin('o.shop s')
-                        ->leftJoin('o.logo ologo')
-                        ->leftJoin('o.termandcondition tc')
-                        ->leftJoin('o.tiles t')
-                        ->leftJoin('s.logo img')
-                        ->leftJoin('s.screenshot ws')
-                        ->andWhere('o.shopId=?', $shopId)
-                        ->andWhere('o.endDate > "'.$currentDate.'"')
-                        ->andWhere('o.startdate <= "'.$currentDate.'"')
-                        ->andWhere('o.deleted=0')
-                        ->limit(1)
-                        ->fetchArray();
-        return $relatedOffers;
-    }
-
     public static function getCommonNewestOffers($type, $limit, $shopId = 0, $userId = "")
     {
         $currentDateTime = date('Y-m-d H:i');
@@ -1105,7 +1085,27 @@ class Offer extends BaseOffer
                     $newOffers = $newestOffers->limit($limit)->fetchArray();
         return $newOffers;
     }
-
+    
+    public static function getrelatedOffers($shopId)
+    {
+        $currentDate = date('Y-m-d H:i');
+        $relatedOffers = Doctrine_Query::create()
+            ->select('t.*, o.*,s.*,s.permaLink as permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+            ->from('offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.logo ologo')
+            ->leftJoin('o.termandcondition tc')
+            ->leftJoin('o.tiles t')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.screenshot ws')
+            ->andWhere("o.shopId =".$shopId)
+            ->andWhere('o.endDate <= "'.$currentDate.'"')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
+            ->andWhere('o.deleted=0')
+            ->limit(1)
+            ->fetchArray();
+        return $relatedOffers;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -2316,7 +2316,6 @@ class Offer extends BaseOffer
       * @return array $relatedOffers
       * @version 1.0
       */
-    
 
       /**
       * get popular voucher codes
