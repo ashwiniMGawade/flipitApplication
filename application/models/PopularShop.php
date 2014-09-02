@@ -165,7 +165,7 @@ class PopularShop extends BasePopularShop
             }
             }
             //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
             //die();
             }
 
@@ -233,8 +233,8 @@ public static function addShopInList($title)
 
 }
 //call cache function
-FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
-
+FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
 return $flag;
 
     }
@@ -256,7 +256,9 @@ return $flag;
                             ->set('p.position', 'p.position -1')
                             ->where('p.position >' . $position)->execute();
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
 
                         }
                     }
@@ -288,7 +290,8 @@ return $flag;
                             $pc->position = $pos;
                             $pc->save();
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
                             return true ;
                         }
                         return false ;
@@ -322,7 +325,8 @@ return $flag;
                             $pc->position = $pos;
                             $pc->save();
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
                             return true ;
                         }
                         return false ;
