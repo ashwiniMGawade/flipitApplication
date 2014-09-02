@@ -1042,6 +1042,27 @@ class Offer extends BaseOffer
         $offers = $offers->fetchArray();
         return $offers;
     }
+    
+    public static function getrelatedOffers($shopId)
+    {
+        $currentDate = date('Y-m-d H:i');
+        $relatedOffers = Doctrine_Query::create()
+            ->select('t.*, o.*,s.*,s.permaLink as permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
+            ->from('offer o')
+            ->leftJoin('o.shop s')
+            ->leftJoin('o.logo ologo')
+            ->leftJoin('o.termandcondition tc')
+            ->leftJoin('o.tiles t')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.screenshot ws')
+            ->andWhere("o.shopId =".$shopId)
+            ->andWhere('o.endDate <= "'.$currentDate.'"')
+            ->andWhere('o.startdate <= "'.$currentDate.'"')
+            ->andWhere('o.deleted=0')
+            ->limit(1)
+            ->fetchArray();
+        return $relatedOffers;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -2206,28 +2227,7 @@ class Offer extends BaseOffer
       * @return array $relatedOffers
       * @version 1.0
       */
-     public static function getrelatedOffers($shopId, $currentDate)
-     {
-        $date = date('Y-m-d H:i:s');
-        $relatedOffers = Doctrine_Query::create()
-                        ->select('t.*, o.*,s.*,s.permaLink as permalink,tc.*,img.name,img.path,ws.name,ws.path,ologo.*')
-                        ->from('offer o')
-                        ->leftJoin('o.shop s')
-                        ->leftJoin('o.logo ologo')
-                        ->leftJoin('o.termandcondition tc')
-                        ->leftJoin('o.tiles t')
-                        ->leftJoin('s.logo img')
-                        ->leftJoin('s.screenshot ws')
-                        //->Where('o.extendedOffer=?','1')
-                        ->andWhere('o.shopId=?',$shopId)
-                        ->andWhere('o.endDate > ?',$currentDate)
-                        ->andWhere('o.startdate <= "'.$date.'"')
-                        ->andWhere('o.deleted=0')
-                        ->limit(1)
-                        ->fetchArray();
 
-        return $relatedOffers;
-     }
 
       /**
       * get popular voucher codes
