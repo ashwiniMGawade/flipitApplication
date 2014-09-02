@@ -36,12 +36,15 @@ echo $this->headTitle()->append('Edit Shop');?>
                  $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme(); ?>
                 <button class="btn ml10" type="button" onClick="window.location.href='<?php echo HTTP_PATH ;?>admin/shop<?php echo '#'.$this->qstring; ?>'"><?php echo $this->translate('Cancel'); ?></button>
                 <button type="button" class="btn btn-primary ml10" id='prefillData'><?php echo $this->translate('Pre-fill'); ?></button>	
-                <?php $host = 'kortingscode.nl';
-                if ($_COOKIE['site_name'] != 'kortingscode.nl') {
-                    $host = 'flipit.com/admin';
+                <?php 
+                $host = 'www.kortingscode.nl';
+                if ($_COOKIE['site_name'] != 'kortingscode.nl') 
+                {
+                    $host = 'www.flipit.com/admin';
                 } 
+                date_default_timezone_set('Europe/Amsterdam');
+                $hash = md5($this->data['id'].date('Y').'-'.date('m').'-'.date('d').':'.date('H')); 
                 ?>
-                <?php $hash = md5($this->data['id'].date('Y').'-'.date('m').'-'.date('d').':'.date('H')); ?>
                 <a href="<?php echo 'http://'.$host.'/branding/start?storeUrl=http://'.$httpScheme.'.'.$_COOKIE['site_name'].'/' ?><?php echo $this->data['permaLink'].'&shopID='.$this->data['id'].'&hash='.$hash; ?>" class="btn btn-primary">Brand this shop</a>
             </h1>
 

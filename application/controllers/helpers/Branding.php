@@ -3,6 +3,8 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 {
     public function start()
     {
+        setcookie('passCache', '1', time() + 3600*8, '/');        
+
         $storeUrl             = $this->getRequest()->getParam('storeUrl', false);
         $linkValidationHash   = $this->getRequest()->getParam('hash', false);
         $shopID               = $this->getRequest()->getParam('shopID', false);
@@ -17,6 +19,7 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
         }
 
         if (!empty($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'flipit.com')) {
+            date_default_timezone_set('Europe/Amsterdam');
             $securityCheckHash = md5($shopID.date('Y').'-'.date('m').'-'.date('d').':'.date('H'));
             if ($securityCheckHash == $linkValidationHash) {
                 $session->brandingActivated = true;
