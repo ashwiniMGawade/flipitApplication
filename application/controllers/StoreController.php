@@ -50,7 +50,9 @@ class StoreController extends Zend_Controller_Action
             $allShopDetailKey = 'shopDetails_'.$ShopList;
             $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)$allShopDetailKey,
-                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId))
+                array('function' => 'Shop::getStoreDetails', 'parameters' => array($shopId)
+                ),
+                ''
             );
             $allOffersInStoreKey = '6_topOffers'.$ShopList;
             $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -58,7 +60,8 @@ class StoreController extends Zend_Controller_Action
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',
                     'parameters' => array("all", 10, $shopId, 0)
-                )
+                ),
+                ''
             );
             $allExpiredOfferKey = 'shop_expiredOffers'.$ShopList;
             $expiredOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -66,7 +69,8 @@ class StoreController extends Zend_Controller_Action
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
                     'parameters' => array("expired", 8, $shopId)
-                )
+                ),
+                ''
             );
             $allLatestUpdatesInStoreKey = '4_shopLatestUpdates_'.$ShopList;
             $latestShopUpdates = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
@@ -74,14 +78,16 @@ class StoreController extends Zend_Controller_Action
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::getShopCouponCode',
                     'parameters' => array('latestupdates', 4, $shopId)
-                )
+                ),
+                ''
             );
             $moneySavingGuideArticle = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 (string)'shop_moneySavingArticles_'.$ShopList,
                 array(
                     'function' => 'FrontEnd_Helper_viewHelper::generateShopMoneySavingGuideArticle',
                     'parameters' => array('moneysaving', 3, $shopId)
-                )
+                ),
+                ''
             );
 
             if (!count($shopInformation) >0) {
@@ -169,7 +175,8 @@ class StoreController extends Zend_Controller_Action
                 array(
                 'function' =>
                 'User::getUserDetails', 'parameters' => array($shopInformation[0]['contentManagerId'])
-                )
+                ),
+                ''
             );
 
         $customHeader = isset($shopInformation[0]['customHeader']) ? $shopInformation[0]['customHeader'] : '';
