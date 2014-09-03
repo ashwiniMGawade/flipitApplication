@@ -56,7 +56,8 @@ class ErrorController extends Zend_Controller_Action
                             'error_specialPage_offers',
                             array(
                                 'function' => 'Offer::getSpecialPageOffers', 'parameters' => array($pageDetails)
-                            )
+                            ),
+                            ''
                         );
                     $paginationNumber['page'] = $pageNumber;
                     $specialOffersPaginator = FrontEnd_Helper_viewHelper::renderPagination(
@@ -84,7 +85,8 @@ class ErrorController extends Zend_Controller_Action
                             array(
                                 'function' => 'Logo::getPageLogo',
                                 'parameters' => array($pageDetails['pageHeaderImageId'])
-                            )
+                            ),
+                            ''
                         );
                     $this->view->offercount = count($specialPageOffers);
                     $this->view->offersPaginator = $specialOffersPaginator;
@@ -105,7 +107,8 @@ class ErrorController extends Zend_Controller_Action
                             '12_popularShops_list',
                             array(
                                 'function' => 'Shop::getPopularStores', 'parameters' => array(12)
-                            )
+                            ),
+                            ''
                         );
                 $this->view->flipitLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(Website::getAllWebsites());
                 break;
