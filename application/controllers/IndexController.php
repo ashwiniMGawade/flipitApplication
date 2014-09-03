@@ -38,7 +38,7 @@ class IndexController extends Zend_Controller_Action
         if (FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
 
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "10_popularShops_list",
+                "10_popularShopsHome_list",
                 array('function' => 'Offer::getTopOffers', 'parameters' => array(10))
             );
             
@@ -48,7 +48,7 @@ class IndexController extends Zend_Controller_Action
             );
             $this->view->topCategories = $topCategories;
             $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "all_specialPages_list",
+                "all_specialPagesHome_list",
                 array('function' => 'SpecialList::getSpecialPages', 'parameters' => array())
             );
             $this->view->specialListPages = $specialListPages;

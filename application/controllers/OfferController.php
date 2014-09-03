@@ -27,7 +27,8 @@ class OfferController extends Zend_Controller_Action
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)
-            )
+            ),
+            ''
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->viewHelperObject->getMetaTags(
@@ -41,11 +42,15 @@ class OfferController extends Zend_Controller_Action
         );
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'20_topOffers_list',
-            (array)array('function' => 'Offer::getTopOffers', 'parameters' => array(20))
+            (array)array('function' => 'Offer::getTopOffers', 'parameters' => array(20)
+            ),
+            ''
         );
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'10_popularShops_list',
-            (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10))
+            (array)array('function' => 'Shop::getAllPopularStores', 'parameters' => array(10)
+            ),
+            ''
         );
         $this->view->popularStores = $popularStores;
         $this->view->controllerName = $this->getRequest()->getControllerName();
