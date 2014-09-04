@@ -348,6 +348,8 @@ class Offer extends BaseOffer
         $shopId = $offerDetails['shop']['id'];
         $key = 'shopDetails_'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'offerDetails_'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = '6_topOffers'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_latestUpdates'  . $shopId . '_list';
@@ -2920,6 +2922,8 @@ class Offer extends BaseOffer
             //call cache function
             $key = 'shopDetails_'  . $sid . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'offerDetails_'  . $sid . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
    
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
           
@@ -2940,6 +2944,8 @@ class Offer extends BaseOffer
            ->execute();
             //call cache function
             $key = 'shopDetails_'  . $sid . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'offerDetails_'  . $sid . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');

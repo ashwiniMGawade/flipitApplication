@@ -22,7 +22,7 @@ endif;
 $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
 $similarOffersHeader = '';
 $similarOffers = '';
-if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
+if(!empty($this->similarShopsAndSimilarCategoriesOffers)):
     $similarOffersHeader =$offerPartialClass->getSimilarShopHeader(
         $this->currentStoreInformation[0]['name'],
         'similar'

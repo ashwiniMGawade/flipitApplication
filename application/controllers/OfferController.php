@@ -76,7 +76,7 @@ class OfferController extends Zend_Controller_Action
             array('function' => 'Offer::getCouponDetails', 'parameters' => array($extendedUrl))
         );
         $shopList = $couponDetails[0]['shop']['id'].'_list';
-        $allShopDetailKey = 'shopDetails_'.$shopList;
+        $allShopDetailKey = 'offerDetails_'.$shopList;
         $shopInformation = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)$allShopDetailKey,
             (array)array('function' => 'Shop::getStoreDetails', 'parameters' => array($couponDetails[0]['shop']['id']))

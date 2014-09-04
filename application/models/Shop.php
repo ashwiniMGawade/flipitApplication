@@ -259,7 +259,9 @@ class Shop extends BaseShop
             $favouriteShops->save();
             $shopName = Doctrine_Core::getTable("Shop")->findOneBy('id', $shopId);
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);         
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
+            $cacheKeyOfferDetails = 'offerDetails_'  . $shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);       
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
@@ -804,6 +806,8 @@ class Shop extends BaseShop
         //call cache function
         $key = 'shopDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails); 
 
         
         $key = 'shop_'.$this->id.'_similarShops';
@@ -1625,6 +1629,8 @@ public static function getShopDetail($shopId)
 
         $key = 'shopDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails); 
 
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);

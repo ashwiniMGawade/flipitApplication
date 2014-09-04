@@ -131,6 +131,8 @@ class FavoriteShop extends BaseFavoriteShop
         $shop = Doctrine_Core::getTable('Shop')->find($shopid);
         $key = 'shopDetails_'  . $shopid . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'offerDetails_'  . $shopid . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('alreadyFavourite_'.$userid.'_shops');
@@ -200,6 +202,8 @@ class FavoriteShop extends BaseFavoriteShop
 
 
         $key = 'shopDetails_'  . $shopid . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $key = 'offerDetails_'  . $shopid . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
