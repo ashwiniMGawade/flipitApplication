@@ -37,23 +37,23 @@ function getDetails(divId, permalink)
         switch(divId){
             case 'newOffer':
                 ajaxRequestUrl = HOST_PATH_LOCALE + "homeajax/getnewestoffers";
-                getRightDiv(ajaxRequestUrl);
+                getRightDiv(ajaxRequestUrl, permalink);
                 break;
             case 'moneysaving':
                 ajaxRequestUrl = HOST_PATH_LOCALE + "homeajax/getmoneysavingguides";
-                getRightDiv(ajaxRequestUrl);
+                getRightDiv(ajaxRequestUrl, permalink);
                 break;
             default:
                 ajaxRequestUrl = 
                     HOST_PATH_LOCALE + "homeajax/getcategoryoffers/categoryid/" + divId + "/permalink/" + permalink;
-                getRightDiv(ajaxRequestUrl);
+                getRightDiv(ajaxRequestUrl, permalink);
                 break;
         }
     }
 }
 
-function getRightDiv(ajaxRequestUrl) {
-     ___addOverLay();
+function getRightDiv(ajaxRequestUrl, divId) {
+    $('div#ajaxContent').append("<div id='overlay'><img id='img-load' src='" +  HOST_PATH  + "/public/images/back_end/ajax-loader1.gif'/></div>");
     $.ajax({
         type : "POST",
         url : ajaxRequestUrl,
@@ -61,7 +61,7 @@ function getRightDiv(ajaxRequestUrl) {
         dataType : 'json',
         success : function(rightDivWithContent) { 
             $('div.columns').append(rightDivWithContent).show();
-             ___removeOverLay();
+            ___removeOverLay(divId);
         }
     });
 }
