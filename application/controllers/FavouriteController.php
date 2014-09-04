@@ -39,9 +39,12 @@ class FavouriteController extends Zend_Controller_Action
             } else {
                 $stores = $this->_helper->Favourite->getPopularStores();
             }
+            $cacheKey =
+            FrontEnd_Helper_viewHelper::
+            getPermalinkAfterRemovingSpecialChracter($searchBrandForm->getValue('searchBrand'));
             $this->view->popularShops = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                'alreadyFavourite_'.Auth_VisitorAdapter::getIdentity()->id.'_shops',
+                'alreadyFavourite_'.$cacheKey.Auth_VisitorAdapter::getIdentity()->id.'_shops',
                 array(
                     'function' => 'FavoriteShop::filterAlreadyFavouriteShops',
                     'parameters' => array($stores)
