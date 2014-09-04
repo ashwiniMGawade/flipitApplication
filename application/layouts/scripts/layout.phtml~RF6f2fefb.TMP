@@ -20,8 +20,6 @@ $em->flush();
 */
 
 $em = \Zend_Registry::get('em');
-print_r($em->find('KC\Entity\user', 1));
-die;
 $u  =  new KC\Entity\couponcode();
 $u->code = 'Test';
 $u->lastname = 2309;

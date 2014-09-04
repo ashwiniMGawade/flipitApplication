@@ -156,34 +156,24 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
     }
     */
-    public function getDatabaseCredentials($doctrineOptions)
-    {
-        $splitDbName = explode('/', $doctrineOptions);
-        $splitDbUserName = explode(':', $splitDbName[2]);
-        $splitDbPassword = explode('@', $splitDbUserName[1]);
-        $dbPassword = $splitDbPassword[0];
-        $dbUserName = $splitDbUserName[0];
-        $dbName = $splitDbName[3];
-        return array(
-            'driver'   => 'pdo_mysql',
-            'user'     => $splitDbUserName,
-            'password' => $dbPassword,
-            'dbname'   => $dbName,
-        );
-    }
+    
 
     public function _initDoctrine()
     {
-        $paths            = array(APPLICATION_PATH . '/../library/KC/Entity');
+        $paths            = array(APPLICATION_PATH . '/../scripts/export/site_entities');
         //$moduleDirectoryName, $localeCookieData
-        $doctrineOptions = $this->getOption('doctrine');
-       
+
+        print_r($this->$doctrineOptions['imbull']); die;
+        $imbullDbConnection = Doctrine_Manager::connection($this->$doctrineOptions['imbull'], 'doctrine');
+
+        $localSiteDbConnection = self::getLocaleNameForDbConnection($moduleDirectoryName, $localeCookieData);
+
         $isDevMode        = false;
-        $connectionParams =  array(
+        $connectionParams = array(
             'driver'   => 'pdo_mysql',
             'user'     => 'root',
             'password' => 'password',
-            'dbname'   => 'kortingscode_user',
+            'dbname'   => 'kc',
         );
 
         $config = Setup::createConfiguration($isDevMode);

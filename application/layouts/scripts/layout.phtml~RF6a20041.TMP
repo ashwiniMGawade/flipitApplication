@@ -20,25 +20,16 @@ $em->flush();
 */
 
 $em = \Zend_Registry::get('em');
-print_r($em->find('KC\Entity\user', 1));
-die;
-$u  =  new KC\Entity\couponcode();
-$u->code = 'Test';
-$u->lastname = 2309;
-$em->persist($u);
-$em->flush();
-//print_r($em->find('KC\Entity\profile_image', 44));
-/*$u  =  new KC\Entity\user();
+$u  =  new KC\Entity\user();
 $u->firstname = 'Test';
 $u->lastname = "By Dev";
 $u->mainText = 'aasdasd';
-
-$u->profileimage = $em->find('KC\Entity\profile_image', 44);
 $u->deleted = 0;
 $u->currentlogin = '0000-00-00 00:00:00';
-$u->userWebsite[] = $em->find('KC\Entity\website', 1);
+$u->userwebsite[] = $em->find('KC\Entity\website', 1);
+$u->user[] = $em->find('KC\Entity\profile_image', 1);
 $em->persist($u);
-$em->flush();*/
+$em->flush();
 echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
