@@ -33,7 +33,8 @@ class SearchController extends Zend_Controller_Action
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)
-            )
+            ),
+            ''
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $searchedKeywords = $this->getRequest()->getParam('searchField');
