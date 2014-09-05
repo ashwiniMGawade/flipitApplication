@@ -285,8 +285,9 @@ class StoreController extends Zend_Controller_Action
         $howToGuidePermalink = ltrim(Zend_Controller_Front::getInstance()->getRequest()->getRequestUri(), '/');
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($howToGuidePermalink);
         $parameters = $this->_getAllParams();
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($parameters['permalink']);
         $howToGuides = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'store_'.$parameters['permalink'].'howToGuide',
+            'store_'.$cacheKey.'_howToGuide',
             array('function' => 'Shop::getshopDetails', 'parameters' => array($parameters['permalink']))
         );
 
