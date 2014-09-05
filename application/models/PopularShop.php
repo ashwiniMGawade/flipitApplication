@@ -335,4 +335,26 @@ return $flag;
 
                     }
 
+    public static function savePopularShopsPosition($shopId)
+    {
+        $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
+        $databaseConnection->query('TRUNCATE TABLE popular_shop');
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
+        unset($databaseConnection);
+        $shopId = explode(',', $shopId);
+        $i = 1;
+        foreach ($shopId as $shopIdValue) {
+            $pc = new PopularShop();
+            $pc->shopId = $shopIdValue;
+            $pc->position = $i;
+            $pc->type = "MN";
+            $pc->save();
+            $i++;
+        }
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+    }
+
 }

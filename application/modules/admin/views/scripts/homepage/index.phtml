@@ -284,13 +284,13 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 
 					<!-- coupon code move up -->
 					<div class="coupon-sidebar-content-box">
-						<button id='moveUp' onClick='moveUp();' class="btn">MOVE UP</button>
+					<button onClick='savePopularShopsPosition();return false;'
+								class="btn">SAVE</button>
 						<button id='addNewShop' onClick='addNewShop();' class="btn">ADD
 							NEW STORE</button>
 					</div>
 					<!-- coupon code move down -->
-					<div class="coupon-sidebar-content-box mb10">
-						<button id='moveDown' onClick='moveDown();' class="btn">MOVE DOWN</button>
+					<div class="coupon-sidebar-content-box mb10 image-loading-icon">
 						<button id='deleteOne' onClick='deleteOne();' class="btn">DELETE</button>
 					</div>
 
@@ -312,21 +312,17 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			<div id="post-body-content-coupon">
 				<div class="top-coupon-list"
 					style="overflow: auto; height: 585px ! important;">
-					<ul id='mostPopularCode'>
-                        <?php if($this->data!=null){
-
-                        	foreach ($this->data as $o){
-
-              					echo  "<li reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['shopId'] . "' id='" . $o['id'] . "' >" . $o['shop']['name'] ."</li>";
-
-              					}
-
-                         	} else {
-
-                         		echo  "<li id='noRecord'>No record found</li>";
-
-              				} ?>
-              			</ul>
+							<ul id="mostPopularCode">
+							<?php
+								if($this->data!=null){
+	                        	foreach ($this->data as $o){
+	              					echo  "<li class='ui-state-default' id='" . $o['id'] . "' reltype='" . $o['type'] . "' relpos='" . $o['position'] . "' reloffer='" . $o['shopId'] . "'>" . $o['shop']['name'] ."</li>";
+	              					}
+	                         	} else {
+	                         		echo  "<li id='noRecord'>No record found</li>";
+	              				}
+							?>
+							</ul>              			 
 				</div>
 			</div>
 		</div>

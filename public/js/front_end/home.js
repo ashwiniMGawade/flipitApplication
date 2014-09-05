@@ -54,7 +54,7 @@ function getDetails(divId, permalink)
 
 function getRightDiv(ajaxRequestUrl, divId) {
     var divHeight = $('.categories-block').height();
-    $('div#ajaxContent').append("<div id='overlay' style='height:"+divHeight+"px;'><img id='img-load' src='" +  HOST_PATH  + "/public/images/back_end/ajax-loader-tran.gif'/></div>");
+    $('div#ajaxContent').append("<div id='overlay' style='height:"+divHeight+"px;'><img id='img-load' src='" +  HOST_PATH  + "/public/images/validating.gif'/></div>");
     $.ajax({
         type : "POST",
         url : ajaxRequestUrl,

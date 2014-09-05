@@ -701,8 +701,7 @@ function addNewShop() {
 	     			dataType : "json",
 	     			type : "post",
 	     			success : function(data) {
-
-	     				if(data=='2' || data==2)
+ 	     				if(data=='2' || data==2)
 	     					{
 	     						bootbox.alert(__('This store does not exist'));
 
@@ -710,7 +709,7 @@ function addNewShop() {
 
 	     						$('ul#mostPopularCode li#noRecord').remove();
 
-	     						var li  = "<li reltype='" + data.type + "' relpos='" + data.position + "' reloffer='" + data.offerId + "' id='" + data.id + "' >" + offerName + "</li>";
+	     						var li  = "<li class='ui-state-default' reltype='" + data.type + "' relpos='" + data.position + "' reloffer='" + data.shopId + "' id='" + data.id + "' >" + offerName + "</li>";
 	     						$('ul#mostPopularCode').append(li);
 	     						$('ul#mostPopularCode li#'+ data.id).click(changeSelectedClass);
 	     						$("input#searchCouponTxt").val('');
@@ -820,7 +819,7 @@ function deletePopularCode() {
 				if(json!=''){
 					for(var i in json)
 						{
-						 	li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].shopId + "' id='" + json[i].id + "' >" + json[i].shop.name + "</li>";
+						 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].shopId + "' id='" + json[i].id + "' >" + json[i].shop.name + "</li>";
 
 						}
 					$('ul#mostPopularCode').append(li);
@@ -2149,10 +2148,8 @@ function saveEmailPerLocale(){
 
 
 $(function () {
-
-
-
-
+    $( "#mostPopularCode" ).sortable();
+    $( "#mostPopularCode" ).disableSelection();
 
 
     'use strict';
@@ -2372,3 +2369,25 @@ $(function () {
 
     }) ;
 });
+
+function savePopularShopsPosition()
+{
+	var shopid = new Array();
+	$('.ui-state-default').each(function(){
+        shopid.push($(this).attr('reloffer'));
+    });
+	$('div.image-loading-icon').append("<img id='img-load' src='" +  HOST_PATH  + "/public/images/validating.gif'/>");
+    var shopid = shopid.toString();
+	$.ajax({
+        type : "POST",
+        url : HOST_PATH_LOCALE + "homepage/savepopularshopsposition",
+        method : "post",
+        dataType : 'json',
+        data: { shopid: shopid },
+        success : function(rightDivWithContent) { 
+			$('#img-load').remove();
+        }
+    });
+
+    return false;
+}
