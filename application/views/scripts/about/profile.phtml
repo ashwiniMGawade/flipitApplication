@@ -1,5 +1,4 @@
 <?php 
-$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
 $authorName = FrontEnd_Helper_AuthorPartialFunctions::
     getAuthorName($this->authorDetails['firstName'], $this->authorDetails['lastName']);
 $authorDetails  = '';
@@ -27,7 +26,7 @@ endif;
 
 $discussion = $this->partial(
         $partialViewPath.'_discussion.phtml',
-        array('authorName' => $authorName)
+        array('authorName' => $authorName, 'discussionComments' => $this->discussionComments)
 );
 
 $signUpWidgetForm = '';

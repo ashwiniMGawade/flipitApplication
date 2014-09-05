@@ -32,15 +32,6 @@ foreach ($this->offers as $offer) {
     );
     ?>
             <div class="box">
-    <?php
-    if ($offer->discountType == 'PR' || $offer->discountType == 'PA') {
-                ?>
-                <div class="img-code">
-                    <img width="163" height="96" alt="image description" src="<?php echo $urlToShow; ?>">
-                </div>
-    <?php
-    }
-    ?>
                 <div class="text">
                     <p> <?php echo $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
                     <?php 
@@ -108,7 +99,7 @@ foreach ($this->offers as $offer) {
             <hr class="alt2">
             <div class="offer">
                 <span><?php echo $this->translate('Grab this offer now:');?></span>
-                <a target = "_blank" href="<?php echo $urlToShow;?>">
+                <a target = "_blank" href="<?php echo $urlToShow;?>" rel= "nofollow">
                 <?php echo $this->translate('Open ');?>
                 <?php echo $offer->shop['name']; ?>
                 <?php echo $this->translate(' website');?>

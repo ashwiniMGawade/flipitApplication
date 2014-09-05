@@ -4,6 +4,19 @@ class Articles extends BaseArticles
     ##############################################
     ####### REFACTORED CODE ######################
     ##############################################
+    public static function getAllArticlesCount()
+    {
+        $currentDateTime = date('Y-m-d 00:00:00');
+        $allArticles = Doctrine_Query::create()
+            ->select('count(*)')
+            ->from("Articles a")
+            ->where('a.publish = "1"')
+            ->andWhere("a.deleted= 0")
+            ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+            ->fetchArray();
+        return isset($allArticles[0]['count']) ? $allArticles[0]['count'] : 0;
+    }
+ 
     public static function getMoneySavingArticles($limit = 0)
     {
         $moneySavingArticles = Doctrine_Query::create()
@@ -35,7 +48,7 @@ class Articles extends BaseArticles
         return $articleDetails;
     }
 
-    public static function getAllArticles()
+    public static function getAllArticles($limit = 0)
     {
         $currentDateTime = date('Y-m-d 00:00:00');
         $allArticles = Doctrine_Query::create()->select()
@@ -49,6 +62,7 @@ class Articles extends BaseArticles
                 ->where('a.publish = "1"')
                 ->andWhere("a.deleted= 0")
                 ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+                ->limit($limit)
                 ->fetchArray();
         return $allArticles;
     }
@@ -298,7 +312,7 @@ class Articles extends BaseArticles
                     $relatedstores->articleid = $data->id;
                     $relatedstores->storeid = $storeid;
                     $relatedstores->save();
-                    $key = 'all_msArticleInStore'  . $storeid . '_list';
+                    $key = 'shop_moneySavingArticles_'  . $storeid . '_list';
                     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                 }
             }
@@ -332,13 +346,15 @@ class Articles extends BaseArticles
         }
 
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_article_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
 
 
@@ -398,9 +414,7 @@ class Articles extends BaseArticles
         }
 
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
-        //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_article_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
 
         $catIds = self::findCategoryId($params['id']);
         $catArr = array();
@@ -408,27 +422,21 @@ class Articles extends BaseArticles
             $catArr[] = $catIds[$i]['relatedcategoryid'];
         }
 
-        $cat_ids = array_unique($catArr);
-        foreach($cat_ids as $cids):
-
-            $key1 ="all_". "mostreadarticle".$cids ."_list";
-            $key2 ="all_". "articlesofcategory".$cids ."_list";
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key1);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key2);
-
-        endforeach;
-
+        
         $pageIds = self::findPageIds($params['id']);
         $artArr = array();
         for($i=0;$i<count($pageIds);$i++){
             $artArr[] = $pageIds[$i]['pageid'];
         }
         $page_ids = array_unique($artArr);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
         foreach($page_ids as $ids):
 
@@ -473,7 +481,7 @@ class Articles extends BaseArticles
                     $relatedstores->articleid = $data->id;
                     $relatedstores->storeid = $storeid;
                     $relatedstores->save();
-                    $key = 'all_msArticleInStore'  . $storeid . '_list';
+                    $key = 'shop_moneySavingArticles_'  . $storeid . '_list';
                     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
                 }
@@ -681,7 +689,10 @@ class Articles extends BaseArticles
                 ->where('a.id='.$id)->fetchArray();
 
             foreach ($getVal[0]['relatedstores'] as $st):
-                $key = 'all_msArticleInStore'  . $st['storeid'] . '_list';
+                $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                $permalinkWithoutSpecilaChracter = str_replace("-", "", $st['permalink']);
+                $key = 'article_'.$permalinkWithoutSpecilaChracter.'_details';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             endforeach;
 
@@ -693,8 +704,7 @@ class Articles extends BaseArticles
 
 
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_article_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
 
         $pageIds = self::findPageIds($id);
             $artArr = array();
@@ -702,11 +712,12 @@ class Articles extends BaseArticles
                 $artArr[] = $pageIds[$i]['pageid'];
             }
             $page_ids = array_unique($artArr);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
             foreach($page_ids as $ids):
 
@@ -721,15 +732,6 @@ class Articles extends BaseArticles
                 $catArr[] = $catIds[$i]['relatedcategoryid'];
             }
 
-            $cat_ids = array_unique($catArr);
-            foreach($cat_ids as $cids):
-
-            $key1 ="all_". "mostreadarticle".$cids ."_list";
-            $key2 ="all_". "articlesofcategory".$cids ."_list";
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key1);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key2);
-
-            endforeach;
 
         return 1;
     }
@@ -748,7 +750,9 @@ class Articles extends BaseArticles
             ->where('a.id='.$id)->fetchArray();
 
             foreach ($getVal[0]['relatedstores'] as $st):
-            $key = 'all_msArticleInStore'  . $st['storeid'] . '_list';
+            $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'article_'.$st['permalink'].'_details';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             endforeach;
 
@@ -762,8 +766,7 @@ class Articles extends BaseArticles
         }
         //call cache function
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_article_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
 
         $pageIds = self::findPageIds($id);
             $artArr = array();
@@ -771,11 +774,12 @@ class Articles extends BaseArticles
                 $artArr[] = $pageIds[$i]['pageid'];
             }
             $page_ids = array_unique($artArr);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
             foreach($page_ids as $ids):
 
@@ -790,15 +794,7 @@ class Articles extends BaseArticles
                 $catArr[] = $catIds[$i]['relatedcategoryid'];
             }
 
-            $cat_ids = array_unique($catArr);
-            foreach($cat_ids as $cids):
-
-            $key1 ="all_". "mostreadarticle".$cids ."_list";
-            $key2 ="all_". "articlesofcategory".$cids ."_list";
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key1);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key2);
-
-            endforeach;
+            
 
 
         return $id;
@@ -821,7 +817,9 @@ class Articles extends BaseArticles
                 ->where('a.id='.$id)->fetchArray();
 
             foreach ($getVal[0]['relatedstores'] as $st):
-                $key = 'all_msArticleInStore'  . $st['storeid'] . '_list';
+                $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                $key = 'article_'.$st['permalink'].'_details';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             endforeach;
 
@@ -833,19 +831,19 @@ class Articles extends BaseArticles
             $id = null;
         }
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_article_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
         $pageIds = self::findPageIds($id);
             $artArr = array();
             for($i=0;$i<count($pageIds);$i++) {
                 $artArr[] = $pageIds[$i]['pageid'];
             }
             $page_ids = array_unique($artArr);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
             foreach($page_ids as $ids):
 
@@ -860,15 +858,6 @@ class Articles extends BaseArticles
                 $catArr[] = $catIds[$i]['relatedcategoryid'];
             }
 
-            $cat_ids = array_unique($catArr);
-            foreach($cat_ids as $cids):
-
-            $key1 ="all_". "mostreadarticle".$cids ."_list";
-            $key2 ="all_". "articlesofcategory".$cids ."_list";
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key1);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key2);
-
-            endforeach;
 
 
         return $id;

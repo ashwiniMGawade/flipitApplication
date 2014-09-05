@@ -23,8 +23,42 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops(Shop::getPopularStores(25));
-            $this->view->favouriteShops = Visitor::getFavoriteShops(Auth_VisitorAdapter::getIdentity()->id);
+            $searchBrandForm = new Application_Form_SearchBrand();
+            $this->view->form = $searchBrandForm;
+            if ($this->getRequest()->isPost()) {
+                if ($searchBrandForm->isValid($this->getRequest()->getPost())) {
+                    $stores = Shop::getStoresForSearchByKeyword(
+                        $searchBrandForm->getValue('searchBrand'),
+                        25,
+                        'favourite'
+                    );
+                } else {
+                    $searchBrandForm->highlightErrorElements();
+                    $stores = $this->_helper->Favourite->getPopularStores();
+                }
+            } else {
+                $stores = $this->_helper->Favourite->getPopularStores();
+            }
+            $cacheKey =
+            FrontEnd_Helper_viewHelper::
+            getPermalinkAfterRemovingSpecialChracter($searchBrandForm->getValue('searchBrand'));
+            $this->view->popularShops = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'alreadyFavourite_'.$cacheKey.Auth_VisitorAdapter::getIdentity()->id.'_shops',
+                array(
+                    'function' => 'FavoriteShop::filterAlreadyFavouriteShops',
+                    'parameters' => array($stores)
+                )
+            );
+
+            $this->view->favouriteShops = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops',
+                array(
+                    'function' => 'Visitor::getFavoriteShops',
+                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
+                )
+            );
             $this->view->pageCssClass = 'brands-page';
         } else {
             $this->_redirect('/');
@@ -35,12 +69,23 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
-            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
+            $favoriteShopsOffers = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShopOffers',
+                array(
+                    'function' => 'Visitor::getFavoriteShopsOffers',
+                    'parameters' => array()
+                )
+            );
             $offers = $this->_helper->Favourite->getOffers($favoriteShopsOffers);
-            $userDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-            /*echo "<pre>";
-            print_r($offers);
-            die;*/
+            $userDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
+                array(
+                    'function' => 'Visitor::getUserDetails',
+                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
+                )
+            );
             $this->view->favouriteShopsOffers = $offers;
             $this->view->userDetails = $userDetails[0];
             $this->view->pageCssClass = 'youroffers-page';

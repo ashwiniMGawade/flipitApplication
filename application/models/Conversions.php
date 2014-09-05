@@ -21,6 +21,7 @@ class Conversions extends BaseConversions
         ->update('Conversions')
         ->set('converted', 1)
         ->where('subid = ?', $subId)->execute();
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_conversion_details');
         return true;
     }
 

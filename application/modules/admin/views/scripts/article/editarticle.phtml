@@ -329,7 +329,6 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                     id="articlemetaDesc" name="articlemetaDesc" 
                                     placeholder="<?php echo $this->translate ( 'Meta Description' );?>" 
                                     rows="3"><?php echo trim($this->articleData[0]['metadescription']);?></textarea>
-                                    textarea>
                                     <input type="text" disabled="disabled" 
                                     value="<?php echo $this->translate('Artical meta description length '). strlen($this->articleData[0]['metadescription']). $this->translate(' characters') ;?>" id="metaDescriptionleft" 
                                     class="input-xlarge disabled btop word-count">

@@ -1,4 +1,5 @@
 $(document).ready(function(){
+    validateSearch();
 $.ui.autocomplete.prototype._renderMenu = function( ul, items ) {
    var currentSelectedItem = this;
    $.each( items, function( index, item ) {
@@ -100,7 +101,7 @@ if(event.which == 13 && $("input#searchFieldHeader").val()!='' && $("input#searc
             autocomplete.selectedItem = item;
         } 
     });   
-    if ( autocomplete.selectedItem && $(this).val().toLowerCase() == autocomplete.selectedItem.value.toLowerCase()) {
+    if (autocomplete.selectedItem && $(this).val().toLowerCase() == autocomplete.selectedItem.value.toLowerCase()) {
         item = {};
         item['permalink'] = autocomplete.selectedItem.permalink;
         autocomplete._trigger( "select", '', { 'item' : item } );
@@ -124,4 +125,51 @@ $('ul.ui-autocomplete').addClass('wd1');
 function __highlight(s, t) {
     var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(t) + ")", "ig");
     return s.replace(matcher, '<span>$1</span>');
+}
+function validateSearch() {
+    validator = $('form.email-form')
+    .validate({
+        errorClass: 'input-error',
+        validClass: 'input-success',
+        rules: {
+            searchFieldHeader: {
+                required: true
+            }
+        },
+        messages : {
+            searchFieldHeader: {
+                required:''
+            }
+        },
+        onfocusin : function(element) {
+            if($(element).valid() == 0){
+                $(element).removeClass('input-error').removeClass('input-success');
+                $(element).next('label').hide();
+            } else {
+                $(element).removeClass('input-error').addClass('input-success');
+                $(element).next('label').hide();
+            }
+        },
+        onfocusout :function(element) {
+            if($(element).valid() == 0){
+                $(element).removeClass('input-success').addClass('input-error');
+                $(element).next('label').hide();
+            } else {
+                $(element).removeClass('input-error').addClass('input-success');
+                $(element).next('label').hide();
+            }
+         },
+        highlight : function(element, errorClass, validClass) {
+            $(element).addClass(errorClass).removeClass(validClass);
+            $(element).next('label').hide();
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).removeClass(errorClass);
+            $(element).next('label').hide();
+        },
+        success: function(element, errorClass, validClass) {
+            $(element).removeClass(errorClass).addClass(validClass);
+            $(element).next('label').hide();
+        }
+    });
 }

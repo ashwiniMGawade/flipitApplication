@@ -31,14 +31,9 @@ class Category extends BaseCategory
         ->leftJoin("o.shop s")
         ->leftJoin('o.termandcondition terms')
         ->leftJoin("s.logo l")
-        ->leftJoin('s.favoriteshops fv');
-        if ($pageName=='home') {
-            $categoryId = implode(',', $categoryId);
-            $categoryOffersList->where("roc.categoryId IN ($categoryId)");
-        } else {
-            $categoryOffersList->Where("roc.categoryId =".$categoryId);
-        }
-        $categoryOffersList->andWhere("c.deleted = 0")
+        ->leftJoin('s.favoriteshops fv')
+        ->where("roc.categoryId =".$categoryId)
+        ->andWhere("c.deleted = 0")
         ->andWhere("c.status= 1")
         ->andWhere('o.discounttype="CD"')
         ->andWhere(
@@ -55,11 +50,13 @@ class Category extends BaseCategory
         ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->orderBy('o.exclusiveCode DESC')
-        ->addOrderBy('o.startDate DESC')
-        ->limit($numberOfOffers);
+        ->addOrderBy('o.startDate DESC');
+        if ($pageName == 'homePage') {
+            $categoryOffersList->groupBy('s.id');
+        }
+        $categoryOffersList->limit(10);
         $categoryOffersList = $categoryOffersList->fetchArray();
-        return $pageName=='home' ? $categoryOffersList : self::changeDataAccordingToOfferHtml($categoryOffersList);
-
+        return self::changeDataAccordingToOfferHtml($categoryOffersList);
     }
 
     public static function changeDataAccordingToOfferHtml($categoryOffersList)
@@ -73,17 +70,13 @@ class Category extends BaseCategory
     
     public static function getPopularCategories($categoriesLimit = 0, $pageName = '')
     {
-        $couponsCount = '*';
-        if ($pageName!='') {
-            $couponsCount = 'DISTINCT s.id';
-        }
         $currentDateAndTime = date('Y-m-d 00:00:00');
         $popularCategories = Doctrine_Query::create()
         ->select('p.id, o.name,o.categoryiconid,i.type,i.path,i.name,p.type,p.position,p.categoryId,o.permaLink')
         ->from('PopularCategory p')
         ->addSelect(
             "(
-                SELECT  count($couponsCount) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  
+                SELECT  count(*) FROM refOfferCategory roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE  
                 off.deleted = 0 and s.deleted = 0 and roc.categoryId = p.categoryId and off.enddate >'"
             .$currentDateAndTime."' and off.discounttype='CD' and off.Visability!='MEM') as countOff"
         )
@@ -138,7 +131,10 @@ class Category extends BaseCategory
         $category->categoryFeaturedImageId = $categoryFeaturedImageId;
         $category->categoryHeaderImageId = $categoryHeaderImageId;
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
 
         try {
             $category->save();
@@ -251,7 +247,11 @@ class Category extends BaseCategory
         }
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
+
         try {
             $category->save();
             self::updateFeaturedCategory($categoryParameter['id']);
@@ -536,7 +536,10 @@ class Category extends BaseCategory
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
 
     }
     /**
@@ -553,7 +556,10 @@ class Category extends BaseCategory
                                     ->execute();
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcategory_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params["permaLink"]);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
     }
 
 /******************functions to be used on frontend*******************/

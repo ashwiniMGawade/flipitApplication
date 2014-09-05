@@ -63,7 +63,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
                 $shopWebsiteUrl = isset($explodedShopUrl[1]) ? $explodedShopUrl[1] : $explodedShopUrl[0];
                 $divContent .=
                     '<h1>'.$shop['title'].'</h1>
-                    <h2>'.$shop['subTitle'].'</h2>
+                    <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>
                         <a target="_blank" rel="nofollow" 
                         class="btn text-blue-link fl store-header-link '.$affliateClass.' pop btn btn-sm btn-default" '
                         .$affliateDisabled.'

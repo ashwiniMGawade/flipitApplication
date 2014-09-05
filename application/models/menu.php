@@ -23,6 +23,15 @@ class menu extends Basemenu
             ->execute();
         return true;
     }
+
+    public static function deleteUnusedMenus()
+    {
+        Doctrine_Query::create()
+            ->delete()
+            ->from('Menu m')
+            ->where("m.level > 0")
+            ->execute();
+    }
     ######################## Refactored #############################
 
     public static function getAllTree()

@@ -54,12 +54,11 @@ function printIt(urlToShow) {
     var windowObject = window.open();
     self.focus();
     windowObject.document.open();
-    windowObject.document.write('<'+'html'+'><'+'body'+'>');
+    windowObject.document.write('<html><body>');
     windowObject.document.write('<img src ='+urlToShow+'>');
-    windowObject.document.write('<'+'/body'+'><'+'/html'+'>');
+    windowObject.document.write('</body></html>');
     windowObject.document.close();
     windowObject.print();
-    windowObject.close();
 }
 
 function getQueryStringParams(popupParameter) {

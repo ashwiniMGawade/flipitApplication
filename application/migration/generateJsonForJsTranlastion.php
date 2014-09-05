@@ -106,7 +106,7 @@ class CreateTranslationJSON
 
 
         # add suffix according to locale
-        $path =  PUBLIC_PATH . $this->_localePath . "language/backend_js" . strtoupper($suffix). ".po";
+        $path =  PUBLIC_PATH . $this->_localePath . "language/frontend_js" . strtoupper($suffix). ".po";
         $homepage = file_get_contents($path);
         preg_match_all('/msgid "(.*)"/', $homepage, $keys);
         preg_match_all('/msgstr "(.*)"/', $homepage, $strings);
@@ -123,7 +123,7 @@ class CreateTranslationJSON
 
 
         if(!file_exists($pathToDir))
-            mkdir($pathToDir, 776, TRUE);
+            mkdir($pathToDir, 0776, TRUE);
 
         $pathToJSONFile = $pathToDir . $fileName ;
 

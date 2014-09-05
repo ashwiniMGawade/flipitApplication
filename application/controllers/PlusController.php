@@ -33,16 +33,15 @@ class PlusController extends Zend_Controller_Action
 
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
-                (string)"all_categoryWiseArticles_list",
+                (string)"all_categoriesArticles_list",
                 array('function' =>
                 'MoneySaving::getCategoryWiseArticles', 'parameters' => array())
             );
 
         $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
         $allArticlesWithAuthorDetails = $moneySavingPartialFunctions->addAuthorDetailsInArticles($categoryWiseArticles);
-
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            (string)'all_plus_popularshop_list',
+            (string)'7_popularShops_list',
             array('function' => 'Shop::getAllPopularStores', 'parameters' => array(7)),
             true
         );
@@ -59,7 +58,13 @@ class PlusController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             isset($pageDetails->customHeader) ? $pageDetails->customHeader : ''
         );
-        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'page_header'.$pageDetails->id.'_image',
+            array(
+                'function' => 'Logo::getPageLogo',
+                'parameters' => array($pageDetails->pageHeaderImageId)
+            )
+        );
         $this->view->popularStores = $popularStores;
         $this->view->mostReadArticles = $mostReadArticles;
         $this->view->allArticles =  $allArticlesWithAuthorDetails;
@@ -68,10 +73,31 @@ class PlusController extends Zend_Controller_Action
 
     public function guidedetailAction()
     {
-        $articleDetails = Articles::getArticleByPermalink($this->getRequest()->getParam('permalink'));
-        $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
-        $categoryWiseArticles = MoneySaving::getCategoryWiseArticles(5);
+        $permalink = $this->getRequest()->getParam('permalink');
         $articleObject = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
+        $positionOfSpecialCharactetr = strpos($permalink, "-");
+        if ($positionOfSpecialCharactetr) {
+            $stringWithoutSpecilaChracter = str_replace("-", "", $permalink);
+            $cacheKey = $stringWithoutSpecilaChracter;
+
+        } else {
+            $cacheKey = $permalink;
+        }
+
+        $articleDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                (string)"article_".$cacheKey."_details",
+                array('function' =>
+                'Articles::getArticleByPermalink', 'parameters' => array($permalink))
+            );
+        $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
+        $categoryWiseArticles = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                (string)"4_categoriesArticles_list",
+                array('function' =>
+                'MoneySaving::getCategoryWiseArticles', 'parameters' => array(5))
+            );
+
         $articlesRelatedToCurrentCategory =
             !empty($categoryWiseArticles[$currentArticleCategory])
             ? $articleObject->excludeSelectedArticle(
@@ -85,7 +111,7 @@ class PlusController extends Zend_Controller_Action
         if (!empty($articleDetails)) {
             $this->view->canonical =
                 FrontEnd_Helper_viewHelper::generateCononical(
-                    $this->getRequest()->getControllerName() .'/'. $this->getRequest()->getParam('permalink')
+                    $this->getRequest()->getControllerName() .'/'. $permalink
                 );
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array(
@@ -93,10 +119,14 @@ class PlusController extends Zend_Controller_Action
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("all_recentlyAddedArticles_list", array('function' =>
+            getRequestedDataBySetGetCache("2_recentlyAddedArticles_list", array('function' =>
                 'MoneySaving::getRecentlyAddedArticles', 'parameters' => array($articleDetails[0]['id'], 3)));
-            $this->view->topPopularOffers = Offer::getTopOffers(5);
-            $this->view->userDetails = User::getUserDetails($articleDetails[0]['authorid']);
+            $this->view->topPopularOffers = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
+                'Offer::getTopOffers', 'parameters' => array(5)));
+            $this->view->userDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache('user_'.$articleDetails[0]['authorid'].'_details', array('function' =>
+                'User::getUserDetails', 'parameters' => array($articleDetails[0]['authorid'])));
             $articleThumbNailImage = FACEBOOK_IMAGE;
             if (!empty($articleDetails[0]['thumbnail'])) {
                 $articleThumbNailImage = PUBLIC_PATH_CDN
@@ -112,6 +142,16 @@ class PlusController extends Zend_Controller_Action
                 $articleThumbNailImage,
                 ''
             );
+            $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($permalink);
+            $this->view->discussionComments =
+                FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                    'get_'.$cacheKey.'_disqusComments',
+                    array(
+                        'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
+                        'parameters' => array(HTTP_PATH_LOCALE.$permalink)
+                    ),
+                    ''
+                );
             $this->view->pageCssClass = 'in-savings-page author-page';
         } else {
               throw new Zend_Controller_Action_Exception('', 404);

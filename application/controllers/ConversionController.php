@@ -22,7 +22,13 @@ class ConversionController extends Zend_Controller_Action
             mkdir($logDirectoryPath, 776, true);
         }
 
-        $conversionDetails = Conversions::getConversionDetail($subId);
+        $conversionDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'all_conversion_details',
+                array(
+                    'function' => 'Conversions::getConversionDetail', 'parameters' => array($subId)
+                )
+            );
         $fileName = $logDirectoryPath  . 'conversion';
         
         if ($conversionDetails) {

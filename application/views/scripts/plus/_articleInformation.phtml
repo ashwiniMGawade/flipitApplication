@@ -19,9 +19,7 @@ $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
     <header class="meta">
         <p>
             <?php echo $byAuthorName[0]; ?>
-            <a class='black-link-bold' href="<?php echo $profileLink; ?>">
-                <?php echo $byAuthorName[1];?>
-            </a>
+            <a class='black-link-bold' href="<?php echo $profileLink; ?>"><?php echo $byAuthorName[1];?></a>
             <?php echo empty($byAuthorName[1]) ? '' : '&nbsp;'; ?>
             <span class='date'><?php echo '&nbsp;&nbsp;'.$articleUpdatedAtDate; ?></span>
             <?php echo '&nbsp; | &nbsp;'. $this->translate('back to') . " ";?>   
@@ -33,7 +31,8 @@ $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
     if (!empty($articleDetails['chapters'])) {
         foreach ($articleDetails['chapters'] as $articleChapter) :                    
             echo '<h2 id="'.$articleChapter['id'].'">'.$articleChapter['title'].'</h2>';
-            echo $articleChapter['content'];
+            $chapters = preg_replace('/(<a\b[^><]*)>/i', '$1 style="color: #0077cc;text-decoration: underline;">', $articleChapter['content']);
+            echo $chapters;
         endforeach;
     }
 ?> 

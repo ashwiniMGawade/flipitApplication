@@ -3,12 +3,10 @@ $this->minifyHeadScript()->appendFile("/public/js/front_end/home.js");
 $this->minifyHeadScript()->appendFile("/public/js/front_end/search.js");
 $homePageTopNewOffersCategoriesAndSpecialGuidesData = array(
     'topOffers'=>$this->topOffers,
-    'newOffers'=>$this->newOffers,
     'topCategories'=>$this->topCategories,
-    'topCategoriesOffers'=>$this->topCategoriesOffers,
     'specialPages'=>$this->specialListPages,
     'specialPagesOffers'=>$this->specialPagesOffers,
-    'moneySavingGuides'=>$this->moneySavingGuides
+    'moneySavingGuidesCount'=>$this->moneySavingGuidesCount
 );
 
 $indexViewPath = 'index/';
@@ -63,7 +61,7 @@ echo $top9StoresContents;
     <?php
     $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions(); 
     echo $homePagePartial->getHomePageLeftColumn($homePageTopNewOffersCategoriesAndSpecialGuidesData);
-    echo $homePagePartial->getHomePageRightColumnOffersList();
+    echo "<div id='ajaxContent'>".$homePagePartial->getHomePageRightColumnOffersList()."</div>";
     ?>
     </div>
 </div>
