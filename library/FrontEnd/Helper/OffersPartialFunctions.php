@@ -289,7 +289,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     : HTTP_PATH_LOCALE."accountlogin";
                 $offerLink =
                     '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
-                    alt = "'.$urlToShow.'" target="_self" onclick = "'.$onClick.'" rel="nofollow">
+                    alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
                     '.$offerAnchorTagContent .'</a>';
             }
         }
