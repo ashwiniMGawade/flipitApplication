@@ -363,10 +363,10 @@ class FrontEnd_Helper_HomePagePartialFunctions
             '<div id="div_'. $divId .'" class="vouchers">
                 <a href="'. $link.'" class="all">'.$textButtomLink.'</a><ul>';
         $moneySavingGuidestHtml = '';
-        $topTenMoneySavingGuides = array_slice($savingGuides, 0, 10);
-        foreach ($topTenMoneySavingGuides as $savingGuide) {
-            $savingImage = PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/")
-                . $savingGuide['thumbnail']['name'];
+        foreach ($savingGuides as $savingGuide) {
+            $savingImage = !empty($savingGuide['thumbnail'])
+                ? PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/"). $savingGuide['thumbnail']['name']
+                : '';
             $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
 
             $savingTitle = mb_strlen($savingGuide['title'], 'UTF-8') > 50

@@ -31,14 +31,9 @@ class Category extends BaseCategory
         ->leftJoin("o.shop s")
         ->leftJoin('o.termandcondition terms')
         ->leftJoin("s.logo l")
-        ->leftJoin('s.favoriteshops fv');
-        if ($pageName=='home') {
-            $categoryId = implode(',', $categoryId);
-            $categoryOffersList->where("roc.categoryId IN ($categoryId)");
-        } else {
-            $categoryOffersList->Where("roc.categoryId =".$categoryId);
-        }
-        $categoryOffersList->andWhere("c.deleted = 0")
+        ->leftJoin('s.favoriteshops fv')
+        ->where("roc.categoryId =".$categoryId)
+        ->andWhere("c.deleted = 0")
         ->andWhere("c.status= 1")
         ->andWhere('o.discounttype="CD"')
         ->andWhere(
@@ -55,11 +50,13 @@ class Category extends BaseCategory
         ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->orderBy('o.exclusiveCode DESC')
-        ->addOrderBy('o.startDate DESC')
-        ->limit($numberOfOffers);
+        ->addOrderBy('o.startDate DESC');
+        if ($pageName == 'homePage') {
+            $categoryOffersList->groupBy('s.id');
+        }
+        $categoryOffersList->limit(10);
         $categoryOffersList = $categoryOffersList->fetchArray();
-        return $pageName=='home' ? $categoryOffersList : self::changeDataAccordingToOfferHtml($categoryOffersList);
-
+        return self::changeDataAccordingToOfferHtml($categoryOffersList);
     }
 
     public static function changeDataAccordingToOfferHtml($categoryOffersList)

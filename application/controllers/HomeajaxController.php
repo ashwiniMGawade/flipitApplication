@@ -10,7 +10,7 @@ class HomeajaxController extends Zend_Controller_Action
             "all_hometocategoryoffers". $categoryId ."_list",
             array(
                 'function' => 'Category::getCategoryVoucherCodes',
-                'parameters' => array($categoryId, 0)
+                'parameters' => array($categoryId, 10, 'homePage')
             )
         );
         $removedDuplicateShops = $this->_helper->Index->removeDuplicateCode($topCategoriesOffers);
