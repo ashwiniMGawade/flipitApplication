@@ -7,13 +7,7 @@ if(LOCALE=='') :
         $flipitHomePage['viewObject']->render($flipitHomePage['htmlPath']) : '';
     echo $flipitHomePage['htmlPath']!='' ? die : '';
 endif;
-$em =\Zend_Registry::get('emLocale');
-print_r($em->find('KC\Entity\Varnish', 35891));  
-$testEntities = new FrontEnd_Helper_TestEntitiesFunctions();
-//echo $testEntities->saveUser(44, 1);
-echo "<pre>";
-print_r($testEntities->getUserWithRelation(1));
-die('hello');
+
 echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish
