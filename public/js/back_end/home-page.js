@@ -2380,7 +2380,7 @@ function savePopularShopsPosition()
     var shopid = shopid.toString();
 	$.ajax({
         type : "POST",
-        url : HOST_PATH_LOCALE + "homepage/savepopularshopsposition",
+        url : HOST_PATH + "admin/homepage/savepopularshopsposition",
         method : "post",
         dataType : 'json',
         data: { shopid: shopid },
