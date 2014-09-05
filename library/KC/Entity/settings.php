@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="settings", uniqueConstraints={@ORM\UniqueConstraint(name="id", columns={"id"})})
  */
-class settings
+class Settings
 {
     /**
      * @ORM\Id

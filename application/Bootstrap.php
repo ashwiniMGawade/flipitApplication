@@ -1,10 +1,4 @@
 <?php
-use Doctrine\ORM\Tools\Setup;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\Common\Annotations\AnnotationRegistry;
-
 require_once 'BootstrapConstantsFunctions.php';
 require_once 'BootstrapAdminConstantsFunctions.php';
 require_once 'BootstrapLocaleConstantsFunctions.php';
@@ -156,48 +150,15 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
     }
     */
-    public function getDatabaseCredentials($doctrineOptions)
-    {
-        $splitDbName = explode('/', $doctrineOptions);
-        $splitDbUserName = explode(':', $splitDbName[2]);
-        $splitDbPassword = explode('@', $splitDbUserName[1]);
-        $dbPassword = $splitDbPassword[0];
-        $dbUserName = $splitDbUserName[0];
-        $dbName = $splitDbName[3];
-        return array(
-            'driver'   => 'pdo_mysql',
-            'user'     => $splitDbUserName,
-            'password' => $dbPassword,
-            'dbname'   => $dbName,
-        );
-    }
+    
 
     public function _initDoctrine()
     {
-        $paths            = array(APPLICATION_PATH . '/../library/KC/Entity');
-        //$moduleDirectoryName, $localeCookieData
-        $doctrineOptions = $this->getOption('doctrine');
-       
-        $isDevMode        = false;
-        $connectionParams =  array(
-            'driver'   => 'pdo_mysql',
-            'user'     => 'root',
-            'password' => 'password',
-            'dbname'   => 'kortingscode_user',
+        return $localSiteDbConnection = BootstrapDoctrineConnectionFunctions::doctrineConnections(
+            $this->getOption('doctrine'),
+            $this->moduleDirectoryName,
+            $this->localeCookieData
         );
-
-        $config = Setup::createConfiguration($isDevMode);
-        $driver = new AnnotationDriver(new AnnotationReader(), $paths);
-
-        // registering noop annotation autoloader - allow all annotations by default
-        AnnotationRegistry::registerLoader('class_exists');
-        $config->setMetadataDriverImpl($driver);
-
-        $em = EntityManager::create($connectionParams, $config);
-        Zend_Registry::set('em', $em);
-        //$platform = $em->getConnection()->getDatabasePlatform();
-        //$platform->registerDoctrineTypeMapping('enum', 'string');
-        return $em;
     }
 
     protected function _initViewScripts()

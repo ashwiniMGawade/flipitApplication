@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="signupcodes", uniqueConstraints={@ORM\UniqueConstraint(name="code", columns={"code"})})
  */
-class signupcodes
+class Signupcodes
 {
     /**
      * @ORM\Id

@@ -7,38 +7,13 @@ if(LOCALE=='') :
         $flipitHomePage['viewObject']->render($flipitHomePage['htmlPath']) : '';
     echo $flipitHomePage['htmlPath']!='' ? die : '';
 endif;
-
-//ONE TO ONE RELATION EXAMPLE
-/*$em = \Zend_Registry::get('em');
-$em1 = \Zend_Registry::get('em');
-$u  =  new KC\Entity\User();
-$u->firstname = 'Test';
-$u->lastname = "By Dev";
-$u->role = ($em->find('KC\Entity\Role', 1));
-$em->persist($u);
-$em->flush();
-*/
-
-$em = \Zend_Registry::get('em');
-print_r($em->find('KC\Entity\user', 1));
-die;
-$u  =  new KC\Entity\couponcode();
-$u->code = 'Test';
-$u->lastname = 2309;
-$em->persist($u);
-$em->flush();
-//print_r($em->find('KC\Entity\profile_image', 44));
-/*$u  =  new KC\Entity\user();
-$u->firstname = 'Test';
-$u->lastname = "By Dev";
-$u->mainText = 'aasdasd';
-
-$u->profileimage = $em->find('KC\Entity\profile_image', 44);
-$u->deleted = 0;
-$u->currentlogin = '0000-00-00 00:00:00';
-$u->userWebsite[] = $em->find('KC\Entity\website', 1);
-$em->persist($u);
-$em->flush();*/
+$em =\Zend_Registry::get('emLocale');
+print_r($em->find('KC\Entity\Varnish', 35891));  
+$testEntities = new FrontEnd_Helper_TestEntitiesFunctions();
+//echo $testEntities->saveUser(44, 1);
+echo "<pre>";
+print_r($testEntities->getUserWithRelation(1));
+die('hello');
 echo $this->doctype();
 
 # manage the kc_session_active by checking the front_login session, we need this cookie for Varnish

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={"categoryiconid"})}
  * )
  */
-class articlecategory
+class Articlecategory
 {
     /**
      * @ORM\Id
@@ -70,18 +70,18 @@ class articlecategory
     private $categorytitlecolor;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\moneysaving", mappedBy="articlecategory")
+     * @ORM\OneToMany(targetEntity="KC\Entity\MoneySaving", mappedBy="articlecategory")
      */
     private $moneysaving;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="ArtCatIcon")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="ArtCatIcon")
      * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id", onDelete="restrict")
      */
     private $artImage;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\category", mappedBy="articlecategory")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Category", mappedBy="articlecategory")
      */
     private $category;
 }

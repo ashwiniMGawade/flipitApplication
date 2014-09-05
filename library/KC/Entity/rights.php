@@ -4,9 +4,9 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="rights", indexes={@ORM\Index(name="roleid_idx", columns={"roleid"})})
+ * @ORM\Table(name="rights")
  */
-class rights
+class Rights
 {
     /**
      * @ORM\Id
@@ -22,8 +22,6 @@ class rights
 
     /**
      * @ORM\Column(type="integer", length=3, nullable=true)
-     * @ORM\ManyToOne(targetEntity="KC\Entity\role", inversedBy="roleRights")
-     * @ORM\JoinColumn(name="roleid", referencedColumnName="id", onDelete="restrict")
      */
     private $rights;
 
@@ -41,4 +39,20 @@ class rights
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $updated_at;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Role", inversedBy="rights")
+     * @ORM\JoinColumn(name="roleid", referencedColumnName="id")
+     */
+    private $role;
+
+     public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

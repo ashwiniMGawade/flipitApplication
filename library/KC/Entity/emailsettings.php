@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="emailsettings")
  */
-class emailsettings
+class EmailSettings
 {
     /**
      * @ORM\Id

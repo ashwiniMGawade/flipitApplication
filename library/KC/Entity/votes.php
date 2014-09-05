@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="votes")
  */
-class votes
+class Votes
 {
     /**
      * @ORM\Id
@@ -66,7 +66,7 @@ class votes
     private $visitorid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\offer", inversedBy="votes")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="votes")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     private $offer;

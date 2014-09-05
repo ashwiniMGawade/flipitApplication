@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     }
  * )
  */
-class page
+class Page
 {
     /**
      * @ORM\Id
@@ -262,38 +262,38 @@ class page
     private $offersCount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\moneysaving", mappedBy="page")
+     * @ORM\OneToMany(targetEntity="KC\Entity\MoneySaving", mappedBy="page")
      */
     private $moneysaving;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_offer_page", mappedBy="offers")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferPage", mappedBy="offers")
      */
     private $pageoffers;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_page_widget", mappedBy="widget")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="widget")
      */
     private $pagewidget;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\shop", mappedBy="shopPage")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shopPage")
      */
     private $pages;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\special_list", mappedBy="page")
+     * @ORM\OneToMany(targetEntity="KC\Entity\SpecialList", mappedBy="page")
      */
     private $specialList;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="pageheaderimage")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="pageheaderimage")
      * @ORM\JoinColumn(name="pageHeaderImageId", referencedColumnName="id", onDelete="cascade")
      */
     private $logo;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\page_attribute", inversedBy="pageattribute")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\PageAttribute", inversedBy="pageattribute")
      * @ORM\JoinColumn(name="pageattributeid", referencedColumnName="id", onDelete="restrict")
      */
     private $page;

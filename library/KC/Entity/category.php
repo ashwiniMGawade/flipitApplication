@@ -24,7 +24,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={"categoryiconid"})}
  * )
  */
-class category
+class Category
 {
     /**
      * @ORM\Id
@@ -85,45 +85,45 @@ class category
     private $featured_category;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\interestingcategory", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Interestingcategory", mappedBy="category")
      */
     private $interestingcategory;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\popular_category", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="KC\Entity\PopularCategory", mappedBy="category")
      */
     private $popularCategory;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_offer_category", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="offer")
      */
     private $categoryoffres;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_shop_category", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefShopCategory", mappedBy="shop")
      */
     private $shopcategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="categoryfeaturedimage")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="categoryfeaturedimage")
      * @ORM\JoinColumn(name="categoryFeaturedImageId", referencedColumnName="id", onDelete="cascade")
      */
     private $category;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="categoryheaderimage")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="categoryheaderimage")
      * @ORM\JoinColumn(name="categoryHeaderImageId", referencedColumnName="id", onDelete="cascade")
      */
     private $headerimagecategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="categoryicon")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="categoryicon")
      * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id", onDelete="restrict")
      */
     private $iconcategory;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\articlecategory", inversedBy="category")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Articlecategory", inversedBy="category")
      * @ORM\JoinTable(
      *     name="ref_articlecategory_relatedcategory",
      *     joinColumns={@ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id", nullable=false)},
@@ -133,7 +133,7 @@ class category
     private $articlecategory;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\articles", mappedBy="category")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Articles", mappedBy="category")
      */
     private $articles;
 }

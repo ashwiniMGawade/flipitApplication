@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="footer")
  */
-class footer
+class Footer
 {
     /**
      * @ORM\Id

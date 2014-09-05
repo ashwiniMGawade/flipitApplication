@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="chain", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})})
  */
-class chain
+class Chain
 {
     /**
      * @ORM\Id
@@ -31,7 +31,7 @@ class chain
     private $updated_at;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\website", inversedBy="chain")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Website", inversedBy="chain")
      * @ORM\JoinTable(
      *     name="chain_item",
      *     joinColumns={@ORM\JoinColumn(name="chainid", referencedColumnName="id", nullable=false)},
@@ -39,4 +39,14 @@ class chain
      * )
      */
     private $website;
+
+     public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

@@ -33,6 +33,15 @@ $application->getBootstrap()->bootstrap('doctrine');
 $em = $application->getBootstrap()->getResource('doctrine');
 $platform = $em->getConnection()->getDatabasePlatform();
 $platform->registerDoctrineTypeMapping('enum', 'string');
+
+$config = new \Doctrine\ORM\Configuration();
+$config->setProxyDir(APPLICATION_PATH . '/../KC/Entity/proxy');
+$config->setProxyNamespace('KC\Entity\Proxy');
+
+// Auto generate proxies for development
+$config->setAutoGenerateProxyClasses(true);
+
+
 // generate the Doctrine HelperSet
 $helperSet = new \Symfony\Component\Console\Helper\HelperSet(array(
     'db' => new \Doctrine\DBAL\Tools\Console\Helper\ConnectionHelper($em->getConnection()),

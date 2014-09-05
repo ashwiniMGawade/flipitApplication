@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     }
  * )
  */
-class conversions
+class Conversions
 {
     /**
      * @ORM\Id
@@ -67,19 +67,19 @@ class conversions
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\shop", inversedBy="conversions")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="conversions")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     private $shop;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\visitor", inversedBy="conversions")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Visitor", inversedBy="conversions")
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
     private $visitor;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\offer", inversedBy="conversions")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="conversions")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     private $offer;

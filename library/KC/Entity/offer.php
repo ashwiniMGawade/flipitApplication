@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="offerlogoid", columns={"offerlogoid"})}
  * )
  */
-class offer
+class Offer
 {
     /**
      * @ORM\Id
@@ -39,7 +39,7 @@ class offer
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @ORM\OneToMany(targetEntity="KC\Entity\couponcode", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\CouponCode", mappedBy="offer")
      */
     private $couponcode;
 
@@ -184,64 +184,64 @@ class offer
     private $couponcodetype;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\conversions", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="offer")
      */
     private $conversions;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\offer_tiles", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\OfferTiles", mappedBy="offer")
      */
     private $offerTiles;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\popular_code", mappedBy="popularcode")
+     * @ORM\OneToMany(targetEntity="KC\Entity\PopularCode", mappedBy="popularcode")
      */
     private $offer;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\popular_vouchercodes", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\PopularVouchercodes", mappedBy="offer")
      */
     private $popularVouchercodes;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_offer_category", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="category")
      */
     private $categoryoffres;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_offer_page", mappedBy="refoffers")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferPage", mappedBy="refoffers")
      */
     private $offers;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\term_and_condition", mappedBy="termandcondition")
+     * @ORM\OneToMany(targetEntity="KC\Entity\TermAndCondition", mappedBy="termandcondition")
      */
     private $offertermandcondition;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\view_count", mappedBy="viewcount")
+     * @ORM\OneToMany(targetEntity="KC\Entity\ViewCount", mappedBy="viewcount")
      */
     private $offerviewcount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\votes", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Votes", mappedBy="offer")
      */
     private $votes;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="logooffer")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="logooffer")
      * @ORM\JoinColumn(name="offerlogoid", referencedColumnName="id", onDelete="restrict")
      */
     private $logooffer;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\shop", inversedBy="offer")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="offer")
      * @ORM\JoinColumn(name="shopid", referencedColumnName="id", onDelete="restrict")
      */
     private $shopOffers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\visitor", inversedBy="offer")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="offer")
      * @ORM\JoinTable(
      *     name="favorite_offer",
      *     joinColumns={@ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false)},

@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="store_id", columns={"store_id"})}
  * )
  */
-class signupfavoriteshop
+class Signupfavoriteshop
 {
     /**
      * @ORM\Id
@@ -34,7 +34,7 @@ class signupfavoriteshop
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\shop", inversedBy="shop")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="shop")
      * @ORM\JoinColumn(name="store_id", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $signupfavoriteshop;

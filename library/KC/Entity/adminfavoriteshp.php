@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="adminfavoriteshp")
  */
-class adminfavoriteshp
+class Adminfavoriteshp
 {
     /**
      * @ORM\Id
@@ -21,7 +21,7 @@ class adminfavoriteshp
     private $userId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\shop", inversedBy="adminfevoriteshops")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="adminfevoriteshops")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     private $shops;

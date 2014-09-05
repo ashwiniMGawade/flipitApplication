@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="signupmaxaccount")
  */
-class signupmaxaccount
+class Signupmaxaccount
 {
     /**
      * @ORM\Id

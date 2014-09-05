@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="moneysaving")
  */
-class moneysaving
+class MoneySaving
 {
     /**
      * @ORM\Id
@@ -31,13 +31,13 @@ class moneysaving
     private $deleted;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\page", inversedBy="moneysaving")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="moneysaving")
      * @ORM\JoinColumn(name="pageid", referencedColumnName="id")
      */
     private $page;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\articlecategory", inversedBy="moneysaving")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Articlecategory", inversedBy="moneysaving")
      * @ORM\JoinColumn(name="categoryid", referencedColumnName="id")
      */
     private $articlecategory;

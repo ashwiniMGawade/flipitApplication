@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="shopviewcount")
  */
-class shopviewcount
+class ShopViewCount
 {
     /**
      * @ORM\Id
@@ -46,7 +46,7 @@ class shopviewcount
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\shop", inversedBy="viewcount")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="viewcount")
      * @ORM\JoinColumn(name="shopid", referencedColumnName="id")
      */
     private $shop;

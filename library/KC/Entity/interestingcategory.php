@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="interestingcategory")
  */
-class interestingcategory
+class Interestingcategory
 {
     /**
      * @ORM\Id
@@ -21,7 +21,7 @@ class interestingcategory
     private $userId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\category", inversedBy="interestingcategory")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="interestingcategory")
      * @ORM\JoinColumn(name="categoryid", referencedColumnName="id")
      */
     private $category;

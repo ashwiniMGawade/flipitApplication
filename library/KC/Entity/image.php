@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(name="image", indexes={@ORM\Index(name="type_idx", columns={"type"})})
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", length=10, type="string")
- * @ORM\DiscriminatorMap({""="KC\Entity\logo"})
+ * @ORM\DiscriminatorMap({""="KC\Entity\Logo"})
  */
-class image
+class Image
 {
     /**
      * @ORM\Id
@@ -49,62 +49,62 @@ class image
     private $updated_at;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\seen_in", mappedBy="seenin")
+     * @ORM\OneToOne(targetEntity="KC\Entity\SeenIn", mappedBy="seenin")
      */
     private $seeninlogo;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\articlecategory", mappedBy="artImage")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Articlecategory", mappedBy="artImage")
      */
     private $ArtCatIcon;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\articles", mappedBy="imagearticle")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Articles", mappedBy="imagearticle")
      */
     private $articleImage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\category", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="category")
      */
     private $categoryfeaturedimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\category", mappedBy="headerimagecategory")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="headerimagecategory")
      */
     private $categoryheaderimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\category", mappedBy="iconcategory")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="iconcategory")
      */
     private $categoryicon;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\media", mappedBy="media")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Media", mappedBy="media")
      */
     private $mediaimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\offer", mappedBy="logooffer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Offer", mappedBy="logooffer")
      */
     private $logooffer;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\page", mappedBy="logo")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Page", mappedBy="logo")
      */
     private $pageheaderimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\shop", mappedBy="shops")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shops")
      */
     private $howtousebigimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\shop", mappedBy="shopimage")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shopimage")
      */
     private $smallimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\shop", mappedBy="shoplogo")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shoplogo")
      */
     private $logo;
 }

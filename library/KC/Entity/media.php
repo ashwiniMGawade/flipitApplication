@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="media", indexes={@ORM\Index(name="mediaimageid_idx", columns={"mediaimageid"})})
  */
-class media
+class Media
 {
     /**
      * @ORM\Id
@@ -65,7 +65,7 @@ class media
     private $updated_at;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="mediaimage")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="mediaimage")
      * @ORM\JoinColumn(name="mediaimageid", referencedColumnName="id", onDelete="restrict")
      */
     private $media;

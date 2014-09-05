@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})}
  * )
  */
-class visitor
+class Visitor
 {
     /**
      * @ORM\Id
@@ -150,22 +150,22 @@ class visitor
     private $changepasswordrequest;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\conversions", mappedBy="visitor")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="visitor")
      */
     private $conversions;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\visitor_keyword", mappedBy="visitor")
+     * @ORM\OneToMany(targetEntity="KC\Entity\VisitorKeyword", mappedBy="visitor")
      */
     private $visitorKeyword;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\offer", mappedBy="visitors")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Offer", mappedBy="visitors")
      */
     private $offer;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\shop", mappedBy="visitors")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Shop", mappedBy="visitors")
      */
     private $favoriteshops;
 }

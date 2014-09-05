@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="articles", indexes={@ORM\Index(name="thumbnailid", columns={"thumbnailid"})})
  */
-class articles
+class Articles
 {
     /**
      * @ORM\Id
@@ -81,33 +81,33 @@ class articles
     private $thumbnailsmallid;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\article_chapter", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="KC\Entity\ArticleChapter", mappedBy="article")
      */
     private $articleChapter;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\articleviewcount", mappedBy="articles")
+     * @ORM\OneToMany(targetEntity="KC\Entity\ArticleViewCount", mappedBy="articles")
      */
     private $articleviewcount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\moneysaving_article", mappedBy="moneysaving")
+     * @ORM\OneToMany(targetEntity="KC\Entity\MoneysavingArticle", mappedBy="moneysaving")
      */
     private $articles;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_article_store", mappedBy="relatedstores")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleStore", mappedBy="relatedstores")
      */
     private $storearticles;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="articleImage")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="articleImage")
      * @ORM\JoinColumn(name="thumbnailid", referencedColumnName="id", onDelete="restrict")
      */
     private $imagearticle;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\category", inversedBy="articles")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Category", inversedBy="articles")
      * @ORM\JoinTable(
      *     name="ref_article_category",
      *     joinColumns={@ORM\JoinColumn(name="articlesid", referencedColumnName="id", nullable=false)},

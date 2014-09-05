@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="couponcode", indexes={@ORM\Index(name="couponcode_idx", columns={"status"})})
  */
-class couponcode
+class CouponCode
 {
     /**
      * @ORM\Id
@@ -26,18 +26,8 @@ class couponcode
     private $status;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\offer", inversedBy="couponcode")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="couponcode")
      * @ORM\JoinColumn(name="offerid", referencedColumnName="id")
      */
     private $offer;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

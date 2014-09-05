@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="articleviewcount")
  */
-class articleviewcount
+class ArticleViewCount
 {
     /**
      * @ORM\Id
@@ -46,7 +46,7 @@ class articleviewcount
     private $deleted;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\articles", inversedBy="articleviewcount")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="articleviewcount")
      * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
      */
     private $articles;

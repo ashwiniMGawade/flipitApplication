@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="role")
  */
-class role
+class Role
 {
     /**
      * @ORM\Id
@@ -36,12 +36,22 @@ class role
     private $updated_at;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\rights", mappedBy="rights")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Rights", mappedBy="role")
      */
-    private $roleRights;
+    private $rights;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\user", mappedBy="users")
+     * @ORM\OneToMany(targetEntity="KC\Entity\User", mappedBy="users")
      */
-    private $role;
+    private $roleid;
+
+     public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

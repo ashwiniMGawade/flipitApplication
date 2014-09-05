@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="dashboard")
  */
-class dashboard
+class Dashboard
 {
     /**
      * @ORM\Id

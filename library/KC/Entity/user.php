@@ -14,13 +14,13 @@ use Doctrine\Common\Collections\ArrayCollection;
  *     uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})}
  * )
  */
-class user
+class User
 {
     public function __construct()
     {
-        $this->userWebsite = new ArrayCollection();
-        $this->user = new ArrayCollection();
+        $this->website = new ArrayCollection();
     }
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", length=8)
@@ -149,29 +149,28 @@ class user
     private $editorText;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\profile_image", inversedBy="profileimage")
-     * @ORM\JoinColumn(name="profileimageid", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\OneToMany(targetEntity="KC\Entity\UserSession", mappedBy="usersession")
      */
     private $user;
 
     /**
-     * 
-     * 
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ProfileImage", inversedBy="user")
+     * @ORM\JoinColumn(name="profileimageid", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
-    private $userxyz;
+    private $profileimage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\role", inversedBy="role")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Role", inversedBy="roleid")
      * @ORM\JoinColumn(name="roleid", referencedColumnName="id", onDelete="restrict")
      */
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\website", mappedBy="user")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Website", mappedBy="user")
      */
     private $website;
 
-    public function __get($property)
+     public function __get($property)
     {
         return $this->$property;
     }

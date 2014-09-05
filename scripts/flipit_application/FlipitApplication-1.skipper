@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <skipper version="3.0.0.1104" name="FlipitApplication" mvc="Zend Framework" orm="Doctrine2" uuid="f8d77ed5-cdfa-45e5-b861-23918ccbc748">
   <module name="Name of the project" import-format="Doctrine2Php" import-path="../../library/KC/Entity" uuid="5eb3913c-5ab8-42de-a18d-1fe3a4066ea1">
-    <entity name="about" uuid="{02E72079-1640-48D7-B96B-EF9CDD4C9D99}">
+    <entity name="About" uuid="{02E72079-1640-48D7-B96B-EF9CDD4C9D99}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="4b87c5e9-c30b-402e-aaae-0d87c6956cd3"/>
       <field name="title" type="string" size="100" default="NULL" uuid="4c176072-09a1-42a2-8e26-43e5759cfe22"/>
       <field name="content" type="blob" default="NULL" uuid="0c4dee99-4fec-4c8f-9442-23e592100c3b"/>
@@ -10,20 +10,22 @@
       <field name="updated_at" type="datetime" required="true" uuid="77d8c20a-f868-4fbf-b23a-ed1380e5c61a"/>
       <orm-attributes>
         <attribute name="table">about</attribute>
+        <attribute name="export-file-name">About.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="adminfavoriteshp" uuid="{BCDE8A34-4763-41EB-ADBE-72C4529E8B85}">
+    <entity name="Adminfavoriteshp" uuid="{BCDE8A34-4763-41EB-ADBE-72C4529E8B85}">
       <field name="id" description="PK" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="b557446a-f5ca-4578-bc4f-60d955eedfc0"/>
       <field name="userId" description="FK to user.id" type="integer" size="11" required="true" uuid="0c1a4486-d448-4a83-bc90-6382ebdf7056"/>
       <field name="shopId" type="integer" size="8" uuid="88ab2005-6f54-4f57-b3ca-256d8aee6c0e"/>
       <orm-attributes>
         <attribute name="table">adminfavoriteshp</attribute>
+        <attribute name="export-file-name">Adminfavoriteshp.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="adminfavoriteshp" to="shop" caption="Shop Adminfavoriteshp" owner-alias="adminfevoriteshops" inverse-alias="shops" uuid="f55fabc8-918f-4762-ac24-3e29efd7641a">
+    <association from="Adminfavoriteshp" to="Shop" caption="Shop Adminfavoriteshp" owner-alias="adminfevoriteshops" inverse-alias="shops" uuid="f55fabc8-918f-4762-ac24-3e29efd7641a">
       <association-field from="shopId" to="id"/>
     </association>
-    <entity name="affliate_network" uuid="{123CEBAB-6410-4A59-8FC6-FCCC8A2648EC}">
+    <entity name="AffliateNetwork" uuid="{123CEBAB-6410-4A59-8FC6-FCCC8A2648EC}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="ee5432b6-dfa3-49ba-89f5-844830e7c1fc"/>
       <field name="name" type="string" default="NULL" uuid="cb0e8951-e56c-4903-80b3-0902e37776e6"/>
       <field name="status" type="integer" size="1" default="NULL" uuid="1154ac08-e7ec-4920-92bb-6a54b505b07d"/>
@@ -37,15 +39,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">affliate_network</attribute>
+        <attribute name="export-file-name">AffliateNetwork.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="affliate_network" to="affliate_network" caption="affliate_network_replacewithid_affliate_network_id" owner-alias="affliate_network" inverse-alias="affliate_networks" uuid="{EEE3FFF0-42D1-44CE-BD65-F4D443AFAC92}">
+    <association from="AffliateNetwork" to="AffliateNetwork" caption="affliate_network_replacewithid_affliate_network_id" owner-alias="affliate_network" inverse-alias="affliate_networks" uuid="{EEE3FFF0-42D1-44CE-BD65-F4D443AFAC92}">
       <association-field from="replacewithid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="article_chapter" uuid="{DF31B05E-9F02-49CE-91E4-2AE301977DB9}">
+    <entity name="ArticleChapter" uuid="{DF31B05E-9F02-49CE-91E4-2AE301977DB9}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1c6fb0f4-b7c9-4a53-a2fb-962d7fa98542"/>
       <field name="title" type="string" default="NULL" uuid="20d38ab4-7000-4767-8564-81f0dd552d96"/>
       <field name="content" type="blob" default="NULL" uuid="67cdf592-3789-4af8-9dd9-9bd951aad773"/>
@@ -54,12 +57,13 @@
       <field name="articleId" type="integer" size="8" uuid="74121c62-2182-43c0-b952-3f3292694299"/>
       <orm-attributes>
         <attribute name="table">article_chapter</attribute>
+        <attribute name="export-file-name">ArticleChapter.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="article_chapter" to="articles" caption="Articles ArticleChapter" owner-alias="articleChapter" inverse-alias="article" uuid="9677f5b1-5a72-45e7-b329-322a9327ec42">
+    <association from="ArticleChapter" to="Articles" caption="Articles ArticleChapter" owner-alias="articleChapter" inverse-alias="article" uuid="9677f5b1-5a72-45e7-b329-322a9327ec42">
       <association-field from="articleId" to="id"/>
     </association>
-    <entity name="articlecategory" uuid="{C11F68A0-F755-42D5-8B6A-2229291278B5}">
+    <entity name="Articlecategory" uuid="{C11F68A0-F755-42D5-8B6A-2229291278B5}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="a25efa97-7f0c-4d80-86f0-3e6ef86d8071"/>
       <field name="name" type="string" size="100" default="NULL" uuid="09f43bc3-7a32-4343-b99c-ee7c8aabc7b0"/>
       <field name="permalink" type="string" size="255" default="NULL" uuid="ec56033f-bd3d-4260-84e0-74ee972035ca"/>
@@ -83,15 +87,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">articlecategory</attribute>
+        <attribute name="export-file-name">Articlecategory.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="articlecategory" to="image" caption="articlecategory_ibfk_1" owner-alias="ArtCatIcon" inverse-alias="artImage" uuid="{3E270EEB-6D24-47FD-8700-DB84775355F9}">
+    <association from="Articlecategory" to="Image" caption="articlecategory_ibfk_1" owner-alias="ArtCatIcon" inverse-alias="artImage" uuid="{3E270EEB-6D24-47FD-8700-DB84775355F9}">
       <association-field from="categoryiconid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="articles" uuid="{24FB2AE8-5018-45E4-9F0B-FA4A339D9337}">
+    <entity name="Articles" uuid="{24FB2AE8-5018-45E4-9F0B-FA4A339D9337}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="8eff8079-e055-4e4b-9884-c8117974a3b8"/>
       <field name="title" type="string" size="255" default="NULL" uuid="135fec25-1919-44bf-aa9a-ab13952f8a00"/>
       <field name="permalink" type="string" size="255" default="NULL" uuid="957ddd55-ec49-49b9-a97e-8dbc395f6d96"/>
@@ -112,15 +117,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">articles</attribute>
+        <attribute name="export-file-name">Articles.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="articles" to="image" caption="articles_ibfk_2" owner-alias="articleImage" inverse-alias="imagearticle" uuid="{3E24C255-8E82-4A01-9A55-63C78F573EF7}">
+    <association from="Articles" to="Image" caption="articles_ibfk_2" owner-alias="articleImage" inverse-alias="imagearticle" uuid="{3E24C255-8E82-4A01-9A55-63C78F573EF7}">
       <association-field from="thumbnailid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="articleviewcount" uuid="{5C1DCCDB-C802-43C6-8452-DCBCE3F2CCE3}">
+    <entity name="ArticleViewCount" uuid="{5C1DCCDB-C802-43C6-8452-DCBCE3F2CCE3}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="0ee0b197-db3a-4584-a29c-4f1c3ac67dfe"/>
       <field name="onclick" type="integer" size="8" required="true" uuid="e75ec382-7b31-48e1-aabd-22e2bf0be24a"/>
       <field name="onload" type="integer" size="8" default="NULL" uuid="2bd1e2aa-7369-4c71-97aa-bed835f063fa"/>
@@ -131,12 +137,13 @@
       <field name="articleid" type="integer" size="8" uuid="d03e409e-19da-4b44-b801-b4c757c372b1"/>
       <orm-attributes>
         <attribute name="table">articleviewcount</attribute>
+        <attribute name="export-file-name">ArticleViewCount.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="articleviewcount" to="articles" caption="Articles Articleviewcount" owner-alias="articleviewcount" inverse-alias="articles" uuid="0f0fca0d-3236-48fd-a3d9-a18272f7206f">
+    <association from="ArticleViewCount" to="Articles" caption="Articles Articleviewcount" owner-alias="articleviewcount" inverse-alias="articles" uuid="0f0fca0d-3236-48fd-a3d9-a18272f7206f">
       <association-field from="articleid" to="id"/>
     </association>
-    <entity name="category" uuid="{8712194F-EF54-4BB9-935F-E690F85E9139}">
+    <entity name="Category" uuid="{8712194F-EF54-4BB9-935F-E690F85E9139}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="740e3951-c917-4f11-b4af-c331f9a8fe97"/>
       <field name="name" type="string" size="100" default="NULL" uuid="10a95b40-3876-47a6-9dd7-e112fc7685fc"/>
       <field name="permalink" type="string" size="255" default="NULL" uuid="59565f40-5693-4d3d-afb2-675c0d3264d9"/>
@@ -198,27 +205,28 @@
       </index>
       <orm-attributes>
         <attribute name="table">category</attribute>
+        <attribute name="export-file-name">Category.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="category" to="image" caption="categoryFeaturedImageId_foreign_key" owner-alias="categoryfeaturedimage" inverse-alias="category" uuid="{D226A4FF-0285-4BD1-B9F0-128B55290149}">
+    <association from="Category" to="Image" caption="categoryFeaturedImageId_foreign_key" owner-alias="categoryfeaturedimage" inverse-alias="category" uuid="{D226A4FF-0285-4BD1-B9F0-128B55290149}">
       <association-field from="categoryFeaturedImageId" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">cascade</attribute>
       </orm-attributes>
     </association>
-    <association from="category" to="image" caption="categoryHeaderImageId_foreign_key" owner-alias="categoryheaderimage" inverse-alias="headerimagecategory" uuid="{A95290D2-6EC1-49AE-82B8-5AFCBCB4631D}">
+    <association from="Category" to="Image" caption="categoryHeaderImageId_foreign_key" owner-alias="categoryheaderimage" inverse-alias="headerimagecategory" uuid="{A95290D2-6EC1-49AE-82B8-5AFCBCB4631D}">
       <association-field from="categoryHeaderImageId" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">cascade</attribute>
       </orm-attributes>
     </association>
-    <association from="category" to="image" caption="category_categoryiconid_image_id" owner-alias="categoryicon" inverse-alias="iconcategory" uuid="{FC12003C-2B6E-4DF4-BDA7-761836F6208B}">
+    <association from="Category" to="Image" caption="category_categoryiconid_image_id" owner-alias="categoryicon" inverse-alias="iconcategory" uuid="{FC12003C-2B6E-4DF4-BDA7-761836F6208B}">
       <association-field from="categoryiconid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="conversions" uuid="{55724A03-6EA1-4888-9464-81B707CD054A}">
+    <entity name="Conversions" uuid="{55724A03-6EA1-4888-9464-81B707CD054A}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b07472f3-c11a-4cad-8a33-fec4b2f63a8c"/>
       <field name="IP" type="string" size="50" default="NULL" uuid="039d788b-b797-4a57-b6b5-1195a61c334d"/>
       <field name="subid" type="string" size="50" default="NULL" uuid="aa4042f5-c698-4743-8885-b5957e2cad5c"/>
@@ -242,18 +250,19 @@
       </index>
       <orm-attributes>
         <attribute name="table">conversions</attribute>
+        <attribute name="export-file-name">Conversions.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="conversions" to="shop" caption="Shop Conversions" owner-alias="conversions" inverse-alias="shop" uuid="aa1f04d8-d7f2-4cae-912b-4fddfce218b3">
+    <association from="Conversions" to="Shop" caption="Shop Conversions" owner-alias="conversions" inverse-alias="shop" uuid="aa1f04d8-d7f2-4cae-912b-4fddfce218b3">
       <association-field from="shopId" to="id"/>
     </association>
-    <association from="conversions" to="visitor" caption="Visitor Conversions" owner-alias="conversions" inverse-alias="visitor" uuid="09dbb063-18d2-4cc5-813e-82284e2ebe2f">
+    <association from="Conversions" to="Visitor" caption="Visitor Conversions" owner-alias="conversions" inverse-alias="visitor" uuid="09dbb063-18d2-4cc5-813e-82284e2ebe2f">
       <association-field from="visitorId" to="id"/>
     </association>
-    <association from="conversions" to="offer" caption="Offer Conversions" owner-alias="conversions" inverse-alias="offer" uuid="cd2fbaea-9ba5-47f8-b301-8c81a3887dfa">
+    <association from="Conversions" to="Offer" caption="Offer Conversions" owner-alias="conversions" inverse-alias="offer" uuid="cd2fbaea-9ba5-47f8-b301-8c81a3887dfa">
       <association-field from="offerId" to="id"/>
     </association>
-    <entity name="couponcode" uuid="{588AB6CB-74FB-4883-82DE-FF85B94A2723}">
+    <entity name="CouponCode" uuid="{588AB6CB-74FB-4883-82DE-FF85B94A2723}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="46efb864-9b8b-468c-ae75-bd0c33e0e8f1"/>
       <field name="code" type="string" size="255" default="NULL" uuid="f6b15c56-d2e0-46a0-8142-c3cbffc48e18"/>
       <field name="status" description="1-available ,0-used" type="integer" size="1" default="'1'" uuid="53706090-b255-4c69-93df-2fa5b1706192"/>
@@ -263,12 +272,13 @@
       </index>
       <orm-attributes>
         <attribute name="table">couponcode</attribute>
+        <attribute name="export-file-name">CouponCode.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="couponcode" to="offer" caption="Offer Couponcode" owner-alias="couponcode" inverse-alias="offer" uuid="b6c02f18-e7b2-45f8-ba5b-ea772609bf50">
+    <association from="CouponCode" to="Offer" caption="Offer Couponcode" owner-alias="couponcode" inverse-alias="offer" uuid="b6c02f18-e7b2-45f8-ba5b-ea772609bf50">
       <association-field from="offerid" to="id"/>
     </association>
-    <entity name="dashboard" uuid="{20C0A17B-902E-48DD-8DE3-EB5793CD9D0D}">
+    <entity name="Dashboard" uuid="{20C0A17B-902E-48DD-8DE3-EB5793CD9D0D}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="4159e21d-c5c3-45f4-a9fa-39b26cc1bee8"/>
       <field name="message" type="string" default="NULL" uuid="1532d715-a136-4e64-9223-3bcfd8c50e59"/>
       <field name="no_of_offers" type="integer" size="8" default="NULL" uuid="a8f11db8-983e-40b0-9ca0-61a123f45d06"/>
@@ -286,9 +296,10 @@
       <field name="total_no_of_shops_online_code_thisweek" type="integer" size="11" default="'0'" required="true" uuid="45f73381-6a4e-43de-a5ef-3fc68de534cf"/>
       <orm-attributes>
         <attribute name="table">dashboard</attribute>
+        <attribute name="export-file-name">Dashboard.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="disqus_comments" uuid="{32F111C9-2D80-44A5-A140-1D90070BC83D}">
+    <entity name="DisqusComments" uuid="{32F111C9-2D80-44A5-A140-1D90070BC83D}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="367a407e-57f2-4b4e-a379-980fd721ef21"/>
       <field name="comment_id" type="integer" size="8" default="NULL" uuid="036d7d56-a769-4c4b-89e6-2ce107226eed"/>
       <field name="message" type="string" size="255" default="NULL" uuid="9269cf90-2ce1-4d58-8ea1-81d70e109104"/>
@@ -306,9 +317,10 @@
       </index>
       <orm-attributes>
         <attribute name="table">disqus_comments</attribute>
+        <attribute name="export-file-name">DisqusComments.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="email_light_box" uuid="{724EC939-1631-4336-849B-BC664936F622}">
+    <entity name="EmailLightBox" uuid="{724EC939-1631-4336-849B-BC664936F622}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e4dad0b8-1d7b-4327-a200-341a4f60d6c6"/>
       <field name="title" type="string" size="100" default="NULL" uuid="7f3229a6-9e86-4ad5-838d-1776da932aba"/>
       <field name="content" type="blob" default="NULL" uuid="ec5674e5-0191-42f6-9eca-044d25bc9cc9"/>
@@ -317,9 +329,10 @@
       <field name="updated_at" type="datetime" required="true" uuid="ea3c8be5-ea8d-44de-899f-ea2b3e0c9f41"/>
       <orm-attributes>
         <attribute name="table">email_light_box</attribute>
+        <attribute name="export-file-name">EmailLightBox.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="email_subscribe" uuid="{A72A1241-6090-45DD-9390-E1E8E67CBA45}">
+    <entity name="EmailSubscribe" uuid="{A72A1241-6090-45DD-9390-E1E8E67CBA45}">
       <field name="id" type="integer" size="20" required="true" primary="true" auto-increment="true" uuid="00583230-ec4c-4029-87a3-c7949dca750a"/>
       <field name="email" type="string" size="255" default="NULL" uuid="d07bae52-5ee2-429c-91a7-a2dbc4df5a62"/>
       <field name="send" type="integer" size="20" uuid="cb7dba2f-2d09-4c0a-af27-d4b02d1bbf36"/>
@@ -328,9 +341,10 @@
       <field name="updated_at" type="datetime" required="true" uuid="7bd5d7c1-bc7f-4995-8b02-01a59bfeec20"/>
       <orm-attributes>
         <attribute name="table">email_subscribe</attribute>
+        <attribute name="export-file-name">EmailSubscribe.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="emails" uuid="{756CF415-F185-47DE-9F6B-EFD73117D94A}">
+    <entity name="Emails" uuid="{756CF415-F185-47DE-9F6B-EFD73117D94A}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="690ab5c1-cc2c-424b-b2b0-3f19f9ba5814"/>
       <field name="type" type="string" default="NULL" uuid="2fbc7447-0d3a-453f-8cf3-5fdd447a6970"/>
       <field name="header" type="string" default="NULL" uuid="c59836b8-91bf-4840-882f-68e9ec760ba7"/>
@@ -346,9 +360,10 @@
       <field name="send_counter" type="integer" size="8" default="NULL" uuid="9551d4c7-c18e-430e-8b13-70fdf8d3e88b"/>
       <orm-attributes>
         <attribute name="table">emails</attribute>
+        <attribute name="export-file-name">Emails.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="emailsettings" uuid="{6CE256AA-47AE-491B-9F1A-51D4709ECAA5}">
+    <entity name="EmailSettings" uuid="{6CE256AA-47AE-491B-9F1A-51D4709ECAA5}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="d384f83f-fbb6-4e05-aa92-2ccc7a530ffa"/>
       <field name="email" type="string" default="NULL" uuid="87682b87-f58b-49bc-bc3f-275741525200"/>
       <field name="name" type="string" default="NULL" uuid="27d178c1-b1ab-4f03-a8e9-6ab11c6b34ff"/>
@@ -359,9 +374,10 @@
       <field name="updated_at" type="datetime" default="NULL" uuid="d5fe8171-8cfe-459b-aca2-ff5833c6b247"/>
       <orm-attributes>
         <attribute name="table">emailsettings</attribute>
+        <attribute name="export-file-name">EmailSettings.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="excluded_keyword" uuid="{48A2018C-10DA-4507-B60C-75FECBA88531}">
+    <entity name="ExcludedKeyword" uuid="{48A2018C-10DA-4507-B60C-75FECBA88531}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="41cac2fc-3f87-460e-a540-753144063afc"/>
       <field name="keyword" type="string" size="255" default="NULL" uuid="81f8084d-9b07-43e0-87da-0179ea3964ed"/>
       <field name="url" type="string" size="255" default="NULL" uuid="d77694b5-b8ec-4819-8990-5ac1ec305616"/>
@@ -370,9 +386,10 @@
       <field name="updated_at" type="datetime" required="true" uuid="7c07fa11-0281-46bb-b82b-310dbb4a7586"/>
       <orm-attributes>
         <attribute name="table">excluded_keyword</attribute>
+        <attribute name="export-file-name">ExcludedKeyword.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="favorite_offer" uuid="{B23C9A63-0E02-4C14-B625-DA4986E6A3BC}">
+    <entity name="FavoriteOffer" uuid="{B23C9A63-0E02-4C14-B625-DA4986E6A3BC}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b81bf975-1250-4f3f-9e0e-237b9d9c470f"/>
       <field name="deleted" type="integer" size="1" required="true" uuid="b054d23d-b50f-46dc-a711-0321252a4302"/>
       <field name="created_at" type="datetime" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="dba943f6-5a6a-439c-a87c-281a6602302c"/>
@@ -380,17 +397,18 @@
       <field name="offerId" type="integer" size="8" required="true" primary="true" uuid="43f15c82-4501-45bc-9983-f7ac57ec486d"/>
       <orm-attributes>
         <attribute name="table">favorite_offer</attribute>
+        <attribute name="export-file-name">FavoriteOffer.php</attribute>
       </orm-attributes>
     </entity>
-    <many-to-many mn-entity="favorite_offer" caption="Visitor to Offer" uuid="d1c31601-0ef7-413e-a08b-2c8347e02af0">
-      <many-to-many-entity name="offer" owning-side="true" alias="offer" uuid="a9057be7-cd0c-44f8-9bc8-c43aa72092f3">
+    <many-to-many mn-entity="FavoriteOffer" caption="Visitor to Offer" uuid="d1c31601-0ef7-413e-a08b-2c8347e02af0">
+      <many-to-many-entity name="Offer" owning-side="true" alias="offer" uuid="a9057be7-cd0c-44f8-9bc8-c43aa72092f3">
         <many-to-many-field from="offerId" to="id"/>
       </many-to-many-entity>
-      <many-to-many-entity name="visitor" owning-side="false" alias="visitors" uuid="e62fc2af-9fec-47e8-a269-7ddd0c01ae4b">
+      <many-to-many-entity name="Visitor" owning-side="false" alias="visitors" uuid="e62fc2af-9fec-47e8-a269-7ddd0c01ae4b">
         <many-to-many-field from="visitorId" to="id"/>
       </many-to-many-entity>
     </many-to-many>
-    <entity name="favorite_shop" uuid="{CC353541-D9A2-4951-B9EC-9C409201671B}">
+    <entity name="FavoriteShop" uuid="{CC353541-D9A2-4951-B9EC-9C409201671B}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="525a75ec-5b67-480a-8b6f-73d22482bc76"/>
       <field name="created_at" type="datetime" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="7b01ed52-2473-4e3a-81d0-f55e98e18eab"/>
       <field name="deleted" type="integer" size="11" default="'0'" required="true" uuid="07aa58bb-8388-4a44-be86-40990cd9ade3"/>
@@ -399,17 +417,18 @@
       <index name="fav_cascade"/>
       <orm-attributes>
         <attribute name="table">favorite_shop</attribute>
+        <attribute name="export-file-name">FavoriteShop.php</attribute>
       </orm-attributes>
     </entity>
-    <many-to-many mn-entity="favorite_shop" caption="Visitor to Shop" uuid="74f237f0-8dca-4ced-9218-ab3df15adb51">
-      <many-to-many-entity name="shop" owning-side="true" alias="favoriteshops" uuid="b45f5621-62cd-4ee9-b94e-32ad759ce087">
+    <many-to-many mn-entity="FavoriteShop" caption="Visitor to Shop" uuid="74f237f0-8dca-4ced-9218-ab3df15adb51">
+      <many-to-many-entity name="Shop" owning-side="true" alias="favoriteshops" uuid="b45f5621-62cd-4ee9-b94e-32ad759ce087">
         <many-to-many-field from="shopId" to="id"/>
       </many-to-many-entity>
-      <many-to-many-entity name="visitor" owning-side="false" alias="visitors" uuid="ce66ce0b-0757-4e6a-9740-099a85faf351">
+      <many-to-many-entity name="Visitor" owning-side="false" alias="visitors" uuid="ce66ce0b-0757-4e6a-9740-099a85faf351">
         <many-to-many-field from="visitorId" to="id"/>
       </many-to-many-entity>
     </many-to-many>
-    <entity name="footer" uuid="{33BE8E97-D05B-4EAB-8EF0-1BF069C542D8}">
+    <entity name="Footer" uuid="{33BE8E97-D05B-4EAB-8EF0-1BF069C542D8}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3094ff90-d9ab-4ab0-8d6c-9cb040c5789c"/>
       <field name="topfooter" type="string" default="NULL" uuid="ff218058-4784-440b-81a3-d15c36425d28"/>
       <field name="middlecolumn1" type="string" default="NULL" uuid="c770eb98-895e-492f-9428-c12c3a4cdabf"/>
@@ -422,9 +441,10 @@
       <field name="updated_at" type="datetime" required="true" uuid="070b70bf-9fdd-4a0f-b621-bbebcf810c70"/>
       <orm-attributes>
         <attribute name="table">footer</attribute>
+        <attribute name="export-file-name">Footer.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="image" uuid="{2294F353-146D-4CAC-A218-4E76AE2019B1}">
+    <entity name="Image" uuid="{2294F353-146D-4CAC-A218-4E76AE2019B1}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="aa47b9f8-ff71-45a2-868f-1165a088d281"/>
       <field name="ext" type="string" size="5" default="NULL" uuid="793ab2ce-1a25-4e30-a9be-13eeb8b9f0ad"/>
       <field name="type" type="string" size="10" default="NULL" uuid="c3f7bdab-99a8-463b-902d-244b93f56803"/>
@@ -439,28 +459,31 @@
       <inheritance-parent discriminator-field="type" type="SINGLE_TABLE" uuid="740f68c1-0ba9-410b-88dc-9e1ada15e647"/>
       <orm-attributes>
         <attribute name="table">image</attribute>
+        <attribute name="export-file-name">Image.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="interestingcategory" uuid="{0E41DE14-96FB-4A27-A9A2-F4BE68023AAC}">
+    <entity name="Interestingcategory" uuid="{0E41DE14-96FB-4A27-A9A2-F4BE68023AAC}">
       <field name="id" description="PK" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="18105945-78e2-4ba2-a269-4c74d1f39d99"/>
       <field name="userId" description="FK to user.id" type="integer" size="11" required="true" uuid="5d880466-ce23-42de-80f9-409edea050bd"/>
       <field name="categoryid" type="integer" size="8" uuid="921cad8d-2dbf-4561-829f-4643b070ad0e"/>
       <orm-attributes>
         <attribute name="table">interestingcategory</attribute>
+        <attribute name="export-file-name">Interestingcategory.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="interestingcategory" to="category" caption="Category Interestingcategory" owner-alias="interestingcategory" inverse-alias="category" uuid="bfdd9516-4613-4e84-a8be-9c996ae4989a">
+    <association from="Interestingcategory" to="Category" caption="Category Interestingcategory" owner-alias="interestingcategory" inverse-alias="category" uuid="bfdd9516-4613-4e84-a8be-9c996ae4989a">
       <association-field from="categoryid" to="id"/>
     </association>
-    <entity name="locale_settings" uuid="{72537FAC-BC48-4F6C-9BF2-018C3C491C26}">
+    <entity name="LocaleSettings" uuid="{72537FAC-BC48-4F6C-9BF2-018C3C491C26}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="21ab646c-8a04-4ea1-9f4d-6563c68f61ec"/>
       <field name="locale" type="string" size="10" default="NULL" uuid="b6b881b1-5766-4aaf-b61b-a38747604463"/>
       <field name="timezone" type="string" size="255" default="NULL" uuid="205cb7ac-fd56-435f-943e-36880465b2db"/>
       <orm-attributes>
         <attribute name="table">locale_settings</attribute>
+        <attribute name="export-file-name">LocaleSettings.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="mainmenu" uuid="{1D245D3D-5D55-4F0E-840B-82D535FE479B}">
+    <entity name="Mainmenu" uuid="{1D245D3D-5D55-4F0E-840B-82D535FE479B}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1bea913f-07f2-4959-bdb7-42d917a67913"/>
       <field name="name" type="string" size="255" default="NULL" uuid="64bfa368-50c6-439d-af67-751b749e0798"/>
       <field name="parentId" type="integer" size="8" default="NULL" uuid="bbbc73f6-e1d3-486b-a845-bf7f139642c0"/>
@@ -473,9 +496,10 @@
       <field name="position" type="integer" size="11" default="'0'" required="true" uuid="e23b6a3a-f95c-4c5c-8162-d8afd7e2923d"/>
       <orm-attributes>
         <attribute name="table">mainmenu</attribute>
+        <attribute name="export-file-name">Mainmenu.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="media" uuid="{1442674D-957C-44E0-A00C-388BB8A50977}">
+    <entity name="Media" uuid="{1442674D-957C-44E0-A00C-388BB8A50977}">
       <field name="id" type="integer" size="8" required="true" primary="true" uuid="f74242b6-49f8-4fcb-ac74-c9f4efa691b7"/>
       <field name="name" type="string" size="100" default="NULL" uuid="6713e24d-9996-4026-9ee5-7405cb870aa5"/>
       <field name="alternatetext" type="string" size="255" default="NULL" uuid="4a5941a5-8ed9-4198-a19c-30d2fddcbdb2"/>
@@ -493,15 +517,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">media</attribute>
+        <attribute name="export-file-name">Media.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="media" to="image" caption="media_mediaimageid_image_id" owner-alias="mediaimage" inverse-alias="media" uuid="{2F123478-A85F-4DD3-8A04-2E85A1E19BA6}">
+    <association from="Media" to="Image" caption="media_mediaimageid_image_id" owner-alias="mediaimage" inverse-alias="media" uuid="{2F123478-A85F-4DD3-8A04-2E85A1E19BA6}">
       <association-field from="mediaimageid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="menu" uuid="{E494873A-3753-47AC-909E-1CF78046AB85}">
+    <entity name="Menu" uuid="{E494873A-3753-47AC-909E-1CF78046AB85}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="27550b00-0e9b-4976-b995-5027a7b392d9"/>
       <field name="name" type="string" size="255" default="NULL" uuid="7ceae95c-8ba7-432d-b654-f07515f9370e"/>
       <field name="parentId" type="integer" size="8" default="NULL" uuid="4cf59c34-bd98-47a0-a89f-50974b793cc2"/>
@@ -514,16 +539,18 @@
       <field name="position" type="integer" size="11" default="'0'" required="true" uuid="f9927871-7dc2-4af2-abc2-a18ad4a7fc03"/>
       <orm-attributes>
         <attribute name="table">menu</attribute>
+        <attribute name="export-file-name">Menu.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="migration_version" uuid="{B9019580-8935-4642-A7D1-66334AD4190B}">
+    <entity name="MigrationVersion" uuid="{B9019580-8935-4642-A7D1-66334AD4190B}">
       <field name="version" type="integer" size="11" default="NULL" uuid="13c4b9a2-e888-4e48-b4bd-af5faaa5141a"/>
       <field name="id" type="integer" required="true" unique="true" primary="true" auto-increment="true" uuid="b5329e49-3f68-45c4-b734-afc43cf107de"/>
       <orm-attributes>
         <attribute name="table">migration_version</attribute>
+        <attribute name="export-file-name">MigrationVersion.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="moneysaving" uuid="{A96CBA2F-63BA-46FC-A565-0EE5FA067917}">
+    <entity name="MoneySaving" uuid="{A96CBA2F-63BA-46FC-A565-0EE5FA067917}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="c4f85aba-27df-441b-a67f-2f8bd0096f21"/>
       <field name="created_at" type="datetime" required="true" uuid="6f1bdf53-bdb9-4356-a619-098eb5339c55"/>
       <field name="updated_at" type="datetime" required="true" uuid="f842b21a-4177-4ff7-91da-6ca815cc8942"/>
@@ -532,15 +559,16 @@
       <field name="categoryid" type="integer" size="8" uuid="6f9a93b0-a2c1-4f99-8bf6-3882170c7479"/>
       <orm-attributes>
         <attribute name="table">moneysaving</attribute>
+        <attribute name="export-file-name">MoneySaving.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="moneysaving" to="page" caption="Page Moneysaving" owner-alias="moneysaving" inverse-alias="page" uuid="c1a3eb4e-69a1-4978-bdab-d6158be1b715">
+    <association from="MoneySaving" to="Page" caption="Page Moneysaving" owner-alias="moneysaving" inverse-alias="page" uuid="c1a3eb4e-69a1-4978-bdab-d6158be1b715">
       <association-field from="pageid" to="id"/>
     </association>
-    <association from="moneysaving" to="articlecategory" caption="Articlecategory Moneysaving" owner-alias="moneysaving" inverse-alias="articlecategory" uuid="661565db-3480-4677-b5a3-4489cc13c68d">
+    <association from="MoneySaving" to="Articlecategory" caption="Articlecategory Moneysaving" owner-alias="moneysaving" inverse-alias="articlecategory" uuid="661565db-3480-4677-b5a3-4489cc13c68d">
       <association-field from="categoryid" to="id"/>
     </association>
-    <entity name="moneysaving_article" uuid="{177840F9-376A-4AD3-A79C-50048F35FE0F}">
+    <entity name="MoneysavingArticle" uuid="{177840F9-376A-4AD3-A79C-50048F35FE0F}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="cea4277a-7395-454c-97f7-1f8b72563bd7"/>
       <field name="type" type="string" size="255" default="NULL" uuid="12f03056-097e-40fa-b835-bfbdbc3a5b72"/>
       <field name="position" description="Holds the code position among popular code list" type="integer" size="8" default="NULL" uuid="f417bbf1-1aab-4bce-a08e-a8ed1954ecb7"/>
@@ -560,15 +588,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">moneysaving_article</attribute>
+        <attribute name="export-file-name">MoneysavingArticle.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="moneysaving_article" to="articles" caption="moneysaving_article_ibfk_1" owner-alias="articles" inverse-alias="moneysaving" uuid="{A6D23FA2-3F4C-4D84-9A3C-3BC82D9F7E35}">
+    <association from="MoneysavingArticle" to="Articles" caption="moneysaving_article_ibfk_1" owner-alias="articles" inverse-alias="moneysaving" uuid="{A6D23FA2-3F4C-4D84-9A3C-3BC82D9F7E35}">
       <association-field from="articleid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="newslettersub" uuid="{A6283039-7B14-4C73-B276-6DCADECF35E6}">
+    <entity name="Newslettersub" uuid="{A6283039-7B14-4C73-B276-6DCADECF35E6}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6e3974ee-7774-41a8-9bd2-f5b481aaf316"/>
       <field name="email" type="string" size="255" required="true" uuid="c5272993-bd21-4132-8ae1-1eed4750f4f5"/>
       <field name="deleted" type="integer" size="11" default="0" uuid="10955111-280c-418c-b81a-5a111465149f"/>
@@ -576,9 +605,10 @@
       <field name="updated_at" type="datetime" required="true" uuid="1e26b53e-28da-4590-881f-fa0733f15d37"/>
       <orm-attributes>
         <attribute name="table">newslettersub</attribute>
+        <attribute name="export-file-name">Newslettersub.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="offer" uuid="{C10F19BD-C513-4AA8-967C-7EA2FD26C65A}">
+    <entity name="Offer" uuid="{C10F19BD-C513-4AA8-967C-7EA2FD26C65A}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="fecb4c72-177f-40bf-b3d5-a916c8858120"/>
       <field name="title" type="string" size="255" default="NULL" required="true" uuid="541c7df8-4394-472d-ae90-8bd935d86bfb"/>
       <field name="visability" type="string" size="255" default="NULL" uuid="7421a878-b530-4aeb-bc38-ef3c52ba3ee7"/>
@@ -634,21 +664,22 @@
       </index>
       <orm-attributes>
         <attribute name="table">offer</attribute>
+        <attribute name="export-file-name">Offer.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="offer" to="image" caption="offer_offerlogoid_image_id" owner-alias="logooffer" inverse-alias="logooffer" uuid="{545F92C1-D93F-4212-9AA9-C403ACF6D51E}">
+    <association from="Offer" to="Image" caption="offer_offerlogoid_image_id" owner-alias="logooffer" inverse-alias="logooffer" uuid="{545F92C1-D93F-4212-9AA9-C403ACF6D51E}">
       <association-field from="offerlogoid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="offer" to="shop" caption="offer_shopid_shop_id" owner-alias="offer" inverse-alias="shopOffers" uuid="{29BF0807-E90E-46E2-8C0A-263D6736CFEA}">
+    <association from="Offer" to="Shop" caption="offer_shopid_shop_id" owner-alias="offer" inverse-alias="shopOffers" uuid="{29BF0807-E90E-46E2-8C0A-263D6736CFEA}">
       <association-field from="shopid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="offer_news" uuid="{0F672F06-8F7D-477E-94A3-DD8DE3277E6F}">
+    <entity name="OfferNews" uuid="{0F672F06-8F7D-477E-94A3-DD8DE3277E6F}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e55dbd97-2bfe-4732-b678-86f0c01ba702"/>
       <field name="offerId" type="integer" size="8" default="NULL" uuid="ca5e889d-b4a1-4ded-99de-ae9bb416794e"/>
       <field name="title" type="string" size="225" default="NULL" uuid="2e426b63-7435-42f2-87be-120af4f96d20"/>
@@ -662,12 +693,13 @@
       <field name="shopId" type="integer" size="8" uuid="51607777-edb4-4a84-b52f-46e09616a80b"/>
       <orm-attributes>
         <attribute name="table">offer_news</attribute>
+        <attribute name="export-file-name">OfferNews.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="offer_news" to="shop" caption="Shop OfferNews" owner-alias="offerNews" inverse-alias="shop" uuid="fda41b41-f5b1-4015-b79f-dfdc424703a9">
+    <association from="OfferNews" to="Shop" caption="Shop OfferNews" owner-alias="offerNews" inverse-alias="shop" uuid="fda41b41-f5b1-4015-b79f-dfdc424703a9">
       <association-field from="shopId" to="id"/>
     </association>
-    <entity name="offer_tiles" uuid="{4632681D-6396-4694-BC3E-F6679CCEC6B7}">
+    <entity name="OfferTiles" uuid="{4632681D-6396-4694-BC3E-F6679CCEC6B7}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3715233d-b68e-4459-8dfe-b7e890fbbed0"/>
       <field name="label" type="string" size="255" default="NULL" uuid="6b229680-a199-4393-a845-3dc87b9c38d1"/>
       <field name="type" type="string" size="50" default="NULL" uuid="f662b803-930a-41d2-a534-e01168c31322"/>
@@ -681,12 +713,13 @@
       <field name="offerId" type="integer" size="8" uuid="2ab74f51-819d-476d-8431-6d6efae4f77b"/>
       <orm-attributes>
         <attribute name="table">offer_tiles</attribute>
+        <attribute name="export-file-name">OfferTiles.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="offer_tiles" to="offer" caption="Offer OfferTiles" owner-alias="offerTiles" inverse-alias="offer" uuid="9a24abea-b3fb-47b9-b9de-2cf47cc98d10">
+    <association from="OfferTiles" to="Offer" caption="Offer OfferTiles" owner-alias="offerTiles" inverse-alias="offer" uuid="9a24abea-b3fb-47b9-b9de-2cf47cc98d10">
       <association-field from="offerId" to="id"/>
     </association>
-    <entity name="page" uuid="{65201ACA-6B82-4138-9229-A571E68FA944}">
+    <entity name="Page" uuid="{65201ACA-6B82-4138-9229-A571E68FA944}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="8d0089d9-aa91-4b7b-b3fa-e11746f12711"/>
       <field name="pagetype" type="string" size="10" default="NULL" uuid="5c061114-44ff-49f7-9456-af60e8e26d25"/>
       <field name="pagetitle" type="string" size="255" default="NULL" uuid="6537fa0c-4b8d-4f60-b470-0c0b50ea8a89"/>
@@ -746,21 +779,22 @@
       </index>
       <orm-attributes>
         <attribute name="table">page</attribute>
+        <attribute name="export-file-name">Page.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="page" to="image" caption="pageHeaderImageId_foreign_key" owner-alias="pageheaderimage" inverse-alias="logo" uuid="{82D22C11-F469-47C8-914C-B00C6875F01D}">
+    <association from="Page" to="Image" caption="pageHeaderImageId_foreign_key" owner-alias="pageheaderimage" inverse-alias="logo" uuid="{82D22C11-F469-47C8-914C-B00C6875F01D}">
       <association-field from="pageHeaderImageId" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">cascade</attribute>
       </orm-attributes>
     </association>
-    <association from="page" to="page_attribute" caption="page_pageattributeid_page_attribute_id" owner-alias="pageattribute" inverse-alias="page" uuid="{D7DB4EFC-4F69-4CA9-97CA-402160ED55F8}">
+    <association from="Page" to="PageAttribute" caption="page_pageattributeid_page_attribute_id" owner-alias="pageattribute" inverse-alias="page" uuid="{D7DB4EFC-4F69-4CA9-97CA-402160ED55F8}">
       <association-field from="pageattributeid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="page_attribute" uuid="{D89686DC-C85E-4955-BA6C-89B424BEF139}">
+    <entity name="PageAttribute" uuid="{D89686DC-C85E-4955-BA6C-89B424BEF139}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="8ee9e264-5e66-402d-9f10-b60d49204dcf"/>
       <field name="name" type="string" size="255" default="NULL" uuid="d0d26e3c-0b7e-4cb2-9882-4d010a205b74"/>
       <field name="deleted" type="integer" size="1" default="0" uuid="ad69b59a-e74e-44ad-8732-5c7b5be82250"/>
@@ -768,9 +802,10 @@
       <field name="updated_at" type="datetime" required="true" uuid="c458f974-e430-4020-bbf6-40e70f35fcfc"/>
       <orm-attributes>
         <attribute name="table">page_attribute</attribute>
+        <attribute name="export-file-name">PageAttribute.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="popular_category" uuid="{207D8C23-5261-43F0-9D6B-B9617D15AB1A}">
+    <entity name="PopularCategory" uuid="{207D8C23-5261-43F0-9D6B-B9617D15AB1A}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="2d3dd869-cc82-46a3-b6a3-e1f607c62ac4"/>
       <field name="type" type="string" size="255" default="NULL" uuid="4b6e746d-8c50-46e2-bd27-f24817df41d9"/>
       <field name="position" description="Holds the shop position among popular category list" type="integer" size="8" default="NULL" uuid="74d64a3a-c008-45a0-8c2e-489c904f0223"/>
@@ -781,12 +816,13 @@
       <field name="categoryid" type="integer" size="8" uuid="affc28e1-0857-4e3b-bd51-96804af8ab1d"/>
       <orm-attributes>
         <attribute name="table">popular_category</attribute>
+        <attribute name="export-file-name">PopularCategory.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="popular_category" to="category" caption="Category PopularCategory" owner-alias="popularCategory" inverse-alias="category" uuid="abff03ea-bf6c-4a4e-944c-2507d7cee6da">
+    <association from="PopularCategory" to="Category" caption="Category PopularCategory" owner-alias="popularCategory" inverse-alias="category" uuid="abff03ea-bf6c-4a4e-944c-2507d7cee6da">
       <association-field from="categoryid" to="id"/>
     </association>
-    <entity name="popular_code" uuid="{20A6C0DA-6C44-4DEC-877A-1D7A454EBEF6}">
+    <entity name="PopularCode" uuid="{20A6C0DA-6C44-4DEC-877A-1D7A454EBEF6}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="39fc185e-15d6-4883-94a3-427fc6916e53"/>
       <field name="type" type="string" size="255" default="NULL" uuid="fbd68e8e-6ffa-4fa2-aa4c-72e052ea3f10"/>
       <field name="position" description="Holds the code position among popular code list" type="integer" size="8" default="NULL" uuid="943c305f-1a9b-400b-a600-27bfefcae75f"/>
@@ -803,15 +839,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">popular_code</attribute>
+        <attribute name="export-file-name">PopularCode.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="popular_code" to="offer" caption="popular_code_offerid_offer_id" owner-alias="offer" inverse-alias="popularcode" uuid="{7A7F25AA-27D2-4A17-9BFC-C4238A3254E9}">
+    <association from="PopularCode" to="Offer" caption="popular_code_offerid_offer_id" owner-alias="offer" inverse-alias="popularcode" uuid="{7A7F25AA-27D2-4A17-9BFC-C4238A3254E9}">
       <association-field from="offerid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="popular_shop" uuid="{B279B551-7F3C-46BF-8A92-2DAABD3C5082}">
+    <entity name="PopularShop" uuid="{B279B551-7F3C-46BF-8A92-2DAABD3C5082}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="c1c900cd-31fb-4982-8ddd-101e6d1e4d62"/>
       <field name="type" type="string" size="255" default="NULL" uuid="5dd816fb-b2b3-4108-bda0-c26b9990f03d"/>
       <field name="position" type="integer" size="8" default="NULL" uuid="05c32fb4-275f-4977-9d61-ce6ae16c878a"/>
@@ -831,15 +868,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">popular_shop</attribute>
+        <attribute name="export-file-name">PopularShop.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="popular_shop" to="shop" caption="popular_shop_shopid_shop_id" owner-alias="popularshop" inverse-alias="popularshops" uuid="{2EEC0FE0-CA93-4837-8D73-DC8838A1C3ED}">
+    <association from="PopularShop" to="Shop" caption="popular_shop_shopid_shop_id" owner-alias="popularshop" inverse-alias="popularshops" uuid="{2EEC0FE0-CA93-4837-8D73-DC8838A1C3ED}">
       <association-field from="shopid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="popular_vouchercodes" uuid="{9B7C13CD-50C6-44D8-BD2D-54B295C8DF24}">
+    <entity name="PopularVouchercodes" uuid="{9B7C13CD-50C6-44D8-BD2D-54B295C8DF24}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="5ce68334-c201-4d96-928f-28cbad981057"/>
       <field name="type" type="string" size="255" default="NULL" uuid="fea52060-0cdf-4f0c-bffe-e564a39f89c7"/>
       <field name="position" description="Holds the shop position among popular offer list" type="integer" size="8" default="NULL" uuid="7bab05e5-2874-445b-9fd4-5e80dae69cf1"/>
@@ -850,12 +888,13 @@
       <field name="vaoucherofferid" type="integer" size="8" uuid="93b3c6de-5d98-41a4-995c-2e3ecdd46782"/>
       <orm-attributes>
         <attribute name="table">popular_vouchercodes</attribute>
+        <attribute name="export-file-name">PopularVouchercodes.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="popular_vouchercodes" to="offer" caption="Offer PopularVouchercodes" owner-alias="popularVouchercodes" inverse-alias="offer" uuid="dbf04ab8-ad43-4472-9f31-0779e2f08d3b">
+    <association from="PopularVouchercodes" to="Offer" caption="Offer PopularVouchercodes" owner-alias="popularVouchercodes" inverse-alias="offer" uuid="dbf04ab8-ad43-4472-9f31-0779e2f08d3b">
       <association-field from="vaoucherofferid" to="id"/>
     </association>
-    <entity name="ref_article_category" uuid="{986796AD-C059-4930-8475-3956AF7B9199}">
+    <entity name="RefArticleCategory" uuid="{986796AD-C059-4930-8475-3956AF7B9199}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="cfcc8434-da3e-4c63-bb9e-642d157dbc98"/>
       <field name="created_at" type="datetime" required="true" uuid="5d0ef52a-02e8-4aba-b325-2840f1f30671"/>
       <field name="updated_at" type="datetime" required="true" uuid="f1a34d24-604f-47f9-b17c-23e48a5a5cbc"/>
@@ -863,17 +902,18 @@
       <field name="articlesid" type="integer" size="8" required="true" primary="true" uuid="9cdd865f-5d39-42e6-ade2-b4682fde9e3e"/>
       <orm-attributes>
         <attribute name="table">ref_article_category</attribute>
+        <attribute name="export-file-name">RefArticleCategory.php</attribute>
       </orm-attributes>
     </entity>
-    <many-to-many mn-entity="ref_article_category" caption="Category to Articles" uuid="e00b54bf-e0ff-49be-8889-282a57e722d7">
-      <many-to-many-entity name="articles" owning-side="true" alias="articles" uuid="017540a2-9769-420f-8c74-eb676a50263b">
+    <many-to-many mn-entity="RefArticleCategory" caption="Category to Articles" uuid="e00b54bf-e0ff-49be-8889-282a57e722d7">
+      <many-to-many-entity name="Articles" owning-side="true" alias="articles" uuid="017540a2-9769-420f-8c74-eb676a50263b">
         <many-to-many-field from="articlesid" to="id"/>
       </many-to-many-entity>
-      <many-to-many-entity name="category" owning-side="false" alias="category" uuid="293669c0-f908-4923-a6d2-71f769485d68">
+      <many-to-many-entity name="Category" owning-side="false" alias="category" uuid="293669c0-f908-4923-a6d2-71f769485d68">
         <many-to-many-field from="relatedcategoryid" to="id"/>
       </many-to-many-entity>
     </many-to-many>
-    <entity name="ref_article_store" uuid="{E1D4ACB8-B034-462F-A745-D0BD1E5FF8C7}">
+    <entity name="RefArticleStore" uuid="{E1D4ACB8-B034-462F-A745-D0BD1E5FF8C7}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="0a8e5fef-1b27-4f90-b01f-20f82f0b82d7"/>
       <field name="articleid" description="FK to article.id" type="integer" size="8" required="true" uuid="bac072b3-5dd7-49cb-85a6-4a2e478e26d1"/>
       <field name="storeid" description="FK to shop.id" type="integer" size="8" required="true" uuid="72626b58-be8a-4e48-8a2e-e92a288e7f22"/>
@@ -891,21 +931,22 @@
       </index>
       <orm-attributes>
         <attribute name="table">ref_article_store</attribute>
+        <attribute name="export-file-name">RefArticleStore.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="ref_article_store" to="articles" caption="ref_article_store_ibfk_1" owner-alias="storearticles" inverse-alias="relatedstores" uuid="{C789D113-1B75-4E53-8287-1A6960734E3A}">
+    <association from="RefArticleStore" to="Articles" caption="ref_article_store_ibfk_1" owner-alias="storearticles" inverse-alias="relatedstores" uuid="{C789D113-1B75-4E53-8287-1A6960734E3A}">
       <association-field from="articleid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="ref_article_store" to="shop" caption="ref_article_store_ibfk_2" owner-alias="articlestore" inverse-alias="articleshops" uuid="{360598C1-E8C2-4E32-B19C-91B37261617F}">
+    <association from="RefArticleStore" to="Shop" caption="ref_article_store_ibfk_2" owner-alias="articlestore" inverse-alias="articleshops" uuid="{360598C1-E8C2-4E32-B19C-91B37261617F}">
       <association-field from="storeid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="ref_articlecategory_relatedcategory" uuid="{6FBBB38F-65FA-4239-A124-3637E8F01DD3}">
+    <entity name="RefArticlecategoryRelatedcategory" uuid="{6FBBB38F-65FA-4239-A124-3637E8F01DD3}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="f90b86e2-f3b9-4a3a-aa72-f6c07f2d022b"/>
       <field name="created_at" type="datetime" required="true" uuid="5ec8f99e-000b-437a-926b-39a50dbfc6d0"/>
       <field name="updated_at" type="datetime" required="true" uuid="68405d9c-b79e-4363-9262-8ccf9e3807bd"/>
@@ -913,17 +954,18 @@
       <field name="relatedcategoryid" type="integer" size="8" required="true" primary="true" uuid="6fe89c5d-d330-4cd0-9b90-b7b7ca448380"/>
       <orm-attributes>
         <attribute name="table">ref_articlecategory_relatedcategory</attribute>
+        <attribute name="export-file-name">RefArticlecategoryRelatedcategory.php</attribute>
       </orm-attributes>
     </entity>
-    <many-to-many mn-entity="ref_articlecategory_relatedcategory" caption="Articlecategory to Category" uuid="9dc309c2-6206-4165-ae20-8e54a3adb617">
-      <many-to-many-entity name="category" owning-side="true" alias="category" uuid="d62bad59-d1bb-47e0-9ae8-ef64972cd4d4">
+    <many-to-many mn-entity="RefArticlecategoryRelatedcategory" caption="Articlecategory to Category" uuid="9dc309c2-6206-4165-ae20-8e54a3adb617">
+      <many-to-many-entity name="Category" owning-side="true" alias="category" uuid="d62bad59-d1bb-47e0-9ae8-ef64972cd4d4">
         <many-to-many-field from="relatedcategoryid" to="id"/>
       </many-to-many-entity>
-      <many-to-many-entity name="articlecategory" owning-side="false" alias="articlecategory" uuid="1796556b-feeb-435e-8ee7-988c0137333b">
+      <many-to-many-entity name="Articlecategory" owning-side="false" alias="articlecategory" uuid="1796556b-feeb-435e-8ee7-988c0137333b">
         <many-to-many-field from="articlecategoryid" to="id"/>
       </many-to-many-entity>
     </many-to-many>
-    <entity name="ref_excludedkeyword_shop" uuid="{D7AA25A2-EC47-4FBA-AAAA-13DF8A8E2B73}">
+    <entity name="RefExcludedkeywordShop" uuid="{D7AA25A2-EC47-4FBA-AAAA-13DF8A8E2B73}">
       <field name="id" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="04de496e-b6fe-477c-9408-c09723e3bed5"/>
       <field name="keywordname" type="string" size="256" default="NULL" uuid="91ffcb1e-143f-4dd6-ad0e-0c0e7332039f"/>
       <field name="deleted" type="integer" size="1" default="0" uuid="c83f262c-6840-4a52-bbfc-ecc05758c308"/>
@@ -933,17 +975,18 @@
       <field name="keywordid" type="integer" size="8" required="true" primary="true" uuid="f6d37911-ce60-471f-a43d-af3d569e1893"/>
       <orm-attributes>
         <attribute name="table">ref_excludedkeyword_shop</attribute>
+        <attribute name="export-file-name">RefExcludedkeywordShop.php</attribute>
       </orm-attributes>
     </entity>
-    <many-to-many mn-entity="ref_excludedkeyword_shop" caption="Shop to ExcludedKeyword" uuid="23819c7a-9e6b-4eea-a5c9-c0c4ff717aab">
-      <many-to-many-entity name="excluded_keyword" owning-side="true" alias="keywords" uuid="51f03319-67bc-4fb1-9871-5f045e87a16b">
+    <many-to-many mn-entity="RefExcludedkeywordShop" caption="Shop to ExcludedKeyword" uuid="23819c7a-9e6b-4eea-a5c9-c0c4ff717aab">
+      <many-to-many-entity name="ExcludedKeyword" owning-side="true" alias="keywords" uuid="51f03319-67bc-4fb1-9871-5f045e87a16b">
         <many-to-many-field from="keywordid" to="id"/>
       </many-to-many-entity>
-      <many-to-many-entity name="shop" owning-side="false" alias="shops" uuid="f13ffd60-2099-4d92-b750-76063500b344">
+      <many-to-many-entity name="Shop" owning-side="false" alias="shops" uuid="f13ffd60-2099-4d92-b750-76063500b344">
         <many-to-many-field from="shopid" to="id"/>
       </many-to-many-entity>
     </many-to-many>
-    <entity name="ref_offer_category" uuid="{E0482222-D7BC-4BE6-A3FB-8E1DBD019AF4}">
+    <entity name="RefOfferCategory" uuid="{E0482222-D7BC-4BE6-A3FB-8E1DBD019AF4}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="d7a2e2ed-0b4f-4dd5-9cda-8a27526e8e9c"/>
       <field name="offerid" description="FK to offer.id" type="integer" size="8" required="true" uuid="18e8db42-6139-4e5d-95cf-68db913fd5a0"/>
       <field name="categoryid" description="FK to category.id" type="integer" size="8" required="true" uuid="21c73d0e-f07f-4b83-8af8-9162b9396944"/>
@@ -961,21 +1004,22 @@
       </index>
       <orm-attributes>
         <attribute name="table">ref_offer_category</attribute>
+        <attribute name="export-file-name">RefOfferCategory.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="ref_offer_category" to="category" caption="ref_offer_category_categoryid_category_id" owner-alias="categoryoffres" inverse-alias="offer" uuid="{5D8B69AE-2C63-4946-BD37-C9FFEE1218A4}">
+    <association from="RefOfferCategory" to="Category" caption="ref_offer_category_categoryid_category_id" owner-alias="categoryoffres" inverse-alias="offer" uuid="{5D8B69AE-2C63-4946-BD37-C9FFEE1218A4}">
       <association-field from="categoryid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="ref_offer_category" to="offer" caption="ref_offer_category_offerid_offer_id" owner-alias="categoryoffres" inverse-alias="category" uuid="{8E56A65E-3CA7-4E03-BF8A-3548D01BFEEA}">
+    <association from="RefOfferCategory" to="Offer" caption="ref_offer_category_offerid_offer_id" owner-alias="categoryoffres" inverse-alias="category" uuid="{8E56A65E-3CA7-4E03-BF8A-3548D01BFEEA}">
       <association-field from="offerid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="ref_offer_page" uuid="{CDD29A8D-7AA4-4053-8DAD-69768A07549E}">
+    <entity name="RefOfferPage" uuid="{CDD29A8D-7AA4-4053-8DAD-69768A07549E}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="6f0ca095-5d74-451d-86a6-5b4b6332f45b"/>
       <field name="pageid" description="FK to page.id" type="integer" size="8" required="true" uuid="a0d205b9-8e10-4cc3-9626-8be3b8f5de36"/>
       <field name="offerid" description="FK to offer.id" type="integer" size="8" required="true" uuid="85a2b2fe-8e60-42d4-8ddc-48086a7a1754"/>
@@ -993,21 +1037,22 @@
       </index>
       <orm-attributes>
         <attribute name="table">ref_offer_page</attribute>
+        <attribute name="export-file-name">RefOfferPage.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="ref_offer_page" to="offer" caption="ref_offer_page_offerid_offer_id" owner-alias="offers" inverse-alias="refoffers" uuid="{03D05B5E-155A-4BC9-9262-0D9BA2BF1B26}">
+    <association from="RefOfferPage" to="Offer" caption="ref_offer_page_offerid_offer_id" owner-alias="offers" inverse-alias="refoffers" uuid="{03D05B5E-155A-4BC9-9262-0D9BA2BF1B26}">
       <association-field from="offerid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="ref_offer_page" to="page" caption="ref_offer_page_pageid_page_id" owner-alias="pageoffers" inverse-alias="offers" uuid="{18DCA2D5-4E00-47BF-B140-F29BB8FF6DF3}">
+    <association from="RefOfferPage" to="Page" caption="ref_offer_page_pageid_page_id" owner-alias="pageoffers" inverse-alias="offers" uuid="{18DCA2D5-4E00-47BF-B140-F29BB8FF6DF3}">
       <association-field from="pageid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="ref_page_widget" uuid="{D14D7C4E-A5F6-4579-9B01-746C2C8AB3AF}">
+    <entity name="RefPageWidget" uuid="{D14D7C4E-A5F6-4579-9B01-746C2C8AB3AF}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="cdd4c5d9-fb05-427a-9531-1962513d859c"/>
       <field name="pageid" description="FK to page.id" type="integer" size="8" required="true" uuid="b62c6c5c-aa6d-4dae-b84e-64b3c35ba4c4"/>
       <field name="widgetid" description="FK to widget.id" type="integer" size="8" required="true" uuid="5407af60-b16d-413b-89ff-53da5997af11"/>
@@ -1023,21 +1068,22 @@
       </index>
       <orm-attributes>
         <attribute name="table">ref_page_widget</attribute>
+        <attribute name="export-file-name">RefPageWidget.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="ref_page_widget" to="page" caption="ref_page_widget_pageid_page_id" owner-alias="pagewidget" inverse-alias="widget" uuid="{8458191E-4817-4E76-8CC8-23BCD097C8A8}">
+    <association from="RefPageWidget" to="Page" caption="ref_page_widget_pageid_page_id" owner-alias="pagewidget" inverse-alias="widget" uuid="{8458191E-4817-4E76-8CC8-23BCD097C8A8}">
       <association-field from="pageid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="ref_page_widget" to="widget" caption="ref_page_widget_widgetid_widget_id" owner-alias="Widget" inverse-alias="page" uuid="{4372D722-FC75-48AD-AA41-03E22C1AEE76}">
+    <association from="RefPageWidget" to="Widget" caption="ref_page_widget_widgetid_widget_id" owner-alias="Widget" inverse-alias="page" uuid="{4372D722-FC75-48AD-AA41-03E22C1AEE76}">
       <association-field from="widgetid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="ref_shop_category" uuid="{4F640268-D642-4A2E-A8B4-7FAFEFBF407C}">
+    <entity name="RefShopCategory" uuid="{4F640268-D642-4A2E-A8B4-7FAFEFBF407C}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="9ad99c6d-87b9-497f-b735-81236116c1ba"/>
       <field name="shopid" description="FK to shop.id" type="integer" size="8" default="NULL" uuid="83237050-4464-4537-ab96-79671e7dbc62"/>
       <field name="categoryid" description="FK to category.id" type="integer" size="8" default="NULL" uuid="a2d5a069-5982-42f7-8972-4a8380af239f"/>
@@ -1055,21 +1101,22 @@
       </index>
       <orm-attributes>
         <attribute name="table">ref_shop_category</attribute>
+        <attribute name="export-file-name">RefShopCategory.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="ref_shop_category" to="category" caption="ref_shop_category_categoryid_category_id" owner-alias="shopcategory" inverse-alias="shop" uuid="{6F464B5B-AE07-425B-988E-818DA64DB431}">
+    <association from="RefShopCategory" to="Category" caption="ref_shop_category_categoryid_category_id" owner-alias="shopcategory" inverse-alias="shop" uuid="{6F464B5B-AE07-425B-988E-818DA64DB431}">
       <association-field from="categoryid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="ref_shop_category" to="shop" caption="ref_shop_category_shopid_shop_id" owner-alias="categoryshops" inverse-alias="category" uuid="{5633B379-524F-4460-87ED-A9D4DE5522F9}">
+    <association from="RefShopCategory" to="Shop" caption="ref_shop_category_shopid_shop_id" owner-alias="categoryshops" inverse-alias="category" uuid="{5633B379-524F-4460-87ED-A9D4DE5522F9}">
       <association-field from="shopid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="ref_shop_relatedshop" uuid="{0710CE84-A6AC-4427-ABAC-1AD9E59212DB}">
+    <entity name="RefShopRelatedshop" uuid="{0710CE84-A6AC-4427-ABAC-1AD9E59212DB}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b3c3b63a-93a3-410c-b5e7-59753916df21"/>
       <field name="relatedshopId" description="related shop id forgien key to shop id" type="integer" size="8" required="true" uuid="76f9bfb8-d154-4856-9bbc-7c4f08803666"/>
       <field name="position" type="integer" size="5" required="true" uuid="364da21a-5fd5-4145-81ac-070caf364e8d"/>
@@ -1084,12 +1131,13 @@
       </index>
       <orm-attributes>
         <attribute name="table">ref_shop_relatedshop</attribute>
+        <attribute name="export-file-name">RefShopRelatedshop.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="ref_shop_relatedshop" to="shop" caption="Shop RefShopRelatedshop" owner-alias="relatedshops" inverse-alias="shop" uuid="25605aa6-3921-428c-bea6-d78385425f63">
+    <association from="RefShopRelatedshop" to="Shop" caption="Shop RefShopRelatedshop" owner-alias="relatedshops" inverse-alias="shop" uuid="25605aa6-3921-428c-bea6-d78385425f63">
       <association-field from="shopId" to="id"/>
     </association>
-    <entity name="route_permalink" uuid="{3A4FB4C0-C05D-4EA0-93C0-D7FCF2A0D47F}">
+    <entity name="RoutePermalink" uuid="{3A4FB4C0-C05D-4EA0-93C0-D7FCF2A0D47F}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="b35e4a8a-54a2-4ffc-808f-7bb48c1409e1"/>
       <field name="permalink" type="string" size="255" required="true" uuid="b0603947-f8c9-42fb-9aba-1d10f33d9cbd"/>
       <field name="type" type="string" size="255" required="true" uuid="4c537913-4151-4ccc-a765-e63a8ea59573"/>
@@ -1102,9 +1150,10 @@
       </index>
       <orm-attributes>
         <attribute name="table">route_permalink</attribute>
+        <attribute name="export-file-name">RoutePermalink.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="route_redirect" uuid="{9BA59AF6-80E3-4906-90E2-840B5E6B3AF7}">
+    <entity name="RouteRedirect" uuid="{9BA59AF6-80E3-4906-90E2-840B5E6B3AF7}">
       <field name="orignalurl" type="string" default="NULL" uuid="1eccdb77-aaca-4b58-9727-d10ad64cea62"/>
       <field name="redirectto" type="string" default="NULL" uuid="cb27d491-1931-4f94-878a-a5355276d994"/>
       <field name="created_at" type="datetime" default="NULL" uuid="8e00b4e6-d0b1-4052-8fd1-a0369230ef6a"/>
@@ -1116,9 +1165,10 @@
       </index>
       <orm-attributes>
         <attribute name="table">route_redirect</attribute>
+        <attribute name="export-file-name">RouteRedirect.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="seen_in" uuid="{7851E659-CFD5-49F6-9F14-5AB9EC4F3DEB}">
+    <entity name="SeenIn" uuid="{7851E659-CFD5-49F6-9F14-5AB9EC4F3DEB}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3a7510c9-8258-4417-b7ac-a6aa39ffdb58"/>
       <field name="name" type="string" size="50" default="NULL" uuid="a8602dd3-9ee7-4b14-aff6-ab8f045db8dd"/>
       <field name="url" type="string" size="255" default="NULL" uuid="b116fc1c-2c1a-417f-9533-422b7ca50f23"/>
@@ -1139,15 +1189,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">seen_in</attribute>
+        <attribute name="export-file-name">SeenIn.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="seen_in" to="image" caption="seen_in_logoid_image_id" owner-alias="seeninlogo" inverse-alias="seenin" uuid="{818F5B03-6297-467F-B63C-9FF1BB5ADF98}">
+    <association from="SeenIn" to="Image" caption="seen_in_logoid_image_id" owner-alias="seeninlogo" inverse-alias="seenin" uuid="{818F5B03-6297-467F-B63C-9FF1BB5ADF98}">
       <association-field from="logoid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="settings" uuid="{18525071-0D88-406E-8EC2-B9B5CE2DA0B6}">
+    <entity name="Settings" uuid="{18525071-0D88-406E-8EC2-B9B5CE2DA0B6}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="00c7889a-3d20-4021-b63a-c36903f80ba0"/>
       <field name="name" type="string" size="255" default="NULL" uuid="b54860cf-e742-4f19-a9be-cb529032a563"/>
       <field name="value" type="string" default="NULL" uuid="1e22d2d6-6909-4856-8910-4cfdd5951903"/>
@@ -1163,9 +1214,10 @@
       </index>
       <orm-attributes>
         <attribute name="table">settings</attribute>
+        <attribute name="export-file-name">Settings.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="shop" uuid="{6B5AA8BC-0DC5-4965-8CA4-9A0B52498B97}">
+    <entity name="Shop" uuid="{6B5AA8BC-0DC5-4965-8CA4-9A0B52498B97}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="43e3b368-661f-49d0-ad7d-442b190ff354"/>
       <field name="name" type="string" size="255" default="NULL" uuid="63b75605-0273-4420-860d-51ab24567ba9"/>
       <field name="permalink" type="string" size="255" default="NULL" unique="true" uuid="d1344336-23b8-4617-b853-955b540f2256"/>
@@ -1255,39 +1307,40 @@
       </index>
       <orm-attributes>
         <attribute name="table">shop</attribute>
+        <attribute name="export-file-name">Shop.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="shop" to="affliate_network" caption="shop_affliatenetworkid_affliate_network_id" owner-alias="affliatenetwork" inverse-alias="affliatenetwork" uuid="{0496FFC8-6F52-4D8A-9EAC-6717A2C88F3A}">
+    <association from="Shop" to="AffliateNetwork" caption="shop_affliatenetworkid_affliate_network_id" owner-alias="affliatenetwork" inverse-alias="affliatenetwork" uuid="{0496FFC8-6F52-4D8A-9EAC-6717A2C88F3A}">
       <association-field from="affliatenetworkid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="shop" to="image" caption="shop_howtousebigid_image_id" owner-alias="howtousebigimage" inverse-alias="shops" uuid="{4244D1CE-40D1-486B-B3CE-292C5E74AFC1}">
+    <association from="Shop" to="Image" caption="shop_howtousebigid_image_id" owner-alias="howtousebigimage" inverse-alias="shops" uuid="{4244D1CE-40D1-486B-B3CE-292C5E74AFC1}">
       <association-field from="howtousebigimageid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="shop" to="page" caption="shop_howtousepageid_page_id" owner-alias="pages" inverse-alias="shopPage" uuid="{53AFF6E0-4ACD-4335-B81C-5BE15F207506}">
+    <association from="Shop" to="Page" caption="shop_howtousepageid_page_id" owner-alias="pages" inverse-alias="shopPage" uuid="{53AFF6E0-4ACD-4335-B81C-5BE15F207506}">
       <association-field from="howtousepageid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="shop" to="image" caption="shop_howtousesmallimageid_image_id" owner-alias="smallimage" inverse-alias="shopimage" uuid="{31D5AC4B-257F-42C0-BDA0-B832E5086051}">
+    <association from="Shop" to="Image" caption="shop_howtousesmallimageid_image_id" owner-alias="smallimage" inverse-alias="shopimage" uuid="{31D5AC4B-257F-42C0-BDA0-B832E5086051}">
       <association-field from="howtousesmallimageid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <association from="shop" to="image" caption="shop_logoid_image_id" owner-alias="logo" inverse-alias="shoplogo" uuid="{4BEAD100-87EF-47A4-A147-7713B1E63A50}">
+    <association from="Shop" to="Image" caption="shop_logoid_image_id" owner-alias="logo" inverse-alias="shoplogo" uuid="{4BEAD100-87EF-47A4-A147-7713B1E63A50}">
       <association-field from="logoid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="shop_howto_chapter" uuid="{D2774238-3360-4AD1-BCEE-26D962B29A19}">
+    <entity name="ShopHowToChapter" uuid="{D2774238-3360-4AD1-BCEE-26D962B29A19}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="454fc23b-2790-486f-bacb-6fd249d908b7"/>
       <field name="chapterTitle" type="string" default="NULL" uuid="348382fd-86a9-4be3-9d46-dcbf60aaff65"/>
       <field name="chapterDescription" type="blob" default="NULL" uuid="83a046df-e362-482e-a82b-a82d2833bd52"/>
@@ -1296,12 +1349,13 @@
       <field name="shopId" type="integer" size="8" uuid="f9a8bd59-b07f-4896-97cc-d1a052bbd1ac"/>
       <orm-attributes>
         <attribute name="table">shop_howto_chapter</attribute>
+        <attribute name="export-file-name">ShopHowToChapter.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="shop_howto_chapter" to="shop" caption="Shop ShopHowtoChapter" owner-alias="howtochapter" inverse-alias="shop" uuid="8635299a-969d-4a4d-b2b2-81fb8a533cd3">
+    <association from="ShopHowToChapter" to="Shop" caption="Shop ShopHowtoChapter" owner-alias="howtochapter" inverse-alias="shop" uuid="8635299a-969d-4a4d-b2b2-81fb8a533cd3">
       <association-field from="shopId" to="id"/>
     </association>
-    <entity name="shopviewcount" uuid="{9EC4BBB9-3AEC-4457-8771-2CF83BE05937}">
+    <entity name="ShopViewCount" uuid="{9EC4BBB9-3AEC-4457-8771-2CF83BE05937}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="7d2c764b-150b-4e25-9678-4b3ae0489b67"/>
       <field name="onclick" type="integer" size="8" default="NULL" uuid="edbbad82-c0e0-4b49-b462-719e057a9a96"/>
       <field name="onload" type="integer" size="8" default="NULL" uuid="c64606cc-5650-4ba9-8fd7-7bd68939eb96"/>
@@ -1312,12 +1366,13 @@
       <field name="shopid" type="integer" size="8" uuid="ad304942-6c2c-404e-8f07-54e5f723812e"/>
       <orm-attributes>
         <attribute name="table">shopviewcount</attribute>
+        <attribute name="export-file-name">ShopViewCount.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="shopviewcount" to="shop" caption="Shop Shopviewcount" owner-alias="viewcount" inverse-alias="shop" uuid="40dcb0bc-0d0c-4660-92bc-04ffadf79131">
+    <association from="ShopViewCount" to="Shop" caption="Shop Shopviewcount" owner-alias="viewcount" inverse-alias="shop" uuid="40dcb0bc-0d0c-4660-92bc-04ffadf79131">
       <association-field from="shopid" to="id"/>
     </association>
-    <entity name="signupcodes" uuid="{8230131C-31E9-4EB7-9A4B-86D70139F6B9}">
+    <entity name="Signupcodes" uuid="{8230131C-31E9-4EB7-9A4B-86D70139F6B9}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="ca404454-e247-4140-bd6c-7c41c379cdbf"/>
       <field name="entered_uid" type="integer" size="8" required="true" uuid="ced57854-e34b-4111-8afb-185cb295fc01"/>
       <field name="code" type="string" size="255" default="NULL" uuid="6e50043c-5164-4f9a-9ed0-357fcc28ca04"/>
@@ -1331,9 +1386,10 @@
       </index>
       <orm-attributes>
         <attribute name="table">signupcodes</attribute>
+        <attribute name="export-file-name">Signupcodes.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="signupfavoriteshop" uuid="{3E098374-0E36-45FC-9815-56D673D52E5A}">
+    <entity name="Signupfavoriteshop" uuid="{3E098374-0E36-45FC-9815-56D673D52E5A}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="16aa4fa3-239f-4f29-b03e-50d5c7677ccb"/>
       <field name="entered_uid" type="integer" size="8" required="true" uuid="a85612bf-58b8-4fcf-95f6-090900b0eb31"/>
       <field name="store_id" description="FK to shop.id" type="integer" size="8" required="true" uuid="f56b7ba4-db3f-4a13-8827-fd3ebc462424"/>
@@ -1347,15 +1403,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">signupfavoriteshop</attribute>
+        <attribute name="export-file-name">Signupfavoriteshop.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="signupfavoriteshop" to="shop" caption="signupfavoriteshop_ibfk_1" owner-alias="shop" inverse-alias="signupfavoriteshop" uuid="{6CB2E0B2-E1B2-472C-877B-50C665F84A2D}">
+    <association from="Signupfavoriteshop" to="Shop" caption="signupfavoriteshop_ibfk_1" owner-alias="shop" inverse-alias="signupfavoriteshop" uuid="{6CB2E0B2-E1B2-472C-877B-50C665F84A2D}">
       <association-field from="store_id" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="signupmaxaccount" uuid="{4D305C77-7E78-474E-AA8A-1BB0008A8A5A}">
+    <entity name="Signupmaxaccount" uuid="{4D305C77-7E78-474E-AA8A-1BB0008A8A5A}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="11c43d8d-23a8-49ab-b9ad-1694eb317460"/>
       <field name="entered_uid" type="integer" size="20" required="true" uuid="14966727-4480-4ecc-9f48-219206265d17"/>
       <field name="no_of_acc" type="string" size="255" default="NULL" uuid="d1d22268-ea31-4ab4-8b51-4cf7163ff02b"/>
@@ -1383,9 +1440,10 @@
       <field name="newletter_scheduled_time" description="newsletter scheduled timestamp" type="datetime" default="'2014-01-23 12:11:26'" uuid="83316658-d2c1-44ad-a992-f27939a04b8d"/>
       <orm-attributes>
         <attribute name="table">signupmaxaccount</attribute>
+        <attribute name="export-file-name">Signupmaxaccount.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="special" uuid="{511AC56E-860A-4649-8219-3C98FE26C6FD}">
+    <entity name="Special" uuid="{511AC56E-860A-4649-8219-3C98FE26C6FD}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="262e6b2c-c9f1-4892-be93-e7a6f1a3deca"/>
       <field name="title" type="string" default="NULL" uuid="8821217b-ead8-4e74-bc0e-2fac527c6c0f"/>
       <field name="description" type="blob" default="NULL" uuid="e50ebf9a-b4ac-48d8-a3a2-6e6296a5ad5b"/>
@@ -1394,9 +1452,10 @@
       <field name="updated_at" type="datetime" required="true" uuid="682713f1-7fb7-4b90-b701-7594e994ab9a"/>
       <orm-attributes>
         <attribute name="table">special</attribute>
+        <attribute name="export-file-name">Special.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="special_list" uuid="{D132F5A9-BF1D-4906-B4B4-B1D584DD6F8C}">
+    <entity name="SpecialList" uuid="{D132F5A9-BF1D-4906-B4B4-B1D584DD6F8C}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="de5ea6d1-8c3f-41e8-ba40-00a4117cf2b3"/>
       <field name="type" type="string" size="255" default="NULL" uuid="776656d1-7b8e-4128-b384-5ca181ebd0dc"/>
       <field name="position" description="Holds the shop position among popular offer list" type="integer" size="8" default="NULL" uuid="fa5e1aac-b0a4-4264-b8cd-c3958e5ba781"/>
@@ -1407,12 +1466,13 @@
       <field name="specialpageid" type="integer" size="8" uuid="5425001c-ad99-4ee8-95f4-d07ea318b48a"/>
       <orm-attributes>
         <attribute name="table">special_list</attribute>
+        <attribute name="export-file-name">SpecialList.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="special_list" to="page" caption="Page SpecialList" owner-alias="specialList" inverse-alias="page" uuid="fcc6bbfb-b041-4ac7-87de-3ce66f4a4ec9">
+    <association from="SpecialList" to="Page" caption="Page SpecialList" owner-alias="specialList" inverse-alias="page" uuid="fcc6bbfb-b041-4ac7-87de-3ce66f4a4ec9">
       <association-field from="specialpageid" to="id"/>
     </association>
-    <entity name="term_and_condition" uuid="{9D33D8F0-8A4A-432A-8FA2-52BDE491EA0F}">
+    <entity name="TermAndCondition" uuid="{9D33D8F0-8A4A-432A-8FA2-52BDE491EA0F}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1765fceb-0522-463e-8861-39669111bc9f"/>
       <field name="content" type="string" default="NULL" uuid="25c968ac-a893-4c32-8979-01fda8895c4e"/>
       <field name="offerid" description="FK to offer.id" type="integer" size="8" default="NULL" uuid="c1f6c824-cbfd-468f-b746-3fc9d1cfab0c"/>
@@ -1424,15 +1484,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">term_and_condition</attribute>
+        <attribute name="export-file-name">TermAndCondition.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="term_and_condition" to="offer" caption="term_and_condition_offerid_offer_id" owner-alias="offertermandcondition" inverse-alias="termandcondition" uuid="{C30A1AED-7CBF-49C5-8A24-BE4F51FF5666}">
+    <association from="TermAndCondition" to="Offer" caption="term_and_condition_offerid_offer_id" owner-alias="offertermandcondition" inverse-alias="termandcondition" uuid="{C30A1AED-7CBF-49C5-8A24-BE4F51FF5666}">
       <association-field from="offerid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="translations" uuid="{85CCAB30-F941-4F74-B0D1-119E811AD6FD}">
+    <entity name="Translations" uuid="{85CCAB30-F941-4F74-B0D1-119E811AD6FD}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="4fffa7d8-9904-41d0-868a-340bd4e7aa7d"/>
       <field name="translationKey" type="string" default="NULL" uuid="5536c34d-a09a-4063-a2e0-dac44ae91883"/>
       <field name="translation" type="string" default="NULL" uuid="13d891d6-f68c-410b-ad95-e8e53c0a542d"/>
@@ -1441,9 +1502,10 @@
       <field name="deleted" type="integer" size="1" default="NULL" uuid="5f8d3961-c482-439c-a537-2773e0886b79"/>
       <orm-attributes>
         <attribute name="table">translations</attribute>
+        <attribute name="export-file-name">Translations.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="varnish" uuid="{3A159224-CE99-44AC-81B3-1B2856A0689B}">
+    <entity name="Varnish" uuid="{3A159224-CE99-44AC-81B3-1B2856A0689B}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="1a7889b0-350d-4ded-b0f1-753596050825"/>
       <field name="url" type="string" default="NULL" uuid="5789b0f5-e006-4f9c-aa09-e7fe842a491e"/>
       <field name="status" type="string" default="NULL" uuid="a7a95b78-acf4-4cee-8e34-02638401b853"/>
@@ -1451,9 +1513,10 @@
       <field name="updated_at" type="datetime" default="NULL" uuid="573ed99c-d423-4d66-bd0a-51159033a96a"/>
       <orm-attributes>
         <attribute name="table">varnish</attribute>
+        <attribute name="export-file-name">Varnish.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="view_count" uuid="{80C90282-50B4-4F6F-A456-1124404540E5}">
+    <entity name="ViewCount" uuid="{80C90282-50B4-4F6F-A456-1124404540E5}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e3560f6c-aea5-46a8-8f8a-a8a3e159af9d"/>
       <field name="loadtime" type="integer" size="8" default="NULL" uuid="2e91536f-37e4-4975-8eb8-9f9c7d342cae"/>
       <field name="onclick" type="integer" size="8" default="'0'" uuid="39f6b910-5204-4021-a0c4-215250071e4e"/>
@@ -1478,15 +1541,16 @@
       </index>
       <orm-attributes>
         <attribute name="table">view_count</attribute>
+        <attribute name="export-file-name">ViewCount.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="view_count" to="offer" caption="view_count_offerid_offer_id" owner-alias="offerviewcount" inverse-alias="viewcount" uuid="{96669711-4915-4154-ACB1-5D7BBA64543B}">
+    <association from="ViewCount" to="Offer" caption="view_count_offerid_offer_id" owner-alias="offerviewcount" inverse-alias="viewcount" uuid="{96669711-4915-4154-ACB1-5D7BBA64543B}">
       <association-field from="offerid" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
-    <entity name="visitor" uuid="{C6505F14-E260-4EA7-BFBB-841CF976FCF9}">
+    <entity name="Visitor" uuid="{C6505F14-E260-4EA7-BFBB-841CF976FCF9}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="97e6f016-a30e-493d-afe5-7be3ee44839a"/>
       <field name="firstname" type="string" default="NULL" uuid="08b8a272-325f-4cd7-9692-ca0cac035796"/>
       <field name="lastname" type="string" default="NULL" uuid="d26a9d0a-58f2-424a-9fc2-e43e89a34aba"/>
@@ -1528,20 +1592,22 @@
       </index>
       <orm-attributes>
         <attribute name="table">visitor</attribute>
+        <attribute name="export-file-name">Visitor.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="visitor_keyword" uuid="{A0ECA104-D730-45E9-A070-E61D877E0ABE}">
+    <entity name="VisitorKeyword" uuid="{A0ECA104-D730-45E9-A070-E61D877E0ABE}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="e08c4b63-e26f-4616-959e-c643b150b145"/>
       <field name="keyword" type="string" size="255" default="NULL" uuid="c51af421-d3a3-4240-a4bd-7d3b8e9d3003"/>
       <field name="visitorId" type="integer" size="8" uuid="7e00e8e2-e147-4d25-b6c6-739b0d7cfc66"/>
       <orm-attributes>
         <attribute name="table">visitor_keyword</attribute>
+        <attribute name="export-file-name">VisitorKeyword.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="visitor_keyword" to="visitor" caption="Visitor VisitorKeyword" owner-alias="visitorKeyword" inverse-alias="visitor" uuid="e66884f2-13d6-4d6b-8c3e-c76c5c036097">
+    <association from="VisitorKeyword" to="Visitor" caption="Visitor VisitorKeyword" owner-alias="visitorKeyword" inverse-alias="visitor" uuid="e66884f2-13d6-4d6b-8c3e-c76c5c036097">
       <association-field from="visitorId" to="id"/>
     </association>
-    <entity name="votes" uuid="{247394E5-7393-4C48-93B9-E92CB1EAA75E}">
+    <entity name="Votes" uuid="{247394E5-7393-4C48-93B9-E92CB1EAA75E}">
       <field name="id" type="integer" size="11" required="true" primary="true" auto-increment="true" uuid="b111221c-a6ce-4ab9-8ebc-2c1de0442f1b"/>
       <field name="ipaddress" type="string" size="200" default="NULL" uuid="76e8ad7b-2026-43e9-b345-17a563d65f08"/>
       <field name="date" type="datetime" default="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP" required="true" uuid="1692dc27-b0d1-41fb-9fe9-5df38d0b610a"/>
@@ -1556,12 +1622,13 @@
       <field name="offerId" type="integer" size="8" uuid="cf755c92-5761-4089-aef5-c3d9370ba1b4"/>
       <orm-attributes>
         <attribute name="table">votes</attribute>
+        <attribute name="export-file-name">Votes.php</attribute>
       </orm-attributes>
     </entity>
-    <association from="votes" to="offer" caption="Offer Votes" owner-alias="votes" inverse-alias="offer" uuid="0441da9d-bc6f-4519-b23c-406ff2490a00">
+    <association from="Votes" to="Offer" caption="Offer Votes" owner-alias="votes" inverse-alias="offer" uuid="0441da9d-bc6f-4519-b23c-406ff2490a00">
       <association-field from="offerId" to="id"/>
     </association>
-    <entity name="widget" uuid="{A673E38B-41E5-4185-AD56-73CC45B25330}">
+    <entity name="Widget" uuid="{A673E38B-41E5-4185-AD56-73CC45B25330}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="274e813e-e321-4f2c-8bed-32e7800882a6"/>
       <field name="title" type="string" default="NULL" uuid="4780c4c0-ba13-4993-bb54-1a97ec8d24ea"/>
       <field name="slug" type="string" size="255" default="NULL" uuid="f2d8e93d-58cc-4844-ad6b-a3422182469c"/>
@@ -1574,10 +1641,14 @@
       <field name="deleted" type="integer" size="1" default="'0'" required="true" uuid="c4de4e11-c020-4f3a-a57e-d4296a7e1fce"/>
       <orm-attributes>
         <attribute name="table">widget</attribute>
+        <attribute name="export-file-name">Widget.php</attribute>
       </orm-attributes>
     </entity>
-    <entity name="logo" uuid="74f75618-72e7-49ba-8d44-7a92603cb507">
-      <inheritance-child derived-from="image" caption="New inheritance" uuid="5b38fa3a-df4b-41eb-b01d-a3d94c46c2c6"/>
+    <entity name="Logo" uuid="74f75618-72e7-49ba-8d44-7a92603cb507">
+      <inheritance-child derived-from="Image" caption="New inheritance" uuid="5b38fa3a-df4b-41eb-b01d-a3d94c46c2c6"/>
+      <orm-attributes>
+        <attribute name="export-file-name">Logo.php</attribute>
+      </orm-attributes>
     </entity>
     <orm-attributes>
       <attribute name="file-suffix">without-suffix</attribute>
@@ -1613,14 +1684,14 @@
     <many-to-many-association uuid="e00b54bf-e0ff-49be-8889-282a57e722d7" color="4288059030"/>
     <association uuid="e66884f2-13d6-4d6b-8c3e-c76c5c036097" color="4288059030"/>
     <association uuid="f55fabc8-918f-4762-ac24-3e29efd7641a" color="4288059030"/>
-    <project uuid="f8d77ed5-cdfa-45e5-b861-23918ccbc748" size-x="158" size-x2="3172" size-y="0" size-y2="3594"/>
+    <project uuid="f8d77ed5-cdfa-45e5-b861-23918ccbc748" size-x="209" size-x2="3172" size-y="0" size-y2="3623"/>
     <association uuid="fcc6bbfb-b041-4ac7-87de-3ce66f4a4ec9" color="4288059030"/>
     <association uuid="fda41b41-f5b1-4015-b79f-dfdc424703a9" color="4288059030"/>
     <entity uuid="{02E72079-1640-48D7-B96B-EF9CDD4C9D99}" bg-color="4294967295" hdr-color="4292006610" position-x="1256" position-y="248" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
     <association uuid="{03D05B5E-155A-4BC9-9262-0D9BA2BF1B26}" color="4278236368"/>
     <association uuid="{0496FFC8-6F52-4D8A-9EAC-6717A2C88F3A}" color="4291261615"/>
     <entity uuid="{0710CE84-A6AC-4427-ABAC-1AD9E59212DB}" bg-color="4294967295" hdr-color="4292006610" position-x="775" position-y="376" size-x="0" size-x2="129" size-y="0" size-y2="101"/>
-    <entity uuid="{0E41DE14-96FB-4A27-A9A2-F4BE68023AAC}" bg-color="4294967295" hdr-color="4292006610" position-x="521" position-y="3182" size-x="0" size-x2="117" size-y="0" size-y2="59"/>
+    <entity uuid="{0E41DE14-96FB-4A27-A9A2-F4BE68023AAC}" bg-color="4294967295" hdr-color="4292006610" position-x="522" position-y="3182" size-x="0" size-x2="117" size-y="0" size-y2="59"/>
     <entity uuid="{0F672F06-8F7D-477E-94A3-DD8DE3277E6F}" bg-color="4294967295" hdr-color="4292006610" position-x="1324" position-y="632" size-x="0" size-x2="118" size-y="0" size-y2="171"/>
     <entity uuid="{123CEBAB-6410-4A59-8FC6-FCCC8A2648EC}" bg-color="4294967295" hdr-color="4292006610" position-x="1035" position-y="918" size-x="0" size-x2="126" size-y="0" size-y2="129"/>
     <entity uuid="{1442674D-957C-44E0-A00C-388BB8A50977}" bg-color="4294967295" hdr-color="4292006610" position-x="438" position-y="506" size-x="0" size-x2="130" size-y="0" size-y2="185"/>
@@ -1642,7 +1713,7 @@
     <entity uuid="{33BE8E97-D05B-4EAB-8EF0-1BF069C542D8}" bg-color="4294967295" hdr-color="4292006610" position-x="948" position-y="256" size-x="0" size-x2="119" size-y="0" size-y2="157"/>
     <association uuid="{360598C1-E8C2-4E32-B19C-91B37261617F}" color="4291261615"/>
     <entity uuid="{3A159224-CE99-44AC-81B3-1B2856A0689B}" bg-color="4294967295" hdr-color="4292006610" position-x="98" position-y="387" size-x="0" size-x2="116" size-y="0" size-y2="87"/>
-    <entity uuid="{3A4FB4C0-C05D-4EA0-93C0-D7FCF2A0D47F}" bg-color="4294967295" hdr-color="4292006610" position-x="-44" position-y="22" size-x="0" size-x2="118" size-y="0" size-y2="115"/>
+    <entity uuid="{3A4FB4C0-C05D-4EA0-93C0-D7FCF2A0D47F}" bg-color="4294967295" hdr-color="4292006610" position-x="-45" position-y="22" size-x="0" size-x2="118" size-y="0" size-y2="115"/>
     <entity uuid="{3E098374-0E36-45FC-9815-56D673D52E5A}" bg-color="4294967295" hdr-color="4292006610" position-x="982" position-y="469" size-x="0" size-x2="121" size-y="0" size-y2="87"/>
     <association uuid="{3E24C255-8E82-4A01-9A55-63C78F573EF7}" color="4284601169"/>
     <association uuid="{3E270EEB-6D24-47FD-8700-DB84775355F9}" color="4278876221"/>
@@ -1682,7 +1753,7 @@
     <association uuid="{8E56A65E-3CA7-4E03-BF8A-3548D01BFEEA}" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="0" color="4281230255"/>
     <association uuid="{96669711-4915-4154-ACB1-5D7BBA64543B}" caption1-position-x="0" caption1-position-y="0" center-position-x="0" center-position-y="19" color="4291674923"/>
     <entity uuid="{986796AD-C059-4930-8475-3956AF7B9199}" bg-color="4294967295" hdr-color="4292006610" position-x="82" position-y="3363" size-x="0" size-x2="145" size-y="0" size-y2="102"/>
-    <entity uuid="{9B7C13CD-50C6-44D8-BD2D-54B295C8DF24}" bg-color="4294967295" hdr-color="4292006610" position-x="1175" position-y="2452" size-x="0" size-x2="140" size-y="0" size-y2="129"/>
+    <entity uuid="{9B7C13CD-50C6-44D8-BD2D-54B295C8DF24}" bg-color="4294967295" hdr-color="4292006610" position-x="1176" position-y="2452" size-x="0" size-x2="140" size-y="0" size-y2="129"/>
     <entity uuid="{9BA59AF6-80E3-4906-90E2-840B5E6B3AF7}" bg-color="4294967295" hdr-color="4292006610" position-x="94" position-y="22" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
     <entity uuid="{9D33D8F0-8A4A-432A-8FA2-52BDE491EA0F}" bg-color="4294967295" hdr-color="4292006610" position-x="1297" position-y="1950" size-x="0" size-x2="116" size-y="0" size-y2="101"/>
     <entity uuid="{9EC4BBB9-3AEC-4457-8771-2CF83BE05937}" bg-color="4294967295" hdr-color="4292006610" position-x="584" position-y="437" size-x="0" size-x2="116" size-y="0" size-y2="129"/>

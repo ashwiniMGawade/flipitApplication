@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="widget")
  */
-class widget
+class Widget
 {
     /**
      * @ORM\Id
@@ -61,7 +61,7 @@ class widget
     private $deleted;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_page_widget", mappedBy="page")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="page")
      */
     private $Widget;
 }

@@ -17,7 +17,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     }
  * )
  */
-class shop
+class Shop
 {
     /**
      * @ORM\Id
@@ -312,92 +312,92 @@ class shop
     private $brandingcss;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\adminfavoriteshp", mappedBy="shops")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Adminfavoriteshp", mappedBy="shops")
      */
     private $adminfevoriteshops;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\conversions", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="shop")
      */
     private $conversions;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\offer", mappedBy="shopOffers")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Offer", mappedBy="shopOffers")
      */
     private $offer;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\offer_news", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="KC\Entity\OfferNews", mappedBy="shop")
      */
     private $offerNews;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\popular_shop", mappedBy="popularshops")
+     * @ORM\OneToMany(targetEntity="KC\Entity\PopularShop", mappedBy="popularshops")
      */
     private $popularshop;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_article_store", mappedBy="articleshops")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleStore", mappedBy="articleshops")
      */
     private $articlestore;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_shop_category", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefShopCategory", mappedBy="category")
      */
     private $categoryshops;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\ref_shop_relatedshop", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefShopRelatedshop", mappedBy="shop")
      */
     private $relatedshops;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\shop_howto_chapter", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="KC\Entity\ShopHowToChapter", mappedBy="shop")
      */
     private $howtochapter;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\shopviewcount", mappedBy="shop")
+     * @ORM\OneToMany(targetEntity="KC\Entity\ShopViewCount", mappedBy="shop")
      */
     private $viewcount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\signupfavoriteshop", mappedBy="signupfavoriteshop")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Signupfavoriteshop", mappedBy="signupfavoriteshop")
      */
     private $shop;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\affliate_network", inversedBy="affliatenetwork")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\AffliateNetwork", inversedBy="affliatenetwork")
      * @ORM\JoinColumn(name="affliatenetworkid", referencedColumnName="id", onDelete="restrict")
      */
     private $affliatenetwork;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="howtousebigimage")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="howtousebigimage")
      * @ORM\JoinColumn(name="howtousebigimageid", referencedColumnName="id", onDelete="restrict")
      */
     private $shops;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\page", inversedBy="pages")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pages")
      * @ORM\JoinColumn(name="howtousepageid", referencedColumnName="id", onDelete="restrict")
      */
     private $shopPage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="smallimage")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="smallimage")
      * @ORM\JoinColumn(name="howtousesmallimageid", referencedColumnName="id", onDelete="restrict")
      */
     private $shopimage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\image", inversedBy="logo")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="logo")
      * @ORM\JoinColumn(name="logoid", referencedColumnName="id", onDelete="restrict")
      */
     private $shoplogo;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\visitor", inversedBy="favoriteshops")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="favoriteshops")
      * @ORM\JoinTable(
      *     name="favorite_shop",
      *     joinColumns={@ORM\JoinColumn(name="shopId", referencedColumnName="id", nullable=false)},
@@ -407,7 +407,7 @@ class shop
     private $visitors;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\excluded_keyword", mappedBy="shops")
+     * @ORM\ManyToMany(targetEntity="KC\Entity\ExcludedKeyword", mappedBy="shops")
      */
     private $keywords;
 }
