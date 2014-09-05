@@ -32,7 +32,7 @@ class DisqusComments extends BaseDisqusComments
         $commentInformation = Doctrine_Query::create()
             ->select('message')
             ->from('DisqusComments')
-            ->where('page_url = '."'".$pageUrl."'")
+            ->where('page_url like '."'%".$pageUrl."%'")
             ->fetchArray();
         $disqusCommentMessages = !empty($commentInformation) ?  $commentInformation : '';
         return $disqusCommentMessages;
