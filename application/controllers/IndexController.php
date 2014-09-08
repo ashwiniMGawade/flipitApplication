@@ -38,7 +38,7 @@ class IndexController extends Zend_Controller_Action
         if (FrontEnd_Helper_HomePagePartialFunctions:: getFlipitHomePageStatus()) {
 
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                "10_popularShopsHome_list",
+                "10_popularOffersHome_list",
                 array('function' => 'Offer::getTopOffers', 'parameters' => array(10))
             );
             

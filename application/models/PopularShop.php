@@ -353,7 +353,7 @@ return $flag;
             $i++;
         }
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
     }
 
