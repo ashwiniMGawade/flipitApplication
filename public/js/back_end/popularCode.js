@@ -57,6 +57,9 @@ $(document).ready(function() {
 						$('ul#mostPopularCode li').click(changeSelectedClass);
 					}
 					bootbox.alert(__('Popular offers successfully updated.'));
+					setTimeout(function(){
+					  bootbox.hideAll();
+					}, 3000);
 		        }
 		    });
 

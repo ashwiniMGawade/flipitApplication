@@ -2180,6 +2180,9 @@ $(function () {
 					$('ul#mostPopularCode li').click(changeSelectedClass);
 				}
 				bootbox.alert(__('Popular shops successfully updated.'));
+					setTimeout(function(){
+					  bootbox.hideAll();
+					}, 3000);
 	        }
 	    });
 
