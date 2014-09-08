@@ -55,10 +55,11 @@ function printIt(urlToShow) {
     self.focus();
     windowObject.document.open();
     windowObject.document.write('<html><body>');
-    windowObject.document.write('<img src ='+urlToShow+'>');
+    windowObject.document.write('<p><img src ="'+urlToShow+'"></p>');
     windowObject.document.write('</body></html>');
     windowObject.document.close();
     windowObject.print();
+    window.close();
 }
 
 function getQueryStringParams(popupParameter) {

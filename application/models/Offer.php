@@ -2927,7 +2927,7 @@ class Offer extends BaseOffer
    
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
           
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
@@ -2948,7 +2948,7 @@ class Offer extends BaseOffer
             $key = 'offerDetails_'  . $sid . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             
