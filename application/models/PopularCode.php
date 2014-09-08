@@ -689,7 +689,7 @@ class PopularCode extends BasePopularCode
     {
         $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
         $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
-        $databaseConnection->query('TRUNCATE TABLE Popular_code');
+        $databaseConnection->query('TRUNCATE TABLE popular_code');
         $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
         unset($databaseConnection);
         $offerId = explode(',', $offerId);
