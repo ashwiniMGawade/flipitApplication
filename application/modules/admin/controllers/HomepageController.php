@@ -363,6 +363,8 @@ class Admin_HomepageController extends Zend_Controller_Action
     public function savepopularshopspositionAction()
     {
         PopularShop::savePopularShopsPosition($this->getRequest()->getParam('shopid'));
+        $popularShop = PopularShop::getPopularShop();
+        echo Zend_Json::encode($popularShop);
         exit();
     }
     /**

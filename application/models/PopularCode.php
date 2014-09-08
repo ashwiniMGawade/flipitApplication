@@ -464,6 +464,7 @@ class PopularCode extends BasePopularCode
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
@@ -512,6 +513,7 @@ class PopularCode extends BasePopularCode
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
             $key = 'all_widget5_list';
@@ -680,6 +682,35 @@ class PopularCode extends BasePopularCode
 
         return false ;
 
+    }
+
+    public static function savePopularOffersPosition($offerId)
+    {
+        $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
+        $databaseConnection->query('TRUNCATE TABLE Popular_code');
+        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
+        unset($databaseConnection);
+        $offerId = explode(',', $offerId);
+        $i = 1;
+
+        foreach ($offerId as $offerIdValue) {
+            $pc = new PopularCode();
+            $pc->offerId = $offerIdValue;
+            $pc->position = $i;
+            $pc->type = "MN";
+            $pc->status = "1";
+            $pc->save();
+            $i++;
+        }
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
     }
 
 }

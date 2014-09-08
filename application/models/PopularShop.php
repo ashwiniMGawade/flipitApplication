@@ -252,9 +252,7 @@ return $flag;
                             $pc = Doctrine_Query::create()->delete('PopularShop')
                             ->where('id=' . $id)->execute();
                             //change position by 1 of each below element
-                            $q = Doctrine_Query::create()->update('PopularShop p')
-                            ->set('p.position', 'p.position -1')
-                            ->where('p.position >' . $position)->execute();
+                           
                             //call cache function
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
@@ -352,9 +350,7 @@ return $flag;
             $pc->save();
             $i++;
         }
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
     }
 
 }
