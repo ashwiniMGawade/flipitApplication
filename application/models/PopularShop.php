@@ -343,11 +343,11 @@ return $flag;
         $shopId = explode(',', $shopId);
         $i = 1;
         foreach ($shopId as $shopIdValue) {
-            $pc = new PopularShop();
-            $pc->shopId = $shopIdValue;
-            $pc->position = $i;
-            $pc->type = "MN";
-            $pc->save();
+            $popularShop = new PopularShop();
+            $popularShop->shopId = $shopIdValue;
+            $popularShop->position = $i;
+            $popularShop->type = "MN";
+            $popularShop->save();
             $i++;
         }
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');

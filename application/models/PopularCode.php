@@ -696,12 +696,12 @@ class PopularCode extends BasePopularCode
         $i = 1;
 
         foreach ($offerId as $offerIdValue) {
-            $pc = new PopularCode();
-            $pc->offerId = $offerIdValue;
-            $pc->position = $i;
-            $pc->type = "MN";
-            $pc->status = "1";
-            $pc->save();
+            $popularCode = new PopularCode();
+            $popularCode->offerId = $offerIdValue;
+            $popularCode->position = $i;
+            $popularCode->type = "MN";
+            $popularCode->status = "1";
+            $popularCode->save();
             $i++;
         }
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
