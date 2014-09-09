@@ -8,9 +8,6 @@ function getDisqusRecentComments($parameters)
     if (!isset($parameters['commentCount'])) {
         $parameters['commentCount'] = 25;
     }
-    if (!isset($parameters['commentLength'])) {
-        $parameters['commentLength'] = 100;
-    }
 
     $DisqusCommentsAPILink =
     "http://disqus.com/api/3.0/posts/list.json?limit={$parameters['commentCount']}&api_key={$parameters['APIKey']}&forum={$parameters['forumName']}&include=approved";

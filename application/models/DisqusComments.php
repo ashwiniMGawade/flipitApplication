@@ -30,7 +30,7 @@ class DisqusComments extends BaseDisqusComments
     public static function getPageUrlBasedDisqusComments($pageUrl)
     {
         $commentInformation = Doctrine_Query::create()
-            ->select('message')
+            ->select('*')
             ->from('DisqusComments')
             ->where('page_url like '."'%".$pageUrl."%'")
             ->fetchArray();
