@@ -39,12 +39,17 @@ echo $this->translate('Disqus');
 ?>
     </span>
 </a>
-<div style = "display:none;">
+<div style = "display:none;background:#fff;">
+<h3>Comments:</h3>
     <?php
     if (!empty($this->discussionComments)) {
         foreach ($this->discussionComments as $discussionComment) {
         ?>
-            <p><?php echo $discussionComment['message'];?></p>
+            <div class= "comment">
+                <h5><?php echo $discussionComment['author_name'];?></h5>
+                <p><?php echo $discussionComment['created_at'];?></p>
+                <p><?php echo $discussionComment['message'];?></p>
+            </div>
         <?php      
         }
     }
