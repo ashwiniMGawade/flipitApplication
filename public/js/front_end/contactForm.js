@@ -13,9 +13,9 @@ function ltrim(src){
     return src;
 }
 $('#submit').click( function() {
-  var submitUrl = $('#contactform').attr('action', ltrim($('#contactform').attr('action')));
+    $('#contactform').attr('action', '');
     $.ajax({
-        url : submitUrl,
+        url : HOST_PATH_LOCALE + 'contact/getcontactformdetails',
         type: 'post',
         dataType: 'json',
         data: $('form#contactform').serialize(),
