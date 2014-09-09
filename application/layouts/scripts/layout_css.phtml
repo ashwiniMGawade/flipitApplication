@@ -5,6 +5,6 @@ if (APPLICATION_ENV == 'development') {
     $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'all.less'));
     echo $this->headLink(array("rel"=>"stylesheet/less", 'href'=>$lessCssPath.'ie.less'));  
 } else {
-    echo $this->minifyHeadLink()
+    echo $this->headLink()
         ->prependStylesheet("/public/css/front_end/all.css");
 }
