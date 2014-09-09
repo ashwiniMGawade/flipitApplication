@@ -13,7 +13,7 @@ function ltrim(src){
     return src;
 }
 $('#submit').click( function() {
-  var submitUrl = $('#contactform').attr('action', HOST_PATH_LOCALE+ltrim($('#contactform').attr('action')));
+  var submitUrl = $('#contactform').attr('action', ltrim($('#contactform').attr('action')));
     $.ajax({
         url : submitUrl,
         type: 'post',
