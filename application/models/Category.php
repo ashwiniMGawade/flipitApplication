@@ -50,12 +50,9 @@ class Category extends BaseCategory
         ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->orderBy('o.exclusiveCode DESC')
-        ->addOrderBy('o.startDate DESC');
-        if ($pageName == 'homePage') {
-            $categoryOffersList->groupBy('s.id');
-        }
-        $categoryOffersList->limit(10);
-        $categoryOffersList = $categoryOffersList->fetchArray();
+        ->addOrderBy('o.startDate DESC')
+        ->limit($numberOfOffers)
+        ->fetchArray();
         return self::changeDataAccordingToOfferHtml($categoryOffersList);
     }
 
