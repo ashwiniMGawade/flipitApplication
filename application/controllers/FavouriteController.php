@@ -69,6 +69,7 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
+            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
             $favoriteShopsOffers = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShopOffers',
