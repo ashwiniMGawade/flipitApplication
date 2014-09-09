@@ -332,6 +332,10 @@ class Admin_EmailController extends Zend_Controller_Action
 
     }
 
+    public function codeAlertSettingsAction()
+    {
+
+    }
     public function getFlashMessage()
     {
         $message = $this->flashMessenger->getMessages();
