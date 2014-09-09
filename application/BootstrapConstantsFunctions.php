@@ -36,6 +36,7 @@ class BootstrapConstantsFunctions
 
     public static function constantsForDefaultModule($scriptName, $cdnUrlForDefaultModule, $scriptFileName)
     {
+        
         defined('LOCALE') || define('LOCALE', '');
         defined('HTTP_PATH_LOCALE') || define('HTTP_PATH_LOCALE', trim('http://' . HTTP_HOST . '/'));
         defined('PUBLIC_PATH') || define('PUBLIC_PATH', 'http://' . HTTP_HOST. dirname($scriptName) . '/');
