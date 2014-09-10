@@ -27,6 +27,7 @@
 </head>
 <body class="splash-page">
 <?php
+$serverNameScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
 $mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(); 
     if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 
         $countryName = FrontEnd_Helper_viewHelper::getCountryNameByLocale($mostPopularCoupon['locale']);
@@ -36,8 +37,8 @@ $mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(
             : $mostPopularCoupon['locale'].'/';
         $domainName = 
             $mostPopularCoupon['locale'] == 'en' 
-            ? 'http://www.kortingscode.nl/' 
-            : 'http://www.flipit.com/'.$localeName;
+            ? 'http://'.$serverNameScheme.'.kortingscode.nl/' 
+            : 'http://'.$serverNameScheme.'.flipit.com/'.$localeName;
         $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
         $daysTillOfferExpires = 
             $offerPartial->getDaysTillOfferExpires($mostPopularCoupon['mostPopularCoupon'][0]['endDate']);
@@ -48,7 +49,7 @@ $mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(
     <div id="wrapper">
         <div class="container">
             <div class="panel-box win-min-height">
-                <strong class="logo-panel"><a href="http://www.flipit.com/"><h1>Changing the way we save</h1></a></strong>
+                <strong class="logo-panel"><a href="http://<?php echo $serverNameScheme; ?>.flipit.com/"><h1>Changing the way we save</h1></a></strong>
                 <span class="alt-text">CHoose RegioN:</span>
                 <div id="selectedByIP" style="display:none;" class="region-box"></div>
                 <div class="links-cols">

@@ -51,14 +51,64 @@ function showCodeInformation(id) {
 }
 
 function printIt(urlToShow) {
-    var windowObject = window.open();
-    self.focus();
-    windowObject.document.open();
-    windowObject.document.write('<html><body>');
-    windowObject.document.write('<img src ='+urlToShow+'>');
-    windowObject.document.write('</body></html>');
-    windowObject.document.close();
-    windowObject.print();
+    var windowUrl = 'about:blank';
+    var uniqueName = new Date();
+    var windowName = 'Print' + uniqueName.getTime();
+    var printWindow = window.open(windowUrl, windowName);
+    printWindow.document.write('<html>\n'); 
+    printWindow.document.write('<head>\n');
+    printWindow.document.write('<script>\n');
+    printWindow.document.write('function winPrint()\n');
+    printWindow.document.write('{\n');
+    printWindow.document.write('window.focus();\n');  
+
+    if (navigator.userAgent.toLowerCase().indexOf("chrome") > -1)
+    {
+        printWindow.document.write('printChrome();\n');
+    }
+    else
+    {       
+        printWindow.document.write('window.print();\n');
+    }
+
+    if(navigator.userAgent.toLowerCase().indexOf("firefox") > -1)
+    {
+        printWindow.document.write('window.close();\n');
+    }
+    else
+    {
+        printWindow.document.write('chkstate();\n');
+    }   
+
+    printWindow.document.write('}\n');
+    printWindow.document.write('function chkstate()\n');
+    printWindow.document.write('{\n');
+    printWindow.document.write('if(document.readyState=="complete")');
+    printWindow.document.write('{\n');
+    printWindow.document.write('window.close();\n');
+    printWindow.document.write('}\n');
+    printWindow.document.write('else{\n');
+    printWindow.document.write('setTimeout("chkstate();",3000);\n');
+    printWindow.document.write('}\n');
+    printWindow.document.write('}\n');
+    printWindow.document.write('function printChrome()\n');
+    printWindow.document.write('{\n');
+    printWindow.document.write('if(document.readyState=="complete")');
+    printWindow.document.write('{\n');
+    printWindow.document.write('window.print();\n');
+    printWindow.document.write('}\n');
+    printWindow.document.write('else{\n');
+    printWindow.document.write('setTimeout("printChrome();",3000);\n');
+    printWindow.document.write('}\n');
+    printWindow.document.write('}\n');
+    printWindow.document.write('</scr');
+    printWindow.document.write('ipt>');
+    printWindow.document.write('</head>');
+    printWindow.document.write('<body onload="winPrint()" >');
+    printWindow.document.write('<img src="'+urlToShow+'"/>');
+    printWindow.document.write('</body>'); 
+    printWindow.document.write('</html>'); 
+    printWindow.document.close();
 }
 
 function getQueryStringParams(popupParameter) {

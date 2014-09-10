@@ -8,9 +8,6 @@ function getDisqusRecentComments($parameters)
     if (!isset($parameters['commentCount'])) {
         $parameters['commentCount'] = 25;
     }
-    if (!isset($parameters['commentLength'])) {
-        $parameters['commentLength'] = 100;
-    }
 
     $DisqusCommentsAPILink =
     "http://disqus.com/api/3.0/posts/list.json?limit={$parameters['commentCount']}&api_key={$parameters['APIKey']}&forum={$parameters['forumName']}&include=approved";
@@ -39,8 +36,7 @@ function getDisqusRecentComments($parameters)
             $DisqusComments[$index]['authorName'] = $DisqusComments[$index]['author']['name'];
             $DisqusComments[$index]['authorProfileURL'] = $DisqusComments[$index]['author']['profileUrl'];
             $DisqusComments[$index]['authorAvatar'] = $DisqusComments[$index]['author']['avatar']['cache'];
-            $DisqusComments[$index]['message'] =
-            DisqusLimitLength($DisqusComments[$index]['raw_message'], $parameters['commentLength']);
+            $DisqusComments[$index]['message'] = $DisqusComments[$index]['raw_message'];
             unset($DisqusComments[$index]['isJuliaFlagged']);
             unset($DisqusComments[$index]['isFlagged']);
             unset($DisqusComments[$index]['forum']);
@@ -80,11 +76,3 @@ function DisqusGetJson($DisqusCommentsAPILink)
     return $DisqusJsonResponse;
 }
 
-function DisqusLimitLength($message, $maxLength)
-{
-    if (strlen($message) <= $maxLength) {
-        return $message;
-    } else {
-        return substr($message, 0, $maxLength)."...";
-    }
-}

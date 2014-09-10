@@ -37,6 +37,7 @@ class Offer extends BaseOffer
         ->andWhere('o.enddate<'."'".$expiredDate."'")
         ->andWhere('o.discounttype="CD"')
         ->andWhere('s.deleted = 0')
+        ->andWhere('s.status = 1')
         ->orderBy('o.id DESC');
 
         if ($shopId != '') {
@@ -86,6 +87,7 @@ class Offer extends BaseOffer
                 ->leftJoin('s.logo img')
                 ->where('o.deleted = 0')
                 ->andWhere('s.deleted = 0')
+                ->andWhere('s.status = 1')
                 ->andWhere('s.affliateProgram = 1')
                 ->andWhere('o.discountType="CD"')
                 ->andWhere('o.Visability!="MEM"')
@@ -141,6 +143,7 @@ class Offer extends BaseOffer
             ->leftJoin('s.logo img')
             ->where('o.deleted = 0')
             ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
             ->andWhere('s.affliateProgram = 1')
             ->andWhere('o.discountType="CD"')
             ->andWhere('o.Visability!="MEM"')
@@ -2927,7 +2930,7 @@ class Offer extends BaseOffer
    
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
           
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
@@ -2948,7 +2951,7 @@ class Offer extends BaseOffer
             $key = 'offerDetails_'  . $sid . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             

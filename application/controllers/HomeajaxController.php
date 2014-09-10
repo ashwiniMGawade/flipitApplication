@@ -10,13 +10,15 @@ class HomeajaxController extends Zend_Controller_Action
             "all_hometocategoryoffers". $categoryId ."_list",
             array(
                 'function' => 'Category::getCategoryVoucherCodes',
-                'parameters' => array($categoryId, 10, 'homePage')
+                'parameters' => array($categoryId, 0, 'homePage')
             )
         );
-        $removedDuplicateShops = $this->_helper->Index->removeDuplicateCode($topCategoriesOffers);
+        $offers = count($topCategoriesOffers) > 10
+                  ? $this->_helper->Index->removeDuplicateCode($topCategoriesOffers, 'homePage')
+                  :  $topCategoriesOffers;
         $homePagePartials = new FrontEnd_Helper_HomePagePartialFunctions();
         $rightDivWithContent = $homePagePartials->getRightDivByAjax(
-            $removedDuplicateShops,
+            $offers,
             $categoryPermalink,
             FrontEnd_Helper_viewHelper::__form('form_All') . " " . $categoryPermalink. " "
             . FrontEnd_Helper_viewHelper::__form('form_Code'),
