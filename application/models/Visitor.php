@@ -200,7 +200,7 @@ class Visitor extends BaseVisitor
         ->select(
             'fv.id as fvid,fv.shopId as shopId,s.refUrl,
             s.actualUrl,fv.visitorId as visitorId,s.name as name,s.logoid as slogoId,
-            s.permalink as permaLink,o.*,l.path,l.name,l.id,terms.content,vot.id,vot.vote'
+            s.permalink as permaLink,o.id, o.title, o.totalViewcount as clicks,l.path,l.name,l.id'
         )
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
@@ -211,17 +211,15 @@ class Visitor extends BaseVisitor
         ->leftJoin('o.shop s')
         ->leftJoin('s.favoriteshops fv')
         ->leftJoin('s.logo l')
-        ->leftJoin('o.termandcondition terms')
-        ->leftJoin('o.vote vot')
         ->where('fv.visitorId='. Auth_VisitorAdapter::getIdentity()->id)
         ->andWhere('s.deleted=0')
+        ->andWhere('o.deleted=0')
         ->andWhere('o.endDate > "'.$currentDate.'"')
         ->andWhere('o.startDate <= "'.$currentDate.'"')
         ->andWhere('o.discountType="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->andWhere('o.userGenerated=0')
-        ->orderBy('o.exclusiveCode DESC')
-        ->addOrderBy('o.startdate DESC')
+        ->orderBy('o.totalViewcount DESC')
         ->limit($limit)
         ->fetchArray();
         return $favouriteShopsOffers;
