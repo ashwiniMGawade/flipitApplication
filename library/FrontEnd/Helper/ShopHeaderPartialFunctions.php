@@ -89,8 +89,13 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
             $titleTextForLove = $this->__form("form_Add in Favourite");
         endif;
-        return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" 
-            class="pop btn btn-sm btn-default" href="javascript:void(0)">
+        $clickEvent = '';
+        if ($visitorId==0) {
+            $redirectUrl = 'javascript:void(0)';
+            $clickEvent = "onclick=showSignUpPopUp();";
+        }
+        return '<a title="'. $titleTextForLove .'"  '.$clickEvent.' href="' . $redirectUrl .'" 
+            class="pop btn btn-sm btn-default">
             <span class="' . $loveClassGreyColorOrRedColor . '"></span>'.
             $shopName.
         '</a>';

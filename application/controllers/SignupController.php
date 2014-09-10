@@ -88,7 +88,8 @@ class SignupController extends Zend_Controller_Action
                         FrontEnd_Helper_viewHelper::__translate('Please enter valid information'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'signup',
-                        $visitorInformation['emailAddress']
+                        $visitorInformation['emailAddress'],
+                        $visitorInformation['shopId']
                     );
                 }
             } else {
@@ -108,8 +109,14 @@ class SignupController extends Zend_Controller_Action
         $this->_redirect($redirectUrl);
     }
 
-    public function redirectAccordingToMessage($visitorId, $message, $redirectLink, $pageName, $visitorEmail = '')
-    {
+    public function redirectAccordingToMessage(
+        $visitorId,
+        $message,
+        $redirectLink,
+        $pageName,
+        $visitorEmail = '',
+        $shopId = ''
+    ) {
         if (!$visitorId) {
             self::showFlashMessage(
                 $message,
@@ -136,15 +143,21 @@ class SignupController extends Zend_Controller_Action
                     __translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
-                self::showFlashMessage(
-                    $message,
-                    HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'),
-                    'success'
-                );
+                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login');
+                $shopIdNameSpace = new Zend_Session_Namespace('shopId');
+                if (isset($shopIdNameSpace->shopId) && $shopIdNameSpace->shopId!='') {
+                    $shopName = Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
+                    $shopIdNameSpace->shopId = '';
+                    $message = $shopName. " ".  FrontEnd_Helper_viewHelper::
+                    __translate('have been added to your favorite shops');
+                    $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                }
+                self::showFlashMessage($message, $redirectUrl, 'success');
             }
         }
         return;
     }
+
     public function sendWelcomeMail($visitorId)
     {
         $visitorDetails = Visitor::getUserDetails($visitorId);
@@ -235,5 +248,35 @@ class SignupController extends Zend_Controller_Action
             $message = FrontEnd_Helper_viewHelper::__translate('Please enter valid information');
         }
         self::redirectAccordingToMessage($visitorId, $message, $redirectLink, 'profile');
+    }
+
+    public function signuplightboxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->view->shopLogo = $this->getRequest()->getParam('url');
+        $this->view->shopId = $this->getRequest()->getParam('shopId');
+        
+    }
+
+    public function signuplightboxsetsesionsAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $params = $this->getRequest()->getParams();
+        $emailAddress = $params['emailAddress'];
+        $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
+        $visitorEmail->emailAddressSignup = $emailAddress;
+        $addToFavoriteShopId = $params['shopId'];
+        $visitorShopId = new Zend_Session_Namespace('shopId');
+        $visitorShopId->shopId = $addToFavoriteShopId;
+        $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
+    }
+
+    public function setsessionAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $params = $this->getRequest()->getParams();
+        $visitorShopId = new Zend_Session_Namespace('shopId');
+        $visitorShopId->shopId = $params['shopId'];
+        $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'));
     }
 }

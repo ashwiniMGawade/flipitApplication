@@ -261,13 +261,16 @@ class Shop extends BaseShop
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
             $cacheKeyOfferDetails = 'offerDetails_'  . $shopId . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);       
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');       
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(
+                'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops'
+            );
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
@@ -282,6 +285,14 @@ class Shop extends BaseShop
             ->andWhere('o.enddate >'."'".$currentDate."'")
             ->andWhere('o.deleted=0')->fetchArray();
         return $acitveOfferCount;
+    }
+
+    public static function getShopName($shopId)
+    {
+        $shop = Doctrine_Query::create()->select('s.name')
+            ->from('Shop s')
+            ->where('s.id='.$shopId)->fetchArray();
+        return isset($shop[0]['name']) ? $shop[0]['name'] : '';  
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
