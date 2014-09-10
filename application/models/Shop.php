@@ -450,7 +450,8 @@ class Shop extends BaseShop
             //call cache function
             $key = 'shop_'.$this->id.'_similarShops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'store_'.$this->permaLink.'howToGuide';
+            $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
+            $key = 'store_'.$cacheKey.'_howToGuide';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
@@ -482,7 +483,8 @@ class Shop extends BaseShop
         //call cache function
         $key = 'shop_'.$this->id.'_similarShops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $key = 'store_'.$this->permaLink.'howToGuide';
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
+        $key = 'store_'.$cacheKey.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
@@ -812,8 +814,8 @@ class Shop extends BaseShop
         
         $key = 'shop_'.$this->id.'_similarShops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'store_'.$shopDetail['shopNavUrl'].'howToGuide';
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopDetail['shopNavUrl']);
+        $key = 'store_'.$cacheKey.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
@@ -1597,7 +1599,8 @@ public static function getShopDetail($shopId)
         $shop->status = $status;
         $shop->offlineSicne = $date;
         $shop->save();
-
+        $key = 'shopDetails_'.$params['id'].'_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         return $shop->offlineSicne;
 
 
@@ -1627,7 +1630,7 @@ public static function getShopDetail($shopId)
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
 
 
-        $key = 'shopDetails_'  . $this->id . '_list';
+        $key = 'shopDetails_'. $this->id.'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails); 
