@@ -36,9 +36,9 @@ class VisitorExport
         try {
 
             $this->dbh = CommonMigrationFunctions::connectionToPDO($dsn);
-
             $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($keyIn);
-            $visitorFile    = $pathToTempExcelFolder . "visitorList.csv";
+            $locale = $keyIn == 'en' ? "-NL" : "-".strtoupper($keyIn);
+            $visitorFile    = $pathToTempExcelFolder . "visitorList".$locale.".csv";
             $fp             = fopen($visitorFile, 'w');
 
             print "Parse visitors data and save it into excel file\n";

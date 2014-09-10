@@ -61,9 +61,11 @@ class OfferExport
         if ($key == 'en') {
             $this->_localePath = '';
             $suffix = "" ;
+            $locale = "-NL";
         } else {
             $this->_localePath = $key . "/";
             $suffix = "_" . strtoupper($key) ;
+            $locale = "-".strtoupper($key);
         }
 
         defined('PUBLIC_PATH')
@@ -126,25 +128,26 @@ class OfferExport
 
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0);
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->_trans->translate('Title'));
-        $objPHPExcel->getActiveSheet()->setCellValue('B1', $this->_trans->translate('Shop'));
-        $objPHPExcel->getActiveSheet()->setCellValue('C1', $this->_trans->translate('Type'));
-        $objPHPExcel->getActiveSheet()->setCellValue('D1', $this->_trans->translate('Visibility'));
-        $objPHPExcel->getActiveSheet()->setCellValue('E1', $this->_trans->translate('Extended'));
-        $objPHPExcel->getActiveSheet()->setCellValue('F1', $this->_trans->translate('Start'));
-        $objPHPExcel->getActiveSheet()->setCellValue('G1', $this->_trans->translate('End'));
-        $objPHPExcel->getActiveSheet()->setCellValue('H1', $this->_trans->translate('Clickouts'));
-        $objPHPExcel->getActiveSheet()->setCellValue('I1', $this->_trans->translate('Author'));
-        $objPHPExcel->getActiveSheet()->setCellValue('J1', $this->_trans->translate('Coupon Code'));
-        $objPHPExcel->getActiveSheet()->setCellValue('K1', $this->_trans->translate('Ref URL'));
-        $objPHPExcel->getActiveSheet()->setCellValue('L1', $this->_trans->translate('Exclusive'));
-        $objPHPExcel->getActiveSheet()->setCellValue('M1', $this->_trans->translate('Editor Picks'));
-        $objPHPExcel->getActiveSheet()->setCellValue('N1', $this->_trans->translate('User Generated'));
-        $objPHPExcel->getActiveSheet()->setCellValue('O1', $this->_trans->translate('Approved'));
-        $objPHPExcel->getActiveSheet()->setCellValue('P1', $this->_trans->translate('Offline'));
-        $objPHPExcel->getActiveSheet()->setCellValue('Q1', $this->_trans->translate('Created At'));
-        $objPHPExcel->getActiveSheet()->setCellValue('R1', $this->_trans->translate('Deeplink'));
-        $objPHPExcel->getActiveSheet()->setCellValue('S1', $this->_trans->translate('Terms & Conditions'));
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->_trans->translate('Generation Date and Time'));
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', $this->_trans->translate('Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('B3', $this->_trans->translate('Shop'));
+        $objPHPExcel->getActiveSheet()->setCellValue('C3', $this->_trans->translate('Type'));
+        $objPHPExcel->getActiveSheet()->setCellValue('D3', $this->_trans->translate('Visibility'));
+        $objPHPExcel->getActiveSheet()->setCellValue('E3', $this->_trans->translate('Extended'));
+        $objPHPExcel->getActiveSheet()->setCellValue('F3', $this->_trans->translate('Start'));
+        $objPHPExcel->getActiveSheet()->setCellValue('G3', $this->_trans->translate('End'));
+        $objPHPExcel->getActiveSheet()->setCellValue('H3', $this->_trans->translate('Clickouts'));
+        $objPHPExcel->getActiveSheet()->setCellValue('I3', $this->_trans->translate('Author'));
+        $objPHPExcel->getActiveSheet()->setCellValue('J3', $this->_trans->translate('Coupon Code'));
+        $objPHPExcel->getActiveSheet()->setCellValue('K3', $this->_trans->translate('Ref URL'));
+        $objPHPExcel->getActiveSheet()->setCellValue('L3', $this->_trans->translate('Exclusive'));
+        $objPHPExcel->getActiveSheet()->setCellValue('M3', $this->_trans->translate('Editor Picks'));
+        $objPHPExcel->getActiveSheet()->setCellValue('N3', $this->_trans->translate('User Generated'));
+        $objPHPExcel->getActiveSheet()->setCellValue('O3', $this->_trans->translate('Approved'));
+        $objPHPExcel->getActiveSheet()->setCellValue('P3', $this->_trans->translate('Offline'));
+        $objPHPExcel->getActiveSheet()->setCellValue('Q3', $this->_trans->translate('Created At'));
+        $objPHPExcel->getActiveSheet()->setCellValue('R3', $this->_trans->translate('Deeplink'));
+        $objPHPExcel->getActiveSheet()->setCellValue('S3', $this->_trans->translate('Terms & Conditions'));
 
         $column = 2;
         $row = 2;
@@ -334,8 +337,11 @@ class OfferExport
 
                 $terms = @$offer['termandcondition'][0]['content'];
             }
+            $currentDateAndTime = date('Y-m-d H:i:s');
 
+                    
             // set value in column of excel
+            $objPHPExcel->getActiveSheet()->setCellValue('A2', $currentDateAndTime);
             $objPHPExcel->getActiveSheet()->setCellValue('A' . $column, $title);
             $objPHPExcel->getActiveSheet()->setCellValue('B' . $column, $shopname);
             $objPHPExcel->getActiveSheet()->setCellValue('C' . $column, $type);
@@ -374,16 +380,16 @@ class OfferExport
                                 'color' => array('argb' => '000000'))));
         // HEADER COLOR
 
-        $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S1')->applyFromArray($headerStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:' . 'S3')->applyFromArray($headerStyle);
 
         // SET ALIGN OF TEXT
-        $objPHPExcel->getActiveSheet()->getStyle('A1:S1')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-        $objPHPExcel->getActiveSheet()->getStyle('B2:S' . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:S3')->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+        $objPHPExcel->getActiveSheet()->getStyle('B4:S' . $row)->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_TOP);
 
         // BORDER TO CELL
-        $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S1')->applyFromArray($borderStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:' . 'S3')->applyFromArray($borderStyle);
         $borderColumn = (intval($column) - 1);
-        $objPHPExcel->getActiveSheet()->getStyle('A1:' . 'S' . $borderColumn)->applyFromArray($borderStyle);
+        $objPHPExcel->getActiveSheet()->getStyle('A3:' . 'S' . $borderColumn)->applyFromArray($borderStyle);
 
         // SET SIZE OF THE CELL
         $objPHPExcel->getActiveSheet()->getColumnDimension('A')->setAutoSize(true);
@@ -417,7 +423,7 @@ class OfferExport
 
         //write to an xlsx file and upload to excel folder locale basis
 
-        $offerFile = $pathToFile."offerList.xlsx";
+        $offerFile = $pathToFile."offerList".$locale.".xlsx";
 
         $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
         $objWriter->save($offerFile);
