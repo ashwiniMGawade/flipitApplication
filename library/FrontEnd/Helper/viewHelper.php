@@ -610,23 +610,23 @@ EOD;
         return $text;
     }
    
-    public static function gethomeSections($offertype, $flag = "")
+    public static function gethomeSections($offertype, $limit = "")
     {
         switch ($offertype) {
             case "popular":
-                $result = PopularCode::gethomePopularvoucherCode($flag);
+                $result = PopularCode::gethomePopularvoucherCode($limit);
                 break;
             case "newest":
-                $result = PopularVouchercodes::getNewstoffer($flag);
+                $result = PopularVouchercodes::getNewstoffer($limit);
                 break;
             case "category":
-                $result = Category::getPopularCategories($flag);
+                $result = Category::getPopularCategories($limit);
                 break;
             case "specialList":
-                $result = $data = SpecialList::getfronendsplpage($flag);
+                $result = $data = SpecialList::getfronendsplpage($limit);
                 break;
             case "moneySaving":
-                $result = Articles::getmoneySavingArticles($flag);
+                $result = Articles::getmoneySavingArticles($limit);
                 break;
             case "asseenin":
                 $result = SeenIn::getSeenInContent();
@@ -918,9 +918,34 @@ EOD;
 
     public static function getServerNameScheme()
     {
-        $httpUrlScheme = parse_url($_SERVER['SERVER_NAME']);
-        $httpUrlScheme = isset($httpUrlScheme['path']) ? explode('.', $httpUrlScheme['path']) : '';
-        $httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : 'www';
+        if (php_sapi_name() != 'cli') {
+            $httpUrlScheme = parse_url($_SERVER['HTTP_HOST']);
+            $httpUrlScheme = isset($httpUrlScheme['path']) ? explode('.', $httpUrlScheme['path']) : '';
+            $httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : 'www';
+        } else {
+            $httpUrlScheme = 'www';
+        }
+        
         return $httpUrlScheme;
+    }
+
+    public static function getPermalinkAfterRemovingSpecialChracter($permalink)
+    {
+        $positionOfSpecialCharacter = strpos($permalink, "-");
+        $positionOfSpecialCharacterDot = strpos($permalink, ".");
+        $positionOfSpecialCharacterSlash = strpos($permalink, "/");
+        if ($positionOfSpecialCharacter) {
+            $stringWithoutSpecilaChracter = str_replace("-", "", $permalink);
+            $cacheKey = $stringWithoutSpecilaChracter;
+        } else if ($positionOfSpecialCharacterDot) {
+            $positionOfSpecialCharacterDot = str_replace(".", "", $permalink);
+            $cacheKey = $positionOfSpecialCharacterDot;
+        } else if ($positionOfSpecialCharacterSlash) {
+            $positionOfSpecialCharacterSlash = str_replace("/", "", $permalink);
+            $cacheKey = $positionOfSpecialCharacterSlash;
+        } else {
+            $cacheKey = $permalink;
+        }
+        return $cacheKey;
     }
 }

@@ -256,6 +256,10 @@ abstract class BasePage extends Doctrine_Record
               'pageType' => 'offer',
              ),
              ));
+        $this->hasColumn('offersCount', 'integer', 20, array(
+                'type' => 'integer',
+                'length' => '20',
+        ));
     }
 
     public function setUp()

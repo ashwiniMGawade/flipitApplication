@@ -12,5 +12,12 @@
  */
 class Rights extends BaseRights
 {
-
+    public function addRights()
+    {
+        $rights = new Rights();
+        $rights->name = 'administration';
+        $rights->rights = 1;
+        $rights->roleId = 1;
+        $rights->save();
+    }
 }

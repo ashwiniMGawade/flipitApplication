@@ -358,9 +358,10 @@ class Visitor extends BaseVisitor
         }
 
         $visitor->save();
-
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_details');
         return array("ret" => $visitor->id ,
                      "status" => self::SUCCESS );
+
     }
     /**
      * Search top five visitors and shows in autocomplete

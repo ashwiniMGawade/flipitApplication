@@ -7,17 +7,19 @@ if (!empty($translateSession->onlineTranslationActivated)): ?>
     </div>
 <?php 
 endif;
- 
+
+$httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+
 if(LOCALE == ''):
     $logoCssClass = 'logo kortingscode';
     $logoPath = HTTP_PATH.'public/images/kortingscode-logo.png';
     $logoAlt = "kortingscode.nl";
-    $websiteName = 'http://www.kortingscode.nl';
+    $websiteName = 'http://'.$httpScheme.'.kortingscode.nl';
 else :
     $logoCssClass = 'logo flipit';
     $logoPath = HTTP_PATH.'public/images/flipit-logo.png';
     $logoAlt = "flipit.com";
-    $websiteName = 'http://www.flipit.com/'.LOCALE;
+    $websiteName = 'http://'.$httpScheme.'.flipit.com/'.LOCALE;
 endif
 ?>
 <header id="header">
@@ -28,8 +30,7 @@ endif
                 FrontEnd_Helper_viewHelper::__translate('save money with online discount codes and save pointers')
             );?>
             </span>
-            <a class="btn-menu" href="#"><?php echo FrontEnd_Helper_viewHelper::__translate('account menu');?>
-            </a>
+            <a class="btn-menu" href="#">account menu</a>
             <?php
                 $this->locale = LOCALE != 'en' ? LOCALE : '';
                 $userMenuLink = $this->locale. '/login/usermenu';

@@ -31,7 +31,8 @@ $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
     if (!empty($articleDetails['chapters'])) {
         foreach ($articleDetails['chapters'] as $articleChapter) :                    
             echo '<h2 id="'.$articleChapter['id'].'">'.$articleChapter['title'].'</h2>';
-            echo $articleChapter['content'];
+            $chapters = preg_replace('/(<a\b[^><]*)>/i', '$1 style="color: #0077cc;text-decoration: underline;">', $articleChapter['content']);
+            echo $chapters;
         endforeach;
     }
 ?> 

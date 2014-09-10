@@ -330,7 +330,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshopForHomePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
     }
 
@@ -356,8 +356,16 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshopForHomePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
+    }
+
+    public function savepopularshopspositionAction()
+    {
+        PopularShop::savePopularShopsPosition($this->getRequest()->getParam('shopid'));
+        $popularShop = PopularShop::getPopularShop();
+        echo Zend_Json::encode($popularShop);
+        exit();
     }
     /**
      * move up one position  popular shop list
@@ -384,7 +392,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshopForHomePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
     }
     /**
@@ -411,7 +419,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'all_widget6_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshopForHomePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
     }
 

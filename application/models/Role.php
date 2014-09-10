@@ -20,8 +20,8 @@ class Role extends BaseRole
      *@param integer $args
      *@return array $roles
      */
-  public static function createUserPermission($role)
-   {
+    public static function createUserPermission($role)
+    {
         $roles  =  array();
         switch ($role) {
 
@@ -51,7 +51,16 @@ class Role extends BaseRole
         }
         return  $roles;
 
-   }
+    }
 
-
+    public function addUserRoles()
+    {
+        $roles = $this->createUserPermission(1);
+        foreach ($roles as $role) {
+            $userRole = new Role();
+            $userRole->name = $role;
+            $userRole->save();
+        }
+        return true;
+    }
 }

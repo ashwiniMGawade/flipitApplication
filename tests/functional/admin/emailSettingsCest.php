@@ -24,7 +24,6 @@ class emailSettingsCest
         $I->click('button[type=submit]');
         $I->amOnPage('/admin/email/email-settings');
         $I->seeInField('#senderEmail', 'kim@web-flight.nl');
-        $I->seeInField('#senderEmail', 'kim@web-flight.nl');
         $I->seeInField('#senderName', 'kim');
     }
 

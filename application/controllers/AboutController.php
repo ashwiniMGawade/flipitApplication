@@ -21,7 +21,13 @@ class AboutController extends Zend_Controller_Action
     public function indexAction()
     {
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
-        $this->view->pageHeaderImage = Logo::getPageLogo($pageDetails->pageHeaderImageId);
+        $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+            'page_header'.$pageDetails->id.'_image',
+            array(
+                'function' => 'Logo::getPageLogo',
+                'parameters' => array($pageDetails->pageHeaderImageId)
+            )
+        );
         $this->viewHelperObject->getMetaTags(
             $this,
             isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
@@ -33,11 +39,12 @@ class AboutController extends Zend_Controller_Action
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $allAuthorsDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_about_pages_users_list',
+            'all_users_list',
             array(
                 'function' => 'User::getAllUsersDetails',
                 'parameters' => array($this->_helper->About->getWebsiteNameWithLocale())
-            )
+            ),
+            ''
         );
         $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
             $allAuthorsDetails,
@@ -60,12 +67,12 @@ class AboutController extends Zend_Controller_Action
     {
         $authorSlugName = $this->getRequest()->getParam('slug');
         $authorId = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_'. 'users'. str_replace('-', '_', $authorSlugName) .'_list',
+            'user_'. str_replace('-', '_', $authorSlugName) .'_data',
             array('function' => 'User::getUserIdBySlugName', 'parameters' => array($authorSlugName)),
             0
         );
         $authorDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_'. 'users'.$authorId .'_list',
+            'user_'.$authorId .'_data',
             array(
                 'function' => 'User::getUserProfileDetails',
                 'parameters' => array($authorId, $this->_helper->About->getWebsiteNameWithLocale())
@@ -78,12 +85,12 @@ class AboutController extends Zend_Controller_Action
 
         $authorDetails = $authorDetails[0];
         $authorFavouriteShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_'. 'favouriteshop'.$authorId .'_list',
+            'user_'. 'favouriteShop'.$authorId .'_data',
             array('function' => 'User::getUserFavouriteStores', 'parameters' => array($authorId)),
             0
         );
         $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'all_'. 'mostread'.$authorId .'_list',
+            'user_'. 'mostRead'.$authorId .'_data',
             array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
             0
         );
@@ -100,6 +107,17 @@ class AboutController extends Zend_Controller_Action
             FACEBOOK_IMAGE,
             $customHeader
         );
+
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($authorSlugName);
+        $this->view->discussionComments =
+            FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
+                'get_'.$cacheKey.'_disqusComments',
+                array(
+                    'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
+                    'parameters' => array($authorSlugName)
+                ),
+                ''
+            );
         $this->view->authorDetails = $authorDetails;
         $this->view->authorFavouriteShops = $authorFavouriteShops;
         $this->view->authorMostReadArticles = $authorMostReadArticles;

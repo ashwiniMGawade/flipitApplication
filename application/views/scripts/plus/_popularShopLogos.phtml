@@ -13,8 +13,13 @@
                     ?>
                     <div class="slide">
                         <a href="<?php echo HTTP_PATH_LOCALE.$popularStore['shop']['permaLink'];?>">
-                            <img src="<?php echo $popularStoreImage; ?>" width = "150px"
+                            <img class="lazy" data-original="<?php echo $popularStoreImage; ?>"
+                            width ="150"
                             alt="<?php echo $popularStore['shop']['name']; ?>">
+                            <noscript>
+                                <img src="<?php echo $popularStoreImage; ?>" width ="150"
+                                alt="<?php echo $popularStore['shop']['name']; ?>">
+                            </noscript>
                         </a>
                     </div>
                     <?php

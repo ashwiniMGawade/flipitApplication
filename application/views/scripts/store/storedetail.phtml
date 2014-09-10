@@ -22,7 +22,7 @@ endif;
 $offerPartialClass = new FrontEnd_Helper_OffersPartialFunctions();
 $similarOffersHeader = '';
 $similarOffers = '';
-if(count($this->similarShopsAndSimilarCategoriesOffers) > 0):
+if(!empty($this->similarShopsAndSimilarCategoriesOffers)):
     $similarOffersHeader =$offerPartialClass->getSimilarShopHeader(
         $this->currentStoreInformation[0]['name'],
         'similar'
@@ -57,7 +57,9 @@ $discussion = '';
 if($this->currentStoreInformation[0]['discussions'] == 1):
     $discussion = $this->partial(
         $partialViewPath.'_discussion.phtml',
-        array('shopName' => $this->currentStoreInformation[0]['name'])
+        array('shopName' => $this->currentStoreInformation[0]['name'],
+            'discussionComments' => $this->discussionComments
+        )
     );
 endif;
 

@@ -32,8 +32,10 @@ $howToUse = $this->partial(
                     </a>
                 </span>
                 <div class="photo">
-                <?php 
-                    $editorText = isset($this->shopEditor['editorText']) ? $this->shopEditor['editorText'] : 'Hello';
+                <?php
+
+                    $editorText = isset($this->shopEditor['editorText']) ? $this->shopEditor['editorText']
+                    : $this->translate('Hello');
                 ?>
                     <span class="text-box"><?php echo $editorText ; ?></span>
                     <a href="<?php echo $profileLink;?>">
@@ -44,7 +46,9 @@ $howToUse = $this->partial(
             </div>
         </div>
         <h2><?php echo $shopAbout; ?></h2>
-        <?php echo $this->shop['shopText']; ?>
+        <?php 
+        echo  preg_replace('/(<a\b[^><]*)>/i', '$1 style="color: #0077cc;text-decoration: underline;">',
+        $this->shop['shopText']); ?>
     </div>
 <?php echo $howToUse; ?>
 </article>
