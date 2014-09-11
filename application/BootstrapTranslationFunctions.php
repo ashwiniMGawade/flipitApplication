@@ -23,7 +23,6 @@ class BootstrapTranslationFunctions {
 
         $locale = LocaleSettings::getLocaleSettings();
         $locale = !empty($locale[0]['locale']) ? $locale[0]['locale'] : 'nl_NL';
-
         return array('locale' => $locale, 'localePath' => $localePath, 'suffix' => $suffix);
     }
 
@@ -32,6 +31,7 @@ class BootstrapTranslationFunctions {
         $transSettings = self::getTranslationSettings($domain, $moduleDirectoryName, $localeCookieData);
         $locale = $transSettings['locale'];
         Zend_Registry::set('Zend_Locale', $locale);
+        return;
     }
 
     public static function setDateConstantsForLocale()
@@ -40,15 +40,9 @@ class BootstrapTranslationFunctions {
         $month = $date->get(Zend_Date::MONTH_NAME);
         $year = $date->get(Zend_Date::YEAR);
         $day = $date->get(Zend_Date::DAY);
-
-        defined('CURRENT_MONTH')
-        || define('CURRENT_MONTH', $month);
-
-        defined('CURRENT_YEAR')
-        || define('CURRENT_YEAR', $year);
-
-        defined('CURRENT_DAY')
-        || define('CURRENT_DAY', $day);
+        defined('CURRENT_MONTH') || define('CURRENT_MONTH', $month);
+        defined('CURRENT_YEAR') || define('CURRENT_YEAR', $year);
+        defined('CURRENT_DAY') || define('CURRENT_DAY', $day);
     }
 
     public static function activateInlineTranslationForAdmin($domain, $moduleDirectoryName, $localeCookieData)
@@ -93,14 +87,12 @@ class BootstrapTranslationFunctions {
         Zend_Locale::setDefault('en_US');
         $locale = new Zend_Locale(Zend_Registry::get('Zend_Locale'));
         $poTrans = new Zend_Translate(array('adapter' => 'gettext', 'locale'  => $locale, 'disableNotices' => true));
-
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/fallback/frontend_php', $locale);
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/backend_php', $locale);
         self::getSavedTranslationFileAndSetInRegistry($poTrans, $locale);
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/email', $locale);
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/form', $locale);
         self::addTranslationFileInRegistry($poTrans, $transSettings, 'language/po_links', $locale);
-       
         Zend_Registry::set('Zend_Locale', $locale);
         Zend_Registry::set('Zend_Translate', $poTrans);
     }
@@ -147,7 +139,6 @@ class BootstrapTranslationFunctions {
                 'locale' => $locale
             )
         );
-
         return $dbTranslations;
     }
 
@@ -160,7 +151,6 @@ class BootstrapTranslationFunctions {
             'content'   => $inlineTranslationFolder . '/',
             'locale'    => $locale
         );
-
         $csvTranslate = new Zend_Translate($csvTranslation);
         return $csvTranslate;
     }
