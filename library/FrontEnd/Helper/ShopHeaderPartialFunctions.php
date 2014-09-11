@@ -73,7 +73,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $divContent .=
                 '<h1>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']).'</h1>
                 <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>
-                    '.$shopWebsiteUrlContent. self::getLoveAnchor($shop['id'], $shop['name']);
+                    '.$shopWebsiteUrlContent. self::getLoveAnchor($shop['id'], $shop['name'], $shop['permaLink']);
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
@@ -82,10 +82,8 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         return $divContent;
     }
     
-    public function getLoveAnchor($shopId, $shopName)
+    public function getLoveAnchor($shopId, $shopName, $shopPermalink)
     {
-        $shopPermalink = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/"
-          . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes');
         $visitorId = Auth_VisitorAdapter::hasIdentity() ? Auth_VisitorAdapter::getIdentity()->id : 0;
         $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $shopPermalink .'&shopId='
             . base64_encode($shopId);
