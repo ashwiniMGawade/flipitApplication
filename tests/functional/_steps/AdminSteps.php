@@ -31,15 +31,15 @@ class AdminSteps extends \FunctionalTester
             'slug' => 'test-user',
             'imageName' => 'test.png',
             'locale' => '',
-            'nameStatus' => '',
+            'nameStatus' => '0',
             'google' => '',
             'twitter' => '',
             'pintrest' => '',
             'likes' => '',
             'dislike' => '',
             'editortext' => '',
-            'popularKortingscode' => ''
-            );
+            'popularKortingscode' => '0'
+        );
         $user = new \User();
         $user->truncateTables();
         $role = new \Role();
