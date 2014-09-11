@@ -50,7 +50,7 @@ class SearchController extends Zend_Controller_Action
             true
         );
         $offersBySearchedKeywords = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'offersBySearchedKeywords',
+            'offers_by_searchedkeywords',
             array('function' => 'Offer::searchOffers',
                 'parameters' => array($this->_getAllParams(), $shopIds, 12)),
             true

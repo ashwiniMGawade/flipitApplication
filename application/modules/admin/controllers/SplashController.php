@@ -64,6 +64,8 @@ class Admin_SplashController extends Zend_Controller_Action
             $this->splashObject->offerId = $offerId;
             $this->splashObject->locale = $locale;
             $this->splashObject->save();
+            $varnishObject = new Varnish();
+            $varnishObject->addUrl("http://www.flipit.com");
             $this->setFlashMessage('Offer has been added successfully');
             $this->_redirect(HTTP_PATH . 'admin/splash');
         }

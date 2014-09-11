@@ -226,4 +226,12 @@ class Admin_PopularcodeController extends Zend_Controller_Action
         }
 
     }
+
+    public function savepopularofferspositionAction()
+    {
+        PopularCode::savePopularOffersPosition($this->getRequest()->getParam('offerid'));
+        $popularCode = PopularCode::getPopularCode();
+        echo Zend_Json::encode($popularCode);
+        exit();
+    }
 }
