@@ -931,21 +931,7 @@ EOD;
 
     public static function getPermalinkAfterRemovingSpecialChracter($permalink)
     {
-        $positionOfSpecialCharacter = strpos($permalink, "-");
-        $positionOfSpecialCharacterDot = strpos($permalink, ".");
-        $positionOfSpecialCharacterSlash = strpos($permalink, "/");
-        if ($positionOfSpecialCharacter) {
-            $stringWithoutSpecilaChracter = str_replace("-", "", $permalink);
-            $cacheKey = $stringWithoutSpecilaChracter;
-        } else if ($positionOfSpecialCharacterDot) {
-            $positionOfSpecialCharacterDot = str_replace(".", "", $permalink);
-            $cacheKey = $positionOfSpecialCharacterDot;
-        } else if ($positionOfSpecialCharacterSlash) {
-            $positionOfSpecialCharacterSlash = str_replace("/", "", $permalink);
-            $cacheKey = $positionOfSpecialCharacterSlash;
-        } else {
-            $cacheKey = $permalink;
-        }
+        $cacheKey = preg_replace("/[\/\&_~,`@!(){}:*+^%#$?#.=-]/", "", $permalink);
         return $cacheKey;
     }
 }
