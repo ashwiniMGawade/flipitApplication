@@ -134,7 +134,7 @@ class StoreController extends Zend_Controller_Action
             $explodedPermalink = explode("/", $shopPermalink);
             $shopPermalink = $explodedPermalink[1];
         }
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopPermalink);
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
             $this->view->discussionComments =
                 FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
