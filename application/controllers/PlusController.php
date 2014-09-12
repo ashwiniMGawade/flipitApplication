@@ -28,14 +28,18 @@ class PlusController extends Zend_Controller_Action
                 (string)"all_mostreadMsArticlePage_list",
                 array('function' =>
                 'MoneySaving::getMostReadArticles',
-                'parameters' => array(3))
+                'parameters' => array(3)
+                ),
+                ''
             );
 
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 (string)"all_categoriesArticles_list",
                 array('function' =>
-                'MoneySaving::getCategoryWiseArticles', 'parameters' => array())
+                'MoneySaving::getCategoryWiseArticles', 'parameters' => array()
+                ),
+                ''
             );
 
         $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
@@ -63,7 +67,8 @@ class PlusController extends Zend_Controller_Action
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)
-            )
+            ),
+            ''
         );
         $this->view->popularStores = $popularStores;
         $this->view->mostReadArticles = $mostReadArticles;
@@ -90,7 +95,8 @@ class PlusController extends Zend_Controller_Action
                 array('function' =>
                 'Articles::getArticleByPermalink', 'parameters' => array($permalink))
             );
-        $currentArticleCategory = $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'];
+        $currentArticleCategory = !empty($articleDetails[0]['relatedcategory'][0]['articlecategory'])
+                                  ? $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'] : '';
         $categoryWiseArticles = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 (string)"4_categoriesArticles_list",
@@ -148,7 +154,7 @@ class PlusController extends Zend_Controller_Action
                     'get_'.$cacheKey.'_disqusComments',
                     array(
                         'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
-                        'parameters' => array(HTTP_PATH_LOCALE.$permalink)
+                        'parameters' => array($permalink)
                     ),
                     ''
                 );

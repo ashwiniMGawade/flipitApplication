@@ -43,7 +43,8 @@ class AboutController extends Zend_Controller_Action
             array(
                 'function' => 'User::getAllUsersDetails',
                 'parameters' => array($this->_helper->About->getWebsiteNameWithLocale())
-            )
+            ),
+            ''
         );
         $this->view->authorsWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
             $allAuthorsDetails,
@@ -113,7 +114,7 @@ class AboutController extends Zend_Controller_Action
                 'get_'.$cacheKey.'_disqusComments',
                 array(
                     'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
-                    'parameters' => array(HTTP_PATH_LOCALE.$authorSlugName)
+                    'parameters' => array($authorSlugName)
                 ),
                 ''
             );

@@ -381,7 +381,9 @@ class Page extends BasePage
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
+            $pagePermalinkParam =
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
 
         
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
@@ -704,7 +706,6 @@ class Page extends BasePage
         //call cache function
             $slug = $this->pageAttributeId;
             $pagedatakey ="all_". "pagedata".$slug ."_list";
-
             $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pagedatakey);
             //key not exist in cache
             if(!$flag) {
@@ -718,7 +719,9 @@ class Page extends BasePage
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
+            $pagePermalinkParam =
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
 
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);

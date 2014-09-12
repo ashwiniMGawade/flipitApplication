@@ -14,12 +14,12 @@ class Zend_Controller_Action_Helper_Index extends Zend_Controller_Action_Helper_
         return $specialOfferslist;
     }
 
-    public static function removeDuplicateCode($offers)
+    public static function removeDuplicateCode($offers, $pageName = '')
     {
-        $offersWithoughtDuplicateShop = '';
+        $offersWithoutDuplicateShop = '';
         foreach ($offers as $offerId => $offer) {
-            $offersWithoughtDuplicateShop[$offer['shop']['id']] = $offers[$offerId];
+            $offersWithoutDuplicateShop[$offer['shop']['id']] = $offers[$offerId];
         }
-        return $offersWithoughtDuplicateShop;
+        return $pageName == 'homePage' ? array_slice($offersWithoutDuplicateShop, 0, 10) : $offersWithoutDuplicateShop;
     }
 }

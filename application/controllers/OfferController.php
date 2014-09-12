@@ -72,7 +72,7 @@ class OfferController extends Zend_Controller_Action
         $extendedUrl = $parameters['permalink'];
 
         $couponDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'extended_'.$extendedUrl.'_couponDetails',
+            'extended_'.FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($extendedUrl).'_couponDetails',
             array('function' => 'Offer::getCouponDetails', 'parameters' => array($extendedUrl))
         );
         $shopList = $couponDetails[0]['shop']['id'].'_list';
@@ -95,7 +95,7 @@ class OfferController extends Zend_Controller_Action
         );
 
         if (count($couponDetails)== 0) {
-            $this->_redirect(HTTP_PATH_LOCALE.'error');
+            throw new Zend_Controller_Action_Exception('', 404);
         }
 
         $topOfferFromStore = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(

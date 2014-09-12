@@ -643,26 +643,98 @@ a.pop{
 	&:hover,
 	&:focus{
 		background: white;
-		.glyphicon-heart{
-			color:#fc0d1b;
-		}
 	}
 }
 
-.btn {
-	.glyphicon-heart {
-		color:#878a8d;
-		font-size:15px;
-		padding:0 6px 0 2px;
-		vertical-align:top;
-		&:hover {
-	    	color:#fc0d1b;
+.remove-fovourite-btn-gradiant {
+	color:#fff;
+	box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 0 #dc4747 inset;
+	border-color:#dc4747;
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		color-stop(0, #DB4444),
+		color-stop(0.49, #C31818),
+		color-stop(1, #D53A3A),
+		color-stop(1, #CC2929)
+	);
+	background-image: -o-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+	background-image: -moz-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+	background-image: -webkit-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+	background-image: -ms-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+	background-image: linear-gradient(to bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+}
+.blue-fovourite-btn{
+	color:#fff;
+	box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 0 #57bee7 inset;
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		color-stop(0, #22A2D4),
+		color-stop(0.54, #177EB5),
+		color-stop(1, #2486B3),
+		color-stop(1, #0E8ACC)
+	);
+	background-image: -o-linear-gradient(bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
+	background-image: -moz-linear-gradient(bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
+	background-image: -webkit-linear-gradient(bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
+	background-image: -ms-linear-gradient(bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
+	background-image: linear-gradient(to bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
+}
+a.follow-button{
+	line-height:16px;
+	font-size:12px;
+	color:#0077cc;
+	padding:6px 19px 6px;
+	box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 0 #fff inset;
+	.glyphicon-heart{
+		display:inline-block;
+		padding:0 10px 0 0;
+		color:#0077cc;
+	}
+	&:hover, &:focus{
+		color:#0077cc;
+		.glyphicon-heart{
+			color:#0077cc;
 		}
 	}
-	.red-heart {
-		color:#fc0d1b;
+}
+a.remove-fovourite{
+	line-height:16px;
+	font-size:12px;
+	color:#0077cc;
+	padding:5px 19px 5px;
+	.blue-fovourite-btn;
+	&:hover, &:focus{
+		.remove-fovourite-btn-gradiant;
+		padding:6px 32px 6px;
+	}
+	em{
+		font-style:normal;
+		display:block;
+		color:#fff;
+	}
+	strong{
+		display:none;
+		font-weight:normal;
+		margin: 0;
+	}
+	span{
+		display:inline-block;
+		vertical-align:middle;
+	}
+	&:hover, &:focus{
+		strong{
+			display:block;
+			color:#fff;
+		}
+		em{display:none;}
 	}
 }
+
+
 .btn-sm, .btn-group-sm > .btn{
 	font-size:11px;
 	margin: 0 14px 0 0;
@@ -3145,6 +3217,11 @@ input[type="submit"]::-moz-focus-inner{
 			}
 		}
 	}
+}
+
+span.pop{
+	color:#353535;
+	margin-bottom: 10px;
 }
 
 @media only screen and (min-width: 1200px){

@@ -37,6 +37,7 @@ class Offer extends BaseOffer
         ->andWhere('o.enddate<'."'".$expiredDate."'")
         ->andWhere('o.discounttype="CD"')
         ->andWhere('s.deleted = 0')
+        ->andWhere('s.status = 1')
         ->orderBy('o.id DESC');
 
         if ($shopId != '') {
@@ -86,6 +87,7 @@ class Offer extends BaseOffer
                 ->leftJoin('s.logo img')
                 ->where('o.deleted = 0')
                 ->andWhere('s.deleted = 0')
+                ->andWhere('s.status = 1')
                 ->andWhere('s.affliateProgram = 1')
                 ->andWhere('o.discountType="CD"')
                 ->andWhere('o.Visability!="MEM"')
@@ -141,6 +143,7 @@ class Offer extends BaseOffer
             ->leftJoin('s.logo img')
             ->where('o.deleted = 0')
             ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
             ->andWhere('s.affliateProgram = 1')
             ->andWhere('o.discountType="CD"')
             ->andWhere('o.Visability!="MEM"')
@@ -1211,7 +1214,9 @@ class Offer extends BaseOffer
 
             $key = 'extendedTopOffer_of_'.$u->shopId;
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'extended_'.$u->extendedurl.'_couponDetails';
+            $key = 'extended_'.
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($u->extendedurl).
+                '_couponDetails';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'offer_'.$id.'_details';
@@ -1649,7 +1654,9 @@ class Offer extends BaseOffer
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $key = 'extended_'.$params['extendedOfferRefurl'].'_couponDetails';
+            $key = 'extended_'.
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
+                '_couponDetails';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
@@ -1964,7 +1971,9 @@ class Offer extends BaseOffer
 
             $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'extended_'.$params['extendedOfferRefurl'].'_couponDetails';
+            $key = 'extended_'.
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
+                '_couponDetails';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             $key = 'offer_'.$offerID.'_details';
@@ -2927,7 +2936,7 @@ class Offer extends BaseOffer
    
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
           
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
@@ -2948,7 +2957,7 @@ class Offer extends BaseOffer
             $key = 'offerDetails_'  . $sid . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             

@@ -261,7 +261,7 @@ class Shop extends BaseShop
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
             $cacheKeyOfferDetails = 'offerDetails_'  . $shopId . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);       
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
@@ -390,7 +390,7 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvouchercode_list_shoppage');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
 
         return $id;
     }
@@ -461,7 +461,8 @@ class Shop extends BaseShop
             //call cache function
             $key = 'shop_'.$this->id.'_similarShops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'store_'.$this->permaLink.'howToGuide';
+            $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
+            $key = 'store_'.$cacheKey.'_howToGuide';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
@@ -472,7 +473,7 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
 
 
             # update chain if shop is associated with chain
@@ -493,7 +494,8 @@ class Shop extends BaseShop
         //call cache function
         $key = 'shop_'.$this->id.'_similarShops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $key = 'store_'.$this->permaLink.'howToGuide';
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
+        $key = 'store_'.$cacheKey.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
@@ -502,7 +504,7 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
         return $id;
 
     }
@@ -533,7 +535,7 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categories_of_shoppage');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
         return $id;
     }
     /**
@@ -610,7 +612,8 @@ class Shop extends BaseShop
         $this->subTitle =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopSubTitle']);
         $this->overriteTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
         $this->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
-        $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopViewCount']);
+        $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
+        $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
 
         $this->howtoTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
         $this->howtoSubtitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
@@ -619,25 +622,35 @@ class Shop extends BaseShop
         $this->customHeader = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
         $this->howToIntroductionText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
 
-        $this->showSimliarShops = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['similarShops']);
-        $this->showChains = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['showChains']);
-        $this->strictConfirmation = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['strictConfirmation']);
+        $this->showSimliarShops = BackEnd_Helper_viewHelper::stripSlashesFromString(
+            !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0');
+        $showChains = !empty($shopDetail['showChains']) ? $shopDetail['showChains'] : '0';
+        $this->showChains = BackEnd_Helper_viewHelper::stripSlashesFromString($showChains);
+        $strictConfirmation = !empty($shopDetail['strictConfirmation']) ? $shopDetail['strictConfirmation'] : '0';
+        $this->strictConfirmation = BackEnd_Helper_viewHelper::stripSlashesFromString($strictConfirmation);
 
         // shop extra properties
-        $this->displayExtraProperties = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties']);
+        $displayExtraProperties = !empty($shopDetail['displayExtraProperties']) ? $shopDetail['displayExtraProperties'] : '0';
+        $this->displayExtraProperties = BackEnd_Helper_viewHelper::stripSlashesFromString($displayExtraProperties);
 
         # display signup option on store detail page
-        $this->showSignupOption = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['signupOption']);
+        $this->showSignupOption = BackEnd_Helper_viewHelper::stripSlashesFromString(
+            !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0');
 
 
         if( BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties']) ) {
-
-            $this->ideal = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['ideal']);
-            $this->qShops = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['qShops']);
-            $this->freeReturns = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['freeReturns']);
-            $this->pickupPoints = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pickupPoints']);
-            $this->mobileShop = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['mobileShop']);
-            $this->service = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['service']);
+            $this->ideal = BackEnd_Helper_viewHelper::stripSlashesFromString(
+                !empty($shopDetail['ideal']) ? $shopDetail['ideal'] : 0);
+            $this->qShops = BackEnd_Helper_viewHelper::stripSlashesFromString(
+                !empty($shopDetail['qShops']) ? $shopDetail['qShops'] : 0);
+            $this->freeReturns = BackEnd_Helper_viewHelper::stripSlashesFromString(
+                !empty($shopDetail['freeReturns']) ? $shopDetail['freeReturns'] : 0);
+            $this->pickupPoints = BackEnd_Helper_viewHelper::stripSlashesFromString(
+                !empty($shopDetail['pickupPoints']) ? $shopDetail['pickupPoints'] : 0);
+            $this->mobileShop = BackEnd_Helper_viewHelper::stripSlashesFromString(
+                !empty($shopDetail['mobileShop']) ? $shopDetail['mobileShop'] : 0);
+            $this->service = BackEnd_Helper_viewHelper::stripSlashesFromString(
+                !empty($shopDetail['service']) ? $shopDetail['service'] : 0);
 
 
             if( BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['service']) ) {
@@ -692,8 +705,8 @@ class Shop extends BaseShop
         if(isset($shopDetail['discussions'])){
             $this->discussions = '1';
         }
-
-        $this->accoutManagerId = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['selectaccountmanagers']);
+        $selectAccountManagers = isset($shopDetail['selectaccountmanagers']) ? $shopDetail['selectaccountmanagers'] : '0';
+        $this->accoutManagerId = BackEnd_Helper_viewHelper::stripSlashesFromString($selectAccountManagers);
         $this->accountManagerName = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['accountManagerName']);
         $this->contentManagerId = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['selecteditors']);
         $this->contentManagerName = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['editorName']);
@@ -762,15 +775,15 @@ class Shop extends BaseShop
 
         }
 
-        if (isset($shopDetail['selectedCategoryies'])) {
+        if (!empty($shopDetail['selectedCategoryies'])) {
 
             $this->refShopCategory->delete();
-            foreach ($shopDetail['selectedCategoryies'] as $categories) {
+            foreach ($shopDetail['selectedCategoryies'] as $key =>$categories) {
 
                 $this->refShopCategory[]->categoryId = $categories;
             }
         }
-
+ 
         if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
 
             $uploadPath = UPLOAD_IMG_PATH . "shop/";
@@ -818,13 +831,13 @@ class Shop extends BaseShop
         $key = 'shopDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails); 
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails); 
 
         
         $key = 'shop_'.$this->id.'_similarShops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        $key = 'store_'.$shopDetail['shopNavUrl'].'howToGuide';
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopDetail['shopNavUrl']);
+        $key = 'store_'.$cacheKey.'_howToGuide';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
@@ -835,7 +848,7 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
 
         if(!empty($shopDetail['id'])) {
             $getcategory = Doctrine_Query::create()->select()->from('Shop')->where('id = '.$shopDetail['id'] )->fetchArray();
@@ -845,7 +858,6 @@ class Shop extends BaseShop
             $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = '".$getcategory[0]['permaLink']."'")->andWhere('type = "SHP"')->fetchArray();
             $howToguideRoute = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->andWhere('type = "SHP"')->fetchArray();
         }
-
 
         try {
 
@@ -1608,7 +1620,8 @@ public static function getShopDetail($shopId)
         $shop->status = $status;
         $shop->offlineSicne = $date;
         $shop->save();
-
+        $key = 'shopDetails_'.$params['id'].'_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         return $shop->offlineSicne;
 
 
@@ -1635,13 +1648,13 @@ public static function getShopDetail($shopId)
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offersBySearchedKeywords');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
 
 
-        $key = 'shopDetails_'  . $this->id . '_list';
+        $key = 'shopDetails_'. $this->id.'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails); 
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails); 
 
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
