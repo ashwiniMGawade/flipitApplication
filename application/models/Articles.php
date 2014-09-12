@@ -332,12 +332,6 @@ class Articles extends BaseArticles
                 $artArr[] = $pageIds[$i]['pageid'];
             }
             $page_ids = array_unique($artArr);
-            foreach($page_ids as $ids):
-
-                $key = "all_allMSArticle".$ids."_list";
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-            endforeach;
 
             return array('articleId' => $articleId , 'isDraft' => $isDraft ) ;
         }catch(Exception $e){
@@ -438,12 +432,6 @@ class Articles extends BaseArticles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
-        foreach($page_ids as $ids):
-
-            $key = "all_allMSArticle".$ids."_list";
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        endforeach;
         /*
         $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
         $data->articleImage->ext = $ext;*/
@@ -719,13 +707,6 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
-            foreach($page_ids as $ids):
-
-                $key = "all_allMSArticle".$ids."_list";
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-            endforeach;
-
             $catIds = self::findCategoryId($id);
             $catArr = array();
             for($i=0;$i<count($catIds);$i++){
@@ -781,12 +762,6 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
-            foreach($page_ids as $ids):
-
-                $key = "all_allMSArticle".$ids."_list";
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-            endforeach;
 
             $catIds = self::findCategoryId($id);
             $catArr = array();
@@ -844,13 +819,6 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
-            foreach($page_ids as $ids):
-
-                $key = "all_allMSArticle".$ids."_list";
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-            endforeach;
 
             $catIds = self::findCategoryId($id);
             $catArr = array();
