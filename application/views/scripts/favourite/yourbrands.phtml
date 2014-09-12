@@ -20,6 +20,12 @@ $searchBrandForm = $this->form;
 foreach ($searchBrandForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
 }
+if($this->successMessage!='' || $this->errorMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
+    </div>
+    <?php 
+endif;
 ?>
 <div class="row">
     <div id="content" class="col-sm-8">

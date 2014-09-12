@@ -72,11 +72,30 @@ class LoginController extends Zend_Controller_Action
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->_helper->Login->setUserCookies();
             FrontEnd_Helper_viewHelper::redirectAddToFavouriteShop();
-            $this->_redirect(
-                HTTP_PATH_LOCALE
+            $redirectUrl = HTTP_PATH_LOCALE
                 . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/"
-                . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes')
-            );
+                . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes');
+            $shopIdNameSpace = new Zend_Session_Namespace('shopId');
+            if ($shopIdNameSpace->shopId) {
+                $shopName = Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
+                $visitorFavouriteShopStatus = Visitor::getFavoriteShopsForUser(
+                    Auth_VisitorAdapter::getIdentity()->id,
+                    base64_decode($shopIdNameSpace->shopId)
+                );
+                if ($visitorFavouriteShopStatus) {
+                    $messageText = 'shop already added in your favourite shops';
+                } else {
+                    $messageText = 'have been added to your favorite shops';
+                    Shop::shopAddInFavourite($visitorId, base64_decode($shopIdNameSpace->shopId));
+                }
+                $shopIdNameSpace->shopId = '';
+                $message = $shopName. " ".  FrontEnd_Helper_viewHelper::__translate($messageText);
+                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                self::addFlashMessage($message, $redirectUrl, 'success');
+            } else {
+                $this->_redirect($redirectUrl);
+            }
+
         } else {
             $visitorEmail = new Zend_Session_Namespace('emailAddressSpace');
             $visitorEmail->emailAddressSpace = $visitorDetails['emailAddress'];

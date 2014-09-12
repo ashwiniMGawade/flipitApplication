@@ -88,19 +88,23 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $shopPermalink .'&shopId='
             . base64_encode($shopId);
         $titleTextForLove = $this->__form('form_Remove from Favourite');
-        $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
         $emAndSpan = '<em>'.$this->__translate("I FOLLOW THIS").'</em>
             <strong>'.$this->__translate("REMOVE").'</strong>';
         $aTagClasses = 'pop btn btn-sm btn-default remove-fovourite';
         if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
-            $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
             $titleTextForLove = $this->__form("form_Add in Favourite");
             $emAndSpan = '<span class="glyphicon red-heart glyphicon-heart"></span>
                 <span>'.$this->__translate("FOLLOW").'</span>';
             $aTagClasses = 'pop btn btn-sm btn-default follow-button';
         endif;
-        return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" 
-            class="'. $aTagClasses . '" href="javascript:void(0)">'. $emAndSpan.
+
+        $clickEvent = '';
+        if ($visitorId==0) {
+            $redirectUrl = 'javascript:void(0)';
+            $clickEvent = "onclick=showSignUpPopUp();";
+        }
+        return '<a title="'. $titleTextForLove .'" '.$clickEvent.' href="' . $redirectUrl .'" 
+            class="'. $aTagClasses . '">'. $emAndSpan.
         '</a>';
     }
 }
