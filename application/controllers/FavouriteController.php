@@ -23,9 +23,9 @@ class FavouriteController extends Zend_Controller_Action
     {
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         $message = $flashMessage->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ?
+        $this->view->successMessage = isset($message[0]['success']) ?
         $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ?
+        $this->view->errorMessage = isset($message[0]['error']) ?
         $message[0]['error'] : '';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {

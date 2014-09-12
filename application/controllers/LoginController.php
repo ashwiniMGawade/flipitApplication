@@ -78,11 +78,11 @@ class LoginController extends Zend_Controller_Action
             $shopIdNameSpace = new Zend_Session_Namespace('shopId');
             if ($shopIdNameSpace->shopId) {
                 $shopName = Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
-                $visitorFovouriteShopStatus = Visitor::getFavoriteShopsForUser(
+                $visitorFavouriteShopStatus = Visitor::getFavoriteShopsForUser(
                     Auth_VisitorAdapter::getIdentity()->id,
                     base64_decode($shopIdNameSpace->shopId)
                 );
-                if ($visitorFovouriteShopStatus) {
+                if ($visitorFavouriteShopStatus) {
                     $messageText = 'shop already added in your favourite shops';
                 } else {
                     $messageText = 'have been added to your favorite shops';

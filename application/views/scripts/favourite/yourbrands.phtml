@@ -20,9 +20,9 @@ $searchBrandForm = $this->form;
 foreach ($searchBrandForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
 }
-if($this->messageSuccess!='' || $this->messageError!='') : ?>
+if($this->successMessage!='' || $this->errorMessage!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
-        <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
+        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
     </div>
     <?php 
 endif;

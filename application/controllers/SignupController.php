@@ -255,6 +255,7 @@ class SignupController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->view->shopLogo = $this->getRequest()->getParam('url');
         $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->shopName = Shop::getShopName(base64_decode($this->getRequest()->getParam('shopId')));
         
     }
 
@@ -262,12 +263,10 @@ class SignupController extends Zend_Controller_Action
     {
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
-        $emailAddress = $params['emailAddress'];
         $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
-        $visitorEmail->emailAddressSignup = $emailAddress;
-        $addToFavoriteShopId = $params['shopId'];
+        $visitorEmail->emailAddressSignup = $params['emailAddress'];
         $visitorShopId = new Zend_Session_Namespace('shopId');
-        $visitorShopId->shopId = $addToFavoriteShopId;
+        $visitorShopId->shopId = $params['shopId'];
         $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
     }
 
