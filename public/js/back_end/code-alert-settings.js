@@ -320,7 +320,7 @@ function sendNewsLetter(e){
         } else {
             e.preventDefault();
             var newForm = jQuery('<form>', {
-                'action': HOST_PATH + "admin/email/mandrill",
+                'action': HOST_PATH + "admin/email/codealert",
                 'target': '_top',
                 'method' : 'post'
             });
@@ -341,7 +341,7 @@ function sendTestNewsLetter(e){
             e.preventDefault();
 
             var newForm = jQuery('<form>', {
-                'action': HOST_PATH + "admin/email/mandrill/send/test",
+                'action': HOST_PATH + "admin/email/codealert/send/test",
                 'target': '_top',
                 'method' : 'post',
             }).append(jQuery('<input>', {
@@ -432,7 +432,7 @@ function disableNewsLetterSchedule(e)
         } else {
             e.preventDefault();
             var newForm = jQuery('<form>', {
-                'action': HOST_PATH + "admin/email/disablemandrillnewsletter",
+                'action': HOST_PATH + "admin/email/disablecodealertschedule",
                 'target': '_top',
                 'method' : 'post'
             });

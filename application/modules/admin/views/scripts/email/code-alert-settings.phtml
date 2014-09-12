@@ -45,7 +45,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
                             <input type="text" value="<?php 
-                            echo !empty($this->data[0]['emailsubject']) ? $this->data[0]['emailsubject'] : '';?>"
+                            echo !empty($this->data[0]['emailsubject']) ? $this->data[0]['emailsubject'] : 'test';?>"
                                 placeholder=<?php echo $this->translate("Subject")?> 
                                 name="emailSubject" id="emailSubject" onblur="saveSenderEmail(this)"
                                 class="span3">
@@ -63,7 +63,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
                             <div class="">
                                 <textarea name="emailHeader" id="emailHeader" 
                                     class="" style="height:135px;"><?php 
-                                    echo !empty($this->data[0]['email_header']) ? $this->data[0]['email_header'] : '';
+                                    echo !empty($this->data[0]['email_header']) ? $this->data[0]['email_header'] : 'test';
                                     ?></textarea>
                             </div>
                         </div>
@@ -181,7 +181,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
             <div class="mainpage-content-right">
                 <div class="mainpage-content-right-inner-left-other">
                     <div data-toggle="buttons-checkbox" class="btn-group">
-                        <a class="btn btn-primary" href="javascript:;" 
+                        <a class="btn btn-primary" id="sendTest" href="javascript:;" 
                         onclick="sendTestNewsLetter(event)"><?php echo $this->translate('Send Test Newsletter') ?></a>
                     </div>
                 </div>

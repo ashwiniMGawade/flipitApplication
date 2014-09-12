@@ -39,5 +39,21 @@ class codealertCest
         $I->amOnPage('/admin/email/code-alert-settings');
         $I->seeInField('#emailSubject', '');
         $I->seeInField('#emailHeader', '');
+        $I->seeElement('#sendNewsletter-btn', '');
+    }
+
+    public function codeAlertTestMail(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new FunctionalTester\AdminSteps($scenario);
+        $I->login();
+        $I->canSee('Code alert');
+        $I->click('Code alert');
+        $I->amOnPage('/admin/email/code-alert');
+        $I->canSee('Code alert settings');
+        $I->click('Code alert settings');
+        $I->amOnPage('/admin/email/code-alert-settings');
+        $I->seeInField('#emailSubject', '');
+        $I->seeInField('#emailHeader', '');
+        $I->seeElement('#sendNewsletter-btn', '');
     }
 }
