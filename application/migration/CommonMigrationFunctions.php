@@ -119,4 +119,17 @@ class CommonMigrationFunctions
         if(!file_exists($pathToExcelFolder)) mkdir($pathToExcelFolder, 0774, TRUE);
         return $pathToExcelFolder;
     }
+
+    public static function dateFormatAndPublicConstant()
+    {
+        $date = new Zend_Date();
+        $month = $date->get(Zend_Date::MONTH_NAME);
+        $year = $date->get(Zend_Date::YEAR);
+        $day = $date->get(Zend_Date::DAY);
+        defined('CURRENT_MONTH') || define('CURRENT_MONTH', $month);
+        defined('CURRENT_YEAR') || define('CURRENT_YEAR', $year);
+        defined('CURRENT_DAY') || define('CURRENT_DAY', $day);
+        defined('PUBLIC_PATH') ||
+        define('PUBLIC_PATH', dirname(dirname(dirname(__FILE__))) . "/public/");
+    }
 }

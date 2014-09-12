@@ -558,7 +558,7 @@ class Admin_ShopController extends Zend_Controller_Action
         set_time_limit ( 10000 );
         ini_set('max_execution_time',115200);
         ini_set("memory_limit","1024M");
-        $data =  Shop::exportShopeList();
+        $data =  Shop::exportShopList();
         //echo "<pre>";
         //print_r($data); die;
         //create object of phpExcel

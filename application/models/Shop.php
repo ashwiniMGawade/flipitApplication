@@ -1040,7 +1040,7 @@ class Shop extends BaseShop
      * @return array $shopList
      * @version 1.0
      */
-    public static function exportShopeList()
+    public static function exportShopList()
     {
         $shopList = Doctrine_Query::create()->select('s.*,a.name as affname,c.name,rs.name')
                 ->from("Shop s")
