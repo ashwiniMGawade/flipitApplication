@@ -134,8 +134,6 @@ class GlobalShopExport
         CommonMigrationFunctions::dateFormatAndPublicConstant();
         $objPHPExcel = $this->shopExcelHeaders('en');
         foreach ($this->_shopsData as $key => $data) {
-            echo "\n";
-            echo $key." - Shops are being saved into excel file !!!";
             $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($data['dsn']);
             $manager = CommonMigrationFunctions::loadDoctrineModels();
             $objPHPExcel =  $this->perShopData($data['data'], $key, $objPHPExcel);
@@ -154,142 +152,30 @@ class GlobalShopExport
             $row = $this->row;
         }
         foreach ($shopData as $shop) {
-            $prog = '';
-            if ($shop['affliateProgram'] == true) {
-                $prog = 'Yes';
-            } else {
-                $prog = 'No';
-            }
-
-            $accountManagername = '';
-            if ($shop['accountManagerName'] == ''
-                    ||$shop['accountManagerName']=='undefined'
-                    ||$shop['accountManagerName']==null
-                    ||$shop['accountManagerName']=='0') {
-                $accountManagername ='';
-            } else {
-                $accountManagername = User::getUserName($shop['accoutManagerId']);
-            }
-
+            $affliateProgram = $shop['affliateProgram'] == true ? 'Yes' : 'No';
+            $accountManagername = !empty($shop['accountManagerName'])
+                ? User::getUserName($shop['accoutManagerId']) : '';
             $startDate =  date("d-m-Y", strtotime($shop['created_at']));
-            
-            $affilateNetwork = '';
-            if ($shop['affname']==null
-                    ||$shop['affname']==''
-                    ||$shop['affname']=='undefined') {
-                $affilateNetwork = '';
-            } else {
-                $affilateNetwork = $shop['affname'];
-            }
-
-            $offLine='';
-            if ($shop['status']==true) {
-                $offLine = 'Yes';
-            } else {
-                $offLine = 'No';
-            }
-
-            $offLineSince = '';
-            if ($shop['offlineSicne']=='undefined'
-                    || $shop['offlineSicne']==null
-                    || $shop['offlineSicne']=='') {
-                $offLineSince='';
-            } else {
-                $offLineSince = date("d-m-Y", strtotime($shop['offlineSicne']));
-            }
-
-            $overriteTitle = '';
-            if ($shop['overriteTitle']=='undefined'
-                    || $shop['overriteTitle']==null
-                    || $shop['overriteTitle']=='') {
-                $overriteTitle='';
-            } else {
-                $overriteTitle = $shop['overriteTitle'];
-            }
-
-            $metaDesc = '';
-            if ($shop['metaDescription']=='undefined'
-                    || $shop['metaDescription']==null
-                    || $shop['metaDescription']=='') {
-                $metaDesc='';
-            } else {
-                $metaDesc = $shop['metaDescription'];
-            }
-
-            $userGenerated = '';
-            if ($shop['usergenratedcontent']==true) {
-                $userGenerated= 'Yes';
-            } else {
-                $userGenerated = 'No';
-            }
-
-            $howToGuide = '';
-            if ($shop['howToUse']==true) {
-                $howToGuide = 'Yes';
-            } else {
-                $howToGuide = 'No';
-            }
-
-            $newsTicker = '';
-            if ($shop['newsTickerTime'] > 0) {
-                $newsTicker = 'Yes';
-            } else {
-                $newsTicker = 'No';
-            }
-
+            $affilateNetwork = !empty($shop['affname']) ? $shop['affname'] : '';
+            $offLine = $shop['status']==true ? 'Yes' : 'No';
+            $offLineSince = !empty($shop['offlineSicne']) ? date("d-m-Y", strtotime($shop['offlineSicne'])) : '';
+            $overriteTitle = !empty($shop['overriteTitle']) ? $shop['overriteTitle'] : '';
+            $metaDesc = !empty($shop['metaDescription']) ? $shop['metaDescription'] : '';
+            $userGenerated = $shop['usergenratedcontent']==true ? 'Yes' : 'No';
+            $howToGuide = $shop['howToUse']==true ? 'Yes' : 'No';
+            $newsTicker = $shop['newsTickerTime'] > 0 ? 'Yes' : 'No';
             $lastUpdated = '';
             $shopTime = strtotime($shop['updated_at']);
-            $newTickerTime = isset($shop['newsTickerTime'])
-                    ? strtotime($shop['newsTickerTime']) : false;
-            $offerTime =     isset($shop['offerTime'])
-                    ? strtotime($shop['offerTime']) : false;
+            $newTickerTime = isset($shop['newsTickerTime']) ? strtotime($shop['newsTickerTime']) : false;
+            $offerTime =     isset($shop['offerTime']) ? strtotime($shop['offerTime']) : false;
             $lastUpdated = max($shopTime, $newTickerTime, $offerTime);
             $lastUpdated = date("d-m-Y H:i:s", $lastUpdated);
-
-            if ($shop['discussions'] ==true) {
-                $discussion = 'Yes';
-            } else {
-                $discussion = 'No';
-            }
-
-            $title = '';
-            if ($shop['title']=='undefined'
-                    || $shop['title']==null
-                    || $shop['title']=='') {
-
-                $title='';
-            } else {
-
-                $title = FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']);
-            }
-
-            $subTitle = '';
-            if ($shop['subTitle']=='undefined'
-                    || $shop['subTitle']==null
-                    || $shop['subTitle']=='') {
-                $subTitle ='';
-            } else {
-                $subTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']);
-            }
-
-            $notes = '';
-            if ($shop['notes']=='undefined'
-                    || $shop['notes']==null
-                    || $shop['notes']=='') {
-                $notes ='';
-            } else {
-                $notes = $shop['notes'];
-            }
-
-            $contentManagerName = '';
-            if ($shop['contentManagerId']=='undefined'
-                    || $shop['contentManagerId']==null
-                    || $shop['contentManagerId']=='') {
-                $contentManagerName ='';
-            } else {
-                $contentManagerName = User::getUserName($shop['contentManagerId']);
-            }
-
+            $discussion = $shop['discussions'] ==true ? 'Yes' : 'No';
+            $title = !empty($shop['title']) ? FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']) : '';
+            $subTitle = !empty($shop['subTitle'])
+                ? FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']) : '';
+            $notes = !empty($shop['notes']) ? $shop['notes'] : '';
+            $contentManagerName = !empty($shop['contentManagerId']) ? User::getUserName($shop['contentManagerId']) : '';
             $categories = '';
             if (!empty($shop['category'])) {
                 $prefix = '';
@@ -298,7 +184,6 @@ class GlobalShopExport
                     $prefix = ', ';
                 }
             }
-
             $relatedshops = '';
             if (!empty($shop['relatedshops'])) {
                 $prefix = '';
@@ -307,80 +192,21 @@ class GlobalShopExport
                     $prefix = ', ';
                 }
             }
-
-            $deeplink = '';
-            if ($shop['deepLink']=='undefined'
-                    || $shop['deepLink']==null
-                    || $shop['deepLink']=='') {
-                $deeplink ='';
-            } else {
-                $deeplink = $shop['deepLink'];
-            }
-
-            $refUrl = '';
-            if ($shop['refUrl']=='undefined'
-                    || $shop['refUrl']==null
-                    || $shop['refUrl']=='') {
-                $refUrl ='';
-            } else {
-                $refUrl = $shop['refUrl'];
-            }
-
-            $actualUrl = '';
-            if ($shop['actualUrl']=='undefined'
-                    || $shop['actualUrl']==null
-                    || $shop['actualUrl']=='') {
-                $actualUrl ='';
-            } else {
-                $actualUrl = $shop['actualUrl'];
-            }
-
-            $shopText = '';
-            if ($shop['shopText']=='undefined'
-                    || $shop['shopText']==null
-                    || $shop['shopText']=='') {
-                $shopText ='';
-            } else {
-                $shopText = $shop['shopText'];
-            }
-
-            if ($shop['showSimliarShops'] == 1) {
-                $showSimliarShops = 'Yes';
-            } else {
-                $showSimliarShops = 'No';
-            }
-
-
-            if ($shop['showSignupOption'] == 1) {
-                $showSignupOption = 'Yes';
-            } else {
-                $showSignupOption = 'No';
-            }
-
-            if ($shop['showChains'] == 1) {
-                $showChains = 'Yes';
-            } else {
-                $showChains = 'No';
-            }
-
-            if ($shop['customHeader']) {
-                $customHeader = 'Yes';
-            } else {
-                $customHeader = 'No';
-            }
-
-
-            if ($shop['displayExtraProperties'] == 1) {
-                $displayExtraProperties = 'Yes';
-            } else {
-                $displayExtraProperties = 'No';
-            }
+            $deeplink = !empty($shop['deepLink']) ? $shop['deepLink'] : '';
+            $refUrl = !empty($shop['refUrl']) ? $shop['refUrl'] : '';
+            $actualUrl = !empty($shop['actualUrl']) ? $shop['actualUrl'] : '';
+            $shopText = !empty($shop['shopText']) ? $shop['shopText'] : '';
+            $showSimliarShops = $shop['showSimliarShops'] == 1 ? 'Yes' : 'No';
+            $showSignupOption = $shop['showSignupOption'] == 1 ? 'Yes' : 'No';
+            $showChains = $shop['showChains'] == 1 ? 'Yes' : 'No';
+            $customHeader = $shop['customHeader'] > 0 ? 'Yes' :  'No';
+            $displayExtraProperties = $shop['displayExtraProperties'] == 1 ? 'Yes' : 'No';
             $shopId = $shop['id'];
 
             $objPHPExcel->getActiveSheet()->setCellValue('A2', date('Y-m-d H:i:s'));
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $shop['permaLink']);
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $prog);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $affliateProgram);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $accountManagername);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $startDate);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $affilateNetwork);
