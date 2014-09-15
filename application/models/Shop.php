@@ -1063,7 +1063,7 @@ class Shop extends BaseShop
      * @return array $shopList
      * @version 1.0
      */
-    public static function exportShopeList()
+    public static function exportShopsList()
     {
         $shopList = Doctrine_Query::create()->select('s.*,a.name as affname,c.name,rs.name')
                 ->from("Shop s")
@@ -1898,7 +1898,7 @@ public static function getShopDetail($shopId)
      * @return integer
      * @version 1.0
      */
-    public static function getTimesShopFavourite($shopId)
+    public static function getFavouriteCountOfShop($shopId)
     {
         $data = Doctrine_Query::create()
                 ->select("count(*)")

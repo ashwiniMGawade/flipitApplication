@@ -3269,7 +3269,7 @@ class Offer extends BaseOffer
      * @version 1.0
      */
 
-    public static function getTotalAmountOfCouponsShop($shopId, $type='')
+    public static function getTotalAmountOfShopCoupons($shopId, $type='')
     {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
