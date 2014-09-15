@@ -603,25 +603,16 @@ public function validatepermalinkAction()
         # Add urls to refresh in Varnish
         $varnishObj = new Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
-        $varnishObj->addUrl(HTTP_PATH_FRONTEND. FrontEnd_Helper_viewHelper::__link('link_plus'));
-
-
-
-                # make markplaatfeed url's get refreashed only in case of kortingscode
-        iF(LOCALE == '')
-        {
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
-
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . strtolower('plus'));
+        # make markplaatfeed url's get refreashed only in case of kortingscode
+        if (LOCALE == '') {
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
         }
-
-
-
         # get all the urls related to this shop
         $varnishUrls = Articles::getAllUrls($id);
-
         # check $varnishUrls has atleast one
-        if(isset($varnishUrls) && count($varnishUrls) > 0) {
+        if (isset($varnishUrls) && count($varnishUrls) > 0) {
             foreach($varnishUrls as $value) {
                 $varnishObj->addUrl( HTTP_PATH_FRONTEND  . $value);
             }

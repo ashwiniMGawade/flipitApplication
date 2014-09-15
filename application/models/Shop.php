@@ -1573,13 +1573,15 @@ public static function getShopDetail($shopId)
         # check an offerr has one or more categories
         if(isset($shop['category']) && count($shop['category']) > 0) {
 
-            $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
+            $categoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
 
             # traverse through all catgories
             foreach($shop['category'] as $value) {
                 # check if a category has permalink then add it into array
                 if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
-                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] ;
+                    $urlsArray[] = $categoriesPage . $value['permaLink'];
+                    $urlsArray[] = $categoriesPage . $data['permaLink'] .'/2';
+                    $urlsArray[] = $categoriesPage . $data['permaLink'] .'/3';
                 }
             }
         }

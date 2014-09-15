@@ -733,10 +733,13 @@ class Page extends BasePage
             $permalink = $this->permaLink ;
 
             #update varnish for this page
-            if(isset($permalink)) {
+            if (isset($permalink)) {
             // Add urls to refresh in Varnish
                 $varnishObj = new Varnish();
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND . $permalink);
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink .'/2');
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink.'/3');
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
             }
 
 
