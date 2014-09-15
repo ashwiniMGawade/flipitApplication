@@ -51,9 +51,6 @@ else:
         )
     );
 endif;
-if (APPLICATION_ENV != 'development') {
-    echo $this->headLink();
-}
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
