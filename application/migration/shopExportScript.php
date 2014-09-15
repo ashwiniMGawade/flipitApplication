@@ -364,11 +364,11 @@ class ShopExport
 
             $shopId = $shop['id'];
             $daysWithoutCoupon = Shop::getDaysSinceShopWithoutOnlneOffers($shopId);
-            $timesShopFavourite = Shop::getTimesShopFavourite($shopId);
+            $timesShopFavourite = Shop::getFavouriteCountOfShop($shopId);
             $lastWeekClicks = ShopViewCount::getAmountClickoutOfShop($shopId);
             $totalClicks =  ShopViewCount::getTotalViewCountOfShopAndOffer($shopId);
-            $totalAmountCoupons = Offer::getTotalAmountOfCouponsShop($shopId, 'CD');
-            $totalAmountOffers = Offer::getTotalAmountOfCouponsShop($shopId);
+            $totalAmountCoupons = Offer::getTotalAmountOfShopCoupons($shopId, 'CD');
+            $totalAmountOffers = Offer::getTotalAmountOfShopCoupons($shopId);
             $currentDateAndTime = date('Y-m-d H:i:s');
             //set value in column of excel
             $objPHPExcel->getActiveSheet()->setCellValue('A2', $currentDateAndTime);

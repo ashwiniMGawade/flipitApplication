@@ -120,7 +120,7 @@ class CommonMigrationFunctions
         return $pathToExcelFolder;
     }
 
-    public static function dateFormatAndPublicConstant()
+    public static function dateFormatConstants()
     {
         $date = new Zend_Date();
         $month = $date->get(Zend_Date::MONTH_NAME);
@@ -129,7 +129,5 @@ class CommonMigrationFunctions
         defined('CURRENT_MONTH') || define('CURRENT_MONTH', $month);
         defined('CURRENT_YEAR') || define('CURRENT_YEAR', $year);
         defined('CURRENT_DAY') || define('CURRENT_DAY', $day);
-        defined('PUBLIC_PATH') ||
-        define('PUBLIC_PATH', dirname(dirname(dirname(__FILE__))) . "/public/");
     }
 }

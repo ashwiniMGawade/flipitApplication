@@ -1,8 +1,8 @@
 <?php
 class GlobalShopExport
 {
-    protected $_localePath = '/';
-    protected $_trans = null;
+    protected $localePath = '/';
+    protected $zendTranslation = null;
     protected $_shopsData = array();
     protected $row = 4;
     protected $column = 4;
@@ -39,8 +39,8 @@ class GlobalShopExport
         $manager = CommonMigrationFunctions::loadDoctrineModels();
         $customLocale = LocaleSettings::getLocaleSettings();
         $customLocale = !empty($customLocale[0]['locale']) ? $customLocale[0]['locale'] : 'nl_NL';
-        $data = Shop::exportShopList();
-        $this->_shopsData[$key]['data'] = $data;
+        $allShopsData = Shop::exportShopsList();
+        $this->_shopsData[$key]['data'] = $allShopsData;
         $this->_shopsData[$key]['customLocale'] = $customLocale;
         $this->_shopsData[$key]['dsn'] = $dsn;
         $manager->closeConnection($doctrineSiteDbConnection);
@@ -51,28 +51,28 @@ class GlobalShopExport
     public function shopExcelHeaders($key)
     {
         if ($key == 'en') {
-            $this->_localePath = '';
+            $this->localePath = '';
             $suffix = "" ;
         } else {
-            $this->_localePath = $key . "/";
+            $this->localePath = $key . "/";
             $suffix = "_" . strtoupper($key);
         }
         $customLocale = $this->_shopsData[$key]['customLocale'];
-        $this->_trans = new Zend_Translate(array(
+        $this->zendTranslation = new Zend_Translate(array(
                 'adapter' => 'gettext',
                 'disableNotices' => true));
-        $this->_trans->addTranslation(
+        $this->zendTranslation->addTranslation(
             array(
-                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath)
+                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->localePath)
                     .'language/fallback/frontend_php'
                     . $suffix . '.mo',
                     'locale' => $customLocale,
             )
         );
 
-        $this->_trans->addTranslation(
+        $this->zendTranslation->addTranslation(
             array(
-                    'content' => APPLICATION_PATH.'/../public/'.strtolower($this->_localePath).'language/po_links'
+                    'content' => APPLICATION_PATH.'/../public/'.strtolower($this->localePath).'language/po_links'
                     . $suffix . '.mo',
                     'locale' => $customLocale ,
             )
@@ -85,64 +85,64 @@ class GlobalShopExport
     {
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0);
-        $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->_trans->translate('Generation Date and Time'));
-        $objPHPExcel->getActiveSheet()->setCellValue('A3', $this->_trans->translate('Shopname'));
-        $objPHPExcel->getActiveSheet()->setCellValue('B3', $this->_trans->translate('Navigation URL'));
-        $objPHPExcel->getActiveSheet()->setCellValue('C3', $this->_trans->translate('Money shop'));
-        $objPHPExcel->getActiveSheet()->setCellValue('D3', $this->_trans->translate('Account manager'));
-        $objPHPExcel->getActiveSheet()->setCellValue('E3', $this->_trans->translate('Start'));
-        $objPHPExcel->getActiveSheet()->setCellValue('F3', $this->_trans->translate('Network'));
-        $objPHPExcel->getActiveSheet()->setCellValue('G3', $this->_trans->translate('Online'));
-        $objPHPExcel->getActiveSheet()->setCellValue('H3', $this->_trans->translate('Offline since'));
-        $objPHPExcel->getActiveSheet()->setCellValue('I3', $this->_trans->translate('Overwrite Title'));
-        $objPHPExcel->getActiveSheet()->setCellValue('J3', $this->_trans->translate('Meta Description'));
-        $objPHPExcel->getActiveSheet()->setCellValue('K3', $this->_trans->translate('Allow user generated content'));
-        $objPHPExcel->getActiveSheet()->setCellValue('L3', $this->_trans->translate('Allow Discussions'));
-        $objPHPExcel->getActiveSheet()->setCellValue('M3', $this->_trans->translate('Title'));
-        $objPHPExcel->getActiveSheet()->setCellValue('N3', $this->_trans->translate('Sub-title'));
-        $objPHPExcel->getActiveSheet()->setCellValue('O3', $this->_trans->translate('Notes'));
-        $objPHPExcel->getActiveSheet()->setCellValue('P3', $this->_trans->translate('Editor'));
-        $objPHPExcel->getActiveSheet()->setCellValue('Q3', $this->_trans->translate('Category'));
-        $objPHPExcel->getActiveSheet()->setCellValue('R3', $this->_trans->translate('Similar Shops'));
-        $objPHPExcel->getActiveSheet()->setCellValue('S3', $this->_trans->translate('Deeplinking code'));
-        $objPHPExcel->getActiveSheet()->setCellValue('T3', $this->_trans->translate('Ref URL'));
-        $objPHPExcel->getActiveSheet()->setCellValue('U3', $this->_trans->translate('Actual URL'));
-        $objPHPExcel->getActiveSheet()->setCellValue('V3', $this->_trans->translate('Shop Text'));
-        $objPHPExcel->getActiveSheet()->setCellValue('W3', $this->_trans->translate('Days Without Online Coupons'));
+        $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->zendTranslation->translate('Generation Date and Time'));
+        $objPHPExcel->getActiveSheet()->setCellValue('A3', $this->zendTranslation->translate('Shopname'));
+        $objPHPExcel->getActiveSheet()->setCellValue('B3', $this->zendTranslation->translate('Navigation URL'));
+        $objPHPExcel->getActiveSheet()->setCellValue('C3', $this->zendTranslation->translate('Money shop'));
+        $objPHPExcel->getActiveSheet()->setCellValue('D3', $this->zendTranslation->translate('Account manager'));
+        $objPHPExcel->getActiveSheet()->setCellValue('E3', $this->zendTranslation->translate('Start'));
+        $objPHPExcel->getActiveSheet()->setCellValue('F3', $this->zendTranslation->translate('Network'));
+        $objPHPExcel->getActiveSheet()->setCellValue('G3', $this->zendTranslation->translate('Online'));
+        $objPHPExcel->getActiveSheet()->setCellValue('H3', $this->zendTranslation->translate('Offline since'));
+        $objPHPExcel->getActiveSheet()->setCellValue('I3', $this->zendTranslation->translate('Overwrite Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('J3', $this->zendTranslation->translate('Meta Description'));
+        $objPHPExcel->getActiveSheet()->setCellValue('K3', $this->zendTranslation->translate('Allow user generated content'));
+        $objPHPExcel->getActiveSheet()->setCellValue('L3', $this->zendTranslation->translate('Allow Discussions'));
+        $objPHPExcel->getActiveSheet()->setCellValue('M3', $this->zendTranslation->translate('Title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('N3', $this->zendTranslation->translate('Sub-title'));
+        $objPHPExcel->getActiveSheet()->setCellValue('O3', $this->zendTranslation->translate('Notes'));
+        $objPHPExcel->getActiveSheet()->setCellValue('P3', $this->zendTranslation->translate('Editor'));
+        $objPHPExcel->getActiveSheet()->setCellValue('Q3', $this->zendTranslation->translate('Category'));
+        $objPHPExcel->getActiveSheet()->setCellValue('R3', $this->zendTranslation->translate('Similar Shops'));
+        $objPHPExcel->getActiveSheet()->setCellValue('S3', $this->zendTranslation->translate('Deeplinking code'));
+        $objPHPExcel->getActiveSheet()->setCellValue('T3', $this->zendTranslation->translate('Ref URL'));
+        $objPHPExcel->getActiveSheet()->setCellValue('U3', $this->zendTranslation->translate('Actual URL'));
+        $objPHPExcel->getActiveSheet()->setCellValue('V3', $this->zendTranslation->translate('Shop Text'));
+        $objPHPExcel->getActiveSheet()->setCellValue('W3', $this->zendTranslation->translate('Days Without Online Coupons'));
         $objPHPExcel->getActiveSheet()->setCellValue(
             'X3',
-            $this->_trans->translate('No. of Times Shop became Favourite')
+            $this->zendTranslation->translate('No. of Times Shop became Favourite')
         );
-        $objPHPExcel->getActiveSheet()->setCellValue('Y3', $this->_trans->translate('Last week Clickouts'));
-        $objPHPExcel->getActiveSheet()->setCellValue('Z3', $this->_trans->translate('Total Clickouts'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AA3', $this->_trans->translate('Amount of Coupons'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AB3', $this->_trans->translate('Amount of Offers'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AC3', $this->_trans->translate('How To Guide'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AD3', $this->_trans->translate('News Ticker'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AE3', $this->_trans->translate('Display singup option'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AF3', $this->_trans->translate('Display similar shops'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AG3', $this->_trans->translate('Display chains'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AH3', $this->_trans->translate('Custom Header Text'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AI3', $this->_trans->translate('Extra opties'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AJ3', $this->_trans->translate('Last Updated'));
-        $objPHPExcel->getActiveSheet()->setCellValue('AK3', $this->_trans->translate('Locale'));
+        $objPHPExcel->getActiveSheet()->setCellValue('Y3', $this->zendTranslation->translate('Last week Clickouts'));
+        $objPHPExcel->getActiveSheet()->setCellValue('Z3', $this->zendTranslation->translate('Total Clickouts'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AA3', $this->zendTranslation->translate('Amount of Coupons'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AB3', $this->zendTranslation->translate('Amount of Offers'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AC3', $this->zendTranslation->translate('How To Guide'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AD3', $this->zendTranslation->translate('News Ticker'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AE3', $this->zendTranslation->translate('Display singup option'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AF3', $this->zendTranslation->translate('Display similar shops'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AG3', $this->zendTranslation->translate('Display chains'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AH3', $this->zendTranslation->translate('Custom Header Text'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AI3', $this->zendTranslation->translate('Extra opties'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AJ3', $this->zendTranslation->translate('Last Updated'));
+        $objPHPExcel->getActiveSheet()->setCellValue('AK3', $this->zendTranslation->translate('Locale'));
         return $objPHPExcel;
     }
 
     public function excelColumnsData()
     {
-        CommonMigrationFunctions::dateFormatAndPublicConstant();
+        CommonMigrationFunctions::dateFormatConstants();
         $objPHPExcel = $this->shopExcelHeaders('en');
         foreach ($this->_shopsData as $key => $data) {
             $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($data['dsn']);
             $manager = CommonMigrationFunctions::loadDoctrineModels();
-            $objPHPExcel =  $this->perShopData($data['data'], $key, $objPHPExcel);
+            $objPHPExcel =  $this->localeShopsData($data['data'], $key, $objPHPExcel);
             $this->exportLocaleShopsInExcel($data['data'], $key, $doctrineSiteDbConnection, $manager);
         }
         return $objPHPExcel;
     }
 
-    public function perShopData($shopData, $key, $objPHPExcel, $localeExport = '')
+    public function localeShopsData($shopData, $key, $objPHPExcel, $localeExport = '')
     {
         if (!empty($localeExport )) {
             $column = 4;
@@ -153,7 +153,7 @@ class GlobalShopExport
         }
         foreach ($shopData as $shop) {
             $affliateProgram = $shop['affliateProgram'] == true ? 'Yes' : 'No';
-            $accountManagername = !empty($shop['accountManagerName'])
+            $accountManagerName = !empty($shop['accountManagerName'])
                 ? User::getUserName($shop['accoutManagerId']) : '';
             $startDate =  date("d-m-Y", strtotime($shop['created_at']));
             $affilateNetwork = !empty($shop['affname']) ? $shop['affname'] : '';
@@ -167,7 +167,7 @@ class GlobalShopExport
             $lastUpdated = '';
             $shopTime = strtotime($shop['updated_at']);
             $newTickerTime = isset($shop['newsTickerTime']) ? strtotime($shop['newsTickerTime']) : false;
-            $offerTime =     isset($shop['offerTime']) ? strtotime($shop['offerTime']) : false;
+            $offerTime = isset($shop['offerTime']) ? strtotime($shop['offerTime']) : false;
             $lastUpdated = max($shopTime, $newTickerTime, $offerTime);
             $lastUpdated = date("d-m-Y H:i:s", $lastUpdated);
             $discussion = $shop['discussions'] ==true ? 'Yes' : 'No';
@@ -179,16 +179,16 @@ class GlobalShopExport
             $categories = '';
             if (!empty($shop['category'])) {
                 $prefix = '';
-                foreach ($shop['category'] as $cat) {
-                    $categories .= $prefix  . $cat['name'];
+                foreach ($shop['category'] as $category) {
+                    $categories .= $prefix  . $category['name'];
                     $prefix = ', ';
                 }
             }
-            $relatedshops = '';
+            $relatedShops = '';
             if (!empty($shop['relatedshops'])) {
                 $prefix = '';
-                foreach ($shop['relatedshops'] as $rShops) {
-                    $relatedshops .= $prefix  . $rShops['name'];
+                foreach ($shop['relatedshops'] as $relatedShop) {
+                    $relatedShops .= $prefix  . $relatedShop['name'];
                     $prefix = ', ';
                 }
             }
@@ -196,7 +196,7 @@ class GlobalShopExport
             $refUrl = !empty($shop['refUrl']) ? $shop['refUrl'] : '';
             $actualUrl = !empty($shop['actualUrl']) ? $shop['actualUrl'] : '';
             $shopText = !empty($shop['shopText']) ? $shop['shopText'] : '';
-            $showSimliarShops = $shop['showSimliarShops'] == 1 ? 'Yes' : 'No';
+            $showSimilarShops = $shop['showSimliarShops'] == 1 ? 'Yes' : 'No';
             $showSignupOption = $shop['showSignupOption'] == 1 ? 'Yes' : 'No';
             $showChains = $shop['showChains'] == 1 ? 'Yes' : 'No';
             $customHeader = $shop['customHeader'] > 0 ? 'Yes' :  'No';
@@ -207,7 +207,7 @@ class GlobalShopExport
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $shop['permaLink']);
             $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $affliateProgram);
-            $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $accountManagername);
+            $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $accountManagerName);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $startDate);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $affilateNetwork);
             $objPHPExcel->getActiveSheet()->setCellValue('G'.$column, $offLine);
@@ -221,7 +221,7 @@ class GlobalShopExport
             $objPHPExcel->getActiveSheet()->setCellValue('O'.$column, $notes);
             $objPHPExcel->getActiveSheet()->setCellValue('P'.$column, $contentManagerName);
             $objPHPExcel->getActiveSheet()->setCellValue('Q'.$column, $categories);
-            $objPHPExcel->getActiveSheet()->setCellValue('R'.$column, $relatedshops);
+            $objPHPExcel->getActiveSheet()->setCellValue('R'.$column, $relatedShops);
             $objPHPExcel->getActiveSheet()->setCellValue('S'.$column, $deeplink);
             $objPHPExcel->getActiveSheet()->setCellValue('T'.$column, $refUrl);
             $objPHPExcel->getActiveSheet()->setCellValue('U'.$column, $actualUrl);
@@ -230,7 +230,7 @@ class GlobalShopExport
                 'W'.$column,
                 Shop::getDaysSinceShopWithoutOnlneOffers($shopId)
             );
-            $objPHPExcel->getActiveSheet()->setCellValue('X'.$column, Shop::getTimesShopFavourite($shopId));
+            $objPHPExcel->getActiveSheet()->setCellValue('X'.$column, Shop::getFavouriteCountOfShop($shopId));
             $objPHPExcel->getActiveSheet()->setCellValue(
                 'Y'.$column,
                 ShopViewCount::getAmountClickoutOfShop($shopId)
@@ -241,24 +241,24 @@ class GlobalShopExport
             );
             $objPHPExcel->getActiveSheet()->setCellValue(
                 'AA'.$column,
-                Offer::getTotalAmountOfCouponsShop($shopId, 'CD')
+                Offer::getTotalAmountOfShopCoupons($shopId, 'CD')
             );
-            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$column, Offer::getTotalAmountOfCouponsShop($shopId));
+            $objPHPExcel->getActiveSheet()->setCellValue('AB'.$column, Offer::getTotalAmountOfShopCoupons($shopId));
             $objPHPExcel->getActiveSheet()->setCellValue('AC'.$column, $howToGuide);
             $objPHPExcel->getActiveSheet()->setCellValue('AD'.$column, $newsTicker);
             $objPHPExcel->getActiveSheet()->setCellValue('AE'.$column, $showSignupOption);
-            $objPHPExcel->getActiveSheet()->setCellValue('AF'.$column, $showSimliarShops);
+            $objPHPExcel->getActiveSheet()->setCellValue('AF'.$column, $showSimilarShops);
             $objPHPExcel->getActiveSheet()->setCellValue('AG'.$column, $showChains);
             $objPHPExcel->getActiveSheet()->setCellValue('AH'.$column, $customHeader);
             $objPHPExcel->getActiveSheet()->setCellValue('AI'.$column, $displayExtraProperties);
             $objPHPExcel->getActiveSheet()->setCellValue('AJ'.$column, $lastUpdated);
 
-            $localeVal = $key ;
+            $localeName = $key ;
             if ($key == 'en') {
-                $localeVal = 'default' ;
+                $localeName = 'default' ;
             }
 
-            $objPHPExcel->getActiveSheet()->setCellValue('AK'.$column, $localeVal);
+            $objPHPExcel->getActiveSheet()->setCellValue('AK'.$column, $localeName);
             $column++;
             $row++;
         }
@@ -388,16 +388,16 @@ class GlobalShopExport
     protected function exportLocaleShopsInExcel($shopData, $key, $doctrineSiteDbConnection, $manager)
     {
         if ($key == 'en') {
-            $this->_localePath = '';
+            $this->localePath = '';
             $locale = "-NL";
         } else {
-            $this->_localePath = $key . "/";
+            $this->localePath = $key . "/";
             $locale = "-".strtoupper($key);
         }
         $objPHPExcel = $this->shopExcelHeaders($key);
-        $objPHPExcel = $this->perShopData($shopData, $key, $objPHPExcel, 'locale');
+        $objPHPExcel = $this->localeShopsData($shopData, $key, $objPHPExcel, 'locale');
         $objectPHPExcel = $this->excelFormatting($objPHPExcel);
-        $pathToFile = UPLOAD_EXCEL_TMP_PATH . strtolower($this->_localePath) . 'excels/' ;
+        $pathToFile = UPLOAD_EXCEL_TMP_PATH . strtolower($this->localePath) . 'excels/' ;
 
         if (!file_exists($pathToFile)) {
             mkdir($pathToFile, 0774, true);
