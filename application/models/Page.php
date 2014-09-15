@@ -373,13 +373,9 @@ class Page extends BasePage
         }
 
 
-        $key = "all_allMSArticle".$this->id."_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
         try {
         //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             $pagePermalinkParam =
                 FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
@@ -713,10 +709,9 @@ class Page extends BasePage
             }
             $pageKey ="all_moneysavingpage".$this->id."_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pageKey);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
             $pagePermalinkParam =
