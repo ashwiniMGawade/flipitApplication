@@ -56,4 +56,17 @@ class codealertCest
         $I->seeInField('#emailHeader', '');
         $I->seeElement('#sendNewsletter-btn', '');
     }
+
+    public function codealertofferTest(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new FunctionalTester\AdminSteps($scenario);
+        $I->login();
+        $I->click('.menu-icon-offer');
+        $I->amOnPage('/admin/offer');
+        $I->wait(10);
+        $I->click('#offerListTable a');
+        $I->amOnPage('/admin/offer/editoffer/id/1');
+        $I->click('Send code alert');
+        $I->seeInCurrentUrl('/admin/codealert');
+    }
 }

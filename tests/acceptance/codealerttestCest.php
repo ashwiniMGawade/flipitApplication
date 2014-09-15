@@ -29,4 +29,17 @@ class codealerttestCest
         $I->wait(10);
         $I->seeInCurrentUrl('/admin/email/codealert/send/test');
     }
+
+    public function codealertofferTest(AcceptanceTester $I, \Codeception\Scenario $scenario)
+    {
+        $I = new AcceptanceTester\LoginSteps($scenario);
+        $I->login();
+        $I->click('.menu-icon-offer');
+        $I->amOnPage('/admin/offer');
+        $I->wait(10);
+        $I->click('#offerListTable a');
+        $I->amOnPage('/admin/offer/editoffer/id/1');
+        $I->click('Send code alert');
+        $I->seeInCurrentUrl('/admin/codealert');
+    }
 }

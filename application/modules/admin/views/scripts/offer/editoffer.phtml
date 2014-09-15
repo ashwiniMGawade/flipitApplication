@@ -47,6 +47,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 			?>
 			<button type="button" onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?>/<?php echo $this->offerShoLogo[0]['shop']['permaLink'] ;?>','_blank')"  href="_blank" class="btn btn-primary ml10"><?php echo $this->translate('Open store page'); ?></button>
 			<?php endif;	?>
+			<button type="button" onClick="window.open('<?php echo HTTP_PATH; ?>admin/codealert','_blank')"  href="_blank" class="btn btn-primary ml10"><?php echo $this->translate('Send code alert'); ?></button>
 		</h1>
       <input type="hidden" name='offerImageSelect' id='offerImageSelect' value='' />
       <input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
