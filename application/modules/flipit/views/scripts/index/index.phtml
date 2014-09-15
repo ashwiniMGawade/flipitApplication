@@ -27,6 +27,7 @@
 </head>
 <body class="splash-page">
 <?php
+echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager();
 $serverNameScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
 $mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(); 
     if (!empty($mostPopularCoupon['locale']) && !empty($mostPopularCoupon['mostPopularCoupon'])) { 

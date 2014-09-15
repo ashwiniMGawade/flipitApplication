@@ -558,7 +558,7 @@ class Admin_ShopController extends Zend_Controller_Action
         set_time_limit ( 10000 );
         ini_set('max_execution_time',115200);
         ini_set("memory_limit","1024M");
-        $data =  Shop::exportShopeList();
+        $data =  Shop::exportShopsList();
         //echo "<pre>";
         //print_r($data); die;
         //create object of phpExcel
@@ -822,11 +822,11 @@ class Admin_ShopController extends Zend_Controller_Action
 
             //Extra columns added to excel export
             $daysWithoutCoupon = Shop::getDaysSinceShopWithoutOnlneOffers($shop['id']);
-            $timesShopFavourite = Shop::getTimesShopFavourite($shop['id']);
+            $timesShopFavourite = Shop::getFavouriteCountOfShop($shop['id']);
             $lastWeekClicks = ShopViewCount::getAmountClickoutOfShop($shop['id']);
             $totalClicks = ShopViewCount::getTotalAmountClicksOfShop($shop['id']);
-            $totalAmountCoupons = Offer::getTotalAmountOfCouponsShop($shop['id'], 'CD');
-            $totalAmountOffers = Offer::getTotalAmountOfCouponsShop($shop['id']);
+            $totalAmountCoupons = Offer::getTotalAmountOfShopCoupons($shop['id'], 'CD');
+            $totalAmountOffers = Offer::getTotalAmountOfShopCoupons($shop['id']);
 
             //set value in column of excel
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
@@ -1047,11 +1047,9 @@ class Admin_ShopController extends Zend_Controller_Action
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels'));
-
-
-
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         # make markplaatfeed url's get refreashed only in case of kortingscode
-        iF(LOCALE == '')
+        if (LOCALE == '')
         {
             $varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
             $varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
