@@ -663,7 +663,7 @@ class Category extends BaseCategory
                 ->where("c.id=? " , $id)
                 ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-        $varnishUrl = array();
+        $varnishUrls = array();
 
 
         $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
@@ -671,11 +671,11 @@ class Category extends BaseCategory
         $articlesCetgoriesPage = 'pluscat' .'/' ;
 
         # check if a category has permalink then add it into array
-        if (isset($data['permaLink']) && strlen($data['permaLink']) > 0 )
+        if (isset($data['permaLink']) && mb_strlen($data['permaLink']) > 0 )
         {
-            $varnishUrl[] = $cetgoriesPage . $data['permaLink'];
-            $varnishUrl[] = $cetgoriesPage . $data['permaLink'] .'/2';
-            $varnishUrl[] = $cetgoriesPage . $data['permaLink'] .'/3';
+            $varnishUrls[] = $cetgoriesPage . $data['permaLink'];
+            $varnishUrls[] = $cetgoriesPage . $data['permaLink'] .'/2';
+            $varnishUrls[] = $cetgoriesPage . $data['permaLink'] .'/3';
         }
 
         # check a category has one or more related article category
@@ -684,11 +684,11 @@ class Category extends BaseCategory
             foreach($data['articlecategory'] as $value) {
                 # check if a category has permalink then add it into array
                 if(isset($value['permalink']) && strlen($value['permalink']) > 0 ) {
-                    $varnishUrl[] = $articlesCetgoriesPage . $value['permalink'] ;
+                    $varnishUrls[] = $articlesCetgoriesPage . $value['permalink'] ;
                 }
             }
         }
-        return $varnishUrl ;
+        return $varnishUrls ;
     }
 
 }
