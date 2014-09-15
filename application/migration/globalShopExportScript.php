@@ -3,7 +3,7 @@ class GlobalShopExport
 {
     protected $localePath = '/';
     protected $zendTranslation = null;
-    protected $_shopsData = array();
+    protected $shopsData = array();
     protected $row = 4;
     protected $column = 4;
     public function __construct()
@@ -40,9 +40,9 @@ class GlobalShopExport
         $customLocale = LocaleSettings::getLocaleSettings();
         $customLocale = !empty($customLocale[0]['locale']) ? $customLocale[0]['locale'] : 'nl_NL';
         $allShopsData = Shop::exportShopsList();
-        $this->_shopsData[$key]['data'] = $allShopsData;
-        $this->_shopsData[$key]['customLocale'] = $customLocale;
-        $this->_shopsData[$key]['dsn'] = $dsn;
+        $this->shopsData[$key]['data'] = $allShopsData;
+        $this->shopsData[$key]['customLocale'] = $customLocale;
+        $this->shopsData[$key]['dsn'] = $dsn;
         $manager->closeConnection($doctrineSiteDbConnection);
         echo "\n";
         echo $key." Shops have been fetched successfully!!!";
@@ -57,7 +57,7 @@ class GlobalShopExport
             $this->localePath = $key . "/";
             $suffix = "_" . strtoupper($key);
         }
-        $customLocale = $this->_shopsData[$key]['customLocale'];
+        $customLocale = $this->shopsData[$key]['customLocale'];
         $this->zendTranslation = new Zend_Translate(array(
                 'adapter' => 'gettext',
                 'disableNotices' => true));
@@ -133,11 +133,11 @@ class GlobalShopExport
     {
         CommonMigrationFunctions::dateFormatConstants();
         $objPHPExcel = $this->shopExcelHeaders('en');
-        foreach ($this->_shopsData as $key => $data) {
-            $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($data['dsn']);
+        foreach ($this->shopsData as $locale => $shop) {
+            $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($shop['dsn']);
             $manager = CommonMigrationFunctions::loadDoctrineModels();
-            $objPHPExcel =  $this->localeShopsData($data['data'], $key, $objPHPExcel);
-            $this->exportLocaleShopsInExcel($data['data'], $key, $doctrineSiteDbConnection, $manager);
+            $objPHPExcel =  $this->localeShopsData($shop['data'], $locale, $objPHPExcel);
+            $this->exportLocaleShopsInExcel($shop['data'], $locale, $doctrineSiteDbConnection, $manager);
         }
         return $objPHPExcel;
     }
@@ -291,7 +291,6 @@ class GlobalShopExport
     {
         $column = 4;
         $row = 4;
-        //FORMATING OF THE EXCELL
         $headerStyle = array(
                 'fill' => array(
                         'type' => PHPExcel_Style_Fill::FILL_SOLID,
@@ -364,7 +363,7 @@ class GlobalShopExport
 
     protected function exportShopsInExcel()
     {
-        if (! empty($this->_shopsData)) {
+        if (! empty($this->shopsData)) {
             echo "\n";
             echo "Parse shops data and save it into excel file\n";
             $objPHPExcel = $this->getExcelSheet();
@@ -410,12 +409,16 @@ class GlobalShopExport
         echo "\n";
         print "$key - Shops have been exported successfully!!!";
 
+        $folderName = $key;
         if ($key == 'en') {
-            $key = 'excels';
+            $folderName = 'excels';
         }
 
-        CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$key, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
-        CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$key);
+        CommonMigrationFunctions::copyDirectory(
+            UPLOAD_EXCEL_TMP_PATH.$folderName,
+            UPLOAD_DATA_FOLDER_EXCEL_PATH.$folderName
+        );
+        CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$folderName);
     }
 }
 new GlobalShopExport();
