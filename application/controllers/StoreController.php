@@ -103,10 +103,6 @@ class StoreController extends Zend_Controller_Action
                     $shopInformation[0]['name'],
                     $shopInformation[0]['chainItemId']
                 );
-
-                if (isset($shopChains['headLink'])) {
-                    $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
-                }
                 if ($shopChains['hasShops'] && isset($shopChains['string'])) {
                     $this->view->shopChain = $shopChains['string'];
                 }
