@@ -732,8 +732,10 @@ class Page extends BasePage
             // Add urls to refresh in Varnish
                 $varnishObj = new Varnish();
                 $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
-                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink .'/2');
-                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink.'/3');
+                if (!$permalink=='plus') {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink .'/2');
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink.'/3');
+                }
                 $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
             }
 

@@ -1578,10 +1578,10 @@ public static function getShopDetail($shopId)
             # traverse through all catgories
             foreach($shop['category'] as $value) {
                 # check if a category has permalink then add it into array
-                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
                     $urlsArray[] = $categoriesPage . $value['permaLink'];
-                    $urlsArray[] = $categoriesPage . $data['permaLink'] .'/2';
-                    $urlsArray[] = $categoriesPage . $data['permaLink'] .'/3';
+                    $urlsArray[] = $categoriesPage . $value['permaLink'] .'/2';
+                    $urlsArray[] = $categoriesPage . $value['permaLink'] .'/3';
                 }
             }
         }
