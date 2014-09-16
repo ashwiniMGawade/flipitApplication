@@ -335,20 +335,22 @@ return $flag;
 
     public static function savePopularShopsPosition($shopId)
     {
-        $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
-        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
-        $databaseConnection->query('TRUNCATE TABLE popular_shop');
-        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
-        unset($databaseConnection);
-        $shopId = explode(',', $shopId);
-        $i = 1;
-        foreach ($shopId as $shopIdValue) {
-            $popularShop = new PopularShop();
-            $popularShop->shopId = $shopIdValue;
-            $popularShop->position = $i;
-            $popularShop->type = "MN";
-            $popularShop->save();
-            $i++;
+        if (!empty($shopId)) {
+            $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
+            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
+            $databaseConnection->query('TRUNCATE TABLE popular_shop');
+            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
+            unset($databaseConnection);
+            $shopId = explode(',', $shopId);
+            $i = 1;
+            foreach ($shopId as $shopIdValue) {
+                $popularShop = new PopularShop();
+                $popularShop->shopId = $shopIdValue;
+                $popularShop->position = $i;
+                $popularShop->type = "MN";
+                $popularShop->save();
+                $i++;
+            }
         }
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
     }
