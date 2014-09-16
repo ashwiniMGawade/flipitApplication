@@ -86,7 +86,10 @@ class LoginController extends Zend_Controller_Action
                     $messageText = 'shop already added in your favourite shops';
                 } else {
                     $messageText = 'have been added to your favorite shops';
-                    Shop::shopAddInFavourite($visitorId, base64_decode($shopIdNameSpace->shopId));
+                    Shop::shopAddInFavourite(
+                        Auth_VisitorAdapter::getIdentity()->id,
+                        base64_decode($shopIdNameSpace->shopId)
+                    );
                 }
                 $shopIdNameSpace->shopId = '';
                 $message = $shopName. " ".  FrontEnd_Helper_viewHelper::__translate($messageText);
