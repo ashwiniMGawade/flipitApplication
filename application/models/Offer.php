@@ -27,8 +27,8 @@ class Offer extends BaseOffer
         $expiredDate = date("Y-m-d H:i");
         $expiredOffers = Doctrine_Query::create()
         ->select(
-            's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate,
-            o.extendedoffer, o.extendedUrl, o.shopid'
+            's.id, o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate,
+            o.extendedoffer, o.extendedUrl, o.shopid, s.affliateProgram'
         )
         ->from('Offer o')
         ->leftJoin('o.shop s')
