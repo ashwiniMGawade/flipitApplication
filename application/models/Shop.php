@@ -367,7 +367,7 @@ class Shop extends BaseShop
             $id = null;
         }
         //call cache function
-        $key = 'shop_'.$id.'_similarShops';
+        $key = 'shop_similar_shops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
@@ -448,7 +448,7 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $id);
 
             //call cache function
-            $key = 'shop_'.$this->id.'_similarShops';
+            $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
             $key = 'store_'.$cacheKey.'_howToGuide';
@@ -481,7 +481,7 @@ class Shop extends BaseShop
 
         }
         //call cache function
-        $key = 'shop_'.$this->id.'_similarShops';
+        $key = 'shop_similar_shops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($this->permaLink);
         $key = 'store_'.$cacheKey.'_howToGuide';
@@ -823,7 +823,7 @@ class Shop extends BaseShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails); 
 
         
-        $key = 'shop_'.$this->id.'_similarShops';
+        $key = 'shop_similar_shops';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopDetail['shopNavUrl']);
         $key = 'store_'.$cacheKey.'_howToGuide';
@@ -855,7 +855,7 @@ class Shop extends BaseShop
 
         
 
-            $key = 'shop_'.$this->id.'_similarShops';
+            $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             if(!empty($getRouteLink)){
@@ -1609,6 +1609,9 @@ public static function getShopDetail($shopId)
         $shop->status = $status;
         $shop->offlineSicne = $date;
         $shop->save();
+        
+        $key = 'shop_similar_shops';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         return $shop->offlineSicne;
