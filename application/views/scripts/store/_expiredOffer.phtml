@@ -8,10 +8,16 @@ foreach ($this->expiredOffers as $offer) :
     $offer = (object) $offer;
     $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
     $shopUrl = $domainName.'out/shop/'.$offer->shop['id'];
+    $target = $offer->shop['affliateProgram'] == 0 ? '_self' : '_blank';
+    if($offer->shop['affliateProgram']==0)
+    {
+       $shopUrl = "javascript:void(0);";
+    }
+    
     ?>
     <div class="line">
       <a href="<?php echo $shopUrl;?>"
-      rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
+      rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : $target;?>">
         <div class="holder">
             <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
             <div class="box">
