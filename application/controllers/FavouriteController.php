@@ -21,6 +21,9 @@ class FavouriteController extends Zend_Controller_Action
 
     public function yourbrandsAction()
     {
+        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
+        $backgroundImg = $pageHeader->getCategoryOrPageHeaderImage(Logo::getPageLogo($pageDetails->pageHeaderImageId));
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         $message = $flashMessage->getMessages();
         $this->view->successMessage = isset($message[0]['success']) ?
