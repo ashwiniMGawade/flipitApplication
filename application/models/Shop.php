@@ -610,7 +610,7 @@ class Shop extends BaseShop
         $this->affliateProgram = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['affiliateProgStatus']);
         $this->title =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopTitle']);
         $this->subTitle =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['shopSubTitle']);
-        $this->overriteTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
+        $this->overriteTitle = FrontEnd_Helper_viewHelper::replaceStringVariable(BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']));
         $this->shopText = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
         $this->views = BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
