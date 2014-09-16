@@ -56,7 +56,7 @@ class HomeajaxController extends Zend_Controller_Action
             $moneySavingGuidesList,
             'moneysaving',
             FrontEnd_Helper_viewHelper::__form('form_All Saving Guides'),
-            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('form_moneysaving')
+            HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_moneysaving')
         );
         echo Zend_Json::encode($guidesHtml);
         die;
