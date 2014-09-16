@@ -41,6 +41,9 @@ class SignupController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical(
+            FrontEnd_Helper_viewHelper::getPagePermalink()
+        );
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->_redirect(
                 HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
