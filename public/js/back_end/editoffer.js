@@ -8,7 +8,22 @@ var flagT = 1;
 var tile_id ='';
 
 function init(){
-	
+	jQuery('#code-alert-queue').click(function(){
+		var offerId = jQuery('#offerId').val();
+		var shopId = jQuery('#selctedshop').val();
+		jQuery.ajax({
+			type : "POST",
+		    url: HOST_PATH + "admin/email/codealertqueue",
+		    dataType: 'json',
+		    method : "post",
+		    data: { shopId: shopId, offerId: offerId},
+			   success: function(dataSet)
+			   { 
+				   
+				   return false;
+			  } 
+		});
+	});
 
 	
 	

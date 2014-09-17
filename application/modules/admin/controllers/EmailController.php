@@ -3,6 +3,7 @@
 class Admin_EmailController extends Zend_Controller_Action
 {
     public $flashMessenger = '';
+    public $_settings = false ;
     public function preDispatch()
     {
         $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
@@ -15,6 +16,8 @@ class Admin_EmailController extends Zend_Controller_Action
         BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
+        $sessionNamespace = new Zend_Session_Namespace();
+        $this->_settings  = $sessionNamespace->settings['rights'] ;
 
     }
 
@@ -334,7 +337,157 @@ class Admin_EmailController extends Zend_Controller_Action
 
     public function codeAlertSettingsAction()
     {
+        $data = CodeAlertSettings::getCodeAlertSettings();
 
+        $this->view->data = $data;
+        $this->view->localeSettings = LocaleSettings::getLocaleSettings();
+        $this->view->rights = $this->_settings['administration'];
+        $this->view->timezones_list = Signupmaxaccount::$timezones;
+    }
+
+    public function codealertqueueAction()
+    {
+        $codeAlertQueueParameters = $this->getRequest()->getParams();
+        $codeAlertQueueShopId = $codeAlertQueueParameters['shopId'];
+        $codeAlertQueueOfferId = $codeAlertQueueParameters['offerId'];
+        CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
+       // print_r($this->getRequest()->getParams()); die;
+    }
+    
+    public function savecodealertsettingsAction()
+    {
+        CodeAlertSettings::saveCodeAlertSettings($this->getRequest()->getParams());
+        die;
+    }
+    
+    public function savecodealertemailsubjectAction()
+    {
+        CodeAlertSettings::saveCodeAlertEmailSubject($this->getRequest()->getParams());
+        die;
+    }
+
+    public function savecodealertemailheaderAction()
+    {
+        CodeAlertSettings::saveCodeAlertEmailHeader($this->getRequest()->getParams());
+        die;
+    }
+
+    public function totalRecepientsAction()
+    {
+        if ($this->_settings['content']['rights'] != '1') {
+            $this->getResponse()->setHttpResponseCode(404);
+            echo $this->_helper->json('This page does not exist');
+        }
+
+        $visitors = CodeAlertQueue::getRecepientsCount();
+        echo $this->_helper->json(array('recepients' => $visitors), true);
+    }
+
+    public function codealertsendAction()
+    {
+        if ($this->_request->isPost()) {
+            $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $isScheduled = $this->getRequest()->getParam("isScheduled", false);
+
+            if ($isScheduled) {
+                if (CodeAlertSettings::saveScheduledNewsletter($this->getRequest())) {
+                    $flash->addMessage(
+                        array(
+                            'success' => $this->view->translate('Newsletter has been successfully scheduled')
+                        )
+                    );
+                } else {
+                    $flash->addMessage(
+                        array(
+                            'error' => $this->view->translate('There is some problem in your data')
+                        )
+                    );
+                }
+
+                $this->_helper->redirector('code-alert-settings', 'email', null);
+            }
+
+            CodeAlertSettings::updateCodeAlertSchedulingStatus();
+            set_time_limit(10000);
+            ini_set('max_execution_time', 115200);
+            ini_set("memory_limit", "1024M");
+            foreach ($codeAlertOffers as $key => $value) {
+                # code...
+            
+                $topVouchercodes = Offer::getTopOffers(10);
+                $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
+                if ($categoryflag) {
+                    $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
+                    FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
+                } else {
+                    $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
+                }
+
+                $emailDetails = Signupmaxaccount::getAllMaxAccounts();
+                $mandrillSenderEmailAddress = $emailDetails[0]['emailperlocale'];
+                $mandrillNewsletterSubject = $emailDetails[0]['emailsubject'];
+                $mandrillSenderName = $emailDetails[0]['sendername'];
+                $visitors = $value['shop']['visitors'];
+               // echo "<pre>"; print_r($value['shop']['visitors']);
+                $visitorId = array();
+                foreach ($visitors as $key => $visitorvalue) {
+                    $visitorId[] = $visitorvalue['visitorId'];
+                   
+                }
+                $visitorId = implode(',', $visitorId);
+                $this->visitorId = $visitorId;
+              //   echo "<pre>"; print_r($visitorId);
+              //  echo $visitorId."<br>"; 
+              BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this); echo "<pre>"; print_r($this->_to);   
+              //  BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
+            //    $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
+             //   $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
+            //    $categoryName = $topCategories[0]['category']['name'];
+            //    $categoryPermalink = $topCategories[0]['category']['permaLink'];
+             //   $newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
+                try {
+                    /*FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                        $topVouchercodes,
+                        $categoryVouchers,
+                        $categoryName.'|'.$categoryPermalink,
+                        $mandrillNewsletterSubject,
+                        $mandrillSenderEmailAddress,
+                        $mandrillSenderName,
+                        $this->_recipientMetaData,
+                        $this->_loginLinkAndData,
+                        $this->_to,
+                        $this->footerContent,
+                        '',
+                        $newsletterHeader['email_header']
+                    );*/
+                    $message = $this->view->translate('Newsletter has been sent successfully');
+                } catch (Mandrill_Error $e) {
+                    $message = $this->view->translate('There is some problem in your data');
+                }
+                $flash->addMessage(array('success' => $message));
+            //    $this->_helper->redirector('emailcontent', 'accountsetting', null);
+            } die;
+        } else {
+            $this->_helper->redirector('index', 'index', null);
+        }
+        exit;
+    }
+    public function disablecodealertscheduleAction()
+    {
+        if ($this->_request->isPost()) {
+            $flash = $this->_helper->getHelper('FlashMessenger');
+
+            if (CodeAlertSettings::updateCodeAlertSchedulingStatus()) {
+                $flash->addMessage(
+                    array(
+                        'success' => $this->view->translate('Newsletter schedule has been successfully disabled')
+                    )
+                );
+            }
+
+            $this->_helper->redirector('code-alert-settings', 'email', null);
+        }
     }
     public function getFlashMessage()
     {

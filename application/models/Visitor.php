@@ -693,7 +693,7 @@ public static function Visitortotal_acc()
      * return all visitors to whom newsletters to be sent
      * @author sp singh
      */
-    public function getVisitorsToSendNewsletter($recordPerPage = 1000)
+    public function getVisitorsToSendNewsletter($visitorId = '')
     {
 
         return   Doctrine_Query::create()->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
@@ -702,7 +702,8 @@ public static function Visitortotal_acc()
                 ->orderBy("k.keyword")
                 ->where('status = 1')
                 ->andWhere('active = 1')
-                ->andWhere('weeklyNewsLetter = 1')
+              //  ->andWhere('weeklyNewsLetter = 1')
+                ->andWhere('v.id IN('.$visitorId.')')
                 ->fetchArray();
     }
 }

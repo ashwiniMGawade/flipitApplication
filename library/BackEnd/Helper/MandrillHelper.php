@@ -37,8 +37,9 @@ class BackEnd_Helper_MandrillHelper
                 $currentObject
             );
         } else {
+            $visitorId = $currentObject->visitorId != '' ? $currentObject->visitorId: '';
             $visitors = new Visitor();
-            $visitors = $visitors->getVisitorsToSendNewsletter();
+            $visitors = $visitors->getVisitorsToSendNewsletter($visitorId);
             if ($linkType == 'scheduleNewsletterSender') {
                 $frontendPath = $currentObject->_linkPath;
                 $currentMandrillKey = $mandrillKey;

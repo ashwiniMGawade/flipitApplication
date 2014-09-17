@@ -320,7 +320,7 @@ function sendNewsLetter(e){
         } else {
             e.preventDefault();
             var newForm = jQuery('<form>', {
-                'action': HOST_PATH + "admin/email/codealert",
+                'action': HOST_PATH + "admin/email/codealertsend",
                 'target': '_top',
                 'method' : 'post'
             });
@@ -341,7 +341,7 @@ function sendTestNewsLetter(e){
             e.preventDefault();
 
             var newForm = jQuery('<form>', {
-                'action': HOST_PATH + "admin/email/codealert/send/test",
+                'action': HOST_PATH + "admin/email/codealertsend/send/test",
                 'target': '_top',
                 'method' : 'post',
             }).append(jQuery('<input>', {
@@ -361,7 +361,7 @@ function sendTestNewsLetter(e){
 function saveEmailHeaderFooter(name , data)
 {
     $.ajax({
-        url : HOST_PATH + "admin/email/email-header-footer",
+        url : HOST_PATH + "admin/email/savecodealertemailheader",
         type : 'post',
         data : { 'template' : name , 'data' : data}
     });
@@ -372,7 +372,7 @@ function saveSenderEmail(el)
     var value = $(el).val().trim();
     if(value != ''){
         $.ajax({
-            url : HOST_PATH + 'admin/email/saveemailcontent',
+            url : HOST_PATH + 'admin/email/savecodealertemailsubject',
             type : 'post',
             data : { name : $(el).attr('name'), val : value },
         });

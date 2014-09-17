@@ -215,4 +215,20 @@ class FavoriteShop extends BaseFavoriteShop
 
         return $shop->toArray();
     }
+    public static function getShopsById($shopId)
+    {
+        $data = Doctrine_Query::create()
+            ->select('p.visitorId,p.shopId')
+            ->from("FavoriteShop p")
+            ->leftJoin('p.visitors v')
+            ->leftJoin('p.shops s')
+            ->leftJoin('s.logo l')
+            ->andWhere("p.shopId=s.id")
+            ->andWhere("s.status= ?",1)
+            ->andWhere("s.deleted= ?",0)
+            ->andWhere("p.shopId =$shopId")
+            ->orderBy("s.name ASC")
+            ->fetchArray();
+        return $data;
+    }
 }

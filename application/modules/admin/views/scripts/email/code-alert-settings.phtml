@@ -71,16 +71,16 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
                 </div>
             </div>
             <?php
-            $isScheduled = $this->data['0']['newletter_is_scheduled'] ;
+            $isScheduled = $this->data['0']['code_alert_schedule'] ;
             $sendDate = $isScheduled ?
-            date('m-d-Y', strtotime($this->data['0']['newletter_scheduled_time']))
+            date('m-d-Y', strtotime($this->data['0']['code_alert_schedule_time']))
             : date('m-d-Y');
 
-            $sendTime = isset($this->data['0']['newletter_is_scheduled'] )
-            ? date('H:i', strtotime($this->data['0']['newletter_scheduled_time']))
+            $sendTime = isset($this->data['0']['code_alert_schedule'] )
+            ? date('H:i', strtotime($this->data['0']['code_alert_schedule_time']))
             : date('H:i:s');
             ?>
-            <?php if ($this->rights['rights'] !=  1 ) : ?>
+            <?php if ($this->rights['rights'] ==  1 ) : ?>
             <div class="mainpage-content-line mb10">
                 <div class="mainpage-content-left">
                     <label><strong><?php echo $this->translate("Schedule email");?></strong></label>
