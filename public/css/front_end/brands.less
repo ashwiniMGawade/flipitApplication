@@ -97,9 +97,8 @@
 		}
 	}
 	.remove-fovourite-btn-gradiant {
-		color:#fff;
-		box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 0 #dc4747 inset;
-		border-color:#dc4747;
+		border:1px solid #d53a3a;
+		box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 3px rgba(0, 0, 0, 0.1);
 		background-image: -webkit-gradient(
 			linear,
 			left top,
@@ -115,26 +114,7 @@
 		background-image: -ms-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
 		background-image: linear-gradient(to bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
 	}
-	.blue-fovourite-btn{
-		color:#fff;
-		box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 0 #57bee7 inset;
-		background-image: -webkit-gradient(
-			linear,
-			left top,
-			left bottom,
-			color-stop(0, #22A2D4),
-			color-stop(0.54, #177EB5),
-			color-stop(1, #2486B3),
-			color-stop(1, #0E8ACC)
-		);
-		background-image: -o-linear-gradient(bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
-		background-image: -moz-linear-gradient(bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
-		background-image: -webkit-linear-gradient(bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
-		background-image: -ms-linear-gradient(bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
-		background-image: linear-gradient(to bottom, #22A2D4 0%, #177EB5 54%, #2486B3 100%, #0E8ACC 100%);
-	}
 	.pop{
-
 		line-height:16px;
 		font-size:12px;
 		color:#0077cc;
@@ -155,7 +135,7 @@
 		}
 		.glyphicon-heart{
 			display:inline-block;
-			padding:0 10px 0 0;
+			padding:0 3px 0 0;
 			margin:-1px 0 0 -9px;
 			vertical-align:middle;
 			color:#0077cc;
@@ -166,15 +146,19 @@
 			}
 			strong{
 				display:block;
+				font-weight: bold;
+		    	text-transform: uppercase;
 			}
 			em{display:none;}
 		}
 	}
-	.remove-fovourite{
-		.blue-fovourite-btn;
+	a.remove-fovourite{
+		min-width: 100px;
+		width: 120px;
+		height: 30px;
 		&:hover{
 			.remove-fovourite-btn-gradiant;
-			padding: 4px 35px;
+			padding: 9px 35px;
 		}
 	}
 	#sidebar{
@@ -222,12 +206,11 @@
 		}
 		.pop{
 			min-width:84px;
-			padding:4px 16px;
 			text-align:center;
 		}
 		.remove-fovourite{
 			&:hover{
-				padding: 4px 34px;
+				padding: 9px 34px;
 			}
 		}
 		.share-forms{
