@@ -416,7 +416,7 @@ header#header {
     left:0;
     top:100px;
     z-index:999;
-    max-width: 760px;
+    width: 100%;
     margin:0 auto;
     font-size:14px;
     line-height:18px;
@@ -477,4 +477,50 @@ div#sign_up_add_to_favourite {
     display:none;
     height:620px;
     width:520px;
+}
+@media only screen and (max-width: 979px){
+    div#sign_up_add_to_favourite.popup_block {
+        margin-left: -270px;
+    }
+}
+@media only screen and (max-width: 767px){
+    #signup-lightbox {
+        width:70%;
+        .lightbox{
+            .block{
+                input[type="text"] {
+                    width: 100%;
+                }
+                button[type="submit"] {
+                    width: 100%;
+                }
+            }
+            .icon {
+                padding: 0px;
+            }
+        }
+    }
+    div#sign_up_add_to_favourite.popup_block {
+        width: 700px;
+        margin-left: -352px;
+    }
+}
+@media only screen and (max-width: 479px) {
+    #signup-lightbox {
+        width:80%;
+        .lightbox{
+            .block{
+                input[type="text"] {
+                    width: 100%;
+                }
+                button[type="submit"] {
+                    width: 100%;
+                }
+            }
+        }
+    }
+    div#sign_up_add_to_favourite.popup_block {
+        width: 421px;
+        margin-left: -209px;
+    }
 }
