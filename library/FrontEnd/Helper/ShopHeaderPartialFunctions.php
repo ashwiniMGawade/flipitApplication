@@ -94,7 +94,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
             $titleTextForLove = $this->__form("form_Add in Favourite");
             $emAndSpan = '<span class="glyphicon red-heart glyphicon-heart"></span>
-                <span>'.$this->__translate("FOLLOW").'</span>';
+                <span class = "follow-text">'.$this->__translate("FOLLOW").'</span>';
             $aTagClasses = 'pop btn btn-sm btn-default follow-button';
         endif;
 
