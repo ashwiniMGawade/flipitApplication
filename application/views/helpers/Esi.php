@@ -102,7 +102,12 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
         } else {
             // fetch with ajax. We still we wat to show the html
             $divID = rand(0, 99999);
-            echo '<nav class="account-box" id="'.$divID.'"></nav>';
+            if (strpos($src, 'login') !== false) {
+                echo '<nav class="account-box" id="'.$divID.'"></nav>';
+            } else {
+                echo '<span class="" id="'.$divID.'"></span>';
+            }
+
             ?>
             <script type="text/javascript">
                 var divId = "<?php echo $divID; ?>";

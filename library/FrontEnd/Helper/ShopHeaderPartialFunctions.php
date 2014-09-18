@@ -73,7 +73,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $divContent .=
                 '<h1>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']).'</h1>
                 <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>
-                    '.$shopWebsiteUrlContent. self::getLoveAnchor($shop['id'], $shop['name'], $shop['permaLink']);
+                    '.$shopWebsiteUrlContent . self::getLoveAnchor($shop['id'], $shop['name'], $shop['permaLink']);
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
@@ -90,7 +90,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $titleTextForLove = $this->__form('form_Remove from Favourite');
         $emAndSpan = '<em>'.$this->__translate("I FOLLOW THIS").'</em>
             <strong>'.$this->__translate("REMOVE").'</strong>';
-        $aTagClasses = 'pop btn btn-sm btn-default remove-fovourite';
+        $aTagClasses = 'pop btn btn-sm btn-default remove-fovourite blue';
         if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
             $titleTextForLove = $this->__form("form_Add in Favourite");
             $emAndSpan = '<span class="glyphicon red-heart glyphicon-heart"></span>
