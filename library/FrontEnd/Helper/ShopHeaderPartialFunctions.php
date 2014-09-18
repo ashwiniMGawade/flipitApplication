@@ -73,12 +73,12 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $divContent .=
                 '<h1>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']).'</h1>
                 <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>
-                    '.$shopWebsiteUrlContent. self::getLoveAnchor($shop['id'], $shop['name'], $shop['permaLink']);
+                    '.$shopWebsiteUrlContent;//self::getLoveAnchor($shop['id'], $shop['name'], $shop['permaLink']);
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
         
-        $divContent .='</div></div>';
+       // $divContent .='</div></div>';
         return $divContent;
     }
     
