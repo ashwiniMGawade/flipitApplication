@@ -1249,7 +1249,7 @@ div.line:last-child {border-bottom: none;}
 	background:@white-color;
 	margin:0 0 25px;
 	&:after {.after}
-	a{
+	a,span.replace{
 		&:after {.after}
 		display:block;
 		font-size:12px;
@@ -3420,6 +3420,15 @@ span.pop{
 				width:20%;
 			}
 		}
+		span.replace{
+			padding:12px;
+			.holder{
+				width:79%;
+			}
+			.date{
+				width:20%;
+			}
+		}
 	}
 	.photo{
 		.text-box{
@@ -3857,6 +3866,14 @@ span.pop{
 	.deal{display:none;}
 	.section-module{
 		a{
+			.holder{
+				width:82%;
+			}
+			.date{
+				width:17%;
+			}
+		}
+		span.replace{
 			.holder{
 				width:82%;
 			}
@@ -4508,6 +4525,19 @@ img.logo.kortingscode{
 	}
 	.section-module{
 		a{
+			text-align:right;
+			padding:10px 20px;
+			.holder{
+				float:none;
+				width:100%;
+				margin:0 0 5px;
+				text-align:left;
+			}
+			.date{
+				display: none;
+			}
+		}
+		span.replace{
 			text-align:right;
 			padding:10px 20px;
 			.holder{
