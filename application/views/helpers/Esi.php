@@ -110,9 +110,10 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
 
             ?>
             <script type="text/javascript">
-                var divId = "<?php echo $divID; ?>";
-                var link = "<?php echo $src; ?>";
-                var http = "<?php echo HTTP_PATH . ltrim($src, '/'); ?>";
+                $.get('<?php echo HTTP_PATH . ltrim($src , '/'); ?>', function(data) {
+                  $('#<?php echo $divID; ?>').html(data);
+                  console.log('Load of <?php echo $src; ?> was performed with ajax.');
+                });
             </script>
             <?php
         }
