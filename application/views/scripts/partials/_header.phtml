@@ -1,5 +1,9 @@
-<script type="text/javascript" src='/public/js/jquery-1.7.2.min.js'></script>
 <?php 
+if (APPLICATION_ENV == 'development') {
+    ?>
+    <script type="text/javascript" src='/public/js/jquery-1.7.2.min.js'></script>
+    <?php
+}
 
 $translateSession = new Zend_Session_Namespace('Transl8');
 if (!empty($translateSession->onlineTranslationActivated)): ?>
