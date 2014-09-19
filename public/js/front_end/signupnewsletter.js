@@ -88,6 +88,7 @@ function showSignUpPopUp() {
             success : function(data) {
                 $('#sign_up_add_to_favourite').html(data);
                 $('#signup-lightbox').show();
+                $(window).trigger('load');
             }
         });
     }
