@@ -52,7 +52,11 @@ class Shop extends BaseShop
             ->andWhere("rs.deleted = 0")
             ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
+            ->andWhere("c.status = 1")
+            ->andWhere("c.deleted = 0")
             ->leftJoin('c.shop ss')
+            ->andWhere("ss.status = 1")
+            ->andWhere("ss.deleted = 0")
             ->leftJoin('ss.logo img')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return self::removeDuplicateShops($relatedShops, $numberOfShops);
