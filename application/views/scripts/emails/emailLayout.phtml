@@ -88,7 +88,7 @@ if(!empty($this->codeAlert)) {
     $codeAlert = $this->partial(
         $emailsViewPath. 'codeAlert.phtml',
         array(
-            'topOffers' => $this->codeAlert,
+            'codeAlert' => $this->codeAlert,
             'categoryInformation' => $this->categoryInformation,
             'httpPathLocale' => $httpPathLocale,
             'publicPathCdn' => $publicPathCdn,

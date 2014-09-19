@@ -1625,6 +1625,11 @@ class Offer extends BaseOffer
             }
             /***************** End Add news code ********************/
             $offer_id = $this->id;
+            if (isset($params['codealertcheckbox']) && $params['codealertcheckbox'] == '1') {
+                $codeAlertShopId = isset($params['selctedshop']) && $params['selctedshop'] != '' ?
+                    $params['selctedshop'] : '';
+                CodeAlertQueue::saveCodeAlertQueue($codeAlertShopId, $offer_id);
+            }
             $authorId = self::getAuthorId($offer_id);
 
             $uid = $authorId[0]['authorId'];
@@ -2041,14 +2046,14 @@ class Offer extends BaseOffer
     public static function getOfferDetail($offerId)
     {
         $offerDetails = Doctrine_Query::create()
-        ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
+        ->select('o.*,s.refUrl,s.permalink,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
         ->from("Offer o")
         ->leftJoin('o.shop s')
         ->leftJoin('s.affliatenetwork a')
         ->leftJoin('o.page p')
         ->leftJoin('o.termandcondition tc')
         ->leftJoin('o.category cat')
-        ->leftJoin('o.logo img')
+        ->leftJoin('s.logo img')
         ->leftJoin('o.offernews news')
         ->leftJoin('o.tiles t')
         ->addSelect("(SELECT  count(cc.status) FROM CouponCode cc WHERE cc.offerid = o.id and cc.status = 0) as used")

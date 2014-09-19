@@ -76,7 +76,7 @@ class FrontEnd_Helper_Mailer {
                             'siteUrl' => $siteUrl
                         )
                     );
-
-       // $result = $this->mandrill->messages->sendTemplate('main', array($content, $footer, $emailHeader), $message);
+ 
+ //$result = $this->mandrill->messages->sendTemplate('main', array($content, $footer, $emailHeader), $message);
     }
 }

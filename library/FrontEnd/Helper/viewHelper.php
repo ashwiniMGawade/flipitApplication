@@ -739,7 +739,8 @@ EOD;
         $mandrillUsersList,
         $footerContent,
         $pathConstants = '',
-        $emailHeaderText = ''
+        $emailHeaderText = '',
+        $codeAlert = ''
     ) {
         $basePath = new Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
@@ -751,7 +752,8 @@ EOD;
                     'topVouchercodes' => $topVouchercodes,
                     'categoryVouchers' => $categoryVouchers,
                     'categoryInformation' => $categoryInformation,
-                    'pathConstants' => $pathConstants
+                    'pathConstants' => $pathConstants,
+                    'codeAlert' => $codeAlert
                 )
             )
         );

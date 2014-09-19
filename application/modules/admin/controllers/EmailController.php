@@ -351,6 +351,7 @@ class Admin_EmailController extends Zend_Controller_Action
         $codeAlertQueueShopId = $codeAlertQueueParameters['shopId'];
         $codeAlertQueueOfferId = $codeAlertQueueParameters['offerId'];
         CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
+        die;
        // print_r($this->getRequest()->getParams()); die;
     }
     
@@ -381,6 +382,14 @@ class Admin_EmailController extends Zend_Controller_Action
 
         $visitors = CodeAlertQueue::getRecepientsCount();
         echo $this->_helper->json(array('recepients' => $visitors), true);
+    }
+    
+    public function codealertlistAction()
+    {
+        $params = $this->_getAllParams();
+        $codeAlertQueue = CodeAlertQueue::getCodeAlertList($params);
+        echo Zend_Json::encode($codeAlertQueue);
+        die ();
     }
 
     public function codealertsendAction()
@@ -431,43 +440,56 @@ class Admin_EmailController extends Zend_Controller_Action
                 $visitors = $value['shop']['visitors'];
                // echo "<pre>"; print_r($value['shop']['visitors']);
                 $visitorId = array();
-                foreach ($visitors as $key => $visitorvalue) {
-                    $visitorId[] = $visitorvalue['visitorId'];
-                   
-                }
-                $visitorId = implode(',', $visitorId);
-                $this->visitorId = $visitorId;
-              //   echo "<pre>"; print_r($visitorId);
-              //  echo $visitorId."<br>"; 
-              BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this); echo "<pre>"; print_r($this->_to);   
-              //  BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
-            //    $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
-             //   $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
-            //    $categoryName = $topCategories[0]['category']['name'];
-            //    $categoryPermalink = $topCategories[0]['category']['permaLink'];
-             //   $newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
-                try {
-                    /*FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
-                        $topVouchercodes,
-                        $categoryVouchers,
-                        $categoryName.'|'.$categoryPermalink,
-                        $mandrillNewsletterSubject,
-                        $mandrillSenderEmailAddress,
-                        $mandrillSenderName,
-                        $this->_recipientMetaData,
-                        $this->_loginLinkAndData,
-                        $this->_to,
-                        $this->footerContent,
-                        '',
-                        $newsletterHeader['email_header']
-                    );*/
-                    $message = $this->view->translate('Newsletter has been sent successfully');
-                } catch (Mandrill_Error $e) {
-                    $message = $this->view->translate('There is some problem in your data');
-                }
-                $flash->addMessage(array('success' => $message));
-            //    $this->_helper->redirector('emailcontent', 'accountsetting', null);
-            } die;
+                
+                    foreach ($visitors as $key => $visitorvalue) {
+                        $codeAlertVisitors = CodeAlertVisitors::getVisitorsToRemoveInCodeAlert(
+                            $visitorvalue['visitorId'],
+                            $value['id']
+                        );
+                        if (empty($codeAlertVisitors)) {
+                            $visitorId[] = $visitorvalue['visitorId'];
+                        }
+                       
+                    }
+                    if (!empty($visitorId)) {
+                    $visitorId = implode(',', $visitorId);
+                    $this->visitorId = $visitorId;
+                  //  echo $visitorId."<br>"; 
+                  BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this); echo "<pre>"; print_r($visitorId); die;  
+                  //  BackEnd_Helper_MandrillHelper::getHeaderFooterContent($this);
+                //    $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
+                 //   $categoryVouchers = array_slice(Category::getCategoryVoucherCodes($topCategories[0]['categoryId']), 0, 3);
+                //    $categoryName = $topCategories[0]['category']['name'];
+                //    $categoryPermalink = $topCategories[0]['category']['permaLink'];
+
+                    $newsletterHeader = Signupmaxaccount::getEmailHeaderFooter();
+                    try {
+                        FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
+                            $topVouchercodes,
+                            '',
+                            '',
+                            $mandrillNewsletterSubject,
+                            $mandrillSenderEmailAddress,
+                            $mandrillSenderName,
+                            $this->_recipientMetaData,
+                            $this->_loginLinkAndData,
+                            $this->_to,
+                            '',
+                            '',
+                            $newsletterHeader['email_header'],
+                            $value
+                        );
+                        
+                        CodeAlertVisitors::saveCodeAlertVisitors($visitorId, $value['id']);
+                       // CodeAlertQueue::clearCodeAlertQueueByOfferId($value['id']);
+                        $message = $this->view->translate('Newsletter has been sent successfully');
+                    } catch (Mandrill_Error $e) {
+                        $message = $this->view->translate('There is some problem in your data');
+                    }
+                    $flash->addMessage(array('success' => $message));
+                //    $this->_helper->redirector('emailcontent', 'accountsetting', null);
+               die; } 
+           }
         } else {
             $this->_helper->redirector('index', 'index', null);
         }

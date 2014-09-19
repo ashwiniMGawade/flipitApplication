@@ -131,9 +131,13 @@ class Visitor extends BaseVisitor
     public static function getVisitorDetailsByEmail($visitorEmail)
     {
         $visitorDetails = Doctrine_Query::create()->select("v.*")
-        ->from("Visitor v")
-        ->where("v.email='".$visitorEmail."'")
-        ->fetchArray();
+        ->from("Visitor v");
+        if (is_int($visitorEmail)) {
+            $visitorDetails = $visitorDetails->where("v.email='".$visitorEmail."'");
+        } else {
+            $visitorDetails = $visitorDetails->where("v.id='".$visitorEmail."'");
+        }
+        $visitorDetails = $visitorDetails->fetchArray();
         return $visitorDetails;
     }
     

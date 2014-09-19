@@ -1921,4 +1921,13 @@ jQuery.extend(jQuery.validator.prototype , {
 	}
 });
 
-
+function codeAlertToggle(e){
+	
+	var btn = e.target  ? e.target :  e.srcElement ;
+	jQuery(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+	 if(btn.value=='yes'){
+		 jQuery("input#codealertcheckbox").val(1);
+	}else{
+		 jQuery("input#codealertcheckbox").val(0); 
+	 }
+}

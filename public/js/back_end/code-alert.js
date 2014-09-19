@@ -42,7 +42,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
 			"iDisplayStart" : iStart,
 			"aaSorting": [[ iSortCol , iSortDir ]],
 			"sPaginationType" : "bootstrap",
-			"sAjaxSource" : HOST_PATH + "admin/widget/widgetlist/searchText/"+ iSearchText +"/flag/0",
+			"sAjaxSource" : HOST_PATH + "admin/email/codealertlist/searchText/"+ iSearchText +"/flag/0",
 			"aoColumns" : [
 				{
 					"fnRender" : function(obj) {
@@ -57,7 +57,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
 					var tag = "";
 					tag ="<p editId='" + obj.aData.id + 
 					"' class='editId word-wrap-without-margin-widget store-offer'><a href='/admin/offer/editoffer/id/"+
-					 obj.aData.id +"'>Zalando - offer title</a></p>";
+					 obj.aData.id +"'>"+obj.aData.shop.name + " - "+obj.aData.title+"</a></p>";
 					return tag;
 				},
 				"bSearchable" : true,
@@ -67,7 +67,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
 					"fnRender" : function(obj) {
 						var tag = "";
 						if(obj.aData.id){
-							tag = obj.aData.id;
+							tag = obj.aData.visitors;
 						} 
 						return tag; 
 					},
