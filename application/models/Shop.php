@@ -265,16 +265,14 @@ class Shop extends BaseShop
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
             $cacheKeyOfferDetails = 'offerDetails_'  . $shopId . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);       
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(
-                'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops'
-            );
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
