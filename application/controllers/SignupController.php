@@ -147,10 +147,8 @@ class SignupController extends Zend_Controller_Action
                     $this->sendWelcomeMail($visitorId);
                 }
                 $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login');
-                $shopIdNameSpace = new Zend_Session_Namespace('shopId');
-                if (isset($shopIdNameSpace->shopId) && $shopIdNameSpace->shopId!='') {
-                    $shopName = Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
-                    $shopIdNameSpace->shopId = '';
+                if (isset($shopId) && $shopId!='') {
+                    $shopName = Shop::getShopName(base64_decode($shopId));
                     $message = $shopName. " ".  FrontEnd_Helper_viewHelper::
                     __translate('have been added to your favorite shops');
                     $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
@@ -262,7 +260,7 @@ class SignupController extends Zend_Controller_Action
         
     }
 
-    public function signuplightboxsetsesionsAction()
+    public function signuplightboxsetsessionsAction()
     {
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
