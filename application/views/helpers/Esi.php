@@ -90,7 +90,7 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
      */
     public function esi($src)
     {
-        if (!empty($_SERVER['HTTP_X_VARNISH'])) {
+        if (!empty($_SERVER['HTTP_X_VARNISH']) && !isset($_COOKIE['passCache'])) {
             if (!self::$_varnishHeaderSent) {
                 $response = Zend_Controller_Front::getInstance()->getResponse();
                 $response->setHeader(self::$_varnishHeaderName, self::$_varnishHeaderValue);
