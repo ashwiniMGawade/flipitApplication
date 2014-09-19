@@ -127,7 +127,7 @@ function __highlight(s, t) {
     return s.replace(matcher, '<span>$1</span>');
 }
 function validateSearch() {
-    validator = $('form.email-form')
+    validator = $('form#search-form')
     .validate({
         errorClass: 'input-error',
         validClass: 'input-success',
