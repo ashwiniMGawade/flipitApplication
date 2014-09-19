@@ -1,5 +1,5 @@
 <?php 
-if (APPLICATION_ENV == 'development') {
+if (empty($_SERVER['HTTP_X_VARNISH']) || isset($_COOKIE['passCache'])) {
     ?>
     <script type="text/javascript" src='/public/js/jquery-1.7.2.min.js'></script>
     <?php
