@@ -318,7 +318,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
                     <h3>
                        <span>'. $shopName .'</span>'.$offerExclusiveText.'
                     </h3>
-                   <p class="sub-text">' . $offerTitle .'</p>
+                   <p class="sub-text">' . FrontEnd_Helper_viewHelper::replaceStringVariable($offerTitle) .'</p>
                 </div>
             </a>
         </li>';

@@ -391,4 +391,11 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopname = $this->getRequest()->getParam('shopName');
         $this->_helper->layout()->disableLayout();
     }
+
+    public function followbuttonAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopid');
+        $this->view->permalink = $this->getRequest()->getParam('permalink');
+    }
 }

@@ -52,7 +52,11 @@ class Shop extends BaseShop
             ->andWhere("rs.deleted = 0")
             ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
+            ->andWhere("c.status = 1")
+            ->andWhere("c.deleted = 0")
             ->leftJoin('c.shop ss')
+            ->andWhere("ss.status = 1")
+            ->andWhere("ss.deleted = 0")
             ->leftJoin('ss.logo img')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return self::removeDuplicateShops($relatedShops, $numberOfShops);
@@ -261,16 +265,14 @@ class Shop extends BaseShop
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
             $cacheKeyOfferDetails = 'offerDetails_'  . $shopId . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);       
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(
-                'all_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShops'
-            );
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
@@ -1578,10 +1580,10 @@ public static function getShopDetail($shopId)
             # traverse through all catgories
             foreach($shop['category'] as $value) {
                 # check if a category has permalink then add it into array
-                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
                     $urlsArray[] = $categoriesPage . $value['permaLink'];
-                    $urlsArray[] = $categoriesPage . $data['permaLink'] .'/2';
-                    $urlsArray[] = $categoriesPage . $data['permaLink'] .'/3';
+                    $urlsArray[] = $categoriesPage . $value['permaLink'] .'/2';
+                    $urlsArray[] = $categoriesPage . $value['permaLink'] .'/3';
                 }
             }
         }

@@ -73,38 +73,10 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $divContent .=
                 '<h1>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']).'</h1>
                 <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>
-                    '.$shopWebsiteUrlContent. self::getLoveAnchor($shop['id'], $shop['name'], $shop['permaLink']);
+                    '.$shopWebsiteUrlContent;
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
-        
-        $divContent .='</div></div>';
         return $divContent;
-    }
-    
-    public function getLoveAnchor($shopId, $shopName, $shopPermalink)
-    {
-        $visitorId = Auth_VisitorAdapter::hasIdentity() ? Auth_VisitorAdapter::getIdentity()->id : 0;
-        $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $shopPermalink .'&shopId='
-            . base64_encode($shopId);
-        $titleTextForLove = $this->__form('form_Remove from Favourite');
-        $emAndSpan = '<em>'.$this->__translate("I FOLLOW THIS").'</em>
-            <strong>'.$this->__translate("REMOVE").'</strong>';
-        $aTagClasses = 'pop btn btn-sm btn-default remove-fovourite';
-        if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
-            $titleTextForLove = $this->__form("form_Add in Favourite");
-            $emAndSpan = '<span class="glyphicon red-heart glyphicon-heart"></span>
-                <span>'.$this->__translate("FOLLOW").'</span>';
-            $aTagClasses = 'pop btn btn-sm btn-default follow-button';
-        endif;
-
-        $clickEvent = '';
-        if ($visitorId==0) {
-            $redirectUrl = 'javascript:void(0)';
-            $clickEvent = "onclick=showSignUpPopUp();";
-        }
-        return '<a title="'. $titleTextForLove .'" '.$clickEvent.' href="' . $redirectUrl .'" 
-            class="'. $aTagClasses . '">'. $emAndSpan.
-        '</a>';
     }
 }

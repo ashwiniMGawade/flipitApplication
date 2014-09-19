@@ -1218,7 +1218,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
                                         if($overwriteTitle!='None' && $overwriteTitle!=''){
 
-                                            $shopList->overriteTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($overwriteTitle);
+                                            $shopList->overriteTitle = FrontEnd_Helper_viewHelper::replaceStringVariable(BackEnd_Helper_viewHelper::stripSlashesFromString($overwriteTitle));
                                         }
 
                                         if($metaDescription!='None' && $metaDescription!=''){

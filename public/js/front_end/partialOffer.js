@@ -51,6 +51,13 @@ function showCodeInformation(id) {
 }
 
 function printIt(urlToShow) {
+    var flirNameWithExtension = urlToShow.split(".");
+    var htmlTag = '';
+    if (flirNameWithExtension[3] == 'pdf') {
+        htmlTag = 'iframe';
+    } else {
+        htmlTag = 'img';
+    }
     var windowUrl = 'about:blank';
     var uniqueName = new Date();
     var windowName = 'Print' + uniqueName.getTime();
@@ -105,7 +112,7 @@ function printIt(urlToShow) {
     printWindow.document.write('ipt>');
     printWindow.document.write('</head>');
     printWindow.document.write('<body onload="winPrint()" >');
-    printWindow.document.write('<img src="'+urlToShow+'"/>');
+    printWindow.document.write('<'+htmlTag+' src="'+urlToShow+'" width = "100%" height = "100%"/>');
     printWindow.document.write('</body>'); 
     printWindow.document.write('</html>'); 
     printWindow.document.close();

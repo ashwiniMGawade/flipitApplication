@@ -21,7 +21,9 @@ class OfferController extends Zend_Controller_Action
     public function top20Action()
     {
         $pageName = 'top-20';
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pagePermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
