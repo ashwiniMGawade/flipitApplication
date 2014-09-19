@@ -90,7 +90,6 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
      */
     public function esi($src)
     {
-
         if (!empty($_SERVER['HTTP_X_VARNISH'])) {
             // If the ESI headers have not been sent yet do it now
             if (!self::$_varnishHeaderSent) {
@@ -100,31 +99,20 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
             }
             return '<esi:include src="' . HTTP_PATH . ltrim($src, '/') . '"/>';
         } else {
-            // fetch with ajax. We still we wat to show the html
             $divID = rand(0, 99999);
             if (strpos($src, 'login') !== false) {
                 echo '<nav class="account-box" id="'.$divID.'"></nav>';
             } else {
                 echo '<span class="" id="'.$divID.'"></span>';
             }
-            if (APPLICATION_ENV == 'development') {
-                ?>
-                <script type="text/javascript">
-                    $.get('<?php echo HTTP_PATH . ltrim($src , '/'); ?>', function(data) {
-                      $('#<?php echo $divID; ?>').html(data);
-                      console.log('Load of <?php echo $src; ?> was performed with ajax.');
-                    });
-                </script>
-                <?php
-            } else {
-                ?>
-                <script type="text/javascript">
-                    var divId = "<?php echo $divID; ?>";
-                    var link = "<?php echo $src; ?>";
-                    var http = "<?php echo HTTP_PATH . ltrim($src, '/'); ?>";
-                </script>
+            ?>
+            <script type="text/javascript">
+                $.get('<?php echo HTTP_PATH . ltrim($src , '/'); ?>', function(data) {
+                  $('#<?php echo $divID; ?>').html(data);
+                  console.log('Load of <?php echo $src; ?> was performed with ajax.');
+                });
+            </script>
             <?php
-            }
         }
 
     }
