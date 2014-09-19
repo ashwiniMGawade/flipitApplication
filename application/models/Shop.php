@@ -52,7 +52,11 @@ class Shop extends BaseShop
             ->andWhere("rs.deleted = 0")
             ->leftJoin("rs.logo as logo")
             ->leftJoin('s.category c')
+            ->andWhere("c.status = 1")
+            ->andWhere("c.deleted = 0")
             ->leftJoin('c.shop ss')
+            ->andWhere("ss.status = 1")
+            ->andWhere("ss.deleted = 0")
             ->leftJoin('ss.logo img')
             ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
         return self::removeDuplicateShops($relatedShops, $numberOfShops);
@@ -261,13 +265,14 @@ class Shop extends BaseShop
             $cacheKeyShopDetails = 'shopDetails_'  . $shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyShopDetails);
             $cacheKeyOfferDetails = 'offerDetails_'  . $shopId . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);       
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');       
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;
@@ -282,6 +287,14 @@ class Shop extends BaseShop
             ->andWhere('o.enddate >'."'".$currentDate."'")
             ->andWhere('o.deleted=0')->fetchArray();
         return $acitveOfferCount;
+    }
+
+    public static function getShopName($shopId)
+    {
+        $shop = Doctrine_Query::create()->select('s.name')
+            ->from('Shop s')
+            ->where('s.id='.$shopId)->fetchArray();
+        return isset($shop[0]['name']) ? $shop[0]['name'] : '';  
     }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
@@ -1052,7 +1065,7 @@ class Shop extends BaseShop
      * @return array $shopList
      * @version 1.0
      */
-    public static function exportShopeList()
+    public static function exportShopsList()
     {
         $shopList = Doctrine_Query::create()->select('s.*,a.name as affname,c.name,rs.name')
                 ->from("Shop s")
@@ -1562,13 +1575,15 @@ public static function getShopDetail($shopId)
         # check an offerr has one or more categories
         if(isset($shop['category']) && count($shop['category']) > 0) {
 
-            $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
+            $categoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
 
             # traverse through all catgories
             foreach($shop['category'] as $value) {
                 # check if a category has permalink then add it into array
-                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
-                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] ;
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
+                    $urlsArray[] = $categoriesPage . $value['permaLink'];
+                    $urlsArray[] = $categoriesPage . $value['permaLink'] .'/2';
+                    $urlsArray[] = $categoriesPage . $value['permaLink'] .'/3';
                 }
             }
         }
@@ -1888,7 +1903,7 @@ public static function getShopDetail($shopId)
      * @return integer
      * @version 1.0
      */
-    public static function getTimesShopFavourite($shopId)
+    public static function getFavouriteCountOfShop($shopId)
     {
         $data = Doctrine_Query::create()
                 ->select("count(*)")

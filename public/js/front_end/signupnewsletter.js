@@ -75,3 +75,19 @@ function validateSignUpNewsLetter(formName) {
                 }
             });
 }
+function showSignUpPopUp() {
+    var img = $('img.radiusImg').attr('src');
+    $('#sign_up_add_to_favourite').html('');
+    customPopUp('sign_up_add_to_favourite');
+        $.ajax({
+            url : HOST_PATH_LOCALE + "signup/signuplightbox",
+            method : "post",
+            data : {url : img, shopId : $('input#currentShop').val() },
+            type : "post",
+            success : function(data) {
+                $('#sign_up_add_to_favourite').html(data);
+                $('#signup-lightbox').show();
+                $(window).trigger('load');
+            }
+        });
+}

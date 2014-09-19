@@ -41,6 +41,9 @@ class SignupController extends Zend_Controller_Action
 
     public function indexAction()
     {
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical(
+            FrontEnd_Helper_viewHelper::getPagePermalink()
+        );
         if (Auth_VisitorAdapter::hasIdentity()) {
             $this->_redirect(
                 HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
@@ -88,7 +91,8 @@ class SignupController extends Zend_Controller_Action
                         FrontEnd_Helper_viewHelper::__translate('Please enter valid information'),
                         HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'),
                         'signup',
-                        $visitorInformation['emailAddress']
+                        $visitorInformation['emailAddress'],
+                        $visitorInformation['shopId']
                     );
                 }
             } else {
@@ -108,8 +112,14 @@ class SignupController extends Zend_Controller_Action
         $this->_redirect($redirectUrl);
     }
 
-    public function redirectAccordingToMessage($visitorId, $message, $redirectLink, $pageName, $visitorEmail = '')
-    {
+    public function redirectAccordingToMessage(
+        $visitorId,
+        $message,
+        $redirectLink,
+        $pageName,
+        $visitorEmail = '',
+        $shopId = ''
+    ) {
         if (!$visitorId) {
             self::showFlashMessage(
                 $message,
@@ -136,15 +146,19 @@ class SignupController extends Zend_Controller_Action
                     __translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
-                self::showFlashMessage(
-                    $message,
-                    HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'),
-                    'success'
-                );
+                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login');
+                if (isset($shopId) && $shopId!='') {
+                    $shopName = Shop::getShopName(base64_decode($shopId));
+                    $message = $shopName. " ".  FrontEnd_Helper_viewHelper::
+                    __translate('have been added to your favorite shops');
+                    $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                }
+                self::showFlashMessage($message, $redirectUrl, 'success');
             }
         }
         return;
     }
+
     public function sendWelcomeMail($visitorId)
     {
         $visitorDetails = Visitor::getUserDetails($visitorId);
@@ -235,5 +249,34 @@ class SignupController extends Zend_Controller_Action
             $message = FrontEnd_Helper_viewHelper::__translate('Please enter valid information');
         }
         self::redirectAccordingToMessage($visitorId, $message, $redirectLink, 'profile');
+    }
+
+    public function signuplightboxAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $this->view->shopLogo = $this->getRequest()->getParam('url');
+        $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->shopName = Shop::getShopName(base64_decode($this->getRequest()->getParam('shopId')));
+        
+    }
+
+    public function signuplightboxsetsessionsAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $params = $this->getRequest()->getParams();
+        $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
+        $visitorEmail->emailAddressSignup = $params['emailAddress'];
+        $visitorShopId = new Zend_Session_Namespace('shopId');
+        $visitorShopId->shopId = $params['shopId'];
+        $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
+    }
+
+    public function setsessionAction()
+    {
+        $this->_helper->layout->disableLayout();
+        $params = $this->getRequest()->getParams();
+        $visitorShopId = new Zend_Session_Namespace('shopId');
+        $visitorShopId->shopId = $params['shopId'];
+        $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'));
     }
 }

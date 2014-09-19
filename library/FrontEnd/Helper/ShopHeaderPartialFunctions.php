@@ -73,32 +73,10 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
             $divContent .=
                 '<h1>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['title']).'</h1>
                 <h2>'.FrontEnd_Helper_viewHelper::replaceStringVariable($shop['subTitle']).'</h2>
-                    '.$shopWebsiteUrlContent. self::getLoveAnchor($shop['id'], $shop['name']);
+                    '.$shopWebsiteUrlContent;
         } else {
             $divContent .='<h1>'.$offerTitle.'</h1>';
         }
-        
-        $divContent .='</div></div>';
         return $divContent;
-    }
-    
-    public function getLoveAnchor($shopId, $shopName)
-    {
-        $shopPermalink = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') . "/"
-          . FrontEnd_Helper_viewHelper::__link('link_memberonlycodes');
-        $visitorId = Auth_VisitorAdapter::hasIdentity() ? Auth_VisitorAdapter::getIdentity()->id : 0;
-        $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $shopPermalink .'&shopId='
-            . base64_encode($shopId);
-        $titleTextForLove = $this->__form('form_Remove from Favourite');
-        $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart red-heart';
-        if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
-            $loveClassGreyColorOrRedColor = 'glyphicon glyphicon-heart';
-            $titleTextForLove = $this->__form("form_Add in Favourite");
-        endif;
-        return '<a title="'. $titleTextForLove .'" href="' . $redirectUrl .'" 
-            class="pop btn btn-sm btn-default" href="javascript:void(0)">
-            <span class="' . $loveClassGreyColorOrRedColor . '"></span>'.
-            $shopName.
-        '</a>';
     }
 }

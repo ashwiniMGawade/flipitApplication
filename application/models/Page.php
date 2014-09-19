@@ -373,13 +373,9 @@ class Page extends BasePage
         }
 
 
-        $key = "all_allMSArticle".$this->id."_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
         try {
         //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             $pagePermalinkParam =
                 FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
@@ -713,10 +709,9 @@ class Page extends BasePage
             }
             $pageKey ="all_moneysavingpage".$this->id."_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pageKey);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
             $pagePermalinkParam =
@@ -733,10 +728,15 @@ class Page extends BasePage
             $permalink = $this->permaLink ;
 
             #update varnish for this page
-            if(isset($permalink)) {
+            if (isset($permalink)) {
             // Add urls to refresh in Varnish
                 $varnishObj = new Varnish();
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND . $permalink);
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
+                if (!$permalink=='plus') {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink .'/2');
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink.'/3');
+                }
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
             }
 
 

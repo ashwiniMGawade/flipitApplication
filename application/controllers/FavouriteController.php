@@ -21,6 +21,12 @@ class FavouriteController extends Zend_Controller_Action
 
     public function yourbrandsAction()
     {
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessage->getMessages();
+        $this->view->successMessage = isset($message[0]['success']) ?
+        $message[0]['success'] : '';
+        $this->view->errorMessage = isset($message[0]['error']) ?
+        $message[0]['error'] : '';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
             $searchBrandForm = new Application_Form_SearchBrand();
@@ -69,6 +75,7 @@ class FavouriteController extends Zend_Controller_Action
     {
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (Auth_VisitorAdapter::hasIdentity()) {
+            $favoriteShopsOffers = Visitor::getFavoriteShopsOffers();
             $favoriteShopsOffers = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
                 'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_favouriteShopOffers',

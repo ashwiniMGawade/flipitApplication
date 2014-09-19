@@ -687,22 +687,24 @@ class PopularCode extends BasePopularCode
 
     public static function savePopularOffersPosition($offerId)
     {
-        $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
-        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
-        $databaseConnection->query('TRUNCATE TABLE popular_code');
-        $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
-        unset($databaseConnection);
-        $offerId = explode(',', $offerId);
-        $i = 1;
+        if (!empty($offerId)) {
+            $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
+            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
+            $databaseConnection->query('TRUNCATE TABLE popular_code');
+            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
+            unset($databaseConnection);
+            $offerId = explode(',', $offerId);
+            $i = 1;
 
-        foreach ($offerId as $offerIdValue) {
-            $popularCode = new PopularCode();
-            $popularCode->offerId = $offerIdValue;
-            $popularCode->position = $i;
-            $popularCode->type = "MN";
-            $popularCode->status = "1";
-            $popularCode->save();
-            $i++;
+            foreach ($offerId as $offerIdValue) {
+                $popularCode = new PopularCode();
+                $popularCode->offerId = $offerIdValue;
+                $popularCode->position = $i;
+                $popularCode->type = "MN";
+                $popularCode->status = "1";
+                $popularCode->save();
+                $i++;
+            }
         }
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');

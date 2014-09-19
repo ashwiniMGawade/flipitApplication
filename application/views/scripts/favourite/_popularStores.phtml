@@ -27,7 +27,7 @@ foreach ($this->popularShops as $popularShop) :
                     . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') .'&shopId='
                     . base64_encode($popularShop['id']);?>' class="pop btn btn-default">
                         <span class="glyphicon red-heart glyphicon-heart"></span>
-                        <span><?php echo $this->translate('Favourite');?></span>
+                        <span class='follow-text'><?php echo $this->translate('FOLLOW');?></span>
                     </a>
                 </div>
             </div>

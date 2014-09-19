@@ -3175,8 +3175,10 @@ class Offer extends BaseOffer
             # traverse through all catgories
             foreach ($offer['category'] as $value) {
                 # check if a category has permalink then add it into array
-                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
-                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] ;
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
+                    $urlsArray[] = $cetgoriesPage . $value['permaLink'];
+                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] .'/2';
+                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] .'/3';
                 }
             }
         }
@@ -3267,7 +3269,7 @@ class Offer extends BaseOffer
      * @version 1.0
      */
 
-    public static function getTotalAmountOfCouponsShop($shopId, $type='')
+    public static function getTotalAmountOfShopCoupons($shopId, $type='')
     {
         $format = 'Y-m-j H:i:s';
         $date = date($format);
