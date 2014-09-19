@@ -138,9 +138,8 @@ endif;
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
 <?php echo $headerBlock; ?>
 <?php
-$randomNumber = mt_rand();
 echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreInformation[0]['id']
-    .'&permalink='.urlencode($this->currentStoreInformation[0]['permaLink']).'&number='.$randomNumber); 
+    .'&permalink='.urlencode($this->currentStoreInformation[0]['permaLink'])); 
 ?>
 </div></div>
 <div class="row"> 
