@@ -424,7 +424,10 @@ header#header {
     .lightbox{
         padding:30px 31px 23px;
         position:relative;
-        .btn-close {
+        .transl8-link-container {
+            display: block;        
+        }
+        a.btn-close {
             color: #a7a7a7;
             cursor: pointer;
             font-size: 16px;
@@ -433,6 +436,10 @@ header#header {
             right: 12px;
             top: 11px;
             text-decoration: none;
+            &:hover,&:focus{
+                color: #616060;
+                text-decoration: none;
+            }
         }
         .block{
             max-width: 600px;
@@ -515,6 +522,14 @@ div#sign_up_add_to_favourite {
                 }
                 button[type="submit"] {
                     width: 100%;
+                }
+            }
+            .singup-heading{
+                .first-p{
+                    line-height: 25px;
+                }
+                .second-p{
+                    line-height: 25px;
                 }
             }
         }
