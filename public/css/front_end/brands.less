@@ -155,10 +155,11 @@
 	a.remove-fovourite{
 		min-width: 100px;
 		width: 120px;
-		height: 30px;
+		height: auto;
+		padding: 9px;
 		&:hover{
 			.remove-fovourite-btn-gradiant;
-			padding: 9px 35px;
+			padding: 9px;
 		}
 	}
 	#sidebar{
@@ -210,7 +211,7 @@
 		}
 		.remove-fovourite{
 			&:hover{
-				padding: 9px 34px;
+				padding: 9px;
 			}
 		}
 		.share-forms{
@@ -273,7 +274,19 @@
 				padding:45px 25px;
 			}
 		}
+		a.remove-fovourite{
+			min-width: 100px;
+			width: 92px;
+			height: auto;
+			&:hover{
+				.remove-fovourite-btn-gradiant;
+				padding: 9px;
+			}
+		}
 		#sidebar{
+			.pop{
+				font-size: 8px;
+			}
 			.box{padding:23px 20px;}
 			.share-forms{
 				padding:16px 20px 19px;
@@ -308,6 +321,9 @@
 			}
 		}
 		#sidebar{
+			.pop{
+				font-size: 10px;
+			}
 			.block{margin:0 0 20px;}
 			.box{padding:23px 15px;}
 			.share-forms{
