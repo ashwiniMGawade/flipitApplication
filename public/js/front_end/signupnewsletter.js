@@ -78,7 +78,6 @@ function validateSignUpNewsLetter(formName) {
 function showSignUpPopUp() {
     var img = $('img.radiusImg').attr('src');
     $('#sign_up_add_to_favourite').html('');
-    if (!(/(Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini)/i.test(navigator.userAgent) )) {
     customPopUp('sign_up_add_to_favourite');
         $.ajax({
             url : HOST_PATH_LOCALE + "signup/signuplightbox",
@@ -91,5 +90,4 @@ function showSignUpPopUp() {
                 $(window).trigger('load');
             }
         });
-    }
 }
