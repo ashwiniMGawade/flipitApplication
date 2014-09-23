@@ -18,7 +18,7 @@ class CodeAlertVisitors extends BaseCodeAlertVisitors
             ->select("c.visitorId")
             ->from("CodeAlertVisitors c")
             ->where('offerId = '.$offerId)
-            ->where('visitorId = '.$visitorId)
+            ->andWhere('visitorId = '.$visitorId)
             ->fetchArray();
         return $visitors;
     }

@@ -132,7 +132,7 @@ class Visitor extends BaseVisitor
     {
         $visitorDetails = Doctrine_Query::create()->select("v.*")
         ->from("Visitor v");
-        if (is_int($visitorEmail)) {
+        if (!ctype_digit($visitorEmail)) {
             $visitorDetails = $visitorDetails->where("v.email='".$visitorEmail."'");
         } else {
             $visitorDetails = $visitorDetails->where("v.id='".$visitorEmail."'");

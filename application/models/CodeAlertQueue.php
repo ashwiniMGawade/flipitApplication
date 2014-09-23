@@ -62,6 +62,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         ->from('CodeAlertQueue c')
         ->fetchArray();
         $offers =  array();
+        $ooo = array();
         $visitorsCount = 0;
         foreach ($codeAlertOfferIds as $codeAlertOfferId) {
             $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
@@ -80,6 +81,42 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         } 
 
  
+        return $ooo;
+    }
+
+    public static function getLatestCodeAlertByTestEmail($visitorEmail)
+    {
+        $visitorInformation = Visitor::getVisitorDetailsByEmail($visitorEmail);
+        $shopId = FavoriteShop::getShopsByVisitorId($visitorInformation[0]['id']);
+       
+        foreach ($shopId as $shopIdvalue) {
+            $filteredShopId = $shopIdvalue['shopId'];
+            $codeAlertOfferIds = Doctrine_Query::create()
+                ->select('c.offerId,c.shopId')
+                ->from('CodeAlertQueue c')
+                ->where("c.shopId =$filteredShopId")
+                ->orderBy('c.id DESC')
+                ->limit(1)
+                ->fetchArray();
+        }
+        
+        $offers =  array();
+        $ooo = array();
+        $visitorsCount = 0;
+        foreach ($codeAlertOfferIds as $codeAlertOfferId) {
+            $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
+            if (!empty($shop)) {
+                foreach (Offer::getOfferDetail($codeAlertOfferId['offerId']) as $key => $value) {
+                    $offers = $value;
+                    $offers['shop']['visitors'] = array(
+                        array(
+                            'visitorId' => $visitorInformation[0]['id']
+                        )
+                    );
+                    $ooo[] = $offers;
+                }
+            }
+        }
         return $ooo;
     }
 
