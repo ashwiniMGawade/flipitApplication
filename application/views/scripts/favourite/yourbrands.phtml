@@ -28,7 +28,12 @@ if($this->successMessage!='' || $this->errorMessage!='') : ?>
 endif;
 ?>
 <div class="title-box">
-    <h1><?php echo $this->translate('Hey'). " " . $this->userDetails['firstName'];?></h1>
+    <h1>
+        <?php
+        $visitorFirstName = isset($this->userDetails['firstName']) ? $this->userDetails['firstName'] : '';
+        echo $this->translate('Hey'). " " . $visitorFirstName;
+        ?>
+    </h1>
     <?php echo $this->translate('How are you? Let’s save some money for you!');?>
 </div>
 <div class="row">

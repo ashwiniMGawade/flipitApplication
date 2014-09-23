@@ -45,10 +45,6 @@ class FavouriteController extends Zend_Controller_Action
             } else {
                 $stores = $this->_helper->Favourite->getPopularStores();
             }
-            $cacheKey =
-            FrontEnd_Helper_viewHelper::
-            getPermalinkAfterRemovingSpecialChracter($searchBrandForm->getValue('searchBrand'));
-            
             $this->view->popularShops = FavoriteShop::filterAlreadyFavouriteShops($stores);
             $this->view->favouriteShops = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache(
@@ -67,7 +63,7 @@ class FavouriteController extends Zend_Controller_Action
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );
-            $this->view->userDetails = $userDetails[0];
+            $this->view->userDetails = isset($userDetails[0]) ? $userDetails[0] : '';
             $this->view->pageCssClass = 'brands-page';
         } else {
             $this->_redirect('/');
