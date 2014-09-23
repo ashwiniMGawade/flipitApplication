@@ -119,20 +119,6 @@ if($this->shopEditor != null):
         )
     );
 endif;
-
-$signUpWidgetForm = '';
-if ($this->currentStoreInformation[0]['showSignupOption']) :
-    $signUpWidgetForm = $this->partial(
-        $partialViewPath.'_signupForm.phtml',
-        array(
-           'zendForm' => $this->sidebarWidgetForm,
-           'signupFormWidgetType'=> 'sidebarWidget',
-           'shopId'=>$this->currentStoreInformation[0]['id'],
-           'shopLogoOrDefaultImage'=>''
-        )
-    );
-endif;
-
 ?>
 <input type="hidden" name="currentShop" id="currentShop" 
 value= "<?php echo base64_encode($this->currentStoreInformation[0]['id']);?>"/>
@@ -164,10 +150,15 @@ echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreIn
             'latestShopUpdates'=> $this->latestShopUpdates,
             'shopChain' => $this->shopChain,
             'shop' => $this->currentStoreInformation[0],
-            'popularStoresList'=> $this->popularStoresList,
-            'signUpWidgetForm' => $signUpWidgetForm
+            'popularStoresList'=> $this->popularStoresList
             )
     );
+    if ($this->currentStoreInformation[0]['showSignupOption']) :
+        $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
+        $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
+        $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
+            .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
+    endif;
     ?>
     </aside>
 </div>
