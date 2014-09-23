@@ -40,15 +40,6 @@ if ($this->pageMode == true) {
             $pageContent ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
         }
     } 
-    $signUpWidgetForm = $this->partial(
-        $partialsViewPath.'_signupForm.phtml',
-        array(
-           'zendForm' => $this->sidebarWidgetForm,
-           'signupFormWidgetType'=> 'sidebarWidget',
-           'shopId'=>'',
-           'shopLogoOrDefaultImage'=>''
-        )
-    );
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     $imagePath = isset($this->pageHeaderImage['path']) ? $this->pageHeaderImage['path'] : '';
     $imageName = isset($this->pageHeaderImage['name']) ? $this->pageHeaderImage['name'] : '';
@@ -60,7 +51,13 @@ if ($this->pageMode == true) {
             <?php echo $pageContent; ?>
         </div>
         <aside class="col-md-4 col-sm-4" id="sidebar"> 
-            <?php echo $this->widget . $frontendSidebarHelper->socialMediaWidget(). $signUpWidgetForm; ?>  
+            <?php echo $this->widget . $frontendSidebarHelper->socialMediaWidget();
+            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+            $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
+            $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
+            $this->esi($this->locale.'signup/signupwidget?shopId='
+                .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
+             ?>  
         </aside> 
     </div>
 <?php 

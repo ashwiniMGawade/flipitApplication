@@ -20,16 +20,6 @@ if ($this->storesInformation != '' && $this->storesInformation != null) :
         array('storesInformation' => $this->storesInformation)
     );
 endif;
-
-$signUpWidgetForm = $this->partial(
-    'partials/_signupForm.phtml',
-    array(
-       'zendForm' => $this->sidebarWidgetForm,
-       'signupFormWidgetType'=> 'sidebarWidget',
-       'shopId'=> '',
-       'shopLogoOrDefaultImage'=>''
-    )
-);
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
@@ -43,7 +33,11 @@ echo $storesInformation;
     </div>
     <aside id="sidebar" class="col-md-4 col-sm-4 col-sm-4">
 <?php
-echo $signUpWidgetForm;
+$this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+$sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
+$sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
+$this->esi($this->locale.'signup/signupwidget?shopId='
+    .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
 $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
 echo $frontendSidebarHelper->socialMediaWidget();
 ?>

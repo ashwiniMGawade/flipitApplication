@@ -101,8 +101,10 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
             $divID = rand(0, 99999);
             if (strpos($src, 'login') !== false) {
                 echo '<nav class="account-box" id="'.$divID.'"></nav>';
-            } else {
+            } elseif (strpos($src, 'followbutton') !== false) {
                 echo '<span class="" id="'.$divID.'"></span>';
+            } else {
+                echo '<div class="" id="'.$divID.'"></div>';
             }
             ?>
             <script type="text/javascript">

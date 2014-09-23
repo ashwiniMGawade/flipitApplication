@@ -279,4 +279,35 @@ class SignupController extends Zend_Controller_Action
         $visitorShopId->shopId = $params['shopId'];
         $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login'));
     }
+
+    
+    public function signupwidgetAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
+        $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
+        $zendFormNamespace = new Zend_Session_Namespace('zendFormSidebar');
+        $this->view->zendForm =  unserialize($zendFormNamespace->zendFormSidebar);
+    }
+
+    public function signupwidgetlargeAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
+        $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
+        $zendFormNamespace = new Zend_Session_Namespace('zendFormLarge');
+        $this->view->zendForm =  unserialize($zendFormNamespace->zendFormLarge);
+    }
+
+    public function signupwidgetfooterAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
+        $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
+        $zendFormNamespace = new Zend_Session_Namespace('zendFormFooter');
+        $this->view->zendForm =  unserialize($zendFormNamespace->zendFormFooter);
+    }
 }

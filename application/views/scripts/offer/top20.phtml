@@ -22,17 +22,6 @@ if(count($this->top20PopularOffers) > 0):
     );
 endif;
 
-$signUpWidgetForm = '';
-$signUpWidgetForm = $this->partial(
-    $partialViewPath.'_signupForm.phtml',
-    array(
-       'zendForm' => $this->sidebarWidgetForm,
-       'signupFormWidgetType'=> 'sidebarWidget',
-       'shopId'=>'',
-       'shopLogoOrDefaultImage'=>''
-    )
-);
-
 $popularStores = '';
 if (!empty($this->popularStores)) :
      $popularStores = $this->partial(
@@ -48,7 +37,12 @@ echo $popularStores; ?>
     </div>
     <aside class="col-md-4 col-sm-4" id="sidebar">
 <?php
-echo $signUpWidgetForm;
+$this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+$sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
+$sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
+$this->esi($this->locale.'signup/signupwidget?shopId='
+    .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
+
 $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
 echo $frontendSidebarHelper->socialMediaWidget('top20');
 ?>
