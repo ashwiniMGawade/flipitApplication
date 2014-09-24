@@ -1,5 +1,4 @@
 <?php
-$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
 $this->minifyHeadScript()->appendFile("public/js/front_end/signupnewsletter.js");
 $pageHeader = new FrontEnd_Helper_PageHeaderPartialFunctions();
 echo $pageHeader->getCategoryOrPageHeader(
@@ -18,16 +17,6 @@ if (!empty($this->authorsWithPagination)) {
 } else {
     $authorsList = $this->translate('No Records Found');
 }
-$signUpWidgetForm = '';
-$signUpWidgetForm = $this->partial(
-    $partialViewPath.'_signupForm.phtml',
-    array(
-       'zendForm' => $this->sidebarWidgetForm,
-       'signupFormWidgetType'=> 'sidebarWidget',
-       'shopId'=>'',
-       'shopLogoOrDefaultImage'=>''
-    )
-);
 ?>
 <div class="row">
     <?php echo $authorsList;?>
@@ -37,7 +26,11 @@ $signUpWidgetForm = $this->partial(
     echo $frontendSidebarHelper->popularCategoryWidget();
     echo $frontendSidebarHelper->popularShopWidget();
     echo $frontendSidebarHelper->socialMediaWidget();
-    echo $signUpWidgetForm;
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
+    $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
+    $this->esi($this->locale.'signup/signupwidget?shopId='
+        .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     ?>
     </aside>
 </div>

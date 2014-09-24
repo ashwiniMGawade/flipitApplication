@@ -101,6 +101,15 @@ class Page extends BasePage
         return true;
     }
 
+    public static function addSpecialPagesOffersCount($spcialPageId, $offersCount)
+    {
+        $updatePage = Doctrine_Query::create()
+            ->update('Page p')
+            ->set('p.offersCount', $offersCount)
+            ->where('p.id='.$spcialPageId)
+            ->execute();
+        return true;
+    }
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -230,6 +239,8 @@ class Page extends BasePage
     public function savePage($params)
     {
         $this->pageType='default';
+        $this->maxOffers  = 0;
+        $this->oderOffers = 0; 
         if (isset($params['selectedpageType'])){
 
               $this->pageType='offer';
@@ -290,6 +301,7 @@ class Page extends BasePage
         }
 
         $this->publish   = 1;
+        $this->timeOrder   = 0;
         if($params['savePagebtn']=='draft'){
             $this->publish   = 0;
         }
@@ -364,14 +376,17 @@ class Page extends BasePage
         }
 
 
-        $key = "all_allMSArticle".$this->id."_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
         try {
         //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryspeciallist_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+            $pagePermalinkParam =
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
+
+        
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
+
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             //$getPage = Doctrine_Core::getTable ( 'Page' )->findOneBy ( "permalink", $params['pagepermalink'] );
@@ -690,7 +705,6 @@ class Page extends BasePage
         //call cache function
             $slug = $this->pageAttributeId;
             $pagedatakey ="all_". "pagedata".$slug ."_list";
-
             $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pagedatakey);
             //key not exist in cache
             if(!$flag) {
@@ -698,10 +712,15 @@ class Page extends BasePage
             }
             $pageKey ="all_moneysavingpage".$this->id."_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pageKey);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryspeciallist_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+
+
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
+            $pagePermalinkParam =
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
+
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -712,10 +731,15 @@ class Page extends BasePage
             $permalink = $this->permaLink ;
 
             #update varnish for this page
-            if(isset($permalink)) {
+            if (isset($permalink)) {
             // Add urls to refresh in Varnish
                 $varnishObj = new Varnish();
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND . $permalink);
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
+                if (!$permalink=='plus') {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink .'/2');
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink.'/3');
+                }
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
             }
 
 
@@ -867,7 +891,10 @@ public static function exportpagelist()
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+       
+
         return $id;
     }
 
@@ -891,7 +918,9 @@ public static function exportpagelist()
 
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+
         return 1;
     }
     /**
@@ -919,7 +948,9 @@ public static function exportpagelist()
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_speciallist_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+
         return $id;
 
     }

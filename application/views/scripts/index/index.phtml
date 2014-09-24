@@ -61,7 +61,7 @@ echo $top9StoresContents;
     <?php
     $homePagePartial = new FrontEnd_Helper_HomePagePartialFunctions(); 
     echo $homePagePartial->getHomePageLeftColumn($homePageTopNewOffersCategoriesAndSpecialGuidesData);
-    echo $homePagePartial->getHomePageRightColumnOffersList();
+    echo "<div id='ajaxContent'>".$homePagePartial->getHomePageRightColumnOffersList()."</div>";
     ?>
     </div>
 </div>

@@ -7,8 +7,6 @@
  *
  */
 
-new VisitorExport();
-
 class VisitorExport
 {
     protected $_localePath  = '/';
@@ -21,13 +19,13 @@ class VisitorExport
         require_once('CommonMigrationFunctions.php');
 
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
-        foreach ( $connections as $key => $connection ) {
+        foreach ($connections as $key => $connection) {
             // check if database is a site
             if ($key != 'imbull') {
                 try {
-                    $this->exportVisitors( $connection ['dsn'], $key);
-                } catch ( Exception $e ) {
-                    echo $e->getMessage ()."\n\n";
+                    $this->exportVisitors($connection ['dsn'], $key);
+                } catch (Exception $e) {
+                    echo $e->getMessage()."\n\n";
                 }
             }
         }
@@ -38,12 +36,15 @@ class VisitorExport
         try {
 
             $this->dbh = CommonMigrationFunctions::connectionToPDO($dsn);
-
             $pathToTempExcelFolder = CommonMigrationFunctions::pathToTempExcelFolder($keyIn);
-            $visitorFile    = $pathToTempExcelFolder . "visitorList.csv";
+            $locale = $keyIn == 'en' ? "-NL" : "-".strtoupper($keyIn);
+            $visitorFile    = $pathToTempExcelFolder . "visitorList".$locale.".csv";
             $fp             = fopen($visitorFile, 'w');
 
             print "Parse visitors data and save it into excel file\n";
+
+            $currentDateAndTime = array('Genration Date and Time', date('Y-m-d H:i:s'));
+            fputcsv($fp, $currentDateAndTime, ';');
 
             $headers = array(
                 'Name',
@@ -133,7 +134,9 @@ class VisitorExport
 
             echo "\n $keyIn - Visitors have been exported successfully!!!";
 
-            if($keyIn == 'en') $keyIn = 'excels';
+            if ($keyIn == 'en') {
+                $keyIn = 'excels';
+            }
 
             CommonMigrationFunctions::copyDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn, UPLOAD_DATA_FOLDER_EXCEL_PATH.$keyIn);
             CommonMigrationFunctions::deleteDirectory(UPLOAD_EXCEL_TMP_PATH.$keyIn);
@@ -143,3 +146,4 @@ class VisitorExport
         }
     }
 }
+new VisitorExport();

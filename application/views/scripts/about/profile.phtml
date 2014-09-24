@@ -1,5 +1,4 @@
 <?php 
-$this->minifyHeadScript()->appendFile("public/js/front_end/socialmedia.js");
 $authorName = FrontEnd_Helper_AuthorPartialFunctions::
     getAuthorName($this->authorDetails['firstName'], $this->authorDetails['lastName']);
 $authorDetails  = '';
@@ -27,18 +26,7 @@ endif;
 
 $discussion = $this->partial(
         $partialViewPath.'_discussion.phtml',
-        array('authorName' => $authorName)
-);
-
-$signUpWidgetForm = '';
-$signUpWidgetForm = $this->partial(
-        $partialViewPath.'_signupForm.phtml',
-        array(
-                'zendForm' => $this->sidebarWidgetForm,
-                'signupFormWidgetType'=> 'sidebarWidget',
-                'shopId'=>'',
-                'shopLogoOrDefaultImage'=>''
-        )
+        array('authorName' => $authorName, 'discussionComments' => $this->discussionComments)
 );
 ?>
 <div class="row">
@@ -51,8 +39,12 @@ $signUpWidgetForm = $this->partial(
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     echo $frontendSidebarHelper->popularCategoryWidget().
     $frontendSidebarHelper->popularShopWidget().
-    $frontendSidebarHelper->socialMediaWidget().
-    $signUpWidgetForm;
+    $frontendSidebarHelper->socialMediaWidget();
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
+    $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
+    $this->esi($this->locale.'signup/signupwidget?shopId='
+        .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     ?>
     </aside>
 </div>

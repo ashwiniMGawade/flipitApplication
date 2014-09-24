@@ -9,7 +9,7 @@ $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
 $plusViewPath = 'plus/';
 $discussion = $this->partial(
     'partials/_discussion.phtml',
-    array('shopName' =>'')
+    array('shopName' =>'','discussionComments' => $this->discussionComments)
 );
 $articleInformation = $this->partial(
     $plusViewPath.'_articleInformation.phtml',

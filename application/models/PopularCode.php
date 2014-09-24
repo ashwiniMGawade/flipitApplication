@@ -463,12 +463,12 @@ class PopularCode extends BasePopularCode
         }
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
         return $flag;
 
     }
@@ -511,10 +511,11 @@ class PopularCode extends BasePopularCode
             }
             //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
             $key = 'all_widget5_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -550,10 +551,9 @@ class PopularCode extends BasePopularCode
                 ->execute();
 
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
                 $key = 'all_widget5_list';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -572,8 +572,7 @@ class PopularCode extends BasePopularCode
      * @version 1.0
      */
     public static function moveUp($currentCodeId, $currentPosition, $previousCodeId, $previousCodePosition)
-    {
-       
+    {       
         $changeCurrentCodePosition = Doctrine_Query::create()
             ->update('PopularCode')
             ->set('position', $previousCodePosition)
@@ -590,8 +589,8 @@ class PopularCode extends BasePopularCode
       
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         $key = 'all_widget5_list';
@@ -611,7 +610,6 @@ class PopularCode extends BasePopularCode
     public static function moveDown($currentCodeId, $currentPosition, $nextCodeId)
     {
         $nextCodePosition = (intval($currentPosition) + 1);
-
         $changeCurrentCodePosition = Doctrine_Query::create()
             ->update('PopularCode')
             ->set('position', $nextCodePosition)
@@ -626,8 +624,9 @@ class PopularCode extends BasePopularCode
 
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('top_20_offers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_feed');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
         $key = 'all_widget5_list';
@@ -684,6 +683,38 @@ class PopularCode extends BasePopularCode
 
         return false ;
 
+    }
+
+    public static function savePopularOffersPosition($offerId)
+    {
+        if (!empty($offerId)) {
+            $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
+            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
+            $databaseConnection->query('TRUNCATE TABLE popular_code');
+            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
+            unset($databaseConnection);
+            $offerId = explode(',', $offerId);
+            $i = 1;
+
+            foreach ($offerId as $offerIdValue) {
+                $popularCode = new PopularCode();
+                $popularCode->offerId = $offerIdValue;
+                $popularCode->position = $i;
+                $popularCode->type = "MN";
+                $popularCode->status = "1";
+                $popularCode->save();
+                $i++;
+            }
+        }
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularcode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShopsHome_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularvaouchercode_list_shoppage');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
     }
 
 }

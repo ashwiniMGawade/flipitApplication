@@ -1,7 +1,8 @@
 <?php
 $categoryHeaderImage =
-    PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryheaderimage']['path']
-    .$this->categoryDetails[0]['categoryheaderimage']['name'];
+    isset($this->categoryDetails[0]['categoryheaderimage']['path'])
+    ? PUBLIC_PATH_CDN.$this->categoryDetails[0]['categoryheaderimage']['path']
+    .$this->categoryDetails[0]['categoryheaderimage']['name'] : '';
 $categoryPartial = new FrontEnd_Helper_PageHeaderPartialFunctions();
 echo $categoryPartial->getCategoryOrPageHeader($this->categoryDetails[0]['name'], $categoryHeaderImage);
 $partialsViewPath = 'partials/';
@@ -21,15 +22,6 @@ if (count($this->offersWithPagination)>0) {
 } else {
     $offers ='<div class = "no-record">' . $this->translate('No record found') .'</div>';
 }
-$signUpWidgetForm = $this->partial(
-    $partialsViewPath.'_signupForm.phtml',
-    array(
-        'zendForm' => $this->sidebarWidgetForm,
-        'signupFormWidgetType'=> 'sidebarWidget',
-        'shopId'=>'',
-        'shopLogoOrDefaultImage'=>''
-    )
-);
 ?> 
 <div class="row">
     <div class="col-md-8 col-sm-8" id="content">
@@ -41,7 +33,11 @@ $signUpWidgetForm = $this->partial(
     echo $frontendSidebarHelper->popularCategoryWidget();
     echo $frontendSidebarHelper->socialMediaWidget();
     echo $frontendSidebarHelper->popularShopWidget();
-    echo $signUpWidgetForm;
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
+    $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
+    $this->esi($this->locale.'signup/signupwidget?shopId='
+        .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     ?>
     </aside>
 </div>

@@ -15,27 +15,27 @@ echo $this->shopName!= ''
 ?>
     </strong>
 </header>
-<section id="disqus_thread" class="section section-comments"></section>
+<section id="disqus_thread" class="section section-comments" style="display: none;"></section>
 <script type="text/javascript">
     var disqus_shortname = '<?php echo $this->translate('disqus_shortname');?>';
 </script>
 <?php
-echo $this->inlineScript()->appendFile($this->baseUrl("public/js/front_end/disqus.js"));
+$this->minifyHeadScript()->appendFile("/public/js/front_end/disqusComments.js");
 ?>
-<noscript><?php echo $this->translate('Please enable JavaScript to view the'); ?>
-    <a href="http://disqus.com/?ref_noscript">
-<?php
-echo $this->translate('comments powered by Disqus.');
-?>
-    </a>
-</noscript>
-<a href="http://disqus.com" class="dsq-brlink">
-<?php
-echo $this->translate('comments powered by');
-?>
-    <span class="logo-disqus">
-<?php
-echo $this->translate('Disqus');
-?>
-    </span>
-</a>
+<div id="disqusComments" style="background:#fff;">
+    <section class="section tips-section tips-section-2">
+        <?php
+        if (!empty($this->discussionComments)) {
+            foreach ($this->discussionComments as $discussionComment) {
+            ?>
+                <article class= "block">
+                    <h5><b><?php echo $discussionComment['author_name'];?></b></h5>
+                    <b><?php echo $discussionComment['created_at'];?></b>
+                    <div class="box"><?php echo $discussionComment['message'];?></div>
+                </article>
+            <?php      
+            }
+        }
+        ?>
+    </section>
+</div>

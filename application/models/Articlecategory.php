@@ -32,6 +32,28 @@ class Articlecategory extends BaseArticlecategory
                                             ->from('RefArticlecategoryRelatedcategory')
                                             ->execute();
     }
+
+    public static function getAllUrls($id)
+    {
+        $artcileData = Doctrine_Query::create()
+                        ->select("ac.permalink,a.permalink")
+                        ->from('Articlecategory ac')
+                        ->leftJoin("ac.articles a")
+                        ->where("ac.id=?", $id)
+                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $urlsArray = array();
+        if (isset($artcileData['permalink'])) {
+            $urlsArray[] = $artcileData['permalink'];
+        }
+        if (isset($artcileData['articles']) && count($artcileData['articles']) > 0) {
+            foreach ($artcileData['articles'] as $artcileValue) {
+                if (isset($artcileValue['permalink']) && strlen($artcileValue['permalink']) > 0) {
+                    $urlsArray[] = $artcileValue['permalink'];
+                }
+            }
+        }
+        return $urlsArray ;
+    }
     ####################### Refactored ##############################
 
     public function addcategory($params)
@@ -54,8 +76,6 @@ class Articlecategory extends BaseArticlecategory
                 return false;
             }
         }
-
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_articlecategory_list');
         $categoryImageExtension = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
         $this->ArtCatIcon->ext = $categoryImageExtension;
         try {
@@ -247,7 +267,6 @@ class Articlecategory extends BaseArticlecategory
             }
             //print_r($getPage[0]['permalink']); die;
             //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_articlecategory_list');
 
             $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
             $edit->ArtCatIcon->ext = $ext;
@@ -287,18 +306,12 @@ class Articlecategory extends BaseArticlecategory
                     $artArr[] = $pageIds[$i]['pageid'];
                 }
                 $page_ids = array_unique($artArr);
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
-                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
-
-                foreach($page_ids as $ids):
-
-                    $key = "all_allMSArticle".$ids."_list";
-                    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-                endforeach;
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
 
 
@@ -337,8 +350,6 @@ class Articlecategory extends BaseArticlecategory
 
             $id = null;
         }
-        //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_articlecategory_list');
 
         $pageIds = self::findPageId($id);
         $artArr = array();
@@ -346,18 +357,12 @@ class Articlecategory extends BaseArticlecategory
             $artArr[] = $pageIds[$i]['pageid'];
         }
         $page_ids = array_unique($artArr);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mspagepopularCodeAtTheMoment_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoryWiseArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_recentlyAddedArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_plus_popularshop_list');
-
-        foreach($page_ids as $ids):
-
-            $key = "all_allMSArticle".$ids."_list";
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
-        endforeach;
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
         return $id;
 
@@ -417,33 +422,5 @@ class Articlecategory extends BaseArticlecategory
      * @author Surinderpal Singh
      * @return array array of urls
      */
-    public static function getAllUrls($id)
-    {
-        $data  = Doctrine_Query::create()->select("ac.permalink,a.permalink")
-                            ->from('Articlecategory ac')
-                            ->leftJoin("ac.articles a")
-                            ->where("ac.id=? " , $id)
-                            ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-        $urlsArray = array();
-
-        $cetgoriesPage = 'pluscat' .'/' ;
-
-        # check for article permalink
-        if(isset($data['permalink'])) {
-            $urlsArray[] = $cetgoriesPage . $data['permalink'];
-        }
-
-        # check an article has one or more categories
-        if(isset($data['articles']) && count($data['articles']) > 0) {
-            # traverse through all catgories
-            foreach($data['articles'] as $value) {
-                # check if a category has permalink then add it into array
-                if(isset($value['permalink']) && strlen($value['permalink']) > 0 ) {
-                    $urlsArray[] = $cetgoriesPage . $value['permalink'] ;
-                }
-            }
-        }
-        return $urlsArray ;
-    }
+   
 }

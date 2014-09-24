@@ -165,7 +165,7 @@ class PopularShop extends BasePopularShop
             }
             }
             //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
             //die();
             }
 
@@ -233,8 +233,8 @@ public static function addShopInList($title)
 
 }
 //call cache function
-FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
 return $flag;
 
     }
@@ -252,12 +252,11 @@ return $flag;
                             $pc = Doctrine_Query::create()->delete('PopularShop')
                             ->where('id=' . $id)->execute();
                             //change position by 1 of each below element
-                            $q = Doctrine_Query::create()->update('PopularShop p')
-                            ->set('p.position', 'p.position -1')
-                            ->where('p.position >' . $position)->execute();
+                           
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('search_pageHeader_image');
 
                         }
                     }
@@ -289,8 +288,8 @@ return $flag;
                             $pc->position = $pos;
                             $pc->save();
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
                             return true ;
                         }
                         return false ;
@@ -324,8 +323,8 @@ return $flag;
                             $pc->position = $pos;
                             $pc->save();
                             //call cache function
-                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularshop_list');
                             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+                            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
                             return true ;
                         }
                         return false ;
@@ -333,5 +332,27 @@ return $flag;
 
 
                     }
+
+    public static function savePopularShopsPosition($shopId)
+    {
+        if (!empty($shopId)) {
+            $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
+            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
+            $databaseConnection->query('TRUNCATE TABLE popular_shop');
+            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
+            unset($databaseConnection);
+            $shopId = explode(',', $shopId);
+            $i = 1;
+            foreach ($shopId as $shopIdValue) {
+                $popularShop = new PopularShop();
+                $popularShop->shopId = $shopIdValue;
+                $popularShop->position = $i;
+                $popularShop->type = "MN";
+                $popularShop->save();
+                $i++;
+            }
+        }
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
+    }
 
 }

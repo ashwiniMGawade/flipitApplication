@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.0.4
+-- version 4.1.11
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Jun 24, 2014 at 06:46 AM
--- Server version: 5.6.12-log
--- PHP Version: 5.4.16
+-- Generation Time: Aug 29, 2014 at 03:18 PM
+-- Server version: 5.6.17
+-- PHP Version: 5.5.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -17,10 +17,8 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `flipit_test`
+-- Database: `kortingscode_site`
 --
-CREATE DATABASE IF NOT EXISTS `flipit_test` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `flipit_test`;
 
 -- --------------------------------------------------------
 
@@ -36,7 +34,7 @@ CREATE TABLE IF NOT EXISTS `about` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=14 ;
 
 -- --------------------------------------------------------
 
@@ -50,7 +48,7 @@ CREATE TABLE IF NOT EXISTS `adminfavoriteshp` (
   `userId` int(11) NOT NULL COMMENT 'FK to user.id',
   PRIMARY KEY (`id`),
   KEY `shopId_idx` (`shopId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2633 ;
 
 -- --------------------------------------------------------
 
@@ -63,13 +61,13 @@ CREATE TABLE IF NOT EXISTS `affliate_network` (
   `name` text,
   `status` tinyint(1) DEFAULT NULL,
   `replacewithid` bigint(20) DEFAULT NULL COMMENT 'FK to affliate_network.id , Defines a network is merged or not',
-  `subId` text,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `subId` text,
   PRIMARY KEY (`id`),
   KEY `replacewithid_idx` (`replacewithid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=18 ;
 
 -- --------------------------------------------------------
 
@@ -89,10 +87,11 @@ CREATE TABLE IF NOT EXISTS `articlecategory` (
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `categorytitlecolor` text NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `categoryiconid` (`categoryiconid`),
   KEY `categoryiconid_idx` (`categoryiconid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
 
 -- --------------------------------------------------------
 
@@ -118,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `articles` (
   `thumbnailsmallid` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `thumbnailid` (`thumbnailid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=62 ;
 
 -- --------------------------------------------------------
 
@@ -137,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `articleviewcount` (
   `deleted` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `articleid_idx` (`articleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8326 ;
 
 -- --------------------------------------------------------
 
@@ -153,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `article_chapter` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7307 ;
 
 -- --------------------------------------------------------
 
@@ -191,7 +190,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   KEY `name_10` (`name`),
   KEY `categoryFeaturedImageId_foreign_key` (`categoryFeaturedImageId`),
   KEY `categoryHeaderImageId_foreign_key` (`categoryHeaderImageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=24 ;
 
 -- --------------------------------------------------------
 
@@ -216,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `conversions` (
   PRIMARY KEY (`id`),
   KEY `offer_conversion_idx` (`offerId`,`converted`,`IP`),
   KEY `shop_conversion_idx` (`shopId`,`converted`,`IP`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3317548 ;
 
 -- --------------------------------------------------------
 
@@ -230,8 +229,9 @@ CREATE TABLE IF NOT EXISTS `couponcode` (
   `code` varchar(255) DEFAULT NULL,
   `status` tinyint(1) DEFAULT '1' COMMENT '1-available ,0-used',
   PRIMARY KEY (`id`),
-  KEY `offerid_idx` (`offerid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `offerid_idx` (`offerid`),
+  KEY `couponcode_idx` (`offerid`,`status`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8107 ;
 
 -- --------------------------------------------------------
 
@@ -256,27 +256,27 @@ CREATE TABLE IF NOT EXISTS `dashboard` (
   `updated_at` datetime DEFAULT NULL,
   `total_no_of_shops_online_code_thisweek` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `emailcampain`
+-- Table structure for table `disqus_comments`
 --
 
-CREATE TABLE IF NOT EXISTS `emailcampain` (
+CREATE TABLE IF NOT EXISTS `disqus_comments` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `sender` text,
-  `subject` text,
-  `header` text,
-  `footer` text,
-  `status` smallint(6) DEFAULT NULL,
-  `recipients` tinyint(1) DEFAULT NULL,
-  `send_at` datetime DEFAULT NULL,
+  `comment_id` bigint(20) DEFAULT NULL,
+  `message` varchar(255) DEFAULT NULL,
+  `page_title` varchar(255) DEFAULT NULL,
+  `page_url` varchar(255) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `deleted` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  `author_name` varchar(255) DEFAULT NULL,
+  `author_profile_url` varchar(255) DEFAULT NULL,
+  `author_avtar` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `page_url_comments_idx` (`page_url`),
+  KEY `message_comments_idx` (`message`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -366,7 +366,7 @@ CREATE TABLE IF NOT EXISTS `excluded_keyword` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=802 ;
 
 -- --------------------------------------------------------
 
@@ -397,9 +397,10 @@ CREATE TABLE IF NOT EXISTS `favorite_shop` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
+  KEY `ind_fvshop_sid` (`shopId`),
   KEY `fav_cascade` (`visitorId`),
   KEY `shop_visitor_id_idx` (`shopId`,`visitorId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=44235 ;
 
 -- --------------------------------------------------------
 
@@ -419,7 +420,7 @@ CREATE TABLE IF NOT EXISTS `footer` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -436,8 +437,9 @@ CREATE TABLE IF NOT EXISTS `image` (
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`id`),
+  KEY `type_idx` (`type`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4395 ;
 
 -- --------------------------------------------------------
 
@@ -450,7 +452,20 @@ CREATE TABLE IF NOT EXISTS `interestingcategory` (
   `userId` int(11) NOT NULL COMMENT 'FK to user.id',
   `categoryid` bigint(20) NOT NULL COMMENT 'FK to category.id',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1575 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `locale_settings`
+--
+
+CREATE TABLE IF NOT EXISTS `locale_settings` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `locale` varchar(10) DEFAULT NULL,
+  `timezone` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -470,7 +485,7 @@ CREATE TABLE IF NOT EXISTS `mainmenu` (
   `url` varchar(255) DEFAULT NULL,
   `position` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -493,7 +508,7 @@ CREATE TABLE IF NOT EXISTS `media` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `mediaimageid_idx` (`mediaimageid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=167 ;
 
 -- --------------------------------------------------------
 
@@ -513,7 +528,7 @@ CREATE TABLE IF NOT EXISTS `menu` (
   `url` varchar(255) DEFAULT NULL,
   `position` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=84 ;
 
 -- --------------------------------------------------------
 
@@ -561,7 +576,7 @@ CREATE TABLE IF NOT EXISTS `moneysaving_article` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `articleid` (`articleid`),
   KEY `articleid_idx` (`articleid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9 ;
 
 -- --------------------------------------------------------
 
@@ -576,7 +591,7 @@ CREATE TABLE IF NOT EXISTS `newslettersub` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -623,8 +638,9 @@ CREATE TABLE IF NOT EXISTS `offer` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `offerlogoid` (`offerlogoid`),
   KEY `shopid_idx` (`shopid`),
-  KEY `offerlogoid_idx` (`offerlogoid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `ind_offer_exdist` (`exclusivecode`,`discounttype`,`startdate`,`title`,`enddate`,`visability`,`approved`),
+  KEY `ind_offer_shenex` (`shopid`,`enddate`,`exclusivecode`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=34520 ;
 
 -- --------------------------------------------------------
 
@@ -645,7 +661,7 @@ CREATE TABLE IF NOT EXISTS `offer_news` (
   `updated_at` datetime DEFAULT NULL,
   `deleted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1448 ;
 
 -- --------------------------------------------------------
 
@@ -667,7 +683,7 @@ CREATE TABLE IF NOT EXISTS `offer_tiles` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `offerId` (`offerId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=317 ;
 
 -- --------------------------------------------------------
 
@@ -725,10 +741,12 @@ CREATE TABLE IF NOT EXISTS `page` (
   `updated_at` datetime NOT NULL,
   `customheader` text,
   `pageHeaderImageId` bigint(20) DEFAULT NULL,
+  `showsitemap` tinyint(4) NOT NULL DEFAULT '0',
+  `offersCount` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `pageattributeid_idx` (`pageattributeid`),
   KEY `pageHeaderImageId_foreign_key` (`pageHeaderImageId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=82 ;
 
 -- --------------------------------------------------------
 
@@ -743,7 +761,7 @@ CREATE TABLE IF NOT EXISTS `page_attribute` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=4 ;
 
 -- --------------------------------------------------------
 
@@ -763,7 +781,7 @@ CREATE TABLE IF NOT EXISTS `popular_category` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `categoryid` (`categoryid`),
   KEY `categoryid_idx` (`categoryid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -781,9 +799,8 @@ CREATE TABLE IF NOT EXISTS `popular_code` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `offerid` (`offerid`),
-  KEY `offerid_idx` (`offerid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  UNIQUE KEY `offerid` (`offerid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=888 ;
 
 -- --------------------------------------------------------
 
@@ -803,7 +820,7 @@ CREATE TABLE IF NOT EXISTS `popular_shop` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `shopid` (`shopid`),
   KEY `shopid_idx` (`shopid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=160 ;
 
 -- --------------------------------------------------------
 
@@ -823,7 +840,7 @@ CREATE TABLE IF NOT EXISTS `popular_vouchercodes` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `vaoucherofferid` (`vaoucherofferid`),
   KEY `vaoucherofferid_idx` (`vaoucherofferid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=12 ;
 
 -- --------------------------------------------------------
 
@@ -838,7 +855,7 @@ CREATE TABLE IF NOT EXISTS `ref_articlecategory_relatedcategory` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=194 ;
 
 -- --------------------------------------------------------
 
@@ -853,7 +870,7 @@ CREATE TABLE IF NOT EXISTS `ref_article_category` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1693 ;
 
 -- --------------------------------------------------------
 
@@ -871,7 +888,7 @@ CREATE TABLE IF NOT EXISTS `ref_article_store` (
   KEY `articleid` (`articleid`),
   KEY `storeid` (`storeid`),
   KEY `article_shop_id_idx` (`articleid`,`storeid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19743 ;
 
 -- --------------------------------------------------------
 
@@ -889,7 +906,7 @@ CREATE TABLE IF NOT EXISTS `ref_excludedkeyword_shop` (
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
   KEY `keyword_shop_id_idx` (`keywordid`,`shopid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2694 ;
 
 -- --------------------------------------------------------
 
@@ -907,7 +924,7 @@ CREATE TABLE IF NOT EXISTS `ref_offer_category` (
   KEY `offerid_idx` (`offerid`),
   KEY `categoryid_idx` (`categoryid`),
   KEY `offer_category_id_idx` (`categoryid`,`offerid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=40896 ;
 
 -- --------------------------------------------------------
 
@@ -925,7 +942,7 @@ CREATE TABLE IF NOT EXISTS `ref_offer_page` (
   KEY `offerid_idx` (`offerid`),
   KEY `pageid_idx` (`pageid`),
   KEY `offer_page_id_idx` (`pageid`,`offerid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=9351 ;
 
 -- --------------------------------------------------------
 
@@ -944,7 +961,7 @@ CREATE TABLE IF NOT EXISTS `ref_page_widget` (
   PRIMARY KEY (`id`),
   KEY `pageid_idx` (`pageid`),
   KEY `widgetid_idx` (`widgetid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=851 ;
 
 -- --------------------------------------------------------
 
@@ -962,7 +979,7 @@ CREATE TABLE IF NOT EXISTS `ref_shop_category` (
   KEY `shopid_idx` (`shopid`),
   KEY `categoryid_idx` (`categoryid`),
   KEY `shop_category_id_idx` (`shopid`,`categoryid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=22378 ;
 
 -- --------------------------------------------------------
 
@@ -978,8 +995,9 @@ CREATE TABLE IF NOT EXISTS `ref_shop_relatedshop` (
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`),
-  KEY `shop_relatedshop_id_idx` (`shopId`,`relatedshopId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `shop_relatedshop_id_idx` (`shopId`,`relatedshopId`),
+  KEY `shop_relatedshop_idx` (`shopId`,`relatedshopId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=31127 ;
 
 -- --------------------------------------------------------
 
@@ -997,7 +1015,7 @@ CREATE TABLE IF NOT EXISTS `route_permalink` (
   `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `permalink_idx` (`permalink`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15694 ;
 
 -- --------------------------------------------------------
 
@@ -1014,7 +1032,7 @@ CREATE TABLE IF NOT EXISTS `route_redirect` (
   `deleted` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `orignalurl_idx` (`orignalurl`(255))
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=75429 ;
 
 -- --------------------------------------------------------
 
@@ -1035,7 +1053,7 @@ CREATE TABLE IF NOT EXISTS `seen_in` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `logoid` (`logoid`),
   KEY `logoid_idx` (`logoid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7 ;
 
 -- --------------------------------------------------------
 
@@ -1053,7 +1071,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=38 ;
 
 -- --------------------------------------------------------
 
@@ -1124,14 +1142,14 @@ CREATE TABLE IF NOT EXISTS `shop` (
   `chainId` bigint(20) DEFAULT NULL,
   `strictconfirmation` tinyint(1) NOT NULL DEFAULT '0',
   `howToIntroductionText` longblob,
+  `brandingcss` text,
   PRIMARY KEY (`id`),
   UNIQUE KEY `logoid` (`logoid`),
   UNIQUE KEY `howtousesmallimageid` (`howtousesmallimageid`),
   UNIQUE KEY `howtousebigimageid` (`howtousebigimageid`) USING BTREE,
-  KEY `logoid_idx` (`logoid`),
   KEY `affliatenetworkid_idx` (`affliatenetworkid`),
   KEY `howtousepageid_idx` (`howtousepageid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1862 ;
 
 -- --------------------------------------------------------
 
@@ -1150,7 +1168,7 @@ CREATE TABLE IF NOT EXISTS `shopviewcount` (
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `shopid_idx` (`shopid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=254367 ;
 
 -- --------------------------------------------------------
 
@@ -1166,7 +1184,7 @@ CREATE TABLE IF NOT EXISTS `shop_howto_chapter` (
   `created_at` datetime DEFAULT NULL,
   `updated_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5139 ;
 
 -- --------------------------------------------------------
 
@@ -1182,7 +1200,7 @@ CREATE TABLE IF NOT EXISTS `signupcodes` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=3 ;
 
 -- --------------------------------------------------------
 
@@ -1198,7 +1216,7 @@ CREATE TABLE IF NOT EXISTS `signupfavoriteshop` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `store_id` (`store_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -1211,13 +1229,12 @@ CREATE TABLE IF NOT EXISTS `signupmaxaccount` (
   `entered_uid` int(20) NOT NULL,
   `no_of_acc` varchar(255) DEFAULT NULL,
   `status` int(20) NOT NULL,
-  `email_confirmation` tinyint(1) NOT NULL DEFAULT '0',
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
-  `max_account` bigint(20) DEFAULT NULL,
+  `email_confirmation` tinyint(1) DEFAULT '0',
   `email_header` longblob,
   `email_footer` longblob,
-  `locale` varchar(50) DEFAULT NULL,
+  `max_account` bigint(20) DEFAULT NULL,
   `emailperlocale` text NOT NULL,
   `sendername` varchar(255) NOT NULL DEFAULT '',
   `emailsubject` varchar(255) NOT NULL DEFAULT '',
@@ -1230,12 +1247,11 @@ CREATE TABLE IF NOT EXISTS `signupmaxaccount` (
   `homepagebanner_path` varchar(255) DEFAULT NULL,
   `homepage_widget_banner_name` varchar(255) DEFAULT NULL,
   `homepage_widget_banner_path` varchar(255) DEFAULT NULL,
-  `timezone` varchar(255) DEFAULT NULL,
   `newletter_is_scheduled` tinyint(1) DEFAULT '0' COMMENT '1-scheduled ,0-manual',
   `newletter_status` tinyint(1) DEFAULT '0' COMMENT '1-sent ,0-unsent, this is only used in case of scheduled newsletters',
-  `newletter_scheduled_time` datetime DEFAULT '2014-01-23 12:11:30' COMMENT 'newsletter scheduled timestamp',
+  `newletter_scheduled_time` datetime DEFAULT '2014-01-23 12:11:26' COMMENT 'newsletter scheduled timestamp',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -1251,7 +1267,7 @@ CREATE TABLE IF NOT EXISTS `special` (
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=2 ;
 
 -- --------------------------------------------------------
 
@@ -1271,7 +1287,7 @@ CREATE TABLE IF NOT EXISTS `special_list` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `specialofferid` (`specialpageid`),
   KEY `specialofferid_idx` (`specialpageid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=17 ;
 
 -- --------------------------------------------------------
 
@@ -1288,7 +1304,23 @@ CREATE TABLE IF NOT EXISTS `term_and_condition` (
   `updated_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   KEY `offerid_idx` (`offerid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=16493 ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `translations`
+--
+
+CREATE TABLE IF NOT EXISTS `translations` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `translationKey` text,
+  `translation` text,
+  `created_at` datetime DEFAULT NULL,
+  `updated_at` datetime DEFAULT NULL,
+  `deleted` tinyint(1) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=182 ;
 
 -- --------------------------------------------------------
 
@@ -1325,8 +1357,9 @@ CREATE TABLE IF NOT EXISTS `view_count` (
   `counted` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `offerid_idx` (`offerid`),
-  KEY `offer_click_count_idx` (`offerid`,`onclick`,`counted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  KEY `offer_click_count_idx` (`offerid`,`onclick`,`counted`),
+  KEY `memberid_idx` (`memberid`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=7554454 ;
 
 -- --------------------------------------------------------
 
@@ -1361,11 +1394,12 @@ CREATE TABLE IF NOT EXISTS `visitor` (
   `profile_img` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `active_codeid` varchar(255) CHARACTER SET utf8 NOT NULL,
   `active` tinyint(1) DEFAULT NULL,
-  `changepasswordrequest` tinyint(4) NOT NULL COMMENT 'true=1,false=0',
+  `changepasswordrequest` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `email` (`email`),
-  KEY `imageid_idx` (`imageid`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+  KEY `imageid_idx` (`imageid`),
+  KEY `createdby_idx` (`createdby`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=267472 ;
 
 -- --------------------------------------------------------
 
@@ -1378,9 +1412,8 @@ CREATE TABLE IF NOT EXISTS `visitor_keyword` (
   `keyword` varchar(255) DEFAULT NULL,
   `visitorId` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `vis_cascade` (`visitorId`),
   KEY `visitorId_idx` (`visitorId`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=273618 ;
 
 -- --------------------------------------------------------
 
@@ -1401,8 +1434,9 @@ CREATE TABLE IF NOT EXISTS `votes` (
   `updated_at` datetime NOT NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   `visitorid` bigint(20) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+  PRIMARY KEY (`id`),
+  KEY `offer_id_idx` (`offerId`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1416 ;
 
 -- --------------------------------------------------------
 
@@ -1422,7 +1456,150 @@ CREATE TABLE IF NOT EXISTS `widget` (
   `updated_at` datetime NOT NULL,
   `deleted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=26 ;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `affliate_network`
+--
+ALTER TABLE `affliate_network`
+  ADD CONSTRAINT `affliate_network_replacewithid_affliate_network_id` FOREIGN KEY (`replacewithid`) REFERENCES `affliate_network` (`id`);
+
+--
+-- Constraints for table `articlecategory`
+--
+ALTER TABLE `articlecategory`
+  ADD CONSTRAINT `articlecategory_ibfk_1` FOREIGN KEY (`categoryiconid`) REFERENCES `image` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `articles`
+--
+ALTER TABLE `articles`
+  ADD CONSTRAINT `articles_ibfk_2` FOREIGN KEY (`thumbnailid`) REFERENCES `image` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `category`
+--
+ALTER TABLE `category`
+  ADD CONSTRAINT `categoryFeaturedImageId_foreign_key` FOREIGN KEY (`categoryFeaturedImageId`) REFERENCES `image` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `categoryHeaderImageId_foreign_key` FOREIGN KEY (`categoryHeaderImageId`) REFERENCES `image` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `category_categoryiconid_image_id` FOREIGN KEY (`categoryiconid`) REFERENCES `image` (`id`);
+
+--
+-- Constraints for table `favorite_shop`
+--
+ALTER TABLE `favorite_shop`
+  ADD CONSTRAINT `fav_cascade` FOREIGN KEY (`visitorId`) REFERENCES `visitor` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `media`
+--
+ALTER TABLE `media`
+  ADD CONSTRAINT `media_mediaimageid_image_id` FOREIGN KEY (`mediaimageid`) REFERENCES `image` (`id`);
+
+--
+-- Constraints for table `moneysaving_article`
+--
+ALTER TABLE `moneysaving_article`
+  ADD CONSTRAINT `moneysaving_article_ibfk_1` FOREIGN KEY (`articleid`) REFERENCES `articles` (`id`);
+
+--
+-- Constraints for table `offer`
+--
+ALTER TABLE `offer`
+  ADD CONSTRAINT `offer_offerlogoid_image_id` FOREIGN KEY (`offerlogoid`) REFERENCES `image` (`id`),
+  ADD CONSTRAINT `offer_shopid_shop_id` FOREIGN KEY (`shopid`) REFERENCES `shop` (`id`);
+
+--
+-- Constraints for table `page`
+--
+ALTER TABLE `page`
+  ADD CONSTRAINT `pageHeaderImageId_foreign_key` FOREIGN KEY (`pageHeaderImageId`) REFERENCES `image` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `page_pageattributeid_page_attribute_id` FOREIGN KEY (`pageattributeid`) REFERENCES `page_attribute` (`id`);
+
+--
+-- Constraints for table `popular_code`
+--
+ALTER TABLE `popular_code`
+  ADD CONSTRAINT `popular_code_offerid_offer_id` FOREIGN KEY (`offerid`) REFERENCES `offer` (`id`);
+
+--
+-- Constraints for table `popular_shop`
+--
+ALTER TABLE `popular_shop`
+  ADD CONSTRAINT `popular_shop_shopid_shop_id` FOREIGN KEY (`shopid`) REFERENCES `shop` (`id`);
+
+--
+-- Constraints for table `ref_article_store`
+--
+ALTER TABLE `ref_article_store`
+  ADD CONSTRAINT `ref_article_store_ibfk_1` FOREIGN KEY (`articleid`) REFERENCES `articles` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  ADD CONSTRAINT `ref_article_store_ibfk_2` FOREIGN KEY (`storeid`) REFERENCES `shop` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `ref_offer_category`
+--
+ALTER TABLE `ref_offer_category`
+  ADD CONSTRAINT `ref_offer_category_categoryid_category_id` FOREIGN KEY (`categoryid`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `ref_offer_category_offerid_offer_id` FOREIGN KEY (`offerid`) REFERENCES `offer` (`id`);
+
+--
+-- Constraints for table `ref_offer_page`
+--
+ALTER TABLE `ref_offer_page`
+  ADD CONSTRAINT `ref_offer_page_offerid_offer_id` FOREIGN KEY (`offerid`) REFERENCES `offer` (`id`),
+  ADD CONSTRAINT `ref_offer_page_pageid_page_id` FOREIGN KEY (`pageid`) REFERENCES `page` (`id`);
+
+--
+-- Constraints for table `ref_page_widget`
+--
+ALTER TABLE `ref_page_widget`
+  ADD CONSTRAINT `ref_page_widget_pageid_page_id` FOREIGN KEY (`pageid`) REFERENCES `page` (`id`),
+  ADD CONSTRAINT `ref_page_widget_widgetid_widget_id` FOREIGN KEY (`widgetid`) REFERENCES `widget` (`id`);
+
+--
+-- Constraints for table `ref_shop_category`
+--
+ALTER TABLE `ref_shop_category`
+  ADD CONSTRAINT `ref_shop_category_categoryid_category_id` FOREIGN KEY (`categoryid`) REFERENCES `category` (`id`),
+  ADD CONSTRAINT `ref_shop_category_shopid_shop_id` FOREIGN KEY (`shopid`) REFERENCES `shop` (`id`);
+
+--
+-- Constraints for table `seen_in`
+--
+ALTER TABLE `seen_in`
+  ADD CONSTRAINT `seen_in_logoid_image_id` FOREIGN KEY (`logoid`) REFERENCES `image` (`id`);
+
+--
+-- Constraints for table `shop`
+--
+ALTER TABLE `shop`
+  ADD CONSTRAINT `shop_affliatenetworkid_affliate_network_id` FOREIGN KEY (`affliatenetworkid`) REFERENCES `affliate_network` (`id`),
+  ADD CONSTRAINT `shop_howtousebigid_image_id` FOREIGN KEY (`howtousebigimageid`) REFERENCES `image` (`id`),
+  ADD CONSTRAINT `shop_howtousepageid_page_id` FOREIGN KEY (`howtousepageid`) REFERENCES `page` (`id`),
+  ADD CONSTRAINT `shop_howtousesmallimageid_image_id` FOREIGN KEY (`howtousesmallimageid`) REFERENCES `image` (`id`),
+  ADD CONSTRAINT `shop_logoid_image_id` FOREIGN KEY (`logoid`) REFERENCES `image` (`id`);
+
+--
+-- Constraints for table `signupfavoriteshop`
+--
+ALTER TABLE `signupfavoriteshop`
+  ADD CONSTRAINT `signupfavoriteshop_ibfk_1` FOREIGN KEY (`store_id`) REFERENCES `shop` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+--
+-- Constraints for table `term_and_condition`
+--
+ALTER TABLE `term_and_condition`
+  ADD CONSTRAINT `term_and_condition_offerid_offer_id` FOREIGN KEY (`offerid`) REFERENCES `offer` (`id`);
+
+--
+-- Constraints for table `view_count`
+--
+ALTER TABLE `view_count`
+  ADD CONSTRAINT `view_count_offerid_offer_id` FOREIGN KEY (`offerid`) REFERENCES `offer` (`id`);
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

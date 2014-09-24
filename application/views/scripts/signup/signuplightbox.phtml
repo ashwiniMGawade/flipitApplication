@@ -1,0 +1,41 @@
+<section id="signup-lightbox">
+    <div id="popup1" class="lightbox">
+        <a class="glyphicon glyphicon-remove btn-close" onclick="customPopUpClose()"></a>
+        <header class="head">
+            <div class="icon">
+                <img src="<?php echo $this->shopLogo;?>" width="176" height="89" alt="image description">
+            </div>
+        </header>
+        <div class='singup-heading'>
+            <p class='first-p'><?php echo $this->shopName . " " . $this->translate('your favorite shop!');?></p>
+            <p class='second-p'>
+                <?php echo $this->translate('Stay up to date and receive code alerts from')." " .$this->shopName;?>
+            </p>
+        </div>
+        <div class="block">
+            <form id='singupFormInLightbox' name='singupFormInLightbox' role="form"
+                class="form-signin newsletter" method="POST" 
+                action='<?php echo HTTP_PATH_LOCALE
+                .FrontEnd_Helper_viewHelper::__link("link_inschrijven") ."/"
+                .FrontEnd_Helper_viewHelper::__link("link_signuplightboxsetsessions");?>'>
+                <input id="shopId" type="hidden" value="" name="shopId">
+                <input id="formName" type="hidden" value="singupFormInLightbox" name="formName">
+                <input class="form-control" type="text" name='emailAddress' id='emailAddress'>
+                <button 
+                    onclick="setHiddenFieldValue(), signUpNewsLetter('singupFormInLightbox')" 
+                    type="submit" class="btn blue btn-lg btn-primary">
+                    <?php echo FrontEnd_Helper_viewHelper::__form('form_Sing up');?>
+                </button>
+            </form>
+        </div>
+        <footer class="bottom">
+            <?php echo $this->translate('Already a member?');?>
+            <a class='link' rel="nofollow" 
+                href="<?php echo HTTP_PATH_LOCALE 
+                .FrontEnd_Helper_viewHelper::__link("link_inschrijven") ."/"
+                . FrontEnd_Helper_viewHelper::__link('link_setsession'). "/". $this->shopId; ?>">
+                <?php echo $this->translate('Sign In'); ?>
+            </a>
+        </footer>
+    </div>
+</section>

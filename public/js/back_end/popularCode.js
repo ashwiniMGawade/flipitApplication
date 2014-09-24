@@ -23,7 +23,47 @@ $(document).ready(function() {
 		//code for selection of li
 		$('ul#mostPopularCode li').click(changeSelectedClass);
 		
-		
+		$( "#mostPopularCode" ).sortable();
+	    $( "#mostPopularCode" ).disableSelection();
+		$( "#mostPopularCode" ).on( "sortstop", function( event, ui ) {
+			var offerid = new Array();
+			$('.ui-state-default').each(function(){
+		        offerid.push($(this).attr('reloffer'));
+		    });
+			$('div.image-loading-icon').append("<img id='img-load' src='" +  HOST_PATH  + "/public/images/validating.gif'/>");
+		    var offerid = offerid.toString();
+			$.ajax({
+		        type : "POST",
+		        url : HOST_PATH + "admin/popularcode/savepopularoffersposition",
+		        method : "post",
+		        dataType : 'json',
+		        data: { offerid: offerid },
+		        success : function(json) { 
+					$('#img-load').remove();
+					$( "#mostPopularCode" ).sortable( "refresh" );
+					$( "#mostPopularCode" ).sortable( "refreshPositions" );
+					$('ul#mostPopularCode li').remove();
+						var li = '';
+
+					if(json!=''){
+						for(var i in json)
+							{
+								lockImage = HOST_PATH + "public/images/back_end/stock_lock.png";
+							    image = "<img src=" + lockImage + " height='20' style='float:right' width='20'>";
+							 	li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' >" + json[i].offer.title + "</span>" + image + "</li>";
+
+							}
+						$('ul#mostPopularCode').append(li);
+						$('ul#mostPopularCode li').click(changeSelectedClass);
+					}
+					bootbox.alert(__('Popular offers successfully updated.'));
+					setTimeout(function(){
+					  bootbox.hideAll();
+					}, 3000);
+		        }
+		    });
+
+	 	});
 		
 });
 /**
@@ -202,7 +242,7 @@ function addNewOffer() {
 	    						}else{
 	    							image = "";
 	    						}
-	     						var li  = "<li reltype='" + data.type + "' relpos='" + data.position + "' reloffer='" + data.offerId + "' id='" + data.id + "' ><span>" + data.title.replace(/\\/g, '')  + "</span>"+ image + "</li>";
+	     						var li  = "<li class='ui-state-default' reltype='" + data.type + "' relpos='" + data.position + "' reloffer='" + data.offerId + "' id='" + data.id + "' ><span>" + data.title.replace(/\\/g, '')  + "</span>"+ image + "</li>";
 	     						$('ul#mostPopularCode').append(li);
 	     						
 	     						$('ul#mostPopularCode li#'+ data.id).click(changeSelectedClass);
@@ -347,7 +387,7 @@ function deletePopularCode() {
 						}else{
 							image = "";
 						}
-						li+= "<li reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" + json[i].offer.title +"</span>" + image + "</li>";
+						li+= "<li class='ui-state-default' reltype='" + json[i].type + "' relpos='" + json[i].position + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" + json[i].offer.title +"</span>" + image + "</li>";
  						
 						
 					}

@@ -107,14 +107,18 @@ EOD;
 
         $socialMediaValue =
             array(
-                'og:title'=>$headMetaValue->facebookTitle,
+                'og:title'=>FrontEnd_Helper_viewHelper::replaceStringVariable($headMetaValue->facebookTitle),
                 'og:type'=>'website',
                 'og:url'=> $headMetaValue->facebookShareUrl,
-                'og:description'=>$headMetaValue->facebookDescription,
+                'og:description'=>FrontEnd_Helper_viewHelper::replaceStringVariable(
+                    $headMetaValue->facebookDescription
+                ),
                 'og:locale'=>$ogLocale,
                 'og:image'=>$headMetaValue->facebookImage,
                 'og:site_name'=>$site_name,
-                'twitter:description'=>$headMetaValue->twitterDescription,
+                'twitter:description'=>FrontEnd_Helper_viewHelper::replaceStringVariable(
+                    $headMetaValue->twitterDescription
+                ),
                 'twitter:site'=>$site_name
         );
         return $socialMediaValue;
@@ -426,20 +430,26 @@ EOD;
         }
 
         $facebookShareUrl = $permaLink != '' ? HTTP_PATH_LOCALE . $permaLink : rtrim(HTTP_PATH_LOCALE, '/');
-        $currentObject->view->headTitle($metaTitle);
-        $currentObject->view->headMeta()->setName('description', $metaDescription);
-        $currentObject->view->facebookTitle = $title;
+        $currentObject->view->headTitle(FrontEnd_Helper_viewHelper::replaceStringVariable($metaTitle));
+        $currentObject->view->headMeta()->setName(
+            'description',
+            FrontEnd_Helper_viewHelper::replaceStringVariable($metaDescription)
+        );
+        $currentObject->view->facebookTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($title);
         $currentObject->view->facebookShareUrl = $facebookShareUrl;
         $currentObject->view->facebookImage = $image;
-        $currentObject->view->facebookDescription = $metaDescription;
+        $currentObject->view->facebookDescription = FrontEnd_Helper_viewHelper::replaceStringVariable(
+            $metaDescription
+        );
         if (LOCALE == '') {
             $facebookLocale = '';
         } else {
             $facebookLocale = LOCALE;
         }
         $currentObject->view->facebookLocale = $facebookLocale;
-        $currentObject->view->twitterDescription = $metaDescription;
-
+        $currentObject->view->twitterDescription = FrontEnd_Helper_viewHelper::replaceStringVariable(
+            $metaDescription
+        );
         if (isset($customHeader)) {
             $currentObject->view->layout()->customHeader =
                 $currentObject->view->layout()->customHeader . $customHeader . "\n";
@@ -610,23 +620,23 @@ EOD;
         return $text;
     }
    
-    public static function gethomeSections($offertype, $flag = "")
+    public static function gethomeSections($offertype, $limit = "")
     {
         switch ($offertype) {
             case "popular":
-                $result = PopularCode::gethomePopularvoucherCode($flag);
+                $result = PopularCode::gethomePopularvoucherCode($limit);
                 break;
             case "newest":
-                $result = PopularVouchercodes::getNewstoffer($flag);
+                $result = PopularVouchercodes::getNewstoffer($limit);
                 break;
             case "category":
-                $result = Category::getPopularCategories($flag);
+                $result = Category::getPopularCategories($limit);
                 break;
             case "specialList":
-                $result = $data = SpecialList::getfronendsplpage($flag);
+                $result = $data = SpecialList::getfronendsplpage($limit);
                 break;
             case "moneySaving":
-                $result = Articles::getmoneySavingArticles($flag);
+                $result = Articles::getmoneySavingArticles($limit);
                 break;
             case "asseenin":
                 $result = SeenIn::getSeenInContent();
@@ -918,9 +928,20 @@ EOD;
 
     public static function getServerNameScheme()
     {
-        $httpUrlScheme = parse_url($_SERVER['SERVER_NAME']);
-        $httpUrlScheme = isset($httpUrlScheme['path']) ? explode('.', $httpUrlScheme['path']) : '';
-        $httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : 'www';
+        if (php_sapi_name() != 'cli') {
+            $httpUrlScheme = parse_url($_SERVER['HTTP_HOST']);
+            $httpUrlScheme = isset($httpUrlScheme['path']) ? explode('.', $httpUrlScheme['path']) : '';
+            $httpUrlScheme = isset($httpUrlScheme[0]) ? $httpUrlScheme[0] : 'www';
+        } else {
+            $httpUrlScheme = 'www';
+        }
+        
         return $httpUrlScheme;
+    }
+
+    public static function getPermalinkAfterRemovingSpecialChracter($permalink)
+    {
+        $cacheKey = preg_replace("/[\/\&_~,`@!(){}:*+^%#$?#.=-]/", "", $permalink);
+        return $cacheKey;
     }
 }

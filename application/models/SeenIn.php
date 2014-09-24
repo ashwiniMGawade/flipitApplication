@@ -103,7 +103,7 @@ class SeenIn extends BaseSeenIn
             $seenIn->status =  0 ;
 
             $seenIn->save();
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeseenin_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeSeenIn_list');
 
             if(! $retVal) {
                 self::newSeenInSetting($seenIn->id , "SEENIN_". $i);
@@ -142,7 +142,7 @@ class SeenIn extends BaseSeenIn
         $settings->value = $id ;
         $settings->save();
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeseenin_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeSeenIn_list');
 
 
     }
