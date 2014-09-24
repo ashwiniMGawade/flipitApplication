@@ -16,6 +16,13 @@ class BootstrapDoctrineConnectionFunctions
         // registering noop annotation autoloader - allow all annotations by default
         AnnotationRegistry::registerLoader('class_exists');
         $config->setMetadataDriverImpl($driver);
+
+        // set the proxy dir and set some options
+        $config->setProxyDir(APPLICATION_PATH . '/../library/KC/Entity/Proxy');
+        $config->setAutoGenerateProxyClasses(true);
+        $config->setProxyNamespace('KC\Entity\Proxy');
+
+
         // db connection parameters for user(imbull) database
         $emUser = EntityManager::create(self::getDatabaseCredentials($doctrineOptions['imbull']), $config);
         // get locale name

@@ -42,7 +42,7 @@ class FrontEnd_Helper_TestEntitiesFunctions
         return $userDetails;
     }
 
-    public function get($varnishId = 35891)
+    public function getVarnish($varnishId = 35891)
     {
         return $this->entityManagerUserLocale->find('KC\Entity\Varnish', $varnishId);
     }
