@@ -2043,18 +2043,24 @@ class Offer extends BaseOffer
         return $offerList;
     }
 
-    public static function getOfferDetail($offerId)
+    public static function getOfferDetail($offerId, $type = '')
     {
+        $shopParameters = $type != '' ? 's.refUrl,s.permalink' : '';
         $offerDetails = Doctrine_Query::create()
-        ->select('o.*,s.refUrl,s.permalink,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
+        ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*'.$shopParameters)
         ->from("Offer o")
         ->leftJoin('o.shop s')
         ->leftJoin('s.affliatenetwork a')
         ->leftJoin('o.page p')
         ->leftJoin('o.termandcondition tc')
-        ->leftJoin('o.category cat')
-        ->leftJoin('s.logo img')
-        ->leftJoin('o.offernews news')
+        ->leftJoin('o.category cat');
+        if ($type != '') {
+            $offerDetails = $offerDetails->leftJoin('s.logo img');
+        } else {
+            $offerDetails = $offerDetails->leftJoin('o.logo img');
+        }
+        
+        $offerDetails = $offerDetails->leftJoin('o.offernews news')
         ->leftJoin('o.tiles t')
         ->addSelect("(SELECT  count(cc.status) FROM CouponCode cc WHERE cc.offerid = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")

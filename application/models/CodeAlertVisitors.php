@@ -26,13 +26,13 @@ class CodeAlertVisitors extends BaseCodeAlertVisitors
     public static function saveCodeAlertVisitors($visitorId, $offerId)
     {
         if (isset($visitorId) && $visitorId != '') {
-            $getRecord = Doctrine_Query::create()
+            $codeAlertInformation = Doctrine_Query::create()
                 ->select()
                 ->from("CodeAlertVisitors")
                 ->where('offerId = '.$offerId)
                 ->fetchArray();
 
-            if (empty($getRecord)) {
+            if (empty($codeAlertInformation)) {
                 $visitorId = explode(',', $visitorId);
                 foreach ($visitorId as $visitorValue) {
                     $codeAlertQueue = new CodeAlertVisitors();

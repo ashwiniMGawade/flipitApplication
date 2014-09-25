@@ -15,55 +15,56 @@ class CodeAlertSettings extends BaseCodeAlertSettings
 
     public static function saveCodeAlertSettings($codeAlertEmailSubject, $codeAlertEmailHeader)
     {
-        $getRecord = Doctrine_Query::create()
+        $codeAlertInformation = Doctrine_Query::create()
             ->select()
             ->from("CodeAlertSettings")
             ->where('id = 1')
             ->fetchArray();
             
-        if (empty($getRecord)) {
+        if (empty($codeAlertInformation)) {
             $codeAlertQueue = new CodeAlertSettings();
             $codeAlertQueue->email_subject = $codeAlertEmailSubject;
             $codeAlertQueue->email_header = $codeAlertEmailHeader;
             $codeAlertQueue->save();
         }
-        $q = Doctrine_Query::create()->update('CodeAlertSettings')
-        ->set('email_subject', "'".$codeAlertEmailSubject."'")
-        ->set('email_header', "'".$codeAlertEmailHeader."'")
-        ->where('id=1')
-        ->execute();
+        
+        Doctrine_Query::create()->update('CodeAlertSettings')
+            ->set('email_subject', "'".$codeAlertEmailSubject."'")
+            ->set('email_header', "'".$codeAlertEmailHeader."'")
+            ->where('id=1')
+            ->execute();
 
         return true;
     }
 
     public static function saveCodeAlertEmailHeader($codeAlertSettingsParameters)
     {
-        $getRecord = Doctrine_Query::create()
+        $codeAlertInformation = Doctrine_Query::create()
             ->select()
             ->from("CodeAlertSettings")
             ->where('id = 1')
             ->fetchArray();
             
-        if (empty($getRecord)) {
+        if (empty($codeAlertInformation)) {
             $codeAlertQueue = new CodeAlertSettings();
             $codeAlertQueue->email_header = $codeAlertSettingsParameters['val'];
             $codeAlertQueue->save();
         }
-        $q = Doctrine_Query::create()->update('CodeAlertSettings')
-        ->set('email_header', "'".$codeAlertSettingsParameters['data']."'")
-        ->where('id=1')
-        ->execute();
+        Doctrine_Query::create()->update('CodeAlertSettings')
+            ->set('email_header', "'".$codeAlertSettingsParameters['data']."'")
+            ->where('id=1')
+            ->execute();
 
         return true;
     }
 
     public static function getCodeAlertSettings()
     {
-        $data = Doctrine_Query::create()
+        $codeAlertInformation = Doctrine_Query::create()
         ->select('*')
         ->from('CodeAlertSettings')
         ->where('id=1')
         ->fetchArray();
-        return $data;
+        return $codeAlertInformation;
     }
 }

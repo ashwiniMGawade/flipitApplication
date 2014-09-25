@@ -247,7 +247,8 @@
 		          <div class="imbull-submenu-wrap">
 		            <div class="imbull-submenu-head"><?php echo $this->translate('Code alert');?> </div>
 		            <ul>
-		            	<?php if($controller == 'email' && $action == 'code-alert') { $userColorClass = "new-blue"; }else { $userColorClass = "new-gray"; } ?>
+		            	<?php if($controller == 'email' && $action == 'code-alert-settings') { $userColorClass = "new-blue"; }else { 
+		            		$userColorClass = "new-gray"; } ?>
 		               <li>
 		               		<a href="<?php echo HTTP_PATH?>admin/email/code-alert-settings" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Code alert settings');?> </a>
 		               	</li>

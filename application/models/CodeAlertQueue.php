@@ -15,23 +15,23 @@ class CodeAlertQueue extends BaseCodeAlertQueue
 
     public static function saveCodeAlertQueue($shopId, $offerId)
     {
-        $queue = 0;
+        $codeAlertQueueValue = 0;
         if (isset($shopId) && $shopId != '') {
-            $getRecord = Doctrine_Query::create()
+            $codeAlertInformation = Doctrine_Query::create()
                 ->select()
                 ->from("CodeAlertQueue")
                 ->where('offerId = '.$offerId)
                 ->fetchArray();
 
-            if (empty($getRecord)) {
+            if (empty($codeAlertInformation)) {
                 $codeAlertQueue = new CodeAlertQueue();
                 $codeAlertQueue->offerId = $offerId;
                 $codeAlertQueue->shopId = $shopId;
                 $codeAlertQueue->save();
-                $queue = 1;
+                $codeAlertQueueValue = 1;
             }
         }
-        return $queue;
+        return $codeAlertQueueValue;
     }
 
     public static function getRecepientsCount()
@@ -43,14 +43,14 @@ class CodeAlertQueue extends BaseCodeAlertQueue
 
         $visitorsCount = 0;
         foreach ($codeAlertShopIds as $codeAlertShopId) {
-            $count = Doctrine_Query::create()
+            $favouriteShopCount = Doctrine_Query::create()
                 ->select('count(fs.id)')
                 ->from('FavoriteShop fs')
                 ->where('shopId = '.$codeAlertShopId['shopId'])
                 ->fetchArray();
 
-            foreach ($count as $countValue) {
-                $visitorsCount += $countValue['count'];
+            foreach ($favouriteShopCount as $favouriteShopCountValue) {
+                $visitorsCount += $favouriteShopCountValue['count'];
                 
             }
         }
@@ -66,41 +66,40 @@ class CodeAlertQueue extends BaseCodeAlertQueue
     public static function getCodealertOffers()
     {
         $codeAlertOfferIds = Doctrine_Query::create()
-        ->select('c.offerId,c.shopId')
-        ->from('CodeAlertQueue c')
-        ->fetchArray();
+            ->select('c.offerId,c.shopId')
+            ->from('CodeAlertQueue c')
+            ->fetchArray();
         $offers =  array();
-        $ooo = array();
-        $visitorsCount = 0;
+        $codeAlertOffers = array();
         foreach ($codeAlertOfferIds as $codeAlertOfferId) {
             $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
             if (!empty($shop)) {
-                foreach (Offer::getOfferDetail($codeAlertOfferId['offerId']) as $key => $value) {
-                    $offers = $value;
+                foreach (Offer::getOfferDetail($codeAlertOfferId['offerId'], 'codealert') as $key => $codeAlertOfferValue) {
+                    $offers = $codeAlertOfferValue;
                     $offers['shop']['visitors'] = $shop;
-                    $ooo[] = $offers;
+                    $codeAlertOffers[] = $offers;
                 }
             }
         }
-        return $ooo;
+        return $codeAlertOffers;
     }
 
-    public static function getCodeAlertList($params)
+    public static function getCodeAlertList($codeAlertParameters)
     {
-        $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : '';
+        $srh = @$codeAlertParameters["SearchText"] != 'undefined' ? @$codeAlertParameters["SearchText"] : '';
         $codeAlertOfferIds = Doctrine_Query::create()
         ->select('c.*')
         ->from("CodeAlertQueue c")
         ->andWhere("c.offerId LIKE ?", "$srh%")
         ->orderBy("c.id DESC")->fetchArray();
-        $test = array();
+        $codeAlertOffersId = array();
         foreach ($codeAlertOfferIds as $codeAlertOfferId) {
             $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
             if (!empty($shop)) {
-                $test[] = $codeAlertOfferId['offerId'];
+                $codeAlertOffersId[] = $codeAlertOfferId['offerId'];
             }
         }
-        $offerId = implode(',', $test);
+        $offerId = implode(',', $codeAlertOffersId);
         $offerDetails = array();
         if (!empty($offerId)) {
             $offerDetails = Doctrine_Query::create()
@@ -121,7 +120,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         }
         $list = DataTable_Helper::generateDataTableResponse(
             $offerDetails,
-            $params,
+            $codeAlertParameters,
             array(
                 "__identifier" => 'o.id', 's.name','o.title','visitors','codeAlertId'
             ),

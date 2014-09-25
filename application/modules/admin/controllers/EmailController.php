@@ -342,8 +342,8 @@ class Admin_EmailController extends Zend_Controller_Action
 
     public function codeAlertSettingsAction()
     {
-        $data = CodeAlertSettings::getCodeAlertSettings();
-        $this->view->data = $data;
+        $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
+        $this->view->codeAlertSettings = $codeAlertSettings;
 
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->getFlashMessage();

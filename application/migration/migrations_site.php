@@ -73,9 +73,7 @@ if(empty($locale)) {
         # check database is being must be site
         if($key != 'imbull') {
             try {
-                if($key == 'en') {
                  migrateDatabase($connection['dsn'] , $key,$version);
-                }
 
             } catch (Exception $e) {
 

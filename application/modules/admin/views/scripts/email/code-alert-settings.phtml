@@ -37,7 +37,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
                             <input type="text" value="<?php 
-                            echo !empty($this->data[0]['email_subject']) ? $this->data[0]['email_subject'] : '';?>"
+                            echo !empty($this->codeAlertSettings[0]['email_subject']) ? $this->codeAlertSettings[0]['email_subject'] : '';?>"
                                 placeholder=<?php echo $this->translate("Subject")?> 
                                 name="emailSubject" id="emailSubject" onblur="saveSenderEmail(this)"
                                 class="span3">
@@ -55,7 +55,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
                             <div class="">
                                 <textarea name="emailHeader" id="emailHeader" 
                                     class="" style="height:135px;"><?php 
-                                    echo !empty($this->data[0]['email_header']) ? $this->data[0]['email_header'] : '';
+                                    echo !empty($this->codeAlertSettings[0]['email_header']) ? $this->codeAlertSettings[0]['email_header'] : '';
                                     ?></textarea>
                             </div>
                         </div>

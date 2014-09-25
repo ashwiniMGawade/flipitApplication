@@ -72,9 +72,7 @@ class SendCodeAlert
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    if($key == 'en') {
                     $this->send($connection ['dsn'], $key, $imbull);
-                }die;
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
