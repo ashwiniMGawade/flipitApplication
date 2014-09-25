@@ -55,8 +55,8 @@ class LocaleSettings
 
     public static function getLocaleSettings()
     {
-        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerLocale->select('locale')
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('locale')
             ->from('KC\Entity\LocaleSettings', 'locale');
         $localeInfo = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $localeInfo;

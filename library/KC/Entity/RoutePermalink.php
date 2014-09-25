@@ -59,8 +59,8 @@ class RoutePermalink
     public static function getRoute($permalink)
     {
         $permalink = trim($permalink, '/');
-        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerLocale->select('p')
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('p')
             ->from('KC\Entity\RoutePermalink', 'p')
             ->setParameter(1, $permalink)
             ->where('p.permalink = ?1');
@@ -71,8 +71,8 @@ class RoutePermalink
     public static function getPageProperties($permalink)
     {
         $permalink = trim($permalink, '/');
-        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerLocale->select('p')
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('p')
             ->from('KC\Entity\Page', 'p')
             ->setParameter(1, $permalink)
             ->where('p.permalink = ?1')
@@ -84,8 +84,8 @@ class RoutePermalink
 
     public static function getPermalinks($exactLink)
     {
-        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerLocale->select('rp.permalink')
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('rp.permalink')
             ->from('KC\Entity\RoutePermalink', 'rp')
             ->setParameter(1, $exactLink)
             ->where('rp.exactlink = ?1')
@@ -97,8 +97,8 @@ class RoutePermalink
 
     public static function getDefaultPageProperties($slug)
     {
-        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerLocale->select('p')
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('p')
             ->from('KC\Entity\Page', 'p')
             ->setParameter(1, $slug)
             ->where('p.slug = ?1');
