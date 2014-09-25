@@ -86,9 +86,9 @@ class DataTable_Helper
         } else {
             $params = $Params;
             $Q = $Query;
-           // echo count($Q->fetchArray()); die;
+            //echo count($Q->getResult()); die;
             // ############ get Total count ##########
-            $iTotal = $Q->count();
+            $iTotal = $Q->getResult();
             //############## Searching ##############
             $and = "";
             $or = "";
@@ -140,7 +140,7 @@ class DataTable_Helper
             	$Q->andWhere($and);
             }
 
-            $iDTotal = $Q->count();
+            $iDTotal = $Q->getResult();
 
 
 
@@ -190,9 +190,9 @@ class DataTable_Helper
 
          	//die($Q->getSqlQuery());
             // ######################## Execute Query ###################
-     	  //echo $sqlQuery = $Q->getSqlQuery();
+     	    //echo $sqlQuery = $Q->getSqlQuery();
          
-            $data = $Q->fetchArray();
+            $data = $Q->getResult();
             $retData = array();
             if ($actions != null) {
 

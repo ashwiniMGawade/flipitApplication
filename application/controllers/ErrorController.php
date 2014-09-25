@@ -5,9 +5,6 @@ class ErrorController extends Zend_Controller_Action
 
     public function errorAction()
     {
-        $ab = new FrontEnd_Helper_TestEntitiesFunctions();
-        echo "<pre>";
-        print_r($ab->getUser(1)); die;
         $this->view->controller = $this->_request->getControllerName();
         $errors = $this->_getParam('error_handler');
         if (!$errors || !$errors instanceof ArrayObject) {
