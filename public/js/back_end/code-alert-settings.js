@@ -311,52 +311,6 @@ $(document).ready(function() {
             defaultTime : $("input#currentSendTime").val()
     });
 });
-  
-function sendNewsLetter(e){
-    $receipt = getTotalRecepients() ;
-    bootbox.confirm(__("Are you sure you want to send the newsletter to "+ $receipt +" recepients?"),__('No'),__('Yes'),function(r){
-        if(!r){
-            return false;
-        } else {
-            e.preventDefault();
-            var newForm = jQuery('<form>', {
-                'action': HOST_PATH + "admin/email/codealertsend",
-                'target': '_top',
-                'method' : 'post'
-            });
-            $(newForm).append($("#speacialForm").html());
-            $("input#offerstartTime" , newForm).val( $("input#offerstartTime", "#speacialForm").val());
-            $("input#offerStartDate" , newForm ).val($("input#offerStartDate", "#speacialForm").val());
-            newForm.appendTo('body').submit().remove();
-        }
-    });
- }
-
-function sendTestNewsLetter(e){
-    bootbox.confirm(__("Are you sure you want to send the newsletter to one person?"),__('No'),__('Yes'),function(r){
-        if(!r){
-            return false;
-        }
-        else{
-            e.preventDefault();
-
-            var newForm = jQuery('<form>', {
-                'action': HOST_PATH + "admin/email/codealertsend/send/test",
-                'target': '_top',
-                'method' : 'post',
-            }).append(jQuery('<input>', {
-                'name': 'send',
-                'value': 'test',
-                'type': 'hidden'
-            })).append(jQuery('<input>', {
-                'name': 'testEmail',
-                'value': $("input#testEmail").val(),
-                'type': 'hidden'
-            }));
-            newForm.appendTo('body').submit().remove();
-        }
-    });
-}
 
 function saveEmailHeaderFooter(name , data)
 {
@@ -395,52 +349,4 @@ function getTotalRecepients()
     });
 
     return count;
-}
-
-function scheduleNewsletter(el)
-{
-    $(el).addClass('btn-primary').siblings('button').removeClass('btn-primary active') ;
-    $("input[type=hidden]#isScheduled").val(1);
-    jQuery('#dp3').datepicker(); 
-    jQuery('#offerstartTime').timepicker({
-        minuteStep: 5,
-        template: 'modal',
-        showSeconds: false,
-        showMeridian: false,
-    });
-
-    $("div#timestamp-feild-container").show();
-    $("a#sendNewsletter-btn").text(__('Save Scheduling'));
-    $("#disableNewsletter-btn").show();
-    $("a#disableNewsletter-btn").text(__('Disable Scheduling'));
-}
-
-function unScheduleNewsletter(el)
-{
-    $(el).addClass('btn-primary').siblings('button').removeClass('btn-primary active') ;
-    $("input[type=hidden]#isScheduled").val(0);
-    $("div#timestamp-feild-container").hide();
-    $("a#sendNewsletter-btn").text(__('Send Newsletter'));
-    $("#disableNewsletter-btn").hide();
-}
-
-function disableNewsLetterSchedule(e)
-{
-    bootbox.confirm(__("Are you sure you want to disable the newsletter schedule?"),__('No'),__('Yes'),function(r){
-        if(!r){
-            return false;
-        } else {
-            e.preventDefault();
-            var newForm = jQuery('<form>', {
-                'action': HOST_PATH + "admin/email/disablecodealertschedule",
-                'target': '_top',
-                'method' : 'post'
-            });
-            $(newForm).append($("#speacialForm").html());
-            $("input#offerstartTime" , newForm).val( $("input#offerstartTime", "#speacialForm").val());
-            $("input#offerStartDate" , newForm ).val($("input#offerStartDate", "#speacialForm").val());
-            newForm.appendTo('body').submit().remove();
-        }
-
-    });
 }

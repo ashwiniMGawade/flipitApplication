@@ -12,7 +12,7 @@ class codealerttestCest
     }
 
     // tests
-    public function codealertemailTest(AcceptanceTester $I, \Codeception\Scenario $scenario)
+    public function codealertTest(AcceptanceTester $I, \Codeception\Scenario $scenario)
     {
         $I = new AcceptanceTester\LoginSteps($scenario);
         $I->login();
@@ -22,33 +22,29 @@ class codealerttestCest
         $I->canSee('Code alert settings');
         $I->click('Code alert settings');
         $I->amOnPage('/admin/email/code-alert-settings');
-        $I->click('.select2-choice');
-        $I->click('#sendTest');
-        $I->wait(10);
-        $I->click('Yes');
-        $I->wait(10);
-        $I->seeInCurrentUrl('/admin/email/codealert/send/test');
+        $I->fillField('#emailSubject', 'email subject');
+        $I->fillField('#emailHeader', 'email header');
+        $I->click('button[type=submit]');
+        $I->amOnPage('/admin/email/code-alert-settings');
+        $I->seeInField('#emailSubject', 'email subject');
+        $I->seeInField('#emailHeader', 'email header');
     }
 
     public function codealertofferTest(AcceptanceTester $I, \Codeception\Scenario $scenario)
     {
         $I = new AcceptanceTester\LoginSteps($scenario);
         $I->login();
-        $I->click('.menu-icon-offer');
+        $this->createShop($I);
+        $this->createOffer($I, 'CD', 'couponCode', '2', 'coupon code offer');
+        $this->unlinkFilesFromTmp();
+        $I->click('li a.menu-icon-offer');
         $I->amOnPage('/admin/offer');
         $I->wait(10);
         $I->click('#offerListTable a');
         $I->amOnPage('/admin/offer/editoffer/id/1');
         $I->click('Send code alert');
-        $I->seeInCurrentUrl('/admin/codealert');
-    }
-
-    public function codealertofferQueueTest(AcceptanceTester $I, \Codeception\Scenario $scenario)
-    {
-        $this->unlinkFilesFromTmp();
-        $I = new AcceptanceTester($scenario);
-        $this->createShop($I);
-        $this->createOffer($I, 'CD', 'couponCode', '2', 'coupon code offer');
+        $I->wait(10);
+        $I->canSeeInPageSource('modal-body');
     }
 
     protected function unlinkFilesFromTmp()

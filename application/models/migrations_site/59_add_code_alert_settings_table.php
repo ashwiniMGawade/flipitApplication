@@ -18,24 +18,6 @@ class AddCodeAlertSettingsTable extends Doctrine_Migration_Base
             'email_header' => array(
                 'type'   => 'blob'
             ),
-            'code_alert_schedule' => array(
-                'type' => 'boolean',
-                'notnull' => false ,
-                'default' => 0,
-                'length' => 1,
-                'comment' => '1-scheduled ,0-manual'
-            ),
-            'code_alert_status' => array(
-                'type' => 'boolean',
-                'notnull' => false ,
-                'default' => 0,
-                'length' => 1,
-                'comment' => '1-sent ,0-unsent'
-            ),
-            'code_alert_schedule_time' => array(
-                'type'   => 'timestamp',
-                'length' => 12
-            ),
             'deleted' => array(
                 'type'   => 'boolean',
                 'length' => 1,

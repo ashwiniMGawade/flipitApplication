@@ -72,9 +72,7 @@ class SendCodeAlert
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    if($key == 'en') {
                     $this->send($connection ['dsn'], $key, $imbull);
-                }die;
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -165,8 +163,10 @@ class SendCodeAlert
                 $currentTime->setTimezone($timezone);
                 echo "\n" ;
                 $currentTime->get('YYYY-MM-dd HH:mm:ss');
+                if ($currentTime->isLater($sentTime)) {
                     echo "\nSending newletter...\n" ;
                     $this->mandrilHandler($key, $settings);
+                }
             } else {
                 echo "\n";
                 print "$key - Already sent";
@@ -182,43 +182,37 @@ class SendCodeAlert
 
     protected function mandrilHandler($key, $settings)
     {
-        $message = '';
         $this->_linkPath = $this->_hostName . '/' .$this->_localePath;
         $this->_publicPath = $this->_hostName . '/public/' . $this->_localePath;
         $this->_rootPath = PUBLIC_PATH . $this->_localePath;
         $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
         if (!empty($codeAlertOffers)) {
-            foreach ($codeAlertOffers as $codeAlertOffer) {
+            foreach ($codeAlertOffers as $value) {
                 set_time_limit(10000);
                 ini_set('max_execution_time', 115200);
                 ini_set("memory_limit", "1024M");
-                $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
-                    'similarStoresAndSimilarCategoriesOffers',
-                    4,
-                    $codeAlertOffer['shop']['id']
-                );
+                $topVouchercodes = Offer::getTopOffers(10);
                 $emailDetails = CodeAlertSettings::getCodeAlertSettings();
                 $mandrillSenderEmailAddress = 'test@flipit.com';
                 $mandrillNewsletterSubject = $emailDetails[0]['email_subject'];
                 $mandrillSenderName = 'flipit';
-                $visitors = $codeAlertOffer['shop']['visitors'];
+                $visitors = $value['shop']['visitors'];
                 $visitorId = array();
                 foreach ($visitors as $visitorvalue) {
                     $codeAlertVisitors = CodeAlertVisitors::getVisitorsToRemoveInCodeAlert(
                         $visitorvalue['visitorId'],
-                        $codeAlertOffer['id']
+                        $value['id']
                     );
                     if (empty($codeAlertVisitors)) {
-                        $visitorCodeAlertSendDate = Visitor::getVisitorCodeAlertSendDate($visitorvalue['visitorId']);
-                        if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
-                        } else {
-                            $visitorId[] = $visitorvalue['visitorId'];
+                            $visitorCodeAlertSendDate = Visitors::getVisitorCodeAlertSendDate($visitorvalue['visitorId']);
+                            if($visitorCodeAlertSendDate != date('Y-m-d 00:00:00'))
+                            {
+                                $visitorId[] = $visitorvalue['visitorId'];
+                            }
                         }
-                    }
                 }
                 if (!empty($visitorId)) {
                     $visitorId = implode(',', $visitorId);
-
                     $this->visitorId = $visitorId;
                     BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
                         $this,
@@ -231,7 +225,7 @@ class SendCodeAlert
                             $topVouchercodes,
                             '',
                             '',
-                            $mandrillNewsletterSubject.' '.$codeAlertOffer['shop']['name'],
+                            $mandrillNewsletterSubject,
                             $mandrillSenderEmailAddress,
                             $mandrillSenderName,
                             $this->_recipientMetaData,
@@ -245,12 +239,13 @@ class SendCodeAlert
                                 'publicPathCdn' => $this->_public_cdn_path,
                                 'mandrillKey' => $this->_mandrillKey
                             ),
-                            $emailDetails[0]['email_header'].' '.$codeAlertOffer['shop']['name'],
-                            $codeAlertOffer
+                            $emailDetails[0]['email_header'],
+                            $value
                         );
-                        Visitor::addCodeAlertTimeStampForVisitor($visitorId);
-                        CodeAlertVisitors::saveCodeAlertVisitors($visitorId, $codeAlertOffer['id']);
-                        CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
+                        
+                        //CodeAlertVisitors::saveCodeAlertVisitors($visitorId, $value['id']);
+                        //CodeAlertQueue::clearCodeAlertQueueByOfferId($value['id']);
+                        //CodeAlertSettings::updateCodeAlertSchedulingStatus();
                         $message = 'code alert has been sent successfully' ;
                     } catch (Mandrill_Error $e) {
                         $message ='There is some problem in your data';

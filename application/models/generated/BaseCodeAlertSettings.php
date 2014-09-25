@@ -25,26 +25,6 @@ abstract class BaseCodeAlertSettings extends Doctrine_Record
           $this->hasColumn('email_header', 'blob', null, array(
                 'type' => 'blob',
         ));
-          $this->hasColumn('code_alert_schedule', 'boolean', 1, array(
-                'type' => 'boolean',
-                'notnull' => false ,
-                'default' => 0,
-                'length' => 1,
-                'comment' => '1-scheduled ,0-manual'
-        ));
-        $this->hasColumn('code_alert_status', 'boolean', 20, array(
-                'type' => 'boolean',
-                'notnull' => false ,
-                'default' => 0,
-                'length' => 1,
-                'comment' => '1-sent ,0-unsent'
-        ));
-        $this->hasColumn('code_alert_schedule_time', 'timestamp', 20, array(
-                'default' => date("Y-m-d H:i:s"),
-                'type'   => 'timestamp',
-                'comment' => 'code alert scheduled timestamp'
-        ));
-
           $this->hasColumn('created_at', 'timestamp', null, array(
              'type' => 'timestamp',
              'fixed' => false,

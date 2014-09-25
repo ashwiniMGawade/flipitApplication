@@ -331,19 +331,28 @@ class Admin_EmailController extends Zend_Controller_Action
         $this->view->sendersEmailAddress = $sendersEmailAddress;
         $this->view->sendersName = Settings::getEmailSettings('sender_name');
     }
+
     public function codeAlertAction()
     {
-
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $flash->getMessages();
+        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
     }
 
     public function codeAlertSettingsAction()
     {
         $data = CodeAlertSettings::getCodeAlertSettings();
-
         $this->view->data = $data;
-        $this->view->localeSettings = LocaleSettings::getLocaleSettings();
-        $this->view->rights = $this->_settings['administration'];
-        $this->view->timezones_list = Signupmaxaccount::$timezones;
+
+        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $this->getFlashMessage();
+        if ($this->getRequest()->isPost()) {
+            $codeAlertParameters = $this->getRequest()->getParams();
+            CodeAlertSettings::saveCodeAlertSettings($codeAlertParameters['emailSubject'], $codeAlertParameters['emailHeader']);
+            $this->setFlashMessage('Code alert Settings have been updated successfully');
+            $this->_redirect(HTTP_PATH . 'admin/email/code-alert-settings');
+        }
     }
 
     public function codealertqueueAction()
@@ -351,9 +360,9 @@ class Admin_EmailController extends Zend_Controller_Action
         $codeAlertQueueParameters = $this->getRequest()->getParams();
         $codeAlertQueueShopId = $codeAlertQueueParameters['shopId'];
         $codeAlertQueueOfferId = $codeAlertQueueParameters['offerId'];
-        CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
+        $codeAlertQueue = CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
+        echo $codeAlertQueue;
         die;
-       // print_r($this->getRequest()->getParams()); die;
     }
     
     public function savecodealertsettingsAction()
@@ -390,125 +399,25 @@ class Admin_EmailController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         $codeAlertQueue = CodeAlertQueue::getCodeAlertList($params);
         echo Zend_Json::encode($codeAlertQueue);
-        die ();
+        die();
     }
 
-    public function codealertsendAction()
+    public function movecodealerttotrashAction()
     {
-        if ($this->_request->isPost()) {
-            $sendParameter = $this->getRequest()->getParam('send');
-            if (isset($sendParameter) && $sendParameter == 'test') {
-                $testEmail = isset($sendParameter)
-                    && $sendParameter == 'test' ?
-                    $this->getRequest()->getParam('testEmail')
-                    : '';
-                $codeAlertOffers = CodeAlertQueue::getLatestCodeAlertByTestEmail($testEmail);
-            } else {
-                $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
-            }
+        $codeAlertParameter = $this->_getAllParams();
+        $codeAlert = CodeAlertQueue::moveCodeAlertToTrash($codeAlertParameter['id']);
+        if (intval($codeAlert) > 0) {
             $flash = $this->_helper->getHelper('FlashMessenger');
-            $isScheduled = $this->getRequest()->getParam("isScheduled", false);
-
-            if ($isScheduled) {
-                if (CodeAlertSettings::saveScheduledNewsletter($this->getRequest())) {
-                    $flash->addMessage(
-                        array(
-                            'success' => $this->view->translate('Newsletter has been successfully scheduled')
-                        )
-                    );
-                } else {
-                    $flash->addMessage(
-                        array(
-                            'error' => $this->view->translate('There is some problem in your data')
-                        )
-                    );
-                }
-                $this->_helper->redirector('code-alert-settings', 'email', null);
-            }
-
-            CodeAlertSettings::updateCodeAlertSchedulingStatus();
-            if (!empty($codeAlertOffers)) {
-
-               // echo "<pre>"; print_r($codeAlertOffers);
-                foreach ($codeAlertOffers as $value) {
-                    set_time_limit(10000);
-                    ini_set('max_execution_time', 115200);
-                    ini_set("memory_limit", "1024M");
-                    $topVouchercodes = Offer::getTopOffers(10);
-                    $emailDetails = CodeAlertSettings::getCodeAlertSettings();
-                    $mandrillSenderEmailAddress = 'test@flipit.com';
-                    $mandrillNewsletterSubject = $emailDetails[0]['email_subject'];
-                    $mandrillSenderName = 'flipit';
-                    $visitors = $value['shop']['visitors'];
-                    $visitorId = array();
-                    foreach ($visitors as $key => $visitorvalue) {
-                        $codeAlertVisitors = CodeAlertVisitors::getVisitorsToRemoveInCodeAlert(
-                            $visitorvalue['visitorId'],
-                            $value['id']
-                        );
-                        if (empty($codeAlertVisitors)) {
-                            $visitorId[] = $visitorvalue['visitorId'];
-                        }
-                    }
-                    if (!empty($visitorId)) {
-                        $visitorId = implode(',', $visitorId);
-                        echo "<pre>"; print_r($value['id']);
-                        $this->visitorId = $visitorId;
-                        BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this); 
-                        try {
-                            FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
-                                $topVouchercodes,
-                                '',
-                                '',
-                                $mandrillNewsletterSubject,
-                                $mandrillSenderEmailAddress,
-                                $mandrillSenderName,
-                                $this->_recipientMetaData,
-                                $this->_loginLinkAndData,
-                                $this->_to,
-                                '',
-                                '',
-                                $emailDetails[0]['email_header'],
-                                $value
-                            );
-
-                            //CodeAlertVisitors::saveCodeAlertVisitors($visitorId, $value['id']);
-                            //CodeAlertQueue::clearCodeAlertQueueByOfferId($value['id']);
-                            $message = $this->view->translate('Code alert has been sent successfully');
-                        } catch (Mandrill_Error $e) {
-                            $message = $this->view->translate('There is some problem in your data');
-                        }
-                        $flash->addMessage(array('success' => $message));
-                       // $this->_helper->redirector('code-alert-settings', 'email', null);
-                    }
-                }
-                //die;
-            } else {
-                $message = $this->view->translate('There is some problem in your data');
-                $flash->addMessage(array('success' => $message));
-               // $this->_helper->redirector('code-alert-settings', 'email', null);
-            }
+            $message = $this->view->translate('Code alert has been moved to trash');
+            $flash->addMessage(array('success' => $message));
         } else {
-            //$this->_helper->redirector('index', 'index', null);
+            $message = $this->view->translate('Problem in your data.');
+            $flash->addMessage(array('error' => $message));
         }
-        exit;
+        echo Zend_Json::encode($codeAlert);
+        die();
     }
-    public function disablecodealertscheduleAction()
-    {
-        if ($this->_request->isPost()) {
-            $flash = $this->_helper->getHelper('FlashMessenger');
 
-            if (CodeAlertSettings::updateCodeAlertSchedulingStatus()) {
-                $flash->addMessage(
-                    array(
-                        'success' => $this->view->translate('Newsletter schedule has been successfully disabled')
-                    )
-                );
-            }
-
-            $this->_helper->redirector('code-alert-settings', 'email', null);
-        }
-    }
     public function getFlashMessage()
     {
         $message = $this->flashMessenger->getMessages();

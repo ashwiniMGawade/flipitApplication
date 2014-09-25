@@ -99,8 +99,8 @@ class BackEnd_Helper_MandrillHelper
         $passwordKey,
         $currentObject
     ) {
-        $visitorId = $currentObject->visitorId != '' ? $currentObject->visitorId: $visitorEmail;
-        $visitorDetails = Visitor::getVisitorDetailsByEmail($visitorId);
+        //$visitorId = $currentObject->visitorId != '' ? $currentObject->visitorId: $visitorEmail;
+        $visitorDetails = Visitor::getVisitorDetailsByEmail($visitorEmail);
         $key = 0;
         if (defined('HTTP_PATH_FRONTEND')) {
             $httpPathLocale = HTTP_PATH_FRONTEND;

@@ -13,7 +13,7 @@
 class CodeAlertSettings extends BaseCodeAlertSettings
 {
 
-    public static function saveCodeAlertEmailSubject($codeAlertSettingsParameters)
+    public static function saveCodeAlertSettings($codeAlertEmailSubject, $codeAlertEmailHeader)
     {
         $getRecord = Doctrine_Query::create()
             ->select()
@@ -23,11 +23,13 @@ class CodeAlertSettings extends BaseCodeAlertSettings
             
         if (empty($getRecord)) {
             $codeAlertQueue = new CodeAlertSettings();
-            $codeAlertQueue->email_subject = $codeAlertSettingsParameters['val'];
+            $codeAlertQueue->email_subject = $codeAlertEmailSubject;
+            $codeAlertQueue->email_header = $codeAlertEmailHeader;
             $codeAlertQueue->save();
         }
         $q = Doctrine_Query::create()->update('CodeAlertSettings')
-        ->set('email_subject', "'".$codeAlertSettingsParameters['val']."'")
+        ->set('email_subject', "'".$codeAlertEmailSubject."'")
+        ->set('email_header', "'".$codeAlertEmailHeader."'")
         ->where('id=1')
         ->execute();
 
@@ -63,52 +65,5 @@ class CodeAlertSettings extends BaseCodeAlertSettings
         ->where('id=1')
         ->fetchArray();
         return $data;
-    }
-
-    public static function saveScheduledNewsletter($request)
-    {
-        $scheduledDate = $request->getParam("sendDate", false);
-        $scheduledTime = $request->getParam("sendTime", false);
-        $timezone = $request->getParam("timezone", false);
-        $scheduledDate = explode('-', $scheduledDate);
-        $scheduledDate = $scheduledDate[1].'-'.$scheduledDate[0].'-'.$scheduledDate[2];
-        $timestamp = date('Y-m-d', strtotime($scheduledDate)).' '.date('H:i:s', strtotime($scheduledTime));
-        try {
-            $getRecord = Doctrine_Query::create()->select()->from("CodeAlertSettings")->where('id = 1')->fetchArray();
-            if (empty($getRecord)) {
-                    $signupmaxaccount = new CodeAlertSettings();
-                    $signupmaxaccount->id = 1;
-                    $signupmaxaccount->code_alert_schedule = $this->getRequest()->getParam("isScheduled", false);
-                    $signupmaxaccount->code_alert_schedule_time = $timestamp ;
-                    $signupmaxaccount->code_alert_status = 0 ;
-                    $signupmaxaccount->save();
-                return true;
-            } else {
-                $q = Doctrine_Query::create()
-                    ->update('CodeAlertSettings')
-                    ->set('code_alert_schedule_time', '?', $timestamp)
-                    ->set('code_alert_schedule', '?', $request->getParam("isScheduled", false))
-                    ->set('code_alert_status', '?', 0)
-                    ->where('id=1')
-                    ->execute();
-                return true;
-            }
-        } catch (Exception $e) {
-            return false;
-        }
-    }
-
-    public static function updateCodeAlertSchedulingStatus()
-    {
-        $date = new DateTime();
-        $date->modify("+1 days");
-        $date = $date->format('Y-m-d H:i:s');
-        $q = Doctrine_Query::create()
-            ->update('CodeAlertSettings')
-            ->set('code_alert_schedule_time', '?', $date)
-            ->set('code_alert_schedule', '?', 0)
-            ->set('code_alert_status', '?', 1)
-            ->where('id=1')
-            ->execute();
     }
 }

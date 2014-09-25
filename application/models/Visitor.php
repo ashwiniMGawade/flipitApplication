@@ -699,15 +699,43 @@ public static function Visitortotal_acc()
      */
     public function getVisitorsToSendNewsletter($visitorId = '')
     {
+        $visitorsToSendNewsletter = Doctrine_Query::create()->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
+            ->from('Visitor v')
+            ->leftJoin("v.keywords k")
+            ->orderBy("k.keyword")
+            ->where('status = 1')
+            ->andWhere('active = 1');
+        
+        if ($visitorId != '') {
+            $visitorsToSendNewsletter = $visitorsToSendNewsletter->andWhere('v.id IN('.$visitorId.')');
+        } else {
+            $visitorsToSendNewsletter = $visitorsToSendNewsletter->andWhere('weeklyNewsLetter = 1');
+        }
+    
+        $visitorsToSendNewsletter = $visitorsToSendNewsletter->fetchArray();
+        return $visitorsToSendNewsletter;
+    }
 
-        return   Doctrine_Query::create()->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
-                ->from('Visitor v')
-                ->leftJoin("v.keywords k")
-                ->orderBy("k.keyword")
-                ->where('status = 1')
-                ->andWhere('active = 1')
-              //  ->andWhere('weeklyNewsLetter = 1')
-                ->andWhere('v.id IN('.$visitorId.')')
-                ->fetchArray();
+    public static function addCodeAlertTimeStampForVisitor($visitorId)
+    {
+        if (!empty($visitorId)) {
+            $visitorId = explode(',', $visitorId);
+            foreach ($visitorId as $visitorIdValue) {
+                Doctrine_Query::create()->update('Visitor')
+                    ->set('code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
+                    ->where('id='. FrontEnd_Helper_viewHelper::sanitize($visitorIdValue))
+                    ->execute();
+            }
+        }
+        return true;
+    }
+
+    public static function getVisitorCodeAlertSendDate($visitorId = '')
+    {
+        $codeAlertSendDate = Doctrine_Query::create()->select('v.code_alert_send_date')
+            ->from('Visitor v')
+            ->andWhere('v.id='. FrontEnd_Helper_viewHelper::sanitize($visitorId))
+            ->fetchArray();
+        return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
     }
 }

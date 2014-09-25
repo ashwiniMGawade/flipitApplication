@@ -15,6 +15,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
 
     public static function saveCodeAlertQueue($shopId, $offerId)
     {
+        $queue = 0;
         if (isset($shopId) && $shopId != '') {
             $getRecord = Doctrine_Query::create()
                 ->select()
@@ -27,9 +28,10 @@ class CodeAlertQueue extends BaseCodeAlertQueue
                 $codeAlertQueue->offerId = $offerId;
                 $codeAlertQueue->shopId = $shopId;
                 $codeAlertQueue->save();
+                $queue = 1;
             }
         }
-        return true;
+        return $queue;
     }
 
     public static function getRecepientsCount()
@@ -55,6 +57,12 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         return $visitorsCount;
     }
 
+    public static function moveCodeAlertToTrash($codeAlertId)
+    {
+        Doctrine_Query::create()->delete()->from('CodeAlertQueue c')->where("c.id=".$codeAlertId)->execute();
+        return true;
+    }
+
     public static function getCodealertOffers()
     {
         $codeAlertOfferIds = Doctrine_Query::create()
@@ -66,53 +74,10 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         $visitorsCount = 0;
         foreach ($codeAlertOfferIds as $codeAlertOfferId) {
             $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
-           //  echo "<pre>"; print_r($shop);
-            if(!empty($shop)) {
-               // $offers[] = Offer::getOfferDetail($codeAlertOfferId['offerId']);
-               
-               foreach (Offer::getOfferDetail($codeAlertOfferId['offerId']) as $key => $value) {
-                $offers = $value;
-                $offers['shop']['visitors'] = $shop;
-                $ooo[] = $offers;
-               }
-            }
-            
-            
-        } 
-
- 
-        return $ooo;
-    }
-
-    public static function getLatestCodeAlertByTestEmail($visitorEmail)
-    {
-        $visitorInformation = Visitor::getVisitorDetailsByEmail($visitorEmail);
-        $shopId = FavoriteShop::getShopsByVisitorId($visitorInformation[0]['id']);
-       
-        foreach ($shopId as $shopIdvalue) {
-            $filteredShopId = $shopIdvalue['shopId'];
-            $codeAlertOfferIds = Doctrine_Query::create()
-                ->select('c.offerId,c.shopId')
-                ->from('CodeAlertQueue c')
-                ->where("c.shopId =$filteredShopId")
-                ->orderBy('c.id DESC')
-                ->limit(1)
-                ->fetchArray();
-        }
-        
-        $offers =  array();
-        $ooo = array();
-        $visitorsCount = 0;
-        foreach ($codeAlertOfferIds as $codeAlertOfferId) {
-            $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
             if (!empty($shop)) {
                 foreach (Offer::getOfferDetail($codeAlertOfferId['offerId']) as $key => $value) {
                     $offers = $value;
-                    $offers['shop']['visitors'] = array(
-                        array(
-                            'visitorId' => $visitorInformation[0]['id']
-                        )
-                    );
+                    $offers['shop']['visitors'] = $shop;
                     $ooo[] = $offers;
                 }
             }
@@ -128,7 +93,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         ->from("CodeAlertQueue c")
         ->andWhere("c.offerId LIKE ?", "$srh%")
         ->orderBy("c.id DESC")->fetchArray();
-
+        $test = array();
         foreach ($codeAlertOfferIds as $codeAlertOfferId) {
             $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
             if (!empty($shop)) {
@@ -136,32 +101,34 @@ class CodeAlertQueue extends BaseCodeAlertQueue
             }
         }
         $offerId = implode(',', $test);
- 
-        $offerDetails = Doctrine_Query::create()
-            ->select('o.id,o.title,s.name')
-            ->from("Offer o")
-            ->leftJoin('o.shop s')
-            ->leftJoin('s.affliatenetwork a')
-            ->leftJoin('o.page p')
-            ->leftJoin('o.termandcondition tc')
-            ->leftJoin('o.category cat')
-            ->leftJoin('o.logo img')
-            ->leftJoin('o.offernews news')
-            ->leftJoin('o.tiles t')
-            ->addSelect("(SELECT count(fs.id) FROM FavoriteShop fs WHERE fs.shopId = s.id) as visitors")
-            ->andWhere("o.id IN($offerId)")
-            ->andWhere("o.userGenerated = '0'");
- 
-         $list = DataTable_Helper::generateDataTableResponse(
+        $offerDetails = array();
+        if (!empty($offerId)) {
+            $offerDetails = Doctrine_Query::create()
+                ->select('o.id,o.title,s.name')
+                ->from("Offer o")
+                ->leftJoin('o.shop s')
+                ->leftJoin('s.affliatenetwork a')
+                ->leftJoin('o.page p')
+                ->leftJoin('o.termandcondition tc')
+                ->leftJoin('o.category cat')
+                ->leftJoin('o.logo img')
+                ->leftJoin('o.offernews news')
+                ->leftJoin('o.tiles t')
+                ->addSelect("(SELECT count(fs.id) FROM FavoriteShop fs WHERE fs.shopId = s.id) as visitors")
+                ->addSelect("(SELECT cq.id FROM CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
+                ->andWhere("o.id IN($offerId)")
+                ->andWhere("o.userGenerated = '0'");
+        }
+        $list = DataTable_Helper::generateDataTableResponse(
             $offerDetails,
             $params,
             array(
-                "__identifier" => 'o.id', 's.name','o.title','visitors'
+                "__identifier" => 'o.id', 's.name','o.title','visitors','codeAlertId'
             ),
             array(),
             array()
         );
-
+ 
         return $list;
     }
 

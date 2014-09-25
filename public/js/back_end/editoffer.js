@@ -9,6 +9,7 @@ var tile_id ='';
 
 function init(){
 	jQuery('#code-alert-queue').click(function(){
+		___addOverLay()
 		var offerId = jQuery('#offerId').val();
 		var shopId = jQuery('#selctedshop').val();
 		jQuery.ajax({
@@ -19,7 +20,12 @@ function init(){
 		    data: { shopId: shopId, offerId: offerId},
 			   success: function(dataSet)
 			   { 
-				   
+			   	if(dataSet == 1) {
+			   		bootbox.alert("Code alert successfully added to the queue.");
+			   	} else {
+			   		bootbox.alert("Code alert Queue for this offer already exist.");
+			   	}
+				   ___removeOverLay();
 				   return false;
 			  } 
 		});

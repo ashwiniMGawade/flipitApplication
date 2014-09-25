@@ -74,6 +74,14 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
 					"bSearchable" : false,
 					"bSortable" : true
 	               },
+	            {
+					"fnRender" : function(obj) {
+						var html = "<a href='javascript:void(0);' onclick='moveToTrash("+obj.aData.codeAlertId+");'>"+__("Delete")+ "</a>";
+						return html;
+					},
+					"bSearchable" : false,
+					"bSortable" : false
+				}
 			],
 			"fnPreDrawCallback": function( oSettings ) {
 				$('#codeAlertListTable').css('opacity',0.5);
@@ -125,4 +133,41 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
 				});
 			}
 		});
+}
+
+function moveToTrash(id){
+	bootbox.confirm(__("Are you sure you want to move this code alert to trash?"),__('No'),__('Yes'),function(r){
+		if(!r){
+			return false;
+		}
+		else{
+			deleteRecord(id);
+		}
+		
+	});
+}
+function deleteRecord(id) {
+	
+	addOverLay();
+	$.ajax({
+		url : HOST_PATH + "admin/email/movecodealerttotrash",
+		method : "post",
+		data : {
+			'id' : id
+		},
+		dataType : "json",
+		type : "post",
+		success : function(data) {
+			
+			if (data != null) {
+				
+				window.location = HOST_PATH + "admin/email/code-alert";
+				
+			} else {
+				
+				window.location = HOST_PATH + 'admin/email/code-alert';
+				
+			} 
+		}
+	});	
 }
