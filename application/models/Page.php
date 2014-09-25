@@ -39,17 +39,7 @@ class Page extends BasePage
             ->fetchArray();
         return $specialListPages;
     }
-    public static function getPageDetailsInError($page)
-    {
-        $currentDate = date('Y-m-d 00:00:00');
-        $pageDetails = Doctrine_Query::create()->from('Page p')
-         ->where("p.permaLink='".$page."'")
-        ->leftJoin("p.widget w")
-        ->andWhere("p.publishDate <='".$currentDate."'")
-        ->andWhere('p.deleted=0')->fetchOne();
-        return $pageDetails;
-
-    }
+    
 
     public static function getDefaultPageProperties($permalink)
     {

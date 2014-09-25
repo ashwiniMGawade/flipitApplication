@@ -154,7 +154,8 @@ class ErrorController extends Zend_Controller_Action
 
         if ($pagePermalink!='') {
             $this->pagePermalink = $pagePermalink;
-            $pagedata = Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
+            $page  =  new KC\Entity\Page();
+            $pagedata = $page->getPageDetailsInError(rtrim($pagePermalink, '/'));
         } else {
             $pagedata= '';
         }

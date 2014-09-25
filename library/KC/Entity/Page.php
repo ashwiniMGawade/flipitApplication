@@ -1,4 +1,9 @@
-<?php
+
+     $page  =  new KC\Entity\Page();
+            $pagedata = $page->getPageDetailsInError(rtrim($pagePermalink, '/'));
+
+
+            <?php
 namespace KC\Entity;
 use Doctrine\ORM\Mapping AS ORM;
 
@@ -297,4 +302,32 @@ class Page
      * @ORM\JoinColumn(name="pageattributeid", referencedColumnName="id", onDelete="restrict")
      */
     private $page;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+
+
+    public static function getPageDetailsInError($page)
+    {
+       $currentDate = date('Y-m-d 00:00:00');
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page')
+            ->from('KC\Entity\Page', 'page')
+            ->leftJoin('page.pagewidget', 'pagewidget')
+            ->setParameter(1, $page)
+            ->where('page.permalink = ?1')
+            ->setParameter(2, $currentDate)
+            ->andWhere('page.publishdate <= ?2')
+            ->setParameter(3, 0)
+            ->andWhere('page.deleted = ?3');
+        $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageDetails;
+    }
 }
