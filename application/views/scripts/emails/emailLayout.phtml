@@ -15,13 +15,14 @@ $publicLocalePath = $locale != '' ? $httpPath.'public/'.$locale.'/images/front_e
 $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($locale);
 $publicPath = $httpPath.'public/images/front_end/';
 $emailsViewPath = 'emails/';
+$mailType = !empty($this->codeAlert) ? 'codeAlert' : $this->mailType;
 $emailHeader = $this->partial(
     $emailsViewPath. 'emailHeader.phtml',
     array(
         'websiteName' => $websiteName,
         'publicLocalePath' => $publicLocalePath,
         'httpPathLocale' => $httpPathLocale,
-        'mailType' => $this->mailType,
+        'mailType' => $mailType,
         'locale' => $locale,
         'publicPath' => $publicPath
     )

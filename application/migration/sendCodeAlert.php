@@ -163,7 +163,7 @@ class SendCodeAlert
                 $currentTime->setTimezone($timezone);
                 echo "\n" ;
                 $currentTime->get('YYYY-MM-dd HH:mm:ss');
-                    echo "\nSending newletter...\n" ;
+                    echo "\nSending code alert...\n" ;
                     $this->mandrilHandler($key, $settings);
             } else {
                 echo "\n";
@@ -196,9 +196,10 @@ class SendCodeAlert
                     $codeAlertOffer['shop']['id']
                 );
                 $emailDetails = CodeAlertSettings::getCodeAlertSettings();
-                $mandrillSenderEmailAddress = 'test@flipit.com';
+                $settings = Signupmaxaccount::getAllMaxAccounts();
+                $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
                 $mandrillNewsletterSubject = $emailDetails[0]['email_subject'];
-                $mandrillSenderName = 'flipit';
+                $mandrillSenderName = $settings[0]['sendername'];
                 $visitors = $codeAlertOffer['shop']['visitors'];
                 $visitorId = array();
                 foreach ($visitors as $visitorvalue) {
