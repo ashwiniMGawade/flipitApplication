@@ -307,14 +307,14 @@ class Page
         $this->$property = $value;
     }
 
-    public static function getPageDetailsInError($page)
+    public static function getPageDetailsInError($permalink)
     {
         $currentDate = date('Y-m-d 00:00:00');
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.pagewidget', 'pagewidget')
-            ->setParameter(1, $page)
+            ->setParameter(1, $permalink)
             ->where('page.permalink = ?1')
             ->setParameter(2, $currentDate)
             ->andWhere('page.publishdate <= ?2')
@@ -322,5 +322,120 @@ class Page
             ->andWhere('page.deleted = ?3');
         $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
+    }
+
+    public static function getPageDetailsFromUrl($pagePermalink)
+    {
+        $pageDetails = self::getPageDetailsByPermalink($pagePermalink);
+        if (!empty($pageDetails)) {
+            return $pageDetails;
+        } else {
+            throw new Zend_Controller_Action_Exception('', 404);
+        }
+    }
+
+    public static function getPageDetailsByPermalink($permalink)
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page.*, img.id, img.path, img.name')
+            ->from('KC\Entity\Page', 'page')
+            ->leftJoin('page.logo', 'img')
+            ->setParameter(1, $permalink)
+            ->where('page.permalink = ?1')
+            ->setParameter(2, 1)
+            ->andWhere('page.publish = ?2')
+            ->setParameter(3, 0)
+            ->andWhere('page.pagelock = ?3')
+            ->setParameter(4, 0)
+            ->andWhere('page.pagelock = ?4');
+        $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageDetails;
+    }
+
+    public static function getSpecialListPages()
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page.*, img.*')
+            ->from('KC\Entity\Page', 'page')
+            ->leftJoin('page.logo', 'img')
+            ->setParameter(1, 'offer')
+            ->where('page.pagetype = ?1')
+            ->setParameter(2, 0)
+            ->andWhere('page.deleted = ?2');
+        $specialListPages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $specialListPages;
+    }
+    
+
+    public static function getDefaultPageProperties($permalink)
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page.*')
+            ->from('KC\Entity\Page', 'page')
+            ->setParameter(1, $permalink)
+            ->where('page.permalink = ?1')
+            ->setParameter(2, 0)
+            ->andWhere('page.deleted = ?2');
+        $pageProperties = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageProperties;
+    }
+
+    public static function getPageDetailFromPermalink($permalink)
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page.content, page.pagetitle')
+            ->from('KC\Entity\Page', 'page')
+            ->setParameter(1, $permalink)
+            ->where('page.permalink = ?1')
+            ->setParameter(2, 0)
+            ->andWhere('page.deleted = ?2');
+        $pageDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageDetail;
+    }
+
+    public static function updatePageAttributeId()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->update('KC\Entity\Page', 'page');
+        for ($i = 1; $i <= 3; $i++) {
+                $query->set('page.pageattributeid', $i)->getQuery();
+            if ($i == 1) {
+                $query->setParameter(1, 'info/contact')->where('permalink = ?1')->getQuery();
+            } else if ($i == 2) {
+                $query->setParameter(1, 'info/faq')->where('permalink = ?1')->getQuery();
+            } else if ($i == 3) {
+                $query->setParameter(1, 'info/contact')
+                ->where('permalink = ?1')
+                ->setParameter(2, 'info/faq')
+                ->where('permalink = ?2')
+                ->getQuery();
+            }
+            $query->execute();
+        }
+        return true;
+    }
+
+    public static function replaceToPlusPage()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->update('KC\Entity\Page', 'page')
+            ->set('page.permalink', 'plus')
+            ->setParameter(1, 66)
+            ->where('page.id = ?1')
+            ->getQuery();
+            $query->execute();
+        return true;
+    }
+
+    public static function addSpecialPagesOffersCount($spcialPageId, $offersCount)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->update('KC\Entity\Page', 'page')
+            ->set('page.offersCount', $offersCount)
+            ->setParameter(1, $spcialPageId)
+            ->where('page.id = ?1')
+            ->getQuery();
+            $query->execute();
+        return true;
     }
 }
