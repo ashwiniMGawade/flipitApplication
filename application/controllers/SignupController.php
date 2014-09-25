@@ -50,8 +50,8 @@ class SignupController extends Zend_Controller_Action
                 FrontEnd_Helper_viewHelper::__link('link_profiel')
             );
         }
-
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $page  =  new KC\Entity\Page();
+        $pageDetails = $page->getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
 
         $this->viewHelperObject->getMetaTags($this);

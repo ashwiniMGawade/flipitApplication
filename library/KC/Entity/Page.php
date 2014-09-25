@@ -1,12 +1,6 @@
-
-     $page  =  new KC\Entity\Page();
-            $pagedata = $page->getPageDetailsInError(rtrim($pagePermalink, '/'));
-
-
-            <?php
+<?php
 namespace KC\Entity;
 use Doctrine\ORM\Mapping AS ORM;
-
 /**
  * @ORM\Entity
  * @ORM\Table(
@@ -313,10 +307,9 @@ class Page
         $this->$property = $value;
     }
 
-
     public static function getPageDetailsInError($page)
     {
-       $currentDate = date('Y-m-d 00:00:00');
+        $currentDate = date('Y-m-d 00:00:00');
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
             ->from('KC\Entity\Page', 'page')
