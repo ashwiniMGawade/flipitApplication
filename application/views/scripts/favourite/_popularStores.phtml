@@ -15,19 +15,23 @@ foreach ($this->popularShops as $popularShop) :
                     <?php echo $popularShop['name']; ?>
                     </a>
                     <p>
-                    <?php if($popularShop['activeCount'] > 0):?>
+                    <?php 
+                    if($popularShop['activeCount'] > 0):
+                        ?>
                         <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["permaLink"];?>" 
                         class="active-offer">
                         <?php echo $popularShop['activeCount'] . " "  .$this->translate('active offers');?>
                         </a>
                     <?php endif; ?>
                     </p>
-                    <a 
+                    <a
                     href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
                     . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten') .'&shopId='
-                    . base64_encode($popularShop['id']);?>' class="pop btn btn-default">
-                        <span class="glyphicon red-heart glyphicon-heart"></span>
-                        <span><?php echo $this->translate('Favourite');?></span>
+                    . base64_encode($popularShop['id']);?>'>
+                        <button class="pop btn btn-default" type="button">
+                            <span class="glyphicon glyphicon-heart"></span>
+                            <span class='follow-text'><?php echo $this->translate('love');?></span>
+                        </button>
                     </a>
                 </div>
             </div>

@@ -50,12 +50,9 @@ class Category extends BaseCategory
         ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->orderBy('o.exclusiveCode DESC')
-        ->addOrderBy('o.startDate DESC');
-        if ($pageName == 'homePage') {
-            $categoryOffersList->groupBy('s.id');
-        }
-        $categoryOffersList->limit(10);
-        $categoryOffersList = $categoryOffersList->fetchArray();
+        ->addOrderBy('o.startDate DESC')
+        ->limit($numberOfOffers)
+        ->fetchArray();
         return self::changeDataAccordingToOfferHtml($categoryOffersList);
     }
 
@@ -666,7 +663,7 @@ class Category extends BaseCategory
                 ->where("c.id=? " , $id)
                 ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
-        $urlsArray = array();
+        $varnishUrls = array();
 
 
         $cetgoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
@@ -674,22 +671,12 @@ class Category extends BaseCategory
         $articlesCetgoriesPage = 'pluscat' .'/' ;
 
         # check if a category has permalink then add it into array
-        if(isset($data['permaLink']) && strlen($data['permaLink']) > 0 ) {
-            $urlsArray[] = $cetgoriesPage . $data['permaLink'] ;
+        if (isset($data['permaLink']) && mb_strlen($data['permaLink']) > 0 )
+        {
+            $varnishUrls[] = $cetgoriesPage . $data['permaLink'];
+            $varnishUrls[] = $cetgoriesPage . $data['permaLink'] .'/2';
+            $varnishUrls[] = $cetgoriesPage . $data['permaLink'] .'/3';
         }
-
-
-        /* # check a category has one or more related
-        if(isset($data['shop']) && count($data['shop']) > 0 ) {
-            # traverse through all shops
-            foreach($data['shop'] as $value) {
-                # check if a category has permalink then add it into array
-                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
-                    $urlsArray[] = $value['permaLink'] ;
-                }
-            }
-        }  */
-
 
         # check a category has one or more related article category
         if(isset($data['articlecategory']) && count($data['articlecategory']) > 0 ) {
@@ -697,11 +684,11 @@ class Category extends BaseCategory
             foreach($data['articlecategory'] as $value) {
                 # check if a category has permalink then add it into array
                 if(isset($value['permalink']) && strlen($value['permalink']) > 0 ) {
-                    $urlsArray[] = $articlesCetgoriesPage . $value['permalink'] ;
+                    $varnishUrls[] = $articlesCetgoriesPage . $value['permalink'] ;
                 }
             }
         }
-        return $urlsArray ;
+        return $varnishUrls ;
     }
 
 }

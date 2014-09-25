@@ -239,6 +239,8 @@ class Page extends BasePage
     public function savePage($params)
     {
         $this->pageType='default';
+        $this->maxOffers  = 0;
+        $this->oderOffers = 0; 
         if (isset($params['selectedpageType'])){
 
               $this->pageType='offer';
@@ -299,6 +301,7 @@ class Page extends BasePage
         }
 
         $this->publish   = 1;
+        $this->timeOrder   = 0;
         if($params['savePagebtn']=='draft'){
             $this->publish   = 0;
         }
@@ -373,15 +376,13 @@ class Page extends BasePage
         }
 
 
-        $key = "all_allMSArticle".$this->id."_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
         try {
         //call cache function
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
+            $pagePermalinkParam =
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
 
         
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
@@ -704,7 +705,6 @@ class Page extends BasePage
         //call cache function
             $slug = $this->pageAttributeId;
             $pagedatakey ="all_". "pagedata".$slug ."_list";
-
             $flag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pagedatakey);
             //key not exist in cache
             if(!$flag) {
@@ -712,13 +712,14 @@ class Page extends BasePage
             }
             $pageKey ="all_moneysavingpage".$this->id."_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pageKey);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneysavingpage_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$params['pagepermalink'].'_data');
+            $pagePermalinkParam =
+                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
 
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -730,10 +731,15 @@ class Page extends BasePage
             $permalink = $this->permaLink ;
 
             #update varnish for this page
-            if(isset($permalink)) {
+            if (isset($permalink)) {
             // Add urls to refresh in Varnish
                 $varnishObj = new Varnish();
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND . $permalink);
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
+                if (!$permalink=='plus') {
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink .'/2');
+                    $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink.'/3');
+                }
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
             }
 
 

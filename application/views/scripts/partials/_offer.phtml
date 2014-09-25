@@ -12,7 +12,7 @@ foreach ($this->offers as $offer) {
     $offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
     $daysTillOfferExpires = $offerPartial->getDaysTillOfferExpires($offer->endDate);
     $urlToShow = $offerPartial->getUrlToShow($offer);
-    $offerTitle = $offer->title;
+    $offerTitle = FrontEnd_Helper_viewHelper::replaceStringVariable($offer->title);
     $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
     $userLoggedInOrNot = $offerPartial->getUserIsLoggedInOrNot();
     $couponCode = $offer->couponCode;
@@ -121,15 +121,11 @@ foreach ($this->offers as $offer) {
     if($offerCounter == 1) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
-            echo $this->partial(
-                'partials/_signupForm.phtml',
-                array(
-                   'zendForm' => $this->zendForm,
-                   'signupFormWidgetType'=> 'widgetWithinOffers',
-                   'shopId'=>isset($this->shop['id']) ? $this->shop['id'] : '',
-                   'shopLogoOrDefaultImage'=>$shopLogoOrDefaultImage
-               )
-            );
+            $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+            $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormLarge');
+            $sidebarWidgetNamespace->zendFormLarge = serialize($this->zendForm);
+            $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
+                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage='.$shopLogoOrDefaultImage);
         endif;
     endif;
 }

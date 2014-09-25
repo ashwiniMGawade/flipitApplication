@@ -643,26 +643,94 @@ a.pop{
 	&:hover,
 	&:focus{
 		background: white;
-		.glyphicon-heart{
-			color:#fc0d1b;
-		}
 	}
 }
 
-.btn {
-	.glyphicon-heart {
-		color:#878a8d;
-		font-size:15px;
-		padding:0 6px 0 2px;
-		vertical-align:top;
-		&:hover {
-	    	color:#fc0d1b;
+.remove-fovourite-btn-gradiant {
+	border:1px solid #d53a3a;
+	box-shadow: 0 1px 0 rgba(255, 255, 255, 0.3) inset, 0 1px 3px rgba(0, 0, 0, 0.1);
+	background-image: -webkit-gradient(
+		linear,
+		left top,
+		left bottom,
+		color-stop(0, #DB4444),
+		color-stop(0.49, #C31818),
+		color-stop(1, #D53A3A),
+		color-stop(1, #CC2929)
+	);
+	background-image: -o-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+	background-image: -moz-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+	background-image: -webkit-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+	background-image: -ms-linear-gradient(bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+	background-image: linear-gradient(to bottom, #DB4444 0%, #C31818 49%, #D53A3A 100%, #CC2929 100%);
+}
+a.follow-button{
+	line-height:16px;
+	color:#0077cc;
+	box-shadow: 0 1px 3px rgba(0,0,0,.05), 0 1px 0 #fff inset;
+	.glyphicon-heart{
+		display:inline-block;
+		padding:0 3px 0 0;
+		color:#0077cc;
+	}
+	&:hover, &:focus{
+		color:#0077cc;
+		.glyphicon-heart{
+			color:#0077cc;
 		}
 	}
-	.red-heart {
-		color:#fc0d1b;
+}
+.follow-text{
+	font-weight: bold;
+	font-size: 11px;
+}
+.red-heart{
+	top:2px;
+}
+div.box a.remove-fovourite.blue {
+	min-width: 100px;
+	width: 96px;
+	height: 29px;
+}
+div.box a.remove-fovourite.blue{
+	line-height:14px;
+	font-size:12px;
+	color:#0077cc;
+	padding: 7px 6px 8px;
+	letter-spacing: normal;
+	font-size: 11px;
+	font-weight: bold;
+	&:hover, &:focus{
+		.remove-fovourite-btn-gradiant;
+		padding: 7px 6px 8px;
+	}
+	em{
+		font-style:normal;
+		display:block;
+		color:#fff;
+	}
+	strong{
+		display:none;
+		font-weight:normal;
+		margin: 0;
+	}
+	span{
+		display:inline-block;
+		vertical-align:middle;
+	}
+	&:hover, &:focus{
+		strong{
+			display:block;
+			color:#fff;
+			font-weight: bold;
+		    text-transform: uppercase;
+		    font-size: 12px;
+		}
+		em{display:none;}
 	}
 }
+
+
 .btn-sm, .btn-group-sm > .btn{
 	font-size:11px;
 	margin: 0 14px 0 0;
@@ -1184,7 +1252,7 @@ div.line:last-child {border-bottom: none;}
 	background:@white-color;
 	margin:0 0 25px;
 	&:after {.after}
-	a{
+	a,span.replace{
 		&:after {.after}
 		display:block;
 		font-size:12px;
@@ -3147,6 +3215,11 @@ input[type="submit"]::-moz-focus-inner{
 	}
 }
 
+span.pop{
+	color:#353535;
+	margin-bottom: 10px;
+}
+
 @media only screen and (min-width: 1200px){
 	.search-box .js-slide-hidden{
 		position:static !important;
@@ -3342,6 +3415,15 @@ input[type="submit"]::-moz-focus-inner{
 	}
 	.section-module{
 		a{
+			padding:12px;
+			.holder{
+				width:79%;
+			}
+			.date{
+				width:20%;
+			}
+		}
+		span.replace{
 			padding:12px;
 			.holder{
 				width:79%;
@@ -3787,6 +3869,14 @@ input[type="submit"]::-moz-focus-inner{
 	.deal{display:none;}
 	.section-module{
 		a{
+			.holder{
+				width:82%;
+			}
+			.date{
+				width:17%;
+			}
+		}
+		span.replace{
 			.holder{
 				width:82%;
 			}
@@ -4450,6 +4540,19 @@ img.logo.kortingscode{
 				display: none;
 			}
 		}
+		span.replace{
+			text-align:right;
+			padding:10px 20px;
+			.holder{
+				float:none;
+				width:100%;
+				margin:0 0 5px;
+				text-align:left;
+			}
+			.date{
+				display: none;
+			}
+		}
 	}
 	.header-block{
 		.icon.icon-small{
@@ -4568,7 +4671,7 @@ img.logo.kortingscode{
 				background: none repeat scroll 0 0 #2d2c2c;
 				box-shadow: 1px 0 2px 1px #2d2c2c;
 				min-width: 210px;
-				margin-top: 4px;
+				margin-top: -6px;
 				.full-width-li {
 					width: 100%;
 					a{

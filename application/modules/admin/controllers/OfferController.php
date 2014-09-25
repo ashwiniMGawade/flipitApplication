@@ -1101,9 +1101,10 @@ class Admin_OfferController extends Zend_Controller_Action
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
-
+        $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
+        $varnishObj->addUrl("http://www.flipit.com");
         # make markplaatfeed url's get refreashed only in case of kortingscode
-        iF(LOCALE == '')
+        if(LOCALE == '')
         {
             $varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
             $varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );

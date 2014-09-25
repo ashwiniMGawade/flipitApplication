@@ -90,9 +90,7 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
      */
     public function esi($src)
     {
-
-        if (!empty($_SERVER['HTTP_X_VARNISH'])) {
-            // If the ESI headers have not been sent yet do it now
+        if (!empty($_SERVER['HTTP_X_VARNISH']) && !isset($_COOKIE['passCache'])) {
             if (!self::$_varnishHeaderSent) {
                 $response = Zend_Controller_Front::getInstance()->getResponse();
                 $response->setHeader(self::$_varnishHeaderName, self::$_varnishHeaderValue);
@@ -100,14 +98,20 @@ class Zend_View_Helper_Esi extends Zend_View_Helper_Abstract
             }
             return '<esi:include src="' . HTTP_PATH . ltrim($src, '/') . '"/>';
         } else {
-            // fetch with ajax. We still we wat to show the html
             $divID = rand(0, 99999);
-            echo '<nav class="account-box" id="'.$divID.'"></nav>';
+            if (strpos($src, 'login') !== false) {
+                echo '<nav class="account-box" id="'.$divID.'"></nav>';
+            } elseif (strpos($src, 'followbutton') !== false) {
+                echo '<span class="" id="'.$divID.'"></span>';
+            } else {
+                echo '<div class="" id="'.$divID.'"></div>';
+            }
             ?>
             <script type="text/javascript">
-                var divId = "<?php echo $divID; ?>";
-                var link = "<?php echo $src; ?>";
-                var http = "<?php echo HTTP_PATH . ltrim($src, '/'); ?>";
+                $.get('<?php echo HTTP_PATH . ltrim($src , '/'); ?>', function(data) {
+                  $('#<?php echo $divID; ?>').html(data);
+                  console.log('Load of <?php echo $src; ?> was performed with ajax.');
+                });
             </script>
             <?php
         }

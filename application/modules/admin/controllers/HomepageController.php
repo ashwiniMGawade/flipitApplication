@@ -359,6 +359,14 @@ class Admin_HomepageController extends Zend_Controller_Action
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularShops_list');
         die();
     }
+
+    public function savepopularshopspositionAction()
+    {
+        PopularShop::savePopularShopsPosition($this->getRequest()->getParam('shopid'));
+        $popularShop = PopularShop::getPopularShop();
+        echo Zend_Json::encode($popularShop);
+        exit();
+    }
     /**
      * move up one position  popular shop list
      * @author Er.kundal

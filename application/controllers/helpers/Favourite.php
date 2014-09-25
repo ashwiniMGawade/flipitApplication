@@ -16,7 +16,9 @@ class Zend_Controller_Action_Helper_Favourite extends Zend_Controller_Action_Hel
     {
         $offers = '';
         foreach ($mergedTopOffersAndFavouriteShopsOffers as $mergedTopOffersAndFavouriteShopsOffer) {
-            $offers[$mergedTopOffersAndFavouriteShopsOffer['id']] = $mergedTopOffersAndFavouriteShopsOffer;
+            if (!isset($offers[$mergedTopOffersAndFavouriteShopsOffer['shop']['id']])) {
+                $offers[$mergedTopOffersAndFavouriteShopsOffer['shop']['id']] = $mergedTopOffersAndFavouriteShopsOffer;
+            }
         }
 
         usort(

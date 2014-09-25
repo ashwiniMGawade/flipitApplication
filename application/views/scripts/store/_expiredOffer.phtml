@@ -10,8 +10,18 @@ foreach ($this->expiredOffers as $offer) :
     $shopUrl = $domainName.'out/shop/'.$offer->shop['id'];
     ?>
     <div class="line">
-      <a href="<?php echo $shopUrl;?>"
-      rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
+    <?php
+    if($offer->shop['affliateProgram']==1) {
+        ?>
+        <a href="<?php echo $shopUrl;?>"
+        rel="nofollow" target="<?php echo $offer->extendedOffer==1 ? '_self' : '_blank';?>">
+        <?php
+    } else {
+        ?>
+        <span class='replace'>
+        <?php
+    }
+    ?>
         <div class="holder">
             <strong class="mark status"><?php echo  $this->translate('Expired'); ?></strong>
             <div class="box">
@@ -25,7 +35,17 @@ foreach ($this->expiredOffers as $offer) :
             </div>
         </div>
         <span class="date"><?php echo $expiredOffersPartialClass->getExpiredOnDate($offer->endDate);?></span>
-      </a>
+    <?php
+    if($offer->shop['affliateProgram']==1) {
+        ?>
+        </a>
+        <?php
+    } else {
+        ?>
+        </span>
+        <?php    
+    }
+    ?>
     </div>
     <?php 
 endforeach;?>

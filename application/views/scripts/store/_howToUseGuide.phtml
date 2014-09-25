@@ -1,6 +1,8 @@
 <?php
 $domainName = LOCALE == '' ? HTTP_PATH : HTTP_PATH_LOCALE;
-$shopUrl = $domainName.'out/shop/'.$this->shop['id'];
+$shopUrl = $this->shop['affliateProgram'] == '1' ? 
+    '<a href="'.$domainName.'out/shop/'.$this->shop['id'].'" rel="nofollow" target="_blank">'.$this->actualUrl.'</a>' :
+     $this->actualUrl;
 ?>
 <ul class="add-info">
 <?php
@@ -21,6 +23,6 @@ if($this->shop['howToUse']):
 <?php endif; ?>    
     <li class="web">
         <h4><?php echo $this->translate('Official website'); ?></h4>
-        <a href="<?php echo $shopUrl; ?>" rel="nofollow" target="_blank"><?php echo $this->actualUrl;?></a>
+        <?php echo $shopUrl; ?>
     </li>
 </ul>

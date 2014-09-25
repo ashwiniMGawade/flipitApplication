@@ -21,7 +21,9 @@ class OfferController extends Zend_Controller_Action
     public function top20Action()
     {
         $pageName = 'top-20';
-        $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
+        $pagePermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $pageDetails = Page::getPageDetailsFromUrl($pagePermalink);
+        $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($pagePermalink);
         $this->view->pageHeaderImage = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'page_header'.$pageDetails->id.'_image',
             array(
@@ -72,7 +74,7 @@ class OfferController extends Zend_Controller_Action
         $extendedUrl = $parameters['permalink'];
 
         $couponDetails = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-            'extended_'.$extendedUrl.'_couponDetails',
+            'extended_'.FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($extendedUrl).'_couponDetails',
             array('function' => 'Offer::getCouponDetails', 'parameters' => array($extendedUrl))
         );
         $shopList = $couponDetails[0]['shop']['id'].'_list';
@@ -95,7 +97,7 @@ class OfferController extends Zend_Controller_Action
         );
 
         if (count($couponDetails)== 0) {
-            $this->_redirect(HTTP_PATH_LOCALE.'error');
+            throw new Zend_Controller_Action_Exception('', 404);
         }
 
         $topOfferFromStore = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(

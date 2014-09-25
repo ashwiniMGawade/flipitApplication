@@ -51,9 +51,6 @@ else:
         )
     );
 endif;
-if (APPLICATION_ENV != 'development') {
-    echo $this->headLink();
-}
 echo $this->headMeta();
 echo $this->render('layout_css.phtml');
 echo $this->render('layout_js.phtml');
@@ -64,6 +61,7 @@ echo FrontEnd_Helper_LayoutContent::loadGoogleAnalyticsCode();
 
 </head>
 <body<?php echo (!empty($this->pageCssClass) ? " class='$this->pageCssClass'" : ''); ?>>
+    <?php echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager(); ?>
     <?php echo $this->render('branding_menu.phtml'); ?>
     <?php echo $this->render('mobile_menu.phtml'); ?>
     <div id="wrapper">

@@ -10,7 +10,7 @@ class Application_Form_SearchBrand extends Application_Form_Base
         $searchBrand = new Zend_Form_Element_Text('searchBrand');
         $searchBrand->setRequired(true);
         $searchBrand->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Type in a Store e.g.  Avis'));
-        $searchBrand->setAttrib('class', 'form-control');
+        $searchBrand->setAttrib('class', 'form-control text-active');
         $this->addElements(array($searchBrand));
     }
 }

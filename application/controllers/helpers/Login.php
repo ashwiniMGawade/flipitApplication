@@ -19,5 +19,6 @@ class Zend_Controller_Action_Helper_Login extends Zend_Controller_Action_Helper_
         $visitor = new Visitor();
         $visitor->updateLoginTime($visitorId);
         setcookie('kc_unique_user_id', $visitorId, time() + 64800, '/');
+        setcookie('registered_user', true, time() + 10 * 365 * 24 * 60 * 60, '/');
     }
 }

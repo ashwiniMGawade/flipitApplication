@@ -103,10 +103,6 @@ class StoreController extends Zend_Controller_Action
                     $shopInformation[0]['name'],
                     $shopInformation[0]['chainItemId']
                 );
-
-                if (isset($shopChains['headLink'])) {
-                    $this->view->layout()->customHeader = "\n" . $shopChains['headLink'];
-                }
                 if ($shopChains['hasShops'] && isset($shopChains['string'])) {
                     $this->view->shopChain = $shopChains['string'];
                 }
@@ -134,14 +130,14 @@ class StoreController extends Zend_Controller_Action
             $explodedPermalink = explode("/", $shopPermalink);
             $shopPermalink = $explodedPermalink[1];
         }
-        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopPermalink);
+        $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
             $this->view->discussionComments =
                 FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                     'get_'.$cacheKey.'_disqusComments',
                     array(
                         'function' => 'DisqusComments::getPageUrlBasedDisqusComments',
-                        'parameters' => array(HTTP_PATH_LOCALE.$shopPermalink)
+                        'parameters' => array($shopPermalink)
                     ),
                     ''
                 );
@@ -195,7 +191,7 @@ class StoreController extends Zend_Controller_Action
 
         if ($shopInformation[0]['showSimliarShops']) {
             $this->view->similarShops = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
-                (string)'shop_'.$shopId.'_similarShops',
+                (string)'shop_similar_shops',
                 array(
                     'function' => 'Shop::getSimilarShops',
                     'parameters' => array($shopId, 11)
@@ -394,5 +390,12 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopid = $this->getRequest()->getParam('shopId');
         $this->view->shopname = $this->getRequest()->getParam('shopName');
         $this->_helper->layout()->disableLayout();
+    }
+
+    public function followbuttonAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopid');
+        $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
 }
