@@ -37,7 +37,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
             "bServerSide" : true,
             "iDisplayLength" : 100,
             "oLanguage": {
-                  "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
+                "sInfo": "<b>_START_-_END_</b> of <b>_TOTAL_</b>"
             },
             "iDisplayStart" : iStart,
             "aaSorting": [[ iSortCol , iSortDir ]],
@@ -57,7 +57,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
                     var tag = "";
                     tag ="<p editId='" + obj.aData.id + 
                     "' class='editId word-wrap-without-margin-widget store-offer'><a href='/admin/offer/editoffer/id/"+
-                     obj.aData.id +"'>Zalando - offer title</a></p>";
+                    obj.aData.id +"'>Zalando - offer title</a></p>";
                     return tag;
                 },
                 "bSearchable" : true,
@@ -86,6 +86,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
                     state[ 'iSortDir' ] = obj.aaSorting[0][1] ;
                     state[ 'iSearchText' ] = iSearchText;
                     $("#SearchcodeAlert").val(iSearchText);
+                    
                     if(iSearchText == undefined){
                         $.bbq.removeState( 'iSearchText' );
                     }
@@ -106,6 +107,7 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
                     if($('td.row_selected').length > 0){
                         var top = $('td.row_selected').offset().top;
                     }
+
                     var windowHeight = $(window).height() / 2 - 50;
                     window.scrollTo(0, top - windowHeight);
              },
@@ -128,14 +130,11 @@ function getcodeAlertList(iSearchText,iStart,iSortCol,iSortDir){
 }
 
 var validRules = {
-
     acclimit : __("Max free accounts looks great")
 };
 
 var focusRules = {
-
     acclimit : __("Enter numbers only")
-
 };
 
 $(document).ready(init);
@@ -158,7 +157,7 @@ function validatespeacialForm()
                 afterReset  : resetBorders,
                 errorPlacement : function(error, element) {
                     element.parent("div").prev("div")
-                            .html(error);
+                        .html(error);
                 },
                 rules : {
                     acclimit : {
@@ -177,25 +176,24 @@ function validatespeacialForm()
                 onfocusin : function(element) {
                     if (!$(element).parent('div').prev("div")
                             .hasClass('success')) {                     
-                         var label = this.errorsFor(element);
-                         if( $( label).attr('hasError')  )
-                         {
-                             if($( label).attr('remote-validated') != "true")
-                                {
-                                    this.showLabel(element, focusRules[element.name]);
-                                    
-                                    $(element).parent('div').removeClass(
-                                                    this.settings.errorClass)
-                                            .removeClass(
-                                                    this.settings.validClass)
-                                            .prev("div")
-                                            .addClass('focus')
-                                            .removeClass(
-                                                    this.settings.errorClass)
-                                            .removeClass(
-                                                    this.settings.validClass);
-                                }
-                         } else {
+                        var label = this.errorsFor(element);
+                        if( $( label).attr('hasError')  )
+                        {
+                            if($( label).attr('remote-validated') != "true")
+                            {
+                                this.showLabel(element, focusRules[element.name]);
+                                $(element).parent('div').removeClass(
+                                                this.settings.errorClass)
+                                        .removeClass(
+                                                this.settings.validClass)
+                                        .prev("div")
+                                        .addClass('focus')
+                                        .removeClass(
+                                                this.settings.errorClass)
+                                        .removeClass(
+                                                this.settings.validClass);
+                            }
+                        } else {
                             this.showLabel(element, focusRules[element.name]);
                             $(element).parent('div').removeClass(
                                             this.settings.errorClass)
@@ -207,7 +205,7 @@ function validatespeacialForm()
                                             this.settings.errorClass)
                                     .removeClass(
                                             this.settings.validClass);
-                         }
+                        }
                     }
                 },
 
@@ -241,7 +239,6 @@ function validatespeacialForm()
                     }
                 },
                 success: function(label , element) {
-                    
                     $(element).parent('div')
                     .removeClass(this.errorClass)
                     .addClass(this.validClass).prev(
@@ -252,9 +249,7 @@ function validatespeacialForm()
                     $(label).append( validRules[element.name] ) ;
                     label.addClass('valid') ;
                 }
-
             });
-
 }
 
 function resetBorders(el)
@@ -276,15 +271,15 @@ $(document).ready(function() {
              url: HOST_PATH + "admin/visitor/searchemails",
              dataType: 'json',
              data: function(term, page) {
-                 return {
-                     keyword: term,
-                     flag: 0
+                return {
+                    keyword: term,
+                    flag: 0
              };
          },
-         type: 'post',
-         results: function (data, page) { 
-             return {results: data};
-             }
+        type: 'post',
+        results: function (data, page) { 
+            return {results: data};
+            }
         },
         formatResult: function(data) { 
             return data; 
@@ -296,11 +291,8 @@ $(document).ready(function() {
     });
     
     $("#emailHeader").blur(function(){
-
         saveEmailHeaderFooter('email-header' , $(this).val() );
     });
-
- 
 
     jQuery('#dp3').datepicker();
     jQuery('#offerstartTime').timepicker({
@@ -324,7 +316,7 @@ function saveEmailHeaderFooter(name , data)
 function saveSenderEmail(el)
 {
     var value = $(el).val().trim();
-    if(value != ''){
+    if (value != '') {
         $.ajax({
             url : HOST_PATH + 'admin/email/savecodealertemailsubject',
             type : 'post',
@@ -338,14 +330,13 @@ function getTotalRecepients()
     var count = 0 ;
     $.ajax({
         url : HOST_PATH + "admin/email/total-recepients",
-            method : "post",
-            dataType : "json",
-            type : "post",
-            async : false,
-            success : function(data) {
-                count =     data['recepients'];
-            }
-
+        method : "post",
+        dataType : "json",
+        type : "post",
+        async : false,
+        success : function(data) {
+            count = data['recepients'];
+        }
     });
 
     return count;

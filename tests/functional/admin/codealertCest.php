@@ -13,7 +13,6 @@ class codealertCest
     {
     }
 
-    // tests
     public function codealert(FunctionalTester $I, \Codeception\Scenario $scenario)
     {
         $I = new FunctionalTester\AdminSteps($scenario);

@@ -19,7 +19,7 @@ class Admin_EmailController extends Zend_Controller_Action
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
         $this->_settings  = $sessionNamespace->settings['rights'] ;
-
+        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
     }
 
     public function init()
@@ -334,22 +334,22 @@ class Admin_EmailController extends Zend_Controller_Action
 
     public function codeAlertAction()
     {
-        $flash = $this->_helper->getHelper('FlashMessenger');
-        $message = $flash->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+        $this->getFlashMessage();
     }
 
     public function codeAlertSettingsAction()
     {
         $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
         $this->view->codeAlertSettings = $codeAlertSettings;
-
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->getFlashMessage();
+
         if ($this->getRequest()->isPost()) {
             $codeAlertParameters = $this->getRequest()->getParams();
-            CodeAlertSettings::saveCodeAlertSettings($codeAlertParameters['emailSubject'], $codeAlertParameters['emailHeader']);
+            CodeAlertSettings::saveCodeAlertSettings(
+                $codeAlertParameters['emailSubject'],
+                $codeAlertParameters['emailHeader']
+            );
             $this->setFlashMessage('Code alert Settings have been updated successfully');
             $this->_redirect(HTTP_PATH . 'admin/email/code-alert-settings');
         }
@@ -404,8 +404,7 @@ class Admin_EmailController extends Zend_Controller_Action
 
     public function movecodealerttotrashAction()
     {
-        $codeAlertParameter = $this->_getAllParams();
-        $codeAlert = CodeAlertQueue::moveCodeAlertToTrash($codeAlertParameter['id']);
+        $codeAlert = CodeAlertQueue::moveCodeAlertToTrash($this->_getParam('id'));
         if (intval($codeAlert) > 0) {
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Code alert has been moved to trash');
@@ -421,8 +420,8 @@ class Admin_EmailController extends Zend_Controller_Action
     public function getFlashMessage()
     {
         $message = $this->flashMessenger->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+        $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->ErrorMessage = isset($message[0]['error']) ? $message[0]['error'] : '';
         return $this;
     }
 

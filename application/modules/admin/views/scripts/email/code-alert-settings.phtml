@@ -11,14 +11,14 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
 ?>
 <div class="newsletter-setting-container wrap columns-2">
     <div class='wrap columns-2'>
-        <?php if ($this->messageSuccess!='' || $this->messageError!='' ) { ?>
+        <?php if ($this->successMessage!='' || $this->ErrorMessage!='' ) { ?>
             <br>
             <div class ="mainpage-content-colorbox success">
-            <?php if ($this->messageSuccess!='') { ?>
-                <span class="successserver"><?php echo $this->messageSuccess; ?></span>
+            <?php if ($this->successMessage!='') { ?>
+                <span class="successserver"><?php echo $this->successMessage; ?></span>
             <?php }?>
-            <?php if ($this->messageError!=''){ ?>
-                <span class="errorserver"><?php echo $this->messageError; ?></span>
+            <?php if ($this->ErrorMessage!=''){ ?>
+                <span class="errorserver"><?php echo $this->ErrorMessage; ?></span>
             <?php } ?>
             </div>
         <?php
@@ -37,7 +37,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div data-toggle="buttons-checkbox" class="mainpage-content-right-inner-left-other">
                             <input type="text" value="<?php 
-                            echo !empty($this->codeAlertSettings[0]['email_subject']) ? $this->codeAlertSettings[0]['email_subject'] : '';?>"
+                            echo !empty($this->codeAlertSettings[0]['email_subject']) 
+                                ? $this->codeAlertSettings[0]['email_subject'] : '';?>"
                                 placeholder=<?php echo $this->translate("Subject")?> 
                                 name="emailSubject" id="emailSubject" onblur="saveSenderEmail(this)"
                                 class="span3">
@@ -55,22 +56,25 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
                             <div class="">
                                 <textarea name="emailHeader" id="emailHeader" 
                                     class="" style="height:135px;"><?php 
-                                    echo !empty($this->codeAlertSettings[0]['email_header']) ? $this->codeAlertSettings[0]['email_header'] : '';
+                                    echo !empty($this->codeAlertSettings[0]['email_header']) 
+                                        ? $this->codeAlertSettings[0]['email_header'] : '';
                                     ?></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        <div class="mainpage-content-line mb10">
-            <div class="mainpage-content-right">
-                <div class="mainpage-content-right-inner-left-other">
-                    <div data-toggle="buttons-checkbox" class="btn-group">
-                        <button class="btn btn-primary" type="submit"><?php echo $this->translate('Submit') ?></button>
+            <div class="mainpage-content-line mb10">
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-left-other">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button class="btn btn-primary" type="submit">
+                                <?php echo $this->translate('Submit') ?>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
         </form>
     </div>
 </div>

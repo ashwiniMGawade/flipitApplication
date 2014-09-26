@@ -2,77 +2,41 @@
 
 class SendCodeAlert
 {
-    public $_localePath = '/';
-    public $_hostName = '';
-    public $_trans = null;
-    public $_locale = '';
-    public $_siteName = null;
-    public $_logo = null;
-    public $_linkPath = null;
-    public $_publicPath = null;
-    public $_public_cdn_path = null;
-    public $_http_path_cdn = null;
+    public $localePath = '/';
+    public $hostName = '';
+    public $zendTranslate = '';
+    public $locale = '';
+    public $siteName = '';
+    public $logo = '';
+    public $_linkPath = '';
+    public $publicCdnPath = '';
     public $_recipientMetaData  = array();
     public $_loginLinkAndData = array();
     public $_to = array();
-    public $_mandrillKey = "";
-    public $_template = "" ;
-    public $_rootPath = "" ;
+    public $mandrillKey = "";
+    public $template = "";
 
     public function __construct()
     {
-        ini_set('memory_limit', '-1');
-        set_time_limit(0);
-        defined('APPLICATION_PATH')
-            || define(
-                'APPLICATION_PATH',
-                dirname(dirname(__FILE__))
-            );
-        defined('LIBRARY_PATH')
-            || define('LIBRARY_PATH', realpath(dirname(dirname(dirname(__FILE__))). '/library'));
-        defined('DOCTRINE_PATH') || define('DOCTRINE_PATH', LIBRARY_PATH . '/Doctrine');
-        defined('APPLICATION_ENV')
-        || define(
-            'APPLICATION_ENV',
-            (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV')
-                : 'production')
-        );
-        set_include_path(
-            implode(
-                PATH_SEPARATOR,
-                array(
-                    realpath(APPLICATION_PATH . '/../library'),
-                    get_include_path(),)
-            )
-        );
-        set_include_path(
-            implode(
-                PATH_SEPARATOR,
-                array(realpath(DOCTRINE_PATH), get_include_path(),)
-            )
-        );
-
-        require_once(LIBRARY_PATH.'/PHPExcel/PHPExcel.php');
-        require_once(LIBRARY_PATH.'/BackEnd/Helper/viewHelper.php');
-        require_once (LIBRARY_PATH . '/Zend/Application.php');
-        require_once(DOCTRINE_PATH . '/Doctrine.php');
+        require_once 'ConstantForMigration.php';
+        require_once('CommonMigrationFunctions.php');
+        CommonMigrationFunctions::setTimeAndMemoryLimit();
         $application = new Zend_Application(
             APPLICATION_ENV,
             APPLICATION_PATH . '/configs/application.ini'
         );
         $frontControlerObject = $application->getOption('resources');
-        $this->_mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
-        $this->_template = $frontControlerObject['frontController']['params']['newsletterTemplate'];
-        $connections = $application->getOption('doctrine');
-        spl_autoload_register(array('Doctrine', 'autoload'));
-        $manager = Doctrine_Manager::getInstance();
+        $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
+        $this->template = $frontControlerObject['frontController']['params']['newsletterTemplate'];
+        $connections = CommonMigrationFunctions::getAllConnectionStrings();
+        $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
+        $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
         $imbull = $connections['imbull'];
-        $DMC1 = Doctrine_Manager::connection($connections['imbull'], 'doctrine');
 
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->send($connection ['dsn'], $key, $imbull);
+                    $this->send($connection['dsn'], $key, $imbull);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -80,141 +44,131 @@ class SendCodeAlert
                 echo "\n\n";
             }
         }
-        $manager->closeConnection($DMC1);
+        $manager->closeConnection($doctrineImbullDbConnection);
     }
 
     protected function send($dsn, $key, $imbull)
     {
         if ($key == 'en') {
-            $this->_localePath = '';
-            $this->_hostName = "http://www.kortingscode.nl";
-            $this->_logo = $this->_hostName ."/public/images/HeaderMail.gif" ;
+            $this->localePath = '';
+            $this->hostName = "http://www.kortingscode.nl";
+            $this->logo = $this->hostName ."/public/images/HeaderMail.gif" ;
             $suffix = "" ;
-            $this->_locale = '';
-            $this->_siteName = "Kortingscode.nl";
-            $this->_public_cdn_path = "http://img.kortingscode.nl/public/";
+            $this->locale = '';
+            $this->siteName = "Kortingscode.nl";
+            $this->publicCdnPath = "http://img.kortingscode.nl/public/";
         } else {
-            $this->_localePath = $key . "/";
-            $this->_hostName = "http://www.flipit.com";
+            $this->localePath = $key . "/";
+            $this->hostName = "http://www.flipit.com";
             $suffix = "_" . strtoupper($key) ;
-            $this->_locale = $key;
-            $this->_siteName = "Flipit.com";
-            $this->_logo =  $this->_hostName ."/public/images/flipit-welcome-mail.jpg";
-            $this->_public_cdn_path = "http://img.flipit.com/public/" . strtolower($this->_localePath);
+            $this->locale = $key;
+            $this->siteName = "Flipit.com";
+            $this->logo =  $this->hostName ."/public/images/flipit-welcome-mail.jpg";
+            $this->publicCdnPath = "http://img.flipit.com/public/" . strtolower($this->localePath);
         }
 
-        defined('PUBLIC_PATH')
-            || define(
-                'PUBLIC_PATH',
-                dirname(dirname(dirname(__FILE__)))."/public/"
-            );
-
-        $DMC = Doctrine_Manager::connection($dsn, 'doctrine_site');
+        $doctrineSiteConnection = Doctrine_Manager::connection($dsn, 'doctrine_site');
         spl_autoload_register(array('Doctrine', 'modelsAutoload'));
         $manager = Doctrine_Manager::getInstance();
         $manager->setAttribute(Doctrine_Core::ATTR_MODEL_LOADING, Doctrine_Core::MODEL_LOADING_CONSERVATIVE);
         $manager->setAttribute(Doctrine_Core::ATTR_AUTO_ACCESSOR_OVERRIDE, true);
         $manager->setAttribute(Doctrine::ATTR_AUTOLOAD_TABLE_CLASSES, true);
         Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
-
         try {
-            $settings = CodeAlertSettings::getCodeAlertSettings();
+            $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
             $localeSettings = LocaleSettings::getLocaleSettings();
-            
             $cutsomLocale = !empty( $localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
-            $this->_trans = new Zend_Translate(array(
+            $this->zendTranslate = new Zend_Translate(array(
                     'adapter' => 'gettext',
                     'disableNotices' => true));
-            $this->_trans->addTranslation(
+            $this->zendTranslate->addTranslation(
                 array(
-                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->localePath).
                     'language/frontend_php' . $suffix . '.mo',
                     'locale' => $cutsomLocale,
                 )
             );
-            $this->_trans->addTranslation(
+            $this->zendTranslate->addTranslation(
                 array(
-                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->localePath).
                     'language/email' . $suffix . '.mo',
                     'locale' => $cutsomLocale
                 )
             );
-            $this->_trans->addTranslation(
+            $this->zendTranslate->addTranslation(
                 array(
-                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->localePath).
                     'language/form' . $suffix . '.mo',
                     'locale' => $cutsomLocale
                 )
             );
-            $this->_trans->addTranslation(
+            $this->zendTranslate->addTranslation(
                 array(
-                    'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                    'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->localePath).
                     'language/po_links' . $suffix . '.mo',
                     'locale'    => $cutsomLocale
                 )
             );
-            Zend_Registry::set('Zend_Translate', $this->_trans);
+            Zend_Registry::set('Zend_Translate', $this->zendTranslate);
             Zend_Registry::set('Zend_Locale', $cutsomLocale);
-            $timezone = $localeSettings[0]['timezone'];
-            echo "\n" ;
-            echo "\n" ;
             echo "\nSending code alert...\n" ;
-            $this->mandrilHandler($key, $settings);
+            $this->mandrilHandler($key, $codeAlertSettings);
         } catch (Exception $e) {
             echo "\n";
             echo $e->getMessage();
         }
 
-        $manager->closeConnection($DMC);
+        $manager->closeConnection($doctrineSiteConnection);
     }
 
+    protected function setPhpExecutionLimit()
+    {
+        set_time_limit(10000);
+        ini_set('max_execution_time', 115200);
+        ini_set("memory_limit", "1024M");
+    }
 
     protected function mandrilHandler($key, $settings)
     {
         $message = '';
-        $this->_linkPath = $this->_hostName . '/' .$this->_localePath;
-        $this->_publicPath = $this->_hostName . '/public/' . $this->_localePath;
-        $this->_rootPath = PUBLIC_PATH . $this->_localePath;
+        $this->_linkPath = $this->hostName . '/' .$this->localePath;
         $codeAlertOffers = CodeAlertQueue::getCodealertOffers();
         if (!empty($codeAlertOffers)) {
             foreach ($codeAlertOffers as $codeAlertOffer) {
-                set_time_limit(10000);
-                ini_set('max_execution_time', 115200);
-                ini_set("memory_limit", "1024M");
+                $this->setPhpExecutionLimit();
                 $topVouchercodes = FrontEnd_Helper_viewHelper::getShopCouponCode(
                     'similarStoresAndSimilarCategoriesOffers',
                     4,
                     $codeAlertOffer['shop']['id']
                 );
-                $emailDetails = CodeAlertSettings::getCodeAlertSettings();
+                $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
                 $settings = Signupmaxaccount::getAllMaxAccounts();
                 $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
-                $mandrillNewsletterSubject = $emailDetails[0]['email_subject'];
+                $mandrillNewsletterSubject = $codeAlertSettings[0]['email_subject'];
                 $mandrillSenderName = $settings[0]['sendername'];
                 $visitors = $codeAlertOffer['shop']['visitors'];
-                $visitorId = array();
-                foreach ($visitors as $visitorvalue) {
+                $visitorIds = array();
+                foreach ($visitors as $visitorInfo) {
                     $codeAlertVisitors = CodeAlertVisitors::getVisitorsToRemoveInCodeAlert(
-                        $visitorvalue['visitorId'],
+                        $visitorInfo['visitorId'],
                         $codeAlertOffer['id']
                     );
                     if (empty($codeAlertVisitors)) {
-                        $visitorCodeAlertSendDate = Visitor::getVisitorCodeAlertSendDate($visitorvalue['visitorId']);
+                        $visitorCodeAlertSendDate = Visitor::getVisitorCodeAlertSendDate($visitorInfo['visitorId']);
                         if (date('Y-m-d', strtotime($visitorCodeAlertSendDate)) == date('Y-m-d')) {
                         } else {
-                            $visitorId[] = $visitorvalue['visitorId'];
+                            $visitorIds[] = $visitorInfo['visitorId'];
                         }
                     }
                 }
-                if (!empty($visitorId)) {
-                    $visitorId = implode(',', $visitorId);
-
-                    $this->visitorId = $visitorId;
+                if (!empty($visitorIds)) {
+                    $visitorIds = implode(',', $visitorIds);
+                    $this->visitorId = $visitorIds;
                     BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
                         $this,
                         'scheduleNewsletterSender',
                         '',
-                        $this->_mandrillKey
+                        $this->mandrillKey
                     );
                     try {
                         FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
@@ -229,17 +183,17 @@ class SendCodeAlert
                             $this->_to,
                             '',
                             array(
-                                'httpPath' => $this->_hostName,
-                                'locale' => $this->_locale,
+                                'httpPath' => $this->hostName,
+                                'locale' => $this->locale,
                                 'httpPathLocale' => $this->_linkPath,
-                                'publicPathCdn' => $this->_public_cdn_path,
-                                'mandrillKey' => $this->_mandrillKey
+                                'publicPathCdn' => $this->publicCdnPath,
+                                'mandrillKey' => $this->mandrillKey
                             ),
-                            $emailDetails[0]['email_header'].' '.$codeAlertOffer['shop']['name'],
+                            $codeAlertSettings[0]['email_header'].' '.$codeAlertOffer['shop']['name'],
                             $codeAlertOffer
                         );
-                        Visitor::addCodeAlertTimeStampForVisitor($visitorId);
-                        CodeAlertVisitors::saveCodeAlertVisitors($visitorId, $codeAlertOffer['id']);
+                        Visitor::addCodeAlertTimeStampForVisitor($visitorIds);
+                        CodeAlertVisitors::saveCodeAlertVisitors($visitorIds, $codeAlertOffer['id']);
                         CodeAlertQueue::clearCodeAlertQueueByOfferId($codeAlertOffer['id']);
                         $message = 'code alert has been sent successfully' ;
                     } catch (Mandrill_Error $e) {

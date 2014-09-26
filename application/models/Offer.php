@@ -2063,6 +2063,7 @@ class Offer extends BaseOffer
         ->leftJoin('o.page p')
         ->leftJoin('o.termandcondition tc')
         ->leftJoin('o.category cat');
+        
         if ($type != '') {
             $offerDetails = $offerDetails->leftJoin('s.logo img');
         } else {

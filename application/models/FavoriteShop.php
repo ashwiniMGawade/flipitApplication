@@ -35,7 +35,7 @@ class FavoriteShop extends BaseFavoriteShop
     public static function getShopsById($shopId)
     {
         $shopVisitorInformation = Doctrine_Query::create()
-            ->select('p.visitorId,p.shopId')
+            ->select('p.visitorId, p.shopId')
             ->from("FavoriteShop p")
             ->leftJoin('p.visitors v')
             ->leftJoin('p.shops s')

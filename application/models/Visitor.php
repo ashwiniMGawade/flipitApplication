@@ -714,11 +714,11 @@ public static function Visitortotal_acc()
         return $visitorsToSendNewsletter;
     }
 
-    public static function addCodeAlertTimeStampForVisitor($visitorId)
+    public static function addCodeAlertTimeStampForVisitor($visitorIds)
     {
-        if (!empty($visitorId)) {
-            $visitorId = explode(',', $visitorId);
-            foreach ($visitorId as $visitorIdValue) {
+        if (!empty($visitorIds)) {
+            $visitorIds = explode(',', $visitorIds);
+            foreach ($visitorIds as $visitorIdValue) {
                 Doctrine_Query::create()->update('Visitor')
                     ->set('code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
                     ->where('id='. FrontEnd_Helper_viewHelper::sanitize($visitorIdValue))
@@ -732,7 +732,7 @@ public static function Visitortotal_acc()
     {
         $codeAlertSendDate = Doctrine_Query::create()->select('v.code_alert_send_date')
             ->from('Visitor v')
-            ->andWhere('v.id='. FrontEnd_Helper_viewHelper::sanitize($visitorId))
+            ->where('v.id='. FrontEnd_Helper_viewHelper::sanitize($visitorId))
             ->fetchArray();
         return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
     }

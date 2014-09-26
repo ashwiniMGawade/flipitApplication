@@ -11,7 +11,6 @@ class codealerttestCest
     {
     }
 
-    // tests
     public function codealertTest(AcceptanceTester $I, \Codeception\Scenario $scenario)
     {
         $I = new AcceptanceTester\LoginSteps($scenario);

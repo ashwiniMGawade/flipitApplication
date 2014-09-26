@@ -16,7 +16,7 @@ class CodeAlertSettings extends BaseCodeAlertSettings
     public static function saveCodeAlertSettings($codeAlertEmailSubject, $codeAlertEmailHeader)
     {
         $codeAlertInformation = Doctrine_Query::create()
-            ->select()
+            ->select("*")
             ->from("CodeAlertSettings")
             ->where('id = 1')
             ->fetchArray();
@@ -61,10 +61,10 @@ class CodeAlertSettings extends BaseCodeAlertSettings
     public static function getCodeAlertSettings()
     {
         $codeAlertInformation = Doctrine_Query::create()
-        ->select('*')
-        ->from('CodeAlertSettings')
-        ->where('id=1')
-        ->fetchArray();
+            ->select('*')
+            ->from('CodeAlertSettings')
+            ->where('id=1')
+            ->fetchArray();
         return $codeAlertInformation;
     }
 }

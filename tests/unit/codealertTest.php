@@ -16,7 +16,6 @@ class codealertTest extends \Codeception\TestCase\Test
     {
     }
 
-    // tests
     public function testCodeAlertEmailSubject()
     {
         $codeAlertSettings = new CodeAlertSettings();

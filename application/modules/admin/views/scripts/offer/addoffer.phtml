@@ -482,12 +482,20 @@
                </div>
 
                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Code alert'); ?></strong></label></div>
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Code alert'); ?></strong>
+                        </label>
+                    </div>
                     <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group ">
-                        	<button type="button" class="btn" value="yes" onClick="codeAlertToggle(event);"><?php echo $this->translate('Yes'); ?></button>
-                        	<button type="button" class="btn btn-primary" style="border-radius: 0 4px 4px 0;"  value="no" onClick="codeAlertToggle(event);"><?php echo $this->translate('No'); ?></button>
-                       	 	<input type="hidden" value="0" name="codealertcheckbox" id="codealertcheckbox">
+                        <div data-toggle="buttons-checkbox" class="btn-group ">
+                            <button type="button" class="btn" value="yes" onClick="codeAlertToggle(event);">
+                                <?php echo $this->translate('Yes'); ?>
+                            </button>
+                            <button type="button" class="btn btn-primary" style="border-radius: 0 4px 4px 0;" 
+                                value="no" onClick="codeAlertToggle(event);"><?php echo $this->translate('No'); ?>
+                            </button>
+                       	    <input type="hidden" value="0" name="codealertcheckbox" id="codealertcheckbox">
                        </div>
                     </div>
                </div>
