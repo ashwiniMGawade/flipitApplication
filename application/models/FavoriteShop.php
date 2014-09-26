@@ -31,6 +31,24 @@ class FavoriteShop extends BaseFavoriteShop
         }
         return $removeAlreayAddedFavouriteShops;
     }
+
+    public static function getShopsById($shopId)
+    {
+        $shopVisitorInformation = Doctrine_Query::create()
+            ->select('p.visitorId, p.shopId')
+            ->from("FavoriteShop p")
+            ->leftJoin('p.visitors v')
+            ->leftJoin('p.shops s')
+            ->leftJoin('s.logo l')
+            ->andWhere("p.shopId=s.id")
+            ->andWhere("s.status= ?", 1)
+            ->andWhere("s.deleted= ?", 0)
+            ->andWhere("p.shopId =$shopId")
+            ->andWhere("v.status= ?", 1)
+            ->orderBy("s.name ASC")
+            ->fetchArray();
+        return $shopVisitorInformation;
+    }
     ###################### END REFACTORED CODE #############
 
     public static function get_suggestionshops($userid,$flag)
@@ -214,5 +232,21 @@ class FavoriteShop extends BaseFavoriteShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$userid.'_favouriteShops');
 
         return $shop->toArray();
+    }
+
+    public static function getShopsByVisitorId($visitorId)
+    {
+        $shopId = Doctrine_Query::create()
+            ->select('p.shopId')
+            ->from("FavoriteShop p")
+            ->leftJoin('p.visitors v')
+            ->leftJoin('p.shops s')
+            ->andWhere("p.shopId=s.id")
+            ->andWhere("s.status= ?", 1)
+            ->andWhere("s.deleted= ?", 0)
+            ->andWhere("p.visitorId =$visitorId")
+            ->andWhere("v.status= ?", 1)
+            ->fetchArray();
+        return !empty($shopId) ? $shopId : 0;
     }
 }
