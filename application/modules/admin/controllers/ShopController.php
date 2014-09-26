@@ -400,7 +400,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
         // display  page's list
         $pages = new Page();
-        $this->view->DefaultPagesList = $pages->DefaultPagesList();
+        $this->view->DefaultPagesList = $pages->defaultPagesList();
 
 
         // display affliate network's list
@@ -476,7 +476,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
         // display  page's list
         $pages = new Page();
-        $this->view->DefaultPagesList = $pages->DefaultPagesList();
+        $this->view->DefaultPagesList = $pages->defaultPagesList();
 
         // display affliate network's list
         $affiliate = new AffliateNetwork();

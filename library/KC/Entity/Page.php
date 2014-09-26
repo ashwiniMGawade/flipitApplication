@@ -337,7 +337,7 @@ class Page
     public static function getPageDetailsByPermalink($permalink)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.*, img.id, img.path, img.name')
+        $query = $entityManagerUser->select('page, img.id, img.path, img.name')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
             ->setParameter(1, $permalink)
@@ -355,7 +355,7 @@ class Page
     public static function getSpecialListPages()
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.*, img.*')
+        $query = $entityManagerUser->select('page, img')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
             ->setParameter(1, 'offer')
@@ -370,7 +370,7 @@ class Page
     public static function getDefaultPageProperties($permalink)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.*')
+        $query = $entityManagerUser->select('page')
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, $permalink)
             ->where('page.permalink = ?1')
@@ -437,5 +437,123 @@ class Page
             ->getQuery();
             $query->execute();
         return true;
+    }
+
+    public function defaultPagesList()
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page.id, page.pagetitle')
+            ->from('KC\Entity\Page', 'page')
+            ->setParameter(1, 'default')
+            ->where('page.pagetype = ?1')
+            ->setParameter(2, 0)
+            ->andWhere('page.deleted = ?2')
+            ->setParameter(3, 1)
+            ->andWhere('page.publish = ?3')
+            ->orderBy('page.pagetitle ASC');
+        $defaultPagesList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $defaultPagesList;
+    }
+
+    public function getPagesOffer()
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page.id, page.pagetitle')
+            ->from('KC\Entity\Page', 'page')
+            ->setParameter(1, 1)
+            ->where('page.showpage = ?1')
+            ->setParameter(2, 0)
+            ->andWhere('page.deleted = ?2')
+            ->setParameter(3, 1)
+            ->andWhere('page.publish = ?3')
+            ->setParameter(4, 0)
+            ->andWhere('page.pagelock = ?4')
+            ->orderBy('page.pagetitle ASC');
+        $pagesOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pagesOffer;
+    }
+
+    public function getPages($params)
+    {
+        $srhPage = (isset($params["searchText"]) && trim($params["searchText"])!='undefined')
+            ? $params["searchText"] : '';
+        $conn2 = BackEnd_Helper_viewHelper::addConnection();
+        if (Auth_StaffAdapter::hasIdentity()) {
+            $roleId =   Zend_Auth::getInstance()->getIdentity()->roleId;
+        }
+        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page.pagetype, page.pagetitle, page.pagelock, page.created_at, page.publish, page.contentManagerName')
+            ->from('KC\Entity\Page', 'page')
+            ->setParameter(1, 0)
+            ->where('page.deleted = ?1')
+            ->setParameter(2, $srhPage)
+            ->andWhere('page.pagetitle LIKE = ?2%');
+        if ($roleId>2) {
+            $query->setParameter(3, 0);
+            $query->andWhere('page.pagelock = ?3');
+        }
+        if (trim($params["searchType"])!='undefined') {
+            $query->setParameter(4, $params['searchType']);
+            $query->andWhere('page.pagetype = ?4');
+        }
+        $result = DataTable_Helper::generateDataTableResponse(
+            $query,
+            $params,
+            array("__identifier" => 'page.pagetitle','page.pagetitle','page.pagetype','page.pagelock','page.created_at','page.publish','page.contentManagerName'),
+            array(),
+            array()
+        );
+        return $result;
+    }
+
+    public function gettrashedPages($params)
+    {
+        $srhPage = (isset($params["searchText"]) && trim($params["searchText"])!='undefined')
+            ? $params["searchText"] : '';
+
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page.pagetitle, page.created_at, page.updated_at, page.contentManagerName')
+            ->from('KC\Entity\Page', 'page')
+            ->setParameter(1, 1)
+            ->where('page.deleted = ?1')
+            ->setParameter(2, $srhPage)
+            ->andWhere('page.pagetitle LIKE = ?2%');
+        $result =  DataTable_Helper::generateDataTableResponse(
+            $pageList,
+            $params,
+            array("__identifier" => 'page.pagetitle','page.created_at','page.updated_at','page.contentManagerName'),
+            array(),
+            array()
+        );
+        return $result;
+    }
+
+    public function checkFooterpages($tempid)
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page')
+            ->from('KC\Entity\Page', 'page')
+            ->setParameter(1, $tempid)
+            ->where('page.pageattributeid = ?1')
+            ->setParameter(2, 0)
+            ->andWhere('page.deleted = ?2');
+        $footerPages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $footerPages;
+    }
+
+    public function getPageDetail($pageId)
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser->select('page, pagewigdet, logo, pageheaderimage, artcatg.pageid,artcatg.categoryid')
+            ->from('KC\Entity\Page', 'page')
+            ->leftJoin('page.logo', 'logo')
+            ->leftJoin('page.pageheaderimage', 'pageheaderimage')
+            ->leftJoin('page.pagewidget', 'pagewidget')
+            ->leftJoin("page.moneysaving artcatg")
+            ->setParameter(1, $pageId)
+            ->where('page.id = ?1');
+        $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageDetails;
     }
 }

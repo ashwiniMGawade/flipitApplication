@@ -119,7 +119,7 @@ class Admin_PageController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         if(@$params['pageTemplate'] == 15){
             $pageObj = new Page();
-            $checkfooterpages = $pageObj->checkFotterpages(@$params['pageTemplate']);
+            $checkfooterpages = $pageObj->checkFooterpages(@$params['pageTemplate']);
 
             if(count($checkfooterpages) == 10){
                 $flash = $this->_helper->getHelper('FlashMessenger');
@@ -192,7 +192,7 @@ class Admin_PageController extends Zend_Controller_Action
 
     if(@$params['pageTemplate'] == 15){
 
-        $checkfooterpages = $pageObj->checkFotterpages(@$params['pageTemplate']);
+        $checkfooterpages = $pageObj->checkFooterpages(@$params['pageTemplate']);
 
         if(count($checkfooterpages) == 10){
 
