@@ -14,7 +14,9 @@ modules:
         WebDriver:
             url: 'http://www.kortingscode.nl'
             browser: phantomjs
+            window_size: 1280x720
             capabilities:
                 phantomjs.cli.args: ['--ignore-ssl-errors=true']
+
         Db:
             cleanup: true
