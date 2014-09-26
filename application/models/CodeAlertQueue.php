@@ -8,7 +8,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         $codeAlertQueueValue = 0;
         if (isset($shopId) && $shopId != '') {
             $codeAlertInformation = Doctrine_Query::create()
-                ->select()
+                ->select("*")
                 ->from("CodeAlertQueue")
                 ->where('offerId = '.$offerId)
                 ->fetchArray();
@@ -41,7 +41,6 @@ class CodeAlertQueue extends BaseCodeAlertQueue
 
             foreach ($favouriteShopCount as $favouriteShopCountValue) {
                 $visitorsCount += $favouriteShopCountValue['count'];
-                
             }
         }
         return $visitorsCount;

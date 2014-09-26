@@ -421,7 +421,7 @@ class Admin_EmailController extends Zend_Controller_Action
     {
         $message = $this->flashMessenger->getMessages();
         $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->ErrorMessage = isset($message[0]['error']) ? $message[0]['error'] : '';
+        $this->view->errorMessage = isset($message[0]['error']) ? $message[0]['error'] : '';
         return $this;
     }
 

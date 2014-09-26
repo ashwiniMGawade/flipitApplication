@@ -31,12 +31,11 @@ class SendCodeAlert
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
-        $imbull = $connections['imbull'];
 
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->send($connection['dsn'], $key, $imbull);
+                    $this->send($connection['dsn'], $key, $connections['imbull']);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";

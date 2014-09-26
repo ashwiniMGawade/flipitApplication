@@ -7,7 +7,7 @@ $this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/emailSettings.js");
 <div class="newsletter-setting-container wrap columns-2">
     <div class='wrap columns-2'>
         <?php
-        if ($this->successMessage != '' || $this->ErrorMessage != '' ) {
+        if ($this->successMessage != '' || $this->errorMessage != '' ) {
             ?>
             <br>
             <div class ="mainpage-content-colorbox success">
@@ -16,9 +16,9 @@ $this->headScript()->appendFile(PUBLIC_PATH  . "js/back_end/emailSettings.js");
                         <?php echo FrontEnd_Helper_viewHelper::__translate($this->successMessage); ?>
                     </span>
                 <?php }?>
-                <?php if ($this->ErrorMessage != '') {?>
+                <?php if ($this->errorMessage != '') {?>
                     <span class="errorserver">
-                        <?php echo FrontEnd_Helper_viewHelper::__translate($this->ErrorMessage); ?>
+                        <?php echo FrontEnd_Helper_viewHelper::__translate($this->errorMessage); ?>
                     </span>
                 <?php } ?>
             </div>

@@ -11,14 +11,14 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert-settings.
 ?>
 <div class="newsletter-setting-container wrap columns-2">
     <div class='wrap columns-2'>
-        <?php if ($this->successMessage!='' || $this->ErrorMessage!='' ) { ?>
+        <?php if ($this->successMessage!='' || $this->errorMessage!='' ) { ?>
             <br>
             <div class ="mainpage-content-colorbox success">
             <?php if ($this->successMessage!='') { ?>
                 <span class="successserver"><?php echo $this->successMessage; ?></span>
             <?php }?>
-            <?php if ($this->ErrorMessage!=''){ ?>
-                <span class="errorserver"><?php echo $this->ErrorMessage; ?></span>
+            <?php if ($this->errorMessage!=''){ ?>
+                <span class="errorserver"><?php echo $this->errorMessage; ?></span>
             <?php } ?>
             </div>
         <?php
