@@ -105,8 +105,8 @@ class LocaleSettings
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->update('KC\Entity\LocaleSettings', 'ls')
                 ->set('ls.locale', $queryBuilder->expr()->literal($locale))
-                ->where('ls.id = ?1')
                 ->setParameter(1, 1)
+                ->where('ls.id = ?1')
                 ->getQuery();
         $query->execute();
     }
