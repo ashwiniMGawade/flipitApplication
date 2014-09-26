@@ -115,7 +115,6 @@ class SendCodeAlert
             $this->mandrilHandler($key, $codeAlertSettings);
         } catch (Exception $e) {
             echo "\n";
-            echo $e->getMessage();
         }
 
         $manager->closeConnection($doctrineSiteConnection);
@@ -202,7 +201,7 @@ class SendCodeAlert
                 }
             }
         } else {
-            $message ='There is some problem in your data';
+            $message ='Code alert already sent...';
         }
         echo "\n";
         print "$key - $message ";
