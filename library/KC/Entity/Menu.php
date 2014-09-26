@@ -353,25 +353,13 @@ class Menu
    
     public static function getFirstLevelMenu()
     {
-        $mainMenu = Doctrine_Query::create()->from('menu')->orderBy('position')->where('parentId=0')->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('menu')
+            ->from('KC\Entity\Menu', 'menu')
+            ->setParameter(1, '0')
+            ->where('menu.parentId = ?1')
+            ->orderBy('menu.position', 'ASC');
+        $mainMenu = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $mainMenu;
-
-    }
-    
-    public static function getLevelSecond($id)
-    {
-        $second = Doctrine_Query::create()
-        ->from('menu')
-        ->orderBy('position')
-        ->where('parentId='.$id)
-        ->andWhere('parentId='.$id)
-        ->fetchArray();
-        return $second;
-    }
-   
-    public static function getLevelThird($id)
-    {
-        $third = Doctrine_Query::create()->from('menu')->orderBy('position')->where('parentId='.$id)->fetchArray();
-        return $third;
     }
 }
