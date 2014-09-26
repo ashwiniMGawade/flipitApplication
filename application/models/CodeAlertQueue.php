@@ -75,6 +75,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
             $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
             if (!empty($shop)) {
                 foreach (Offer::getOfferDetail($codeAlertOfferId['offerId'], 'codealert') as $key => $codeAlertOfferValue) {
+                     
                     $offers = $codeAlertOfferValue;
                     $offers['shop']['visitors'] = $shop;
                     $codeAlertOffers[] = $offers;

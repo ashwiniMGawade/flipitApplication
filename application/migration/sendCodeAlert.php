@@ -120,55 +120,46 @@ class SendCodeAlert
         try {
             $settings = CodeAlertSettings::getCodeAlertSettings();
             $localeSettings = LocaleSettings::getLocaleSettings();
-            if ($settings[0]['code_alert_schedule'] && $settings[0]['code_alert_status'] ==  0) {
-                $cutsomLocale = !empty( $localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
-                $this->_trans = new Zend_Translate(array(
-                        'adapter' => 'gettext',
-                        'disableNotices' => true));
-                $this->_trans->addTranslation(
-                    array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/frontend_php' . $suffix . '.mo',
-                        'locale' => $cutsomLocale,
-                    )
-                );
-                $this->_trans->addTranslation(
-                    array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/email' . $suffix . '.mo',
-                        'locale' => $cutsomLocale
-                    )
-                );
-                $this->_trans->addTranslation(
-                    array(
-                        'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/form' . $suffix . '.mo',
-                        'locale' => $cutsomLocale
-                    )
-                );
-                $this->_trans->addTranslation(
-                    array(
-                        'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
-                        'language/po_links' . $suffix . '.mo',
-                        'locale'    => $cutsomLocale
-                    )
-                );
-                Zend_Registry::set('Zend_Translate', $this->_trans);
-                Zend_Registry::set('Zend_Locale', $cutsomLocale);
-                $timezone = $localeSettings[0]['timezone'];
-                echo "\n" ;
-                $sentTime = new Zend_Date($settings[0]['code_alert_schedule_time']);
-                $sentTime->get('YYYY-MM-dd HH:mm:ss');
-                $currentTime = new Zend_Date();
-                $currentTime->setTimezone($timezone);
-                echo "\n" ;
-                $currentTime->get('YYYY-MM-dd HH:mm:ss');
-                    echo "\nSending code alert...\n" ;
-                    $this->mandrilHandler($key, $settings);
-            } else {
-                echo "\n";
-                print "$key - Already sent";
-            }
+            
+            $cutsomLocale = !empty( $localeSettings[0]['locale']) ? $localeSettings[0]['locale'] : 'nl_NL';
+            $this->_trans = new Zend_Translate(array(
+                    'adapter' => 'gettext',
+                    'disableNotices' => true));
+            $this->_trans->addTranslation(
+                array(
+                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                    'language/frontend_php' . $suffix . '.mo',
+                    'locale' => $cutsomLocale,
+                )
+            );
+            $this->_trans->addTranslation(
+                array(
+                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                    'language/email' . $suffix . '.mo',
+                    'locale' => $cutsomLocale
+                )
+            );
+            $this->_trans->addTranslation(
+                array(
+                    'content' => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                    'language/form' . $suffix . '.mo',
+                    'locale' => $cutsomLocale
+                )
+            );
+            $this->_trans->addTranslation(
+                array(
+                    'content'   => APPLICATION_PATH.'/../public/'. strtolower($this->_localePath).
+                    'language/po_links' . $suffix . '.mo',
+                    'locale'    => $cutsomLocale
+                )
+            );
+            Zend_Registry::set('Zend_Translate', $this->_trans);
+            Zend_Registry::set('Zend_Locale', $cutsomLocale);
+            $timezone = $localeSettings[0]['timezone'];
+            echo "\n" ;
+            echo "\n" ;
+            echo "\nSending code alert...\n" ;
+            $this->mandrilHandler($key, $settings);
         } catch (Exception $e) {
             echo "\n";
             echo $e->getMessage();

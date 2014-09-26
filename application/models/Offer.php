@@ -2054,7 +2054,7 @@ class Offer extends BaseOffer
 
     public static function getOfferDetail($offerId, $type = '')
     {
-        $shopParameters = $type != '' ? 's.refUrl,s.permalink' : '';
+        $shopParameters = $type != '' ? ',s.refUrl,s.permalink' : '';
         $offerDetails = Doctrine_Query::create()
         ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*'.$shopParameters)
         ->from("Offer o")
