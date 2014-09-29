@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="votes")
  */
-class Votes
+class Vote
 {
     /**
      * @ORM\Id
@@ -70,4 +70,18 @@ class Votes
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     private $offer;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+    public function getId()
+    {
+        return $this->id;
+    }
 }

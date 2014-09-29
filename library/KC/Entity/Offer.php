@@ -224,7 +224,7 @@ class Offer
     private $offerviewcount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Votes", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Vote", mappedBy="offer")
      */
     private $votes;
 
