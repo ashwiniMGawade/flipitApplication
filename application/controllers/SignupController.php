@@ -98,7 +98,7 @@ class SignupController extends Zend_Controller_Action
                 $registrationForm->highlightErrorElements();
             }
         }
-        $testimonials = Signupmaxaccount::getTestimonials();
+        $testimonials = KC\Entity\Signupmaxaccount::getTestimonials();
         $this->view->testimonials = $testimonials;
         $this->view->pageCssClass = 'register-page';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
