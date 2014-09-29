@@ -1,8 +1,9 @@
 <?php
 namespace KC\Repository;
-class Menu Extends \KC\Entity\Menu
+
+class Menu extends \KC\Entity\Menu
 {
-	######################## Refactored #############################
+    ######################## Refactored #############################
     public static function replaceBespaarwijzerWithPlus()
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');

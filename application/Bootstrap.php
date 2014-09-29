@@ -187,10 +187,10 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $matches = isset($matches[0]) ? $matches[0] : 0;
         if (intval($matches) > 0) {
             $permalink = explode('/'.$matches[0], $permalink);
-            $getPermalinkFromDb = KC\Entity\RoutePermalink::getRoute($permalink[0]);
+            $getPermalinkFromDb = KC\Repository\RoutePermalink::getRoute($permalink[0]);
             $actualPermalink = $permalink[0];
         } else {
-            $getPermalinkFromDb = KC\Entity\RoutePermalink::getRoute($permalink);
+            $getPermalinkFromDb = KC\Repository\RoutePermalink::getRoute($permalink);
             $actualPermalink = $permalink;
         }
         // check if permalink exists in route permalink table

@@ -1,8 +1,9 @@
 <?php
 namespace KC\Repository;
-class Menu Extends \KC\Entity\RoutePermalink
+
+class RoutePermalink extends \KC\Entity\RoutePermalink
 {
-	public static function getRoute($permalink)
+    public static function getRoute($permalink)
     {
         $permalink = trim($permalink, '/');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();

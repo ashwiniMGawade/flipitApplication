@@ -5,7 +5,7 @@ class BootstrapRouterFunctions
     {
         $permalinkWithoutLeftSlash = ltrim(REQUEST_URI, '/');
         $permalink = rtrim($permalinkWithoutLeftSlash, '/');
-        $routeRedirectName = KC\Entity\RouteRedirect::getRoute(HTTP_PATH.$permalink);
+        $routeRedirectName = KC\Repository\RouteRedirect::getRoute(HTTP_PATH.$permalink);
         $splitPermalinkFromQueryString = strstr($permalink, '?');
 
         self::redirectUrl($routeRedirectName, $splitPermalinkFromQueryString);
@@ -113,7 +113,7 @@ class BootstrapRouterFunctions
     public static function getPageUrls($getPermalinkFromDb)
     {
         // get the page detail from page table on the basis of permalink
-        $pageDetail = KC\Entity\RoutePermalink::getPageProperties(
+        $pageDetail = KC\Repositoy\RoutePermalink::getPageProperties(
             strtolower($getPermalinkFromDb[0]['permalink'])
         );
         //check if there exist page belongs to the permalink then append the

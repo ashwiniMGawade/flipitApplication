@@ -1,8 +1,9 @@
 <?php
 namespace KC\Repository;
-class Menu Extends \KC\Entity\RouteRedirect
+
+class RouteRedirect extends \KC\Entity\RouteRedirect
 {
-	public static function getRoute($orignalurl)
+    public static function getRoute($orignalurl)
     {
         $orignalurl= trim($orignalurl, '/');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();

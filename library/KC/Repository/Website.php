@@ -1,8 +1,8 @@
 <?php
 namespace KC\Repository;
-class Menu Extends \KC\Entity\Website
+
+class Website Extends \KC\Entity\Website
 {
-	
     public static function getAllWebsites()
     {
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
