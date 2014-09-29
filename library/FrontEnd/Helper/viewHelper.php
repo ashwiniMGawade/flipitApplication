@@ -99,7 +99,7 @@ EOD;
             $site_name = "Flipit.com";
         }
         $locale = LOCALE != '' ? '/'.LOCALE : '';
-        $chainLocale = Website::getWebsiteDetails('', strtolower($site_name).$locale);
+        $chainLocale = KC\Entity\Website::getWebsiteDetails('', strtolower($site_name).$locale);
         $ogCustomLocale = explode('_', $chainLocale['chain']);
         $ogCustomLocale = isset($ogCustomLocale[1]) ? $ogCustomLocale[1] : $ogCustomLocale[0];
         $ogLocale = !empty($chainLocale) && $chainLocale['chain'] != '' ?
