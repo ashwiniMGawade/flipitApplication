@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\Menu::getmenuList());
+        print_r(KC\Repository\SpecialList::getSpecialPages());
         die;
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
@@ -56,7 +56,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->topCategories = $topCategories;
             $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_specialPagesHome_list",
-                array('function' => 'SpecialList::getSpecialPages', 'parameters' => array()
+                array('function' => 'KC\Repository\SpecialList::getSpecialPages', 'parameters' => array()
                 ),
                 ''
             );
