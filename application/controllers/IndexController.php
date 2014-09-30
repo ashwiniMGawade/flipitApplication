@@ -22,8 +22,9 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\Menu::getmenuList());
-        die;
+        $keyword = 'Popular';
+        print_r(KC\Repository\Widget::permanentDeleteWidget(4));
+        die('cccccc');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();

@@ -181,7 +181,7 @@ class Page Extends \KC\Entity\Page
         if (Auth_StaffAdapter::hasIdentity()) {
             $roleId =   Zend_Auth::getInstance()->getIdentity()->roleId;
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
             'page.pagetype, page.pagetitle, page.pagelock, page.created_at,
@@ -190,8 +190,8 @@ class Page Extends \KC\Entity\Page
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, 0)
             ->where('page.deleted = ?1')
-            ->setParameter(2, $srhPage)
-            ->andWhere('page.pagetitle LIKE = ?2%');
+            ->setParameter(2, $srhPage.'%')
+            ->andWhere($entityManagerUser->expr()->like('page.pagetitle , ?2'));
         if ($roleId>2) {
             $query->setParameter(3, 0);
             $query->andWhere('page.pagelock = ?3');
@@ -221,8 +221,8 @@ class Page Extends \KC\Entity\Page
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, 1)
             ->where('page.deleted = ?1')
-            ->setParameter(2, $srhPage)
-            ->andWhere('page.pagetitle LIKE = ?2%');
+            ->setParameter(2, $srhPage.'%')
+            ->andWhere($entityManagerUser->expr()->like('page.pagetitle , ?2'));
         $result =  DataTable_Helper::generateDataTableResponse(
             $pageList,
             $params,
@@ -366,8 +366,8 @@ class Page Extends \KC\Entity\Page
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, $type)
             ->where('page.deleted = ?1')
-            ->setParameter(2, $keyword)
-            ->andWhere('page.pagetitle LIKE = ?2%');
+            ->setParameter(2, $keyword.'%')
+            ->andWhere($entityManagerUser->expr()->like('page.pagetitle , ?2'));
         $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
         if ($role=='4' || $role=='3') {
             $query->setParameter(3, 0)->andWhere('page.pagelock = ?3');
