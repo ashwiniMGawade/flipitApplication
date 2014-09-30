@@ -16,7 +16,6 @@ $('body').click(function(event){
 
 
 $("input#searchFieldHeader").autocomplete({
-    delay: 0,
     minLength : 1,
     search: function(event, ui) {
         $('.ajax-autocomplete ul').empty();
