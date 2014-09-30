@@ -21,9 +21,11 @@ function init(){
             success: function(dataSet)
             { 
                 if(dataSet == 1) {
-                    bootbox.alert("Code alert successfully added to the queue.");
+                    bootbox.alert(__("Code alert successfully added to the queue."));
+                } else if(dataSet == 2){
+                	bootbox.alert(__("Code alert addition to queue failed. Shop has not been favorited by any visitor yet."));
                 } else {
-                    bootbox.alert("Code alert Queue for this offer already exist.");
+                    bootbox.alert(__("Code alert Queue for this offer already exist."));
                 }
                 ___removeOverLay();
                 return false;
