@@ -7,18 +7,23 @@ class CodeAlertQueue extends BaseCodeAlertQueue
     {
         $codeAlertQueueValue = 0;
         if (isset($shopId) && $shopId != '') {
-            $codeAlertInformation = Doctrine_Query::create()
-                ->select("*")
-                ->from("CodeAlertQueue")
-                ->where('offerId = '.$offerId)
-                ->fetchArray();
+            $shop = FavoriteShop::getShopsById($shopId);
+            if (!empty($shop)) {
+                $codeAlertInformation = Doctrine_Query::create()
+                    ->select("*")
+                    ->from("CodeAlertQueue")
+                    ->where('offerId = '.$offerId)
+                    ->fetchArray();
 
-            if (empty($codeAlertInformation)) {
-                $codeAlertQueue = new CodeAlertQueue();
-                $codeAlertQueue->offerId = $offerId;
-                $codeAlertQueue->shopId = $shopId;
-                $codeAlertQueue->save();
-                $codeAlertQueueValue = 1;
+                if (empty($codeAlertInformation)) {
+                    $codeAlertQueue = new CodeAlertQueue();
+                    $codeAlertQueue->offerId = $offerId;
+                    $codeAlertQueue->shopId = $shopId;
+                    $codeAlertQueue->save();
+                    $codeAlertQueueValue = 1;
+                }
+            } else {
+                $codeAlertQueueValue = 2;
             }
         }
         return $codeAlertQueueValue;
