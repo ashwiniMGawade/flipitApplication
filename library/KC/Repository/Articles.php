@@ -40,72 +40,61 @@ class Articles extends \KC\Entity\Articles
 
     public static function getArticleByPermalink($permalink)
     {
-        /*$articleDetails = Doctrine_Query::create()->select()
-            ->from("Articles a")
-            ->leftJoin('a.relatedstores as stores')
-            ->leftJoin('a.relatedcategory as related')
-            ->leftJoin('related.articlecategory as category')
-            ->leftJoin('a.chapters as chapter')
-            ->leftJoin('a.articleImage')
-            ->leftJoin('a.thumbnail thum')
-            ->leftJoin('stores.shop')
-            ->where('a.permalink="'.$permalink.'"')
-            ->andWhere('a.publish = "1"')
-            ->andWhere("a.deleted= 0")
-            ->fetchArray();
-        return $articleDetails;*/
-
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('a')
+        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops')
             ->from('KC\Entity\Articles', 'a')
             ->leftJoin('a.storearticles', 'stores')
             ->leftJoin('a.category', 'related')
             ->leftJoin('related.articlecategory', 'category')
             ->leftJoin('a.articleChapter', 'chapter')
-            //->leftJoin('a.articleImage')
+            ->leftJoin('a.imagearticle', 'artimg')
             ->leftJoin('a.imagearticle', 'thum')
-            ->leftJoin('stores.shop')
+            ->leftJoin('stores.articleshops', 'shops')
             ->setParameter(1, $permalink)
             ->where('a.permalink = ?1')
             ->setParameter(2, '1')
-            ->andWhere('o.publish = ?2')
+            ->andWhere('a.publish = ?2')
             ->setParameter(3, '0')
-            ->andWhere('o.deleted = ?3');
+            ->andWhere('a.deleted = ?3');
             $articleDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $articleDetails;
-
     }
 
     public static function getAllArticles($limit = 0)
     {
         $currentDateTime = date('Y-m-d 00:00:00');
-        $allArticles = Doctrine_Query::create()->select()
-        ->from("Articles a")
-        ->leftJoin('a.relatedstores as stores')
-        ->leftJoin('a.relatedcategory as related')
-        ->leftJoin('a.thumbnail')
-        ->leftJoin('a.articleImage')
-        ->leftJoin('stores.shop')
-        ->leftJoin('a.chapters chap')
-        ->where('a.publish = "1"')
-        ->andWhere("a.deleted= 0")
-        ->andWhere('a.publishdate <="'.$currentDateTime.'"')
-        ->limit($limit)
-        ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg')
+            ->from('KC\Entity\Articles', 'a')
+            ->leftJoin('a.storearticles', 'stores')
+            ->leftJoin('a.category', 'related')
+            ->leftJoin('related.articlecategory', 'category')
+            ->leftJoin('a.articleChapter', 'chapter')
+            ->leftJoin('a.imagearticle', 'artimg')
+            ->leftJoin('a.imagearticle', 'thum')
+            ->setParameter(1, '1')
+            ->where('a.publish = ?1')
+            ->setParameter(2, '0')
+            ->andWhere('a.deleted = ?2')
+            ->setParameter(3, $currentDateTime)
+            ->andWhere('a.publishdate <= ?3');
+            $allArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allArticles;
     }
 
     public static function generateArticlePermalinks()
     {
         $currentDateTime = date('Y-m-d 00:00:00');
-        $allArticlesPermalink = Doctrine_Query::create()
-            ->select('a.*')
-            ->from('Articles a')
-            ->where('a.publish = "1"')
-            ->andWhere("a.deleted= 0")
-            ->andWhere('a.publishdate <="'.$currentDateTime.'"')
-            ->orderBy('a.id')
-            ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('a')
+            ->from('KC\Entity\Articles', 'a')
+            ->setParameter(1, '1')
+            ->where('a.publish = ?1')
+            ->setParameter(2, '0')
+            ->andWhere('a.deleted = ?2')
+            ->setParameter(3, $currentDateTime)
+            ->andWhere('a.publishdate <= ?3');
+            $allArticlesPermalink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allArticlesPermalink;
     }
     ###############################################
@@ -125,105 +114,101 @@ class Articles extends \KC\Entity\Articles
 
     public static function getAuthorList($site_name)
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
-
-        $data = Doctrine_Query::create()->select('id,firstName,lastName')
-                                        ->from('User u')
-                                        ->leftJoin("u.refUserWebsite rfu")
-                                        ->leftJoin("rfu.Website w")
-                                        ->where("deleted= 0")
-                                        ->andWhere("w.url ='".$site_name."'")
-                                        ->orderBy("firstName ASC")
-                                        ->fetchArray();
-
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
-
-
+        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder->select('user.id, user.firstname, user.lastname')
+            ->from('\KC\Entity\User', 'user')
+            ->leftJoin('user.website', 'website')
+            ->setParameter(1, '0')
+            ->where('user.deleted = ?1')
+            ->setParameter(2, $site_name)
+            ->andWhere('website.url = ?2')
+            ->orderBy("user.firstname", "ASC");
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
-
     }
 
-    public static function getAllStores($keyword,$flag)
+    public static function getAllStores($keyword, $flag)
     {
-        $data = Doctrine_Query::create()->select('s.name as name,s.id as id')
-                                        ->from("Shop s")->where('s.deleted= ?' , $flag )
-                                        ->andWhere("s.name LIKE ?", "$keyword%")
-                                        ->andWhere("s.deleted= 0")->orderBy("s.name ASC")
-                                        ->limit(5)->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('s.name as name,s.id as id')
+            ->from('\KC\Entity\Shop', 's')
+            ->setParameter(1, '0')
+            ->where('s.deleted = ?1')
+            ->setParameter(2, $keyword.'%')
+            ->andWhere($queryBuilder->expr()->like('s.name', '?2'))
+            ->orderBy("s.name", "ASC");
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
-
     }
 
-    public function getArticleList($params)
+    public static function getArticleList($params)
     {
-
         $srh =  $params["searchText"]=='undefined' ? '' : $params["searchText"];
         $flag = $params['flag'] ;
-
-        $artList = $data = Doctrine_Query::create()->select('art.id,art.title,art.publishdate,art.publish,art.authorname')
-        ->from("Articles art")
-        ->where('art.deleted = ?' , $flag )
-        ->andWhere("art.title LIKE ?", "$srh%");
-
-        //print_r($artList->fetchArray()); die;
-        $result =   DataTable_Helper::generateDataTableResponse($artList,
-                $params,
-                array("__identifier" => 'art.id','art.title','art.publishdate','art.publish','art.authorname'),
-                array(),
-                array());
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $artList = $queryBuilder->select('art.id,art.title,art.publishdate,art.publish,art.authorname')
+            ->from('KC\Entity\Articles', 'art')
+            ->setParameter(1, $flag)
+            ->where('art.deleted = ?1')
+            ->setParameter(2, $srh.'%')
+            ->andWhere($queryBuilder->expr()->like('art.title', '?2'))
+            ->getQuery();
+        $result = \DataTable_Helper::generateDataTableResponse(
+            $artList,
+            $params,
+            array("__identifier" => 'art.id','art.title','art.publishdate','art.publish','art.authorname'),
+            array(),
+            array()
+        );
         return $result;
     }
 
     public function getTrashedList($params)
     {
-
         $srh =  $params["searchText"]=='undefined' ? '' : $params["searchText"];
         $flag = $params['flag'] ;
-
-        $artList = $data = Doctrine_Query::create()->select('art.id,art.title,art.created_at,art.publish,art.authorname')
-        ->from("Articles art")
-        ->where('art.deleted = ?' , $flag )
-        ->andWhere("art.title LIKE ?", "$srh%");
-
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $artList = $queryBuilder->select('art.id,art.title,art.created_at,art.publish,art.authorname')
+            ->from('KC\Entity\Articles', 'art')
+            ->setParameter(1, $flag)
+            ->where('art.deleted = ?1')
+            ->setParameter(2, $srh.'%')
+            ->andWhere($queryBuilder->expr()->like('art.title', '?2'))
+            ->getQuery();
         //print_r($artList->fetchArray()); die;
-        $result =   DataTable_Helper::generateDataTableResponse($artList,
-                $params,
-                array("__identifier" => 'art.id','art.title','art.created_at','art.publish','art.authorname'),
-                array(),
-                array());
+        $result =   \DataTable_Helper::generateDataTableResponse(
+            $artList,
+            $params,
+            array("__identifier" => 'art.id','art.title','art.created_at','art.publish','art.authorname'),
+            array(),
+            array()
+        );
         return $result;
-
-
     }
 
     public static function getArticleData($params)
     {
-
-        $data = Doctrine_Query::create()->select()
-                                        ->from("Articles a")
-                                        ->leftJoin('a.relatedstores as stores')
-                                        ->leftJoin('a.relatedcategory as related')
-                                        ->leftJoin('a.chapters as chapter')
-                                        ->leftJoin('a.articleImage')
-                                        ->leftJoin('a.thumbnail')
-                                        ->leftJoin('stores.shop')
-                                        ->where('id='.$params['id'])
-                                        ->andWhere("a.deleted= 0")
-                                        ->fetchArray();
-        #check data is empty or not
-        if($data) {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('a, stores, related, category, chapter, artimg, shops')
+            ->from('KC\Entity\Articles', 'a')
+            ->leftJoin('a.storearticles', 'stores')
+            ->leftJoin('a.category', 'related')
+            ->leftJoin('related.articlecategory', 'category')
+            ->leftJoin('a.articleChapter', 'chapter')
+            ->leftJoin('a.imagearticle', 'artimg')
+            ->leftJoin('a.imagearticle', 'thum')
+            ->leftJoin('stores.articleshops', 'shops')
+            ->setParameter(1, $params['id'])
+            ->where('a.id = ?1')
+            ->setParameter(3, '0')
+            ->andWhere('a.deleted = ?3');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        if (!empty($data)) {
             return $data;
         } else {
             return false ;
         }
-
-
     }
-
-
-
-
-
 
     /**
      * get to five page
@@ -232,19 +217,23 @@ class Articles extends \KC\Entity\Articles
      * @author jsingh
      * @version 1.0
      */
-    public static function searchToFiveArticle($keyword,$type)
+    public static function searchToFiveArticle($keyword, $type)
     {
-        $qry = Doctrine_Query::create()->select('a.Articles as Articles ')
-        ->from("Articles a")->where('a.deleted='.$type.'')
-        ->andWhere("a.articlestitle LIKE ?", "$keyword%");
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('a')
+            ->from('\KC\Entity\Articles', 'a')
+            ->setParameter(1, $type)
+            ->where('a.deleted = ?1')
+            ->setParameter(2, $keyword.'%')
+            ->andWhere($queryBuilder->expr()->like('a.title', '?2'));
 
-        $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
-        if($role=='4' || $role=='3') {
-            $qry->andWhere("a.articlesLock='0'");
-
+        $role = \Zend_Auth::getInstance()->getIdentity()->roleId;
+        if ($role == '4' || $role == '3') {
+            $query->setParameter(3, '0')
+                ->andWhere('a.articlesLock= ?2');
         }
-
-        $data = $qry->orderBy("a.articlestitle ASC")->limit(5)->fetchArray();
+        $query->orderBy("a.title", "ASC")->setMaxResults(5);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
 

@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\Articles::getArticleByPermalink('the-best-time-to-shop-in-india'));
+        print_r(KC\Repository\Articles::searchToFiveArticle('t', '0'));
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
