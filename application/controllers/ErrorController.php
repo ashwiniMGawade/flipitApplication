@@ -110,7 +110,8 @@ class ErrorController extends Zend_Controller_Action
                             ),
                             ''
                         );
-                $this->view->flipitLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(\KC\Entity\Website::getAllWebsites());
+
+                $this->view->flipitLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(KC\Repository\Website::getAllWebsites());
                 break;
         }
         if ($log = $this->getLog()) {
