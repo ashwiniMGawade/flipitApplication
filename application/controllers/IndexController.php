@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\Articles::searchToFiveArticle('t', '0'));
+        print_r(KC\Repository\User::getUserDetails(212));
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();

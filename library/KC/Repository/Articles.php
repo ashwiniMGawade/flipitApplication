@@ -115,14 +115,14 @@ class Articles extends \KC\Entity\Articles
     public static function getAuthorList($site_name)
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->select('user.id, user.firstname, user.lastname')
+        $query = $queryBuilder->select('user.id, user.firstName, user.lastName')
             ->from('\KC\Entity\User', 'user')
             ->leftJoin('user.website', 'website')
             ->setParameter(1, '0')
             ->where('user.deleted = ?1')
             ->setParameter(2, $site_name)
             ->andWhere('website.url = ?2')
-            ->orderBy("user.firstname", "ASC");
+            ->orderBy("user.firstName", "ASC");
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }

@@ -25,12 +25,12 @@ class User
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $firstname;
+    private $firstName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $lastname;
+    private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -90,12 +90,12 @@ class User
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $currentlogin;
+    private $currentLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $lastlogin;
+    private $lastLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -125,12 +125,12 @@ class User
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $popularkortingscode;
+    private $popularKortingscode;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $passwordchangetime;
+    private $passwordChangeTime;
 
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
@@ -172,5 +172,55 @@ class User
     public function __set($property, $value)
     {
         $this->$property = $value;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function validatePassword($passwordToBeVerified)
+    {
+        if ($this->password == md5($passwordToBeVerified))
+        {
+           return true;
+        }
+        return false;
+    }
+
+    public function isPasswordDifferent($newPassword)
+    {
+
+        if($this->password === md5($newPassword)) {
+            return false;
+        }
+        return true ;
+    }
+   
+    public function validateEmail($emailToBeVerified)
+    {
+        if ($this->email == ($emailToBeVerified)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function setPassword($password)
+    {
+            $this->_set('password', md5($password));
+            $this->_set('passwordChangeTime', date("Y-m-d H:i:s"));
+    }
+
+    public function updateLoginTime($id)
+    {
+        $entityManagerUser = \Zend_Registry::get('emUser');
+        $user = $entityManagerUser->find('KC\Entity\User', $id);
+        if ($user->currentLogIn == '0000-00-00 00:00:00') {
+            $user->currentLogIn = new \DateTime('now');
+        }
+        $user->lastLogIn = $user->currentLogIn;
+        $user->currentLogIn = new \DateTime('now');
+        $entityManagerUser->persist($user);
+        $entityManagerUser->flush();
     }
 }

@@ -80,6 +80,7 @@ class Vote
     {
         $this->$property = $value;
     }
+    
     public function getId()
     {
         return $this->id;
