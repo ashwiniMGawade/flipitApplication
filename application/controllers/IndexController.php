@@ -22,12 +22,12 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\SpecialList::getSpecialPages());
+        print_r(KC\Repository\Shop::returnShopCategories(2));
         die;
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
-        $pageDetails = KC\Entity\Page::getPageDetailsFromUrl($this->getRequest()->getActionName());
+        $pageDetails = KC\Repository\Page::getPageDetailsFromUrl($this->getRequest()->getActionName());
         $this->view->pageTitle = ucfirst(isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '');
         $this->viewHelperObject->getMetaTags(
             $this,
@@ -73,7 +73,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->specialPagesOffers = $specialPagesOffers;
             $this->view->moneySavingGuidesCount = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_moneySaving_list",
-                array('function' => 'Articles::getAllArticlesCount', 'parameters' => array()
+                array('function' => 'KC\Repository\Articles::getAllArticlesCount', 'parameters' => array()
                 ),
                 ''
             );

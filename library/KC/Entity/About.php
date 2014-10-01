@@ -1,7 +1,6 @@
 <?php
 namespace KC\Entity;
 use Doctrine\ORM\Mapping AS ORM;
-
 /**
  * @ORM\Entity
  * @ORM\Table(name="about")

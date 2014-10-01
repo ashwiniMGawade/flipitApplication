@@ -102,8 +102,15 @@ class ErrorController extends Zend_Controller_Action
                 $this->getResponse()->setHttpResponseCode(500);
                 $priority = Zend_Log::CRIT;
                 $this->view->message = 'Application error';
-                $this->view->popularShops = '';
-                $this->view->flipitLocales = '';
+                $this->view->popularShops = FrontEnd_Helper_viewHelper::
+                        getRequestedDataBySetGetCache(
+                            '12_popularShops_list',
+                            array(
+                                'function' => 'Shop::getPopularStores', 'parameters' => array(12)
+                            ),
+                            ''
+                        );
+                $this->view->flipitLocales = FrontEnd_Helper_viewHelper::getWebsitesLocales(KC\Repository\Website::getAllWebsites());
                 break;
         }
         if ($log = $this->getLog()) {
@@ -147,10 +154,10 @@ class ErrorController extends Zend_Controller_Action
 
         if ($pagePermalink!='') {
             $this->pagePermalink = $pagePermalink;
-            $pagedata = KC\Entity\Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
+            $pageData = KC\Repository\Page::getPageDetailsInError(rtrim($pagePermalink, '/'));
         } else {
-            $pagedata= '';
+            $pageData= '';
         }
-        return $pagedata;
+        return $pageData;
     }
 }
