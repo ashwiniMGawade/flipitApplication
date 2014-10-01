@@ -173,7 +173,7 @@ class SendCodeAlert
                             $topVouchercodes,
                             '',
                             '',
-                            $mandrillNewsletterSubject.' '.$codeAlertOffer['shop']['name'],
+                            str_replace('[shopname]', $codeAlertOffer['shop']['name'], $mandrillNewsletterSubject),
                             $mandrillSenderEmailAddress,
                             $mandrillSenderName,
                             $this->_recipientMetaData,
@@ -187,7 +187,7 @@ class SendCodeAlert
                                 'publicPathCdn' => $this->publicCdnPath,
                                 'mandrillKey' => $this->mandrillKey
                             ),
-                            $codeAlertSettings[0]['email_header'].' '.$codeAlertOffer['shop']['name'],
+                            str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertSettings[0]['email_header']),
                             $codeAlertOffer
                         );
                         Visitor::addCodeAlertTimeStampForVisitor($visitorIds);
