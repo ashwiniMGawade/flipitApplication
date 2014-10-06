@@ -23,7 +23,7 @@ class IndexController extends Zend_Controller_Action
     {
         echo "<pre>";
         $keyword = 'Popular';
-        print_r(KC\Repository\Widget::permanentDeleteWidget(4));
+        print_r(KC\Repository\Offer::getTopCouponCodes('',1));
         die('cccccc');
 
         $this->view->canonical = '';

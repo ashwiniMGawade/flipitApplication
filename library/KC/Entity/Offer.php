@@ -35,13 +35,13 @@ class Offer
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $discounttype;
+    private $discountType;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
      * @ORM\OneToMany(targetEntity="KC\Entity\CouponCode", mappedBy="offer")
      */
-    private $couponcode;
+    private $couponCode;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -51,7 +51,7 @@ class Offer
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $refurl;
+    private $refUrl;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -66,17 +66,17 @@ class Offer
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $exclusivecode;
+    private $exclusiveCode;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $editorpicks;
+    private $editorPicks;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $extendedoffer;
+    private $extendedOffer;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -86,7 +86,7 @@ class Offer
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $extendedurl;
+    private $extendedUrl;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -171,7 +171,7 @@ class Offer
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $totalviewcount;
+    private $totalViewcount;
 
     /**
      * @ORM\Column(type="decimal", length=16, nullable=true, scale=4)
@@ -181,7 +181,7 @@ class Offer
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $couponcodetype;
+    private $couponCodeType;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="offer")
@@ -249,4 +249,14 @@ class Offer
      * )
      */
     private $visitors;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

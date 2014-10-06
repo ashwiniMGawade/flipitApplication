@@ -372,7 +372,7 @@ class Page Extends \KC\Entity\Page
         if ($role=='4' || $role=='3') {
             $query->setParameter(3, 0)->andWhere('page.pagelock = ?3');
         }
-        $query->orderBy("page.pagetitle ASC")->setMaxResults(5);
+        $query->orderBy("page.pagetitle","ASC")->setMaxResults(5);
         $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
