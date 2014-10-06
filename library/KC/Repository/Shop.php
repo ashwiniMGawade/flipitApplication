@@ -36,24 +36,30 @@ class Shop extends \KC\Entity\Shop
 
     public static function getSimilarShops($shopId, $numberOfShops = 12)
     {
-        $relatedShops = Doctrine_Query::create()->from('Shop s')
-            ->select(
-                "s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink,
-                c.id,ss.name, ss.permaLink"
-            )
-            ->where("s.id = ".$shopId)
-            ->leftJoin("s.relatedshops rs")
-            ->andWhere("rs.status = 1")
-            ->andWhere("rs.deleted = 0")
-            ->leftJoin("rs.logo as logo")
-            ->leftJoin('s.category c')
-            ->andWhere("c.status = 1")
-            ->andWhere("c.deleted = 0")
-            ->leftJoin('c.shop ss')
-            ->andWhere("ss.status = 1")
-            ->andWhere("ss.deleted = 0")
-            ->leftJoin('ss.logo img')
-            ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('s.name, s.permaLink, img.path, img.name, logo.path, logo.name, rs.name, rs.permaLink,
+                c.id,ss.name, ss.permaLink')
+            ->from('KC\Entity\Shop', 's')
+            ->setParameter(1, $shopId)
+            ->where('s.id = ?1')
+            ->leftJoin("s.relatedshops", "rs")
+            ->setParameter(2, '1')
+            ->andWhere("rs.status = ?2")
+            ->setParameter(3, '0')
+            ->andWhere("rs.deleted = ?3")
+            ->leftJoin("rs.logo", "logo")
+            ->leftJoin('s.categoryshops', 'c')
+            ->setParameter(4, '1')
+            ->andWhere("c.status = ?4")
+            ->setParameter(5, '0')
+            ->andWhere("c.deleted = ?5")
+            ->leftJoin('c.shop', 'ss')
+            ->setParameter(6, '1')
+            ->andWhere("ss.status = ?6")
+            ->setParameter(7, '0')
+            ->andWhere("ss.deleted = ?7")
+            ->leftJoin('ss.logo', 'img');
+        $relatedShops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return self::removeDuplicateShops($relatedShops, $numberOfShops);
     }
 
@@ -83,54 +89,58 @@ class Shop extends \KC\Entity\Shop
     public static function getPopularStores($limit, $shopId = null)
     {
         $currentDate = date('Y-m-d 00:00:00');
-        $popularStoreData = Doctrine_Query::create()
-        ->select(
-            'o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('o.id,o.exclusiveCode,p.id,s.name,s.permaLink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,
             s.Deliverytime, s.returnPolicy, s.freeDelivery, p.type,p.position,p.shopId, img.path as imgpath, 
-            img.name as imgname'
-        )
-        ->from('PopularShop p')
-        ->addSelect(
-            "(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND
-            (o.exclusiveCode=1 AND exclusive.endDate > '$currentDate')) as exclusiveCount"
-        )
-        ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
-        ->addSelect(
-            "(SELECT COUNT(*) FROM Offer active WHERE
-            (active.shopId = s.id AND active.endDate >= '$currentDate' 
-                AND active.deleted = 0
+            img.name as imgname')
+            ->from('KC\Entity\PopularShop', 'p')
+            ->addSelect(
+                "(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND
+                (o.exclusiveCode=1 AND exclusive.endDate > '$currentDate')) as exclusiveCount"
             )
-            ) as activeCount"
-        )
-        ->leftJoin('p.shop s')
-        ->leftJoin('s.offer o')
-        ->leftJoin('s.logo img')
-        ->where('s.deleted=0')
-        ->addWhere('s.status=1')
-        ->orderBy('p.position ASC');
-
+            ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
+            ->addSelect(
+                "(SELECT COUNT(*) FROM Offer active WHERE
+                (active.shopId = s.id AND active.endDate >= '$currentDate' 
+                    AND active.deleted = 0
+                )
+                ) as activeCount"
+            )
+            ->leftJoin('p.popularshops', 's')
+            ->leftJoin('s.offer', 'o')
+            ->leftJoin('s.logo', 'img')
+            ->setParameter(1, '0')
+            ->where('s.deleted= ?1')
+            ->setParameter(2, '1')
+            ->andWhere('s.status= ?2')
+            ->orderBy('p.position', 'ASC');
+        
         if ($shopId) {
-            $popularStoreData = $popularStoreData->andWhere("s.id = ? ", $shopId);
+            $query = $query->setParameter(3, $shopId)->andWhere("s.id = ?3 ");
         } else {
-            $popularStoreData = $popularStoreData->limit($limit);
+            $query = $query->setMaxResults($limit);
         }
-
-        $popularStoreData = $popularStoreData->fetchArray();
+        
+        $popularStoreData = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $popularStoreData;
     }
 
     public static function getStoreDetails($shopId)
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $storeDetail = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
-        ->from('Shop s')
-        ->leftJoin('s.logo img')
-        ->leftJoin('s.smallimage small')
-        ->leftJoin('s.bigimage big')
-        ->leftJoin('s.affliatenetwork aff')
-        ->leftJoin('s.screenshot scr')
-        ->where('s.id='.$shopId)
-        ->andWhere('s.deleted=0')
-        ->andWhere('s.status=1');
+        ->from('KC\Entity\Shop', 's')
+        ->leftJoin('s.logo', 'img')
+        ->leftJoin('s.smallimage', 'small')
+        ->leftJoin('s.bigimage', 'big')
+        ->leftJoin('s.affliatenetwork', 'aff')
+        ->leftJoin('s.screenshot', 'scr')
+        ->setParameter(1, $shopId)
+        ->where('s.id= ?1')
+        ->setParameter(2, '0')
+        ->andWhere('s.deleted= ?2')
+        ->setParameter(3, '1')
+        ->andWhere('s.status= ?3');
         $allStoresDetail = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
         return $allStoresDetail;
     }
