@@ -49,7 +49,7 @@ class Visitor extends BaseVisitor
         $visitor->save();
     }
 
-    public static function addVisitor($visitorInformation)
+    public static function addVisitor($visitorInformation, $profileUpdate = '')
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
@@ -75,16 +75,18 @@ class Visitor extends BaseVisitor
         $visitor->firstName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['firstName']);
         $visitor->lastName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['lastName']);
         $visitor->gender = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['gender'] == 'M' ? 0 : 1);
-        $visitor->dateOfBirth =
-            (
-                $visitorInformation['dateOfBirthYear'].'-'
-                .$visitorInformation['dateOfBirthMonth'].'-'
-                .$visitorInformation['dateOfBirthDay']
-            );
-        $visitor->postalCode =
-            FrontEnd_Helper_viewHelper::sanitize(
-                isset($visitorInformation['postCode']) ? $visitorInformation['postCode'] : ''
-            );
+        if ($profileUpdate != '') {
+            $visitor->dateOfBirth =
+                (
+                    $visitorInformation['dateOfBirthYear'].'-'
+                    .$visitorInformation['dateOfBirthMonth'].'-'
+                    .$visitorInformation['dateOfBirthDay']
+                );
+            $visitor->postalCode =
+                FrontEnd_Helper_viewHelper::sanitize(
+                    isset($visitorInformation['postCode']) ? $visitorInformation['postCode'] : ''
+                );
+        }
         if (!empty($visitorInformation['password'])) {
             $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($visitorInformation['password']));
         }

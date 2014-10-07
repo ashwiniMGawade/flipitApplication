@@ -215,19 +215,22 @@ class SignupController extends Zend_Controller_Action
         if ($this->getRequest()->isPost()) {
             if ($profileForm->isValid($this->getRequest()->getPost())) {
                 $visitorDetails = $profileForm->getValues();
-                self::addVisitor($visitorDetails);
+                self::addVisitor($visitorDetails, 'profile');
             } else {
                 $profileForm->highlightErrorElements();
             }
         } else {
             $dateOfBirth = array_reverse(explode('-', $visitorDetailsForForm['dateOfBirth']));
+            $dateOfBirthDay = isset($dateOfBirth[0]) && $dateOfBirth[0] != '' ? $dateOfBirth[0] : '';
+            $dateOfBirthMonth = isset($dateOfBirth[1]) && $dateOfBirth[1] != '' ? $dateOfBirth[1] : '';
+            $dateOfBirthYear = isset($dateOfBirth[2]) && $dateOfBirth[2] != '' ? $dateOfBirth[2] : '';
             $profileForm->getElement('firstName')->setValue($visitorDetailsForForm['firstName']);
             $profileForm->getElement('lastName')->setValue($visitorDetailsForForm['lastName']);
             $profileForm->getElement('emailAddress')->setValue($visitorDetailsForForm['email']);
             $profileForm->getElement('gender')->setValue($visitorDetailsForForm['gender']);
-            $profileForm->getElement('dateOfBirthDay')->setValue($dateOfBirth[0]=='00' ? '' : $dateOfBirth[0]);
-            $profileForm->getElement('dateOfBirthMonth')->setValue($dateOfBirth[1]=='00' ? '' : $dateOfBirth[1]);
-            $profileForm->getElement('dateOfBirthYear')->setValue($dateOfBirth[2]=='0000' ? '' : $dateOfBirth[2]);
+            $profileForm->getElement('dateOfBirthDay')->setValue(isset($dateOfBirth[0]) && $dateOfBirth[0]=='00' ? '' : $dateOfBirthDay);
+            $profileForm->getElement('dateOfBirthMonth')->setValue(isset($dateOfBirth[1]) && $dateOfBirth[1]=='00' ? '' : $dateOfBirthMonth);
+            $profileForm->getElement('dateOfBirthYear')->setValue(isset($dateOfBirth[2]) && $dateOfBirth[2]=='0000' ? '' : $dateOfBirthYear);
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
         }
@@ -237,12 +240,12 @@ class SignupController extends Zend_Controller_Action
   
     }
 
-    public function addVisitor($visitorDetails)
+    public function addVisitor($visitorDetails, $profileUpdate = '')
     {
         $redirectLink =
             HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'). '/' .
             FrontEnd_Helper_viewHelper::__link('link_profiel');
-        $visitorId = Visitor::addVisitor($visitorDetails);
+        $visitorId = Visitor::addVisitor($visitorDetails, $profileUpdate);
         if ($visitorId) {
             $message = FrontEnd_Helper_viewHelper::__translate('Your information has been updated successfully !.');
         } else {

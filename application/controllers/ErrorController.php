@@ -53,7 +53,7 @@ class ErrorController extends Zend_Controller_Action
                     }
                     $specialPageOffers = FrontEnd_Helper_viewHelper::
                         getRequestedDataBySetGetCache(
-                            'error_specialPage_offers',
+                            'error_specialPage'.$pageDetails->id.'_offers',
                             array(
                                 'function' => 'Offer::getSpecialPageOffers', 'parameters' => array($pageDetails)
                             ),
