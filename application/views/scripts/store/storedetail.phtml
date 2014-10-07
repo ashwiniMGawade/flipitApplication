@@ -156,7 +156,7 @@ echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreIn
     if ($this->currentStoreInformation[0]['showSignupOption']) :
         $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
         $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
-        $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
+        echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
     ?>

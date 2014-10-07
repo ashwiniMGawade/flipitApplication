@@ -124,7 +124,7 @@ foreach ($this->offers as $offer) {
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
             $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormLarge');
             $sidebarWidgetNamespace->zendFormLarge = serialize($this->zendForm);
-            $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
+            echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
                 .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage='.$shopLogoOrDefaultImage);
         endif;
     endif;

@@ -40,7 +40,7 @@ echo $popularStores; ?>
 $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
 $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
 $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
-$this->esi($this->locale.'signup/signupwidget?shopId='
+echo $this->esi($this->locale.'signup/signupwidget?shopId='
     .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
 
 $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();

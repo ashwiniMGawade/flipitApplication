@@ -29,7 +29,7 @@ if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='log
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
             $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormFooter');
             $sidebarWidgetNamespace->zendFormFooter = serialize($signUpForm);
-            $this->esi($this->locale.'signup/signupwidgetfooter?shopId='
+            echo $this->esi($this->locale.'signup/signupwidgetfooter?shopId='
                 .'&signupFormWidgetType=footerSignupForm&shopLogoOrDefaultImage=');
             ?>
             <div class="social">
