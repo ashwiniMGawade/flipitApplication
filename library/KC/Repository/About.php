@@ -8,6 +8,7 @@ class About Extends \KC\Entity\About
     {
         $aboutContent =  false;
         $aboutDetail = self::getAboutContentFromSettings();
+
         if ($aboutDetail) {
             if ($aboutStatus == 1) {
                 $aboutStatus = array("1");
@@ -22,9 +23,9 @@ class About Extends \KC\Entity\About
             $query = $entityManagerUser->select('about')
             ->from('KC\Entity\About', 'about')
             ->setParameter(1, $aboutStatus)
-            ->add('where', $qb->expr()->in('about.status', '?1'))
+            ->where($entityManagerUser->expr()->in('about.status', '?1'))
             ->setParameter(2, $aboutPageContentIds)
-            ->add('where', $qb->expr()->in('about.id', '?2'));
+            ->andWhere($entityManagerUser->expr()->in('about.id', '?2'));
             $aboutContent = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $aboutContent;
         }
@@ -33,7 +34,7 @@ class About Extends \KC\Entity\About
 
     public static function getAboutContentFromSettings()
     {
-        return KC\Repository\Settings::getAboutSettings("about_");
+        return \KC\Repository\Settings::getAboutSettings("about_");
     }
 
     #####################################################
@@ -56,21 +57,22 @@ class About Extends \KC\Entity\About
 
     public static function checkAboutContent($name)
     {
-        return KC\Repository\Settings::getSettings($name) ;
+        return \KC\Repository\Settings::getSettings($name) ;
     }
 
     public static function newAboutSetting($id, $name)
     {
-        $settings =  new KC\Repository\Settings();
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $settings =  new \KC\Entity\Settings();
+
         //$settings->name =  constant(  "Settings::" . $name ) ;
         $settings->name = $name;
         $settings->value = $id;
-
-        $entityManagerLocale = \Zend_Registry::get('emLocale');
+       
         $entityManagerLocale->persist($settings);
         $entityManagerLocale->flush();
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_about_page');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_about_page');
     }
 
     public static function update($params)
@@ -99,7 +101,6 @@ class About Extends \KC\Entity\About
             $about->status = @$params['status'][$a] ? 1 : 0 ;
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($about);
-            $entityManagerLocale->flush();
             if (! $retVal) {
                 self::newAboutSetting($about->id, "about_".$i);
             }

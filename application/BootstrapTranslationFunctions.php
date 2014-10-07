@@ -21,7 +21,7 @@ class BootstrapTranslationFunctions {
             $localePath = '/';
         }
 
-        $locale = KC\Repository\LocaleSettings::getLocaleSettings();
+        $locale = \KC\Repository\LocaleSettings::getLocaleSettings();
         $locale = !empty($locale[0]['locale']) ? $locale[0]['locale'] : 'nl_NL';
         return array('locale' => $locale, 'localePath' => $localePath, 'suffix' => $suffix);
     }

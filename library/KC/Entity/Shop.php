@@ -54,27 +54,27 @@ class Shop
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $deeplink;
+    private $deepLink;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $deeplinkstatus;
+    private $deepLinkStatus;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $refurl;
+    private $refUrl;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $actualurl;
+    private $actualUrl;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $affliateprogram;
+    private $affliateProgram;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)

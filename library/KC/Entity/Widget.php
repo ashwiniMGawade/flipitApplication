@@ -64,4 +64,15 @@ class Widget
      * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="page")
      */
     private $Widget;
+
+        
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }
