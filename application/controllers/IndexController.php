@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\Shop::getSimilarShops(343));
+        print_r(KC\Repository\Shop::getStoresForSearchByKeyword('zal', 10, 1));
         die;
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();

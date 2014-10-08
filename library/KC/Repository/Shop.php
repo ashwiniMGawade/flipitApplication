@@ -128,40 +128,43 @@ class Shop extends \KC\Entity\Shop
     public static function getStoreDetails($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $storeDetail = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
+        $query = $queryBuilder->select('s,img,small,big')
         ->from('KC\Entity\Shop', 's')
-        ->leftJoin('s.logo', 'img')
-        ->leftJoin('s.smallimage', 'small')
-        ->leftJoin('s.bigimage', 'big')
+        ->leftJoin('s.shoplogo', 'img')
+        ->leftJoin('s.shopimage', 'small')
+        ->leftJoin('s.shops', 'big')
         ->leftJoin('s.affliatenetwork', 'aff')
-        ->leftJoin('s.screenshot', 'scr')
+        //->leftJoin('s.screenshot', 'scr')
         ->setParameter(1, $shopId)
         ->where('s.id= ?1')
         ->setParameter(2, '0')
         ->andWhere('s.deleted= ?2')
         ->setParameter(3, '1')
         ->andWhere('s.status= ?3');
-        $allStoresDetail = $storeDetail->fetchArray(array(), Doctrine_Core::HYDRATE_ARRAY);
+        $allStoresDetail = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allStoresDetail;
     }
 
     public static function getallStoresForFrontEnd()
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
-        $storeInformation = Doctrine_Query::create()
-        ->select('o.id,s.id, s.name, s.permaLink as permalink')
-        ->from('Shop s')
+        $query = $queryBuilder->select('o.id,s.id, s.name, s.permalink')
+        ->from('KC\Entity\Shop', 's')
         ->addSelect(
-            "(SELECT COUNT(*) FROM Offer exclusive WHERE exclusive.shopId = s.id AND
-                (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount"
+            "(SELECT COUNT(exclusive) FROM KC\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
+                (o.exclusivecode=1 AND o.enddate > '$currentDateAndTime')) as exclusiveCount"
         )
-        ->addSelect("(SELECT COUNT(*) FROM PopularCode WHERE offerId = o.id ) as popularCount")
-        ->leftJoin('s.offer o')
-        ->leftJoin('s.logo img')
-        ->where('s.deleted=0')
-        ->addWhere('s.status=1')
-        ->orderBy('s.name')->fetchArray();
-
+        ->addSelect("(SELECT COUNT(p.id) FROM KC\Entity\PopularCode p WHERE p.popularcode = o.id ) as popularCount")
+        ->leftJoin('s.offer', 'o')
+        ->leftJoin('s.shoplogo', 'img')
+        ->setParameter(1, '0')
+        ->where('s.deleted= ?1')
+        ->setParameter(2, '1')
+        ->andWhere('s.status= ?2')
+        ->orderBy('s.name');
+        $storeInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+ 
         $storesForFrontend =array();
         foreach ($storeInformation as $store) {
             if ($store['name']!='' && $store['name']!=null) {
@@ -185,64 +188,67 @@ class Shop extends \KC\Entity\Shop
 
     public static function getAllPopularStores($limit)
     {
-        $popularStores = Doctrine_Query::create()
-        ->select('p.id,s.name,s.permaLink,img.path as imgpath, img.name as imgname')
-        ->from('PopularShop p')
-        ->leftJoin('p.shop s')
-        ->leftJoin('s.logo img')
-        ->where('s.deleted=0')
-        ->addWhere('s.status=1')
-        ->orderBy('p.position ASC')
-        ->limit($limit)->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('p.id,s.name,s.permalink,img.path as imgpath, img.name as imgname')
+        ->from('KC\Entity\PopularShop', 'p')
+        ->leftJoin('p.popularshops', 's')
+        ->leftJoin('s.shoplogo', 'img')
+        ->setParameter(1, '0')
+        ->where('s.deleted= ?1')
+        ->setParameter(2, '1')
+        ->andWhere('s.status= ?2')
+        ->orderBy('p.position', 'ASC')
+        ->setMaxResults($limit);
+        $popularStores = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $popularStores;
     }
 
     public static function getshopDetails($permalink)
     {
-        $shopDetails = Doctrine_Query::create()
-        ->select('s.*,img.name,img.path,chptr.*')
-        ->from('shop s')
-        ->leftJoin('s.logo img')
-        ->leftJoin('s.howtochapter chptr')
-        ->Where("s.permaLink='".$permalink."'")
-        ->andWhere('s.status = 1')
-        ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('s,img.name,img.path,chptr')
+        ->from('KC\Entity\Shop', 's')
+        ->leftJoin('s.shoplogo', 'img')
+        ->leftJoin('s.howtochapter', 'chptr')
+        ->Where("s.permalink= '".$permalink."'")
+        ->andWhere('s.status = 1');
+        $shopDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopDetails;
     }
 
     public static function getShopsByShopIds($shopIds)
     {
-        $shopsInformation = Doctrine_Query::create()
-            ->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
-            ->from("Shop s")
-            ->leftJoin("s.logo img")
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('s.id, s.name,s.permalink, img.path as imgpath, img.name as imgname')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.shoplogo', 'img')
             ->where('s.deleted=0')
-            ->andWhereIn("s.id", $shopIds)
-            ->orderBy("s.name")->fetchArray();
+            ->andWhere($queryBuilder->expr()->in('s.id', $shopIds))
+            ->orderBy("s.name");
+        $shopsInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopsInformation;
     }
 
     public static function getStoresForSearchByKeyword($searchedKeyword, $limit, $fromPage='')
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date('Y-m-d 00:00:00');
-        $storesByKeyword = Doctrine_Query::create()
-            ->select('s.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
-            ->from('shop s')
-            ->leftJoin('s.logo img')
+        $query = $queryBuilder->select('s.id,s.name,s.permalink, img.path as imgpath, img.name as imgname')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.shoplogo', 'img')
             ->where('s.deleted=0')
-            ->addWhere('s.status=1')
-            ->andWhere("s.name LIKE ?", "%". $searchedKeyword."%");
+            ->andWhere('s.status=1')
+            //->setParameter(1, "%". $queryBuilder->expr()->literal($searchedKeyword)."%")
+            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%". $searchedKeyword."%")));
         if ($fromPage!='') {
-            $storesByKeyword->addSelect(
-                "(SELECT COUNT(*) FROM Offer active WHERE
-                (active.shopId = s.id AND active.endDate >= '$currentDate' 
-                    AND active.deleted = 0
-                )
-                ) as activeCount"
+            $query = $query->addSelect(
+                "(SELECT count(tt) FROM KC\Entity\Offer active LEFT JOIN active.votes tt  WHERE
+                (active.id = tt.offer )) as activeCount"
             )
-            ->leftJoin('s.offer o');
+            ->leftJoin('s.offer', 'o');
         }
-        $stores = $storesByKeyword->limit($limit)->fetchArray();
+        $query = $query->setMaxResults($limit);
+        $stores = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $stores;
     }
 
