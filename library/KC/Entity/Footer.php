@@ -18,30 +18,60 @@ class Footer
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $topfooter;
+    private $bottomFooter;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     */
+    private $middleColumn4;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $middleColumn3;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $middleColumn2;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $middleColumn1;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $topFooter;
+
+    /**
+     * 
+     */
+    private $topfooter;
+
+    /**
+     * 
      */
     private $middlecolumn1;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * 
      */
     private $middlecolumn2;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * 
      */
     private $middlecolumn3;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * 
      */
     private $middlecolumn4;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * 
      */
     private $bottomfooter;
 

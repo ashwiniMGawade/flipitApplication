@@ -34,8 +34,8 @@ class Chain
      * @ORM\ManyToMany(targetEntity="KC\Entity\Website", inversedBy="chain")
      * @ORM\JoinTable(
      *     name="chain_item",
-     *     joinColumns={@ORM\JoinColumn(name="chainid", referencedColumnName="id", nullable=false)},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="websiteid", referencedColumnName="id", nullable=false)}
+     *     joinColumns={@ORM\JoinColumn(name="chainId", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="websiteId", referencedColumnName="id", nullable=false)}
      * )
      */
     private $website;

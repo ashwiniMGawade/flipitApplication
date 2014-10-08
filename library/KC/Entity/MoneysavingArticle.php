@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="moneysaving_article",
- *     indexes={@ORM\Index(name="articleid_idx", columns={"articleid"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="articleid", columns={"articleid"})}
+ *     indexes={@ORM\Index(name="articleid_idx", columns={"articleId"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="articleid", columns={"articleId"})}
  * )
  */
 class MoneysavingArticle
@@ -51,7 +51,7 @@ class MoneysavingArticle
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Articles", inversedBy="articles")
-     * @ORM\JoinColumn(name="articleid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="articleId", referencedColumnName="id", onDelete="restrict")
      */
     private $moneysaving;
 

@@ -5,7 +5,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="articles", indexes={@ORM\Index(name="thumbnailid", columns={"thumbnailid"})})
+ * @ORM\Table(name="articles", indexes={@ORM\Index(name="thumbnailid", columns={})})
  */
 class Articles
 {
@@ -102,8 +102,20 @@ class Articles
     private $storearticles;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="articleImage")
-     * @ORM\JoinColumn(name="thumbnailid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesThumb", inversedBy="articles")
+     * @ORM\JoinColumn(name="thumbnailsmallid2", referencedColumnName="id")
+     */
+    private $thumbnail;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesIcon", inversedBy="articles")
+     * @ORM\JoinColumn(name="articles_icon_id", referencedColumnName="id")
+     */
+    private $articleImage;
+
+    /**
+     * 
+     * 
      */
     private $imagearticle;
 
@@ -111,7 +123,7 @@ class Articles
      * @ORM\ManyToMany(targetEntity="KC\Entity\Category", inversedBy="articles")
      * @ORM\JoinTable(
      *     name="ref_article_category",
-     *     joinColumns={@ORM\JoinColumn(name="articleid", referencedColumnName="id", nullable=false)},
+     *     joinColumns={@ORM\JoinColumn(name="articlesid", referencedColumnName="id", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id", nullable=false)}
      * )
      */

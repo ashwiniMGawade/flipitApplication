@@ -42,7 +42,7 @@ class Rights
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Role", inversedBy="rights")
-     * @ORM\JoinColumn(name="roleid", referencedColumnName="id")
+     * @ORM\JoinColumn(name="roleId", referencedColumnName="id")
      */
     private $role;
 }

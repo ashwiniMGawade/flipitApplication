@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="ref_offer_page",
  *     indexes={
- *         @ORM\Index(name="offerid_idx", columns={"offerid"}),
- *         @ORM\Index(name="pageid_idx", columns={"pageid"}),
- *         @ORM\Index(name="offer_page_id_idx", columns={"pageid","offerid"})
+ *         @ORM\Index(name="offerid_idx", columns={"offerId"}),
+ *         @ORM\Index(name="pageid_idx", columns={"pageId"}),
+ *         @ORM\Index(name="offer_page_id_idx", columns={"pageId","offerId"})
  *     }
  * )
  */
@@ -34,13 +34,13 @@ class RefOfferPage
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offers")
-     * @ORM\JoinColumn(name="offerid", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $refoffers;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pageoffers")
-     * @ORM\JoinColumn(name="pageid", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="pageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $offers;
 }

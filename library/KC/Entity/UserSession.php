@@ -17,6 +17,11 @@ class UserSession
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
+    private $sessionId;
+
+    /**
+     * 
+     */
     private $sessionid;
 
     /**
@@ -31,7 +36,7 @@ class UserSession
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\User", inversedBy="user")
-     * @ORM\JoinColumn(name="userid", referencedColumnName="id")
+     * @ORM\JoinColumn(name="userId", referencedColumnName="id")
      */
     private $usersession;
 }

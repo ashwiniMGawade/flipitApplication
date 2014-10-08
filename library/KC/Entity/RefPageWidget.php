@@ -6,14 +6,14 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="ref_page_widget",
- *     indexes={@ORM\Index(name="pageid_idx", columns={"pageid"}),@ORM\Index(name="widgetid_idx", columns={"widgetid"})}
+ *     indexes={@ORM\Index(name="pageid_idx", columns={"pageId"}),@ORM\Index(name="widgetid_idx", columns={"widgetId"})}
  * )
  */
 class RefPageWidget
 {
     /**
-     * @ORM\Id
-     * @ORM\Column(type="integer", length=8)
+     * 
+     * @ORM\Column(type="integer", length=8, nullable=false)
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
@@ -40,13 +40,13 @@ class RefPageWidget
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pagewidget")
-     * @ORM\JoinColumn(name="pageid", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="pageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $widget;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Widget", inversedBy="Widget")
-     * @ORM\JoinColumn(name="widgetid", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="widgetId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $page;
 }
