@@ -84,4 +84,14 @@ class Dashboard
      * @ORM\Column(type="integer", length=11, nullable=false)
      */
     private $total_no_of_shops_online_code_thisweek;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

@@ -94,8 +94,7 @@ class Admin_AuthController extends Zend_Controller_Action
 
             $result = $auth->authenticate($data_adapter);
             if (Auth_StaffAdapter::hasIdentity()) {
-
-
+               
                 //create object of user class
                 $timeSeconds = 28800;
                 

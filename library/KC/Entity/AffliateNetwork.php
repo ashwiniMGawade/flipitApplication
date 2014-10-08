@@ -60,4 +60,14 @@ class AffliateNetwork
      * @ORM\JoinColumn(name="replacewithId", referencedColumnName="id", onDelete="restrict")
      */
     private $affliate_networks;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

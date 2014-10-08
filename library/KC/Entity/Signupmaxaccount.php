@@ -46,12 +46,12 @@ class Signupmaxaccount
     private $email_confirmation;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $email_header;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $email_footer;
 
@@ -134,4 +134,14 @@ class Signupmaxaccount
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $newletter_scheduled_time;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

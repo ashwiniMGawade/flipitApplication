@@ -56,7 +56,7 @@ class IndexController extends Zend_Controller_Action
             $this->view->topCategories = $topCategories;
             $specialListPages = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "all_specialPagesHome_list",
-                array('function' => 'SpecialList::getSpecialPages', 'parameters' => array()
+                array('function' => 'KC\Repository\SpecialList::getSpecialPages', 'parameters' => array()
                 ),
                 ''
             );

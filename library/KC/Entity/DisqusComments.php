@@ -60,4 +60,14 @@ class DisqusComments
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $author_avtar;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

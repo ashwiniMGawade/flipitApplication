@@ -55,7 +55,7 @@ class Category
     private $metaDescription;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 
@@ -131,4 +131,14 @@ class Category
      * @ORM\ManyToMany(targetEntity="KC\Entity\Articles", mappedBy="category")
      */
     private $articles;
+    
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

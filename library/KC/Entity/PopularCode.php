@@ -50,4 +50,14 @@ class PopularCode
      * @ORM\JoinColumn(name="offerid", referencedColumnName="id", onDelete="restrict")
      */
     private $popularcode;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

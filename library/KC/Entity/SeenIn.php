@@ -59,4 +59,14 @@ class SeenIn
      * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */
     private $logo;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

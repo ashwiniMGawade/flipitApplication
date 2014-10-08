@@ -50,4 +50,14 @@ class ArticleViewCount
      * @ORM\JoinColumn(name="articleid", referencedColumnName="id")
      */
     private $articles;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

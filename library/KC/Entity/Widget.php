@@ -26,7 +26,7 @@ class Widget
     private $slug;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $content;
 
@@ -64,4 +64,14 @@ class Widget
      * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="page")
      */
     private $Widget;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

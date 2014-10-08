@@ -93,7 +93,7 @@ class Offer
     private $extendedMetaDescription;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $extendedFullDescription;
 
@@ -254,4 +254,14 @@ class Offer
      * )
      */
     private $visitors;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

@@ -21,7 +21,7 @@ class ShopHowToChapter
     private $chapterTitle;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $chapterDescription;
 
@@ -40,4 +40,14 @@ class ShopHowToChapter
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id")
      */
     private $shop;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

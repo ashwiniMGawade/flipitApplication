@@ -70,4 +70,14 @@ class Votes
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     private $offer;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }
