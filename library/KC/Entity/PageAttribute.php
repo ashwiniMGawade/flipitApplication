@@ -4,9 +4,9 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="newslettersub")
+ * @ORM\Table(name="page_attribute")
  */
-class Newslettersub
+class PageAttribute
 {
     /**
      * @ORM\Id
@@ -16,12 +16,12 @@ class Newslettersub
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $email;
+    private $name;
 
     /**
-     * @ORM\Column(type="integer", length=11, nullable=true)
+     * @ORM\Column(type="integer", length=1, nullable=true)
      */
     private $deleted;
 
@@ -34,4 +34,9 @@ class Newslettersub
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $updated_at;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\Page", mappedBy="page")
+     */
+    private $pageattribute;
 }

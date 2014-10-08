@@ -4,9 +4,9 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="newslettersub")
+ * @ORM\Table(name="route_permalink", indexes={@ORM\Index(name="permalink_idx", columns={"permalink"})})
  */
-class Newslettersub
+class RoutePermalink
 {
     /**
      * @ORM\Id
@@ -18,12 +18,17 @@ class Newslettersub
     /**
      * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $email;
+    private $permalink;
 
     /**
-     * @ORM\Column(type="integer", length=11, nullable=true)
+     * @ORM\Column(type="string", length=255, nullable=false)
      */
-    private $deleted;
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=false)
+     */
+    private $exactlink;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -34,4 +39,9 @@ class Newslettersub
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $updated_at;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=false)
+     */
+    private $deleted;
 }

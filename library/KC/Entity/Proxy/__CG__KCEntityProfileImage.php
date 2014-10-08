@@ -42,27 +42,6 @@ class ProfileImage extends \KC\Entity\ProfileImage implements \Doctrine\ORM\Prox
     }
 
     
-    public function getId()
-    {
-        if ($this->__isInitialized__ === false) {
-            return (int) $this->_identifier["id"];
-        }
-        $this->__load();
-        return parent::getId();
-    }
-
-    public function __get($property)
-    {
-        $this->__load();
-        return parent::__get($property);
-    }
-
-    public function __set($property, $value)
-    {
-        $this->__load();
-        return parent::__set($property, $value);
-    }
-
 
     public function __sleep()
     {

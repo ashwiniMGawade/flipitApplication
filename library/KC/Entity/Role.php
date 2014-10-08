@@ -4,9 +4,9 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="newslettersub")
+ * @ORM\Table(name="role")
  */
-class Newslettersub
+class Role
 {
     /**
      * @ORM\Id
@@ -16,12 +16,12 @@ class Newslettersub
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=false)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $email;
+    private $name;
 
     /**
-     * @ORM\Column(type="integer", length=11, nullable=true)
+     * @ORM\Column(type="integer", length=1, nullable=false)
      */
     private $deleted;
 
@@ -34,4 +34,14 @@ class Newslettersub
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $updated_at;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\Rights", mappedBy="role")
+     */
+    private $rights;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\User", mappedBy="users")
+     */
+    private $roleid;
 }
