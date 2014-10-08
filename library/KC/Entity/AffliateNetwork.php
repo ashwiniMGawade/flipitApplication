@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="affliate_network", indexes={@ORM\Index(name="replacewithid_idx", columns={"replacewithid"})})
+ * @ORM\Table(name="affliate_network", indexes={@ORM\Index(name="replacewithid_idx", columns={"replacewithId"})})
  */
 class AffliateNetwork
 {
@@ -57,7 +57,7 @@ class AffliateNetwork
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\AffliateNetwork", inversedBy="affliate_network")
-     * @ORM\JoinColumn(name="replacewithid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="replacewithId", referencedColumnName="id", onDelete="restrict")
      */
     private $affliate_networks;
 }

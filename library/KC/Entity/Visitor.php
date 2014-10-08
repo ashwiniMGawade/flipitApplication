@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="visitor",
- *     indexes={@ORM\Index(name="imageid_idx", columns={"imageid"}),@ORM\Index(name="createdby_idx", columns={"createdby"})},
+ *     indexes={@ORM\Index(name="imageid_idx", columns={"imageId"}),@ORM\Index(name="createdby_idx", columns={"createdBy"})},
  *     uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})}
  * )
  */
@@ -22,10 +22,20 @@ class Visitor
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $firstname;
+    private $lastName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     */
+    private $firstName;
+
+    /**
+     * 
+     */
+    private $firstname;
+
+    /**
+     * 
      */
     private $lastname;
 
@@ -57,6 +67,11 @@ class Visitor
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
+    private $imageId;
+
+    /**
+     * 
+     */
     private $imageid;
 
     /**
@@ -65,37 +80,72 @@ class Visitor
     private $gender;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $dateofbirth;
+    private $createdBy;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $codeAlert;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $travelNewsLetter;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $fashionNewsLetter;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $weeklyNewsLetter;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
+    private $postalCode;
+
+    /**
+     * @ORM\Column(type="date", nullable=true)
+     */
+    private $dateOfBirth;
+
+    /**
+     * 
+     */
+    private $dateofbirth;
+
+    /**
+     * 
+     */
     private $postalcode;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
+     * 
      */
     private $weeklynewsletter;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
+     * 
      */
     private $fashionnewsletter;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
+     * 
      */
     private $travelnewsletter;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
+     * 
      */
     private $codealert;
 
     /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
+     * 
      */
     private $createdby;
 
@@ -107,10 +157,20 @@ class Visitor
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $currentlogin;
+    private $lastLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $currentLogIn;
+
+    /**
+     * 
+     */
+    private $currentlogin;
+
+    /**
+     * 
      */
     private $lastlogin;
 
@@ -158,6 +218,12 @@ class Visitor
      * @ORM\OneToMany(targetEntity="KC\Entity\VisitorKeyword", mappedBy="visitor")
      */
     private $visitorKeyword;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\VisitorImage", inversedBy="visitor")
+     * @ORM\JoinColumn(name="visitor_image_id", referencedColumnName="id")
+     */
+    private $visitorimage;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Offer", mappedBy="visitors")

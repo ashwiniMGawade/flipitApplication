@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="term_and_condition", indexes={@ORM\Index(name="offerid_idx", columns={"offerid"})})
+ * @ORM\Table(name="term_and_condition", indexes={@ORM\Index(name="offerid_idx", columns={"offerId"})})
  */
 class TermAndCondition
 {
@@ -37,7 +37,7 @@ class TermAndCondition
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offertermandcondition")
-     * @ORM\JoinColumn(name="offerid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="offerId", referencedColumnName="id", onDelete="restrict")
      */
     private $termandcondition;
 }

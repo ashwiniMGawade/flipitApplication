@@ -7,7 +7,20 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(name="image", indexes={@ORM\Index(name="type_idx", columns={"type"})})
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", length=10, type="string")
- * @ORM\DiscriminatorMap({""="KC\Entity\Logo"})
+ * @ORM\DiscriminatorMap(
+ *     {
+ *     "LG"="KC\Entity\Logo",
+ *     "HTUS"="KC\Entity\HowToUseSmallImage",
+ *     "HTUB"="KC\Entity\HowToUseBigImage",
+ *     "MI"="KC\Entity\MediaImage",
+ *     "CATICON"="KC\Entity\CategoryIcon",
+ *     "VISITORPIC"="KC\Entity\VisitorImage",
+ *     "ARTCATICON"="KC\Entity\ArticleCategoryIcon",
+ *     "ARTICON"="KC\Entity\ArticlesIcon",
+ *     "ARTTHUMB"="KC\Entity\ArticlesThumb",
+ *     "SCREENSHOT"="KC\Entity\WebsiteScrenshot"
+ * }
+ * )
  */
 class Image
 {
@@ -49,62 +62,62 @@ class Image
     private $updated_at;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\SeenIn", mappedBy="seenin")
+     * 
      */
     private $seeninlogo;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Articlecategory", mappedBy="artImage")
+     * 
      */
     private $ArtCatIcon;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Articles", mappedBy="imagearticle")
+     * 
      */
     private $articleImage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="category")
+     * 
      */
     private $categoryfeaturedimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="headerimagecategory")
+     * 
      */
     private $categoryheaderimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="iconcategory")
+     * 
      */
     private $categoryicon;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Media", mappedBy="media")
+     * 
      */
     private $mediaimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Offer", mappedBy="logooffer")
+     * 
      */
     private $logooffer;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Page", mappedBy="logo")
+     * 
      */
     private $pageheaderimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shops")
+     * 
      */
     private $howtousebigimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shopimage")
+     * 
      */
     private $smallimage;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="shoplogo")
+     * 
      */
     private $logo;
 }

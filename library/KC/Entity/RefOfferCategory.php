@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="ref_offer_category",
  *     indexes={
- *         @ORM\Index(name="offerid_idx", columns={"offerid"}),
- *         @ORM\Index(name="categoryid_idx", columns={"categoryid"}),
- *         @ORM\Index(name="offer_category_id_idx", columns={"categoryid","offerid"})
+ *         @ORM\Index(name="offerid_idx", columns={"offerId"}),
+ *         @ORM\Index(name="categoryid_idx", columns={"categoryId"}),
+ *         @ORM\Index(name="offer_category_id_idx", columns={"categoryId","offerId"})
  *     }
  * )
  */
@@ -34,13 +34,13 @@ class RefOfferCategory
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="categoryoffres")
-     * @ORM\JoinColumn(name="categoryid", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="categoryId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $offer;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="categoryoffres")
-     * @ORM\JoinColumn(name="offerid", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="offerId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $category;
 }

@@ -22,7 +22,7 @@ class Interestingcategory
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="interestingcategory")
-     * @ORM\JoinColumn(name="categoryid", referencedColumnName="id")
+     * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
     private $category;
 }

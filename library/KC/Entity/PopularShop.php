@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="popular_shop",
- *     indexes={@ORM\Index(name="shopid_idx", columns={"shopid"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="shopid", columns={"shopid"})}
+ *     indexes={@ORM\Index(name="shopid_idx", columns={"shopId"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="shopid", columns={"shopId"})}
  * )
  */
 class PopularShop
@@ -40,7 +40,7 @@ class PopularShop
     private $deleted;
 
     /**
-     * @ORM\Column(type="datetime", nullable=false)
+     * @ORM\Column(type="datetime", unique=true, nullable=false)
      */
     private $created_at;
 
@@ -51,7 +51,7 @@ class PopularShop
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="popularshop")
-     * @ORM\JoinColumn(name="shopid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="shopId", referencedColumnName="id", onDelete="restrict")
      */
     private $popularshops;
 }

@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(name="votes")
  */
-class Vote
+class Votes
 {
     /**
      * @ORM\Id
@@ -18,7 +18,7 @@ class Vote
     /**
      * @ORM\Column(type="string", length=200, nullable=true)
      */
-    private $ipaddress;
+    private $ipAddress;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -63,26 +63,11 @@ class Vote
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $visitorid;
+    private $visitorId;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="votes")
      * @ORM\JoinColumn(name="offerId", referencedColumnName="id")
      */
     private $offer;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
-    
-    public function getId()
-    {
-        return $this->id;
-    }
 }

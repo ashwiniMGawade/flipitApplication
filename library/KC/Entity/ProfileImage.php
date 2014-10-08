@@ -49,6 +49,12 @@ class ProfileImage
      * @ORM\OneToMany(targetEntity="KC\Entity\User", mappedBy="profileimage")
      */
     private $user;
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function __get($property)
     {
         return $this->$property;

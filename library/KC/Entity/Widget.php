@@ -38,10 +38,20 @@ class Widget
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $userdefined;
+    private $showWithDefault;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $userDefined;
+
+    /**
+     * 
+     */
+    private $userdefined;
+
+    /**
+     * 
      */
     private $showwithdefault;
 
@@ -64,4 +74,15 @@ class Widget
      * @ORM\OneToMany(targetEntity="KC\Entity\RefPageWidget", mappedBy="page")
      */
     private $Widget;
+
+        
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }
