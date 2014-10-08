@@ -7,10 +7,10 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="offer",
  *     indexes={
- *         @ORM\Index(name="shopid_idx", columns={"shopid"}),
- *         @ORM\Index(name="ind_offer_shenex", columns={"shopid","enddate","exclusivecode"})
+ *         @ORM\Index(name="shopid_idx", columns={"shopId"}),
+ *         @ORM\Index(name="ind_offer_shenex", columns={"shopId","endDate","exclusiveCode"})
  *     },
- *     uniqueConstraints={@ORM\UniqueConstraint(name="offerlogoid", columns={"offerlogoid"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="offerlogoid", columns={})}
  * )
  */
 class Offer
@@ -30,7 +30,7 @@ class Offer
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $visability;
+    private $Visability;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -39,7 +39,6 @@ class Offer
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * @ORM\OneToMany(targetEntity="KC\Entity\CouponCode", mappedBy="offer")
      */
     private $couponCode;
 
@@ -51,17 +50,17 @@ class Offer
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $refUrl;
+    private $refURL;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $startdate;
+    private $startDate;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $enddate;
+    private $endDate;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
@@ -81,7 +80,7 @@ class Offer
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $extendedtitle;
+    private $extendedTitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -91,12 +90,12 @@ class Offer
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $extendedmetadescription;
+    private $extendedMetaDescription;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
      */
-    private $extendedfulldescription;
+    private $extendedFullDescription;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -166,7 +165,7 @@ class Offer
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $shopexist;
+    private $shopExist;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
@@ -176,7 +175,7 @@ class Offer
     /**
      * @ORM\Column(type="decimal", length=16, nullable=true, scale=4)
      */
-    private $popularitycount;
+    private $popularityCount;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -184,9 +183,20 @@ class Offer
     private $couponCodeType;
 
     /**
+     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="offer")
+     * @ORM\JoinColumn(name="offerLogoId", referencedColumnName="id", unique=true)
+     */
+    private $logo;
+
+    /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Conversions", mappedBy="offer")
      */
     private $conversions;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\CouponCode", mappedBy="offer")
+     */
+    private $couponcode;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\OfferTiles", mappedBy="offer")
@@ -224,19 +234,13 @@ class Offer
     private $offerviewcount;
 
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Vote", mappedBy="offer")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Votes", mappedBy="offer")
      */
     private $votes;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="logooffer")
-     * @ORM\JoinColumn(name="offerlogoid", referencedColumnName="id", onDelete="restrict")
-     */
-    private $logooffer;
-
-    /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="offer")
-     * @ORM\JoinColumn(name="shopid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="shopId", referencedColumnName="id", onDelete="restrict")
      */
     private $shopOffers;
 
@@ -249,14 +253,4 @@ class Offer
      * )
      */
     private $visitors;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

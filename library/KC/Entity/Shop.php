@@ -7,13 +7,13 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="shop",
  *     indexes={
- *         @ORM\Index(name="affliatenetworkid_idx", columns={"affliatenetworkid"}),
- *         @ORM\Index(name="howtousepageid_idx", columns={"howtousepageid"})
+ *         @ORM\Index(name="affliatenetworkid_idx", columns={"affliateNetworkId"}),
+ *         @ORM\Index(name="howtousepageid_idx", columns={"howtoUsepageId"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="logoid", columns={"logoid"}),
- *         @ORM\UniqueConstraint(name="howtousesmallimageid", columns={"howtousesmallimageid"}),
- *         @ORM\UniqueConstraint(name="howtousebigimageid", columns={"howtousebigimageid"})
+ *         @ORM\UniqueConstraint(name="logoid", columns={}),
+ *         @ORM\UniqueConstraint(name="howtousesmallimageid", columns={}),
+ *         @ORM\UniqueConstraint(name="howtousebigimageid", columns={})
  *     }
  * )
  */
@@ -39,7 +39,7 @@ class Shop
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metadescription;
+    private $metaDescription;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
@@ -89,22 +89,22 @@ class Shop
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $overritetitle;
+    private $overriteTitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $overritesubtitle;
+    private $overriteSubtitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $overritebrowsertitle;
+    private $overriteBrowserTitle;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
      */
-    private $shoptext;
+    private $shopText;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
@@ -114,7 +114,7 @@ class Shop
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $howtouse;
+    private $howToUse;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -144,12 +144,12 @@ class Shop
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $offlinesicne;
+    private $offlineSicne;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $accoutmanagerid;
+    private $accoutManagerId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -159,7 +159,7 @@ class Shop
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $contentmanagerid;
+    private $contentManagerId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -169,7 +169,7 @@ class Shop
     /**
      * @ORM\Column(type="integer", length=8, nullable=false)
      */
-    private $screenshotid;
+    private $screenshotId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -259,7 +259,7 @@ class Shop
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $showsignupoption;
+    private $showSignupOption;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
@@ -269,12 +269,12 @@ class Shop
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $customheader;
+    private $customHeader;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $totalviewcount;
+    private $totalViewcount;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
@@ -284,7 +284,7 @@ class Shop
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $showchains;
+    private $showChains;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
@@ -299,7 +299,7 @@ class Shop
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
-    private $strictconfirmation;
+    private $strictConfirmation;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
@@ -310,6 +310,12 @@ class Shop
      * @ORM\Column(type="string", nullable=true)
      */
     private $brandingcss;
+
+    /**
+     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="shop")
+     * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
+     */
+    private $logo;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Adminfavoriteshp", mappedBy="shops")
@@ -368,33 +374,33 @@ class Shop
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\AffliateNetwork", inversedBy="affliatenetwork")
-     * @ORM\JoinColumn(name="affliatenetworkid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="affliateNetworkId", referencedColumnName="id", onDelete="restrict")
      */
     private $affliatenetwork;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="howtousebigimage")
-     * @ORM\JoinColumn(name="howtousebigimageid", referencedColumnName="id", onDelete="restrict")
-     */
-    private $shops;
-
-    /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pages")
-     * @ORM\JoinColumn(name="howtousepageid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="howtoUsepageId", referencedColumnName="id", onDelete="restrict")
      */
     private $shopPage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="smallimage")
-     * @ORM\JoinColumn(name="howtousesmallimageid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\HowToUseSmallImage", inversedBy="shop")
+     * @ORM\JoinColumn(name="howtoUseSmallImageId", referencedColumnName="id")
      */
-    private $shopimage;
+    private $howtousesmallimage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="logo")
-     * @ORM\JoinColumn(name="logoid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\HowToUseBigImage", inversedBy="shop")
+     * @ORM\JoinColumn(name="howtoUseBigImageId", referencedColumnName="id")
      */
-    private $shoplogo;
+    private $howtousebigimage;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\WebsiteScrenshot", inversedBy="shop")
+     * @ORM\JoinColumn(name="screnshotId", referencedColumnName="id")
+     */
+    private $screnshot;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="favoriteshops")

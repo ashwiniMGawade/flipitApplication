@@ -116,7 +116,7 @@ class Admin_AuthController extends Zend_Controller_Action
                 if ($adminPasswordAge) {
 
                     # check passowrd is older than two months or not
-                    $date = new DateTime(Auth_StaffAdapter::getIdentity()->passwordChangeTime);
+                    $date = new DateTime(Auth_StaffAdapter::getIdentity()->passwordChangeTime->format('Y-m-d H:i:s'));
                     $date->modify($adminPasswordAge);
 
                     $newPasswordChagetime = strtotime($date->format('Y-m-d H:i:s'));

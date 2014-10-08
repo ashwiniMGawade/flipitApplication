@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="seen_in",
- *     indexes={@ORM\Index(name="logoid_idx", columns={"logoid"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="logoid", columns={"logoid"})}
+ *     indexes={@ORM\Index(name="logoid_idx", columns={})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="logoid", columns={})}
  * )
  */
 class SeenIn
@@ -52,11 +52,11 @@ class SeenIn
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $alttext;
+    private $altText;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Image", inversedBy="seeninlogo")
-     * @ORM\JoinColumn(name="logoid", referencedColumnName="id", unique=true, onDelete="restrict")
+     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="seenin")
+     * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */
-    private $seenin;
+    private $logo;
 }

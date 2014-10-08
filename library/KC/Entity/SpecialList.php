@@ -47,7 +47,7 @@ class SpecialList
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="specialList")
-     * @ORM\JoinColumn(name="specialpageid", referencedColumnName="id")
+     * @ORM\JoinColumn(name="specialpageId", referencedColumnName="id")
      */
     private $page;
 }

@@ -7,8 +7,8 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="user",
  *     indexes={
- *         @ORM\Index(name="roleid_idx", columns={"roleid"}),
- *         @ORM\Index(name="profileimageid_idx", columns={"profileimageid"})
+ *         @ORM\Index(name="roleid_idx", columns={"roleId"}),
+ *         @ORM\Index(name="profileimageid_idx", columns={"profileImageId"})
  *     },
  *     uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})}
  * )
@@ -80,7 +80,7 @@ class User
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $createdby;
+    private $createdBy;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
@@ -149,13 +149,13 @@ class User
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ProfileImage", inversedBy="user")
-     * @ORM\JoinColumn(name="profileimageid", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="profileImageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $profileimage;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Role", inversedBy="roleid")
-     * @ORM\JoinColumn(name="roleid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="roleId", referencedColumnName="id", onDelete="restrict")
      */
     private $users;
 
@@ -163,7 +163,7 @@ class User
      * @ORM\ManyToMany(targetEntity="KC\Entity\Website", mappedBy="user")
      */
     private $website;
-    
+
     public function __get($property)
     {
         return $this->$property;
@@ -173,6 +173,7 @@ class User
     {
         $this->$property = $value;
     }
+
 
     public function getId()
     {

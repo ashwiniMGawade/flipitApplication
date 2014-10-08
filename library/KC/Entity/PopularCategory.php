@@ -47,7 +47,7 @@ class PopularCategory
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Category", inversedBy="popularCategory")
-     * @ORM\JoinColumn(name="categoryid", referencedColumnName="id")
+     * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      */
     private $category;
 }

@@ -1,14 +1,11 @@
 <?php
-/**
- * Check user is authenticated or not 
- * @author kraj
- * @version 1.0
- */
-class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface {
+class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
+{
     protected $email = "";
     protected $password = "";
     
-    public function __construct($email, $password, $loginMode = null) {
+    public function __construct($email, $password, $loginMode = null)
+    {
         //$this->email = FrontEnd_Helper_viewHelper::sanitize( $email );
         //$this->password = FrontEnd_Helper_viewHelper::sanitize( $password );
         $this->email = $email;
@@ -96,7 +93,9 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface {
      */
     public function forgotPassword($eMail)
     {
-        $result = Doctrine_Core::getTable('User')->findOneByemail($eMail);
+        $entityManagerUser = \Zend_Registry::get('emUser');
+        $repo = $entityManagerLocale->getRepository('KC\Entity\User');
+        $result = $repo->findBy(array('email' => $eMail));
         if ($result) {
             return array ('id' => $result ['id'], 'username' => $result ['firstName'] );
         } else {
@@ -118,35 +117,38 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface {
         return $string;
     }
     
-    public function checkToken($token) {
-        $Obj = Doctrine_Core::getTable ( 'UserSession' )->findOneBy ( 'sessionid', $token );
-        $q = Doctrine_Query::create ()->select ()->from ( 'User u' )->leftJoin ( 'u.usersession us' )->Where ( 'us.sessionId = "' . $token . '"' )->fetchArray ();
-        if (count ( $q )) {
-            if (! Auth_StaffAdapter::hasIdentity ()) {
-                $data_adapter = new Auth_StaffAdapter ( $q ['0'] ['email'], $q ['0'] ['password'], 1 );
-                $auth = Zend_Auth::getInstance ();
-                $result = $auth->authenticate ( $data_adapter );
-                if (Auth_StaffAdapter::hasIdentity ()) {
-                    $Obj = new User ();
-                    $Obj->updateLoginTime ( Auth_StaffAdapter::getIdentity ()->id );
-                    $Obj = Doctrine_Core::getTable ( 'User' )->findOneBy ( 'id', Auth_StaffAdapter::getIdentity ()->id );
-                    
-                    $user = new Zend_Session_Namespace ( 'user' );
+    public function checkToken($token)
+    {
+        $entityManagerUser = \Zend_Registry::get('emUser');
+        $repo = $entityManagerLocale->getRepository('KC\Entity\UserSession');
+        $Obj = $repo->findBy(array('sessionid' => $token));
+
+        $queryBuilder  = $entityManagerUser->createQueryBuilder();
+        $query = $queryBuilder->select('u')
+            ->from('\KC\Entity\User', 'u')
+            ->leftJoin('u.usersession', 'us')
+            ->setParameter(1, $token)
+            ->where('us.sessionId = ?1');
+        $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        if (count($q)) {
+            if (!Auth_StaffAdapter::hasIdentity()) {
+                $data_adapter = new Auth_StaffAdapter($q['0']['email'], $q['0']['password'], 1);
+                $auth = Zend_Auth::getInstance();
+                $result = $auth->authenticate($data_adapter);
+                if (Auth_StaffAdapter::hasIdentity()) {
+                    $Obj = new KC\Entity\User();
+                    $Obj->updateLoginTime(Auth_StaffAdapter::getIdentity()->id);
+                    $Obj = $entityManagerUser->find('KC\Entity\User', Auth_StaffAdapter::getIdentity()->id);
+                    $user = new Zend_Session_Namespace('user');
                     $user->user_data = $Obj;
                     //$user->setExpirationSeconds(10);
-                    $sessionNamespace = new Zend_Session_Namespace ();
+                    $sessionNamespace = new Zend_Session_Namespace();
                     $sessionNamespace->settings = $Obj->permissions;
                     //$sessionNamespace->setExpirationSeconds(10);
                 }
             }
         } else {
-            
-            header ( 'Location:' . PARENT_PATH . 'admin/auth' );
-        
+            header('Location:' . PARENT_PATH . 'admin/auth');
         }
-    
     }
-
-
 }
-?>

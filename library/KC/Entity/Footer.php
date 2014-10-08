@@ -18,32 +18,32 @@ class Footer
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $topfooter;
+    private $topFooter;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $middlecolumn1;
+    private $middleColumn1;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $middlecolumn2;
+    private $middleColumn2;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $middlecolumn3;
+    private $middleColumn3;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $middlecolumn4;
+    private $middleColumn4;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $bottomfooter;
+    private $bottomFooter;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)

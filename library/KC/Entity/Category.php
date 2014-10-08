@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="category",
  *     indexes={
- *         @ORM\Index(name="categoryiconid_idx", columns={"categoryiconid"}),
+ *         @ORM\Index(name="categoryiconid_idx", columns={}),
  *         @ORM\Index(name="name", columns={"name"}),
  *         @ORM\Index(name="name_2", columns={"name"}),
  *         @ORM\Index(name="name_3", columns={"name"}),
@@ -18,10 +18,10 @@ use Doctrine\ORM\Mapping AS ORM;
  *         @ORM\Index(name="name_8", columns={"name"}),
  *         @ORM\Index(name="name_9", columns={"name"}),
  *         @ORM\Index(name="name_10", columns={"name"}),
- *         @ORM\Index(name="categoryFeaturedImageId_foreign_key", columns={"categoryFeaturedImageId"}),
- *         @ORM\Index(name="categoryHeaderImageId_foreign_key", columns={"categoryHeaderImageId"})
+ *         @ORM\Index(name="categoryFeaturedImageId_foreign_key", columns={}),
+ *         @ORM\Index(name="categoryHeaderImageId_foreign_key", columns={})
  *     },
- *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={"categoryiconid"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={})}
  * )
  */
 class Category
@@ -35,13 +35,14 @@ class Category
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $permalink;
+    private $permaLink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -51,7 +52,7 @@ class Category
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metadescription;
+    private $metaDescription;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
@@ -105,22 +106,16 @@ class Category
     private $shopcategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="categoryfeaturedimage")
-     * @ORM\JoinColumn(name="categoryFeaturedImageId", referencedColumnName="id", onDelete="cascade")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\CategoryIcon", inversedBy="category")
+     * @ORM\JoinColumn(name="categoryIconId", referencedColumnName="id")
      */
-    private $category;
+    private $categoryicon;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="categoryheaderimage")
-     * @ORM\JoinColumn(name="categoryHeaderImageId", referencedColumnName="id", onDelete="cascade")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ArticleCategoryIcon", inversedBy="category")
+     * @ORM\JoinColumn(name="categoryIconId2", referencedColumnName="id")
      */
-    private $headerimagecategory;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="categoryicon")
-     * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id", onDelete="restrict")
-     */
-    private $iconcategory;
+    private $articlecategoryicon;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Articlecategory", inversedBy="category")

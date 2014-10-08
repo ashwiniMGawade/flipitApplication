@@ -1,13 +1,14 @@
 <?php
 namespace KC\Entity;
 use Doctrine\ORM\Mapping AS ORM;
+
 /**
  * @ORM\Entity
  * @ORM\Table(
  *     name="page",
  *     indexes={
- *         @ORM\Index(name="pageattributeid_idx", columns={"pageattributeid"}),
- *         @ORM\Index(name="pageHeaderImageId_foreign_key", columns={"pageHeaderImageId"})
+ *         @ORM\Index(name="pageattributeid_idx", columns={"pageAttributeId"}),
+ *         @ORM\Index(name="pageHeaderImageId_foreign_key", columns={})
  *     }
  * )
  */
@@ -23,12 +24,12 @@ class Page
     /**
      * @ORM\Column(type="string", length=10, nullable=true)
      */
-    private $pagetype;
+    private $pageType;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $pagetitle;
+    private $pageTitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -38,17 +39,17 @@ class Page
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $permalink;
+    private $permaLink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metatitle;
+    private $metaTitle;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $metadescription;
+    private $metaDescription;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -63,7 +64,7 @@ class Page
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $pagelock;
+    private $pageLock;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=false)
@@ -78,92 +79,92 @@ class Page
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $enabletimeconstraint;
+    private $enableTimeConstraint;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $timenumberofdays;
+    private $timenumberOfDays;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $timetype;
+    private $timeType;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $timemaxoffer;
+    private $timeMaxOffer;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $timeorder;
+    private $timeOrder;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $enablewordconstraint;
+    private $enableWordConstraint;
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
      */
-    private $wordtitle;
+    private $wordTitle;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $wordmaxoffer;
+    private $wordMaxOffer;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
      */
-    private $publishdate;
+    private $publishDate;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $wordorder;
+    private $wordOrder;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $awardconstratint;
+    private $awardConstratint;
 
     /**
      * @ORM\Column(type="string", length=5, nullable=true)
      */
-    private $awardtype;
+    private $awardType;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $awardmaxoffer;
+    private $awardMaxOffer;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $awardorder;
+    private $awardOrder;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $enableclickconstraint;
+    private $enableClickConstraint;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $numberofclicks;
+    private $numberOfClicks;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $clickmaxoffer;
+    private $clickMaxOffer;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $clickorder;
+    private $clickOrder;
 
     /**
      * @ORM\Column(type="integer", length=11, nullable=false)
@@ -178,57 +179,57 @@ class Page
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $couponregular;
+    private $couponRegular;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $couponeditorpick;
+    private $couponEditorPick;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $couponexclusive;
+    private $couponExclusive;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $saleregular;
+    private $saleRegular;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $saleeditorpick;
+    private $saleEditorPick;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $saleexclusive;
+    private $saleExclusive;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $printableregular;
+    private $printableRegular;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $printableeditorpick;
+    private $printableEditorPick;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $printableexclusive;
+    private $printableExclusive;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $showpage;
+    private $showPage;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $logoid;
+    private $logoId;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
@@ -248,7 +249,7 @@ class Page
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $customheader;
+    private $customHeader;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
@@ -259,6 +260,12 @@ class Page
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
     private $offersCount;
+
+    /**
+     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
+     * @ORM\JoinColumn(name="logo_id", referencedColumnName="id", unique=true)
+     */
+    private $logo;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\MoneySaving", mappedBy="page")
@@ -286,24 +293,8 @@ class Page
     private $specialList;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="pageheaderimage")
-     * @ORM\JoinColumn(name="pageHeaderImageId", referencedColumnName="id", onDelete="cascade")
-     */
-    private $logo;
-
-    /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\PageAttribute", inversedBy="pageattribute")
-     * @ORM\JoinColumn(name="pageattributeid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="pageAttributeId", referencedColumnName="id", onDelete="restrict")
      */
     private $page;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

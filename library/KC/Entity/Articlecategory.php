@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="articlecategory",
- *     indexes={@ORM\Index(name="categoryiconid_idx", columns={"categoryiconid"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={"categoryiconid"})}
+ *     indexes={@ORM\Index(name="categoryiconid_idx", columns={})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={})}
  * )
  */
 class Articlecategory
@@ -73,12 +73,6 @@ class Articlecategory
      * @ORM\OneToMany(targetEntity="KC\Entity\MoneySaving", mappedBy="articlecategory")
      */
     private $moneysaving;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="ArtCatIcon")
-     * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id", onDelete="restrict")
-     */
-    private $artImage;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Category", mappedBy="articlecategory")

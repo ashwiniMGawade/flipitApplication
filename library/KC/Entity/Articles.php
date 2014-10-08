@@ -1,11 +1,10 @@
 <?php
 namespace KC\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="articles", indexes={@ORM\Index(name="thumbnailid", columns={"thumbnailid"})})
+ * @ORM\Table(name="articles", indexes={@ORM\Index(name="thumbnailid", columns={})})
  */
 class Articles
 {
@@ -102,28 +101,24 @@ class Articles
     private $storearticles;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="articleImage")
-     * @ORM\JoinColumn(name="thumbnailid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesIcon", inversedBy="articles")
+     * @ORM\JoinColumn(name="articles_icon_id", referencedColumnName="id")
      */
-    private $imagearticle;
+    private $articleImage;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesThumb", inversedBy="articles")
+     * @ORM\JoinColumn(name="thumbnailsmallid2", referencedColumnName="id")
+     */
+    private $thumbnail;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Category", inversedBy="articles")
      * @ORM\JoinTable(
      *     name="ref_article_category",
-     *     joinColumns={@ORM\JoinColumn(name="articleid", referencedColumnName="id", nullable=false)},
+     *     joinColumns={@ORM\JoinColumn(name="articlesid", referencedColumnName="id", nullable=false)},
      *     inverseJoinColumns={@ORM\JoinColumn(name="relatedcategoryid", referencedColumnName="id", nullable=false)}
      * )
      */
     private $category;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

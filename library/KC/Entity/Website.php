@@ -55,18 +55,9 @@ class Website
      * @ORM\ManyToMany(targetEntity="KC\Entity\User", inversedBy="website")
      * @ORM\JoinTable(
      *     name="ref_user_website",
-     *     joinColumns={@ORM\JoinColumn(name="websiteid", referencedColumnName="id", nullable=false)},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="userid", referencedColumnName="id", nullable=false)}
+     *     joinColumns={@ORM\JoinColumn(name="websiteId", referencedColumnName="id", nullable=false)},
+     *     inverseJoinColumns={@ORM\JoinColumn(name="userId", referencedColumnName="id", nullable=false)}
      * )
      */
     private $user;
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

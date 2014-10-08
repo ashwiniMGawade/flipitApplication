@@ -7,9 +7,9 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="view_count",
  *     indexes={
- *         @ORM\Index(name="offerid_idx", columns={"offerid"}),
- *         @ORM\Index(name="offer_click_count_idx", columns={"offerid","onclick","counted"}),
- *         @ORM\Index(name="memberid_idx", columns={"memberid"})
+ *         @ORM\Index(name="offerid_idx", columns={"offerId"}),
+ *         @ORM\Index(name="offer_click_count_idx", columns={"offerId","onClick","counted"}),
+ *         @ORM\Index(name="memberid_idx", columns={"memberId"})
  *     }
  * )
  */
@@ -25,32 +25,32 @@ class ViewCount
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $loadtime;
+    private $loadTime;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onclick;
+    private $onClick;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onload;
+    private $onLoad;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onhover;
+    private $onHover;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $ip;
+    private $IP;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $memberid;
+    private $memberId;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
@@ -69,7 +69,7 @@ class ViewCount
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Offer", inversedBy="offerviewcount")
-     * @ORM\JoinColumn(name="offerid", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="offerId", referencedColumnName="id", onDelete="restrict")
      */
     private $viewcount;
 }
