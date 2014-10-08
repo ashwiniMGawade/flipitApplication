@@ -42,7 +42,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, w.id, pi.name, pi.path')
-            //->addSelect('DATEDIFF(NOW(), u.created_at) as sinceDays')
+            ->addSelect('DATEDIFF(NOW(), u.created_at) as sinceDays')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin('u.website', 'w')
@@ -248,7 +248,7 @@ class User extends \KC\Entity\User
         $cnt = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return count($cnt);
     }
-    // not migrated
+    // not migrated and not used in application 
     public function getPermissions()
     {
         if (intval($this->id) > 0) {
@@ -862,7 +862,7 @@ class User extends \KC\Entity\User
 
             //$Shop = Doctrine_query::create()->from('Shop')
             //->where('name=' . "'$name'")->limit(1)->fetchArray();
-        $Shop = Doctrine_Core::getTable('Shop')->find($name);
+        $Shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $name);
         BackEnd_Helper_viewHelper::closeConnection($connSite);
         $connUser = BackEnd_Helper_viewHelper::addConnection();
         $flag = 0;
@@ -873,44 +873,37 @@ class User extends \KC\Entity\User
 
         return $flag;
     }
-    /**
-    * get interesting category related currect user(admin)
-    * use in  normal list
-    * @param integer $id
-    * @param array $userFevoriteCat
-    * @author kraj
-    * @version 1.0
-    */
+   
     public static function getUserInterestingCat($id)
     {
-        $userFevoriteCat = Doctrine_Core::getTable('Interestingcategory')->findBy('userId', $id)->toArray();
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $repo = $entityManagerLocale->getRepository('KC\Entity\Interestingcategory');
+        $userFevoriteCat = $repo->findOneBy(array('userId' => $id))->toArray();
         return $userFevoriteCat;
     }
-    /**
-    * get user detail
-    * use in  normal list
-    * @param integer $id
-    * @return array userdetail
-    * @author kkumar
-    * @version 1.0
-    */
+   
     public static function getUserDetail($uId)
     {
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
         BackEnd_Helper_viewHelper::closeConnection($connSite);
         $connUser = BackEnd_Helper_viewHelper::addConnection();
-         $Userdata = Doctrine_Query::create()->select("Count(*) as Max,o.authorId,o.authorName")
-        ->from('Offer o')
-        ->groupBy("o.authorName")
-        ->orderBy('Max DESC')
-        ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+       
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('Count(*) as Max,o.authorId,o.authorName')
+            ->from('\KC\Entity\Offer', 'o')
+            ->groupBy("o.authorName")
+            ->orderBy('Max', 'DESC');
+        $Userdata = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-         $data = Doctrine_Query::create()->select()
-         ->from('User u')
-         ->leftJoin("u.website w")
-         ->leftJoin("u.profileimage pi")
-         ->where("u.id = ?", $Userdata[0]['authorId'])
-         ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder->select('u, w, pi')
+            ->from('\KC\Entity\User', 'u')
+            ->leftJoin("u.website", "w")
+            ->leftJoin("u.profileimage", "pi")
+            ->setParameter(1, $Userdata[0]['authorId'])
+            ->where('u.id = ?1');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         BackEnd_Helper_viewHelper::closeConnection($connUser);
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
@@ -920,13 +913,14 @@ class User extends \KC\Entity\User
 
     public static function getFamousUserDetail($eId)
     {
-        $data = Doctrine_Query::create()
-        ->select()
-        ->from('User u')
-        ->leftJoin("u.website w")
-        ->leftJoin("u.profileimage pi")
-        ->where("u.id = ?", $eId)
-        ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder->select('u, w, pi')
+            ->from('\KC\Entity\User', 'u')
+            ->leftJoin("u.website", "w")
+            ->leftJoin("u.profileimage", "pi")
+            ->setParameter(1, $eId)
+            ->where('u.id = ?1');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
 
@@ -935,47 +929,37 @@ class User extends \KC\Entity\User
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
         BackEnd_Helper_viewHelper::closeConnection($connSite);
         $connUser = BackEnd_Helper_viewHelper::addConnection();
-        $data = Doctrine_Query::create()->select("c.name, c.permalink, ic.id")
-        ->from('Interestingcategory ic')
-        ->leftJoin("ic.category c")
-        ->where("ic.userId = ?", $uId)
-        ->andWhere('c.deleted =0')
-        ->fetchArray();
+       
+        $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('c.name, c.permalink, ic.id')
+            ->from('\KC\Entity\Interestingcategory', 'ic')
+            ->leftJoin("ic.category", "c")
+            ->setParameter(1, $uId)
+            ->where('ic.userId = ?1')
+            ->setParameter(2, '0')
+            ->andWhere('c.deleted = ?2');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+
         BackEnd_Helper_viewHelper::closeConnection($connUser);
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
 
         return $data;
     }
-    //******font-end function ******//
-    /**
-    * get user detail
-    * use in  normal list
-    * @param integer $id
-    * @return array profileImage
-    * @author kraj
-    * @version 1.0
-    */
-
-
-    /**
-    * returnEditorUrl
-    * returns the editor url and editor permalink
-    * @author Surinderpal Singh
-    * @param integer $id editor id
-    * @return array
-    * @version 1.0
-    */
+   
     public static function returnEditorUrl($id)
     {
         # check for valid user id
         if (intval($id) > 0) {
             $connUser = BackEnd_Helper_viewHelper::addConnection();
-            $data = Doctrine_Query::create()->select("u.slug")
-                    ->from('User u')
-                    ->leftJoin("u.profileimage pi")
-                    ->where("u.id = ?", $id)
-                    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
 
+            $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('u.slug')
+                ->from('\KC\Entity\User', 'u')
+                ->leftJoin("u.profileimage", "pi")
+                ->setParameter(1, $id)
+                ->where('u.id = ?1');
+            $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             BackEnd_Helper_viewHelper::closeConnection($connUser);
 
             $editor = FrontEnd_Helper_viewHelper::__link("link_redactie"). "/" ;
@@ -986,50 +970,42 @@ class User extends \KC\Entity\User
         return false;
     }
 
-    /**
-    * get users permalinks
-    * use in  normal list
-    * @return array userdetail
-    * @author Raman
-    * @version 1.0
-    */
+
     public static function getAllUserPermalinks($site_name)
     {
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
         BackEnd_Helper_viewHelper::closeConnection($connSite);
         $connUser = BackEnd_Helper_viewHelper::addConnection();
-        $data = Doctrine_Query::create()->select("u.slug")
-        ->from("User u")
-        ->leftJoin("u.refUserWebsite rfu")
-        ->leftJoin("rfu.Website w")
-        ->where('u.deleted=0')
-        ->andWhere("w.url ='".$site_name."'")
-        ->andWhere("u.showInAboutListing = 1")
-        ->fetchArray();
+
+        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder->select('u.slug')
+            ->from('\KC\Entity\User', 'u')
+            ->leftJoin("u.website", "w")
+            ->setParameter(1, '0')
+            ->where('u.deleted = ?1')
+            ->setParameter(2, $site_name)
+            ->where('w.url = ?2')
+            ->setParameter(3, '1')
+            ->where('u.showInAboutListing = ?3');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         BackEnd_Helper_viewHelper::closeConnection($connUser);
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
         return $data;
     }
 
-    /**
-    * get user Name
-    * use in  normal list
-    * @param integer $id
-    * @return array user name
-    * @author Raman
-    * @version 1.0
-    */
     public static function getUserName($uId)
     {
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
         BackEnd_Helper_viewHelper::closeConnection($connSite);
         $connUser = BackEnd_Helper_viewHelper::addConnection();
 
-        $data = Doctrine_Query::create()->select('u.firstName, u.lastname')
-        ->from('User u')
-        ->where("u.id = ".$uId)
-        ->fetchArray(null, Doctrine::HYDRATE_ARRAY);
+        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder->select('u.firstName, u.lastname')
+            ->from('\KC\Entity\User', 'u')
+            ->setParameter(1, $uId)
+            ->where('u.id = ?1');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         BackEnd_Helper_viewHelper::closeConnection($connUser);
         $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
@@ -1040,44 +1016,27 @@ class User extends \KC\Entity\User
         }
         return $name;
     }
-    /**
-    * get all user
-    * use in  normal list
-    * @author kraj
-    * @version 1.0
-    */
+    
     public static function getAllUser()
     {
-        $data =  Doctrine_Query::create()->select('id,firstName,lastName,deleted')->from('User')->fetchArray();
+        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder->select('u.id, u.firstName, u.lastName, u.deleted')
+            ->from('\KC\Entity\User', 'u');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
 
-
-    /**
-    * updatePassword
-    * update user password when it is expired
-    *
-    * @param array $params request params
-    */
     public function updatePassword($params = null)
     {
-
-
         if ($this->validatePassword($params['curPassword'])) {
-
             // check user want to update password or not based upon old password
             if (isset($params['newPassword']) && isset($params['confirmPassword'])) {
-
                 if ($params['newPassword'] !== $params['confirmPassword']) {
                     return  'New password and confrim don\'t matched';
                 }
-
-
                 if (! $this->isPasswordDifferent($params['confirmPassword'])) {
                     return  'New password can\'t be same as previous password';
                 }
-
-
                 if ($this->isValidPassword($params['confirmPassword'])) {
                             // encrypt new passsword
                     self::setPassword($params['confirmPassword']) ;
@@ -1086,32 +1045,18 @@ class User extends \KC\Entity\User
                     # reeturn false to ensure password changed
                     return false;
                 } else {
-
                     return  'New password must contain a number, capital letter and a special character';
                 }
-
-
             } else {
                 return "Please enter new password an scurrent password" ;
             }
-
-
-
-
         } else {
             return  'Please enter valid current password' ;
         }
     }
 
-    /**
-    * isValidPassword
-    *
-    * to make sure that nnew password must contain a capital leter,saml letter and a special character
-    * @param string $password new password
-    */
     public function isValidPassword($password)
     {
-
         $rules = array(
                 'no_whitespace' => '/^\S*$/',
                 'match_upper'   => '/[A-Z]/',
@@ -1128,10 +1073,7 @@ class User extends \KC\Entity\User
                 break;
             }
         }
-
         return (bool) $valid;
-
-
     }
 
     public function truncateTables()
