@@ -10,7 +10,7 @@ class MigrationVersion
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer", length=11)
+     * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;

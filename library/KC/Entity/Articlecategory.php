@@ -21,6 +21,7 @@ class Articlecategory
 
     /**
      * @ORM\Column(type="string", length=100, nullable=true)
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $name;
 
@@ -40,7 +41,7 @@ class Articlecategory
     private $metadescription;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $description;
 

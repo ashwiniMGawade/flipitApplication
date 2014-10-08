@@ -26,7 +26,7 @@ class Widget
     private $slug;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $content;
 

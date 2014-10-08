@@ -102,7 +102,7 @@ class Shop
     private $overriteBrowserTitle;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $shopText;
 
@@ -207,7 +207,7 @@ class Shop
     private $howtoMetaTitle;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $howtoMetaDescription;
 
