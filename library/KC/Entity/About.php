@@ -1,6 +1,7 @@
 <?php
 namespace KC\Entity;
 use Doctrine\ORM\Mapping AS ORM;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="about")
@@ -38,14 +39,4 @@ class About
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $updated_at;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

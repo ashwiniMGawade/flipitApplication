@@ -32,24 +32,14 @@ class Shop
     private $name;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $metaDescription;
-
-    /**
      * @ORM\Column(type="string", unique=true, length=255, nullable=true)
      */
     private $permaLink;
 
     /**
-     * 
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $permalink;
-
-    /**
-     * 
-     */
-    private $metadescription;
+    private $metaDescription;
 
     /**
      * @ORM\Column(type="boolean", nullable=false)
@@ -97,14 +87,9 @@ class Shop
     private $subTitle;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
-     */
-    private $shopText;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $overriteBrowserTitle;
+    private $overriteTitle;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -114,27 +99,12 @@ class Shop
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $overriteTitle;
+    private $overriteBrowserTitle;
 
     /**
-     * 
+     * @ORM\Column(type="blob", nullable=true)
      */
-    private $overritetitle;
-
-    /**
-     * 
-     */
-    private $overritesubtitle;
-
-    /**
-     * 
-     */
-    private $overritebrowsertitle;
-
-    /**
-     * 
-     */
-    private $shoptext;
+    private $shopText;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
@@ -145,11 +115,6 @@ class Shop
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     private $howToUse;
-
-    /**
-     * 
-     */
-    private $howtouse;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -177,24 +142,14 @@ class Shop
     private $status;
 
     /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    private $accoutManagerId;
-
-    /**
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $offlineSicne;
 
     /**
-     * 
+     * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $offlinesicne;
-
-    /**
-     * 
-     */
-    private $accoutmanagerid;
+    private $accoutManagerId;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -207,11 +162,6 @@ class Shop
     private $contentManagerId;
 
     /**
-     * 
-     */
-    private $contentmanagerid;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $contentManagerName;
@@ -220,11 +170,6 @@ class Shop
      * @ORM\Column(type="integer", length=8, nullable=false)
      */
     private $screenshotId;
-
-    /**
-     * 
-     */
-    private $screenshotid;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -317,19 +262,9 @@ class Shop
     private $showSignupOption;
 
     /**
-     * 
-     */
-    private $showsignupoption;
-
-    /**
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     private $addtosearch;
-
-    /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    private $totalViewcount;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -337,14 +272,9 @@ class Shop
     private $customHeader;
 
     /**
-     * 
+     * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $customheader;
-
-    /**
-     * 
-     */
-    private $totalviewcount;
+    private $totalViewcount;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
@@ -355,11 +285,6 @@ class Shop
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     private $showChains;
-
-    /**
-     * 
-     */
-    private $showchains;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
@@ -375,11 +300,6 @@ class Shop
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     private $strictConfirmation;
-
-    /**
-     * 
-     */
-    private $strictconfirmation;
 
     /**
      * @ORM\Column(type="blob", nullable=true)
@@ -459,28 +379,10 @@ class Shop
     private $affliatenetwork;
 
     /**
-     * 
-     * 
-     */
-    private $shops;
-
-    /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Page", inversedBy="pages")
      * @ORM\JoinColumn(name="howtoUsepageId", referencedColumnName="id", onDelete="restrict")
      */
     private $shopPage;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\WebsiteScrenshot", inversedBy="shop")
-     * @ORM\JoinColumn(name="screnshotId", referencedColumnName="id")
-     */
-    private $screnshot;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\HowToUseBigImage", inversedBy="shop")
-     * @ORM\JoinColumn(name="howtoUseBigImageId", referencedColumnName="id")
-     */
-    private $howtousebigimage;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\HowToUseSmallImage", inversedBy="shop")
@@ -489,16 +391,16 @@ class Shop
     private $howtousesmallimage;
 
     /**
-     * 
-     * 
+     * @ORM\ManyToOne(targetEntity="KC\Entity\HowToUseBigImage", inversedBy="shop")
+     * @ORM\JoinColumn(name="howtoUseBigImageId", referencedColumnName="id")
      */
-    private $shopimage;
+    private $howtousebigimage;
 
     /**
-     * 
-     * 
+     * @ORM\ManyToOne(targetEntity="KC\Entity\WebsiteScrenshot", inversedBy="shop")
+     * @ORM\JoinColumn(name="screnshotId", referencedColumnName="id")
      */
-    private $shoplogo;
+    private $screnshot;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="favoriteshops")

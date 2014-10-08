@@ -24,14 +24,4 @@ class LocaleSettings
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $timezone;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

@@ -25,22 +25,7 @@ class ViewCount
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $memberId;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $IP;
-
-    /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    private $onHover;
-
-    /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    private $onLoad;
+    private $loadTime;
 
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
@@ -50,37 +35,22 @@ class ViewCount
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $loadTime;
+    private $onLoad;
 
     /**
-     * 
+     * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $loadtime;
+    private $onHover;
 
     /**
-     * 
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $onclick;
+    private $IP;
 
     /**
-     * 
+     * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $onload;
-
-    /**
-     * 
-     */
-    private $onhover;
-
-    /**
-     * 
-     */
-    private $ip;
-
-    /**
-     * 
-     */
-    private $memberid;
+    private $memberId;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)
