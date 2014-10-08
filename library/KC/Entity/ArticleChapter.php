@@ -21,7 +21,8 @@ class ArticleChapter
     private $title;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $content;
 

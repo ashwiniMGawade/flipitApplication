@@ -21,7 +21,7 @@ class About
     private $title;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $content;
 

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <skipper version="3.0.0.1104" name="FlipitApplication" mvc="Zend Framework" orm="Doctrine2" uuid="0861e49a-008f-41d7-b5b7-719d9614f34d">
-  <module name="Name of the project" import-format="Doctrine2Php" import-path="../../library/KC/Entity" uuid="8f292293-bf05-403d-9ff3-b3b3589bf0b5">
+  <module name="Name of the project" import-format="Doctrine2Php" import-path="../KC" uuid="8f292293-bf05-403d-9ff3-b3b3589bf0b5">
     <entity name="Chain" uuid="{71F1F33E-3A64-45AE-A106-1055F8F1444D}">
       <field name="id" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="77840e95-1fd2-48b1-beb9-c5ec9cdf34b5"/>
       <field name="name" type="string" size="255" default="NULL" uuid="44fd9b0e-bc50-4673-a196-9ed8e1b2cf37"/>
@@ -19,9 +19,9 @@
     </entity>
     <entity name="chainItem" uuid="{1300E599-1AD8-49CA-B6C3-18EEB77E5016}">
       <field name="id" type="integer" size="8" primary="true" auto-increment="true" uuid="d5e30e34-da05-4006-96fe-418120d55d0a"/>
-      <field name="shopname" type="string" size="255" default="NULL" required="true" uuid="6735366a-cb41-4786-9e17-00723006bd3f"/>
-      <field name="websiteid" type="integer" size="8" required="true" primary="true" uuid="86ca8465-f38f-498e-9428-3cb7c8570319"/>
-      <field name="chainid" type="integer" size="8" required="true" primary="true" uuid="e065aa9b-6643-4c06-a3f9-d3d7af627b79"/>
+      <field name="shopName" type="string" size="255" default="NULL" required="true" uuid="6735366a-cb41-4786-9e17-00723006bd3f"/>
+      <field name="websiteId" type="integer" size="8" required="true" primary="true" uuid="86ca8465-f38f-498e-9428-3cb7c8570319"/>
+      <field name="chainId" type="integer" size="8" required="true" primary="true" uuid="e065aa9b-6643-4c06-a3f9-d3d7af627b79"/>
       <field name="created_at" type="datetime" default="NULL" required="true" uuid="435326c4-a718-4607-8eb9-9ca277098067"/>
       <field name="updated_at" type="datetime" default="NULL" uuid="35d81b56-55c0-4260-a76b-455398d9453e"/>
       <field name="permalink" type="string" size="255" default="NULL" unique="true" uuid="f631a170-8bd7-4735-b7cf-526c37dd1440"/>
@@ -29,7 +29,7 @@
       <field name="status" type="integer" size="1" default="'1'" uuid="7ebc42e6-c774-40a2-b338-33a625154446"/>
       <field name="shopId" type="integer" size="8" default="NULL" uuid="95b2f574-a944-44b4-9079-a7a01a40a103"/>
       <index name="unique_shopname_website_idx" unique="true">
-        <index-field name="shopname"/>
+        <index-field name="shopName"/>
         <orm-attributes>
           <attribute name="type">UNIQUE</attribute>
         </orm-attributes>
@@ -41,10 +41,10 @@
     </entity>
     <many-to-many mn-entity="chainItem" caption="Website to Chain" uuid="fb815f58-3972-4839-951b-d10f4a439b78">
       <many-to-many-entity name="Chain" owning-side="true" alias="chain" uuid="b662eed3-30d2-4e24-8683-c780a4268920">
-        <many-to-many-field from="chainid" to="id"/>
+        <many-to-many-field from="chainId" to="id"/>
       </many-to-many-entity>
       <many-to-many-entity name="Website" owning-side="false" alias="website" uuid="d308bf60-7feb-4f57-ab95-1cc9ca16846f">
-        <many-to-many-field from="websiteid" to="id"/>
+        <many-to-many-field from="websiteId" to="id"/>
       </many-to-many-entity>
     </many-to-many>
     <entity name="MigrationVersion" uuid="{F957A766-8826-4069-B3DC-E15EECE4D52C}">
@@ -69,8 +69,8 @@
       </orm-attributes>
     </entity>
     <entity name="RefUserWebsite" uuid="{2138089D-1A75-48E4-9529-8E952A594D37}">
-      <field name="userid" type="integer" size="8" required="true" primary="true" uuid="dd6cc4d3-b3a8-45cf-8012-341f7a32f34d"/>
-      <field name="websiteid" type="integer" size="8" required="true" primary="true" uuid="a695aff4-a5cd-44b8-b24d-fa806ad2717c"/>
+      <field name="userId" type="integer" size="8" required="true" primary="true" uuid="dd6cc4d3-b3a8-45cf-8012-341f7a32f34d"/>
+      <field name="websiteId" type="integer" size="8" required="true" primary="true" uuid="a695aff4-a5cd-44b8-b24d-fa806ad2717c"/>
       <field name="created_at" type="datetime" required="true" uuid="8d549f47-ef18-401d-82eb-56a96c580efc"/>
       <field name="updated_at" type="datetime" required="true" uuid="bb82f61f-42a6-4330-b25b-c5aad6df9fc8"/>
       <field name="id" type="integer" size="8" required="true" auto-increment="true" uuid="30f9be29-8319-40e9-a010-76c3ff5e3020"/>
@@ -81,10 +81,10 @@
     </entity>
     <many-to-many mn-entity="RefUserWebsite" caption="User to Website" uuid="f21d85e9-8edb-43e1-8887-4717a8880190">
       <many-to-many-entity name="Website" owning-side="true" alias="website" uuid="96621379-4d65-4f2c-8c78-8788186a18b1">
-        <many-to-many-field from="websiteid" to="id"/>
+        <many-to-many-field from="websiteId" to="id"/>
       </many-to-many-entity>
       <many-to-many-entity name="User" owning-side="false" alias="user" uuid="8754f524-2c5f-41f2-9244-54ca40043727">
-        <many-to-many-field from="userid" to="id"/>
+        <many-to-many-field from="userId" to="id"/>
       </many-to-many-entity>
     </many-to-many>
     <entity name="Rights" uuid="{FE037C99-5824-4B11-83A9-2D824D0F3A44}">
@@ -92,7 +92,7 @@
       <field name="name" type="string" size="255" default="NULL" uuid="ec77460c-2a3c-4633-a31a-9944f7cab404"/>
       <field name="rights" description="It describe permission of the role over sites, contents, administration, statistic, system manager" type="integer" size="3" default="NULL" uuid="e5e3ab31-2539-4803-ba68-4cdf3ddea417"/>
       <field name="description" description="right description" type="string" size="512" default="NULL" uuid="cac1869d-a32c-4f1e-85e0-59c18cad6c9a"/>
-      <field name="roleid" type="integer" size="8" uuid="6ba19445-f819-4c04-8c53-aece68d17139"/>
+      <field name="roleId" type="integer" size="8" uuid="6ba19445-f819-4c04-8c53-aece68d17139"/>
       <field name="created_at" type="datetime" required="true" uuid="e4c84ee3-0d3e-452a-ba20-01f8077809b6"/>
       <field name="updated_at" type="datetime" required="true" uuid="416cc834-b8fa-41ff-9ebf-de58a51013c7"/>
       <orm-attributes>
@@ -101,7 +101,7 @@
       </orm-attributes>
     </entity>
     <association from="Rights" to="Role" caption="Role Rights" owner-alias="rights" inverse-alias="role" uuid="383755a6-9d1c-4a95-bef3-5607c14f3adf">
-      <association-field from="roleid" to="id"/>
+      <association-field from="roleId" to="id"/>
     </association>
     <entity name="Role" uuid="{82F8B150-0430-449F-95AE-70A2BF255464}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="3db9e4b4-cdba-425b-a100-2acebe60c214"/>
@@ -128,8 +128,8 @@
     </entity>
     <entity name="User" uuid="{CF415728-4DE8-4C4A-9F4E-787D8E17CD06}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="54ce1ead-e421-4714-818b-03c034eac3aa"/>
-      <field name="firstname" type="string" default="NULL" uuid="9468ba1e-a1d6-439a-b030-2857d578893b"/>
-      <field name="lastname" type="string" default="NULL" uuid="78479ff9-481f-4237-82dc-2c96d1f94dc2"/>
+      <field name="firstName" type="string" default="NULL" uuid="9468ba1e-a1d6-439a-b030-2857d578893b"/>
+      <field name="lastName" type="string" default="NULL" uuid="78479ff9-481f-4237-82dc-2c96d1f94dc2"/>
       <field name="email" type="string" size="255" default="NULL" uuid="1cdc4701-821b-4aec-add5-8ba262cb8577"/>
       <field name="password" type="string" size="255" default="NULL" uuid="fbe0b630-664a-43d7-9dbb-31f515f9c832"/>
       <field name="status" type="integer" size="1" default="'1'" uuid="4cd0c185-8d29-4c00-a857-5563e8931e2b"/>
@@ -139,19 +139,19 @@
       <field name="likes" type="string" default="NULL" uuid="79f53f4f-9beb-48e5-ae36-564b7bbf51df"/>
       <field name="dislike" type="string" default="NULL" uuid="cb9d63ec-5895-469a-96eb-f3ac29172145"/>
       <field name="mainText" type="string" required="true" uuid="c345fd36-90f9-403e-8459-ccee78c1f223"/>
-      <field name="roleid" description="FK to role.id" type="integer" size="8" default="NULL" uuid="bd6cd442-4e3a-40ee-ab84-340b2a847991"/>
-      <field name="profileimageid" description="FK to profile_image.id" type="integer" size="8" default="NULL" required="true" uuid="9e97aa2e-06cf-4687-8a13-632bb7a568e1"/>
-      <field name="createdby" description="FK to user.id" type="integer" size="8" default="NULL" uuid="bdd55688-553f-460b-8298-824e3f45b607"/>
+      <field name="roleId" description="FK to role.id" type="integer" size="8" default="NULL" uuid="bd6cd442-4e3a-40ee-ab84-340b2a847991"/>
+      <field name="profileImageId" description="FK to profile_image.id" type="integer" size="8" default="NULL" required="true" uuid="9e97aa2e-06cf-4687-8a13-632bb7a568e1"/>
+      <field name="createdBy" description="FK to user.id" type="integer" size="8" default="NULL" uuid="bdd55688-553f-460b-8298-824e3f45b607"/>
       <field name="deleted" type="integer" size="1" default="'0'" uuid="0d9782a8-ec85-48ed-a7fd-2de491a6b59a"/>
-      <field name="currentlogin" description="current login timestamp" type="datetime" required="true" uuid="cb3553b2-3496-489b-8f38-e1241f5221b7"/>
-      <field name="lastlogin" description="last login timestamp" type="datetime" required="true" uuid="fb2a1d11-f5c5-4a19-8aed-397ef2247100"/>
+      <field name="currentLogIn" description="current login timestamp" type="datetime" required="true" uuid="cb3553b2-3496-489b-8f38-e1241f5221b7"/>
+      <field name="lastLogIn" description="last login timestamp" type="datetime" required="true" uuid="fb2a1d11-f5c5-4a19-8aed-397ef2247100"/>
       <field name="created_at" type="datetime" required="true" uuid="159f2e21-17e6-466f-9f28-a8d8a493ea8a"/>
       <field name="updated_at" type="datetime" required="true" uuid="32702761-0f0e-40a6-a15e-589b6fbe9bdd"/>
       <field name="showInAboutListing" type="integer" size="1" default="NULL" uuid="b648f267-0d24-4bd3-bfed-950deb919c77"/>
       <field name="slug" type="string" default="NULL" uuid="804cd620-f685-445b-adda-34e0b3732f97"/>
       <field name="addtosearch" type="integer" size="1" default="'0'" required="true" uuid="2810b8b5-ef9b-4cce-861d-c1f3bc7701c3"/>
-      <field name="popularkortingscode" type="integer" size="8" default="NULL" uuid="f0b28fb0-b8d5-4a6e-bdb6-61b6bd40ab35"/>
-      <field name="passwordchangetime" type="datetime" default="'2013-12-12 12:50:20'" uuid="1556c1a3-0e2a-441c-ac5e-8ce442745ea7"/>
+      <field name="popularKortingscode" type="integer" size="8" default="NULL" uuid="f0b28fb0-b8d5-4a6e-bdb6-61b6bd40ab35"/>
+      <field name="passwordChangeTime" type="datetime" default="'2013-12-12 12:50:20'" uuid="1556c1a3-0e2a-441c-ac5e-8ce442745ea7"/>
       <field name="countryLocale" type="string" size="10" default="NULL" uuid="af98e434-d407-4141-8c40-d0588955a284"/>
       <field name="editorText" type="string" size="100" default="NULL" uuid="4ad24e33-2cc9-4db7-9112-64801ed1604c"/>
       <index name="email" unique="true">
@@ -161,10 +161,10 @@
         </orm-attributes>
       </index>
       <index name="roleid_idx">
-        <index-field name="roleid"/>
+        <index-field name="roleId"/>
       </index>
       <index name="profileimageid_idx">
-        <index-field name="profileimageid"/>
+        <index-field name="profileImageId"/>
       </index>
       <orm-attributes>
         <attribute name="table">user</attribute>
@@ -172,30 +172,30 @@
       </orm-attributes>
     </entity>
     <association from="User" to="ProfileImage" caption="user_profileimageid_profile_image_id" owner-alias="user" inverse-alias="profileimage" uuid="{B1F1DC26-04DD-413B-9F2C-FF69BBB1106C}">
-      <association-field from="profileimageid" to="id"/>
+      <association-field from="profileImageId" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
     <association from="User" to="Role" caption="user_roleid_role_id" owner-alias="roleid" inverse-alias="users" uuid="{ECED4B53-DABA-40DA-A9D9-8B3519758C94}">
-      <association-field from="roleid" to="id"/>
+      <association-field from="roleId" to="id"/>
       <orm-attributes>
         <attribute name="onDelete">restrict</attribute>
       </orm-attributes>
     </association>
     <entity name="UserSession" uuid="{56D55D79-9D30-4A6C-AE95-F8D154C5D5C3}">
       <field name="id" description="PK" type="integer" size="8" default="'0'" required="true" primary="true" uuid="6d6ffe24-44ef-46d0-bcfb-c8d98ec5dc0d"/>
-      <field name="sessionid" description="LoggedIn User's Session Id" type="string" size="255" default="NULL" uuid="d0717eb5-6f4e-4fda-a664-2a2568e4ff8d"/>
+      <field name="sessionId" description="LoggedIn User's Session Id" type="string" size="255" default="NULL" uuid="d0717eb5-6f4e-4fda-a664-2a2568e4ff8d"/>
       <field name="created_at" type="datetime" required="true" uuid="b12b3b5a-e45d-4934-a763-be4e4fe38870"/>
       <field name="updated_at" type="datetime" required="true" uuid="79e117e0-8995-42aa-97c8-beec1c08582c"/>
-      <field name="userid" type="integer" size="8" uuid="222ea9e9-1753-4955-9318-5bee9e03087e"/>
+      <field name="userId" type="integer" size="8" uuid="222ea9e9-1753-4955-9318-5bee9e03087e"/>
       <orm-attributes>
         <attribute name="table">user_session</attribute>
         <attribute name="export-file-name">UserSession.php</attribute>
       </orm-attributes>
     </entity>
     <association from="UserSession" to="User" caption="User UserSession" owner-alias="user" inverse-alias="usersession" uuid="41bfe25c-4f07-4ec4-8bb5-26fabafbeb54">
-      <association-field from="userid" to="id"/>
+      <association-field from="userId" to="id"/>
     </association>
     <entity name="Website" uuid="{DBE57A95-0103-4F90-BE1F-B4D830715566}">
       <field name="id" description="PK" type="integer" size="8" required="true" primary="true" auto-increment="true" uuid="490cfb5b-8ded-42cd-857d-50e38f5a2727"/>
