@@ -1093,4 +1093,93 @@ class Offer Extends \KC\Entity\Offer
         }
         return $url;
     }
+
+    public static function getOfferInfo($offerId)
+    {
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser
+            ->select(
+                'o.*,s.name,s.notes,s.accountManagerName,s.deepLink,s.refUrl,s.actualUrl,s.affliateNetworkId as aid,
+                s.permaLink,a.name as affname,a.id as affiliateNetworkId,p.id as pageId,tc.*,cat.id,img.*'
+            )
+        ->from('KC\Entity\Offer o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('s.affliatenetwork a')
+        ->leftJoin('o.offers p')
+        ->leftJoin('o.offertermandcondition tc')
+        ->leftJoin('o.categoryoffres cat')
+        ->leftJoin('s.logo img')
+        ->setParameter(1, $offerId)
+        ->where('o.id = ?1');
+        $OfferDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $OfferDetails;
+    }
+
+    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false)
+    {
+        $nowDate = new \DateTime();
+        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerUser
+            ->select(
+                'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
+                o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
+                o.endDate,o.refOfferUrl,o.couponCodeType, o.extendedUrl,l.*,t.*,
+                s.id as shopId,s.name,s.permalink as permalink,
+                s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
+                img.name,vot.id,vot.vote'
+            )
+        ->from('KC\Entity\Offer o')
+        ->addSelect(
+            "(SELECT count(id)  FROM KC\Entity\CouponCode WHERE offer = o.id and status=1) as totalAvailableCodes"
+        )
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.logo l')
+        ->leftJoin('s.logo img')
+        ->leftJoin('o.offertermandcondition terms')
+        ->leftJoin('o.votes vot')
+        ->leftJoin('o.offerTiles t')
+        ->setParameter(1, 0)
+        ->where('o.deleted = ?1');
+
+        if (!$includingOffline) {
+            $query = $query
+                ->setParameter(2, 0)
+                ->andWhere('o.offline = ?2')
+                ->setParameter(3, $entityManagerUser->expr()->literal($nowDate))
+                ->andWhere($entityManagerUser->expr()->lte('o.startdate', '?3'))
+                ->andWhere($entityManagerUser->expr()->gt('o.endDate', '?3'));
+        }
+            
+        $query = $query->andWhere(
+            $entityManagerUser->expr()->orX(
+                $entityManagerUser->expr()->andX('o.userGenerated = 0', 'o.approved = 0'),
+                $entityManagerUser->expr()->andX('o.userGenerated=1', 'o.approved = 1')
+            )
+        )
+            ->setParameter(5, $id)
+            ->andWhere('s.id = ?5')
+            ->setParameter(6, 0)
+            ->andWhere('s.deleted = ?6')
+            ->setParameter(7, 'NW')
+            ->andWhere('o.discountType != ?7')
+            ->setParameter(8, 'MEM')
+            ->andWhere('o.Visability != ?8')
+            ->orderBy('o.editorPicks', 'DESC')
+            ->addOrderBy('o.exclusiveCode', 'DESC')
+            ->addOrderBy('o.discountType', 'ASC')
+            ->addOrderBy('o.startdate', 'DESC')
+            ->addOrderBy('o.popularityCount', 'DESC')
+            ->addOrderBy('o.title', 'ASC');
+
+        if ($getExclusiveOnly) {
+            $query = $query->setParameter(9, 1)->andWhere('o.exclusiveCode = ?9');
+        }
+
+        if ($limit) {
+            $query = $query->setMaxResults($limit);
+        }
+
+        $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $offers;
+    }
 } 

@@ -203,6 +203,7 @@ class Offer
      */
     private $offerTiles;
 
+
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\PopularCode", mappedBy="popularcode")
      */
