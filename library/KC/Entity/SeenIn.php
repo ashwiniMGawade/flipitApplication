@@ -50,24 +50,13 @@ class SeenIn
     private $updated_at;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="seenin")
-     * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
-     */
-    private $logo;
-
-    /**
      * @ORM\Column(type="string", nullable=true)
      */
     private $altText;
 
     /**
-     * 
+     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="seenin")
+     * @ORM\JoinColumn(name="logoId", referencedColumnName="id", unique=true)
      */
-    private $alttext;
-
-    /**
-     * 
-     * 
-     */
-    private $seenin;
+    private $logo;
 }

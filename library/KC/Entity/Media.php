@@ -69,10 +69,4 @@ class Media
      * @ORM\JoinColumn(name="media_image_id", referencedColumnName="id")
      */
     private $mediaimage;
-
-    /**
-     * 
-     * 
-     */
-    private $media;
 }

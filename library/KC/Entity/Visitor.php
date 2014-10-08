@@ -22,22 +22,12 @@ class Visitor
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $lastName;
+    private $firstName;
 
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $firstName;
-
-    /**
-     * 
-     */
-    private $firstname;
-
-    /**
-     * 
-     */
-    private $lastname;
+    private $lastName;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -70,29 +60,24 @@ class Visitor
     private $imageId;
 
     /**
-     * 
-     */
-    private $imageid;
-
-    /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
     private $gender;
 
     /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
+     * @ORM\Column(type="date", nullable=true)
      */
-    private $createdBy;
+    private $dateOfBirth;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $postalCode;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $codeAlert;
-
-    /**
-     * @ORM\Column(type="integer", length=1, nullable=true)
-     */
-    private $travelNewsLetter;
+    private $weeklyNewsLetter;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
@@ -102,52 +87,17 @@ class Visitor
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $weeklyNewsLetter;
+    private $travelNewsLetter;
 
     /**
-     * @ORM\Column(type="string", length=50, nullable=true)
+     * @ORM\Column(type="integer", length=1, nullable=true)
      */
-    private $postalCode;
+    private $codeAlert;
 
     /**
-     * @ORM\Column(type="date", nullable=true)
+     * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $dateOfBirth;
-
-    /**
-     * 
-     */
-    private $dateofbirth;
-
-    /**
-     * 
-     */
-    private $postalcode;
-
-    /**
-     * 
-     */
-    private $weeklynewsletter;
-
-    /**
-     * 
-     */
-    private $fashionnewsletter;
-
-    /**
-     * 
-     */
-    private $travelnewsletter;
-
-    /**
-     * 
-     */
-    private $codealert;
-
-    /**
-     * 
-     */
-    private $createdby;
+    private $createdBy;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
@@ -157,22 +107,12 @@ class Visitor
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $lastLogIn;
+    private $currentLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $currentLogIn;
-
-    /**
-     * 
-     */
-    private $currentlogin;
-
-    /**
-     * 
-     */
-    private $lastlogin;
+    private $lastLogIn;
 
     /**
      * @ORM\Column(type="datetime", nullable=false)

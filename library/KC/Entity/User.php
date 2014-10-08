@@ -83,11 +83,6 @@ class User
     private $createdBy;
 
     /**
-     * 
-     */
-    private $createdby;
-
-    /**
      * @ORM\Column(type="integer", length=1, nullable=true)
      */
     private $deleted;
@@ -168,7 +163,7 @@ class User
      * @ORM\ManyToMany(targetEntity="KC\Entity\Website", mappedBy="user")
      */
     private $website;
-    
+
     public function __get($property)
     {
         return $this->$property;

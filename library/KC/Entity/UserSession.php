@@ -20,11 +20,6 @@ class UserSession
     private $sessionId;
 
     /**
-     * 
-     */
-    private $sessionid;
-
-    /**
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $created_at;

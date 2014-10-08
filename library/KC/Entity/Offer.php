@@ -33,18 +33,12 @@ class Offer
     private $Visability;
 
     /**
-     * 
-     */
-    private $visability;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $discountType;
 
     /**
      * @ORM\Column(type="string", length=50, nullable=false)
-     * 
      */
     private $couponCode;
 
@@ -54,9 +48,9 @@ class Offer
     private $refOfferUrl;
 
     /**
-     * @ORM\Column(type="datetime", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $endDate;
+    private $refURL;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
@@ -64,24 +58,9 @@ class Offer
     private $startDate;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
-    private $refURL;
-
-    /**
-     * 
-     */
-    private $refUrl;
-
-    /**
-     * 
-     */
-    private $startdate;
-
-    /**
-     * 
-     */
-    private $enddate;
+    private $endDate;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=true)
@@ -104,19 +83,9 @@ class Offer
     private $extendedTitle;
 
     /**
-     * 
-     */
-    private $extendedtitle;
-
-    /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $extendedUrl;
-
-    /**
-     * @ORM\Column(type="blob", nullable=true)
-     */
-    private $extendedFullDescription;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -124,14 +93,9 @@ class Offer
     private $extendedMetaDescription;
 
     /**
-     * 
+     * @ORM\Column(type="blob", nullable=true)
      */
-    private $extendedmetadescription;
-
-    /**
-     * 
-     */
-    private $extendedfulldescription;
+    private $extendedFullDescription;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -204,11 +168,6 @@ class Offer
     private $shopExist;
 
     /**
-     * 
-     */
-    private $shopexist;
-
-    /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
     private $totalViewcount;
@@ -217,11 +176,6 @@ class Offer
      * @ORM\Column(type="decimal", length=16, nullable=true, scale=4)
      */
     private $popularityCount;
-
-    /**
-     * 
-     */
-    private $popularitycount;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -285,12 +239,6 @@ class Offer
     private $votes;
 
     /**
-     * 
-     * 
-     */
-    private $logooffer;
-
-    /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="offer")
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id", onDelete="restrict")
      */
@@ -305,14 +253,4 @@ class Offer
      * )
      */
     private $visitors;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

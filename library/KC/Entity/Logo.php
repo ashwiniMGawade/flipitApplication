@@ -8,14 +8,9 @@ use Doctrine\ORM\Mapping AS ORM;
 class Logo extends \KC\Entity\Image
 {
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Shop", mappedBy="logo")
+     * @ORM\OneToOne(targetEntity="KC\Entity\Offer", mappedBy="logo")
      */
-    private $shop;
-
-    /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\SeenIn", mappedBy="logo")
-     */
-    private $seenin;
+    private $offer;
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Page", mappedBy="logo")
@@ -23,7 +18,12 @@ class Logo extends \KC\Entity\Image
     private $page;
 
     /**
-     * @ORM\OneToOne(targetEntity="KC\Entity\Offer", mappedBy="logo")
+     * @ORM\OneToOne(targetEntity="KC\Entity\SeenIn", mappedBy="logo")
      */
-    private $offer;
+    private $seenin;
+
+    /**
+     * @ORM\OneToOne(targetEntity="KC\Entity\Shop", mappedBy="logo")
+     */
+    private $shop;
 }

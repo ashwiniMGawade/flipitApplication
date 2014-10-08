@@ -75,12 +75,6 @@ class Articlecategory
     private $moneysaving;
 
     /**
-     * 
-     * 
-     */
-    private $artImage;
-
-    /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Category", mappedBy="articlecategory")
      */
     private $category;

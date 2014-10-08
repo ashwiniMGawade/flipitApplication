@@ -18,22 +18,7 @@ class Footer
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $bottomFooter;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $middleColumn4;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $middleColumn3;
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $middleColumn2;
+    private $topFooter;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -43,37 +28,22 @@ class Footer
     /**
      * @ORM\Column(type="string", nullable=true)
      */
-    private $topFooter;
+    private $middleColumn2;
 
     /**
-     * 
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $topfooter;
+    private $middleColumn3;
 
     /**
-     * 
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $middlecolumn1;
+    private $middleColumn4;
 
     /**
-     * 
+     * @ORM\Column(type="string", nullable=true)
      */
-    private $middlecolumn2;
-
-    /**
-     * 
-     */
-    private $middlecolumn3;
-
-    /**
-     * 
-     */
-    private $middlecolumn4;
-
-    /**
-     * 
-     */
-    private $bottomfooter;
+    private $bottomFooter;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)

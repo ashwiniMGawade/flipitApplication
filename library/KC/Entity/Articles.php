@@ -1,7 +1,6 @@
 <?php
 namespace KC\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
@@ -102,22 +101,16 @@ class Articles
     private $storearticles;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesThumb", inversedBy="articles")
-     * @ORM\JoinColumn(name="thumbnailsmallid2", referencedColumnName="id")
-     */
-    private $thumbnail;
-
-    /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesIcon", inversedBy="articles")
      * @ORM\JoinColumn(name="articles_icon_id", referencedColumnName="id")
      */
     private $articleImage;
 
     /**
-     * 
-     * 
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesThumb", inversedBy="articles")
+     * @ORM\JoinColumn(name="thumbnailsmallid2", referencedColumnName="id")
      */
-    private $imagearticle;
+    private $thumbnail;
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Category", inversedBy="articles")
@@ -128,14 +121,4 @@ class Articles
      * )
      */
     private $category;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }
