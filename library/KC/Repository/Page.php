@@ -37,7 +37,7 @@ class Page Extends \KC\Entity\Page
         $query = $entityManagerUser->select('page, img.id, img.path, img.name')
             ->from('KC\Entity\Page', 'page')
             ->leftJoin('page.logo', 'img')
-            ->setParameter(1, $permalink)
+            ->setParameter(1, $entityManagerUser->expr()->literal($permalink))
             ->where('page.permalink = ?1')
             ->setParameter(2, 1)
             ->andWhere('page.publish = ?2')
@@ -69,10 +69,11 @@ class Page Extends \KC\Entity\Page
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
             ->from('KC\Entity\Page', 'page')
-            ->setParameter(1, $permalink)
+            ->setParameter(1, $entityManagerUser->expr()->literal($permalink))
             ->where('page.permalink = ?1')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2');
+        
         $pageProperties = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageProperties;
     }
@@ -82,7 +83,7 @@ class Page Extends \KC\Entity\Page
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page.content, page.pagetitle')
             ->from('KC\Entity\Page', 'page')
-            ->setParameter(1, $permalink)
+            ->setParameter(1, $entityManagerUser->expr()->literal($permalink))
             ->where('page.permalink = ?1')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2');
