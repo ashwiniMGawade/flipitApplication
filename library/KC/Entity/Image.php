@@ -60,4 +60,14 @@ class Image
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $updated_at;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

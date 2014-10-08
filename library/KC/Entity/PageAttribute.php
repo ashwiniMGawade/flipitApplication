@@ -39,4 +39,14 @@ class PageAttribute
      * @ORM\OneToMany(targetEntity="KC\Entity\Page", mappedBy="page")
      */
     private $pageattribute;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

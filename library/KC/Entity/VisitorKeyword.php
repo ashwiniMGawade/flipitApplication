@@ -25,4 +25,14 @@ class VisitorKeyword
      * @ORM\JoinColumn(name="visitorId", referencedColumnName="id")
      */
     private $visitor;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

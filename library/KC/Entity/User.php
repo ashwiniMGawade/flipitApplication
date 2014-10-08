@@ -1,6 +1,8 @@
 <?php
+
 namespace KC\Entity;
-use Doctrine\ORM\Mapping AS ORM;
+
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
@@ -173,8 +175,7 @@ class User
     {
         $this->$property = $value;
     }
-
-
+    
     public function getId()
     {
         return $this->id;

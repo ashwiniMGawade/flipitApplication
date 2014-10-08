@@ -23,6 +23,16 @@ class RefShopCategory
     private $id;
 
     /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $shopId;
+
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=true)
+     */
+    private $categoryId;
+
+    /**
      * @ORM\Column(type="datetime", nullable=false)
      */
     private $created_at;
@@ -43,4 +53,15 @@ class RefShopCategory
      * @ORM\JoinColumn(name="shopId", referencedColumnName="id", onDelete="restrict")
      */
     private $category;
+    
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
+
 }

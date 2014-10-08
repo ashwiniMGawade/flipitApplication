@@ -43,4 +43,14 @@ class RefArticleStore
      * @ORM\JoinColumn(name="storeid", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $articleshops;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

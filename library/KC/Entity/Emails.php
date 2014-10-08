@@ -74,4 +74,14 @@ class Emails
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
     private $send_counter;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }
