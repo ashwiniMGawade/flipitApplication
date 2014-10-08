@@ -34,7 +34,7 @@ class Shop
     /**
      * @ORM\Column(type="string", unique=true, length=255, nullable=true)
      */
-    private $permalink;
+    private $permaLink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
