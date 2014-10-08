@@ -45,4 +45,14 @@ class Rights
      * @ORM\JoinColumn(name="roleId", referencedColumnName="id")
      */
     private $role;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

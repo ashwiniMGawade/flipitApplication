@@ -69,4 +69,14 @@ class Media
      * @ORM\JoinColumn(name="media_image_id", referencedColumnName="id")
      */
     private $mediaimage;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }

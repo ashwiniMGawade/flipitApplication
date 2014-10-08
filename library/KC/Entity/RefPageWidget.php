@@ -48,4 +48,14 @@ class RefPageWidget
      * @ORM\JoinColumn(name="widgetId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $page;
+
+    public function __get($property)
+    {
+        return $this->$property;
+    }
+
+    public function __set($property, $value)
+    {
+        $this->$property = $value;
+    }
 }
