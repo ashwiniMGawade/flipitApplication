@@ -94,19 +94,21 @@ class Admin_AuthController extends Zend_Controller_Action
 
             $result = $auth->authenticate($data_adapter);
             if (Auth_StaffAdapter::hasIdentity()) {
-               
+                
                 //create object of user class
                 $timeSeconds = 28800;
-                
+               
                 $Obj = \Zend_Registry::get('emUser')->find('KC\Entity\User', Auth_StaffAdapter::getIdentity()->id);
+
                 $Obj->updateLoginTime(Auth_StaffAdapter::getIdentity()->id);
                 $user = new Zend_Session_Namespace('user');
                 $user->user_data = $Obj;
                 $user->setExpirationSeconds($timeSeconds);
 
+                $userPermission = $Obj->getPermissions();
                 //set session for permission
                 $sessionNamespace = new Zend_Session_Namespace();
-                $sessionNamespace->settings = $Obj->permissions;
+                $sessionNamespace->settings =  $userPermission;
 
                 //initialize mandrill with the template name and other necessary options
                 $adminPasswordAge =    $this->getInvokeArg('adminPasswordAge')  ;
@@ -135,11 +137,9 @@ class Admin_AuthController extends Zend_Controller_Action
                 //$sessionNamespace->setExpirationSeconds(10);
                 $referer = new Zend_Session_Namespace('referer');
 
-
-
                 # get first website which is accesible by logged in user
 
-                $website = trim($Obj->permissions['webaccess'][0]['websitename']);
+                $website = trim($userPermission['webaccess'][0]['websitename']);
 
                 $locateData = explode('/', $website);
 

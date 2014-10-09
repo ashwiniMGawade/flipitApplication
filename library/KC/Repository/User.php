@@ -42,7 +42,7 @@ class User extends \KC\Entity\User
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u, w.id, pi.name, pi.path')
-            ->addSelect('DATEDIFF(NOW(), u.created_at) as sinceDays')
+            ->addSelect('DATE_DIFF(NOW(), u.created_at) as sinceDays')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.profileimage", "pi")
             ->leftJoin('u.website', 'w')
@@ -60,9 +60,9 @@ class User extends \KC\Entity\User
 
     public static function getUserFavouriteStores($userId)
     {
-        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->select('a,s.id as sid,s.name as name,s.permalink, img')
-            ->from('\KC\Entity\Adminfavoriteshop', 'a')
+        $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('a,s.id as sid,s.name as name,s.permaLink as permalink, img')
+            ->from('KC\Entity\Adminfavoriteshp', 'a')
             ->leftJoin("a.shops", "s")
             ->leftJoin('s.logo', 'img')
             ->setParameter(1, $userId)
@@ -70,7 +70,7 @@ class User extends \KC\Entity\User
             ->setParameter(2, '0')
             ->andWhere("s.deleted = ?2")
             ->setParameter(3, '1')
-            ->andWhere('s.status = ?1');
+            ->andWhere('s.status = ?3');
         $userFavouriteStores = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userFavouriteStores;
     }
@@ -129,7 +129,7 @@ class User extends \KC\Entity\User
         } else {
             $websites = $ar[0]['website'] ;
         }
-        $websites = BackEnd_Helper_viewHelper::msort($websites, 'name', 'kortingscode.nl');
+        $websites = \BackEnd_Helper_viewHelper::msort($websites, 'name', 'kortingscode.nl');
         foreach ($websites as $website) {
             $newArray[] = array('id' => $website['id'], 'name' => $website['name']);
         }
@@ -151,7 +151,7 @@ class User extends \KC\Entity\User
         $this->email = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['email']);
         $this->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
         $this->countryLocale = $params['locale'];
-        $this->mainText =BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $this->mainText = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             isset($params['maintext']) ? $params['maintext'] : ''
         );
         $this->currentLogIn = date('Y-m-d');
@@ -178,10 +178,10 @@ class User extends \KC\Entity\User
         $this->editorText = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
-        $this->createdBy = isset(Auth_StaffAdapter::getIdentity()->id) ? Auth_StaffAdapter::getIdentity()->id : '';
+        $this->createdBy = isset(\Auth_StaffAdapter::getIdentity()->id) ? \Auth_StaffAdapter::getIdentity()->id : '';
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
-        $this->slug = BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
+        $this->slug = \BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
         //  if(isset($params['imageName']))
         $pattern = '/^[0-9]{10}_(.+)/i' ;
         preg_match($pattern, $imageName, $matches);
@@ -190,7 +190,7 @@ class User extends \KC\Entity\User
             $pImage  = new KC\Entity\ProfileImage();
             $pImage->ext = $ext;
             $pImage->path ='images/upload/';
-            $pImage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
+            $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
             $entityManagerUser->persist($pImage);
             $entityManagerUser->flush();
             $this->profileImageId =  $pImage->getId();
@@ -230,9 +230,9 @@ class User extends \KC\Entity\User
         }
         //call cache function
         $key = 'user_'.$this->getId().'_details';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
         return $this->getId();
     }
 
@@ -249,87 +249,11 @@ class User extends \KC\Entity\User
         return count($cnt);
     }
     
-    public function getPermissions()
-    {
-        if (intval($this->id) > 0) {
-            $perm = $genralPermission =  array();
-            
-            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->select('r')
-                ->from('KC\Entity\User', 'u')
-                ->leftJoin('u.users', 'r')
-                ->setParameter(1, $this->id)
-                ->where('u.id = ?1');
-            $role = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            $perm['roles'] = $role;
-
-            unset($perm['roles']['created_at']);
-            unset($perm['roles']['updated_at']);
-
-
-            $perm['rights'] =   $this->role->rights->toArray();
-            
-            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->select('rt')
-                ->from('KC\Entity\User', 'u')
-                ->leftJoin('u.users', 'r')
-                ->leftJoin('r.rights', 'rt')
-                ->setParameter(1, $this->id)
-                ->where('u.id = ?1');
-            $rights = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            $perm['rights'] = $rights;
-
-
-            for ($i=0; $i < count($perm['rights']); $i++) {
-                unset($perm['rights'][$i]['created_at']);
-                unset($perm['rights'][$i]['updated_at']);
-                unset($perm['rights'][$i]['id']);
-                unset($perm['rights'][$i]['roleId']);
-                $perm['rights'][$perm['rights'][$i]['name']]= $perm['rights'][$i];
-                unset($perm['rights'][$i]);
-            }
-
-            $perm['webaccess']= $this->refUserWebsite->toArray();
-            
-            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->select('w')
-                ->from('KC\Entity\User', 'u')
-                ->leftJoin('u.website', 'r')
-                ->setParameter(1, $this->id)
-                ->where('u.id = ?1');
-            $websites = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            $perm['webaccess'] = $websites;
-
-
-            for ($i=0; $i < count($perm['webaccess']); $i++) {
-                unset($perm['webaccess'][$i]['id']);
-                unset($perm['webaccess'][$i]['userId']);
-                unset($perm['webaccess'][$i]['created_at']);
-                unset($perm['webaccess'][$i]['updated_at']);
-                
-                $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                $query = $queryBuilder->select('w.name')
-                    ->from('KC\Entity\Website', 'w')
-                    ->setParameter(1, $perm['webaccess'][$i]['websiteId'])
-                    ->orderBy('w.name', 'ASC');
-                $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-                $perm['webaccess'][$i]['websitename'] = $q['0']['name'];
-            }
-             # rearange websites based on website name and keep kortingscode at same place
-             $data = $perm['webaccess'];
-             $data = BackEnd_Helper_viewHelper::msort($data, array('websitename'), "kortingscode.nl");
-             $perm['webaccess'] = $data;
-             return $perm;
-        }
-        return null ;
-    }
-
     public function update($params, $imageName = '', $normalUser = '')
     {
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $addto = BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $addto = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             isset($params['addtosearch'])
             ? $params['addtosearch']
             : ''
@@ -398,11 +322,11 @@ class User extends \KC\Entity\User
         // check logged in user or not
         // if yes then deleted reference websites otherwise skip
         if ($normalUser=='') {
-            if ($this->getId() != Auth_StaffAdapter::getIdentity()->id) {
+            if ($this->getId() != \Auth_StaffAdapter::getIdentity()->id) {
                 if (isset($params['role'])) {
                     $this->roleId = $params['role'];
                 }
-                $this->createdBy = Auth_StaffAdapter::getIdentity()->id;
+                $this->createdBy = \Auth_StaffAdapter::getIdentity()->id;
                 $this->refUserWebsite->delete();
                 if (isset($params['websites'])) {
                     foreach ($params['websites'] as $web) {
@@ -415,7 +339,7 @@ class User extends \KC\Entity\User
         $entityManagerUser->flush();
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
-        if ($this->getId() == Auth_StaffAdapter::getIdentity()->id) {
+        if ($this->getId() == \Auth_StaffAdapter::getIdentity()->id) {
             new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this);
         }
 
@@ -456,7 +380,7 @@ class User extends \KC\Entity\User
             $adminfavoriteshop = $repo->findOneBy(array('userId' => $this->getId()));
             $entityManagerLocale->remove($adminfavoriteshop);
             $entityManagerLocale->flush();
-            $splitStore  =explode(",", $params['fevoriteStore']);
+            $splitStore = explode(",", $params['fevoriteStore']);
             foreach ($splitStore as $str) {
                 $store = new KC\Entity\Adminfavoriteshop();
                 $store->shopId  = $str;
@@ -467,23 +391,23 @@ class User extends \KC\Entity\User
         }
 
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
         //die("test");
         //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
         //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
 
         $alluserIdkey ="user_". $this->getId() ."_data";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
 
         $key = 'user_'. $this->getId().'_details';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
         $interestkey ="all_". "interesting". $this->getId()."_list";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
 
         $favouriteShopkey ="user_". "favouriteShop". $this->getId() ."_data";
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
         self::updateInDatabase($this->getId(), $fullName, 0);//change name of the author etc
         return array(
           "ret" =>  $this->getId(),
@@ -506,7 +430,7 @@ class User extends \KC\Entity\User
             if ($key != 'imbull' && isset($connection ['dsn'])) {
 
                 # create a run tiem connection to all site to update editor data
-                $connObj = BackEnd_Helper_DatabaseManager::addConnection($key);
+                $connObj = \BackEnd_Helper_DatabaseManager::addConnection($key);
                 $conn = $connObj['adapter'];
 
 
@@ -615,7 +539,7 @@ class User extends \KC\Entity\User
                             ->execute();
                     }
                 }
-                $connObj = BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
+                $connObj = \BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
             }
         }
     }
@@ -647,8 +571,8 @@ class User extends \KC\Entity\User
         //return $data =  Doctrine::getTable("Role")->findAll()->toArray();
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('r')
-            ->from('\KC\Entity\Role', 'r')
-            ->setParameter(1, Auth_StaffAdapter::getIdentity()->roleId)
+            ->from('KC\Entity\Role', 'r')
+            ->setParameter(1, \Auth_StaffAdapter::getIdentity()->users->id)
             ->where('r.id >= ?1');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -673,13 +597,14 @@ class User extends \KC\Entity\User
             ->fetchArray(); */
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
-        $query = $queryBuilder->select('u.id, u.firstName as fname,u.lastName as lname,u.roleId as role')
+        $query = $queryBuilder->select('u.id, u.firstName as fname,u.lastName as lname, r.id as role')
             ->from('\KC\Entity\User', 'u')
-            ->leftJoin("u.Website", "w")
+            ->leftJoin("u.website", "w")
+            ->leftJoin("u.users", "r")
             ->setParameter(1, '0')
             ->where('u.deleted = ?1')
             ->setParameter(2, 4)
-            ->andWhere('u.roleId = ?2')
+            ->andWhere('r.id = ?2')
             ->setParameter(3, $site_name)
             ->andWhere("w.name = ?3")
             ->orderBy('fname', 'ASC');
@@ -694,11 +619,12 @@ class User extends \KC\Entity\User
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u.firstName as firstName')
             ->from('\KC\Entity\User', 'u')
+            ->leftJoin("u.users", "r")
             ->setParameter(1, $for)
             ->where('u.deleted = ?1')
-            ->setParameter(2, Auth_StaffAdapter::getIdentity()->roleId)
-            ->andWhere('u.roleId >= ?2')
-            ->setParameter(3, Auth_StaffAdapter::getIdentity()->id)
+            ->setParameter(2, \Auth_StaffAdapter::getIdentity()->users->id)
+            ->andWhere('r.id >= ?2')
+            ->setParameter(3, \Auth_StaffAdapter::getIdentity()->id)
             ->andWhere("u.id <> ?3")
             ->setParameter(4, $param.'%')
              ->andWhere($queryBuilder->expr()->like('u.firstName', '?4'))
@@ -722,30 +648,30 @@ class User extends \KC\Entity\User
         $srh = $params['searchtext'];
 
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $data = $queryBuilder->select('u,r.name as role,p.path as path,p.name as ppname')
+        $data = $queryBuilder->select('u, r.name as role, p.path as path, p.name as ppname')
             ->addSelect('(SELECT COUNT(us.createdby) FROM KC\Entity\User us WHERE us.createdby = u.id)  as entries')
             ->from('KC\Entity\User', 'u')
+            ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
             ->setParameter(1, '0')
             ->where('u.deleted = ?1')
-            ->setParameter(2, Auth_StaffAdapter::getIdentity()->roleId)
-            ->andWhere('u.roleId >=', '?2');
+            ->setParameter(2, \Auth_StaffAdapter::getIdentity()->users->id)
+            ->andWhere('r.id >=', '?2');
         if ((intval($role)) > 0) {
             //add role search
             $data->setParameter(3, $role)
-                ->addWhere('u.roleId= ?3');
+                ->addWhere('r.id= ?3');
         }
         if ($srh!='undefined') {
             //add search for user name
             $data->setParameter(4, $srh.'%')
             ->andWhere($queryBuilder->expr()->like('u.firstName', '?4'));
         }
-        $data->setParameter(5, Auth_StaffAdapter::getIdentity()->id)
+        $data->setParameter(5, \Auth_StaffAdapter::getIdentity()->id)
             ->andWhere('u.id <>', '?5')
-            ->leftJoin('u.role', 'r')
             ->orderBy("u.id", "DESC")->getQuery();
         return Zend_Json::encode(
-            DataTable_Helper::generateDataTableResponse(
+            \DataTable_Helper::generateDataTableResponse(
                 $data,
                 $params,
                 array("__identifier" => "u.id, r.id, p.id",'u.id','u.firstName','u.email','role'),
@@ -762,26 +688,26 @@ class User extends \KC\Entity\User
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
         $data = $queryBuilder->select('u,r.name as role,p.path as path,p.name as ppname')
             ->from('KC\Entity\User', 'u')
+            ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
             ->setParameter(1, '1')
             ->where('u.deleted = ?1')
-            ->setParameter(2, Auth_StaffAdapter::getIdentity()->roleId)
-            ->andWhere('u.roleId >=', '?2');
+            ->setParameter(2, \Auth_StaffAdapter::getIdentity()->users->id)
+            ->andWhere('r.id >=', '?2');
         if ((intval($role)) > 0) {
             $data->setParameter(3, $role)
-                ->addWhere('u.roleId= ?3');
+                ->addWhere('r.id= ?3');
         }
         if ($srh!='undefined') {
             $data->setParameter(4, $srh.'%')
             ->andWhere($queryBuilder->expr()->like('u.firstName', '?4'));
         }
-        $data->setParameter(5, Auth_StaffAdapter::getIdentity()->id)
+        $data->setParameter(5, \Auth_StaffAdapter::getIdentity()->id)
             ->andWhere('u.id <>', '?5')
-            ->leftJoin('u.role', 'r')
             ->orderBy("u.id", "DESC")->getQuery();
 
         return Zend_Json::encode(
-            DataTable_Helper::generateDataTableResponse(
+            \DataTable_Helper::generateDataTableResponse(
                 $data,
                 $params,
                 array("__identifier" => "u.id, r.id, p.id",'u.id','u.firstName','u.email','role'),
@@ -797,34 +723,21 @@ class User extends \KC\Entity\User
         $query = $queryBuilder->select('u.id,u.firstName as fname,u.lastName as lname')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin('u.website', 'w')
-            ->setParameter(1, '0')
-            ->where('u.deleted = ?1')
-            ->setParameter(2, $site_name)
-            ->andWhere('w.url = ?2')
+            ->where($queryBuilder->expr()->eq('u.deleted', '0'))
+            ->andWhere($queryBuilder->expr()->eq('w.url', $site_name))
             ->orderBy('fname', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return  $data;
     }
 
-    /**
-    * add store in favorite list
-    * @author kraj
-    * @version 1.0
-    * @return integer $flag
-    */
     public static function addStoreInList($name)
     {
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
-        BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();//connection generate with second database
-
         //find shop by name
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('s')
             ->from('KC\Entity\Shop', 's')
-            ->setParameter(1, $name)
-            ->where('s.name = ?1')
+            ->where($queryBuilder->expr()->eq('s.name', $name))
             ->setMaxResults(1);
         $Shop = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -839,66 +752,40 @@ class User extends \KC\Entity\User
                 //add new store if not exist in datbase
                 $pc = new KC\Entity\Adminfavoriteshop();
                 $pc->shopId = $Shop[0]['id'];
-
-                BackEnd_Helper_viewHelper::closeConnection($connSite);
-                $connUser = BackEnd_Helper_viewHelper::addConnection();
-
-                    $pc->userId = Auth_StaffAdapter::getIdentity()->id;//get current user(admin) id
-
-                BackEnd_Helper_viewHelper::closeConnection($connUser);
-                $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-
-                    $entityManagerLocale->persist($pc);
-                    $entityManagerLocale->flush();
-
-                BackEnd_Helper_viewHelper::closeConnection($connSite);
-                $connUser = BackEnd_Helper_viewHelper::addConnection();
+                $pc->userId = Auth_StaffAdapter::getIdentity()->id;//get current user(admin) id
+                $entityManagerLocale->persist($pc);
+                $entityManagerLocale->flush();
                 $flag = $pc->toArray();
             }
 
         }
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
         return $flag;
     }
    
     public static function searchTopTenStore($keyword, $selctedshop)
     {
+        $SP = $selctedshop!='' ? $selctedshop: 0;
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.name as name,s.id as id')
             ->from('\KC\Entity\Shop', 's')
-            ->setParameter(1, '0')
-            ->where('s.deleted = ?1')
-            ->setParameter(2, $keyword . '%')
-            ->andWhere($queryBuilder->expr()->like('s.name', '?2'))
-            ->setParameter(3, $SP)
-            ->andWhere($queryBuilder->expr()->notIn('s.id', '?3'))
-            ->setParameter(4, '1')
-            ->andWhere('s.status', '?4')
+            ->where($queryBuilder->expr()->eq('s.deleted', '0'))
+            ->andWhere($queryBuilder->expr()->like('s.name', $keyword . '%'))
+            ->andWhere($queryBuilder->expr()->notIn('s.id', $SP))
+            ->andWhere($queryBuilder->expr()->eq('s.status', '1'))
             ->orderBy('s.name', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
-    /**
-    * check shop in database base on name
-    * use in  normal list
-    * @param string $name
-    * @param integer $flag
-    * @author kraj
-    * @version 1.0
-    */
+    
     public static function checkStoreExistOrNot($name)
     {
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
-        BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-
-            //$Shop = Doctrine_query::create()->from('Shop')
-            //->where('name=' . "'$name'")->limit(1)->fetchArray();
+        //$Shop = Doctrine_query::create()->from('Shop')
+        //->where('name=' . "'$name'")->limit(1)->fetchArray();
         $Shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $name);
-        BackEnd_Helper_viewHelper::closeConnection($connSite);
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
+       
         $flag = 0;
         if ($Shop) {
 
@@ -918,16 +805,12 @@ class User extends \KC\Entity\User
    
     public static function getUserDetail($uId)
     {
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-        BackEnd_Helper_viewHelper::closeConnection($connSite);
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
-       
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->select('Count(*) as Max,o.authorId,o.authorName')
+        $query = $queryBuilder->select('Count(o.id) as MaxOffers, o.authorId, o.authorName')
             ->from('\KC\Entity\Offer', 'o')
             ->groupBy("o.authorName")
-            ->orderBy('Max', 'DESC');
+            ->orderBy('MaxOffers', 'DESC');
         $Userdata = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
@@ -935,12 +818,8 @@ class User extends \KC\Entity\User
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.website", "w")
             ->leftJoin("u.profileimage", "pi")
-            ->setParameter(1, $Userdata[0]['authorId'])
-            ->where('u.id = ?1');
+            ->where($queryBuilder->expr()->eq('u.id', $Userdata[0]['authorId']));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
         return $data;
     }
 
@@ -952,32 +831,20 @@ class User extends \KC\Entity\User
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.website", "w")
             ->leftJoin("u.profileimage", "pi")
-            ->setParameter(1, $eId)
-            ->where('u.id = ?1');
+            ->where($queryBuilder->expr()->eq('u.id', $eId));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
 
     public static function getUserIntcategory($uId)
     {
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-        BackEnd_Helper_viewHelper::closeConnection($connSite);
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
-       
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('c.name, c.permalink, ic.id')
+        $query = $queryBuilder->select('c.name, c.permaLink, ic.id')
             ->from('\KC\Entity\Interestingcategory', 'ic')
             ->leftJoin("ic.category", "c")
-            ->setParameter(1, $uId)
-            ->where('ic.userId = ?1')
-            ->setParameter(2, '0')
-            ->andWhere('c.deleted = ?2');
+            ->where($queryBuilder->expr()->eq('ic.userId', $uId))
+            ->andWhere($queryBuilder->expr()->eq('c.deleted', '0'));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-
-        BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-
         return $data;
     }
    
@@ -985,64 +852,40 @@ class User extends \KC\Entity\User
     {
         # check for valid user id
         if (intval($id) > 0) {
-            $connUser = BackEnd_Helper_viewHelper::addConnection();
-
             $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
             $query = $queryBuilder->select('u.slug')
                 ->from('\KC\Entity\User', 'u')
                 ->leftJoin("u.profileimage", "pi")
-                ->setParameter(1, $id)
-                ->where('u.id = ?1');
+                ->where($queryBuilder->expr()->eq('u.id', $id));
             $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            BackEnd_Helper_viewHelper::closeConnection($connUser);
-
-            $editor = FrontEnd_Helper_viewHelper::__link("link_redactie"). "/" ;
+            $editor = \FrontEnd_Helper_viewHelper::__link("link_redactie"). "/" ;
             $url = HTTP_PATH. $editor . $data['slug'];
             return array('url' => $url , 'permalink' => $editor . $data['slug'] );
         }
-
         return false;
     }
 
 
     public static function getAllUserPermalinks($site_name)
     {
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-        BackEnd_Helper_viewHelper::closeConnection($connSite);
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
-
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.slug')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.website", "w")
-            ->setParameter(1, '0')
-            ->where('u.deleted = ?1')
-            ->setParameter(2, $site_name)
-            ->where('w.url = ?2')
-            ->setParameter(3, '1')
-            ->where('u.showInAboutListing = ?3');
+            ->where($queryBuilder->expr()->eq('u.deleted', '0'))
+            ->andWhere($queryBuilder->expr()->eq('w.url', $site_name))
+            ->andWhere($queryBuilder->expr()->eq('u.showInAboutListing', '1'));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
         return $data;
     }
 
     public static function getUserName($uId)
     {
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
-        BackEnd_Helper_viewHelper::closeConnection($connSite);
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
-
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->select('u.firstName, u.lastname')
+        $query = $queryBuilder->select('u.firstName, u.lastName')
             ->from('\KC\Entity\User', 'u')
-            ->setParameter(1, $uId)
-            ->where('u.id = ?1');
+            ->where($queryBuilder->expr()->eq('u.id', $uId));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
-        BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
         if (!empty($data)) {
             $name = $data[0]['firstName'].' '.$data[0]['lastName'];
         } else {
