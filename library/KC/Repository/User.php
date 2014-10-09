@@ -248,18 +248,37 @@ class User extends \KC\Entity\User
         $cnt = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return count($cnt);
     }
-    // not migrated and not used in application 
+    
     public function getPermissions()
     {
         if (intval($this->id) > 0) {
-             $perm = $genralPermission =  array();
-             $perm['roles'] =    $this->role->toArray();
+            $perm = $genralPermission =  array();
+            
+            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('r')
+                ->from('KC\Entity\User', 'u')
+                ->leftJoin('u.users', 'r')
+                ->setParameter(1, $this->id)
+                ->where('u.id = ?1');
+            $role = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $perm['roles'] = $role;
 
-              unset($perm['roles']['created_at']);
-              unset($perm['roles']['updated_at']);
+            unset($perm['roles']['created_at']);
+            unset($perm['roles']['updated_at']);
 
 
-             $perm['rights'] =   $this->role->rights->toArray();
+            $perm['rights'] =   $this->role->rights->toArray();
+            
+            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('rt')
+                ->from('KC\Entity\User', 'u')
+                ->leftJoin('u.users', 'r')
+                ->leftJoin('r.rights', 'rt')
+                ->setParameter(1, $this->id)
+                ->where('u.id = ?1');
+            $rights = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $perm['rights'] = $rights;
+
 
             for ($i=0; $i < count($perm['rights']); $i++) {
                 unset($perm['rights'][$i]['created_at']);
@@ -271,15 +290,30 @@ class User extends \KC\Entity\User
             }
 
             $perm['webaccess']= $this->refUserWebsite->toArray();
+            
+            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('w')
+                ->from('KC\Entity\User', 'u')
+                ->leftJoin('u.website', 'r')
+                ->setParameter(1, $this->id)
+                ->where('u.id = ?1');
+            $websites = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $perm['webaccess'] = $websites;
+
+
             for ($i=0; $i < count($perm['webaccess']); $i++) {
                 unset($perm['webaccess'][$i]['id']);
                 unset($perm['webaccess'][$i]['userId']);
                 unset($perm['webaccess'][$i]['created_at']);
                 unset($perm['webaccess'][$i]['updated_at']);
-                $q = Doctrine_Query::create()
-                     ->select('w.name')
-                     ->from('Website w')->where("id = ".$perm['webaccess'][$i]['websiteId']."")
-                     ->orderBy("w.name")->fetchArray();
+                
+                $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+                $query = $queryBuilder->select('w.name')
+                    ->from('KC\Entity\Website', 'w')
+                    ->setParameter(1, $perm['webaccess'][$i]['websiteId'])
+                    ->orderBy('w.name', 'ASC');
+                $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
                 $perm['webaccess'][$i]['websitename'] = $q['0']['name'];
             }
              # rearange websites based on website name and keep kortingscode at same place
