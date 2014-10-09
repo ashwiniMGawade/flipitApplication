@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping AS ORM;
  *         @ORM\Index(name="howtousepageid_idx", columns={"howtoUsepageId"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="logoid", columns={}),
- *         @ORM\UniqueConstraint(name="howtousesmallimageid", columns={}),
- *         @ORM\UniqueConstraint(name="howtousebigimageid", columns={})
+ *         @ORM\UniqueConstraint(name="logoid", columns={"logo"}),
+ *         @ORM\UniqueConstraint(name="howtousesmallimageid", columns={"howtousesmallimage"}),
+ *         @ORM\UniqueConstraint(name="howtousebigimageid", columns={"howtousebigimage"})
  *     }
  * )
  */
@@ -302,7 +302,7 @@ class Shop
     private $strictConfirmation;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $howToIntroductionText;
 
@@ -398,7 +398,7 @@ class Shop
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\WebsiteScrenshot", inversedBy="shop")
-     * @ORM\JoinColumn(name="screnshotId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="screenshotid", referencedColumnName="id")
      */
     private $screnshot;
 
@@ -422,7 +422,7 @@ class Shop
         return $this->$property;
     }
 
-    public function __set($property, $value)
+    public function __set($property, $value = '')
     {
         $this->$property = $value;
     }
