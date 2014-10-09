@@ -302,7 +302,7 @@ class Shop
     private $strictConfirmation;
 
     /**
-     * @ORM\Column(type="blob", nullable=true)
+     * @ORM\Column(type="text", nullable=true)
      */
     private $howToIntroductionText;
 
@@ -422,7 +422,7 @@ class Shop
         return $this->$property;
     }
 
-    public function __set($property, $value)
+    public function __set($property, $value = '')
     {
         $this->$property = $value;
     }

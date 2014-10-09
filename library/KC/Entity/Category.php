@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="category",
  *     indexes={
- *         @ORM\Index(name="categoryiconid_idx", columns={}),
+ *         @ORM\Index(name="categoryiconid_idx", columns={"categoryicon"}),
  *         @ORM\Index(name="name", columns={"name"}),
  *         @ORM\Index(name="name_2", columns={"name"}),
  *         @ORM\Index(name="name_3", columns={"name"}),
@@ -17,11 +17,9 @@ use Doctrine\ORM\Mapping AS ORM;
  *         @ORM\Index(name="name_7", columns={"name"}),
  *         @ORM\Index(name="name_8", columns={"name"}),
  *         @ORM\Index(name="name_9", columns={"name"}),
- *         @ORM\Index(name="name_10", columns={"name"}),
- *         @ORM\Index(name="categoryFeaturedImageId_foreign_key", columns={}),
- *         @ORM\Index(name="categoryHeaderImageId_foreign_key", columns={})
+ *         @ORM\Index(name="name_10", columns={"name"})
  *     },
- *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={"categoryicon"})}
  * )
  */
 class Category

@@ -75,8 +75,16 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     {
         if (Zend_Auth::getInstance()->hasIdentity()) {
             $u = Zend_Auth::getInstance()->getIdentity();
-            $member = \Zend_Registry::get('emUser')->find('\KC\Entity\User', $u->id);
-            return $member;
+            //$member = \Zend_Registry::get('emUser')->find('\KC\Entity\User', $u->id);
+
+            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('u, r')
+                ->from('KC\Entity\User', 'u')
+                ->leftJoin('u.users', 'r')
+                ->setParameter(1, $u->id)
+                ->where('u.id = ?1');
+            $member = $query->getQuery()->getResult();
+            return $member[0];
         }
         return false;
     }
@@ -143,7 +151,7 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
                     $user->user_data = $Obj;
                     //$user->setExpirationSeconds(10);
                     $sessionNamespace = new Zend_Session_Namespace();
-                    $sessionNamespace->settings = $Obj->permissions;
+                    $sessionNamespace->settings = $Obj->getPermissions();
                     //$sessionNamespace->setExpirationSeconds(10);
                 }
             }
