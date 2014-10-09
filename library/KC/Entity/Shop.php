@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping AS ORM;
  *         @ORM\Index(name="howtousepageid_idx", columns={"howtoUsepageId"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="logoid", columns={}),
- *         @ORM\UniqueConstraint(name="howtousesmallimageid", columns={}),
- *         @ORM\UniqueConstraint(name="howtousebigimageid", columns={})
+ *         @ORM\UniqueConstraint(name="logoid", columns={"logo"}),
+ *         @ORM\UniqueConstraint(name="howtousesmallimageid", columns={"howtousesmallimage"}),
+ *         @ORM\UniqueConstraint(name="howtousebigimageid", columns={"howtousebigimage"})
  *     }
  * )
  */
@@ -398,7 +398,7 @@ class Shop
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\WebsiteScrenshot", inversedBy="shop")
-     * @ORM\JoinColumn(name="screnshotId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="screenshotid", referencedColumnName="id")
      */
     private $screnshot;
 
