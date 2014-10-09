@@ -224,4 +224,72 @@ class User
         $entityManagerUser->persist($user);
         $entityManagerUser->flush();
     }
+
+    public function getPermissions()
+    {
+        if (intval($this->id) > 0) {
+            $perm = $genralPermission =  array();
+            
+            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('u, r')
+                ->from('KC\Entity\User', 'u')
+                ->leftJoin('u.users', 'r')
+                ->where($queryBuilder->expr()->eq('u.id', $this->id));
+            $role = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+          
+            $perm['roles'] = $role[0]['users'];
+
+            unset($perm['roles']['created_at']);
+            unset($perm['roles']['updated_at']);
+
+            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('u, r, rt')
+                ->from('KC\Entity\User', 'u')
+                ->leftJoin('u.users', 'r')
+                ->leftJoin('r.rights', 'rt')
+                ->where($queryBuilder->expr()->eq('u.id', $this->id));
+            $rights = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+            $perm['rights'] = $rights[0]['users']['rights'];
+
+            for ($i=0; $i < count($perm['rights']); $i++) {
+                unset($perm['rights'][$i]['created_at']);
+                unset($perm['rights'][$i]['updated_at']);
+                unset($perm['rights'][$i]['id']);
+                unset($perm['rights'][$i]['roleId']);
+                $perm['rights'][$perm['rights'][$i]['name']]= $perm['rights'][$i];
+                unset($perm['rights'][$i]);
+            }
+            
+            $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('u, w')
+                ->from('KC\Entity\User', 'u')
+                ->leftJoin('u.website', 'w')
+                ->where($queryBuilder->expr()->eq('u.id', $this->id));
+            $websites = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $perm['webaccess'] = $websites[0]['website'];
+
+            for ($i=0; $i < count($perm['webaccess']); $i++) {
+                //unset($perm['webaccess'][$i]['id']);
+                unset($perm['webaccess'][$i]['userId']);
+                unset($perm['webaccess'][$i]['created_at']);
+                unset($perm['webaccess'][$i]['updated_at']);
+                
+                $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+                $query = $queryBuilder->select('w.name')
+                    ->from('KC\Entity\Website', 'w')
+                    ->where($queryBuilder->expr()->eq('w.id', $perm['webaccess'][$i]['id']))
+                    ->orderBy('w.name', 'ASC');
+                $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+                $perm['webaccess'][$i]['websitename'] = $q['0']['name'];
+            }
+             # rearange websites based on website name and keep kortingscode at same place
+             $data = $perm['webaccess'];
+             $data = \BackEnd_Helper_viewHelper::msort($data, array('websitename'), "kortingscode.nl");
+             $perm['webaccess'] = $data;
+             return $perm;
+        }
+        return null ;
+    }
 }
