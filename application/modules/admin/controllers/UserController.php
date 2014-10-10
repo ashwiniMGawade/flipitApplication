@@ -101,8 +101,10 @@ class Admin_UserController extends Zend_Controller_Action
         $this->_helper->layout()->disableLayout(true);
         $this->_helper->viewRenderer->setNoRender();
 
-        $data =  User::getWebsite($this->getRequest()->getParam('id'),
-                        $this->getRequest()->getParam('rolid'));
+        $data =  KC\Repository\User::getWebsite(
+            $this->getRequest()->getParam('id'),
+            $this->getRequest()->getParam('rolid')
+        );
         echo Zend_Json::encode($data);
         die();
     }
@@ -127,7 +129,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function getuserlistAction()
     {
         $params = $this->_getAllParams();
-        $userList =  User::getUserList($params);
+        $userList =  KC\Repository\User::getUserList($params);
         echo  $userList;
         die();
     }
@@ -843,7 +845,7 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function getrolesAction()
     {
-        $roles = User::getRoles();
+        $roles = KC\Repository\User::getRoles();
         echo Zend_Json::encode($roles);
         die();
     }

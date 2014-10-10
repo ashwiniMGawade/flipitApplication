@@ -35,6 +35,11 @@ class Varnish
      */
     private $updated_at;
 
+    public function getId()
+    {
+        return $this->id;
+    }
+    
     public function __get($property)
     {
         return $this->$property;
