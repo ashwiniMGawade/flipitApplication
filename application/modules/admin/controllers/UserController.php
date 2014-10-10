@@ -68,14 +68,14 @@ class Admin_UserController extends Zend_Controller_Action
     {
         $u = Auth_StaffAdapter::getIdentity();
         $this->view->id = $u->id;
-        $this->view->role = $u->roleId;
-        $this->view->roles = Role::createUserPermission($u->roleId);
+        $this->view->role = $u->users->id;
+        $this->view->roles = KC\Repository\Role::createUserPermission($u->users->id);
         //get flashes
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
-     }
+    }
     /**
      * add user form
      * @author kkumar
