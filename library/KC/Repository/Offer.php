@@ -394,23 +394,23 @@ class Offer Extends \KC\Entity\Offer
         $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $shopId = $offerDetails['shop']['id'];
         $key = 'shopDetails_'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'offerDetails_'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = '6_topOffers'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_latestUpdates'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_expiredOffers'  . $shopId . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allMoneySavingGuideLists');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewOfferList');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('extended_coupon_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allMoneySavingGuideLists');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewOfferList');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('extended_coupon_details');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
     }
 
     public static function getSpecialPageOffers($specialPage)
@@ -1267,4 +1267,1990 @@ class Offer Extends \KC\Entity\Offer
         $relatedOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $relatedOffers;
     }
-} 
+    ##################################################################################
+    ################## END REFACTORED CODE ###########################################
+    ##################################################################################
+
+    public static function moveToTrash($id)
+    {
+        if ($id) {
+            //find record by id
+            $u = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $id);
+            $offer_id = $id;
+            $authorId = self::getAuthorId($offer_id);
+
+            //Delete popular code if exist
+            $exist = \Zend_Registry::get('emLocale')->find('KC\Entity\PopularCode', $offer_id);
+
+            if ($exist) {
+                KC\Entity\PopularCode::deletePopular($offer_id, $exist->position);
+            }
+            //Delete popular code if exist
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+
+            $key = '6_topOffers'  . $u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'shop_expiredOffers'  . $u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+
+            $key = 'all_widget5_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $u->delete();
+
+        } else {
+            $id = null;
+        }
+        //call cache function
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+        return $id;
+    }
+
+    public static function deleteOffer($id)
+    {
+        if ($id) {
+            //find record by id and change status (deleted=1)
+            $u = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $id);
+            $offer_id = $id;
+            $authorId = self::getAuthorId($offer_id);
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+            $key = '6_topOffers'  . $u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'shop_expiredOffers'  . $u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'extendedTopOffer_of_'.$u->shopId;
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'extended_'.
+                \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($u->extendedurl).
+                '_couponDetails';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'offer_'.$id.'_details';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\RefOfferCategory', 'w')
+                    ->where("w.offerId=" . $id)
+                    ->getQuery();
+            $query->execute();
+            $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 'w')
+                    ->where("w.offerId=" . $id)
+                    ->getQuery();
+            $query->execute();
+            $query = $queryBuilder->delete('KC\Entity\PopularCode', 'w')
+                    ->where("w.offerId=" . $id)
+                    ->getQuery();
+            $query->execute();
+            $query = $queryBuilder->delete('KC\Entity\RefOfferPage', 'w')
+                    ->where("w.offerId=" . $id)
+                    ->getQuery();
+            $query->execute();
+            $query = $queryBuilder->delete('KC\Entity\ViewCount', 'w')
+                    ->where("w.offerId=" . $id)
+                    ->getQuery();
+            $query->execute();
+            $query = $queryBuilder->delete('KC\Entity\OfferNews', 'w')
+                    ->where("w.offerId=" . $id)
+                    ->getQuery();
+            $query->execute();
+            $key = 'all_widget5_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $query = $queryBuilder->delete('KC\Entity\Offer', 'w')
+                    ->where("w.id=" . $id)
+                    ->getQuery();
+            $query->execute();
+
+        } else {
+            $id = null;
+        }
+        //call cache function
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        return $id;
+    }
+
+    public static function restoreOffer($id)
+    {
+        if ($id) {
+
+            $u = \Zend_Registry::get('emLocale')->find('KC\Entity\Offer', $id);
+
+            $offer_id = $id;
+            $authorId = self::getAuthorId($offer_id);
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+            $key = '6_topOffers'  . $u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'shop_latestUpdates'  .$u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'shop_expiredOffers'  . $u->shopId . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+
+            $key = 'all_widget5_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            //update status of record by id(deleted=0)
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->update('KC\Entity\Offer', 'o')
+                >set('o.deleted', 0)
+                ->where('o.id=' . $id)
+                ->getQuery();
+            $query->execute();
+        } else {
+            $id = null;
+        }
+        //call cache function
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        return $id;
+    }
+
+    public static function searchToFiveOffer($keyword, $flag)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('o.title as title')
+                ->from('KC\Entity\Offer', 'o')
+                ->where('o.deleted='.$flag)
+                ->setParameter(2, $keyword.'%')
+                ->andWhere($queryBuilder->expr()->like('o.title , ?2'))
+                ->andWhere("o.userGenerated = '0'")
+                ->orderBy("o.title", "ASC")
+                ->setMaxResults(5);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function searchToFiveShop($keyword, $flag)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('s')
+                ->from('KC\Entity\Offer', 'o')
+                ->leftJoin('o.shopOffers', 's')
+                ->where('o.deleted='.$flag)
+                ->setParameter(2, $keyword.'%')
+                ->andWhere($queryBuilder->expr()->like('s.name , ?2'))
+                ->andWhere("o.userGenerated = '0'")
+                ->orderBy("s.id", "ASC")
+                ->groupBy('s.name')
+                ->setMaxResults(5);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function searchToFiveCoupon($keyword, $flag)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('o')
+                ->from('KC\Entity\Offer', 'o')
+                ->where('o.deleted='.$flag)
+                ->setParameter(2, $keyword.'%')
+                ->andWhere($queryBuilder->expr()->like('o.couponCode , ?2'))
+                ->orderBy("o.id", "ASC")
+                ->setMaxResults(5);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function addkortingscode($title, $shopid, $kortingscode, $desc, $userid, $uname)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $pc = new KC\Entity\Offer();
+        $pc->shopId =$shopid;
+        $pc->title =\BackEnd_Helper_viewHelper::stripSlashesFromString($title);
+        $pc->couponCode =\BackEnd_Helper_viewHelper::stripSlashesFromString($kortingscode);
+        $pc->extendedMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($desc);
+        $pc->userGenerated = 1;
+        $pc->authorId = \BackEnd_Helper_viewHelper::stripSlashesFromString($userid);
+        $pc->authorName =\BackEnd_Helper_viewHelper::stripSlashesFromString($uname);
+        $queryBuilder->persist($pc);
+        $queryBuilder->flush();
+        return true;
+    }
+
+    public static function getAuthorId($offerId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('o.authorId')
+                ->from('KC\Entity\Offer', 'o')
+                ->where('o.id='.$offerId);
+        $userId = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $userId;
+    }
+
+    public static function exportofferList()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('o.title, o.name,s.name,s.deeplink,term.content')
+                ->from('KC\Entity\Offer', 'o')
+                ->addSelect('(SELECT COUNT(*) FROM KC\Entity\ViewCount v WHERE v.viewcount = o.id) as Count')
+                ->leftJoin('o.shopOffers', 's')
+                ->leftJoin('o.offertermandcondition term')
+                ->where("o.deleted=0")
+                ->andWhere("o.userGenerated=0")
+                ->orderBy("o.id", "DESC");
+        $offerList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $offerList;
+    }
+
+    public static function getOfferDetail($offerId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select(
+            'o.title, o.name,o.id,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,
+            p.id as pageId,tc.ontent,cat.id,img.name,img.pathnews.*,t.*'
+        )
+        ->from('KC\Entity\Offer', 'o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('s.affliatenetwork a')
+        ->leftJoin('o.offers p')
+        ->leftJoin('o.offertermandcondition tc')
+        ->leftJoin('o.categoryoffres cat')
+        ->leftJoin('o.logo img')
+        ->leftJoin('o.offernews news')
+        ->leftJoin('o.offerTiles t')
+        ->addSelect("(SELECT count(cc.status) FROM CouponCode cc WHERE cc.offer = o.id and cc.status = 0) as used")
+        ->addSelect("(SELECT count(ccc.status) FROM CouponCode ccc WHERE ccc.offer = o.id and ccc.status = 1) as available")
+        ->andWhere("o.id =".$offerId)
+        ->andWhere("o.userGenerated = '0'");
+        $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $offerDetails;
+    }
+
+    public function uploadFile($imgName)
+    {
+        $uploadPath = "images/upload/offer/";
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        $user_path = ROOT_PATH . $uploadPath;
+        $img = $imgName;
+
+        //unlink image file from folder if exist
+        if ($img) {
+            unlink($user_path . $img);
+            unlink($user_path . "thum_" . $img);
+            unlink($user_path . "thum_large" . $img);
+        }
+        if (!file_exists($user_path)) {
+            mkdir($user_path, 0776, true);
+        }
+        $adapter->setDestination(ROOT_PATH . $uploadPath);
+        $adapter->addValidator('Extension', false, 'jpg,pdf,jpeg');
+        $adapter->addValidator('Size', false, array('max' => '2MB'));
+        $files = $adapter->getFileInfo();
+
+        foreach ($files as $file => $info) {
+            if ($file=='uploadoffer' && $info['name']!='') {
+
+                $name = $adapter->getFileName($file, false);
+                $name = $adapter->getFileName($file);
+                $orgName = time() . "_" . $info['name'];
+                $fname = $user_path . $orgName;
+                //call function resize image
+                $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
+                \BackEnd_Helper_viewHelper::resizeImage(
+                    $_FILES["uploadoffer"],
+                    $orgName,
+                    126,
+                    90,
+                    $path
+                );
+                //call function resize image
+                $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
+                \BackEnd_Helper_viewHelper::resizeImage(
+                    $_FILES["uploadoffer"],
+                    $orgName,
+                    132,
+                    95,
+                    $path
+                );
+                $adapter->addFilter(
+                    new \Zend_Filter_File_Rename(
+                        array(
+                            'target' => $fname,
+                            'overwrite' => true
+                        )
+                    ),
+                    null,
+                    $file
+                );
+                $adapter->receive($file);
+                $status = "";
+                $data = "";
+                $msg = "";
+                if ($adapter->isValid($file) == 1) {
+                    $data = $orgName;
+                    return $data;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
+
+    public static function uploadTiles($imgName)
+    {
+        $uploadPath = UPLOAD_IMG_PATH."offertiles/";
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        $user_path = ROOT_PATH . $uploadPath;
+        $img = $imgName;
+        //unlink image file from folder if exist
+        if ($img) {
+            unlink($user_path . $img);
+            unlink($user_path . "thum_" . $img);
+            unlink($user_path . "thum_large" . $img);
+        }
+        if (!file_exists($user_path)) {
+            mkdir($user_path, 0776, true);
+        }
+        $adapter->setDestination(ROOT_PATH . $uploadPath);
+        $adapter->addValidator('Extension', false, 'jpg,jpeg,png');
+        $adapter->addValidator('Size', false, array('max' => '2MB'));
+        $files = $adapter->getFileInfo();
+        foreach ($files as $file => $info) {
+
+            $name = $adapter->getFileName($file, false);
+            $name = $adapter->getFileName($file);
+            $orgName = time() . "_" . $info['name'];
+            $fname = $user_path . $orgName;
+            //call function resize image
+            $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
+
+            BackEnd_Helper_viewHelper::resizeImageForAjax(
+                $_FILES["tileupload"],
+                $orgName,
+                126,
+                90,
+                $path
+            );
+            //call function resize image
+            $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
+            BackEnd_Helper_viewHelper::resizeImageForAjax(
+                $_FILES["tileupload"],
+                $orgName,
+                132,
+                95,
+                $path
+            );
+
+            $path = ROOT_PATH . $uploadPath . "thum_small_" . $orgName;
+            $thum_small = BackEnd_Helper_viewHelper::resizeImageForAjax(
+                $_FILES["tileupload"],
+                $orgName,
+                80,
+                80,
+                $path
+            );
+
+            $path = ROOT_PATH . $uploadPath . "thum_large_" . $orgName;
+            $thum_small = BackEnd_Helper_viewHelper::resizeImageForAjax(
+                $_FILES["tileupload"],
+                $orgName,
+                127,
+                127,
+                $path
+            );
+
+            $adapter->addFilter(
+                new Zend_Filter_File_Rename(
+                    array(
+                            'target' => $fname,
+                            'overwrite' => true
+                    )
+                ),
+                null,
+                $file
+            );
+
+            $adapter->receive($file);
+            $status = "";
+            $data = "";
+            $msg = "";
+            if ($adapter->isValid($file) == 1) {
+                $data = $orgName;
+                return $data;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public function uploadShopLogo($file)
+    {
+        // generate upload path for images related to category
+        $uploadPath = UPLOAD_IMG_PATH."shop/";
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
+        // generate real path for upload path
+        $rootPath = ROOT_PATH.$uploadPath;
+        // get upload file info
+        $files = $adapter->getFileInfo($file);
+
+        // check upload directory exists, if no then create upload directory
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 0776, true);
+        }
+
+        // set destination path and apply validations
+        $adapter->setDestination($rootPath);
+        $adapter->addValidator('Extension', false, 'jpg,png');
+        $adapter->addValidator('Size', false, array('max' => '2MB'));
+        // get file name
+        $name = $adapter->getFileName($file, false);
+        // rename file name to by prefixing current unix timestamp
+        $newName = time() . "_" . $name;
+        // generates complete path of image
+        $cp = $rootPath . $newName;
+        /**
+         *   generating thumnails for image
+         */
+
+        $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 135, 95, $path);
+
+        $path = $uploadPath . "thum_medium_" . $newName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 50, 50, $path);
+
+        $path = $uploadPath . "thum_large_" . $newName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 95, 95, $path);
+
+        $path = $uploadPath . "thum_small_" . $newName;
+        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 24, 24, $path);
+
+        //echo "<pre>"; print_r($file); die;
+        // apply filter to rename file name and set target
+        $adapter
+        ->addFilter(
+            new Zend_Filter_File_Rename(
+                array(
+                    'target' => $cp,
+                    'overwrite' => true
+                )
+            ),
+            null,
+            $file
+        );
+
+        // recieve file for upload
+        $adapter->receive($file);
+        // check is file is valid then
+        if ($adapter->isValid($file) == 1) {
+            $data = $newName;
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+    public static function searchRelatedOffers($params)
+    {
+        $suggestion = array();
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select(
+            'p.id,o.endDate as enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,
+            o.Visability,o.extendedUrl,o.couponCode as couponcode, o.exclusiveCode as exclusivecode,
+            o.discount,o.discountvalueType,s.name,l.path,l.name,p.type,p.position,
+            p.offerId,fv.shopId,fv.visitorId,ologo.name,ologo.path,vot.id,vot.vote'
+        )
+        ->from('KC\Entity\PopularCode', 'p')
+        ->leftJoin('p.popularcode o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.votes vot')
+        ->leftJoin('s.visitors fv')
+        ->leftJoin('s.logo l')
+        ->where('o.deleted =0')
+        ->andWhere("o.userGenerated = 0")
+        ->andWhere('s.deleted = 0')
+        ->andWhere('o.offline = 0')
+        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('o.endDate > "'.$date.'"')
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('o.Visability != "MEM"')
+        ->orderBy('p.position', 'ASC')
+        ->setMaxResults(4);
+        $data= $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        foreach ($data as $d) {
+            $suggestion[] = $d['offer'];
+        }
+        return $suggestion;
+    }
+
+    public static function getCouponDetails($extendedUrl)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select(
+            't.name, t.path, o.title, o.name, o.actualUrl,s.name,s.id,s.discussions,s.permaLink as permalink,
+            s.title,s.subTitle,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,
+            s.affliateProgram,tc.content,img.name,img.path,ws.name,ws.path,ologo.name, ologo.path'
+        )
+           ->from('KC\Entity\Offer', 'o')
+           ->leftJoin('o.shopOffers', 's')
+           ->leftJoin('o.logo ologo')
+           ->leftJoin('o.offerTiles t')
+           ->leftJoin('o.offertermandcondition tc')
+           ->leftJoin('s.logo img')
+           ->leftJoin('s.screnshot', 'ws')
+           ->Where("o.extendedUrl = '".$extendedUrl."'")
+           ->andWhere('o.extendedOffer = 1')
+           ->andWhere('s.status = 1');
+        $couponDetails= $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $couponDetails;
+    }
+
+    public static function getpopularOffers($offerId, $cpnDetails)
+    {
+        $date = date('Y-m-d H:i:s');
+        $title = "";
+        if (isset($cpnDetails[0]['title']) && $cpnDetails[0]['title'] != "") {
+            $title = $cpnDetails[0]['title'];
+        }
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('po.type, po.position,o.name, o.title,s.id,s.name,s.permalink,img.name,img.path')
+        ->from('KC\Entity\PopularCode', 'p')
+        ->leftJoin('p.popularcode o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('s.logo img')
+        ->where('o.title !="'.$title.'"')
+        ->andWhere('o.endDate >="'.$date.'"')
+        ->andWhere('o.startdate <= "'.$date.'"')
+        ->andWhere('o.deleted = 0')
+        ->andWhere('s.deleted = 0')
+        ->orderBy('po.id', 'DESC')
+        ->setMaxResults(3);
+        $popularOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularOffers;
+    }
+
+    public static function commongetpopularOffers($type, $limit, $shopId = 0, $userId = "")
+    {
+
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select(
+            's.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,
+            p.id,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,
+            o.discount,o.couponCodeType,o.userGenerated,o.couponCode,o.refOfferUrl,o.refURL,
+            o.discountType,o.startDate as startdate,o.endDate,img.id, img.path, img.name,fv.shopId,
+            fv.visitorId,ologo.name, o.logo.path,vot.id,vot.vote'
+        )
+            ->from('KC\Entity\PopularCode', 'p')
+            ->leftJoin('p.popularcode o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('o.logo ologo')
+            ->leftJoin('o.votes vot')
+            ->leftJoin('s.logo img')
+            ->leftJoin('s.visitors fv')
+            ->leftJoin('o.offertermandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere(
+                "(o.couponCodeType = 'UN' AND (SELECT count(c.id)  FROM CouponCode c WHERE c.offer = o.id and c.status=1)  > 0) 
+                or o.couponCodeType = 'GN'"
+            )
+            ->andWhere("o.userGenerated = 0")
+            ->andWhere('o.endDate > "'.$date.'"')
+            ->andWhere('o.startDate <= "'.$date.'"')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('s.status = 1')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability!="MEM"')
+            ->andWhere('o.userGenerated=0');
+        if ($shopId != '') {
+            $query->andWhere('s.id = '.$shopId.'');
+        }
+
+        if ($userId != '') {
+            $query->andWhere('o.authorId = '.$userId.'');
+        }
+
+        if ($limit != '') {
+            $query->setMaxResults($limit);
+        }
+
+        $query = $query->orderBy('p.position', 'ASC');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $newData = array();
+        foreach ($data as $res) {
+            $newData[] = $res['offer'];
+        }
+        return $newData;
+    }
+
+    public static function commongetMemberOnlyOffer($type, $limit)
+    {
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select(
+            's.id,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,
+            s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,
+            o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,
+            o.couponCode,o.couponCodeType,o.refOfferUrl,o.refURL as refUrl,o.discountType,o.endDate,
+            img.id, img.path, img.name,IDENTITY(fv.visitors) as test,IDENTITY(fv.visitors) as test2,ologo.name,ologo.path,vot.id,vot.vote'
+        )
+        ->from('KC\Entity\Offer', 'o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.logo', 'ologo')
+        ->leftJoin('o.votes', 'vot')
+        ->leftJoin('s.logo', 'img')
+        ->leftJoin('s.visitors', 'fv')
+        ->leftJoin('o.offertermandcondition', 'terms')
+        ->where('o.deleted = 0')
+        ->andWhere('s.deleted = 0')
+        ->andWhere('o.Visability = "MEM"')
+        ->andWhere('o.endDate > "'.$date.'"')
+        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('o.discountType != "NW"')
+        ->andWhere('o.discounttype="CD"')
+        ->andWhere('o.userGenerated=0')
+        ->orderBy('o.id', 'DESC')
+        ->setMaxResults($limit);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function getNewestOffersForRSS()
+    {
+        $currentDate = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select(
+            'terms.content as terms,img.name as shopImageName,img.path as shopImagePath,
+            o.id,o.title,s.permaLink as permalink,o.updated_at as lastUpdate'
+        )
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('o.logo', 'ologo')
+            ->leftJoin('o.votes', 'vot')
+            ->leftJoin('s.logo', 'img')
+            ->leftJoin('s.visitors', 'fv')
+            ->leftJoin('o.offertermandcondition', 'terms')
+            ->where('o.deleted = 0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.endDate > "'.$currentDate.'"')
+            ->andWhere('o.startDate <= "'.$currentDate.'"')
+            ->andWhere('o.discountType != "NW"')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.Visability != "MEM"')
+            ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
+            ->orderBy('o.startDate', 'DESC');
+        $newestOffersForRss = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $newestOffersForRss;
+    }
+
+    public static function getPopularOffersForRSS()
+    {
+        $currentDate = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                'terms.content as terms,o.id,o.title,s.permaLink as permalink,p.id,o.updated_at as lastUpdate,
+                img.name as shopImageName,img.path as shopImagePath'
+            )
+            ->from('KC\Entity\PopularCode', 'p')
+            ->leftJoin('p.popularcode', 'o')
+            ->leftJoin('o.logo', 'ologo')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('o.votes', 'vot')
+            ->leftJoin('s.logo', 'img')
+            ->leftJoin('s.visitors', 'fv')
+            ->leftJoin('o.offertermandcondition terms')
+            ->where('o.deleted = 0')
+            ->andWhere('o.endDate > "'.$currentDate.'"')
+            ->andWhere('o.startDate <= "'.$currentDate.'"')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.discountType="CD"')
+            ->andWhere('o.Visability!="MEM"')
+            ->andWhere('o.userGenerated=0')
+            ->orderBy('p.position', 'ASC');
+        $popularOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $popularOfferForRss = array();
+        foreach ($popularOffers as $popularOffer) {
+            $popularOfferForRss[] = $popularOffer['offer'];
+        }
+        return $popularOfferForRss;
+    }
+
+    public static function commongetextendedOffers($type, $limit, $shopId = 0)
+    {
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+                ->select('o.name,o.title,img.id, img.path, img.name')
+                ->from('KC\Entity\Offer', 'o')
+                ->leftJoin('o.shopOffers', 's')
+                ->leftJoin('o.logo', 'img')
+                ->where('o.deleted = 0')
+                ->andWhere('s.deleted = 0')
+                ->andWhere('o.extendedOffer = 1')
+                ->andWhere('o.discountType != "NW"')
+                ->andWhere('o.discountType="CD"')
+                ->andWhere('o.endDate > "'.$date.'"')
+                ->andWhere('o.startDate <= "'.$date.'"')
+                ->orderBy('o.id', 'DESC')
+                ->setMaxResults($limit);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function commongetrelatedshops($type, $limit, $shopId = 0)
+    {
+        $data =  null;
+        $date = date('Y-m-d H:i:s');
+        $lastdata = \FrontEnd_Helper_viewHelper::getallrelatedshopsid($shopId);
+        if (sizeof($lastdata)>0) {
+            for ($i=0; $i<sizeof($lastdata); $i++) {
+                $shopdata[$i] = $lastdata[$i]['relatedshopId'];
+            }
+            $shopvalues = implode(",", $shopdata);
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+                ->select(
+                    's.id as shopId,s.permalink as permalink,s.name,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,
+                    terms.content,o.id,o.title, o.Visability, o.couponCode, o.refOfferUrl as refofferurl,
+                     o.startDate as startdate , o.endDate as enddate, o.exclusiveCode, o.editorPicks,
+                     o.extendedOffer as extendedoffer ,o.extendedUrl,o.discount,
+                     o.authorId, o.authorName, o.userGenerated, o.approved,o.discountvalueType,
+                     img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
+                )
+                ->from('KC\Entity\Offer', 'o')
+                ->leftJoin('o.shopOffers', 's')
+                ->leftJoin('s.visitors', 'fv')
+                ->leftJoin('o.offertermandcondition', 'terms')
+                ->leftJoin('o.votes', 'vot')
+                ->leftJoin('s.logo', 'img')
+                ->setParameter(1, $shopvalues)
+                ->where($queryBuilder->expr()->in('o.shopOffers', '?1'))
+                ->andWhere('o.deleted = 0')
+                ->andWhere('s.deleted = 0')
+                ->andWhere('o.endDate > "'.$date.'"')
+                ->andWhere('o.startDate <= "'.$date.'"')
+                ->andWhere('o.discountType="CD"')
+                ->andWhere('o.shopid != "'.$shopId.'"')
+                ->orderBy('o.startDate', 'DESC')
+                ->setMaxResults($limit);
+            $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        } else {
+            $data = array();
+        }
+        return $data;
+    }
+
+    public static function commongetallrelatedshopsid($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('ref.relatedshopId,s.name,s.id')
+            ->from('KC\Entity\RefShopRelatedshop', 'ref')
+            ->leftJoin('ref.shop s')
+            ->andWhere("ref.shop=".$shopId)
+            ->orderBy("s.name", "ASC");
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function getLatestUpdates($type, $limit, $shopId = 0)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('n')
+            ->from('KC\Entity\OfferNews', 'n')
+            ->andWhere('n.shop = ' . $shopId)
+            ->orderBy('n.startdate', 'DESC')
+            ->setMaxResults($limit);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function getNewstoffers($flag)
+    {
+        $memOnly = "MEM";
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select(
+            'o.title,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
+            o.discountvalueType,s.name,s.views,l.name,l.path'
+        )
+        ->from('KC\Entity\Offer', 'o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('s.logo', 'l')
+        ->where('o.Visability!=' ."'$memOnly'")
+        ->andWhere('o.deleted =0')
+        ->andWhere('s.deleted =0')
+        ->andWhere('o.discountType != "NW"')
+        ->orderBy("o.id", "DESC")
+        ->setMaxResults($flag);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function getAdditionalTopKortingscodeForShopPage($shopCategories, $offerIDs, $limit = 5)
+    {
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                'p.id as popularCodeId,o.id,o.authorId,o.refURL,o.couponCodeType,o.discountType,o.title,
+                o.discountvalueType,
+                o.Visability, o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,
+                o.totalViewcount,
+                o.startDate, o.endDate,o.refOfferUrl, o.extendedUrl,l.name,l.path,t.path,t.name,t.position,t.label,
+                s.id as shopId,s.name,s.permalink as permalink,
+                s.usergenratedcontent,s.deepLink,
+                s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name,fv.shopId,
+                fv.visitorId,fv.id,vot.id,vot.vote'
+            )
+        ->from('KC\Entity\PopularCode', 'p')
+        ->leftJoin('p.popularcode', 'o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('s.categoryshops', 'sc')
+        ->leftJoin('o.logo', 'l')
+        ->leftJoin('s.logo', 'img')
+        ->leftJoin('s.visitors', 'fv')
+        ->leftJoin('o.offertermandcondition', 'terms')
+        ->leftJoin('o.votes', 'vot')
+        ->leftJoin('o.offerTiles', 't')
+        ->where('o.deleted = 0')
+        ->andWhere(
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0)
+             or o.couponCodeType = 'GN'"
+        )
+        ->andWhere($queryBuilder->expr()->notIn('sc.categoryId', $shopCategories))
+        ->andWhere($queryBuilder->expr()->notIn('o.id', $offerIDs))
+        ->andWhere('s.deleted=0')
+        ->andWhere('o.offline = 0')
+        ->andWhere('s.status = 1')
+        ->andWhere('o.enddate > "'.$date.'"')
+        ->andWhere('o.startdate <= "'.$date.'"')
+        ->andWhere('o.discounttype = "CD"')
+        ->andWhere('o.userGenerated = 0')
+        ->andWhere('o.Visability != "MEM"')
+        ->orderBy('p.position', 'ASC')
+        ->setMaxResults($limit);
+        $additionalTopKortingscodeForShopPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $additionalTopKortingscodeForShopPage;
+    }
+
+    public static function getCouponOffersHowToGuide($pLink, $limit = null, $getExclusiveOnly = false, $includingOffline = false)
+    {
+        $nowDate = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select(
+            'l.name,l.path,,t.content,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,
+            s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.name, o.title,img.id, img.path, img.name,
+            fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
+        )
+        ->from('KC\Entity\Offer', 'o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.logo', 'l')
+        ->leftJoin('s.logo', 'img')
+        ->leftJoin('s.visitors', 'fv')
+        ->leftJoin('o.offertermandcondition', 'terms')
+        ->leftJoin('o.votes', 'vot')
+        ->leftJoin('o.offerTiles', 't')
+        ->where('o.deleted = 0');
+        if (!$includingOffline) {
+            $query = $query->andWhere('o.offline = 0')
+            ->andWhere("o.endDate >='".$nowDate."'")
+            ->andWhere("o.startdate <='".$nowDate."'");
+        }
+
+        $query= $query->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+        ->andWhere("s.permaLink='".$pLink."'")
+        ->andWhere('s.deleted =0')
+        ->andWhere('o.discountType = "CD"')
+        ->andWhere('o.discountType != "NW"')
+        ->andWhere('o.Visability!="MEM"')
+        ->orderBy('o.exclusiveCode', 'DESC')
+        ->addOrderBy('o.discountType', 'ASC')
+        ->addOrderBy('o.startDate', 'DESC')
+        ->addOrderBy('o.popularityCount', 'DESC')
+        ->addOrderBy('o.title', 'ASC');
+        // check need to get execlusive offers or not
+        if ($getExclusiveOnly) {
+            $query = $query->andWhere('o.exclusiveCode = 1');
+        }
+        // check $limit if passed or not
+        if ($limit) {
+            $query = $query->setMaxResults($limit);
+        }
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function getpopularOffersOfShops($shopId, $limit)
+    {
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                'po.position, po.status, po.type,o.name,o.title,o.id,terms.content,s.id as shopId,s.name,
+                img.name,img.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote'
+            )
+            ->from('KC\Entity\PopularVouchercodes', 'po')
+            ->leftJoin('po.offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('o.offertermandcondition', 'terms')
+            ->leftJoin('o.votes', 'vot')
+            ->leftJoin('s.logo', 'img')
+            ->leftJoin('s.visitors', 'fv')
+            ->Where('s.id='.$shopId)
+            ->andWhere('o.deleted =0')
+            ->andWhere('o.endDate > "'.$date.'"')
+            ->andWhere('o.startDate <= "'.$date.'"')
+            ->andWhere('s.deleted =0')
+            ->orderBy('po.vaoucherofferid', 'DESC')
+            ->setMaxResults($limit);
+        $popularOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularOffers;
+    }
+
+    public static function updateTotalViewCount()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                'o.id, o.totalViewcount, o.startDate, DATEDIFF(NOW(),o.startDate) as diff'
+            )
+            ->from('KC\Entity\Offer', 'o')
+            ->addSelect(
+                "(SELECT  sum(v.onclick) as clicks FROM KC\Entity\ViewCount v WHERE v.viewcount = o.id and v.counted=0)
+                as clicks"
+            );
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        foreach ($data as $value) {
+
+            # update only when there ar new click out in view_count table
+            if ($value['clicks']) {
+
+                    KC\Entity\ViewCount::processViewCount($value['id']);
+
+                    # COUNT POPULAITY OF AN OFFER based on otal clicks
+
+                    $newtotal = intval($value['clicks']) + intval($value['totalViewcount']) ;
+
+                    $dStart = date("y-m-d h:i:s");
+                    $dEnd  = $value['startDate'];
+                    $dDiff = $dEnd->diff($dStart);
+
+                    $diff = (int) $dDiff->days ;
+
+                    $popularity = round($newtotal / ($diff > 0 ? $diff : 1 ), 4);
+
+                    # update popularity and otal click counts
+                      $query = $queryBuilder
+                            ->update('KC\Entity\Offer', 'o')
+                            ->set('o.totalViewcount', $newtotal)
+                            ->set('o.popularityCount', "'".$popularity."'")
+                            ->where('o.id = ?', $value['id'])
+                            ->getQuery();
+                            $query->execute();
+            }
+        }
+    }
+
+    public static function getmemberexclusiveOffersOfShops()
+    {
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                'po.position, po.status, po.type,o.name,o.title,s.id,s.name,img.name,img.path,vot.id,vot.vote'
+            )
+        ->from('KC\Entity\PopularVouchercodes', 'po')
+        ->leftJoin('po.offer', 'o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.votes', 'vot')
+        ->leftJoin('s.logo', 'img')
+        ->leftJoin('s.visitors', 'fv')
+        ->where('s.id=?o.sshopOffers')
+        ->andWhere('o.exclusivecode<>0')
+        ->andWhere('o.endDate > "'.$date.'"')
+        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('o.deleted =0')
+        ->andWhere('s.deleted =0')
+        ->orderBy('o.title', 'ASC');
+        $popularOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $popularOffers;
+    }
+
+    public static function getMemberonly()
+    {
+        $date = date('Y-m-d H:i:s');
+        $memOnly = "MEM";
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select(
+            'o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
+             o.discountvalueType,s.name,s.views,l.name,l.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote'
+        )
+        ->from('KC\Entity\Offer', 'o')
+        ->leftJoin('o.shopOffers', 's')
+        ->leftJoin('o.votes', 'vot')
+        ->leftJoin('s.logo', 'l')
+        ->leftJoin('s.visitors', 'fv')
+        ->where('o.Visability='."'$memOnly'")
+        ->andWhere('o.deleted =0')
+        ->andWhere('s.deleted =0')
+        ->andWhere('o.enddate > "'.$date.'"')
+        ->andWhere('o.startdate <= "'.$date.'"')
+        ->orderBy('o.id', 'DESC');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $k = 0;
+
+        if (count($data) > 0) {
+            foreach ($data as $pag) {
+                $data[$k]['marginCounter'] = 4;
+                $k++;
+            }
+        }
+        return $data;
+    }
+
+    public static function findNoOfOffersByUser($uid)
+    {
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('count(*) as cout')
+        ->from('KC\Entity\Offer', 'o')
+        ->leftJoin('o.shopOffers', 's')
+        ->where('o.authorId=' .$uid)
+        ->andWhere('o.deleted =0')
+        ->andWhere('o.endDate > "'.$date.'"')
+        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('s.deleted =0');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function countVotes($id)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('count(*) as cnt')
+        ->from("KC\Entity\Votes v")
+        ->where("v.offer=".$id)
+        ->andWhere("v.deleted=0")
+        ->andWhere("v.vote='positive'");
+        $positiveVotes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $query = $queryBuilder
+        ->select('count(*) as cnt')
+        ->from('KC\Entity\Votes v')
+        ->where('v.offer='.$id)
+        ->andWhere('v.deleted=0')
+        ->andWhere('v.vote="negative"');
+        $negativeVotes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $arr = array();
+        $arr['vote'] = (($positiveVotes[0]['cnt'])/($negativeVotes[0]['cnt']+$positiveVotes[0]['cnt']))*100 ;
+        $arr['poscount'] = $positiveVotes[0]['cnt'];
+        return $arr;
+    }
+
+    public static function getOfferShopDetail($offerId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('o.shopOffers,s.logoId,l.name,l.path,s.permaLink')
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('s.logo', 'l')
+            ->where('s.deleted=0')
+            ->andWhere("o.id =". $offerId);
+        $shopLogo = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shopLogo;
+    }
+
+    public static function getAllExtendedOffers()
+    {
+        $date = date('Y-m-d H:i:s');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('o.id, o.extendedUrl')
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->where('o.deleted=0')
+            ->andWhere('s.deleted = 0')
+            ->andWhere('o.extendedoffer=1')
+            ->andWhere('o.discounttype="CD"')
+            ->andWhere('o.endDate > "'.$date.'"')
+            ->andWhere('o.startDate <= "'.$date.'"')
+            ->orderBy('o.id', 'DESC');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function getAllUrls($id)
+    {
+        # get offer data
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select(
+                "o.id, o.extendedOffer,o.authorId , o.extendedUrl,
+                s.permaLink, s.howToUse ,s.contentManagerId , sp.permaLink, p.permaLink,c.permaLink"
+            )
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.shopOffers', 's')
+            ->leftJoin('o.categoryoffres', 'c')
+            ->leftJoin('s.shopPage', 'sp')
+            ->leftJoin('o.offers', 'p')
+            ->where("o.id=".$id);
+        $offer = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        $urlsArray = array();
+
+        # check for related shop permalink
+        if (isset($offer['shop'])) {
+            $urlsArray[] = $offer['shop']['permaLink'];
+
+            # check if a shop has editor or not
+            if (isset($offer['shop']['contentManagerId'])) {
+
+                # redactie permalink
+                $redactie =  KC\Entity\User::returnEditorUrl($offer['shop']['contentManagerId']);
+
+                # check if an editor  has permalink then add it into array
+                if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
+                    $urlsArray[] = $redactie['permalink'] ;
+                }
+            }
+
+        }
+
+        # check for extende offer page
+        if (isset($offer['extendedOffer'])) {
+            # check for extende offer url
+            if ($offer['extendedUrl'] && strlen($offer['extendedUrl']) > 0) {
+                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $offer['extendedUrl'];
+            }
+        }
+
+        # check for shop permalink
+        if ($offer['shop']['howToUse']) {
+            # check for extende offer url
+            if (isset($offer['shop']['permaLink'])  && strlen($offer['shop']['permaLink']) > 0) {
+                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer['shop']['permaLink'];
+            }
+        }
+
+        # check an offerr has one or more categories
+        if (isset($offer['category']) && count($offer['category']) > 0) {
+
+            $cetgoriesPage = \FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
+            # traverse through all catgories
+            foreach ($offer['category'] as $value) {
+                # check if a category has permalink then add it into array
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
+                    $urlsArray[] = $cetgoriesPage . $value['permaLink'];
+                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] .'/2';
+                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] .'/3';
+                }
+            }
+        }
+
+        # check an offerr has one or more pages
+        if (isset($offer['page']) && count($offer['page']) > 0) {
+            # traverse through all pages
+            foreach ($offer['page'] as $value) {
+                # check if a page has permalink then add it into array
+                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
+                    $urlsArray[] = $value['permaLink'] ;
+                }
+            }
+        }
+
+        return $urlsArray ;
+    }
+
+    public static function getAmountOffersCreatedLastWeek()
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        // - 7 days from today
+        $past7Days = date($format, strtotime('-7 day' . $date));
+        $nowDate = $date;
+
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select("count(*) as amountOffers")
+        ->from('KC\Entity\Offer', 'o')
+        ->where('o.deleted = 0')
+        ->andWhere('o.discountType != "NW"')
+        ->andWhere('o.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function getTotalAmountOfOffers()
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select("count(*) as amountOffers")
+        ->from('KC\Entity\Offer', 'o')
+        ->where('o.deleted = 0')
+        ->andWhere('o.endDate > "'.$date.'"')
+        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('o.discountType != "NW"');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function getTotalAmountOfShopCoupons($shopId, $type = '')
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select("count(*)")
+        ->from('KC\Entity\Offer', 'o')
+        ->where('o.deleted = 0')
+        ->andWhere('o.endDate > "'.$date.'"')
+        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('o.shopOffers = '.$shopId)
+        ->andWhere('o.discountType != "NW"');
+        if ($type == 'CD') {
+            $query->andWhere('o.discountType = "CD"');
+        }
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data['count'];
+    }
+
+    public static function getTotalAmountOfOffersByShopId($shopId)
+    {
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select("o.id")
+        ->from('KC\Entity\Offer', 'o')
+        ->where('o.deleted = 0')
+        ->andWhere('o.shopOffers = '.$shopId)
+        ->andWhere('o.endDate > "'.$date.'"')
+        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('o.discountType = "CD"');
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $Ids = array();
+        if (!empty($data)) {
+            foreach ($data as $arr) {
+                $Ids[] = $arr['id'];
+            }
+        }
+        return $Ids;
+    }
+
+    public static function countFavShop($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('count(*) as total')
+        ->from("FavoriteShop")
+        ->where('shopId='.$shopId);
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        if ($data[0]['total']>0) {
+            return true;
+        } else {
+            return null;
+        }
+    }
+
+    public static function addFavoriteShop($sid, $flag)
+    {
+        $userid = \Auth_VisitorAdapter::getIdentity()->id;
+        if ($flag=='1' || $flag==1) {
+            $fvshop = new KC\Entity\FavoriteShop();
+            $fvshop->shopId = $sid;
+            $fvshop->visitorId = $userid;
+            $entityManagerUser->persist($fvshop);
+            $entityManagerUser->flush();
+            //call cache function
+            $key = 'shopDetails_'  . $sid . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'offerDetails_'  . $sid . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+            return 1;
+        } else {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\FavoriteShop', 'fs')
+            ->where("fs.shopId=" . $sid)
+            ->andWhere('fs.visitorId='.$userid)
+            ->getQuery();
+            $query->execute();
+            $key = 'shopDetails_'  . $sid . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'offerDetails_'  . $sid . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularOffersHome_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+            return 2;
+        }
+    }
+
+    public function saveOffer($params)
+    {
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
+                // check the offer type
+            if (isset($params['defaultoffercheckbox'])) {     //offer type is default
+                $this->Visability = 'DE';
+                if ($params['selctedshop']!='') {
+
+                    if (intval($params['selctedshop']) > 0) {
+                        $this->shopId = $params['selctedshop'] ;
+                    } else {
+                        return array('result' => true , 'errType' => 'shop' );
+                    }
+                }
+            } else {                                            // offer type member only
+                $this->Visability = 'MEM';
+                $this->shopId = null;
+            }
+        } else {
+
+            if (intval($params['selctedshop']) > 0) {
+                $this->shopId =  $params['selctedshop'] ;
+            } else {
+                return array('result' => true , 'errType' => 'shop' );
+            }
+
+        }
+
+        // check the discountype
+        if (isset($params['couponCodeCheckbox'])) {             // discount type coupon
+            $this->discountType = 'CD';
+            $this->couponCode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
+            $this->discount = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                isset($params['discountamount']) ? $params['discountamount'] : 0
+            );
+            $this->discountvalueType =\BackEnd_Helper_viewHelper::stripSlashesFromString(
+                isset($params['discountchk']) ? $params['discountchk'] : 0
+            );
+            if (isset($params['selectedcategories'])) {
+                foreach ($params['selectedcategories'] as $categories) {
+                    $this->refOfferCategory[]->categoryId = $categories;
+                }
+            }
+        } elseif (isset($params['newsCheckbox'])) {       // discount type sale
+            $this->discountType = 'NW';
+        } elseif (isset($params['saleCheckbox'])) {       // discount type sale
+            $this->discountType = 'SL';
+        } else {                                                // discount type printable
+            $this->discountType = 'PA';
+            //check printable document
+            if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {                          // upload offer
+
+                $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
+                $ext =  BackEnd_Helper_viewHelper::getImageExtension($fileName);
+                $pattern = '/^[0-9]{10}_(.+)/i' ;
+                preg_match($pattern, $fileName, $matches);
+                if (!$fileName) {
+                    return false;
+                }
+                if (@$matches[1]) {
+                    $this->logo->ext = $ext;
+                    $this->logo->path ='images/upload/offer/';
+                    $this->logo->name = $fileName;
+                }
+            } else {                                                   // add offer refUrl
+                $this->refOfferUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
+            }
+        }
+
+        $this->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
+
+        if (isset($params['deepLinkStatus'])) {
+            $this->refURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
+            //$this->shop->deepLink = $params['offerRefUrl'];
+        }
+
+        if (trim($params['termsAndcondition'])!='') {
+            $this->termandcondition[]->content =
+                \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
+        }
+
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
+            $this->startDate = date('Y-m-d', strtotime($params['offerStartDate']))
+                .' '.date(
+                    'H:i',
+                    strtotime($params['offerstartTime'])
+                );
+             $this->endDate = date('Y-m-d', strtotime($params['offerEndDate']))
+                .' '.date(
+                    'H:i',
+                    strtotime($params['offerendTime'])
+                );
+        }
+
+        if (isset($params['attachedpages'])) {
+            foreach ($params['attachedpages'] as $pageId) {
+                $this->refOfferPage[]->pageId = $pageId ;
+            }
+        }
+
+        if (isset($params['extendedoffercheckbox'])) {                  // check if offer is extended
+            $this->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
+            $this->extendedTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $this->extendedUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
+            $this->extendedMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
+            $this->extendedFullDescription =\BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
+        } else {
+
+            $this->extendedOffer = 0;
+            $this->extendedTitle = '';
+            $this->extendedUrl = '';
+            $this->extendedMetaDescription = '';
+            $this->extendedFullDescription = '';
+        }
+
+        $this->exclusiveCode=$this->editorPicks = 0;
+        if (isset($params['exclusivecheckbox'])) {
+            $this->exclusiveCode=1;
+        }
+
+        if (isset($params['editorpickcheckbox'])) {
+            $this->editorPicks=1;
+        }
+
+        $this->maxlimit = 0;
+        $this->maxcode = 0;
+        if (isset($params['maxoffercheckbox'])) {
+            $this->maxlimit='1';
+            $this->maxcode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxoffertxt']);
+        }
+
+        $connUser = \BackEnd_Helper_viewHelper::addConnection();
+
+            $this->authorId = \Auth_StaffAdapter::getIdentity()->id;
+            $this->authorName = \Auth_StaffAdapter::getIdentity()->firstName . " "
+                . \Auth_StaffAdapter::getIdentity()->lastName;
+
+        \BackEnd_Helper_viewHelper::closeConnection($connUser);
+        $connSite = \BackEnd_Helper_viewHelper::addConnectionSite();
+        if (intval($params['offerImageSelect']) > 0) {
+            $this->tilesId = $params['offerImageSelect'];
+        }
+
+        // New code starts add blal
+
+        if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
+
+            if (intval($params['selctedshop']) > 0) {
+                $this->shopId = $params['selctedshop'] ;
+
+            } else {
+                return array('result' => true , 'errType' => 'shop' );
+            }
+
+        }
+
+        if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
+            $this->shopExist = 0;
+        } else {
+            $this->shopExist = 1;
+        }
+
+        if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
+            $saveNewShop = new KC\Entity\Shop();
+            $saveNewShop->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
+            $saveNewShop->permaLink = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
+            $saveNewShop->status = 1;
+
+            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
+
+                $fileName = self::uploadShopLogo('logoFile');
+                $saveNewShop->logo->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                    \BackEnd_Helper_viewHelper::getImageExtension($fileName)
+                );
+                $saveNewShop->logo->path = 'images/upload/shop/';
+                $saveNewShop->logo->name = $fileName;
+            } else {
+                return false;
+            }
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $saveNewShop->logoId = $saveNewShop->logo->id;
+            $queryBuilder->persist($saveNewShop);
+            $queryBuilder->flush();
+            $this->shopId = $saveNewShop->id;
+
+        }      // New code Ends
+
+        try {
+
+            if (intval($this->shopId) > 0) {
+                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $queryBuilder->persist($this);
+                $queryBuilder->flush();
+            } else {
+                return array('result' => true , 'errType' => 'shop' );
+            }
+
+            /***************** Start Add news code ********************/
+            $lId = $this->id;
+            if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
+                $newstitleloop = @$params['newsTitle'];
+                for ($n=0; $n<count($newstitleloop); $n++) {
+                    $savenews = new KC\Entity\OfferNews();
+                    $savenews->shopId = @$params['selctedshop'];
+                    $savenews->offerId = @$lId;
+                    $savenews->title = @$newstitleloop[$n] != "" ?
+                                            \BackEnd_Helper_viewHelper::stripSlashesFromString($newstitleloop[$n]) : "";
+
+                    $savenews->url = @$params['newsrefUrl'][$n] != "" ?
+                                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsrefUrl'][$n]) : "";
+
+                    $savenews->content = @$params['newsDescription'][$n] != "" ?
+                            \BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsDescription'][$n]) : "";
+
+                    $savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
+                    $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                    $queryBuilder->persist($savenews);
+                    $queryBuilder->flush();
+                }
+            }
+            /***************** End Add news code ********************/
+            $offer_id = $this->id;
+            $authorId = self::getAuthorId($offer_id);
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+            //call cache function
+            $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'shop_expiredOffers'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                    
+            $key = 'offer_'.$this->id.'_details';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'extended_'.
+                \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
+                '_couponDetails';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+            return array('result' => true , 'ofer_id' => $this->id );
+            $key = 'all_widget5_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function updateOffer($params)
+    {
+        //echo "<pre>"; print_r($params); die;
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
+                // check the offer type
+            if (isset($params['defaultoffercheckbox'])) {      //offer type is default
+                $this->Visability = 'DE';
+                if ($params['selctedshop']!='') {
+                    $this->shopId =  $params['selctedshop'] ;
+                }
+            } else {                                            // offer type member only
+                $this->Visability = 'MEM';
+                $this->shopId = null;
+            }
+        } else {
+            $this->shopId =  $params['selctedshop'] ;
+        }
+        // check the discountype
+
+        if (intval($params['offerImageSelect']) > 0) {
+
+            $this->tilesId =  $params['offerImageSelect'] ;
+
+        }
+
+        $this->couponCodeType = $params['couponCodeType'];
+
+        if (isset($params['couponCodeCheckbox'])) {             // discount type coupon
+
+            $this->discountType = 'CD';
+            $this->couponCode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
+            $this->discount = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['discountamount']);
+            $this->discountvalueType = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                isset($params['discountchk']) ? $params['discountchk'] : 0
+            );
+            $this->refOfferCategory->delete();
+            if (isset($params['selectedcategories'])) {
+                foreach ($params['selectedcategories'] as $categories) {
+
+                    $this->refOfferCategory[]->categoryId = $categories ;
+
+                }
+            }
+
+        } elseif (isset($params['newsCheckbox'])) {       // discount type sale
+            $this->discountType = 'NW';
+        } elseif (isset($params['saleCheckbox'])) {       // discount type sale
+            $this->discountType = 'SL';
+
+            //find if the offers exist in popular codes
+            $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
+
+            if ($exist) {
+                KC\Entity\PopularCode::deletePopular($params['offerId'], $exist->position);
+            }
+
+        } else {                                                // discount type printable
+            $this->discountType = 'PA';
+
+            //$this->tilesId = null ;
+
+            //find if the offers exist in popular codes
+            $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
+
+            if ($exist) {
+                KC\Entity\PopularCode::deletePopular($params['offerId'], $exist->position);
+            }
+
+            //check printable document
+            if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {  // upload offer
+
+                $this->refOfferUrl = '';
+                $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
+                $ext =  \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                    \BackEnd_Helper_viewHelper::getImageExtension($fileName)
+                );
+                $pattern = '/^[0-9]{10}_(.+)/i' ;
+                preg_match($pattern, $fileName, $matches);
+                if (!$fileName) {
+                    return false;
+                }
+                if (@$matches[1]) {
+                    $this->logo->ext = $ext;
+                    $this->logo->path ='images/upload/offer/';
+                    $this->logo->name = $fileName;
+                }
+
+            } else {                                                     // add offer refUrl
+                $this->refOfferUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
+            }
+        }
+
+        $this->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
+
+        if (isset($params['deepLinkStatus'])) {
+            $this->refURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
+        } else {
+            $this->refURL =  '';
+        }
+        $this->termandcondition->delete();
+
+        if (trim($params['termsAndcondition'])!='') {
+            $this->termandcondition[]->content = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $params['termsAndcondition']
+            );
+        }
+
+        if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
+            $this->startDate = date('Y-m-d', strtotime($params['offerStartDate']))
+            .' '.date(
+                'H:i',
+                strtotime($params['offerstartTime'])
+            );
+            $this->endDate = date('Y-m-d', strtotime($params['offerEndDate']))
+            .' '.date(
+                'H:i',
+                strtotime($params['offerendTime'])
+            );
+
+
+        }
+
+        $this->refOfferPage->delete();
+        if (isset($params['attachedpages'])) {
+            foreach ($params['attachedpages'] as $pageId) {
+
+                $this->refOfferPage[]->pageId = $pageId ;
+
+            }
+        }
+        //&& isset($params['couponCodeCheckbox'])
+
+        if (isset($params['extendedoffercheckbox'])) {
+            //echo "<pre>";
+            //print_r($params['couponInfo']);
+            // check if offer is extended
+            $this->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
+            $this->extendedTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $this->extendedUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
+            $this->extendedMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $params['extendedOfferMetadesc']
+            );
+            $this->extendedFullDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
+        } else {
+
+            $this->extendedOffer = 0;
+            $this->extendedTitle = '';
+            $this->extendedUrl = '';
+            $this->extendedMetaDescription = '';
+            $this->extendedFullDescription = '';
+        }
+
+        $this->exclusiveCode=$this->editorPicks=0;
+        if (isset($params['exclusivecheckbox'])) {
+            $this->exclusiveCode=1;
+        }
+
+        if (isset($params['editorpickcheckbox'])) {
+            $this->editorPicks=1;
+        }
+
+        $this->maxlimit=$this->maxcode='0';
+
+        if (isset($params['maxoffercheckbox'])) {
+            $this->maxlimit='1';
+            $this->maxcode=$params['maxoffertxt'];
+        }
+
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+            ->select('o')
+            ->from('KC\Entity\Offer', 'o')
+            ->where('o.id = '.$params['offerId']);
+        $getcategory = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        if (!empty($getcategory)) {
+
+            $extendedUrl = mysql_real_escape_string($getcategory[0]['extendedUrl']);
+            $query = $queryBuilder
+                ->select('rp')
+                ->from('KC\Entity\RoutePermalink', 'rp')
+                ->where('rp.permalink = "?"', $extendedUrl)
+                ->andWhere('type = "EXTOFFER"');
+            $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+            if (empty($getRouteLink)) {
+                $getRouteLink = 'empty';
+            }
+            //$updateRouteLink = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $getcategory[0]['permaLink'] );
+        } else {
+            $updateRouteLink = new KC\Entity\RoutePermalink();
+        }
+
+        // New code starts add blal
+
+        if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
+            //die("Hiiii");
+            $this->shopId = @$params['selctedshop'];
+        }
+        if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
+            $this->shopExist = 0;
+        } else {
+            $this->shopExist = 1;
+        }
+        if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
+            $saveNewShop = new KC\Entity\Shop();
+            $saveNewShop->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
+            $saveNewShop->permaLink = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
+            $saveNewShop->status = 1;
+
+            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
+
+                $fileName = self::uploadShopLogo('logoFile');
+                $saveNewShop->logo->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                    \BackEnd_Helper_viewHelper::getImageExtension($fileName)
+                );
+                $saveNewShop->logo->path = 'images/upload/shop/';
+                $saveNewShop->logo->name = $fileName;
+            } else {
+                return false;
+            }
+
+            $saveNewShop->logoId = $saveNewShop->logo->id;
+            $queryBuilder->persist($saveNewShop);
+            $queryBuilder->flush();
+            $this->shopId = $saveNewShop->id;
+
+        }      // New code Ends
+
+        try {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $queryBuilder->persist($this);
+            $queryBuilder->flush();
+            $lId = $this->id;
+
+            /*****************Add more news of offer******************/
+
+            $offerId = @$params['offerId'];
+            $query = $queryBuilder->delete('KC\Entity\OfferNews', 'n')
+            ->where('offerId=' . $offerId)
+            ->getQuery();
+            $query->execute();
+            if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
+                $newsloop = @$params['newsTitle'];
+                for ($n=0; $n<count($newsloop); $n++) {
+
+                    $savenews = new KC\Entity\OfferNews();
+                    $savenews->shopId = @$params['selctedshop'];
+                    $savenews->offerId = @$offerId;
+
+                    $savenews->title = @$newsloop[$n] != "" ?
+                             \BackEnd_Helper_viewHelper::stripSlashesFromString($newsloop[$n]) : "";
+
+                    $savenews->url = @$params['newsrefUrl'][$n] != "" ?
+                                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsrefUrl'][$n]) : "";
+
+                    $savenews->content = @$params['newsDescription'][$n] != "" ?
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsDescription'][$n]) : "";
+                    $savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
+                    $queryBuilder->persist($savenews);
+                    $queryBuilder->flush();
+                }
+            }
+
+            /***********End update more news of offer shop*************/
+
+            $offerID = $params['offerId'];
+            $authorId = self::getAuthorId($offerID);
+
+            $uid = $authorId[0]['authorId'];
+            $popularcodekey ="all_". "popularcode".$uid ."_list";
+            $newcodekey ="all_". "newestcode".$uid ."_list";
+            //call cache function
+
+            $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'shop_expiredOffers'  .intval($params['selctedshop']) . '_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+
+
+            $key = 'extendedTopOffer_of_'.intval($params['selctedshop']);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'extended_'.
+                \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['extendedOfferRefurl']).
+                '_couponDetails';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            $key = 'offer_'.$offerID.'_details';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+
+        
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
+
+            $key = 'all_widget5_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $key = 'all_widget6_list';
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            return array('result' => true);
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+}
