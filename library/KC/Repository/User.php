@@ -112,8 +112,8 @@ class User extends \KC\Entity\User
             case '3':
             case '4':
             case '5':
-                 $Q= $queryBuilder->select('u')
-                    ->from('\KC\Entity\User', 'u')
+                 $Q= $queryBuilder->select('u, refW')
+                    ->from('KC\Entity\User', 'u')
                     ->leftJoin("u.website", "refW")
                     ->setParameter(1, $userId)
                     ->where('u.id = ?1');
@@ -660,7 +660,7 @@ class User extends \KC\Entity\User
         if ((intval($role)) > 0) {
             //add role search
             $data->setParameter(3, $role)
-                ->addWhere('r.id= ?3');
+                ->andWhere('r.id= ?3');
         }
         if ($srh!='undefined') {
             //add search for user name
@@ -670,7 +670,7 @@ class User extends \KC\Entity\User
         $data->setParameter(5, \Auth_StaffAdapter::getIdentity()->id)
             ->andWhere('u.id <>', '?5')
             ->orderBy("u.id", "DESC")->getQuery();
-        return Zend_Json::encode(
+        return \Zend_Json::encode(
             \DataTable_Helper::generateDataTableResponse(
                 $data,
                 $params,

@@ -64,7 +64,7 @@ class Admin_RedirectController extends Zend_Controller_Action
     {
          $params = $this->_getAllParams();
         // cal to function in ExcludedKeyword model class
-         $keywordList =  RouteRedirect::getRedirect($params);
+         $keywordList =  KC\Repository\RouteRedirect::getRedirect($params);
          echo Zend_Json::encode ( $keywordList );
          die ;
     }

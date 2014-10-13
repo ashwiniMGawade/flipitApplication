@@ -119,6 +119,7 @@ class Menu extends \KC\Entity\Menu
 
     public static function deleteOne()
     {
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
         $repo = $entityManagerLocale->getRepository('KC\Entity\Menu');
         $menu = $repo->findOneBy(array('Name' =>  'Child menu 1'));
         $entityManagerLocale->remove($menu);

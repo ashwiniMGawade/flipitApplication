@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\Offer::commongetMemberOnlyOffer('',1));
+        print_r(KC\Repository\Shop::exportShopsList());
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();

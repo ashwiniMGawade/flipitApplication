@@ -21,8 +21,9 @@ class Auth_StaffAdapter implements Zend_Auth_Adapter_Interface
     {
 
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->select('u')
+        $query = $queryBuilder->select('u, r')
             ->from('\KC\Entity\User', 'u')
+            ->leftJoin('u.users', 'r')
             ->setParameter(1, $this->email)
             ->where('u.email = ?1')
             ->setParameter(2, '0')

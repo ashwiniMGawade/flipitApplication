@@ -130,9 +130,9 @@ class Shop extends \KC\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s,img,small,big')
         ->from('KC\Entity\Shop', 's')
-        ->leftJoin('s.shoplogo', 'img')
-        ->leftJoin('s.shopimage', 'small')
-        ->leftJoin('s.shops', 'big')
+        ->leftJoin('s.logo', 'img')
+        ->leftJoin('s.howtousesmallimage', 'small')
+        ->leftJoin('s.howtousebigimage', 'big')
         ->leftJoin('s.affliatenetwork', 'aff')
         //->leftJoin('s.screenshot', 'scr')
         ->setParameter(1, $shopId)
@@ -149,15 +149,15 @@ class Shop extends \KC\Entity\Shop
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d 00:00:00');
-        $query = $queryBuilder->select('o.id,s.id, s.name, s.permalink')
+        $query = $queryBuilder->select('o.id,s.id, s.name, s.permaLink')
         ->from('KC\Entity\Shop', 's')
         ->addSelect(
             "(SELECT COUNT(exclusive) FROM KC\Entity\Offer exclusive WHERE exclusive.shopOffers = s.id AND
-                (o.exclusivecode=1 AND o.enddate > '$currentDateAndTime')) as exclusiveCount"
+                (o.exclusiveCode=1 AND o.endDate > '$currentDateAndTime')) as exclusiveCount"
         )
         ->addSelect("(SELECT COUNT(p.id) FROM KC\Entity\PopularCode p WHERE p.popularcode = o.id ) as popularCount")
         ->leftJoin('s.offer', 'o')
-        ->leftJoin('s.shoplogo', 'img')
+        ->leftJoin('s.logo', 'img')
         ->setParameter(1, '0')
         ->where('s.deleted= ?1')
         ->setParameter(2, '1')
@@ -177,7 +177,7 @@ class Shop extends \KC\Entity\Shop
 
                 $storesForFrontend[$FirstCharacter][$store['id']] =
                 array("id"=>$store['id'],
-                    "permaLink"=>$store['permalink'],
+                    "permaLink"=>$store['permaLink'],
                     "name"=>$store['name'],
                     "exclusive"=>$store['exclusiveCount'],
                     "inpopular"=>$store['popularCount']);
@@ -189,10 +189,10 @@ class Shop extends \KC\Entity\Shop
     public static function getAllPopularStores($limit)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('p.id,s.name,s.permalink,img.path as imgpath, img.name as imgname')
+        $query = $queryBuilder->select('p.id,s.name,s.permaLink,img.path as imgpath, img.name as imgname')
         ->from('KC\Entity\PopularShop', 'p')
         ->leftJoin('p.popularshops', 's')
-        ->leftJoin('s.shoplogo', 'img')
+        ->leftJoin('s.logo', 'img')
         ->setParameter(1, '0')
         ->where('s.deleted= ?1')
         ->setParameter(2, '1')
@@ -208,9 +208,9 @@ class Shop extends \KC\Entity\Shop
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s,img.name,img.path,chptr')
         ->from('KC\Entity\Shop', 's')
-        ->leftJoin('s.shoplogo', 'img')
+        ->leftJoin('s.logo', 'img')
         ->leftJoin('s.howtochapter', 'chptr')
-        ->Where("s.permalink= '".$permalink."'")
+        ->Where("s.permaLink= '".$permalink."'")
         ->andWhere('s.status = 1');
         $shopDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopDetails;
@@ -219,9 +219,9 @@ class Shop extends \KC\Entity\Shop
     public static function getShopsByShopIds($shopIds)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('s.id, s.name,s.permalink, img.path as imgpath, img.name as imgname')
+        $query = $queryBuilder->select('s.id, s.name,s.permaLink, img.path as imgpath, img.name as imgname')
             ->from('KC\Entity\Shop', 's')
-            ->leftJoin('s.shoplogo', 'img')
+            ->leftJoin('s.logo', 'img')
             ->where('s.deleted=0')
             ->andWhere($queryBuilder->expr()->in('s.id', $shopIds))
             ->orderBy("s.name");
@@ -229,21 +229,23 @@ class Shop extends \KC\Entity\Shop
         return $shopsInformation;
     }
 
-    public static function getStoresForSearchByKeyword($searchedKeyword, $limit, $fromPage='')
+    public static function getStoresForSearchByKeyword($searchedKeyword, $limit, $fromPage = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDate = date('Y-m-d 00:00:00');
-        $query = $queryBuilder->select('s.id,s.name,s.permalink, img.path as imgpath, img.name as imgname')
+        $query = $queryBuilder->select('s.id,s.name,s.permaLink, img.path as imgpath, img.name as imgname')
             ->from('KC\Entity\Shop', 's')
-            ->leftJoin('s.shoplogo', 'img')
+            ->leftJoin('s.logo', 'img')
             ->where('s.deleted=0')
             ->andWhere('s.status=1')
-            //->setParameter(1, "%". $queryBuilder->expr()->literal($searchedKeyword)."%")
             ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%". $searchedKeyword."%")));
         if ($fromPage!='') {
             $query = $query->addSelect(
-                "(SELECT count(tt) FROM KC\Entity\Offer active LEFT JOIN active.votes tt  WHERE
-                (active.id = tt.offer )) as activeCount"
+                "(SELECT COUNT(active) FROM KC\Entity\Offer active WHERE
+                (active.shopOffers = s.id AND active.endDate >= '$currentDate' 
+                    AND active.deleted = 0
+                )
+                ) as activeCount"
             )
             ->leftJoin('s.offer', 'o');
         }
@@ -254,6 +256,7 @@ class Shop extends \KC\Entity\Shop
 
     public static function shopAddInFavourite($visitorId, $shopId)
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $addedStatus = 0;
         if ($shopId!='') {
             $favouriteShops  = Doctrine_Query::create()->from('FavoriteShop s')
@@ -1070,496 +1073,325 @@ class Shop extends \KC\Entity\Shop
         }
 
     }
-    /**
-     * get list of shop for export
-     * @author kraj
-     * @return array $shopList
-     * @version 1.0
-     */
+//limit need to be checked
     public static function exportShopsList()
     {
-        $shopList = Doctrine_Query::create()->select('s.*,a.name as affname,c.name,rs.name')
-                ->from("Shop s")
-                ->leftJoin('s.affliatenetwork a')->leftJoin("s.category c")
-                ->addSelect("(SELECT con.updated_at FROM OfferNews  con  WHERE con.shopId = s.id order by updated_at Desc LIMIT 1) as newsTickerTime")
-                ->addSelect("(SELECT o.updated_at FROM Offer o WHERE o.shopId = s.id and o.deleted = 0 order by updated_at Desc LIMIT 1) as offerTime")
-                ->leftJoin("s.relatedshops rs")
-                ->where("s.deleted=0")
-                ->orderBy("s.id DESC")
-                ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopList = $queryBuilder->select('s,a.name as affname,c.name,rs.name')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.affliatenetwork', 'a')
+            ->leftJoin("s.categoryshops", "c")
+            ->addSelect("(SELECT con.updated_at FROM KC\Entity\OfferNews  con  WHERE con.shopId = s.id order by con.updated_at Desc LIMIT 1) as newsTickerTime")
+            ->addSelect("(SELECT o.updated_at FROM KC\Entity\Offer o WHERE o.shopId = s.id and o.deleted = 0 order by o.updated_at Desc LIMIT 1) as offerTime")
+            ->leftJoin("s.relatedshops", "rs")
+            ->where("s.deleted=0")
+            ->orderBy("s.id", "DESC")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopList;
-
-
     }
-
-
-
-/* Offer List function start here */
-/**
- * get list of shop for offerList
- * @author kkumar
- * @return array $shopList
- * @version 1.0
- */
 
     public static function getOfferShopList()
     {
-        $shopList = Doctrine_Query::create()
-        ->select('s.name,s.logoId,l.name,l.path')
-        ->from("Shop s")
-        ->leftJoin("s.logo l")
-        ->where('s.deleted=0')
-        ->addWhere('s.status=1')
-        ->orderBy("s.name")->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopList = $queryBuilder->select('s.name,l.id as logoId,l.name,l.path')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin("s.logo", "l")
+            ->where('s.deleted=0')
+            ->andWhere('s.status=1')
+            ->orderBy("s.name")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopList;
-   }
+    }
 
-/**
- * @author kkumar
- * @param $shopId
- * @return shopDetail
- */
-public static function getShopDetail($shopId)
-{
-        $shopDetail = Doctrine_Query::create()
-        ->select('s.notes,s.accountManagerName,s.deepLink,s.deeplinkstatus,s.strictConfirmation,a.name as affname,cat.*')
-        ->from("Shop s")
-        ->leftJoin('s.affliatenetwork a')
-        ->leftJoin('s.category cat')
-        ->where('s.deleted=0')
-        ->andWhere("s.id =$shopId")->fetchArray();
+    public static function getShopDetail($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopDetail = $queryBuilder->select('s.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,a.name as affname,cat.id')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.affliatenetwork', 'a')
+            ->leftJoin('s.categoryshops', 'cat')
+            ->where('s.deleted=0')
+            ->andWhere("s.id =$shopId")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopDetail;
+    }
 
- }
+    public static function getShopPermalinks()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $permalinks = $queryBuilder->select('s.permaLink as permalink, s.howToUse')
+            ->from('KC\Entity\Shop', 's')
+            ->where('s.deleted=0')
+            ->andWhere('s.status=1')
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $permalinks;
+    }
 
+    public static function getAllShopPermalinks()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $permalinks = $queryBuilder->select('s.permaLink as permalink')
+            ->from('KC\Entity\Shop', 's')
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $permalinks;
+    }
 
+    public static function updateTotalViewCount()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $nowDate = date('Y-m-d 00:00:00');
+        $data = $queryBuilder->select('s.id')
+            ->from('KC\Entity\Shop', 's')
+            ->addSelect("(SELECT sum(v.onclick) as pop FROM KC\Entity\ShopViewCount v WHERE v.shop = s.id ) as clicks")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
- /**
-  * @author Raman
-  * @return shopDetail
-  */
- public static function getShopPermalinks()
- {
-    $permalinks = Doctrine_Query::create()
-    ->select('s.permalink, s.howToUse')
-    ->from("Shop s")
-    ->where('s.deleted=0')
-    ->andWhere('s.status=1')
-    ->fetchArray();
-    return $permalinks;
-
- }
-
-
- /**
-  * @author Raman
-  * @return shops permalinks
-  */
- public static function getAllShopPermalinks()
- {
-    $permalinks = Doctrine_Query::create()
-    ->select('s.permalink')
-    ->from("Shop s")
-    ->fetchArray();
-    return $permalinks;
-
- }
- /* Offer List function end here */
-
-
-
-
-/*============================Function for front-end ======================= */
-
- /**
-  * get total view count for shop and update the total viewcount
-  * and also update its offers viewcount
-  *
-  * @author sp singh
-  * @version 1.0
-  */
- public static function updateTotalViewCount()
- {
-    $nowDate = date('Y-m-d 00:00:00');
-    $data = Doctrine_Query::create()
-    ->select('s.id')
-    ->from('Shop s')
-    ->addSelect("(SELECT sum(v.onclick) as pop FROM ShopViewCount v WHERE v.shopid = s.id ) as clicks")
-    ->fetchArray();
-
-
-    foreach ($data as $value) {
-        if($value['clicks']) {
-            $shopList = Doctrine_Query::create()
-            ->update('Shop s')
-            ->set('s.totalViewcount', $value['clicks'])
-            ->where('s.id = ?', $value['id'])
-            ->execute();
-
+        foreach ($data as $value) {
+            if ($value['clicks']) {
+                $shopList = $queryBuilder->update('KC\Entity\Shop', 's')
+                    ->set('s.totalViewcount', $queryBuilder->expr()->literal($value['clicks']))
+                    ->where('s.id = ?1')
+                    ->setParameter(1, $value['id'])
+                    ->getQuery()->execute();
+            }
         }
     }
 
- }
+    public static function filterFirstCharacter($var)
+    {
+        $filteredCharacter = substr($var, 0, 1);
+        return $filteredCharacter;
+    }
 
- /**
-  * get first character of the store name
-  * @return character $var
-  * @return $filteredCharacter
-  */
- public static function filterFirstCharacter($var)
- {
-    $filteredCharacter = substr($var, 0,1);
-    return $filteredCharacter;
- }
- /**
-  * get all store if has exclusive deal
-  * @author kraj
-  * @version 0.1
-  * @param integer $shopId
-  * @return Ambigous <multitype:, multitype:unknown number >
-  */
- public static function getStoreExclusiveDeal($shopId)
- {
-    $nowDate = date('Y-m-d 00:00:00');
-    //echo $nowDate ;
-    //die();
-    $Q = Doctrine_Query::create()->from('Offer o')
-    ->where('o.shopId='.$shopId)
-    ->andWhere('o.exclusiveCode=1 AND o.endDate >'."'$nowDate'")
-    ->fetchArray();
-    return $Q;
- }
- /**
-  * get store if has offer in popular
-  * @author kraj
-  * @param integer $shopId
-  * @version 0.1
-  * @return Ambigous <multitype:, multitype:unknown number >
-  */
- public static function getStoreOfferInPopularOrNot($shopId)
- {
-    $nowDate = date('Y-m-d 00:00:00');
-    $Q = Doctrine_Query::create()->from('Offer o')
-    ->leftJoin('o.popularcode p')
-    ->where('o.shopId='.$shopId)
-    ->fetchArray();
-    //echo "<pre>";
-    return $Q;
-    //die();
-    //return count($Q['popularcode']);
- }
- /**
-  * get store if has offer in active stage
-  * @author kraj
-  * @param integer $shopId
-  * @version 0.1
-  * @return Ambigous <multitype:, multitype:unknown number >
-  */
- public static function getStoreHasActiveCode($shopId)
- {
-    $nowDate = date('Y-m-d 00:00:00');
-    $Q = Doctrine_Query::create()->from('Offer o')
-    ->where('o.shopId='.$shopId)
-    ->andWhere('o.endDate >'."'$nowDate'")
-    ->fetchArray();
-    //echo "<pre>";
-    return $Q;
-    //die();
-    //return count($Q['popularcode']);
- }
+    public static function getStoreExclusiveDeal($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $nowDate = date('Y-m-d 00:00:00');
+        $Q = $queryBuilder->select("o")
+            ->from('KC\Entity\Offer', 'o')
+            ->where('o.shopOffers='.$shopId)
+            ->andWhere('o.exclusiveCode=1 AND o.endDate >'."'$nowDate'")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $Q;
+    }
 
- /**
-  * get recent stores (Shop) for front end
-  * @author Er.Kundal
-  * @version 1.0
-  * @return array $data
-  */
- public static function getrecentstores($flag)
- {
-    $shops = Doctrine_Query::create()->select('s.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
-    ->from('Shop s')
-    ->leftJoin('s.logo img')
-    ->where('s.deleted=0')
-    ->orderBy('s.id DESC')
-    ->limit($flag)->fetchArray();
+    public static function getStoreOfferInPopularOrNot($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $Q = $queryBuilder->select("o")
+            ->from('KC\Entity\Offer', 'o')
+            ->leftJoin('o.offer', 'p')
+            ->where('o.shopOffers='.$shopId)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $Q;
+    }
 
-    return $shops;
- }
- /**
-  * Search shop from shop table
-  * @param string $keyword
-  * @author kraj
-  * @return array $data
-  * @version 1.0
-  */
- public static function commonSearchStore($keyword,$limit)
- {
-        $redirectKeywods = ExcludedKeyword::getExRedirectKeywordsList();
+    public static function getStoreHasActiveCode($shopId)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $nowDate = date('Y-m-d 00:00:00');
+        $Q = $queryBuilder->select("o")
+            ->from('KC\Entity\Offer', 'o')
+            ->where('o.shopOffers='.$shopId)
+            ->andWhere('o.endDate >'."'$nowDate'")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $Q;
+    }
 
-        $data = Doctrine_Query::create()
-        ->select('s.name as name,s.id as id,s.permaLink as permalink')
-        ->from("Shop s")
-        ->where('s.deleted= 0')
-        ->andWhere("s.name LIKE ?", "$keyword%")
-        ->andWhere('s.status=1')
-        //->whereNotIn("s.name", $redirectKeywods)
-        ->orderBy("s.name ASC")
-        ->limit($limit)
-        ->fetchArray();
+    public static function getrecentstores($flag)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shops = $queryBuilder->select('s.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.logo', 'img')
+            ->where('s.deleted=0')
+            ->orderBy('s.id', 'DESC')
+            ->setMaxResults($flag)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $shops;
+    }
+
+    public static function getAllStores()
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $data = $queryBuilder->select('s.name as name,s.id as id,s.permaLink as permalink')
+            ->from('KC\Entity\Shop', 's')
+            ->where('s.deleted= 0')
+            ->andWhere('s.status=1')
+            ->orderBy("s.name", "ASC")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
         return $data;
- }
+    }
 
-
- /**
-  * get all shops for the json file for frontend search
-  * @author sp singh
-  * @return array
-
-  */
-
- public static function getAllStores()
- {
-    $redirectKeywods = ExcludedKeyword::getExRedirectKeywordsList();
-
-    $data = Doctrine_Query::create()
-        ->select('s.name as name,s.id as id,s.permaLink as permalink')
-        ->from("Shop s")
-        ->where('s.deleted= 0')
-        ->andWhere('s.status=1')
-        ->orderBy("s.name ASC")
-        ->fetchArray();
-
-    return $data;
- }
-
-
- /**
-  * Search shop from shop table
-  * @param string $keyword
-  * @author kraj
-  * @return array $data
-  * @version 1.0
-  */
- public static function commonSearchStoreForUserGenerated($keyword,$limit)
- {
-    $data = Doctrine_Query::create()
-    ->select('s.name as name,s.id as id,s.permaLink as permalink')
-    ->from("Shop s")
-    ->where('s.deleted=0')
-    ->andWhere("s.name LIKE ?", "$keyword%")
-    ->andWhere("s.usergenratedcontent=1")
-    ->andWhere('s.status=1')
-    ->orderBy("s.name ASC")
-    ->limit($limit)->fetchArray();
-    return $data;
- }
+    public static function commonSearchStoreForUserGenerated($keyword, $limit)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $data = $queryBuilder->select('s.name as name,s.id as id,s.permaLink as permalink')
+            ->from('KC\Entity\Shop', 's')
+            ->where('s.deleted=0')
+            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal($keyword."%")))
+            ->andWhere("s.usergenratedcontent=1")
+            ->andWhere('s.status=1')
+            ->orderBy("s.name", "ASC")
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
 
     public static function getAllShopDetails()
     {
-        $shopList = Doctrine_Query::create()
-        ->select('s.name')
-        ->from("Shop s")
-        ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopList = $queryBuilder->select('s.name')
+            ->from('KC\Entity\Shop', 's')
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $shopList;
-
-    }
-
-    public static function updateShop($name, $shop_text, $freDel, $delCost)
-    {
-        $shopList = Doctrine_Query::create()
-        ->update('Shop s')
-        ->set('s.shoptext', '?1')
-        ->set('u.email', '?2')
-        ->where('u.id = ?3')
-        ->setParameter(1, $username)
-        ->setParameter(2, $email)
-        ->setParameter(3, $editId)
-        ->execute();
-        //$p = $q->execute();
-
 
     }
 
     public static function deletechapters($id)
     {
-        $data = Doctrine_Query::create()
-        ->delete('ShopHowToChapter s')
-        ->where('s.id ='.$id)
-        ->execute();
-
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $data = $queryBuilder->delete('KC\Entity\ShopHowToChapter', 's')
+            ->where('s.id ='.$id)
+            ->getQuery()
+            ->execute();
         return $data;
     }
 
 
-
-    /**
-     * getStoreLinks
-     * get links for a shop for cloaking purpose
-     *
-     * @author Raman modified by Surindetrpal Singhj
-     * @param integer $offerId id of an offer
-     * @param boolean $checkRefUrl if true then check only the shop has ref url|deep link  or not
-     *                                     if false then return the outgoing link
-     * @return array|boolean $data
-     * @version 1.0
-     */
-    public static function getStoreLinks($shopId , $checkRefUrl = false)
+    public static function getStoreLinks($shopId, $checkRefUrl = false)
     {
-
-        $data = Doctrine_Query::create()->select('s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
-        ->from('Shop s')
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $data = $queryBuilder->select('s.id, s.permaLink as permalink, s.deepLink, s.deepLinkStatus, s.refUrl, s.actualUrl')
+        ->from('KC\Entity\Shop', 's')
         ->where('s.id='.$shopId)
-        ->fetchOne(null,Doctrine::HYDRATE_ARRAY );
+        ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        $network = Shop::getAffliateNetworkDetail( $shopId );
+        $network = Shop::getAffliateNetworkDetail($shopId);
 
-        if($checkRefUrl) {
+        if ($checkRefUrl) {
             # retur false if s shop is not associated with any network
-            if(! isset($network['affliatenetwork'])) {
-                return false ;
+            if (! isset($network['affname'])) {
+                return false;
             }
-
-            if(isset($data['deepLink']) && $data['deepLink']!=null){
-
+            if (isset($data['deepLink']) && $data['deepLink']!=null) {
                 # deeplink is now commetted for the time being, so we always @return false ;
                 return false;
-            }elseif(isset($data['refUrl']) && $data['refUrl']!=null){
-                return true ;
-            }else{
-                return true ;
+            } elseif (isset($data['refUrl']) && $data['refUrl']!=null) {
+                return true;
+            } else {
+                return true;
             }
         }
-
         $subid = "" ;
-        if( isset($network['affliatenetwork']) ) {
-            if(!empty($network['subid']) ) {
+        if (isset($network['affname'])) {
+            if (!empty($network['subid'])) {
                  $subid = "&". $network['subid'] ;
-
-
-                 $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
+                 $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
                  $ip = ip2long($clientIP);
 
                  # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
-
-                 $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
+                 $conversion = \KC\Repository\Conversions::getConversionId($data['id'], $ip, 'shop');
+                 $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
             }
         }
 
-        # deeplink is now commetted for the time being, so we always return false ;
-        /*if(isset($data['deepLink']) && $data['deepLink']!=null){
-            $url = $data['deepLink'];
-            $url .=  $subid ;
-
-        }else*/
-
-        if(isset($data['refUrl']) && $data['refUrl']!=null){
+        if (isset($data['refUrl']) && $data['refUrl']!=null) {
             $url = $data['refUrl'];
-            $url .=  $subid ;
-        }elseif (isset($data['actualUrl']) && $data['actualUrl']!=null){
+            $url .= $subid;
+        } elseif (isset($data['actualUrl']) && $data['actualUrl']!=null) {
             $url = $data['actualUrl'];
-        }else{
+        } else {
             $url = HTTP_PATH_LOCALE.@$data['permaLink'];
 
         }
-        return $url ;
+        return $url;
     }
-
-    /**
-     * addConversion
-     * add a conversion to a shop which is associted with a network
-     *
-     * @param integeter $id shopId
-     * @auther Surinderpal Singh
-     */
 
     public static function addConversion($id)
     {
-        $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $clientIP = \FrontEnd_Helper_viewHelper::getRealIpAddress();
         $ip = ip2long($clientIP);
 
         # save conversion detail if an offer is associated with a network
-        if(Shop::getStoreLinks($id , true )) {
-
+        if (Shop::getStoreLinks($id, true)) {
             # check for previous cnversion of same ip
-            $data = Doctrine_Query::create()
-                ->select('count(c.id) as exists,c.id')
-                ->from('Conversions c')
-                ->andWhere('c.shopId="'.$id.'"')
-                ->andWhere('c.IP="'.$ip.'"')
+            $data = $queryBuilder->select("count(c.id) as exist, c.id")
+                ->from("KC\Entity\Conversions", "c")
+                ->andWhere("c.shop= '".$id."'")
+                ->andWhere("c.IP='".$ip."'")
                 ->andWhere("c.converted=0")
-                ->groupBy('c.id')
-                ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+                ->groupBy("c.id")->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-            if(! $data['exists']) {
-
+            if (!isset($data[0]['exist'])) {
                 # save conversion detail if an offer is associated with a network
-                $cnt  = new Conversions();
-                $cnt->shopId = $id;
+                $cnt = new \KC\Entity\Conversions();
+                $cnt->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $id);
                 $cnt->IP = $ip;
                 $cnt->utma = $_COOKIE["__utma"];
                 $cnt->utmz = $_COOKIE["__utmz"];
                 $time = time();
-                $cnt->subid = md5(time()*rand(1,999));
-                $cnt->save();
-            } else{
-
-
+                $cnt->subid = md5(time()*rand(1, 999));
+                \Zend_Registry::get('emLocale')->persist($cnt);
+                \Zend_Registry::get('emLocale')->flush();
+            } else {
                 # update existing conversion detail
-                $cnt = Doctrine_Core::getTable("Conversions")->find($data['id']);
-                if($cnt) {
-                    $cnt->utma = $_COOKIE["__utma"];
-                    $cnt->utmz = $_COOKIE["__utmz"];
+                $cnt = $queryBuilder->select("count(cs.id) as exist")
+                    ->from("KC\Entity\Conversions", "cs")
+                    ->andWhere("cs.id='".$data[0]['id']."'")
+                    ->getQuery()
+                    ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+                if (!empty($cnt)) {
                     $time = time();
-                    $cnt->subid = md5(time()*rand(1,999));
-                    $cnt->save();
+                    $queryBuilder->update('KC\Entity\Conversions', 'cv')
+                        ->set('cv.utma', $queryBuilder->expr()->literal($_COOKIE["__utma"]))
+                        ->set('cv.utmz', $queryBuilder->expr()->literal($_COOKIE["__utmz"]))
+                        ->set('cv.subid', $queryBuilder->expr()->literal(md5(time()*rand(1, 999))))
+                        ->where('cv.id = ?1')
+                        ->setParameter(1, $data[0]['id'])
+                        ->getQuery()->execute();
                 }
             }
         }
     }
 
-    /**
-     * getAffliateNetworkDetail
-     *
-     *  get the affliate network detail for the given shop
-     *
-     * @param integer $shopId
-     * @retun array
-     */
     public static function getAffliateNetworkDetail($shopId)
     {
-
-            return  Doctrine_Query::create()
-                        ->select('s.id,a.name as affname,a.subId as subid')
-                        ->from("Shop s")
-                        ->leftJoin('s.affliatenetwork a')
-                        ->where('s.deleted=0')
-                        ->andWhere("s.id =?" , $shopId)
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
-
-
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        return $queryBuilder->select('s.id,a.name as affname,a.subId as subid')
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.affliatenetwork', 'a')
+            ->where('s.deleted=0')
+            ->andWhere("s.id =".$shopId)->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
 
-    /**
-     * getAllUrls
-     *
-     * returns the all the urls related to a offer like  special list pages,
-     * realted extended offer page, realted category pages, sreach pages, redactie pages,
-     * pageRelated How to use etc
-     * @param integer $id shop id
-     * @author Surinderpal Singh
-     * @return array array of urls
-     */
+    // to be checked and migrated
     public static function getAllUrls($id)
     {
-        $shop  = Doctrine_Query::create()
-                    ->select("s.id, s.permaLink,s.contentManagerId, s.howToUse,c.permaLink, o.extendedOffer, o.extendedUrl,")
-                    ->from('Shop s')
-                    ->leftJoin("s.offer o")
-                    ->leftJoin("s.category c")
-                    ->where("s.id=? " , $id)
-                    ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select("s.id, s.permaLink,s.contentManagerId,c.id as test, s.howToUse, o.extendedOffer, o.extendedUrl")
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin("s.offer", "o")
+            ->leftJoin("s.categoryshops", "c")
+            ->where("s.id= ". $id);
+        $shop = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
+        print_r($shop); die;
         # redactie permalink
         $redactie =  User::returnEditorUrl($shop['contentManagerId']);
 
@@ -1612,47 +1444,35 @@ public static function getShopDetail($shopId)
         return $urlsArray ;
     }
 
-    /**
-     * change status of shop
-     * @param array $params
-     * @author blal
-     * @version 1.0
-     */
     public static function changeStatus($params)
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $status = $params['status'] == 'offline' ? '0' : '1';
 
-        $shop = Doctrine_Core::getTable("Shop")->find($params['id']);
-
-        if($params['status'] == 'offline') {
-            $date = date('Y-m-d H:i:s')  ;
+        if ($params['status'] == 'offline') {
+            $date = date('Y-m-d H:i:s');
             $status = 0 ;
         } else {
             $status = 1 ;
-            $date = NULL ;
+            $date = null;
         }
 
-        $shop->status = $status;
-        $shop->offlineSicne = $date;
-        $shop->save();
-        
+        $query = $queryBuilder->update('KC\Entity\Shop', 's')
+            ->set('s.status', $queryBuilder->expr()->literal($status))
+            ->set('s.offlineSicne', $queryBuilder->expr()->literal($date))
+            ->where('s.id = ?1')
+            ->setParameter(1, $params['id'])
+            ->getQuery();
+        $shop = $query->execute();
         $key = 'shop_similar_shops';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shopDetails_'.$params['id'].'_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        return $shop->offlineSicne;
-
-
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        return $date;
     }
 
 
-    /*
-     * execute when a shop is being updated. Based on modief
-     * We update shop inforamation in chain table based on modified data
-     *
-     *  exmaple status,name,permalink and deleted to update chain
-     *
-     */
+    //to be refactored
     public function postUpdate($event)
     {
 
@@ -1707,17 +1527,9 @@ public static function getShopDetail($shopId)
 
     }
 
-
-
-    /**
-     * get No of Shops created in last 7 days for dashboard
-     * @author Raman
-     * @return integer
-     * @version 1.0
-     */
-
     public static function getAmountShopsCreatedLastWeek()
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
@@ -1725,179 +1537,134 @@ public static function getShopDetail($shopId)
         $past7Days = date($format, strtotime('-7 day' . $date));
         $nowDate = $date;
 
-        $data = Doctrine_Query::create()
-        ->select("count(*) as amountshops")
-        ->from('Shop s')
-        ->where('s.deleted=0')
-        ->andWhere('s.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"')
-        //->andWhere('s.status=1')
-        ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
-
+        $query = $queryBuilder->select("count(s) as amountshops")
+            ->from('KC\Entity\Shop', 's')
+            ->where('s.deleted=0')
+            ->andWhere("s.created_at BETWEEN '".$past7Days."' AND '".$date."'");
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
-
-
-    /**
-     * get total No of Shops
-     * @author Raman
-     * @return integer
-     * @version 1.0
-     */
 
     public static function getTotalAmountOfShops()
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
-        $data = Doctrine_Query::create()
-        ->select("count(*) as amountshops")
-        ->from('Shop s')
-        ->where('s.deleted = 0')
-        ->andWhere("s.status = '1'")
-        ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+        $query = $queryBuilder->select("count(s) as amountshops")
+            ->from('KC\Entity\Shop', 's')
+            ->where('s.deleted = 0')
+            ->andWhere("s.status = '1'");
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
-
-    /**
-     * get No of Shops with atleast one code online
-     * @author Raman
-     * @return integer
-     * @version 1.0
-     */
 
     public static function getTotalAmountOfShopsCodeOnline()
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
-        $data = Doctrine_Query::create()
-            ->select("count(*) as amountshops")
-            ->from('Shop s')
-            ->leftJoin('s.offer o')
+        $query = $queryBuilder->select("count(s) as amountshops")
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.offer', 'o')
             ->where('s.deleted = 0')
             ->andWhere("s.status = '1'")
-            ->andWhere('o.enddate > "'.$date.'"')
-            ->andWhere('o.startdate <= "'.$date.'"')
-            ->andWhere('o.discounttype="CD"')
-            ->andWhere('o.deleted = 0' )
-            //->andWhere('s.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"')
-            ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+            ->andWhere("o.endDate > '".$date."'")
+            ->andWhere("o.startDate <= '".$date."'")
+            ->andWhere("o.discountType='CD'")
+            ->andWhere('o.deleted = 0');
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
-    /**
-     * get No of Shops with atleast one code online this week
-     * @author Raman
-     * @return integer
-     * @version 1.0
-     */
 
     public static function getTotalAmountOfShopsCodeOnlineThisWeek()
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         // - 7 days from today
         $past7Days = date($format, strtotime('-7 day' . $date));
 
-        $data = Doctrine_Query::create()
-            ->select("count(*) as amountshops")
-            ->from('Shop s')
-            ->leftJoin('s.offer o')
+        $query = $queryBuilder->select("count(s) as amountshops")
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.offer', 'o')
             ->where('s.deleted=0')
-            ->andWhere('o.enddate > "'.$past7Days.'"')
-            ->andWhere('o.startdate <= "'.$past7Days.'"')
-            ->andWhere('o.discounttype="CD"')
-            ->andWhere('o.deleted = 0' )
-            //->andWhere('s.updated_at BETWEEN "'.$past7Days.'" AND "'.$date.'"')
-            ->andWhere('s.status = 1 OR (s.offlineSicne > "'.$past7Days.'" && s.offlineSicne < "'.$date.'")')
-            ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+            ->andWhere("o.endDate > '".$past7Days."'")
+            ->andWhere("o.startDate <= '".$past7Days."'")
+            ->andWhere("o.discountType='CD'")
+            ->andWhere('o.deleted = 0')
+            ->andWhere("s.status = 1 OR (s.offlineSicne > '".$past7Days."' AND s.offlineSicne < '".$date."')");
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
 
-    /**
-     * get No of Shops with atleast one code online of Last week
-     * @author Raman
-     * @return integer
-     * @version 1.0
-     */
-
     public static function getTotalAmountOfShopsCodeOnlineLastWeek()
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $format = 'Y-m-j H:i:s';
         $date = date($format);
-
         // - 7 days from today
         $past7Days = date($format, strtotime('-7 day' . $date));
         // - 14 days from today
         $past14Days = date($format, strtotime('-14 day' . $date));
-
-        $data = Doctrine_Query::create()
-        ->select("count(*) as amountshops")
-        ->from('Shop s')
-        ->leftJoin('s.offer o')
-        ->where('s.deleted=0')
-        ->andWhere('o.enddate > "'.$past14Days.'"')
-        ->andWhere('o.startdate <= "'.$past14Days.'"')
-        ->andWhere('o.discounttype="CD"')
-        ->andWhere('o.deleted = 0' )
-        //->andWhere('s.updated_at BETWEEN "'.$past14Days.'" AND "'.$past7Days.'"')
-        ->andWhere('s.status = 1 OR (s.offlineSicne > "'.$past14Days.'" && s.offlineSicne < "'.$past7Days.'")')
-        ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+        $query = $queryBuilder->select("count(s) as amountshops")
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.offer', 'o')
+            ->where('s.deleted=0')
+            ->andWhere("o.endDate > '".$past14Days."'")
+            ->andWhere("o.startDate <= '".$past14Days."'")
+            ->andWhere("o.discountType='CD'")
+            ->andWhere('o.deleted = 0')
+            ->andWhere("s.status = 1 OR (s.offlineSicne > '".$past14Days."' AND s.offlineSicne < '".$past7Days."')");
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
-    /**
-     * get number of days since the store has no more coupons online.
-     * @author Raman
-     * @return integer
-     * @version 1.0
-     */
+
     public static function getDaysSinceShopWithoutOnlneOffers($shopId)
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $format = 'Y-m-j H:i:s';
         $date = date($format);
 
         // find whether this shop has any code
-        $anyOffer = Doctrine_Query::create()
-        ->select("s.id, o.id")
-        ->from('Shop s')
-        ->leftJoin('s.offer o')
-        ->where('s.id = '.$shopId)
-        ->andWhere('o.discounttype="CD"')
-        ->fetchArray();
-
+        $query = $queryBuilder->select("s.id, o.id")
+            ->from('KC\Entity\Shop', 's')
+            ->leftJoin('s.offer', 'o')
+            ->where($queryBuilder->expr()->eq('s.id', $shopId))
+            ->andWhere("o.discountType = 'CD'");
+        $anyOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $Days = 0;
         $noOfDays = $Days;
-        if(empty($anyOffer)){
-
+        if (empty($anyOffer)) {
             $noOfDays = $Days;
         } else {
-
             // find whether this shop has any code online
-            $isOnline = Doctrine_Query::create()
-                ->select("s.id, o.id")
-                ->from('Shop s')
-                ->leftJoin('s.offer o')
-                ->where('s.id = '.$shopId)
-                ->andWhere('o.enddate >= "'.$date.'"')
-                ->andWhere('o.startdate <= "'.$date.'"')
-                ->andWhere('o.discounttype="CD"')
-                ->andWhere('o.deleted = 0' )
-                ->fetchArray();
-
+            $query = \Zend_Registry::get('emLocale')->createQueryBuilder()->select("s.id, o.id")
+                ->from('KC\Entity\Shop', 's')
+                ->leftJoin('s.offer', 'o')
+                ->where($queryBuilder->expr()->eq('s.id', $shopId))
+                ->andWhere("o.endDate >= '".$date."'")
+                ->andWhere("o.startDate <= '".$date."'")
+                ->andWhere("o.discountType='CD'")
+                ->andWhere('o.deleted = 0');
+            $isOnline = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            
             //since how many days the shop has no code online
-            if(empty($isOnline)){
-                    $data = Doctrine_Query::create()
-                    ->select("(DATEDIFF('".$date."', o.enddate)) as diffdays")
-                    ->from('Shop s')
-                    ->leftJoin('s.offer o')
-                    ->where('s.id = '.$shopId)
-                    ->andWhere('o.enddate < "'.$date.'"')
-                    ->andWhere('o.discounttype="CD"')
-                    ->andWhere('o.deleted = 0' )
-                    ->orderBy('o.enddate DESC')
-                    ->limit(1)
-                    ->fetchArray() ;
+            if (empty($isOnline)) {
+                $query = \Zend_Registry::get('emLocale')->createQueryBuilder()
+                    ->select("(DATE_DIFF('".$date."', o.endDate)) as diffdays")
+                    ->from('KC\Entity\Shop', 's')
+                    ->leftJoin('s.offer', 'o')
+                    ->where(\Zend_Registry::get('emLocale')->createQueryBuilder()->expr()->eq('s.id', $shopId))
+                    ->andWhere("o.endDate < '".$date."'")
+                    ->andWhere("o.discountType='CD'")
+                    ->andWhere('o.deleted = 0')
+                    ->orderBy('o.endDate', 'DESC')
+                    ->setMaxResults(1);
+                $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-                if(!empty($data)){
+                if (!empty($data)) {
                     $noOfDays = $data[0]['diffdays'];
                 }
             } else {
@@ -1908,61 +1675,43 @@ public static function getShopDetail($shopId)
 
         return $noOfDays;
     }
-    /**
-     * get number of times the store has been added to favourite.
-     * @author Raman
-     * @return integer
-     * @version 1.0
-     */
+//error to be migrated
     public static function getFavouriteCountOfShop($shopId)
     {
-        $data = Doctrine_Query::create()
-                ->select("count(*)")
-                ->from('FavoriteShop s')
-                ->where('s.shopId='.$shopId)
-                ->fetchOne(null, Doctrine::HYDRATE_ARRAY) ;
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select("count(s.id)")
+                ->from('KC\Entity\Shop', 's')
+                ->leftJoin('s.visitors', 'v')
+                ->where('s.visitors='.$shopId);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data['count'];
     }
 
-    /*
-     * Author Raman
-     * find whether a shop is online or not
-    * */
     public static function getshopStatus($shopId)
     {
-
-        $Q = Doctrine_Query::create()->select('s.id')
-        ->from('Shop s')
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('s.id')
+        ->from("KC\Entity\Shop", "s")
         ->where('s.id='.$shopId)
-        ->andWhere('s.status = 1')
-        ->fetchArray();
+        ->andWhere('s.status = 1');
+        $Q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        if(empty($Q)){
-
+        if (empty($Q)) {
             $online = true;
             return $online;
-
         } else {
-
             $online = false;
             return $online;
-
         }
     }
 
-    /**
-    * @author Daniel
-    * @return getShopBranding
-    */
     public static function getShopBranding($shopID)
     {
-        $brandingCss = Doctrine_Query::create()
-        ->select('s.brandingcss')
-        ->from("Shop s")
-        ->where('s.id='.$shopID)
-        ->fetchArray(Doctrine::HYDRATE_SINGLE_SCALAR);
-
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('s.brandingcss')
+            ->from("KC\Entity\Shop", "s")
+            ->where('s.id='.$shopID);
+        $brandingCss = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return (!empty($brandingCss[0]['brandingcss'])) ? unserialize($brandingCss[0]['brandingcss']) : null;
     }
-
 }

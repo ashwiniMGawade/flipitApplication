@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *     name="page",
  *     indexes={
  *         @ORM\Index(name="pageattributeid_idx", columns={"pageAttributeId"}),
- *         @ORM\Index(name="pageHeaderImageId_foreign_key", columns={"logo"})
+ *         @ORM\Index(name="pageHeaderImageId_foreign_key", columns={"pageHeaderImageId"})
  *     }
  * )
  */
@@ -255,7 +255,10 @@ class Page
      * @ORM\Column(type="integer", length=1, nullable=false)
      */
     private $showsitemap;
-
+    /**
+     * @ORM\Column(type="integer", length=1, nullable=false)
+     */
+    private $pageHeaderImageId;
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
