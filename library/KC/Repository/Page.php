@@ -143,15 +143,15 @@ class Page Extends \KC\Entity\Page
     public function defaultPagesList()
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.id, page.pagetitle')
+        $query = $entityManagerUser->select('page.id, page.pageTitle as pagetitle')
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, 'default')
-            ->where('page.pagetype = ?1')
+            ->where('page.pageType = ?1')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2')
             ->setParameter(3, 1)
             ->andWhere('page.publish = ?3')
-            ->orderBy('page.pagetitle ASC');
+            ->orderBy('page.pageTitle', 'ASC');
         $defaultPagesList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $defaultPagesList;
     }

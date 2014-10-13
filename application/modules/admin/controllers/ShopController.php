@@ -188,7 +188,7 @@ class Admin_ShopController extends Zend_Controller_Action
             $selctedshop = 0;
         }
         $selctedshop = $this->getRequest()->getParam('currentshopId').','.$selctedshop;
-        $data =Shop::searchsimilarStore($srh,$flag,$selctedshop);
+        $data =\KC\Repository\Shop::searchsimilarStore($srh,$flag,$selctedshop);
         $ar = $br =  array();
         if (sizeof($data) > 0) {
 
@@ -304,148 +304,100 @@ class Admin_ShopController extends Zend_Controller_Action
         //     	die ;
     }
 
-    /**
-     * validate url
-     * @author spsingh
-     * @version 1.0
-     */
-     public function validatenavurlAction()
-     {
-        $url = $this->getRequest()->getParam("shopNavUrl") ;
-        $isEdit = $this->getRequest()->getParam("isEdit") ;
+    public function validatenavurlAction()
+    {
+        $url = $this->getRequest()->getParam("shopNavUrl");
+        $isEdit = $this->getRequest()->getParam("isEdit");
 
-        $pattern = array ('/\s/',"/[\,+@#$%'^&*!]+/");
+        $pattern = array('/\s/',"/[\,+@#$%'^&*!]+/");
 
-        $replace = array ("-","-");
-        $url = preg_replace ( $pattern, $replace, $url );
+        $replace = array("-","-");
+        $url = preg_replace($pattern, $replace, $url);
         $url = strtolower($url);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $rp = $queryBuilder->select("r")
+            ->from("KC\Entity\RoutePermalink", "r")
+            ->where("r.permalink = '".urlencode($url)."'")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        $rp = Doctrine_Query::create()
-                ->select()
-                ->from("RoutePermalink")
-                ->where("permalink = '".urlencode($url)."'")
-                ->fetchArray();
-
-        if($isEdit) {
-
+        if ($isEdit) {
             $exactLink = "store/storedetail/id/".$this->getRequest()->getParam("id") ;
-
-            if(@$rp[0]['permalink'] == $url ) {
-
-                if( @$rp[0]['exactlink'] == $exactLink){
-
+            if (@$rp[0]['permalink'] == $url) {
+                if (@$rp[0]['exactlink'] == $exactLink) {
                     $res = array( 	'status' => '200' ,
-                        'url' => $url ,
-                        'shopNavUrl' => $url ) ;
-
-                    echo Zend_Json::encode($res ) ;
-                    die ;
-
-                }else	{
-
+                    'url' => $url ,
+                    'shopNavUrl' => $url ) ;
+                    echo Zend_Json::encode($res);
+                    die;
+                } else {
                     $res = false ;
-                    echo Zend_Json::encode( $res ) ;
-                    die ;
+                    echo Zend_Json::encode($res);
+                    die;
                 }
             }
-            /* */
         }
-        if( strlen($url )  > 0) {
-
-            if(@$rp[0]['permalink'] != $url ) {
-
-                $res = array ( 'status' => '200',
-                        'url' => $url,
-                        'permaLink' =>
-                        $this->getRequest ()->getParam ( "articlepermalink" )
+        if (strlen($url) > 0) {
+            if (@$rp[0]['permalink'] != $url) {
+                $res = array(
+                    'status' => '200',
+                    'url' => $url,
+                    'permaLink' => $this->getRequest()->getParam("articlepermalink")
                 );
-
-            }else {
-
+            } else {
                 $res = false;
             }
-
         } else {
-
-            $res = false ;
+            $res = false;
         }
-        echo Zend_Json::encode( $res ) ;
+        echo Zend_Json::encode($res);
         die();
     }
 
-    /**
-     * crete new shop a
-     * @author spsingh
-     */
     public function createshopAction()
     {
         $arr = array();
-        /* get Category List*/
         $arr['status'] = '1';
         $category = new \KC\Repository\Category();
-
-
         $this->view->categoryList = $category->getCategoriesInformation();
 
-
-
         $site_name = "";
-        if(isset($_COOKIE['site_name'])){
+        if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
         }
 
-        // display managers and account managers list
-        $users = new User();
+        $users = new \KC\Repository\User();
         $this->view->MangersList = $users->getManagersLists($site_name);
-
-        // display  page's list
-        $pages = new Page();
+        $pages = new \KC\Repository\Page();
         $this->view->DefaultPagesList = $pages->defaultPagesList();
-
-
-        // display affliate network's list
-        $affiliate = new AffliateNetwork();
-         $arr['sortBy'] = 'name';
-         $arr['off'] = '1';
+        $affiliate = new \KC\Repository\AffliateNetwork();
+        $arr['sortBy'] = 'name';
+        $arr['off'] = '1';
         $affiliateNetworkList =  $affiliate->getNetworkList($arr);
-
-
         $this->view->affiliateNetworkList = $affiliateNetworkList['aaData'];
 
-        // if request is post
         if ($this->_request->isPost()) {
             $parmas = $this->_getAllParams();
-            $shop = new Shop();
-
+            $shop = new \KC\Repository\Shop();
             $flash = $this->_helper->getHelper('FlashMessenger');
-            if($parmas['shopName']!=null && $parmas['shopName']!=''){
+            if ($parmas['shopName'] != null && $parmas['shopName'] != '') {
                 $shopId = $shop->CreateNewShop($parmas);
-                if($shopId) {
-
+                if ($shopId) {
                     self::updateVarnish($shopId);
-
                     $message = $this->view->translate('The shop has been saved successfully');
                     $flash->addMessage(array('success' => $message));
-                    $this->_helper->redirector(null , 'shop' , null ) ;
-
+                    $this->_helper->redirector(null, 'shop', null);
                 } else {
-
                     $message = $this->view->translate('Error: Your file size exceeded 2MB');
                     $flash->addMessage(array('error' => $message));
-                     $this->_helper->redirector(null , 'shop' , null ) ;
-
+                    $this->_helper->redirector(null, 'shop', null);
                 }
-
-            }else{
-
+            } else {
                 $message = $this->view->translate('Error: Invalid shop name');
                 $flash->addMessage(array('error' => $message));
-                $this->_helper->redirector(null , 'shop' , null ) ;
+                $this->_helper->redirector(null, 'shop', null);
             }
-
         }
-
-
     }
     /**
      * edit shop
