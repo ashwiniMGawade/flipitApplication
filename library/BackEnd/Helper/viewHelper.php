@@ -63,10 +63,10 @@ class BackEnd_Helper_viewHelper
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($key);
-                    $varnish = new Varnish($connectionObject['connName']);
+                    $connectionObject = \BackEnd_Helper_DatabaseManager::addConnection($key);
+                    $varnish = new KC\Repository\Varnish($connectionObject['connName']);
                     $varnishUrlsCount[] = $varnish->getVarnishUrlsCount();
-                    BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
+                    \BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
                 } catch (Exception $e) {
                 }
             }
