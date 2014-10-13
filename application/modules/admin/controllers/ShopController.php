@@ -56,7 +56,7 @@ class Admin_ShopController extends Zend_Controller_Action
     {
          $params = $this->_getAllParams();
          //cal to getshoplist function from Shop model
-        $shopList = Shop::getshopList($params);
+        $shopList = \KC\Repository\Shop::getshopList($params);
 
         echo Zend_Json::encode( $shopList );
 
@@ -382,7 +382,7 @@ class Admin_ShopController extends Zend_Controller_Action
         $arr = array();
         /* get Category List*/
         $arr['status'] = '1';
-        $category = new Category();
+        $category = new \KC\Repository\Category();
 
 
         $this->view->categoryList = $category->getCategoriesInformation();
