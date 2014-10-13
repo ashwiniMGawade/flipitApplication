@@ -167,7 +167,7 @@ class DataTable_Helper
 			                    {
 			                    	//print_r($aColumns);
 			                    	//die('Helll  111 1  1');
-			                    	$Q->orderBy($aColumns[intval($params['iSortCol_' . $i])] . " " . $params['sSortDir_' . $i]);
+			                    	//$Q->orderBy($aColumns[intval($params['iSortCol_' . $i])] . " " . $params['sSortDir_' . $i]);
 			                    }
 
 		                    }
@@ -182,7 +182,7 @@ class DataTable_Helper
              isset($params["iDisplayLength"])) {
                 if (intval($params["iDisplayStart"] > - 1) &&
                  intval($params["iDisplayLength"]) > 0) {
-                    $Q->limit(intval($params["iDisplayLength"]))->offset(
+                    $Q->setMaxResults(intval($params["iDisplayLength"]))->setFirstResult(
                     intval($params["iDisplayStart"]));
                 }
 

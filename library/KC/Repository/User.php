@@ -660,7 +660,7 @@ class User extends \KC\Entity\User
         if ((intval($role)) > 0) {
             //add role search
             $data->setParameter(3, $role)
-                ->addWhere('r.id= ?3');
+                ->andWhere('r.id= ?3');
         }
         if ($srh!='undefined') {
             //add search for user name

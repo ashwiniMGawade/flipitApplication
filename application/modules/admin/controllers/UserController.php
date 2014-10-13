@@ -66,6 +66,10 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function indexAction()
     {
+       // echo "<pre>";
+       //  print_r(KC\Repository\RouteRedirect::getRedirect(array('role'=>1, "searchtext"=>'k')));
+       // die('END');
+
         $u = Auth_StaffAdapter::getIdentity();
         $this->view->id = $u->id;
         $this->view->role = $u->users->id;

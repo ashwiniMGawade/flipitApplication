@@ -30,7 +30,7 @@ class Admin_IndexController extends Zend_Controller_Action
     {
 
 
-        $data = Dashboard::getDashboardToDisplay();
+        $data = KC\Repository\Dashboard::getDashboardToDisplay();
         $this->view->data = $data;
 
         $lastweek = $data['total_no_of_shops_online_code_lastweek'];
