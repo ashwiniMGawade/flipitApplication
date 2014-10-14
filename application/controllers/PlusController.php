@@ -95,30 +95,30 @@ class PlusController extends Zend_Controller_Action
                 array('function' =>
                 'Articles::getArticleByPermalink', 'parameters' => array($permalink))
             );
-        $currentArticleCategory = !empty($articleDetails[0]['relatedcategory'][0]['articlecategory'])
-                                  ? $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'] : '';
-        $categoryWiseArticles = FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache(
-                (string)"4_categoriesArticles_list",
-                array('function' =>
-                'MoneySaving::getCategoryWiseArticles', 'parameters' => array(5))
-            );
-
-        $articlesRelatedToCurrentCategory =
-            !empty($categoryWiseArticles[$currentArticleCategory])
-            ? $articleObject->excludeSelectedArticle(
-                $categoryWiseArticles[$currentArticleCategory],
-                $articleDetails[0]['id']
-            )
-            : '';
-        $incrementArticleViewCountValue  = FrontEnd_Helper_viewHelper::
-            viewCounter('article', 'onload', $articleDetails[0]['id']);
 
         if (!empty($articleDetails)) {
-            $this->view->canonical =
-                FrontEnd_Helper_viewHelper::generateCononical(
-                    $this->getRequest()->getControllerName() .'/'. $permalink
+            $currentArticleCategory = !empty($articleDetails[0]['relatedcategory'][0]['articlecategory'])
+                                      ? $articleDetails[0]['relatedcategory'][0]['articlecategory']['name'] : '';
+            $categoryWiseArticles = FrontEnd_Helper_viewHelper::
+                getRequestedDataBySetGetCache(
+                    (string)"4_categoriesArticles_list",
+                    array('function' =>
+                    'MoneySaving::getCategoryWiseArticles', 'parameters' => array(5))
                 );
+
+            $articlesRelatedToCurrentCategory =
+                !empty($categoryWiseArticles[$currentArticleCategory])
+                ? $articleObject->excludeSelectedArticle(
+                    $categoryWiseArticles[$currentArticleCategory],
+                    $articleDetails[0]['id']
+                )
+                : '';
+            $incrementArticleViewCountValue  = FrontEnd_Helper_viewHelper::
+                viewCounter('article', 'onload', $articleDetails[0]['id']);
+                $this->view->canonical =
+                    FrontEnd_Helper_viewHelper::generateCononical(
+                        $this->getRequest()->getControllerName() .'/'. $permalink
+                    );
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array(
                     'function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
