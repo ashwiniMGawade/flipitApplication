@@ -111,6 +111,9 @@ function init(){
       	jQuery('#extendedOfferTitle').textareaCount(options, function(data){
 			jQuery('#metaTitleLeft').val(__("Extended offer meta title length ") + (data.input) + __(" Characters"));
 		});
+		jQuery('#extendedTitle').textareaCount(options, function(data){
+			jQuery('#extendedTitleLeft').val(__("Extended title length ") + (data.input) + __(" Characters"));
+		});
     	jQuery('#extendedOfferMetadesc').textareaCount(options, function(data){
 			jQuery('#metaDescLeft').val(__("Extended offer meta description length ") + (data.input) + __(" Characters"));
 		});
@@ -502,6 +505,14 @@ function setFormData(data){
 			// alert(parseInt(data[0].extendedTitle.length));
 			 jQuery('#extendedOfferTitle').val(data[0].extendedTitle);
 			 jQuery('#metaTitleLeft').val(__("Extended offer meta title length ") + parseInt(data[0].extendedTitle.length) + __(" characters"));
+			 //jQuery('#metaTitleLeft').val((data.input) + __(" characters"));
+			//jQuery('span#metaTitleLeft').text(68-parseInt(data[0].extendedTitle.length) + __(' characters remaining'));
+		 }
+
+		if(data[0].extendedTitle != null && data[0].extendedTitle != ''){
+			// alert(parseInt(data[0].extendedTitle.length));
+			 jQuery('#extendedTitle').val(data[0].extendedoffertitle);
+			 jQuery('#extendedTitleLeft').val(__("Extended title length ") + parseInt(data[0].extendedTitle.length) + __(" characters"));
 			 //jQuery('#metaTitleLeft').val((data.input) + __(" characters"));
 			//jQuery('span#metaTitleLeft').text(68-parseInt(data[0].extendedTitle.length) + __(' characters remaining'));
 		 }
