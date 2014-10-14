@@ -146,7 +146,7 @@ class StoreController extends Zend_Controller_Action
         if ($shopInformation[0]['affliateProgram'] == 0) {
             $numberOfSimilarOffers = 10;
         } else {
-            $numberOfSimilarOffers = 4;
+            $numberOfSimilarOffers = 3;
         }
 
         $similarShopsAndSimilarCategoriesOffers = FrontEnd_Helper_viewHelper::getShopCouponCode(
