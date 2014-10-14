@@ -109,6 +109,10 @@ function init(){
 			jQuery('#metaTitleLeft').val(__("Extended offer meta title length ") + (data.input) + __(" characters"));
 
 		});
+		jQuery('#extendedTitle').textareaCount(options, function(data){
+			jQuery('#extendedTitleLeft').val(__("Extended title length ") + (data.input) + __(" characters"));
+
+		});
       	jQuery('#extendedOfferMetadesc').textareaCount(options, function(data){
 			jQuery('#metaDescLeft').val(__("Extended offer meta description length ") + (data.input) + __(" characters"));
 			

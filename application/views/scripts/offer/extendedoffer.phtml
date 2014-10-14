@@ -31,9 +31,9 @@ else:
 endif;
 
 $termsAndConditions = $offerPartial->getOfferTermsAndCondition($offer);
-
+$extendedTitle = !empty($offer->extendedoffertitle) ? $offer->extendedoffertitle : $offer->title;
 $frontShopHeaderHelper = new FrontEnd_Helper_ShopHeaderPartialFunctions();
-echo $headerBlock = $frontShopHeaderHelper->getShopHeader($offer->shop, $expiredMessage, $offer->title);
+echo $headerBlock = $frontShopHeaderHelper->getShopHeader($offer->shop, $expiredMessage, $extendedTitle);
 ?>
 </div></div>
 <div class="row">
