@@ -294,8 +294,21 @@ class Shop extends BaseShop
         $shop = Doctrine_Query::create()->select('s.name')
             ->from('Shop s')
             ->where('s.id='.$shopId)->fetchArray();
-        return isset($shop[0]['name']) ? $shop[0]['name'] : '';  
+        return isset($shop[0]['name']) ? $shop[0]['name'] : '';
     }
+
+    public static function getShopLogoByShopId($shopId)
+    {
+        $shopsInformation = Doctrine_Query::create()
+            ->select('s.permaLink, img.path, img.name')
+            ->from("Shop s")
+            ->leftJoin("s.logo img")
+            ->where('s.deleted=0')
+            ->andWhere("s.id", $shopId)
+            ->fetchArray();
+        return !empty($shopsInformation) ? $shopsInformation[0] : '';
+    }
+
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
