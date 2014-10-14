@@ -79,6 +79,8 @@ class CategoryController extends Zend_Controller_Action
     public function indexAction()
     {
         $categoryPermalink = FrontEnd_Helper_viewHelper::getPagePermalink();
+        $categoryPermalink = explode('?', $categoryPermalink);
+        $categoryPermalink = isset($categoryPermalink[0]) ? $categoryPermalink[0] : '';
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($categoryPermalink);
         $pageDetails = Page::getPageDetailsFromUrl($categoryPermalink);
         $this->viewHelperObject->getMetaTags(
