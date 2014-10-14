@@ -11,14 +11,14 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert.js");
     <div id="codeAlertListdiv">
         <div class="wrap columns-2">
             <div class='wrap columns-2'>
-                <?php if ($this->messageSuccess != '' || $this->messageError != '') { ?>
+                <?php if ($this->successMessage != '' || $this->errorMessage != '') { ?>
                 <br>
                 <div class ="mainpage-content-colorbox success">
-                <?php if ($this->messageSuccess != '') { ?>
-                    <span class="successserver"><?php echo $this->messageSuccess; ?></span>
+                <?php if ($this->successMessage != '') { ?>
+                    <span class="successserver"><?php echo $this->successMessage; ?></span>
                 <?php } ?>
-                <?php if ($this->messageError != '') { ?>
-                    <span class="errorserver"><?php echo $this->messageError; ?></span>
+                <?php if ($this->errorMessage != '') { ?>
+                    <span class="errorserver"><?php echo $this->errorMessage; ?></span>
                 <?php } ?>
                 </div>
                 <?php } ?>
@@ -31,6 +31,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/code-alert.js");
                         <th style="display:none;"><?php echo $this->translate('Id'); ?></th>
                         <th><?php echo $this->translate('Code title'); ?></th>
                         <th><?php echo $this->translate('Recipients count'); ?></th>
+                        <th><?php echo $this->translate('Delete'); ?></th>
                     </tr>
                 </thead>
             </table>

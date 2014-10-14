@@ -8,7 +8,28 @@ var flagT = 1;
 var tile_id ='';
 
 function init(){
-	
+    jQuery('#code-alert-queue').click(function(){
+        ___addOverLay()
+        var offerId = jQuery('#offerId').val();
+        var shopId = jQuery('#selctedshop').val();
+        jQuery.ajax({
+            type : "POST",
+            url: HOST_PATH + "admin/email/codealertqueue",
+            dataType: 'json',
+            method : "post",
+            data: { shopId: shopId, offerId: offerId},
+            success: function(dataSet)
+            { 
+                if(dataSet == 1) {
+                    bootbox.alert("Code alert successfully added to the queue.");
+                } else {
+                    bootbox.alert("Code alert Queue for this offer already exist.");
+                }
+                ___removeOverLay();
+                return false;
+            } 
+        });
+    });
 
 	
 	
@@ -877,7 +898,7 @@ function selectDiscountType(dIv){
 		    jQuery("#datesdiv").show();
 		    
 		    jQuery("#attachpagesDiv").show();
-		    
+		    jQuery('#extra-options').show();
 	    	jQuery('#offerrefurlPR').val('');
 	    	jQuery('#uploadoffer').val('');
 	    	jQuery("input#couponCodeCheckbox").attr('checked' , 'checked');   // check coupon code checkbox if  discount type coupon code
@@ -936,8 +957,8 @@ function selectDiscountType(dIv){
 		     jQuery("#offertitledetail").show();
 		     jQuery("#datesdiv").show();
 		     
-		     jQuery("#attachpagesDiv").hide();
-		     
+		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extra-options').hide();
 	        jQuery('#offerrefurl').val('');
 	        jQuery('#uploadoffer').val('');
 	        jQuery("input#saleCheckbox").attr('checked' , 'checked');   // check coupon code checkbox if  discount type sale 
@@ -970,7 +991,8 @@ function selectDiscountType(dIv){
 		    jQuery("#visibiliyDiv").show();
 		    jQuery("#offertitledetail").show();
 		    jQuery("#datesdiv").show();
-		    jQuery("#attachpagesDiv").hide();
+		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extra-options').hide();
 		    jQuery("input#printableCheckbox").attr('checked' , 'checked');   // check print checkbox if  discount type prinable
 		    jQuery("input#newsCheckbox").removeAttr('checked') ;          // uncheck news div checkbox if discount type coupon code
 	        jQuery("input#saleCheckbox").removeAttr('checked') ;          // uncheck sale checkbox if discount type prinable

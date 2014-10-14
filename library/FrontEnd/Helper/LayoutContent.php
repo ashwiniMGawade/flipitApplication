@@ -70,64 +70,6 @@ class FrontEnd_Helper_LayoutContent
         return $robots;
     }
 
-    public static function loadGoogleAnalyticsCode()
-    {
-        $googleAnalyticsKey = 'UA-17691171-4';
-        $websiteName = 'kortingscode.nl';
-        $pushSetAccount = 'UA-17691171-1';
-        # set google analytics code for locale based like be/in etc
-        if(LOCALE!='') :
-            $googleAnalyticsKey = 'UA-17691171-3';
-            $websiteName = 'flipit.com';
-            if(LOCALE=='be') :
-                $pushSetAccount = 'UA-17691171-5';
-            else :
-                $pushSetAccount = '';
-            endif;
-        endif;
-        $googleAnalyticsCode = '';
-
-        if(strtolower(zend_Controller_Front::getInstance()->getRequest()->getControllerName()) == 'error') :
-            $googleAnalyticsCode = "<script type='text/javascript'>
-            (function (i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function () {
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-            ga('create', '$googleAnalyticsKey' , '$websiteName');
-            ga('require', 'displayfeatures');
-            ga('send', 'pageview');
-            ga('send', 'event', 'error', '404', 'page:ref' , document.location.pathname
-           + document.location.search + ':' + document.referrer  );
-           </script>";
-        else :
-            $googleAnalyticsCode =  "<script type='text/javascript'>
-            (function (i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function () {
-            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-            ga('create', '$googleAnalyticsKey' , '$websiteName');
-            ga('require', 'displayfeatures');
-            ga('send', 'pageview');";
-
-            if ($pushSetAccount!='') :
-                $googleAnalyticsCode .= "var _gaq = _gaq || [];
-               _gaq.push(['_setAccount', '$pushSetAccount']);
-               _gaq.push(['_trackPageview']);
-               (function () { var ga = document.createElement('script'); ga.type = 'text/javascript';
-               ga.async = true; ga.src = ('https:' == document.location.protocol ?
-               'https://' : 'http://')
-               + 'stats.g.doubleclick.net/dc.js';
-               var s = document.getElementsByTagName('script')[0];
-               s.parentNode.insertBefore(ga, s); }
-               )();";
-            endif;
-            $googleAnalyticsCode .="</script>";
-        endif;
-        return $googleAnalyticsCode;
-    }
-
     public static function loadGoogleTagManager()
     {
         $googleTagManager = "<!-- Google Tag Manager -->

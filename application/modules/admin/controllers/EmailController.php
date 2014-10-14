@@ -3,6 +3,8 @@
 class Admin_EmailController extends Zend_Controller_Action
 {
     public $flashMessenger = '';
+    public $_settings = false ;
+    public $_recipientMetaData = array();
     public function preDispatch()
     {
         $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
@@ -15,7 +17,9 @@ class Admin_EmailController extends Zend_Controller_Action
         BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
-
+        $sessionNamespace = new Zend_Session_Namespace();
+        $this->_settings  = $sessionNamespace->settings['rights'] ;
+        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
     }
 
     public function init()
@@ -327,16 +331,97 @@ class Admin_EmailController extends Zend_Controller_Action
         $this->view->sendersEmailAddress = $sendersEmailAddress;
         $this->view->sendersName = Settings::getEmailSettings('sender_name');
     }
+
     public function codeAlertAction()
     {
+        $this->getFlashMessage();
+    }
 
+    public function codeAlertSettingsAction()
+    {
+        $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
+        $this->view->codeAlertSettings = $codeAlertSettings;
+        $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $this->getFlashMessage();
+
+        if ($this->getRequest()->isPost()) {
+            $codeAlertParameters = $this->getRequest()->getParams();
+            CodeAlertSettings::saveCodeAlertSettings(
+                $codeAlertParameters['emailSubject'],
+                $codeAlertParameters['emailHeader']
+            );
+            $this->setFlashMessage('Code alert Settings have been updated successfully');
+            $this->_redirect(HTTP_PATH . 'admin/email/code-alert-settings');
+        }
+    }
+
+    public function codealertqueueAction()
+    {
+        $codeAlertQueueParameters = $this->getRequest()->getParams();
+        $codeAlertQueueShopId = $codeAlertQueueParameters['shopId'];
+        $codeAlertQueueOfferId = $codeAlertQueueParameters['offerId'];
+        $codeAlertQueue = CodeAlertQueue::saveCodeAlertQueue($codeAlertQueueShopId, $codeAlertQueueOfferId);
+        echo $codeAlertQueue;
+        die;
+    }
+    
+    public function savecodealertsettingsAction()
+    {
+        CodeAlertSettings::saveCodeAlertSettings($this->getRequest()->getParams());
+        die;
+    }
+    
+    public function savecodealertemailsubjectAction()
+    {
+        CodeAlertSettings::saveCodeAlertEmailSubject($this->getRequest()->getParams());
+        die;
+    }
+
+    public function savecodealertemailheaderAction()
+    {
+        CodeAlertSettings::saveCodeAlertEmailHeader($this->getRequest()->getParams());
+        die;
+    }
+
+    public function totalRecepientsAction()
+    {
+        if ($this->_settings['content']['rights'] != '1') {
+            $this->getResponse()->setHttpResponseCode(404);
+            echo $this->_helper->json('This page does not exist');
+        }
+
+        $visitors = CodeAlertQueue::getRecepientsCount();
+        echo $this->_helper->json(array('recepients' => $visitors), true);
+    }
+    
+    public function codealertlistAction()
+    {
+        $params = $this->_getAllParams();
+        $codeAlertQueue = CodeAlertQueue::getCodeAlertList($params);
+        echo Zend_Json::encode($codeAlertQueue);
+        die();
+    }
+
+    public function movecodealerttotrashAction()
+    {
+        $codeAlert = CodeAlertQueue::moveCodeAlertToTrash($this->_getParam('id'));
+        if (intval($codeAlert) > 0) {
+            $flash = $this->_helper->getHelper('FlashMessenger');
+            $message = $this->view->translate('Code alert has been moved to trash');
+            $flash->addMessage(array('success' => $message));
+        } else {
+            $message = $this->view->translate('Problem in your data.');
+            $flash->addMessage(array('error' => $message));
+        }
+        echo Zend_Json::encode($codeAlert);
+        die();
     }
 
     public function getFlashMessage()
     {
         $message = $this->flashMessenger->getMessages();
-        $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
-        $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+        $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->errorMessage = isset($message[0]['error']) ? $message[0]['error'] : '';
         return $this;
     }
 

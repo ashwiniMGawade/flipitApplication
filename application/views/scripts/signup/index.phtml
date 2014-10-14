@@ -58,41 +58,12 @@ endif;
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                            <?php echo $registerForm->dateOfBirth->renderLabel();?>
-                                <div class="row">
-                                    <div class="col-xs-4 first">
-                                    <?php echo $registerForm->dateOfBirthDay->renderViewHelper();?>
-                                    </div>
-                                    
-                                    <div class="col-xs-4 second">
-                                     <?php echo $registerForm->dateOfBirthMonth->renderViewHelper();?>
-                                    </div>
-                                    
-                                    <div class="col-xs-4 third">
-                                     <?php echo $registerForm->dateOfBirthYear->renderViewHelper();?>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        
+                    <div class="row">                      
                         <div class="col-sm-6">
                             <div class="form-group">
                             <?php 
                             echo $registerForm->gender->renderLabel()
                             . $registerForm->gender->renderViewHelper();
-                            ?>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                            <?php 
-                            echo $registerForm->postCode->renderLabel()
-                            . $registerForm->postCode->renderViewHelper();
                             ?>
                             </div>
                         </div>

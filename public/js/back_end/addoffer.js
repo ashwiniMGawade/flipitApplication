@@ -585,6 +585,7 @@ function selectDiscountType(dIv){
 		    jQuery("#datesdiv").show();
 		    
 		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extraOptions').show();
 	    	jQuery('#offerrefurlPR').val('');
 	    	jQuery('#uploadoffer').val('');
 	    	jQuery("input#couponCodeCheckbox").attr('checked' , 'checked');   // check coupon code checkbox if  discount type coupon code
@@ -645,7 +646,8 @@ function selectDiscountType(dIv){
 		    jQuery("#visibiliyDiv").show();
 		    jQuery("#offertitledetail").show();
 		    jQuery("#datesdiv").show();
-		    jQuery("#attachpagesDiv").hide();
+		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extraOptions').hide();
 	        jQuery('#offerrefurlPR').val('');
 	        jQuery('#uploadoffer').val('');
 	        jQuery("input#saleCheckbox").attr('checked' , 'checked');   // check coupon code checkbox if  discount type sale
@@ -674,7 +676,8 @@ function selectDiscountType(dIv){
 		    jQuery("#visibiliyDiv").show();
 		    jQuery("#offertitledetail").show();
 		    jQuery("#datesdiv").show();
-		    jQuery("#attachpagesDiv").hide();
+		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extraOptions').hide();
 		    jQuery("input#printableCheckbox").attr('checked','checked');   // check print checkbox if  discount type prinable
 		    jQuery("input#newsCheckbox").removeAttr('checked') ;          // uncheck news div checkbox if discount type coupon code
 	        jQuery("input#saleCheckbox").removeAttr('checked') ;          // uncheck sale checkbox if discount type prinable
@@ -1921,4 +1924,13 @@ jQuery.extend(jQuery.validator.prototype , {
 	}
 });
 
-
+function codeAlertToggle(e){
+	var btn = e.target  ? e.target :  e.srcElement ;
+	jQuery(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+	
+	if(btn.value=='yes'){
+		jQuery("input#codealertcheckbox").val(1);
+	}else{
+		jQuery("input#codealertcheckbox").val(0); 
+	}
+}

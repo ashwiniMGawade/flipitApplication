@@ -15,13 +15,14 @@ $publicLocalePath = $locale != '' ? $httpPath.'public/'.$locale.'/images/front_e
 $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName($locale);
 $publicPath = $httpPath.'public/images/front_end/';
 $emailsViewPath = 'emails/';
+$mailType = !empty($this->codeAlert) ? 'codeAlert' : $this->mailType;
 $emailHeader = $this->partial(
     $emailsViewPath. 'emailHeader.phtml',
     array(
         'websiteName' => $websiteName,
         'publicLocalePath' => $publicLocalePath,
         'httpPathLocale' => $httpPathLocale,
-        'mailType' => $this->mailType,
+        'mailType' => $mailType,
         'locale' => $locale,
         'publicPath' => $publicPath
     )
@@ -83,6 +84,20 @@ if(!empty($this->categoryVouchers)) {
     );
 } 
 
+$codeAlert = '';
+if(!empty($this->codeAlert)) {
+    $codeAlert = $this->partial(
+        $emailsViewPath. 'codeAlert.phtml',
+        array(
+            'codeAlert' => $this->codeAlert,
+            'categoryInformation' => $this->categoryInformation,
+            'httpPathLocale' => $httpPathLocale,
+            'publicPathCdn' => $publicPathCdn,
+            'httpPath' => $httpPath,
+            'mailType' => $this->mailType
+        )
+    );
+} 
 ?>
 <table width="100%" cellpadding="0" cellspacing="0">
 <tbody>
@@ -93,6 +108,7 @@ if(!empty($this->categoryVouchers)) {
                 <?php
                 echo $emailHeader;
                 echo $welcomeTopBlock;
+                echo $codeAlert;
                 echo $topOffers;
                 echo $topVouchercodes;
                 echo $categoryVouchers;
