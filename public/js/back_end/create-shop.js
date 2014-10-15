@@ -110,9 +110,28 @@ $(document).ready(init);
 
 function init()
 {
-	$('#shopMetaDescription').NobleCount('#metaTextLeft',{
-		max_chars: ''
+	jQuery('#shopOverwriteTitle').NobleCount('#shopOverwriteTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Shop overwrite title length ")
 	});
+	
+	jQuery('#shopMetaDescription').NobleCount('#metaTextLeft',{
+		max_chars: 150,
+		prefixString : __("Shop meta description length ")
+	});
+
+	jQuery('#pagemetaTitle').NobleCount('#pagemetaTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Shop meta title length ")
+	});
+	
+	jQuery('#pagemetaDesc').NobleCount('#pagemetaDescLeft',{
+		max_chars: 150,
+		prefixString : __("Shop page meta description length ")
+	});
+
+
+ 
 
 	$('button#prefillData').click(function(){
 		updateTitleSubtitle();
@@ -136,6 +155,18 @@ function init()
 
 	$('#shopSubTitle').textareaCount(options, function(data){
 		jQuery('#shopSubTitleLeft').val(__("Shop sub-title length ") + (data.input) + __(" characters"));
+	});
+	
+	$('#shopName').textareaCount(options, function(data){
+		jQuery('#shopNameLeft').text(__("Shop name length ") + (data.input) + __(" characters"));
+	});
+	
+	$('#pageTitle').textareaCount(options, function(data){
+		jQuery('#pageTitleLeft').text(__("Page title length ") + (data.input) + __(" characters"));
+	});
+	
+	$('#pageSubTitle').textareaCount(options, function(data){
+		jQuery('#pageSubTitleLeft').text(__("Page sub title length ") + (data.input) + __(" characters"));
 	});
 	
 

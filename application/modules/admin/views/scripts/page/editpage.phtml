@@ -357,13 +357,13 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->pageDetail['metaTitle']; ?>"/>
-                            <!--<span id="metaTextLeft" class="nobel" style="width:504px;"></span>-->
+                            <span id="metaTextLeft" class="input-xlarge disabled btop word-count nobel wordcount-width"></span>
                             <!--<input type="text" class="span3" placeholder="<?php //echo $this->translate('Meta Title'); ?>" maxlength="68" value="<?php //echo $this->pageDetail['metaTitle']; ?>" name="pagemetaTitle" id="pagemetaTitle"></div>-->
                             </div>
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
                             <div class="mainpage-content-right"><textarea class="input-xlarge mbot bbot ignore" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo $this->pageDetail['metaDescription']; ?></textarea>
-                            <!--<span id="metaDescLeft" class="nobel" style="width:504px;"></span>-->
+                            <span id="metaDescLeft" class="input-xlarge disabled btop word-count nobel wordcount-width"></span>
                             <!--<textarea class="input-xlarge mbot bbot ignore" name="pagemetaDesc" id="pagemetaDesc" placeholder="<?php //echo $this->translate('Meta Description'); ?>"  maxlength="150" rows="3"><?php //echo $this->pageDetail['metaDescription']; ?></textarea>
                             <input type="text" class="input-xlarge disabled btop word-count"  id="metaTextLeft" value = "Characters Left: 160" placeholder="Word Count: 28" disabled="disabled">-->
                             </div>

@@ -391,13 +391,15 @@ class Offer extends BaseOffer
         ->select(
             'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
             o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
-            o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,s.name,s.refUrl,
+            o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
+            o.updated_at as lastUpdate,s.name,s.refUrl,
             s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
-            ologo.name'
+            ologo.name,terms.content as terms'
         )
         ->from('refOfferPage op')
         ->leftJoin('op.Offer o')
         ->leftJoin('o.logo ologo')
+        ->leftJoin('o.termandcondition terms')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
