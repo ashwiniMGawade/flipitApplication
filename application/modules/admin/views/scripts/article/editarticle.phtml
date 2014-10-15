@@ -316,9 +316,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                         <input type="text" id="articlemetaTitle" 
                                         name="articlemetaTitle" value="<?php echo $this->articleData[0]['metatitle']?>"
                                          placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore">
-                                        <input type="text" disabled="disabled"
-                                         value="<?php echo $this->translate('Artical meta title length ') . strlen($this->articleData[0]['metatitle']). $this->translate(' characters') ;?>" id="metaTextLeft" 
-                                         class="input-xlarge disabled btop word-count">
+                                         <span id="metaTextLeft" class="disabled btop word-count nobel wordcount-width"></span>
                                 </div>
                              </div>
                             <div class="mainpage-content-line">
@@ -329,9 +327,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                     id="articlemetaDesc" name="articlemetaDesc" 
                                     placeholder="<?php echo $this->translate ( 'Meta Description' );?>" 
                                     rows="3"><?php echo trim($this->articleData[0]['metadescription']);?></textarea>
-                                    <input type="text" disabled="disabled" 
-                                    value="<?php echo $this->translate('Artical meta description length '). strlen($this->articleData[0]['metadescription']). $this->translate(' characters') ;?>" id="metaDescriptionleft" 
-                                    class="input-xlarge disabled btop word-count">
+                                    <span id="metaDescriptionleft" class="disabled btop word-count nobel wordcount-width"></span>
                                 </div>
                                 <div class="mainpage-content-left"><label>
                                 <strong><?php echo $this->translate('Introduction'); ?></strong></label></div>
