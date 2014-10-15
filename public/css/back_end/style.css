@@ -3463,3 +3463,15 @@ div.mainpage-content-right-inner div.browse-container img.image-container {
 div#error-message {
 	color: #B94A48;
 }
+
+.wordcount-width{
+	width: 656px !important;
+}
+
+.offer-wordcount-width{
+	width: 651px !important;
+}
+
+.shop-wordcount-width{
+	width: 98% !important;
+}

@@ -41,7 +41,8 @@ $howToIntroductionText = '';
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
-                              <input type="text" class="span3"  id="shopName" name="shopName" placeholder=<?php echo $this->translate('Shop Name'); ?>>
+                              <input type="text" class="span3"  id="shopName" name="shopName" placeholder=<?php echo $this->translate('Shop Name'); ?> style="margin-bottom: 0;">
+                            <span id="shopNameLeft" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Shop Name length 0 characters'); ?></span>
 						</div>
                     </div>
                 </div>
@@ -59,8 +60,8 @@ $howToIntroductionText = '';
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
-                        	<input type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="shopOverwriteTitle" id="shopOverwriteTitle">
-                        	
+                        	<input type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="shopOverwriteTitle" id="shopOverwriteTitle" style="margin-bottom: 0;">
+                        	<span id="shopOverwriteTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                         </div>
                     </div>    
                 </div>
@@ -70,7 +71,7 @@ $howToIntroductionText = '';
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
 	                        <textarea class="input-xlarge mbot bbot ignore" id="shopMetaDescription" name="shopMetaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Shop meta description length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
+                            <span id="metaTextLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                         </div>
                     </div>
                 </div>
@@ -474,7 +475,8 @@ $howToIntroductionText = '';
                     <div class="mainpage-content-right">
                     	 <div class="mainpage-content-right-inner-right-other"></div>
                     	<div class="mainpage-content-right-inner-left-other">
-                    		<input type="text" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>">
+                    		<input type="text" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>" style="margin-bottom: 0;">
+                            <span id="pageTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Page title length 0 characters'); ?></span>
                     	</div>
                     </div>
                 </div>
@@ -484,7 +486,8 @@ $howToIntroductionText = '';
                      <div class="mainpage-content-right">
                      	 <div class="mainpage-content-right-inner-right-other"></div>
                      	<div class="mainpage-content-right-inner-left-other">
-                     		<input type="text" name="pageSubTitle" id="pageSubTitle" class="span3" placeholder="<?php echo $this->translate('Page Subtitle'); ?>">
+                     		<input type="text" name="pageSubTitle" id="pageSubTitle" class="span3" placeholder="<?php echo $this->translate('Page Subtitle'); ?>" style="margin-bottom: 0;">
+                            <span id="pageSubTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"><?php echo $this->translate('Page sub title length 0 characters'); ?></span>
                      	</div>
                      </div>	
                 </div>
@@ -495,7 +498,7 @@ $howToIntroductionText = '';
                      	 <div class="mainpage-content-right-inner-right-other"></div>
                      	<div class="mainpage-content-right-inner-left-other">
 		                     <input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot"/>
-							 <input type="text" disabled="disabled" value="<?php echo $this->translate('Shop meta title length 0 characters');?>" id="pagemetaTitleLeft" class="input-xlarge disabled btop word-count">
+                             <span id="pagemetaTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
 						</div>	 
 					 </div>
                 </div>
@@ -505,7 +508,7 @@ $howToIntroductionText = '';
                      	 <div class="mainpage-content-right-inner-right-other"></div>
                      	<div class="mainpage-content-right-inner-left-other">
 		                     <textarea class="input-xlarge mbot bbot" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
-							 <input type="text" disabled="disabled" value="<?php echo $this->translate('Shop page meta description length 0 characters');?>" id="pagemetaDescLeft" class="input-xlarge disabled btop word-count">
+                             <span id="pagemetaDescLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
 						</div>	 
 					 </div>
                 </div>

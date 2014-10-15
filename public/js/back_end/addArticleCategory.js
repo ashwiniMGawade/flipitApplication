@@ -99,6 +99,16 @@ function init()
 		
 	});
 	
+	jQuery('#metaTitle').NobleCount('#metaTextLeft',{
+		max_chars: 68,
+		prefixString : __("Artical category meta title length ")
+	});
+	
+	jQuery('#metaDescription').NobleCount('#metaTextLeft1',{
+		max_chars: 150,
+		prefixString : __("Artical category meta description length ")
+	});
+	
 	$("form").submit(function(){
 		
 		if (! jQuery.isEmptyObject(invalidForm) ) 

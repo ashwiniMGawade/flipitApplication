@@ -85,7 +85,8 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
-                              <input value="<?php echo $this->data['name'] ; ?>" type="text" class="span3"  id="shopName" name="shopName"  placeholder=<?php echo $this->translate('Shop Name'); ?>>
+                              <input value="<?php echo $this->data['name'] ; ?>" type="text" class="span3"  id="shopName" name="shopName"  placeholder=<?php echo $this->translate('Shop Name'); ?> style="margin-bottom: 0;">
+                              <input type="text" id="shopNameLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate("Shop name length "). strlen($this->data['name']) . $this->translate(' characters');?>" placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
 </div>
                     </div>
                 </div>
@@ -104,7 +105,8 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
-                        	<input value="<?php echo $this->data['overriteTitle'] ; ?>" type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="shopOverwriteTitle">
+                        	<input value="<?php echo $this->data['overriteTitle'] ; ?>" type="text" class="span3 ignore" placeholder="<?php echo $this->translate('Overwrite Title'); ?>" name="shopOverwriteTitle" id="shopOverwriteTitle" style="margin-bottom: 0;">
+                            <span id="shopOverwriteTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                         </div>
                     </div>    
                 </div>
@@ -114,7 +116,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
 	                        <textarea class="input-xlarge mbot bbot ignore" id="shopMetaDescription" name="shopMetaDescription" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo $this->data['metaDescription']; ?></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Shop meta description length ') . strlen($this->data['metaDescription']). $this->translate(' characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
+                            <span id="metaTextLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
                         </div>
                     </div>
                 </div>
@@ -675,7 +677,8 @@ echo $this->headTitle()->append('Edit Shop');?>
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
                     	<div class="mainpage-content-right-inner-left-other">
-                    		<input type="text" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>" value="<?php echo $this->data['howtoTitle'] ; ?>">
+                    		<input type="text" name="pageTitle" id="pageTitle" class="span3" placeholder="<?php echo $this->translate('Page title'); ?>" value="<?php echo $this->data['howtoTitle'] ; ?>" style="margin-bottom: 0;">
+                            <input type="text" id="pageTitleLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate("Page title length "). strlen($this->data['howtoTitle']) . $this->translate(' characters');?>" placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
                     	</div>
                     </div>
                 </div>
@@ -684,7 +687,8 @@ echo $this->headTitle()->append('Edit Shop');?>
                      <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Page Subtitle'); ?></strong></label></div>
                      <div class="mainpage-content-right">
                      	<div class="mainpage-content-right-inner-left-other">
-                     		<input type="text" name="pageSubTitle" id="pageSubTitle" class="span3" placeholder="<?php echo $this->translate('Page Subtitle'); ?>" value="<?php echo $this->data['howtoSubtitle'] ; ?>">
+                     		<input type="text" name="pageSubTitle" id="pageSubTitle" class="span3" placeholder="<?php echo $this->translate('Page Subtitle'); ?>" value="<?php echo $this->data['howtoSubtitle'] ; ?>" style="margin-bottom: 0;">
+                        <input type="text" id="pageSubTitleLeft" class="input-xlarge  btop word-count" value="<?php echo $this->translate("Page sub title length "). strlen($this->data['howtoSubtitle']) . $this->translate(' characters');?>" placeholder="<?php echo $this->translate('0 characters');?>" disabled="disabled">
                      	</div>
                      </div>	
                 </div>
@@ -694,7 +698,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                      <div class="mainpage-content-right">
                      	<div class="mainpage-content-right-inner-left-other">
 		                     <input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->data['howtoMetaTitle'] ; ?>"/>
-							 <input type="text" disabled="disabled" value="<?php echo $this->translate("Shop meta title length "). strlen($this->data['howtoMetaTitle']) . $this->translate(' characters');?>" id="pagemetaTitleLeft" class="input-xlarge disabled btop word-count">
+                             <span id="pagemetaTitleLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
 						</div>	 
 					 </div>
                 </div>
@@ -703,7 +707,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                      <div class="mainpage-content-right">
                      	<div class="mainpage-content-right-inner-left-other">
 		                     <textarea class="input-xlarge mbot bbot ignore" id="pagemetaDesc" name="pagemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"><?php echo $this->data['howtoMetaDescription'] ; ?></textarea>
-							 <input type="text" disabled="disabled" value="<?php echo $this->translate("Shop page meta description length "). strlen($this->data['howtoMetaDescription']) . $this->translate(' characters');?>" id="pagemetaDescLeft" class="input-xlarge disabled btop word-count">
+                             <span id="pagemetaDescLeft" class="nobel disabled btop word-count shop-wordcount-width"></span>
 						</div>	 
 					 </div>
                 </div>

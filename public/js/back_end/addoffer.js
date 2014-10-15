@@ -75,12 +75,14 @@ function init(){
 				height : "300"
 	});
 	
-   jQuery('#extendedOfferTitle').NobleCount('#metaTitleLeft',{
-		max_chars: 68
+	jQuery('#extendedOfferTitle').NobleCount('#metaTitleLeft',{
+		max_chars: 68,
+		prefixString : __("Extended offer meta title length ")
 	});
 	
 	jQuery('#extendedOfferMetadesc').NobleCount('#metaDescLeft',{
-		max_chars: 150
+		max_chars: 150,
+		prefixString : __("Extended offer meta description length ")
 	});
 
 	jQuery('.word_count').each(function() {
