@@ -12,17 +12,21 @@ foreach ($this->popularShops as $popularShop) :
                 </a>
                 <div class="text">
                     <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["permaLink"];?>" class="link">
-                    <?php echo $popularShop['name']; ?>
+                        <?php echo $popularShop['name']; ?>
                     </a>
                     <p>
-                    <?php 
-                    if($popularShop['activeCount'] > 0):
+                        <?php 
+                        if($popularShop['activeCount'] > 0):
+                            ?>
+                            <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["permaLink"];?>" 
+                            class="active-offer">
+                            <?php echo $popularShop['activeCount'] . " "  .$this->translate('active offers');?>
+                            </a>
+                        <?php
+                        else:
+                            echo "&nbsp;";
+                        endif;
                         ?>
-                        <a href="<?php echo HTTP_PATH_LOCALE. $popularShop["permaLink"];?>" 
-                        class="active-offer">
-                        <?php echo $popularShop['activeCount'] . " "  .$this->translate('active offers');?>
-                        </a>
-                    <?php endif; ?>
                     </p>
                     <a
                     href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
