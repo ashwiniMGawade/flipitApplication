@@ -167,7 +167,7 @@ class Shop
     private $contentManagerName;
 
     /**
-     * @ORM\Column(type="integer", length=8, nullable=false)
+     * @ORM\Column(type="integer", length=8, nullable=true)
      */
     private $screenshotId;
 
@@ -396,11 +396,7 @@ class Shop
      */
     private $howtousebigimage;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\WebsiteScrenshot", inversedBy="shop")
-     * @ORM\JoinColumn(name="screenshotid", referencedColumnName="id")
-     */
-    private $screnshot;
+ 
 
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Visitor", inversedBy="favoriteshops")

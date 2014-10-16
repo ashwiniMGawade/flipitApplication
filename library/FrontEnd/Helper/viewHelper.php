@@ -253,6 +253,8 @@ EOD;
         } else {
             $functionToBeCached = call_user_func_array($relatedFunction['function'], $relatedFunction['parameters']);
         }
+
+
         $cacheStatusByKey = self::checkCacheStatusByKey($dataKey);
         if ($cacheStatusByKey) {
             if ($replaceStringArrayCheck == '1') {
@@ -359,7 +361,7 @@ EOD;
         $stores = '';
         switch (strtolower($storeType)) {
             case 'popular':
-                $stores = Shop::getPopularStores($limit);
+                $stores = \KC\Repository\Shop::getPopularStores($limit);
                 break;
             default:
                 break;
@@ -894,7 +896,7 @@ EOD;
     public static function setErrorPageParameters($currentObject)
     {
         $currentObject->getResponse()->setHttpResponseCode(404);
-        $currentObject->view->popularShops = Shop::getPopularStores(12);
+        $currentObject->view->popularShops = \KC\Repository\Shop::getPopularStores(12);
         $websitesWithLocales = self::getWebsitesLocales(Website::getAllWebsites());
         $currentObject->view->flipitLocales = $websitesWithLocales;
     }
