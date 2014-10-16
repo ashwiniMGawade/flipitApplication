@@ -48,7 +48,7 @@ class Shop extends \KC\Entity\Shop implements \Doctrine\ORM\Proxy\Proxy
         return parent::__get($property);
     }
 
-    public function __set($property, $value)
+    public function __set($property, $value = '')
     {
         $this->__load();
         return parent::__set($property, $value);

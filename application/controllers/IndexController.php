@@ -20,9 +20,9 @@ class IndexController extends Zend_Controller_Action
     }
 
     public function indexAction()
-    {
+    {//23315
         echo "<pre>";
-        print_r(KC\Repository\Shop::getStoresForSearchByKeyword('zal', 10, 1));
+        print_r(KC\Repository\Offer::updateTotalViewCount());
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();

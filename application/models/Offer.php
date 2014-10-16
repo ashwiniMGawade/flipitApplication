@@ -815,14 +815,14 @@ class Offer extends BaseOffer
                     o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, 
                     o.refofferurl, o.startdate,o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount,
                     o.authorId, o.authorName, o.shopid,o.offerlogoid, o.userGenerated, o.approved,img.id, img.path,
-                    img.name,fv.shopId,fv.visitorId,t.*'
+                    img.name,fv.shopId,fv.visitorId,t.content'
                 )
                 ->from('Offer o')
                 ->leftJoin('o.shop s')
                 ->leftJoin('s.logo img')
                 ->leftJoin('s.favoriteshops fv')
                 ->leftJoin('o.termandcondition terms')
-                 ->leftJoin('o.tiles t')
+                ->leftJoin('o.tiles t')
                 ->where('o.deleted = 0')
                 ->andWhere('o.offline = 0')
                 ->andWhere('s.deleted = 0')

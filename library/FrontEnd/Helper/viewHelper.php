@@ -600,7 +600,7 @@ EOD;
 
     public static function getallrelatedshopsid($shopId)
     {
-        $data = Offer::commongetallrelatedshopsid($shopId);
+        $data = \KC\Repository\Offer::commongetallrelatedshopsid($shopId);
         return $data;
     }
 
