@@ -646,39 +646,35 @@ class User extends \KC\Entity\User
     {
         $role = $params['role'];
         $srh = $params['searchtext'];
-
-        $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $data = $queryBuilder->select('u, r.name as role, p.path as path, p.name as ppname')
-            ->addSelect('(SELECT COUNT(us.createdby) FROM KC\Entity\User us WHERE us.createdby = u.id)  as entries')
+        $request  = \DataTable_Helper::createSearchRequest($params, array('firstName', 'lastName', 'email'));
+        $qb = \Zend_Registry::get('emUser')->createQueryBuilder()
             ->from('KC\Entity\User', 'u')
             ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
-            ->setParameter(1, '0')
-            ->where('u.deleted = ?1')
-            ->setParameter(2, \Auth_StaffAdapter::getIdentity()->users->id)
-            ->andWhere('r.id >=', '?2');
+            ->where('u.deleted = 0')
+            ->andWhere('r.id >='. \Auth_StaffAdapter::getIdentity()->users->id);
         if ((intval($role)) > 0) {
-            //add role search
-            $data->setParameter(3, $role)
-                ->andWhere('r.id= ?3');
+            $qb->andWhere('r.id='. $role);
         }
         if ($srh!='undefined') {
-            //add search for user name
-            $data->setParameter(4, $srh.'%')
-            ->andWhere($queryBuilder->expr()->like('u.firstName', '?4'));
+            $qb->andWhere($queryBuilder->expr()->like('u.firstName', $srh.'%'));
         }
-        $data->setParameter(5, \Auth_StaffAdapter::getIdentity()->id)
-            ->andWhere('u.id <>', '?5')
-            ->orderBy("u.id", "DESC")->getQuery();
-        return \Zend_Json::encode(
-            \DataTable_Helper::generateDataTableResponse(
-                $data,
-                $params,
-                array("__identifier" => "u.id, r.id, p.id",'u.id','u.firstName','u.email','role'),
-                array(),
-                array()
-            )
-        );
+        $qb->andWhere('u.id <>'. \Auth_StaffAdapter::getIdentity()->id)
+        ->orderBy("u.id", "DESC");
+
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
+        $builder
+            ->setQueryBuilder($qb)
+            ->add('text', 'u.firstName')
+            ->add('text', 'u.lastName')
+            ->add('text', 'u.email')
+            ->add('text', 'r.name')
+            ->add('text', 'p.path')
+            ->add('text', 'p.name');
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+
+        $data = \DataTable_Helper::getResponseArray($data, $request);
+        return \Zend_Json::encode($data);
     }
    
     public static function getTrashUserList($params)
