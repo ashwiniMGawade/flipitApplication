@@ -490,7 +490,7 @@ EOD;
     public static function getWebsiteLocales($frontend = '')
     {
         $locales = '';
-        $websites = Website::getAllWebsites();
+        $websites = KC\Repository\Website::getAllWebsites();
         foreach ($websites as $website) {
             $spiltWebsite  = explode('/', $website['name']);
             $locale = isset($spiltWebsite[1]) ? $spiltWebsite[1] : "nl";

@@ -88,11 +88,11 @@ class Admin_UserController extends Zend_Controller_Action
     {
         $u = Auth_StaffAdapter::getIdentity();
         $this->view->id = $u->id;
-        $this->view->role = $u->roleId;
-        $this->view->roles = Role::createUserPermission($u->roleId);
-        $categoryList =  Category::getCategoryList();
+        $this->view->role = $u->users->id;
+        $this->view->roles = KC\Repository\Role::createUserPermission($u->users->id);
+        $categoryList =  KC\Repository\Category::getCategoryList();
         $this->view->categoryList = $categoryList['aaData'] ;
-        $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
+        $this->view->countriesLocales = \FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
     }
     /**
      * function use for getwebbsite acccording to useId and role
@@ -606,42 +606,48 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function edituserAction()
     {
-     $id = intval($this->getRequest()->getParam('id'));
-     $this->view->qstring = $_SERVER['QUERY_STRING'];
-     $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
-            //get category list from category table
-             $categoryList =  Category::getCategoryList() ;
-             //get favorites store of currect user(admin)
-             $favShop  = User::getUserFavouriteStores($id);
-             //get unterestng category of currecnt user(admin)
-             $intCat = User::getUserInterestingCat($id);
+        $id = intval($this->getRequest()->getParam('id'));
+        $this->view->qstring = $_SERVER['QUERY_STRING'];
+        $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
+        //get category list from category table
+        $categoryList =  KC\Repository\Category::getCategoryList() ;
+        //get favorites store of currect user(admin)
+        $favShop  = KC\Repository\User::getUserFavouriteStores($id);
+        //get unterestng category of currecnt user(admin)
+        $intCat = KC\Repository\User::getUserInterestingCat($id);
 
-     $catArray  = array();//array generate on key based
-     foreach ($intCat as $categories){
+        $catArray  = array();//array generate on key based
+        foreach ($intCat as $categories) {
+            $catArray[] = $categories['categoryId'];
+        }
+        $this->view->catArray = '';
+        if (isset($catArray) && count($catArray)>0) {
+            $this->view->catArray =  $catArray  ;
+        }
+       
+        //pas value on phtml page
+        $this->view->categoryList = $categoryList['aaData'];
+        $this->view->favoritesShop = $favShop;
 
-             $catArray[] = $categories['categoryId'];
-         }
-         $this->view->catArray = '';
-         if(isset($catArray) && count($catArray)>0){
-
-             $this->view->catArray =  $catArray  ;
-         }
-         //pas value on phtml page
-         $this->view->categoryList = $categoryList['aaData'] ;
-         $this->view->favoritesShop = $favShop;
-
-         if($id > 0) {
-
+        if ($id > 0) {
             $u = Auth_StaffAdapter::getIdentity();
-            $data = Doctrine_Query::create()->select("u.* , w.id, pi.name,pi.path")
-                                            ->from('User u')
-                                            ->leftJoin("u.website w")
-                                            ->leftJoin("u.profileimage pi")
-                                            ->where("u.id = ?" , $id)
-                                            ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-            $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+            $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+            $query = $queryBuilder->select('u, w, pi, r')
+                ->from('\KC\Entity\User', 'u')
+                ->leftJoin("u.profileimage", "pi")
+                ->leftJoin("u.users", "r")
+                ->leftJoin('u.website', 'w')
+                ->where($queryBuilder->expr()->eq('u.id', $id));
+            $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-            if(($role=='3' || $role=='4') ||  $role > $data['roleId']  || $data['deleted']=='1' || $u->id==$id) {
+            $role =  Zend_Auth::getInstance()->getIdentity()->users->id;
+
+            if (($role=='3'
+                || $role=='4')
+                || $role > $data['users']['id']
+                || $data['users']['id'] == '1'
+                || $u->id == $id
+            ) {
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate("You don't have permissions to edit this user.");
@@ -650,16 +656,18 @@ class Admin_UserController extends Zend_Controller_Action
             }
 
             $this->view->id = $u->id;
-            $this->view->roles = Role::createUserPermission($u->roleId);
-            $this->view->roleId = $data['roleId'];
+            $this->view->roles = KC\Repository\Role::createUserPermission($u->users->id);
+            $this->view->roleId = $data['users']['id'];
             $this->view->userId = $id;
             $this->view->userDetail = $data;
-            $this->view->role = $u->roleId;
+            $this->view->role = $u->users->id;
             $this->view->webAcess ='';
-            foreach($data['website'] as $key=>$value){
+
+       
+            foreach ($data['website'] as $key => $value) {
                 $this->view->webAcess.= $value['id'].',';
             }
-           $this->view->webAcess = rtrim($this->view->webAcess,',');
+            $this->view->webAcess = rtrim($this->view->webAcess, ',');
         }
         // echo Zend_Json::encode($data) ;
     }

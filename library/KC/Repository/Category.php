@@ -472,20 +472,22 @@ class Category extends \KC\Entity\Category
      */
     public static function getCategoryList($params = "")
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
         $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : '';
-        //$delVal = isset($params['status']) ?  array($params['status']) : array(null,0, 1);
-        $categoryList = Doctrine_Query::create()
-                ->select('c.id as id,c.name as name ,c.status as status')
-                ->from("Category c")
-                ->Where("deleted = 0" )
-                ->andWhere("c.name LIKE ?", "$srh%")
-                ->orderBy("c.name ASC");
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $qb = $queryBuilder
+            ->from("KC\Entity\Category", "c")
+            ->where("c.deleted = 0")
+            ->andWhere($queryBuilder->expr()->like('c.name', $queryBuilder->expr()->literal($srh.'%')));
 
-        $list = DataTable_Helper::generateDataTableResponse($categoryList,
-                        $params, array("__identifier" => 'c.id', 'c.id','c.name'),
-                        array(), array());
+        $request  = \DataTable_Helper::createSearchRequest($params, array('id', 'name', 'status'));
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
+        $builder->setQueryBuilder($qb)
+            ->add('number', 'c.id')
+            ->add('text', 'c.name')
+            ->add('text', 'c.status');
+
+        $list = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $list = \DataTable_Helper::getResponse($list, $request);
         return $list;
 
     }

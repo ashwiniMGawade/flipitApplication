@@ -12,10 +12,10 @@ class DataTable_Helper extends \NeuroSYS\DoctrineDatatables\Table
     public static function getResponse($data, $params)
     {
         return array(
-        'sEcho' => $params['sEcho'],
+        'sEcho' => isset($params['sEcho']) ? $params['sEcho'] : 0,
         'aaData' => $data,
         "iTotalRecords" => 500,
-        "iTotalDisplayRecords" => $params['iDisplayLength']
+        "iTotalDisplayRecords" => isset($params['iDisplayLength']) ? $params['iDisplayLength'] : 0
         );
     }
 }

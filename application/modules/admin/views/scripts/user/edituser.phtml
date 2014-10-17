@@ -33,7 +33,7 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.cust
          <form name="editRegister" method = "POST" action = '<?php echo HTTP_PATH; ?>admin/user/updateuser' id='editRegister' enctype="multipart/form-data">
             <input type="hidden" name='loggedInUser' id='loggedInUser' value="<?php echo $this->id; ?>" />
             <input type="hidden" name='id' id='id' value="<?php echo $this->userId;?>" />
-            <input type="hidden" name='pImageId' id='imageIdInEdit' value="<?php echo $this->userDetail['profileImageId'];?>" />    
+            <input type="hidden" name='pImageId' id='imageIdInEdit' value="<?php echo $this->userDetail['profileimage']['id'];?>" />    
             <input type="hidden" name='pImageName' id='pImageName' value="" />
             <input type="hidden" name='userId' id='userId' value="<?php echo $this->userId;?>" />
             <input type="hidden" name='roleId' id='roleId' value="<?php echo $this->role;?>" />

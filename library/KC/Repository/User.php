@@ -646,8 +646,8 @@ class User extends \KC\Entity\User
     {
         $role = $params['role'];
         $srh = $params['searchtext'];
-        
-        $qb = \Zend_Registry::get('emUser')->createQueryBuilder()
+        $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $qb = $queryBuilder
             ->from('KC\Entity\User', 'u')
             ->leftJoin("u.users", "r")
             ->leftJoin('u.profileimage', 'p')
@@ -794,9 +794,12 @@ class User extends \KC\Entity\User
    
     public static function getUserInterestingCat($id)
     {
-        $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $repo = $entityManagerLocale->getRepository('KC\Entity\Interestingcategory');
-        $userFevoriteCat = $repo->findOneBy(array('userId' => $id))->toArray();
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('o')
+            ->from('KC\Entity\Interestingcategory', 'o')
+            ->where("o.userId=".$id);
+        $userFevoriteCat = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userFevoriteCat;
     }
    
