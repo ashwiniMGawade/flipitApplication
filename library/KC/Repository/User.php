@@ -673,7 +673,7 @@ class User extends \KC\Entity\User
             ->add('text', 'p.name');
         $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
 
-        $data = \DataTable_Helper::getResponseArray($data, $request);
+        $data = \DataTable_Helper::getResponse($data, $request);
         return \Zend_Json::encode($data);
     }
    

@@ -1,5 +1,5 @@
 <?php
-class DataTable_Helper
+class DataTable_Helper extends \NeuroSYS\DoctrineDatatables\Table
 {
     public static function createSearchRequest($override = array(), $props = array(), $search = array())
     {
@@ -9,7 +9,7 @@ class DataTable_Helper
         return $override;
     }
 
-    public static function getResponseArray($data, $params)
+    public static function getResponse($data, $params)
     {
         return array(
         'sEcho' => $params['sEcho'],
