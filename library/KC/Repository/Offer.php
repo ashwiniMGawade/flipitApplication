@@ -2300,7 +2300,6 @@ class Offer Extends \KC\Entity\Offer
                 as clicks"
             );
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        print_r($data);die;
         foreach ($data as $value) {
 
             # update only when there ar new click out in view_count table
@@ -2325,7 +2324,7 @@ class Offer Extends \KC\Entity\Offer
                             ->update('KC\Entity\Offer', 'o')
                             ->set('o.totalViewcount', $newtotal)
                             ->set('o.popularityCount', "'".$popularity."'")
-                            ->where('o.id = ?', $value['id'])
+                            ->where('o.id ='.$value['id'])
                             ->getQuery();
                             $query->execute();
             }
@@ -2338,18 +2337,17 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                'po.position, po.status, po.type,o.name,o.title,s.id,s.name,img.name,img.path,vot.id,vot.vote'
+                'po.position, po.status, po.type,o.id, o.title,s.id as shopId,s.name,img.name,img.path,vot.id,vot.vote'
             )
         ->from('KC\Entity\PopularVouchercodes', 'po')
         ->leftJoin('po.offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('s.logo', 'img')
-        ->leftJoin('s.visitors', 'fv')
-        ->where('s.id=?o.sshopOffers')
-        ->andWhere('o.exclusivecode<>0')
-        ->andWhere('o.endDate > "'.$date.'"')
-        ->andWhere('o.startDate <= "'.$date.'"')
+        ->where('s.id = o.shopOffers')
+        ->andWhere('o.exclusiveCode != 0')
+        ->andWhere('o.endDate >'."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
         ->andWhere('o.deleted =0')
         ->andWhere('s.deleted =0')
         ->orderBy('o.title', 'ASC');
@@ -2372,11 +2370,12 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.votes', 'vot')
         ->leftJoin('s.logo', 'l')
         ->leftJoin('s.visitors', 'fv')
-        ->where('o.Visability='."'$memOnly'")
+        ->setParameter(1, 'MEM')
+        ->where('o.Visability = ?1')
         ->andWhere('o.deleted =0')
         ->andWhere('s.deleted =0')
-        ->andWhere('o.enddate > "'.$date.'"')
-        ->andWhere('o.startdate <= "'.$date.'"')
+        ->andWhere('o.endDate >'."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
         ->orderBy('o.id', 'DESC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $k = 0;
@@ -2395,13 +2394,13 @@ class Offer Extends \KC\Entity\Offer
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('count(*) as cout')
+        ->select('count(o.id) as cout')
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->where('o.authorId=' .$uid)
         ->andWhere('o.deleted =0')
-        ->andWhere('o.endDate > "'.$date.'"')
-        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('o.endDate >'."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
         ->andWhere('s.deleted =0');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -2411,19 +2410,21 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('count(*) as cnt')
+        ->select('count(v.id) as cnt')
         ->from("KC\Entity\Votes v")
         ->where("v.offer=".$id)
         ->andWhere("v.deleted=0")
-        ->andWhere("v.vote='positive'");
+        ->setParameter(1, 'positive')
+        ->andWhere('v.vote = ?1');
         $positiveVotes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $query = $queryBuilder
-        ->select('count(*) as cnt')
+        ->select('count(v.id) as cnt')
         ->from('KC\Entity\Votes v')
         ->where('v.offer='.$id)
         ->andWhere('v.deleted=0')
-        ->andWhere('v.vote="negative"');
+        ->setParameter(1, 'negative')
+        ->andWhere('v.vote = ?1');
         $negativeVotes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $arr = array();
@@ -2436,7 +2437,7 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-            ->select('o.shopOffers,s.logoId,l.name,l.path,s.permaLink')
+            ->select('l.name,l.path,s.permaLink, s.id as shopId')
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('s.logo', 'l')
@@ -2456,10 +2457,11 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('o.shopOffers', 's')
             ->where('o.deleted=0')
             ->andWhere('s.deleted = 0')
-            ->andWhere('o.extendedoffer=1')
-            ->andWhere('o.discounttype="CD"')
-            ->andWhere('o.endDate > "'.$date.'"')
-            ->andWhere('o.startDate <= "'.$date.'"')
+            ->andWhere('o.extendedOffer=1')
+            ->setParameter(1, 'CD')
+            ->andWhere('o.discountType = ?1')
+            ->andWhere('o.endDate >'."'".$date."'")
+            ->andWhere('o.startDate <='."'".$date."'")
             ->orderBy('o.id', 'DESC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -2492,7 +2494,7 @@ class Offer Extends \KC\Entity\Offer
             if (isset($offer['shop']['contentManagerId'])) {
 
                 # redactie permalink
-                $redactie =  KC\Entity\User::returnEditorUrl($offer['shop']['contentManagerId']);
+                $redactie =  \KC\Repository\User::returnEditorUrl($offer['shop']['contentManagerId']);
 
                 # check if an editor  has permalink then add it into array
                 if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
@@ -2557,10 +2559,11 @@ class Offer Extends \KC\Entity\Offer
 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select("count(*) as amountOffers")
+        ->select("count(o.id) as amountOffers")
         ->from('KC\Entity\Offer', 'o')
         ->where('o.deleted = 0')
-        ->andWhere('o.discountType != "NW"')
+        ->setParameter(1, 'NW')
+        ->andWhere('o.discountType != ?1')
         ->andWhere('o.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -2572,12 +2575,13 @@ class Offer Extends \KC\Entity\Offer
         $date = date($format);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select("count(*) as amountOffers")
+        ->select("count(o.id) as amountOffers")
         ->from('KC\Entity\Offer', 'o')
         ->where('o.deleted = 0')
-        ->andWhere('o.endDate > "'.$date.'"')
-        ->andWhere('o.startDate <= "'.$date.'"')
-        ->andWhere('o.discountType != "NW"');
+        ->andWhere('o.endDate >'."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
+        ->setParameter(1, 'NW')
+        ->andWhere('o.discountType != ?1');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
@@ -2588,18 +2592,20 @@ class Offer Extends \KC\Entity\Offer
         $date = date($format);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select("count(*)")
+        ->select("count(o.id) as cnt")
         ->from('KC\Entity\Offer', 'o')
         ->where('o.deleted = 0')
-        ->andWhere('o.endDate > "'.$date.'"')
-        ->andWhere('o.startDate <= "'.$date.'"')
+        ->andWhere('o.endDate >'."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
         ->andWhere('o.shopOffers = '.$shopId)
-        ->andWhere('o.discountType != "NW"');
+        ->setParameter(1, 'NW')
+        ->andWhere('o.discountType != ?1');
         if ($type == 'CD') {
-            $query->andWhere('o.discountType = "CD"');
+            $query->setParameter(2, 'CD');
+            $query->andWhere('o.discountType = ?2');
         }
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $data['count'];
+        return $data['cnt'];
     }
 
     public static function getTotalAmountOfOffersByShopId($shopId)
@@ -2612,14 +2618,16 @@ class Offer Extends \KC\Entity\Offer
         ->from('KC\Entity\Offer', 'o')
         ->where('o.deleted = 0')
         ->andWhere('o.shopOffers = '.$shopId)
-        ->andWhere('o.endDate > "'.$date.'"')
-        ->andWhere('o.startDate <= "'.$date.'"')
-        ->andWhere('o.discountType = "CD"');
+        ->andWhere('o.endDate >'."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
+        ->setParameter(1, 'CD')
+        ->andWhere('o.discountType = ?1');
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $Ids = array();
         if (!empty($data)) {
             foreach ($data as $arr) {
-                $Ids[] = $arr['id'];
+                
+                $Ids[] = $arr;
             }
         }
         return $Ids;

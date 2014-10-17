@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {//23315
         echo "<pre>";
-        print_r(KC\Repository\Offer::updateTotalViewCount());
+        print_r(KC\Repository\Offer::getTotalAmountOfOffersByShopId(343));
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
