@@ -646,7 +646,7 @@ class User extends \KC\Entity\User
     {
         $role = $params['role'];
         $srh = $params['searchtext'];
-        $request  = \DataTable_Helper::createSearchRequest($params, array('firstName', 'lastName', 'email'));
+        
         $qb = \Zend_Registry::get('emUser')->createQueryBuilder()
             ->from('KC\Entity\User', 'u')
             ->leftJoin("u.users", "r")
@@ -659,20 +659,21 @@ class User extends \KC\Entity\User
         if ($srh!='undefined') {
             $qb->andWhere($queryBuilder->expr()->like('u.firstName', $srh.'%'));
         }
-        $qb->andWhere('u.id <>'. \Auth_StaffAdapter::getIdentity()->id)
-        ->orderBy("u.id", "DESC");
+        $qb->andWhere('u.id <>'. \Auth_StaffAdapter::getIdentity()->id);
+
+        $request  = \DataTable_Helper::createSearchRequest($params, array('id', 'firstName', 'email'));
 
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
         $builder
             ->setQueryBuilder($qb)
-            ->add('text', 'u.firstName')
-            ->add('text', 'u.lastName')
+            ->add('number', 'u.id')
+            ->add('text', 'u.firstName, u.lastName')
             ->add('text', 'u.email')
             ->add('text', 'r.name')
             ->add('text', 'p.path')
             ->add('text', 'p.name');
-        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
 
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $data = \DataTable_Helper::getResponse($data, $request);
         return \Zend_Json::encode($data);
     }
