@@ -357,7 +357,8 @@ class Shop extends \KC\Entity\Shop
             ->from("KC\Entity\Shop", "s")
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted = '. $flag)
-            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%".$srh."%")))->getQuery();
+            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%a".$srh."%")))->getQuery();
+         //echo "<prE>";   print_r($shopList); die;
         $result = \DataTable_Helper::generateDataTableResponse(
             $shopList,
             $params,
@@ -538,125 +539,131 @@ class Shop extends \KC\Entity\Shop
 
     public function CreateNewShop($shopDetail)
     {
-        $this->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
-        $this->permaLink = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
-        $this->metaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopMetaDescription']);
-        $this->notes =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNotes']);
-    #   $this->deepLink =\BackEnd_Helper_viewHelper::stripSlashesFromString (@$shopDetail['shopDeepLinkUrl']);
-    #   $this->deepLinkStatus =\BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['deepLinkStatus']);
-        $this->refUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopRefUrl']);
-        $this->actualUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopActualUrl']);
-        $this->affliateProgram = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['affiliateProgStatus']);
-        $this->title =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopTitle']);
-        $this->subTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
-        $this->overriteTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
-        $this->shopText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $shopInfo = new \Kc\Entity\Shop();
+        $shopInfo->deleted = 0;
+        $shopInfo->created_at = new \DateTime('now');
+        $shopInfo->updated_at = new \DateTime('now');
+        $shopInfo->addtosearch = 0;
+        $shopInfo->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopName']);
+        $shopInfo->permaLink = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
+        $shopInfo->metaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopMetaDescription']);
+        $shopInfo->notes =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNotes']);
+    #   $shopInfo->deepLink =\BackEnd_Helper_viewHelper::stripSlashesFromString (@$shopDetail['shopDeepLinkUrl']);
+    #   $shopInfo->deepLinkStatus =\BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['deepLinkStatus']);
+        $shopInfo->refUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopRefUrl']);
+        $shopInfo->actualUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopActualUrl']);
+        $shopInfo->affliateProgram = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['affiliateProgStatus']);
+        $shopInfo->title =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopTitle']);
+        $shopInfo->subTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopSubTitle']);
+        $shopInfo->overriteTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopOverwriteTitle']);
+        $shopInfo->shopText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopDescription']);
         $shopViewCount = isset($shopDetail['shopViewCount']) ? $shopDetail['shopViewCount'] : '0';
-        $this->views = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
-        $this->howtoTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
-        $this->howtoSubtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
-        $this->howtoMetaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
-        $this->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
-        $this->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
-        $this->howToIntroductionText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
-        $this->showSimliarShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $shopInfo->views = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopViewCount);
+        $shopInfo->howtoTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageTitle']);
+        $shopInfo->howtoSubtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pageSubTitle']);
+        $shopInfo->howtoMetaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaTitle']);
+        $shopInfo->howtoMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['pagemetaDesc']);
+        $shopInfo->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopCustomHeader']);
+        $shopInfo->howToIntroductionText = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['howToIntroductionText']);
+        $shopInfo->showSimliarShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['similarShops']) ? $shopDetail['similarShops'] : '0'
         );
         $showChains = !empty($shopDetail['showChains']) ? $shopDetail['showChains'] : '0';
-        $this->showChains = \BackEnd_Helper_viewHelper::stripSlashesFromString($showChains);
+        $shopInfo->showChains = \BackEnd_Helper_viewHelper::stripSlashesFromString($showChains);
         $strictConfirmation = !empty($shopDetail['strictConfirmation']) ? $shopDetail['strictConfirmation'] : '0';
-        $this->strictConfirmation = \BackEnd_Helper_viewHelper::stripSlashesFromString($strictConfirmation);
+        $shopInfo->strictConfirmation = \BackEnd_Helper_viewHelper::stripSlashesFromString($strictConfirmation);
         // shop extra properties
         $displayExtraProperties = !empty($shopDetail['displayExtraProperties']) ? $shopDetail['displayExtraProperties'] : '0';
-        $this->displayExtraProperties = \BackEnd_Helper_viewHelper::stripSlashesFromString($displayExtraProperties);
+        $shopInfo->displayExtraProperties = \BackEnd_Helper_viewHelper::stripSlashesFromString($displayExtraProperties);
         # display signup option on store detail page
-        $this->showSignupOption = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $shopInfo->showSignupOption = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0'
         );
 
         if (\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties'])) {
-            $this->ideal = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $shopInfo->ideal = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 !empty($shopDetail['ideal']) ? $shopDetail['ideal'] : 0
             );
-            $this->qShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $shopInfo->qShops = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 !empty($shopDetail['qShops']) ? $shopDetail['qShops'] : 0
             );
-            $this->freeReturns = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $shopInfo->freeReturns = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 !empty($shopDetail['freeReturns']) ? $shopDetail['freeReturns'] : 0
             );
-            $this->pickupPoints = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $shopInfo->pickupPoints = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 !empty($shopDetail['pickupPoints']) ? $shopDetail['pickupPoints'] : 0
             );
-            $this->mobileShop = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $shopInfo->mobileShop = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 !empty($shopDetail['mobileShop']) ? $shopDetail['mobileShop'] : 0
             );
-            $this->service = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $shopInfo->service = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 !empty($shopDetail['service']) ? $shopDetail['service'] : 0
             );
 
             if (\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['service'])) {
-                $this->serviceNumber = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['serviceNumber']);
+                $shopInfo->serviceNumber = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['serviceNumber']);
             }
         }
 
-        $this->discussions = '0';
+        $shopInfo->discussions = '0';
 
         if (isset($shopDetail['discussions'])) {
-            $this->discussions = '1';
+            $shopInfo->discussions = '1';
         }
 
-        $this->usergenratedcontent = '0';
+        $shopInfo->usergenratedcontent = '0';
 
         if (isset($shopDetail['usergenratedchk'])) {
-            $this->usergenratedcontent = '1';
+            $shopInfo->usergenratedcontent = '1';
         }
 
         if (isset($shopDetail['keywordlink'])) {
-            $this->keywordlink = $shopDetail['keywordlink'];
+            $shopInfo->keywordlink = $shopDetail['keywordlink'];
         }
 
 
         if (isset($shopDetail['onlineStatus'])) {
             if ($shopDetail['onlineStatus'] == 1) {
-                $this->status = 1;
-                $this->offlineSicne = null;
+                $shopInfo->status = 1;
+                $shopInfo->offlineSicne = null;
             } else {
-                $this->status = 0;
+                $shopInfo->status = 0;
                 if (strlen($shopDetail['offlineSince']) > 18) {
-                    $this->offlineSicne = $shopDetail['offlineSince'] ;
+                    $shopInfo->offlineSicne = $shopDetail['offlineSince'] ;
                 } else {
-                    $this->offlineSicne = date("Y-m-d h:m:s");
+                    $shopInfo->offlineSicne = date("Y-m-d h:m:s");
                 }
             }
         } else {
-            $this->status = 1 ;
+            $shopInfo->status = 1 ;
         }
 
-        $this->discussions = '0';
+        $shopInfo->discussions = '0';
 
         if (isset($shopDetail['discussions'])) {
-            $this->discussions = '1';
+            $shopInfo->discussions = '1';
         }
 
         $selectAccountManagers = isset($shopDetail['selectaccountmanagers']) ? $shopDetail['selectaccountmanagers'] : '0';
-        $this->accoutManagerId = \BackEnd_Helper_viewHelper::stripSlashesFromString($selectAccountManagers);
-        $this->accountManagerName = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['accountManagerName']);
-        $this->contentManagerId = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['selecteditors']);
-        $this->contentManagerName = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['editorName']);
+        $shopInfo->accoutManagerId = \BackEnd_Helper_viewHelper::stripSlashesFromString($selectAccountManagers);
+        $shopInfo->accountManagerName = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['accountManagerName']);
+        $shopInfo->contentManagerId = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['selecteditors']);
+        $shopInfo->contentManagerName = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['editorName']);
 
-        $this->affliateNetworkId = null;
+        $shopInfo->affliateNetworkId = null;
 
         if ($shopDetail['shopAffiliateNetwork'] != 0) {
-            $this->affliateNetworkId = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $shopInfo->affliateNetworkId = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 $shopDetail['shopAffiliateNetwork']
             );
         }
 
-        $this->howToUse = $shopDetail['howTouseStatus'];
+        $shopInfo->howToUse = $shopDetail['howTouseStatus'];
 
         if (intval($shopDetail['howTouseStatus']) > 0) {
             if (isset($shopDetail['shopHowToUsePageId'])) {
-                $this->howtoUsepageId = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopHowToUsePageId']);
+                $shopInfo->howtoUsepageId = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopHowToUsePageId']);
             }
 
             //  upload small logo image for how to use page
@@ -670,9 +677,9 @@ class Shop extends \KC\Entity\Shop
                     $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                         $result['fileName']
                     );
-                    $this->howtousesmallimage->ext = $ext;
-                    $this->howtousesmallimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                    $this->howtousesmallimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                   // $shopInfo->howtousesmallimage->ext = $ext;
+                   // $shopInfo->howtousesmallimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+                   // $shopInfo->howtousesmallimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
                 } else {
                     return false;
                 }
@@ -691,9 +698,9 @@ class Shop extends \KC\Entity\Shop
                         $result['fileName']
                     );
 
-                    $this->howtousebigimage->ext = $ext;
-                    $this->howtousebigimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                    $this->howtousebigimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                   // $shopInfo->howtousebigimage->ext = $ext;
+                   // $shopInfo->howtousebigimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+                  //  $shopInfo->howtousebigimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
                 } else {
                     return false;
                 }
@@ -701,9 +708,9 @@ class Shop extends \KC\Entity\Shop
         }
 
         if (!empty($shopDetail['selectedCategoryies'])) {
-            $this->refShopCategory->delete();
+            //$shopInfo->refShopCategory->delete();
             foreach ($shopDetail['selectedCategoryies'] as $key => $categories) {
-                $this->refShopCategory[]->categoryId = $categories;
+                //$shopInfo->refShopCategory[]->categoryId = $categories;
             }
         }
  
@@ -717,9 +724,9 @@ class Shop extends \KC\Entity\Shop
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                     $result['fileName']
                 );
-                $this->logo->ext = $ext;
-                $this->logo->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                $this->logo->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+               // $shopInfo->logo->ext = $ext;
+               // $shopInfo->logo->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+              //  $shopInfo->logo->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
             } else {
                 return false;
             }
@@ -735,18 +742,18 @@ class Shop extends \KC\Entity\Shop
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                     $result['fileName']
                 );
-                $this->screenshot->ext = $ext;
-                $this->screenshot->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                $this->screenshot->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+              ///  $shopInfo->screenshot->ext = $ext;
+              ////  $shopInfo->screenshot->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+              //  $shopInfo->screenshot->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
             } else {
                 return false;
             }
         }
-
+$shopInfo->screenshotId = 1;
         //call cache function
-        $key = 'shopDetails_'  . $this->id . '_list';
+        $key = 'shopDetails_'  . $shopInfo->id . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
+        $cacheKeyOfferDetails = 'offerDetails_'  . $shopInfo->id . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
         $key = 'shop_similar_shops';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -758,28 +765,30 @@ class Shop extends \KC\Entity\Shop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $shopInfo->id);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('12_popularShops_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
 
         if (!empty($shopDetail['id'])) {
-            $getcategory = Doctrine_Query::create()->select()->from('Shop')->where('id = '.$shopDetail['id'])->fetchArray();
+            $getcategory = $queryBuilder->select('s.permaLink')->from('Shop')->where('id = '.$shopDetail['id'])->fetchArray();
         }
         if (!empty($getcategory[0]['permaLink'])) {
-            $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = '".$getcategory[0]['permaLink']."'")->andWhere('type = "SHP"')->fetchArray();
-            $howToguideRoute = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->andWhere('type = "SHP"')->fetchArray();
+            $getRouteLink = $queryBuilder->select()->from('RoutePermalink')->where("permalink = '".$getcategory[0]['permaLink']."'")->andWhere('type = "SHP"')->fetchArray();
+            $howToguideRoute = $queryBuilder->select()->from('RoutePermalink')->where("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->andWhere('type = "SHP"')->fetchArray();
         }
 
         try {
-            $this->refShopRelatedshop->delete();
-            $this->save();
+            //$shopInfo->refShopRelatedshop->delete();
+           // $shopInfo->save();
+            \Zend_Registry::get('emLocale')->persist($shopInfo);
+                \Zend_Registry::get('emLocale')->flush(); die('ss');
             $key = 'shop_similar_shops';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             if (!empty($getRouteLink)) {
-                $exactLink = 'store/storedetail/id/'.$this->id;
-                $howtoguide = 'store/howtoguide/shopid/'.$this->id;
+                $exactLink = 'store/storedetail/id/'.$shopInfo->id;
+                $howtoguide = 'store/howtoguide/shopid/'.$shopInfo->id;
                 $updateRouteLink = Doctrine_Query::create()->update('RoutePermalink')
                 ->set(
                     'permalink',
@@ -799,21 +808,23 @@ class Shop extends \KC\Entity\Shop
                     $route = new RoutePermalink();
                     $route->permalink = "how-to/" . \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
                     $route->type = 'SHP';
-                    $route->exactlink = 'store/howtoguide/shopid/'.$this->id;
+                    $route->exactlink = 'store/howtoguide/shopid/'.$shopInfo->id;
                     $route->save();
                 }
             } else {
-                $route = new RoutePermalink();
+                $route = new \KC\Entity\RoutePermalink();
                 $route->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
                 $route->type = 'SHP';
-                $route->exactlink = 'store/storedetail/id/'.$this->id;
-                $route->save();
+                $route->exactlink = 'store/storedetail/id/'.$shopInfo->id;
+                \Zend_Registry::get('emLocale')->persist($route);
+                \Zend_Registry::get('emLocale')->flush();
 
-                $route = new RoutePermalink();
+                $route = new \KC\Entity\RoutePermalink();
                 $route->permalink = "how-to/" . \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
                 $route->type = 'SHP';
-                $route->exactlink = 'store/howtoguide/shopid/'.$this->id;
-                $route->save();
+                $route->exactlink = 'store/howtoguide/shopid/'.$shopInfo->id;
+                \Zend_Registry::get('emLocale')->persist($route);
+                \Zend_Registry::get('emLocale')->flush();
             }
 
             if (isset($shopDetail['similarstoreord'])) {
@@ -821,141 +832,110 @@ class Shop extends \KC\Entity\Shop
                 $i = 1;
                 foreach ($similarstoreordArray as $shop) {
                     if ($shop!='') {
-                        $relateshopObj = new refShopRelatedshop();
-                        $relateshopObj->shopId = $this->id;
+                        $relateshopObj = new \KC\Entity\RefShopRelatedshop();
+                        $relateshopObj->shopId = $shopInfo->id;
                         $relateshopObj->relatedshopId = $shop;
                         $relateshopObj->position = $i;
-                        $relateshopObj->save();
+                        \Zend_Registry::get('emLocale')->persist($relateshopObj);
+                        \Zend_Registry::get('emLocale')->flush();
                         ++$i;
                     }
                 }
             }
 
             if (!empty($shopDetail['title']) && !empty($shopDetail['content'])) {
-                $delChapters = Doctrine_Query::create()->delete("ShopHowToChapter")->where("shopId = ".$this->id)->execute();
+                $delChapters = $queryBuilder->delete("KC\Entity\ShopHowToChapter", "sh")->where("sh.shopId = ".$shopInfo->id)->getQuery()->execute();
                 foreach ($shopDetail['title'] as $key => $title) {
                     if (!empty($shopDetail['title'][$key]) && !empty($shopDetail['content'][$key])) {
-                        $chapter = new ShopHowToChapter();
-                        $chapter->shopId = $this->id;
+                        $chapter = new \KC\Entity\ShopHowToChapter();
+                        $chapter->shopId = $shopInfo->id;
                         $chapter->chapterTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['title'][$key]);
                         $chapter->chapterDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['content'][$key]) ;
-                        $chapter->save();
+                        \Zend_Registry::get('emLocale')->persist($chapter);
+                        \Zend_Registry::get('emLocale')->flush();
                     }
                 }
             }
-            return $this->id;
+            return $shopInfo->id;
         } catch (Exception $e) {
             return false;
         }
     }
 
-    /**
-     * upload image
-     * @param $_FILES[index]  $file
-     */
-    public function uploadImage($file,$path)
+    public function uploadImage($file, $path)
     {
-        // generate upload path for images related to shop
         $uploadPath = $path;
         if (!file_exists(UPLOAD_IMG_PATH))
             mkdir($uploadPath, 0776, true);
 
-        $adapter = new Zend_File_Transfer_Adapter_Http();
-
-        // generate real path for upload path
-
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
         $rootPath = ROOT_PATH . $uploadPath;
-        // echo $rootPath;
-        //die;
-        // get upload file info
         $files = $adapter->getFileInfo($file);
 
-        // check upload directory exists, if no then create upload directory
         if (!file_exists($rootPath))
             mkdir($rootPath ,776, true);
 
-        // set destination path and apply validations
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
         $adapter->addValidator('Size', false, array('max' => '2MB'));
-        // get file name
         $name = $adapter->getFileName($file, false);
-
-        // rename file name to by prefixing current unix timestamp
         $newName = time() . "_" . $name;
-
-        // generates complete path of image
         $cp = $rootPath . $newName;
         $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 132, 95, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 132, 95, $path);
 
-        if($file=='bigLogoFile') {
+        if ($file == 'bigLogoFile') {
             $path = ROOT_PATH . $uploadPath . "thum_bigLogoFile_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 280, 197, $path);
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 280, 197, $path);
         }
-        if($file=='smallLogoFile') {
+        if ($file == 'smallLogoFile') {
             $path = ROOT_PATH . $uploadPath . "thum_smallLogoFile_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 280, 100, $path);
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 280, 100, $path);
         }
-        /**
-         *   generating thumnails for upload logo if file in shop logo
-         */
+
+
         if ($file == "logoFile") {
-
             $path = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 150, $path);
-
-            //espect ratio
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 150, $path);
             $path = ROOT_PATH . $uploadPath . "thum_small_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 84, 42, $path);
-
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 84, 42, $path);
             $path = ROOT_PATH . $uploadPath . "thum_medium_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 100, 50, $path);
-
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 100, 50, $path);
             $path = ROOT_PATH . $uploadPath . "thum_big_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 236, 118, $path);
-
-
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 236, 118, $path);
             $path = ROOT_PATH . $uploadPath . "thum_expired_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 100, 50, $path);
-
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 100, 50, $path);
             $path = ROOT_PATH . $uploadPath . "thum_medium_store_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 100, $path);
-
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 100, $path);
         }
+
         if ($file == "websitescreenshot") {
-
             $path1 = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 450,0, $path1);
-            //die('Hello');
-
+            \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 450, 0, $path1);
         }
-        // apply filter to rename file name and set target
-        $adapter
-                ->addFilter(
-                        new Zend_Filter_File_Rename(
-                                array('target' => $cp, 'overwrite' => true)),
-                        null, $file);
 
-        // recieve file for upload
+        $adapter->addFilter(
+            new \Zend_Filter_File_Rename(
+                array(
+                    'target' => $cp,
+                    'overwrite' => true
+                )
+            ),
+            null,
+            $file
+        );
+
         $adapter->receive($file);
-
-        // check is file is valid then
-        //echo "<pre>"; print_r($adapter->isValid($file)); die;
         if ($adapter->isValid($file)) {
-
             return array("fileName" => $newName, "status" => "200",
                     "msg" => "File uploaded successfully",
                     "path" => $uploadPath);
-
         } else {
-
             return array("status" => "-1",
                     "msg" => "Please upload the valid file");
-
         }
-
     }
+
     //limit need to be checked
     public static function exportShopsList()
     {
@@ -1558,16 +1538,16 @@ class Shop extends \KC\Entity\Shop
 
         return $noOfDays;
     }
-    //error to be migrated
+
     public static function getFavouriteCountOfShop($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select("count(s.id)")
+        $query = $queryBuilder->select("count(s.id) as countFavourite")
                 ->from('KC\Entity\Shop', 's')
                 ->leftJoin('s.visitors', 'v')
-                ->where('s.visitors='.$shopId);
-        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $data['count'];
+                ->where('s.id='.$shopId);
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data['countFavourite'];
     }
 
     public static function getshopStatus($shopId)

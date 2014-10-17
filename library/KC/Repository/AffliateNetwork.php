@@ -3,31 +3,26 @@ namespace KC\Repository;
 
 class AffliateNetwork extends \KC\Entity\AffliateNetwork
 {
-
-   /**
-   * save new network
-   * @param array $params
-   * @author blal
-   * @version 1.0
-   */
-   public function addNewnetwork($params)
-   {
-       $data = new AffliateNetwork();
-       $data->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params['addNetworkText']);
-       $data->subId = BackEnd_Helper_viewHelper::stripSlashesFromString($params['subId']);
-       $data->status = '1';
-       $data->save ();
-       //call cache function
-       FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_affilatenetwork_page');
-       return $data;
-  }
+    public function addNewnetwork($params)
+    {
+        $data = new \KC\Entity\AffliateNetwork();
+        $data->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addNetworkText']);
+        $data->subId = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['subId']);
+        $data->status = '1';
+        $data->deleted = '0';
+        $data->created_at = new \DateTime('now');
+        $data->updated_at = new \DateTime('now');
+        \Zend_Registry::get('emLocale')->persist($data);
+        \Zend_Registry::get('emLocale')->flush();
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_affilatenetwork_page');
+        return $data;
+    }
 
     public static function getNetworkList($params = "")
     {
         $srh =  @$params["searchText"] != 'undefined' ? @$params["searchText"] : '';
-        $sortBy = isset($params['sortBy']) ? @$params['sortBy'] : 'id DESC';
+        $sortBy = isset($params['sortBy']) ? @$params['sortBy'] : '';
         $delVal = isset($params['off']) ?  $params['off'] : '0, 1';
-        
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $networkList = $queryBuilder->select('a.name as name ,a.id, a.subId')
             ->from("KC\Entity\AffliateNetwork", "a")
@@ -35,7 +30,7 @@ class AffliateNetwork extends \KC\Entity\AffliateNetwork
             ->andWhere("a.deleted = 0")
             ->where('a.status IN('.$delVal.')')
             ->andWhere("a.affliate_networks IS NULL")
-            ->orderBy($sortBy)
+            ->orderBy('a.id', 'DESC')
             ->getQuery();
 
         $list =  \DataTable_Helper::generateDataTableResponse(
@@ -46,138 +41,96 @@ class AffliateNetwork extends \KC\Entity\AffliateNetwork
             array()
         );
         return $list;
-
     }
 
- /**
-  * get top five networks
-  * @param string $keyword
-  * @return array $data
-  * @author blal
-  * @version 1.0
-  */
-  public static function searchTopFiveNetwork($keyword)
-  {
-    $data = Doctrine_Query::create()->select('a.name as name')
-                                    ->from("AffliateNetwork as a")
-                                    ->where('a.deleted=0')
-                                    ->andWhere('a.status=1')
-                                    ->andWhere("a.name LIKE ?", "$keyword%")
-                                    ->andWhere("a.replaceWithId IS NULL")
-                                    ->orderBy("a.name ASC")
-                                    ->limit(5)->fetchArray();
+    public static function searchTopFiveNetwork($keyword)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $data = $queryBuilder->select('a.name as name')
+            ->from("KC\Entity\AffliateNetwork", "a")
+            ->where('a.deleted=0')
+            ->andWhere('a.status=1')
+            ->andWhere($queryBuilder->expr()->like("a.name", $queryBuilder->expr()->literal($keyword."%")))
+            ->andWhere("a.affliate_networks IS NULL")
+            ->orderBy("a.name", "ASC")
+            ->setMaxResults(5)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
- }
-
- /**
-  *change status of networks
-  * @param array $params
-  * @author blal
-  * @version 1.0
-  */
-  public static function changeStatus($params)
-  {
-    $status = $params['status']=='offline' ? '0' : '1';
-    $q = Doctrine_Query::create()
-                         ->update('AffliateNetwork a')
-                         ->set('a.status', $status)
-                         ->where('a.id=?',$params['id'])
-                         ->execute();
-
- }
-
- /**
-  * details of editable network
-  * @param integer $id
-  * @return array $data
-  * @author blal
-  * @version 1.0
-  */
- public static function getNetworkForEdit($id)
- {
-    $data = Doctrine_Query::create()->select("a.*")
-                                    ->from('AffliateNetwork a')
-                                    ->where("id = ?", $id)
-                                    ->fetchArray();
-    return $data;
-
- }
-
- /**
-  * update edited network by id
-  * @param array $params
-  * @author blal updated by kraj
-  * @version 1.0
-  */
- public static function updateNetwork($params)
- {
-    //find network by id
-    self::replaceNetwork($params);
-
-
-    $data = Doctrine_Core::getTable('AffliateNetwork')->find($params['id']);
-    $data->name = BackEnd_Helper_viewHelper::stripSlashesFromString($params["addNetworkText"]);
-
-    if(isset($params["subId"])) {
-        $data->subId = BackEnd_Helper_viewHelper::stripSlashesFromString($params["subId"]);
     }
-    $a = $data->save();
-    //call cache function
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_affilatenetwork_page');
- }
 
- /**
-  * delete network by id
-  * @param integer $params
-  * @author blal
-  * @version 1.0
-  */
- public static function deleteNetwork($params)
- {
-    $q = Doctrine_Query::create()->update('AffliateNetwork a')
-                                 ->set('a.deleted', 1)
-                                 ->where('a.id=?', $params['id'])
-                                 ->execute();
-    //call cache function
-    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_affilatenetwork_page');
- }
-
- /**
-  * get network list in edit form in dropdown(replace with:)
-  * @author blal
-  * @version 1.0
-  */
- public static function networklistDropdown($params = "")
- {
-    $networkList = Doctrine_Query::create ()
-                                 ->select ('a.name as name ,a.id, a.status as status ,a.replaceWithId as replaceWithId')
-                                 ->from ( "AffliateNetwork as a" )
-                                 ->Where("a.deleted = 0" )
-                                 ->andWhere('a.id!=?',$params['id'])
-                                 ->andWhere("a.replaceWithId IS NULL")
-                                 ->orderBy("a.name ASC")
-                                ->fetchArray();
-
-    return $networkList;
-
-
- }
-
- /**
-  * replace network name with network name in dropdown(Edit form)
-  * @author blal updated by kraj
-  * @version 1.0
-  */
-  public function replaceNetwork($params)
-  {
-    if(intval($params['selectNetworkList'] > 0 )) {
-
-    $q = Doctrine_Query::create()
-                         ->update('AffliateNetwork a')
-                         ->set('a.replaceWithId', $params['selectNetworkList'])
-                         ->where('a.id=?',$params['networkUpdatedId'])
-                         ->execute();
-
+    public static function changeStatus($params)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $status = $params['status']=='offline' ? '0' : '1';
+        $q = $queryBuilder->update("KC\Entity\AffliateNetwork", "a")
+            ->set('a.status', $status)
+            ->where('a.id='. $params['id'])
+            ->getQuery()
+            ->execute();
     }
- }
+
+    public static function getNetworkForEdit($id)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $data = $queryBuilder->select("a")
+            ->from("KC\Entity\AffliateNetwork", "a")
+            ->where("a.id = ". $id)
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $data;
+    }
+
+    public static function updateNetwork($params)
+    {
+        self::replaceNetwork($params);
+        $data = \Zend_Registry::get('emLocale')->find('KC\Entity\AffliateNetwork', $params['id']);
+        $data->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($params["addNetworkText"]);
+
+        if (isset($params["subId"])) {
+            $data->subId = \BackEnd_Helper_viewHelper::stripSlashesFromString($params["subId"]);
+        }
+
+        \Zend_Registry::get('emLocale')->persist($data);
+        \Zend_Registry::get('emLocale')->flush();
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_affilatenetwork_page');
+    }
+
+    public static function deleteNetwork($params)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $q = $queryBuilder->update('KC\Entity\AffliateNetwork', 'a')
+            ->set('a.deleted', 1)
+            ->where('a.id='. $params['id'])
+            ->getQuery()
+            ->execute();
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_affilatenetwork_page');
+    }
+
+    public static function networklistDropdown($params = "")
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $networkList = $queryBuilder->select('a.name as name ,a.id, a.status as status ,IDENTITY(a.affliate_networks) as replaceWithId')
+            ->from("KC\Entity\AffliateNetwork", "a")
+            ->Where("a.deleted = 0")
+            ->andWhere('a.id!='. $params['id'])
+            ->andWhere("a.affliate_networks IS NULL")
+            ->orderBy("a.name", "ASC")
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+        return $networkList;
+    }
+
+    public function replaceNetwork($params)
+    {
+        if (intval($params['selectNetworkList'] > 0)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $q = $queryBuilder->update('KC\Entity\AffliateNetwork', 'a')
+                ->set('a.affliate_networks', $params['selectNetworkList'])
+                ->where('a.id= '. $params['networkUpdatedId'])
+                ->getQuery()
+                ->execute();
+        }
+    }
 }
