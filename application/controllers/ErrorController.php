@@ -106,7 +106,7 @@ class ErrorController extends Zend_Controller_Action
                         getRequestedDataBySetGetCache(
                             '12_popularShops_list',
                             array(
-                                'function' => 'Shop::getPopularStores', 'parameters' => array(12)
+                                'function' => '\KC\Repository\Shop::getPopularStores', 'parameters' => array(12)
                             ),
                             ''
                         );

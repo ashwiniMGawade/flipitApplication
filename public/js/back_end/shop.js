@@ -162,7 +162,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 						},{
 							"fnRender" : function(obj) {
 								var tag = '';
-								var dat = obj.aData.created_at;
+								var dat = '2010-02-08 10:50:55';
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");

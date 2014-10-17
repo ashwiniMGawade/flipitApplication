@@ -43,18 +43,18 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
 
     public static function getRedirect($params)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $redirectList = $queryBuilder->select('e.orignalurl as orignalurl,e.redirectto as redirectto,e.created_at as created_at')
-            ->from('KC\Entity\RouteRedirect', 'e')
-            ->orderBy('e.id', 'DESC')->getQuery();
-        $list = \DataTable_Helper::generateDataTableResponse(
-            $redirectList,
-            $params,
-            array("__identifier" => 'e.id','e.id','orignalurl','redirectto','created_at'),
-            array(),
-            array()
-        );
-        return $list;
+        $request  = \DataTable_Helper::createSearchRequest($params, array('orignalurl', 'redirectto', 'created_at'));
+        $qb = \Zend_Registry::get('emLocale')->createQueryBuilder()->from('KC\Entity\RouteRedirect', 'p');
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($qb)
+            ->add('text', 'p.orignalurl')
+            ->add('text', 'p.redirectto')
+            ->add('number', 'p.created_at');
+
+        $results = $builder->getTable()->getResponseArray();
+
+        return $results;
     }
 
     public static function getRedirectForEdit($id)

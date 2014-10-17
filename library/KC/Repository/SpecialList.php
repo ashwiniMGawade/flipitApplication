@@ -3,49 +3,25 @@ namespace KC\Repository;
 
 class SpecialList extends \KC\Entity\SpecialList
 {
-    ######################################################
-    ################# REFACTORED CODE ####################
-    ######################################################
     public static function getSpecialPages($limit = '')
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $currentDateAndTime = date('Y-m-d H:i:s');
-        $query = $queryBuilder->select('sp,p,l')
+        $specialPages = $queryBuilder->select('sp.type,sp.position,IDENTITY(sp.page) as specialpageId,p.pageTitle,p.permaLink,l.name,l.path')
+            ->addSelect("(SELECT count(roc) FROM KC\Entity\RefOfferPage roc LEFT JOIN roc.refoffers off LEFT JOIN off.shopOffers s  WHERE roc.offers = sp.page and off.deleted = 0 and s.deleted = 0 and off.endDate >'".$currentDateAndTime."' and off.startDate <= '".$currentDateAndTime."'  and off.discountType='CD'  and off.Visability!='MEM') as totalCoupons")
+            ->addSelect("(SELECT count(roc1) FROM KC\Entity\RefOfferPage roc1 LEFT JOIN roc1.refoffers off1 LEFT JOIN off1.shopOffers s1  WHERE roc1.offers = sp.page and off1.deleted = 0 and s1.deleted = 0 and off1.endDate >'".$currentDateAndTime."' and off1.startDate <= '".$currentDateAndTime."' and off1.Visability!='MEM') as totalOffers")
             ->from('KC\Entity\SpecialList', 'sp')
             ->leftJoin('sp.page', 'p')
             ->leftJoin('p.logo', 'l')
-            ->setParameter(1, '0')
-            ->where('p.deleted = ?1')
-            ->setParameter(2, '1')
-            ->andWhere('p.publish = ?2');
-            // $query->addSelect("(SELECT roc FROM KC\Entity\refOfferPage roc LEFT JOIN roc.Offer off LEFT JOIN off.shop s  WHERE roc.pageid = sp.specialpageId and off.deleted = 0 and s.deleted = 0 and off.enddate >'".$currentDateAndTime."' and off.startdate <= '".$currentDateAndTime."'  and off.discounttype='CD'  and off.Visability!='MEM') as totalCoupons");
-            //->addSelect("(SELECT roc1 FROM KC\Entity\refOfferPage roc1 LEFT JOIN roc1.Offer off1 LEFT JOIN off1.shop s1  WHERE roc1.pageid = sp.specialpageId and off1.deleted = 0 and s1.deleted = 0 and off1.enddate >'".$currentDateAndTime."' and off1.startdate <= '".$currentDateAndTime."' and off1.Visability!='MEM') as totalOffers");
-        if ($limit != '') {
-            $query = $query->setMaxResults($limit);
-        }
-
-        $query = $query->orderBy('sp.position', 'ASC');
-        $specialPages = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        $queryBuilder1 = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query2 =  $queryBuilder1->select('roc')
-            ->from('KC\Entity\refOfferPage', 'roc')
-            ->leftJoin('roc.refoffers', 'off')
-            ->leftJoin('off.shopOffers', 's');
-        $query = $query2;
+            ->where('p.deleted = 0')
+            ->andWhere('p.publish = 1')
+            ->setMaxResults($limit)
+            ->orderBy('sp.position', 'ASC')
+            ->getQuery()
+            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $specialPages;
     }
-    ####################################################
-    ############ END REFACTORED CODE ###################
-    ####################################################
 
-    /**
-     * Search to five offer
-     * @param string $keyword
-     * @param boolean $flag
-     * @version 1.0
-     * @return array $data
-     * @author Er.kundal
-     */
     public static function searchTopTenOffer($keyword, $flag)
     {
         $lastdata=self::getsplpage();
@@ -58,45 +34,32 @@ class SpecialList extends \KC\Entity\SpecialList
         } else {
             $codevalues = '0';
         }
-
+ 
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('p.pageTitle as title')
             ->from('KC\Entity\Page', 'p')
-            ->setParameter(1, '0')
-            ->where('p.deleted = ?1')
-            ->setParameter(2, 'offer')
-            ->add('where', $queryBuilder->expr()->literal('p.pageType', '?2'))
-            ->setParameter(3, $keyword.'%')
-            ->add('where', $queryBuilder->expr()->like('p.pageTitle', '?3'))
-            ->setParameter(4, $codevalues)
-            ->add('where', $queryBuilder->expr()->notIn('p.id', '?4'))
+            ->where('p.deleted = 0')
+            ->andWhere("p.pageType = 'offer'")
+            ->setParameter(1, $keyword."%")
+            ->andWhere($queryBuilder->expr()->like('p.pageTitle', '?1'))
+            ->setParameter(2, $codevalues)
+            ->andWhere($queryBuilder->expr()->notIn('p.id', '?2'))
             ->setMaxResults(10);
         $topTenOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $topTenOffers;
     }
 
-    /**
-     * get Special offer list from database
-     * @author Er.kundal
-     * @version 1.0
-     * @return array $data
-     */
     public static function getsplpage()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('sp.type,sp.position,sp.specialpageId,p.pageTitle as title')
+        $query = $queryBuilder->select('sp.type,sp.position,IDENTITY(sp.page) as specialpageId,p.pageTitle as title')
             ->from('KC\Entity\SpecialList', 'sp')
             ->leftJoin('sp.page', 'p')
             ->orderBy('sp.position', 'ASC');
         $specialPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $specialPage;
     }
-    /**
-    * add offer in Special offer
-    * @author Er.kundal
-    * @version 1.0
-    * @return integer $flag
-    */
+
     public static function addOfferInList($title)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -111,24 +74,22 @@ class SpecialList extends \KC\Entity\SpecialList
         $flag = '2';
 
         if (sizeof($page) > 0) {
-            //check offer exist or not
             $pc = $entityManager->getRepository('KC\Entity\SpecialList')
                 ->findBy(array('specialpageId' => $page[0]['id']));
 
             if (sizeof($pc) > 0) {
             } else {
                 $flag = '1';
-                //find last postion  from database
                 $query = $queryBuilder->select('p.position')
-                            ->from('KC\Entity\SpecialList', 'p')
-                            ->orderBy('p.position', 'DESC')
-                            ->setMaxResults(1);
+                    ->from('KC\Entity\SpecialList', 'p')
+                    ->orderBy('p.position', 'DESC')
+                    ->setMaxResults(1);
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (sizeof($data) > 0) {
                     $NewPos = $data[0]['position'];
                 } else {
                     $NewPos = 1;
-                }               //add new offer if not exist in datbase
+                }
                 $pc = new KC\Entity\SpecialList();
                 $pc->type = 'MN';
                 $pc->status = '1';
@@ -141,19 +102,10 @@ class SpecialList extends \KC\Entity\SpecialList
             }
 
         }
-        //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
-
         return $flag;
-
     }
-    /**
-    * delete Special offer
-    * @param integer $id
-    * @param integer $position
-    * @author Er.kundal
-    * @version 1.0
-    */
+
     public static function deletePapularCode($id, $position)
     {
         if ($id) {
@@ -172,76 +124,50 @@ class SpecialList extends \KC\Entity\SpecialList
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
             return true;
         }
-
         return false;
     }
 
-    /**
-    * move up Special offer from list
-    * @param integer $id
-    * @param integer $position
-    * @author Er.kundal
-    * @version 1.0
-    */
     public static function moveUpSpecial($id, $position)
     {
         $pos = (intval($position) - 1);
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $repo = $entityManagerLocale->getRepository('KC\Entity\SpecialList');
+        $PrevPc = $repo->findOneBy(array('position' =>  $pos));
 
-
-        //find prev element from database based of current
-        $PrevPc = Doctrine_Core::getTable('SpecialList')
-        ->findBy('position', $pos)->toArray();
-        //change position of prev element with current
-        //$flag =  1;
-        if (count($PrevPc) > 0) {
-
-            //$flag =2;
-            $changePrevPc = Doctrine_Core::getTable('SpecialList')
-            ->find($PrevPc[0]['id']);
+        if (!empty($PrevPc)) {
+            $changePrevPc = $entityManagerLocale->getRepository('KC\Entity\SpecialList')->find($PrevPc->id);
             $changePrevPc->position = $position;
-            $changePrevPc->save();
-            //change position of current element with postition + 1
-            $pc = Doctrine_Core::getTable('SpecialList')->find($id);
+            \Zend_Registry::get('emLocale')->persist($changePrevPc);
+            \Zend_Registry::get('emLocale')->flush();
+            $pc = $entityManagerLocale->getRepository('KC\Entity\SpecialList')->find($id);
             $pc->position = $pos;
-            $pc->save();
-            //call cache function
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
-
-            return true ;
+            \Zend_Registry::get('emLocale')->persist($pc);
+            \Zend_Registry::get('emLocale')->flush();
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
+            return true;
         }
-
-        return false ;
-        //return $flag;
+        return false;
     }
-        /**
-        * move down Special offer from list
-        * @param integer $id
-        * @param integer $position
-        * @author kraj
-        * @version 1.0
-        */
-        public static function moveDownSpecial($id, $position)
-        {
-            $pos = (intval($position) + 1);
-            //find next element from database based of current
-            $PrevPc = Doctrine_Core::getTable('SpecialList')
-            ->findBy('position', $pos)->toArray();
-            //change position of next element with current
-            if(count($PrevPc) > 0) {
 
-                    $changePrevPc = Doctrine_Core::getTable('SpecialList')
-                    ->find($PrevPc[0]['id']);
-                    $changePrevPc->position = $position;
-                    $changePrevPc->save();
-                    //change position of current element with postition - 1
-                    $pc = Doctrine_Core::getTable('SpecialList')->find($id);
-                    $pc->position = $pos;
-                    $pc->save();
-                    //call cache function
-                    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
+    public static function moveDownSpecial($id, $position)
+    {
+        $pos = (intval($position) + 1);
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $repo = $entityManagerLocale->getRepository('KC\Entity\SpecialList');
+        $PrevPc = $repo->findOneBy(array('position' =>  $pos));
 
-                    return true ;
-            }
-            return false ;
+        if (!empty($PrevPc)) {
+            $changePrevPc = $entityManagerLocale->getRepository('KC\Entity\SpecialList')->find($PrevPc->id);
+            $changePrevPc->position = $position;
+            \Zend_Registry::get('emLocale')->persist($changePrevPc);
+            \Zend_Registry::get('emLocale')->flush();
+            $pc = $entityManagerLocale->getRepository('KC\Entity\SpecialList')->find($id);
+            $pc->position = $pos;
+            \Zend_Registry::get('emLocale')->persist($pc);
+            \Zend_Registry::get('emLocale')->flush();
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPagesHome_list');
+            return true;
         }
+        return false;
+    }
 }

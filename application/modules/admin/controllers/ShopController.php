@@ -154,7 +154,7 @@ class Admin_ShopController extends Zend_Controller_Action
      {
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
-        $data =Shop::searchKeyword($srh,$flag);
+        $data = \KC\Repository\Shop::searchKeyword($srh,$flag);
 
             $ar = array();
             if (sizeof($data) > 0) {

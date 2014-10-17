@@ -266,7 +266,7 @@ class Page
 
     /**
      * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
-     * @ORM\JoinColumn(name="logo_id", referencedColumnName="id", unique=true)
+     * @ORM\JoinColumn(name="logoid", referencedColumnName="id", unique=true)
      */
     private $logo;
 
