@@ -139,9 +139,6 @@ class User extends \KC\Entity\User
 
     public function addUser($params, $imageName)
     {
-        //echo "<pre>";
-        //print_r($params);
-        //die($params);
         $addUser = new \KC\Entity\User();
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $addto = isset($params['addtosearch']) ? $params['addtosearch'] : 0;
@@ -152,7 +149,7 @@ class User extends \KC\Entity\User
         }
         $ext = \BackEnd_Helper_viewHelper::getImageExtension($params['imageName']);
         $addUser->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
-        $addUser->email = \BackEnd_Helper_viewHelper::stripSlashesFromString('aaa@assssssssssssa.com');
+        $addUser->email = \BackEnd_Helper_viewHelper::stripSlashesFromString('aaa@csvddsnf.com');
         $addUser->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
         $addUser->countryLocale = isset($params['locale']) ? $params['locale'] : '';
         
@@ -211,11 +208,17 @@ class User extends \KC\Entity\User
                 $addUser->website[] = $entityManagerUser->find('KC\Entity\Website', $web);
                 //$entityManagerUser->persist($addUser);
                 //$entityManagerUser->persist($website);
-                //echo $web . "</br>";
+                //$entityManagerUser->flush();
+                echo $web . "</br>";
+                //echo "<pre>";
+                $us = $entityManagerUser->find('KC\Entity\Website', $web);
+                print_r($us->id);
             }
         }
         $entityManagerUser->persist($addUser);
         $entityManagerUser->flush();
+        //print_r($addUser->website);
+        die('Hello');
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
         if (isset($params['selectedCategoryies'])) {
             foreach ($params['selectedCategoryies'] as $categories) {
