@@ -148,29 +148,29 @@ class Admin_UserController extends Zend_Controller_Action
         $params = $this->getRequest()->getParams();
 
         $uesrPicName = '';
-        if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
-            $uesrPicName = self::uploadFile($_FILES['imageName']['name']);
+        if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
+         $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
         }
 
         $flash = $this->_helper->getHelper('FlashMessenger');
         $result  = null;
         if ($params) {
-            $u = new KC\Repository\User();
-            $result  = $u->addUser($params, $uesrPicName);
+            $u = new User();
+            $result  = $u->addUser($params,$uesrPicName);
 
             # check if there is any error in user data
-            if (is_array($result) && isset($result['error'])) {
+            if(is_array($result) && isset($result['error'])) {
                     $message = $this->view->translate($result['message']);
-                    $flash->addMessage(array('error' => $message));
+                    $flash->addMessage(array('error' => $message ));
 
-                    $this->_redirect(HTTP_PATH.'admin/user/adduser');
+                    $this->_redirect(HTTP_PATH.'admin/user/adduser' );
 
                     exit;
             }
             //$userPermlink = $u->slug ;
             //self::updateVarnish($userPermlink);
         }
-        echo Zend_Json::encode($result);
+        echo Zend_Json::encode(	$result);
         $message = $this->view->translate('User has been created successfully.');
         $flash->addMessage(array('success' => $message ));
         $this->_redirect(HTTP_PATH.'admin/user');
@@ -585,7 +585,7 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function checkuserAction()
     {
-        $u = KC\Repository\User::checkDuplicateUser($this->_getParam('email'));
+        $u = new KC\Repository\User::checkDuplicateUser($this->_getParam('email'));
         $cnt  = intval($u);
 
         if ($cnt > 0) {

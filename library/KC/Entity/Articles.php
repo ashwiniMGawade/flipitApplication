@@ -108,7 +108,7 @@ class Articles
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesThumb", inversedBy="articles")
-     * @ORM\JoinColumn(name="thumbnailsmallid2", referencedColumnName="id")
+     * @ORM\JoinColumn(name="thumbnailsmallid", referencedColumnName="id")
      */
     private $thumbnail;
 
