@@ -122,7 +122,7 @@ class LoginController extends Zend_Controller_Action
     {
         Auth_VisitorAdapter::clearIdentity();
         setcookie('kc_unique_user_id', "", time() - 64800, '/');
-        setcookie('registered_user', "", time() - 10 * 365 * 24 * 60 * 60, '/');
+        
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         Zend_Session::namespaceUnset('favouriteShopId');
@@ -287,7 +287,7 @@ class LoginController extends Zend_Controller_Action
             $userid = Auth_VisitorAdapter::getIdentity()->id;
             $obj = new Visitor();
             $obj->updateLoginTime($userid);
-            setcookie('kc_unique_user_id', $userid, time() + 64800, '/');
+            $this->_helper->Login->setUserCookies();
             $url =
                 HTTP_PATH_LOCALE
                 . FrontEnd_Helper_viewHelper::__link('link_inschrijven')
@@ -317,7 +317,7 @@ class LoginController extends Zend_Controller_Action
             $userid = Auth_VisitorAdapter::getIdentity()->id;
             $obj = new Visitor();
             $obj->updateLoginTime($userid);
-            setcookie('kc_unique_user_id', $userid, time() + 64800, '/');
+            $this->_helper->Login->setUserCookies();
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
             $flash->addMessage(array('success' => $message));
