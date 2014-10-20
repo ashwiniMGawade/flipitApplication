@@ -105,16 +105,19 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\CategoryIcon", inversedBy="category")
-     * @ORM\JoinColumn(name="categoryIconId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
      */
     private $categoryicon;
-
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\ArticleCategoryIcon", inversedBy="category")
-     * @ORM\JoinColumn(name="categoryIconId2", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\CategoryIcon", inversedBy="categoryfeatured")
+     * @ORM\JoinColumn(name="categoryFeaturedImageId", referencedColumnName="id")
      */
-    private $articlecategoryicon;
-
+    private $categoryFeaturedImage;
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\CategoryIcon", inversedBy="categoryheader")
+     * @ORM\JoinColumn(name="categoryHeaderImageId", referencedColumnName="id")
+     */
+    private $categoryHeaderImage;
     /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Articlecategory", inversedBy="category")
      * @ORM\JoinTable(

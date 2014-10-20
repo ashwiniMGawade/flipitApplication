@@ -12,6 +12,7 @@ use Doctrine\ORM\Mapping AS ORM;
 class RefPageWidget
 {
     /**
+    * @ORM\Id
      * @ORM\Column(type="integer", length=8, nullable=false)
      * @ORM\GeneratedValue(strategy="AUTO")
      */

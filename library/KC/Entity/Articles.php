@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="articles", indexes={@ORM\Index(name="thumbnailid", columns={})})
+ * @ORM\Table(name="articles", indexes={@ORM\Index(name="thumbnailid", columns={"thumbnail"})})
  */
 class Articles
 {
@@ -102,7 +102,7 @@ class Articles
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ArticlesIcon", inversedBy="articles")
-     * @ORM\JoinColumn(name="articles_icon_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="thumbnailid", referencedColumnName="id")
      */
     private $articleImage;
 

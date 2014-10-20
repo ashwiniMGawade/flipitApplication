@@ -5,9 +5,7 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  * @ORM\Table(
- *     name="articlecategory",
- *     indexes={@ORM\Index(name="categoryiconid_idx", columns={})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={})}
+ *     name="articlecategory"
  * )
  */
 class Articlecategory

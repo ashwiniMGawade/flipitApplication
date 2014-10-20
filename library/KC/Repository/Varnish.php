@@ -17,9 +17,11 @@ class Varnish extends \KC\Entity\Varnish
     {
         # add url if it is not queued
         if (! self::checkQueuedUrl($url)) {
-            $v          = new KC\Entity\Varnish();
+            $v          = new \KC\Entity\Varnish();
             $v->url     = rtrim($url, '/');
             $v->status  = 'queue';
+            $v->created_at = new \DateTime('now');
+            $v->updated_at = new \DateTime('now');
             $entityManagerLocale = \Zend_Registry::get('emLocale');
             $entityManagerLocale->persist($v);
             $entityManagerLocale->flush();
@@ -78,8 +80,8 @@ class Varnish extends \KC\Entity\Varnish
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.id')
             ->from('KC\Entity\Varnish', 'v')
-            ->where($queryBuilder->expr()->eq('v.url', rtrim($url, '/')))
-            ->andWhere($queryBuilder->expr()->eq('v.status', 'queue'))->setMaxResult();
+            ->where($queryBuilder->expr()->eq('v.url', $queryBuilder->expr()->literal(rtrim($url, '/'))))
+            ->andWhere("v.status = 'queue'");
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return  $data;
     }

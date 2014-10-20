@@ -6,8 +6,8 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="seen_in",
- *     indexes={@ORM\Index(name="logoid_idx", columns={})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="logoid", columns={})}
+ *     indexes={@ORM\Index(name="logoid_idx", columns={"logo"})},
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="logoid", columns={"logo"})}
  * )
  */
 class SeenIn
