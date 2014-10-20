@@ -561,6 +561,16 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
 		</div>
 		<div class="mainpage-content" id="extendedoffer-container" style="display:none;">
 			<div class="mainpage-content-line">
+				<div class="mainpage-content-left"> <label><strong><?php echo $this->translate('Extended Title'); ?></strong></label></div>
+				<div class="mainpage-content-right">
+					<div class="mainpage-content-right-inner-right-other"></div>
+					<div class="mainpage-content-right-inner-left-other">
+					<input type="text" name="extendedTitle" id="extendedTitle" placeholder="<?php echo $this->translate('This account is important, etc');?>" class="input-xlarge mbot bbot ignore span3"/>
+					<input type="text" disabled="disabled" value="<?php echo $this->translate('Extended offer Title length 0 characters');?>" id="extendedTitleLeft" class="input-xlarge disabled btop word-count">
+					</div>
+				</div>
+			</div>
+			<div class="mainpage-content-line">
 				<div class="mainpage-content-left"> <label><strong><?php echo $this->translate('Meta Title'); ?></strong></label></div>
 				<div class="mainpage-content-right">
 					<div class="mainpage-content-right-inner-right-other"></div>

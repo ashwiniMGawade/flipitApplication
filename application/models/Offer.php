@@ -1533,6 +1533,7 @@ class Offer extends BaseOffer
         if (isset($params['extendedoffercheckbox'])) {                  // check if offer is extended
           $this->extendedOffer = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
           $this->extendedTitle =BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+          $this->extendedoffertitle =BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedTitle']);
           $this->extendedUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
           $this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
           $this->extendedFullDescription =BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
@@ -1619,6 +1620,7 @@ class Offer extends BaseOffer
         try {
 
             if (intval($this->shopId) > 0) {
+
                 $this->save();
             } else {
                 return array('result' => true , 'errType' => 'shop' );
@@ -1859,6 +1861,7 @@ class Offer extends BaseOffer
             // check if offer is extended
             $this->extendedOffer = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
             $this->extendedTitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $this->extendedoffertitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedTitle']);
             $this->extendedUrl = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
             $this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
             $this->extendedFullDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
