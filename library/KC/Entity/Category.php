@@ -105,13 +105,13 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\CategoryIcon", inversedBy="category")
-     * @ORM\JoinColumn(name="categoryIconId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
      */
     private $categoryicon;
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ArticleCategoryIcon", inversedBy="category")
-     * @ORM\JoinColumn(name="categoryIconId2", referencedColumnName="id")
+     * @ORM\JoinColumn(name="categoryIconId", referencedColumnName="id")
      */
     private $articlecategoryicon;
 

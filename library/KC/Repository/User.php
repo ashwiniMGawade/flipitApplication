@@ -139,27 +139,35 @@ class User extends \KC\Entity\User
 
     public function addUser($params, $imageName)
     {
+        //echo "<pre>";
+        //print_r($params);
+        //die($params);
+        $addUser = new \KC\Entity\User();
         $entityManagerUser  = \Zend_Registry::get('emUser');
-        $addto = isset($params['addtosearch']) ? $params['addtosearch'] : false;
+        $addto = isset($params['addtosearch']) ? $params['addtosearch'] : 0;
         if ($addto == 'on') {
             $addtosearch = 1;
         } else {
             $addtosearch = 0;
         }
         $ext = \BackEnd_Helper_viewHelper::getImageExtension($params['imageName']);
-        $this->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
-        $this->email = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['email']);
-        $this->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
-        $this->countryLocale = $params['locale'];
-        $this->mainText = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+        $addUser->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
+        $addUser->email = \BackEnd_Helper_viewHelper::stripSlashesFromString('aaa@assssssssssssa.com');
+        $addUser->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
+        $addUser->countryLocale = isset($params['locale']) ? $params['locale'] : '';
+        
+        $addUser->mainText = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             isset($params['maintext']) ? $params['maintext'] : ''
         );
-        $this->currentLogIn = date('Y-m-d');
-        $this->lastLogIn = date('Y-m-d');
+        $addUser->currentLogIn = new \DateTime('now');
+        $addUser->lastLogIn = new \DateTime('now');
+        $addUser->deleted = '0';
+        $addUser->addtosearch = '0';
+
         if ($this->isValidPassword($params['password'])) {
-            self::setPassword($params['password']);
-            $entityManagerUser->persist($this);
-            $entityManagerUser->flush();
+            $addUser = self::setPassword($addUser, $params['password']);
+            //$entityManagerUser->persist($addUser);
+            //$entityManagerUser->flush();
         } else {
             return  array(
                 'error' => true,
@@ -167,21 +175,22 @@ class User extends \KC\Entity\User
             );
         }
 
-        $this->roleId = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']);
-        $this->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
-        $this->addtosearch =$addtosearch;
-        $this->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
-        $this->twitter = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['twitter']);
-        $this->pinterest = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pintrest']);
-        $this->likes = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['likes']);
-        $this->dislike = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['dislike']);
-        $this->editorText = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
-        $this->popularKortingscode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
+        $addUser->roleId = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']);
+        $addUser->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
+        $addUser->addtosearch =$addtosearch;
+        $addUser->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
+        $addUser->twitter = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['twitter']);
+        $addUser->pinterest = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pintrest']);
+        $addUser->likes = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['likes']);
+        $addUser->dislike = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['dislike']);
+        $addUser->editorText = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
+        $addUser->popularKortingscode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
-        $this->createdBy = isset(\Auth_StaffAdapter::getIdentity()->id) ? \Auth_StaffAdapter::getIdentity()->id : '';
+        $addUser->createdBy = isset(\Auth_StaffAdapter::getIdentity()->id) ? \Auth_StaffAdapter::getIdentity()->id : 0;
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
-        $this->slug = \BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
+        $addUser->slug = \BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
+
         //  if(isset($params['imageName']))
         $pattern = '/^[0-9]{10}_(.+)/i' ;
         preg_match($pattern, $imageName, $matches);
@@ -193,25 +202,26 @@ class User extends \KC\Entity\User
             $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
             $entityManagerUser->persist($pImage);
             $entityManagerUser->flush();
-            $this->profileImageId =  $pImage->getId();
+            $addUser->profileImageId =  $pImage->getId();
 
         }
         //save user website access
         if (isset($params['websites'])) {
             foreach ($params['websites'] as $web) {
-                $this->refUserWebsite[]->websiteId = $web ;
+                $addUser->website[] = $entityManagerUser->find('KC\Entity\Website', $web);
+                //$entityManagerUser->persist($addUser);
+                //$entityManagerUser->persist($website);
+                //echo $web . "</br>";
             }
         }
-
-        $entityManagerUser->persist($this);
+        $entityManagerUser->persist($addUser);
         $entityManagerUser->flush();
-        //save interesting category in database
+        $entityManagerLocale  =\Zend_Registry::get('emLocale');
         if (isset($params['selectedCategoryies'])) {
-            $entityManagerLocale  =\Zend_Registry::get('emLocale');
             foreach ($params['selectedCategoryies'] as $categories) {
-                $cat = new KC\Entity\Interestingcategory();
-                $cat->categoryId  =$categories;
-                $cat->userId = $this->getId();
+                $cat = new \KC\Entity\Interestingcategory();
+                $cat->category  = $entityManagerLocale->find('KC\Entity\Category', $categories);
+                $cat->userId = $addUser->getId();
                 $entityManagerLocale->persist($cat);
                 $entityManagerLocale->flush();
             }
@@ -221,19 +231,19 @@ class User extends \KC\Entity\User
         if (!empty($params['fevoriteStore'])) {
             $splitStore  =explode(",", $params['fevoriteStore']);
             foreach ($splitStore as $str) {
-                $store = new  KC\Entity\Adminfavoriteshop();
-                $store->shopId  = $str;
-                $store->userId = $this->getId();
-                $entityManagerUser->persist($store);
-                $entityManagerUser->flush();
+                $store = new  \KC\Entity\Adminfavoriteshp();
+                $store->shops  = $entityManagerLocale->find('KC\Entity\Shop', $str);
+                $store->userId = $addUser->getId();
+                $entityManagerLocale->persist($store);
+                $entityManagerLocale->flush();
             }
         }
         //call cache function
-        $key = 'user_'.$this->getId().'_details';
+        $key = 'user_'.$addUser->getId().'_details';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_user_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_users_list');
-        return $this->getId();
+        return $addUser->getId();
     }
 
     public static function checkDuplicateUser($email)
@@ -769,7 +779,7 @@ class User extends \KC\Entity\User
         $query = $queryBuilder->select('s.name as name,s.id as id')
             ->from('\KC\Entity\Shop', 's')
             ->where($queryBuilder->expr()->eq('s.deleted', '0'))
-            ->andWhere($queryBuilder->expr()->like('s.name', $keyword . '%'))
+            ->andWhere($queryBuilder->expr()->like('s.name', $queryBuilder->expr()->literal($keyword . '%')))
             ->andWhere($queryBuilder->expr()->notIn('s.id', $SP))
             ->andWhere($queryBuilder->expr()->eq('s.status', '1'))
             ->orderBy('s.name', 'ASC');
@@ -930,6 +940,13 @@ class User extends \KC\Entity\User
         } else {
             return  'Please enter valid current password' ;
         }
+    }
+
+    public function setPassword($classObject, $password)
+    {
+        $classObject->password = md5($password);
+        $classObject->passwordChangeTime = new \DateTime('now');
+        return $classObject;
     }
 
     public function isValidPassword($password)
