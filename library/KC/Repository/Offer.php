@@ -63,16 +63,16 @@ class Offer Extends \KC\Entity\Offer
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
                 ->select(
-                    's.id as shopId,s.permaLink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
-                    o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
+                    's.id as shopId,s.permaLink as permalink,s.name as shopName,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
+                    o.refURL, o.refOfferUrl, s.refUrl as shopRefUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
                     o.discountType, o.couponCode, o.startDate as startdate, o.endDate as enddate, o.exclusiveCode,
                     o.editorPicks,o.extendedOffer as extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName,
-                    o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path,
-                    img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
+                    o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.path,
+                    img.name,fv.id as visitorId,vot.id as voteId,vot.vote'
                 )
                 ->from('KC\Entity\Offer', 'o')
                 ->addSelect(
-                    "(SELECT count(id) FROM KC\Entity\CouponCode WHERE offer = o.id and status=1) as totalAvailableCodes"
+                    "(SELECT count(cc.id) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1) as totalAvailableCodes"
                 )
                 ->leftJoin('o.shopOffers', 's')
                 ->leftJoin('s.visitors', 'fv')
@@ -102,7 +102,6 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere($entityManagerUser->expr()->in('o.shopOffers', '?11'))
                 ->orderBy('o.startDate', 'DESC')
                 ->setMaxResults($limit);
-                //print_r($query->getQuery()->getDql());die;
                 $similarShopsOffers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
             $similarShopsOffers = array();
@@ -130,14 +129,13 @@ class Offer Extends \KC\Entity\Offer
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
             ->select(
-                's.id as shopId,s.permaLink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
+                's.id as shopId,s.permaLink as permalink,s.name as shopName,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
                 o.refURL,
                 o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,
                 o.couponCodeType, o.couponCode, o.refOfferUrl as refofferurl, o.startDate as startdate,
                 o.endDate as enddate, o.exclusiveCode, o.editorPicks,
                 o.extendedOffer as extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName,
-                o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,
-                fv.id,vot.id,vot.vote'
+                o.userGenerated, o.approved,o.discountvalueType,img.path, img.name,fv.id as visitorId,vot.id as voteId,vot.vote'
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -324,14 +322,14 @@ class Offer Extends \KC\Entity\Offer
         $currentDate = date("Y-m-d H:i");
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            's.id as shopId,s.name,
-            s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
+            's.id as shopId,s.name as shopName,
+            s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.usergenratedcontent,s.refUrl,
             s.actualUrl,terms.content,
             o.id,o.Visability as visability,o.userGenerated,o.title,o.authorId,
             o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
             o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refURL as refUrl,o.extendedUrl,
             o.discountType,o.startDate as startdate,o.endDate as enddate,
-            img.id as imageId, img.path, img.name,fv.favoriteshops, logo.id, logo.name, logo.path,
+            img.path as shopPath, img.name as shopImage, logo.name, logo.path,
             vot.id as voteId,vot.vote'
         )
             ->from('KC\Entity\Offer', 'o')
@@ -428,11 +426,11 @@ class Offer Extends \KC\Entity\Offer
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'op.offers,op.refoffers,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL as refUrl,o.refOfferUrl,
+            'o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL as refUrl,o.refOfferUrl,
             o.discountType,o.startDate as startdate,o.endDate as enddate,o.authorId,o.authorName,
             o.Visability as visability,o.couponCode,o.exclusiveCode,
-            o.editorPicks,o.discount,o.discountvalueType,o.extendedOffer,o.extendedUrl,s.name,s.refUrl,
-            s.actualUrl,s.permaLink as permalink,s.views,l.name,l.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote,
+            o.editorPicks,o.discount,o.discountvalueType,o.extendedOffer,o.extendedUrl,s.name as shopName,s.refUrl as shopRefUrl,
+            s.actualUrl,s.permaLink as permalink,s.views,l.name,l.path,fv.id as visitorId,vot.id,vot.vote,
             ologo.path,ologo.name'
         )
         ->from('KC\Entity\RefOfferPage', 'op')
@@ -447,7 +445,7 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('s.logo', 'l')
         ->leftJoin('s.visitors', 'fv')
         ->setParameter(7, $pageId)
-        ->where('op.pageId = ?7')
+        ->where('op.offers = ?7')
         ->andWhere('o.endDate >'."'".$currentDate."'")
         ->andWhere('o.startDate <='."'".$currentDate."'")
         ->setParameter(2, 0)
@@ -488,10 +486,9 @@ class Offer Extends \KC\Entity\Offer
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $offersConstraintsQuery = $entityManagerUser->select(
-            'o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startdate,o.enddate,o.refUrl,
-            o.refOfferUrl,o.authorId,o.authorName,o.visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
-            o.discountvalueType,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.name,l.path,fv.id,
-            fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name'
+            'o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate as startdate,o.endDate as enddate ,o.refURL as refUrl ,
+            o.refOfferUrl,o.authorId,o.authorName,o.Visability as visability ,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
+            o.discountvalueType,s.name as shopName,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.name,l.path,fv.id as visitorId, vot.id as voteId, vot.vote, ologo.path, ologo.name'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.logo', 'ologo')
@@ -864,13 +861,13 @@ class Offer Extends \KC\Entity\Offer
             $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $entityManagerUser
             ->select(
-                's.id as shopId,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,
+                's.id as shopId,s.name as shopName,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,
                 o.discountType,o.id,o.title,o.extendedUrl,o.Visability as visability,
                 o.discountvalueType as discountValueType,
                 o.couponCode as couponcode , o.refOfferUrl as refofferurl,
                 o.startDate as startdate ,o.endDate as enddate, o.exclusiveCode as exclusivecode,
                 o.editorPicks as editorpicks, o.extendedOffer as extendedoffer,o.discount, o.authorId,
-                o.authorName, o.userGenerated, o.approved,fv.shopId,fv.visitorId,img.id, img.path,
+                o.authorName, o.userGenerated, o.approved,fv.id as visitorId,img.path,
                 img.name'
             )
             ->from('KC\Entity\Offer', 'o')
@@ -906,13 +903,13 @@ class Offer Extends \KC\Entity\Offer
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
             ->select(
-                's.id as shopId,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,
+                's.id as shopId,s.name as shopName,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,
                 o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.Visability as visability,
                 o.discountvalueType as discountValueType, o.couponCode as couponcode, 
                 o.refOfferUrl as refofferurl, o.startDate as startdate, o.endDate as enddate,
                 o.exclusiveCode as exclusivecode, o.editorPicks as editorpicks,o.extendedOffer as extendedoffer,
-                o.discount,o.authorId, o.authorName,o.userGenerated, o.approved,img.id,
-                img.path,img.name,fv.shopId,fv.visitorId,t.content'
+                o.discount,o.authorId, o.authorName,o.userGenerated, o.approved,
+                img.path,img.name,fv.id as visitorId,t.name, t.position, t.path, t.ext'
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
@@ -933,7 +930,7 @@ class Offer Extends \KC\Entity\Offer
             ->setParameter(6, 'MEM')
             ->andWhere('o.Visability != ?6')
             ->andWhere(
-                $query->expr()->orX(
+                $entityManagerUser->expr()->orX(
                     "s.name LIKE '%$searchKeyword%'",
                     "o.title LIKE '%$searchKeyword%'"
                 )
@@ -945,7 +942,7 @@ class Offer Extends \KC\Entity\Offer
 
     public static function getOfferList($parameters)
     {
-        $userRole           = \Auth_StaffAdapter::getIdentity()->roleId;
+        $userRole           = \Auth_StaffAdapter::getIdentity()->users->id;
         $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
         $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
         $searchCoupon       = $parameters["shopCoupon"]!='undefined' ? $parameters["shopCoupon"] : '';
@@ -953,11 +950,6 @@ class Offer Extends \KC\Entity\Offer
         $deletedStatus      = $parameters['flag'];
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $getOffersQuery = $entityManagerUser
-            ->select(
-                'o.id,o.title,s.name,s.accountManagerName as acName,o.totalViewcount as clicks,
-                o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,o.authorName,o.refURL,
-                o.couponCode as couponcode'
-            )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->setParameter(1, $deletedStatus)
@@ -980,16 +972,41 @@ class Offer Extends \KC\Entity\Offer
         if ($searchCouponType!='') {
             $getOffersQuery->andWhere('o.discountType ='."'".$searchCouponType."'");
         }
-        $offersList = \DataTable_Helper::generateDataTableResponse(
-            $getOffersQuery,
+        
+        $request  = \DataTable_Helper::createSearchRequest(
             $parameters,
-            array("__identifier" => 'o.id','o.title','s.name','o.discountType','o.refURL','o.couponCode','o.startDate',
-                'o.endDate', 'clicks','authorName'),
-            array(),
-            array()
+            array(
+                'id',
+                'Title',
+                'Winkel',
+                'Type',
+                'Deeplinking',
+                'Start',
+                'End',
+                'CouponCode',
+                'clickouts',
+                'author',
+                'Delete'
+            )
         );
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($getOffersQuery)
+            ->add('number', 'o.id')
+            ->add('text', 'o.title, s.name')
+            ->add('text', 's.accountManagerName')
+            ->add('number', 'o.totalViewcount')
+            ->add('text', 'o.discountType, o.Visability')
+            ->add('text', 'o.extendedOffer')
+            ->add('text', 'o.startDate,o.endDate')
+            ->add('text', 'o.authorName,o.refURL')
+            ->add('text', 'o.couponCode');
+
+        $offersList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $offersList = \DataTable_Helper::getResponse($offersList, $request);
         return $offersList;
     }
+
     public static function addConversion($offerId)
     {
         $clientIP = ip2long(\FrontEnd_Helper_viewHelper::getRealIpAddress());
@@ -1188,14 +1205,14 @@ class Offer Extends \KC\Entity\Offer
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser
                 ->select(
-                    's.id as shopId,s.name, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,
+                    's.id as shopId,s.name as shopName, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,
                     s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,
                     o.extendedUrl as extendedurl,o.extendedOffer as extendedoffer,
                     o.editorPicks as editorpicks,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,
                     o.exclusiveCode,
                     o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refURL as refUrl,
                     o.discountType,
-                    o.startDate,o.endDate,img.id as imageId, img.path, img.name,fv.id, fv.favoriteshops,ologo.id,
+                    o.startDate,o.endDate,img.id as imageId, img.path, img.name,fv.id as visitorId,
                     vot.id,vot.vote'
                 )
                 ->from('KC\Entity\Offer', 'o')
@@ -1468,10 +1485,10 @@ class Offer Extends \KC\Entity\Offer
         return $id;
     }
 
-    public static function searchToFiveOffer($keyword, $flag)
+    public static function searchTopFiveOffer($keyword, $flag)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('o.title as title')
+        $query = $queryBuilder->select('o.title as title, o.id')
                 ->from('KC\Entity\Offer', 'o')
                 ->where('o.deleted='.$flag)
                 ->andWhere("o.title LIKE '$keyword%'")
@@ -1485,7 +1502,7 @@ class Offer Extends \KC\Entity\Offer
     public static function searchToFiveShop($keyword, $flag)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('s')
+        $query = $queryBuilder->select('s.name, s.id')
                 ->from('KC\Entity\Offer', 'o')
                 ->leftJoin('o.shopOffers', 's')
                 ->where('o.deleted='.$flag)
@@ -1501,7 +1518,7 @@ class Offer Extends \KC\Entity\Offer
     public static function searchToFiveCoupon($keyword, $flag)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('o')
+        $query = $queryBuilder->select('o.couponCode, o.id')
                 ->from('KC\Entity\Offer', 'o')
                 ->where('o.deleted='.$flag)
                 ->andWhere("o.couponCode LIKE '$keyword%'")
@@ -1541,7 +1558,7 @@ class Offer Extends \KC\Entity\Offer
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-                ->select('o.title,s.name,s.deepLink as deeplink,term.content')
+                ->select('o.title, o.id,s.name,s.deepLink as deeplink,term.content')
                 ->from('KC\Entity\Offer', 'o')
                 ->leftJoin('o.shopOffers', 's')
                 ->leftJoin('o.offertermandcondition', 'term')
@@ -1810,10 +1827,10 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'p.id,o.endDate as enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,
+            'p.id as popularCodeId,o.endDate as enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink, o.id,
             o.Visability,o.extendedUrl,o.couponCode as couponcode, o.exclusiveCode as exclusivecode,
-            o.discount,o.discountvalueType,s.name,l.path,l.name,p.type,p.position,
-            p.offerId,fv.shopId,fv.visitorId,vot.id,vot.vote'
+            o.discount,o.discountvalueType,s.name as shopName,l.path,l.name,p.type,p.position,
+            fv.id as visitorId,vot.id as voteId,vot.vote'
         )
         ->from('KC\Entity\PopularCode', 'p')
         ->leftJoin('p.popularcode', 'o')
@@ -1825,8 +1842,8 @@ class Offer Extends \KC\Entity\Offer
         ->andWhere("o.userGenerated = 0")
         ->andWhere('s.deleted = 0')
         ->andWhere('o.offline = 0')
-        ->andWhere('o.endDate >'."'".$currentDate."'")
-        ->andWhere('o.startDate <='."'".$currentDate."'")
+        ->andWhere('o.endDate >'."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
         ->setParameter(1, 'CD')
         ->andWhere('o.discountType = ?1')
         ->setParameter(2, 'MEM')
@@ -1835,7 +1852,7 @@ class Offer Extends \KC\Entity\Offer
         ->setMaxResults(4);
         $data= $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         foreach ($data as $d) {
-            $suggestion[] = $d['offer'];
+            $suggestion[] = $d;
         }
         return $suggestion;
     }
@@ -1895,10 +1912,9 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select(
             's.id as shopId,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,
-            p.id,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,
+            p.id as pageId,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,
             o.discount,o.couponCodeType,o.userGenerated,o.couponCode,o.refOfferUrl,o.refURL,
-            o.discountType,o.startDate as startdate,o.endDate,img.id as imageId, img.path, img.name,fv.shopId,
-            fv.visitorId,ologo.name, o.logo.path,vot.id,vot.vote'
+            o.discountType,o.startDate as startdate,o.endDate, img.path as shopImagePath, img.name as shopImageName, fv.id as visitorId,ologo.name as offerLogoName, ologo.path as offerLogoPath,vot.id as voteId,vot.vote'
         )
             ->from('KC\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
@@ -1910,7 +1926,7 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('o.offertermandcondition', 'terms')
             ->where('o.deleted = 0')
             ->andWhere(
-                "(o.couponCodeType = 'UN' AND (SELECT count(c.id)  FROM CouponCode c WHERE c.offer = o.id and c.status=1)  > 0) 
+                "(o.couponCodeType = 'UN' AND (SELECT count(c.id)  FROM KC\Entity\CouponCode c WHERE c.offer = o.id and c.status=1)  > 0) 
                 or o.couponCodeType = 'GN'"
             )
             ->andWhere("o.userGenerated = 0")
@@ -1949,11 +1965,11 @@ class Offer Extends \KC\Entity\Offer
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select(
-            's.id,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,
+            's.id as shopId,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,
             s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,
             o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,
             o.couponCode,o.couponCodeType,o.refOfferUrl,o.refURL as refUrl,o.discountType,o.endDate,
-            img.id, img.path, img.name,IDENTITY(fv.visitors) as test,IDENTITY(fv.visitors) as test2,ologo.name,ologo.path,vot.id,vot.vote'
+            img.path as shopImagePath, img.name as shopImageName, fv.id as visitorId,  ologo.name as offerImageName, ologo.path as offerImagePath , vot.id as voteId,vot.vote'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
@@ -2078,7 +2094,7 @@ class Offer Extends \KC\Entity\Offer
                     o.startDate as startdate , o.endDate as enddate, o.exclusiveCode, o.editorPicks,
                     o.extendedOffer as extendedoffer ,o.extendedUrl,o.discount,
                     o.authorId, o.authorName, o.userGenerated, o.approved,o.discountvalueType,
-                    img.id, img.path, img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
+                    img.id, img.path, img.name,fv.id as visitorId,vot.id as voteId,vot.vote'
                 )
                 ->from('KC\Entity\Offer', 'o')
                 ->leftJoin('o.shopOffers', 's')
@@ -2094,7 +2110,7 @@ class Offer Extends \KC\Entity\Offer
                 ->andWhere('o.startDate <='."'".$date."'")
                 ->setParameter(1, 'CD')
                 ->andWhere('o.discountType = ?1')
-                ->andWhere('o.shopid !='.$shopId)
+                ->andWhere('o.shopOffers !='.$shopId)
                 ->orderBy('o.startDate', 'DESC')
                 ->setMaxResults($limit);
             $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -2159,15 +2175,12 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                'p.id as popularCodeId,o.id,o.authorId,o.refURL,o.couponCodeType,o.discountType,o.title,
-                o.discountvalueType,
-                o.Visability, o.exclusiveCode,o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,
-                o.totalViewcount,
-                o.startDate, o.endDate,o.refOfferUrl, o.extendedUrl,l.name,l.path,t.path,t.name,t.position,t.label,
-                s.id as shopId,s.name,s.permalink as permalink,
+                'p.id as popularCodeId,o.id,o.authorId,o.refURL,o.couponCodeType,o.discountType,o.title, o.discountvalueType, o.Visability, o.exclusiveCode,o.editorPicks,
+                o.userGenerated,o.couponCode,o.extendedOffer, o.totalViewcount,
+                o.startDate, o.endDate,o.refOfferUrl, o.extendedUrl,l.name as offerLogoName,l.path as offerLogoPath,t.path,t.name,t.position,t.label,
+                s.id as shopId,s.name as shopName,s.permaLink as permalink,
                 s.usergenratedcontent,s.deepLink,
-                s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name,fv.shopId,
-                fv.visitorId,fv.id,vot.id,vot.vote'
+                s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.path as shopImagePath, img.name as shopImageName,fv.id as visitorId,vot.id as voteId,vot.vote'
             )
         ->from('KC\Entity\PopularCode', 'p')
         ->leftJoin('p.popularcode', 'o')
@@ -2181,11 +2194,13 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.offerTiles', 't')
         ->where('o.deleted = 0')
         ->andWhere(
-            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0)
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0)
              or o.couponCodeType = 'GN'"
         )
-        ->andWhere($queryBuilder->expr()->notIn('sc.categoryId', $shopCategories))
-        ->andWhere($queryBuilder->expr()->notIn('o.id', $offerIDs))
+        ->setParameter(10, $queryBuilder->expr()->literal($shopCategories))
+        ->andWhere($queryBuilder->expr()->notIn('sc.categoryId', '?10'))
+        ->setParameter(11, $queryBuilder->expr()->literal($offerIDs))
+        ->andWhere($queryBuilder->expr()->notIn('o.id', '?11'))
         ->andWhere('s.deleted=0')
         ->andWhere('o.offline = 0')
         ->andWhere('s.status = 1')
@@ -2213,9 +2228,8 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'l.name,l.path,t.path,t.name,t.position,s.id as shopId,s.name,s.permaLink as permalink,s.usergenratedcontent,s.deepLink,
-            s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id, o.title,img.id, img.path, img.name,
-            fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
+            'l.name as offerLogoName,l.path as offerLogoPath,t.path,t.name,t.position,s.id as shopId,s.name as shopName,s.permaLink as permalink,s.usergenratedcontent,s.deepLink,
+            s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id, o.title,img.path as shopImagePath, img.name as shopImageName,fv.id,vot.id as voteId,vot.vote'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
@@ -2267,7 +2281,7 @@ class Offer Extends \KC\Entity\Offer
         $query = $queryBuilder
             ->select(
                 'po.position, po.status, po.type,o.title,o.id,terms.content,s.id as shopId,s.name,
-                img.name,img.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote'
+                img.name,img.path,fv.id,fv.id as visitorId,vot.id as voteId,vot.vote'
             )
             ->from('KC\Entity\PopularVouchercodes', 'po')
             ->leftJoin('po.offer', 'o')
@@ -2278,8 +2292,6 @@ class Offer Extends \KC\Entity\Offer
             ->leftJoin('s.visitors', 'fv')
             ->Where('s.id='.$shopId)
             ->andWhere('o.deleted =0')
-            ->andWhere('o.endDate >'."'".$date."'")
-            ->andWhere('o.startDate <='."'".$date."'")
             ->andWhere('s.deleted =0')
             ->orderBy('po.offer', 'DESC')
             ->setMaxResults($limit);
@@ -2320,13 +2332,13 @@ class Offer Extends \KC\Entity\Offer
                     $popularity = round($newtotal / ($diff > 0 ? $diff : 1 ), 4);
 
                     # update popularity and otal click counts
-                      $query = $queryBuilder
-                            ->update('KC\Entity\Offer', 'o')
-                            ->set('o.totalViewcount', $newtotal)
-                            ->set('o.popularityCount', "'".$popularity."'")
-                            ->where('o.id ='.$value['id'])
-                            ->getQuery();
-                            $query->execute();
+                    $query = $queryBuilder
+                        ->update('KC\Entity\Offer', 'o')
+                        ->set('o.totalViewcount', $newtotal)
+                        ->set('o.popularityCount', "'".$popularity."'")
+                        ->where('o.id ='.$value['id'])
+                        ->getQuery();
+                        $query->execute();
             }
         }
     }
@@ -2362,8 +2374,7 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
-             o.discountvalueType,s.name,s.views,l.name,l.path,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote'
+            'o.id,o.title,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount, o.discountvalueType,s.name as shopName, s.id as shopId,s.views,l.name,l.path,fv.id as visitorId,vot.id as voteId,vot.vote'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
@@ -2411,7 +2422,7 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('count(v.id) as cnt')
-        ->from("KC\Entity\Votes v")
+        ->from('KC\Entity\Votes', 'v')
         ->where("v.offer=".$id)
         ->andWhere("v.deleted=0")
         ->setParameter(1, 'positive')
@@ -2420,7 +2431,7 @@ class Offer Extends \KC\Entity\Offer
 
         $query = $queryBuilder
         ->select('count(v.id) as cnt')
-        ->from('KC\Entity\Votes v')
+        ->from('KC\Entity\Votes', 'v')
         ->where('v.offer='.$id)
         ->andWhere('v.deleted=0')
         ->setParameter(1, 'negative')
@@ -2473,28 +2484,29 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                "o.id, o.extendedOffer,o.authorId , o.extendedUrl,
-                s.permaLink, s.howToUse ,s.contentManagerId , sp.permaLink, p.permaLink,c.permaLink"
+                "o.id, o.title, o.extendedOffer,o.authorId , o.extendedUrl,
+                s.permaLink as shopPermalink, s.howToUse ,s.contentManagerId , sp.permaLink as shopPagePermalink, p.permaLink as categoryPermalink, page.permaLink as pagePermalink"
             )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')
             ->leftJoin('o.categoryoffres', 'c')
+            ->leftJoin('o.offers', 'refPage')
+            ->leftJoin('refPage.offers', 'page')
             ->leftJoin('s.shopPage', 'sp')
-            ->leftJoin('o.offers', 'p')
+            ->leftJoin('c.offer', 'p')
             ->where("o.id=".$id);
-        $offer = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
+        $offer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $urlsArray = array();
 
         # check for related shop permalink
         if (isset($offer['shop'])) {
-            $urlsArray[] = $offer['shop']['permaLink'];
+            $urlsArray[] = $offer[0]['shopPermaLink'];
 
             # check if a shop has editor or not
-            if (isset($offer['shop']['contentManagerId'])) {
+            if (isset($offer[0]['contentManagerId'])) {
 
                 # redactie permalink
-                $redactie =  \KC\Repository\User::returnEditorUrl($offer['shop']['contentManagerId']);
+                $redactie =  \KC\Repository\User::returnEditorUrl($offer[0]['contentManagerId']);
 
                 # check if an editor  has permalink then add it into array
                 if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
@@ -2505,47 +2517,42 @@ class Offer Extends \KC\Entity\Offer
         }
 
         # check for extende offer page
-        if (isset($offer['extendedOffer'])) {
+        if (isset($offer[0]['extendedOffer'])) {
             # check for extende offer url
-            if ($offer['extendedUrl'] && strlen($offer['extendedUrl']) > 0) {
-                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $offer['extendedUrl'];
+            if ($offer[0]['extendedUrl'] && strlen($offer[0]['extendedUrl']) > 0) {
+                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $offer[0]['extendedUrl'];
             }
         }
 
         # check for shop permalink
-        if ($offer['shop']['howToUse']) {
+        if ($offer[0]['howToUse']) {
             # check for extende offer url
-            if (isset($offer['shop']['permaLink'])  && strlen($offer['shop']['permaLink']) > 0) {
-                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer['shop']['permaLink'];
+            if (isset($offer[0]['shopPermaLink'])  && strlen($offer[0]['shopPermaLink']) > 0) {
+                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'. $offer[0]['shopPermaLink'];
             }
         }
 
         # check an offerr has one or more categories
-        if (isset($offer['category']) && count($offer['category']) > 0) {
 
-            $cetgoriesPage = \FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
-            # traverse through all catgories
-            foreach ($offer['category'] as $value) {
-                # check if a category has permalink then add it into array
-                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
-                    $urlsArray[] = $cetgoriesPage . $value['permaLink'];
-                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] .'/2';
-                    $urlsArray[] = $cetgoriesPage . $value['permaLink'] .'/3';
-                }
+        $cetgoriesPage = \FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
+        # traverse through all catgories
+        foreach ($offer as $value) {
+            # check if a category has permalink then add it into array
+            if (isset($value['categoryPermalink']) && strlen($value['categoryPermalink']) > 0) {
+                $urlsArray[] = $cetgoriesPage . $value['categoryPermalink'];
+                $urlsArray[] = $cetgoriesPage . $value['categoryPermalink'] .'/2';
+                $urlsArray[] = $cetgoriesPage . $value['categoryPermalink'] .'/3';
             }
         }
 
         # check an offerr has one or more pages
-        if (isset($offer['page']) && count($offer['page']) > 0) {
             # traverse through all pages
-            foreach ($offer['page'] as $value) {
-                # check if a page has permalink then add it into array
-                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
-                    $urlsArray[] = $value['permaLink'] ;
-                }
+        foreach ($offer as $value) {
+            # check if a page has permalink then add it into array
+            if (isset($value['pagePermalink']) && strlen($value['pagePermalink']) > 0) {
+                $urlsArray[] = $value['pagePermalink'] ;
             }
         }
-
         return $urlsArray ;
     }
 
@@ -2564,8 +2571,10 @@ class Offer Extends \KC\Entity\Offer
         ->where('o.deleted = 0')
         ->setParameter(1, 'NW')
         ->andWhere('o.discountType != ?1')
-        ->andWhere('o.created_at BETWEEN "'.$past7Days.'" AND "'.$date.'"');
-        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        ->setParameter(2, $queryBuilder->expr()->literal($past7Days))
+        ->setParameter(3, $queryBuilder->expr()->literal($date))
+        ->andWhere('o.created_at BETWEEN ?2 AND ?3');
+        $data = $query->getQuery()->getSql();
         return $data;
     }
 
@@ -2687,7 +2696,7 @@ class Offer Extends \KC\Entity\Offer
     }
 
     public function saveOffer($params)
-    {
+    {   
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
                 // check the offer type
             if (isset($params['defaultoffercheckbox'])) {     //offer type is default
@@ -2726,7 +2735,7 @@ class Offer Extends \KC\Entity\Offer
             );
             if (isset($params['selectedcategories'])) {
                 foreach ($params['selectedcategories'] as $categories) {
-                    $this->refOfferCategory[]->categoryId = $categories;
+                    $this->categoryoffres[]->categoryId = $categories;
                 }
             }
         } elseif (isset($params['newsCheckbox'])) {       // discount type sale
@@ -2739,7 +2748,7 @@ class Offer Extends \KC\Entity\Offer
             if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {                          // upload offer
 
                 $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
-                $ext =  BackEnd_Helper_viewHelper::getImageExtension($fileName);
+                $ext =  \BackEnd_Helper_viewHelper::getImageExtension($fileName);
                 $pattern = '/^[0-9]{10}_(.+)/i' ;
                 preg_match($pattern, $fileName, $matches);
                 if (!$fileName) {
@@ -2763,7 +2772,7 @@ class Offer Extends \KC\Entity\Offer
         }
 
         if (trim($params['termsAndcondition'])!='') {
-            $this->termandcondition[]->content =
+            $this->offertermandcondition[]->content =
                 \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
         }
 
@@ -2782,7 +2791,7 @@ class Offer Extends \KC\Entity\Offer
 
         if (isset($params['attachedpages'])) {
             foreach ($params['attachedpages'] as $pageId) {
-                $this->refOfferPage[]->pageId = $pageId ;
+                $this->offers[]->pageId = $pageId ;
             }
         }
 
@@ -2818,11 +2827,9 @@ class Offer Extends \KC\Entity\Offer
         }
 
         $connUser = \BackEnd_Helper_viewHelper::addConnection();
-
-            $this->authorId = \Auth_StaffAdapter::getIdentity()->id;
-            $this->authorName = \Auth_StaffAdapter::getIdentity()->firstName . " "
-                . \Auth_StaffAdapter::getIdentity()->lastName;
-
+        $this->authorId = \Auth_StaffAdapter::getIdentity()->id;
+        $this->authorName = \Auth_StaffAdapter::getIdentity()->firstName . " "
+            . \Auth_StaffAdapter::getIdentity()->lastName;
         \BackEnd_Helper_viewHelper::closeConnection($connUser);
         $connSite = \BackEnd_Helper_viewHelper::addConnectionSite();
         if (intval($params['offerImageSelect']) > 0) {
@@ -2876,6 +2883,7 @@ class Offer Extends \KC\Entity\Offer
         try {
 
             if (intval($this->shopId) > 0) {
+                echo "<pre>";print_r($this);die;
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
                 $queryBuilder->persist($this);
                 $queryBuilder->flush();
