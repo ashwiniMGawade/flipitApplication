@@ -24,23 +24,23 @@ class AffliateNetwork extends \KC\Entity\AffliateNetwork
         $sortBy = isset($params['sortBy']) ? @$params['sortBy'] : '';
         $delVal = isset($params['off']) ?  $params['off'] : '0, 1';
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $networkList = $queryBuilder->select('a.name as name ,a.id, a.subId')
+        $networkList = $queryBuilder
             ->from("KC\Entity\AffliateNetwork", "a")
             ->where("a.name LIKE $srh%")
             ->andWhere("a.deleted = 0")
             ->where('a.status IN('.$delVal.')')
             ->andWhere("a.affliate_networks IS NULL")
-            ->orderBy('a.id', 'DESC')
-            ->getQuery();
-
-        $list =  \DataTable_Helper::generateDataTableResponse(
-            $networkList,
-            $params,
-            array("__identifier" => 'a.id','a.id','a.name','a.subid'),
-            array(),
-            array()
-        );
-        return $list;
+            ->orderBy('a.id', 'DESC');
+        $request = \DataTable_Helper::createSearchRequest($params, array('id', 'name'));
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
+        $builder
+            ->setQueryBuilder($networkList)
+            ->add('number', 'a.id')
+            ->add('text', 'a.name')
+            ->add('text', 'a.subId');
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $list = \DataTable_Helper::getResponse($data, $request);
+        return \Zend_Json::encode($list);
     }
 
     public static function searchTopFiveNetwork($keyword)

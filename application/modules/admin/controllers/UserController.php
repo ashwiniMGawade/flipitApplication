@@ -148,29 +148,29 @@ class Admin_UserController extends Zend_Controller_Action
         $params = $this->getRequest()->getParams();
 
         $uesrPicName = '';
-        if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
-         $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
+        if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
+            $uesrPicName = self::uploadFile($_FILES['imageName']['name']);
         }
 
         $flash = $this->_helper->getHelper('FlashMessenger');
         $result  = null;
         if ($params) {
-            $u = new User();
-            $result  = $u->addUser($params,$uesrPicName);
+            $u = new KC\Repository\User();
+            $result  = $u->addUser($params, $uesrPicName);
 
             # check if there is any error in user data
-            if(is_array($result) && isset($result['error'])) {
+            if (is_array($result) && isset($result['error'])) {
                     $message = $this->view->translate($result['message']);
-                    $flash->addMessage(array('error' => $message ));
+                    $flash->addMessage(array('error' => $message));
 
-                    $this->_redirect(HTTP_PATH.'admin/user/adduser' );
+                    $this->_redirect(HTTP_PATH.'admin/user/adduser');
 
                     exit;
             }
             //$userPermlink = $u->slug ;
             //self::updateVarnish($userPermlink);
         }
-        echo Zend_Json::encode(	$result);
+        echo Zend_Json::encode($result);
         $message = $this->view->translate('User has been created successfully.');
         $flash->addMessage(array('success' => $message ));
         $this->_redirect(HTTP_PATH.'admin/user');
@@ -585,15 +585,12 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function checkuserAction()
     {
-        $u =  new User();
-        $cnt  = intval($u->checkDuplicateUser($this->_getParam('email')));
+        $u = KC\Repository\User::checkDuplicateUser($this->_getParam('email'));
+        $cnt  = intval($u);
 
-        if($cnt > 0) {
-
+        if ($cnt > 0) {
             echo Zend_Json::encode(false);
-
         } else {
-
             echo Zend_Json::encode(true);
         }
 
@@ -901,16 +898,10 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function searchtoptenshopAction()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
-        $conn3 = BackEnd_Helper_viewHelper::addConnectionSite();//connection generate with second database
+        $srh = $this->getRequest()->getParam('keyword');
+        $selectedShop = $this->getRequest()->getParam('selectedShop');
+        $data = KC\Repository\User::searchTopTenStore($srh, $selectedShop);
 
-            $srh = $this->getRequest()->getParam('keyword');
-            $selectedShop = $this->getRequest()->getParam('selectedShop');
-            $data =User::searchTopTenStore($srh,$selectedShop);
-
-        BackEnd_Helper_viewHelper::closeConnection($conn3);
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
 
         $ar = array();
         if (sizeof($data) > 0) {
@@ -931,7 +922,7 @@ class Admin_UserController extends Zend_Controller_Action
     public function checkstoreexistAction()
     {
         $name = $this->getRequest()->getParam('name');
-        $retVal = User::checkStoreExistOrNot($name);
+        $retVal = KC\Repository\User::checkStoreExistOrNot($name);
         echo Zend_Json::encode($retVal);
         die();
     }

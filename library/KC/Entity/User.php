@@ -3,7 +3,7 @@
 namespace KC\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-
+use \Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
  * @ORM\Table(
@@ -17,6 +17,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class User
 {
+    public function __construct()
+    {
+        $this->website = new ArrayCollection();
+    }
+   
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", length=8)
@@ -205,12 +210,12 @@ class User
         }
         return false;
     }
-
-    public function setPassword($password)
+    //it will be reome after testing
+    /*public function setPassword($password)
     {
         $this->_set('password', md5($password));
         $this->_set('passwordChangeTime', date("Y-m-d H:i:s"));
-    }
+    }*/
 
     public function updateLoginTime($id)
     {

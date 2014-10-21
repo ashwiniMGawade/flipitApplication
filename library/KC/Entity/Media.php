@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="media", indexes={@ORM\Index(name="mediaimageid_idx", columns={})})
+ * @ORM\Table(name="media", indexes={@ORM\Index(name="mediaimageid_idx", columns={"mediaimage"})})
  */
 class Media
 {

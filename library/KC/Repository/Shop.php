@@ -353,20 +353,28 @@ class Shop extends \KC\Entity\Shop
         $srh = $params["searchText"]=='undefined' ? '' : $params["searchText"];
         $flag = @$params['flag'];
 
-        $shopList = $queryBuilder->select('s,a.name as affname')
+        $shopList = $queryBuilder
             ->from("KC\Entity\Shop", "s")
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted = '. $flag)
-            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%a".$srh."%")))->getQuery();
+            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%a".$srh."%")));
          //echo "<prE>";   print_r($shopList); die;
-        $result = \DataTable_Helper::generateDataTableResponse(
-            $shopList,
-            $params,
-            array("__identifier" => 's.id,s.updated_at', 's.id','s.name','s.permaLink','s.affliateProgram','s.created_at','affname','s.discussions','s.showSignupOption','s.status','s.offlineSicne'),
-            array(),
-            array()
-        );
-        return $result;
+        $request = \DataTable_Helper::createSearchRequest($params, array('id', 'firstName', 'email'));
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
+        $builder
+            ->setQueryBuilder($shopList)
+            ->add('number', 's.id')
+            ->add('text', 's.updated_at')
+            ->add('text', 's.permaLink')
+            ->add('text', 's.affliateProgram')
+            ->add('text', 'a.name')
+            ->add('text', 's.discussions')
+            ->add('text', 's.showSignupOption')
+            ->add('text', 's.status')
+            ->add('text', 's.offlineSicne');
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $result = \DataTable_Helper::getResponse($data, $request);
+        return \Zend_Json::encode($result);
     }
 
     public static function moveToTrash($id)
@@ -1338,56 +1346,37 @@ $shopInfo->screenshotId = 1;
     //to be refactored
     public function postUpdate($event)
     {
-
-
-        //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
-
-
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
         $key = 'shopDetails_'. $this->id.'_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails); 
-
-
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
-
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
 
         try {
-
             $data = $this->getLastModified();
-
             # update chain if shop is associated with chain
             if($this->chainItemId) {
-
                 $chainItem = Doctrine_Core::getTable("ChainItem") ->findBySql(
                                     'shopId = ? AND id = ?',
                                     array($this->id,$this->chainItemId),
                                     Doctrine::HYDRATE_RECORD)->getData();
-
                 # verify a valid chain item exists
                 if(isset($chainItem[0])) {
                      $chainItem[0]->update($data,$this->toArray(false));
                 }
-
             }
-
-
-
         } catch (Exception $e) {
-
-            return false ;
+            return false;
         }
-
-
     }
 
     public static function getAmountShopsCreatedLastWeek()

@@ -40,7 +40,7 @@
 	<!-- update category -->
 <div id='editCategory' class="wrap columns-2">
 	<form action="<?php echo HTTP_PATH ;?>admin/category/editcategory" method="POST" name='updateCategoryForm' id="updateCategoryForm" method=POST enctype=multipart/form-data>
-	<input type="hidden" value="<?php echo $this->categoryDetail[0]['categoryIconId'] ;?>" name='iconId' id='iconId' />
+	<input type="hidden" value="<?php echo $this->categoryDetail['categoryIconId'] ;?>" name='iconId' id='iconId' />
 	<input type="hidden" value="<?php echo $this->categoryDetail[0]['id'] ?>" name='id' id='id' />
 	<input type="hidden" value="<?php echo $this->role; ?>" name='role' id='role' />
 	<input type="hidden" name='qString' id='qString' value='<?php echo $this->qstring; ?>' />
