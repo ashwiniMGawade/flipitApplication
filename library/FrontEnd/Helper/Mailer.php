@@ -44,6 +44,11 @@ class FrontEnd_Helper_Mailer {
             $httpPath = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
             $locale = LOCALE;
         }
+        
+        $email = Settings::getEmailSettings('sender_email_address');
+        $name = Settings::getEmailSettings('sender_name');
+        $fromEmail = !empty($email) ? $email : $fromEmail;
+        $fromName = !empty($name) ? $name :  $fromName;
 
         $message = array(
                         'subject'    => $subject,
