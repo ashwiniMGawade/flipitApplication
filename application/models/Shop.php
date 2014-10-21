@@ -124,6 +124,28 @@ class Shop extends BaseShop
         return $popularStoreData;
     }
 
+    public static function getPopularStoresForMemeberPortal($limit, $shopId = null)
+    {
+        $currentDate = date('Y-m-d 00:00:00');
+        $popularStoreData = Doctrine_Query::create()
+        ->select('p.id, s.name, s.permaLink, img.path as imgpath, img.name as imgname')
+        ->from('PopularShop p')
+        ->addSelect(
+            "(SELECT COUNT(*) FROM Offer active WHERE
+            (active.shopId = s.id AND active.endDate >= '$currentDate' 
+                AND active.deleted = 0 AND active.discounttype = 'CD'
+            )
+            ) as activeCount"
+        )
+        ->leftJoin('p.shop s')
+        ->leftJoin('s.logo img')
+        ->where('s.deleted=0')
+        ->addWhere('s.status=1')
+        ->orderBy('p.position ASC')
+        ->limit($limit)->fetchArray();
+        return $popularStoreData;
+    }
+
     public static function getStoreDetails($shopId)
     {
         $storeDetail = Doctrine_Query::create()->select('s.*,img.*,scr.*,small.*,big.*')
@@ -231,7 +253,7 @@ class Shop extends BaseShop
             $storesByKeyword->addSelect(
                 "(SELECT COUNT(*) FROM Offer active WHERE
                 (active.shopId = s.id AND active.endDate >= '$currentDate' 
-                    AND active.deleted = 0
+                    AND active.deleted = 0 AND active.discounttype = 'CD'
                 )
                 ) as activeCount"
             )
@@ -273,6 +295,7 @@ class Shop extends BaseShop
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$visitorId.'_favouriteShops');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('visitor_'.$visitorId.'_favouriteShopOffers');
             return array('shop' => $shopName->name, 'flag' => $addedStatus);
         }
         return;

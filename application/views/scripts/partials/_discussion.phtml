@@ -17,7 +17,7 @@ echo $this->shopName!= ''
 </header>
 <section id="disqus_thread" class="section section-comments" style="display: none;"></section>
 <script type="text/javascript">
-    var disqus_shortname = '<?php echo $this->translate('disqus_shortname');?>';
+    var disqus_shortname = '<?php echo FrontEnd_Helper_viewHelper::__form('disqus_shortname');?>';
 </script>
 <?php
 $this->minifyHeadScript()->appendFile("/public/js/front_end/disqusComments.js");
