@@ -38,11 +38,19 @@ class Settings extends BaseSettings
 
     public static function updateSendersSettings($sendersFieldName, $sendersValue)
     {
-        Doctrine_Query::create()
-            ->update('Settings')
-            ->set("value", '"'.$sendersValue.'"')
-            ->where('name = "'.$sendersFieldName.'"')
-            ->execute();
+        $getSettings = self::getEmailSettings($sendersFieldName);
+        if (!empty($getSettings)) {
+            Doctrine_Query::create()
+                ->update('Settings')
+                ->set("value", '"'.$sendersValue.'"')
+                ->where('name = "'.$sendersFieldName.'"')
+                ->execute();
+        } else {
+            $setting = new Settings();
+            $setting->name = $sendersFieldName;
+            $setting->value = $sendersValue;
+            $setting->save();
+        }
         return true;
     }
  
