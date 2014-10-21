@@ -1526,7 +1526,8 @@ class Admin_OfferController extends Zend_Controller_Action
     public function exportXlxAction()
     {
         # set fiel and its translattions
-        $file =  UPLOAD_EXCEL_PATH . 'offerList.xlsx' ;
+        $locale = LOCALE != "" ? "-".strtoupper(LOCALE) : "-NL";
+        $file =  UPLOAD_EXCEL_PATH . 'offerList'.$locale.'.xlsx' ;
         $fileName =  $this->view->translate($file);
 
         $this->_helper->layout()->disableLayout();
