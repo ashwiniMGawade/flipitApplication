@@ -70,4 +70,11 @@ class Image
     {
         $this->$property = $value;
     }
+
+    public function test($value)
+    {
+        $t = new \KC\Entity\CategoryIcon();
+        $t->type = $value;
+        $this->type = $t->type;
+    }
 }
