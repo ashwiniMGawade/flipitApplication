@@ -120,7 +120,7 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function gettopfiveAction()
     {
-        $ar = User::getTopFiveForAutoComp($this->getRequest()->getParam('for'),$this->getRequest()->getParam('text'));
+        $ar = KC\Repository\User::getTopFiveForAutoComp($this->getRequest()->getParam('for'),$this->getRequest()->getParam('text'));
         echo Zend_Json::encode($ar);
         die();
     }
@@ -629,11 +629,12 @@ class Admin_UserController extends Zend_Controller_Action
         if ($id > 0) {
             $u = Auth_StaffAdapter::getIdentity();
             $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->select('u, w, pi, r')
+            $query = $queryBuilder->select('u, rf, w, pi, r')
                 ->from('\KC\Entity\User', 'u')
                 ->leftJoin("u.profileimage", "pi")
                 ->leftJoin("u.users", "r")
-                ->leftJoin('u.website', 'w')
+                ->leftJoin('u.refUserWebsite', 'rf')
+                ->leftJoin('rf.refUsersWebsite', 'w')
                 ->where($queryBuilder->expr()->eq('u.id', $id));
             $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
@@ -661,8 +662,8 @@ class Admin_UserController extends Zend_Controller_Action
             $this->view->webAcess ='';
 
        
-            foreach ($data['website'] as $key => $value) {
-                $this->view->webAcess.= $value['id'].',';
+            foreach ($data['refUserWebsite'] as $key => $value) {
+                $this->view->webAcess.= $value['refUsersWebsite']['id'].',';
             }
             $this->view->webAcess = rtrim($this->view->webAcess, ',');
         }

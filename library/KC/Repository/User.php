@@ -149,7 +149,7 @@ class User extends \KC\Entity\User
         }
         $ext = \BackEnd_Helper_viewHelper::getImageExtension($params['imageName']);
         $addUser->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
-        $addUser->email = \BackEnd_Helper_viewHelper::stripSlashesFromString('aaa@csvddsnf.com');
+        $addUser->email = \BackEnd_Helper_viewHelper::stripSlashesFromString('aaa@mmmmsdm.com');
         $addUser->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
         $addUser->countryLocale = isset($params['locale']) ? $params['locale'] : '';
         
@@ -163,8 +163,6 @@ class User extends \KC\Entity\User
 
         if ($this->isValidPassword($params['password'])) {
             $addUser = self::setPassword($addUser, $params['password']);
-            //$entityManagerUser->persist($addUser);
-            //$entityManagerUser->flush();
         } else {
             return  array(
                 'error' => true,
@@ -202,23 +200,23 @@ class User extends \KC\Entity\User
             $addUser->profileImageId =  $pImage->getId();
 
         }
+
+        $entityManagerUser->persist($addUser);
+        $entityManagerUser->flush();
+
         //save user website access
         if (isset($params['websites'])) {
             foreach ($params['websites'] as $web) {
-                $addUser->website[] = $entityManagerUser->find('KC\Entity\Website', $web);
-                //$entityManagerUser->persist($addUser);
-                //$entityManagerUser->persist($website);
-                //$entityManagerUser->flush();
-                echo $web . "</br>";
-                //echo "<pre>";
-                $us = $entityManagerUser->find('KC\Entity\Website', $web);
-                print_r($us->id);
+                $website = new \KC\Entity\refUserWebsite();
+                $website->created_at = new \DateTime('now');
+                $website->updated_at = new \DateTime('now');
+                $website->refUsersWebsite = $entityManagerUser->find('KC\Entity\Website', $web);
+                $website->websiteUsers = $entityManagerUser->find('KC\Entity\User', $addUser->getId());
+                $entityManagerUser->persist($website);
+                $entityManagerUser->flush();
             }
         }
-        $entityManagerUser->persist($addUser);
-        $entityManagerUser->flush();
-        //print_r($addUser->website);
-        die('Hello');
+
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
         if (isset($params['selectedCategoryies'])) {
             foreach ($params['selectedCategoryies'] as $categories) {
@@ -633,14 +631,10 @@ class User extends \KC\Entity\User
         $query = $queryBuilder->select('u.firstName as firstName')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.users", "r")
-            ->setParameter(1, $for)
-            ->where('u.deleted = ?1')
-            ->setParameter(2, \Auth_StaffAdapter::getIdentity()->users->id)
-            ->andWhere('r.id >= ?2')
-            ->setParameter(3, \Auth_StaffAdapter::getIdentity()->id)
-            ->andWhere("u.id <> ?3")
-            ->setParameter(4, $param.'%')
-             ->andWhere($queryBuilder->expr()->like('u.firstName', '?4'))
+            ->where('u.deleted ='. $for)
+            ->andWhere('r.id >='. \Auth_StaffAdapter::getIdentity()->users->id)
+            ->andWhere("u.id <>". \Auth_StaffAdapter::getIdentity()->id)
+            ->andWhere($queryBuilder->expr()->like('u.firstName', $queryBuilder->expr()->literal($param.'%')))
             ->orderBy('u.firstName', 'ASC')
             ->setMaxResults(5);
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -670,7 +664,7 @@ class User extends \KC\Entity\User
             $qb->andWhere('r.id='. $role);
         }
         if ($srh!='undefined') {
-            $qb->andWhere($queryBuilder->expr()->like('u.firstName', $srh.'%'));
+            $qb->andWhere($queryBuilder->expr()->like('u.firstName', $queryBuilder->expr()->literal($srh.'%')));
         }
         $qb->andWhere('u.id <>'. \Auth_StaffAdapter::getIdentity()->id);
 

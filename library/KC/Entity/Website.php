@@ -52,14 +52,9 @@ class Website
     private $chain;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\User", inversedBy="website")
-     * @ORM\JoinTable(
-     *     name="ref_user_website",
-     *     joinColumns={@ORM\JoinColumn(name="websiteId", referencedColumnName="id", nullable=false)},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="userId", referencedColumnName="id", nullable=false)}
-     * )
+     * @ORM\OneToMany(targetEntity="KC\Entity\refUserWebsite", mappedBy="refUsersWebsite")
      */
-    private $user;
+    private $websiteUsers;
 
     public function __get($property)
     {

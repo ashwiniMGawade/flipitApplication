@@ -1,8 +1,6 @@
 <?php
-
 namespace KC\Entity;
-
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping AS ORM;
 use \Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
@@ -19,9 +17,9 @@ class User
 {
     public function __construct()
     {
-        $this->website = new ArrayCollection();
+        $this->refUserWebsite = new ArrayCollection();
     }
-   
+
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", length=8)
@@ -155,6 +153,11 @@ class User
     private $user;
 
     /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\refUserWebsite", mappedBy="websiteUsers", cascade={"persist", "remove"})
+     */
+    private $refUserWebsite;
+
+    /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\ProfileImage", inversedBy="user")
      * @ORM\JoinColumn(name="profileImageId", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
@@ -165,11 +168,6 @@ class User
      * @ORM\JoinColumn(name="roleId", referencedColumnName="id", onDelete="restrict")
      */
     private $users;
-
-    /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Website", mappedBy="user")
-     */
-    private $website;
 
     public function __get($property)
     {
