@@ -793,12 +793,12 @@ function getShopDetail(value){
 								jQuery(".strict-confirmation-alert").hide();
 							}
 
-						var catCount = data[0].category.length;
+						var catCount = data[0].categoryId.length;
 						
 						for(var i=0 ; i< catCount ; i++ ){
 							// Add class by Er.kundal for select catg of shop
-							jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
-							jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
+							jQuery("#categoryBtn-"+data[0].category[i].categoryIdcategoryId).addClass('btn-primary');
+							jQuery("input#category-" + data[0].category[i].categoryId).attr('checked' , 'checked');
 						}
 						
 						if(data[0].notes=='' && data[0].affname=='' && data[0].accountManagerName=='') {
