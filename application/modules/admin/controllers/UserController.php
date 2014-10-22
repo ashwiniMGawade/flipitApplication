@@ -615,7 +615,7 @@ class Admin_UserController extends Zend_Controller_Action
 
         $catArray  = array();//array generate on key based
         foreach ($intCat as $categories) {
-            $catArray[] = $categories['categoryId'];
+            $catArray[] = $categories['category']['id'];
         }
         $this->view->catArray = '';
         if (isset($catArray) && count($catArray)>0) {
@@ -689,25 +689,30 @@ class Admin_UserController extends Zend_Controller_Action
             if ($params) {
 
                 $uesrPicName = '';
-                if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
-                    $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
+                if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
+                    $uesrPicName = self::uploadFile($_FILES['imageName']['name']);
                 }
 
-                $user = Doctrine_Core::getTable("User")->find($params['id']);
+                $entityManagerUser  = \Zend_Registry::get('emUser');
+                $repo = $entityManagerUser->getRepository('KC\Entity\User');
+                $user = $repo->find($params['id']);
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];
-                $user->save();
-                $result = $user->update($params,$uesrPicName);
+                $entityManagerUser->persist($user);
+                $entityManagerUser->flush();
+
+                $u = new KC\Repository\User();
+                $result = $u->update($params, $uesrPicName);
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
 
                 # check if there is any error in user data
-                if(is_array($result) && isset($result['error'])) {
+                if (is_array($result) && isset($result['error'])) {
 
                     $message = $this->view->translate($result['message']);
                     $flash->addMessage(array('error' => $message ));
 
-                    $this->_redirect(HTTP_PATH.'admin/user/edituser/id/' . trim($params['id']). '?'.$params['qString'] );
+                    $this->_redirect(HTTP_PATH.'admin/user/edituser/id/' . trim($params['id']). '?'.$params['qString']);
 
                     exit;
                 }

@@ -345,7 +345,7 @@ class User extends \KC\Entity\User
         // if yes then deleted reference websites otherwise skip
         if ($normalUser=='') {
 
-            if ($params['id'] != \Auth_StaffAdapter::getIdentity()->id) {
+            if ($updateUser->getId() != \Auth_StaffAdapter::getIdentity()->id) {
 
                 if (isset($params['role'])) {
                     $updateUser->users =  $entityManagerUser->find('KC\Entity\Role', $params['role']);
@@ -353,11 +353,10 @@ class User extends \KC\Entity\User
 
                 $updateUser->createdBy = \Auth_StaffAdapter::getIdentity()->id;
                
-                
-                $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-                $query = $queryBuilder->delete('KC\Entity\refUserWebsite', 'rf')
-                    ->where("rf.websiteUsers=" . $params['id'])
-                    ->getQuery()->execute();
+                $repo = $entityManagerUser->getRepository('KC\Entity\refUserWebsite');
+                $refUserWebsite = $repo->findBy(array('websiteUsers' => $entityManagerUser->find('KC\Entity\User', $params['id'])));
+                $entityManagerUser->remove($refUserWebsite);
+                $entityManagerUser->flush();
 
                 if (isset($params['websites'])) {
                     foreach ($params['websites'] as $web) {
@@ -372,9 +371,6 @@ class User extends \KC\Entity\User
                 }
             }
         }
-
-        $entityManagerUser->persist($updateUser);
-        $entityManagerUser->flush();
 
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
@@ -400,15 +396,14 @@ class User extends \KC\Entity\User
         }
 
         if (isset($params['selectedCategoryies'])) {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Interestingcategory', 'i')
-                ->where("i.userId=" . $updateUser->getId())
-                ->getQuery()->execute();
-
+            $repo = $entityManagerLocale->getRepository('KC\Entity\Interestingcategory');
+            $interestingcategory = $repo->findBy(array('userId' => $updateUser->getId()));
+            $entityManagerLocale->remove($interestingcategory);
+            $entityManagerLocale->flush();
             foreach ($params['selectedCategoryies'] as $categories) {
                 $cat = new \KC\Entity\Interestingcategory();
                 $cat->category  = $entityManagerLocale->find('KC\Entity\Category', $categories);
-                $cat->userId = $updateUser->getId();
+                $cat->userId = $addUser->getId();
                 $entityManagerLocale->persist($cat);
                 $entityManagerLocale->flush();
             }
@@ -416,16 +411,15 @@ class User extends \KC\Entity\User
         //end code of enteresting category in database
         //save favorite store in database
         if (!empty($params['fevoriteStore'])) {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->delete('KC\Entity\Adminfavoriteshp', 'i')
-                ->where("i.userId=" . $updateUser->getId())
-                ->getQuery()->execute();
-
+            $repo = $entityManagerLocale->getRepository('KC\Entity\Adminfavoriteshop');
+            $adminfavoriteshop = $repo->findBy(array('userId' => $updateUser->getId()));
+            $entityManagerLocale->remove($adminfavoriteshop);
+            $entityManagerLocale->flush();
             $splitStore = explode(",", $params['fevoriteStore']);
             foreach ($splitStore as $str) {
                 $store = new  \KC\Entity\Adminfavoriteshp();
                 $store->shops  = $entityManagerLocale->find('KC\Entity\Shop', $str);
-                $store->userId = $updateUser->getId();
+                $store->userId = $addUser->getId();
                 $entityManagerLocale->persist($store);
                 $entityManagerLocale->flush();
             }
@@ -459,7 +453,7 @@ class User extends \KC\Entity\User
     // not migrated now
     public function updateInDatabase($id, $fullName, $flag)
     {
-        $application = new \Zend_Application(
+        $application = new Zend_Application(
             APPLICATION_ENV,
             APPLICATION_PATH . '/configs/application.ini'
         );
