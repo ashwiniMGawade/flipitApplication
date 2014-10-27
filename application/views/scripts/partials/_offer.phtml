@@ -120,8 +120,6 @@ foreach ($this->offers as $offer) {
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-            $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormLarge');
-            $sidebarWidgetNamespace->zendFormLarge = serialize($this->zendForm);
             echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
                 .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
         endif;

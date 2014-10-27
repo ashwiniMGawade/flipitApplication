@@ -99,8 +99,6 @@ if ($expiredMessage == '') {
     );
     if ($this->currentStoreInformation[0]['showSignupOption']) :
         $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-        $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormSidebar');
-        $sidebarWidgetNamespace->zendFormSidebar = serialize($this->sidebarWidgetForm);
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;

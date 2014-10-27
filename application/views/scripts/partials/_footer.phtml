@@ -27,8 +27,6 @@ if(zend_Controller_Front::getInstance()->getRequest()->getControllerName()!='log
         <div class="container" id ="footer-signup-form">
             <?php 
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-            $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormFooter');
-            $sidebarWidgetNamespace->zendFormFooter = serialize($signUpForm);
             echo $this->esi($this->locale.'signup/signupwidgetfooter?shopId='
                 .'&signupFormWidgetType=footerSignupForm&shopLogoOrDefaultImage=');
             ?>

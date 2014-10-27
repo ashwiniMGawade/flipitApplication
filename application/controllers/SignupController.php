@@ -290,8 +290,11 @@ class SignupController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopId');
         $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
         $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
-        $zendFormNamespace = new Zend_Session_Namespace('zendFormSidebar');
-        $this->view->zendForm =  unserialize($zendFormNamespace->zendFormSidebar);
+        $signUpFormSidebarWidget = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+            'formSignupSidebarWidget',
+            'SignUp '
+        );
+        $this->view->zendForm = $signUpFormSidebarWidget;
     }
 
     public function signupwidgetlargeAction()
@@ -300,8 +303,11 @@ class SignupController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopId');
         $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
         $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
-        $zendFormNamespace = new Zend_Session_Namespace('zendFormLarge');
-        $this->view->zendForm =  unserialize($zendFormNamespace->zendFormLarge);
+        $signUpFormLargeForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+            'largeSignupForm',
+            'SignUp'
+        );
+        $this->view->zendForm =  $signUpFormLargeForm;
     }
 
     public function signupwidgetfooterAction()
@@ -310,7 +316,12 @@ class SignupController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopId');
         $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
         $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
-        $zendFormNamespace = new Zend_Session_Namespace('zendFormFooter');
-        $this->view->zendForm =  unserialize($zendFormNamespace->zendFormFooter);
+        $signUpForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+            'footerLargeSignUpForm',
+            'SignUp',
+            'email-form form-inline',
+            'orange'
+        );
+        $this->view->zendForm =  $signUpForm;
     }
 }
