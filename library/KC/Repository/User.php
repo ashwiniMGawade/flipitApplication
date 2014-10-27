@@ -449,7 +449,7 @@ class User extends \KC\Entity\User
 
         $favouriteShopkey ="user_". "favouriteShop". $updateUser->getId() ."_data";
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
-        self::updateInDatabase($updateUser->getId(), $fullName, 0);//change name of the author etc
+        //self::updateInDatabase($updateUser->getId(), $fullName, 0);//change name of the author etc
         return array(
           "ret" =>  $updateUser->getId(),
           "status" => self::SUCCESS,

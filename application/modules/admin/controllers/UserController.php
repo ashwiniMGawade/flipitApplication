@@ -637,7 +637,9 @@ class Admin_UserController extends Zend_Controller_Action
                 ->leftJoin('rf.refUsersWebsite', 'w')
                 ->where($queryBuilder->expr()->eq('u.id', $id));
             $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
+            //echo "<pre>";
+           // print_r($data);
+           // die();
             $role =  Zend_Auth::getInstance()->getIdentity()->users->id;
 
             if (($role=='3'
