@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="category",
  *     indexes={
- *         @ORM\Index(name="categoryiconid_idx", columns={"categoryicon"}),
+ *         @ORM\Index(name="categoryiconid_idx", columns={"categoryiconid"}),
  *         @ORM\Index(name="name", columns={"name"}),
  *         @ORM\Index(name="name_2", columns={"name"}),
  *         @ORM\Index(name="name_3", columns={"name"}),
@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *         @ORM\Index(name="name_9", columns={"name"}),
  *         @ORM\Index(name="name_10", columns={"name"})
  *     },
- *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={"categoryicon"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="categoryiconid", columns={"categoryiconid"})}
  * )
  */
 class Category
@@ -104,17 +104,17 @@ class Category
     private $shopcategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\CategoryIcon", inversedBy="category")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="category")
      * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
      */
     private $categoryicon;
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\CategoryIcon", inversedBy="categoryfeatured")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="categoryfeatured")
      * @ORM\JoinColumn(name="categoryFeaturedImageId", referencedColumnName="id")
      */
     private $categoryFeaturedImage;
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\CategoryIcon", inversedBy="categoryheader")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageCategoryIcon", inversedBy="categoryheader")
      * @ORM\JoinColumn(name="categoryHeaderImageId", referencedColumnName="id")
      */
     private $categoryHeaderImage;

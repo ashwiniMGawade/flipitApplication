@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping AS ORM;
  *         @ORM\Index(name="shopid_idx", columns={"shopId"}),
  *         @ORM\Index(name="ind_offer_shenex", columns={"shopId","endDate","exclusiveCode"})
  *     },
- *     uniqueConstraints={@ORM\UniqueConstraint(name="offerlogoid", columns={"logo"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="offerlogoid", columns={"offerlogoid"})}
  * )
  */
 class Offer

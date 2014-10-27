@@ -9,7 +9,7 @@ use \Doctrine\Common\Collections\ArrayCollection;
 /**
  * @ORM\Entity
  */
-class CategoryIcon extends \KC\Entity\Image
+class ImageCategoryIcon extends \KC\Entity\Image
 {
     
     public function __construct()
