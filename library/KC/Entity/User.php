@@ -265,23 +265,26 @@ class User
             }
             
             $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-            $query = $queryBuilder->select('u, w')
+            $query = $queryBuilder
+                ->select('w.id as websiteid, u.id, w.name, w.created_at, w.updated_at, w.url')
                 ->from('KC\Entity\User', 'u')
-                ->leftJoin('u.website', 'w')
+                ->leftJoin('u.refUserWebsite', 'rf')
+                ->leftJoin('rf.refUsersWebsite', 'w')
                 ->where($queryBuilder->expr()->eq('u.id', $this->id));
             $websites = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            $perm['webaccess'] = $websites[0]['website'];
+
+            $perm['webaccess'] = $websites;
 
             for ($i=0; $i < count($perm['webaccess']); $i++) {
                 //unset($perm['webaccess'][$i]['id']);
-                unset($perm['webaccess'][$i]['userId']);
+                unset($perm['webaccess'][$i]['id']);
                 unset($perm['webaccess'][$i]['created_at']);
                 unset($perm['webaccess'][$i]['updated_at']);
                 
                 $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
                 $query = $queryBuilder->select('w.name')
                     ->from('KC\Entity\Website', 'w')
-                    ->where($queryBuilder->expr()->eq('w.id', $perm['webaccess'][$i]['id']))
+                    ->where($queryBuilder->expr()->eq('w.id', $perm['webaccess'][$i]['websiteid']))
                     ->orderBy('w.name', 'ASC');
                 $q = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 

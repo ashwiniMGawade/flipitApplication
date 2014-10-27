@@ -16,7 +16,8 @@ class User extends \KC\Entity\User
         )
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.profileimage", "pi")
-            ->leftJoin('u.website', 'w')
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
             ->setParameter(1, '0')
             ->where('u.deleted = ?1')
             ->setParameter(2, '1')
@@ -45,7 +46,8 @@ class User extends \KC\Entity\User
             ->addSelect('DATE_DIFF(NOW(), u.created_at) as sinceDays')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin("u.profileimage", "pi")
-            ->leftJoin('u.website', 'w')
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
             ->setParameter(1, $userId)
             ->where('u.id = ?1')
             ->setParameter(2, '1')
@@ -112,9 +114,10 @@ class User extends \KC\Entity\User
             case '3':
             case '4':
             case '5':
-                 $Q= $queryBuilder->select('u, refW')
+                 $Q= $queryBuilder->select('u, refW, w')
                     ->from('KC\Entity\User', 'u')
-                    ->leftJoin("u.website", "refW")
+                    ->leftJoin('u.refUserWebsite', 'refW')
+                    ->leftJoin('refW.refUsersWebsite', 'w')
                     ->setParameter(1, $userId)
                     ->where('u.id = ?1');
                 break;
@@ -141,15 +144,18 @@ class User extends \KC\Entity\User
     {
         $addUser = new \KC\Entity\User();
         $entityManagerUser  = \Zend_Registry::get('emUser');
+
+        $addtosearch = '0';
         $addto = isset($params['addtosearch']) ? $params['addtosearch'] : 0;
         if ($addto == 'on') {
             $addtosearch = 1;
         } else {
             $addtosearch = 0;
         }
+
         $ext = \BackEnd_Helper_viewHelper::getImageExtension($params['imageName']);
         $addUser->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
-        $addUser->email = \BackEnd_Helper_viewHelper::stripSlashesFromString('aaa@mmmmsdm.com');
+        $addUser->email = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['email']);
         $addUser->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
         $addUser->countryLocale = isset($params['locale']) ? $params['locale'] : '';
         
@@ -159,7 +165,7 @@ class User extends \KC\Entity\User
         $addUser->currentLogIn = new \DateTime('now');
         $addUser->lastLogIn = new \DateTime('now');
         $addUser->deleted = '0';
-        $addUser->addtosearch = '0';
+        
 
         if ($this->isValidPassword($params['password'])) {
             $addUser = self::setPassword($addUser, $params['password']);
@@ -170,9 +176,9 @@ class User extends \KC\Entity\User
             );
         }
 
-        $addUser->roleId = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']);
+        $addUser->users = $entityManagerUser->find('KC\Entity\Role', \BackEnd_Helper_viewHelper::stripSlashesFromString($params['role']));
         $addUser->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
-        $addUser->addtosearch =$addtosearch;
+        $addUser->addtosearch = $addtosearch;
         $addUser->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
         $addUser->twitter = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['twitter']);
         $addUser->pinterest = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pintrest']);
@@ -191,14 +197,16 @@ class User extends \KC\Entity\User
         preg_match($pattern, $imageName, $matches);
         if (@$matches[1]) {
             $ext =  \BackEnd_Helper_viewHelper::getImageExtension($imageName);
-            $pImage  = new KC\Entity\ProfileImage();
+            $pImage  = new \KC\Entity\ProfileImage();
             $pImage->ext = $ext;
+            $pImage->created_at = new \DateTime('now');
+            $pImage->deleted_at = new \DateTime('now');
+            $pImage->deleted = '0';
             $pImage->path ='images/upload/';
             $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
             $entityManagerUser->persist($pImage);
             $entityManagerUser->flush();
-            $addUser->profileImageId =  $pImage->getId();
-
+            $addUser->profileImageId =  $entityManagerUser->find('KC\Entity\ProfileImage', $pImage->getId());
         }
 
         $entityManagerUser->persist($addUser);
@@ -262,8 +270,15 @@ class User extends \KC\Entity\User
     
     public function update($params, $imageName = '', $normalUser = '')
     {
+        
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
+
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        $repo = $entityManagerUser->getRepository('KC\Entity\User');
+        $updateUser = $repo->find($params['id']);
+
+        $addtosearch = 0;
         $addto = \BackEnd_Helper_viewHelper::stripSlashesFromString(
             isset($params['addtosearch'])
             ? $params['addtosearch']
@@ -274,26 +289,25 @@ class User extends \KC\Entity\User
         } else {
             $addtosearch = 0;
         }
-        $this->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
-        $this->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
-        $this->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
-        $this->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
-        $this->roleId =  $params['role'];
-        $this->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
-        $this->addtosearch =$addtosearch;
-        $this->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
-        $this->twitter = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['twitter']);
-        $this->pinterest = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pintrest']);
-        $this->likes = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['likes']);
-        $this->dislike = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['dislike']);
-        $this->mainText =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
-        $this->editorText = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
-        $this->popularKortingscode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
-        $this->countryLocale = isset($params['locale']) ? $params['locale'] : '';
+
+        $updateUser->firstName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['firstName']);
+        $updateUser->lastName = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['lastName']);
+        $updateUser->users =  $entityManagerUser->find('KC\Entity\Role', $params['role']);
+        $updateUser->showInAboutListing = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['nameStatus']);
+        $updateUser->addtosearch =$addtosearch;
+        $updateUser->google = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['google']);
+        $updateUser->twitter = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['twitter']);
+        $updateUser->pinterest = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pintrest']);
+        $updateUser->likes = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['likes']);
+        $updateUser->dislike = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['dislike']);
+        $updateUser->mainText =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maintext']);
+        $updateUser->editorText = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
+        $updateUser->popularKortingscode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
+        $updateUser->countryLocale = isset($params['locale']) ? $params['locale'] : '';
 
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
-        $this->slug = \BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
+        $updateUser->slug = \BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));
 
         if (strlen($imageName) > 0) {
             $pattern = '/^[0-9]{10}_(.+)/i' ;
@@ -301,28 +315,29 @@ class User extends \KC\Entity\User
             if (@$matches[1]) {
                 $ext =  \BackEnd_Helper_viewHelper::getImageExtension($imageName);
                 if (intval($params['pImageId']) > 0) {
-                    $pImage = Doctrine_Core::getTable('ProfileImage')->find($params['pImageId']);
+                    $pImage = $entityManagerUser->find('KC\Entity\ProfileImage', $params['pImageId']);
                 } else {
-                    $pImage  = new KC\Entity\ProfileImage();
+                    $pImage  = new \KC\Entity\ProfileImage();
+                    $pImage->created_at = new \DateTime('now');
+                    $pImage->updated_at = new \DateTime('now');
+                    $pImage->deleted = '0';
                 }
                 $pImage->ext = $ext;
                 $pImage->path ='images/upload/';
                 $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
                 $entityManagerUser->persist($pImage);
                 $entityManagerUser->flush();
-                $this->profileImageId =  $pImage->getId();
+                $updateUser->profileimage =  $entityManagerUser->find('KC\Entity\ProfileImage', $pImage->getId());
             }
         }
         // check user want to update password or not based upon old password
         if (isset($params['confirmNewPassword']) && !empty($params['confirmNewPassword'])) {
             # apply validation on password like it should strong enough and not same as previous one
-            if (! $this->isPasswordDifferent($params['confirmNewPassword'])) {
+            if (! $updateUser->isPasswordDifferent($params['confirmNewPassword'])) {
                 return  array('error' => true, 'message' => 'New password can\'t be same as previous password');
             }
-            if ($this->isValidPassword($params['confirmNewPassword'])) {
-                self::setPassword($params['confirmNewPassword']) ;
-                $entityManagerUser->persist($this);
-                $entityManagerUser->flush();
+            if ($updateUser->isValidPassword($params['confirmNewPassword'])) {
+                $updateUser = self::setPassword($updateUser, $params['confirmNewPassword']);
             } else {
                 return  array(
                   'error' => true,
@@ -330,28 +345,46 @@ class User extends \KC\Entity\User
                 );
             }
         }
+
         // check logged in user or not
         // if yes then deleted reference websites otherwise skip
         if ($normalUser=='') {
-            if ($this->getId() != \Auth_StaffAdapter::getIdentity()->id) {
+
+            if ($params['id'] != \Auth_StaffAdapter::getIdentity()->id) {
+
                 if (isset($params['role'])) {
-                    $this->roleId = $params['role'];
+                    $updateUser->users =  $entityManagerUser->find('KC\Entity\Role', $params['role']);
                 }
-                $this->createdBy = \Auth_StaffAdapter::getIdentity()->id;
-                $this->refUserWebsite->delete();
+
+                $updateUser->createdBy = \Auth_StaffAdapter::getIdentity()->id;
+               
+                
+                $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+                $query = $queryBuilder->delete('KC\Entity\refUserWebsite', 'rf')
+                    ->where("rf.websiteUsers=" . $params['id'])
+                    ->getQuery()->execute();
+
                 if (isset($params['websites'])) {
                     foreach ($params['websites'] as $web) {
-                        $this->refUserWebsite[]->websiteId = $web ;
+                        $website = new \KC\Entity\refUserWebsite();
+                        $website->created_at = new \DateTime('now');
+                        $website->updated_at = new \DateTime('now');
+                        $website->refUsersWebsite = $entityManagerUser->find('KC\Entity\Website', $web);
+                        $website->websiteUsers = $entityManagerUser->find('KC\Entity\User', $params['id']);
+                        $entityManagerUser->persist($website);
+                        $entityManagerUser->flush();
                     }
                 }
             }
         }
-        $entityManagerUser->persist($this);
+
+        $entityManagerUser->persist($updateUser);
         $entityManagerUser->flush();
+
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
-        if ($this->getId() == \Auth_StaffAdapter::getIdentity()->id) {
-            new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $this);
+        if ($updateUser->getId() == \Auth_StaffAdapter::getIdentity()->id) {
+            new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $updateUser);
         }
 
         if ($params['pImageName']!== @$params['prevImageName']) {
@@ -372,14 +405,15 @@ class User extends \KC\Entity\User
         }
 
         if (isset($params['selectedCategoryies'])) {
-            $repo = $entityManagerLocale->getRepository('KC\Entity\Interestingcategory');
-            $interestingcategory = $repo->findOneBy(array('userId' => $this->getId()));
-            $entityManagerLocale->remove($interestingcategory);
-            $entityManagerLocale->flush();
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\Interestingcategory', 'i')
+                ->where("i.userId=" . $updateUser->getId())
+                ->getQuery()->execute();
+
             foreach ($params['selectedCategoryies'] as $categories) {
-                $cat = new KC\Entity\Interestingcategory();
-                $cat->categoryId = $categories;
-                $cat->userId = $this->getId();
+                $cat = new \KC\Entity\Interestingcategory();
+                $cat->category  = $entityManagerLocale->find('KC\Entity\Category', $categories);
+                $cat->userId = $updateUser->getId();
                 $entityManagerLocale->persist($cat);
                 $entityManagerLocale->flush();
             }
@@ -387,15 +421,16 @@ class User extends \KC\Entity\User
         //end code of enteresting category in database
         //save favorite store in database
         if (!empty($params['fevoriteStore'])) {
-            $repo = $entityManagerLocale->getRepository('KC\Entity\Adminfavoriteshop');
-            $adminfavoriteshop = $repo->findOneBy(array('userId' => $this->getId()));
-            $entityManagerLocale->remove($adminfavoriteshop);
-            $entityManagerLocale->flush();
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\Adminfavoriteshp', 'i')
+                ->where("i.userId=" . $updateUser->getId())
+                ->getQuery()->execute();
+
             $splitStore = explode(",", $params['fevoriteStore']);
             foreach ($splitStore as $str) {
-                $store = new KC\Entity\Adminfavoriteshop();
-                $store->shopId  = $str;
-                $store->userId = $this->getId();
+                $store = new  \KC\Entity\Adminfavoriteshp();
+                $store->shops  = $entityManagerLocale->find('KC\Entity\Shop', $str);
+                $store->userId = $updateUser->getId();
                 $entityManagerLocale->persist($store);
                 $entityManagerLocale->flush();
             }
@@ -408,20 +443,20 @@ class User extends \KC\Entity\User
         //$alluserkey ="all_". "users". $params['firstName']. $params['lastName'] ."_list";
         //FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserkey);
 
-        $alluserIdkey ="user_". $this->getId() ."_data";
+        $alluserIdkey ="user_". $updateUser->getId() ."_data";
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($alluserIdkey);
 
-        $key = 'user_'. $this->getId().'_details';
+        $key = 'user_'. $updateUser->getId().'_details';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-        $interestkey ="all_". "interesting". $this->getId()."_list";
+        $interestkey ="all_". "interesting". $updateUser->getId()."_list";
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($interestkey);
 
-        $favouriteShopkey ="user_". "favouriteShop". $this->getId() ."_data";
+        $favouriteShopkey ="user_". "favouriteShop". $updateUser->getId() ."_data";
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($favouriteShopkey);
-        self::updateInDatabase($this->getId(), $fullName, 0);//change name of the author etc
+        //self::updateInDatabase($updateUser->getId(), $fullName, 0);//change name of the author etc
         return array(
-          "ret" =>  $this->getId(),
+          "ret" =>  $updateUser->getId(),
           "status" => self::SUCCESS,
           "message" => "Record has been updated successfully"
         );
@@ -429,7 +464,9 @@ class User extends \KC\Entity\User
     // not migrated now
     public function updateInDatabase($id, $fullName, $flag)
     {
-        $application = new Zend_Application(
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        $entityManagerLocale  =\Zend_Registry::get('emLocale');
+        $application = new \Zend_Application(
             APPLICATION_ENV,
             APPLICATION_PATH . '/configs/application.ini'
         );
@@ -447,34 +484,46 @@ class User extends \KC\Entity\User
 
                 if ($flag==0) {
 
-                    $o = Doctrine_Query::create($conn)->update('Offer')->set('authorName', "'$fullName'")
-                        ->where('authorId=' . $id);
-                    $o->execute();
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Offer');
+                    $offer = $repo->findBy(array('authorId' =>  $id));
+                    $offer->authorName = "'$fullName'";
+                    $offer->remove($offer);
+                    $entityManagerLocale->flush();
 
-                    $p = Doctrine_Query::create($conn)->update('Page')->set('contentManagerName', "'$fullName'")
-                        ->where('contentManagerId=' . $id);
-                    $p->execute();
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Page');
+                    $page = $repo->findBy(array('contentManagerId' =>  $id));
+                    $page->contentManagerName = "'$fullName'";
+                    $page->remove($page);
+                    $entityManagerLocale->flush();
+
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Articles');
+                    $articles = $repo->findBy(array('authorid' =>  $id));
+                    $articles->authorname = "'$fullName'";
+                    $articles->remove($articles);
+                    $entityManagerLocale->flush();
+
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Shop');
+                    $shop = $repo->findBy(array('accoutManagerId' =>  $id));
+                    $shop->accountManagerName = "'$fullName'";
+                    $shop->remove($shop);
+                    $entityManagerLocale->flush();
 
 
-                    $a = Doctrine_Query::create($conn)->update('Articles')->set('authorname', "'$fullName'")
-                        ->where('authorid=' . $id);
-                    $a->execute();
-
-                    $s = Doctrine_Query::create($conn)->update('Shop')->set('accountManagerName', "'$fullName'")
-                        ->where('accoutManagerId=' . $id);
-                    $s->execute();
-
-
-                    $s1 = Doctrine_Query::create($conn)->update('Shop')->set('contentManagerName', "'$fullName'")
-                        ->where('contentManagerId=' . $id);
-                    $s1->execute();
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Shop');
+                    $shop = $repo->findBy(array('contentManagerId' =>  $id));
+                    $shop->contentManagerName = "'$fullName'";
+                    $shop->remove($shop);
+                    $entityManagerLocale->flush();
 
                 } else if ($flag==1) {
 
 
                     //update offer
-                    $offers = Doctrine_Query::create()->select('id')->from('Offer')->where('authorId=' . $id)->fetchArray();
-
+                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $queryBuilder->select('o.id')
+                        ->from('\KC\Entity\Offer', 'o')
+                        ->where('o.authorId=' . $id);
+                    $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     # check if there is atleast one offer exists in the array
                     if (count($offers) > 0) {
 
@@ -485,16 +534,21 @@ class User extends \KC\Entity\User
                                 $ids[] = $arr['id'];
                             endforeach;
                         endif;
-
-                        $o = Doctrine_Query::create($conn)->update('Offer')->set('authorName', "'$fullName'")
+                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $queryBuilder->update('\KC\Entity\Offer')
+                            ->set('authorName', "'$fullName'")
                             ->set('authorName', "'$fullName'")
                             ->set('authorId', 0)
-                            ->whereIn('id', $ids)
-                            ->execute();
+                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $query->getQuery()->execute();
                     }
 
                     //update page
-                    $page = Doctrine_Query::create()->select('id')->from('Page')->where('contentManagerId=' . $id)->fetchArray();
+                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $queryBuilder->select('p.id')
+                        ->from('\KC\Entity\Page', 'p')
+                        ->where('p.contentManagerId=' . $id);
+                    $page = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     # check if there is atleast one page exists in the array
                     if (count($page) > 0) {
                         $ids = array();
@@ -504,15 +558,20 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $p = Doctrine_Query::create()->update('Page')
+                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $queryBuilder->update('\KC\Entity\Page')
                             ->set('contentManagerName', "'$fullName'")
                             ->set('contentManagerId', 0)
-                            ->whereIn('id', $ids);
-                            $p->execute();
+                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $query->getQuery()->execute();
                     }
 
                     //update articles
-                    $art = Doctrine_Query::create()->select('id')->from('Articles')->where('authorid=' . $id)->fetchArray();
+                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $queryBuilder->select('a.id')
+                        ->from('\KC\Entity\Articles', 'a')
+                        ->where('a.authorid=' . $id);
+                    $art = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                     # check if there is atleast one page exists in the array
                     if (count($art) > 0) {
@@ -522,17 +581,21 @@ class User extends \KC\Entity\User
                                 $ids[] = $arr['id'];
                             endforeach;
                         endif;
-                        $a = Doctrine_Query::create()->update('Articles')->set('authorname', "'$fullName'")
+
+                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $queryBuilder->update('\KC\Entity\Articles')
+                            ->set('authorname', "'$fullName'")
                             ->set('authorid', 0)
-                            ->whereIn('id', $ids)
-                            ->execute();
+                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $query->getQuery()->execute();
                     }
 
                     //update shops
-                    $shops = Doctrine_Query::create($conn)
-                        ->select('id,name')->from('Shop')
-                        ->where('contentManagerId=' . $id)->fetchArray();
-
+                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $queryBuilder->select('a.id, a.name')
+                        ->from('\KC\Entity\Shop', 'a')
+                        ->where('a.contentManagerId=' . $id);
+                    $shops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     # check if there is atleast one shop exists in the array
                     if (count($shops) > 0) {
                         $ids = array();
@@ -542,12 +605,12 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $s = Doctrine_Query::create($conn)
-                            ->update('Shop')
+                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $queryBuilder->update('\KC\Entity\Shop')
                             ->set('contentManagerName', "'$fullName'")
                             ->set('contentManagerId', 0)
-                            ->whereIn('id', $ids)
-                            ->execute();
+                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $query->getQuery()->execute();
                     }
                 }
                 $connObj = \BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
@@ -610,7 +673,8 @@ class User extends \KC\Entity\User
         $queryBuilder  = $entityManagerUser->createQueryBuilder();
         $query = $queryBuilder->select('u.id, u.firstName as fname,u.lastName as lname, r.id as role')
             ->from('\KC\Entity\User', 'u')
-            ->leftJoin("u.website", "w")
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.users", "r")
             ->setParameter(1, '0')
             ->where('u.deleted = ?1')
@@ -726,7 +790,8 @@ class User extends \KC\Entity\User
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.id,u.firstName as fname,u.lastName as lname')
             ->from('\KC\Entity\User', 'u')
-            ->leftJoin('u.website', 'w')
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
             ->where($queryBuilder->expr()->eq('u.deleted', '0'))
             ->andWhere($queryBuilder->expr()->eq('w.url', $site_name))
             ->orderBy('fname', 'ASC');
@@ -803,8 +868,9 @@ class User extends \KC\Entity\User
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
         $queryBuilder  = $entityManagerLocale->createQueryBuilder();
-        $query = $queryBuilder->select('o')
+        $query = $queryBuilder->select('o, c')
             ->from('KC\Entity\Interestingcategory', 'o')
+            ->leftJoin('o.category', 'c')
             ->where("o.userId=".$id);
         $userFevoriteCat = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $userFevoriteCat;
@@ -821,9 +887,10 @@ class User extends \KC\Entity\User
         $Userdata = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->select('u, w, pi')
+        $query = $queryBuilder->select('u, rf, w, pi')
             ->from('\KC\Entity\User', 'u')
-            ->leftJoin("u.website", "w")
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.profileimage", "pi")
             ->where($queryBuilder->expr()->eq('u.id', $Userdata[0]['authorId']));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -834,9 +901,10 @@ class User extends \KC\Entity\User
     public static function getFamousUserDetail($eId)
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->select('u, w, pi')
+        $query = $queryBuilder->select('u, rf, w, pi')
             ->from('\KC\Entity\User', 'u')
-            ->leftJoin("u.website", "w")
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
             ->leftJoin("u.profileimage", "pi")
             ->where($queryBuilder->expr()->eq('u.id', $eId));
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -878,7 +946,8 @@ class User extends \KC\Entity\User
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('u.slug')
             ->from('\KC\Entity\User', 'u')
-            ->leftJoin("u.website", "w")
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
             ->where($queryBuilder->expr()->eq('u.deleted', '0'))
             ->andWhere($queryBuilder->expr()->eq('w.url', $site_name))
             ->andWhere($queryBuilder->expr()->eq('u.showInAboutListing', '1'));
