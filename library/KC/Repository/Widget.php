@@ -170,7 +170,7 @@ class Widget extends \KC\Entity\Widget
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('p.permaLink,w.id')
             ->from('KC\Entity\Widget', 'w')
-            ->leftJoin('w.page p')
+            ->leftJoin('w.page', 'p')
             ->setParameter(1, $id)
             ->where('w.id = ?1')
             ->setParameter(2, 0)

@@ -196,7 +196,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
             $data = new Signupmaxaccount();
             $data->id = 1;
             $data->status = '';
-            $data->save();
+            \Zend_Registry::get('emLocale')->persist($data);
+            \Zend_Registry::get('emLocale')->flush();
         }
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.status', $value)
@@ -280,7 +281,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
             $data = new Signupmaxaccount();
             $data->id = 1;
             $data->status = '';
-            $data->save();
+            \Zend_Registry::get('emLocale')->persist($data);
+            \Zend_Registry::get('emLocale')->flush();
         }
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
             ->set('signupmaxaccount.email_confirmation', $value)
@@ -315,7 +317,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
             $data = new Signupmaxaccount();
             $data->id = 1;
             $data->email_header = $value;
-            $data->save();
+            \Zend_Registry::get('emLocale')->persist($data);
+            \Zend_Registry::get('emLocale')->flush();
             return ;
         }
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
@@ -337,7 +340,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
             $data = new Signupmaxaccount();
             $data->id = 1;
             $data->email_footer = $value ;
-            $data->save();
+            \Zend_Registry::get('emLocale')->persist($data);
+            \Zend_Registry::get('emLocale')->flush();
             return ;
         }
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
@@ -368,7 +372,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
             $data = new Signupmaxaccount();
             $data->id = 1;
             $data->emailperlocale = $email ;
-            $data->save();
+            \Zend_Registry::get('emLocale')->persist($data);
+            \Zend_Registry::get('emLocale')->flush();
             return ;
         }
         $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
@@ -393,7 +398,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     $data = new Signupmaxaccount();
                     $data->id = 1;
                     $data->status = '';
-                    $data->save();
+                    \Zend_Registry::get('emLocale')->persist($data);
+                    \Zend_Registry::get('emLocale')->flush();
                 } else {
                     $fileName = $getRecord['homepagebanner_name'];
                     $filePath = $getRecord['homepagebanner_path'];
@@ -438,7 +444,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     $data = new Signupmaxaccount();
                     $data->id = 1;
                     $data->status = '';
-                    $data->save();
+                    \Zend_Registry::get('emLocale')->persist($data);
+                    \Zend_Registry::get('emLocale')->flush();
                 } else {
                     $fileName = $getRecord['homepage_widget_banner_name'];
                     $filePath = $getRecord['homepage_widget_banner_path'];
@@ -541,7 +548,8 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
                     $signupmaxaccount->newletter_is_scheduled = $this->getRequest()->getParam("isScheduled", false);
                     $signupmaxaccount->newletter_scheduled_time = $timestamp ;
                     $signupmaxaccount->newletter_status = 0 ;
-                    $signupmaxaccount->save();
+                    \Zend_Registry::get('emLocale')->persist($signupmaxaccount);
+                    \Zend_Registry::get('emLocale')->flush();
                 return true;
             } else {
                 $query = $entityManagerUser->update('KC\Entity\Signupmaxaccount', 'signupmaxaccount')
