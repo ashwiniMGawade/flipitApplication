@@ -243,6 +243,7 @@ class Admin_AuthController extends Zend_Controller_Action
      */
     public function logoutAction()
     {
+       
         //clear identity of the user
         Auth_StaffAdapter::clearIdentity();
         //unset the session
@@ -252,8 +253,8 @@ class Admin_AuthController extends Zend_Controller_Action
         unset($_COOKIE['locale']);
         unset($_COOKIE['site_name']);
         //redirect to auth index action of the auth
+        Zend_Session::destroy();
         $this->_redirect("/admin/auth");
-
     }
 
 
