@@ -2696,27 +2696,29 @@ class Offer Extends \KC\Entity\Offer
     }
 
     public function saveOffer($params)
-    {   
+    {
+        $saveOffer = new \KC\Entity\Offer();
+        $entityManagerUser  = \Zend_Registry::get('emLocale');
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
                 // check the offer type
             if (isset($params['defaultoffercheckbox'])) {     //offer type is default
-                $this->Visability = 'DE';
+                $saveOffer->Visability = 'DE';
                 if ($params['selctedshop']!='') {
 
                     if (intval($params['selctedshop']) > 0) {
-                        $this->shopId = $params['selctedshop'] ;
+                        $saveOffer->shopId = $params['selctedshop'] ;
                     } else {
                         return array('result' => true , 'errType' => 'shop' );
                     }
                 }
             } else {                                            // offer type member only
-                $this->Visability = 'MEM';
-                $this->shopId = null;
+                $saveOffer->Visability = 'MEM';
+                $saveOffer->shopId = null;
             }
         } else {
 
             if (intval($params['selctedshop']) > 0) {
-                $this->shopId =  $params['selctedshop'] ;
+                $saveOffer->shopId =  $params['selctedshop'] ;
             } else {
                 return array('result' => true , 'errType' => 'shop' );
             }
@@ -2725,115 +2727,79 @@ class Offer Extends \KC\Entity\Offer
 
         // check the discountype
         if (isset($params['couponCodeCheckbox'])) {             // discount type coupon
-            $this->discountType = 'CD';
-            $this->couponCode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
-            $this->discount = \BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $saveOffer->discountType = 'CD';
+            $saveOffer->couponCode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponCode']);
+            $saveOffer->discount = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 isset($params['discountamount']) ? $params['discountamount'] : 0
             );
-            $this->discountvalueType =\BackEnd_Helper_viewHelper::stripSlashesFromString(
+            $saveOffer->discountvalueType =\BackEnd_Helper_viewHelper::stripSlashesFromString(
                 isset($params['discountchk']) ? $params['discountchk'] : 0
             );
-            if (isset($params['selectedcategories'])) {
-                foreach ($params['selectedcategories'] as $categories) {
-                    $this->categoryoffres[]->categoryId = $categories;
-                }
-            }
-        } elseif (isset($params['newsCheckbox'])) {       // discount type sale
-            $this->discountType = 'NW';
-        } elseif (isset($params['saleCheckbox'])) {       // discount type sale
-            $this->discountType = 'SL';
-        } else {                                                // discount type printable
-            $this->discountType = 'PA';
-            //check printable document
-            if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {                          // upload offer
 
-                $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
-                $ext =  \BackEnd_Helper_viewHelper::getImageExtension($fileName);
-                $pattern = '/^[0-9]{10}_(.+)/i' ;
-                preg_match($pattern, $fileName, $matches);
-                if (!$fileName) {
-                    return false;
-                }
-                if (@$matches[1]) {
-                    $this->logo->ext = $ext;
-                    $this->logo->path ='images/upload/offer/';
-                    $this->logo->name = $fileName;
-                }
-            } else {                                                   // add offer refUrl
-                $this->refOfferUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
-            }
+        } elseif (isset($params['newsCheckbox'])) {       // discount type sale
+            $saveOffer->discountType = 'NW';
+        } elseif (isset($params['saleCheckbox'])) {       // discount type sale
+            $saveOffer->discountType = 'SL';
+        } else {                                                // discount type printable
+            $saveOffer->discountType = 'PA';
+            //check printable document
+                          // add offer refUrl
+                $saveOffer->refOfferUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerrefurlPR']);
         }
 
-        $this->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
+        $saveOffer->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['addofferTitle']);
 
         if (isset($params['deepLinkStatus'])) {
-            $this->refURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
+            $saveOffer->refURL =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['offerRefUrl']);
             //$this->shop->deepLink = $params['offerRefUrl'];
         }
 
-        if (trim($params['termsAndcondition'])!='') {
-            $this->offertermandcondition[]->content =
-                \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
-        }
-
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
-            $this->startDate = date('Y-m-d', strtotime($params['offerStartDate']))
+            $saveOffer->startDate = date('Y-m-d', strtotime($params['offerStartDate']))
                 .' '.date(
                     'H:i',
                     strtotime($params['offerstartTime'])
                 );
-             $this->endDate = date('Y-m-d', strtotime($params['offerEndDate']))
+             $saveOffer->endDate = date('Y-m-d', strtotime($params['offerEndDate']))
                 .' '.date(
                     'H:i',
                     strtotime($params['offerendTime'])
                 );
         }
 
-        if (isset($params['attachedpages'])) {
-            foreach ($params['attachedpages'] as $pageId) {
-                $this->offers[]->pageId = $pageId ;
-            }
-        }
-
         if (isset($params['extendedoffercheckbox'])) {                  // check if offer is extended
-            $this->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
-            $this->extendedTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
-            $this->extendedUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
-            $this->extendedMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
-            $this->extendedFullDescription =\BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
+            $saveOffer->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
+            $saveOffer->extendedTitle =\BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $saveOffer->extendedUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
+            $saveOffer->extendedMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
+            $saveOffer->extendedFullDescription =\BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
         } else {
 
-            $this->extendedOffer = 0;
-            $this->extendedTitle = '';
-            $this->extendedUrl = '';
-            $this->extendedMetaDescription = '';
-            $this->extendedFullDescription = '';
+            $saveOffer->extendedOffer = 0;
+            $saveOffer->extendedTitle = '';
+            $saveOffer->extendedUrl = '';
+            $saveOffer->extendedMetaDescription = '';
+            $saveOffer->extendedFullDescription = '';
         }
 
-        $this->exclusiveCode=$this->editorPicks = 0;
+        $saveOffer->exclusiveCode=$saveOffer->editorPicks = 0;
         if (isset($params['exclusivecheckbox'])) {
-            $this->exclusiveCode=1;
+            $saveOffer->exclusiveCode=1;
         }
 
         if (isset($params['editorpickcheckbox'])) {
-            $this->editorPicks=1;
+            $saveOffer->editorPicks=1;
         }
 
-        $this->maxlimit = 0;
-        $this->maxcode = 0;
+        $saveOffer->maxlimit = 0;
+        $saveOffer->maxcode = 0;
         if (isset($params['maxoffercheckbox'])) {
-            $this->maxlimit='1';
-            $this->maxcode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxoffertxt']);
+            $saveOffer->maxlimit='1';
+            $saveOffer->maxcode = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxoffertxt']);
         }
 
-        $connUser = \BackEnd_Helper_viewHelper::addConnection();
-        $this->authorId = \Auth_StaffAdapter::getIdentity()->id;
-        $this->authorName = \Auth_StaffAdapter::getIdentity()->firstName . " "
-            . \Auth_StaffAdapter::getIdentity()->lastName;
-        \BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = \BackEnd_Helper_viewHelper::addConnectionSite();
         if (intval($params['offerImageSelect']) > 0) {
-            $this->tilesId = $params['offerImageSelect'];
+            $saveOffer->tilesId = $params['offerImageSelect'];
         }
 
         // New code starts add blal
@@ -2841,7 +2807,7 @@ class Offer Extends \KC\Entity\Offer
         if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
 
             if (intval($params['selctedshop']) > 0) {
-                $this->shopId = $params['selctedshop'] ;
+                $saveOffer->shopId = $params['selctedshop'] ;
 
             } else {
                 return array('result' => true , 'errType' => 'shop' );
@@ -2850,42 +2816,18 @@ class Offer Extends \KC\Entity\Offer
         }
 
         if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
-            $this->shopExist = 0;
+            $saveOffer->shopExist = 0;
         } else {
-            $this->shopExist = 1;
+            $saveOffer->shopExist = 1;
         }
-
-        if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
-            $saveNewShop = new KC\Entity\Shop();
-            $saveNewShop->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
-            $saveNewShop->permaLink = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
-            $saveNewShop->status = 1;
-
-            if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
-
-                $fileName = self::uploadShopLogo('logoFile');
-                $saveNewShop->logo->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
-                    \BackEnd_Helper_viewHelper::getImageExtension($fileName)
-                );
-                $saveNewShop->logo->path = 'images/upload/shop/';
-                $saveNewShop->logo->name = $fileName;
-            } else {
-                return false;
-            }
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $saveNewShop->logoId = $saveNewShop->logo->id;
-            $queryBuilder->persist($saveNewShop);
-            $queryBuilder->flush();
-            $this->shopId = $saveNewShop->id;
-
-        }      // New code Ends
+    // New code Ends
 
         try {
 
             if (intval($this->shopId) > 0) {
-                echo "<pre>";print_r($this);die;
+                echo "<pre>";print_r($saveOffer);die;
                 $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $queryBuilder->persist($this);
+                $queryBuilder->persist($saveOffer);
                 $queryBuilder->flush();
             } else {
                 return array('result' => true , 'errType' => 'shop' );
