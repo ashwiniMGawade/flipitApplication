@@ -6,9 +6,9 @@
 
 class_name: FunctionalTester
 modules:
-    enabled: [ZF1, Doctrine1, Filesystem, FunctionalHelper, PhpBrowser]
+    enabled: [ZF1, Doctrine2, Filesystem, FunctionalHelper, PhpBrowser]
     config:
-        Doctrine1:
+        Doctrine2:
             cleanup: true,
             populate: true
         PhpBrowser:
