@@ -10,14 +10,14 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\DiscriminatorMap(
  *     {
  *     "LG"="KC\Entity\Logo",
- *     "HTUS"="KC\Entity\HowToUseSmallImage",
- *     "HTUB"="KC\Entity\HowToUseBigImage",
+ *     "HTUS"="KC\Entity\ImageHowToUseSmallImage",
+ *     "HTUB"="KC\Entity\ImageHowToUseBigImage",
  *     "MI"="KC\Entity\MediaImage",
- *     "CATICON"="KC\Entity\CategoryIcon",
+ *     "CATICON"="KC\Entity\ImageCategoryIcon",
  *     "VISITORPIC"="KC\Entity\VisitorImage",
- *     "ARTCATICON"="KC\Entity\ArticleCategoryIcon",
- *     "ARTICON"="KC\Entity\ArticlesIcon",
- *     "ARTTHUMB"="KC\Entity\ArticlesThumb",
+ *     "ARTCATICON"="KC\Entity\ImageArticleCategoryIcon",
+ *     "ARTICON"="KC\Entity\ImageArticlesIcon",
+ *     "ARTTHUMB"="KC\Entity\ImageArticlesThumb",
  *     "SCREENSHOT"="KC\Entity\WebsiteScrenshot"
  * }
  * )

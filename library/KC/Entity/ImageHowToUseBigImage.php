@@ -5,12 +5,12 @@ use Doctrine\ORM\Mapping AS ORM;
 /**
  * @ORM\Entity
  */
-class ArticlesIcon extends \KC\Entity\Image
+class ImageHowToUseBigImage extends \KC\Entity\Image
 {
     /**
-     * @ORM\OneToMany(targetEntity="KC\Entity\Articles", mappedBy="articleImage")
+     * @ORM\OneToMany(targetEntity="KC\Entity\Shop", mappedBy="howtousebigimage")
      */
-    private $articles;
+    private $shop;
 
     public function __get($property)
     {
