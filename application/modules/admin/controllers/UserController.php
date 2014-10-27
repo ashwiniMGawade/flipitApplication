@@ -253,15 +253,18 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function deleteuserAction()
     {
+        $entityManagerUser  = \Zend_Registry::get('emUser');
         $id = $this->getRequest()->getParam('id');
-        if ($id && $id != Auth_StaffAdapter::getIdentity()->id ) {
+        if ($id && $id != Auth_StaffAdapter::getIdentity()->id) {
 
-            $uDel = Doctrine_Core::getTable('User')->find($id);
-            $uDel->deleted  = true;
-            $uDel->save();
-            $User = new User();
-            $User->updateInDatabase($id, null, 0);
-            $userPermlink = $uDel->slug ;
+            $uDel = $entityManagerUser->find('KC\Entity\User', $id);
+            $uDel->deleted = true;
+            $entityManagerUser->persist($uDel);
+            $entityManagerUser->flush();
+
+            $User = new KC\Entity\User();
+            //$User->updateInDatabase($id, null, 0);
+            $userPermlink = $uDel->__get('slug');
             //self::updateVarnish($userPermlink);
 
         } else {

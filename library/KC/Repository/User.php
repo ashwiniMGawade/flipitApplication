@@ -459,6 +459,8 @@ class User extends \KC\Entity\User
     // not migrated now
     public function updateInDatabase($id, $fullName, $flag)
     {
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        $entityManagerLocale  =\Zend_Registry::get('emLocale');
         $application = new \Zend_Application(
             APPLICATION_ENV,
             APPLICATION_PATH . '/configs/application.ini'
@@ -477,34 +479,46 @@ class User extends \KC\Entity\User
 
                 if ($flag==0) {
 
-                    $o = Doctrine_Query::create($conn)->update('Offer')->set('authorName', "'$fullName'")
-                        ->where('authorId=' . $id);
-                    $o->execute();
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Offer');
+                    $offer = $repo->findBy(array('authorId' =>  $id));
+                    $offer->authorName = "'$fullName'";
+                    $offer->remove($offer);
+                    $entityManagerLocale->flush();
 
-                    $p = Doctrine_Query::create($conn)->update('Page')->set('contentManagerName', "'$fullName'")
-                        ->where('contentManagerId=' . $id);
-                    $p->execute();
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Page');
+                    $page = $repo->findBy(array('contentManagerId' =>  $id));
+                    $page->contentManagerName = "'$fullName'";
+                    $page->remove($page);
+                    $entityManagerLocale->flush();
+
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Articles');
+                    $articles = $repo->findBy(array('authorid' =>  $id));
+                    $articles->authorname = "'$fullName'";
+                    $articles->remove($articles);
+                    $entityManagerLocale->flush();
+
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Shop');
+                    $shop = $repo->findBy(array('accoutManagerId' =>  $id));
+                    $shop->accountManagerName = "'$fullName'";
+                    $shop->remove($shop);
+                    $entityManagerLocale->flush();
 
 
-                    $a = Doctrine_Query::create($conn)->update('Articles')->set('authorname', "'$fullName'")
-                        ->where('authorid=' . $id);
-                    $a->execute();
-
-                    $s = Doctrine_Query::create($conn)->update('Shop')->set('accountManagerName', "'$fullName'")
-                        ->where('accoutManagerId=' . $id);
-                    $s->execute();
-
-
-                    $s1 = Doctrine_Query::create($conn)->update('Shop')->set('contentManagerName', "'$fullName'")
-                        ->where('contentManagerId=' . $id);
-                    $s1->execute();
+                    $repo = $entityManagerLocale->getRepository('KC\Entity\Shop');
+                    $shop = $repo->findBy(array('contentManagerId' =>  $id));
+                    $shop->contentManagerName = "'$fullName'";
+                    $shop->remove($shop);
+                    $entityManagerLocale->flush();
 
                 } else if ($flag==1) {
 
 
                     //update offer
-                    $offers = Doctrine_Query::create()->select('id')->from('Offer')->where('authorId=' . $id)->fetchArray();
-
+                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $queryBuilder->select('o.id')
+                        ->from('\KC\Entity\Offer', 'o')
+                        ->where('o.authorId=' . $id);
+                    $offers = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     # check if there is atleast one offer exists in the array
                     if (count($offers) > 0) {
 
@@ -515,16 +529,21 @@ class User extends \KC\Entity\User
                                 $ids[] = $arr['id'];
                             endforeach;
                         endif;
-
-                        $o = Doctrine_Query::create($conn)->update('Offer')->set('authorName', "'$fullName'")
+                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $queryBuilder->update('\KC\Entity\Offer')
+                            ->set('authorName', "'$fullName'")
                             ->set('authorName', "'$fullName'")
                             ->set('authorId', 0)
-                            ->whereIn('id', $ids)
-                            ->execute();
+                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $query->getQuery()->execute();
                     }
 
                     //update page
-                    $page = Doctrine_Query::create()->select('id')->from('Page')->where('contentManagerId=' . $id)->fetchArray();
+                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $queryBuilder->select('p.id')
+                        ->from('\KC\Entity\Page', 'p')
+                        ->where('p.contentManagerId=' . $id);
+                    $page = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     # check if there is atleast one page exists in the array
                     if (count($page) > 0) {
                         $ids = array();
@@ -534,15 +553,20 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $p = Doctrine_Query::create()->update('Page')
+                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $queryBuilder->update('\KC\Entity\Page')
                             ->set('contentManagerName', "'$fullName'")
                             ->set('contentManagerId', 0)
-                            ->whereIn('id', $ids);
-                            $p->execute();
+                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $query->getQuery()->execute();
                     }
 
                     //update articles
-                    $art = Doctrine_Query::create()->select('id')->from('Articles')->where('authorid=' . $id)->fetchArray();
+                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $queryBuilder->select('a.id')
+                        ->from('\KC\Entity\Articles', 'a')
+                        ->where('a.authorid=' . $id);
+                    $art = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
                     # check if there is atleast one page exists in the array
                     if (count($art) > 0) {
@@ -552,17 +576,21 @@ class User extends \KC\Entity\User
                                 $ids[] = $arr['id'];
                             endforeach;
                         endif;
-                        $a = Doctrine_Query::create()->update('Articles')->set('authorname', "'$fullName'")
+
+                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $queryBuilder->update('\KC\Entity\Articles')
+                            ->set('authorname', "'$fullName'")
                             ->set('authorid', 0)
-                            ->whereIn('id', $ids)
-                            ->execute();
+                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $query->getQuery()->execute();
                     }
 
                     //update shops
-                    $shops = Doctrine_Query::create($conn)
-                        ->select('id,name')->from('Shop')
-                        ->where('contentManagerId=' . $id)->fetchArray();
-
+                    $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                    $query = $queryBuilder->select('a.id, a.name')
+                        ->from('\KC\Entity\Shop', 'a')
+                        ->where('a.contentManagerId=' . $id);
+                    $shops = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                     # check if there is atleast one shop exists in the array
                     if (count($shops) > 0) {
                         $ids = array();
@@ -572,12 +600,12 @@ class User extends \KC\Entity\User
                             endforeach;
                         endif;
 
-                        $s = Doctrine_Query::create($conn)
-                            ->update('Shop')
+                        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+                        $query= $queryBuilder->update('\KC\Entity\Shop')
                             ->set('contentManagerName', "'$fullName'")
                             ->set('contentManagerId', 0)
-                            ->whereIn('id', $ids)
-                            ->execute();
+                            ->where($entityManagerUser->expr()->in('id', $ids));
+                        $query->getQuery()->execute();
                     }
                 }
                 $connObj = \BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
