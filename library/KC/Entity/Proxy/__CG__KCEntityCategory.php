@@ -57,7 +57,7 @@ class Category extends \KC\Entity\Category implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'name', 'permaLink', 'metatitle', 'metaDescription', 'description', 'status', 'deleted', 'created_at', 'updated_at', 'featured_category', 'interestingcategory', 'popularCategory', 'categoryoffres', 'shopcategory', 'categoryicon', 'categoryFeaturedImage', 'categoryHeaderImage', 'articlecategoryicon', 'articlecategory', 'articles');
+        return array('__isInitialized__', 'id', 'name', 'permaLink', 'metatitle', 'metaDescription', 'description', 'status', 'deleted', 'created_at', 'updated_at', 'featured_category', 'interestingcategory', 'popularCategory', 'categoryoffres', 'shopcategory', 'categoryicon', 'categoryFeaturedImage', 'categoryHeaderImage', 'articlecategory', 'articles');
     }
 
     public function __clone()

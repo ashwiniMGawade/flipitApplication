@@ -253,15 +253,18 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function deleteuserAction()
     {
+        $entityManagerUser  = \Zend_Registry::get('emUser');
         $id = $this->getRequest()->getParam('id');
-        if ($id && $id != Auth_StaffAdapter::getIdentity()->id ) {
+        if ($id && $id != Auth_StaffAdapter::getIdentity()->id) {
 
-            $uDel = Doctrine_Core::getTable('User')->find($id);
-            $uDel->deleted  = true;
-            $uDel->save();
-            $User = new User();
-            $User->updateInDatabase($id, null, 0);
-            $userPermlink = $uDel->slug ;
+            $uDel = $entityManagerUser->find('KC\Entity\User', $id);
+            $uDel->deleted = true;
+            $entityManagerUser->persist($uDel);
+            $entityManagerUser->flush();
+
+            $User = new KC\Entity\User();
+            //$User->updateInDatabase($id, null, 0);
+            $userPermlink = $uDel->__get('slug');
             //self::updateVarnish($userPermlink);
 
         } else {
@@ -615,7 +618,7 @@ class Admin_UserController extends Zend_Controller_Action
 
         $catArray  = array();//array generate on key based
         foreach ($intCat as $categories) {
-            $catArray[] = $categories['categoryId'];
+            $catArray[] = $categories['category']['id'];
         }
         $this->view->catArray = '';
         if (isset($catArray) && count($catArray)>0) {
@@ -637,7 +640,9 @@ class Admin_UserController extends Zend_Controller_Action
                 ->leftJoin('rf.refUsersWebsite', 'w')
                 ->where($queryBuilder->expr()->eq('u.id', $id));
             $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
+            //echo "<pre>";
+           // print_r($data);
+           // die();
             $role =  Zend_Auth::getInstance()->getIdentity()->users->id;
 
             if (($role=='3'
@@ -689,25 +694,30 @@ class Admin_UserController extends Zend_Controller_Action
             if ($params) {
 
                 $uesrPicName = '';
-                if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
-                    $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
+                if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
+                    $uesrPicName = self::uploadFile($_FILES['imageName']['name']);
                 }
 
-                $user = Doctrine_Core::getTable("User")->find($params['id']);
+                $entityManagerUser  = \Zend_Registry::get('emUser');
+                $repo = $entityManagerUser->getRepository('KC\Entity\User');
+                $user = $repo->find($params['id']);
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];
-                $user->save();
-                $result = $user->update($params,$uesrPicName);
+                $entityManagerUser->persist($user);
+                $entityManagerUser->flush();
+
+                $u = new KC\Repository\User();
+                $result = $u->update($params, $uesrPicName);
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
 
                 # check if there is any error in user data
-                if(is_array($result) && isset($result['error'])) {
+                if (is_array($result) && isset($result['error'])) {
 
                     $message = $this->view->translate($result['message']);
                     $flash->addMessage(array('error' => $message ));
 
-                    $this->_redirect(HTTP_PATH.'admin/user/edituser/id/' . trim($params['id']). '?'.$params['qString'] );
+                    $this->_redirect(HTTP_PATH.'admin/user/edituser/id/' . trim($params['id']). '?'.$params['qString']);
 
                     exit;
                 }

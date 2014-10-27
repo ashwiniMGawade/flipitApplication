@@ -50,6 +50,11 @@ class ProfileImage
      */
     private $user;
 
+    public function getId()
+    {
+        return $this->id;
+    }
+
     public function __get($property)
     {
         return $this->$property;
