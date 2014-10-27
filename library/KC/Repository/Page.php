@@ -297,9 +297,9 @@ class Page Extends \KC\Entity\Page
         } else {
             $id = null;
         }
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
         return $id;
     }
 
@@ -318,9 +318,9 @@ class Page Extends \KC\Entity\Page
             ->where('routePermalink.permalink = ?1')
             ->getQuery();
         $query->execute();
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
         return 1;
     }
 
@@ -354,9 +354,9 @@ class Page Extends \KC\Entity\Page
         } else {
             $id = null;
         }
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$id.'_image');
         return $id;
     }
 
@@ -520,7 +520,7 @@ class Page Extends \KC\Entity\Page
             ->andWhere('page.deleted = ?2')
             ->setParameter(3, 1)
             ->andWhere('page.showsitemap = ?3')
-            ->orderBy('page.pagetitle ASC');
+            ->orderBy('page.pagetitle', 'ASC');
         $pageIdsAndPermalinks = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageIdsAndPermalinks;
     }
@@ -707,9 +707,9 @@ class Page Extends \KC\Entity\Page
             $this->pageattributeid = $params['pageTemplate'];
         }
         $conn2 = \BackEnd_Helper_viewHelper::addConnection();
-        $this->contentManagerId = Auth_StaffAdapter::getIdentity()->id;
-        $this->contentManagerName = Auth_StaffAdapter::getIdentity()->firstName
-        . " " . Auth_StaffAdapter::getIdentity()->lastName;
+        $this->contentManagerId = \Auth_StaffAdapter::getIdentity()->id;
+        $this->contentManagerName = \Auth_StaffAdapter::getIdentity()->firstName
+        . " " . \Auth_StaffAdapter::getIdentity()->lastName;
         \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $selectedWidgets = explode(',', $params['selectedWigetForPage']);
         foreach ($selectedWidgets as $widget) {
