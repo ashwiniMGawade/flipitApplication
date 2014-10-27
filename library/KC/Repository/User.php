@@ -197,14 +197,16 @@ class User extends \KC\Entity\User
         preg_match($pattern, $imageName, $matches);
         if (@$matches[1]) {
             $ext =  \BackEnd_Helper_viewHelper::getImageExtension($imageName);
-            $pImage  = new KC\Entity\ProfileImage();
+            $pImage  = new \KC\Entity\ProfileImage();
             $pImage->ext = $ext;
+            $pImage->created_at = new \DateTime('now');
+            $pImage->deleted_at = new \DateTime('now');
+            $pImage->deleted = '0';
             $pImage->path ='images/upload/';
             $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
             $entityManagerUser->persist($pImage);
             $entityManagerUser->flush();
-            $addUser->profileImageId =  $pImage->getId();
-
+            $addUser->profileImageId =  $entityManagerUser->find('KC\Entity\ProfileImage', $pImage->getId());
         }
 
         $entityManagerUser->persist($addUser);
@@ -313,16 +315,19 @@ class User extends \KC\Entity\User
             if (@$matches[1]) {
                 $ext =  \BackEnd_Helper_viewHelper::getImageExtension($imageName);
                 if (intval($params['pImageId']) > 0) {
-                    $pImage = Doctrine_Core::getTable('ProfileImage')->find($params['pImageId']);
+                    $pImage = $entityManagerUser->find('KC\Entity\ProfileImage', $params['pImageId']);
                 } else {
-                    $pImage  = new KC\Entity\ProfileImage();
+                    $pImage  = new \KC\Entity\ProfileImage();
+                    $pImage->created_at = new \DateTime('now');
+                    $pImage->updated_at = new \DateTime('now');
+                    $pImage->deleted = '0';
                 }
                 $pImage->ext = $ext;
                 $pImage->path ='images/upload/';
                 $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
                 $entityManagerUser->persist($pImage);
                 $entityManagerUser->flush();
-                $updateUser->profileImageId =  $pImage->getId();
+                $updateUser->profileimage =  $entityManagerUser->find('KC\Entity\ProfileImage', $pImage->getId());
             }
         }
         // check user want to update password or not based upon old password
