@@ -383,7 +383,7 @@ class Category extends \KC\Entity\Category
             ->orderBy("c.featured_category", "DESC")
             ->getQuery()
             ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
+        //echo "<pre>";print_r($categoriesInformation);die;
         return $categoriesInformation;
     }
 

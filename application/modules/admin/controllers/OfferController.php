@@ -9,7 +9,7 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         $parameters = $this->_getAllParams();
         $offerList = \KC\Repository\Offer::getOfferList($parameters);
-        echo Zend_Json::encode($offerList);
+        echo \Zend_Json::encode($offerList);
         die();
     }
     ############################################################
@@ -62,16 +62,12 @@ class Admin_OfferController extends Zend_Controller_Action
     public function addofferAction()
     {
 
-        $shopObj = new Shop();
-        $this->view->shopList=$shopObj->getOfferShopList();
-        $catObj = new Category();
-        $this->view->catList = $catObj->getCategoriesInformation();
-        $pageObj = new Page();
+        $this->view->shopList =\KC\Repository\Shop::getOfferShopList();
+        $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
+        $pageObj = new KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
-
         $allTiles = $this->getalltiles2Action();
         $this->view->tiles = $allTiles;
-
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
@@ -89,23 +85,15 @@ class Admin_OfferController extends Zend_Controller_Action
         $offerId = $params['id'];
 
         // new code added by bhart
-        $shopImageOfOffer = new Offer();
-        $shop = $shopImageOfOffer::getOfferShopDetail($offerId);
+        $shop = \KC\Repository\Offer::getOfferShopDetail($offerId);
         $this->view->offerShoLogo = $shop;
         // end code
-
-        $shopObj = new Shop();
-        $this->view->shopList=$shopObj->getOfferShopList();
-
-        $catObj = new Category();
-        $this->view->catList=$catObj->getCategoriesInformation();
-
-        $pageObj = new Page();
+        $this->view->shopList = \KC\Repository\Shop::getOfferShopList();
+        $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
+        $pageObj = new KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
-
         $allTiles = $this->getalltiles2Action();
         $this->view->tiles = $allTiles;
-
 
     }
 
@@ -138,7 +126,7 @@ class Admin_OfferController extends Zend_Controller_Action
     public function shopdetailAction()
     {
         $params = $this->_getAllParams();
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
         $Getshopdetails = $shopObj->getShopDetail($params['shopId']);
         $details = Zend_Json::encode($Getshopdetails);
 
@@ -152,7 +140,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
 
 
-        $offerObj = new Offer();
+        $offerObj = new \KC\Repository\Offer();
         $offer = $offerObj->saveOffer($params);
 
         $flash = $this->_helper->getHelper('FlashMessenger');
@@ -237,7 +225,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
-        $data = Offer::searchToFiveShop($srh, $flag);
+        $data = \KC\Repository\Offer::searchToFiveShop($srh, $flag);
 
 
         $ar = array();
@@ -246,9 +234,9 @@ class Admin_OfferController extends Zend_Controller_Action
             //$ar[] = $srh;
             foreach ($data as $d) {
 
-                $id =  $d['shop']['id'];
+                $id =  $d['id'];
                 //array fro remove duplicate search text
-                $ar[] = ucfirst($d['shop']['name']);
+                $ar[] = ucfirst($d['name']);
 
             }
 
@@ -278,7 +266,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
-        $data = Offer::searchToFiveCoupon($srh, $flag);
+        $data = \KC\Repository\Offer::searchToFiveCoupon($srh, $flag);
         //echo "<pre>";print_r($data);die;
 
         $ar = array();
@@ -318,7 +306,7 @@ class Admin_OfferController extends Zend_Controller_Action
         $flag = $this->getRequest()->getParam('flag');
 
         //cal to searchToFiveShop function from offer model class
-        $data = Offer::searchToFiveOffer($srh, $flag);
+        $data = \KC\Repository\Offer::searchTopFiveOffer($srh, $flag);
 
         $ar = array();
         $removeDup = array();
@@ -906,7 +894,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
     public function getalltiles2Action()
     {
-        $Tiles = OfferTiles::getAllTiles();
+        $Tiles = \KC\Repository\OfferTiles::getAllTiles();
         //echo Zend_Json::encode($Tiles);
         //die;
         return $Tiles;

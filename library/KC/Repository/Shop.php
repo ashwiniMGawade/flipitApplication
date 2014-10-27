@@ -965,7 +965,7 @@ $shopInfo->screenshotId = 1;
     public static function getOfferShopList()
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $shopList = $queryBuilder->select('s.name,l.id as logoId,l.name,l.path')
+        $shopList = $queryBuilder->select('s.name as shopName,l.id as logoId,l.name,l.path, s.id')
             ->from('KC\Entity\Shop', 's')
             ->leftJoin("s.logo", "l")
             ->where('s.deleted=0')
@@ -979,7 +979,7 @@ $shopInfo->screenshotId = 1;
     public static function getShopDetail($shopId)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $shopDetail = $queryBuilder->select('s.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,a.name as affname,cat.id')
+        $shopDetail = $queryBuilder->select('s.notes,s.accountManagerName,s.deepLink,s.deepLinkStatus,s.strictConfirmation,a.name as affname,cat.id as categoryId')
             ->from('KC\Entity\Shop', 's')
             ->leftJoin('s.affliatenetwork', 'a')
             ->leftJoin('s.categoryshops', 'cat')

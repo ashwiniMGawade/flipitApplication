@@ -159,17 +159,17 @@ class Page Extends \KC\Entity\Page
     public function getPagesOffer()
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.id, page.pagetitle')
+        $query = $entityManagerUser->select('page.id, page.pageTitle')
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, 1)
-            ->where('page.showpage = ?1')
+            ->where('page.showPage = ?1')
             ->setParameter(2, 0)
             ->andWhere('page.deleted = ?2')
             ->setParameter(3, 1)
             ->andWhere('page.publish = ?3')
             ->setParameter(4, 0)
-            ->andWhere('page.pagelock = ?4')
-            ->orderBy('page.pagetitle ASC');
+            ->andWhere('page.pageLock = ?4')
+            ->orderBy('page.pageTitle', 'ASC');
         $pagesOffer = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pagesOffer;
     }
