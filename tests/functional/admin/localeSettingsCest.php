@@ -28,4 +28,23 @@ class localeSettingsCest
         $I->canSee('Locale');
         $I->canSee('Time Zone');
     }
+
+    public function test(FunctionalTester $I, \Codeception\Scenario $scenario)
+    {
+         $em = \Codeception\Module\Doctrine2::$em;
+        $t =  $I->haveInRepository('KC\Entity\Settings', array('name' => 'test'));
+        $I->persistEntity(
+            new \KC\Entity\Settings,
+            array(
+            'name' => 'test',
+            'created_at' => new \DateTime('now'),
+            'updated_at' => new \DateTime('now'),
+            'deleted' => 0,
+            'value' => 123
+            )
+        );
+        $test = $I->grabFromRepository('KC\Entity\Settings', 'value', array('name' => 'test'));
+
+        $em->getRepository( 'KC\Entity\Settings' )->findOneBy( array( 'name' => 'test' ) );
+    }
 }

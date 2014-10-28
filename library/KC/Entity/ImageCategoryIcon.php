@@ -1,12 +1,21 @@
 <?php
+
 namespace KC\Entity;
+
 use Doctrine\ORM\Mapping AS ORM;
+
+use \Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * @ORM\Entity
  */
-class CategoryIcon extends \KC\Entity\Image
+class ImageCategoryIcon extends \KC\Entity\Image
 {
+    
+    public function __construct()
+    {
+        $this->category = new ArrayCollection();
+    }
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\Category", mappedBy="categoryicon")
      */

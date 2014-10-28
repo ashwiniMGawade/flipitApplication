@@ -54,6 +54,7 @@ class Logo extends \KC\Entity\Logo implements \Doctrine\ORM\Proxy\Proxy
         return parent::__set($property, $value);
     }
 
+<<<<<<< HEAD
     public function getId()
     {
         if ($this->__isInitialized__ === false) {
@@ -61,6 +62,12 @@ class Logo extends \KC\Entity\Logo implements \Doctrine\ORM\Proxy\Proxy
         }
         $this->__load();
         return parent::getId();
+=======
+    public function test($value)
+    {
+        $this->__load();
+        return parent::test($value);
+>>>>>>> ff6a31f44b28ee4faf0ccad1ee95a4bb4c2606ef
     }
 
 

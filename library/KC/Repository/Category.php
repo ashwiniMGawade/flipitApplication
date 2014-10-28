@@ -279,17 +279,15 @@ class Category extends \KC\Entity\Category
         if (isset($categoryIconFileName) && $categoryIconFileName != '') {
             $uploadedImage = self::uploadImage($categoryIconName);
             if ($uploadedImage['status'] == '200') {
-                $category1 = new \KC\Entity\CategoryIcon();
-                $category2 = new \KC\Entity\Image();
+                $category1 = new \KC\Entity\Image();
                 $category1->ext = \BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
                 $category1->path = $uploadedImage['path'];
                 $category1->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
-                $category1->testdel(0);
-                $category1->test('CATICON');
-                $category1->testc(new \DateTime('now'));
-                $category1->testcd(new \DateTime('now'));
+                $category1->deleted = 0;
+                $category1->type = 'CATICON';
+                $category1->created_at = new \DateTime('now');
+                $category1->updated_at = new \DateTime('now');
                 \Zend_Registry::get('emLocale')->persist($category1);
-                \Zend_Registry::get('emLocale')->persist($category2);
                 \Zend_Registry::get('emLocale')->flush();
                 return $category1->id;
             } else {

@@ -11,9 +11,9 @@ use Doctrine\ORM\Mapping AS ORM;
  *         @ORM\Index(name="howtousepageid_idx", columns={"howtoUsepageId"})
  *     },
  *     uniqueConstraints={
- *         @ORM\UniqueConstraint(name="logoid", columns={"logo"}),
- *         @ORM\UniqueConstraint(name="howtousesmallimageid", columns={"howtousesmallimage"}),
- *         @ORM\UniqueConstraint(name="howtousebigimageid", columns={"howtousebigimage"})
+ *         @ORM\UniqueConstraint(name="logoid", columns={"logoId"}),
+ *         @ORM\UniqueConstraint(name="howtousesmallimageid", columns={"howtoUseSmallImageId"}),
+ *         @ORM\UniqueConstraint(name="howtousebigimageid", columns={"howtoUseBigImageId"})
  *     }
  * )
  */
@@ -385,13 +385,13 @@ class Shop
     private $shopPage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\HowToUseSmallImage", inversedBy="shop")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageHowToUseSmallImage", inversedBy="shop")
      * @ORM\JoinColumn(name="howtoUseSmallImageId", referencedColumnName="id")
      */
     private $howtousesmallimage;
 
     /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\HowToUseBigImage", inversedBy="shop")
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageHowToUseBigImage", inversedBy="shop")
      * @ORM\JoinColumn(name="howtoUseBigImageId", referencedColumnName="id")
      */
     private $howtousebigimage;
@@ -412,6 +412,12 @@ class Shop
      * @ORM\ManyToMany(targetEntity="KC\Entity\ExcludedKeyword", mappedBy="shops")
      */
     private $keywords;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\WebsiteScrenshot", inversedBy="shop")
+     * @ORM\JoinColumn(name="screenshotid", referencedColumnName="id")
+     */
+    private $screnshot;
 
     public function __get($property)
     {

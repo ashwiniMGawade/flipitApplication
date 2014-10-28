@@ -4,7 +4,7 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="chain", uniqueConstraints={@ORM\UniqueConstraint(name="name", columns={"name"})})
+ * @ORM\Table(name="chain", uniqueConstraints={@ORM\UniqueConstraint(name="chainname", columns={"name"})})
  */
 class Chain
 {

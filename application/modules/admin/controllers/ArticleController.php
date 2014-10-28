@@ -50,7 +50,7 @@ class Admin_ArticleController extends Zend_Controller_Action
 
     public function getarticlesAction()
     {
-        $getList = new Articles();
+        $getList = new KC\Repository\Articles();
         $list = $getList->getArticleList($this->getRequest()->getParams());
 
         echo Zend_Json::encode($list);
@@ -273,18 +273,15 @@ class Admin_ArticleController extends Zend_Controller_Action
     {
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
-        $data =Articles::searchKeyword($srh,$flag);
+        $data = KC\Repository\Articles::searchKeyword($srh, $flag);
 
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
-
                 $ar[] = ucfirst($d['title']);
-
             }
 
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }

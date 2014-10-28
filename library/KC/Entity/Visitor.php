@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Table(
  *     name="visitor",
  *     indexes={@ORM\Index(name="imageid_idx", columns={"imageId"}),@ORM\Index(name="createdby_idx", columns={"createdBy"})},
- *     uniqueConstraints={@ORM\UniqueConstraint(name="email", columns={"email"})}
+ *     uniqueConstraints={@ORM\UniqueConstraint(name="visitoremail", columns={"email"})}
  * )
  */
 class Visitor
