@@ -137,9 +137,6 @@ class Admin_OfferController extends Zend_Controller_Action
     public function saveofferAction()
     {
         $params = $this->_getAllParams();
-
-
-
         $offerObj = new \KC\Repository\Offer();
         $offer = $offerObj->saveOffer($params);
 

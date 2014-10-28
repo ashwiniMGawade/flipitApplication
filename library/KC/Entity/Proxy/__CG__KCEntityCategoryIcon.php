@@ -78,6 +78,15 @@ class CategoryIcon extends \KC\Entity\CategoryIcon implements \Doctrine\ORM\Prox
         return parent::testcd($value);
     }
 
+    public function getId()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int) $this->_identifier["id"];
+        }
+        $this->__load();
+        return parent::getId();
+    }
+
 
     public function __sleep()
     {

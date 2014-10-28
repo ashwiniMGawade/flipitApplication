@@ -23,7 +23,7 @@
 		$today = time();
 		$twoMonthsLater = date('t-m-Y');
 		//$twoMonthsLater = strtotime("+2 months", $today);
-		$role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+		$role = Zend_Auth::getInstance()->getIdentity()->users->id;
 
 		$code = "kortingscodeoffernews";
 		$secret = base64_encode($code);
