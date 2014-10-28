@@ -946,4 +946,18 @@ EOD;
         $cacheKey = preg_replace("/[\/\&_~,`@!(){}:*+^%#$?#.=-]/", "", $permalink);
         return $cacheKey;
     }
+
+    public function sortNamesByOrder($unSortedNames, $order)
+    {
+        $sortedNames = array();
+        if ($order == 'asc') {
+            asort($unSortedNames);
+        } else {
+            rsort($unSortedNames);
+        }
+        foreach ($unSortedNames as $val) {
+            $sortedNames[] = $val;
+        }
+        return  $sortedNames;
+    }
 }

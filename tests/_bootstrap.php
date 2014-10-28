@@ -45,11 +45,11 @@ $connectionParamsLocale = array(
 $em = EntityManager::create($connectionParamsLocale, $config);
 \Codeception\Module\Doctrine2::$em = $em;
 
-$schemaTool = new SchemaTool($em);
+// $schemaTool = new SchemaTool($em);
 
-$cmf = $em->getMetadataFactory();
-$classes = $cmf->getAllMetadata();
-$schemaTool->dropDatabase();
-$schemaTool->createSchema($classes);
+// $cmf = $em->getMetadataFactory();
+// $classes = $cmf->getAllMetadata();
+// $schemaTool->dropDatabase();
+// $schemaTool->createSchema($classes);
 
 \Codeception\Util\Autoload::registerSuffix('Page', __DIR__.DIRECTORY_SEPARATOR.'_pages');
