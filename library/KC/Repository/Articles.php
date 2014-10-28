@@ -117,11 +117,12 @@ class Articles extends \KC\Entity\Articles
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
         $query = $queryBuilder->select('user.id, user.firstName, user.lastName')
             ->from('\KC\Entity\User', 'user')
-            ->leftJoin('user.website', 'website')
+            ->leftJoin('user.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
             ->setParameter(1, '0')
             ->where('user.deleted = ?1')
             ->setParameter(2, $site_name)
-            ->andWhere('website.url = ?2')
+            ->andWhere('rf.url = ?2')
             ->orderBy("user.firstName", "ASC");
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
@@ -146,20 +147,22 @@ class Articles extends \KC\Entity\Articles
         $srh =  $params["searchText"]=='undefined' ? '' : $params["searchText"];
         $flag = $params['flag'] ;
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $artList = $queryBuilder->select('art.id,art.title,art.publishdate,art.publish,art.authorname')
+        $qb = $queryBuilder
             ->from('KC\Entity\Articles', 'art')
-            ->setParameter(1, $flag)
-            ->where('art.deleted = ?1')
-            ->setParameter(2, $srh.'%')
-            ->andWhere($queryBuilder->expr()->like('art.title', '?2'))
-            ->getQuery();
-        $result = \DataTable_Helper::generateDataTableResponse(
-            $artList,
-            $params,
-            array("__identifier" => 'art.id','art.title','art.publishdate','art.publish','art.authorname'),
-            array(),
-            array()
-        );
+            ->where('art.deleted ='. $flag)
+            ->andWhere($queryBuilder->expr()->like('art.title', $queryBuilder->expr()->literal($srh.'%')));
+
+        $request  = \DataTable_Helper::createSearchRequest($params, array('title', 'publishdate', 'publish', 'authorname'));
+
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($qb)
+            ->add('text', 'art.title')
+            ->add('number', 'art.publishdate')
+            ->add('text', 'art.publish')
+            ->add('text', 'art.authorname');
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $result = \DataTable_Helper::getResponse($data, $request);
         return $result;
     }
 
@@ -167,22 +170,25 @@ class Articles extends \KC\Entity\Articles
     {
         $srh =  $params["searchText"]=='undefined' ? '' : $params["searchText"];
         $flag = $params['flag'] ;
+
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $artList = $queryBuilder->select('art.id,art.title,art.created_at,art.publish,art.authorname')
+        $qb = $queryBuilder
             ->from('KC\Entity\Articles', 'art')
-            ->setParameter(1, $flag)
-            ->where('art.deleted = ?1')
-            ->setParameter(2, $srh.'%')
-            ->andWhere($queryBuilder->expr()->like('art.title', '?2'))
-            ->getQuery();
-        //print_r($artList->fetchArray()); die;
-        $result =   \DataTable_Helper::generateDataTableResponse(
-            $artList,
-            $params,
-            array("__identifier" => 'art.id','art.title','art.created_at','art.publish','art.authorname'),
-            array(),
-            array()
-        );
+            ->where('art.deleted ='. $flag)
+            ->andWhere($queryBuilder->expr()->like('art.title', $queryBuilder->expr()->literal($srh.'%')));
+
+        $request  = \DataTable_Helper::createSearchRequest($params, array('id', 'title', 'created_at', 'publish', 'authorname'));
+
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($qb)
+            ->add('number', 'art.id')
+            ->add('text', 'art.title')
+            ->add('text', 'art.created_at')
+            ->add('text', 'art.publish')
+            ->add('text', 'art.authorname');
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $result = \DataTable_Helper::getResponse($data, $request);
         return $result;
     }
 
@@ -210,13 +216,7 @@ class Articles extends \KC\Entity\Articles
         }
     }
 
-    /**
-     * get to five page
-     * @param string $keyword
-     * @return array $data
-     * @author jsingh
-     * @version 1.0
-     */
+   
     public static function searchToFiveArticle($keyword, $type)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -227,7 +227,7 @@ class Articles extends \KC\Entity\Articles
             ->setParameter(2, $keyword.'%')
             ->andWhere($queryBuilder->expr()->like('a.title', '?2'));
 
-        $role = \Zend_Auth::getInstance()->getIdentity()->roleId;
+        $role = \Zend_Auth::getInstance()->getIdentity()->users->id;
         if ($role == '4' || $role == '3') {
             $query->setParameter(3, '0')
                 ->andWhere('a.articlesLock= ?2');
@@ -239,31 +239,32 @@ class Articles extends \KC\Entity\Articles
 
 
     public static function saveArticle($params)
-    { 
+    {
         $isDraft = true  ;
         $storeIds = explode(',', $params['selectedRelatedStores']);
         $relatedIds = explode(',', $params['selectedRelatedCategory']);
-        $data = new Articles();
+        $data = new KC\Entity\Articles();
         //echo "<pre>"; print_r($data); die();
-        $data->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['articleTitle']);
-        $data->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString( $params['articlepermalink']);
-        $data->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlemetaTitle']);
-        $data->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString(trim($params['articlemetaDesc']));
-        $data->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
+        $data->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articleTitle']);
+        $data->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlepermalink']);
+        $data->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlemetaTitle']);
+        $data->metadescription = \BackEnd_Helper_viewHelper::stripSlashesFromString(trim($params['articlemetaDesc']));
+        $data->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
         $data->authorid = $params['authorList']; //Auth_StaffAdapter::getIdentity()->id;
-        $data->authorname = BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']);
+        $data->authorname = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']);
 
         if (isset($_FILES['articleImage']['name']) && $_FILES['articleImage']['name'] != '') {
 
             $result = self::uploadImage('articleImage');
 
             if (@$result['status'] == '200') {
-                $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        @$result['fileName']);
+                $ext = \BackEnd_Helper_viewHelper::getImageExtension(
+                    @$result['fileName']
+                );
 
                 $data->articleImage->ext = @$ext;
                 $data->articleImage->path = @$result['path'];
-                $data->articleImage->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $data->articleImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
             } else {
                 return false;
             }
@@ -274,12 +275,13 @@ class Articles extends \KC\Entity\Articles
             $artThumbnail = self::uploadImage('articleImageSmall');
 
             if (@$artThumbnail['status'] == '200') {
-                $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        @$artThumbnail['fileName']);
+                $ext = \BackEnd_Helper_viewHelper::getImageExtension(
+                    @$artThumbnail['fileName']
+                );
 
                 $data->thumbnail->ext = @$ext;
-                $data->thumbnail->path = @BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
-                $data->thumbnail->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);
+                $data->thumbnail->path = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
+                $data->thumbnail->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);
             } else {
                 return false;
             }
@@ -287,33 +289,36 @@ class Articles extends \KC\Entity\Articles
     /*  $ext = BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
         $data->articleImage->ext = $ext;*/
 
-        if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
-            $data->publish = Articles::ArticleStatusDraft;
-        }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']))  > date('Y-m-d H:i:s')){
-            $data->publish = Articles::ArticleStatusPublished;
-            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
+        if (isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft') {
+            $data->publish = self::ArticleStatusDraft;
+        } else if($params['savePagebtn'] == 'publish' && date('Y-m-d', strtotime($params['publishDate'])).' '.date('H:i:s', strtotime($params['publishTimehh'])) > date('Y-m-d H:i:s')) {
+            
+            $data->publish = self::ArticleStatusPublished;
+            $data->publishdate = date('Y-m-d', strtotime($params['publishDate'])).' '.date('H:i:s', strtotime($params['publishTimehh']));
+            $isDraft  = false ;
 
+        } else {
+            
+            $data->publish = self::ArticleStatusPublished;
+            $data->publishdate = date('Y-m-d', strtotime($params['publishDate'])).' '.date('H:i:s', strtotime($params['publishTimehh']));
             $isDraft  = false ;
-        }else{
-            $data->publish = Articles::ArticleStatusPublished;
-            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
-            $isDraft  = false ;
+
         }
 
 
         try {
             $data->save();
-            $articleId = $data->id ;
+            $articleId = $data->id;
             /* $route = new RoutePermalink();
             $route->permalink =  $params['articlepermalink'];
             $route->type = 'ART';
             $route->exactlink = 'plus/guidedetail/id/'.$data->id;
             $route->save(); */
 
-            if(!empty($params['title']) && !empty($params['content'])){
+            if (!empty($params['title']) && !empty($params['content'])) {
                 foreach ($params['title'] as $key => $title) {
-                    if(!empty($params['title'][$key]) && !empty($params['content'][$key])){
-                        $chapter = new ArticleChapter();
+                    if (!empty($params['title'][$key]) && !empty($params['content'][$key])) {
+                        $chapter = new KC\Entity\ArticleChapter();
                         $chapter->articleId = $data->id;
                         $chapter->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'][$key]);
                         $chapter->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
@@ -322,22 +327,23 @@ class Articles extends \KC\Entity\Articles
                 }
             }
 
-            if($storeIds[0] != ""){
-                foreach($storeIds as $storeid ){
+            if ($storeIds[0] != "") {
+                foreach ($storeIds as $storeid) {
 
-                    $relatedstores = new RefArticleStore();
+                    $relatedstores = new KC\Entity\RefArticleStore();
                     $relatedstores->articleid = $data->id;
                     $relatedstores->storeid = $storeid;
                     $relatedstores->save();
                     $key = 'shop_moneySavingArticles_'  . $storeid . '_list';
                     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
                 }
             }
 
-            if($relatedIds[0] != ""){
-                foreach($relatedIds as $relatedid ){
+            if ($relatedIds[0] != "") {
+                foreach ($relatedIds as $relatedid) {
 
-                    $relatedcategories = new RefArticleCategory();
+                    $relatedcategories = new KC\Entity\RefArticleCategory();
                     $relatedcategories->articleid = $data->id;
                     $relatedcategories->relatedcategoryid = $relatedid;
                     $relatedcategories->save();
@@ -345,30 +351,27 @@ class Articles extends \KC\Entity\Articles
             }
             $pageIds = self::findPageIds($data->id);
             $artArr = array();
-            for($i=0;$i<count($pageIds);$i++){
+            for ($i=0; $i < count($pageIds); $i++) {
                 $artArr[] = $pageIds[$i]['pageid'];
             }
             $page_ids = array_unique($artArr);
 
             return array('articleId' => $articleId , 'isDraft' => $isDraft ) ;
-        }catch(Exception $e){
+        } catch(Exception $e) {
 
             return false;
         }
 
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
         $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
-
-
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
     }
 
 
@@ -378,28 +381,26 @@ class Articles extends \KC\Entity\Articles
         $relatedIds = explode(',', $params['selectedRelatedCategory']);
         $data = Doctrine_Core::getTable("Articles")->find($params['id']);
 
-        $data->title = BackEnd_Helper_viewHelper::stripSlashesFromString ($params['articleTitle']);
-        $data->permalink =  BackEnd_Helper_viewHelper::stripSlashesFromString ($params['articlepermalink']);
-        $data->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString ($params['articlemetaTitle']);
+        $data->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articleTitle']);
+        $data->permalink =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlepermalink']);
+        $data->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlemetaTitle']);
         $md = trim($params['articlemetaDesc']);
-        $data->metadescription = BackEnd_Helper_viewHelper::stripSlashesFromString($md);
-        $data->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
-        $data->authorid = BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorList']);
-        $data->authorname = trim(BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']));
+        $data->metadescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($md);
+        $data->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
+        $data->authorid = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorList']);
+        $data->authorname = trim(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['authorNameHidden']));
 
-        if(isset($_FILES['articleImage']['name']) && $_FILES['articleImage']['name'] != '') {
+        if (isset($_FILES['articleImage']['name']) && $_FILES['articleImage']['name'] != '') {
 
             $result = self::uploadImage('articleImage');
 
             if ($result['status'] == '200') {
-                $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        $result['fileName']);
-
+                $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
                 $data->articleImage->ext = $ext;
-                $data->articleImage->path = BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                $data->articleImage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $data->articleImage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+                $data->articleImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
 
-            } else{
+            } else {
 
                 return false;
             }
@@ -413,76 +414,75 @@ class Articles extends \KC\Entity\Articles
             $artThumbnail = self::uploadImage('articleImageSmall');
 
             if (@$artThumbnail['status'] == '200') {
-                $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        @$artThumbnail['fileName']);
+                $ext = \BackEnd_Helper_viewHelper::getImageExtension(@$artThumbnail['fileName']);
 
                 $data->thumbnail->ext = @$ext;
-                $data->thumbnail->path = @BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
-                $data->thumbnail->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);
+                $data->thumbnail->path = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
+                $data->thumbnail->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);
             } else {
                 return false;
             }
         }
 
 
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
 
         $catIds = self::findCategoryId($params['id']);
         $catArr = array();
-        for($i=0;$i<count($catIds);$i++) {
+        for ($i=0;$i<count($catIds);$i++) {
             $catArr[] = $catIds[$i]['relatedcategoryid'];
         }
 
         
         $pageIds = self::findPageIds($params['id']);
         $artArr = array();
-        for($i=0;$i<count($pageIds);$i++){
+        for ($i=0;$i<count($pageIds);$i++) {
             $artArr[] = $pageIds[$i]['pageid'];
         }
         $page_ids = array_unique($artArr);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
         $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
         /*
         $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
         $data->articleImage->ext = $ext;*/
 
-        if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
-            $data->publish = Articles::ArticleStatusDraft;
-        }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']))  > date('Y-m-d H:i:s')){
-            $data->publish = Articles::ArticleStatusPublished;
+        if (isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft') {
+            $data->publish = self::ArticleStatusDraft;
+        } else if ($params['savePagebtn'] == 'publish' && date('Y-m-d', strtotime($params['publishDate'])).' '.date('H:i:s', strtotime($params['publishTimehh']))  > date('Y-m-d H:i:s')){
+            $data->publish = self::ArticleStatusPublished;
             $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
-        }else{
-            $data->publish = Articles::ArticleStatusPublished;
-            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
+        } else {
+            $data->publish = self::ArticleStatusPublished;
+            $data->publishdate = date('Y-m-d', strtotime($params['publishDate'])).' '.date('H:i:s', strtotime($params['publishTimehh']));
         }
-        $getcategory = Doctrine_Query::create()->select()->from('Articles')->where('id = '.$params['id'] )->fetchArray();
-        if(!empty($getcategory[0]['permalink'])){
+        $getcategory = Doctrine_Query::create()->select()->from('Articles')->where('id = '.$params['id'])->fetchArray();
+        if (!empty($getcategory[0]['permalink'])) {
             $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where('permalink = "'.$getcategory[0]['permalink'].'"')->andWhere('type = "ART"')->fetchArray();
             //$updateRouteLink = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $getcategory[0]['permaLink'] );
-        }else{
-            $updateRouteLink = new RoutePermalink();
+        } else {
+            $updateRouteLink = new KC\Entity\RoutePermalink();
         }
         try {
             $data->save();
 
 
-            if(!empty($getRouteLink)){
+            if (!empty($getRouteLink)) {
                 $exactLink = 'plus/guidedetail/id/'.$data->id;
 
             }
 
-            if($storeIds[0] != ""){
+            if ($storeIds[0] != "") {
                 $delRelatedStores = Doctrine_Query::create()->delete("RefArticleStore")->where("articleid = ".$data->id)->execute();
-                foreach($storeIds as $storeid ){
+                foreach ($storeIds as $storeid) {
 
-                    $relatedstores = new RefArticleStore();
+                    $relatedstores = new KC\Entity\RefArticleStore();
                     $relatedstores->articleid = $data->id;
                     $relatedstores->storeid = $storeid;
                     $relatedstores->save();
@@ -492,25 +492,25 @@ class Articles extends \KC\Entity\Articles
                 }
             }
 
-            if($relatedIds[0] != ""){
+            if ($relatedIds[0] != "") {
                 $delRelatedStores = Doctrine_Query::create()->delete("RefArticleCategory")->where("articleid = ".$data->id)->execute();
-                foreach($relatedIds as $relatedid ){
+                foreach ($relatedIds as $relatedid) {
 
-                    $relatedcategories = new RefArticleCategory();
+                    $relatedcategories = new KC\Entity\RefArticleCategory();
                     $relatedcategories->articleid = $data->id;
                     $relatedcategories->relatedcategoryid = $relatedid;
                     $relatedcategories->save();
                 }
             }
 
-            if(!empty($params['title']) && !empty($params['content'])){
+            if (!empty($params['title']) && !empty($params['content'])) {
                 $delChapters = Doctrine_Query::create()->delete("ArticleChapter")->where("articleId = ".$data->id)->execute();
                 foreach ($params['title'] as $key => $title) {
-                    if(!empty($params['title'][$key]) && !empty($params['content'][$key])){
-                        $chapter = new ArticleChapter();
+                    if (!empty($params['title'][$key]) && !empty($params['content'][$key])) {
+                        $chapter = new KC\Entity\ArticleChapter();
                         $chapter->articleId = $data->id;
-                        $chapter->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'][$key]);
-                        $chapter->content = BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
+                        $chapter->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'][$key]);
+                        $chapter->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['content'][$key]);
                         $chapter->save();
                     }
                 }
@@ -530,8 +530,9 @@ class Articles extends \KC\Entity\Articles
      */
     public static function uploadImage($file)
     {
-        if (!file_exists(UPLOAD_IMG_PATH))
+        if (!file_exists(UPLOAD_IMG_PATH)) {
             mkdir(UPLOAD_IMG_PATH);
+        }
 
         // generate upload path for images related to shop
         $uploadPath = UPLOAD_IMG_PATH . "article/";
@@ -544,8 +545,9 @@ class Articles extends \KC\Entity\Articles
         $files = $adapter->getFileInfo($file);
 
         // check upload directory exists, if no then create upload directory
-        if (!file_exists($rootPath))
-            mkdir($rootPath,776, true);
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 776, true);
+        }
 
         // set destination path and apply validations
         $adapter->setDestination($rootPath);
@@ -563,25 +565,25 @@ class Articles extends \KC\Entity\Articles
 
         $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
 
-        BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName ,132, 95, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 132, 95, $path);
 
         $path = ROOT_PATH . $uploadPath . "thum_article_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 64, 32, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 64, 32, $path);
 
 
         $path = ROOT_PATH . $uploadPath . "thum_article_samll_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 0 , 46, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 0, 46, $path);
 
         $path = ROOT_PATH . $uploadPath . "thum_article_medium_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 0, 60, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 0, 60, $path);
 
 
         $path = ROOT_PATH . $uploadPath . "thum_article_big_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 960, 340, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 960, 340, $path);
 
 
         $path = ROOT_PATH . $uploadPath . "thum_article_all_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file] , $newName , 110, 0, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 110, 0, $path);
 
 
         /**
@@ -589,17 +591,18 @@ class Articles extends \KC\Entity\Articles
          */
         if ($file == "logoFile") {
             $path = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
-
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName,
-                    200, 150, $path);
+            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 150, $path);
         }
 
         // apply filter to rename file name and set target
         $adapter
         ->addFilter(
-                new Zend_Filter_File_Rename(
-                        array('target' => $cp, 'overwrite' => true)),
-                null, $file);
+            new Zend_Filter_File_Rename(
+                array('target' => $cp, 'overwrite' => true)
+            ),
+            null,
+            $file
+        );
 
         // recieve file for upload
         $adapter->receive($file);
@@ -623,20 +626,16 @@ class Articles extends \KC\Entity\Articles
 
     public static function searchKeyword($keyword, $flag)
     {
-        $data = Doctrine_Query::create()->select('art.title as title')
-                                        ->from("Articles art")->where('art.deleted= ?' , $flag )
-                                        ->andWhere("art.title LIKE ?", "$keyword%")->orderBy("art.title ASC")
-                                        ->limit(5)->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('a.title')
+            ->from('\KC\Entity\Articles', 'a')
+            ->where('a.deleted ='. $flag)
+            ->andWhere($queryBuilder->expr()->like('a.title', $queryBuilder->expr()->literal($keyword.'%')))
+            ->orderBy("a.title", "ASC")
+            ->setMaxResults(5);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
-
     }
-
-
-    /**
-     * Get page Id
-     * @author Raman
-     * @version 1.0
-     */
 
     public static function findPageIds($artId)
     {
