@@ -8,6 +8,7 @@ foreach ($profileForm->getElements() as $formElement) :
 endforeach;
 if($this->messageSuccess!='' || $this->messageError!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <span class='glyphicon glyphicon-warning-sign'></span>
         <strong><?php echo $this->messageSuccess!='' ? $this->messageSuccess : $this->messageError;?></strong>
     </div>
     <?php 

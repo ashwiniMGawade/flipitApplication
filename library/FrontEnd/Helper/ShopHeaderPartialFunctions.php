@@ -47,6 +47,7 @@ class FrontEnd_Helper_ShopHeaderPartialFunctions extends FrontEnd_Helper_viewHel
         $divContent =
             '<div class="header-block header-block-2">
                 <div id="messageDiv" class="yellow-box-error-box-code" style="margin-top : 20px; display:none;">
+                    <span class="glyphicon glyphicon-warning-sign"></span>
                     <strong></strong>
                 </div>
                 <div class="icon">

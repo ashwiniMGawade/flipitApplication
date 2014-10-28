@@ -22,6 +22,7 @@ foreach ($searchBrandForm->getElements() as $formElement) {
 }
 if($this->successMessage!='' || $this->errorMessage!='') : ?>
     <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+        <span class='glyphicon glyphicon-warning-sign'></span>
         <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
     </div>
     <?php 
