@@ -170,7 +170,7 @@ class SendCodeAlert
                     );
                     try {
                         FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
-                            $topVouchercodes,
+                            '',
                             '',
                             '',
                             $mandrillNewsletterSubject.' '.$codeAlertOffer['shop']['name'],
