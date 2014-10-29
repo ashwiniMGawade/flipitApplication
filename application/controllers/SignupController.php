@@ -170,7 +170,8 @@ class SignupController extends Zend_Controller_Action
                             'emails/emailLayout.phtml',
                             array(
                                 'topOffers' => Offer::getTopOffers(5),
-                                'mailType' => 'welcome'
+                                'mailType' => 'welcome',
+                                'firstName' => $visitorDetails[0]['firstName']
                                 )
                         )
                     );
