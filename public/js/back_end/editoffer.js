@@ -412,7 +412,7 @@ function setFormData(data){
 			 jQuery('#selctedshop').val(data[0].shopId);
 			 jQuery('#whichshop').select2("val", data[0].shopId);
 			 jQuery('input.spancombo').val(data[0].shopName);
-			 if(data[0].shop.notes!=''){
+			 if(data[0].notes!=''){
 				jQuery('#aboutShopNoteDiv').show();
 				jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');
 			 }
@@ -487,7 +487,7 @@ function setFormData(data){
 		jQuery("#couponCode").click();
 		jQuery('#couponCodeTxt').val(data[0].couponCode);
 		//$('#couponInfo').val(data[0].extendedFullDescription);
-		var catCount = data[0].category.length;
+		var catCount = data[0].categoryId.length;
 		for(var i=0 ; i< catCount ; i++ ){
 			// Add class by Er.kundal for select catg of shop
 			jQuery("#categoryBtn-"+data[0].categoryId[i]).addClass('btn-primary');
@@ -529,11 +529,11 @@ function setFormData(data){
 		jQuery("#couponCode").click();
 		jQuery('#couponCodeTxt').val(data[0].couponCode);
 		//$('#couponInfo').val(data[0].extendedFullDescription);
-		var catCount = data[0].category.length;
+		var catCount = data[0].categoryId.length;
 		for(var i=0 ; i< catCount ; i++ ){
 			// Add class by Er.kundal for select catg of shop
-			jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
-			jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
+			jQuery("#categoryBtn-"+data[0].categoryId[i]).addClass('btn-primary');
+			jQuery("input#category-" + data[0].categoryId[i]).attr('checked' , 'checked');
 		}
 		
 		
@@ -561,8 +561,8 @@ function setFormData(data){
 		  jQuery('#offerrefurlPR').val(data[0].refOfferUrl);
 			
 		}else{
-		    if(data[0].logo){
-			var image = data[0].logo.path+"/thum_"+data[0].imageName;
+		    if(data[0].imageName){
+			var image = data[0].path+"/thum_"+data[0].imageName;
 	        var imgSrc = PUBLIC_PATH_LOCALE + image;
 			jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer">');
 	        //jQuery('#uplodedOffer').show().attr('src', imgSrc);
@@ -620,22 +620,25 @@ function setFormData(data){
 		 jQuery('#deepLinkoofbtn').click(); 
 	 }
 	 //console.log(data[0].termandcondition.length);
-	 var termsCount = data[0].termandcondition.length;
-	 for(var i=0;i<termsCount;i++){
-		 if(i>4){
-		    jQuery('#addmoreBtn').click();
-		 }
-		 //jQuery('#termsAndcondition').val(data[0].termandcondition[i].content);
+	 if(data[0].termsAndconditionContent != null) {
+	 var termsCount = data[0].termsAndconditionContent.length;
+	
+		for(var i=0;i<termsCount;i++){
+			 if(i>4){
+			    jQuery('#addmoreBtn').click();
+			 }
+			 //jQuery('#termsAndcondition').val(data[0].termandcondition[i].content);
 
-	       
-		 CKEDITOR.instances['termsAndcondition'].setData(data[0].termandcondition[i].content);
-		 
-		 
-	 }
-	 
+		       
+			 CKEDITOR.instances['termsAndcondition'].setData(data[0].termsAndconditionContent[i].content);
+			 
+			 
+		 }
+	}
+
 	 if(data[0].startDate != null && data[0].endDate != null){
-			 dateStart = data[0].startDate.split(' ');
-			 dateEnd = data[0].endDate.split(' ');
+			 dateStart = data[0].startDate.date.split(' ');
+			 dateEnd = data[0].endDate.date.split(' ');
 		
 			 jQuery('input#offerStartDate').val(changeDateFormat(dateStart[0]));
 			 jQuery('input#offerEndDate').val(changeDateFormat(dateEnd[0]));
@@ -661,12 +664,13 @@ function setFormData(data){
 		jQuery('#maxoffertxt').val(data[0].maxcode);
 		jQuery("input#maxoffercheckbox").attr('checked' , 'checked');
 	 }
-	
-	var pageCount = data[0].page.length;
-	for(var i=0 ; i< pageCount ; i++ ){
-		cheboxId = "#attachedPage-"+data[0].page[i].id;
-		jQuery(cheboxId).attr('checked', 'checked');
-		jQuery(cheboxId).parent().addClass("selected");
+	if(data[0].pageId != null) {
+		var pageCount = data[0].pageId.length;
+		for(var i=0 ; i< pageCount ; i++ ){
+			cheboxId = "#attachedPage-"+data[0].pageId[i];
+			jQuery(cheboxId).attr('checked', 'checked');
+			jQuery(cheboxId).parent().addClass("selected");
+		}
 	}
 	if(data[0]!=undefined && data[0]!=null && data[0].tilesId){
 		jQuery('a#selectImg_' + data[0].tilesId).show();

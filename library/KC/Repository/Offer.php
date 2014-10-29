@@ -1577,7 +1577,7 @@ class Offer Extends \KC\Entity\Offer
         ->select(
             'o.title,o.id,o.Visability,o.shopExist,o.discountType, o.couponCode, o.extendedOffer, o.couponCodeType,s.name as shopName,
             s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle,o.extendedMetaDescription,
-            p.id as pageId,tc.content,category.id as categoryId,img.name as imageName,img.path,news.title as newsTitle,
+            p.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,img.path,news.title as newsTitle,
             news.url, news.content as newsContent, t.id as tilesId, t.path as offerTilesPath,t.name as offerTilesName,t.position,
              s.id as shopId, o.extendedFullDescription,o.discountvalueType, o.refOfferUrl, o.startDate, o.endDate, o.refURL,
              o.exclusiveCode, o.maxlimit, o.maxcode'
@@ -3148,11 +3148,11 @@ class Offer Extends \KC\Entity\Offer
 
         if (isset($params['attachedpages'])) {
             foreach ($params['attachedpages'] as $pageId) {
-                $offerPage  = new KC\Entity\RefOfferPage();
+                $offerPage  = new \KC\Entity\RefOfferPage();
                 $offerPage->created_at = new \DateTime('now');
                 $offerPage->updated_at = new \DateTime('now');
                 $offerPage->offers = $entityManagerLocale->find('KC\Entity\Page', $pageId);
-                $offerPage->refoffers = $entityManagerLocale->find('KC\Entity\Offer', $saveOffer->getId());
+                $offerPage->refoffers = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
                 $entityManagerLocale->persist($offerPage);
                 $entityManagerLocale->flush();
             }
@@ -3208,9 +3208,10 @@ class Offer Extends \KC\Entity\Offer
             $query = $queryBuilder
                 ->select('rp')
                 ->from('KC\Entity\RoutePermalink', 'rp')
-                ->where('rp.permalink = "?"', $extendedUrl)
-                ->setParameter(1, "EXTOFFER")
-                ->andWhere('rp.type = ?1');
+                ->setParameter(1, $queryBuilder->expr()->literal($extendedUrl))
+                ->where('rp.permalink = ?1')
+                ->setParameter(2, 'EXTOFFER')
+                ->andWhere('rp.type = ?2');
             $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             if (empty($getRouteLink)) {
@@ -3258,9 +3259,15 @@ class Offer Extends \KC\Entity\Offer
             $entityManagerLocale->flush();
             $updateOffer->shopOffers = $entityManagerLocale->find('KC\Entity\Shop', $saveNewShop->__get('id'));
 
-        }      // New code Ends
+        }
+        $updateOffer->deleted = 0;
+        $updateOffer->created_at = new \DateTime('now');
+        $updateOffer->updated_at = new \DateTime('now');
+        $updateOffer->userGenerated = 0;
+        $updateOffer->approved = 0;
+        $updateOffer->offline = 0;      // New code Ends
 
-        try {
+        try { 
                 $entityManagerLocale->persist($updateOffer);
                 $entityManagerLocale->flush();
                 $lId = $updateOffer->__get('id');
@@ -3270,7 +3277,7 @@ class Offer Extends \KC\Entity\Offer
             $offerId = @$params['offerId'];
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->delete('KC\Entity\OfferNews', 'n')
-            ->where('offerId=' . $offerId)
+            ->where('n.offerId=' . $offerId)
             ->getQuery();
             $query->execute();
             if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {

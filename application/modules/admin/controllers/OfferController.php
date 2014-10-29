@@ -104,14 +104,14 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
 
-        $offer = Doctrine_Core::getTable("Offer")->find($params['offerId']);
-
+        //$offer = Doctrine_Core::getTable("Offer")->find($params['offerId']);
+        $offer = new KC\Repository\Offer();
         $offerUpdate = $offer->updateOffer($params);
         $flash = $this->_helper->getHelper('FlashMessenger');
 
         if($offerUpdate['result']){
 
-            self::updateVarnish($params['offerId']);
+            //self::updateVarnish($params['offerId']);
             $message = $this->view->translate('Offer has been updated successfully.');
             $flash->addMessage(array('success' => $message ));
         }else{
@@ -723,7 +723,7 @@ class Admin_OfferController extends Zend_Controller_Action
             $id = $this->getRequest()->getParam('offerId');
             $offerObj = new KC\Repository\Offer();
             $offerDetail = $offerObj->getOfferDetail($id);
-            echo "<pre>";print_r($offerDetail);die;
+            //echo "<pre>";print_r($offerDetail);die;
             echo Zend_Json::encode($offerDetail);
             die;
     }
