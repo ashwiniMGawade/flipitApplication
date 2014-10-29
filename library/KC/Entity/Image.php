@@ -77,4 +77,9 @@ class Image
         $t->type = $value;
         $this->type = $t->type;
     }
+
+    public function getId()
+    {
+        return $this->id;
+    }
 }

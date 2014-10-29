@@ -85,10 +85,12 @@ class Admin_OfferController extends Zend_Controller_Action
         $offerId = $params['id'];
 
         // new code added by bhart
-        $shop = \KC\Repository\Offer::getOfferShopDetail($offerId);
+        $shop = KC\Repository\Offer::getOfferShopDetail($offerId);
+        //echo "<pre>";print_r($shop);die;
         $this->view->offerShoLogo = $shop;
         // end code
         $this->view->shopList = \KC\Repository\Shop::getOfferShopList();
+
         $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
         $pageObj = new KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
@@ -719,8 +721,9 @@ class Admin_OfferController extends Zend_Controller_Action
     public function offerdetailAction()
     {
             $id = $this->getRequest()->getParam('offerId');
-            $offerObj = new Offer();
+            $offerObj = new KC\Repository\Offer();
             $offerDetail = $offerObj->getOfferDetail($id);
+            echo "<pre>";print_r($offerDetail);die;
             echo Zend_Json::encode($offerDetail);
             die;
     }

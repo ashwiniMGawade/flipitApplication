@@ -1575,9 +1575,12 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select(
-            'o.title,o.id,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,
-            p.id as pageId,tc.content,cat.id,img.name,img.path,news.title, news.url, news.content,
-            t.path,t.name,t.position, s.id as shopId'
+            'o.title,o.id,o.Visability,o.shopExist,o.discountType, o.couponCode, o.extendedOffer, o.couponCodeType,s.name as shopName,
+            s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle,o.extendedMetaDescription,
+            p.id as pageId,tc.content,category.id as categoryId,img.name as imageName,img.path,news.title as newsTitle,
+            news.url, news.content as newsContent, t.id as tilesId, t.path as offerTilesPath,t.name as offerTilesName,t.position,
+             s.id as shopId, o.extendedFullDescription,o.discountvalueType, o.refOfferUrl, o.startDate, o.endDate, o.refURL,
+             o.exclusiveCode, o.maxlimit, o.maxcode'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
@@ -1585,6 +1588,7 @@ class Offer Extends \KC\Entity\Offer
         ->leftJoin('o.offers', 'p')
         ->leftJoin('o.offertermandcondition', 'tc')
         ->leftJoin('o.categoryoffres', 'cat')
+        ->leftJoin('cat.offer', 'category')
         ->leftJoin('o.logo', 'img')
         ->leftJoin('s.offerNews', 'news')
         ->leftJoin('o.offerTiles', 't')
@@ -2999,20 +3003,22 @@ class Offer Extends \KC\Entity\Offer
 
     public function updateOffer($params)
     {
+        $updateOffer = new \KC\Entity\Offer();
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
         //echo "<pre>"; print_r($params); die;
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
                 // check the offer type
             if (isset($params['defaultoffercheckbox'])) {      //offer type is default
                 $updateOffer->Visability = 'DE';
                 if ($params['selctedshop']!='') {
-                    $updateOffer->shopOffers =  $entityManagerUser->find('KC\Entity\Shop', $params['selctedshop']);
+                    $updateOffer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
                 }
             } else {                                            // offer type member only
                 $updateOffer->Visability = 'MEM';
                 $updateOffer->shopOffers = null;
             }
         } else {
-            $updateOffer->shopOffers =  $entityManagerUser->find('KC\Entity\Shop', $params['selctedshop']);
+            $updateOffer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
         }
         // check the discountype
 
@@ -3040,10 +3046,15 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->discountType = 'SL';
 
             //find if the offers exist in popular codes
-            $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
-
-            if ($exist) {
-                KC\Repository\PopularCode::deletePopular($params['offerId'], $exist->position);
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+                    ->select('p.position')
+                    ->from('KC\Entity\PopularCode', 'p')
+                    ->where('p.popularcode = '.$params['offerId']);
+        
+            $exist = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            if (!empty($exist)) {
+                KC\Repository\PopularCode::deletePopular($params['offerId'], $exist['position']);
             }
 
         } else {                                                // discount type printable
@@ -3052,16 +3063,22 @@ class Offer Extends \KC\Entity\Offer
             //$this->tilesId = null ;
 
             //find if the offers exist in popular codes
-            $exist = Doctrine_Core::getTable('PopularCode')->findOneByofferId($params['offerId']);
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+                    ->select('p.position')
+                    ->from('KC\Entity\PopularCode', 'p')
+                    ->where('p.popularcode = '.$params['offerId']);
+        
+            $exist = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             if ($exist) {
-                KC\Repository\PopularCode::deletePopular($params['offerId'], $exist->position);
+                KC\Repository\PopularCode::deletePopular($params['offerId'], $exist['position']);
             }
 
             //check printable document
             if (isset($_FILES['uploadoffer']['name']) && $_FILES['uploadoffer']['name'] != '') {  // upload offer
 
-                $this->refOfferUrl = '';
+                $updateOffer->refOfferUrl = '';
                 $fileName = self::uploadFile($_FILES['uploadoffer']['name']);
                 $ext =  \BackEnd_Helper_viewHelper::stripSlashesFromString(
                     \BackEnd_Helper_viewHelper::getImageExtension($fileName)
@@ -3072,9 +3089,14 @@ class Offer Extends \KC\Entity\Offer
                     return false;
                 }
                 if (@$matches[1]) {
-                    $this->logo->ext = $ext;
-                    $this->logo->path ='images/upload/offer/';
-                    $this->logo->name = $fileName;
+
+                    $offerImage  = new KC\Entity\Image();
+                    $offerImage->ext = $ext;
+                    $offerImage->path ='images/upload/offer/';
+                    $offerImage->name = $fileName;
+                    $entityManagerLocale->persist($offerImage);
+                    $entityManagerLocale->flush();
+                    $saveOffer->offerlogoid =  $offerImage->getId();
                 }
 
             } else {                                                     // add offer refUrl
@@ -3089,12 +3111,18 @@ class Offer Extends \KC\Entity\Offer
         } else {
             $updateOffer->refURL =  '';
         }
-        $this->termandcondition->delete();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 'tc')
+            ->setParameter(1, $params['offerId'])
+            ->where('tc.termandcondition = ?1')
+            ->getQuery();
+        $query->execute();
 
         if (trim($params['termsAndcondition'])!='') {
-            $this->termandcondition[]->content = \BackEnd_Helper_viewHelper::stripSlashesFromString(
-                $params['termsAndcondition']
-            );
+            $offerTerms  = new KC\Entity\TermAndCondition();
+            $offerTerms->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
+            $entityManagerLocale->persist($offerTerms);
+            $entityManagerLocale->flush();
         }
 
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
@@ -3108,16 +3136,25 @@ class Offer Extends \KC\Entity\Offer
                 'H:i',
                 strtotime($params['offerendTime'])
             );
-
-
+            $updateOffer->startDate = new \DateTime($startDate);
+            $updateOffer->endDate = new \DateTime($endDate);
         }
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->delete('KC\Entity\RefOfferPage', 'rop')
+            ->setParameter(1, $params['offerId'])
+            ->where('rop.refoffers = ?1')
+            ->getQuery();
+        $query->execute();
 
-        $this->refOfferPage->delete();
         if (isset($params['attachedpages'])) {
             foreach ($params['attachedpages'] as $pageId) {
-
-                $this->refOfferPage[]->pageId = $pageId ;
-
+                $offerPage  = new KC\Entity\RefOfferPage();
+                $offerPage->created_at = new \DateTime('now');
+                $offerPage->updated_at = new \DateTime('now');
+                $offerPage->offers = $entityManagerLocale->find('KC\Entity\Page', $pageId);
+                $offerPage->refoffers = $entityManagerLocale->find('KC\Entity\Offer', $saveOffer->getId());
+                $entityManagerLocale->persist($offerPage);
+                $entityManagerLocale->flush();
             }
         }
         //&& isset($params['couponCodeCheckbox'])
@@ -3172,7 +3209,8 @@ class Offer Extends \KC\Entity\Offer
                 ->select('rp')
                 ->from('KC\Entity\RoutePermalink', 'rp')
                 ->where('rp.permalink = "?"', $extendedUrl)
-                ->andWhere('type = "EXTOFFER"');
+                ->setParameter(1, "EXTOFFER")
+                ->andWhere('rp.type = ?1');
             $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
             if (empty($getRouteLink)) {
@@ -3187,7 +3225,7 @@ class Offer Extends \KC\Entity\Offer
 
         if (isset($params['memberonlycheckbox']) && isset($params['existingShopCheckbox'])) {
             //die("Hiiii");
-            $this->shopId = @$params['selctedshop'];
+            $updateOffer->shopOffers =  $entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
         }
         if (isset($params['fromWhichShop']) && $params['fromWhichShop']== 0) {
             $updateOffer->shopExist = 0;
@@ -3203,31 +3241,34 @@ class Offer Extends \KC\Entity\Offer
             if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
 
                 $fileName = self::uploadShopLogo('logoFile');
-                $saveNewShop->logo->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $shopImage  = new KC\Entity\Image();
+                $shopImage->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
                     \BackEnd_Helper_viewHelper::getImageExtension($fileName)
                 );
-                $saveNewShop->logo->path = 'images/upload/shop/';
-                $saveNewShop->logo->name = $fileName;
+                $shopImage->path = 'images/upload/shop/';
+                $shopImage->name = $fileName;
+                $entityManagerLocale->persist($shopImage);
+                $entityManagerLocale->flush();
             } else {
                 return false;
             }
 
-            $saveNewShop->logoId = $saveNewShop->logo->id;
-            $queryBuilder->persist($saveNewShop);
-            $queryBuilder->flush();
-            $this->shopId = $saveNewShop->id;
+            $saveNewShop->logoId = $shopImage->getId();
+            $entityManagerLocale->persist($saveNewShop);
+            $entityManagerLocale->flush();
+            $updateOffer->shopOffers = $entityManagerLocale->find('KC\Entity\Shop', $saveNewShop->__get('id'));
 
         }      // New code Ends
 
         try {
-            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $queryBuilder->persist($this);
-            $queryBuilder->flush();
-            $lId = $this->id;
+                $entityManagerLocale->persist($updateOffer);
+                $entityManagerLocale->flush();
+                $lId = $updateOffer->__get('id');
 
             /*****************Add more news of offer******************/
 
             $offerId = @$params['offerId'];
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
             $query = $queryBuilder->delete('KC\Entity\OfferNews', 'n')
             ->where('offerId=' . $offerId)
             ->getQuery();
@@ -3237,7 +3278,7 @@ class Offer Extends \KC\Entity\Offer
                 for ($n=0; $n<count($newsloop); $n++) {
 
                     $savenews = new KC\Entity\OfferNews();
-                    $savenews->shopId = @$params['selctedshop'];
+                    $savenews->shop = @$entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
                     $savenews->offerId = @$offerId;
 
                     $savenews->title = @$newsloop[$n] != "" ?
@@ -3249,8 +3290,8 @@ class Offer Extends \KC\Entity\Offer
                     $savenews->content = @$params['newsDescription'][$n] != "" ?
                         \BackEnd_Helper_viewHelper::stripSlashesFromString($params['newsDescription'][$n]) : "";
                     $savenews->linkstatus = @$params['newsdeepLinkStatus'][$n];
-                    $queryBuilder->persist($savenews);
-                    $queryBuilder->flush();
+                    $entityManagerLocale->persist($savenews);
+                    $entityManagerLocale->flush();
                 }
             }
 

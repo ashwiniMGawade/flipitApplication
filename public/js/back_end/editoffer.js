@@ -388,38 +388,38 @@ function setFormData(data){
 	if(data[0].Visability == 'MEM'){
 		jQuery("#memberOnly").click();
 		
-		if(data[0].shopExist==true || data[0].shopExist=='1'){
+		if(data[0].shopExist ==true || data[0].shopExist=='1'){
 			
 			 //code 
 			 //0.showexitdiv
 				showExistDiv();
-				jQuery('#selctedshop').val(data[0].shop.id);
-				jQuery('#whichshop').select2("val", data[0].shop.id);
-				jQuery('input.spancombo').val(data[0].shop.name);
+				jQuery('#selctedshop').val(data[0].shopId);
+				jQuery('#whichshop').select2("val", data[0].shopId);
+				jQuery('input.spancombo').val(data[0].shopName);
 			 //1.show dropdown for shop
 			 //2. set value drp
 		     
 		 }else{
 			 
 			 showNotExistDiv();
-			 jQuery('input#newShop').val(data[0].shop.name);
+			 jQuery('input#newShop').val(data[0].shopName);
 			 //fill values in field
 		 }
 		
 	}else{
 		 jQuery("#default").click();
 		 if(data[0].shopId){
-			 jQuery('#selctedshop').val(data[0].shop.id);
-			 jQuery('#whichshop').select2("val", data[0].shop.id);
-			 jQuery('input.spancombo').val(data[0].shop.name);
+			 jQuery('#selctedshop').val(data[0].shopId);
+			 jQuery('#whichshop').select2("val", data[0].shopId);
+			 jQuery('input.spancombo').val(data[0].shopName);
 			 if(data[0].shop.notes!=''){
 				jQuery('#aboutShopNoteDiv').show();
-				jQuery('#shopNotes').html(data[0].shop.notes).addClass('alert-error');
+				jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');
 			 }
 			 jQuery('#aboutShopDiv').show();
-		     if(data[0].shop.accountManagerName!=''){
+		     if(data[0].accountManagerName!=''){
 				jQuery('#aboutManagerDiv').show();
-				jQuery('#shopManager').html(data[0].shop.accountManagerName);
+				jQuery('#shopManager').html(data[0].accountManagerName);
 			 }
 			 if(data[0].affname){
 				jQuery('#aboutNertworkDiv').show();
@@ -428,7 +428,7 @@ function setFormData(data){
 
 			 // check if selected shop has restrcited content or not
 			// if yes then disable submit button and ask check to accept term and conditions
-			if(data[0].shop.strictConfirmation) {
+			if(data[0].strictConfirmation) {
 
 				jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
 				jQuery(".strict-confirmation-alert").show();
@@ -437,7 +437,7 @@ function setFormData(data){
 				// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
 				jQuery('#enableSaveButtons').click(function(){
 
-					if(data[0].shop.strictConfirmation){
+					if(data[0].strictConfirmation){
 
 						if(jQuery(this).is(':checked')){
 							jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
@@ -480,7 +480,7 @@ function setFormData(data){
    // console.log('aaa' +  data[0].tiles.id);
 	if(data[0].tiles!= null){
 		
-		tile_id = data[0].tiles.id;
+		tile_id = data[0].tilesId;
 	}
 	
 	if(data[0].discountType=='CD'){
@@ -490,8 +490,8 @@ function setFormData(data){
 		var catCount = data[0].category.length;
 		for(var i=0 ; i< catCount ; i++ ){
 			// Add class by Er.kundal for select catg of shop
-			jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
-			jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
+			jQuery("#categoryBtn-"+data[0].categoryId[i]).addClass('btn-primary');
+			jQuery("input#category-" + data[0].categoryId[i]).attr('checked' , 'checked');
 		}
 
 	if(data[0].extendedOffer==true){
@@ -562,7 +562,7 @@ function setFormData(data){
 			
 		}else{
 		    if(data[0].logo){
-			var image = data[0].logo.path+"/thum_"+data[0].logo.name;
+			var image = data[0].logo.path+"/thum_"+data[0].imageName;
 	        var imgSrc = PUBLIC_PATH_LOCALE + image;
 			jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer">');
 	        //jQuery('#uplodedOffer').show().attr('src', imgSrc);
@@ -581,7 +581,7 @@ function setFormData(data){
 	    jQuery("#extendedOfferDiv").hide();
 		jQuery("#news").click(); 
 	
-		var newsCount = data[0].offernews.length;
+		var newsCount = data[0].newsContent.length;
 		if(newsCount >0)
 			{
 				jQuery('span#newsDiv').empty();
@@ -668,8 +668,8 @@ function setFormData(data){
 		jQuery(cheboxId).attr('checked', 'checked');
 		jQuery(cheboxId).parent().addClass("selected");
 	}
-	if(data[0]!=undefined && data[0]!=null && data[0].tiles){
-		jQuery('a#selectImg_' + data[0].tiles.id).show();
+	if(data[0]!=undefined && data[0]!=null && data[0].tilesId){
+		jQuery('a#selectImg_' + data[0].tilesId).show();
 		//jQuery("input#selectedTiles").attr('checked' , 'checked').valid();
 	}
 	//getAllTiles();
