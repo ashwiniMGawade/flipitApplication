@@ -30,11 +30,13 @@ $emailHeader = $this->partial(
 
 $welcomeTopBlock = '';
 if(!empty($this->topOffers)) {
+    $firstName = isset($this->firstName) ? $this->firstName : '';
     $welcomeTopBlock = $this->partial(
         $emailsViewPath. 'welcomeTopBlock.phtml',
         array(
             'websiteName' => $websiteName,
-            'publicPath' => $publicPath
+            'publicPath' => $publicPath,
+            'firstName' => $firstName
         )
     );
 }
