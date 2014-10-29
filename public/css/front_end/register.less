@@ -38,6 +38,14 @@
 			margin:0 0 21px;
 			&:after {.after}
 		}
+		.link-blue-buttom {
+			font-size: 14px;
+			font-weight: normal;
+			.link-blue{
+				color: #0077cc;
+				font-size: 14px;
+			}
+		}
 		textarea.form-control,
 		input.form-control {
 			background:#fcfcfc;
@@ -65,6 +73,14 @@
 			min-width:0;
 			height:40px;
 			padding:10px 25px 9px;
+		}
+	}
+	.pos-relative{
+		position: relative;
+		img{
+			position: absolute;
+			left: 0;
+			top: 0;
 		}
 	}
 	#main {padding-bottom:43px;}
@@ -323,6 +339,11 @@
 @media only screen and (max-width: 979px){
 	.register-page {
 		.register-box {padding:22px 22px 20px;}
+		.pos-relative{
+			form{
+				margin-top: 25px;
+			}
+		}
 		.hide-testimonials{display:none;}
 		#footer{
 			font-size:12px;
@@ -355,6 +376,11 @@
 	.register-page {
 		.navigation .logo {
 			margin:0 auto;
+		}
+		.pos-relative{
+			form{
+				margin-top: 40px;
+			}
 		}
 		.nav-bar{
 			#nav{

@@ -946,4 +946,15 @@ EOD;
         $cacheKey = preg_replace("/[\/\&_~,`@!(){}:*+^%#$?#.=-]/", "", $permalink);
         return $cacheKey;
     }
+
+    public static function getSinupImage()
+    {
+        $documentRoot = dirname(dirname(dirname(dirname(__FILE__))));
+        if (file_exists($documentRoot.'/public/'. LOCALE .'/images/front_end/gratis.png')) {
+            $getSinupImage = PUBLIC_PATH.'images/front_end/gratis.png';
+        } else {
+            $getSinupImage = '/public/images/front_end/gratis.png';
+        }
+        return $getSinupImage;
+    }
 }
