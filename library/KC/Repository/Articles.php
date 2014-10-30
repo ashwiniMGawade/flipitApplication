@@ -429,14 +429,14 @@ class Articles extends \KC\Entity\Articles
 
         $catIds = self::findCategoryId($params['id']);
         $catArr = array();
-        for ($i=0;$i<count($catIds);$i++) {
+        for ($i=0; $i<count($catIds); $i++) {
             $catArr[] = $catIds[$i]['relatedcategoryid'];
         }
 
         
         $pageIds = self::findPageIds($params['id']);
         $artArr = array();
-        for ($i=0;$i<count($pageIds);$i++) {
+        for ($i=0; $i<count($pageIds); $i++) {
             $artArr[] = $pageIds[$i]['pageid'];
         }
         $page_ids = array_unique($artArr);
@@ -639,124 +639,118 @@ class Articles extends \KC\Entity\Articles
 
     public static function findPageIds($artId)
     {
-        $pageIdList = Doctrine_Query::create()->select('ms.pageid')
-        ->from("MoneySaving ms")
-        ->leftJoin("ms.refarticlecategory refac")
-        ->where('refac.articleid='.$artId.'')
-        ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('DISTINCT(p.id)')
+        ->from("\KC\Entity\Articles", "a")
+        ->leftJoin('a.category', 'artcat')
+        ->leftJoin("artcat.moneysaving", 'ms')
+        ->leftJoin("ms.page", 'p')
+        ->where('a.id='. $artId);
+        $pageIdList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageIdList;
-
     }
-
-    /**
-     * Get Category Id
-     * @author Raman
-     * @version 1.0
-     */
 
     public static function findCategoryId($artId)
     {
-        $catIdList = Doctrine_Query::create()->select('rac.relatedcategoryid')
-        ->from("RefArticleCategory rac")
-        ->where('rac.articleid='.$artId.'')
-        ->fetchArray();
-        return $catIdList;
-
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('artcat.id')
+        ->from("\KC\Entity\Articles", "a")
+        ->leftJoin('a.category', 'artcat')
+        ->where('a.id='. $artId);
+        $pageIdList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $pageIdList;
     }
-
-    /**
-     * export article list
-     * @author chetan
-     * @version 1.0
-     */
 
     public static function exportarticlelist()
     {
-        $articleList = Doctrine_Query::create()->select('art.id,art.title,art.created_at,art.publish,art.authorname')
-        ->from("Articles  art")
-        ->where("art.deleted=0")
-        ->orderBy("art.id DESC")
-        ->fetchArray();
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->select('art.id,art.title,art.created_at,art.publish,art.authorname')
+            ->from('\KC\Entity\Articles', 'art')
+            ->where('art.deleted = 0')
+            ->orderBy("art.id", "DESC");
+        $articleList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $articleList;
 
     }
-    /**
-     * delete page permanently
-     * @author jsingh
-     * @version 1.0
-     */
-
+   
     public static function deleteArticles($id)
     {
-            $getVal = Doctrine_Query::create()->from('Articles a')
-                ->leftJoin('a.relatedstores')
-                ->where('a.id='.$id)->fetchArray();
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('s.id, s.permaLink')
+            ->from('\KC\Entity\Articles', 'a')
+            ->leftJoin('a.storearticles', 'artStore')
+            ->leftJoin('artStore.articleshops', 's')
+            ->where('a.id ='. $id);
+        $getVal = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        
+        foreach ($getVal as $st):
+            $key = 'shop_moneySavingArticles_'  . $st['id'] . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            $permalinkWithoutSpecilaChracter = str_replace("-", "", $st['permalink']);
+            $key = 'article_'.$permalinkWithoutSpecilaChracter.'_details';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        endforeach;
+       
+        $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+        $query= $queryBuilder->update('\KC\Entity\Articles', 'a')
+            ->set('a.deleted', '2')
+            ->where('a.id=' . $id);
+        $query->getQuery()->execute();
 
-            foreach ($getVal[0]['relatedstores'] as $st):
-                $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
+        $pageIds = self::findPageIds($id);
+
+        //not needed code we will remove that if doctrine2 migrated
+        /*$artArr = array();
+        for ($i=0; $i < count($pageIds); $i++) {
+            $artArr[] = $pageIds[$i]['pageid'];
+        }*/
+        $page_ids = array_unique($artArr);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
+
+        $catIds = self::findCategoryId($id);
+
+        //not needed code we will remove that if doctrine2 migrated
+
+        /*$catArr = array();
+        for ($i = 0; $i < count($catIds); $i++) {
+            $catArr[] = $catIds[$i]['relatedcategoryid'];
+        }*/
+        return 1;
+    }
+   
+    public static function restoreArticles($id)
+    {
+        if ($id) {
+            //update status of record by id(deleted=0)
+            $entityManagerLocale = \Zend_Registry::get('emLocale');
+            $queryBuilder = $entityManagerLocale->createQueryBuilder();
+            $query = $queryBuilder->select('s.id, s.permaLink')
+                ->from('\KC\Entity\Articles', 'a')
+                ->leftJoin('a.storearticles', 'artStore')
+                ->leftJoin('artStore.articleshops', 's')
+                ->where('a.id ='. $id);
+            $getVal = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            
+            foreach ($getVal as $st):
+                $key = 'shop_moneySavingArticles_'  . $st['id'] . '_list';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
                 $permalinkWithoutSpecilaChracter = str_replace("-", "", $st['permalink']);
                 $key = 'article_'.$permalinkWithoutSpecilaChracter.'_details';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             endforeach;
 
-
-        $O = Doctrine_Query::create()->update('Articles')->set('deleted', '2')
-        ->where('id=' . $id);
-        $O->execute();
-        //call cache function
-
-
-
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-
-        $pageIds = self::findPageIds($id);
-            $artArr = array();
-            for($i=0;$i<count($pageIds);$i++) {
-                $artArr[] = $pageIds[$i]['pageid'];
-            }
-            $page_ids = array_unique($artArr);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
-            $catIds = self::findCategoryId($id);
-            $catArr = array();
-            for($i=0;$i<count($catIds);$i++){
-                $catArr[] = $catIds[$i]['relatedcategoryid'];
-            }
-
-
-        return 1;
-    }
-    /**
-     * restore shop by id
-     * @param $id
-     * @author jsingh
-     * @version 1.0
-     */
-    public static function restoreArticles($id)
-    {
-        if ($id) {
-            //update status of record by id(deleted=0)
-            $getVal = Doctrine_Query::create()->from('Articles a')
-            ->leftJoin('a.relatedstores')
-            ->where('a.id='.$id)->fetchArray();
-
-            foreach ($getVal[0]['relatedstores'] as $st):
-            $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'article_'.$st['permalink'].'_details';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            endforeach;
-
-            $O = Doctrine_Query::create()->update('Articles')->set('deleted', '0')
-            ->where('id=' . $id);
-            $O->execute();
-
+            $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+            $query= $queryBuilder->update('\KC\Entity\Articles', 'a')
+                ->set('a.deleted', '0')
+                ->where('a.id=' . $id);
+            $query->getQuery()->execute();
 
         } else {
             $id = null;
@@ -766,56 +760,57 @@ class Articles extends \KC\Entity\Articles
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
 
         $pageIds = self::findPageIds($id);
-            $artArr = array();
-            for($i=0;$i<count($pageIds);$i++) {
-                $artArr[] = $pageIds[$i]['pageid'];
-            }
-            $page_ids = array_unique($artArr);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
+        //not needed code we will remove that if doctrine2 migrated
+        /*$artArr = array();
+        for ($i=0; $i<count($pageIds); $i++) {
+            $artArr[] = $pageIds[$i]['pageid'];
+        }*/
+        $page_ids = array_unique($pageIds);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
 
-            $catIds = self::findCategoryId($id);
-            $catArr = array();
-            for($i=0;$i<count($catIds);$i++){
-                $catArr[] = $catIds[$i]['relatedcategoryid'];
-            }
-
-            
-
+        $catIds = self::findCategoryId($id);
+        //not needed code we will remove that if doctrine2 migrated
+        /*$catArr = array();
+        for ($i=0; $i < count($catIds); $i++) {
+            $catArr[] = $catIds[$i]['relatedcategoryid'];
+        }*/
 
         return $id;
     }
 
-    /**
-     * Move record in trash.
-     * @param integer $id
-     * @version 1.0
-     * @author  jsingh
-     * @return integer $id
-     */
+
     public static function moveToTrash($id)
     {
         if ($id) {
             //find record by id
-            $u = Doctrine_Core::getTable("Articles")->find($id);
-            $getVal = Doctrine_Query::create()->from('Articles a')
-                ->leftJoin('a.relatedstores')
-                ->where('a.id='.$id)->fetchArray();
-
-            foreach ($getVal[0]['relatedstores'] as $st):
-                $key = 'shop_moneySavingArticles_'  . $st['storeid'] . '_list';
+            $entityManagerLocale = \Zend_Registry::get('emLocale');
+            $queryBuilder = $entityManagerLocale->createQueryBuilder();
+            $query = $queryBuilder->select('s.id, s.permaLink')
+                ->from('\KC\Entity\Articles', 'a')
+                ->leftJoin('a.storearticles', 'artStore')
+                ->leftJoin('artStore.articleshops', 's')
+                ->where('a.id ='. $id);
+            $getVal = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            
+            foreach ($getVal as $st):
+                $key = 'shop_moneySavingArticles_'  . $st['id'] . '_list';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-                $key = 'article_'.$st['permalink'].'_details';
+                $permalinkWithoutSpecilaChracter = str_replace("-", "", $st['permalink']);
+                $key = 'article_'.$permalinkWithoutSpecilaChracter.'_details';
                 FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             endforeach;
 
-            $u->delete();
-
+            $queryBuilder  = $entityManagerLocale->createQueryBuilder();
+            $query= $queryBuilder->update('\KC\Entity\Articles', 'a')
+                ->set('a.deleted', '1')
+                ->where('a.id=' . $id);
+            $query->getQuery()->execute();
 
         } else {
 
@@ -824,126 +819,91 @@ class Articles extends \KC\Entity\Articles
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
         $pageIds = self::findPageIds($id);
-            $artArr = array();
-            for($i=0;$i<count($pageIds);$i++) {
-                $artArr[] = $pageIds[$i]['pageid'];
-            }
-            $page_ids = array_unique($artArr);
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
+        //not needed code we will remove that if doctrine2 migrated
+        /*$artArr = array();
+        for ($i=0;$i<count($pageIds);$i++) {
+            $artArr[] = $pageIds[$i]['pageid'];
+        }*/
+        $page_ids = array_unique($pageIds);
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
 
-            $catIds = self::findCategoryId($id);
-            $catArr = array();
-            for($i=0;$i<count($catIds);$i++){
-                $catArr[] = $catIds[$i]['relatedcategoryid'];
-            }
-
-
-
+        $catIds = self::findCategoryId($id);
+        //not needed code we will remove that if doctrine2 migrated
+        /*$catArr = array();
+        for ($i=0;$i<count($catIds);$i++){
+            $catArr[] = $catIds[$i]['relatedcategoryid'];
+        }*/
         return $id;
-
     }
-
-
 
     /*********************************************Front fuction for displaying articles********************************************/
-    public static function searchArticles($keyword, $flag,$limit)
+    public static function searchArticles($keyword, $flag, $limit)
     {
-        $data = Doctrine_Query::create()->select()
-                                        ->from("Articles art")
-                                        ->leftJoin("art.articleImage")
-                                        ->where('art.deleted=' .$flag )
-                                        ->andWhere("art.title LIKE '%$keyword%' or art.content LIKE '%$keyword%'")
-                                        ->limit($limit)
-                                        ->orderBy("art.title ASC")
-                                        ->fetchArray();
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('a, img')
+            ->from('\KC\Entity\Articles', 'a')
+            ->leftJoin('a.articleImage', 'img')
+            ->where('a.deleted='. $flag)
+            ->andWhere("a.title LIKE '%$keyword%' or a.content LIKE '%$keyword%'")
+            ->setMaxResults($limit)
+            ->orderBy('a.title', 'ASC');
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
-
     }
-
-    /**
-     * Most popular Fashion Guide article fronthome page
-     * @author kkumar
-     * @version 1.0
-     * @return array $data
-     */
 
     public static function MostPopularFashionGuide()
     {
-        $data = Doctrine_Query::create()
-        ->select('a.*,img.*')
-        ->from('Articles a')
-        ->leftJoin('a.articleImage img')
-        ->where('a.deleted= 0')
-        ->limit('5')
-        ->fetchArray();
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('a, img')
+            ->from('\KC\Entity\Articles', 'a')
+            ->leftJoin('a.articleImage', 'img')
+            ->where('a.deleted= 0')
+            ->setMaxResults(5);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
-
-    /**
-     * Other helpful money saving fronthome page
-     * @author kkumar
-     * @version 1.0
-     * @return array $data
-     */
 
     public static function otherhelpfullSavingTips()
     {
-        $data = Doctrine_Query::create()
-        ->select('a.*,img.*')
-        ->from('Articles a')
-        ->leftJoin('a.thumbnail img')
-        ->where('a.deleted= 0')
-        ->limit('5')
-        ->fetchArray();
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('a, img')
+            ->from('\KC\Entity\Articles', 'a')
+            ->leftJoin('a.thumbnail', 'img')
+            ->where('a.deleted= 0')
+            ->setMaxResults(5);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }
-
-    /**
-     * Other helpful money saving fronthome page
-     * @author kkumar
-     * @version 1.0
-     * @return array $data
-     */
 
     public static function deletechapters($id)
     {
-        $data = Doctrine_Query::create()
-                                ->delete('ArticleChapter a')
-                                ->where('a.id ='.$id)
-                                ->execute();
-
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->delete('\KC\Entity\ArticleChapter', 'a')
+            ->where('a.id=' . $id);
+        $data = $query->getQuery()->execute();
         return $data;
     }
 
-    /**
-     * @author Raman
-     * @return Article permalinks
-     */
-
-
-
-
-    /**
-     * getAllUrls
-     *
-     * returns the all the urls related to the article like  realted store pages, realted category pages
-     * @param integer $id article id
-     * @author Surinderpal Singh
-     * @return array array of urls
-     */
     public static function getAllUrls($id)
     {
-        $article  =Doctrine_Query::create()->select("a.permalink,a.authorid,c.permalink,s.permaLink")
-                        ->from('Articles a')
-                        ->leftJoin("a.shop s")
-                        ->leftJoin("a.articlecategory c")
-                        ->where("a.id=? " , $id)
-                        ->fetchOne(null, Doctrine::HYDRATE_ARRAY);
+        $entityManagerLocale = \Zend_Registry::get('emLocale');
+        $queryBuilder = $entityManagerLocale->createQueryBuilder();
+        $query = $queryBuilder->select('a, c, artStore, s')
+            ->from('\KC\Entity\Articles', 'a')
+            ->leftJoin('a.storearticles', 'artStore')
+            ->leftJoin('artStore.articleshops', 's')
+            ->leftJoin('a.category', 'c')
+            ->where('a.id ='. $id);
+        $article = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         # redactie permalink
         $redactie =  User::returnEditorUrl($article['authorid']);
@@ -953,34 +913,34 @@ class Articles extends \KC\Entity\Articles
         $cetgoriesPage = 'pluscat' .'/' ;
 
         # check for article permalink
-        if(isset($article['permalink'])) {
-            $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_plus') . '/'. $article['permalink'];
+        if (isset($article['permalink'])) {
+            $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_plus') . '/'. $article['permalink'];
         }
 
         # check if an editor  has permalink then add it into array
-        if(isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 ) {
+        if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
             $urlsArray[] = $redactie['permalink'] ;
         }
 
         # check an article has one or more categories
-        if(isset($article['articlecategory']) && count($article['articlecategory']) > 0) {
+        if (isset($article['category']) && count($article['category']) > 0) {
 
             # traverse through all catgories
-            foreach($article['articlecategory'] as $value) {
+            foreach ($article['category'] as $value) {
                 # check if a category has permalink then add it into array
-                if(isset($value['permalink']) && strlen($value['permalink']) > 0 ) {
+                if (isset($value['permalink']) && strlen($value['permalink']) > 0) {
                     $urlsArray[] = $cetgoriesPage . $value['permalink'] ;
                 }
             }
         }
 
         # check for related shops
-        if(isset($article['shop']) && count($article['shop']) > 0) {
+        if (isset($article['storearticles']) && count($article['storearticles']) > 0) {
             # traverse through all shops
-            foreach( $article['shop'] as $value) {
+            foreach ($article['storearticles'] as $value) {
                 # check if a shops has permalink then add it into array
-                if(isset($value['permaLink']) && strlen($value['permaLink']) > 0 ) {
-                    $urlsArray[] = $value['permaLink'] ;
+                if (isset($value['articleshops']['permaLink']) && strlen($value['articleshops']['permaLink']) > 0) {
+                    $urlsArray[] = $value['articleshops']['permaLink'] ;
                 }
             }
         }
