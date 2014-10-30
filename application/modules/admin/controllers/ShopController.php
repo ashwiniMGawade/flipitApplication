@@ -408,30 +408,31 @@ class Admin_ShopController extends Zend_Controller_Action
     {
 
         // set logged in role
-        $this->view->role = Zend_Auth::getInstance()->getIdentity()->roleId;
+        $u = Auth_StaffAdapter::getIdentity();
+        $this->view->role = $u->users->id;
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         /* get Category List*/
         $arr = array();
         /* get Category List*/
         $arr['status'] = '1';
-        $category = new Category();
+        $category = new \KC\Repository\Category();
         $this->view->categoryList = $category->getCategoriesInformation();
 
         $site_name = "";
-        if(isset($_COOKIE['site_name'])){
+        if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
         }
 
                 // display managers and account managers list
-        $users = new User();
+        $users = new \KC\Repository\User();
         $this->view->MangersList = $users->getManagersLists($site_name);
 
         // display  page's list
-        $pages = new Page();
+        $pages = new \KC\Repository\Page();
         $this->view->DefaultPagesList = $pages->defaultPagesList();
 
         // display affliate network's list
-        $affiliate = new AffliateNetwork();
+        $affiliate = new \KC\Repository\AffliateNetwork();
         $arr['sortBy'] = 'name';
         $affiliateNetworkList =  $affiliate->getNetworkList($arr);
 
@@ -439,39 +440,33 @@ class Admin_ShopController extends Zend_Controller_Action
         $this->view->affiliateNetworkList = $affiliateNetworkList['aaData'];
 
         $id = $this->getRequest()->getParam('id');
-        if( intval($id) > 0 ) {
-                    $data = Doctrine_Query::create()
-                    ->from('Shop s')
-                    ->leftJoin("s.category c")
-                    ->leftJoin("s.howtousesmallimage sl")
-                    ->leftJoin("s.howtousebigimage bl")
-                    ->leftJoin("s.howtochapter chapter")
-                    ->leftJoin("s.relatedshops sp")
-                    ->leftJoin("s.page pg")
-                    ->leftJoin("s.logo logo")
-                    ->leftJoin("s.screenshot screenshot")
-                    ->where("s.id = ?" , $id)
-                    ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-
-
-            //var_dump($data) ;
-
+        if (intval($id) > 0) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $data = $queryBuilder->select('s, c, sl, bl, chapter, sp, pg, logo, af')
+                ->from('KC\Entity\Shop', 's')
+                ->leftJoin("s.categoryshops", "c")
+                ->leftJoin("s.howtousesmallimage", "sl")
+                ->leftJoin("s.howtousebigimage", "bl")
+                ->leftJoin("s.howtochapter", "chapter")
+                ->leftJoin("s.relatedshops", "sp")
+                ->leftJoin("s.shopPage", "pg")
+                ->leftJoin("s.affliatenetwork", "af")
+                ->leftJoin("s.logo", "logo")
+                ->where("s.id = ". $id)
+                ->getQuery()
+                ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $this->view->data = $data ;
-            //echo "<pre>";
-            //print_r($data); die;
-
-            $existingCategories  = $data['category'] ;
+            $existingCategories  = $data['categoryshops'] ;
             $catArray  = array();
             foreach ($existingCategories as $categories) {
                 $catArray[] = $categories['id'];
             }
             $this->view->catArray = '';
-            if(isset($catArray) && count($catArray)>0){
+            if (isset($catArray) && count($catArray) >0) {
                 $this->view->catArray =  $catArray  ;
             }
         } else {
-
-            $this->_helper->redirector( 'createshop', 'shop', 'admin' ) ;
+            $this->_helper->redirector('createshop', 'shop', 'admin');
         }
 
         // if request is post
@@ -994,7 +989,7 @@ class Admin_ShopController extends Zend_Controller_Action
     public function updateVarnish($id)
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new \KC\Repository\Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
@@ -1009,7 +1004,7 @@ class Admin_ShopController extends Zend_Controller_Action
         }
 
         # get all the urls related to this shop
-        $varnishUrls = Shop::getAllUrls($id);
+        $varnishUrls = \KC\Repository\Shop::getAllUrls($id);
 
         # check $varnishUrls has atleast one
         if(isset($varnishUrls) && count($varnishUrls) > 0) {

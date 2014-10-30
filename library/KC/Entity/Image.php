@@ -47,7 +47,7 @@ class Image
     private $name;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=false)
+     * @ORM\Column(type="integer", length=1, nullable=true)
      */
     private $deleted;
 
@@ -69,12 +69,5 @@ class Image
     public function __set($property, $value)
     {
         $this->$property = $value;
-    }
-
-    public function test($value)
-    {
-        $t = new \KC\Entity\CategoryIcon();
-        $t->type = $value;
-        $this->type = $t->type;
     }
 }

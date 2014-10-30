@@ -13,26 +13,26 @@
 
 	$categoryPicturePath = '';
 	$categoryPictureName = '';
-	if(isset($this->categoryDetail[0]['categoryicon']['name'])) {
-		$categoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryicon']['path']
-		.$this->categoryDetail[0]['categoryicon']['name'];
-		$categoryPictureName = $this->categoryDetail[0]['categoryicon']['name'];
+	if(isset($this->categoryDetail['categoryiconname'])) {
+		$categoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail['categoryiconpath']
+		.$this->categoryDetail['categoryiconname'];
+		$categoryPictureName = $this->categoryDetail['categoryiconname'];
 	}
 
     $featuredCategoryPicturePath = '';
     $featuredCategoryPictureName = '';
-    if(isset($this->categoryDetail[0]['categoryfeaturedimage']['name'])) {
-        $featuredCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryfeaturedimage']['path']
-        .$this->categoryDetail[0]['categoryfeaturedimage']['name'];
-        $featuredCategoryPictureName = $this->categoryDetail[0]['categoryfeaturedimage']['name'];
+    if(isset($this->categoryDetail['categoryfeaturedname'])) {
+        $featuredCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail['categoryfeaturedpath']
+        .$this->categoryDetail['categoryfeaturedname'];
+        $featuredCategoryPictureName = $this->categoryDetail['categoryfeaturedname'];
     }
 
     $headerCategoryPicturePath = '';
     $headerCategoryPictureName = '';
-    if(isset($this->categoryDetail[0]['categoryheaderimage']['name'])) {
-        $headerCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail[0]['categoryheaderimage']['path']
-        .$this->categoryDetail[0]['categoryheaderimage']['name'];
-        $headerCategoryPictureName = $this->categoryDetail[0]['categoryheaderimage']['name'];
+    if(isset($this->categoryDetail['categoryheaderimagename'])) {
+        $headerCategoryPicturePath = PUBLIC_PATH_CDN.$this->categoryDetail['categoryheaderimagepath']
+        .$this->categoryDetail['categoryheaderimagename'];
+        $headerCategoryPictureName = $this->categoryDetail['categoryheaderimagename'];
 	}
 ?>
 

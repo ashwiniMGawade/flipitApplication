@@ -40,7 +40,7 @@ class AffliateNetwork extends \KC\Entity\AffliateNetwork
             ->add('text', 'a.subId');
         $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $list = \DataTable_Helper::getResponse($data, $request);
-        return \Zend_Json::encode($list);
+        return $list;
     }
 
     public static function searchTopFiveNetwork($keyword)

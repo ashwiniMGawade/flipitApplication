@@ -271,29 +271,29 @@ echo $this->headTitle()->append('Edit Shop');?>
 				 <?php
 							
 	                       
-	                           if(trim($this->categoryList[$i]['name'])!=''){ 
+	                           if(trim($this->categoryList[$i]['categoryName'])!=''){ 
 	                           	
 	                           	$categoryIconPath = '';
 	                           	 
 	                           	 
 	                           	$icons = $this->categoryList[$i];
 	                           	 
-	                           	 
+
 	                           	# check an icon is available of not
-	                           	if(file_exists(ROOT_PATH.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'])){
-	                           		$categoryIconPath = PUBLIC_PATH_LOCALE.$icons['categoryicon']['path']."thum_medium_".$icons['categoryicon']['name'];
+	                           	if(file_exists(ROOT_PATH.$icons['path']."thum_medium_".$icons['name'])){
+	                           		$categoryIconPath = PUBLIC_PATH_LOCALE.$icons['path']."thum_medium_".$icons['name'];
 	                           	}else {
 	                           		$categoryIconPath = HTTP_PATH ."public/images/NoImage/NoImage50x50.jpg";
 	                           	}
 	                           	
 	                           	
 	                      	?>
-	                      	<button type="button" title="<?php echo $this->categoryList[$i]['name'];?>" class="btn square-btn <?php echo  @in_array( $this->categoryList[$i]['id'] , $this->catArray )  ? "btn-primary" : "" ?>" id="categoryBtn-<?php echo $this->categoryList[$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i]['id']; ?>')">
+	                      	<button type="button" title="<?php echo $this->categoryList[$i]['categoryName'];?>" class="btn square-btn <?php echo  @in_array( $this->categoryList[$i]['id'] , $this->catArray )  ? "btn-primary" : "" ?>" id="categoryBtn-<?php echo $this->categoryList[$i]['id'];?>" onClick="addCategory(event,'<?php echo $this->categoryList[$i]['id']; ?>')">
 	                      		<img onclick="$('#categoryBtn-<?php echo $this->categoryList[$i]['id'];?>').click();" alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
 	                      	</button>
                       		<div class="clear"></div>
 				        	<span class="image-description-text">	  			   
-									<?php echo strlen($this->categoryList[$i]['name']) < 20 ? $this->categoryList[$i]['name'] : substr($this->categoryList[$i]['name'],0,20).'..'; ?>			    
+									<?php echo strlen($this->categoryList[$i]['categoryName']) < 20 ? $this->categoryList[$i]['categoryName'] : substr($this->categoryList[$i]['categoryName'],0,20).'..'; ?>			    
 		  					</span>
 	                      	<?php } ?>
 	                              	</div>
@@ -324,7 +324,7 @@ echo $this->headTitle()->append('Edit Shop');?>
 								$className = 'grid-line1';
 							}
 						?> 
-                          <li class="<?php echo $className; ?>" value="<?php echo $this->data['relatedshops'][$r]['id']; ?>"><?php echo $this->data['relatedshops'][$r]['name']; ?></li>
+                          <li class="<?php echo $className; ?>" value="<?php echo $this->data['relatedshops'][$r]['relatedshopId']; ?>"><?php echo $this->data['relatedshops'][$r]['relatedshopId']; ?></li>
                           <?php }?>                          
                          </ul> 
                 </div>      
@@ -365,7 +365,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                              if(trim( $this->affiliateNetworkList[$i]['name'])!=''){
                            	?>
                            	
-                           	  <?php  if( $this->affiliateNetworkList[$i]['id'] == $this->data['affliateNetworkId'] ) { ?>
+                           	  <?php  if( $this->affiliateNetworkList[$i]['id'] == $this->data['affliatenetwork']['id'] ) { ?>
                            
                            		 <option selected="selected"  value="<?php echo $this->affiliateNetworkList[$i]['id']; ?>">
                             

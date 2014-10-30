@@ -548,7 +548,13 @@ class Shop extends \KC\Entity\Shop
     public function CreateNewShop($shopDetail)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $shopInfo = new \Kc\Entity\Shop();
+        if (!empty($shopDetail['id'])) {
+            $shopInfo = \Zend_Registry::get('emLocale')
+                ->getRepository('KC\Entity\Shop')
+                ->find($shopDetail['id']);
+        } else {
+            $shopInfo = new \Kc\Entity\Shop();
+        }
         $shopInfo->deleted = 0;
         $shopInfo->created_at = new \DateTime('now');
         $shopInfo->updated_at = new \DateTime('now');
@@ -677,38 +683,56 @@ class Shop extends \KC\Entity\Shop
             //  upload small logo image for how to use page
             if (isset($_FILES['smallLogoFile']['name']) && $_FILES['smallLogoFile']['name'] != '') {
                 $uploadPath = UPLOAD_IMG_PATH . "shop/";
-                if (!file_exists($uploadPath))
+                if (!file_exists($uploadPath)) {
                     mkdir($uploadPath, 0776, true);
+                }
 
                 $result = self::uploadImage('smallLogoFile', $uploadPath);
                 if ($result['status'] == '200') {
                     $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                         $result['fileName']
                     );
-                   // $shopInfo->howtousesmallimage->ext = $ext;
-                   // $shopInfo->howtousesmallimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                   // $shopInfo->howtousesmallimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                    $howtousesmallimage =  new \KC\Entity\ImageHowToUseSmallImage();
+                    $howtousesmallimage->ext = $ext;
+                    $howtousesmallimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+                    $howtousesmallimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                    $howtousesmallimage->deleted = 0;
+                    $howtousesmallimage->created_at = new \DateTime('now');
+                    $howtousesmallimage->updated_at = new \DateTime('now');
+                    \Zend_Registry::get('emLocale')->persist($howtousesmallimage);
+                    \Zend_Registry::get('emLocale')->flush();
+                    $shopInfo->howtousesmallimage = \Zend_Registry::get('emLocale')
+                        ->getRepository('KC\Entity\ImageHowToUseSmallImage')
+                        ->find($howtousesmallimage->id);
                 } else {
                     return false;
                 }
-
             }
 
             //  upload big logo image for how to use page
             if (isset($_FILES['bigLogoFile']['name']) && $_FILES['bigLogoFile']['name'] != '') {
                 $uploadPath = UPLOAD_IMG_PATH . "shop/";
-                if (!file_exists($uploadPath))
+                if (!file_exists($uploadPath)) {
                     mkdir($uploadPath, 0776, true);
+                }
                 $result = self::uploadImage('bigLogoFile', $uploadPath);
 
                 if ($result['status'] == '200') {
                     $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                         $result['fileName']
                     );
-
-                   // $shopInfo->howtousebigimage->ext = $ext;
-                   // $shopInfo->howtousebigimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                  //  $shopInfo->howtousebigimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                    $howtousebigimage =  new \KC\Entity\ImageHowToUseBigImage();
+                    $howtousebigimage->ext = $ext;
+                    $howtousebigimage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+                    $howtousebigimage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                    $howtousebigimage->deleted = 0;
+                    $howtousebigimage->created_at = new \DateTime('now');
+                    $howtousebigimage->updated_at = new \DateTime('now');
+                    \Zend_Registry::get('emLocale')->persist($howtousebigimage);
+                    \Zend_Registry::get('emLocale')->flush();
+                    $shopInfo->howtousebigimage = \Zend_Registry::get('emLocale')
+                        ->getRepository('KC\Entity\ImageHowToUseBigImage')
+                        ->find($howtousebigimage->id);
                 } else {
                     return false;
                 }
@@ -724,40 +748,33 @@ class Shop extends \KC\Entity\Shop
  
         if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
             $uploadPath = UPLOAD_IMG_PATH . "shop/";
-            if (!file_exists($uploadPath))
+            if (!file_exists($uploadPath)) {
                 mkdir($uploadPath, 0776, true);
+            }
             $result = self::uploadImage('logoFile', $uploadPath);
 
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(
                     $result['fileName']
                 );
-               // $shopInfo->logo->ext = $ext;
-               // $shopInfo->logo->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-              //  $shopInfo->logo->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $logo =  new \KC\Entity\Logo();
+                $logo->ext = $ext;
+                $logo->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
+                $logo->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $logo->deleted = 0;
+                $logo->created_at = new \DateTime('now');
+                $logo->updated_at = new \DateTime('now');
+                \Zend_Registry::get('emLocale')->persist($logo);
+                \Zend_Registry::get('emLocale')->flush();
+                $shopInfo->logo = \Zend_Registry::get('emLocale')
+                    ->getRepository('KC\Entity\Logo')
+                    ->find($logo->id);
             } else {
                 return false;
             }
         }
 
-        if (isset($_FILES['websitescreenshot']['name']) && $_FILES['websitescreenshot']['name'] != '') {
-            $uploadPath = UPLOAD_IMG_PATH . "screenshot/";
-            if (!file_exists($uploadPath))
-                mkdir($uploadPath, 0776, true);
-            $result = self::uploadImage('websitescreenshot', $uploadPath);
-
-            if ($result['status'] == '200') {
-                $ext = \BackEnd_Helper_viewHelper::getImageExtension(
-                    $result['fileName']
-                );
-              ///  $shopInfo->screenshot->ext = $ext;
-              ////  $shopInfo->screenshot->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-              //  $shopInfo->screenshot->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
-            } else {
-                return false;
-            }
-        }
-$shopInfo->screenshotId = 1;
+        $shopInfo->screenshotId = 1;
         //call cache function
         $key = 'shopDetails_'  . $shopInfo->id . '_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -790,7 +807,7 @@ $shopInfo->screenshotId = 1;
             //$shopInfo->refShopRelatedshop->delete();
            // $shopInfo->save();
             \Zend_Registry::get('emLocale')->persist($shopInfo);
-                \Zend_Registry::get('emLocale')->flush(); die('ss');
+            \Zend_Registry::get('emLocale')->flush();
             $key = 'shop_similar_shops';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -824,6 +841,9 @@ $shopInfo->screenshotId = 1;
                 $route->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
                 $route->type = 'SHP';
                 $route->exactlink = 'store/storedetail/id/'.$shopInfo->id;
+                $route->deleted = 0;
+                $route->created_at = new \DateTime('now');
+                $route->updated_at = new \DateTime('now');
                 \Zend_Registry::get('emLocale')->persist($route);
                 \Zend_Registry::get('emLocale')->flush();
 
@@ -831,6 +851,9 @@ $shopInfo->screenshotId = 1;
                 $route->permalink = "how-to/" . \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
                 $route->type = 'SHP';
                 $route->exactlink = 'store/howtoguide/shopid/'.$shopInfo->id;
+                $route->deleted = 0;
+                $route->created_at = new \DateTime('now');
+                $route->updated_at = new \DateTime('now');
                 \Zend_Registry::get('emLocale')->persist($route);
                 \Zend_Registry::get('emLocale')->flush();
             }
@@ -841,9 +864,13 @@ $shopInfo->screenshotId = 1;
                 foreach ($similarstoreordArray as $shop) {
                     if ($shop!='') {
                         $relateshopObj = new \KC\Entity\RefShopRelatedshop();
-                        $relateshopObj->shopId = $shopInfo->id;
+                        $relateshopObj->shop = \Zend_Registry::get('emLocale')
+                            ->getRepository('KC\Entity\Shop')
+                            ->find($shopInfo->id);
                         $relateshopObj->relatedshopId = $shop;
                         $relateshopObj->position = $i;
+                        $relateshopObj->created_at = new \DateTime('now');
+                        $relateshopObj->updated_at = new \DateTime('now');
                         \Zend_Registry::get('emLocale')->persist($relateshopObj);
                         \Zend_Registry::get('emLocale')->flush();
                         ++$i;
@@ -852,13 +879,21 @@ $shopInfo->screenshotId = 1;
             }
 
             if (!empty($shopDetail['title']) && !empty($shopDetail['content'])) {
-                $delChapters = $queryBuilder->delete("KC\Entity\ShopHowToChapter", "sh")->where("sh.shopId = ".$shopInfo->id)->getQuery()->execute();
+                $delChapters = $queryBuilder
+                    ->delete("KC\Entity\ShopHowToChapter", "sh")
+                    ->where("sh.shop = ".$shopInfo->id)
+                    ->getQuery()
+                    ->execute();
                 foreach ($shopDetail['title'] as $key => $title) {
                     if (!empty($shopDetail['title'][$key]) && !empty($shopDetail['content'][$key])) {
                         $chapter = new \KC\Entity\ShopHowToChapter();
-                        $chapter->shopId = $shopInfo->id;
+                        $chapter->shop = \Zend_Registry::get('emLocale')
+                            ->getRepository('KC\Entity\Shop')
+                            ->find($shopInfo->id);
                         $chapter->chapterTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['title'][$key]);
                         $chapter->chapterDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['content'][$key]) ;
+                        $chapter->created_at = new \DateTime('now');
+                        $chapter->updated_at = new \DateTime('now');
                         \Zend_Registry::get('emLocale')->persist($chapter);
                         \Zend_Registry::get('emLocale')->flush();
                     }
@@ -873,15 +908,17 @@ $shopInfo->screenshotId = 1;
     public function uploadImage($file, $path)
     {
         $uploadPath = $path;
-        if (!file_exists(UPLOAD_IMG_PATH))
+        if (!file_exists(UPLOAD_IMG_PATH)) {
             mkdir($uploadPath, 0776, true);
+        }
 
         $adapter = new \Zend_File_Transfer_Adapter_Http();
         $rootPath = ROOT_PATH . $uploadPath;
         $files = $adapter->getFileInfo($file);
 
-        if (!file_exists($rootPath))
-            mkdir($rootPath ,776, true);
+        if (!file_exists($rootPath)) {
+            mkdir($rootPath, 776, true);
+        }
 
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('jpg,jpeg,png', true));
@@ -1250,8 +1287,7 @@ $shopInfo->screenshotId = 1;
             ->where('s.deleted=0')
             ->andWhere("s.id =".$shopId)->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
     }
-
-    // to be checked and migrated
+    //to be checked again
     public static function getAllUrls($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
@@ -1262,37 +1298,36 @@ $shopInfo->screenshotId = 1;
             ->where("s.id= ". $id);
         $shop = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        print_r($shop); die;
         # redactie permalink
-        $redactie =  User::returnEditorUrl($shop['contentManagerId']);
+        $redactie =  \KC\Repository\User::returnEditorUrl($shop[0]['contentManagerId']);
 
         $urlsArray = array();
 
         # check for related shop permalink
-        if(isset($shop['permaLink'])) {
-            $urlsArray[] = $shop['permaLink'];
+        if (isset($shop[0]['permaLink'])) {
+            $urlsArray[] = $shop[0]['permaLink'];
         }
 
         # check for ho to use guide
-        if($shop['howToUse']) {
+        if ($shop[0]['howToUse']) {
             # check for extende offer url
-            if( isset($shop['permaLink'])  && strlen( $shop['permaLink'] ) > 0 ) {
-                $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'.$shop['permaLink'];
+            if (isset($shop[0]['permaLink']) && strlen($shop[0]['permaLink']) > 0) {
+                $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_how-to') .'/'.$shop[0]['permaLink'];
             }
         }
 
         # check if an editor  has permalink then add it into array
-        if(isset($redactie['permalink']) && strlen($redactie['permalink']) > 0 ) {
+        if (isset($redactie['permalink']) && strlen($redactie['permalink']) > 0) {
             $urlsArray[] = $redactie['permalink'] ;
         }
-
+ 
         # check an offerr has one or more categories
-        if(isset($shop['category']) && count($shop['category']) > 0) {
+        if (isset($shop['category']) && count($shop['category']) > 0) {
 
-            $categoriesPage = FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
+            $categoriesPage = \FrontEnd_Helper_viewHelper::__link('link_categorieen') .'/' ;
 
             # traverse through all catgories
-            foreach($shop['category'] as $value) {
+            foreach ($shop['category'] as $value) {
                 # check if a category has permalink then add it into array
                 if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
                     $urlsArray[] = $categoriesPage . $value['permaLink'];
@@ -1303,12 +1338,12 @@ $shopInfo->screenshotId = 1;
         }
 
         # check extended offer of this shop
-        if(isset($shop['offer']) && count($shop['offer']) > 0) {
+        if (isset($shop['offer']) && count($shop['offer']) > 0) {
             # traverse through all offer
-            foreach( $shop['offer'] as $value) {
+            foreach ($shop['offer'] as $value) {
                 # check the offer is extended or not
-                if(isset($value['extendedOffer']) && $value['extendedOffer']  ) {
-                    $urlsArray[] = FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $value['extendedUrl'] ;
+                if (isset($value['extendedOffer']) && $value['extendedOffer']) {
+                    $urlsArray[] = \FrontEnd_Helper_viewHelper::__link('link_deals') .'/'. $value['extendedUrl'] ;
                 }
             }
         }
