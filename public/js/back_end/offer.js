@@ -322,10 +322,9 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 							
 						},{
 							"fnRender" : function(obj) {
-								var sd = "";
+								var date = "";
 								if(obj.aData.startDate.date != null){
-								var tag = '';
-								var date = obj.aData.startDate.date;
+									var date = obj.aData.startDate.date;
 								}
 								 return "<a href='javascript:void(0)'>" + date + "</a>";
 								 
@@ -337,9 +336,8 @@ function getOffers(txtOffer,txtShop,txtCoupon,type,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								
-								var ed = "";
+								var date = "";
 								if(obj.aData.endDate.date != null){
-								var tag = '';
 								var date = obj.aData.endDate.date;
 								
 								}

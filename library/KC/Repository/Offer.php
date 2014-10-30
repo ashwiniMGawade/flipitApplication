@@ -47,7 +47,6 @@ class Offer Extends \KC\Entity\Offer
     {
         $date = date("Y-m-d H:i");
         $similarShopsOffers = self::getOffersBySimilarShops($date, $limit, $shopId);
-        print_r($similarShopsOffers);die;
         $similarCategoriesOffers = self::getOffersBySimilarCategories($date, $limit, $shopId);
         $similarShopsAndSimilarCategoriesOffers = self::mergeSimilarShopsOffersAndSimilarCategoriesOffers(
             $similarShopsOffers,
@@ -972,21 +971,12 @@ class Offer Extends \KC\Entity\Offer
         if ($searchCouponType!='') {
             $getOffersQuery->andWhere('o.discountType ='."'".$searchCouponType."'");
         }
-        
+
         $request  = \DataTable_Helper::createSearchRequest(
             $parameters,
             array(
-                'id',
-                'Title',
-                'Winkel',
-                'Type',
-                'Deeplinking',
-                'Start',
-                'End',
-                'CouponCode',
-                'clickouts',
-                'author',
-                'Delete'
+              'o.id','o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate',
+                'o.endDate', 'o.totalViewcount','o.authorName'
             )
         );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
@@ -1577,15 +1567,16 @@ class Offer Extends \KC\Entity\Offer
         ->select(
             'o.title,o.id,o.Visability,o.shopExist,o.discountType, o.couponCode, o.extendedOffer, o.couponCodeType,s.name as shopName,
             s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,o.extendedTitle,o.extendedMetaDescription,
-            p.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,img.path,news.title as newsTitle,
+            page.id as pageId,tc.content as termsAndconditionContent,category.id as categoryId,img.name as imageName,img.path,news.title as newsTitle,
             news.url, news.content as newsContent, t.id as tilesId, t.path as offerTilesPath,t.name as offerTilesName,t.position,
              s.id as shopId, o.extendedFullDescription,o.discountvalueType, o.refOfferUrl, o.startDate, o.endDate, o.refURL,
-             o.exclusiveCode, o.maxlimit, o.maxcode'
+             o.exclusiveCode, o.maxlimit, o.maxcode, o.extendedUrl'
         )
         ->from('KC\Entity\Offer', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.affliatenetwork', 'a')
         ->leftJoin('o.offers', 'p')
+        ->leftJoin('p.offers', 'page')
         ->leftJoin('o.offertermandcondition', 'tc')
         ->leftJoin('o.categoryoffres', 'cat')
         ->leftJoin('cat.offer', 'category')
@@ -1595,8 +1586,7 @@ class Offer Extends \KC\Entity\Offer
         ->addSelect("(SELECT count(cc.status) FROM KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT count(ccc.status) FROM KC\Entity\CouponCode ccc WHERE ccc.offer = o.id and ccc.status = 1) as available")
         ->andWhere("o.id =".$offerId)
-        ->andWhere("o.userGenerated = '0'")
-        ->setMaxResults(1);
+        ->andWhere("o.userGenerated = '0'");
         $offerDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $offerDetails;
     }
@@ -2700,7 +2690,7 @@ class Offer Extends \KC\Entity\Offer
     }
 
     public function saveOffer($params)
-    {   
+    {
         $saveOffer = new \KC\Entity\Offer();
         $entityManagerUser  = \Zend_Registry::get('emLocale');
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
@@ -3003,9 +2993,10 @@ class Offer Extends \KC\Entity\Offer
 
     public function updateOffer($params)
     {
-        $updateOffer = new \KC\Entity\Offer();
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
-        //echo "<pre>"; print_r($params); die;
+        $repo = $entityManagerLocale->getRepository('KC\Entity\Offer');
+        $updateOffer = $repo->find($params['offerId']);
+       
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
                 // check the offer type
             if (isset($params['defaultoffercheckbox'])) {      //offer type is default
@@ -3111,19 +3102,7 @@ class Offer Extends \KC\Entity\Offer
         } else {
             $updateOffer->refURL =  '';
         }
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 'tc')
-            ->setParameter(1, $params['offerId'])
-            ->where('tc.termandcondition = ?1')
-            ->getQuery();
-        $query->execute();
-
-        if (trim($params['termsAndcondition'])!='') {
-            $offerTerms  = new KC\Entity\TermAndCondition();
-            $offerTerms->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
-            $entityManagerLocale->persist($offerTerms);
-            $entityManagerLocale->flush();
-        }
+        
 
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
             $startDate = date('Y-m-d', strtotime($params['offerStartDate']))
@@ -3139,24 +3118,8 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->startDate = new \DateTime($startDate);
             $updateOffer->endDate = new \DateTime($endDate);
         }
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->delete('KC\Entity\RefOfferPage', 'rop')
-            ->setParameter(1, $params['offerId'])
-            ->where('rop.refoffers = ?1')
-            ->getQuery();
-        $query->execute();
 
-        if (isset($params['attachedpages'])) {
-            foreach ($params['attachedpages'] as $pageId) {
-                $offerPage  = new \KC\Entity\RefOfferPage();
-                $offerPage->created_at = new \DateTime('now');
-                $offerPage->updated_at = new \DateTime('now');
-                $offerPage->offers = $entityManagerLocale->find('KC\Entity\Page', $pageId);
-                $offerPage->refoffers = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
-                $entityManagerLocale->persist($offerPage);
-                $entityManagerLocale->flush();
-            }
-        }
+
         //&& isset($params['couponCodeCheckbox'])
 
         if (isset($params['extendedoffercheckbox'])) {
@@ -3164,7 +3127,7 @@ class Offer Extends \KC\Entity\Offer
             //print_r($params['couponInfo']);
             // check if offer is extended
             $updateOffer->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
-            $updateOfferupdateOffer->extendedTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
+            $updateOffer->extendedTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
             $updateOffer->extendedUrl = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferRefurl']);
             $updateOffer->extendedMetaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString(
                 $params['extendedOfferMetadesc']
@@ -3173,12 +3136,12 @@ class Offer Extends \KC\Entity\Offer
         } else {
 
             $updateOffer->extendedOffer = 0;
-            $updateOfferupdateOffer->extendedTitle = '';
+            $updateOffer->extendedTitle = '';
             $updateOffer->extendedUrl = '';
             $updateOffer->extendedMetaDescription = '';
             $updateOffer->extendedFullDescription = '';
         }
-
+//echo "<pre>";print_r($updateOffer);die('dd');
         $updateOffer->exclusiveCode=$updateOffer->editorPicks=0;
         if (isset($params['exclusivecheckbox'])) {
             $updateOffer->exclusiveCode=1;
@@ -3265,12 +3228,73 @@ class Offer Extends \KC\Entity\Offer
         $updateOffer->updated_at = new \DateTime('now');
         $updateOffer->userGenerated = 0;
         $updateOffer->approved = 0;
-        $updateOffer->offline = 0;      // New code Ends
+        $updateOffer->offline = 0;
+        $entityManagerLocale->persist($updateOffer);
+        $entityManagerLocale->flush();     // New code Ends
 
-        try { 
-                $entityManagerLocale->persist($updateOffer);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->delete('KC\Entity\TermAndCondition', 'tc')
+            ->setParameter(1, $params['offerId'])
+            ->where('tc.termandcondition = ?1')
+            ->getQuery();
+        $query->execute();
+
+        if (trim($params['termsAndcondition'])!='') {
+            $offerTerms  = new \KC\Entity\TermAndCondition();
+            $offerTerms->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
+            $offerTerms->deleted = 0;
+            $offerTerms->termandcondition = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
+            $offerTerms->created_at = new \DateTime('now');
+            $offerTerms->updated_at = new \DateTime('now');
+            $entityManagerLocale->persist($offerTerms);
+            $entityManagerLocale->flush();
+        }
+
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder->delete('KC\Entity\RefOfferPage', 'rop')
+            ->setParameter(1, $params['offerId'])
+            ->where('rop.refoffers = ?1')
+            ->getQuery();
+        $query->execute();
+
+        if (isset($params['attachedpages'])) {
+            foreach ($params['attachedpages'] as $pageId) {
+                $offerPage  = new \KC\Entity\RefOfferPage();
+                $offerPage->created_at = new \DateTime('now');
+                $offerPage->updated_at = new \DateTime('now');
+                $offerPage->offers = $entityManagerLocale->find('KC\Entity\Page', $pageId);
+                $offerPage->refoffers = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
+                $entityManagerLocale->persist($offerPage);
                 $entityManagerLocale->flush();
-                $lId = $updateOffer->__get('id');
+            }
+        }
+
+        if (isset($params['couponCodeCheckbox'])) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\RefOfferCategory', 'roc')
+            ->setParameter(1, $params['offerId'])
+            ->where('roc.category = ?1')
+            ->getQuery();
+            $query->execute();
+            if (isset($params['selectedcategories'])) {
+                foreach ($params['selectedcategories'] as $categories) {
+                    $this->refOfferCategory[]->categoryId = $categories ;
+                    $offerCategory  = new \KC\Entity\RefOfferCategory();
+                    $offerCategory->created_at = new \DateTime('now');
+                    $offerCategory->updated_at = new \DateTime('now');
+                    $offerCategory->offer = $entityManagerLocale->find('KC\Entity\Category', $categories);
+                    $offerCategory->category = $entityManagerLocale->find('KC\Entity\Offer', $params['offerId']);
+                    $entityManagerLocale->persist($offerCategory);
+                    $entityManagerLocale->flush();
+
+                }
+            }
+        }
+
+
+        try {
+                
+                $lId = $params['offerId'];
 
             /*****************Add more news of offer******************/
 
@@ -3361,4 +3385,18 @@ class Offer Extends \KC\Entity\Offer
             return false;
         }
     }
+
+    public static function getExtendedUrl($url)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->select('o.id, o.extendedUrl')
+        ->from('KC\Entity\Offer', 'o')
+        ->setParameter(1, $queryBuilder->expr()->literal(urlencode($url)))
+        ->Where('o.extendedUrl = ?1');
+        $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        return $rp;
+    }
+
+    
 }

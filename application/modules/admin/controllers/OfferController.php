@@ -110,7 +110,6 @@ class Admin_OfferController extends Zend_Controller_Action
         $flash = $this->_helper->getHelper('FlashMessenger');
 
         if($offerUpdate['result']){
-
             //self::updateVarnish($params['offerId']);
             $message = $this->view->translate('Offer has been updated successfully.');
             $flash->addMessage(array('success' => $message ));
@@ -782,7 +781,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
         $url = strtolower($url);
 
-        $rp = Doctrine_Query::create()->select('extendedUrl')->from("Offer")->where("extendedUrl = '".urlencode($url)."'")->fetchArray();
+        $rp = KC\Repository\Offer::getExtendedUrl($url);
 
         if($id != '') {
 
