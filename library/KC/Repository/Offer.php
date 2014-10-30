@@ -974,24 +974,23 @@ class Offer Extends \KC\Entity\Offer
 
         $request  = \DataTable_Helper::createSearchRequest(
             $parameters,
-            array(
-              'o.id','o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate',
+            array('o.title','s.name','o.discountType','o.refURL','o.couponcode','o.startDate',
                 'o.endDate', 'o.totalViewcount','o.authorName'
             )
         );
         $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($getOffersQuery)
-            ->add('number', 'o.id')
-            ->add('text', 'o.title, s.name')
-            ->add('text', 's.accountManagerName')
+            ->add('text', 'o.title')
+            ->add('text', 's.name')
+            ->add('text', 'o.discountType')
+            ->add('text', 'o.refURL')
+            ->add('text', 'o.couponCode')
+            ->add('number', 'o.startDate')
+            ->add('number', 'o.endDate')
             ->add('number', 'o.totalViewcount')
-            ->add('text', 'o.discountType, o.Visability')
-            ->add('text', 'o.extendedOffer')
-            ->add('text', 'o.startDate,o.endDate')
-            ->add('text', 'o.authorName,o.refURL')
-            ->add('text', 'o.couponCode');
-
+            ->add('text', 'o.authorName');
+           
         $offersList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $offersList = \DataTable_Helper::getResponse($offersList, $request);
         return $offersList;
