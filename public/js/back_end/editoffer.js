@@ -382,44 +382,43 @@ function getOfferDetail(){
 
 
 function setFormData(data){
-	
 	jQuery('span#newsDiv').append('<div class="mainpage-content-right-inner-left"><label><strong>' +__("Title") +'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><input type="text" name="newsTitle[]" value="" placeholder="' +__('News title') +'" class="span3"></div><div class="mainpage-content-right-inner-left"><label><strong>'+__("Ref URL")+'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><input type="text" name="newsrefUrl[]" value="" id="newsrefUrl" disabled="disabled" placeholder="' +__('Ref.Url') +'" class="span3 ignore" style="width:330px !important;">&nbsp;&nbsp;&nbsp;'+__("Deeplinking is") +' <button class="btn" id="newsdeepLinkOnbtn" name="newsdeepLinkOnbtn" type="button" style="border-radius: 4px 0 0 4px;" onclick="newschangelinkStatus(this)">'+__("On") +'</button><button id="newsdeepLinkoofbtn" name="newsdeepLinkoofbtn" style="border-radius: 0 4px 4px 0;" onclick="newschangelinkStatus(this)" class="btn mr10 btn-primary"  type="button">'+__("Off") +'</button><input type="checkbox" style="display:none;" id="newsdeepLinkStatus" value="1" name="newsdeepLinkStatus[]"></div><div class="mainpage-content-right-inner-left"><label><strong>'+__("Description") +'</strong></label></div><div class="mainpage-content-right-inner-right-other"></div><div class="mainpage-content-right-inner-right-full"><textarea rows="4" cols="3" name="newsDescription[]" id="newsDescription"></textarea></div>');
 	// populate offer type data based based on offer type
 	if(data[0].Visability == 'MEM'){
 		jQuery("#memberOnly").click();
 		
-		if(data[0].shopExist==true || data[0].shopExist=='1'){
+		if(data[0].shopExist ==true || data[0].shopExist=='1'){
 			
 			 //code 
 			 //0.showexitdiv
 				showExistDiv();
-				jQuery('#selctedshop').val(data[0].shop.id);
-				jQuery('#whichshop').select2("val", data[0].shop.id);
-				jQuery('input.spancombo').val(data[0].shop.name);
+				jQuery('#selctedshop').val(data[0].shopId);
+				jQuery('#whichshop').select2("val", data[0].shopId);
+				jQuery('input.spancombo').val(data[0].shopName);
 			 //1.show dropdown for shop
 			 //2. set value drp
 		     
 		 }else{
 			 
 			 showNotExistDiv();
-			 jQuery('input#newShop').val(data[0].shop.name);
+			 jQuery('input#newShop').val(data[0].shopName);
 			 //fill values in field
 		 }
 		
 	}else{
 		 jQuery("#default").click();
 		 if(data[0].shopId){
-			 jQuery('#selctedshop').val(data[0].shop.id);
-			 jQuery('#whichshop').select2("val", data[0].shop.id);
-			 jQuery('input.spancombo').val(data[0].shop.name);
-			 if(data[0].shop.notes!=''){
+			 jQuery('#selctedshop').val(data[0].shopId);
+			 jQuery('#whichshop').select2("val", data[0].shopId);
+			 jQuery('input.spancombo').val(data[0].shopName);
+			 if(data[0].notes!=''){
 				jQuery('#aboutShopNoteDiv').show();
-				jQuery('#shopNotes').html(data[0].shop.notes).addClass('alert-error');
+				jQuery('#shopNotes').html(data[0].notes).addClass('alert-error');
 			 }
 			 jQuery('#aboutShopDiv').show();
-		     if(data[0].shop.accountManagerName!=''){
+		     if(data[0].accountManagerName!=''){
 				jQuery('#aboutManagerDiv').show();
-				jQuery('#shopManager').html(data[0].shop.accountManagerName);
+				jQuery('#shopManager').html(data[0].accountManagerName);
 			 }
 			 if(data[0].affname){
 				jQuery('#aboutNertworkDiv').show();
@@ -428,7 +427,7 @@ function setFormData(data){
 
 			 // check if selected shop has restrcited content or not
 			// if yes then disable submit button and ask check to accept term and conditions
-			if(data[0].shop.strictConfirmation) {
+			if(data[0].strictConfirmation) {
 
 				jQuery("#updateOfferBtn").addClass("disabled").attr('disabled','disabled');
 				jQuery(".strict-confirmation-alert").show();
@@ -437,7 +436,7 @@ function setFormData(data){
 				// bind enable and disbale buttons event on checbox only when strcit confrimation is on 	
 				jQuery('#enableSaveButtons').click(function(){
 
-					if(data[0].shop.strictConfirmation){
+					if(data[0].strictConfirmation){
 
 						if(jQuery(this).is(':checked')){
 							jQuery("#updateOfferBtn").removeClass("disabled").removeAttr('disabled','disabled');
@@ -480,18 +479,18 @@ function setFormData(data){
    // console.log('aaa' +  data[0].tiles.id);
 	if(data[0].tiles!= null){
 		
-		tile_id = data[0].tiles.id;
+		tile_id = data[0].tilesId;
 	}
 	
 	if(data[0].discountType=='CD'){
 		jQuery("#couponCode").click();
 		jQuery('#couponCodeTxt').val(data[0].couponCode);
 		//$('#couponInfo').val(data[0].extendedFullDescription);
-		var catCount = data[0].category.length;
+		var catCount = data.length;
 		for(var i=0 ; i< catCount ; i++ ){
 			// Add class by Er.kundal for select catg of shop
-			jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
-			jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
+			jQuery("#categoryBtn-"+data[i].categoryId).addClass('btn-primary');
+			jQuery("input#category-" + data[i].categoryId).attr('checked' , 'checked');
 		}
 
 	if(data[0].extendedOffer==true){
@@ -529,14 +528,14 @@ function setFormData(data){
 		jQuery("#couponCode").click();
 		jQuery('#couponCodeTxt').val(data[0].couponCode);
 		//$('#couponInfo').val(data[0].extendedFullDescription);
-		var catCount = data[0].category.length;
+
+		// Add class by Er.kundal for select catg of shop
+		var catCount = data.length;
 		for(var i=0 ; i< catCount ; i++ ){
 			// Add class by Er.kundal for select catg of shop
-			jQuery("#categoryBtn-"+data[0].category[i].id).addClass('btn-primary');
-			jQuery("input#category-" + data[0].category[i].id).attr('checked' , 'checked');
+			jQuery("#categoryBtn-"+data[i].categoryId).addClass('btn-primary');
+			jQuery("input#category-" + data[i].categoryId).attr('checked' , 'checked');
 		}
-		
-		
 		
 		if(data[0].discountvalueType=='1'){
 			 jQuery('#euro').addClass("btn-primary").siblings().removeClass("btn-primary");
@@ -561,8 +560,8 @@ function setFormData(data){
 		  jQuery('#offerrefurlPR').val(data[0].refOfferUrl);
 			
 		}else{
-		    if(data[0].logo){
-			var image = data[0].logo.path+"/thum_"+data[0].logo.name;
+		    if(data[0].imageName){
+			var image = data[0].path+"/thum_"+data[0].imageName;
 	        var imgSrc = PUBLIC_PATH_LOCALE + image;
 			jQuery('span#offerLogoId').append('<img src="'+imgSrc+'" id="uplodedOffer" alt="uploaded offer">');
 	        //jQuery('#uplodedOffer').show().attr('src', imgSrc);
@@ -581,7 +580,7 @@ function setFormData(data){
 	    jQuery("#extendedOfferDiv").hide();
 		jQuery("#news").click(); 
 	
-		var newsCount = data[0].offernews.length;
+		var newsCount = data[0].newsContent.length;
 		if(newsCount >0)
 			{
 				jQuery('span#newsDiv').empty();
@@ -620,22 +619,25 @@ function setFormData(data){
 		 jQuery('#deepLinkoofbtn').click(); 
 	 }
 	 //console.log(data[0].termandcondition.length);
-	 var termsCount = data[0].termandcondition.length;
-	 for(var i=0;i<termsCount;i++){
-		 if(i>4){
-		    jQuery('#addmoreBtn').click();
-		 }
-		 //jQuery('#termsAndcondition').val(data[0].termandcondition[i].content);
-
-	       
-		 CKEDITOR.instances['termsAndcondition'].setData(data[0].termandcondition[i].content);
-		 
-		 
-	 }
 	 
+	 var termsCount = data.length;
+	
+		for(var i=0;i<termsCount;i++){
+			 if(i>4){
+			    jQuery('#addmoreBtn').click();
+			 }
+			 //jQuery('#termsAndcondition').val(data[0].termandcondition[i].content);
+
+		       
+			 CKEDITOR.instances['termsAndcondition'].setData(data[i].termsAndconditionContent);
+			 
+			 
+		 }
+
+
 	 if(data[0].startDate != null && data[0].endDate != null){
-			 dateStart = data[0].startDate.split(' ');
-			 dateEnd = data[0].endDate.split(' ');
+			 dateStart = data[0].startDate.date.split(' ');
+			 dateEnd = data[0].endDate.date.split(' ');
 		
 			 jQuery('input#offerStartDate').val(changeDateFormat(dateStart[0]));
 			 jQuery('input#offerEndDate').val(changeDateFormat(dateEnd[0]));
@@ -660,16 +662,17 @@ function setFormData(data){
 		jQuery('#maxoffertxt').removeAttr('disabled');
 		jQuery('#maxoffertxt').val(data[0].maxcode);
 		jQuery("input#maxoffercheckbox").attr('checked' , 'checked');
-	 }
-	
-	var pageCount = data[0].page.length;
+	}
+
+	var pageCount = data.length;
 	for(var i=0 ; i< pageCount ; i++ ){
-		cheboxId = "#attachedPage-"+data[0].page[i].id;
+		cheboxId = "#attachedPage-"+data[i].pageId;
 		jQuery(cheboxId).attr('checked', 'checked');
 		jQuery(cheboxId).parent().addClass("selected");
 	}
-	if(data[0]!=undefined && data[0]!=null && data[0].tiles){
-		jQuery('a#selectImg_' + data[0].tiles.id).show();
+
+	if(data[0]!=undefined && data[0]!=null && data[0].tilesId){
+		jQuery('a#selectImg_' + data[0].tilesId).show();
 		//jQuery("input#selectedTiles").attr('checked' , 'checked').valid();
 	}
 	//getAllTiles();

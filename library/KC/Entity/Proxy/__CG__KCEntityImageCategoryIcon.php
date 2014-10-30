@@ -54,6 +54,14 @@ class ImageCategoryIcon extends \KC\Entity\ImageCategoryIcon implements \Doctrin
         return parent::__set($property, $value);
     }
 
+    public function getId()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int) $this->_identifier["id"];
+        }
+        $this->__load();
+        return parent::getId();
+    }
 
     public function __sleep()
     {

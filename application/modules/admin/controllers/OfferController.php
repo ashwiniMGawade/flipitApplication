@@ -85,10 +85,12 @@ class Admin_OfferController extends Zend_Controller_Action
         $offerId = $params['id'];
 
         // new code added by bhart
-        $shop = \KC\Repository\Offer::getOfferShopDetail($offerId);
+        $shop = KC\Repository\Offer::getOfferShopDetail($offerId);
+        //echo "<pre>";print_r($shop);die;
         $this->view->offerShoLogo = $shop;
         // end code
         $this->view->shopList = \KC\Repository\Shop::getOfferShopList();
+
         $this->view->catList = \KC\Repository\Category::getCategoriesInformation();
         $pageObj = new KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
@@ -102,14 +104,13 @@ class Admin_OfferController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
 
-        $offer = Doctrine_Core::getTable("Offer")->find($params['offerId']);
-
+        //$offer = Doctrine_Core::getTable("Offer")->find($params['offerId']);
+        $offer = new KC\Repository\Offer();
         $offerUpdate = $offer->updateOffer($params);
         $flash = $this->_helper->getHelper('FlashMessenger');
 
         if($offerUpdate['result']){
-
-            self::updateVarnish($params['offerId']);
+            //self::updateVarnish($params['offerId']);
             $message = $this->view->translate('Offer has been updated successfully.');
             $flash->addMessage(array('success' => $message ));
         }else{
@@ -137,9 +138,6 @@ class Admin_OfferController extends Zend_Controller_Action
     public function saveofferAction()
     {
         $params = $this->_getAllParams();
-
-
-
         $offerObj = new \KC\Repository\Offer();
         $offer = $offerObj->saveOffer($params);
 
@@ -722,8 +720,9 @@ class Admin_OfferController extends Zend_Controller_Action
     public function offerdetailAction()
     {
             $id = $this->getRequest()->getParam('offerId');
-            $offerObj = new Offer();
+            $offerObj = new KC\Repository\Offer();
             $offerDetail = $offerObj->getOfferDetail($id);
+            //echo "<pre>";print_r($offerDetail);die;
             echo Zend_Json::encode($offerDetail);
             die;
     }
@@ -782,7 +781,7 @@ class Admin_OfferController extends Zend_Controller_Action
 
         $url = strtolower($url);
 
-        $rp = Doctrine_Query::create()->select('extendedUrl')->from("Offer")->where("extendedUrl = '".urlencode($url)."'")->fetchArray();
+        $rp = KC\Repository\Offer::getExtendedUrl($url);
 
         if($id != '') {
 

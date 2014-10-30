@@ -273,8 +273,6 @@ class User extends \KC\Entity\User
         
         $entityManagerUser  = \Zend_Registry::get('emUser');
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-
-        $entityManagerUser  = \Zend_Registry::get('emUser');
         $repo = $entityManagerUser->getRepository('KC\Entity\User');
         $updateUser = $repo->find($params['id']);
 
