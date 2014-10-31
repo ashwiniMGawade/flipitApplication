@@ -357,14 +357,15 @@ class Shop extends \KC\Entity\Shop
             ->from("KC\Entity\Shop", "s")
             ->leftJoin('s.affliatenetwork', 'a')
             ->where('s.deleted = '. $flag)
-            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%a".$srh."%")));
-         //echo "<prE>";   print_r($shopList); die;
-        $request = \DataTable_Helper::createSearchRequest($params, array('id', 'firstName', 'email'));
-        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
+            ->andWhere($queryBuilder->expr()->like("s.name", $queryBuilder->expr()->literal("%".$srh."%")));
+        $request = \DataTable_Helper::createSearchRequest($params, array());
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($shopList)
             ->add('number', 's.id')
+            ->add('text', 's.name')
             ->add('text', 's.updated_at')
+            ->add('text', 's.created_at')
             ->add('text', 's.permaLink')
             ->add('text', 's.affliateProgram')
             ->add('text', 'a.name')
@@ -374,7 +375,7 @@ class Shop extends \KC\Entity\Shop
             ->add('text', 's.offlineSicne');
         $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $result = \DataTable_Helper::getResponse($data, $request);
-        return \Zend_Json::encode($result);
+        return $result;
     }
 
     public static function moveToTrash($id)
@@ -404,13 +405,14 @@ class Shop extends \KC\Entity\Shop
         return $id;
     }
 
-    // to be migrated
     public static function permanentDeleteShop($id)
     {
         if ($id) {
-            $shop = Doctrine_Core::getTable("Shop")->find($id);
-            $shop->hardDelete(true);
-            return true ;
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\Shop', 's')
+                ->where("s.id=" . $id)
+                ->getQuery()->execute();
+            return true;
         }
         return false ;
     }
@@ -738,13 +740,6 @@ class Shop extends \KC\Entity\Shop
                 }
             }
         }
-
-        if (!empty($shopDetail['selectedCategoryies'])) {
-            //$shopInfo->refShopCategory->delete();
-            foreach ($shopDetail['selectedCategoryies'] as $key => $categories) {
-                //$shopInfo->refShopCategory[]->categoryId = $categories;
-            }
-        }
  
         if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
             $uploadPath = UPLOAD_IMG_PATH . "shop/";
@@ -796,46 +791,91 @@ class Shop extends \KC\Entity\Shop
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
 
         if (!empty($shopDetail['id'])) {
-            $getcategory = $queryBuilder->select('s.permaLink')->from('Shop')->where('id = '.$shopDetail['id'])->fetchArray();
+            $getcategory = $queryBuilder->select('s.permaLink')
+                ->from('KC\Entity\Shop', 's')
+                ->where('s.id = '.$shopDetail['id'])
+                ->getQuery()
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+               
         }
         if (!empty($getcategory[0]['permaLink'])) {
-            $getRouteLink = $queryBuilder->select()->from('RoutePermalink')->where("permalink = '".$getcategory[0]['permaLink']."'")->andWhere('type = "SHP"')->fetchArray();
-            $howToguideRoute = $queryBuilder->select()->from('RoutePermalink')->where("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->andWhere('type = "SHP"')->fetchArray();
+            $getRouteLink = $queryBuilder->select('routep.permalink')
+                ->from('KC\Entity\RoutePermalink', 'routep')
+                ->where("routep.permalink = '".$getcategory[0]['permaLink']."'")
+                ->andWhere("routep.type = 'SHP'")
+                ->setMaxResults(1)
+                ->getQuery()
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $howToguideRoute = $queryBuilder->select('rpermalink.id')
+                ->from('KC\Entity\RoutePermalink', 'rpermalink')
+                ->where("rpermalink.permalink = 'how-to/".$getRouteLink[0]['permalink']."'")
+                ->andWhere("rpermalink.type = 'SHP'")
+                ->getQuery()
+                ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            
         }
 
         try {
-            //$shopInfo->refShopRelatedshop->delete();
-           // $shopInfo->save();
             \Zend_Registry::get('emLocale')->persist($shopInfo);
             \Zend_Registry::get('emLocale')->flush();
+
+            if (!empty($shopDetail['selectedCategoryies'])) {
+                if (!empty($shopDetail['id'])) {
+                    $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                    $query = $queryBuilder->delete('KC\Entity\RefShopCategory', 'rf')
+                        ->where("rf.shopId=" . $shopDetail['id'])
+                        ->getQuery()->execute();
+                }
+                foreach ($shopDetail['selectedCategoryies'] as $key => $categories) {
+                    $refShopCategory = new \KC\Entity\RefShopCategory();
+                    $refShopCategory->created_at = new \DateTime('now');
+                    $refShopCategory->updated_at = new \DateTime('now');
+                    $refShopCategory->category = \Zend_Registry::get('emLocale')->find('KC\Entity\Shop', $shopInfo->id);
+                    $refShopCategory->shop = \Zend_Registry::get('emLocale')->find('KC\Entity\Category', $categories);
+                    \Zend_Registry::get('emLocale')->persist($refShopCategory);
+                    \Zend_Registry::get('emLocale')->flush();
+                }
+            }
+
             $key = 'shop_similar_shops';
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
             if (!empty($getRouteLink)) {
                 $exactLink = 'store/storedetail/id/'.$shopInfo->id;
                 $howtoguide = 'store/howtoguide/shopid/'.$shopInfo->id;
-                $updateRouteLink = Doctrine_Query::create()->update('RoutePermalink')
-                ->set(
-                    'permalink',
-                    "'".\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])."'"
-                )
-                ->set('type', "'SHP'")
-                ->set('exactlink', "'". $exactLink."'");
-                $updateRouteLink->where('type = "SHP"')->andWhere("permalink = '".$getRouteLink[0]['permalink']."'")->execute();
+                $updateRouteLink = $queryBuilder->update('KC\Entity\RoutePermalink', 'rpm')
+                    ->set(
+                        'rpm.permalink',
+                        "'".\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])."'"
+                    )
+                    ->set('rpm.type', "'SHP'")
+                    ->set('rpm.exactlink', "'". $exactLink."'");
+                $updateRouteLink->where("rpm.type = 'SHP'")
+                    ->andWhere($queryBuilder->expr()->eq('rpm.permalink', $queryBuilder->expr()->literal($getRouteLink[0]['permalink'])))
+                    ->getQuery()
+                    ->execute();
 
                 if (!empty($howToguideRoute)) {
-                    $updateRouteHow = Doctrine_Query::create()->update('RoutePermalink')
-                    ->set('permalink', "'how-to/".\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])."'")
-                    ->set('type', "'SHP'")
-                    ->set('exactlink', "'".$howtoguide."'");
-                    $updateRouteHow->where('type = "SHP"')->andWhere("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->execute();
+                    $updateRouteHow = \Zend_Registry::get('emLocale')->createQueryBuilder()->update('KC\Entity\RoutePermalink', 'rpl')
+                    ->set('rpl.permalink', "'how-to/".\BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl'])."'")
+                    ->set('rpl.type', "'SHP'")
+                    ->set('rpl.exactlink', "'".$howtoguide."'");
+                    $updateRouteHow->where("rpl.type = 'SHP'")
+                        ->andWhere($queryBuilder->expr()->eq('rpl.permalink', $queryBuilder->expr()->literal('how-to/'.$getRouteLink[0]['permalink'])))
+                        ->getQuery()
+                        ->execute();
                 } else {
-                    $route = new RoutePermalink();
+                    $route = new \KC\Entity\RoutePermalink();
                     $route->permalink = "how-to/" . \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
                     $route->type = 'SHP';
                     $route->exactlink = 'store/howtoguide/shopid/'.$shopInfo->id;
-                    $route->save();
+                    $route->deleted = 0;
+                    $route->created_at = new \DateTime('now');
+                    $route->updated_at = new \DateTime('now');
+                    \Zend_Registry::get('emLocale')->persist($route);
+                    \Zend_Registry::get('emLocale')->flush();
                 }
+                 
             } else {
                 $route = new \KC\Entity\RoutePermalink();
                 $route->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['shopNavUrl']);
@@ -863,6 +903,12 @@ class Shop extends \KC\Entity\Shop
                 $i = 1;
                 foreach ($similarstoreordArray as $shop) {
                     if ($shop!='') {
+                        if (!empty($shopDetail['id'])) {
+                            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                            $query = $queryBuilder->delete('KC\Entity\RefShopRelatedshop', 'rsrs')
+                                ->where("rsrs.shop=" . $shopDetail['id'])
+                                ->getQuery()->execute();
+                        }
                         $relateshopObj = new \KC\Entity\RefShopRelatedshop();
                         $relateshopObj->shop = \Zend_Registry::get('emLocale')
                             ->getRepository('KC\Entity\Shop')
@@ -877,7 +923,6 @@ class Shop extends \KC\Entity\Shop
                     }
                 }
             }
-
             if (!empty($shopDetail['title']) && !empty($shopDetail['content'])) {
                 $delChapters = $queryBuilder
                     ->delete("KC\Entity\ShopHowToChapter", "sh")
@@ -900,6 +945,33 @@ class Shop extends \KC\Entity\Shop
                 }
             }
             return $shopInfo->id;
+            //to be refactored when chain item model is done
+            if (!empty($shopDetail['id'])) {
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
+                $key = 'shopDetails_'. $shopInfo->id.'_list';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+                $cacheKeyOfferDetails = 'offerDetails_'  . $shopInfo->id . '_list';
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
+                \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $shopInfo->id);
+                   /* if($shopInfo->chainItemId) {
+                        $chainItem = Doctrine_Core::getTable("ChainItem") ->findBySql(
+                                            'shopId = ? AND id = ?',
+                                            array($shopInfo->id,$shopInfo->chainItemId),
+                                            Doctrine::HYDRATE_RECORD)->getData();
+                        # verify a valid chain item exists
+                        if(isset($chainItem[0])) {
+                             $chainItem[0]->update($data,$shopInfo->toArray(false));
+                        }
+                    }*/
+            }
         } catch (Exception $e) {
             return false;
         }
@@ -1375,43 +1447,6 @@ class Shop extends \KC\Entity\Shop
         $key = 'shopDetails_'.$params['id'].'_list';
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         return $date;
-    }
-
-
-    //to be refactored
-    public function postUpdate($event)
-    {
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_shops_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('25_popularshop_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularShops_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_popularVoucherCodesList_feed');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('offers_by_searchedkeywords');
-        $key = 'shopDetails_'. $this->id.'_list';
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-        $cacheKeyOfferDetails = 'offerDetails_'  . $this->id . '_list';
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($cacheKeyOfferDetails);
-        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allCategoriesOf_shoppage_'. $this->id);
-
-        try {
-            $data = $this->getLastModified();
-            # update chain if shop is associated with chain
-            if($this->chainItemId) {
-                $chainItem = Doctrine_Core::getTable("ChainItem") ->findBySql(
-                                    'shopId = ? AND id = ?',
-                                    array($this->id,$this->chainItemId),
-                                    Doctrine::HYDRATE_RECORD)->getData();
-                # verify a valid chain item exists
-                if(isset($chainItem[0])) {
-                     $chainItem[0]->update($data,$this->toArray(false));
-                }
-            }
-        } catch (Exception $e) {
-            return false;
-        }
     }
 
     public static function getAmountShopsCreatedLastWeek()

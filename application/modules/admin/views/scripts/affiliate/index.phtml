@@ -1,7 +1,8 @@
 <!-- start affiliate network list -->
 <?php 
   $this->headTitle()->append($this->translate('Affilate Network'));
-  $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+  $u = Auth_StaffAdapter::getIdentity();
+  $role =  $u->users->id;
   if($role=='1' || $role=='2')
   {
   $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.dataTables.min.js");

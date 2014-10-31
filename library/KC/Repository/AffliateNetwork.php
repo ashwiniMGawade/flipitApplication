@@ -24,15 +24,14 @@ class AffliateNetwork extends \KC\Entity\AffliateNetwork
         $sortBy = isset($params['sortBy']) ? @$params['sortBy'] : '';
         $delVal = isset($params['off']) ?  $params['off'] : '0, 1';
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $networkList = $queryBuilder
+        $networkList = $queryBuilder->select("a")
             ->from("KC\Entity\AffliateNetwork", "a")
-            ->where("a.name LIKE $srh%")
+            ->where($queryBuilder->expr()->like("a.name", $queryBuilder->expr()->literal($srh."%")))
             ->andWhere("a.deleted = 0")
-            ->where('a.status IN('.$delVal.')')
-            ->andWhere("a.affliate_networks IS NULL")
-            ->orderBy('a.id', 'DESC');
-        $request = \DataTable_Helper::createSearchRequest($params, array('id', 'name'));
-        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emUser'), $request);
+            ->andWhere($queryBuilder->expr()->in('a.status', $delVal))
+            ->andWhere("a.affliate_networks IS NULL");
+        $request = \DataTable_Helper::createSearchRequest($params, array());
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
         $builder
             ->setQueryBuilder($networkList)
             ->add('number', 'a.id')
