@@ -539,7 +539,7 @@ class Page Extends \KC\Entity\Page
             mkdir(UPLOAD_IMG_PATH, 0776, true);
         }
         $uploadPath = UPLOAD_IMG_PATH . "page/";
-        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
         $rootPath = ROOT_PATH . $uploadPath;
         $files = $adapter->getFileInfo($file);
 
@@ -553,17 +553,17 @@ class Page Extends \KC\Entity\Page
         $newName = time() . "_" . $name;
         $cp = $rootPath . $newName;
         $path = ROOT_PATH . $uploadPath . "thum_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 132, 95, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 132, 95, $path);
         $path = ROOT_PATH . $uploadPath . "thum_page_small" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 60, 40, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 60, 40, $path);
         $path = ROOT_PATH . $uploadPath . "thum_page_large_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 150, 100, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 150, 100, $path);
         $path = ROOT_PATH . $uploadPath . "thum_extra_large_" . $newName;
-        BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 170, 127, $path);
+        \BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 170, 127, $path);
 
         if ($file == "logoFile") {
             $path = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage(
+            \BackEnd_Helper_viewHelper::resizeImage(
                 $files[$file],
                 $newName,
                 200,
@@ -572,7 +572,7 @@ class Page Extends \KC\Entity\Page
             );
         }
         $adapter->addFilter(
-            new Zend_Filter_File_Rename(
+            new \Zend_Filter_File_Rename(
                 array(
                     'target' => $cp,
                     'overwrite' => true
@@ -595,206 +595,227 @@ class Page Extends \KC\Entity\Page
 
     public function savePage($params)
     {
-        $this->pagetype ='default';
-        $this->maxOffers  = 0;
-        $this->oderOffers = 0;
+        $savePage = new \KC\Entity\Page();
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $savePage->pageType ='default';
+        $savePage->maxOffers  = 0;
+        $savePage->oderOffers = 0;
         if (isset($params['selectedpageType'])) {
-              $this->pagetype ='offer';
+              $savePage->pageType ='offer';
             if (trim($params['maxOffer'])!='') {
-                  $this->maxOffers = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxOffer']);
+                  $savePage->maxOffers = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxOffer']);
             }
-            $this->oderOffers = 'desc';
+            $savePage->oderOffers = 'desc';
             if (isset($params['offersOrderchk'])) {
-                $this->oderOffers = 'asc';
+                $savePage->oderOffers = 'asc';
             }
             if (isset($params['timeCostraintchk'])) {
-                $this->enabletimeconstraint=1;
-                $this->timenumberofdays = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['numberofDays']);
-                $this->timetype = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['postwithin']);
+                $savePage->enableTimeConstraint=1;
+                $savePage->timenumberOfDays = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['numberofDays']);
+                $savePage->timeType = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['postwithin']);
             }
             if (isset($params['wordCostraintchk'])) {
-                $this->enablewordconstraint = 1;
-                $this->wordtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['wordConstraintTxt']);
+                $savePage->enableWordConstraint = 1;
+                $savePage->wordTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['wordConstraintTxt']);
             }
             if (isset($params['awardCostraintchk'])) {
-                $this->awardconstratint = 1;
-                $this->awardtype =
+                $savePage->awardConstratint = 1;
+                $savePage->awardType =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['awardConstraintDropdown']);
             }
             if (isset($params['clickCostraintchk'])) {
-                $this->enableclickconstraint = 1;
-                $this->numberofclicks =
+                $savePage->enableClickConstraint = 1;
+                $savePage->numberOfClicks =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['clickConstraintTxt']);
             }
             if (isset($params['coupconCoderegularchk'])) {
-                $this->couponregular =
+                $savePage->couponRegular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCoderegularchk']);
             }
             if (isset($params['coupconCodeeditorchk'])) {
-                $this->couponeditorpick =
+                $savePage->couponEditorPick =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCodeeditorchk']);
             }
             if (isset($params['coupconCodeeclusivechk'])) {
-                $this->couponexclusive =
+                $savePage->couponExclusive =
                     BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCodeeclusivechk']);
             }
             if (isset($params['saleregularchk'])) {
-                $this->saleregular =
+                $savePage->saleRegular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleregularchk']);
             }
             if (isset($params['saleeditorchk'])) {
-                $this->saleeditorpick =
+                $savePage->saleEditorPick =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeditorchk']);
             }
             if (isset($params['saleeclusivechk'])) {
-                $this->saleexclusive =
+                $savePage->saleExclusive =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeclusivechk']);
             }
             if (isset($params['printableregularchk'])) {
-                $this->printableregular =
+                $savePage->printableRegular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableregularchk']);
             }
             if (isset($params['printableeditorchk'])) {
-                $this->printableeditorpick =
+                $savePage->printableEditorPick =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableeditorchk']);
             }
             if (isset($params['printableexclusivechk'])) {
-                $this->printableexclusive =
+                $savePage->printableExclusive =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableexclusivechk']);
             }
-            $this->showpage = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['showPage']);
+            $savePage->showPage = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['showPage']);
         }
-        $this->publish = 1;
-        $this->timeorder = 0;
+        $savePage->publish = 1;
+        $savePage->timeOrder = 0;
         if ($params['savePagebtn']=='draft') {
-            $this->publish = 0;
+            $savePage->publish = 0;
         }
         if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
             $result = self::uploadImage('logoFile');
-            $this->logoid = 0;
+            $savePage->logoid = 0;
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $this->logo->ext = $ext;
-                $this->logo->path = $result['path'];
-                $this->logo->name = $result['fileName'];
+                $pageImage  = new \KC\Entity\Image();
+                $pageImage->ext = $ext;
+                $pageImage->path = $result['path'];
+                $pageImage->name = $result['fileName'];
+                $pageImage->type = 'LG';
+                $pageImage->deleted = 0;
+                $pageImage->created_at = new \DateTime('now');
+                $pageImage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($pageImage);
+                $entityManagerLocale->flush();
+                $savePage->logoId =  $pageImage->getId();
             } else {
                 return false;
             }
         }
         if (isset($_FILES['headerFile']['name']) && $_FILES['headerFile']['name'] != '') {
             $result = self::uploadImage('headerFile');
-            $this->pageheaderimageid = 0;
+            $savePage->pageheaderimageid = 0;
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $this->pageheaderimage->ext = $ext;
-                $this->pageheaderimage->path = $result['path'];
-                $this->pageheaderimage->name = $result['fileName'];
+                $pageImage  = new \KC\Entity\Image();
+                $pageImage->ext = $ext;
+                $pageImage->path = $result['path'];
+                $pageImage->name = $result['fileName'];
+                $pageImage->type = 'LG';
+                $pageImage->deleted = 0;
+                $pageImage->created_at = new \DateTime('now');
+                $pageImage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($pageImage);
+                $entityManagerLocale->flush();
+                $savePage->pageHeaderImageId =  $pageImage->getId();
             } else {
                 return false;
             }
         }
         if (isset($params['publishDate']) && $params['publishDate']!='') {
-            $this->publishdate = date('Y-m-d', strtotime($params['publishDate']))
+            $publishDate= date('Y-m-d', strtotime($params['publishDate']))
                 .' '.date('H:i:s', strtotime($params['publishTimehh']));
+            $savePage->publishDate = new \DateTime($publishDate);
         }
-        $this->pagetitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
-        $this->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagepermalink']);
-        $this->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaTitle']);
-        $this->metadescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaDesc']);
-        $this->customheader = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageCustomHeader']);
-        $this->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
-        $this->created_at = new \DateTime('now');
-        $this->updated_at = new \DateTime('now');
-        $this->deleted = 0;
-        $this->pagelock = 0;
+        $savePage->pageTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
+        $savePage->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagepermalink']);
+        $savePage->metaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaTitle']);
+        $savePage->metaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaDesc']);
+        $savePage->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageCustomHeader']);
+        $savePage->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
+        $savePage->created_at = new \DateTime('now');
+        $savePage->updated_at = new \DateTime('now');
+        $savePage->deleted = 0;
+        $savePage->pageLock = 0;
         if (isset($params['lockPageStatuschk'])) {
-            $this->pagelock = 1;
+            $savePage->pageLock = 1;
         }
         isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
         if (trim($params['pageTemplate'])!='') {
-            $this->pageattributeid = $params['pageTemplate'];
+            $savePage->page = $params['pageTemplate'];
         }
-        $conn2 = \BackEnd_Helper_viewHelper::addConnection();
-        $this->contentManagerId = \Auth_StaffAdapter::getIdentity()->id;
-        $this->contentManagerName = \Auth_StaffAdapter::getIdentity()->firstName
+       
+        $savePage->contentManagerId = \Auth_StaffAdapter::getIdentity()->id;
+        $savePage->contentManagerName = \Auth_StaffAdapter::getIdentity()->firstName
         . " " . \Auth_StaffAdapter::getIdentity()->lastName;
-        \BackEnd_Helper_viewHelper::closeConnection($conn2);
-        $selectedWidgets = explode(',', $params['selectedWigetForPage']);
-        foreach ($selectedWidgets as $widget) {
-            if (trim($widget)!='') {
-                $this->pagewidget[]->widgetId = $widget;
-            }
-        }
-        if ($params['pageTemplate'] == 13) {
-            for ($a=0; $a<count($params['artcatgs']); $a++) {
-                $this->moneysaving[]->categoryid = $params['artcatgs'][$a];
-            }
-        }
         try {
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
             $pagePermalinkParam =
-                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
+                \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$savePage->getId().'_image');
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $entityManagerLocale->persist($this);
-            $pageId =  $this->id;
-            $permalink = $this->permalink;
+        
+            $entityManagerLocale->persist($savePage);
             $entityManagerLocale->flush();
-            if (isset($permalink)) {
-                $varnishObj = new Varnish();
-                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
+
+            $selectedWidgets = explode(',', $params['selectedWigetForPage']);
+            foreach ($selectedWidgets as $widget) {
+                if (trim($widget)!='') {
+                    $pageWidget  = new \KC\Entity\RefPageWidget();
+                    $pageWidget->created_at = new \DateTime('now');
+                    $pageWidget->updated_at = new \DateTime('now');
+                    $pageWidget->page = $entityManagerUser->find('KC\Entity\Widget', $widget);
+                    $pageWidget->widget = $entityManagerUser->find('KC\Entity\Page', $savePage->getId());
+                    $entityManagerLocale->persist($pageWidget);
+                    $entityManagerLocale->flush();
+                }
             }
-            $route = new KC\Repository\RoutePermalink();
+
+            $pageId =  $savePage->getId();
+            $permalink = $pagePermalinkParam;
+            /*if (isset($permalink)) {
+                $varnishObj = new KC\Repository\Varnish();
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
+            }*/
+            $route = new \KC\Entity\RoutePermalink();
             $route->permalink = $params['pagepermalink'];
             $route->type = 'PG';
             $route->exactlink = $params['pagepermalink'];
 
             switch ($params['pageTemplate']) {
                 case 4:
-                    $route->exactlink = 'index/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'index/index/attachedpage/'.$savePage->getId();
                     break;
                 case 5:
-                    $route->exactlink = 'offer/popularoffer/attachedpage/'.$this->id;
+                    $route->exactlink = 'offer/popularoffer/attachedpage/'.$savePage->getId();
                     break;
                 case 6:
-                    $route->exactlink = 'offer/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'offer/index/attachedpage/'.$savePage->getId();
                     break;
                 case 5:
                     $route->exactlink = 'offer/popularoffer';
                     break;
                 case 7:
-                    $route->exactlink = 'store/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'store/index/attachedpage/'.$savePage->getId();
                     break;
                 case 8:
-                    $route->exactlink = 'store/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'store/index/attachedpage/'.$savePage->getId();
                     break;
                 case 9:
-                    $route->exactlink = 'category/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'category/index/attachedpage/'.$savePage->getId();
                     break;
                 case 10:
-                    $route->exactlink = 'category/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'category/index/attachedpage/'.$savePage->getId();
                     break;
                 case 13:
-                    $route->exactlink = 'plus/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'plus/index/attachedpage/'.$savePage->getId();
                     break;
                 case 14:
-                    $route->exactlink = 'about/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'about/index/attachedpage/'.$savePage->getId();
                     break;
                 case 17:
-                    $route->exactlink = 'login/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'login/index/attachedpage/'.$savePage->getId();
                     break;
                 case 18:
-                    $route->exactlink = 'login/forgotpassword/attachedpage/'.$this->id;
+                    $route->exactlink = 'login/forgotpassword/attachedpage/'.$savePage->getId();
                     break;
                 case 19:
-                    $route->exactlink = 'freesignup/index/attachedpage/'.$this->id;
+                    $route->exactlink = 'freesignup/index/attachedpage/'.$savePage->getId();
                     break;
                 case 29:
-                    $route->exactlink = 'login/memberwelcome/attachedpage/'.$this->id;
+                    $route->exactlink = 'login/memberwelcome/attachedpage/'.$savePage->getId();
                     break;
             }
             $entityManagerLocale->persist($route);
@@ -822,99 +843,102 @@ class Page Extends \KC\Entity\Page
 
     public function updatePage($params)
     {
-        $this->slug =  $params['slug'];
-        $this->pagetype='default';
+        $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $repo = $entityManagerLocale->getRepository('KC\Entity\Page');
+        $updatePage = $repo->find($params['pageId']);
+        $updatePage->slug =  $params['slug'];
+        $updatePage->pageType='default';
         if (isset($params['selectedpageType'])) {
-            $this->pagetype='offer';
-            $this->maxOffers ='';
+            $updatePage->pageType='offer';
+            $updatePage->maxOffers ='';
             if (trim($params['maxOffer'])!='') {
-                $this->maxOffers = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxOffer']);
+                $updatePage->maxOffers = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['maxOffer']);
             }
-            $this->oderOffers = 0;
+            $updatePage->oderOffers = 0;
             if (isset($params['offersOrderchk'])) {
-                $this->oderOffers = $params['offersOrderchk'];
+                $updatePage->oderOffers = $params['offersOrderchk'];
             }
-            $this->enabletimeconstraint=0;
-            $this->timenumberofdays = 0;
-            $this->timetype = 0;
+            $updatePage->enableTimeConstraint=0;
+            $updatePage->timenumberOfDays = 0;
+            $updatePage->timeType = 0;
 
             if (isset($params['timeCostraintchk'])) {
-                $this->enabletimeconstraint=1;
-                $this->timenumberofdays = $params['numberofDays'];
-                $this->timetype = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['postwithin']);
+                $updatePage->enableTimeConstraint=1;
+                $updatePage->timenumberOfDays = $params['numberofDays'];
+                $updatePage->timeType = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['postwithin']);
             }
 
-            $this->enablewordconstraint=0;
-            $this->wordtitle = '';
+            $updatePage->enableWordConstraint=0;
+            $updatePage->wordTitle = '';
 
             if (isset($params['wordCostraintchk'])) {
-                $this->enablewordconstraint=1;
-                $this->wordtitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['wordConstraintTxt']);
+                $updatePage->enableWordConstraint=1;
+                $updatePage->wordTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['wordConstraintTxt']);
             }
-            $this->awardconstratint=0;
-            $this->awardtype = 0;
+            $updatePage->awardconstratint=0;
+            $updatePage->awardtype = 0;
             if (isset($params['awardCostraintchk'])) {
-                $this->awardconstratint=1;
-                $this->awardtype = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['awardConstraintDropdown']);
+                $updatePage->awardconstratint=1;
+                $updatePage->awardtype = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['awardConstraintDropdown']);
             }
 
-            $this->enableclickconstraint=0;
-            $this->numberofclicks = '';
+            $updatePage->enableclickconstraint=0;
+            $updatePage->numberofclicks = '';
 
             if (isset($params['clickCostraintchk'])) {
-                $this->enableclickconstraint = 1;
-                $this->numberofclicks =
+                $updatePage->enableclickconstraint = 1;
+                $updatePage->numberofclicks =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['clickConstraintTxt']);
             }
 
-            $this->couponregular = 0;
+            $updatePage->couponregular = 0;
             if (isset($params['coupconCoderegularchk'])) {
-                $this->couponregular =
+                $updatePage->couponregular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCoderegularchk']);
             }
-            $this->couponeditorpick = 0;
+            $updatePage->couponeditorpick = 0;
             if (isset($params['coupconCodeeditorchk'])) {
-                $this->couponeditorpick =
+                $updatePage->couponeditorpick =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCodeeditorchk']);
             }
-            $this->couponexclusive= 0;
+            $updatePage->couponexclusive= 0;
             if (isset($params['coupconCodeeclusivechk'])) {
-                $this->couponexclusive =
+                $updatePage->couponexclusive =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCodeeclusivechk']);
             }
-            $this->saleregular = 0;
+            $updatePage->saleregular = 0;
             if (isset($params['saleregularchk'])) {
-                $this->saleregular =
+                $updatePage->saleregular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleregularchk']);
             }
-            $this->saleeditorpick = 0;
+            $updatePage->saleeditorpick = 0;
             if (isset($params['saleeditorchk'])) {
-                $this->saleeditorpick = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeditorchk']);
+                $updatePage->saleeditorpick = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeditorchk']);
             }
-            $this->saleexclusive=0;
+            $updatePage->saleexclusive=0;
             if (isset($params['saleeclusivechk'])) {
-                $this->saleexclusive =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeclusivechk']);
+                $updatePage->saleexclusive =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeclusivechk']);
             }
-            $this->printableregular = 0;
+            $updatePage->printableregular = 0;
             if (isset($params['printableregularchk'])) {
-                $this->printableregular =
+                $updatePage->printableregular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableregularchk']);
             }
-            $this->printableeditorpick = 0;
+            $updatePage->printableeditorpick = 0;
             if (isset($params['printableeditorchk'])) {
-                $this->printableeditorpick =
+                $updatePage->printableeditorpick =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableeditorchk']);
             }
-            $this->printableexclusive = 0;
+            $updatePage->printableexclusive = 0;
             if (isset($params['printableexclusivechk'])) {
-                $this->printableexclusive =
+                $updatePage->printableexclusive =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableexclusivechk']);
             }
-            $this->showPage = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['showPage']);
+            $updatePage->showPage = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['showPage']);
         }
-        $this->publish  = 1;
+        $updatePage->publish  = 1;
         if ($params['savePagebtn']=='draft') {
-            $this->publish  = 0;
+            $updatePage->publish  = 0;
         }
         if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
             $result = self::uploadImage('logoFile');
@@ -941,33 +965,34 @@ class Page Extends \KC\Entity\Page
         }
 
         if (isset($params['publishDate']) && $params['publishDate']!='') {
-            $this->publishDate = date('Y-m-d', strtotime($params['publishDate']))
+            $publishDate = date('Y-m-d', strtotime($params['publishDate']))
             .' '.date(
                 'H:i:s',
                 strtotime($params['publishTimehh'])
             );
+            $updatePage->publishDate = $publishDate ;
         }
-        $this->pagetitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
-        $this->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagepermalink']);
-        $this->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaTitle']);
-        $this->metadescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaDesc']);
-        $this->customheader = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageCustomHeader']);
-        $this->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
-        $this->pagelock = 0;
+        $updatePage->pagetitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
+        $updatePage->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagepermalink']);
+        $updatePage->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaTitle']);
+        $updatePage->metadescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaDesc']);
+        $updatePage->customheader = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageCustomHeader']);
+        $updatePage->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
+        $updatePage->pagelock = 0;
         if (isset($params['lockPageStatuschk'])) {
-            $this->pagelock = 1;
+            $updatePage->pagelock = 1;
         }
         isset($params['showSitemapStatuscheck']) && $params['showSitemapStatuscheck'] == 1
-            ? $this->showsitemap = 1 : $this->showsitemap = 0;
+            ? $updatePage->showsitemap = 1 : $this->showsitemap = 0;
 
         if (trim($params['pageTemplate'])!='') {
-            $this->pageattributeid = $params['pageTemplate'];
+            $updatePage->pageattributeid = $params['pageTemplate'];
         } else {
-            $this->pageattributeid = NULL;
+            $updatePage->pageattributeid = NULL;
         }
         if (isset($params['pageAuthor']) && $params['pageAuthor']!='') {
-            $this->contentManagerId = $params['pageAuthor'];
-            $this->contentManagerName = $params['selectedpageAuthorName'];
+            $updatePage->contentManagerId = $params['pageAuthor'];
+            $updatePage->contentManagerName = $params['selectedpageAuthorName'];
         }
         $selectedWidgets = explode(',', $params['selectedWigetForPage']);
         $this->pageWidget->delete();

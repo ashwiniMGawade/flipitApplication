@@ -183,41 +183,31 @@ class Admin_PageController extends Zend_Controller_Action
     public function savepageAction()
     {
         $params = $this->_getAllParams();
-        $pageObj = new Page();
+        $pageObj = new KC\Repository\Page();
 
-    if(@$params['pageTemplate'] == 15){
-
-        $checkfooterpages = $pageObj->checkFooterpages(@$params['pageTemplate']);
-
-        if(count($checkfooterpages) == 10){
-
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('Error: you can not add another footer page.');
-            $flash->addMessage(array('error' => $message ));
-            $this->_redirect(HTTP_PATH.'admin/page');
-            exit;
-        }
-    }
-
-                $pageObj->savePage($params);
-
-                if(isset($params['savePagebtn']) && @$params['savePagebtn'] == 'draft'){
-
-                    $createdpageid = Doctrine_Query::create()->select("id")->from("Page")->orderBy("id DESC")->limit(1)->fetchArray();
-                    $lastval = $createdpageid[0]['id'];
-
-                    $redirecturl = "/admin/page/editpage/id/".$lastval;
-                    $this->_redirect($redirecturl);
-                    exit();
-                }
-
+        if (@$params['pageTemplate'] == 15) {
+            $checkfooterpages = $pageObj->checkFooterpages(@$params['pageTemplate']);
+            if (count($checkfooterpages) == 10) {
                 $flash = $this->_helper->getHelper('FlashMessenger');
-                $message = $this->view->translate('Page has been created successfully.');
-                $flash->addMessage(array('success' => $message ));
+                $message = $this->view->translate('Error: you can not add another footer page.');
+                $flash->addMessage(array('error' => $message ));
                 $this->_redirect(HTTP_PATH.'admin/page');
                 exit;
-
-
+            }
+        }
+        $pageObj->savePage($params);
+        if (isset($params['savePagebtn']) && @$params['savePagebtn'] == 'draft') {
+            $createdpageid = Doctrine_Query::create()->select("id")->from("Page")->orderBy("id DESC")->limit(1)->fetchArray();
+            $lastval = $createdpageid[0]['id'];
+            $redirecturl = "/admin/page/editpage/id/".$lastval;
+            $this->_redirect($redirecturl);
+            exit();
+        }
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $this->view->translate('Page has been created successfully.');
+        $flash->addMessage(array('success' => $message ));
+        $this->_redirect(HTTP_PATH.'admin/page');
+        exit;
     }
 /**
      * search to five shop from database by flag
@@ -537,20 +527,19 @@ class Admin_PageController extends Zend_Controller_Action
      */
     public function validatepermalinkAction()
     {
-        $url = $this->getRequest ()->getParam ( "pagepermalink" );
+        $url = $this->getRequest()->getParam("pagepermalink");
         $id = $this->getRequest()->getParam("id") ;
-
-
-
         $pattern = array ('/\s/','/[\,+@#$%^&*!]+/');
-
         $replace = array ("-","-");
-        $url = preg_replace ( $pattern, $replace, $url );
+        $url = preg_replace($pattern, $replace, $url);
         $url = strtolower($url);
-        $rp = Doctrine_Query::create()->select()->from("RoutePermalink")->where("permalink = '".urlencode($url)."'")->fetchArray();
-
-        if($id!='') {
-
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
+            ->select('rp.permalink, rp.exactlink')
+            ->from('KC\Entity\RoutePermalink', 'rp')
+            ->where("rp.permalink = '".urlencode($url)."'");
+        $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        if ($id!='') {
             $exactLinkIndex = 'index/index/attachedpage/'.$id;
             $exactLinkOfferPop = 'offer/popularoffer/attachedpage/'.$id;
             $exactLinkOffer = 'offer/index/attachedpage/'.$id;
@@ -562,50 +551,45 @@ class Admin_PageController extends Zend_Controller_Action
             $exactLinkForgot = 'login/forgotpassword/attachedpage/'.$id;
             $exactLinkFree = 'freesignup/index/attachedpage/'.$id;
             $exactLinkWelcome = 'login/memberwelcome/attachedpage/'.$id;
-
-
-            if(@$rp[0]['permalink'] == $url ) {
-                if( @$rp[0]['exactlink'] == $url || @$rp[0]['exactlink'] == $exactLinkIndex ||
+            if (@$rp[0]['permalink'] == $url) {
+                if (@$rp[0]['exactlink'] == $url || @$rp[0]['exactlink'] == $exactLinkIndex ||
                     @$rp[0]['exactlink'] == $exactLinkOfferPop || @$rp[0]['exactlink'] == $exactLinkOffer ||
                     @$rp[0]['exactlink'] == $exactLinkStore || @$rp[0]['exactlink'] == $exactLinkCategory ||
                     @$rp[0]['exactlink'] == $exactLinkMsGuide || @$rp[0]['exactlink'] == $exactLinkAbout ||
                     @$rp[0]['exactlink'] == $exactLinkLogin ||
                     @$rp[0]['exactlink'] == $exactLinkForgot || @$rp[0]['exactlink'] == $exactLinkFree ||
                     @$rp[0]['exactlink'] == $exactLinkWelcome
-                  ){
+                  ) {
                     $res = array( 	'status' => '200' ,
                             'url' => $url ,
                             'shopNavUrl' => $url ) ;
 
-                    echo Zend_Json::encode($res ) ;
+                    echo Zend_Json::encode($res);
                     die ;
-                }else	{
+                } else {
 
                     $res = false ;
-                    echo Zend_Json::encode( $res ) ;
+                    echo Zend_Json::encode($res);
                     die ;
                 }
             }
         }
+        if (strlen($url) > 0) {
 
-
-        if( strlen($url )  > 0) {
-
-            if(@$rp[0]['permalink'] != $url ) {
+            if (@$rp[0]['permalink'] != $url) {
                 $res = array ( 'status' => '200',
                         'url' => $url,
                         'permaLink' =>
-                        $this->getRequest ()->getParam ( "pagepermalink" )
+                        $this->getRequest()->getParam("pagepermalink")
                 );
-            }else {
-
-            $res = false;
+            } else {
+                $res = false;
             }
-        } else	{
+        } else {
 
             $res = false ;
         }
-        echo Zend_Json::encode ( $res );
+        echo Zend_Json::encode($res);
 
         die ();
     }
