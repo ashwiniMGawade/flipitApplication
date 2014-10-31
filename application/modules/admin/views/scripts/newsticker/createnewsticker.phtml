@@ -53,9 +53,9 @@
 							  <option value=""></option>
 								<?php 
 								for($i=0;$i<count($this->shopList);$i++){
-		     						if(trim($this->shopList[$i]['name'])!='')
+		     						if(trim($this->shopList[$i]['shopName'])!='')
 		     						{
-		     						  $shopname = substr($this->shopList[$i]['name'],0,70);
+		     						  $shopname = substr($this->shopList[$i]['shopName'],0,70);
 		     					?>
 		     						<option value="<?php echo $this->shopList[$i]['id']; ?>"><?php echo $shopname; ?></option>
 								<?php     
