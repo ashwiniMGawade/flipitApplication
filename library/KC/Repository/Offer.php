@@ -2689,7 +2689,7 @@ class Offer Extends \KC\Entity\Offer
     }
 
     public function saveOffer($params)
-    {
+    {//echo "<pre>";print_r($params);die;
         $saveOffer = new \KC\Entity\Offer();
         $entityManagerUser  = \Zend_Registry::get('emLocale');
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
@@ -2750,6 +2750,10 @@ class Offer Extends \KC\Entity\Offer
                     $offerImage->ext = $ext;
                     $offerImage->path ='images/upload/offer/';
                     $offerImage->name = $fileName;
+                    $offerImage->type = 'LG';
+                    $offerImage->deleted = 0;
+                    $offerImage->created_at = new \DateTime('now');
+                    $offerImage->updated_at = new \DateTime('now');
                     $entityManagerUser->persist($offerImage);
                     $entityManagerUser->flush();
                     $saveOffer->offerlogoid =  $offerImage->getId();
@@ -2766,13 +2770,6 @@ class Offer Extends \KC\Entity\Offer
             //$this->shop->deepLink = $params['offerRefUrl'];
         }
 
-        if (trim($params['termsAndcondition'])!='') {
-            $offerTerms  = new KC\Entity\TermAndCondition();
-            $offerTerms->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
-            $entityManagerUser->persist($offerTerms);
-            $entityManagerUser->flush();
-        }
-
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
             $startDate= date('Y-m-d', strtotime($params['offerStartDate']))
                 .' '.date(
@@ -2787,8 +2784,6 @@ class Offer Extends \KC\Entity\Offer
             $saveOffer->startDate = new \DateTime($startDate);
             $saveOffer->endDate = new \DateTime($endDate);
         }
-
-
 
         if (isset($params['extendedoffercheckbox'])) {                  // check if offer is extended
             $saveOffer->extendedOffer = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
@@ -2827,12 +2822,10 @@ class Offer Extends \KC\Entity\Offer
         $saveOffer->approved = 0;
         $saveOffer->offline = 0;
 
-        /*$connUser = \BackEnd_Helper_viewHelper::addConnection();
         $saveOffer->authorId = \Auth_StaffAdapter::getIdentity()->id;
         $saveOffer->authorName = \Auth_StaffAdapter::getIdentity()->firstName . " "
             . \Auth_StaffAdapter::getIdentity()->lastName;
-        \BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = \BackEnd_Helper_viewHelper::addConnectionSite();*/
+        
         if (intval($params['offerImageSelect']) > 0) {
             $saveOffer->tilesId = $params['offerImageSelect'];
         }
@@ -2857,40 +2850,52 @@ class Offer Extends \KC\Entity\Offer
         }
 
         if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
-            $saveNewShop = new KC\Entity\Shop();
+            $saveNewShop = new \KC\Entity\Shop();
             $saveNewShop->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->permaLink = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->status = 1;
-
+            $saveNewShop->howToUse = 0;
+            $saveNewShop->screenshotId = 0;
+            $saveNewShop->deleted = 0;
+            $saveNewShop->created_at = new \DateTime('now');
+            $saveNewShop->updated_at = new \DateTime('now');
+            $saveNewShop->displayExtraProperties = 1;
+            $saveNewShop->showSignupOption = 0;
+            $saveNewShop->addtosearch = 0;
+            $saveNewShop->showSimliarShops = 0;
+            $saveNewShop->showChains = 0;
+            $saveNewShop->strictConfirmation = 0;
             if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
 
                 $fileName = self::uploadShopLogo('logoFile');
-                $shopImage  = new KC\Entity\Image();
+                $shopImage  = new \KC\Entity\Image();
                 $shopImage->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
                     \BackEnd_Helper_viewHelper::getImageExtension($fileName)
                 );
                 $shopImage->path = 'images/upload/shop/';
                 $shopImage->name = $fileName;
+                $shopImage->deleted = 0;
+                $shopImage->type = "LG";
+                $shopImage->created_at = new \DateTime('now');
+                $shopImage->updated_at = new \DateTime('now');
                 $entityManagerUser->persist($shopImage);
                 $entityManagerUser->flush();
             } else {
                 return false;
             }
 
-            $saveNewShop->logoId = $shopImage->getId();
+            $saveNewShop->logo = $shopImage->getId();
             $entityManagerUser->persist($saveNewShop);
             $entityManagerUser->flush();
             $saveOffer->shopOffers = $entityManagerUser->find('KC\Entity\Shop', $saveNewShop->__get('id'));
 
         }      // New code Ends
         try {
-            
-            if (!empty($saveOffer->shopOffers) > 0) {
+            //echo "<pre>";print_r($saveOffer);die;
+        
                 $entityManagerUser->persist($saveOffer);
                 $entityManagerUser->flush();
-            } else {
-                return array('result' => true , 'errType' => 'shop' );
-            }
+    
             
             if (isset($params['couponCodeCheckbox'])) {
                 if (isset($params['selectedcategories'])) {
@@ -2908,7 +2913,7 @@ class Offer Extends \KC\Entity\Offer
 
             if (isset($params['attachedpages'])) {
                 foreach ($params['attachedpages'] as $pageId) {
-                    $offerPage  = new KC\Entity\RefOfferPage();
+                    $offerPage  = new \KC\Entity\RefOfferPage();
                     $offerPage->created_at = new \DateTime('now');
                     $offerPage->updated_at = new \DateTime('now');
                     $offerPage->offers = $entityManagerUser->find('KC\Entity\Page', $pageId);
@@ -2918,12 +2923,23 @@ class Offer Extends \KC\Entity\Offer
                 }
             }
 
+            if (trim($params['termsAndcondition'])!='') {
+                $offerTerms  = new \KC\Entity\TermAndCondition();
+                $offerTerms->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['termsAndcondition']);
+                $offerTerms->deleted = 0;
+                $offerTerms->termandcondition = $entityManagerUser->find('KC\Entity\Offer', $saveOffer->getId());
+                $offerTerms->created_at = new \DateTime('now');
+                $offerTerms->updated_at = new \DateTime('now');
+                $entityManagerUser->persist($offerTerms);
+                $entityManagerUser->flush();
+            }
+
             /***************** Start Add news code ********************/
             $lId = $saveOffer->getId();
             if (isset($params['newsCheckbox']) && @$params['newsCheckbox'] == "news") {
                 $newstitleloop = @$params['newsTitle'];
                 for ($n=0; $n<count($newstitleloop); $n++) {
-                    $savenews = new KC\Entity\OfferNews();
+                    $savenews = new \KC\Entity\OfferNews();
                     $savenews->shop = @$params['selctedshop'];
                     $savenews->offerId = @$lId;
                     $savenews->title = @$newstitleloop[$n] != "" ?
@@ -3080,10 +3096,14 @@ class Offer Extends \KC\Entity\Offer
                 }
                 if (@$matches[1]) {
 
-                    $offerImage  = new KC\Entity\Image();
+                    $offerImage  = new \KC\Entity\Image();
                     $offerImage->ext = $ext;
                     $offerImage->path ='images/upload/offer/';
                     $offerImage->name = $fileName;
+                    $offerImage->deleted = 0;
+                    $offerImage->type = "LG";
+                    $offerImage->created_at = new \DateTime('now');
+                    $offerImage->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($offerImage);
                     $entityManagerLocale->flush();
                     $saveOffer->offerlogoid =  $offerImage->getId();
@@ -3181,7 +3201,7 @@ class Offer Extends \KC\Entity\Offer
             }
             //$updateRouteLink = Doctrine_Core::getTable('RoutePermalink')->findOneBy('permalink', $getcategory[0]['permaLink'] );
         } else {
-            $updateRouteLink = new KC\Entity\RoutePermalink();
+            $updateRouteLink = new \KC\Entity\RoutePermalink();
         }
 
         // New code starts add blal
@@ -3196,20 +3216,36 @@ class Offer Extends \KC\Entity\Offer
             $updateOffer->shopExist = 1;
         }
         if (isset($params['memberonlycheckbox']) && isset($params['notExistingShopCheckbox'])) {
-            $saveNewShop = new KC\Entity\Shop();
+            $saveNewShop = new \KC\Entity\Shop();
             $saveNewShop->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->permaLink = @\BackEnd_Helper_viewHelper::stripSlashesFromString($params['newShop']);
             $saveNewShop->status = 1;
+            $saveNewShop->status = 1;
+            $saveNewShop->howToUse = 0;
+            $saveNewShop->screenshotId = 0;
+            $saveNewShop->deleted = 0;
+            $saveNewShop->created_at = new \DateTime('now');
+            $saveNewShop->updated_at = new \DateTime('now');
+            $saveNewShop->displayExtraProperties = 1;
+            $saveNewShop->showSignupOption = 0;
+            $saveNewShop->addtosearch = 0;
+            $saveNewShop->showSimliarShops = 0;
+            $saveNewShop->showChains = 0;
+            $saveNewShop->strictConfirmation = 0;
 
             if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
 
                 $fileName = self::uploadShopLogo('logoFile');
-                $shopImage  = new KC\Entity\Image();
+                $shopImage  = new \KC\Entity\Image();
                 $shopImage->ext =   \BackEnd_Helper_viewHelper::stripSlashesFromString(
                     \BackEnd_Helper_viewHelper::getImageExtension($fileName)
                 );
                 $shopImage->path = 'images/upload/shop/';
                 $shopImage->name = $fileName;
+                $shopImage->deleted = 0;
+                $shopImage->type = "LG";
+                $shopImage->created_at = new \DateTime('now');
+                $shopImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($shopImage);
                 $entityManagerLocale->flush();
             } else {
@@ -3307,7 +3343,7 @@ class Offer Extends \KC\Entity\Offer
                 $newsloop = @$params['newsTitle'];
                 for ($n=0; $n<count($newsloop); $n++) {
 
-                    $savenews = new KC\Entity\OfferNews();
+                    $savenews = new \KC\Entity\OfferNews();
                     $savenews->shop = @$entityManagerLocale->find('KC\Entity\Shop', $params['selctedshop']);
                     $savenews->offerId = @$offerId;
 
