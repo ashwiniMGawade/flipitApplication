@@ -50,20 +50,18 @@ class Admin_PageController extends Zend_Controller_Action
 
     public function addpageAction()
     {
-        $pageattrObj = new PageAttribute();
+        $pageattrObj = new KC\Repository\PageAttribute();
         $this->view->pageattr = $pageattrObj->getPageAttributes();
-        $widgetObj = new Widget();
+        $widgetObj = new KC\Repository\Widget();
         $this->view->widgetList = $widgetObj->getDefaultwidgetList();
         $this->view->widgetListUserDefined = $widgetObj->getUserDefinedwidgetList();
-        $artcatg = Articlecategory :: getartCategories();
+        $artcatg = KC\Repository\ArticleCategory:: getartCategories();
         $this->view->artcategory = $artcatg['aaData'];
 
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
-        if (Auth_StaffAdapter::hasIdentity()) {
-            $this->view->roleId = 	Zend_Auth::getInstance()->getIdentity()->roleId;
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        if (\Auth_StaffAdapter::hasIdentity()) {
+            $this->view->roleId = \Zend_Auth::getInstance()->getIdentity()->users->id;
         }
-        $userObj = new User();
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
     }
 
     /**
@@ -75,35 +73,32 @@ class Admin_PageController extends Zend_Controller_Action
 
     public function editpageAction()
     {
-        $this->view->role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+        $this->view->role = \Zend_Auth::getInstance()->getIdentity()->users->id;
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         $params = $this->_getAllParams();
-        $pageattrObj = new PageAttribute();
+        $pageattrObj = new KC\Repository\PageAttribute();
         $this->view->pageattr = $pageattrObj->getPageAttributes();
-        $widgetObj = new Widget();
+        $widgetObj = new KC\Repository\Widget();
         $this->view->widgetList = $widgetObj->getDefaultwidgetList();
         $this->view->widgetListUserDefined = $widgetObj->getUserDefinedwidgetList();
         $this->view->pageId = $params['id'];
-        $pageObj = new Page();
+        $pageObj = new KC\Repository\Page();
         $pageDetail = $pageObj->getPageDetail($params['id']);
-
         $this->view->pageDetail = $pageDetail['0'] ;
-
-        $artcatg = Articlecategory :: getartCategories();
+        $artcatg = KC\Repository\Articlecategory:: getartCategories();
         $this->view->artcategory = $artcatg['aaData'];
 
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
-        if (Auth_StaffAdapter::hasIdentity()) {
-        $this->view->roleId = 	Zend_Auth::getInstance()->getIdentity()->roleId;
+       
+        if (\Auth_StaffAdapter::hasIdentity()) {
+            $this->view->roleId = Zend_Auth::getInstance()->getIdentity()->roleId;
         }
 
-        if(isset($_COOKIE['site_name'])){
+        if (isset($_COOKIE['site_name'])) {
             $site_name = "http://www.".$_COOKIE['site_name'];
         }
-        $userObj = new User();
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        $userObj = new KC\Repository\User();
         $this->view->authorList = $userObj->getPageAutor($site_name);
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
-
 }
 
 /**
@@ -154,10 +149,10 @@ class Admin_PageController extends Zend_Controller_Action
     public function pagelistAction()
     {
         $params = $this->_getAllParams();
-        $pageObj = new Page();
+        $pageObj = new KC\Repository\Page();
         // cal to function in network model class
         $pageList =  $pageObj->getPages($params);
-        echo Zend_Json::encode ( $pageList );
+        echo Zend_Json::encode ($pageList);
         die ;
     }
 
@@ -414,7 +409,7 @@ class Admin_PageController extends Zend_Controller_Action
     {
          $id = $this->getRequest()->getParam('id');
         //cal to deleteOffer function from offer model class
-        $deletePermanent = Page::deletepage($id);
+        $deletePermanent = KC\Repository\Page::deletepage($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
             $message = $this->view
@@ -470,7 +465,7 @@ class Admin_PageController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
 
-        $trash = Page::moveToTrash($id);
+        $trash = KC\Repository\Page::moveToTrash($id);
 
         if (intval($trash) > 0) {
 
@@ -501,13 +496,13 @@ class Admin_PageController extends Zend_Controller_Action
         $srh = $params['keyword'];
         $flag = isset($params['flag']) ? $params['flag'] : '0';
 
-        $data =Page::searchToFivePage( $srh,$flag);
+        $data = KC\Repository\Page::searchToFivePage( $srh,$flag);
 
         $ar = array ();
         if (sizeof ( $data ) > 0) {
             foreach ( $data as $d ) {
 
-                $ar [] = $d ['pagetitle'];
+                $ar [] = $d ['pageTitle'];
             }
         } else {
             $msg = $this->view->translate ( 'No Record Found' );
@@ -529,7 +524,7 @@ class Admin_PageController extends Zend_Controller_Action
     public function deleteimageAction()
     {
         $params = $this->_getAllParams();
-        $pageObj = new Page();
+        $pageObj = new KC\Repository\Page();
         echo $pageObj->deletePageImage($params);
         die;
     }

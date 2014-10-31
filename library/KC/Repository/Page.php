@@ -178,38 +178,47 @@ class Page Extends \KC\Entity\Page
     {
         $srhPage = (isset($params["searchText"]) && trim($params["searchText"])!='undefined')
             ? $params["searchText"] : '';
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
-        if (Auth_StaffAdapter::hasIdentity()) {
-            $roleId =   Zend_Auth::getInstance()->getIdentity()->roleId;
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        
+        if (\Auth_StaffAdapter::hasIdentity()) {
+            $roleId =   \Zend_Auth::getInstance()->getIdentity()->users->id;
         }
-        \BackEnd_Helper_viewHelper::closeConnection($conn2);
-        $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select(
-            'page.pagetype, page.pagetitle, page.pagelock, page.created_at,
-            page.publish, page.contentManagerName'
-        )
+
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, 0)
             ->where('page.deleted = ?1')
-            ->setParameter(2, $srhPage.'%')
-            ->andWhere($entityManagerUser->expr()->like('page.pagetitle , ?2'));
+            ->andWhere("page.pageTitle LIKE '$srhPage%'");
         if ($roleId>2) {
             $query->setParameter(3, 0);
             $query->andWhere('page.pagelock = ?3');
         }
-        if (trim($params["searchType"])!='undefined') {
+        if (trim($params["searchType"])!= 'undefined') {
             $query->setParameter(4, $params['searchType']);
-            $query->andWhere('page.pagetype = ?4');
+            $query->andWhere('page.pageType = ?4');
         }
-        $result = DataTable_Helper::generateDataTableResponse(
-            $query,
+
+        $request  = \DataTable_Helper::createSearchRequest(
             $params,
-            array("__identifier" => 'page.pagetitle','page.pagetitle','page.pagetype','page.pagelock','page.created_at',
-                'page.publish','page.contentManagerName'),
-            array(),
-            array()
+            array('page.pageTitle','page.pageType','page.pageLock','page.created_at',
+                'page.publish','page.contentManagerName'
+            )
         );
-        return $result;
+
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($query)
+            ->add('text', 'page.pageTitle')
+            ->add('text', 'page.pageType')
+            ->add('number', 'page.pageLock')
+            ->add('number', 'page.created_at')
+            ->add('number', 'page.publish')
+            ->add('text', 'page.contentManagerName');
+           
+        $pageList = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $pageList = \DataTable_Helper::getResponse($pageList, $request);
+        return $pageList;
     }
 
     public function gettrashedPages($params)
@@ -363,17 +372,16 @@ class Page Extends \KC\Entity\Page
     public static function searchToFivePage($keyword, $type)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('page.pagetitle')
+        $query = $entityManagerUser->select('page.pageTitle')
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, $type)
             ->where('page.deleted = ?1')
-            ->setParameter(2, $keyword.'%')
-            ->andWhere($entityManagerUser->expr()->like('page.pagetitle , ?2'));
-        $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+            ->andWhere("page.pageTitle LIKE '$keyword%'");
+        $role =  \Zend_Auth::getInstance()->getIdentity()->users->id;
         if ($role=='4' || $role=='3') {
             $query->setParameter(3, 0)->andWhere('page.pagelock = ?3');
         }
-        $query->orderBy("page.pagetitle","ASC")->setMaxResults(5);
+        $query->orderBy("page.pageTitle", "ASC")->setMaxResults(5);
         $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }

@@ -22,7 +22,7 @@ class Widget extends \KC\Entity\Widget
         $query = $queryBuilder->select('w')
             ->from('KC\Entity\Widget', 'w')
             ->setParameter(1, '0')
-            ->where('w.userdefined = ?1')
+            ->where('w.userDefined = ?1')
             ->setParameter(2, '0')
             ->andWhere('w.deleted = ?2')
             ->setParameter(3, '1')

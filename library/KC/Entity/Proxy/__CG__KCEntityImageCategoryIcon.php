@@ -63,6 +63,7 @@ class ImageCategoryIcon extends \KC\Entity\ImageCategoryIcon implements \Doctrin
         return parent::getId();
     }
 
+
     public function __sleep()
     {
         return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'category', 'categoryfeatured', 'categoryheader');
