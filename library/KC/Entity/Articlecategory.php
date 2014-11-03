@@ -75,6 +75,11 @@ class Articlecategory
     private $moneysaving;
 
     /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleCategory", mappedBy="articlecategory")
+     */
+    private $refArticleCategory;
+
+    /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Category", mappedBy="articlecategory")
      */
     private $category;

@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\Articles::getAllUrls(9));
+        //print_r(KC\Repository\Articles::getAllUrls(9));
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
