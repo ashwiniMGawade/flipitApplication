@@ -39,7 +39,7 @@ class Page
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $permaLink;
+    private $permalink;
 
     /**
      * @ORM\Column(type="string", nullable=true)
@@ -226,10 +226,6 @@ class Page
      */
     private $showPage;
 
-    /**
-     * @ORM\Column(type="integer", length=8, nullable=true)
-     */
-    private $logoId;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)
@@ -256,7 +252,8 @@ class Page
      */
     private $showsitemap;
     /**
-     * @ORM\Column(type="integer", length=1, nullable=false)
+     * @ORM\OneToOne(targetEntity="KC\Entity\Logo", inversedBy="page")
+     * @ORM\JoinColumn(name="pageHeaderImageId", referencedColumnName="id", unique=true)
      */
     private $pageHeaderImageId;
     /**

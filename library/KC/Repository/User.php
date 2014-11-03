@@ -786,12 +786,13 @@ class User extends \KC\Entity\User
     public function getPageAutor($site_name)
     {
         $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->select('u.id,u.firstName as fname,u.lastName as lname')
+        $query = $queryBuilder
+            ->select('u.id,u.firstName as fname,u.lastName as lname')
             ->from('\KC\Entity\User', 'u')
             ->leftJoin('u.refUserWebsite', 'rf')
             ->leftJoin('rf.refUsersWebsite', 'w')
             ->where($queryBuilder->expr()->eq('u.deleted', '0'))
-            ->andWhere($queryBuilder->expr()->eq('w.url', $site_name))
+            ->andWhere('w.url ='."'".$site_name."'")
             ->orderBy('fname', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return  $data;
