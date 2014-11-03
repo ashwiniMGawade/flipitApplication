@@ -40,7 +40,7 @@ $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "/css/jquery-ui-1.8.16.cust
                 <input type="hidden" name='pImageName' id='pImageName' value="<?php echo @$this->profile['profileimage']['name'] ;?>" />
                 <input type="hidden" name='id' id='id' value="<?php echo Auth_StaffAdapter::getIdentity()->id ;?>" />
                 <input type="hidden" name='selectedShopId' id='selectedShopId' value="" />
-                <input type="hidden" name='role' id='role' value="<?php echo  $this->profile['roleId'];?>" />
+                <input type="hidden" name='role' id='role' value="<?php echo  $this->profile['users']['id'];?>" />
             <div id="poststuff" class="metabox-holder has-right-sidebar">
               <div id="post-body">
                 <div>
