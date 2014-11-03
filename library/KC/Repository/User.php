@@ -382,7 +382,7 @@ class User extends \KC\Entity\User
         $fullName = $params['firstName'] . " " . $params['lastName'];
         // update session if profile is being updated
         if ($updateUser->getId() == \Auth_StaffAdapter::getIdentity()->id) {
-            new Zend_Auth_Result(Zend_Auth_Result::SUCCESS, $updateUser);
+            new \Zend_Auth_Result(\Zend_Auth_Result::SUCCESS, $updateUser);
         }
 
         if ($params['pImageName']!== @$params['prevImageName']) {

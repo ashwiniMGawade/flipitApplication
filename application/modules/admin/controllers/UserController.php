@@ -831,24 +831,29 @@ class Admin_UserController extends Zend_Controller_Action
             if ($params) {
 
                 $uesrPicName = '';
-                if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
+                if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
                     $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
                 }
 
-                $user = Doctrine_Core::getTable("User")->find($id);
+                $entityManagerUser  = \Zend_Registry::get('emUser');
+                $repo = $entityManagerUser->getRepository('KC\Entity\User');
+                $user = $repo->find($params['id']);
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];
-                $user->save();
-                $result = $user->update($params, $uesrPicName, 'profileupdate');
+                $entityManagerUser->persist($user);
+                $entityManagerUser->flush();
+                
+                $u = new KC\Repository\User();
+                $result = $u->update($params, $uesrPicName, 'profileupdate');
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
 
                 # check if there is any error in user data
-                if(is_array($result) && isset($result['error'])) {
+                if (is_array($result) && isset($result['error'])) {
 
                     $message = $this->view->translate($result['message']);
                     $flash->addMessage(array('error' => $message ));
-                }else {
+                } else {
 
                     $message = $this->view->translate("Profile has been updated successfully");
                     $flash->addMessage(array('success' => $message ));
