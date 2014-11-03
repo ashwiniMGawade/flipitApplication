@@ -408,7 +408,7 @@ class Articles extends \KC\Entity\Articles
         $data = $entityManagerLocale->find('\KC\Entity\Articles', $params['id']);
         //echo "<pre>"; print_r($data->__get('permalink')); die;
         $data->deleted = $data->__get('deleted');
-        $data->created_at = $data->__get('updated_at'); 
+        $data->created_at = $data->__get('updated_at');
         $data->updated_at = new \DateTime('now');
 
         $data->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['articleTitle']);
@@ -423,10 +423,18 @@ class Articles extends \KC\Entity\Articles
         if (isset($_FILES['articleImage']['name']) && $_FILES['articleImage']['name'] != '') {
             $result = self::uploadImage('articleImage');
             if ($result['status'] == '200') {
-                $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $data->articleImage->ext = $ext;
-                $data->articleImage->path = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                $data->articleImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $ext = \BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
+                $articleImage = $entityManagerLocale->find('\KC\Entity\ImageArticlesIcon', $data->articleImage->id);
+                $articleImage->ext = @$ext;
+                $articleImage->path = @$result['path'];
+                $articleImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
+                $articleImage->deleted = 0;
+                $articleImage->created_at = new \DateTime('now');
+                $articleImage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($articleImage);
+                $entityManagerLocale->flush();
+                $data->articleImage = $entityManagerLocale->find('\KC\Entity\ImageArticlesIcon', $articleImage->id);
+
             } else {
                 return false;
             }
@@ -436,9 +444,16 @@ class Articles extends \KC\Entity\Articles
             $artThumbnail = self::uploadImage('articleImageSmall');
             if (@$artThumbnail['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension(@$artThumbnail['fileName']);
-                $data->thumbnail->ext = @$ext;
-                $data->thumbnail->path = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
-                $data->thumbnail->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);
+                $articleThumb = $entityManagerLocale->find('\KC\Entity\ImageArticlesThumb', $data->articleThumb->id);
+                $articleThumb->ext = @$ext;
+                $articleThumb->path = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['path']);
+                $articleThumb->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString($artThumbnail['fileName']);
+                $articleThumb->deleted = 0;
+                $articleThumb->created_at = new \DateTime('now');
+                $articleThumb->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($articleThumb);
+                $entityManagerLocale->flush();
+                $data->thumbnail = $entityManagerLocale->find('\KC\Entity\ImageArticlesThumb', $articleThumb->id);
             } else {
                 return false;
             }
