@@ -16,7 +16,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCount
 <div class="mainpage-content">
 		<div class="mainpage-content-line mb10">
 			<div class="mainpage-content-left"><label><strong></strong></label></div>
-			<div class="mainpage-content-right"><img src="<?php echo PUBLIC_PATH_LOCALE.'images/upload/media/thumb/'.$this->data['fileUrl'];?>" border="0"></div>
+			<div class="mainpage-content-right"><img src="<?php echo PUBLIC_PATH_LOCALE.'images/upload/media/thumb/'.$this->data['fileurl'];?>" border="0"></div>
 		</div>
 		<div class="mainpage-content-line">
 			<div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title:');?></strong></label></div>
@@ -32,7 +32,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCount
 			<div class="mainpage-content-right">
 			  <div class="mainpage-content-right-inner-right-other"></div>
 			<div class="mainpage-content-right-inner-left-other">
-			<input name="alternateText" id="alternateText" value="<?php echo $this->data['alternateText'];?>" type="text" placeholder="Alternate text.." class="span3">
+			<input name="alternateText" id="alternateText" value="<?php echo $this->data['alternatetext'];?>" type="text" placeholder="Alternate text.." class="span3">
 			</div>
 			</div>
 		</div>
@@ -48,7 +48,7 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.textareaCount
 						$httpPath = str_replace("http://","http://www.",$httpPath) ;
 					}
 				 ?>
-			<input name="fileUrl" readonly type="text" placeholder="" class="span3" value="<?php echo $httpPath .'public/images/upload/media/'.$this->data['fileUrl'];?>">
+			<input name="fileUrl" readonly type="text" placeholder="" class="span3" value="<?php echo $httpPath .'public/images/upload/media/'.$this->data['fileurl'];?>">
 			</div>
 			</div>
 		</div>

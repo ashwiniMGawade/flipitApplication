@@ -90,12 +90,12 @@ function getMedia(iStart,iSortCol,iSortDir) {
 							"fnRender" : function(obj) {
 								var imgSrc = "";
 								//alert(obj.aData.path);
-								if (obj.aData.mediaImageId == null || obj.aData.mediaImageId=='' || obj.aData.mediaImageId==undefined) {
+								if (obj.aData.fileurl == null || obj.aData.fileurl=='' || obj.aData.fileurl==undefined) {
 										imgSrc = HOST_PATH_PUBLIC
 											+ "/images/back_end/user-avtar.jpg";
 								} else {
 									
-									imgSrc = PUBLIC_PATH_LOCALE + "images/upload/media/thumb_L/"+(obj.aData.fileUrl);
+									imgSrc = PUBLIC_PATH_LOCALE + "images/upload/media/thumb_L/"+(obj.aData.fileurl);
 						
 								}
 								//var name1 = $('<div/>').text(obj.aData.name).html();
@@ -123,8 +123,8 @@ function getMedia(iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var tag = '';
-								if(obj.aData.alternateText != null){
-								tag = "<p editId='" + obj.aData.id + "' class='editId word-wrap-without-margin'><a href='javascript:void(0);'>"+ucfirst(obj.aData.alternateText)+"</a></p>"; 
+								if(obj.aData.alternatetext != null){
+								tag = "<p editId='" + obj.aData.id + "' class='editId word-wrap-without-margin'><a href='javascript:void(0);'>"+ucfirst(obj.aData.alternatetext)+"</a></p>"; 
 								}
 								return tag;
 							 },
@@ -134,7 +134,7 @@ function getMedia(iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								var tag = '';
-								var dat = obj.aData.created_at;
+								var dat = obj.aData.created_at.date;
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");
