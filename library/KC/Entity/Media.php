@@ -4,13 +4,14 @@ use Doctrine\ORM\Mapping AS ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="media", indexes={@ORM\Index(name="mediaimageid_idx", columns={"media_image_id"})})
+ * @ORM\Table(name="media", indexes={@ORM\Index(name="mediaimageid_idx", columns={"mediaimageid"})})
  */
 class Media
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="integer", length=8)
+     * @ORM\GeneratedValue(strategy="AUTO")
      */
     private $id;
 
@@ -66,7 +67,7 @@ class Media
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\MediaImage", inversedBy="media")
-     * @ORM\JoinColumn(name="media_image_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="mediaimageid", referencedColumnName="id")
      */
     private $mediaimage;
 
