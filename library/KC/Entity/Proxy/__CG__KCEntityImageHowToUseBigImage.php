@@ -54,12 +54,6 @@ class ImageHowToUseBigImage extends \KC\Entity\ImageHowToUseBigImage implements 
         return parent::__set($property, $value);
     }
 
-    public function test($value)
-    {
-        $this->__load();
-        return parent::test($value);
-    }
-
     public function getId()
     {
         if ($this->__isInitialized__ === false) {

@@ -128,7 +128,6 @@ class Admin_CategoryController extends Zend_Controller_Action
         if ($id > 0) {
             // get edit category
             $category = \KC\Repository\Category::getCategoryInformation($id);
-            echo "<pre>"; print_r($category); echo "</pre>";
             $this->view->categoryDetail = $category;
         }
 
@@ -263,6 +262,7 @@ class Admin_CategoryController extends Zend_Controller_Action
     {
         // get all category from database
         $data = \KC\Repository\Category::getAllCategories();
+
         // create object of phpExcel
         $objPHPExcel = new PHPExcel ();
         $objPHPExcel->setActiveSheetIndex ( 0 );

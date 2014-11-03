@@ -31,31 +31,11 @@ class ImageCategoryIcon extends \KC\Entity\Image
 
     public function __get($property)
     {
-        return $this->$property;
+        return parent::__get($property);
     }
 
     public function __set($property, $value)
     {
-        $this->$property = $value;
+        parent::__set($property, $value);
     }
-    
-    public function test($value)
-    {
-        $this->type = $value;
-    }
-
-    public function testdel($value)
-    {
-        $this->deleted = $value;
-    }
-
-    public function testc($value)
-    {
-        $this->created_at = $value;
-    }
-    public function testcd($value)
-    {
-        $this->updated_at = $value;
-    }
-
 }

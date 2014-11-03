@@ -162,7 +162,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 						},{
 							"fnRender" : function(obj) {
 								var tag = '';
-								var dat = '2010-02-08 10:50:55';
+								var dat = obj.aData.created_at.date;
 								tag = dat.split("-");
 								tag2 = tag[2];
 								var da = tag2.split(" ");
@@ -244,11 +244,12 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 						},{
 							"fnRender" : function(obj) {
 								var tag = '';
-								if(obj.aData.offlineSicne==undefined || obj.aData.offlineSicne==null || obj.aData.offlineSicne==''){
+								if(obj.aData.offlineSicne != null) {
+								if(obj.aData.offlineSicne.date==undefined || obj.aData.offlineSicne.date==null || obj.aData.offlineSicne.date==''){
 									tag='';
 								}
 								else{
-									tag = obj.aData.offlineSicne;	
+									tag = obj.aData.offlineSicne.date;	
 									
 									tag = tag.split("-");
 									tag2 = tag[2];
@@ -256,6 +257,7 @@ function getShops(iSearchText,iStart,iSortCol,iSortDir) {
 									tag  = "<a href='javascript:void(0);'>"+da[0]+'-'+tag[1]+'-'+tag[0]+"</a>";
 									//tag =  (da[0]+'-'+tag[1]+'-'+tag[0]);
 								}
+							}
 								return tag;
 							},
 							"bSearchable" : true,

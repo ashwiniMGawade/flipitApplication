@@ -36,7 +36,8 @@ class Admin_ShopController extends Zend_Controller_Action
     public function indexAction()
     {
         // set logged in role
-        $this->view->role = Zend_Auth::getInstance()->getIdentity()->roleId;
+        $u = Auth_StaffAdapter::getIdentity();
+        $this->view->role = $u->users->id;
 
 
         $flash = $this->_helper->getHelper('FlashMessenger');
@@ -72,7 +73,7 @@ class Admin_ShopController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //cal to function moveToTrash from Shop model
-        $trash = Shop::moveToTrash($id);
+        $trash = \KC\Repository\Shop::moveToTrash($id);
         if (intval($trash) > 0) {
 
             self::updateVarnish($id);
@@ -98,7 +99,7 @@ class Admin_ShopController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //cal permanentDeleteShop function from Shop model class
-        $deletePermanent = Shop::permanentDeleteShop($id);
+        $deletePermanent = \KC\Repository\Shop::permanentDeleteShop($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if ( $deletePermanent ) {
             $message = $this->view
@@ -122,7 +123,7 @@ class Admin_ShopController extends Zend_Controller_Action
   {
         $id = $this->getRequest()->getParam('id');
         //cal to restoreShop function from offer model class
-        $restore = Shop::restoreShop($id);
+        $restore = \KC\Repository\Shop::restoreShop($id);
 
         if (intval($restore) > 0) {
 
@@ -408,30 +409,31 @@ class Admin_ShopController extends Zend_Controller_Action
     {
 
         // set logged in role
-        $this->view->role = Zend_Auth::getInstance()->getIdentity()->roleId;
+        $u = Auth_StaffAdapter::getIdentity();
+        $this->view->role = $u->users->id;
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         /* get Category List*/
         $arr = array();
         /* get Category List*/
         $arr['status'] = '1';
-        $category = new Category();
+        $category = new \KC\Repository\Category();
         $this->view->categoryList = $category->getCategoriesInformation();
 
         $site_name = "";
-        if(isset($_COOKIE['site_name'])){
+        if (isset($_COOKIE['site_name'])) {
             $site_name =  $_COOKIE['site_name'];
         }
 
                 // display managers and account managers list
-        $users = new User();
+        $users = new \KC\Repository\User();
         $this->view->MangersList = $users->getManagersLists($site_name);
 
         // display  page's list
-        $pages = new Page();
+        $pages = new \KC\Repository\Page();
         $this->view->DefaultPagesList = $pages->defaultPagesList();
 
         // display affliate network's list
-        $affiliate = new AffliateNetwork();
+        $affiliate = new \KC\Repository\AffliateNetwork();
         $arr['sortBy'] = 'name';
         $affiliateNetworkList =  $affiliate->getNetworkList($arr);
 
@@ -439,45 +441,39 @@ class Admin_ShopController extends Zend_Controller_Action
         $this->view->affiliateNetworkList = $affiliateNetworkList['aaData'];
 
         $id = $this->getRequest()->getParam('id');
-        if( intval($id) > 0 ) {
-                    $data = Doctrine_Query::create()
-                    ->from('Shop s')
-                    ->leftJoin("s.category c")
-                    ->leftJoin("s.howtousesmallimage sl")
-                    ->leftJoin("s.howtousebigimage bl")
-                    ->leftJoin("s.howtochapter chapter")
-                    ->leftJoin("s.relatedshops sp")
-                    ->leftJoin("s.page pg")
-                    ->leftJoin("s.logo logo")
-                    ->leftJoin("s.screenshot screenshot")
-                    ->where("s.id = ?" , $id)
-                    ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
-
-
-            //var_dump($data) ;
-
+        if (intval($id) > 0) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $data = $queryBuilder->select('s, c, sl, bl, chapter, sp, pg, logo, af')
+                ->from('KC\Entity\Shop', 's')
+                ->leftJoin("s.categoryshops", "c")
+                ->leftJoin("s.howtousesmallimage", "sl")
+                ->leftJoin("s.howtousebigimage", "bl")
+                ->leftJoin("s.howtochapter", "chapter")
+                ->leftJoin("s.relatedshops", "sp")
+                ->leftJoin("s.shopPage", "pg")
+                ->leftJoin("s.affliatenetwork", "af")
+                ->leftJoin("s.logo", "logo")
+                ->where("s.id = ". $id)
+                ->getQuery()
+                ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $this->view->data = $data ;
-            //echo "<pre>";
-            //print_r($data); die;
-
-            $existingCategories  = $data['category'] ;
+            $existingCategories  = $data['categoryshops'] ;
             $catArray  = array();
             foreach ($existingCategories as $categories) {
-                $catArray[] = $categories['id'];
+                $catArray[] = $categories['categoryId'];
             }
             $this->view->catArray = '';
-            if(isset($catArray) && count($catArray)>0){
+            if (isset($catArray) && count($catArray) >0) {
                 $this->view->catArray =  $catArray  ;
             }
         } else {
-
-            $this->_helper->redirector( 'createshop', 'shop', 'admin' ) ;
+            $this->_helper->redirector('createshop', 'shop', 'admin');
         }
 
         // if request is post
         if ($this->_request->isPost()) {
             $parmas = $this->_getAllParams();
-            $shop = Doctrine_Core::getTable("Shop")->find($id);
+            $shop = new \KC\Repository\Shop();
             $flash = $this->_helper->getHelper('FlashMessenger');
 
             if($shop->CreateNewShop($parmas,true)) {
@@ -510,7 +506,7 @@ class Admin_ShopController extends Zend_Controller_Action
         set_time_limit ( 10000 );
         ini_set('max_execution_time',115200);
         ini_set("memory_limit","1024M");
-        $data =  Shop::exportShopsList();
+        $data =  \KC\Repository\Shop::exportShopsList();
         //echo "<pre>";
         //print_r($data); die;
         //create object of phpExcel
@@ -773,12 +769,12 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             //Extra columns added to excel export
-            $daysWithoutCoupon = Shop::getDaysSinceShopWithoutOnlneOffers($shop['id']);
-            $timesShopFavourite = Shop::getFavouriteCountOfShop($shop['id']);
-            $lastWeekClicks = ShopViewCount::getAmountClickoutOfShop($shop['id']);
-            $totalClicks = ShopViewCount::getTotalAmountClicksOfShop($shop['id']);
-            $totalAmountCoupons = Offer::getTotalAmountOfShopCoupons($shop['id'], 'CD');
-            $totalAmountOffers = Offer::getTotalAmountOfShopCoupons($shop['id']);
+            $daysWithoutCoupon = \KC\Repository\Shop::getDaysSinceShopWithoutOnlneOffers($shop['id']);
+            $timesShopFavourite = \KC\Repository\Shop::getFavouriteCountOfShop($shop['id']);
+            $lastWeekClicks = \KC\Repository\ShopViewCount::getAmountClickoutOfShop($shop['id']);
+            $totalClicks = \KC\Repository\ShopViewCount::getTotalAmountClicksOfShop($shop['id']);
+            $totalAmountCoupons = \KC\Repository\Offer::getTotalAmountOfShopCoupons($shop['id'], 'CD');
+            $totalAmountOffers = \KC\Repository\Offer::getTotalAmountOfShopCoupons($shop['id']);
 
             //set value in column of excel
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
@@ -912,7 +908,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
      public function importshopimageAction()
      {
-        $shops = Shop::getAllShopDetails();
+        $shops = \KC\Repository\Shop::getAllShopDetails();
         foreach($shops as $shopList):
         endforeach;
         //echo ROOT_PATH."excel/";
@@ -980,7 +976,7 @@ class Admin_ShopController extends Zend_Controller_Action
      public function deletechaptersAction()
      {
         $id = $this->getRequest()->getParam('id');
-        $articles = Shop::deletechapters($id);
+        $articles = \KC\Repository\Shop::deletechapters($id);
         echo Zend_Json::encode($articles);
         die;
      }
@@ -994,7 +990,7 @@ class Admin_ShopController extends Zend_Controller_Action
     public function updateVarnish($id)
     {
         // Add urls to refresh in Varnish
-        $varnishObj = new Varnish();
+        $varnishObj = new \KC\Repository\Varnish();
         $varnishObj->addUrl(HTTP_PATH_FRONTEND);
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_nieuw'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_top-20'));
@@ -1009,7 +1005,7 @@ class Admin_ShopController extends Zend_Controller_Action
         }
 
         # get all the urls related to this shop
-        $varnishUrls = Shop::getAllUrls($id);
+        $varnishUrls = \KC\Repository\Shop::getAllUrls($id);
 
         # check $varnishUrls has atleast one
         if(isset($varnishUrls) && count($varnishUrls) > 0) {
@@ -1027,7 +1023,7 @@ class Admin_ShopController extends Zend_Controller_Action
      */
     public function updateImagesAction()
     {
-        Shop::updateImages();
+        \KC\Repository\Shop::updateImages();
     }
 
     /**
@@ -1531,7 +1527,7 @@ class Admin_ShopController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams ();
         self::updateVarnish($params['id']);
-        $ret = Shop::changeStatus($params);
+        $ret = \KC\Repository\Shop::changeStatus($params);
 
         if($ret) {
            $this->_helper->json(date("d-m-Y" , strtotime($ret)));

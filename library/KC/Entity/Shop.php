@@ -413,11 +413,7 @@ class Shop
      */
     private $keywords;
 
-    /**
-     * @ORM\ManyToOne(targetEntity="KC\Entity\WebsiteScrenshot", inversedBy="shop")
-     * @ORM\JoinColumn(name="screenshotid", referencedColumnName="id")
-     */
-    private $screnshot;
+ 
 
     public function __get($property)
     {

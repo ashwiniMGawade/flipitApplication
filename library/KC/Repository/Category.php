@@ -124,18 +124,17 @@ class Category extends \KC\Entity\Category
             setCategoryImage($_FILES['categoryFeaturedImage']['name'], 'categoryFeaturedImage', $category, 'featured');
         $categoryHeaderImageId = self::
             setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-        $category->categoryicon = \Zend_Registry::get('emLocale')->find('KC\Entity\CategoryIcon', $categoryIconId);
-        $category->categoryFeaturedImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\CategoryIcon')->find($categoryFeaturedImageId);
-        $category->categoryHeaderImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\CategoryIcon')->find($categoryHeaderImageId);
+        $category->categoryicon = \Zend_Registry::get('emLocale')->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
+        $category->categoryFeaturedImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryFeaturedImageId);
+        $category->categoryHeaderImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryHeaderImageId);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
         $permalinkWithoutSpecilaChracter = str_replace("-", "", $categoryParameter["permaLink"]);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_data');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('category_'.$permalinkWithoutSpecilaChracter.'_voucherCodes');
-\Zend_Registry::get('emLocale')->persist($category); \Zend_Registry::get('emLocale')->flush(); die;    try {
-
-            
-            
+        try {
+            \Zend_Registry::get('emLocale')->persist($category);
+            \Zend_Registry::get('emLocale')->flush();
             self::updateFeaturedCategory($category->id);
             self::categoryRoutePermalinkSave($categoryParameter, $category);
             return array($category->id);
@@ -159,7 +158,7 @@ class Category extends \KC\Entity\Category
                     $category,
                     'thumb'
                 );
-            $category->categoryicon = $categoryIconId;
+            $category->categoryicon = \Zend_Registry::get('emLocale')->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
             $categoryFeaturedImageId = self::
                 setCategoryImage(
                     $_FILES['categoryFeaturedImage']['name'],
@@ -167,10 +166,10 @@ class Category extends \KC\Entity\Category
                     $category,
                     'featured'
                 );
-            $category->categoryFeaturedImage = $categoryFeaturedImageId;
+            $category->categoryFeaturedImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryFeaturedImageId);
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-            $category->categoryHeaderImage = $categoryHeaderImageId;
+            $category->categoryHeaderImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryHeaderImageId);
         } else if ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
             $categoryIconId = self::
                 setCategoryImage(
@@ -179,7 +178,7 @@ class Category extends \KC\Entity\Category
                     $category,
                     'thumb'
                 );
-            $category->categoryicon = $categoryIconId;
+            $category->categoryicon = \Zend_Registry::get('emLocale')->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
             $categoryFeaturedImageId = self::
                 setCategoryImage(
                     $_FILES['categoryFeaturedImage']['name'],
@@ -187,7 +186,7 @@ class Category extends \KC\Entity\Category
                     $category,
                     'featured'
                 );
-            $category->categoryFeaturedImage = $categoryFeaturedImageId;
+            $category->categoryFeaturedImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryFeaturedImageId);
         } else if ($_FILES['categoryIconNameHidden']['name'] != '' && $_FILES['categoryHeaderImage']['name'] != '') {
             $categoryIconId = self::
                 setCategoryImage(
@@ -196,14 +195,14 @@ class Category extends \KC\Entity\Category
                     $category,
                     'thumb'
                 );
-            $category->categoryicon = $categoryIconId;
+            $category->categoryicon = \Zend_Registry::get('emLocale')->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-            $category->categoryHeaderImage = $categoryHeaderImageId;
+            $category->categoryHeaderImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryHeaderImageId);
         } else if ($_FILES['categoryHeaderImage']['name'] != '' && $_FILES['categoryFeaturedImage']['name'] != '') {
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-            $category->categoryHeaderImage = $categoryHeaderImageId;
+            $category->categoryHeaderImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryHeaderImageId);
             $categoryFeaturedImageId = self::
                 setCategoryImage(
                     $_FILES['categoryFeaturedImage']['name'],
@@ -211,7 +210,7 @@ class Category extends \KC\Entity\Category
                     $category,
                     'featured'
                 );
-            $category->categoryFeaturedImage = $categoryFeaturedImageId;
+            $category->categoryFeaturedImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryFeaturedImageId);
         } else if ($_FILES['categoryIconNameHidden']['name'] != '' &&  $_FILES['categoryFeaturedImage']['name'] == '' &&
             $_FILES['categoryHeaderImage']['name'] == '' ) {
             $categoryIconId = self::
@@ -221,7 +220,7 @@ class Category extends \KC\Entity\Category
                     $category,
                     'thumb'
                 );
-            $category->categoryicon = $categoryIconId;
+            $category->categoryicon = \Zend_Registry::get('emLocale')->find('KC\Entity\ImageCategoryIcon', $categoryIconId);
         } else if ($_FILES['categoryFeaturedImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
             $_FILES['categoryHeaderImage']['name'] == '') {
             $categoryFeaturedImageId = self::
@@ -231,12 +230,12 @@ class Category extends \KC\Entity\Category
                     $category,
                     'featured'
                 );
-            $category->categoryFeaturedImage = $categoryFeaturedImageId;
+            $category->categoryFeaturedImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryFeaturedImageId);
         } else if ($_FILES['categoryHeaderImage']['name'] != '' &&  $_FILES['categoryIconNameHidden']['name'] == '' &&
             $_FILES['categoryFeaturedImage']['name'] == '') {
             $categoryHeaderImageId = self::
                 setCategoryImage($_FILES['categoryHeaderImage']['name'], 'categoryHeaderImage', $category, 'header');
-            $category->categoryHeaderImage = $categoryHeaderImageId;
+            $category->categoryHeaderImage = \Zend_Registry::get('emLocale')->getRepository('KC\Entity\ImageCategoryIcon')->find($categoryHeaderImageId);
         }
         $categoryInfo = self::getCategoryById($categoryParameter['id']);
 
@@ -279,17 +278,16 @@ class Category extends \KC\Entity\Category
         if (isset($categoryIconFileName) && $categoryIconFileName != '') {
             $uploadedImage = self::uploadImage($categoryIconName);
             if ($uploadedImage['status'] == '200') {
-                $category1 = new \KC\Entity\Image();
-                $category1->ext = \BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
-                $category1->path = $uploadedImage['path'];
-                $category1->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
-                $category1->deleted = 0;
-                $category1->type = 'CATICON';
-                $category1->created_at = new \DateTime('now');
-                $category1->updated_at = new \DateTime('now');
-                \Zend_Registry::get('emLocale')->persist($category1);
+                $categoryIcon =  new \KC\Entity\ImageCategoryIcon();
+                $categoryIcon->ext = \BackEnd_Helper_viewHelper::getImageExtension($uploadedImage['fileName']);
+                $categoryIcon->path = $uploadedImage['path'];
+                $categoryIcon->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($uploadedImage['fileName']);
+                $categoryIcon->deleted = 0;
+                $categoryIcon->created_at = new \DateTime('now');
+                $categoryIcon->updated_at = new \DateTime('now');
+                \Zend_Registry::get('emLocale')->persist($categoryIcon);
                 \Zend_Registry::get('emLocale')->flush();
-                return $category1->id;
+                return $categoryIcon->id;
             } else {
                 return false;
             }
@@ -392,9 +390,9 @@ class Category extends \KC\Entity\Category
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $categoryDetails = $queryBuilder
             ->select(
-                "c,i.id as categoryIconId,i.name as iconname,i.path as iconpath,categoryfeaturedimage.name as featuredname,
-                categoryfeaturedimage.path as featuredpath, categoryheaderimage.name as headername,
-                categoryheaderimage.path as headerpath"
+                "c,i.id as categoryIconId,i.name as categoryiconname,i.path as categoryiconpath,categoryfeaturedimage.name as categoryfeaturedname,
+                categoryfeaturedimage.path as categoryfeaturedpath, categoryheaderimage.name as categoryheaderimagename,
+                categoryheaderimage.path as categoryheaderimagepath"
             )
             ->from('KC\Entity\Category', 'c')
             ->LeftJoin("c.categoryicon", "i")
@@ -535,7 +533,7 @@ class Category extends \KC\Entity\Category
             ->update('KC\Entity\Category', 'c')
             ->set('c.status', $status)
             ->where('c.id='. $params['id'])
-            ->getQuery
+            ->getQuery()
             ->execute();
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
@@ -551,7 +549,7 @@ class Category extends \KC\Entity\Category
         $q = $queryBuilder->update('KC\Entity\Category', 'c')
             ->set('c.deleted', 1)
             ->where('c.id='. $params['id'])
-            ->getQuery
+            ->getQuery()
             ->execute();
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_category_list');
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');

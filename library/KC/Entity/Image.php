@@ -47,7 +47,7 @@ class Image
     private $name;
 
     /**
-     * @ORM\Column(type="integer", length=1, nullable=false)
+     * @ORM\Column(type="integer", length=1, nullable=true)
      */
     private $deleted;
 
@@ -70,14 +70,7 @@ class Image
     {
         $this->$property = $value;
     }
-
-    public function test($value)
-    {
-        $t = new \KC\Entity\CategoryIcon();
-        $t->type = $value;
-        $this->type = $t->type;
-    }
-
+    
     public function getId()
     {
         return $this->id;

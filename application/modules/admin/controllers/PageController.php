@@ -50,20 +50,18 @@ class Admin_PageController extends Zend_Controller_Action
 
     public function addpageAction()
     {
-        $pageattrObj = new PageAttribute();
+        $pageattrObj = new KC\Repository\PageAttribute();
         $this->view->pageattr = $pageattrObj->getPageAttributes();
-        $widgetObj = new Widget();
+        $widgetObj = new KC\Repository\Widget();
         $this->view->widgetList = $widgetObj->getDefaultwidgetList();
         $this->view->widgetListUserDefined = $widgetObj->getUserDefinedwidgetList();
-        $artcatg = Articlecategory :: getartCategories();
+        $artcatg = KC\Repository\ArticleCategory:: getartCategories();
         $this->view->artcategory = $artcatg['aaData'];
 
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
-        if (Auth_StaffAdapter::hasIdentity()) {
-            $this->view->roleId = 	Zend_Auth::getInstance()->getIdentity()->roleId;
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        if (\Auth_StaffAdapter::hasIdentity()) {
+            $this->view->roleId = \Zend_Auth::getInstance()->getIdentity()->users->id;
         }
-        $userObj = new User();
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
     }
 
     /**
@@ -75,35 +73,32 @@ class Admin_PageController extends Zend_Controller_Action
 
     public function editpageAction()
     {
-        $this->view->role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+        $this->view->role = \Zend_Auth::getInstance()->getIdentity()->users->id;
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         $params = $this->_getAllParams();
-        $pageattrObj = new PageAttribute();
+        $pageattrObj = new KC\Repository\PageAttribute();
         $this->view->pageattr = $pageattrObj->getPageAttributes();
-        $widgetObj = new Widget();
+        $widgetObj = new KC\Repository\Widget();
         $this->view->widgetList = $widgetObj->getDefaultwidgetList();
         $this->view->widgetListUserDefined = $widgetObj->getUserDefinedwidgetList();
         $this->view->pageId = $params['id'];
-        $pageObj = new Page();
+        $pageObj = new KC\Repository\Page();
         $pageDetail = $pageObj->getPageDetail($params['id']);
-
         $this->view->pageDetail = $pageDetail['0'] ;
-
-        $artcatg = Articlecategory :: getartCategories();
+        $artcatg = KC\Repository\Articlecategory:: getartCategories();
         $this->view->artcategory = $artcatg['aaData'];
 
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();
-        if (Auth_StaffAdapter::hasIdentity()) {
-        $this->view->roleId = 	Zend_Auth::getInstance()->getIdentity()->roleId;
+       
+        if (\Auth_StaffAdapter::hasIdentity()) {
+            $this->view->roleId = Zend_Auth::getInstance()->getIdentity()->roleId;
         }
 
-        if(isset($_COOKIE['site_name'])){
+        if (isset($_COOKIE['site_name'])) {
             $site_name = "http://www.".$_COOKIE['site_name'];
         }
-        $userObj = new User();
+        $entityManagerUser  = \Zend_Registry::get('emUser');
+        $userObj = new KC\Repository\User();
         $this->view->authorList = $userObj->getPageAutor($site_name);
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
-
 }
 
 /**
@@ -154,10 +149,10 @@ class Admin_PageController extends Zend_Controller_Action
     public function pagelistAction()
     {
         $params = $this->_getAllParams();
-        $pageObj = new Page();
+        $pageObj = new KC\Repository\Page();
         // cal to function in network model class
         $pageList =  $pageObj->getPages($params);
-        echo Zend_Json::encode ( $pageList );
+        echo Zend_Json::encode ($pageList);
         die ;
     }
 
@@ -188,41 +183,31 @@ class Admin_PageController extends Zend_Controller_Action
     public function savepageAction()
     {
         $params = $this->_getAllParams();
-        $pageObj = new Page();
+        $pageObj = new KC\Repository\Page();
 
-    if(@$params['pageTemplate'] == 15){
-
-        $checkfooterpages = $pageObj->checkFooterpages(@$params['pageTemplate']);
-
-        if(count($checkfooterpages) == 10){
-
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('Error: you can not add another footer page.');
-            $flash->addMessage(array('error' => $message ));
-            $this->_redirect(HTTP_PATH.'admin/page');
-            exit;
-        }
-    }
-
-                $pageObj->savePage($params);
-
-                if(isset($params['savePagebtn']) && @$params['savePagebtn'] == 'draft'){
-
-                    $createdpageid = Doctrine_Query::create()->select("id")->from("Page")->orderBy("id DESC")->limit(1)->fetchArray();
-                    $lastval = $createdpageid[0]['id'];
-
-                    $redirecturl = "/admin/page/editpage/id/".$lastval;
-                    $this->_redirect($redirecturl);
-                    exit();
-                }
-
+        if (@$params['pageTemplate'] == 15) {
+            $checkfooterpages = $pageObj->checkFooterpages(@$params['pageTemplate']);
+            if (count($checkfooterpages) == 10) {
                 $flash = $this->_helper->getHelper('FlashMessenger');
-                $message = $this->view->translate('Page has been created successfully.');
-                $flash->addMessage(array('success' => $message ));
+                $message = $this->view->translate('Error: you can not add another footer page.');
+                $flash->addMessage(array('error' => $message ));
                 $this->_redirect(HTTP_PATH.'admin/page');
                 exit;
-
-
+            }
+        }
+        $pageObj->savePage($params);
+        if (isset($params['savePagebtn']) && @$params['savePagebtn'] == 'draft') {
+            $createdpageid = Doctrine_Query::create()->select("id")->from("Page")->orderBy("id DESC")->limit(1)->fetchArray();
+            $lastval = $createdpageid[0]['id'];
+            $redirecturl = "/admin/page/editpage/id/".$lastval;
+            $this->_redirect($redirecturl);
+            exit();
+        }
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        $message = $this->view->translate('Page has been created successfully.');
+        $flash->addMessage(array('success' => $message ));
+        $this->_redirect(HTTP_PATH.'admin/page');
+        exit;
     }
 /**
      * search to five shop from database by flag
@@ -414,7 +399,7 @@ class Admin_PageController extends Zend_Controller_Action
     {
          $id = $this->getRequest()->getParam('id');
         //cal to deleteOffer function from offer model class
-        $deletePermanent = Page::deletepage($id);
+        $deletePermanent = KC\Repository\Page::deletepage($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
             $message = $this->view
@@ -470,7 +455,7 @@ class Admin_PageController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
 
-        $trash = Page::moveToTrash($id);
+        $trash = KC\Repository\Page::moveToTrash($id);
 
         if (intval($trash) > 0) {
 
@@ -501,13 +486,13 @@ class Admin_PageController extends Zend_Controller_Action
         $srh = $params['keyword'];
         $flag = isset($params['flag']) ? $params['flag'] : '0';
 
-        $data =Page::searchToFivePage( $srh,$flag);
+        $data = KC\Repository\Page::searchToFivePage( $srh,$flag);
 
         $ar = array ();
         if (sizeof ( $data ) > 0) {
             foreach ( $data as $d ) {
 
-                $ar [] = $d ['pagetitle'];
+                $ar [] = $d ['pageTitle'];
             }
         } else {
             $msg = $this->view->translate ( 'No Record Found' );
@@ -529,7 +514,7 @@ class Admin_PageController extends Zend_Controller_Action
     public function deleteimageAction()
     {
         $params = $this->_getAllParams();
-        $pageObj = new Page();
+        $pageObj = new KC\Repository\Page();
         echo $pageObj->deletePageImage($params);
         die;
     }
@@ -542,20 +527,19 @@ class Admin_PageController extends Zend_Controller_Action
      */
     public function validatepermalinkAction()
     {
-        $url = $this->getRequest ()->getParam ( "pagepermalink" );
+        $url = $this->getRequest()->getParam("pagepermalink");
         $id = $this->getRequest()->getParam("id") ;
-
-
-
         $pattern = array ('/\s/','/[\,+@#$%^&*!]+/');
-
         $replace = array ("-","-");
-        $url = preg_replace ( $pattern, $replace, $url );
+        $url = preg_replace($pattern, $replace, $url);
         $url = strtolower($url);
-        $rp = Doctrine_Query::create()->select()->from("RoutePermalink")->where("permalink = '".urlencode($url)."'")->fetchArray();
-
-        if($id!='') {
-
+        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $entityManagerLocale
+            ->select('rp.permalink, rp.exactlink')
+            ->from('KC\Entity\RoutePermalink', 'rp')
+            ->where("rp.permalink = '".urlencode($url)."'");
+        $rp = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        if ($id!='') {
             $exactLinkIndex = 'index/index/attachedpage/'.$id;
             $exactLinkOfferPop = 'offer/popularoffer/attachedpage/'.$id;
             $exactLinkOffer = 'offer/index/attachedpage/'.$id;
@@ -567,50 +551,45 @@ class Admin_PageController extends Zend_Controller_Action
             $exactLinkForgot = 'login/forgotpassword/attachedpage/'.$id;
             $exactLinkFree = 'freesignup/index/attachedpage/'.$id;
             $exactLinkWelcome = 'login/memberwelcome/attachedpage/'.$id;
-
-
-            if(@$rp[0]['permalink'] == $url ) {
-                if( @$rp[0]['exactlink'] == $url || @$rp[0]['exactlink'] == $exactLinkIndex ||
+            if (@$rp[0]['permalink'] == $url) {
+                if (@$rp[0]['exactlink'] == $url || @$rp[0]['exactlink'] == $exactLinkIndex ||
                     @$rp[0]['exactlink'] == $exactLinkOfferPop || @$rp[0]['exactlink'] == $exactLinkOffer ||
                     @$rp[0]['exactlink'] == $exactLinkStore || @$rp[0]['exactlink'] == $exactLinkCategory ||
                     @$rp[0]['exactlink'] == $exactLinkMsGuide || @$rp[0]['exactlink'] == $exactLinkAbout ||
                     @$rp[0]['exactlink'] == $exactLinkLogin ||
                     @$rp[0]['exactlink'] == $exactLinkForgot || @$rp[0]['exactlink'] == $exactLinkFree ||
                     @$rp[0]['exactlink'] == $exactLinkWelcome
-                  ){
+                  ) {
                     $res = array( 	'status' => '200' ,
                             'url' => $url ,
                             'shopNavUrl' => $url ) ;
 
-                    echo Zend_Json::encode($res ) ;
+                    echo Zend_Json::encode($res);
                     die ;
-                }else	{
+                } else {
 
                     $res = false ;
-                    echo Zend_Json::encode( $res ) ;
+                    echo Zend_Json::encode($res);
                     die ;
                 }
             }
         }
+        if (strlen($url) > 0) {
 
-
-        if( strlen($url )  > 0) {
-
-            if(@$rp[0]['permalink'] != $url ) {
+            if (@$rp[0]['permalink'] != $url) {
                 $res = array ( 'status' => '200',
                         'url' => $url,
                         'permaLink' =>
-                        $this->getRequest ()->getParam ( "pagepermalink" )
+                        $this->getRequest()->getParam("pagepermalink")
                 );
-            }else {
-
-            $res = false;
+            } else {
+                $res = false;
             }
-        } else	{
+        } else {
 
             $res = false ;
         }
-        echo Zend_Json::encode ( $res );
+        echo Zend_Json::encode($res);
 
         die ();
     }

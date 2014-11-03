@@ -19,12 +19,9 @@
 		
 		$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/newsticker.js");
 		
-		//echo "<pre>";
-		//print_r($this->editNews); die;
 		
-		$date = $this->editNews[0]['startdate']; 
-		$dated =  strtotime($date) ; 
-		$dateForm =  date('d-m-Y',$dated);
+		$date = $this->editNews[0]['startdate'];
+		$dateForm =  $date->format('d-m-Y');
 		//echo $dateForm;
 		
 
@@ -48,9 +45,9 @@
 							  <option value=""></option>
 								<?php 
 								for($i=0;$i<count($this->shopList);$i++){
-		     						if(trim($this->shopList[$i]['name'])!='')
+		     						if(trim($this->shopList[$i]['shopName'])!='')
 		     						{
-		     						  $shopname = substr($this->shopList[$i]['name'],0,70);
+		     						  $shopname = substr($this->shopList[$i]['shopName'],0,70);
 
 		     						  if($this->shopList[$i]['id'] == $this->editNews[0]['shop']['id']){
 		     						  	$selected = "selected";
