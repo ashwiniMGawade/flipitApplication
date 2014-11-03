@@ -260,17 +260,17 @@ class Page Extends \KC\Entity\Page
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select(
-            'page, pagewigdet, logo, pageheaderimage,
-            artcatg.pageid,artcatg.categoryid'
+            'p, w.title as widgetTtitle, w.id as widgetId, logo, pageHeaderImage,pa'
         )
-            ->from('KC\Entity\Page', 'page')
-            ->leftJoin('page.logo', 'logo')
-            ->leftJoin('page.pageheaderimage', 'pageheaderimage')
-            ->leftJoin('page.pagewidget', 'pagewidget')
-            ->leftJoin("page.moneysaving artcatg")
+            ->from('KC\Entity\Page', 'p')
+            ->leftJoin('p.logo', 'logo')
+            ->leftJoin('p.pageHeaderImageId', 'pageHeaderImage')
+            ->leftJoin('p.pagewidget', 'pagewidget')
+            ->leftJoin('pagewidget.page', 'w')
+            ->leftJoin('p.page', 'pa')
             ->setParameter(1, $pageId)
-            ->where('page.id = ?1');
-        $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->where('p.id = ?1');
+        $pageDetails = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
 
@@ -337,29 +337,46 @@ class Page Extends \KC\Entity\Page
     {
         if ($id) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->select('rpw')
+                ->from('KC\Entity\RefPageWidget', 'rpw')
+                ->setParameter(1, $id)
+                ->where('rpw.widget = ?1');
+            $refPageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            if (!empty($refPageDetails)) {
+                $query = $queryBuilder->delete('KC\Entity\RefPageWidget', 'rpw')
+                    ->setParameter(1, $id)
+                    ->where('rpw.widget = ?1')
+                    ->getQuery();
+                $query->execute();
+            }
+
+            
             $query = $queryBuilder->select('page')
                 ->from('KC\Entity\Page', 'page')
                 ->setParameter(1, $id)
                 ->where('page.id = ?1');
             $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+
+            $query = $queryBuilder->select('routePermalink')
+                ->from('KC\Entity\RoutePermalink', 'routePermalink')
+                ->setParameter(1, $pageDetails['permalink'])
+                ->where('routePermalink.permalink = ?1');
+            $routePermalinkDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            if (!empty($routePermalinkDetails)) {
+                $query = $queryBuilder->delete('KC\Entity\RoutePermalink', 'routePermalink')
+                    ->setParameter(1, $pageDetails['permalink'])
+                    ->where('routePermalink.permalink = ?1')
+                    ->getQuery();
+                $query->execute();
+            }
+
             $query = $queryBuilder->delete('KC\Entity\Page', 'page')
                 ->setParameter(1, $id)
                 ->where('page.id = ?1')
                 ->getQuery();
             $query->execute();
 
-            $query = $queryBuilder->select('routePermalink')
-                ->from('KC\Entity\RoutePermalink', 'routePermalink')
-                ->setParameter(1, $pageDetails->permalink)
-                ->where('routePermalink.permalink = ?1');
-            $routePermalinkDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-            if (!empty($routePermalinkDetails)) {
-                $query = $queryBuilder->delete('KC\Entity\RoutePermalink', 'routePermalink')
-                    ->setParameter(1, $pageDetails->permalink)
-                    ->where('routePermalink.permalink = ?1')
-                    ->getQuery();
-                $query->execute();
-            }
+            
         } else {
             $id = null;
         }
@@ -416,7 +433,7 @@ class Page Extends \KC\Entity\Page
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->update('KC\Entity\Page', 'page')
-            ->set('page.logoid', 0)
+            ->set('page.logoId', 0)
             ->setParameter(1, $params['pageId'])
             ->where('page.id = ?1')
             ->getQuery();
@@ -673,40 +690,38 @@ class Page Extends \KC\Entity\Page
         }
         if (isset($_FILES['logoFile']['name']) && $_FILES['logoFile']['name'] != '') {
             $result = self::uploadImage('logoFile');
-            $savePage->logoid = 0;
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
                 $pageImage  = new \KC\Entity\Image();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
-                $pageImage->type = 'LG';
+                $pageImage->type = "LG";
                 $pageImage->deleted = 0;
                 $pageImage->created_at = new \DateTime('now');
                 $pageImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
-                $savePage->logoId =  $pageImage->getId();
+                $savePage->logo = $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
             } else {
                 return false;
             }
         }
         if (isset($_FILES['headerFile']['name']) && $_FILES['headerFile']['name'] != '') {
             $result = self::uploadImage('headerFile');
-            $savePage->pageheaderimageid = 0;
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
                 $pageImage  = new \KC\Entity\Image();
                 $pageImage->ext = $ext;
                 $pageImage->path = $result['path'];
                 $pageImage->name = $result['fileName'];
-                $pageImage->type = 'LG';
+                $pageImage->type = "LG";
                 $pageImage->deleted = 0;
                 $pageImage->created_at = new \DateTime('now');
                 $pageImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
-                $savePage->pageHeaderImageId =  $pageImage->getId();
+                $savePage->pageHeaderImageId = $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
             } else {
                 return false;
             }
@@ -729,9 +744,9 @@ class Page Extends \KC\Entity\Page
         if (isset($params['lockPageStatuschk'])) {
             $savePage->pageLock = 1;
         }
-        isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
+        isset($params['showSitemapStatuscheck']) ? $savePage->showsitemap = 1 : $savePage->showsitemap = 0;
         if (trim($params['pageTemplate'])!='') {
-            $savePage->page = $params['pageTemplate'];
+            $savePage->page = $entityManagerLocale->find('KC\Entity\PageAttribute', $params['pageTemplate']);
         }
        
         $savePage->contentManagerId = \Auth_StaffAdapter::getIdentity()->id;
@@ -751,28 +766,35 @@ class Page Extends \KC\Entity\Page
             $entityManagerLocale->flush();
 
             $selectedWidgets = explode(',', $params['selectedWigetForPage']);
+            $i=0;
             foreach ($selectedWidgets as $widget) {
                 if (trim($widget)!='') {
                     $pageWidget  = new \KC\Entity\RefPageWidget();
                     $pageWidget->created_at = new \DateTime('now');
                     $pageWidget->updated_at = new \DateTime('now');
-                    $pageWidget->page = $entityManagerUser->find('KC\Entity\Widget', $widget);
-                    $pageWidget->widget = $entityManagerUser->find('KC\Entity\Page', $savePage->getId());
+                    $pageWidget->stauts = 1;
+                    $pageWidget->position = $i;
+                    $pageWidget->page = $entityManagerLocale->find('KC\Entity\Widget', $widget);
+                    $pageWidget->widget = $entityManagerLocale->find('KC\Entity\Page', $savePage->getId());
                     $entityManagerLocale->persist($pageWidget);
                     $entityManagerLocale->flush();
                 }
+                $i++;
             }
 
             $pageId =  $savePage->getId();
             $permalink = $pagePermalinkParam;
-            /*if (isset($permalink)) {
+            if (isset($permalink)) {
                 $varnishObj = new KC\Repository\Varnish();
                 $varnishObj->addUrl(HTTP_PATH_FRONTEND . $permalink);
-            }*/
+            }
             $route = new \KC\Entity\RoutePermalink();
             $route->permalink = $params['pagepermalink'];
             $route->type = 'PG';
             $route->exactlink = $params['pagepermalink'];
+            $route->created_at = new \DateTime('now');
+            $route->updated_at = new \DateTime('now');
+            $route->deleted = 0;
 
             switch ($params['pageTemplate']) {
                 case 4:
@@ -820,21 +842,6 @@ class Page Extends \KC\Entity\Page
             }
             $entityManagerLocale->persist($route);
             $entityManagerLocale->flush();
-            $i=0;
-            foreach ($selectedWidgets as $widget) {
-
-                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->update('KC\Entity\refPageWidget', 'refPageWidget')
-                    ->set('refPageWidget.stauts', 1)
-                    ->set('refPageWidget.position', $i)
-                    ->setParameter(1, $pageId)
-                    ->where('refPageWidget.widget = ?1')
-                    ->setParameter(2, $widget)
-                    ->where('refPageWidget.page = ?2')
-                    ->getQuery();
-                $query->execute();
-                $i++;
-            }
             return true;
         } catch (Exception $e) {
             return false;
@@ -954,7 +961,7 @@ class Page Extends \KC\Entity\Page
                 $pageImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
-                $updatePage->logoId =  $pageImage->getId();
+                $updatePage->logo = $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
             } else {
                 return false;
             }
@@ -974,7 +981,7 @@ class Page Extends \KC\Entity\Page
                 $pageImage->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pageImage);
                 $entityManagerLocale->flush();
-                $updatePage->logoId =  $pageImage->getId();
+                $updatePage->pageHeaderImageId =  $entityManagerLocale->find('KC\Entity\Logo', $pageImage->getId());
             } else {
                 return false;
             }
@@ -1002,7 +1009,7 @@ class Page Extends \KC\Entity\Page
             ? $updatePage->showsitemap = 1 : $updatePage->showsitemap = 0;
 
         if (trim($params['pageTemplate'])!='') {
-            $updatePage->page = $params['pageTemplate'];
+            $updatePage->page = $entityManagerLocale->find('KC\Entity\PageAttribute', $params['pageTemplate']);
         } else {
             $updatePage->page = NULL;
         }
@@ -1012,21 +1019,15 @@ class Page Extends \KC\Entity\Page
         }
         
         $pageid = $params['pageId'];
-        KC\Repository\MoneySaving::delartCategories($params['pageId']);
+        \KC\Repository\MoneySaving::delartCategories($params['pageId']);
+
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
             ->from('KC\Entity\Page', 'page')
             ->setParameter(1, $pageid)
             ->where('page.id = ?1');
         $getPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        if ($params['pageTemplate'] == 13) {
-            for ($a=0; $a<count($params['artcatgs']); $a++) {
-                    $monwysavingobj = new MoneySaving();
-                    $monwysavingobj->pageid = $params['pageId'];
-                    $monwysavingobj->categoryid = $params['artcatgs'][$a];
-                    $monwysavingobj->save();
-            }
-        }
+
         if (!empty($getPage[0]['permaLink'])) {
             $query = $entityManagerUser->select('page')
                 ->from('KC\Entity\RoutePermalink', 'routePermalink')
@@ -1036,7 +1037,7 @@ class Page Extends \KC\Entity\Page
                 ->andWhere('routePermalink.type = ?2');
             $getRouteLink = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         } else {
-            $updateRouteLink = new KC\Repository\RoutePermalink();
+            $updateRouteLink = new \KC\Repository\RoutePermalink();
         }
         try {
             $slug = $params['pageTemplate'];
@@ -1045,7 +1046,7 @@ class Page Extends \KC\Entity\Page
             if (!$flag) {
                 \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pagedatakey);
             }
-            $pageKey ="all_moneysavingpage".$this->id."_list";
+            $pageKey ="all_moneysavingpage". $pageid."_list";
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pageKey);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
@@ -1058,8 +1059,33 @@ class Page Extends \KC\Entity\Page
 
             $entityManagerLocale->persist($updatePage);
             $entityManagerLocale->flush();
+
             $pageId =  $params['pageId'];
             $permalink = $params['pagepermalink'];
+
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\RefPageWidget', 'rpw')
+            ->setParameter(1, $pageId)
+            ->where('rpw.widget = ?1')
+            ->getQuery();
+            $query->execute();
+
+            $selectedWidgets = explode(',', $params['selectedWigetForPage']);
+            $i=0;
+            foreach ($selectedWidgets as $widget) {
+                if (trim($widget)!='') {
+                    $pageWidget  = new \KC\Entity\RefPageWidget();
+                    $pageWidget->created_at = new \DateTime('now');
+                    $pageWidget->updated_at = new \DateTime('now');
+                    $pageWidget->stauts = 1;
+                    $pageWidget->position = $i;
+                    $pageWidget->page = $entityManagerLocale->find('KC\Entity\Widget', $widget);
+                    $pageWidget->widget = $entityManagerLocale->find('KC\Entity\Page', $pageId);
+                    $entityManagerLocale->persist($pageWidget);
+                    $entityManagerLocale->flush();
+                }
+                $i++;
+            }
             
             #update varnish for this page
             if (isset($permalink)) {
@@ -1139,20 +1165,6 @@ class Page Extends \KC\Entity\Page
                     ->andWhere('routePermalink.permalink = ?2')
                     ->getQuery();
                 $query->execute();
-            }
-            $i=0;
-            foreach ($selectedWidgets as $widget) {
-                $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-                $query = $queryBuilder->update('KC\Entity\refPageWidget', 'refPageWidget')
-                    ->set('refPageWidget.stauts', 1)
-                    ->set('refPageWidget.position', $i)
-                    ->setParameter(1, $pageId)
-                    ->where('refPageWidget.widget = ?1')
-                    ->setParameter(2, $widget)
-                    ->where('refPageWidget.page = ?2')
-                    ->getQuery();
-                $query->execute();
-                $i++;
             }
             return true;
         }catch (Exception $e){
