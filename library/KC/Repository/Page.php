@@ -828,9 +828,9 @@ class Page Extends \KC\Entity\Page
                     ->set('refPageWidget.stauts', 1)
                     ->set('refPageWidget.position', $i)
                     ->setParameter(1, $pageId)
-                    ->where('refPageWidget.pageId = ?1')
+                    ->where('refPageWidget.widget = ?1')
                     ->setParameter(2, $widget)
-                    ->where('refPageWidget.widgetId = ?2')
+                    ->where('refPageWidget.page = ?2')
                     ->getQuery();
                 $query->execute();
                 $i++;
@@ -875,63 +875,63 @@ class Page Extends \KC\Entity\Page
                 $updatePage->enableWordConstraint=1;
                 $updatePage->wordTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['wordConstraintTxt']);
             }
-            $updatePage->awardconstratint=0;
-            $updatePage->awardtype = 0;
+            $updatePage->awardConstratint=0;
+            $updatePage->awardType = 0;
             if (isset($params['awardCostraintchk'])) {
-                $updatePage->awardconstratint=1;
-                $updatePage->awardtype = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['awardConstraintDropdown']);
+                $updatePage->awardConstratint=1;
+                $updatePage->awardType = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['awardConstraintDropdown']);
             }
 
-            $updatePage->enableclickconstraint=0;
-            $updatePage->numberofclicks = '';
+            $updatePage->enableClickConstraint=0;
+            $updatePage->numberOfClicks = '';
 
             if (isset($params['clickCostraintchk'])) {
-                $updatePage->enableclickconstraint = 1;
-                $updatePage->numberofclicks =
+                $updatePage->enableClickConstraint = 1;
+                $updatePage->numberOfClicks =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['clickConstraintTxt']);
             }
 
-            $updatePage->couponregular = 0;
+            $updatePage->couponRegular = 0;
             if (isset($params['coupconCoderegularchk'])) {
-                $updatePage->couponregular =
+                $updatePage->couponRegular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCoderegularchk']);
             }
-            $updatePage->couponeditorpick = 0;
+            $updatePage->couponEditorPick = 0;
             if (isset($params['coupconCodeeditorchk'])) {
-                $updatePage->couponeditorpick =
+                $updatePage->couponEditorPick =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCodeeditorchk']);
             }
-            $updatePage->couponexclusive= 0;
+            $updatePage->couponExclusive= 0;
             if (isset($params['coupconCodeeclusivechk'])) {
-                $updatePage->couponexclusive =
+                $updatePage->couponExclusive =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['coupconCodeeclusivechk']);
             }
-            $updatePage->saleregular = 0;
+            $updatePage->saleRegular = 0;
             if (isset($params['saleregularchk'])) {
-                $updatePage->saleregular =
+                $updatePage->saleRegular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleregularchk']);
             }
-            $updatePage->saleeditorpick = 0;
+            $updatePage->saleEditorPick = 0;
             if (isset($params['saleeditorchk'])) {
-                $updatePage->saleeditorpick = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeditorchk']);
+                $updatePage->saleEditorPick = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeditorchk']);
             }
-            $updatePage->saleexclusive=0;
+            $updatePage->saleExclusive=0;
             if (isset($params['saleeclusivechk'])) {
-                $updatePage->saleexclusive =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeclusivechk']);
+                $updatePage->saleExclusive =  \BackEnd_Helper_viewHelper::stripSlashesFromString($params['saleeclusivechk']);
             }
-            $updatePage->printableregular = 0;
+            $updatePage->printableRegular = 0;
             if (isset($params['printableregularchk'])) {
-                $updatePage->printableregular =
+                $updatePage->printableRegular =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableregularchk']);
             }
-            $updatePage->printableeditorpick = 0;
+            $updatePage->printableEditorPick = 0;
             if (isset($params['printableeditorchk'])) {
-                $updatePage->printableeditorpick =
+                $updatePage->printableEditorPick =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableeditorchk']);
             }
-            $updatePage->printableexclusive = 0;
+            $updatePage->printableExclusive = 0;
             if (isset($params['printableexclusivechk'])) {
-                $updatePage->printableexclusive =
+                $updatePage->printableExclusive =
                     \BackEnd_Helper_viewHelper::stripSlashesFromString($params['printableexclusivechk']);
             }
             $updatePage->showPage = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['showPage']);
@@ -944,9 +944,17 @@ class Page Extends \KC\Entity\Page
             $result = self::uploadImage('logoFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $this->logo->ext = $ext;
-                $this->logo->path = $result['path'];
-                $this->logo->name = $result['fileName'];
+                $pageImage  = new \KC\Entity\Image();
+                $pageImage->ext = $ext;
+                $pageImage->path = $result['path'];
+                $pageImage->name = $result['fileName'];
+                $pageImage->type = 'LG';
+                $pageImage->deleted = 0;
+                $pageImage->created_at = new \DateTime('now');
+                $pageImage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($pageImage);
+                $entityManagerLocale->flush();
+                $updatePage->logoId =  $pageImage->getId();
             } else {
                 return false;
             }
@@ -956,9 +964,17 @@ class Page Extends \KC\Entity\Page
             $result = self::uploadImage('headerFile');
             if ($result['status'] == '200') {
                 $ext = \BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
-                $this->pageheaderimage->ext = $ext;
-                $this->pageheaderimage->path = $result['path'];
-                $this->pageheaderimage->name = $result['fileName'];
+                $pageImage  = new \KC\Entity\Image();
+                $pageImage->ext = $ext;
+                $pageImage->path = $result['path'];
+                $pageImage->name = $result['fileName'];
+                $pageImage->type = 'LG';
+                $pageImage->deleted = 0;
+                $pageImage->created_at = new \DateTime('now');
+                $pageImage->updated_at = new \DateTime('now');
+                $entityManagerLocale->persist($pageImage);
+                $entityManagerLocale->flush();
+                $updatePage->logoId =  $pageImage->getId();
             } else {
                 return false;
             }
@@ -970,43 +986,37 @@ class Page Extends \KC\Entity\Page
                 'H:i:s',
                 strtotime($params['publishTimehh'])
             );
-            $updatePage->publishDate = $publishDate ;
+            $updatePage->publishDate = new \DateTime($publishDate);
         }
-        $updatePage->pagetitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
-        $updatePage->permalink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagepermalink']);
-        $updatePage->metatitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaTitle']);
-        $updatePage->metadescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaDesc']);
-        $updatePage->customheader = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageCustomHeader']);
+        $updatePage->pageTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageTitle']);
+        $updatePage->permaLink = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagepermalink']);
+        $updatePage->metaTitle = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaTitle']);
+        $updatePage->metaDescription = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pagemetaDesc']);
+        $updatePage->customHeader = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageCustomHeader']);
         $updatePage->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params['pageDesc']);
-        $updatePage->pagelock = 0;
+        $updatePage->pageLock = 0;
         if (isset($params['lockPageStatuschk'])) {
-            $updatePage->pagelock = 1;
+            $updatePage->pageLock = 1;
         }
         isset($params['showSitemapStatuscheck']) && $params['showSitemapStatuscheck'] == 1
-            ? $updatePage->showsitemap = 1 : $this->showsitemap = 0;
+            ? $updatePage->showsitemap = 1 : $updatePage->showsitemap = 0;
 
         if (trim($params['pageTemplate'])!='') {
-            $updatePage->pageattributeid = $params['pageTemplate'];
+            $updatePage->page = $params['pageTemplate'];
         } else {
-            $updatePage->pageattributeid = NULL;
+            $updatePage->page = NULL;
         }
         if (isset($params['pageAuthor']) && $params['pageAuthor']!='') {
             $updatePage->contentManagerId = $params['pageAuthor'];
             $updatePage->contentManagerName = $params['selectedpageAuthorName'];
         }
-        $selectedWidgets = explode(',', $params['selectedWigetForPage']);
-        $this->pageWidget->delete();
-        foreach ($selectedWidgets as $widget) {
-            if (trim($widget)!='') {
-                $this->pageWidget[]->widgetId = $widget;
-            }
-        }
+        
         $pageid = $params['pageId'];
         KC\Repository\MoneySaving::delartCategories($params['pageId']);
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerUser->select('page')
             ->from('KC\Entity\Page', 'page')
-            ->setParameter(1, $this->id)
+            ->setParameter(1, $pageid)
             ->where('page.id = ?1');
         $getPage = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if ($params['pageTemplate'] == 13) {
@@ -1029,7 +1039,7 @@ class Page Extends \KC\Entity\Page
             $updateRouteLink = new KC\Repository\RoutePermalink();
         }
         try {
-            $slug = $this->pageattributeid;
+            $slug = $params['pageTemplate'];
             $pagedatakey ="all_". "pagedata".$slug ."_list";
             $flag =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey($pagedatakey);
             if (!$flag) {
@@ -1039,18 +1049,18 @@ class Page Extends \KC\Entity\Page
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($pageKey);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_page_list');
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_specialPages_list');
-            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$this->id.'_image');
+            \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_header'.$params['pageId'].'_image');
             $pagePermalinkParam =
                 \FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($params['pagepermalink']);
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('page_'.$pagePermalinkParam.'_data');
             $key = 'all_widget' . $params['pageTemplate'] . "_list";
             \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
-            $entityManagerLocale = \Zend_Registry::get('emLocale');
-            $entityManagerLocale->persist($this);
-            $pageId =  $this->id;
-            $permalink = $this->permalink;
+            $entityManagerLocale->persist($updatePage);
             $entityManagerLocale->flush();
+            $pageId =  $params['pageId'];
+            $permalink = $params['pagepermalink'];
+            
             #update varnish for this page
             if (isset($permalink)) {
                 $varnishObj = new Varnish();
@@ -1069,57 +1079,57 @@ class Page Extends \KC\Entity\Page
                     ->set('routePermalink.exactlink', "'".$params['pagepermalink']."'");
                 switch ($params['pageTemplate']) {
                     case 4:
-                        $exactLink = 'index/index/attachedpage/'.$this->id;
+                        $exactLink = 'index/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 5:
-                        $exactLink = 'offer/popularoffer/attachedpage/'.$this->id;
+                        $exactLink = 'offer/popularoffer/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 6:
-                        $exactLink = 'offer/index/attachedpage/'.$this->id;
+                        $exactLink = 'offer/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 7:
-                        $exactLink = 'store/index/attachedpage/'.$this->id;
+                        $exactLink = 'store/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 8:
-                        $exactLink = 'store/index/attachedpage/'.$this->id;
+                        $exactLink = 'store/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 9:
-                        $exactLink = 'category/index/attachedpage/'.$this->id;
+                        $exactLink = 'category/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 10:
-                        $exactLink = 'category/index/attachedpage/'.$this->id;
+                        $exactLink = 'category/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 13:
 
-                        $exactLink = 'plus/index/attachedpage/'.$this->id;
+                        $exactLink = 'plus/index/attachedpage/'.$params['pageId'];
                         $query->set('permalink', "'".$params['pagepermalink']."'");
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 14:
-                        $exactLink = 'about/index/attachedpage/'.$this->id;
+                        $exactLink = 'about/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 17:
-                        $exactLink = 'login/index/attachedpage/'.$this->id;
+                        $exactLink = 'login/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 18:
-                        $exactLink = 'login/forgotpassword/attachedpage/'.$this->id;
+                        $exactLink = 'login/forgotpassword/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 19:
-                        $exactLink = 'freesignup/index/attachedpage/'.$this->id;
+                        $exactLink = 'freesignup/index/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                     case 29:
-                        $exactLink = 'login/memberwelcome/attachedpage/'.$this->id;
+                        $exactLink = 'login/memberwelcome/attachedpage/'.$params['pageId'];
                         $query->set('exactlink', "'".$exactLink."'");
                         break;
                 }
@@ -1137,9 +1147,9 @@ class Page Extends \KC\Entity\Page
                     ->set('refPageWidget.stauts', 1)
                     ->set('refPageWidget.position', $i)
                     ->setParameter(1, $pageId)
-                    ->where('refPageWidget.pageId = ?1')
+                    ->where('refPageWidget.widget = ?1')
                     ->setParameter(2, $widget)
-                    ->where('refPageWidget.widgetId = ?2')
+                    ->where('refPageWidget.page = ?2')
                     ->getQuery();
                 $query->execute();
                 $i++;
