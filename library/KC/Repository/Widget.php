@@ -6,12 +6,15 @@ class Widget extends \KC\Entity\Widget
     public function addWidget($params)
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale');
-        $w = new Widget();
+        $w = new \KC\Entity\Widget();
         $w->title = \BackEnd_Helper_viewHelper::stripSlashesFromString($params ['title']);
         $w->content = \BackEnd_Helper_viewHelper::stripSlashesFromString($params ['content']);
+        $w->status = 1;
+        $w->deleted = 0;
+        $w->created_at = new \DateTime('now');
+        $w->updated_at = new \DateTime('now');
         $entityManagerLocale->persist($w);
         $entityManagerLocale->flush();
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
         return $w->id;
     }
@@ -51,8 +54,7 @@ class Widget extends \KC\Entity\Widget
         if ($params['state'] == 'online') {
             $query = $queryBuilder->update('KC\Entity\Widget', 'widget')
             ->set('widget.status', 1)
-            ->setParameter(1, $params['id'])
-            ->where('widget.id = ?1')
+            ->where('widget.id = '.$params['id'])
             ->getQuery();
             $query->execute();
             return $params['id'];
@@ -60,15 +62,13 @@ class Widget extends \KC\Entity\Widget
         if ($params['state'] == 'offline') {
             $query = $queryBuilder->update('KC\Entity\Widget', 'widget')
             ->set('widget.status', 0)
-            ->setParameter(1, $params['id'])
-            ->where('widget.id = ?1')
+            ->where('widget.id = '.$params['id'])
             ->getQuery();
             $query->execute();
             return $params['id'];
         } else {
             $id = null;
         }
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
     }
 
@@ -76,23 +76,23 @@ class Widget extends \KC\Entity\Widget
     {
         $srh = @$params["SearchText"] != 'undefined' ? @$params["SearchText"] : '';
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('widget')
+        $query = $entityManagerUser
             ->from('KC\Entity\Widget', 'widget')
-            ->setParameter(1, 0)
-            ->where('widget.deleted = ?1')
-            ->setParameter(2, $srh.'%')
-            ->andWhere($entityManagerUser->expr()->like('widget.title', '?2'))
-            ->orderBy("widget.id", "DESC")
-            ->getQuery();
-        //$srh = isset($params["searchText"]) ? $params["searchText"] : '';
-        $list = \DataTable_Helper::generateDataTableResponse(
-            $query,
-            $params,
-            array("__identifier" => 'widget.id', 'widget.id','widget.title','widget.content'),
-            array(),
-            array()
-        );
+            ->where('widget.deleted = 0')
+            ->andWhere($entityManagerUser->expr()->like("widget.title", $entityManagerUser->expr()->literal($srh."%")));
+        $request = \DataTable_Helper::createSearchRequest($params, array());
+        $builder  = new \NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($query)
+            ->add('number', 'widget.id')
+            ->add('text', 'widget.title')
+            ->add('text', 'widget.status')
+            ->add('text', 'widget.content');
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $list = \DataTable_Helper::getResponse($data, $request);
         return $list;
+
+        
     }
 
     public static function searchKeyword($keyword)
@@ -116,9 +116,7 @@ class Widget extends \KC\Entity\Widget
             ->from('KC\Entity\Widget', 'w')
             ->setParameter(1, $id)
             ->where('w.id = ?1');
-        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        //echo $data->getSqlQuery(); die;
-        //call cache function
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
         return $data;
 
@@ -126,7 +124,7 @@ class Widget extends \KC\Entity\Widget
 
     public function editWidgetRecord($params)
     {
-        $content = addslashes($params['content']);
+        $content = @addslashes($params['content']);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->update('KC\Entity\Widget', 'w')
         ->set('w.title', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['title'])))
@@ -135,8 +133,6 @@ class Widget extends \KC\Entity\Widget
         ->where('w.id = ?1')
         ->getQuery();
         $query->execute();
-        //echo $data->getSqlQuery(); die();
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
         return true;
     }
@@ -149,18 +145,10 @@ class Widget extends \KC\Entity\Widget
             ->setParameter(1, $id)
             ->where('w.id = ?1')
             ->getQuery();
-           // print_r($query);die;
             $query->execute();
-
-            
-
-            
-            /*$u = Doctrine_Core::getTable("Widget")->find($id);
-            $u->delete();*/
         } else {
             $id = null;
         }
-        //call cache function
         \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_widget_list');
         return $id;
     }
@@ -168,22 +156,23 @@ class Widget extends \KC\Entity\Widget
     public static function getAllUrls($id)
     {
         $entityManagerUser = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerUser->select('p.permaLink,w.id')
+        $query = $entityManagerUser->select('w, p, wp')
             ->from('KC\Entity\Widget', 'w')
-            ->leftJoin('w.page', 'p')
+            ->leftJoin('w.Widget', 'p')
+            ->leftJoin('p.widget', 'wp')
             ->setParameter(1, $id)
             ->where('w.id = ?1')
             ->setParameter(2, 0)
-            ->andWhere('p.deleted = ?2');
-        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            ->andWhere('wp.deleted = ?2');
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $urlsArray = array();
         # check this widget has one or more related pages
-        if (isset($data['page']) && count($data['page']) > 0) {
+        if (isset($data['Widget']) && count($data['Widget']) > 0) {
             # traverse through all shops
-            foreach ($data['page'] as $value) {
+            foreach ($data['Widget'] as $value) {
                 # check if a category has permalink then add it into array
-                if (isset($value['permaLink']) && strlen($value['permaLink']) > 0) {
-                    $urlsArray[] = $value['permaLink'];
+                if (isset($value['widget']['permaLink']) && strlen($value['widget']['permaLink']) > 0) {
+                    $urlsArray[] = $value['widget']['permaLink'];
                 }
             }
         }

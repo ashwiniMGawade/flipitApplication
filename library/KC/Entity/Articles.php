@@ -122,6 +122,11 @@ class Articles
      */
     private $category;
 
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleCategory", mappedBy="articles")
+     */
+    private $refArticleCategory;
+
     public function __get($property)
     {
         return $this->$property;

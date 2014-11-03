@@ -52,14 +52,21 @@ class Admin_MediaController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         //print_r($params);die;
-        $mediaList = Media::getmediaList($params);
-        //print_r($mediaList);die;
-        echo Zend_Json::encode(
-                DataTable_Helper::generateDataTableResponse($mediaList,
-                        $params,
-                        array("__identifier" => 'm.id','m.id','m.name','m.alternateText','m.created_at','m.mediaImageId','m.authorName','m.fileUrl'),
-                    array(),
-                    array()));
+        $mediaList = \KC\Repository\Media::getmediaList($params);
+      
+        $request = DataTable_Helper::createSearchRequest($params, array());
+        $builder  = new NeuroSYS\DoctrineDatatables\TableBuilder(\Zend_Registry::get('emLocale'), $request);
+        $builder
+            ->setQueryBuilder($mediaList)
+            ->add('number', 'm.id')
+            ->add('text', 'm.name')
+            ->add('text', 'm.alternatetext')
+            ->add('text', 'm.created_at')
+            ->add('text', 'm.authorName')
+            ->add('text', 'm.fileurl');
+        $data = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
+        $result = DataTable_Helper::getResponse($data, $request);
+        echo Zend_Json::encode($result);
         die();
 
     }
@@ -77,7 +84,7 @@ class Admin_MediaController extends Zend_Controller_Action
 
         $flash = $this->_helper->getHelper('FlashMessenger');
 
-        if(Media::permanentDeleteMedia($id)){
+        if(\KC\Repository\Media::permanentDeleteMedia($id)){
             $this->_helper->flashMessenger->addMessage(array('success'=>'Media has been deleted successfully.'));
             $this->_helper->redirector(null , 'media' , null ) ;
         } else{
@@ -101,7 +108,7 @@ class Admin_MediaController extends Zend_Controller_Action
             $params = $this->_getAllParams();
             //print_r($params);die;
 
-            if(Media::updateMediaRecord($params)){
+            if(\KC\Repository\Media::updateMediaRecord($params)){
                 $this->_helper->flashMessenger->addMessage(array('success'=>'Media has been updated successfully!'));
                 $this->_helper->redirector(null , 'media' , null ) ;
             } else{
@@ -116,7 +123,7 @@ public function getmediadataAction()
 {
     $params = $this->getRequest()->getParam('id');
     //print_r($params);die;
-    $mediaList = Media::getMediadata($params);
+    $mediaList = \KC\Repository\Media::getMediadata($params);
     echo Zend_Json::encode(@$mediaList[0]);
     die();
 
@@ -135,16 +142,18 @@ public function editmediaAction()
     $this->view->qstring = $_SERVER['QUERY_STRING'];
     $id = $this->getRequest()->getParam('id');
     if( intval($id) > 0 ) {
-        $data = Doctrine_Query::create()
-        ->from('Media m')
-        ->where("m.id = ?" , $id)
-        ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $data = $queryBuilder->select('m')
+        ->from('KC\Entity\Media', 'm')
+        ->where("m.id = " . $id)
+        ->getQuery()
+        ->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $this->view->data = $data ;
         $this->view->id = $id;
     }
     if(@$parmas['act']=='delete'){
-        $media= new Media();
+        $media= new \KC\Repository\Media();
         //$media = Doctrine_Core::getTable("Media")->find($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
         if($media->permanentDeleteMedia($id)) {
@@ -187,7 +196,7 @@ public function editmediaAction()
  */
 public function saveimageAction()
 {
-        $upload_handler = new Media();
+        $upload_handler = new \KC\Repository\Media();
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'OPTIONS':
                 break;

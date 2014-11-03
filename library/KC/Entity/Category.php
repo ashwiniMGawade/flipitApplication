@@ -94,6 +94,11 @@ class Category
     private $popularCategory;
 
     /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticlecategoryRelatedcategory", mappedBy="category")
+     */
+    private $refArticlecategoryRelatedcategory;
+
+    /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefOfferCategory", mappedBy="offer")
      */
     private $categoryoffres;

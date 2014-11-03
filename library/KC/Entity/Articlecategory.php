@@ -75,6 +75,22 @@ class Articlecategory
     private $moneysaving;
 
     /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticleCategory", mappedBy="articlecategory")
+     */
+    private $refArticleCategory;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\ImageArticleCategoryIcon", inversedBy="articlecategory")
+     * @ORM\JoinColumn(name="categoryiconid", referencedColumnName="id")
+     */
+    private $ArtCatIcon;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefArticlecategoryRelatedcategory", mappedBy="articlecategory")
+     */
+    private $refArticlecategoryRelatedcategory;
+
+    /**
      * @ORM\ManyToMany(targetEntity="KC\Entity\Category", mappedBy="articlecategory")
      */
     private $category;
