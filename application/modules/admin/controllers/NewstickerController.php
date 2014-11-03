@@ -65,7 +65,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
 
 
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
 
         $shopNames = $shopObj::getOfferShopList();
 
@@ -75,7 +75,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
             $params = $this->_getAllParams();
 
-            $newsticker = OfferNews::saveNewsticker($params);
+            $newsticker = \KC\Repository\OfferNews::saveNewsticker($params);
 
             self::updateVarnish($newsticker);
 
@@ -114,7 +114,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams ();
 
-        $newstickerList = OfferNews::getnewstickerList($params);
+        $newstickerList = \KC\Repository\OfferNews::getnewstickerList($params);
 
         echo Zend_Json::encode ( $newstickerList );
 
@@ -134,7 +134,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
 
         self::updateVarnish($id);
 
-        $deletePermanent = OfferNews::deletenewsticker( $id );
+        $deletePermanent = \KC\Repository\OfferNews::deletenewsticker( $id );
 
         $flash = $this->_helper->getHelper('FlashMessenger');
 
@@ -153,7 +153,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
      */
     public function editnewstickerAction()
     {
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
 
         $shopNames = $shopObj::getOfferShopList();
 
@@ -163,7 +163,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
         $id = $this->getRequest ()->getParam ( 'id' );
         if ($id > 0) {
             // get edit newsticker
-            $newsticker = OfferNews::getNewsticker ($id);
+            $newsticker = \KC\Repository\OfferNews::getNewsticker ($id);
             $this->view->editNews = $newsticker;
 
         }
@@ -171,7 +171,7 @@ class Admin_NewstickerController extends Zend_Controller_Action
         if ($this->getRequest ()->isPost ()) {
             $params = $this->getRequest ()->getParams ();
             // cal to update newsticker function
-            $newsticker = OfferNews::updateNewsticker( $params );
+            $newsticker = \KC\Repository\OfferNews::updateNewsticker( $params );
 
 
             self::updateVarnish($id);
@@ -195,10 +195,10 @@ class Admin_NewstickerController extends Zend_Controller_Action
     public function updateVarnish($id)
     {
                 // Add urls to refresh in Varnish
-            $varnishObj = new Varnish();
+            $varnishObj = new \KC\Repository\Varnish();
 
             # get all the urls related to this newsticker
-            $varnishUrls = OfferNews::getAllUrls($id);
+            $varnishUrls = \KC\Repository\OfferNews::getAllUrls($id);
 
             # check $varnishUrls has atleast one
             if(isset($varnishUrls) && count($varnishUrls) > 0) {
