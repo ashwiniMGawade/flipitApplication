@@ -61,6 +61,16 @@ class Image
      */
     private $updated_at;
 
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\Menu", mappedBy="menuIcon")
+     */
+    private $menu;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\Mainmenu", mappedBy="mainMenuIcon")
+     */
+    private $mainmenu;
+
     public function __get($property)
     {
         return $this->$property;
