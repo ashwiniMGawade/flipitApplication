@@ -30,12 +30,12 @@ class Admin_LocaleController extends Zend_Controller_Action
         $this->view->localeSettings = KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->timezones_list = KC\Repository\Signupmaxaccount::$timezones;
         $this->view->localeStatus = KC\Repository\Website::getLocaleStatus($_COOKIE['site_name']);
-        //echo "<pre>";print_r($this->view->localeStatus);die;
+        
         $this->view->chainHrefLang = KC\Repository\Website::getWebsiteDetails('', $_COOKIE['site_name']);
 
         if ($this->getRequest()->isPost()) {
             $chainParameters = $this->getRequest()->getParams();
-            echo "<pre>";print_r($this->view->chainParameters);die;
+            //echo "<pre>";print_r($this->view->chainParameters);die;
             KC\Repository\Website::saveChain($chainParameters['chain'], $_COOKIE['site_name']);
             $this->setFlashMessage($this, 'Chain has been updated successfully');
             $this->_redirect(HTTP_PATH . 'admin/locale/locale-settings');
