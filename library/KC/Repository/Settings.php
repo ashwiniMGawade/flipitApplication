@@ -41,10 +41,9 @@ class Settings Extends \KC\Entity\Settings
 
     public static function updateSendersSettings($sendersFieldName, $sendersValue)
     {
-        $emailExistsOrNot = self::getEmailSettings($sendersValue);
-        if ($emailExistsOrNot != '') {
+        $getSettings = self::getEmailSettings($sendersFieldName);
+        if (!empty($getSettings)) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $emailSettings = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             $query = $queryBuilder->update('KC\Entity\Settings', 's')
                 ->set("s.value", $queryBuilder->expr()->literal($sendersValue))
                 ->setParameter(1, $queryBuilder->expr()->literal($sendersFieldName))
@@ -52,12 +51,15 @@ class Settings Extends \KC\Entity\Settings
                 ->getQuery();
             $query->execute();
         } else {
-            $settings = new \KC\Entity\Settings();
-            $settings->name = 
-            $settings->value = $sendersValue;
-            $settings->created_at = new \DateTime('now');
-            $settings->updated_at = new \DateTime('now');
-            $settings->deleted = 0;
+            $entityManagerLocale  = \Zend_Registry::get('emLocale');
+            $setting = new \KC\Entity\Settings();
+            $setting->name = $sendersFieldName;
+            $setting->value = $sendersValue;
+            $setting->created_at = new \DateTime('now');
+            $setting->updated_at = new \DateTime('now');
+            $setting->deleted = 0;
+            $entityManagerLocale->persist($setting);
+            $entityManagerLocale->flush();
         }
         return true;
     }

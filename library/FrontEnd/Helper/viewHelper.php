@@ -710,7 +710,7 @@ EOD;
 
     public static function getDbConnectionDetails()
     {
-        foreach (Doctrine_Manager::getInstance()->getConnections() as $connection) {
+        /*foreach (Doctrine_Manager::getInstance()->getConnections() as $connection) {
             $dbConnection = $connection->getOptions();
             preg_match('/host=(.*);/', $dbConnection['dsn'], $host);
         }
@@ -720,7 +720,7 @@ EOD;
         $dbUserPassword = $dbConnection['password'];
         $dbHost = $host[1];
         $mysqlConnection = mysqli_connect($dbHost, $dbUserName, $dbUserPassword, $dbName);
-        return $mysqlConnection;
+        return $mysqlConnection;*/
     }
     
     public static function fillupTopCodeWithNewest($offers, $number)
