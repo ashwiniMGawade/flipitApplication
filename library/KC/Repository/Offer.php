@@ -2678,12 +2678,12 @@ class Offer Extends \KC\Entity\Offer
     }
 
     public function saveOffer($params)
-    {//echo "<pre>";print_r($params);die;
+    {
         $saveOffer = new \KC\Entity\Offer();
         $entityManagerUser  = \Zend_Registry::get('emLocale');
         if (!isset($params['newsCheckbox']) && @$params['newsCheckbox'] != "news") {
-                // check the offer type
-            if (isset($params['defaultoffercheckbox'])) {     //offer type is default
+                
+            if (isset($params['defaultoffercheckbox'])) {     
                 $saveOffer->Visability = 'DE';
                 if ($params['selctedshop']!='') {
 
