@@ -50,10 +50,10 @@ class Admin_MenuController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         if ($params['hid']=='') {
-            $menu = \KC\Repository\menu::insertOne($params);
+            $menu = \KC\Repository\Menu::insertOne($params);
             echo Zend_Json::encode($menu);
         } else {
-            $menu = \KC\Repository\menu::insertNode($params);
+            $menu = \KC\Repository\Menu::insertNode($params);
             echo Zend_Json::encode($menu);
         }
         die();
@@ -66,7 +66,7 @@ class Admin_MenuController extends Zend_Controller_Action
    */
     public function listmenuAction()
     {
-        $menu = \KC\Repository\menu::getmenuList();
+        $menu = \KC\Repository\Menu::getmenuList();
         echo Zend_Json::encode($menu);
         die();
     }
@@ -78,7 +78,7 @@ class Admin_MenuController extends Zend_Controller_Action
     public function getrecordAction()
     {
         $params = $this->getRequest()->getParam('id');
-        $menu = \KC\Repository\menu::getmenuRecord($params);
+        $menu = \KC\Repository\Menu::getmenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }
@@ -90,7 +90,7 @@ class Admin_MenuController extends Zend_Controller_Action
     public function editmenuAction()
     {
         $params = $this->_getAllParams();
-        $menu = \KC\Repository\menu::editmenuRecord($params);
+        $menu = \KC\Repository\Menu::editmenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }
@@ -102,7 +102,7 @@ class Admin_MenuController extends Zend_Controller_Action
     public function getrightmenuAction()
     {
         $params = $this->getRequest()->getParam('id');
-        $menu = \KC\Repository\menu::getrtmenuRecord($params);
+        $menu = \KC\Repository\Menu::getrtmenuRecord($params);
         echo Zend_Json::encode($menu);
         die();
     }
@@ -113,7 +113,7 @@ class Admin_MenuController extends Zend_Controller_Action
     */
     public function getidAction()
     {
-        $menu = \KC\Repository\menu::gethighposition();
+        $menu = \KC\Repository\Menu::gethighposition();
         echo Zend_Json::encode($menu);
         die();
     }
@@ -131,7 +131,7 @@ class Admin_MenuController extends Zend_Controller_Action
         $adapter = new \Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         if (!file_exists($user_path)) {
-            mkdir($user_path, 776, True);
+            mkdir($user_path, 776, true);
         }
 
         $adapter->setDestination(ROOT_PATH . $uploadPath);
@@ -178,19 +178,23 @@ class Admin_MenuController extends Zend_Controller_Action
 
             }
             echo Zend_Json::encode(
-            array("fileName" => $data, "sttaus" => $status,
-            "msg" => $msg, "displayFileName" => $info['name'],
-            "path" => "$uploadPath"));
-
-
+                array(
+                    "fileName" => $data,
+                    "sttaus" => $status,
+                    "msg" => $msg,
+                    "displayFileName" => $info['name'],
+                    "path" => "$uploadPath"
+                )
+            );
         }
         die();
     }
 
     public function mainmenuAction()
     {
-    // $mainmenu = mainmenu::insertOne();
+        // $mainmenu = mainmenu::insertOne();
     }
+    
     /**
     * Save mainmenu data in database to create menu.
     * @author mkaur
