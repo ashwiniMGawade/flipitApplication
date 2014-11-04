@@ -1,13 +1,15 @@
 
 $(document).ready(function(){
 	
-	//$('#pagemetaTitle').NobleCount('#metaTextLeft',{
-		//max_chars: 68
-	//});
+	$('#pagemetaTitle').NobleCount('#metaTextLeft',{
+		max_chars: 68,
+		prefixString : __("Page meta title length ")
+	});
 	
-	//$('#pagemetaDesc').NobleCount('#metaDescLeft',{
-	//	max_chars: 150
-	//});
+	$('#pagemetaDesc').NobleCount('#metaDescLeft',{
+		max_chars: 150,
+		prefixString : __("Page meta description length ")
+	});
 	
 	var options = {
 			'maxCharacterSize': '' ,

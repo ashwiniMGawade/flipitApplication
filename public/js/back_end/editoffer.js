@@ -21,9 +21,11 @@ function init(){
             success: function(dataSet)
             { 
                 if(dataSet == 1) {
-                    bootbox.alert("Code alert successfully added to the queue.");
+                    bootbox.alert(__("Code alert successfully added to the queue."));
+                } else if(dataSet == 2){
+                	bootbox.alert(__("Code alert addition to queue failed. Shop has not been favorited by any visitor yet."));
                 } else {
-                    bootbox.alert("Code alert Queue for this offer already exist.");
+                    bootbox.alert(__("Code alert Queue for this offer already exist."));
                 }
                 ___removeOverLay();
                 return false;
@@ -526,7 +528,11 @@ function setFormData(data){
 			// alert(parseInt(data[0].extendedTitle.length));
 			 jQuery('#extendedOfferTitle').val(data[0].extendedTitle);
 			 jQuery('#metaTitleLeft').val(__("Extended offer meta title length ") + parseInt(data[0].extendedTitle.length) + __(" characters"));
-			 //jQuery('#metaTitleLeft').val((data.input) + __(" characters"));
+			jQuery('#extendedOfferTitle').NobleCount('#metaTitleLeft',{
+				max_chars: 68,
+				prefixString : __("Extended offer meta title length ")
+			});
+	//jQuery('#metaTitleLeft').val((data.input) + __(" characters"));
 			//jQuery('span#metaTitleLeft').text(68-parseInt(data[0].extendedTitle.length) + __(' characters remaining'));
 		 }
 
@@ -540,10 +546,13 @@ function setFormData(data){
 		 if(data[0].extendedMetaDescription != null && data[0].extendedMetaDescription != ''){
 			 jQuery('#extendedOfferMetadesc').val(data[0].extendedMetaDescription);
 			 jQuery('#metaDescLeft').val(__("Extended offer meta description length ") + parseInt(data[0].extendedMetaDescription.length) + __(" characters"));
-			// jQuery('span#metaDescLeft').text(150-parseInt(data[0].extendedMetaDescription.length) + __(' characters remaining'));
+			jQuery('#extendedOfferMetadesc').NobleCount('#metaDescLeft',{
+				max_chars: 150,
+				prefixString : __("Extended offer meta description length ")
+			});
+	// jQuery('span#metaDescLeft').text(150-parseInt(data[0].extendedMetaDescription.length) + __(' characters remaining'));
 
 		 }
-		 
 		
 		 jQuery('[name=extendedOfferRefurl]').val(data[0].extendedUrl);
 		 

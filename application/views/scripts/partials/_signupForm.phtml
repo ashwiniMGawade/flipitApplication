@@ -14,12 +14,22 @@ if(!isset($_COOKIE['registered_user'])) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
         endif;
         $shopId = $this->shopId=='' ? 0 : $this->shopId;
+
+        $shopLogoOrDefaultImage = '<div class="ico-mail"></div>';
+        if($shopId!=0) {
+            $shop = Shop::getShopLogoByShopId($shopId);
+            if($shop!='') {
+                $shopLogoImage = PUBLIC_PATH_CDN.ltrim($shop['logo']['path'], "/").'thum_medium_'. $shop['logo']['name'];
+                $shopLogoOrDefaultImage = '<img alt="' . $shop['permaLink']. '" src="'. $shopLogoImage .'">';
+            }
+        }
+
         if (Visitor::getFavoriteShopsForUser($visitorId, $shopId)==false):
             if ($this->signupFormWidgetType== 'widgetWithinOffers') {?>
                 <div class="block block-form <?php echo $shopId==0 ? 'block-form-2' : ''?>">
                     <div class="holder">
                         <div class="<?php echo $this->shopId=='' ? 'ico-box' : 'icon'?>">
-                        <?php echo $this->shopLogoOrDefaultImage;?>
+                        <?php echo $shopLogoOrDefaultImage;?>
                         </div>
                     <?php echo $signUpForm;?>
                     </div>

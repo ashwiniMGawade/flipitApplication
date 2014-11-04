@@ -149,7 +149,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 <label><strong><?php echo $this->translate('Header image'); ?></strong></label>
                             </div>
                             <div class="mainpage-content-right">
-                                <div>
+                                <div class="mainpage-content-right-inner-left-other">
                                     <input type="file" onchange="checkFileType(event)" class="ignore"  
                                      name="articleImage" id="articleImage">
                                 </div>
@@ -176,14 +176,14 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right">
                             <input type="text" name="articlemetaTitle" id="articlemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore">
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Artical meta title length 0 characters');?>" id="metaTextLeft" class="input-xlarge disabled btop word-count">
+                            <span id="metaTextLeft" class="disabled btop word-count nobel wordcount-width"></span>
                             </div>
                         </div>
                       <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta Description'); ?></strong></label></div>
                             <div class="mainpage-content-right">
                             <textarea class="input-xlarge mbot bbot ignore" id="articlemetaDesc" name="articlemetaDesc" placeholder="<?php echo $this->translate ( 'Meta Description' );?>" rows="3"></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Artical meta description length 0 characters');?>" id="metaDescriptionleft" class="input-xlarge disabled btop word-count">
+                            <span id="metaDescriptionleft" class="disabled btop word-count nobel wordcount-width"></span>
 							
                             </div>
                         </div>

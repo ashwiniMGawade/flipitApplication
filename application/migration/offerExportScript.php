@@ -149,7 +149,7 @@ class OfferExport
         $objPHPExcel->getActiveSheet()->setCellValue('R3', $this->_trans->translate('Deeplink'));
         $objPHPExcel->getActiveSheet()->setCellValue('S3', $this->_trans->translate('Terms & Conditions'));
 
-        $column = 2;
+        $column = 4;
         $row = 2;
 
             // loop for each offer

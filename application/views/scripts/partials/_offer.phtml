@@ -116,16 +116,12 @@ foreach ($this->offers as $offer) {
         <?php endif; ?>
     </article>
     <?php
-    $shopLogoOrDefaultImage = $offerPartial->getShopLogoForSignUp($this->shop);
-
     if($offerCounter == 1) :
         if($this->offersType=='simple' || $this->offersType=='top20' || $this->offersType=='offerPage'
             || $this->offersType=='offerWithPagenation' || $this->offersType=='newestOffer'):
             $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
-            $sidebarWidgetNamespace = new Zend_Session_Namespace('zendFormLarge');
-            $sidebarWidgetNamespace->zendFormLarge = serialize($this->zendForm);
-            $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
-                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage='.$shopLogoOrDefaultImage);
+            echo $this->esi($this->locale.'signup/signupwidgetlarge?shopId='.$this->currentStoreInformation[0]['id']
+                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
         endif;
     endif;
 }
