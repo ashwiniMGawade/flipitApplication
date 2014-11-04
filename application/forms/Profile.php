@@ -36,41 +36,48 @@ class Application_Form_Profile extends Application_Form_Base
         $vistorLastName->setAttrib('class', 'form-control');
         $vistorLastName->setLabel(FrontEnd_Helper_viewHelper::__form('form_Last name'));
 
+         
+
+
+
+
+
+
+
         $vistorDateOfBirth = new Zend_Form_Element_Text('dateOfBirth');
         $vistorDateOfBirth->setAttrib('class', 'form-control');
         $vistorDateOfBirth->setLabel(FrontEnd_Helper_viewHelper::__form('form_Date of Birth'));
 
-        $vistorDateOfBirthDay = new Zend_Form_Element_Text('dateOfBirthDay');
+        $dayMultiOptions = array('' => '');
+        for ($i = 1; $i < 32; $i++) {
+            $index = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $dayMultiOptions[$i] = $i;
+        }
+        $vistorDateOfBirthDay = new Zend_Form_Element_Select('dateOfBirthDay');
         $vistorDateOfBirthDay->setRequired(true);
-        $vistorDateOfBirthDay->setAttribs(array('class'=>'form-control', 'size'=> 2, 'maxlength' => 2));
-        $vistorDateOfBirthDay->addValidator('Digits');
+        $vistorDateOfBirthDay->setAttribs(array('class'=>'form-control'));
+        $vistorDateOfBirthDay->addMultiOptions($dayMultiOptions);
 
-        $validator = new Zend_Validate_LessThan(32);
-        $vistorDateOfBirthDay->addValidator($validator, true);
-        $validator = new Zend_Validate_GreaterThan(0);
-        $vistorDateOfBirthDay->addValidator($validator, true);
-
-        $vistorDateOfBirthMonth = new Zend_Form_Element_Text('dateOfBirthMonth');
+        $monthMultiOptions = array('' => '');
+        for ($i = 1; $i < 13; $i++) {
+            $index = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $monthMultiOptions[$i] = $i;
+        }
+        $vistorDateOfBirthMonth = new Zend_Form_Element_Select('dateOfBirthMonth');
         $vistorDateOfBirthMonth->setRequired(true);
-        $vistorDateOfBirthMonth->setAttribs(array('class'=>'form-control', 'size'=> 2, 'maxlength' => 2));
-        $vistorDateOfBirthMonth->addValidator('Digits');
+        $vistorDateOfBirthMonth->setAttribs(array('class'=>'form-control'));
+        $vistorDateOfBirthMonth->addMultiOptions($monthMultiOptions);
 
-        $validator = new Zend_Validate_LessThan(13);
-        $vistorDateOfBirthMonth->addValidator($validator, true);
-        $validator = new Zend_Validate_GreaterThan(0);
-        $vistorDateOfBirthMonth->addValidator($validator, true);
+        $monthMultiOptions = array('' => '');
+        for ($i = 1900; $i <=  date('Y'); $i++) {
+            $index = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $yearMultiOptions[$i] = $i;
+        }
 
-        $vistorDateOfBirthYear = new Zend_Form_Element_Text('dateOfBirthYear');
+        $vistorDateOfBirthYear = new Zend_Form_Element_Select('dateOfBirthYear');
         $vistorDateOfBirthYear->setRequired(true);
-        $vistorDateOfBirthYear->setAttrib('class', 'form-control');
-        $vistorDateOfBirthYear->setAttribs(array('class'=>'form-control', 'size'=> 4, 'maxlength' => 4));
-        $vistorDateOfBirthYear->addValidator('Digits');
-
-        $yearFormat = date('Y') + 1;
-        $validator = new Zend_Validate_LessThan($yearFormat);
-        $vistorDateOfBirthYear->addValidator($validator, true);
-        $validator = new Zend_Validate_GreaterThan(1900);
-        $vistorDateOfBirthYear->addValidator($validator, true);
+        $vistorDateOfBirthYear->setAttribs(array('class'=>'form-control'));
+        $vistorDateOfBirthYear->addMultiOptions($yearMultiOptions);
 
         $vistorGender = new Zend_Form_Element_Select('gender');
         $vistorGender->setRequired(true);

@@ -211,6 +211,8 @@ class SignupController extends Zend_Controller_Action
         }
         $visitorDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
         $visitorDetailsForForm = $visitorDetails[0];
+
+        //echo "<pre>"; print_r($visitorDetailsForForm); die;
         $profileForm = new Application_Form_Profile();
         $this->view->form = $profileForm;
         if ($this->getRequest()->isPost()) {

@@ -64,7 +64,7 @@ class FavouriteController extends Zend_Controller_Action
                 )
             );
             $this->view->userDetails = isset($userDetails[0]) ? $userDetails[0] : '';
-            $this->view->pageCssClass = 'brands-page';
+            $this->view->pageCssClass = 'profile-page';
         } else {
             $this->_redirect('/');
         }
@@ -94,7 +94,7 @@ class FavouriteController extends Zend_Controller_Action
             );
             $this->view->favouriteShopsOffers = $offers;
             $this->view->userDetails = $userDetails[0];
-            $this->view->pageCssClass = 'youroffers-page';
+            $this->view->pageCssClass = 'profile-page';
         } else {
             $this->_redirect('/');
         }

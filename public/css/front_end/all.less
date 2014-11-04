@@ -7,6 +7,7 @@
 @import "flipit-expired.less";
 @import "login.less";
 @import "profile.less";
+@import "profile-edit.less";
 @import "register.less";
 @import "splash-page.less";
 @import "404.less";
@@ -3218,7 +3219,27 @@ span.pop{
 	color:#353535;
 	margin-bottom: 10px;
 }
-
+.fake-select{
+	display:block;
+	margin:0 0 17px;
+	select.form-control{
+		padding-left:3px;
+		padding-right:3px;
+	}
+}
+.select-box{
+	select.form-control{
+		float:left;
+		width:92px;
+		margin:0 0 0 12px;
+		padding-left:3px;
+		padding-right:3px;
+		&:first-child{margin:0;}
+	}
+	&:after{
+		.after;
+	}
+}
 @media only screen and (min-width: 1200px){
 	.search-box .js-slide-hidden{
 		position:static !important;
@@ -3226,6 +3247,9 @@ span.pop{
 	}
 }
 @media only screen and (max-width: 1199px){
+	.select-box{
+		select.form-control{width:71px;}
+	}
 	img.logo.kortingscode{
 		width:260px;
 		margin-top:10px;
@@ -3475,6 +3499,14 @@ span.pop{
 }
 }
 @media only screen and (max-width: 979px){
+	.select-box{
+		select.form-control{
+			width:100%;
+			float:none;
+			margin:0 0 10px;
+			&:first-child{margin:0 0 10px;}
+		}
+	}
 	.row .newsletter input[type="submit"]{
 		width:100% !important;
 	}
@@ -3895,6 +3927,13 @@ span.pop{
 	}
 }
 @media only screen and (max-width: 767px){
+	.select-box{
+		margin:0 0 15px;
+		select.form-control{
+			margin:0 0 15px;
+			&:first-child{margin:0 0 15px;}
+		}
+	}
 	img.logo.kortingscode{
 		width:200px;
 		margin-top: 0;
