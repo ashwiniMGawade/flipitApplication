@@ -481,6 +481,25 @@
                     </div>
                </div>
 
+               <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left">
+                        <label>
+                            <strong><?php echo $this->translate('Code alert'); ?></strong>
+                        </label>
+                    </div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group ">
+                            <button type="button" class="btn" value="yes" onClick="codeAlertToggle(event);">
+                                <?php echo $this->translate('Yes'); ?>
+                            </button>
+                            <button type="button" class="btn btn-primary" style="border-radius: 0 4px 4px 0;" 
+                                value="no" onClick="codeAlertToggle(event);"><?php echo $this->translate('No'); ?>
+                            </button>
+                            <input type="hidden" value="0" name="codealertcheckbox" id="codealertcheckbox">
+                       </div>
+                    </div>
+               </div>
+
                	<div class="mainpage-content-line mb10" id="extendedOfferDivDown">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Extended offer'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -511,7 +530,7 @@
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
                             <input type="text" name="extendedOfferTitle" id="extendedOfferTitle" placeholder="<?php echo $this->translate('This account is important, etc');?>" class="input-xlarge mbot bbot ignore span3"/>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Extended offer meta title length 0 characters');?>" id="metaTitleLeft" class="input-xlarge disabled btop word-count">
+							<span id="metaTitleLeft" class="disabled btop word-count nobel offer-wordcount-width"></span>
 						</div>
                     </div>
                 </div>
@@ -522,7 +541,7 @@
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other">
                         	<textarea class="input-xlarge mbot bbot ignore" id="extendedOfferMetadesc" name="extendedOfferMetadesc" placeholder="Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben codes en korting beschikbaar voor lente zomer, herfst & winter." rows="3"></textarea>
-							<input type="text" disabled="disabled" value="<?php echo $this->translate('Extended offer meta description length 0 characters');?>" id="metaDescLeft" class="input-xlarge disabled btop word-count">
+							<span id="metaDescLeft" class="disabled btop word-count nobel offer-wordcount-width"></span>
 						</div>
                     </div>
                 </div>

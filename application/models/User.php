@@ -249,7 +249,7 @@ class User extends BaseUser
         $this->editorText =BackEnd_Helper_viewHelper::stripSlashesFromString($params['editortext']);
         $this->popularKortingscode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['popularKortingscode']);
 
-        $this->createdBy = isset(Auth_StaffAdapter::getIdentity()->id) ? Auth_StaffAdapter::getIdentity()->id : '';
+        $this->createdBy = isset(Auth_StaffAdapter::getIdentity()->id) ? Auth_StaffAdapter::getIdentity()->id : '0';
         $fname = str_replace(' ', '-', $params['firstName']);
         $lname = str_replace(' ', '-', $params['lastName']);
         $this->slug = BackEnd_Helper_viewHelper::stripSlashesFromString(strtolower($fname ."-". $lname));

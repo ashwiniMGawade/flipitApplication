@@ -239,6 +239,8 @@ class Page extends BasePage
     public function savePage($params)
     {
         $this->pageType='default';
+        $this->maxOffers  = 0;
+        $this->oderOffers = 0; 
         if (isset($params['selectedpageType'])){
 
               $this->pageType='offer';
@@ -299,6 +301,7 @@ class Page extends BasePage
         }
 
         $this->publish   = 1;
+        $this->timeOrder   = 0;
         if($params['savePagebtn']=='draft'){
             $this->publish   = 0;
         }

@@ -28,17 +28,6 @@ $discussion = $this->partial(
         $partialViewPath.'_discussion.phtml',
         array('authorName' => $authorName, 'discussionComments' => $this->discussionComments)
 );
-
-$signUpWidgetForm = '';
-$signUpWidgetForm = $this->partial(
-        $partialViewPath.'_signupForm.phtml',
-        array(
-                'zendForm' => $this->sidebarWidgetForm,
-                'signupFormWidgetType'=> 'sidebarWidget',
-                'shopId'=>'',
-                'shopLogoOrDefaultImage'=>''
-        )
-);
 ?>
 <div class="row">
     <div id="content" class="col-md-8 col-sm-8">
@@ -50,8 +39,10 @@ $signUpWidgetForm = $this->partial(
     $frontendSidebarHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
     echo $frontendSidebarHelper->popularCategoryWidget().
     $frontendSidebarHelper->popularShopWidget().
-    $frontendSidebarHelper->socialMediaWidget().
-    $signUpWidgetForm;
+    $frontendSidebarHelper->socialMediaWidget();
+    $this->locale = LOCALE != 'en' ? LOCALE . '/' : '';
+    echo $this->esi($this->locale.'signup/signupwidget?shopId='
+        .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     ?>
     </aside>
 </div>

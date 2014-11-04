@@ -11,7 +11,6 @@ TRUNCATE `emails`;
 TRUNCATE `emailsettings`;
 TRUNCATE `email_light_box`;
 TRUNCATE `footer`;
-TRUNCATE `locale_settings`;
 TRUNCATE `mainmenu`;
 TRUNCATE `menu`;
 TRUNCATE `page`;

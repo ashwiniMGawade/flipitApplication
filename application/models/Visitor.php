@@ -49,7 +49,7 @@ class Visitor extends BaseVisitor
         $visitor->save();
     }
 
-    public static function addVisitor($visitorInformation)
+    public static function addVisitor($visitorInformation, $profileUpdate = '')
     {
         if (Auth_VisitorAdapter::hasIdentity()) {
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
@@ -75,16 +75,18 @@ class Visitor extends BaseVisitor
         $visitor->firstName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['firstName']);
         $visitor->lastName = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['lastName']);
         $visitor->gender = FrontEnd_Helper_viewHelper::sanitize($visitorInformation['gender'] == 'M' ? 0 : 1);
-        $visitor->dateOfBirth =
-            (
-                $visitorInformation['dateOfBirthYear'].'-'
-                .$visitorInformation['dateOfBirthMonth'].'-'
-                .$visitorInformation['dateOfBirthDay']
-            );
-        $visitor->postalCode =
-            FrontEnd_Helper_viewHelper::sanitize(
-                isset($visitorInformation['postCode']) ? $visitorInformation['postCode'] : ''
-            );
+        if ($profileUpdate != '') {
+            $visitor->dateOfBirth =
+                (
+                    $visitorInformation['dateOfBirthYear'].'-'
+                    .$visitorInformation['dateOfBirthMonth'].'-'
+                    .$visitorInformation['dateOfBirthDay']
+                );
+            $visitor->postalCode =
+                FrontEnd_Helper_viewHelper::sanitize(
+                    isset($visitorInformation['postCode']) ? $visitorInformation['postCode'] : ''
+                );
+        }
         if (!empty($visitorInformation['password'])) {
             $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($visitorInformation['password']));
         }
@@ -128,12 +130,25 @@ class Visitor extends BaseVisitor
         return $userDetails;
     }
 
+    public static function getUserFirstName($visitorId)
+    {
+        $userDetails = Doctrine_Query::create()->select("v.firstName")
+        ->from("Visitor v")
+        ->where('v.id='.$visitorId)
+        ->fetchArray();
+        return $userDetails;
+    }
+
     public static function getVisitorDetailsByEmail($visitorEmail)
     {
         $visitorDetails = Doctrine_Query::create()->select("v.*")
-        ->from("Visitor v")
-        ->where("v.email='".$visitorEmail."'")
-        ->fetchArray();
+        ->from("Visitor v");
+        if (!ctype_digit($visitorEmail)) {
+            $visitorDetails = $visitorDetails->where("v.email='".$visitorEmail."'");
+        } else {
+            $visitorDetails = $visitorDetails->where("v.id='".$visitorEmail."'");
+        }
+        $visitorDetails = $visitorDetails->fetchArray();
         return $visitorDetails;
     }
     
@@ -181,26 +196,27 @@ class Visitor extends BaseVisitor
     {
         $currentDate = date('Y-m-d 00:00:00');
         $favouriteShops = Doctrine_Query::create()
-        ->select("fv.id as id,s.name as name,s.permaLink,s.id as id,l.*")
+        ->select("fv.id as id,s.name as name,s.permaLink,s.id as id, l.path as imgpath, l.name as imgname")
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
-            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
+            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.deleted=0 AND active.discounttype = 'CD')) as activeCount"
         )
-        ->from("FavoriteShop fv")->leftJoin("fv.shops s")
+        ->from("FavoriteShop fv")
+        ->leftJoin("fv.shops s")
         ->leftJoin('s.logo l')
         ->where('fv.visitorId='.$visitorId)
         ->fetchArray();
         return $favouriteShops;
     }
     
-    public static function getFavoriteShopsOffers($limit=40)
+    public static function getFavoriteShopsOffers($limit = 40)
     {
         $currentDate = date('Y-m-d 00:00:00');
         $favouriteShopsOffers = Doctrine_Query::create()
         ->select(
-            'fv.id as fvid,fv.shopId as shopId,s.refUrl,
-            s.actualUrl,fv.visitorId as visitorId,s.name as name,s.logoid as slogoId,
-            s.permalink as permaLink,o.id, o.title, o.totalViewcount as clicks,l.path,l.name,l.id'
+            'fv.id as fvid,
+            fv.visitorId as visitorId,s.name as name,
+            s.permalink as permaLink,o.id, o.title,l.path,l.name,l.id'
         )
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
@@ -219,7 +235,6 @@ class Visitor extends BaseVisitor
         ->andWhere('o.discountType="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->andWhere('o.userGenerated=0')
-        ->orderBy('o.totalViewcount DESC')
         ->limit($limit)
         ->fetchArray();
         return $favouriteShopsOffers;
@@ -691,16 +706,45 @@ public static function Visitortotal_acc()
      * return all visitors to whom newsletters to be sent
      * @author sp singh
      */
-    public function getVisitorsToSendNewsletter($recordPerPage = 1000)
+    public function getVisitorsToSendNewsletter($visitorId = '')
     {
+        $visitorsToSendNewsletter = Doctrine_Query::create()->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
+            ->from('Visitor v')
+            ->leftJoin("v.keywords k")
+            ->orderBy("k.keyword")
+            ->where('status = 1')
+            ->andWhere('active = 1');
+        
+        if ($visitorId != '') {
+            $visitorsToSendNewsletter = $visitorsToSendNewsletter->andWhere('v.id IN('.$visitorId.')');
+        } else {
+            $visitorsToSendNewsletter = $visitorsToSendNewsletter->andWhere('weeklyNewsLetter = 1');
+        }
+    
+        $visitorsToSendNewsletter = $visitorsToSendNewsletter->fetchArray();
+        return $visitorsToSendNewsletter;
+    }
 
-        return   Doctrine_Query::create()->select('v.email,v.password,v.firstName,v.lastName,k.keyword')
-                ->from('Visitor v')
-                ->leftJoin("v.keywords k")
-                ->orderBy("k.keyword")
-                ->where('status = 1')
-                ->andWhere('active = 1')
-                ->andWhere('weeklyNewsLetter = 1')
-                ->fetchArray();
+    public static function addCodeAlertTimeStampForVisitor($visitorIds)
+    {
+        if (!empty($visitorIds)) {
+            $visitorIds = explode(',', $visitorIds);
+            foreach ($visitorIds as $visitorIdValue) {
+                Doctrine_Query::create()->update('Visitor')
+                    ->set('code_alert_send_date', "'".  date('Y-m-d 00:00:00') ."'")
+                    ->where('id='. FrontEnd_Helper_viewHelper::sanitize($visitorIdValue))
+                    ->execute();
+            }
+        }
+        return true;
+    }
+
+    public static function getVisitorCodeAlertSendDate($visitorId = '')
+    {
+        $codeAlertSendDate = Doctrine_Query::create()->select('v.code_alert_send_date')
+            ->from('Visitor v')
+            ->where('v.id='. FrontEnd_Helper_viewHelper::sanitize($visitorId))
+            ->fetchArray();
+        return !empty($codeAlertSendDate) ?  $codeAlertSendDate[0]['code_alert_send_date'] : 0;
     }
 }

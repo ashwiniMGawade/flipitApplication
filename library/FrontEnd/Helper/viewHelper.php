@@ -749,7 +749,8 @@ EOD;
         $mandrillUsersList,
         $footerContent,
         $pathConstants = '',
-        $emailHeaderText = ''
+        $emailHeaderText = '',
+        $codeAlert = ''
     ) {
         $basePath = new Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
@@ -761,7 +762,8 @@ EOD;
                     'topVouchercodes' => $topVouchercodes,
                     'categoryVouchers' => $categoryVouchers,
                     'categoryInformation' => $categoryInformation,
-                    'pathConstants' => $pathConstants
+                    'pathConstants' => $pathConstants,
+                    'codeAlert' => $codeAlert
                 )
             )
         );
@@ -868,7 +870,8 @@ EOD;
                 ? '' : $secondUrlParameter;
             $pagePermalink = $explodedPagePermalink[0].$secondUrlParameter;
         }
-        return  $pagePermalink;
+        $splitPermalinkFromQueryString = explode('?', $pagePermalink);
+        return  $splitPermalinkFromQueryString[0];
     }
 
     public static function redirectAddToFavouriteShop()

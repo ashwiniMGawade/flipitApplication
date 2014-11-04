@@ -8,7 +8,30 @@ var flagT = 1;
 var tile_id ='';
 
 function init(){
-	
+    jQuery('#code-alert-queue').click(function(){
+        ___addOverLay()
+        var offerId = jQuery('#offerId').val();
+        var shopId = jQuery('#selctedshop').val();
+        jQuery.ajax({
+            type : "POST",
+            url: HOST_PATH + "admin/email/codealertqueue",
+            dataType: 'json',
+            method : "post",
+            data: { shopId: shopId, offerId: offerId},
+            success: function(dataSet)
+            { 
+                if(dataSet == 1) {
+                    bootbox.alert(__("Code alert successfully added to the queue."));
+                } else if(dataSet == 2){
+                	bootbox.alert(__("Code alert addition to queue failed. Shop has not been favorited by any visitor yet."));
+                } else {
+                    bootbox.alert(__("Code alert Queue for this offer already exist."));
+                }
+                ___removeOverLay();
+                return false;
+            } 
+        });
+    });
 
 	
 	
@@ -505,7 +528,11 @@ function setFormData(data){
 			// alert(parseInt(data[0].extendedTitle.length));
 			 jQuery('#extendedOfferTitle').val(data[0].extendedTitle);
 			 jQuery('#metaTitleLeft').val(__("Extended offer meta title length ") + parseInt(data[0].extendedTitle.length) + __(" characters"));
-			 //jQuery('#metaTitleLeft').val((data.input) + __(" characters"));
+			jQuery('#extendedOfferTitle').NobleCount('#metaTitleLeft',{
+				max_chars: 68,
+				prefixString : __("Extended offer meta title length ")
+			});
+	//jQuery('#metaTitleLeft').val((data.input) + __(" characters"));
 			//jQuery('span#metaTitleLeft').text(68-parseInt(data[0].extendedTitle.length) + __(' characters remaining'));
 		 }
 
@@ -519,10 +546,13 @@ function setFormData(data){
 		 if(data[0].extendedMetaDescription != null && data[0].extendedMetaDescription != ''){
 			 jQuery('#extendedOfferMetadesc').val(data[0].extendedMetaDescription);
 			 jQuery('#metaDescLeft').val(__("Extended offer meta description length ") + parseInt(data[0].extendedMetaDescription.length) + __(" characters"));
-			// jQuery('span#metaDescLeft').text(150-parseInt(data[0].extendedMetaDescription.length) + __(' characters remaining'));
+			jQuery('#extendedOfferMetadesc').NobleCount('#metaDescLeft',{
+				max_chars: 150,
+				prefixString : __("Extended offer meta description length ")
+			});
+	// jQuery('span#metaDescLeft').text(150-parseInt(data[0].extendedMetaDescription.length) + __(' characters remaining'));
 
 		 }
-		 
 		
 		 jQuery('[name=extendedOfferRefurl]').val(data[0].extendedUrl);
 		 
@@ -888,7 +918,7 @@ function selectDiscountType(dIv){
 		    jQuery("#datesdiv").show();
 		    
 		    jQuery("#attachpagesDiv").show();
-		    
+		    jQuery('#extra-options').show();
 	    	jQuery('#offerrefurlPR').val('');
 	    	jQuery('#uploadoffer').val('');
 	    	jQuery("input#couponCodeCheckbox").attr('checked' , 'checked');   // check coupon code checkbox if  discount type coupon code
@@ -947,8 +977,8 @@ function selectDiscountType(dIv){
 		     jQuery("#offertitledetail").show();
 		     jQuery("#datesdiv").show();
 		     
-		     jQuery("#attachpagesDiv").hide();
-		     
+		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extra-options').hide();
 	        jQuery('#offerrefurl').val('');
 	        jQuery('#uploadoffer').val('');
 	        jQuery("input#saleCheckbox").attr('checked' , 'checked');   // check coupon code checkbox if  discount type sale 
@@ -981,7 +1011,8 @@ function selectDiscountType(dIv){
 		    jQuery("#visibiliyDiv").show();
 		    jQuery("#offertitledetail").show();
 		    jQuery("#datesdiv").show();
-		    jQuery("#attachpagesDiv").hide();
+		    jQuery("#attachpagesDiv").show();
+		    jQuery('#extra-options').hide();
 		    jQuery("input#printableCheckbox").attr('checked' , 'checked');   // check print checkbox if  discount type prinable
 		    jQuery("input#newsCheckbox").removeAttr('checked') ;          // uncheck news div checkbox if discount type coupon code
 	        jQuery("input#saleCheckbox").removeAttr('checked') ;          // uncheck sale checkbox if discount type prinable

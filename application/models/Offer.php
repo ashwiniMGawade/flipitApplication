@@ -366,7 +366,7 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allNewPopularCodeList');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allHomeNewOfferList');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('extended_coupon_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+        self::clearSpecialPagesCache($offerId);
     }
 
     public static function getSpecialPageOffers($specialPage)
@@ -391,13 +391,15 @@ class Offer extends BaseOffer
         ->select(
             'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
             o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
-            o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,s.name,s.refUrl,
+            o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
+            o.updated_at as lastUpdate,s.name,s.refUrl,
             s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
-            ologo.name'
+            ologo.name,terms.content as terms'
         )
         ->from('refOfferPage op')
         ->leftJoin('op.Offer o')
         ->leftJoin('o.logo ologo')
+        ->leftJoin('o.termandcondition terms')
         ->andWhere(
             "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
             or couponCodeType = 'GN'"
@@ -412,7 +414,6 @@ class Offer extends BaseOffer
         ->andWhere('o.deleted =0')
         ->andWhere('s.deleted =0')
         ->andWhere('s.status = 1')
-        ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->orderBy('o.exclusiveCode DESC')
         ->addOrderBy('o.startdate DESC')
@@ -845,7 +846,7 @@ class Offer extends BaseOffer
         $userRole           = Auth_StaffAdapter::getIdentity()->roleId;
         $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';
         $searchShop         = $parameters["shopText"]!='undefined' ? $parameters["shopText"] : '';
-        $searchCoupon       = $parameters["shopCoupon"]!='undefined' ? $parameters["shopCoupon"] : '';
+        $searchCoupon       = @$parameters["shopCoupon"]!='undefined' ? @$parameters["shopCoupon"] : '';
         $searchCouponType   = $parameters["couponType"]!='undefined' ? $parameters["couponType"] : '';
         $deletedStatus      = $parameters['flag'];
         $getOffersQuery = Doctrine_Query::create()
@@ -1111,6 +1112,24 @@ class Offer extends BaseOffer
             ->fetchArray();
         return $relatedOffers;
     }
+
+    public static function clearSpecialPagesCache($offerID)
+    {
+        $specialPagesCacheRefresh = Doctrine_Query::create()->select('r.pageId')
+            ->from('refOfferPage r')
+            ->where('r.offerId = '.$offerID)
+            ->fetchArray();
+
+        if (!empty($specialPagesCacheRefresh)) {
+            foreach ($specialPagesCacheRefresh as $specialPageCacheRefresh) {
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll(
+                    'error_specialPage'.$specialPageCacheRefresh['pageId'].'_offers'
+                );
+            }
+        }
+
+        return true;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1158,7 +1177,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
-
+            self::clearSpecialPagesCache($id);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_popularCategories_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeTopCategoriesOffers_list');
@@ -1227,7 +1246,7 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+            self::clearSpecialPagesCache($id);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
@@ -1280,7 +1299,6 @@ class Offer extends BaseOffer
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
@@ -1326,7 +1344,7 @@ class Offer extends BaseOffer
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($popularcodekey);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($newcodekey);
-
+            self::clearSpecialPagesCache($id);
             $key = 'all_widget5_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
             $key = 'all_widget6_list';
@@ -1343,7 +1361,6 @@ class Offer extends BaseOffer
         //call cache function
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
@@ -1632,6 +1649,11 @@ class Offer extends BaseOffer
             }
             /***************** End Add news code ********************/
             $offer_id = $this->id;
+            if (isset($params['codealertcheckbox']) && $params['codealertcheckbox'] == '1') {
+                $codeAlertShopId = isset($params['selctedshop']) && $params['selctedshop'] != '' ?
+                    $params['selctedshop'] : '';
+                CodeAlertQueue::saveCodeAlertQueue($codeAlertShopId, $offer_id);
+            }
             $authorId = self::getAuthorId($offer_id);
 
             $uid = $authorId[0]['authorId'];
@@ -1663,7 +1685,7 @@ class Offer extends BaseOffer
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_offer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+            self::clearSpecialPagesCache($this->id);
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
@@ -1986,7 +2008,9 @@ class Offer extends BaseOffer
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newOffer_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('new_offersPageHeader_image');
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('error_specialPage_offers');
+            
+            self::clearSpecialPagesCache($offerID);
+            
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_newpopularcode_list');
 
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('10_newOffers_list');
@@ -2050,18 +2074,25 @@ class Offer extends BaseOffer
         return $offerList;
     }
 
-    public static function getOfferDetail($offerId)
+    public static function getOfferDetail($offerId, $type = '')
     {
+        $shopParameters = $type != '' ? ',s.refUrl,s.permalink' : '';
         $offerDetails = Doctrine_Query::create()
-        ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*')
+        ->select('o.*,s.name,s.notes,s.strictConfirmation,s.accountManagerName,a.name as affname,p.id,tc.*,cat.id,img.*,news.*,t.*'.$shopParameters)
         ->from("Offer o")
         ->leftJoin('o.shop s')
         ->leftJoin('s.affliatenetwork a')
         ->leftJoin('o.page p')
         ->leftJoin('o.termandcondition tc')
-        ->leftJoin('o.category cat')
-        ->leftJoin('o.logo img')
-        ->leftJoin('o.offernews news')
+        ->leftJoin('o.category cat');
+        
+        if ($type != '') {
+            $offerDetails = $offerDetails->leftJoin('s.logo img');
+        } else {
+            $offerDetails = $offerDetails->leftJoin('o.logo img');
+        }
+        
+        $offerDetails = $offerDetails->leftJoin('o.offernews news')
         ->leftJoin('o.tiles t')
         ->addSelect("(SELECT  count(cc.status) FROM CouponCode cc WHERE cc.offerid = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")

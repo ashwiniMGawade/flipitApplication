@@ -54,8 +54,10 @@ endif
             <a href="<?php echo $websiteName;?>" class="menu-opener"><span class="glyphicon glyphicon-search"></span></a>
             <div class="nav-bar">
             <?php 
+            $sessionNamespace = new Zend_Session_Namespace('ErrorPage');
             $currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
-            if($currentControllerName != 'index') { ?>
+            if($currentControllerName != 'index' && $sessionNamespace->ErrorPage == false) {
+                ?>
                 <div class="search-box">
                     <a href="javascript:void(0);" class="opener"><span class="glyphicon glyphicon-search"></span></a>
                 <?php
@@ -74,6 +76,7 @@ endif
                 </div>
                 <?php 
             }
+            $sessionNamespace->ErrorPage = '';
             echo FrontEnd_Helper_layoutContent::generateMainMenu();
             ?>
             </div>

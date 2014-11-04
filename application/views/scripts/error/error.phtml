@@ -8,6 +8,8 @@ if ($messege == "Page not found" &&  $this->matches < 4) {
         $flipitPartialViewPath = FrontEnd_Helper_viewHelper::renderFlipitErrorPage();
         echo $flipitPartialViewPath->render('error/error.phtml');
     } else {
+    	$sessionNamespace = new Zend_Session_Namespace('ErrorPage');
+    	$sessionNamespace->ErrorPage = true;
         echo $this->render('error/pageNotFound.phtml');
     }
 }

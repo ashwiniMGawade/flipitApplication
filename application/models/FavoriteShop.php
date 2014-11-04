@@ -13,23 +13,22 @@
 class FavoriteShop extends BaseFavoriteShop
 {
     ####################### refactored code ################
-    public static function filterAlreadyFavouriteShops($popularShops)
+    public static function getShopsById($shopId)
     {
-        $visitorFavouriteShops = Doctrine_Query::create()->select()
-            ->from('FavoriteShop')
-            ->where('visitorId = '. Auth_VisitorAdapter::getIdentity()->id)
+        $shopVisitorInformation = Doctrine_Query::create()
+            ->select('p.visitorId, p.shopId')
+            ->from("FavoriteShop p")
+            ->leftJoin('p.visitors v')
+            ->leftJoin('p.shops s')
+            ->leftJoin('s.logo l')
+            ->andWhere("p.shopId=s.id")
+            ->andWhere("s.status= ?", 1)
+            ->andWhere("s.deleted= ?", 0)
+            ->andWhere("p.shopId =$shopId")
+            ->andWhere("v.status= ?", 1)
+            ->orderBy("s.name ASC")
             ->fetchArray();
-        $favouriteShops = array();
-        foreach ($visitorFavouriteShops as $visitorFavouriteShop) {
-            $favouriteShops[] = $visitorFavouriteShop['shopId'];
-        }
-        $removeAlreayAddedFavouriteShops = array();
-        foreach ($popularShops as $popularShop) {
-            if (!in_array($popularShop['id'], $favouriteShops)) {
-                $removeAlreayAddedFavouriteShops[] = $popularShop;
-            }
-        }
-        return $removeAlreayAddedFavouriteShops;
+        return $shopVisitorInformation;
     }
     ###################### END REFACTORED CODE #############
 
@@ -214,5 +213,21 @@ class FavoriteShop extends BaseFavoriteShop
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_'.$userid.'_favouriteShops');
 
         return $shop->toArray();
+    }
+
+    public static function getShopsByVisitorId($visitorId)
+    {
+        $shopId = Doctrine_Query::create()
+            ->select('p.shopId')
+            ->from("FavoriteShop p")
+            ->leftJoin('p.visitors v')
+            ->leftJoin('p.shops s')
+            ->andWhere("p.shopId=s.id")
+            ->andWhere("s.status= ?", 1)
+            ->andWhere("s.deleted= ?", 0)
+            ->andWhere("p.visitorId =$visitorId")
+            ->andWhere("v.status= ?", 1)
+            ->fetchArray();
+        return !empty($shopId) ? $shopId : 0;
     }
 }
