@@ -227,7 +227,7 @@ class Menu extends \KC\Entity\Menu
         $query = $queryBuilder->select('m, MIN(m.position)')
             ->from('KC\Entity\Menu', 'm')
             ->where('m.level = 0');
-        $menuList = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $menuList = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $menuList;
     }
 
