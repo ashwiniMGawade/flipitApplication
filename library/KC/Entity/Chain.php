@@ -30,13 +30,14 @@ class Chain
      */
     private $updated_at;
 
+     /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\ChainItem", mappedBy="chainItem")
+     */
+    private $chainItem;
+
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Website", inversedBy="chain")
-     * @ORM\JoinTable(
-     *     name="chain_item",
-     *     joinColumns={@ORM\JoinColumn(name="chainId", referencedColumnName="id", nullable=false)},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="websiteId", referencedColumnName="id", nullable=false)}
-     * )
+     * 
+     * 
      */
     private $website;
 

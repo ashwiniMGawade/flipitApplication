@@ -18,9 +18,8 @@ class Website extends \KC\Entity\Website
     {
         $websiteId =  \FrontEnd_Helper_viewHelper::sanitize($websiteId);
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->select('w.id, w.name, w.url, c.name as chainName')
+        $query = $queryBuilder->select('w.id, w.name, w.url, w.chain')
             ->from('KC\Entity\Website', 'w')
-            ->leftJoin('w.chain', 'c')
             ->setParameter(1, '0')
             ->where('w.deleted = ?1');
 
