@@ -66,7 +66,7 @@ class ImageHowToUseBigImage extends \KC\Entity\ImageHowToUseBigImage implements 
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'shop');
+        return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'menu', 'mainmenu', 'shop');
     }
 
     public function __clone()
