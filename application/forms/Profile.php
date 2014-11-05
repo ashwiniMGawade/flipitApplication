@@ -36,21 +36,12 @@ class Application_Form_Profile extends Application_Form_Base
         $vistorLastName->setAttrib('class', 'form-control');
         $vistorLastName->setLabel(FrontEnd_Helper_viewHelper::__form('form_Last name'));
 
-         
-
-
-
-
-
-
-
         $vistorDateOfBirth = new Zend_Form_Element_Text('dateOfBirth');
         $vistorDateOfBirth->setAttrib('class', 'form-control');
         $vistorDateOfBirth->setLabel(FrontEnd_Helper_viewHelper::__form('form_Date of Birth'));
 
         $dayMultiOptions = array('' => '');
         for ($i = 1; $i < 32; $i++) {
-            $index = str_pad($i, 2, '0', STR_PAD_LEFT);
             $dayMultiOptions[$i] = $i;
         }
         $vistorDateOfBirthDay = new Zend_Form_Element_Select('dateOfBirthDay');
@@ -60,7 +51,6 @@ class Application_Form_Profile extends Application_Form_Base
 
         $monthMultiOptions = array('' => '');
         for ($i = 1; $i < 13; $i++) {
-            $index = str_pad($i, 2, '0', STR_PAD_LEFT);
             $monthMultiOptions[$i] = $i;
         }
         $vistorDateOfBirthMonth = new Zend_Form_Element_Select('dateOfBirthMonth');
@@ -68,9 +58,8 @@ class Application_Form_Profile extends Application_Form_Base
         $vistorDateOfBirthMonth->setAttribs(array('class'=>'form-control'));
         $vistorDateOfBirthMonth->addMultiOptions($monthMultiOptions);
 
-        $monthMultiOptions = array('' => '');
+        $yearMultiOptions = array('' => '');
         for ($i = 1900; $i <=  date('Y'); $i++) {
-            $index = str_pad($i, 2, '0', STR_PAD_LEFT);
             $yearMultiOptions[$i] = $i;
         }
 
@@ -91,6 +80,7 @@ class Application_Form_Profile extends Application_Form_Base
         $vistorPostalCode->setLabel(FrontEnd_Helper_viewHelper::__form('form_Postcode'));
 
         $vistorNewsLetterStatus = new Zend_Form_Element_Checkbox('weeklyNewsLetter');
+        $codeAlertStatus = new Zend_Form_Element_Checkbox('codeAlert');
 
         $this->addElements(
             array(
@@ -105,7 +95,8 @@ class Application_Form_Profile extends Application_Form_Base
                 $vistorDateOfBirthYear,
                 $vistorGender,
                 $vistorPostalCode,
-                $vistorNewsLetterStatus
+                $vistorNewsLetterStatus,
+                $codeAlertStatus
             )
         );
 

@@ -205,14 +205,14 @@ class SignupController extends Zend_Controller_Action
 
     public function profileAction()
     {
+        echo "<pre>";
+    print_r(CodeAlertQueue::getCodealertOffers()); die;
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (!Auth_VisitorAdapter::hasIdentity()) {
             $this->_redirect('/');
         }
         $visitorDetails = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
         $visitorDetailsForForm = $visitorDetails[0];
-
-        //echo "<pre>"; print_r($visitorDetailsForForm); die;
         $profileForm = new Application_Form_Profile();
         $this->view->form = $profileForm;
         if ($this->getRequest()->isPost()) {
@@ -236,6 +236,7 @@ class SignupController extends Zend_Controller_Action
             $profileForm->getElement('dateOfBirthYear')->setValue(isset($dateOfBirth[2]) && $dateOfBirth[2]=='0000' ? '' : $dateOfBirthYear);
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
+            $profileForm->getElement('codeAlert')->setValue($visitorDetailsForForm['codeAlert']);
         }
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
