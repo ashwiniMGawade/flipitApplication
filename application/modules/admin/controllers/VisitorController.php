@@ -113,7 +113,7 @@ class Admin_VisitorController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout(true);
         $this->_helper->viewRenderer->setNoRender();
-        $data =  Visitor::getFavorite($this->getRequest()->getParam('id'));
+        $data =  \KC\Repository\Visitor::getFavorite($this->getRequest()->getParam('id'));
         echo Zend_Json::encode($data);
         die();
     }
@@ -126,10 +126,10 @@ class Admin_VisitorController extends Zend_Controller_Action
     public function getvisitorlistAction()
     {
         $params = $this->_getAllParams();
-        $visitorList = Visitor::VisitorList($params);
+        $visitorList = \KC\Repository\Visitor::VisitorList($params);
         echo Zend_Json::encode($visitorList);
         die();
-   }
+    }
 
 
 
@@ -226,13 +226,13 @@ class Admin_VisitorController extends Zend_Controller_Action
     {
         $srh = $this->getRequest()->getParam('keyword');
         $for = $this->getRequest()->getParam('flag');
-        $data = Visitor::searchKeyword($for,$srh);
+        $data = \KC\Repository\Visitor::searchKeyword($for, $srh);
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
                 $ar[] = ucfirst($d['firstName']);
             }
-        } else{
+        } else {
             $ar[]="No Record Found.";
         }
         echo Zend_Json::encode($ar);
@@ -246,13 +246,13 @@ class Admin_VisitorController extends Zend_Controller_Action
     {
         $srh = $this->getRequest()->getParam('keyword');
         $for = $this->getRequest()->getParam('flag');
-        $data = Visitor::searchEmails($for,$srh);
+        $data = \KC\Repository\Visitor::searchEmails($for,$srh);
         $ar = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
                 $ar[] = ucfirst($d['email']);
             }
-        } else{
+        } else {
             $ar[]="No Record Found.";
         }
         echo Zend_Json::encode($ar);
@@ -261,7 +261,7 @@ class Admin_VisitorController extends Zend_Controller_Action
     public function deletefavoriteshopAction()
     {
         $params = $this->_getAllParams();
-        $success = Visitor::delelteFav($params);
+        $success = \KC\Repository\Visitor::delelteFav($params);
         echo Zend_Json::encode($success);
         die();
     }

@@ -412,7 +412,11 @@ class Shop
      * @ORM\ManyToMany(targetEntity="KC\Entity\ExcludedKeyword", mappedBy="shops")
      */
     private $keywords;
-
+    
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteShop", mappedBy="shop")
+     */
+    private $favoriteshops;
  
 
     public function __get($property)

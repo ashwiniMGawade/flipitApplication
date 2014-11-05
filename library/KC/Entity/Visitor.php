@@ -161,7 +161,7 @@ class Visitor
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\VisitorImage", inversedBy="visitor")
-     * @ORM\JoinColumn(name="visitor_image_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="imageid", referencedColumnName="id")
      */
     private $visitorimage;
 
@@ -175,6 +175,16 @@ class Visitor
      */
     private $favoriteshops;
 
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteOffer", mappedBy="visitor")
+     */
+    private $favoriteOffer;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteShop", mappedBy="visitor")
+     */
+    private $favoritevisitorshops;
+
     public function __get($property)
     {
         return $this->$property;
@@ -183,5 +193,25 @@ class Visitor
     public function __set($property, $value)
     {
         $this->$property = $value;
+    }
+
+    public function validatePassword($passwordToBeVerified)
+    {
+        $req = Zend_Controller_Front::getInstance()->getRequest();
+        $lang  = $req->getParam('lang', false);
+
+        # set propertry to current lcoale during login in case of flipit
+        if ($lang) {
+            $this->currentLocale = $lang ;
+        }
+
+        //echo $this->password;
+        //echo $passwordToBeVerified;
+        if ($this->password == $passwordToBeVerified) {
+
+            return true;
+        }
+        return false;
+
     }
 }
