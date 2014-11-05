@@ -61,7 +61,11 @@ echo $this->headStyle();
 </head>
 <body<?php echo (!empty($this->pageCssClass) ? " class='$this->pageCssClass'" : ''); ?>>
 <?php
-if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' || zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='signup'):
+if (
+    zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' 
+    || (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='signup' 
+        && zend_Controller_Front::getInstance()->getRequest()->getActionName()=='profile')
+):
     echo '<div class="edit-page"><div class="inner-block">';
 endif;
 ?>
@@ -129,7 +133,11 @@ else :
 endif;
 ?>
 <?php
-if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' || zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='signup'):
+if (
+    zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' 
+    || (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='signup' 
+        && zend_Controller_Front::getInstance()->getRequest()->getActionName()=='profile')
+):
     echo '</div></div>';
 endif;
 ?>
