@@ -990,13 +990,13 @@ EOD;
                 <a href="'.HTTP_PATH_LOCALE
                 . self::__link('link_mijn-favorieten') . "/"
                 . self::__link('link_memberonlycodes').'" class="offers '.$offersClass.'">'
-                . self::__form('form_Recommended Offers').'</a>
+                . self::__translate('Recommended Offers').'</a>
                 <a href="'.HTTP_PATH_LOCALE . self::__link('link_mijn-favorieten').'" 
-                    class="brands '.$brandsClass.'">'. self::__form('form_Favourite Brands').'</a>
+                    class="brands '.$brandsClass.'">'. self::__translate('Favourite Brands').'</a>
                 <a href="'.HTTP_PATH_LOCALE
                     . self::__link('link_inschrijven') . "/"
                     . self::__link('link_profiel').'" class="settings '.$profileClass.'">'
-                    . self::__form('form_Settings').'</a>
+                    . self::__translate('Settings').'</a>
             </div>
         </div>';
 
