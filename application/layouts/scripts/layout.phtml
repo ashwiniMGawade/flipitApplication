@@ -60,6 +60,11 @@ echo $this->headStyle();
 
 </head>
 <body<?php echo (!empty($this->pageCssClass) ? " class='$this->pageCssClass'" : ''); ?>>
+<?php
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' || zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='signup'):
+    echo '<div class="edit-page"><div class="inner-block">';
+endif;
+?>
     <?php echo FrontEnd_Helper_LayoutContent::loadGoogleTagManager(); ?>
     <?php echo $this->render('branding_menu.phtml'); ?>
     <?php echo $this->render('mobile_menu.phtml'); ?>
@@ -121,6 +126,11 @@ if(file_exists($localePartialPath . '_pop_up.phtml')):
     echo $localePartialViewPath->render($partials. '_pop_up.phtml');
 else :
     echo $baseViewPath->render($partials. '_pop_up.phtml');
+endif;
+?>
+<?php
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' || zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='signup'):
+    echo '</div></div>';
 endif;
 ?>
 </body>

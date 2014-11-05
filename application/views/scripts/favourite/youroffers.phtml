@@ -11,20 +11,16 @@ if(!empty($this->favouriteShopsOffers)) {
 }
 $firstCharacterOfUserName = mb_substr($this->userDetails['firstName'], 0, 1);
 ?>
-<div class="header-block">
-    <div class="icon icon-small">
-        <div class='img-box'><?php echo $firstCharacterOfUserName;?></div>
+<section class="profile-box">
+    <?php 
+    $visitorFirstName = isset($this->userDetails['firstName']) ? $this->userDetails['firstName'] : '';
+    echo FrontEnd_Helper_viewHelper::accountTabPanel($visitorFirstName);
+    ?>
+    <div class="youroffers-page">
+        <div class="section">
+            <div class="row">
+            <?php echo $favouriteShopsOffers; ?>    
+            </div>
+        </div>
     </div>
-    <div class="box">
-        <h1>
-        <?php echo $this->translate('Hi'). " " 
-        . $this->userDetails['firstName'];?>,
-        </h1>
-        <strong><?php echo $this->translate('Welcome to your personal coupon page');?></strong>
-    </div>
-</div>
-<div class="section">
-    <div class="row">
-    <?php echo $favouriteShopsOffers; ?>    
-    </div>
-</div>
+</section>

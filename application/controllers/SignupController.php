@@ -146,7 +146,7 @@ class SignupController extends Zend_Controller_Action
                     __translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
-                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login');
+                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
                 if (isset($shopId) && $shopId!='') {
                     $shopName = Shop::getShopName(base64_decode($shopId));
                     $message = $shopName. " ".  FrontEnd_Helper_viewHelper::
@@ -234,6 +234,7 @@ class SignupController extends Zend_Controller_Action
             $profileForm->getElement('dateOfBirthYear')->setValue(isset($dateOfBirth[2]) && $dateOfBirth[2]=='0000' ? '' : $dateOfBirthYear);
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
+            $profileForm->getElement('codeAlert')->setValue($visitorDetailsForForm['codeAlert']);
         }
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];

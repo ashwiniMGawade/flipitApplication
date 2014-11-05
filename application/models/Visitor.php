@@ -55,9 +55,11 @@ class Visitor extends BaseVisitor
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $visitor = Doctrine_Core::getTable('Visitor')->find($visitorId);
             $visitor->weeklyNewsLetter = $visitorInformation['weeklyNewsLetter'];
+            $visitor->codeAlert = $visitorInformation['codeAlert'];
         } else {
             $visitor = new Visitor();
             $visitor->weeklyNewsLetter = '1';
+            $visitor->codeAlert = '1';
             $visitor->currentLogIn = '0000-00-00';
             $visitor->lastLogIn = '0000-00-00';
             $visitor->active_codeid = '';
