@@ -870,7 +870,8 @@ EOD;
                 ? '' : $secondUrlParameter;
             $pagePermalink = $explodedPagePermalink[0].$secondUrlParameter;
         }
-        return  $pagePermalink;
+        $splitPermalinkFromQueryString = explode('?', $pagePermalink);
+        return  $splitPermalinkFromQueryString[0];
     }
 
     public static function redirectAddToFavouriteShop()

@@ -37,8 +37,16 @@ var searchedValue  = "";
 			
 		});
 		
+		jQuery('#articlemetaTitle').NobleCount('#metaTextLeft',{
+			max_chars: 68,
+			prefixString : __("Artical meta title length ")
+		});
 		
-      	
+		jQuery('#articlemetaDesc').NobleCount('#metaDescriptionleft',{
+			max_chars: 150,
+			prefixString : __("Artical meta description length ")
+		});
+	      	
 		manageWidgets();
 		$('#publishDate').datepicker({'autoclose':true,'format': 'dd-mm-yyyy'});
 		$('#publishTimehh').timepicker({

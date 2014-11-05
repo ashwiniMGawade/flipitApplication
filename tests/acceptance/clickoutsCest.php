@@ -41,7 +41,7 @@ class clickoutsCest
         $I = new AcceptanceTester($scenario);
         $this->createShop($I);
         $this->createOffer($I, 'CD', 'couponCode', '2', 'coupon code offer');
-        $this->switchOfferClickouts('couponCode', 'Get code & Open site', '', $I);
+        $this->switchOfferClickouts('couponCode', '.buttons a:first-child', '', $I);
     }
     
     public function saleClickout(AcceptanceTester $I, \Codeception\Scenario $scenario)
@@ -50,7 +50,7 @@ class clickoutsCest
         $I = new AcceptanceTester($scenario);
         $this->createShop($I);
         $this->createOffer($I, 'SL', 'sale', '1', 'sale offer');
-        $this->switchOfferClickouts('sale', 'Click to Visit Sale', '.clickout-title a', $I);
+        $this->switchOfferClickouts('sale', '.buttons a:first-child', '.clickout-title a', $I);
     }
  
     public function expiredClickout(AcceptanceTester $I, \Codeception\Scenario $scenario)
@@ -68,7 +68,7 @@ class clickoutsCest
         $I = new AcceptanceTester($scenario);
         $this->createShop($I);
         $this->createOffer($I, 'PA', 'printable', '0', 'printable offer');
-        $this->switchOfferClickouts('printable', 'Click to View Information', '.clickout-title a', $I);
+        $this->switchOfferClickouts('printable', '.buttons a:first-child', '.clickout-title a', $I);
     }
 
     protected function createOffer($I, $codeType, $codeTilesType, $discountvalueType, $title)

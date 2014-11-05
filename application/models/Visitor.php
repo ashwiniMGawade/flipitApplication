@@ -132,6 +132,15 @@ class Visitor extends BaseVisitor
         return $userDetails;
     }
 
+    public static function getUserFirstName($visitorId)
+    {
+        $userDetails = Doctrine_Query::create()->select("v.firstName")
+        ->from("Visitor v")
+        ->where('v.id='.$visitorId)
+        ->fetchArray();
+        return $userDetails;
+    }
+
     public static function getVisitorDetailsByEmail($visitorEmail)
     {
         $visitorDetails = Doctrine_Query::create()->select("v.*")
@@ -189,26 +198,27 @@ class Visitor extends BaseVisitor
     {
         $currentDate = date('Y-m-d 00:00:00');
         $favouriteShops = Doctrine_Query::create()
-        ->select("fv.id as id,s.name as name,s.permaLink,s.id as id,l.*")
+        ->select("fv.id as id,s.name as name,s.permaLink,s.id as id, l.path as imgpath, l.name as imgname")
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
-            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
+            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.deleted=0 AND active.discounttype = 'CD')) as activeCount"
         )
-        ->from("FavoriteShop fv")->leftJoin("fv.shops s")
+        ->from("FavoriteShop fv")
+        ->leftJoin("fv.shops s")
         ->leftJoin('s.logo l')
         ->where('fv.visitorId='.$visitorId)
         ->fetchArray();
         return $favouriteShops;
     }
     
-    public static function getFavoriteShopsOffers($limit=40)
+    public static function getFavoriteShopsOffers($limit = 40)
     {
         $currentDate = date('Y-m-d 00:00:00');
         $favouriteShopsOffers = Doctrine_Query::create()
         ->select(
-            'fv.id as fvid,fv.shopId as shopId,s.refUrl,
-            s.actualUrl,fv.visitorId as visitorId,s.name as name,s.logoid as slogoId,
-            s.permalink as permaLink,o.id, o.title, o.totalViewcount as clicks,l.path,l.name,l.id'
+            'fv.id as fvid,
+            fv.visitorId as visitorId,s.name as name,
+            s.permalink as permaLink,o.id, o.title,l.path,l.name,l.id'
         )
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
@@ -227,7 +237,6 @@ class Visitor extends BaseVisitor
         ->andWhere('o.discountType="CD"')
         ->andWhere('o.Visability!="MEM"')
         ->andWhere('o.userGenerated=0')
-        ->orderBy('o.totalViewcount DESC')
         ->limit($limit)
         ->fetchArray();
         return $favouriteShopsOffers;
