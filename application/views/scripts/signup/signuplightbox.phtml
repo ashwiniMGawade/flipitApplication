@@ -3,23 +3,27 @@
         <a class="glyphicon glyphicon-remove btn-close" onclick="customPopUpClose()"></a>
         <header class="head">
             <div class="icon">
-                <span class='i-love'><?php echo $this->translate('I');?></span>
-                <span class='glyphicon red-heart-lightbox glyphicon-heart'></span>
+                <div class='i-love'><?php echo $this->translate('I');?></div>
+                <div><span class='glyphicon red-heart-lightbox glyphicon-heart'></span></div>
                 <img src="<?php echo $this->shopLogo;?>" width="176" height="89" alt="image description">
             </div>
         </header>
         <div class='singup-heading'>
             <p class='first-p'>
-            <?php 
-                echo str_replace(
-                    '[shop]',
-                    $this->shopName,
-                    $this->shopLightBoxText['lightboxfirsttext']
-                );
+            <?php
+            echo FrontEnd_Helper_viewHelper::getLightBoxFirstTextText(
+                $this->shopName,
+                $this->shopLightBoxText['lightboxfirsttext']
+            )
             ?>
             </p>
             <p class='second-p'>
-            <?php echo str_replace('[shop]', $this->shopName, $this->shopLightBoxText['lightboxsecondtext']);?>
+            <?php 
+            echo FrontEnd_Helper_viewHelper::getLightBoxSecondTextText(
+                $this->shopName,
+                $this->shopLightBoxText['lightboxsecondtext']
+            )
+            ?>
             </p>
         </div>
         <div class="block">

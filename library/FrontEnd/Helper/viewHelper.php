@@ -1002,4 +1002,22 @@ EOD;
 
         return $tabContent;
     }
+
+    public static function getLightBoxFirstTextText($shopName, $lightBoxFirstText)
+    {
+        $shopFirstText = $shopName . " " . self::__translate('your favorite shop!');
+        if (!empty($shopLightBoxText)) {
+            $shopFirstText = str_replace('[shop]', $shopName, $lightBoxFirstText);
+        }
+        return $shopFirstText;
+    }
+
+    public static function getLightBoxSecondTextText($shopName, $lightBoxSecondText)
+    {
+        $shopSecondText = self::__translate('Stay up to date and receive code alerts from'). " " . $shopName;
+        if (!empty($lightBoxSecondText)) {
+            $shopSecondText = str_replace('[shop]', $shopName, $lightBoxSecondText);
+        }
+        return $shopSecondText;
+    }
 }
