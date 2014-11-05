@@ -718,7 +718,7 @@ public static function Visitortotal_acc()
             ->andWhere('active = 1');
         
         if ($visitorId != '') {
-            $visitorsToSendNewsletter = $visitorsToSendNewsletter->andWhere('v.codealert = 1');
+            $visitorsToSendNewsletter = $visitorsToSendNewsletter->andWhere('v.id IN('.$visitorId.')');
         } else {
             $visitorsToSendNewsletter = $visitorsToSendNewsletter->andWhere('weeklyNewsLetter = 1');
         }
