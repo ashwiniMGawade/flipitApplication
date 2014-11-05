@@ -146,7 +146,7 @@ class SignupController extends Zend_Controller_Action
                     __translate('Thanks for registration now enjoy the more coupons');
                     $this->sendWelcomeMail($visitorId);
                 }
-                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_login');
+                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
                 if (isset($shopId) && $shopId!='') {
                     $shopName = Shop::getShopName(base64_decode($shopId));
                     $message = $shopName. " ".  FrontEnd_Helper_viewHelper::
@@ -205,8 +205,6 @@ class SignupController extends Zend_Controller_Action
 
     public function profileAction()
     {
-        echo "<pre>";
-    print_r(CodeAlertQueue::getCodealertOffers()); die;
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         if (!Auth_VisitorAdapter::hasIdentity()) {
             $this->_redirect('/');

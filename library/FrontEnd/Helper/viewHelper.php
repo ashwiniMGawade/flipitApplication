@@ -964,12 +964,24 @@ EOD;
         $brandsClass = zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'yourbrands' ? 'active' : '';
         $offersClass = zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'youroffers' ? 'active' : '';
         $profileClass = zend_Controller_Front::getInstance()->getRequest()->getActionName() == 'profile' ? 'active' : '';
+
+        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        if(LOCALE == ''):
+            $websiteName = 'http://'.$httpScheme.'.kortingscode.nl';
+        else :
+            $websiteName = 'http://'.$httpScheme.'.flipit.com/'.LOCALE;
+        endif;
+
         $tabContent = '<div class="title">
-            <a class="btn blue btn-primary">'.self::__translate('shop verder met korting').'</a>
+            <a href="'.$websiteName.'" class="btn blue btn-primary">'.self::__translate('shop verder met korting').'</a>
             <div class="title-frame">
                 <h1>'.self::__translate('Hey').' '.$firstname.', '.self::__translate('hoe is het met je?').'</h1>
                 '.self::__translate('Je vindt hier een overzicht van je persoonlijke gegevens, pas ze aan waar nodig! Beheer').' 
-                <a href="#">'.self::__form('form_hier').'</a> '.self::__translate('je favoriete webwinkels en bekijk').' <br>'.self::__translate('op').' <a href="#">'.self::__form('form_deze pagina').'</a>
+                <a href="'.HTTP_PATH_LOCALE . self::__link('link_mijn-favorieten').'">'.self::__form('form_hier').'</a> '
+                .self::__translate('je favoriete webwinkels en bekijk').' <br>'.self::__translate('op').' <a href="'.HTTP_PATH_LOCALE
+                . self::__link('link_mijn-favorieten') . "/"
+                . self::__link('link_memberonlycodes').'">'
+                .self::__form('form_deze pagina').'</a>
                  '.self::__translate('je favoriete codes en al onze member acties.').'
             </div>
         </div>
