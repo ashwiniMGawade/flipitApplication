@@ -316,9 +316,9 @@ class Visitor extends BaseVisitor
         $visitor->dateOfBirth = FrontEnd_Helper_viewHelper::sanitize( $dob );
 
 
-        if(! $isUpdatedByAdmin) {
-            if(self::validateEmail($params['emailAddress'])) {
-                $visitor->email = FrontEnd_Helper_viewHelper::sanitize( $params['emailAddress'] );
+        if($isUpdatedByAdmin) {
+            if(self::validateEmail($params['email'])) {
+                $visitor->email = FrontEnd_Helper_viewHelper::sanitize( $params['email'] );
             } else {
                 return false ;
             }
@@ -338,18 +338,18 @@ class Visitor extends BaseVisitor
         }else{
             $visitor->weeklyNewsLetter = 0;
         }
-        if(isset($params['travel'])){
+        if(isset($params['travel']) && $params['travel'] != ''){
             $visitor->travelNewsLetter = FrontEnd_Helper_viewHelper::sanitize($params['travel']);
         }else{
 
             $visitor->travelNewsLetter = 0;
         }
-        if(isset($params['fashion'])){
+        if(isset($params['fashion']) && $params['fashion'] != ''){
         $visitor->fashionNewsLetter = FrontEnd_Helper_viewHelper::sanitize($params['fashion']);
         }else{
             $visitor->fashionNewsLetter = 0;
         }
-        if(isset($params['code'])){
+        if(isset($params['code']) && $params['code'] != ''){
             $visitor->codeAlert = FrontEnd_Helper_viewHelper::sanitize($params['code']);
         }else{
             $visitor->codeAlert = 0;
@@ -364,12 +364,20 @@ class Visitor extends BaseVisitor
                     $visitor->keywords[]->keyword = FrontEnd_Helper_viewHelper::sanitize( $keyword );
                 }
         }
-        if($params['gender']=='female'){
+        if(isset($params['gender']) && $params['gender']=='1'){
             $visitor->gender = 1;
         }
 
-        if($params['gender']=='male'){
+        if(isset($params['gender']) && $params['gender']=='0'){
             $visitor->gender = 0;
+        }
+        if (
+            (isset($params['newPassword']) && $params['newPassword'] != '') &&
+            (isset($params['confirmNewPassword']) && $params['confirmNewPassword'] != '')
+        ) {
+            if ($params['newPassword'] == $params['confirmNewPassword']) {
+                $visitor->password = FrontEnd_Helper_viewHelper::sanitize(md5($params['newPassword']));
+            }
         }
 
         $visitor->save();
