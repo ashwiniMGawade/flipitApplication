@@ -17,6 +17,9 @@
                     <a href="<?php echo $favouriteShop['permaLink'];?>" class="active-offer">
                         <?php echo $favouriteShop['activeCount']. " " . $this->translate('active offers');?>
                     </a>
+                <?php 
+                else: ?>
+                &nbsp;
                 <?php endif;?>
                 </p>
                 <a href='<?php echo HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='
@@ -24,7 +27,7 @@
                 . base64_encode($favouriteShop['id']);?>'>
                     <button class="pop btn btn-default" type="button">
                         <em><span class="glyphicon red-heart glyphicon-heart"></span><span><?php echo $this->translate('I LOVE THIS');?></span></em>
-                        <strong><?php echo $this->translate('REMOVE');?></strong>
+                        <strong><span><?php echo $this->translate('REMOVE');?></span></strong>
                     </button>
                 </a>
             </div>
