@@ -176,17 +176,17 @@ class PopularShop Extends \KC\Entity\PopularShop
     public static function savePopularShopsPosition($shopId)
     {
         $entityManagerLocale  = \Zend_Registry::get('emLocale');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if (!empty($shopId)) {
-            $entityManagerLocale->executeQuery('SET FOREIGN_KEY_CHECKS = 0;');
-            $truncateSql = $platform->getTruncateTableSQL('popular_shop');
-            $entityManagerLocale->executeUpdate($truncateSql);
-            $entityManagerLocale->executeQuery('SET FOREIGN_KEY_CHECKS = 1;');
+            $queryBuilder->getQuery('SET FOREIGN_KEY_CHECKS = 0;')->execute();
+            $queryBuilder->getQuery('TRUNCATE TABLE popular_shop')->execute();
+            $queryBuilder->getQuery('SET FOREIGN_KEY_CHECKS = 1;')->execute();
+   
             $shopId = explode(',', $shopId);
             $i = 1;
             foreach ($shopId as $shopIdValue) {
-                
-                $popularShop = new KC\Entity\PopularShop();
-                $popularShop->popularshops = $shopIdValue;
+                $popularShop = new \KC\Entity\PopularShop();
+                $popularShop->popularshops = $entityManagerLocale->find('KC\Entity\Shop', $shopIdValue);
                 $popularShop->position = $i;
                 $popularShop->type = "MN";
                 $entityManagerLocale->persist($popularShop);
