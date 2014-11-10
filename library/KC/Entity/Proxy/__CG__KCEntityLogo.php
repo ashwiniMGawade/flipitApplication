@@ -66,7 +66,7 @@ class Logo extends \KC\Entity\Logo implements \Doctrine\ORM\Proxy\Proxy
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'offer', 'page', 'seenin', 'shop');
+        return array('__isInitialized__', 'id', 'ext', 'path', 'name', 'deleted', 'created_at', 'updated_at', 'menu', 'mainmenu', 'offer', 'page', 'seenin', 'shop');
     }
 
     public function __clone()

@@ -33,7 +33,7 @@ class Settings Extends \KC\Entity\Settings
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('s.value')
             ->from('KC\Entity\Settings', 's')
-            ->setParameter(1, $sendersFieldName)
+            ->setParameter(1, $queryBuilder->expr()->literal($sendersFieldName))
             ->where('s.name = ?1');
         $emailSettings = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return !empty($emailSettings) ? $emailSettings[0]['value'] : '';
@@ -41,13 +41,26 @@ class Settings Extends \KC\Entity\Settings
 
     public static function updateSendersSettings($sendersFieldName, $sendersValue)
     {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->update('KC\Entity\Settings', 's')
-            ->set("value", $queryBuilder->expr()->literal($sendersValue))
-            ->setParameter(1, $queryBuilder->expr()->literal($sendersFieldName))
-            ->where('s.name = ?1')
-            ->getQuery();
-        $query->execute();
+        $getSettings = self::getEmailSettings($sendersFieldName);
+        if (!empty($getSettings)) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->update('KC\Entity\Settings', 's')
+                ->set("s.value", $queryBuilder->expr()->literal($sendersValue))
+                ->setParameter(1, $queryBuilder->expr()->literal($sendersFieldName))
+                ->where('s.name = ?1')
+                ->getQuery();
+            $query->execute();
+        } else {
+            $entityManagerLocale  = \Zend_Registry::get('emLocale');
+            $setting = new \KC\Entity\Settings();
+            $setting->name = $sendersFieldName;
+            $setting->value = $sendersValue;
+            $setting->created_at = new \DateTime('now');
+            $setting->updated_at = new \DateTime('now');
+            $setting->deleted = 0;
+            $entityManagerLocale->persist($setting);
+            $entityManagerLocale->flush();
+        }
         return true;
     }
  

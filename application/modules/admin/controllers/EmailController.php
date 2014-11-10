@@ -316,16 +316,16 @@ class Admin_EmailController extends Zend_Controller_Action
             if ($sendersParameters['senderName']  == '' || $sendersParameters['senderEmail'] == '') {
                 $this->setFlashMessage('Error in updating Email Settings.');
             } else {
-                Settings::updateSendersSettings('sender_email_address', $sendersParameters['senderEmail']);
-                Settings::updateSendersSettings('sender_name', $sendersParameters['senderName']);
+                KC\Repository\Settings::updateSendersSettings('sender_email_address', $sendersParameters['senderEmail']);
+                KC\Repository\Settings::updateSendersSettings('sender_name', $sendersParameters['senderName']);
                 $this->setFlashMessage('Email Settings have been updated successfully');
             }
             $this->_redirect(HTTP_PATH . 'admin/email/email-settings');
         }
         
-        $sendersEmailAddress = Settings::getEmailSettings('sender_email_address');
+        $sendersEmailAddress = KC\Repository\Settings::getEmailSettings('sender_email_address');
         $this->view->sendersEmailAddress = $sendersEmailAddress;
-        $this->view->sendersName = Settings::getEmailSettings('sender_name');
+        $this->view->sendersName = KC\Repository\Settings::getEmailSettings('sender_name');
     }
     public function codeAlertAction()
     {

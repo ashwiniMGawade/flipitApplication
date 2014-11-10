@@ -195,7 +195,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 
             self::updateVarnish();
 
-            $this->_redirect ( '/admin/homepage' );
+            $this->_redirect ('/admin/homepage');
 
         }
 
@@ -213,7 +213,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 
             self::updateVarnish();
 
-            $this->_redirect ( '/admin/homepage' );
+            $this->_redirect('/admin/homepage');
 
         }
 
@@ -224,7 +224,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         {
 
 
-            if($this->_settings['content']['rights'] == '1') {
+            if ($this->_settings['content']['rights'] == '1') {
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate('Changes has been saved successfully.');
                 $flash->addMessage(array('success' => $message ));
@@ -234,7 +234,7 @@ class Admin_HomepageController extends Zend_Controller_Action
                 self::updateVarnish();
 
             } else {
-                $this->_redirect ( '/admin/index' );
+                $this->_redirect('/admin/index');
             }
 
             //$this->_redirect ( '/admin/homepage' );
@@ -243,12 +243,12 @@ class Admin_HomepageController extends Zend_Controller_Action
 
 
         // return updated about content
-        $this->view->about = About::getAboutContent();
+        $this->view->about = KC\Repository\About::getAboutContent();
 
         // return updated about content
-        $this->view->seenIn = SeenIn::getSeenInContent();
+        $this->view->seenIn = KC\Repository\SeenIn::getSeenInContent();
 
-        $this->view->data = PopularShop::getPopularShop();
+        $this->view->data = KC\Repository\PopularShop::getPopularShop();
 
         //Return Popular voucher code from database
         //$data = PopularCode::getPopularCode();
@@ -256,21 +256,21 @@ class Admin_HomepageController extends Zend_Controller_Action
         $this->view->code = @$data;
 
         //Return Popular category code from database
-        $catg = PopularCategory::getPopularCategories();
+        $catg = KC\Repository\KC\Repository\KC\Repository\KC\Repository\PopularCategory::getPopularCategories();
         $this->view->category = @$catg;
 
         //Return Popular category code from database
-        $special = SpecialList::getsplpage();
+        $special = KC\Repository\KC\Repository\KC\Repository\SpecialList::getsplpage();
         $this->view->Speciallist = @$special;
 
         // Return Money saving Article from database
-        $this->view->articles = MoneysavingArticle::getSaving();
+        $this->view->articles = KC\Repository\KC\Repository\MoneysavingArticle::getSaving();
 
         // Return locale for front end
-        $this->view->locale = Signupmaxaccount::getAllMaxAccounts();
-        $this->view->localeSettings = LocaleSettings::getLocaleSettings();
-        $this->view->timezones_list = Signupmaxaccount::$timezones;
-        $this->view->localeStatus = Website::getLocaleStatus($_COOKIE['site_name']);
+        $this->view->locale = KC\Repository\Signupmaxaccount::getAllMaxAccounts();
+        $this->view->localeSettings = KC\Repository\KC\Repository\KC\Repository\LocaleSettings::getLocaleSettings();
+        $this->view->timezones_list = KC\Repository\KC\Repository\Signupmaxaccount::$timezones;
+        $this->view->localeStatus = KC\Repository\Website::getLocaleStatus($_COOKIE['site_name']);
 
     }
 

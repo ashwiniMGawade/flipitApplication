@@ -54,10 +54,19 @@ class Page extends \KC\Entity\Page implements \Doctrine\ORM\Proxy\Proxy
         return parent::__set($property, $value);
     }
 
+    public function getId()
+    {
+        if ($this->__isInitialized__ === false) {
+            return (int) $this->_identifier["id"];
+        }
+        $this->__load();
+        return parent::getId();
+    }
+
 
     public function __sleep()
     {
-        return array('__isInitialized__', 'id', 'pageType', 'pageTitle', 'slug', 'permaLink', 'metaTitle', 'metaDescription', 'content', 'publish', 'pageLock', 'contentManagerId', 'contentManagerName', 'enableTimeConstraint', 'timenumberOfDays', 'timeType', 'timeMaxOffer', 'timeOrder', 'enableWordConstraint', 'wordTitle', 'wordMaxOffer', 'publishDate', 'wordOrder', 'awardConstratint', 'awardType', 'awardMaxOffer', 'awardOrder', 'enableClickConstraint', 'numberOfClicks', 'clickMaxOffer', 'clickOrder', 'maxOffers', 'oderOffers', 'couponRegular', 'couponEditorPick', 'couponExclusive', 'saleRegular', 'saleEditorPick', 'saleExclusive', 'printableRegular', 'printableEditorPick', 'printableExclusive', 'showPage', 'logoId', 'deleted', 'created_at', 'updated_at', 'customHeader', 'showsitemap', 'pageHeaderImageId', 'offersCount', 'logo', 'moneysaving', 'pageoffers', 'pagewidget', 'pages', 'specialList', 'page');
+        return array('__isInitialized__', 'id', 'pageType', 'pageTitle', 'slug', 'permalink', 'metaTitle', 'metaDescription', 'content', 'publish', 'pageLock', 'contentManagerId', 'contentManagerName', 'enableTimeConstraint', 'timenumberOfDays', 'timeType', 'timeMaxOffer', 'timeOrder', 'enableWordConstraint', 'wordTitle', 'wordMaxOffer', 'publishDate', 'wordOrder', 'awardConstratint', 'awardType', 'awardMaxOffer', 'awardOrder', 'enableClickConstraint', 'numberOfClicks', 'clickMaxOffer', 'clickOrder', 'maxOffers', 'oderOffers', 'couponRegular', 'couponEditorPick', 'couponExclusive', 'saleRegular', 'saleEditorPick', 'saleExclusive', 'printableRegular', 'printableEditorPick', 'printableExclusive', 'showPage', 'deleted', 'created_at', 'updated_at', 'customHeader', 'showsitemap', 'offersCount', 'pageHeaderImageId', 'logo', 'moneysaving', 'pageoffers', 'pagewidget', 'pages', 'specialList', 'page');
     }
 
     public function __clone()

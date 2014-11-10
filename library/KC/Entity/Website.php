@@ -46,9 +46,15 @@ class Website
     private $status;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Chain", mappedBy="website")
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * 
      */
     private $chain;
+
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\ChainItem", mappedBy="website")
+     */
+    private $chainItem;
 
     /**
      * @ORM\OneToMany(targetEntity="KC\Entity\refUserWebsite", mappedBy="refUsersWebsite")

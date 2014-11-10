@@ -222,10 +222,10 @@ $gender = $this->userDetail['gender'];
 	                            		
 	                            			<?php
 	                            			   # check visitor has one or more keyword
-	                            			   if(count($this->userDetail['keywords']) > 0)
+	                            			   if(count($this->userDetail['visitorKeyword']) > 0)
 	                            			   {
 	                            			   		# traverse through all keywords
-		                            			 	foreach ($this->userDetail['keywords'] as $value){
+		                            			 	foreach ($this->userDetail['visitorKeyword'] as $value){
 		                            				
 	                            			   			#create delete button  
 	                            						$aTag = sprintf("<a onclick='deleteKeyword(this)' herf='javascript:void(0);'>"

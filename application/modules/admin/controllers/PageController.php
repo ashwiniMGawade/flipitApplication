@@ -78,25 +78,31 @@ class Admin_PageController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         $pageattrObj = new KC\Repository\PageAttribute();
         $this->view->pageattr = $pageattrObj->getPageAttributes();
+
         $widgetObj = new KC\Repository\Widget();
         $this->view->widgetList = $widgetObj->getDefaultwidgetList();
         $this->view->widgetListUserDefined = $widgetObj->getUserDefinedwidgetList();
+        
         $this->view->pageId = $params['id'];
         $pageObj = new KC\Repository\Page();
         $pageDetail = $pageObj->getPageDetail($params['id']);
         $this->view->pageDetail = $pageDetail['0'] ;
+    
+        $pageAttributeObj = new KC\Repository\PageAttribute();
+        $this->view->pageAttributes = $pageAttributeObj->getPageAttributes();
+        $this->view->widgetList = KC\Repository\Widget::getDefaultwidgetList();
+        $this->view->widgetListUserDefined = KC\Repository\Widget::getUserDefinedwidgetList();
+
         $artcatg = KC\Repository\Articlecategory:: getartCategories();
         $this->view->artcategory = $artcatg['aaData'];
 
-       
         if (\Auth_StaffAdapter::hasIdentity()) {
-            $this->view->roleId = Zend_Auth::getInstance()->getIdentity()->roleId;
+            $this->view->roleId = \Zend_Auth::getInstance()->getIdentity()->users->id;
         }
 
         if (isset($_COOKIE['site_name'])) {
             $site_name = "http://www.".$_COOKIE['site_name'];
         }
-        $entityManagerUser  = \Zend_Registry::get('emUser');
         $userObj = new KC\Repository\User();
         $this->view->authorList = $userObj->getPageAutor($site_name);
 }
@@ -112,11 +118,10 @@ class Admin_PageController extends Zend_Controller_Action
     public function updatepageAction()
     {
         $params = $this->_getAllParams();
-        if(@$params['pageTemplate'] == 15){
-            $pageObj = new Page();
+        if (@$params['pageTemplate'] == 15) {
+            $pageObj = new KC\Repository\Page();
             $checkfooterpages = $pageObj->checkFooterpages(@$params['pageTemplate']);
-
-            if(count($checkfooterpages) == 10){
+            if (count($checkfooterpages) == 10) {
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate('Error: you can not add another footer page.');
                 $flash->addMessage(array('error' => $message ));
@@ -125,19 +130,17 @@ class Admin_PageController extends Zend_Controller_Action
             }
         }
 
-                $offer = Doctrine_Core::getTable("Page")->find($params['pageId']);
-                $updatePage = $offer->updatePage($params);
-                $flash = $this->_helper->getHelper('FlashMessenger');
-                if($updatePage){
-                    $message = $this->view->translate('Page has been updated successfully.');
-                    $flash->addMessage(array('success' => $message ));
-                }else{
-                    $message = $this->view->translate('Error: Your file size exceeded 2MB');
-                    $flash->addMessage(array('error' => $message ));
-                }
-                $this->_redirect(HTTP_PATH.'admin/page#'.$params['qString']);
-
-
+        $page = new KC\Repository\Page();
+        $updatePage = $page->updatePage($params);
+        $flash = $this->_helper->getHelper('FlashMessenger');
+        if ($updatePage) {
+            $message = $this->view->translate('Page has been updated successfully.');
+            $flash->addMessage(array('success' => $message ));
+        } else {
+            $message = $this->view->translate('Error: Your file size exceeded 2MB');
+            $flash->addMessage(array('error' => $message ));
+        }
+        $this->_redirect(HTTP_PATH.'admin/page#'.$params['qString']);
     }
 
     /**

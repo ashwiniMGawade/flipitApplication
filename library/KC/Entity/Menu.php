@@ -60,6 +60,12 @@ class Menu
      */
     private $position;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="KC\Entity\Image", inversedBy="menu")
+     * @ORM\JoinColumn(name="iconId", referencedColumnName="id")
+     */
+    private $menuIcon;
+    
     public function __get($property)
     {
         return $this->$property;

@@ -213,18 +213,19 @@ class Signupmaxaccount Extends \KC\Entity\Signupmaxaccount
         } else {
             $localeTimezoneValues = '';
         }
-
-        $query = $entityManagerUser->select(
-            'p.id,p.no_of_acc,p.max_account,p.status,p.email_confirmation,
-            p.email_header,p.email_footer,
-            p.emailperlocale,p.sendername,p.emailsubject,p.testemail,p.showTestimonial,p.testimonial1,
-            p.testimonial2,p.testimonial3,p.homepagebanner_path,p.homepagebanner_name,p.homepage_widget_banner_path,
-            p.homepage_widget_banner_name,p.newletter_is_scheduled,p.newletter_status,p.newletter_scheduled_time,
-            '.$localeTimezoneValues
-        )
-            ->from('KC\Entity\Signupmaxaccount', 'p')
-            ->setParameter(1, 1)
-            ->where('p.id = ?1');
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+          ->select(
+              'p.id,p.no_of_acc,p.max_account,p.status,p.email_confirmation,
+              p.email_header,p.email_footer,
+              p.emailperlocale,p.sendername,p.emailsubject,p.testemail,p.showtestimonial,p.testimonial1,
+              p.testimonial2,p.testimonial3,p.homepagebanner_path,p.homepagebanner_name,p.homepage_widget_banner_path,
+              p.homepage_widget_banner_name,p.newletter_is_scheduled,p.newletter_status,p.newletter_scheduled_time
+              '.$localeTimezoneValues
+          )
+          ->from('KC\Entity\Signupmaxaccount', 'p')
+          ->setParameter(1, 1)
+          ->where('p.id = ?1');
         $allMaxAccounts = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allMaxAccounts;
     }

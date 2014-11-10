@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping AS ORM;
  * @ORM\Entity
  * @ORM\Table(
  *     name="ref_page_widget",
- *     indexes={@ORM\Index(name="pageid_idx", columns={"pageId"}),@ORM\Index(name="widgetid_idx", columns={"widgetId"})}
+ *     indexes={@ORM\Index(name="pageid_idx", columns={"pageId"}),@ORM\Index(name="widgetid_idx", columns={"widgetid"})}
  * )
  */
 class RefPageWidget
@@ -46,7 +46,7 @@ class RefPageWidget
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Widget", inversedBy="Widget")
-     * @ORM\JoinColumn(name="widgetId", referencedColumnName="id", nullable=false, onDelete="restrict")
+     * @ORM\JoinColumn(name="widgetid", referencedColumnName="id", nullable=false, onDelete="restrict")
      */
     private $page;
 

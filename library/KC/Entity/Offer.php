@@ -255,6 +255,11 @@ class Offer
      */
     private $visitors;
 
+    /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\FavoriteOffer", mappedBy="offer")
+     */
+    private $favoriteOffer;
+
     public function __get($property)
     {
         return $this->$property;

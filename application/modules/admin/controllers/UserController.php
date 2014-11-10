@@ -749,7 +749,7 @@ class Admin_UserController extends Zend_Controller_Action
 
             $isValid = "Old password don't matched" ;
 
-            if(intval($params['id']) > 0 ) {
+            if (intval($params['id']) > 0 ) {
 
                 $user = Doctrine_Core::getTable("User")->find($params['id']);
                 $isValid = $user->validatePassword($params['oldPassword']);
@@ -766,28 +766,28 @@ class Admin_UserController extends Zend_Controller_Action
      */
     public function profileAction()
     {
-        $id =  Auth_StaffAdapter::getIdentity()->id;
+        $id =  \Auth_StaffAdapter::getIdentity()->id;
 
-        $connUser = BackEnd_Helper_viewHelper::addConnection();
-        BackEnd_Helper_viewHelper::closeConnection($connUser);
-        $connSite = BackEnd_Helper_viewHelper::addConnectionSite();
+        $connUser = \BackEnd_Helper_viewHelper::addConnection();
+        \BackEnd_Helper_viewHelper::closeConnection($connUser);
+        $connSite = \BackEnd_Helper_viewHelper::addConnectionSite();
         $this->view->countriesLocales = FrontEnd_Helper_viewHelper::getAllCountriesByLocaleNames();
             //get category list from category table
-            $categoryList =  Category::getCategoryList() ;
+            $categoryList =  \KC\Repository\Category::getCategoryList() ;
             //get favorites store of currect user(admin)
-            $favShop  = User::getUserFavouriteStores($id);
+            $favShop  = \KC\Repository\User::getUserFavouriteStores($id);
             //get unterestng category of currecnt user(admin)
-            $intCat = User::getUserInterestingCat($id);
+            $intCat = \KC\Repository\User::getUserInterestingCat($id);
             //print_r($favShop);
-        BackEnd_Helper_viewHelper::closeConnection($connSite);
+        \BackEnd_Helper_viewHelper::closeConnection($connSite);
         $connUser = BackEnd_Helper_viewHelper::addConnection();
         $catArray  = array();//array generate on key based
-        foreach ($intCat as $categories){
+        foreach ($intCat as $categories) {
 
-            $catArray[] = $categories['categoryId'];
+            $catArray[] = $categories['category']['id'];
         }
         $this->view->catArray = '';
-        if(isset($catArray) && count($catArray)>0){
+        if (isset($catArray) && count($catArray)>0) {
 
             $this->view->catArray =  $catArray  ;
         }
@@ -795,17 +795,22 @@ class Admin_UserController extends Zend_Controller_Action
         $this->view->categoryList = $categoryList['aaData'] ;
         $this->view->favoritesShop = $favShop;
 
-        $data = Doctrine_Query::create()->select("u.* ,pi.id, pi.name,pi.path")
-            ->from('User u')
-            ->leftJoin("u.profileimage pi")
-            ->where("u.id = ". $id)
-        ->fetchOne(null , Doctrine::HYDRATE_ARRAY);
+       
         //$user = Doctrine_Core::getTable("User")->find($id);
         //echo "<pre>";
         //print_r($data);
         //die();
+        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
+        $query = $queryBuilder->select('u, rf, w, pi, r')
+            ->from('\KC\Entity\User', 'u')
+            ->leftJoin("u.profileimage", "pi")
+            ->leftJoin("u.users", "r")
+            ->leftJoin('u.refUserWebsite', 'rf')
+            ->leftJoin('rf.refUsersWebsite', 'w')
+            ->where($queryBuilder->expr()->eq('u.id', $id));
+        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-        $this->view->profile = $data ;
+        $this->view->profile = $data;
     }
 
     /**
@@ -826,24 +831,29 @@ class Admin_UserController extends Zend_Controller_Action
             if ($params) {
 
                 $uesrPicName = '';
-                if(isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!=''){
+                if (isset($_FILES['imageName']['name']) && $_FILES['imageName']['name']!='') {
                     $uesrPicName=self::uploadFile($_FILES['imageName']['name']);
                 }
 
-                $user = Doctrine_Core::getTable("User")->find($id);
+                $entityManagerUser  = \Zend_Registry::get('emUser');
+                $repo = $entityManagerUser->getRepository('KC\Entity\User');
+                $user = $repo->find($params['id']);
                 $user->firstName = $params['firstName'];
                 $user->lastName = $params['lastName'];
-                $user->save();
-                $result = $user->update($params, $uesrPicName, 'profileupdate');
+                $entityManagerUser->persist($user);
+                $entityManagerUser->flush();
+                
+                $u = new KC\Repository\User();
+                $result = $u->update($params, $uesrPicName, 'profileupdate');
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
 
                 # check if there is any error in user data
-                if(is_array($result) && isset($result['error'])) {
+                if (is_array($result) && isset($result['error'])) {
 
                     $message = $this->view->translate($result['message']);
                     $flash->addMessage(array('error' => $message ));
-                }else {
+                } else {
 
                     $message = $this->view->translate("Profile has been updated successfully");
                     $flash->addMessage(array('success' => $message ));
