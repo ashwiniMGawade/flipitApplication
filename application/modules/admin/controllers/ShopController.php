@@ -2,12 +2,7 @@
 
 class Admin_ShopController extends Zend_Controller_Action
 {
-    /**
-     * check authentication before load the page
-     * @see Zend_Controller_Action::preDispatch()
-     * @author kraj
-     * @version 1.0
-     */
+
     public function preDispatch()
     {
         $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
@@ -28,18 +23,12 @@ class Admin_ShopController extends Zend_Controller_Action
     {
         /* Initialize action controller here */
     }
-    /**
-     * show list and flash message
-     * @author kraj
-     * @version 1.0
-     */
+
     public function indexAction()
     {
         // set logged in role
         $u = Auth_StaffAdapter::getIdentity();
         $this->view->role = $u->users->id;
-
-
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ?
@@ -48,94 +37,65 @@ class Admin_ShopController extends Zend_Controller_Action
         $message[0]['error'] : '';
 
     }
-   /**
-    * get list of shop from database by using model class
-    * @author mkaur updated by kraj
-    * @version 1.0
-    */
+
     public function getshopAction()
     {
-         $params = $this->_getAllParams();
-         //cal to getshoplist function from Shop model
+        $params = $this->_getAllParams();
+        //cal to getshoplist function from Shop model
         $shopList = \KC\Repository\Shop::getshopList($params);
-
-        echo Zend_Json::encode( $shopList );
-
+        echo Zend_Json::encode($shopList);
         die;
-   }
+    }
 
-    /**
-     * record move to trash by id
-     * @author kraj
-     * @version 1.0
-     */
     public function movetotrashAction()
     {
         $id = $this->getRequest()->getParam('id');
         //cal to function moveToTrash from Shop model
         $trash = \KC\Repository\Shop::moveToTrash($id);
         if (intval($trash) > 0) {
-
             self::updateVarnish($id);
-
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view->translate('Record has been moved to trash');
             $flash->addMessage(array('success' => $message));
-
         } else {
-
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
         echo Zend_Json::encode($trash);
         die;
     }
-    /**
-     * Permanent delete shop from database by id
-     * @author kraj
-     * @version 1.0
-     */
+
     public function deleteshopAction()
     {
         $id = $this->getRequest()->getParam('id');
         //cal permanentDeleteShop function from Shop model class
         $deletePermanent = \KC\Repository\Shop::permanentDeleteShop($id);
         $flash = $this->_helper->getHelper('FlashMessenger');
-        if ( $deletePermanent ) {
+        if ($deletePermanent) {
             $message = $this->view
                     ->translate('Record has been deleted successfully.');
             $flash->addMessage(array('success' => $message));
-
         } else {
-
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
         echo Zend_Json::encode($deletePermanent);
         die;
     }
-    /**
-     * change status of  shop from database by id
-     * @author kraj
-     * @version 1.0
-     */
-  public function restoreshopAction()
-  {
+
+    public function restoreshopAction()
+    {
         $id = $this->getRequest()->getParam('id');
         //cal to restoreShop function from offer model class
         $restore = \KC\Repository\Shop::restoreShop($id);
 
         if (intval($restore) > 0) {
-
             self::updateVarnish($id);
-
             $flash = $this->_helper->getHelper('FlashMessenger');
             $message = $this->view
             ->translate('Record has been restored successfully.');
             $flash->addMessage(array('success' => $message));
-
         } else {
-
             $message = $this->view->translate('Problem in your data.');
             $flash->addMessage(array('error' => $message));
         }
@@ -143,80 +103,51 @@ class Admin_ShopController extends Zend_Controller_Action
         echo Zend_Json::encode($restore);
         die;
     }
-    /**
-     * searchkey
-     *
-     * search top five shops from database based on search text
-     *
-     * @author kraj
-     * @version 1.0
-     */
-     public function searchkeyAction()
-     {
+
+    public function searchkeyAction()
+    {
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
-        $data = \KC\Repository\Shop::searchKeyword($srh,$flag);
+        $data = \KC\Repository\Shop::searchKeyword($srh, $flag);
 
-            $ar = array();
-            if (sizeof($data) > 0) {
-
-                foreach ($data as $d) {
-
-                    $ar[] = ucfirst($d['name']);
-                }
-            } else {
-
-                $msg = $this->view->translate('No Record Found');
-                $ar[] = $msg;
+        $ar = array();
+        if (sizeof($data) > 0) {
+            foreach ($data as $d) {
+                $ar[] = ucfirst($d['name']);
             }
-            echo Zend_Json::encode($ar);
-            die;
+        } else {
+            $msg = $this->view->translate('No Record Found');
+            $ar[] = $msg;
         }
-    /**
-     * searchsimilar
-     *
-     * search related top ten shops from database based on search text
-     *
-     * @author kkumar
-     * @version 1.0
-     */
+        echo Zend_Json::encode($ar);
+        die;
+    }
+
     public function searchsimilarAction()
     {
         $srh = $this->getRequest()->getParam('keyword')=='undefined' ? '' : $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
         $selctedshop = $this->getRequest()->getParam('selctedshop')=='undefined' ? '' : $this->getRequest()->getParam('selctedshop');
-        if($selctedshop==''){
+        if ($selctedshop=='') {
             $selctedshop = 0;
         }
         $selctedshop = $this->getRequest()->getParam('currentshopId').','.$selctedshop;
-        $data =\KC\Repository\Shop::searchsimilarStore($srh,$flag,$selctedshop);
+        $data =\KC\Repository\Shop::searchsimilarStore($srh, $flag, $selctedshop);
         $ar = $br =  array();
         if (sizeof($data) > 0) {
-
             foreach ($data as $d) {
-
                 $ar[] = ucfirst($d['name']);
                 $ar[] = ucfirst($d['id']);
-
             }
-
         } else {
-
             $msg = $this->view->translate('No Record Found');
             $ar[] = $msg;
         }
         echo Zend_Json::encode($ar);
-
         die;
-
         // action body
     }
 
-    /**
-     * save image for user in database
-     * @param objec $file
-     * @author spsingh
-     */
     public function uploadimageAction()
     {
 
@@ -224,8 +155,6 @@ class Admin_ShopController extends Zend_Controller_Action
         $adapter = new Zend_File_Transfer_Adapter_Http();
         $user_path = ROOT_PATH . $uploadPath;
         $img = $this->getRequest()->getParam('imageName');
-
-
         $fileEl = $this->getRequest()->getParam('browsedEl');
         //unlink image file from folder if exist
         if ($img) {
@@ -233,13 +162,13 @@ class Admin_ShopController extends Zend_Controller_Action
             @unlink($user_path . "thum_" . $img);
             @unlink($user_path . "thum_large" . $img);
         }
-        if (!file_exists($user_path))
+        if (!file_exists($user_path)) {
             mkdir($user_path);
+        }
         $adapter->setDestination(ROOT_PATH . $uploadPath);
         $adapter->addValidator('Extension', false, 'jpg,jpeg,png,gif');
         $files = $adapter->getFileInfo();
-            foreach ($files as $file => $info) {
-
+        foreach ($files as $file => $info) {
             $name = $adapter->getFileName($file, false);
             $name = $adapter->getFileName($file);
             $orgName = time() . "_" . $info['name'];
@@ -247,27 +176,22 @@ class Admin_ShopController extends Zend_Controller_Action
             //call function resize image
 
             switch($fileEl) {
-                case 'logo_file' :
+                case 'logo_file':
+                /**
+                 *	 generating thumnails for upload logo
+                */
+                $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
 
-                 /**
-                  *	 generating thumnails for upload logo
-                  */
-                 $path = ROOT_PATH . $uploadPath . "thum_" . $orgName;
-
-                 BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
+                BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
                     200, 150, $path);
-
-                 $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
-                 BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
+                $path = ROOT_PATH . $uploadPath . "thum_large" . $orgName;
+                BackEnd_Helper_viewHelper::resizeImage($_FILES[ $fileEl ], $orgName,
                         132, 95, $path);
-                   break ;
-
+                    break ;
                 case 'small_logo_file' :
                 break ;
-
                 case 'big_logo_file' :
                     break ;
-
             }
 
             $adapter->addFilter(
@@ -285,10 +209,8 @@ class Admin_ShopController extends Zend_Controller_Action
                 $statusMessage = "File uploaded successfully.";
 
             } else {
-
                 $status = "-1";
                 $msg = "Please upload the valid file";
-
             }
             echo Zend_Json::encode(
                     array("fileName" => $data, "sttaus" => $status,
@@ -400,11 +322,7 @@ class Admin_ShopController extends Zend_Controller_Action
             }
         }
     }
-    /**
-     * edit shop
-     * @author spsingh
-     * @version 1.0
-     */
+
     public function editshopAction()
     {
 
@@ -476,7 +394,7 @@ class Admin_ShopController extends Zend_Controller_Action
             $shop = new \KC\Repository\Shop();
             $flash = $this->_helper->getHelper('FlashMessenger');
 
-            if($shop->CreateNewShop($parmas,true)) {
+            if ($shop->CreateNewShop($parmas, true)) {
                 self::updateVarnish($id);
 
                 $message = $this->view->translate('The shop has been updated successfully');
@@ -495,17 +413,13 @@ class Admin_ShopController extends Zend_Controller_Action
 
         }
     }
-    /**
-     * Export show list in excel
-     * @author kraj
-     * @version 1.0
-     */
+
     public function exportshoplistAction()
     {
         //get all shop from database
-        set_time_limit ( 10000 );
-        ini_set('max_execution_time',115200);
-        ini_set("memory_limit","1024M");
+        set_time_limit(10000);
+        ini_set('max_execution_time', 115200);
+        ini_set("memory_limit", "1024M");
         $data =  \KC\Repository\Shop::exportShopsList();
         //echo "<pre>";
         //print_r($data); die;
@@ -550,19 +464,20 @@ class Admin_ShopController extends Zend_Controller_Action
 
             //condition apply on affliatedprograme
             $prog = '';
-            if($shop['affliateProgram']==true){
+            if ($shop['affliateProgram']==true) {
 
                 $prog= $this->view->translate('Yes');
-            } else{
+            } else {
                 $prog = $this->view->translate('No');
             }
 
             //get account manage name from array
             $accountManagername = '';
-            if($shop['accountManagerName']==''
-                    ||$shop['accountManagerName']=='undefined'
-                    ||$shop['accountManagerName']==null
-                    ||$shop['accountManagerName']=='0'){
+            if (
+                $shop['accountManagerName']==''
+                ||$shop['accountManagerName']=='undefined'
+                ||$shop['accountManagerName']==null
+                ||$shop['accountManagerName']=='0') {
 
                 $accountManagername ='';
             } else {
@@ -576,21 +491,22 @@ class Admin_ShopController extends Zend_Controller_Action
             //get affilate network from array
             $affilateNetwork = '';
 
-                if($shop['affname']==null
-                        ||$shop['affname']==''
-                        ||$shop['affname']=='undefined'){
+            if (
+                $shop['affname']==null
+                ||$shop['affname']==''
+                ||$shop['affname']=='undefined') {
 
-                    $affilateNetwork = '';
+                $affilateNetwork = '';
 
-                }  else {
+            } else {
 
-                    $affilateNetwork = $shop['affname'];
-                }
+                $affilateNetwork = $shop['affname'];
+            }
 
 
             //get offline (status of shop from array
             $offLine='';
-            if($shop['status']==true){
+            if ($shop['status']==true) {
 
                 $offLine=$this->view->translate('Yes');
 
@@ -601,9 +517,10 @@ class Admin_ShopController extends Zend_Controller_Action
 
             //get offline since or not from array
             $offLineSince = '';
-            if($shop['offlineSicne']=='undefined'
-                    || $shop['offlineSicne']==null
-                    || $shop['offlineSicne']==''){
+            if (
+                $shop['offlineSicne']=='undefined'
+                || $shop['offlineSicne']==null
+                || $shop['offlineSicne']=='') {
 
                 $offLineSince='';
 
@@ -613,9 +530,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $overriteTitle = '';
-            if($shop['overriteTitle']=='undefined'
-                    || $shop['overriteTitle']==null
-                    || $shop['overriteTitle']==''){
+            if (
+                $shop['overriteTitle']=='undefined'
+                || $shop['overriteTitle']==null
+                || $shop['overriteTitle']=='') {
 
                 $overriteTitle='';
 
@@ -625,9 +543,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $metaDesc = '';
-            if($shop['metaDescription']=='undefined'
-                    || $shop['metaDescription']==null
-                    || $shop['metaDescription']==''){
+            if (
+                $shop['metaDescription']=='undefined'
+                || $shop['metaDescription']==null
+                || $shop['metaDescription']=='') {
 
                 $metaDesc='';
 
@@ -637,27 +556,29 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $userGenerated = '';
-            if($shop['usergenratedcontent']==true){
+            if ($shop['usergenratedcontent']==true) {
 
                 $userGenerated= $this->view->translate('Yes');
-            } else{
+            } else {
                 $userGenerated = $this->view->translate('No');
             }
 
             $discussion = '';
-            if($shop['discussions']=='undefined'
-                    || $shop['discussions']==null
-                    || $shop['discussions']==''){
+            if (
+                $shop['discussions']=='undefined'
+                || $shop['discussions']==null
+                || $shop['discussions']=='') {
 
                 $discussion= '';
-            } else{
+            } else {
                 $discussion = $shop['discussions'];
             }
 
             $title = '';
-            if($shop['title']=='undefined'
-                    || $shop['title']==null
-                    || $shop['title']==''){
+            if (
+                $shop['title']=='undefined'
+                || $shop['title']==null
+                || $shop['title']=='') {
 
                 $title='';
 
@@ -667,9 +588,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $subTitle = '';
-            if($shop['subTitle']=='undefined'
-                    || $shop['subTitle']==null
-                    || $shop['subTitle']==''){
+            if (
+                $shop['subTitle']=='undefined'
+                || $shop['subTitle']==null
+                || $shop['subTitle']=='') {
 
                 $subTitle ='';
 
@@ -679,9 +601,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $notes = '';
-            if($shop['notes']=='undefined'
-                    || $shop['notes']==null
-                    || $shop['notes']==''){
+            if (
+                $shop['notes']=='undefined'
+                || $shop['notes']==null
+                || $shop['notes']=='') {
 
                 $notes ='';
 
@@ -691,9 +614,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $contentManagerName = '';
-            if($shop['contentManagerName']=='undefined'
-                    || $shop['contentManagerName']==null
-                    || $shop['contentManagerName']==''){
+            if (
+                $shop['contentManagerName']=='undefined'
+                || $shop['contentManagerName']==null
+                || $shop['contentManagerName']=='') {
 
                 $contentManagerName ='';
 
@@ -703,7 +627,7 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $categories = '';
-            if(!empty($shop['category'])){
+            if (!empty($shop['category'])) {
                 $prefix = '';
                 foreach ($shop['category'] as $cat) {
                     $categories .= $prefix  . $cat['name'];
@@ -712,7 +636,7 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $relatedshops = '';
-            if(!empty($shop['relatedshops'])){
+            if (!empty($shop['relatedshops'])) {
                 $prefix = '';
                 foreach ($shop['relatedshops'] as $rShops) {
                     $relatedshops .= $prefix  . $rShops['name'];
@@ -721,9 +645,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $deeplink = '';
-            if($shop['deepLink']=='undefined'
-                    || $shop['deepLink']==null
-                    || $shop['deepLink']==''){
+            if (
+                $shop['deepLink']=='undefined'
+                || $shop['deepLink']==null
+                || $shop['deepLink']=='') {
 
                 $deeplink ='';
 
@@ -733,9 +658,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $refUrl = '';
-            if($shop['refUrl']=='undefined'
-                    || $shop['refUrl']==null
-                    || $shop['refUrl']==''){
+            if (
+                $shop['refUrl']=='undefined'
+                || $shop['refUrl']==null
+                || $shop['refUrl']=='') {
 
                 $refUrl ='';
 
@@ -745,9 +671,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $actualUrl = '';
-            if($shop['actualUrl']=='undefined'
-                    || $shop['actualUrl']==null
-                    || $shop['actualUrl']==''){
+            if (
+                $shop['actualUrl']=='undefined'
+                || $shop['actualUrl']==null
+                || $shop['actualUrl']=='') {
 
                 $actualUrl ='';
 
@@ -757,9 +684,10 @@ class Admin_ShopController extends Zend_Controller_Action
             }
 
             $shopText = '';
-            if($shop['shopText']=='undefined'
-                    || $shop['shopText']==null
-                    || $shop['shopText']==''){
+            if (
+                $shop['shopText']=='undefined'
+                || $shop['shopText']==null
+                || $shop['shopText']=='') {
 
                 $shopText ='';
 
@@ -779,7 +707,7 @@ class Admin_ShopController extends Zend_Controller_Action
             //set value in column of excel
             $objPHPExcel->getActiveSheet()->setCellValue('A'.$column, $shop['name']);
             $objPHPExcel->getActiveSheet()->setCellValue('B'.$column, $shop['permaLink']);
-            $objPHPExcel->getActiveSheet()->setCellValue('C'.$column,$prog);
+            $objPHPExcel->getActiveSheet()->setCellValue('C'.$column, $prog);
             $objPHPExcel->getActiveSheet()->setCellValue('D'.$column, $accountManagername);
             $objPHPExcel->getActiveSheet()->setCellValue('E'.$column, $startDate);
             $objPHPExcel->getActiveSheet()->setCellValue('F'.$column, $affilateNetwork);
@@ -872,7 +800,7 @@ class Admin_ShopController extends Zend_Controller_Action
         // redirect output to client browser
 
         $pathToFile = UPLOAD_EXCEL_PATH ;
-    echo	$shopFile = $pathToFile . "shopList.xlsx";
+        echo $shopFile = $pathToFile . "shopList.xlsx";
         $fileName =  $this->view->translate('shopList.xlsx');
 
         die ;
@@ -884,11 +812,7 @@ class Admin_ShopController extends Zend_Controller_Action
 
 
     }
-    /**
-     * Get trashed shops and display in view
-     * @author kraj
-     * @version 1.0
-     */
+
      public function trashAction()
      {
         $flash = $this->_helper->getHelper('FlashMessenger');
@@ -899,12 +823,6 @@ class Admin_ShopController extends Zend_Controller_Action
         : '';
 
      }
-
-     /**
-      * Import data from excel sheet for images
-      * @author Raman
-      * @version 1.0
-      */
 
      public function importshopimageAction()
      {
@@ -939,23 +857,17 @@ class Admin_ShopController extends Zend_Controller_Action
         }
         $handle = opendir(ROOT_PATH . '/Logo/Logo');
         $path = PUBLIC_PATH . 'Logo/Logo/';
-        while($file = readdir($handle)){
-
-
+        while ($file = readdir($handle)) {
             $rootpath = ROOT_PATH . '/Logo/Logo/';
 
-            if($file !== '.' && $file !== '..'){
-
-                //echo '<img src="'.$path.$file.'" border="0" />';
+            if ($file !== '.' && $file !== '..') {
                 $originalpath = $rootpath.$file;
                 $thumbpath = $rootpath . "thum_large_" . $file;
-
                 $ext = BackEnd_Helper_viewHelper :: getImageExtension($file);
 
-                if($ext=='jpg' || $ext == 'png' || $ext =='JPEG'|| $ext =='PNG' || $ext =='gif'){
-                        BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 70, 50, $thumbpath, $ext);
+                if ($ext=='jpg' || $ext == 'png' || $ext =='JPEG'|| $ext =='PNG' || $ext =='gif') {
+                    BackEnd_Helper_viewHelper :: resizeImageFromFolder($originalpath, 70, 50, $thumbpath, $ext);
                 }
-
             }
         }
         die("Raman");
@@ -967,7 +879,7 @@ class Admin_ShopController extends Zend_Controller_Action
      {
         $this->_helper->layout()->disableLayout();
 
-        if($this->getRequest()->getParam('partialCounter') > 0){
+        if ($this->getRequest()->getParam('partialCounter') > 0) {
             $count = $this->getRequest()->getParam('partialCounter');
             $this->view->partialCounter = $count;
         }
@@ -981,12 +893,6 @@ class Admin_ShopController extends Zend_Controller_Action
         die;
      }
 
-    /**
-     *  updateVarnish
-     *
-     *  update varnish table when a shop is created , updated and deleted
-     *  @param integer $id shop id
-    */
     public function updateVarnish($id)
     {
         // Add urls to refresh in Varnish
@@ -997,10 +903,9 @@ class Admin_ShopController extends Zend_Controller_Action
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_alle-winkels'));
         $varnishObj->addUrl(HTTP_PATH_FRONTEND . FrontEnd_Helper_viewHelper::__link('link_categorieen'));
         # make markplaatfeed url's get refreashed only in case of kortingscode
-        if (LOCALE == '')
-        {
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
-            $varnishObj->addUrl(  HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed' );
+        if (LOCALE == '') {
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND  . 'marktplaatsfeed');
+            $varnishObj->addUrl(HTTP_PATH_FRONTEND . 'marktplaatsmobilefeed');
 
         }
 
@@ -1008,29 +913,18 @@ class Admin_ShopController extends Zend_Controller_Action
         $varnishUrls = \KC\Repository\Shop::getAllUrls($id);
 
         # check $varnishUrls has atleast one
-        if(isset($varnishUrls) && count($varnishUrls) > 0) {
-            foreach($varnishUrls as $value) {
-                $varnishObj->addUrl( HTTP_PATH_FRONTEND . $value);
+        if (isset($varnishUrls) && count($varnishUrls) > 0) {
+            foreach ($varnishUrls as $value) {
+                $varnishObj->addUrl(HTTP_PATH_FRONTEND . $value);
             }
         }
     }
 
-
-    /**
-     *  updateImages
-     *
-     *  update varnish table when a shop is created , updated and deleted
-     */
     public function updateImagesAction()
     {
         \KC\Repository\Shop::updateImages();
     }
 
-    /**
-     * mportshops
-     *
-     * import shops in database
-     */
     public function importshopsAction()
     {
         ini_set('max_execution_time',115200);
@@ -1441,12 +1335,7 @@ class Admin_ShopController extends Zend_Controller_Action
                 }
         }
     }
-    /**
-     * emptyXlx
-     *
-     * used to download empty xlsx file for shop imports
-     * @author Surinderpal Singh
-     */
+
     public function emptyXlxAction()
     {
         # set fiel and its trnslattions
@@ -1464,13 +1353,6 @@ class Admin_ShopController extends Zend_Controller_Action
             ->setBody(file_get_contents($fileName));
     }
 
-
-    /**
-     * localExportXlx
-     *
-     * used to download shop export xlsx file of current locale
-     * @author Surinderpal Singh
-     */
     public function localExportXlxAction()
     {
         # set fiel and its translattions
@@ -1490,14 +1372,6 @@ class Admin_ShopController extends Zend_Controller_Action
                 ->setBody(file_get_contents($fileName));
     }
 
-
-
-    /**
-     * globalExportXlx
-     *
-     * used to download shop export xlsx file of al locales
-     * @author Surinderpal Singh
-     */
     public function globalExportXlxAction()
     {
         # set fiel and its trnslattions
@@ -1515,24 +1389,15 @@ class Admin_ShopController extends Zend_Controller_Action
         ->setBody(file_get_contents($fileName));
     }
 
-
-
-    /**
-     * change shop status(online/ofline)
-     *
-     * @version 1.0
-     * @author blal
-     */
     public function shopstatusAction()
     {
-        $params = $this->_getAllParams ();
+        $params = $this->_getAllParams();
         self::updateVarnish($params['id']);
         $ret = \KC\Repository\Shop::changeStatus($params);
 
-        if($ret) {
-           $this->_helper->json(date("d-m-Y" , strtotime($ret)));
+        if ($ret) {
+            $this->_helper->json(date("d-m-Y", strtotime($ret)));
         }
-
 
         $this->_helper->json($ret);
     }

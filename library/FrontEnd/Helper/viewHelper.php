@@ -295,14 +295,14 @@ EOD;
         $artcileExistsOrNot = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                if (ArticleViewCount::getArticleClick($articleId, $clientIp) == 0) {
-                    ArticleViewCount::saveArticleClick($articleId, $clientIp);
+                if (KC\Repository\ArticleViewCount::getArticleClick($articleId, $clientIp) == 0) {
+                    KC\Repository\ArticleViewCount::saveArticleClick($articleId, $clientIp);
                     $artcileExistsOrNot = "true";
                 }
                 break;
             case 'onload':
-                if (ArticleViewCount::getArticleOnload($articleId, $clientIp) == 0) {
-                    ArticleViewCount::saveArticleOnLoad($articleId, $clientIp);
+                if (KC\Repository\ArticleViewCount::getArticleOnload($articleId, $clientIp) == 0) {
+                    KC\Repository\ArticleViewCount::saveArticleOnLoad($articleId, $clientIp);
                     $artcileExistsOrNot = "true";
                 }
                 break;

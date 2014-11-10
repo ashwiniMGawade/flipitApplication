@@ -577,11 +577,30 @@ class Media extends \KC\Entity\Media
                 ->update('KC\Entity\Media', 'm')
                 ->set(
                     'm.name',
-                    $queryBuilder->expr()->literal(htmlentities(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['name'][$i])))
+                    $queryBuilder->expr()->literal(
+                        htmlentities(
+                            \BackEnd_Helper_viewHelper::stripSlashesFromString($params['name'][$i])
+                        )
+                    )
                 )
-                ->set('m.alternatetext', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['alternateText'][$i])))
-                ->set('m.caption', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['caption'][$i])))
-                ->set('m.description', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['description'][$i])))
+                ->set(
+                    'm.alternatetext',
+                    $queryBuilder->expr()->literal(
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['alternateText'][$i])
+                    )
+                )
+                ->set(
+                    'm.caption',
+                    $queryBuilder->expr()->literal(
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['caption'][$i])
+                    )
+                )
+                ->set(
+                    'm.description',
+                    $queryBuilder->expr()->literal(
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['description'][$i])
+                    )
+                )
                 ->where('m.mediaimage='.$params['hid'][$i]);
                 $data->getQuery()->execute();
             }
@@ -595,10 +614,32 @@ class Media extends \KC\Entity\Media
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $queryBuilder
             ->update('KC\Entity\Media', 'm')
-            ->set('m.name', $queryBuilder->expr()->literal(htmlentities(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['name']))))
-            ->set('m.alternatetext', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['alternateText'])))
-            ->set('m.caption', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['caption'])))
-            ->set('m.description', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['description'])))
+            ->set(
+                'm.name',
+                $queryBuilder->expr()->literal(
+                    htmlentities(
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['name'])
+                    )
+                )
+            )
+            ->set(
+                'm.alternatetext',
+                $queryBuilder->expr()->literal(
+                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['alternateText'])
+                )
+            )
+            ->set(
+                'm.caption',
+                $queryBuilder->expr()->literal(
+                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['caption'])
+                )
+            )
+            ->set(
+                'm.description',
+                $queryBuilder->expr()->literal(
+                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['description'])
+                )
+            )
             ->where('m.id='.$params['id'])
             ->getQuery()
             ->execute();
