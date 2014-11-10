@@ -103,7 +103,7 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
         if (!file_exists(UPLOAD_EXCEL_PATH)) {
             mkdir(UPLOAD_EXCEL_PATH, 0776, true);
         }
-
+        
         // generate upload path for images related to shop
         $rootPath = UPLOAD_EXCEL_PATH;
         if ($import) {
@@ -115,7 +115,7 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
             mkdir($rootPath, 0775, true);
         }
 
-        $adapter = new Zend_File_Transfer_Adapter_Http();
+        $adapter = new \Zend_File_Transfer_Adapter_Http();
         // set destination path and apply validations
         $adapter->setDestination($rootPath);
         $adapter->addValidator('Extension', false, array('xlsx', true));
@@ -136,7 +136,7 @@ class RouteRedirect extends \KC\Entity\RouteRedirect
         // apply filter to rename file name and set target
         $adapter
         ->addFilter(
-            new Zend_Filter_File_Rename(
+            new \Zend_Filter_File_Rename(
                 array('target' => $cp, 'overwrite' => true)
             ),
             null,

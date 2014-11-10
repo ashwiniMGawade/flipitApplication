@@ -653,7 +653,7 @@ function deleteVisitor(id) {
 function moverToTrash() {
 	addOverLay();
 	$.ajax({
-		url : HOST_PATH + "admin/visitor/deletevisitor",
+		url : HOST_PATH + "admin/visitor/permanentdelete",
 		method : "post",
 		data : {
 			'id' : $("input#id" , "form#editRegister").val()

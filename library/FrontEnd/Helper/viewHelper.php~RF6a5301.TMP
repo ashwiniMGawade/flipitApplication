@@ -695,8 +695,6 @@ EOD;
         return $variable;
     }
 
-
-
     public static function sanitize($string, $stripTags = true)
     {
         $search = array(
@@ -712,27 +710,15 @@ EOD;
 
     public static function getDbConnectionDetails()
     {
-        $application = new Zend_Application(
-            APPLICATION_ENV,
-            APPLICATION_PATH . '/configs/application.ini'
-        );
-
-        // bootstrap doctrine
-        $application->getBootstrap()->bootstrap('doctrine');
-        $doctrineConnections = $application->getBootstrap()->getOptions('doctrine');
-        foreach ($doctrineConnections['doctrine'] as $connection) {
-            $dbConnection = $connection;
+        foreach (Doctrine_Manager::getInstance()->getConnections() as $connection) {
+            $dbConnection = $connection->getOptions();
+            preg_match('/host=(.*);/', $dbConnection['dsn'], $host);
         }
-
-        $splitDbName = explode('//', $dbConnection);
-        $splitDbName = explode('/', $splitDbName[1]);
-        $dbName = $splitDbName[1];
-        $splitDbPasswordAndHost = explode(':', $splitDbName[0]);
-        $splitDbPassword = explode('@', $splitDbPasswordAndHost[1]);
-        $dbUserName = $splitDbPasswordAndHost[0];
-        $dbUserPassword = $splitDbPassword[0];
-        $dbHost = $splitDbPassword[1];
-
+        $splitDbName = explode('=', $dbConnection['dsn']);
+        $dbName = $splitDbName[2];
+        $dbUserName = $dbConnection['username'];
+        $dbUserPassword = $dbConnection['password'];
+        $dbHost = $host[1];
         $mysqlConnection = mysqli_connect($dbHost, $dbUserName, $dbUserPassword, $dbName);
         return $mysqlConnection;
     }

@@ -274,12 +274,12 @@ class Visitor extends \KC\Entity\Visitor
     public static function getFavorite($visitorId)
     {
         $queryBuilder  = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select("fv.id as id,s.name as name,s.id as id, l")
+        $query = $queryBuilder->select("fv, s, l")
             ->from("\KC\Entity\FavoriteShop", "fv")
             ->leftJoin("fv.shop", "s")
             ->leftJoin('s.logo', 'l')
             ->where('fv.visitor='. \FrontEnd_Helper_viewHelper::sanitize($visitorId));
-        $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         $newArray = array();
         foreach ($data as $fav) {
@@ -297,30 +297,28 @@ class Visitor extends \KC\Entity\Visitor
         if ($isUpdatedByAdmin) {
             $id =  $params['id'] ;
             $dob = $params['date_year'].'-'.$params['date_month'].'-'.$params['date_day'];
-
             if (isset($params['postalCode'])) {
                 $postalCode = $params['postalCode'];
             }
             $toSetActive = true ;
         } else {
-
             $id = \Auth_VisitorAdapter::getIdentity()->id;
             $dob = $params['birthYear'].'-'.$params['birthMonth'].'-'.$params['birthDay'];
-
             if (isset($params['postCode'])) {
                 $postalCode = $params['postCode'];
             }
 
         }
 
+        $dateOfBirth = new \DateTime($dob);
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $id);
 
         $visitor->firstName = \FrontEnd_Helper_viewHelper::sanitize($params['firstName']);
         $visitor->lastName = \FrontEnd_Helper_viewHelper::sanitize($params['lastName']);
-        $visitor->dateOfBirth = \FrontEnd_Helper_viewHelper::sanitize($dob);
+        $visitor->dateOfBirth = $dateOfBirth;
         $visitor->deleted = $visitor->deleted;
-        $visitor->created_at = $visitor->updated_at;
+        $visitor->created_at = $visitor->created_at;
         $visitor->updated_at = new \DateTime('now');
 
         if (!$isUpdatedByAdmin) {
@@ -372,10 +370,10 @@ class Visitor extends \KC\Entity\Visitor
         if (!empty($params['visitorKeywords']) && count($params['visitorKeywords']) > 0) {
             # set visitor  keywords
             foreach ($params['visitorKeywords'] as $keyword) {
-                $keyword = new \KC\Entity\VisitorKeyword();
-                $keyword->keyword = \FrontEnd_Helper_viewHelper::sanitize($keyword);
-                $keyword->visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $params['id']);
-                $entityManagerLocale->persist($keyword);
+                $keywordObj = new \KC\Entity\VisitorKeyword();
+                $keywordObj->keyword = \FrontEnd_Helper_viewHelper::sanitize($keyword);
+                $keywordObj->visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $params['id']);
+                $entityManagerLocale->persist($keywordObj);
                 $entityManagerLocale->flush();
             }
         }
@@ -415,7 +413,7 @@ class Visitor extends \KC\Entity\Visitor
    
     public static function searchEmails($for, $keyword)
     {
-        $keyword =  FrontEnd_Helper_viewHelper::sanitize($keyword);
+        $keyword =  \FrontEnd_Helper_viewHelper::sanitize($keyword);
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v.email')
             ->from('\KC\Entity\Visitor', 'v')
@@ -474,7 +472,7 @@ class Visitor extends \KC\Entity\Visitor
     public static function editVisitor($id)
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder->select('v, fs.id as fsId, k.keyword')
+        $query = $queryBuilder->select('v, fs, fvs, k')
             ->from('\KC\Entity\Visitor', 'v')
             ->leftJoin("v.favoritevisitorshops", "fs")
             ->leftJoin("fs.shop", "fvs")
@@ -505,7 +503,6 @@ class Visitor extends \KC\Entity\Visitor
 
     public static function updatefrontVisitor($params, $userid)
     {
-        // working pending here
        
         $entityManagerLocale = \Zend_Registry::get('emLocale');
         $visitor = $entityManagerLocale->find('\KC\Entity\Visitor', $userid);
