@@ -1529,7 +1529,7 @@ class Offer extends BaseOffer
 
             }
         }
-
+        $this->extendedoffertitle = '';
         if (isset($params['extendedoffercheckbox'])) {                  // check if offer is extended
           $this->extendedOffer = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedoffercheckbox']);
           $this->extendedTitle =BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferTitle']);
