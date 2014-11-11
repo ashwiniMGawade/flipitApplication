@@ -3,9 +3,12 @@
         <a class="glyphicon glyphicon-remove btn-close" onclick="customPopUpClose()"></a>
         <header class="head">
             <div class="icon">
-                <div class='i-love'><?php echo $this->translate('I');?></div>
-                <div><span class='glyphicon red-heart-lightbox glyphicon-heart'></span></div>
                 <img src="<?php echo $this->shopLogo;?>" width="176" height="89" alt="image description">
+                <div>
+                    <button class="btn blue btn-lg btn-primary lightbox-love-btn">
+                        <?php echo $this->translate('I follow this');?>
+                    </button>
+                </div>
             </div>
         </header>
         <div class='singup-heading'>
