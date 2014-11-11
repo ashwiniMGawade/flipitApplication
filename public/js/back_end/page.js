@@ -157,16 +157,9 @@ function pageList(iSearchText,iStart,iSortCol,iSortDir,iType) {
 			
 				{
 					"fnRender" : function(obj) {
-						var tag = '';
-						if(obj.aData.pageLock==true){
-						tag='Yes';
-						}
-						else{
-						tag = 'No';
-						}
-						return "<a href='javascript:void(0);'>" + tag + "</a>";
-					 
-					},
+						tag = "<p class='word-wrap-without-margin-page'><a href='javascript:void(0);'>"+ucfirst(obj.aData.permaLink)+"</a></p>";
+						return tag;
+					 },
 					"bSearchable" : true,
 					"bSortable" : true
 				},

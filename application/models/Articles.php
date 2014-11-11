@@ -132,7 +132,7 @@ class Articles extends BaseArticles
         $srh =  $params["searchText"]=='undefined' ? '' : $params["searchText"];
         $flag = $params['flag'] ;
 
-        $artList = $data = Doctrine_Query::create()->select('art.id,art.title,art.publishdate,art.publish,art.authorname')
+        $artList = $data = Doctrine_Query::create()->select('art.id,art.title,art.publishdate, art.permalink, art.publish,art.authorname')
         ->from("Articles art")
         ->where('art.deleted = ?' , $flag )
         ->andWhere("art.title LIKE ?", "$srh%");
@@ -140,7 +140,7 @@ class Articles extends BaseArticles
         //print_r($artList->fetchArray()); die;
         $result =   DataTable_Helper::generateDataTableResponse($artList,
                 $params,
-                array("__identifier" => 'art.id','art.title','art.publishdate','art.publish','art.authorname'),
+                array("__identifier" => 'art.id','art.title','art.publishdate', 'art.permalink', 'art.publish','art.authorname'),
                 array(),
                 array());
         return $result;

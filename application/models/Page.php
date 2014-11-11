@@ -167,7 +167,7 @@ class Page extends BasePage
         BackEnd_Helper_viewHelper::closeConnection($conn2);
 
         $pageList = Doctrine_Query::create()
-            ->select('p.pageTitle,p.pageType,p.pageLock,p.created_at,p.contentManagerName,p.publish')
+            ->select('p.pageTitle,p.pageType,p.permaLink,p.created_at,p.contentManagerName,p.publish')
             ->from('Page p')
             ->where('p.deleted=0')
             ->andWhere("p.pagetitle LIKE ?", "$srhPage%");
@@ -180,7 +180,7 @@ class Page extends BasePage
       }
         $result =   DataTable_Helper::generateDataTableResponse($pageList,
                 $params,
-                array("__identifier" => 'p.pageTitle','p.pageTitle','p.pageType','p.pageLock','p.created_at','p.publish','p.contentManagerName'),
+                array("__identifier" => 'p.pageTitle','p.pageTitle','p.pageType','p.permaLink','p.created_at','p.publish','p.contentManagerName'),
                 array(),
                 array());
         return $result;
