@@ -246,10 +246,12 @@ class FrontEnd_Helper_OffersPartialFunctions
         $offerAnchorTagContent,
         $class,
         $offerImage
-    )
-    {
+    ) {
         $headOpen = '';
         $headClose = '';
+        $offerAnchorText = strlen($offerAnchorTagContent) >= 80
+            ? mb_substr($offerAnchorTagContent, 0, 80).'...'
+            : $offerAnchorTagContent;
         if ($class=='link clickout-title') {
             $headOpen = '<h3 class="'. $class .'">';
             $headClose = '</h3>';
@@ -265,32 +267,34 @@ class FrontEnd_Helper_OffersPartialFunctions
                 ga('send', 'event', 'aff', '$offerBounceRate'),
                 OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
                 $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" 
+                    '<a title="'.$offerAnchorTagContent.'" id="'.$currentOffer->id.'" class="'.$class.'" 
                     href="'.$urlToShow.'" vote="0" rel="nofollow" 
                     target="_self" onClick="'.$onClick.'">
-                '.$offerAnchorTagContent.' </a>';
+                '.$offerAnchorText.' </a>';
             } else if ($currentOffer->discountType == "SL") {
                 if ($class == "btn blue btn-primary") {
                     $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
+                    $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
                 }
                 $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
                 ga('send', 'event', 'aff', '$offerBounceRate')";
                 $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" 
+                    '<a title="'.$offerAnchorTagContent.'" id="'.$currentOffer->id.'" class="'.$class.'" 
                     href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
-                 '.$offerAnchorTagContent.'</a>';
+                 '.$offerAnchorText.'</a>';
             } else {
                 if ($class == "btn blue btn-primary") {
                     $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+                    $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
                 }
                 $onClick =
                     self::getUserIsLoggedInOrNot() == "true"
                     ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
                     : HTTP_PATH_LOCALE."accountlogin";
                 $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
+                    '<a title="'.$offerAnchorTagContent.'" id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
                     alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
-                    '.$offerAnchorTagContent .'</a>';
+                    '.$offerAnchorText .'</a>';
             }
         }
         return $headOpen. $offerLink . $headClose;
