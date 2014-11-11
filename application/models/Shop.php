@@ -854,28 +854,6 @@ class Shop extends BaseShop
             }
         }
 
-        if (isset($_FILES['websitescreenshot']['name']) && $_FILES['websitescreenshot']['name'] != '') {
-
-            $uploadPath = UPLOAD_IMG_PATH . "screenshot/";
-            if (!file_exists($uploadPath))
-                mkdir($uploadPath, 0776, true);
-
-            $result = self::uploadImage('websitescreenshot',$uploadPath);
-
-            if ($result['status'] == '200') {
-
-                $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        $result['fileName']);
-                $this->screenshot->ext = $ext;
-                $this->screenshot->path = BackEnd_Helper_viewHelper::stripSlashesFromString($result['path']);
-                $this->screenshot->name = BackEnd_Helper_viewHelper::stripSlashesFromString($result['fileName']);
-
-            } else {
-
-                return false;
-            }
-
-        }
         //call cache function
         $key = 'shopDetails_'  . $this->id . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -907,14 +885,13 @@ class Shop extends BaseShop
             $getRouteLink = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = '".$getcategory[0]['permaLink']."'")->andWhere('type = "SHP"')->fetchArray();
             $howToguideRoute = Doctrine_Query::create()->select()->from('RoutePermalink')->where("permalink = 'how-to/".$getRouteLink[0]['permalink']."'")->andWhere('type = "SHP"')->fetchArray();
         }
-
+        // screenshot has been deleted from edit and add shop but we need set a default in database
+        $this->screenshotId = 0;
         try {
 
             $this->refShopRelatedshop->delete();
             $this->save();
-
-        
-
+    
             $key = 'shop_similar_shops';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -1071,13 +1048,6 @@ class Shop extends BaseShop
 
             $path = ROOT_PATH . $uploadPath . "thum_medium_store_" . $newName;
             BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 200, 100, $path);
-
-        }
-        if ($file == "websitescreenshot") {
-
-            $path1 = ROOT_PATH . $uploadPath . "thum_large_" . $newName;
-            BackEnd_Helper_viewHelper::resizeImage($files[$file], $newName, 450,0, $path1);
-            //die('Hello');
 
         }
         // apply filter to rename file name and set target
