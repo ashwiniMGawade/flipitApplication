@@ -120,65 +120,7 @@ echo $this->headTitle()->append('Edit Shop');?>
                         </div>
                     </div>
                 </div>
-                 <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow user generated content'); ?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onclick="usergenrated(event,'usergenrated','on')" class="btn <?php if($this->data['usergenratedcontent']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('On'); ?></button>                     
-                            <button style="border-radius:0 4px 4px 0" onclick="usergenrated(event,'usergenrated','off')" class="btn <?php if($this->data['usergenratedcontent']=='0'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Off'); ?></button>
-                            <input type="checkbox" id="usergenratedchk" <?php if($this->data['usergenratedcontent']=='1'){ echo 'checked'; }  ?>  name="usergenratedchk" style="display:none;"> 
-                      </div>
-                  </div>    
-                </div>
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                             <button type="button" class="btn <?php if($this->data['showSignupOption']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button type="button" class="btn <?php if($this->data['showSignupOption']=='0'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
-                          </div>
-                    </div>
-                </div>
-                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow Discussions'); ?></strong></label></div>
-                <div class="mainpage-content-right">
-                   	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onclick="discussionCheck(event,'on')" class="btn <?php if($this->data['discussions']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-
-                            <button style="border-radius:0 4px 4px 0" onclick="discussionCheck(event,'off')" class="btn <?php if($this->data['discussions']=='0' || $this->data['discussions']==''){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
-                            
-                            <input type="checkbox" id="discussions" <?php if($this->data['discussions']=='1'){ echo 'checked'; }  ?>  name="discussions" style="display:none;"> 
-                    </div>
-                </div>
-				<div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display similar shops");?></strong></label></div>
-                     <div class="mainpage-content-right">
-                     	<div data-toggle="buttons-checkbox" class="btn-group">
-							<button onClick="setOnOff(event,'similarShops','on');" class="btn <?php if($this->data['showSimliarShops']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onClick="setOnOff(event,'similarShops','off');" class="btn <?php if($this->data['showSimliarShops']=='0' || $this->data['showSimliarShops']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
-                            <input type="hidden" value="<?php echo $this->data['showSimliarShops'] ? 1 : 0 ;?>" id="similarShops" name="similarShops" style="display:none;"> 
-                        </div>
-                     </div>
-                </div>
                 
-             	<div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onClick="setOnOff(event,'showChains','on');" class="btn <?php if($this->data['showChains']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onClick="setOnOff(event,'showChains','off');" class="btn <?php if($this->data['showChains']=='0' || $this->data['showChains']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
-                          </div>
-                    </div>
-                </div>
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php 
-                        echo $this->translate("Strict Confirmation");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                        <div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onClick="setOnOff(event,'strictConfirmation','on');" class="btn <?php if($this->data['strictConfirmation']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onClick="setOnOff(event,'strictConfirmation','off');" class="btn <?php if($this->data['strictConfirmation']=='0' || $this->data['strictConfirmation']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
-                          </div>
-                    </div>
-                </div>
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -351,6 +293,17 @@ echo $this->headTitle()->append('Edit Shop');?>
                         </div>
                     </div>    
                 </div>
+
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display similar shops");?></strong></label></div>
+                     <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'similarShops','on');" class="btn <?php if($this->data['showSimliarShops']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'similarShops','off');" class="btn <?php if($this->data['showSimliarShops']=='0' || $this->data['showSimliarShops']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="<?php echo $this->data['showSimliarShops'] ? 1 : 0 ;?>" id="similarShops" name="similarShops" style="display:none;"> 
+                        </div>
+                     </div>
+                </div>
             </div>
             
             
@@ -492,40 +445,6 @@ echo $this->headTitle()->append('Edit Shop');?>
 						</div>
                     </div>
                 </div>
-                
-                   <div class="mainpage-content-line">
-                    <div class="mainpage-content-left">
-                        <label>
-                            <strong><?php echo $this->translate('Website Screenshot'); ?></strong>
-                        </label>
-                    </div>
-                    <div class="mainpage-content-right">
-                     <div class="mainpage-content-right-inner-right-other"></div>
-                      <?php       
-                        $shopPicture = '';
-                        if(
-                            isset($this->data['screenshot']['name'] ) && $this->data['screenshot']['name'] != ''
-                            ) {
-                            $shopPicture = 
-                                PUBLIC_PATH_CDN
-                                .$this->data['screenshot']['path'] . $this->data['screenshot']['name'];
-                        }	
-                      ?>
-                        <div class='browse-container'>
-                            <img class='image-container' 
-                            alt="<?php echo $this->translate('Shop screen shot'); ?>" src="<?php echo $shopPicture ; ?>">
-                    	</div>
-                      	<div class="mainpage-content-right-inner-left-other">
-                            <div>
-                        	<input  data-max-size="2097152" type="file" name="websitescreenshot" 
-                            onchange="checkFileType(event)" class="ignore" />
-                            </div>
-				        	<div id="logo_file_message" class="help-inline">
-                            <?php echo $this->translate('Image Size: min width 450px (*.jpg or *.png file only)'); ?>
-                            </span>
-                    	</div>
-                    </div>
-                </div>
             </div>
             <div class="mainpage-content">
             	<div class="mainpage-content-line mb10">
@@ -536,6 +455,57 @@ echo $this->headTitle()->append('Edit Shop');?>
                         <textarea class="input-xlarge mbot bbot ignore word_count"   id="shopDescription" name="shopDescription" placeholder="<?php echo $this->translate('Small description about the shop.'); ?>" rows="3"><?php echo $this->data['shopText'] ; ?></textarea>
                         <input type="text" id='shopDescription_count' class="input-xlarge disabled btop word-count" disabled="disabled">
                         </div>
+                    </div>
+                </div>
+
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow user generated content'); ?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onclick="usergenrated(event,'usergenrated','on')" class="btn <?php if($this->data['usergenratedcontent']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('On'); ?></button>                     
+                            <button style="border-radius:0 4px 4px 0" onclick="usergenrated(event,'usergenrated','off')" class="btn <?php if($this->data['usergenratedcontent']=='0'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Off'); ?></button>
+                            <input type="checkbox" id="usergenratedchk" <?php if($this->data['usergenratedcontent']=='1'){ echo 'checked'; }  ?>  name="usergenratedchk" style="display:none;"> 
+                      </div>
+                  </div>    
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn <?php if($this->data['showSignupOption']=='1'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn <?php if($this->data['showSignupOption']=='0'){ echo 'btn-primary'; }  ?>" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Allow Discussions'); ?></strong></label></div>
+                <div class="mainpage-content-right">
+                    <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onclick="discussionCheck(event,'on')" class="btn <?php if($this->data['discussions']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+
+                            <button style="border-radius:0 4px 4px 0" onclick="discussionCheck(event,'off')" class="btn <?php if($this->data['discussions']=='0' || $this->data['discussions']==''){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('No'); ?></button>
+                            
+                            <input type="checkbox" id="discussions" <?php if($this->data['discussions']=='1'){ echo 'checked'; }  ?>  name="discussions" style="display:none;"> 
+                    </div>
+                </div>
+                
+                
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'showChains','on');" class="btn <?php if($this->data['showChains']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'showChains','off');" class="btn <?php if($this->data['showChains']=='0' || $this->data['showChains']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php 
+                        echo $this->translate("Strict Confirmation");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'strictConfirmation','on');" class="btn <?php if($this->data['strictConfirmation']=='1'){ echo 'btn-primary'; }  ?>" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'strictConfirmation','off');" class="btn <?php if($this->data['strictConfirmation']=='0' || $this->data['strictConfirmation']==''){ echo 'btn-primary'; }  ?>" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                          </div>
                     </div>
                 </div>
             </div>
