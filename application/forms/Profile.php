@@ -80,7 +80,7 @@ class Application_Form_Profile extends Application_Form_Base
         $vistorPostalCode->setLabel(FrontEnd_Helper_viewHelper::__form('form_Postcode'));
 
         $vistorNewsLetterStatus = new Zend_Form_Element_Checkbox('weeklyNewsLetter');
-        $codeAlertStatus = new Zend_Form_Element_Checkbox('codeAlert');
+        $codeAlertStatus = new Zend_Form_Element_Checkbox('codealert');
 
         $this->addElements(
             array(

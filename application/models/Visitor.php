@@ -55,11 +55,11 @@ class Visitor extends BaseVisitor
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $visitor = Doctrine_Core::getTable('Visitor')->find($visitorId);
             $visitor->weeklyNewsLetter = $visitorInformation['weeklyNewsLetter'];
-            $visitor->codeAlert = $visitorInformation['codeAlert'];
+            $visitor->codealert = $visitorInformation['codealert'];
         } else {
             $visitor = new Visitor();
             $visitor->weeklyNewsLetter = '1';
-            $visitor->codeAlert = '1';
+            $visitor->codealert = '1';
             $visitor->currentLogIn = '0000-00-00';
             $visitor->lastLogIn = '0000-00-00';
             $visitor->active_codeid = '';
@@ -350,9 +350,9 @@ class Visitor extends BaseVisitor
             $visitor->fashionNewsLetter = 0;
         }
         if(isset($params['code']) && $params['code'] != ''){
-            $visitor->codeAlert = FrontEnd_Helper_viewHelper::sanitize($params['code']);
+            $visitor->codealert = FrontEnd_Helper_viewHelper::sanitize($params['code']);
         }else{
-            $visitor->codeAlert = 0;
+            $visitor->codealert = 0;
         }
 
         Doctrine_Core::getTable("VisitorKeyword")->findBy('visitorId', $visitor->id)->delete();
