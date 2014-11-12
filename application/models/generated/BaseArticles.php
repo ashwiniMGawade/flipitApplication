@@ -161,6 +161,24 @@ abstract class BaseArticles extends Doctrine_Record
              'notnull' => true,
              'autoincrement' => false,
              ));
+        $this->hasColumn('featuredImage', 'integer', 8, array(
+                'type' => 'integer',
+                'length' => 8,
+                'fixed' => false,
+                'unsigned' => false,
+                'primary' => false,
+                'notnull' => false,
+                'autoincrement' => false,
+        ));
+        $this->hasColumn('featuredImageStatus', 'integer', 1, array(
+             'type' => 'integer',
+             'length' => 1,
+             'fixed' => false,
+             'unsigned' => false,
+             'primary' => false,
+             'notnull' => false,
+             'autoincrement' => false,
+             ));
     }
 
     public function setUp()
@@ -176,7 +194,9 @@ abstract class BaseArticles extends Doctrine_Record
                 'local' => 'thumbnailsmallid',
                 'foreign' => 'id'));
 
-
+         $this->hasOne('ArticlesFeaturedImage as articlefeaturedimage', array(
+                'local' => 'featuredImage',
+                'foreign' => 'id'));
 
         $this->hasMany('Shop as shop', array(
                 'refClass' => 'RefArticleStore',

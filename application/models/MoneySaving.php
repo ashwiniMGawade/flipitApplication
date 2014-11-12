@@ -32,7 +32,8 @@ class MoneySaving extends BaseMoneySaving
         ->leftJoin('a.chapters chap')
         ->groupBy('av.articleid')
         ->orderBy('pop DESC')
-        ->where('a.deleted = 0');
+        ->where('a.deleted = 0')
+        ->andWhere('a.publish = 1');
         if (isset($userId)  && $userId!= "") {
             $mostReadArticles->andWhere('a.authorId ='.$userId.'');
         }
@@ -138,6 +139,7 @@ class MoneySaving extends BaseMoneySaving
             ->leftJoin('a.chapters chap')
             ->where('r.relatedcategoryid ='.  "'$categoryId'")
             ->andWhere('a.deleted=0')
+            ->andWhere('a.publish = 1')
             ->limit($limit)
             ->orderBy('a.publishdate DESC')
             ->fetchArray();

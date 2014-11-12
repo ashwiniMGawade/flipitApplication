@@ -74,6 +74,21 @@ class BackEnd_Helper_viewHelper
  
         return !empty($varnishUrlsCount) ? array_sum($varnishUrlsCount) : 0;
     }
+
+    public function getOnOffButtonsForArticleFeaturedImage($featuredImage)
+    {
+        if($featuredImage == 1) {
+            $featuredOnClass = 'btn-primary default';
+            $featuredOffClass = '';
+        } else {
+            $featuredOnClass = '';
+            $featuredOffClass = 'btn-primary default';
+        }
+
+        $featuredImageButton = '<button onclick="featuredImageToggle(event);" class="btn '.$featuredOnClass.'" type="button">'.$this->zendTranslate->translate('Yes').'</button>                     
+            <button onclick="featuredImageToggle(event);" class="btn '.$featuredOffClass.'" type="button">'.$this->zendTranslate->translate('No').'</button>';
+        return $featuredImageButton;
+    }
     #####################################################
     ############# END REFACORED CODE ####################
     #####################################################

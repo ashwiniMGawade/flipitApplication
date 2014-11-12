@@ -127,6 +127,23 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                        
                     </div>
                   </div>
+                  <div class="postbox " id="submitdiv" style='height:86px !important;'>
+                  <div class="sidebar-heading">
+                      <p><?php echo $this->translate('Featured Image(yes/no)');?></p>
+                    </div>
+                    <div class="sidebar-content-box" style="display:inline-block;" >
+                      <div data-toggle="buttons-checkbox" class="btn-group ">
+                            <button type="button" class="btn" value="yes" onClick="featuredImageToggle(event);">
+                                <?php echo $this->translate('Yes'); ?>
+                            </button>
+                            <button type="button" class="btn btn-primary" style="border-radius: 0 4px 4px 0;" 
+                                value="no" onClick="featuredImageToggle(event);"><?php echo $this->translate('No'); ?>
+                            </button>
+                            <input type="hidden" value="0" name="featuredimagecheckbox" id="featuredimagecheckbox">
+                       </div>
+                       
+                    </div>
+                    </div>
                 </div>
               </div>
               <div id="post-body">
@@ -169,6 +186,20 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 </div>
                                 <div>
                                 <?php echo $this->translate('Image Size: 370px x 300px (*.jpg or *.png file only)');?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left"><label>
+                                <strong><?php echo $this->translate('Featured in header'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <div>
+                                    <input type="file" onchange="checkFileType(event)" class="ignore"   
+                                    name="articleFeaturedImage" id="articleFeaturedImage">
+                                </div>
+                                <div>
+                                <?php echo $this->translate('Image Size: 553px x 448px (*.jpg or *.png file only)');?>
                                 </div>
                             </div>
                         </div>

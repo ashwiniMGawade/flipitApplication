@@ -178,6 +178,7 @@ class Articles extends BaseArticles
                                         ->leftJoin('a.chapters as chapter')
                                         ->leftJoin('a.articleImage')
                                         ->leftJoin('a.thumbnail')
+                                        ->leftJoin('a.articlefeaturedimage')
                                         ->leftJoin('stores.shop')
                                         ->where('id='.$params['id'])
                                         ->andWhere("a.deleted= 0")
@@ -227,7 +228,7 @@ class Articles extends BaseArticles
         $storeIds = explode(',', $params['selectedRelatedStores']);
         $relatedIds = explode(',', $params['selectedRelatedCategory']);
         $data = new Articles();
-        //echo "<pre>"; print_r($data); die();
+        //echo "<pre>"; print_r($params); die();
         $data->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['articleTitle']);
         $data->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString( $params['articlepermalink']);
         $data->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlemetaTitle']);
@@ -267,11 +268,34 @@ class Articles extends BaseArticles
                 return false;
             }
         }
+
+        if (isset($_FILES['articleFeaturedImage']['name']) && $_FILES['articleFeaturedImage']['name'] != '') {
+
+            $articleFeaturedImage = self::uploadImage('articleFeaturedImage');
+
+            if (@$articleFeaturedImage['status'] == '200') {
+                $ext = BackEnd_Helper_viewHelper::getImageExtension(
+                        @$articleFeaturedImage['fileName']);
+
+                $data->articlefeaturedimage->ext = @$ext;
+                $data->articlefeaturedimage->path = @BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
+                $data->articlefeaturedimage->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
+            } else {
+                return false;
+            }
+        }
+
+        $data->featuredImageStatus = 0;
+        if (isset($params['featuredimagecheckbox']) && $params['featuredimagecheckbox'] == '1') {
+            $data->featuredImageStatus = 1;
+        }
+        
     /*  $ext = BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
         $data->articleImage->ext = $ext;*/
 
         if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
             $data->publish = Articles::ArticleStatusDraft;
+            $data->publishdate = date('Y-m-d');
         }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']))  > date('Y-m-d H:i:s')){
             $data->publish = Articles::ArticleStatusPublished;
             $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
@@ -407,7 +431,27 @@ class Articles extends BaseArticles
             }
         }
 
+        if (isset($_FILES['articleFeaturedImage']['name']) && $_FILES['articleFeaturedImage']['name'] != '') {
 
+            $articleFeaturedImage = self::uploadImage('articleFeaturedImage');
+
+            if (@$articleFeaturedImage['status'] == '200') {
+                $ext = BackEnd_Helper_viewHelper::getImageExtension(
+                        @$articleFeaturedImage['fileName']);
+
+                $data->articlefeaturedimage->ext = @$ext;
+                $data->articlefeaturedimage->path = @BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
+                $data->articlefeaturedimage->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
+            } else {
+                return false;
+            }
+        }
+
+        $data->featuredImageStatus = 0;
+        if (isset($params['featuredimagecheckbox']) && $params['featuredimagecheckbox'] == '1') {
+            $data->featuredImageStatus = 1;
+        }
+        
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
 
         $catIds = self::findCategoryId($params['id']);
@@ -438,6 +482,7 @@ class Articles extends BaseArticles
 
         if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
             $data->publish = Articles::ArticleStatusDraft;
+            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
         }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']))  > date('Y-m-d H:i:s')){
             $data->publish = Articles::ArticleStatusPublished;
             $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));

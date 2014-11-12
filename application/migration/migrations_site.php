@@ -71,7 +71,7 @@ if(empty($locale)) {
     # cycle htoruh all site database
     foreach ($connections as $key => $connection) {
         # check database is being must be site
-        if($key != 'imbull') {
+        if($key == 'en') {
             try {
                  migrateDatabase($connection['dsn'] , $key,$version);
 
