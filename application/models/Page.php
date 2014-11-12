@@ -73,6 +73,18 @@ class Page extends BasePage
         return $pageDetail;
     }
 
+    public static function getSpecialPageDetailForMobileMenu()
+    {
+        $pageDetail = Doctrine_Query::create()
+        ->select('p.permalink, p.pagetitle')
+        ->from('Page p')
+        ->where('p.deleted = 0')
+        ->andWhere('p.showinmobilemenu = 1')
+        ->limit(2)
+        ->fetchArray();
+        return $pageDetail;
+    }
+
     public static function updatePageAttributeId()
     {
         for ($i = 1; $i <= 3; $i++) {
@@ -350,8 +362,9 @@ class Page extends BasePage
             $this->pageLock = 1;
         }
         
-        isset($params['showSitemapStatuscheck']) ? $this->showsitemap = 1 : $this->showsitemap = 0;
-    
+        isset($params['showSitemapStatuscheck']) && $params['showSitemapStatuscheck'] == 1 ? $this->showsitemap = 1 : $this->showsitemap = 0;
+        isset($params['showMobileMenuStatuscheck']) && $params['showMobileMenuStatuscheck'] == 1 ? $this->showinmobilemenu = 1 : $this->showinmobilemenu = 0;
+
         if(trim($params['pageTemplate'])!=''){
         $this->pageAttributeId = $params['pageTemplate'];
         }
@@ -655,7 +668,7 @@ class Page extends BasePage
         }
         
         isset($params['showSitemapStatuscheck']) && $params['showSitemapStatuscheck'] == 1 ? $this->showsitemap = 1 : $this->showsitemap = 0;
-
+        isset($params['showMobileMenuStatuscheck']) && $params['showMobileMenuStatuscheck'] == 1 ? $this->showinmobilemenu = 1 : $this->showinmobilemenu = 0;
         if(trim($params['pageTemplate'])!=''){
             $this->pageAttributeId = $params['pageTemplate'];
         }else{

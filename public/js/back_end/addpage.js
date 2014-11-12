@@ -570,6 +570,18 @@ function showSitemapStatus(dIv) {
     }
 }
 
+function showMobileMenuStatus(dIv) {
+    $("#" + dIv).addClass("btn-primary").siblings().removeClass("btn-primary");
+    switch (dIv) {
+    case 'showMobileMenuYes':
+	    $("input#showMobileMenuStatuscheck").val(1);
+	    break;
+    case 'showMobileMenuNo':
+	    $("input#showMobileMenuStatuscheck").val(0);
+	    break;
+    }
+}
+
 function setOffersOrder(dIv) {
 
 	$("#" + dIv).addClass("btn-primary").siblings().removeClass("btn-primary");
