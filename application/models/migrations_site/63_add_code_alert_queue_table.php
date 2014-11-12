@@ -1,5 +1,5 @@
 <?php
-class AddCodeAlertTable extends Doctrine_Migration_Base
+class AddCodeAlertQueueTable extends Doctrine_Migration_Base
 {
     public function up()
     {
