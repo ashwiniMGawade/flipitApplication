@@ -31,7 +31,7 @@ foreach ($this->categoriesWithSpecialPagesList as $categoryWithSpecialPage) {
             ? FrontEnd_Helper_viewHelper::__link('link_categorieen').'/'. $categoryWithSpecialPage['permaLink'] 
             : $categoryWithSpecialPage['permaLink'];
         ?>
-        <a href="<?php echo HTTP_PATH_LOCALE .  $permalink?>">
+        <a title='<?php echo $categoryWithSpecialPage['name'];?>' href="<?php echo HTTP_PATH_LOCALE .  $permalink?>">
             <div class="image">
                 <img src ="<?php echo $categoryImageSource; ?>" alt="<?php echo $categoryWithSpecialPage['name'];?>" />
             </div>
