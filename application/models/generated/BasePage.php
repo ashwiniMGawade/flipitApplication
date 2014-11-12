@@ -260,6 +260,9 @@ abstract class BasePage extends Doctrine_Record
                 'type' => 'integer',
                 'length' => '20',
         ));
+        $this->hasColumn('showinmobilemenu', 'boolean', null, array(
+         'type' => 'boolean',
+        ));
     }
 
     public function setUp()
