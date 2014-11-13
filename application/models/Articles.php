@@ -228,7 +228,7 @@ class Articles extends BaseArticles
         $storeIds = explode(',', $params['selectedRelatedStores']);
         $relatedIds = explode(',', $params['selectedRelatedCategory']);
         $data = new Articles();
-        //echo "<pre>"; print_r($params); die();
+        //echo "<pre>"; print_r($data); die();
         $data->title = BackEnd_Helper_viewHelper::stripSlashesFromString($params['articleTitle']);
         $data->permalink = BackEnd_Helper_viewHelper::stripSlashesFromString( $params['articlepermalink']);
         $data->metatitle = BackEnd_Helper_viewHelper::stripSlashesFromString($params['articlemetaTitle']);
@@ -270,16 +270,17 @@ class Articles extends BaseArticles
         }
 
         if (isset($_FILES['articleFeaturedImage']['name']) && $_FILES['articleFeaturedImage']['name'] != '') {
-
             $articleFeaturedImage = self::uploadImage('articleFeaturedImage');
 
             if (@$articleFeaturedImage['status'] == '200') {
                 $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        @$articleFeaturedImage['fileName']);
-
-                $data->articlefeaturedimage->ext = @$ext;
-                $data->articlefeaturedimage->path = @BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
-                $data->articlefeaturedimage->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
+                    $articleFeaturedImage['fileName']
+                );
+                $data->articlefeaturedimage->ext = $ext;
+                $data->articlefeaturedimage->path =
+                    BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
+                $data->articlefeaturedimage->name =
+                    BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
             } else {
                 return false;
             }
@@ -372,7 +373,7 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-        
+
             return array('articleId' => $articleId , 'isDraft' => $isDraft ) ;
         }catch(Exception $e){
 
@@ -434,16 +435,15 @@ class Articles extends BaseArticles
         }
 
         if (isset($_FILES['articleFeaturedImage']['name']) && $_FILES['articleFeaturedImage']['name'] != '') {
-
             $articleFeaturedImage = self::uploadImage('articleFeaturedImage');
 
             if (@$articleFeaturedImage['status'] == '200') {
                 $ext = BackEnd_Helper_viewHelper::getImageExtension(
-                        @$articleFeaturedImage['fileName']);
-
-                $data->articlefeaturedimage->ext = @$ext;
-                $data->articlefeaturedimage->path = @BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
-                $data->articlefeaturedimage->name = @BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
+                    $articleFeaturedImage['fileName']
+                );
+                $data->articlefeaturedimage->ext = $ext;
+                $data->articlefeaturedimage->path = BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['path']);
+                $data->articlefeaturedimage->name = BackEnd_Helper_viewHelper::stripSlashesFromString($articleFeaturedImage['fileName']);
             } else {
                 return false;
             }
@@ -489,7 +489,15 @@ class Articles extends BaseArticles
 
         if(isset($params['savePagebtn']) && $params['savePagebtn'] == 'draft'){
             $data->publish = Articles::ArticleStatusDraft;
-            $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));
+            $data->publishdate =
+            date(
+                'Y-m-d',
+                strtotime($params['publishDate'])
+            ).' '.
+            date(
+                'H:i:s',
+                strtotime($params['publishTimehh'])
+            );
         }else if($params['savePagebtn'] == 'publish' && date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']))  > date('Y-m-d H:i:s')){
             $data->publish = Articles::ArticleStatusPublished;
             $data->publishdate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh']));

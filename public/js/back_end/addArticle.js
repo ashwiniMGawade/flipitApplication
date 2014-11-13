@@ -889,12 +889,12 @@ var searchedValue  = "";
 	}
 
 function featuredImageToggle(e){
-	var btn = e.target  ? e.target :  e.srcElement ;
-	jQuery(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
-	
-	if(btn.value=='yes'){
-		jQuery("input#featuredimagecheckbox").val(1);
-	}else{
-		jQuery("input#featuredimagecheckbox").val(0); 
-	}
+    var btn = e.target  ? e.target :  e.srcElement ;
+    jQuery(btn).addClass("btn-primary").siblings().removeClass("btn-primary");
+
+    if(btn.value=='yes'){
+        jQuery("input#featuredimagecheckbox").val(1);
+    }else{
+        jQuery("input#featuredimagecheckbox").val(0); 
+    }
 }

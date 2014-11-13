@@ -82,11 +82,11 @@ abstract class BaseImage extends Doctrine_Record
              ),
            'ArticlesThumb' =>
             array(
-                    'type' => 'ARTTHUMB',
+                'type' => 'ARTTHUMB',
             ),
             'ArticlesFeaturedImage' =>
             array(
-                    'type' => 'ARTFEATIMG',
+                'type' => 'ARTFEATIMG',
             ),
             'WebsiteScrenshot' =>
                 array(
