@@ -944,7 +944,7 @@ EOD;
 
     public static function getPermalinkAfterRemovingSpecialChracter($permalink)
     {
-        $cacheKey = preg_replace("/[\/\&_~,`@!(){}:*+^%#$?#.=-]/", "", $permalink);
+        $cacheKey = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#.=-]/", "", $permalink);
         return $cacheKey;
     }
 

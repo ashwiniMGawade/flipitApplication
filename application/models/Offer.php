@@ -832,7 +832,9 @@ class Offer extends BaseOffer
                 ->andWhere('o.discounttype="CD"')
                 ->andWhere('o.Visability != "MEM"')
                 ->andWhere(
-                    "s.name LIKE '%$searchKeyword%' or o.title LIKE '%$searchKeyword%'",
+                    "s.name LIKE '%".mysqli_real_escape_string(
+                FrontEnd_Helper_viewHelper::getDbConnectionDetails(),$searchKeyword)."%' or o.title LIKE '%".mysqli_real_escape_string(
+                FrontEnd_Helper_viewHelper::getDbConnectionDetails(),$searchKeyword)."%'",
                     $searchKeyword,
                     $searchKeyword
                 )
