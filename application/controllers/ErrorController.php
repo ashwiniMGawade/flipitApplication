@@ -64,7 +64,7 @@ class ErrorController extends Zend_Controller_Action
                         $specialPageOffers,
                         $paginationNumber,
                         20,
-                        5
+                        9
                     );
 
                     $frontendViewHelper = new FrontEnd_Helper_SidebarWidgetFunctions();
