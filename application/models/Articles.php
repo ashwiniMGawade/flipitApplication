@@ -362,25 +362,22 @@ class Articles extends BaseArticles
             }
             $page_ids = array_unique($artArr);
 
+            //call cache function
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
+            $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
+        
             return array('articleId' => $articleId , 'isDraft' => $isDraft ) ;
         }catch(Exception $e){
 
             return false;
         }
-
-        //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_mostreadMsArticlePage_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('2_recentlyAddedArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('7_popularShops_list');
-        $permalinkWithoutSpecilaChracter = str_replace("-", "", $params['articlepermalink']);
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
-
-
     }
 
 

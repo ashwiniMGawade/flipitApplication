@@ -81,7 +81,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
 
     public static function getArticlesAccordingToDescendingOrder($articleCreatedDateAsc, $articleCreatedDateDesc)
     {
-        return strtotime($articleCreatedDateDesc['created_at']) - strtotime($articleCreatedDateAsc['created_at']);
+        return strtotime($articleCreatedDateDesc['publishdate']) - strtotime($articleCreatedDateAsc['publishdate']);
     }
 
     public function excludeSelectedArticle($allArticlesArray, $selectedArticleId)
