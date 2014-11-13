@@ -80,10 +80,14 @@ abstract class BaseImage extends Doctrine_Record
              array(
               'type' => 'ARTICON',
              ),
-               'ArticlesThumb' =>
-                array(
-                        'type' => 'ARTTHUMB',
-                ),
+           'ArticlesThumb' =>
+            array(
+                'type' => 'ARTTHUMB',
+            ),
+            'ArticlesFeaturedImage' =>
+            array(
+                'type' => 'ARTFEATIMG',
+            ),
             'WebsiteScrenshot' =>
                 array(
                     'type' => 'SCREENSHOT',
