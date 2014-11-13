@@ -246,6 +246,17 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                 <div class="mainpage-content-right" style="height : 20px; width : 511px;"></div>
                             </div>
                              
+                            <div class="mainpage-content-line">
+                                <div class="mainpage-content-left"><label>
+                                <strong><?php echo $this->translate('Article plus overview title'); ?></strong>
+                                </label>
+                                </div>
+                                <div class="mainpage-content-right">
+                                <input  type="text" value="<?php echo $this->articleData[0]['plusTitle']?>" 
+                                name="plusTitle" id="plusTitle" class="" 
+                                placeholder="<?php echo $this->translate('Article plus overview title'); ?>"></div>
+                                <div class="mainpage-content-right" style="height : 20px; width : 511px;"></div>
+                            </div>
                             
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label>
@@ -355,7 +366,7 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                             name="articleFeaturedImage" id="articleFeaturedImage">
                                         </div>
                                         <div>
-                                                <?php echo $this->translate('Image Size: 370px x 300px (*.jpg or *.png file only)');?>
+                                                <?php echo $this->translate('Image Size: 553px x 448px (*.jpg or *.png file only)');?>
                                         </div>
                                     </div>
                                         <div class="mainpage-content-right" style="float : left; height : 20px; width : 511px;"></div>

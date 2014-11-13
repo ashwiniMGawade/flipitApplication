@@ -85,8 +85,8 @@ class BackEnd_Helper_viewHelper
             $featuredOffClass = 'btn-primary default';
         }
 
-        $featuredImageButton = '<button onclick="featuredImageToggle(event);" class="btn '.$featuredOnClass.'" type="button">'.$this->zendTranslate->translate('Yes').'</button>                     
-            <button onclick="featuredImageToggle(event);" class="btn '.$featuredOffClass.'" type="button">'.$this->zendTranslate->translate('No').'</button>';
+        $featuredImageButton = '<button onclick="featuredImageToggle(event);" value="yes" class="btn '.$featuredOnClass.'" type="button">'.$this->zendTranslate->translate('Yes').'</button>                     
+            <button onclick="featuredImageToggle(event);" value="no"  class="btn '.$featuredOffClass.'" type="button">'.$this->zendTranslate->translate('No').'</button>';
         return $featuredImageButton;
     }
     #####################################################

@@ -290,6 +290,11 @@ class Articles extends BaseArticles
             $data->featuredImageStatus = 1;
         }
         
+        $data->plusTitle = '';
+        if (isset($params['plusTitle']) && $params['plusTitle'] != '') {
+            $data->plusTitle = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['plusTitle']);
+        }
+        
     /*  $ext = BackEnd_Helper_viewHelper::getImageExtension(@$result['fileName']);
         $data->articleImage->ext = $ext;*/
 
@@ -450,6 +455,11 @@ class Articles extends BaseArticles
         $data->featuredImageStatus = 0;
         if (isset($params['featuredimagecheckbox']) && $params['featuredimagecheckbox'] == '1') {
             $data->featuredImageStatus = 1;
+        }
+        
+        $data->plusTitle = '';
+        if (isset($params['plusTitle']) && $params['plusTitle'] != '') {
+            $data->plusTitle = @BackEnd_Helper_viewHelper::stripSlashesFromString($params['plusTitle']);
         }
         
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');

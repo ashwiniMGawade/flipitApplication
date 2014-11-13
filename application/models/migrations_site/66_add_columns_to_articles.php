@@ -1,5 +1,5 @@
 <?php
-class AddFeaturedImageToArticles extends Doctrine_Migration_Base
+class AddColumnsToArticles extends Doctrine_Migration_Base
 {
     public function up()
     {
@@ -34,11 +34,20 @@ class AddFeaturedImageToArticles extends Doctrine_Migration_Base
                 'autoincrement' => false,
             )
         );
+
+        $this->addColumn(
+            'articles',
+            'plusTitle',
+            'string',
+            255,
+            array('notnull' => false)
+        );
     }
 
     public function down()
     {
         $this->removeColumn('articles', 'featuredImage');
         $this->removeColumn('articles', 'featuredImageStatus');
+        $this->removeColumn('articles', 'plusTitle');
     }
 }
