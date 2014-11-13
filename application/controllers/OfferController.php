@@ -201,7 +201,8 @@ class OfferController extends Zend_Controller_Action
             array(
                 'function' => 'Logo::getPageLogo',
                 'parameters' => array($pageDetails->pageHeaderImageId)
-            )
+            ),
+            ''
         );
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
@@ -220,7 +221,7 @@ class OfferController extends Zend_Controller_Action
         $this->view->controllerName = $params['controller'];
         $this->view->offersType = 'newestOffer';
         $this->view->shopName = 'top20';
-        $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 3);
+        $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination($offers, $this->_getAllParams(), 20, 9);
         $this->view->offersWithPagination = $offersWithPagination;
         $signUpFormForStorePage = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
             'largeSignupForm',
