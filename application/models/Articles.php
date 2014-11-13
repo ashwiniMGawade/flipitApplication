@@ -272,7 +272,7 @@ class Articles extends BaseArticles
         if (isset($_FILES['articleFeaturedImage']['name']) && $_FILES['articleFeaturedImage']['name'] != '') {
             $articleFeaturedImage = self::uploadImage('articleFeaturedImage');
 
-            if (@$articleFeaturedImage['status'] == '200') {
+            if ($articleFeaturedImage['status'] == '200') {
                 $ext = BackEnd_Helper_viewHelper::getImageExtension(
                     $articleFeaturedImage['fileName']
                 );
@@ -373,7 +373,6 @@ class Articles extends BaseArticles
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('article_'.$permalinkWithoutSpecilaChracter.'_details');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('4_categoriesArticles_list');
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('5_topOffers_list');
-
             return array('articleId' => $articleId , 'isDraft' => $isDraft ) ;
         }catch(Exception $e){
 
@@ -437,7 +436,7 @@ class Articles extends BaseArticles
         if (isset($_FILES['articleFeaturedImage']['name']) && $_FILES['articleFeaturedImage']['name'] != '') {
             $articleFeaturedImage = self::uploadImage('articleFeaturedImage');
 
-            if (@$articleFeaturedImage['status'] == '200') {
+            if ($articleFeaturedImage['status'] == '200') {
                 $ext = BackEnd_Helper_viewHelper::getImageExtension(
                     $articleFeaturedImage['fileName']
                 );

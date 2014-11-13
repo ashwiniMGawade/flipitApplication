@@ -221,9 +221,9 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                 $featuredImageStatus = isset($this->articleData[0]['featuredImageStatus']) 
                                    && $this->articleData[0]['featuredImageStatus'] == 1 ? '1' : '0';
                                    $backEndViewHelper = new BackEnd_Helper_viewHelper();
-                                echo $featuredImageStatus == 1 ? 
-                                    $backEndViewHelper->getOnOffButtonsForArticleFeaturedImage(1) :
-                                    $backEndViewHelper->getOnOffButtonsForArticleFeaturedImage(0);
+                                echo $featuredImageStatus == 1
+                                    ? $backEndViewHelper->getOnOffButtonsForArticleFeaturedImage(1)
+                                    : $backEndViewHelper->getOnOffButtonsForArticleFeaturedImage(0);
                                 ?>
                                 <input type="hidden" value="<?php echo $this->articleData[0]['featuredImageStatus']; ?>" 
                                     name="featuredimagecheckbox" id="featuredimagecheckbox">
@@ -255,8 +255,8 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                 </div>
                                 <div class="mainpage-content-right">
                                     <input  type="text" value="<?php echo $this->articleData[0]['plusTitle']?>" 
-                                    name="plusTitle" id="plusTitle" class="" 
-                                    placeholder="<?php echo $this->translate('Article plus overview title'); ?>">
+                                        name="plusTitle" id="plusTitle" class="" 
+                                        placeholder="<?php echo $this->translate('Article plus overview title'); ?>">
                                 </div>
                                 <div class="mainpage-content-right" style="height : 20px; width : 511px;"></div>
                             </div>
@@ -356,19 +356,19 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                             && $this->articleData[0]['articlefeaturedimage']['name'] != '' 
                                         ) {
                                         $articlefeaturedimage =
-                                        PUBLIC_PATH_CDN
-                                        . $this->articleData[0]['articlefeaturedimage']['path']
-                                        . $this->articleData[0]['articlefeaturedimage']['name'];
+                                            PUBLIC_PATH_CDN
+                                            . $this->articleData[0]['articlefeaturedimage']['path']
+                                            . $this->articleData[0]['articlefeaturedimage']['name'];
                                         }   
                                         ?>
                                         <div class='browse-container'> 
                                             <img class='image-container'
-                                            alt="<?php echo $this->translate('Article featured image'); ?>" 
-                                            src="<?php echo $articlefeaturedimage ; ?>">
+                                                alt="<?php echo $this->translate('Article featured image'); ?>" 
+                                                src="<?php echo $articlefeaturedimage ; ?>">
                                         </div>
                                         <div>
                                             <input type="file" class="ignore" onchange="checkFileType(event)" 
-                                            name="articleFeaturedImage" id="articleFeaturedImage">
+                                                name="articleFeaturedImage" id="articleFeaturedImage">
                                         </div>
                                         <div>
                                             <?php echo $this->translate('Image Size: 553px x 448px (*.jpg or *.png file only)');?>

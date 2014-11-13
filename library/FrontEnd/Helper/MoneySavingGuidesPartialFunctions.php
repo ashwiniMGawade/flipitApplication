@@ -17,12 +17,14 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
 
             if (isset($article['plusTitle']) && $article['plusTitle'] != '') {
-                $articleTitle = mb_strlen($article['plusTitle']) > 50 ?
-                    mb_substr($article['plusTitle'], 0, 50).'..' : $article['plusTitle'];
+                $articleTitle = mb_strlen($article['plusTitle']) > 50
+                    ? mb_substr($article['plusTitle'], 0, 50).'..'
+                    : $article['plusTitle'];
                 $altTitle = $article['plusTitle'];
             } else {
-                $articleTitle = mb_strlen($article['title']) > 50 ?
-                    mb_substr($article['title'], 0, 50).'..' : $article['title'];
+                $articleTitle = mb_strlen($article['title']) > 50
+                    ? mb_substr($article['title'], 0, 50).'..'
+                    : $article['title'];
                 $altTitle = $article['title'];
             }
             

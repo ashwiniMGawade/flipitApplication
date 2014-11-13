@@ -14,16 +14,18 @@ $mostReadArticles = $this->mostReadArticles;
                         && $mostReadArticle['articles']['featuredImageStatus'] == 1
                     ) {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['articles']['articlefeaturedimage']) ?
-                                PUBLIC_PATH_CDN
-                                .$mostReadArticle['articles']['articlefeaturedimage']['path'] 
-                                .$mostReadArticle['articles']['articlefeaturedimage']['name'] : '';
+                            !empty($mostReadArticle['articles']['articlefeaturedimage'])
+                            ? PUBLIC_PATH_CDN
+                            .$mostReadArticle['articles']['articlefeaturedimage']['path'] 
+                            .$mostReadArticle['articles']['articlefeaturedimage']['name']
+                            : '';
                     } else {
                         $mostReadArticleImage = 
-                            !empty($mostReadArticle['articles']['thumbnail']) ?
-                                PUBLIC_PATH_CDN
-                                .$mostReadArticle['articles']['thumbnail']['path'] 
-                                .$mostReadArticle['articles']['thumbnail']['name'] : '';
+                            !empty($mostReadArticle['articles']['thumbnail'])
+                            ? PUBLIC_PATH_CDN
+                            .$mostReadArticle['articles']['thumbnail']['path'] 
+                            .$mostReadArticle['articles']['thumbnail']['name']
+                            : '';
                     }
 
                     $mostReadArticleTitle = mb_strlen($mostReadArticle['articles']['title']) > 50 ? 

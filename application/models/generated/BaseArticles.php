@@ -199,9 +199,13 @@ abstract class BaseArticles extends Doctrine_Record
              'foreign' => 'id'));
 
 
-        $this->hasOne('ArticlesThumb as thumbnail', array(
+        $this->hasOne(
+            'ArticlesThumb as thumbnail',
+            array(
                 'local' => 'thumbnailsmallid',
-                'foreign' => 'id'));
+                'foreign' => 'id'
+            )
+        );
 
         $this->hasOne('ArticlesFeaturedImage as articlefeaturedimage', array(
             'local' => 'featuredImage',
