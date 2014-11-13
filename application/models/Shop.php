@@ -133,7 +133,7 @@ class Shop extends BaseShop
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
             (active.shopId = s.id AND active.endDate >= '$currentDate' 
-                AND active.deleted = 0 AND active.discounttype = 'CD'
+                AND active.deleted = 0
             )
             ) as activeCount"
         )
