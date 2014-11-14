@@ -200,7 +200,7 @@ class User extends \KC\Entity\User
             $pImage  = new \KC\Entity\ProfileImage();
             $pImage->ext = $ext;
             $pImage->created_at = new \DateTime('now');
-            $pImage->deleted_at = new \DateTime('now');
+            $pImage->updated_at = new \DateTime('now');
             $pImage->deleted = '0';
             $pImage->path ='images/upload/';
             $pImage->name = \BackEnd_Helper_viewHelper::stripSlashesFromString($imageName);
