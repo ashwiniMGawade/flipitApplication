@@ -22,7 +22,7 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        print_r(KC\Repository\PopularVouchercodes::moveUpCode(11,11));
+        print_r(KC\Repository\Robot::updateFileInformation(1, 'test only'));
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
