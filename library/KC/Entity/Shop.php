@@ -274,7 +274,7 @@ class Shop
     /**
      * @ORM\Column(type="integer", length=8, nullable=true)
      */
-    private $totalViewcount;
+    private $totalviewcount;
 
     /**
      * @ORM\Column(type="integer", length=1, nullable=false)

@@ -641,7 +641,7 @@ EOD;
                 $result = Articles::getmoneySavingArticles($limit);
                 break;
             case "asseenin":
-                $result = SeenIn::getSeenInContent();
+                $result = KC\Repository\SeenIn::getSeenInContent();
                 break;
             case "about":
                 $status = 1;
