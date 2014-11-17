@@ -11,7 +11,7 @@ class SeenIn Extends \KC\Entity\SeenIn
         $seeInContentNames = self::checkSeenInContent();
         if ($seeInContentNames) {
             $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-            $query = $queryBuilder->select('s')
+            $query = $queryBuilder->select('s,l')
             ->from('KC\Entity\SeenIn', 's')
             ->leftJoin('s.logo', 'l')
             ->setParameter(1, $seeInContentNames)
@@ -24,12 +24,12 @@ class SeenIn Extends \KC\Entity\SeenIn
     public static function checkSeenInContent()
     {
         $seenIn = array();
-        $seenIn[] = \KC\Repository\Settings::getSettings(Settings::SEENIN_1);
-        $seenIn[] = \KC\Repository\Settings::getSettings(Settings::SEENIN_2);
-        $seenIn[] = \KC\Repository\Settings::getSettings(Settings::SEENIN_3);
-        $seenIn[] = \KC\Repository\Settings::getSettings(Settings::SEENIN_4);
-        $seenIn[] = \KC\Repository\Settings::getSettings(Settings::SEENIN_5);
-        $seenIn[] = \KC\Repository\Settings::getSettings(Settings::SEENIN_6);
+        $seenIn[] = \KC\Repository\Settings::getSettings(\KC\Repository\Settings::SEENIN_1);
+        $seenIn[] = \KC\Repository\Settings::getSettings(\KC\Repository\Settings::SEENIN_2);
+        $seenIn[] = \KC\Repository\Settings::getSettings(\KC\Repository\Settings::SEENIN_3);
+        $seenIn[] = \KC\Repository\Settings::getSettings(\KC\Repository\Settings::SEENIN_4);
+        $seenIn[] = \KC\Repository\Settings::getSettings(\KC\Repository\Settings::SEENIN_5);
+        $seenIn[] = \KC\Repository\Settings::getSettings(\KC\Repository\Settings::SEENIN_6);
         return $seenIn;
     }
     #####################################################
@@ -49,25 +49,24 @@ class SeenIn Extends \KC\Entity\SeenIn
                 # new object
                 $seenIn = new KC\Entity\SeenIn();
             }
-            $seenIn->altText = @$params['alt-'. $i] ?  $params['alt-'. $i]                           : null ;
+            $seenIn->altText = @$params['alt-'. $i] ?  $params['alt-'. $i] : null;
             if (isset($_FILES['image-'.$i])) {
                 $result = self::uploadImage('image-'.$i);
                 if ($result['status'] == '200') {
                     $viewHelper = new \BackEnd_Helper_viewHelper();
                     $ext = $viewHelper->getImageExtension($result['fileName']);
-                    $seenInImage  = new KC\Entity\Image();
+                    $seenInImage  = new KC\Entity\Logo();
                     $seenInImage->ext = @$ext;
                     $seenInImage->path = @$result['path'];
                     $seenInImage->name = @\BackEnd_Helper_viewHelper::stripSlashesFromString(
                         $result['fileName']
                     );
-                    $seenInImage->type = 'LG';
                     $seenInImage->deleted = 0;
                     $seenInImage->created_at = new \DateTime('now');
                     $seenInImage->updated_at = new \DateTime('now');
                     $entityManagerLocale->persist($seenInImage);
                     $entityManagerLocale->flush();
-                    $seenIn->logo =  $seenInImage->getId();
+                    $seenIn->logo =  $seenInImage->id;
                 }
             }
             $seenIn->status =  0;
@@ -86,7 +85,7 @@ class SeenIn Extends \KC\Entity\SeenIn
 
     public static function checkSeenInContent1($name)
     {
-        return  KC\Repository\Settings::getSettings($name);
+        return  \KC\Repository\Settings::getSettings($name);
     }
 
     public static function newSeenInSetting($id, $name)
@@ -98,7 +97,7 @@ class SeenIn Extends \KC\Entity\SeenIn
         $entityManagerLocale->persist($settings);
         $entityManagerLocale->flush();
         //call cache function
-        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeSeenIn_list');
+        \FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homeSeenIn_list');
     }
 
     public static function uploadImage($file)

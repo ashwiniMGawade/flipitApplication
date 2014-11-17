@@ -491,8 +491,8 @@ class Media extends \KC\Entity\Media
 
             $media = new \KC\Entity\Media();
             $media->name = $fileNameUrl;
-            $media->fileUrl = $fileNameUrl;
-            $media->mediaImageId = \Zend_Registry::get('emLocale')
+            $media->fileurl = $fileNameUrl;
+            $media->mediaimage = \Zend_Registry::get('emLocale')
                 ->getRepository('KC\Entity\MediaImage')
                 ->find($image->id);
             $media->authorName = \Zend_Auth::getInstance()->getIdentity()->firstName;
@@ -521,20 +521,24 @@ class Media extends \KC\Entity\Media
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         if ($id) {
-            $sel = $queryBuilder->select('m')
-            ->from('KC\Entity\MediaMedia', 'm')
+            $sel = $queryBuilder->select('m, mi')
+            ->from('KC\Entity\Media', 'm')
+            ->leftJoin('m.mediaimage', 'mi')
             ->where("m.id=". $id)
             ->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
-            $media = \Zend_Registry::get('emLocale')->find('KC\Entity\MediaMedia', $id);
-            $del = $queryBuilder->delete('KC\Entity\MediaMedia', 'm')
-                ->where("m.id=" . $id)
+            $del = $queryBuilder->delete('KC\Entity\Media', 'm')
+                ->where('m.id=' . $id)
                 ->getQuery()
                 ->execute();
 
-            $del1 = $queryBuilder->delete('KC\Entity\Image', 'i')
-            ->where("i.id=" . $sel['mediaImageId'])
-            ->execute();
+            if (!empty($sel['mediaimage']['id'])) {
+                $media = \Zend_Registry::get('emLocale')->find('KC\Entity\Media', $id);
+                $del1 = $queryBuilder->delete('KC\Entity\Image', 'i')
+                ->where('i.id=' . $sel['mediaimage']['id'])
+                ->getQuery()
+                ->execute();
+            }
 
             unlink(ROOT_PATH.'images/upload/media/'.$sel['fileUrl']);
             unlink(ROOT_PATH.'images/upload/media/thumb/'.$sel['fileUrl']);
@@ -555,9 +559,11 @@ class Media extends \KC\Entity\Media
                 ->find($id);
             $mediaList = $queryBuilder
             ->select("m")
-            ->from("KC\Entity\Image", "m")->where('m.id='.$id)
+            ->from("KC\Entity\Media", "m")
+            ->leftJoin('m.mediaimage', 'mi')
+            ->where('mi.id='.$id)
             ->orderBy("m.id", "DESC");
-                $arr = $mediaList->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $arr = $mediaList->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             return $arr;
         }
     }
@@ -571,11 +577,30 @@ class Media extends \KC\Entity\Media
                 ->update('KC\Entity\Media', 'm')
                 ->set(
                     'm.name',
-                    $queryBuilder->expr()->literal(htmlentities(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['name'][$i])))
+                    $queryBuilder->expr()->literal(
+                        htmlentities(
+                            \BackEnd_Helper_viewHelper::stripSlashesFromString($params['name'][$i])
+                        )
+                    )
                 )
-                ->set('m.alternatetext', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['alternateText'][$i])))
-                ->set('m.caption', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['caption'][$i])))
-                ->set('m.description', $queryBuilder->expr()->literal(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['description'][$i])))
+                ->set(
+                    'm.alternatetext',
+                    $queryBuilder->expr()->literal(
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['alternateText'][$i])
+                    )
+                )
+                ->set(
+                    'm.caption',
+                    $queryBuilder->expr()->literal(
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['caption'][$i])
+                    )
+                )
+                ->set(
+                    'm.description',
+                    $queryBuilder->expr()->literal(
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['description'][$i])
+                    )
+                )
                 ->where('m.mediaimage='.$params['hid'][$i]);
                 $data->getQuery()->execute();
             }
@@ -589,10 +614,32 @@ class Media extends \KC\Entity\Media
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $queryBuilder
             ->update('KC\Entity\Media', 'm')
-            ->set('m.name', '"'.htmlentities(\BackEnd_Helper_viewHelper::stripSlashesFromString($params['name'])).'"')
-            ->set('m.alternateText', '"'.\BackEnd_Helper_viewHelper::stripSlashesFromString($params['alternateText']).'"')
-            ->set('m.caption', '"'.\BackEnd_Helper_viewHelper::stripSlashesFromString($params['caption']).'"')
-            ->set('m.description', '"'.\BackEnd_Helper_viewHelper::stripSlashesFromString($params['description']).'"')
+            ->set(
+                'm.name',
+                $queryBuilder->expr()->literal(
+                    htmlentities(
+                        \BackEnd_Helper_viewHelper::stripSlashesFromString($params['name'])
+                    )
+                )
+            )
+            ->set(
+                'm.alternatetext',
+                $queryBuilder->expr()->literal(
+                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['alternateText'])
+                )
+            )
+            ->set(
+                'm.caption',
+                $queryBuilder->expr()->literal(
+                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['caption'])
+                )
+            )
+            ->set(
+                'm.description',
+                $queryBuilder->expr()->literal(
+                    \BackEnd_Helper_viewHelper::stripSlashesFromString($params['description'])
+                )
+            )
             ->where('m.id='.$params['id'])
             ->getQuery()
             ->execute();

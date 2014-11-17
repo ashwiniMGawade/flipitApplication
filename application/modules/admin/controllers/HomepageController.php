@@ -175,7 +175,8 @@ class Admin_HomepageController extends Zend_Controller_Action
     public function indexAction()
     {
         // action body
-        $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+        $u = Auth_StaffAdapter::getIdentity();
+        $role = $u->users->id;
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
@@ -191,9 +192,9 @@ class Admin_HomepageController extends Zend_Controller_Action
             $message = $this->view->translate('Changes has been saved successfully.');
             $flash->addMessage(array('success' => $message ));
             $parmas = $this->_getAllParams();
-            SeenIn::update($parmas);
+            KC\Repository\SeenIn::update($parmas);
 
-            self::updateVarnish();
+            //self::updateVarnish();
 
             $this->_redirect ('/admin/homepage');
 
@@ -252,7 +253,7 @@ class Admin_HomepageController extends Zend_Controller_Action
 
         //Return Popular voucher code from database
         //$data = PopularCode::getPopularCode();
-        $data = PopularVouchercodes::getPopularvoucherCode();
+        $data = KC\Repository\PopularVouchercodes::getPopularvoucherCode();
         $this->view->code = @$data;
 
         //Return Popular category code from database
@@ -432,7 +433,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         $flag = 0;
         //$status = 1;
         //call to seach top 10 offer function in model class
-        $data = PopularVouchercodes::searchTopTenOffer($srh, $flag);
+        $data = KC\Repository\PopularVouchercodes::searchTopTenOffer($srh, $flag);
         $ar = array();
 
 
@@ -463,7 +464,7 @@ class Admin_HomepageController extends Zend_Controller_Action
         $data = $this->getRequest()->getParam('name');
 
         //call to add offer function from model
-        $flag = PopularVouchercodes::addOfferInVouchercode($data);
+        $flag = KC\Repository\PopularVouchercodes::addOfferInVouchercode($data);
         echo Zend_Json::encode($flag);
         $key = 'all_widget5_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -483,9 +484,9 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        PopularVouchercodes::deletePapularvocherCode($id, $position);
+        KC\Repository\PopularVouchercodes::deletePapularvocherCode($id, $position);
         //get popular code from database
-        $data = PopularVouchercodes::getPopularvoucherCode();
+        $data = KC\Repository\PopularVouchercodes::getPopularvoucherCode();
         echo Zend_Json::encode($data);
         $key = 'all_widget5_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -504,9 +505,9 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        PopularVouchercodes::moveUpCode($id, $position);
+        KC\Repository\PopularVouchercodes::moveUpCode($id, $position);
         //get popular code from database
-        $data = PopularVouchercodes::getPopularvoucherCode();
+        $data = KC\Repository\PopularVouchercodes::getPopularvoucherCode();
         echo Zend_Json::encode($data);
         $key = 'all_widget5_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
@@ -525,9 +526,9 @@ class Admin_HomepageController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
         $position = $this->getRequest()->getParam('pos');
         //call model class function pass position and id
-        PopularVouchercodes::moveDownCode($id, $position);
+        KC\Repository\PopularVouchercodes::moveDownCode($id, $position);
         //get popular code from database
-        $data = PopularVouchercodes::getPopularvoucherCode();
+        $data = KC\Repository\PopularVouchercodes::getPopularvoucherCode();
         echo Zend_Json::encode($data);
         $key = 'all_widget5_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);

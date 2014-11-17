@@ -241,7 +241,7 @@ class Offer
 
     /**
      * @ORM\ManyToOne(targetEntity="KC\Entity\Shop", inversedBy="offer")
-     * @ORM\JoinColumn(name="shopId", referencedColumnName="id", onDelete="restrict")
+     * @ORM\JoinColumn(name="shopid", referencedColumnName="id", onDelete="restrict")
      */
     private $shopOffers;
 
