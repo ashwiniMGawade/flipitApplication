@@ -8,9 +8,12 @@ use Doctrine\ORM\Mapping AS ORM;
  *     name="page",
  *     indexes={
  *         @ORM\Index(name="pageattributeid_idx", columns={"pageAttributeId"}),
- *         @ORM\Index(name="pageHeaderImageId_foreign_key", columns={"pageHeaderImageId"})
+ *         @ORM\Index(name="pageHeaderImageId_foreign_key", columns={})
  *     }
  * )
+ * @ORM\DiscriminatorMap({"offer"="KC\Entity\OfferListPage","default"="KC\Entity\DefaultPage"})
+ * @ORM\DiscriminatorColumn(name="pageType", length=10, type="string")
+ * @ORM\InheritanceType("SINGLE_TABLE")
  */
 class Page
 {
