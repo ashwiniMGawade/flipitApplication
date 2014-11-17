@@ -3,13 +3,54 @@ namespace KC\Repository;
 
 class OfferTiles extends \KC\Entity\OfferTiles
 {
-
-    public function __contruct($connectionName = "")
+    public static function addOfferTile($params, $ext = "")
     {
-        if (!$connectionName) {
-            $connectionName = "doctrine_site" ;
+        if ($params['forDelete']) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+            ->select('t')
+            ->from('KC\Entity\OfferTiles', 't')
+            ->where('t.id = '.$params['forDelete']);
+            $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        } else {
+            $data = new KC\Entity\OfferTiles();
         }
-        Doctrine_Manager::getInstance()->bindComponent($connectionName, $connectionName);
+
+        $data->type = $params['hidtype'];
+        $data->label = $params['label'];
+        $data->name = $params['hidimage'];
+        $data->ext = $ext;
+        $data->path = "images/upload/offertiles/";
+        $data->position = $params['position'];
+        \Zend_Registry::get('emLocale')->persist($data);
+        \Zend_Registry::get('emLocale')->flush();
+        $id = $data->id;
+        return $id;
+    }
+
+    public static function getOfferTilesList($TileId)
+    {
+        $oneTile = '';
+        if ($TileId) {
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder
+            ->select('t')
+            ->from('KC\Entity\OfferTiles', 't')
+            ->where('t.id ='.$TileId);
+            $oneTile = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        }
+        return $oneTile;
+    }
+
+    public static function deleteMenuRecord($params)
+    {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $query = $queryBuilder
+        ->delete('KC\Entity\OfferTiles', 't')
+        ->where('t.id = '.@$params['id'])
+        ->getQuery();
+        $query->execute();
+        return true;
     }
 
     public static function getAllTiles()

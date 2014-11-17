@@ -41,22 +41,13 @@ class ExcludedKeyword
     private $updated_at;
 
     /**
-     * @ORM\ManyToMany(targetEntity="KC\Entity\Shop", inversedBy="keywords")
-     * @ORM\JoinTable(
-     *     name="ref_excludedkeyword_shop",
-     *     joinColumns={@ORM\JoinColumn(name="keywordid", referencedColumnName="id", nullable=false)},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="shopid", referencedColumnName="id", nullable=false)}
-     * )
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefExcludedkeywordShop", mappedBy="shops")
+     */
+    private $keywords;
+
+    /**
+     * 
+     * 
      */
     private $shops;
-
-    public function __get($property)
-    {
-        return $this->$property;
-    }
-
-    public function __set($property, $value)
-    {
-        $this->$property = $value;
-    }
 }

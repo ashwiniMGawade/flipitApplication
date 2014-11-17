@@ -91,7 +91,7 @@ class About Extends \KC\Entity\About
             } else {
 
                 # new object
-                $about = new KC\Repository\About();
+                $about = new KC\Entity\About();
             }
 
             $about->title = @$params['title'][$a] ?

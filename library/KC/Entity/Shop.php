@@ -348,6 +348,11 @@ class Shop
     private $articlestore;
 
     /**
+     * @ORM\OneToMany(targetEntity="KC\Entity\RefExcludedkeywordShop", mappedBy="keywords")
+     */
+    private $shopsofKeyword;
+
+    /**
      * @ORM\OneToMany(targetEntity="KC\Entity\RefShopCategory", mappedBy="category")
      */
     private $categoryshops;
