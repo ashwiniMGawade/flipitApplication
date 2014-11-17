@@ -22,8 +22,8 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        $a = new \KC\Repository\Rights();
-        print_r($a->addRights());
+        $a = new \KC\Repository\PopularCategory();
+        print_r($a->moveUpPopulerCategory('4', '4'));
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
