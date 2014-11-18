@@ -373,6 +373,50 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             </div> 
                         </div>
 
+
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label><strong><?php echo $this->translate('Home Page Image'); ?></strong></label>
+                            </div>
+                            <div class="mainpage-content-right">
+                                <?php 
+                                $homepageimage = '';
+                                if($this->pageDetail['homepageimage']) {
+                                    if(
+                                        isset($this->pageDetail['homepageimage']['name']) 
+                                        && $this->pageDetail['homepageimage']['name']!=''
+                                    ) {
+                                    $homepageimage = PUBLIC_PATH_CDN.$this->pageDetail['homepageimage']['path']
+                                    .$this->pageDetail['homepageimage']['name'];
+                                }
+                                ?>
+                                <div class='browse-container'>    
+                                    <img class='image-container'  src="<?php echo $homepageimage;?>"  
+                                    alt="homepageImage" align="top">
+                                    <a  class="red" 
+                                    onclick="deleteImage(<?php echo $this->pageDetail['homepageimage']['id']; ?>,
+                                    <?php echo $this->pageDetail['id']; ?>)" 
+                                    href="javascript:void(0);" id="deleteButton">
+                                    <strong><?php echo $this->translate('DELETE');?></strong>
+                                    </a>
+                                </div>
+                                <?php }?>
+                                <div class="mainpage-content-right-inner-left-other">
+                                    <div>
+                                        <input type="file" 
+                                        onchange="checkFileType(event)" class="ignore" 
+                                        name="homepageFile" id="homepageImage">
+                                    </div>
+                                    <div>
+                                    <?php echo $this->translate('Image Size: 70px x 70px (*.jpg or *.png file only)'); ?>
+                                    </div>
+                                    <div class="mainpage-content-right" id="imagerrorDiv" 
+                                    style="float:left;margin:-9px 0 6px 0; height : 20px; width : 511px;">
+                                    </div> 
+                                </div>
+                            </div> 
+                        </div>
+
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
                             <div class="mainpage-content-right"><input type="text" name="pagemetaTitle" id="pagemetaTitle" placeholder="<?php echo $this->translate('Meta title');?>" class="input-xlarge mbot bbot ignore" value="<?php echo $this->pageDetail['metaTitle']; ?>"/>

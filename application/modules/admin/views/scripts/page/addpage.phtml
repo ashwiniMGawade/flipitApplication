@@ -226,6 +226,28 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             </div>
                         </div>
 
+                        <div class="mainpage-content-line">
+                            <div class="mainpage-content-left">
+                                <label>
+                                    <strong><?php echo $this->translate('Home Page Image'); ?></strong>
+                                </label>
+                            </div>
+                            <div class="mainpage-content-right control-group">
+                                <div>
+                                    <input type="file" onchange="checkFileType(event)" 
+                                    class="ignore"   name="homepageFile" id="homepageImage">
+                                </div>
+                                <div>
+                                <?php 
+                                echo $this->translate('Image Size: 70px x 70px (*.jpg or *.png file only)'); 
+                                ?>
+                                </div>
+                                <div class="mainpage-content-right" id="imagerrorDiv" 
+                                style="float:left;margin:-9px 0 6px 218px; height : 20px; width : 100%;">
+                                </div>
+                            </div>
+                        </div>
+
 
                         <div class="mainpage-content-line">
                             <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
