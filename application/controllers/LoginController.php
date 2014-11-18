@@ -314,6 +314,7 @@ class LoginController extends Zend_Controller_Action
         $password = $this->getRequest()->getParam("pwd");
 
         if ($type == 'codealert') {
+            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our code alert');
             $updateWeekNewLttr =
                 Doctrine_Query::create()
                 ->update('Visitor')
@@ -321,6 +322,7 @@ class LoginController extends Zend_Controller_Action
                 ->where("email = '".$username."'")
                 ->execute();
         } else {
+            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
             $updateWeekNewLttr =
                 Doctrine_Query::create()
                 ->update('Visitor')
@@ -340,7 +342,6 @@ class LoginController extends Zend_Controller_Action
             $obj->updateLoginTime($userid);
             $this->_helper->Login->setUserCookies();
             $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = FrontEnd_Helper_viewHelper::__translate('You are successfully unsubscribed to our newsletter');
             $flash->addMessage(array('success' => $message));
             $this->getResponse()->setHeader('X-Nocache', 'no-cache');
             $this->_helper->redirector(
