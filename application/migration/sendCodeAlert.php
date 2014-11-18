@@ -142,7 +142,10 @@ class SendCodeAlert
                 $codeAlertSettings = CodeAlertSettings::getCodeAlertSettings();
                 $settings = Signupmaxaccount::getAllMaxAccounts();
                 $mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
-                $mandrillNewsletterSubject = $codeAlertSettings[0]['email_subject'];
+                $mandrillNewsletterSubject = isset($codeAlertSettings[0]['email_subject'])
+                    && $codeAlertSettings[0]['email_subject'] != ''
+                    ? $codeAlertSettings[0]['email_subject']
+                    : '';
                 $mandrillSenderName = $settings[0]['sendername'];
                 $visitors = $codeAlertOffer['shop']['visitors'];
                 $visitorIds = array();
@@ -169,6 +172,9 @@ class SendCodeAlert
                         $this->mandrillKey
                     );
                     try {
+                        $codeAlertHeader = isset($codeAlertSettings[0]['email_header'])
+                            ? $codeAlertSettings[0]['email_header']
+                            : 'Code alert header';
                         FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
                             '',
                             '',
@@ -187,7 +193,7 @@ class SendCodeAlert
                                 'publicPathCdn' => $this->publicCdnPath,
                                 'mandrillKey' => $this->mandrillKey
                             ),
-                            str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertSettings[0]['email_header']),
+                            str_replace('[shopname]', $codeAlertOffer['shop']['name'], $codeAlertHeader),
                             $codeAlertOffer
                         );
                         Visitor::addCodeAlertTimeStampForVisitor($visitorIds);
