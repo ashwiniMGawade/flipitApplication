@@ -164,17 +164,19 @@ class FrontEnd_Helper_LayoutContent
         return $navigationString ='<nav id="nav">' . self::getUlOfMainMenu() . '</nav>';
     }
      
-    public static function getUlOfMainMenu()
+    public static function getUlOfMainMenu($navigation = '')
     {
         $mainMenu = menu::getFirstLevelMenu();
         $classForFlipIt = LOCALE=='' ? "kc-menu" : 'flipit-menu';
         $ulOfMainMenu =
-        '<ul>
-            <li>
+        '<ul>';
+        if ($navigation == 'mobile') {
+            $ulOfMainMenu .=
+            '<li>
                 <a href="'. HTTP_PATH_LOCALE.'"> Home </a>
-            </li>
-        ';
-       
+            </li>';
+        }
+        
         foreach ($mainMenu as $menu) {
             $cssClassForLastLi = strtolower($menu['name'])=='plus' ? $classForFlipIt: '';
             $ulOfMainMenu.=
@@ -189,9 +191,9 @@ class FrontEnd_Helper_LayoutContent
         return $ulOfMainMenu;
     }
 
-    public static function generateMobileMenu()
+    public static function generateMobileMenu($navigation)
     {
-        return self::getUlOfMainMenu();
+        return self::getUlOfMainMenu($navigation);
     }
     public static function generateSpecialPageMobileMenu()
     {
