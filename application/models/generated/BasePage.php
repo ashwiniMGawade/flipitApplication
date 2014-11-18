@@ -246,6 +246,13 @@ abstract class BasePage extends Doctrine_Record
                 'length' => '20',
         ));
 
+        $this->hasColumn('pageHomeImageId', 'integer', 20, array(
+                'unique' => true,
+                'type' => 'integer',
+                'comment' => 'FK to image.id',
+                'length' => '20',
+        ));
+
         $this->setSubClasses(array(
              'DefaultPage' =>
              array(
@@ -281,6 +288,10 @@ abstract class BasePage extends Doctrine_Record
 
         $this->hasOne('Logo as pageheaderimage', array(
                 'local' => 'pageHeaderImageId',
+                'foreign' => 'id'));
+
+        $this->hasOne('Logo as homepageimage', array(
+                'local' => 'pageHomeImageId',
                 'foreign' => 'id'));
 
         $this->hasOne('PageAttribute as pageattribute', array(

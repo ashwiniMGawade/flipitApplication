@@ -148,21 +148,46 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
     public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription)
     {
-        $imageTagOrSpan = '';
-        if ($listType =='special') {
-            $imageTagOrSpan =
-                '<span class="discount-label">'
-                    . FrontEnd_Helper_viewHelper::__translate($listType)
-                . '</span>' ;
-        } else if ($listType =='savingGuide') {
-            $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
-            $imageTagOrSpan ='<span class="' . $cssClassForPlusImage . '" ></span>';
+        if ($listType=='categories') {
+            $imageTagOrSpan = self::getLeftPanelImage($imageName, $imageSize, $imageDescription);
         } else {
-            $imageTagOrSpan =
-            '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
-            alt="'. $imageDescription.'">';
+            if ($listType =='special') {
+                $pageLeftImage = Page::getPageHomeImageByPermalink($imageDescription);
+                if (empty( $pageLeftImage)) {
+                    $imageTagOrSpan =
+                    '<span class="discount-label">'
+                        . FrontEnd_Helper_viewHelper::__translate($listType)
+                    . '</span>';
+                } else {
+                    $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
+                }
+            } else if ($listType =='savingGuide') {
+                $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_plus'));
+                if (empty( $pageLeftImage)) {
+                    $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
+                    $imageTagOrSpan ='<span class="' . $cssClassForPlusImage . '" ></span>';
+                } else {
+                    $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
+                }
+            } else if ($listType =='topOffers') {
+                $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_top-20'));
+                $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-08.png";
+                $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
+            } else if ($listType =='newOffers') {
+                $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_nieuw'));
+                $pageLeftImage = !empty($pageLeftImage) ? $pageLeftImage : HTTP_PATH ."public/images/img-09.png";
+                $imageTagOrSpan = self::getLeftPanelImage($pageLeftImage, $imageSize, $imageDescription);
+            }
         }
         return $imageTagOrSpan;
+    }
+
+    public function getLeftPanelImage($imageName, $imageSize, $imageDescription)
+    {
+        $leftImage =
+        '<img src="'.$imageName.'" width="'.$imageSize.'" height="'.$imageSize.'" 
+        alt="'. $imageDescription.'">';
+        return $leftImage;
     }
 
     public function getHomePageRightColumnOffersList()

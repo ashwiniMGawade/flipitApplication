@@ -122,6 +122,23 @@ class Page extends BasePage
             ->execute();
         return true;
     }
+
+    public static function getPageHomeImageByPermalink($permalink)
+    {
+        $pageHomeIamge = Doctrine_Query::create()
+            ->select('p.id,homepageimage.*')
+            ->from('Page p')
+            ->leftJoin("p.homepageimage homepageimage")
+            ->where('p.permalink="'.$permalink.'"')
+            ->fetchOne();
+        $imagePath = '';
+        if (!empty($pageHomeIamge->homepageimage)) {
+            $imagePath = PUBLIC_PATH_CDN.$pageHomeIamge->homepageimage->path
+                .$pageHomeIamge->homepageimage->name;
+        }
+        return $imagePath;
+    }
+
     ######################################################
     ############ END REFACTORED CODE #####################
     ######################################################
@@ -348,6 +365,22 @@ class Page extends BasePage
             }
         }
 
+
+        if (isset($_FILES['homepageFile']['name']) && $_FILES['homepageFile']['name'] != '') {
+            $result = self::uploadImage('homepageFile');
+            $this->pageHomeImageId = 0;
+            if ($result['status'] == '200') {
+                $ext = BackEnd_Helper_viewHelper::getImageExtension(
+                    $result['fileName']
+                );
+                $this->homepageimage->ext = $ext;
+                $this->homepageimage->path = $result['path'];
+                $this->homepageimage->name = $result['fileName'];
+            } else {
+                return false;
+            }
+        }
+
         if(isset($params['publishDate']) && $params['publishDate']!=''){
         $this->publishDate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh'])) ;
         }
@@ -500,11 +533,12 @@ class Page extends BasePage
     public function getPageDetail($pageId)
     {
         $pageDetails = Doctrine_Query::create()
-        ->select('p.*,w.*,logo.*, pageheaderimage.*, artcatg.pageid,artcatg.categoryid')
+        ->select('p.*,w.*,logo.*, pageheaderimage.*, homepageimage.*, artcatg.pageid,artcatg.categoryid,')
         ->from('Page p')
         ->leftJoin('p.widget w')
         ->leftJoin("p.logo logo")
         ->leftJoin("p.pageheaderimage pageheaderimage")
+        ->leftJoin("p.homepageimage homepageimage")
         ->leftJoin("p.moneysaving artcatg")
         ->where('p.id='.$pageId.'')
         ->fetchArray();
@@ -560,7 +594,7 @@ class Page extends BasePage
             }
 
             $this->enableClickConstraint=0;
-            $this->numberOfClicks = '';
+            $this->numberOfClicks = 0;
 
             if(isset($params['clickCostraintchk'])){
                 $this->enableClickConstraint=1;
@@ -648,7 +682,17 @@ class Page extends BasePage
             }
         }
 
-
+        if (isset($_FILES['homepageFile']['name']) && $_FILES['homepageFile']['name'] != '') {
+            $result = self::uploadImage('homepageFile');
+            if ($result['status'] == '200') {
+                $ext = BackEnd_Helper_viewHelper::getImageExtension($result['fileName']);
+                $this->homepageimage->ext = $ext;
+                $this->homepageimage->path = $result['path'];
+                $this->homepageimage->name = $result['fileName'];
+            } else {
+                return false;
+            }
+        }
 
         if(isset($params['publishDate']) && $params['publishDate']!=''){
             $this->publishDate = date('Y-m-d',strtotime($params['publishDate'])).' '.date('H:i:s',strtotime($params['publishTimehh'])) ;
