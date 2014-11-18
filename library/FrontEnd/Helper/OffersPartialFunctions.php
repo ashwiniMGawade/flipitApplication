@@ -249,9 +249,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     ) {
         $headOpen = '';
         $headClose = '';
-        $offerAnchorText = strlen($offerAnchorTagContent) >= 80
-            ? mb_substr($offerAnchorTagContent, 0, 80).'...'
-            : $offerAnchorTagContent;
+        $offerAnchorText = $offerAnchorTagContent;
         if ($class=='link clickout-title') {
             $headOpen = '<h3 class="'. $class .'">';
             $headClose = '</h3>';
@@ -267,7 +265,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 ga('send', 'event', 'aff', '$offerBounceRate'),
                 OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
                 $offerLink =
-                    '<a title="'.$offerAnchorTagContent.'" id="'.$currentOffer->id.'" class="'.$class.'" 
+                    '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
                     href="'.$urlToShow.'" vote="0" rel="nofollow" 
                     target="_self" onClick="'.$onClick.'">
                 '.$offerAnchorText.' </a>';
@@ -279,7 +277,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                 $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
                 ga('send', 'event', 'aff', '$offerBounceRate')";
                 $offerLink =
-                    '<a title="'.$offerAnchorTagContent.'" id="'.$currentOffer->id.'" class="'.$class.'" 
+                    '<a id="'.$currentOffer->id.'" class="'.$class.'" 
                     href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
                  '.$offerAnchorText.'</a>';
             } else {
@@ -292,7 +290,7 @@ class FrontEnd_Helper_OffersPartialFunctions
                     ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
                     : HTTP_PATH_LOCALE."accountlogin";
                 $offerLink =
-                    '<a title="'.$offerAnchorTagContent.'" id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
+                    '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
                     alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
                     '.$offerAnchorText .'</a>';
             }
