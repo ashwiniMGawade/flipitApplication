@@ -173,6 +173,9 @@ class Transl8_Controller_Plugin_Transl8 extends Zend_Controller_Plugin_Abstract
 .transl8-link-container {
     display:none;
 }
+header#header div.top-panel div.container span.slogan span.transl8-text span.transl8-link-container {
+    display:table;
+}
 </style>
 CSS;
         return $css;

@@ -4,12 +4,29 @@
         <header class="head">
             <div class="icon">
                 <img src="<?php echo $this->shopLogo;?>" width="176" height="89" alt="image description">
+                <div>
+                    <button class="btn blue btn-lg btn-primary lightbox-love-btn">
+                        <?php echo $this->translate('I follow this');?>
+                    </button>
+                </div>
             </div>
         </header>
         <div class='singup-heading'>
-            <p class='first-p'><?php echo $this->shopName . " " . $this->translate('your favorite shop!');?></p>
+            <p class='first-p'>
+            <?php
+            echo FrontEnd_Helper_viewHelper::getLightBoxFirstTextText(
+                $this->shopName,
+                $this->shopLightBoxText['lightboxfirsttext']
+            )
+            ?>
+            </p>
             <p class='second-p'>
-                <?php echo $this->translate('Stay up to date and receive code alerts from')." " .$this->shopName;?>
+            <?php 
+            echo FrontEnd_Helper_viewHelper::getLightBoxSecondTextText(
+                $this->shopName,
+                $this->shopLightBoxText['lightboxsecondtext']
+            )
+            ?>
             </p>
         </div>
         <div class="block">
@@ -20,9 +37,9 @@
                 .FrontEnd_Helper_viewHelper::__link("link_signuplightboxsetsessions");?>'>
                 <input id="shopId" type="hidden" value="" name="shopId">
                 <input id="formName" type="hidden" value="singupFormInLightbox" name="formName">
-                <input class="form-control" type="text" name='emailAddress' id='emailAddress'>
+                <input class="form-control" type="text" name='emailAddress' placeholder = 'E-mail' id='emailAddress'>
                 <button 
-                    onclick="setHiddenFieldValue(), signUpNewsLetter('singupFormInLightbox')" 
+                    onclick="setHiddenFieldValue(), signUpNewsLetterLightBox()"
                     type="submit" class="btn blue btn-lg btn-primary">
                     <?php echo FrontEnd_Helper_viewHelper::__form('form_Sing up');?>
                 </button>

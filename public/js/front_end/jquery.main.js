@@ -145,6 +145,11 @@ function initSameHeight() {
 		flexible: true,
 		multiLine: true
 	});
+	jQuery('.brands-page .section .row-area').sameHeight({
+		elements: '.block',
+		flexible: true,
+		multiLine: true
+	});
 
 }
 /*

@@ -7,7 +7,8 @@ foreach ($loginForm->getElements() as $formElement) {
     $formElement->getDecorator('label')->setOption('tag', null);
 }
 if($this->successMessage!='' || $this->errorMessage!='') : ?>
-    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox">
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox alert-warning">
+        <span class='glyphicon glyphicon-warning-sign'></span>
         <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
     </div>
     <?php 

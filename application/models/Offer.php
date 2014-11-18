@@ -783,7 +783,7 @@ class Offer extends BaseOffer
                 's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,
                 o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate,
                 o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName,
-                o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId'
+                o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId,o.couponCodeType'
             )
             ->from('Offer o')
             ->leftJoin('o.shop s')
@@ -815,7 +815,7 @@ class Offer extends BaseOffer
                     's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,
                     o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, 
                     o.refofferurl, o.startdate,o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount,
-                    o.authorId, o.authorName, o.shopid,o.offerlogoid, o.userGenerated, o.approved,img.id, img.path,
+                    o.authorId, o.authorName, o.shopid,o.offerlogoid, o.userGenerated, o.approved,o.couponCodeType,img.id, img.path,
                     img.name,fv.shopId,fv.visitorId,t.*'
                 )
                 ->from('Offer o')
@@ -832,7 +832,9 @@ class Offer extends BaseOffer
                 ->andWhere('o.discounttype="CD"')
                 ->andWhere('o.Visability != "MEM"')
                 ->andWhere(
-                    "s.name LIKE '%$searchKeyword%' or o.title LIKE '%$searchKeyword%'",
+                    "s.name LIKE '%".mysqli_real_escape_string(
+                FrontEnd_Helper_viewHelper::getDbConnectionDetails(),$searchKeyword)."%' or o.title LIKE '%".mysqli_real_escape_string(
+                FrontEnd_Helper_viewHelper::getDbConnectionDetails(),$searchKeyword)."%'",
                     $searchKeyword,
                     $searchKeyword
                 )
@@ -1538,7 +1540,7 @@ class Offer extends BaseOffer
           $this->extendedMetaDescription = BackEnd_Helper_viewHelper::stripSlashesFromString($params['extendedOfferMetadesc']);
           $this->extendedFullDescription =BackEnd_Helper_viewHelper::stripSlashesFromString($params['couponInfo']);
         } else {
-
+            $this->extendedoffertitle = '';
             $this->extendedOffer = 0;
             $this->extendedTitle = '';
             $this->extendedUrl = '';

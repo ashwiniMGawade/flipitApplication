@@ -7,6 +7,7 @@
 @import "flipit-expired.less";
 @import "login.less";
 @import "profile.less";
+@import "profile-edit.less";
 @import "register.less";
 @import "splash-page.less";
 @import "404.less";
@@ -278,6 +279,8 @@ img.logo.kortingscode{
 	height: 43px;
 	text-indent: -9999px;
 	width: 64px;
+	margin-bottom: 33px;
+    padding: 39px 23px 6px 25px;
 }
 .flipit-menu_image_home{
 	.plus-menu(-64px);
@@ -689,12 +692,11 @@ a.follow-button{
 }
 div.box a.remove-fovourite.blue {
 	min-width: 100px;
-	width: 96px;
+	width: 106px;
 	height: 29px;
 }
 div.box a.remove-fovourite.blue{
 	line-height:14px;
-	font-size:12px;
 	color:#0077cc;
 	padding: 7px 6px 8px;
 	letter-spacing: normal;
@@ -724,7 +726,7 @@ div.box a.remove-fovourite.blue{
 			color:#fff;
 			font-weight: bold;
 		    text-transform: uppercase;
-		    font-size: 12px;
+		    font-size: 11px;
 		}
 		em{display:none;}
 	}
@@ -3218,7 +3220,39 @@ span.pop{
 	color:#353535;
 	margin-bottom: 10px;
 }
-
+.fake-select{
+	display:block;
+	margin:0 0 17px;
+	select.form-control{
+		padding-left:3px;
+		padding-right:3px;
+	}
+}
+.select-box{
+	select.form-control{
+		float:left;
+		width:92px;
+		margin:0 0 0 12px;
+		padding-left:3px;
+		padding-right:3px;
+		&:first-child{margin:0;}
+	}
+	&:after{
+		.after;
+	}
+}
+.follow-heart{
+	color: red;
+    left: -5px;
+    top: 0;
+    font-size: 12px;
+}
+#signup-lightbox .lightbox-love-btn{
+	font-size: 11px;
+    margin: 10px auto;
+    min-width: 176px;
+    pointer-events: none;
+}
 @media only screen and (min-width: 1200px){
 	.search-box .js-slide-hidden{
 		position:static !important;
@@ -3226,6 +3260,9 @@ span.pop{
 	}
 }
 @media only screen and (max-width: 1199px){
+	.select-box{
+		select.form-control{width:71px;}
+	}
 	img.logo.kortingscode{
 		width:260px;
 		margin-top:10px;
@@ -3310,12 +3347,20 @@ span.pop{
                     padding: 12px 12px 10px;
                     a{
                     	top: 0;
+                    	margin-bottom: 0;
+                    	&:hover, &:focus{
+			    			margin-bottom: 0;
+		    			}
                     }
                 }
                 li.flipit-menu{
                     padding: 12px 12px 10px;
                     a{
                     	top: 0;
+                    	margin-bottom: 0;
+                    	&:hover, &:focus{
+			    			margin-bottom: 0;
+		    			}
                     }
                 }
 			}
@@ -3475,6 +3520,14 @@ span.pop{
 }
 }
 @media only screen and (max-width: 979px){
+	.select-box{
+		select.form-control{
+			width:100%;
+			float:none;
+			margin:0 0 10px;
+			&:first-child{margin:0 0 10px;}
+		}
+	}
 	.row .newsletter input[type="submit"]{
 		width:100% !important;
 	}
@@ -3895,6 +3948,13 @@ span.pop{
 	}
 }
 @media only screen and (max-width: 767px){
+	.select-box{
+		margin:0 0 15px;
+		select.form-control{
+			margin:0 0 15px;
+			&:first-child{margin:0 0 15px;}
+		}
+	}
 	img.logo.kortingscode{
 		width:200px;
 		margin-top: 0;

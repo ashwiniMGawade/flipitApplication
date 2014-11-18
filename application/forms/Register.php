@@ -17,6 +17,7 @@ class Application_Form_Register extends Application_Form_Base
              )
          );
          $visitorEmail->setAttrib('class', 'form-control');
+         $visitorEmail->setAttrib('placeholder', 'E-mail');
          $visitorEmail->setLabel(FrontEnd_Helper_viewHelper::__form('form_Email'));
 
         $vistorPassword = new Zend_Form_Element_Password('password');

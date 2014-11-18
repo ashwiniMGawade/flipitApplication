@@ -133,7 +133,7 @@ class Shop extends BaseShop
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
             (active.shopId = s.id AND active.endDate >= '$currentDate' 
-                AND active.deleted = 0 AND active.discounttype = 'CD'
+                AND active.deleted = 0
             )
             ) as activeCount"
         )
@@ -318,6 +318,15 @@ class Shop extends BaseShop
             ->from('Shop s')
             ->where('s.id='.$shopId)->fetchArray();
         return isset($shop[0]['name']) ? $shop[0]['name'] : '';
+    }
+
+    public static function getShopLightBoxText($shopId)
+    {
+        $shop = Doctrine_Query::create()->select('s.lightboxfirsttext, s.lightboxsecondtext')
+            ->from('Shop s')
+            ->where('s.id='.$shopId)->fetchArray();
+        return $shop[0];
+
     }
 
     public static function getShopLogoByShopId($shopId)
@@ -675,6 +684,8 @@ class Shop extends BaseShop
         $this->showSignupOption = BackEnd_Helper_viewHelper::stripSlashesFromString(
             !empty($shopDetail['signupOption']) ? $shopDetail['signupOption'] : '0');
 
+        $this->lightboxfirsttext = BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['lightboxfirsttext']);
+        $this->lightboxsecondtext =BackEnd_Helper_viewHelper::stripSlashesFromString( $shopDetail['lightboxsecondtext']);
 
         if( BackEnd_Helper_viewHelper::stripSlashesFromString($shopDetail['displayExtraProperties']) ) {
             $this->ideal = BackEnd_Helper_viewHelper::stripSlashesFromString(

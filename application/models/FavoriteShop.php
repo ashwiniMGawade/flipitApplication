@@ -26,6 +26,7 @@ class FavoriteShop extends BaseFavoriteShop
             ->andWhere("s.deleted= ?", 0)
             ->andWhere("p.shopId =$shopId")
             ->andWhere("v.status= ?", 1)
+            ->andWhere("v.codealert= ?", 1)
             ->orderBy("s.name ASC")
             ->fetchArray();
         return $shopVisitorInformation;

@@ -170,7 +170,7 @@ class SendCodeAlert
                     );
                     try {
                         FrontEnd_Helper_viewHelper::sendMandrillNewsletterByBatch(
-                            $topVouchercodes,
+                            '',
                             '',
                             '',
                             str_replace('[shopname]', $codeAlertOffer['shop']['name'], $mandrillNewsletterSubject),
@@ -197,10 +197,12 @@ class SendCodeAlert
                     } catch (Mandrill_Error $e) {
                         $message ='There is some problem in your data';
                     }
+                } else {
+                    $message ='Code alert already sent...';
                 }
             }
         } else {
-            $message ='Code alert already sent...';
+            $message ='Code alert queue empty.';
         }
         echo "\n";
         print "$key - $message ";
