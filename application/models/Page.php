@@ -125,16 +125,16 @@ class Page extends BasePage
 
     public static function getPageHomeImageByPermalink($permalink)
     {
-        $pageHomeIamge = Doctrine_Query::create()
+        $pageHomeImage = Doctrine_Query::create()
             ->select('p.id,homepageimage.*')
             ->from('Page p')
             ->leftJoin("p.homepageimage homepageimage")
             ->where('p.permalink="'.$permalink.'"')
             ->fetchOne();
         $imagePath = '';
-        if (!empty($pageHomeIamge->homepageimage)) {
-            $imagePath = PUBLIC_PATH_CDN.$pageHomeIamge->homepageimage->path
-                .$pageHomeIamge->homepageimage->name;
+        if (!empty($pageHomeImage->homepageimage)) {
+            $imagePath = PUBLIC_PATH_CDN.$pageHomeImage->homepageimage->path
+                .$pageHomeImage->homepageimage->name;
         }
         return $imagePath;
     }

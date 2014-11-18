@@ -148,7 +148,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
 
     public function getImageOrSpanTag($listType, $imageName, $imageSize, $imageDescription)
     {
-        if ($listType=='categories') {
+        if ($listType == 'categories') {
             $imageTagOrSpan = self::getLeftPanelImage($imageName, $imageSize, $imageDescription);
         } else {
             if ($listType =='special') {
@@ -163,7 +163,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 }
             } else if ($listType =='savingGuide') {
                 $pageLeftImage = Page::getPageHomeImageByPermalink(FrontEnd_Helper_viewHelper::__link('link_plus'));
-                if (empty( $pageLeftImage)) {
+                if (empty($pageLeftImage)) {
                     $cssClassForPlusImage =  LOCALE=='' ? "kc_menu_image_home" : 'flipit-menu_image_home';
                     $imageTagOrSpan ='<span class="' . $cssClassForPlusImage . '" ></span>';
                 } else {
