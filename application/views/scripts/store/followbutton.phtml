@@ -3,7 +3,7 @@ $visitorId = Auth_VisitorAdapter::hasIdentity() ? Auth_VisitorAdapter::getIdenti
 $redirectUrl = HTTP_PATH_LOCALE. 'store/addtofavourite?permalink='. $this->permalink .'&shopId='
     . base64_encode($this->shopId);
 $titleTextForLove = FrontEnd_Helper_viewHelper::__form('form_Remove from Favourite');
-$emAndSpan = '<em><span class="glyphicon red-heart glyphicon-heart follow-heart"></span><span>'.FrontEnd_Helper_viewHelper::__translate("I FOLLOW THIS").'</span></em>
+$emAndSpan = '<em>'.FrontEnd_Helper_viewHelper::__translate("I FOLLOW THIS").'</em>
     <strong>'.FrontEnd_Helper_viewHelper::__translate("REMOVE").'</strong>';
 $aTagClasses = 'pop btn btn-sm btn-default remove-fovourite blue';
 if (Visitor::getFavoriteShopsForUser($visitorId, $this->shopId)==false):

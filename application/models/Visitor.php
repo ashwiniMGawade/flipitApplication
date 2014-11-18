@@ -55,11 +55,11 @@ class Visitor extends BaseVisitor
             $visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $visitor = Doctrine_Core::getTable('Visitor')->find($visitorId);
             $visitor->weeklyNewsLetter = $visitorInformation['weeklyNewsLetter'];
-            $visitor->codeAlert = $visitorInformation['codeAlert'];
+            $visitor->codealert = $visitorInformation['codealert'];
         } else {
             $visitor = new Visitor();
             $visitor->weeklyNewsLetter = '1';
-            $visitor->codeAlert = '1';
+            $visitor->codealert = '1';
             $visitor->currentLogIn = '0000-00-00';
             $visitor->lastLogIn = '0000-00-00';
             $visitor->active_codeid = '';
@@ -201,7 +201,7 @@ class Visitor extends BaseVisitor
         ->select("fv.id as id,s.name as name,s.permaLink,s.id as id, l.path as imgpath, l.name as imgname")
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE
-            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.deleted=0 AND active.discounttype = 'CD')) as activeCount"
+            (active.shopId = s.id AND active.endDate >= '$currentDate' AND active.deleted=0)) as activeCount"
         )
         ->from("FavoriteShop fv")
         ->leftJoin("fv.shops s")
@@ -350,9 +350,9 @@ class Visitor extends BaseVisitor
             $visitor->fashionNewsLetter = 0;
         }
         if(isset($params['code']) && $params['code'] != ''){
-            $visitor->codeAlert = FrontEnd_Helper_viewHelper::sanitize($params['code']);
+            $visitor->codealert = FrontEnd_Helper_viewHelper::sanitize($params['code']);
         }else{
-            $visitor->codeAlert = 0;
+            $visitor->codealert = 0;
         }
 
         Doctrine_Core::getTable("VisitorKeyword")->findBy('visitorId', $visitor->id)->delete();

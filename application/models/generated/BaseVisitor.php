@@ -118,7 +118,7 @@ abstract class BaseVisitor extends Doctrine_Record
                 'default' => 0,
                 'type' => 'boolean',
         ));
-        $this->hasColumn('codeAlert', 'boolean', null, array(
+        $this->hasColumn('codealert', 'boolean', null, array(
                 'default' => 0,
                 'type' => 'boolean',
         ));

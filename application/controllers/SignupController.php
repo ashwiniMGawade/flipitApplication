@@ -54,7 +54,16 @@ class SignupController extends Zend_Controller_Action
         $pageDetails = Page::getPageDetailsFromUrl(FrontEnd_Helper_viewHelper::getPagePermalink());
         $this->view->pageTitle = isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '';
 
-        $this->viewHelperObject->getMetaTags($this);
+        $this->viewHelperObject->getMetaTags(
+            $this,
+            isset($pageDetails->pageTitle) ? $pageDetails->pageTitle : '',
+            isset($pageDetails->metaTitle) ? $pageDetails->metaTitle : '',
+            isset($pageDetails->metaDescription) ? $pageDetails->metaDescription : '',
+            '',
+            FACEBOOK_IMAGE,
+            ''
+        );
+
         $emailAddressFromMemory = '';
         $emailAddressSpace = new Zend_Session_Namespace('emailAddressSignup');
         if (isset($emailAddressSpace->emailAddressSignup)) {
@@ -234,7 +243,7 @@ class SignupController extends Zend_Controller_Action
             $profileForm->getElement('dateOfBirthYear')->setValue(isset($dateOfBirth[2]) && $dateOfBirth[2]=='0000' ? '' : $dateOfBirthYear);
             $profileForm->getElement('postCode')->setValue($visitorDetailsForForm['postalCode']);
             $profileForm->getElement('weeklyNewsLetter')->setValue($visitorDetailsForForm['weeklyNewsLetter']);
-            $profileForm->getElement('codeAlert')->setValue($visitorDetailsForForm['codeAlert']);
+            $profileForm->getElement('codealert')->setValue($visitorDetailsForForm['codealert']);
         }
         $this->view->pageCssClass = 'profile-page';
         $this->view->firstName = $visitorDetailsForForm['firstName'];
