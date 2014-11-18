@@ -15,8 +15,19 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
             );
             $articleImage = !empty($article['thumbnail']) ?
                 PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
-            $articleTitle = mb_strlen($article['title']) > 50 ?
-                                        mb_substr($article['title'], 0, 50).'..' : $article['title'];
+
+            if (isset($article['plusTitle']) && $article['plusTitle'] != '') {
+                $articleTitle = mb_strlen($article['plusTitle']) > 50
+                    ? mb_substr($article['plusTitle'], 0, 50).'..'
+                    : $article['plusTitle'];
+                $altTitle = $article['plusTitle'];
+            } else {
+                $articleTitle = mb_strlen($article['title']) > 50
+                    ? mb_substr($article['title'], 0, 50).'..'
+                    : $article['title'];
+                $altTitle = $article['title'];
+            }
+            
             $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
             $categoryTitleBackgroundColor = !empty($article['articlecategory'][0]['categorytitlecolor'])
                                                 ? $article['articlecategory'][0]['categorytitlecolor']
@@ -30,9 +41,9 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                             <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
                                 .$article['permalink'].'">
                                 <img class="lazy" data-original="'.$articleImage.'"
-                                width="270" height="192" alt="'.$article['title'].'">
+                                width="270" height="192" alt="'.$altTitle.'">
                                 <noscript>
-                                    <img src="'.$articleImage.'" width="270" height="192" alt="'.$article['title'].'">
+                                    <img src="'.$articleImage.'" width="270" height="192" alt="'.$altTitle.'">
                                 </noscript>
                             </a>    
                         </div>
@@ -72,7 +83,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
 
     public static function getArticlesAccordingToDescendingOrder($articleCreatedDateAsc, $articleCreatedDateDesc)
     {
-        return strtotime($articleCreatedDateDesc['created_at']) - strtotime($articleCreatedDateAsc['created_at']);
+        return strtotime($articleCreatedDateDesc['publishdate']) - strtotime($articleCreatedDateAsc['publishdate']);
     }
 
     public function excludeSelectedArticle($allArticlesArray, $selectedArticleId)

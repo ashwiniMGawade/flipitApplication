@@ -210,6 +210,26 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                             </div>
                         </div>
                     </div>
+
+                    <div class="postbox " id="submitdiv" style='height:86px !important;'>
+                        <div class="sidebar-heading">
+                            <p><?php echo $this->translate('Featured Image(yes/no)');?></p>
+                        </div>
+                        <div class="sidebar-content-box" style="display:inline-block;" >
+                            <div data-toggle="buttons-checkbox" class="btn-group ">
+                                <?php
+                                $featuredImageStatus = isset($this->articleData[0]['featuredImageStatus']) 
+                                   && $this->articleData[0]['featuredImageStatus'] == 1 ? '1' : '0';
+                                   $backEndViewHelper = new BackEnd_Helper_viewHelper();
+                                echo $featuredImageStatus == 1
+                                    ? $backEndViewHelper->getOnOffButtonsForArticleFeaturedImage(1)
+                                    : $backEndViewHelper->getOnOffButtonsForArticleFeaturedImage(0);
+                                ?>
+                                <input type="hidden" value="<?php echo $this->articleData[0]['featuredImageStatus']; ?>" 
+                                    name="featuredimagecheckbox" id="featuredimagecheckbox">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div id="post-body">
@@ -227,6 +247,19 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                 <div class="mainpage-content-right" style="height : 20px; width : 511px;"></div>
                             </div>
                              
+                            <div class="mainpage-content-line">
+                                <div class="mainpage-content-left">
+                                    <label>
+                                        <strong><?php echo $this->translate('Article plus overview title'); ?></strong>
+                                    </label>
+                                </div>
+                                <div class="mainpage-content-right">
+                                    <input  type="text" value="<?php echo $this->articleData[0]['plusTitle']?>" 
+                                        name="plusTitle" id="plusTitle" class="" 
+                                        placeholder="<?php echo $this->translate('Article plus overview title'); ?>">
+                                </div>
+                                <div class="mainpage-content-right" style="height : 20px; width : 511px;"></div>
+                            </div>
                             
                             <div class="mainpage-content-line">
                                 <div class="mainpage-content-left"><label>
@@ -308,6 +341,40 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                                 </div>
                             </div>
                                 <div class="mainpage-content-right" style="float : left; height : 20px; width : 511px;"></div>
+                                </div>
+                                <div class="mainpage-content-line">
+                                    <div class="mainpage-content-left">
+                                        <label>
+                                            <strong><?php echo $this->translate('Featured in header'); ?></strong>
+                                        </label>
+                                    </div>
+                                    <div class="mainpage-content-right">
+                                        <?php 
+                                        $articlefeaturedimage = '';
+                                        if(
+                                            isset( $this->articleData[0]['articlefeaturedimage']['name'] ) 
+                                            && $this->articleData[0]['articlefeaturedimage']['name'] != '' 
+                                        ) {
+                                        $articlefeaturedimage =
+                                            PUBLIC_PATH_CDN
+                                            . $this->articleData[0]['articlefeaturedimage']['path']
+                                            . $this->articleData[0]['articlefeaturedimage']['name'];
+                                        }   
+                                        ?>
+                                        <div class='browse-container'> 
+                                            <img class='image-container'
+                                                alt="<?php echo $this->translate('Article featured image'); ?>" 
+                                                src="<?php echo $articlefeaturedimage ; ?>">
+                                        </div>
+                                        <div>
+                                            <input type="file" class="ignore" onchange="checkFileType(event)" 
+                                                name="articleFeaturedImage" id="articleFeaturedImage">
+                                        </div>
+                                        <div>
+                                            <?php echo $this->translate('Image Size: 553px x 448px (*.jpg or *.png file only)');?>
+                                        </div>
+                                    </div>
+                                    <div class="mainpage-content-right" style="float : left; height : 20px; width : 511px;"></div>
                                 </div>
                                 <div class="mainpage-content-line" style='display: inline-block;'>
                                         <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Meta title'); ?></strong></label></div>
@@ -538,7 +605,8 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                             </label>                           
                         </div>                        
                     </div>
-                </div>                            
+                </div>   
+                <div id="post-body-content">                         
             <div class="mainpage-content">
             <div class="mainpage-content-line mb10">
                 <div class="mainpage-content-left">
@@ -558,7 +626,8 @@ $this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
                 <?php echo $this->translate('+ Add another chapter'); ?></strong></a>
             </div>
             <div class="clear"></div>
-        </div>                                     
+        </div> 
+        </div>                                    
         </div>
     </div>
     <input type="hidden" name="pageId" id="pageId" value="<?php echo $this->articleData[0]['id'];?>" >

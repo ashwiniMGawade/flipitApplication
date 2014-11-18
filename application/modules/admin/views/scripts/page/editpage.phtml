@@ -185,6 +185,25 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 name="showSitemapStatuscheck"  id="showSitemapStatuscheck" value="<?php echo $this->pageDetail['showsitemap']; ?>">
                          </div>
                     </div>
+
+                    <div class="sidebar-content-box">
+                        <p><?php echo $this->translate('Show In Mobile Menu'); ?></p>
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button  type="button" 
+                                class="btn <?php if ($this->pageDetail['showinmobilemenu']=='1') {?> btn-primary <?php }?>" 
+                                id="showMobileMenuYes" onClick="showMobileMenuStatus('showMobileMenuYes')">
+                                <?php echo $this->translate('Yes');?>
+                            </button>                     
+                            <button type="button"
+                                class="btn borderradius4px <?php if ($this->pageDetail['showinmobilemenu']!='1') {?>btn-primary <?php }?>"
+                                onClick="showMobileMenuStatus('showMobileMenuNo')" id="showMobileMenuNo">
+                                <?php echo $this->translate('No'); ?>
+                            </button>
+                            <input type="hidden"<?php if ($this->pageDetail['showinmobilemenu']=='1') {?> checked="checked" <?php }?> 
+                                name="showMobileMenuStatuscheck"  id="showMobileMenuStatuscheck" value="<?php echo $this->pageDetail['showinmobilemenu']; ?>">
+                         </div>
+                    </div>
+
                     <?php } ?>
                   </div>
                   <div class="postbox " id="submitdiv">

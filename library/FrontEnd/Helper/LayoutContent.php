@@ -167,9 +167,14 @@ class FrontEnd_Helper_LayoutContent
     public static function getUlOfMainMenu()
     {
         $mainMenu = menu::getFirstLevelMenu();
-        $ulOfMainMenu =
-        '<ul>';
         $classForFlipIt = LOCALE=='' ? "kc-menu" : 'flipit-menu';
+        $ulOfMainMenu =
+        '<ul>
+            <li>
+                <a href="'. HTTP_PATH_LOCALE.'"> Home </a>
+            </li>
+        ';
+       
         foreach ($mainMenu as $menu) {
             $cssClassForLastLi = strtolower($menu['name'])=='plus' ? $classForFlipIt: '';
             $ulOfMainMenu.=
@@ -187,6 +192,20 @@ class FrontEnd_Helper_LayoutContent
     public static function generateMobileMenu()
     {
         return self::getUlOfMainMenu();
+    }
+    public static function generateSpecialPageMobileMenu()
+    {
+        $specialPages = Page::getSpecialPageDetailForMobileMenu();
+        $ulOfSpecialPageMenu = '<ul>';
+        foreach ($specialPages as $specialPage) {
+            $ulOfSpecialPageMenu.=
+            '<li>
+                <a href="'. HTTP_PATH_LOCALE  . $specialPage['permaLink'] . '">'. ucfirst($specialPage["pageTitle"])
+                 . '</a>
+            </li>';
+        }
+        $ulOfSpecialPageMenu.= '</ul>';
+        return $ulOfSpecialPageMenu;
     }
     public static function getMostPopularCouponOnEarth()
     {

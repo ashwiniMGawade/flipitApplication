@@ -300,14 +300,35 @@ class LoginController extends Zend_Controller_Action
     #this function used in mandrill
     public function directloginunsubscribeAction()
     {
+        $this->directUnsubscribe();
+    }
+
+    public function directcodealertunsubscribeAction()
+    {
+        $this->directUnsubscribe('codealert');
+    }
+
+    public function directUnsubscribe($type = '')
+    {
         $username = base64_decode($this->getRequest()->getParam("email"));
         $password = $this->getRequest()->getParam("pwd");
-        $updateWeekNewLttr =
-            Doctrine_Query::create()
-            ->update('Visitor')
-            ->set('weeklyNewsLetter', 0)
-            ->where("email = '".$username."'")
-            ->execute();
+
+        if ($type == 'codealert') {
+            $updateWeekNewLttr =
+                Doctrine_Query::create()
+                ->update('Visitor')
+                ->set('codealert', 0)
+                ->where("email = '".$username."'")
+                ->execute();
+        } else {
+            $updateWeekNewLttr =
+                Doctrine_Query::create()
+                ->update('Visitor')
+                ->set('weeklyNewsLetter', 0)
+                ->where("email = '".$username."'")
+                ->execute();
+        }
+
         $moduleKey = $this->getRequest()->getParam('lang', null);
         $data_adapter = new Auth_VisitorAdapter($username, $password);
         $auth = Zend_Auth::getInstance();
@@ -329,7 +350,6 @@ class LoginController extends Zend_Controller_Action
             );
         }
     }
-
     // Returns the right top menu for the user by fetching the partial which checks if a user is logged in.
     public function usermenuAction()
     {

@@ -75,64 +75,7 @@ $howToIntroductionText = '';
                         </div>
                     </div>
                 </div>
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Allow user generated content");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onclick="usergenrated(event,'usergenrated','on')" class="btn" type="button"><?php echo $this->translate('On'); ?></button>                     
-                            <button onclick="usergenrated(event,'usergenrated','off')" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('Off'); ?></button>
-                            <input type="checkbox" id="usergenratedchk" name="usergenratedchk" style="display:none;"> 
-                          </div>
-                    </div>
-                </div>
-				<div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                             <button type="button" class="btn" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
-                          </div>
-                    </div>
-                </div>
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Allow Discussions");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onclick="discussionCheck(event, 'on')" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onclick="discussionCheck(event, 'off')" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
-                            <input type="checkbox" id="discussions" name="discussions" style="display:none;"> 
-                          </div>
-                    </div>
-                </div>
-				<div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display similar shops");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                            <button onClick="setOnOff(event,'similarShops','on');" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button onClick="setOnOff(event,'similarShops','off');" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
-                            <input type="hidden" value="0" id="similarShops" name="similarShops" style="display:none;"> 
-                          </div>
-                    </div>
-                </div>
-				<div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                    	<div data-toggle="buttons-checkbox" class="btn-group">
-                             <button type="button" class="btn" onClick="setOnOff(event,'showChains','on');"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'showChains','off');"><?php echo $this->translate('No'); ?></button> 
-                          </div>
-                    </div>
-                </div>
-                <div class="mainpage-content-line mb10">
-                    <div class="mainpage-content-left"><label><strong><?php
-                         echo $this->translate("Strict Confirmation");?></strong></label></div>
-                    <div class="mainpage-content-right">
-                        <div data-toggle="buttons-checkbox" class="btn-group">
-                             <button type="button" class="btn" onClick="setOnOff(event,'strictConfirmation','on');"><?php echo $this->translate('Yes'); ?></button>                     
-                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'strictConfirmation','off');"><?php echo $this->translate('No'); ?></button> 
-                          </div>
-                    </div>
-                </div>
+                
                 <div class="mainpage-content-line">
                     <div class="mainpage-content-left"><label><strong><?php echo $this->translate('Title'); ?></strong></label></div>
                     <div class="mainpage-content-right">
@@ -247,33 +190,38 @@ $howToIntroductionText = '';
                     <div class="mainpage-content-right">
                         <div class="mainpage-content-right-inner-right-other"></div>
                         <div class="mainpage-content-right-inner-left-other-shop">
-                 
-                 
-                 <div style="overflow-y:scroll;min-height:159px;width:160px !important;" class="sidebar-content-box-left">
-                         <ul id="similarshopListul-li">
-                                                     
-                         </ul> 
-                </div>      
-                 <input type="hidden" name="selectedShop" id="selectedShop" value="" />
-                 <input type="hidden" name="similarstoreord" id="similarstoreord" value="" />
-                  <div class="coupon-sidebar-outer-shop">
-                    <div class="coupon-sidebar-heading-shop">
-	                    <input type="text" class="input-medium search-query" id="searchsimilarshop" style="width:295px !important;">
-                    </div>
-                    <div class="coupon-sidebar-content-box-shop mb10">
-                        <button class="btn up" id="moveupBtnbutton" type="button" href="#">MOVE UP</button>
-                        <button class="btn" type="button" href="#" id="addsimilarstorebtn" >ADD SIMILAR SHOP</button>
-                    </div>
-                    
-                     <div class="coupon-sidebar-content-box-shop mb10">
-                        <button class="btn down" id="movedownBtnbutton" href="#" type="button">MOVE DOWN</button>
-                        <button class="btn" href="#" type="button" id="deletesimistorebtn">DELETE</button>
-                    </div>
-                  
-                </div>
-                        	
+                            <div style="overflow-y:scroll;min-height:159px;width:160px !important;" class="sidebar-content-box-left">
+                                <ul id="similarshopListul-li">                    
+                                </ul> 
+                            </div>      
+                             <input type="hidden" name="selectedShop" id="selectedShop" value="" />
+                             <input type="hidden" name="similarstoreord" id="similarstoreord" value="" />
+                              <div class="coupon-sidebar-outer-shop">
+                                <div class="coupon-sidebar-heading-shop">
+            	                    <input type="text" class="input-medium search-query" id="searchsimilarshop" style="width:295px !important;">
+                                </div>
+                                <div class="coupon-sidebar-content-box-shop mb10">
+                                    <button class="btn up" id="moveupBtnbutton" type="button" href="#">MOVE UP</button>
+                                    <button class="btn" type="button" href="#" id="addsimilarstorebtn" >ADD SIMILAR SHOP</button>
+                                </div>
+                                
+                                 <div class="coupon-sidebar-content-box-shop mb10">
+                                    <button class="btn down" id="movedownBtnbutton" href="#" type="button">MOVE DOWN</button>
+                                    <button class="btn" href="#" type="button" id="deletesimistorebtn">DELETE</button>
+                                </div>
+                            </div>
                         </div>
                     </div>    
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display similar shops");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onClick="setOnOff(event,'similarShops','on');" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onClick="setOnOff(event,'similarShops','off');" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="hidden" value="0" id="similarShops" name="similarShops" style="display:none;"> 
+                          </div>
+                    </div>
                 </div>
             </div>
             
@@ -352,21 +300,6 @@ $howToIntroductionText = '';
                         </div>
                     </div>
                 </div>
-
-                <div class="mainpage-content-line">
-                    <div class="mainpage-content-left">
-                        <label><strong><?php echo $this->translate('Website Screenshot'); ?></strong></label>
-                    </div>
-                    <div class="mainpage-content-right">
-                        <div>
-                            <input  data-max-size="2097152" type="file" 
-                            name="websitescreenshot" onchange="checkFileType(event)" class="ignore" />
-                        </div>
-                        <div>
-                        <?php echo $this->translate('Image Size: min width 450px (*.jpg or *.png file only)');?>
-                        </div>
-                    </div>
-                </div>
             </div>
           
             <div class="mainpage-content">
@@ -381,6 +314,56 @@ $howToIntroductionText = '';
                          <input type="text" class="input-xlarge disabled btop word-count"  id="shopDescriptionLeft" value = "Characters Left: 150" placeholder="Word Count: 28" disabled="disabled">-->
                          
                         </div>
+                    </div>
+                </div>
+
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Allow user generated content");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onclick="usergenrated(event,'usergenrated','on')" class="btn" type="button"><?php echo $this->translate('On'); ?></button>                     
+                            <button onclick="usergenrated(event,'usergenrated','off')" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('Off'); ?></button>
+                            <input type="checkbox" id="usergenratedchk" name="usergenratedchk" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display singup option");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'signupOption','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'signupOption','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Allow Discussions");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                            <button onclick="discussionCheck(event, 'on')" class="btn" type="button"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button onclick="discussionCheck(event, 'off')" class="btn btn-primary default" style="border-radius: 0 4px 4px 0;" type="button"><?php echo $this->translate('No'); ?></button>
+                            <input type="checkbox" id="discussions" name="discussions" style="display:none;"> 
+                          </div>
+                    </div>
+                </div>
+                
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php echo $this->translate("Display chains");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'showChains','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'showChains','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
+                    </div>
+                </div>
+                <div class="mainpage-content-line mb10">
+                    <div class="mainpage-content-left"><label><strong><?php
+                         echo $this->translate("Strict Confirmation");?></strong></label></div>
+                    <div class="mainpage-content-right">
+                        <div data-toggle="buttons-checkbox" class="btn-group">
+                             <button type="button" class="btn" onClick="setOnOff(event,'strictConfirmation','on');"><?php echo $this->translate('Yes'); ?></button>                     
+                            <button type="button" class="btn btn-primary default" onClick="setOnOff(event,'strictConfirmation','off');"><?php echo $this->translate('No'); ?></button> 
+                          </div>
                     </div>
                 </div>
             </div>

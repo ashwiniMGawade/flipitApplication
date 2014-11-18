@@ -39,6 +39,8 @@ class BackEnd_Helper_MandrillHelper
         } else {
             $visitorId = isset($currentObject->visitorId) && $currentObject->visitorId != ''
                 ? $currentObject->visitorId: '';
+            $unsubscribeLink = isset($currentObject->visitorId) && $currentObject->visitorId != ''
+                ? 'directcodealertunsubscribe': 'directloginunsubscribe';
             $visitors = new Visitor();
             $visitors = $visitors->getVisitorsToSendNewsletter($visitorId);
             if ($linkType == 'scheduleNewsletterSender') {
@@ -79,7 +81,7 @@ class BackEnd_Helper_MandrillHelper
                 $visitorDirectLoginInformation[$visitorKey]['vars'][1]['content'] =
                     $frontendPath
                     . FrontEnd_Helper_viewHelper::__link("link_login")
-                    . "/" ."directloginunsubscribe"
+                    . "/" .$unsubscribeLink
                     . "/" . base64_encode($visitorValue['email']) ."/". $visitorValue['password'];
                 
                 $visitorInformation[$visitorKey]['email'] = $visitorValue['email'];

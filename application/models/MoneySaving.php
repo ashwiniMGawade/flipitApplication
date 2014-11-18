@@ -24,15 +24,17 @@ class MoneySaving extends BaseMoneySaving
     public static function getMostReadArticles($limit, $userId = "")
     {
         $mostReadArticles = Doctrine_Query::create()
-        ->select('chap.*,av.id, av.articleid, (sum(av.onload)) as pop, a.*, at.path, at.name, ai.name, ai.path')
+        ->select('chap.*,av.id, av.articleid, (sum(av.onload)) as pop, a.*, at.path, at.name, ai.name, ai.path,afi.name, afi.path')
         ->from('ArticleViewCount av')
         ->leftJoin('av.articles a')
         ->leftJoin('a.thumbnail at')
+        ->leftJoin('a.articlefeaturedimage afi')
         ->leftJoin('a.articleImage ai')
         ->leftJoin('a.chapters chap')
         ->groupBy('av.articleid')
         ->orderBy('pop DESC')
-        ->where('a.deleted = 0');
+        ->where('a.deleted = 0')
+        ->andWhere('a.publish = 1');
         if (isset($userId)  && $userId!= "") {
             $mostReadArticles->andWhere('a.authorId ='.$userId.'');
         }
@@ -127,7 +129,7 @@ class MoneySaving extends BaseMoneySaving
     {
         $articles = Doctrine_Query::create()
             ->select(
-                'chap.*, a.id, a.title, a.permalink, a.content, a.authorid, 
+                'chap.*, a.id, a.title, a.plusTitle, a.permalink, a.content, a.authorid, 
                     a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name, ac.categorytitlecolor'
             )
             ->from('Articles a')
@@ -138,6 +140,7 @@ class MoneySaving extends BaseMoneySaving
             ->leftJoin('a.chapters chap')
             ->where('r.relatedcategoryid ='.  "'$categoryId'")
             ->andWhere('a.deleted=0')
+            ->andWhere('a.publish = 1')
             ->limit($limit)
             ->orderBy('a.publishdate DESC')
             ->fetchArray();

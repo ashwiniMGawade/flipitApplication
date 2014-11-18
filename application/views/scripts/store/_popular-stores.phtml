@@ -1,7 +1,15 @@
 <div class="block">
-    <h2 class = "popular-store-title"><?php echo $this->translate('Popular stores'); ?></h2>
-        <ul class="shops">
 <?php
+$currentControllerName = Zend_Controller_Front::getInstance()->getRequest()->getControllerName();
+if($currentControllerName!='store') {
+    ?>
+    <h2 class = "popular-store-title"><?php echo $this->translate('Popular stores'); ?></h2>
+    <?php
+}
+?>
+    <ul class="shops">
+<?php
+
 $popularStoreIncrementCheck = 1;
 
 foreach ($this->popularStores as $popularStore) :
@@ -27,5 +35,5 @@ foreach ($this->popularStores as $popularStore) :
     </li>';
 endforeach;
 ?>
-        </ul>
+    </ul>
 </div>
