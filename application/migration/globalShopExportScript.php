@@ -11,6 +11,13 @@ class GlobalShopExport
         require_once 'ConstantForMigration.php';
         require_once('CommonMigrationFunctions.php');
         CommonMigrationFunctions::setTimeAndMemoryLimit();
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        require_once(LIBRARY_PATH.'/FrontEnd/Helper/Mailer.php');
+        $frontControlerObject = $application->getOption('resources');
+        $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
@@ -18,7 +25,7 @@ class GlobalShopExport
         echo CommonMigrationFunctions::showProgressMessage(
             'get all shops data from databases of all locales'
         );
-        foreach ($connections as $key => $connection) {
+       /* foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
                     $this->getAllShops($connection ['dsn'], $key, $imbull);
@@ -28,7 +35,7 @@ class GlobalShopExport
                 }
                 echo "\n\n";
             }
-        }
+        }*/
         $this->exportShopsInExcel();
         $manager->closeConnection($doctrineImbullDbConnection);
     }
@@ -364,7 +371,7 @@ class GlobalShopExport
     protected function exportShopsInExcel()
     {
         if (! empty($this->shopsData)) {
-            echo "\n";
+            /*echo "\n";
             echo "Parse shops data and save it into excel file\n";
             $objPHPExcel = $this->getExcelSheet();
 
@@ -378,9 +385,35 @@ class GlobalShopExport
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
             $objWriter->save($shopFile);
             echo "\n";
-            $key = 'excels/';
-            CommonMigrationFunctions::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
-            CommonMigrationFunctions::deleteDirectory($pathToFile);
+            $key = 'excels/';*/
+            /*$mailer  = new FrontEnd_Helper_Mailer();
+            $content = array(
+                            'name'    => 'content',
+                            'content' => $this->view->partial(
+                                'emails/emailLayout.phtml',
+                                array(
+                                    'topOffers' => Offer::getTopOffers(5),
+                                    'mailType' => 'welcome',
+                                    'firstName' => $visitorDetails[0]['firstName']
+                                    )
+                            )
+                        );
+            $visitorName = $visitorDetails[0]['firstName'] .' '. $visitorDetails[0]['lastName'];
+            BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails[0]['email']);
+            $mailer->send(
+                FrontEnd_Helper_viewHelper::__email('email_sitename'),
+                $fromEmail[0]['emailperlocale'],
+                $visitorName,
+                $visitorDetails[0]['email'],
+                FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
+                $content,
+                FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
+                '',
+                $this->_loginLinkAndData
+            );*/
+
+           /* CommonMigrationFunctions::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
+            CommonMigrationFunctions::deleteDirectory($pathToFile);*/
         }
     }
 
