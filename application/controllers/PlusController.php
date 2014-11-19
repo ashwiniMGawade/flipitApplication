@@ -46,7 +46,7 @@ class PlusController extends Zend_Controller_Action
         $allArticlesWithAuthorDetails = $moneySavingPartialFunctions->addAuthorDetailsInArticles($categoryWiseArticles);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             (string)'7_popularShops_list',
-            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(7)),
+            array('function' => 'Shop::getAllPopularStores', 'parameters' => array(9)),
             true
         );
         

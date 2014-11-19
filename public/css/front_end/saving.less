@@ -214,13 +214,13 @@
         .slideset{
             width:100%;
             float: left;
+            padding-top: 12px;
         }
         .slide{
-            width:150px;
+            width:126px;
             display:inline-block;
             vertical-align:top;
             padding:2px;
-            margin:0 6px;
         }
         img{
             vertical-align:top;
@@ -379,11 +379,12 @@
                 height: 0px;
             }
             .slide{
-                margin:0 11px;
-                width: 110px;
+                margin:0;
+                width: 10%;
             }
             img {
-                width: 110px;
+                height: auto;
+                max-width: 100%
             }
         }
     }
@@ -436,11 +437,12 @@
         .carousel{
             float: left;
             .slide{
-                margin:0 6px;
-                width: 90px;
+                margin:0;
+                width: 10%;
             }
             img {
-                width: 90px;
+                height: auto;
+                max-width: 100%
             }
         }
     }
@@ -552,11 +554,12 @@
             float: left;
             padding: 20px 0;
             .slide{
-                margin: 10px;
-                width: 100px;
+                margin: 5px;
+                width: 25%;
             }
-            img {
-                width: 100px;
+            img{
+                height: auto;
+                max-width: 100%;
             }
         }
     }
@@ -590,6 +593,14 @@
     .carousel-area{
         .carousel{
             float: left;
+            .slide{
+                margin: 0;
+                width: 25%;
+            }
+            img{
+                height: auto;
+                max-width: 100%;
+            }
         }
     }
 }
