@@ -80,6 +80,18 @@ class Articles extends BaseArticles
             ->fetchArray();
         return $allArticlesPermalink;
     }
+
+    public static function getArticlesList()
+    {
+        $currentDateTime = date('Y-m-d 00:00:00');
+        $articlesList = Doctrine_Query::create()->select('a.id, a.title')
+            ->from("Articles a")
+            ->where('a.publish = "1"')
+            ->andWhere("a.deleted= 0")
+            ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+            ->fetchArray();
+        return $articlesList;
+    }
     ###############################################
     ########## END REFACTORED CODE ################
     ###############################################
