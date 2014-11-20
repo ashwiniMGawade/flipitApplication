@@ -193,7 +193,7 @@ EOD;
         $view = Zend_Controller_Action_HelperBroker::getStaticHelper('viewRenderer')->view;
         $view->headLink(array('rel' => 'canonical', 'href' => HTTP_PATH . strtolower($canocalUrl)));
         if ($pageCount > 1) :
-            if ($currentPage <= 2) :
+            if ($currentPage <= 9) :
                 if ($currentPage == 1) :
                     $permalinkAfterQueryString = explode('?', $permalink);
                     $permalink = $permalinkAfterQueryString[0];

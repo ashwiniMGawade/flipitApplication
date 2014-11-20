@@ -23,10 +23,10 @@ class ErrorController extends Zend_Controller_Action
                 $pageDetails = $this->getPageDetails($pagePermalink, $pageNumber);
                 if (isset($pageDetails['pageType']) && $pageDetails['pageType']=='default') {
                     if ($pageNumber > 0) {
-                        $pageNumber = 4;
+                        $pageNumber = 10;
                     }
                 }
-                if ($pageNumber >= 4) {
+                if ($pageNumber >= 10) {
                     $this->_helper->layout()->disableLayout();
                     FrontEnd_Helper_viewHelper::setErrorPageParameters($this);
                 }
