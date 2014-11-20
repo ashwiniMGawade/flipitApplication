@@ -41,15 +41,22 @@ abstract class BasePopularArticles extends Doctrine_Record
     public function setUp()
     {
         parent::setUp();
-        $this->hasOne('Articles as articles', array(
+        $this->hasOne(
+            'Articles as articles',
+            array(
              'local' => 'articleId',
-             'foreign' => 'id'));
+             'foreign' => 'id'
+            )
+        );
 
-        $softdelete0 = new Doctrine_Template_SoftDelete(array(
+        $softdelete0 = new Doctrine_Template_SoftDelete(
+            array(
              'name' => 'deleted',
              'type' => 'boolean',
-             ));
-        $timestampable0 = new Doctrine_Template_Timestampable(array(
+             )
+        );
+        $timestampable0 = new Doctrine_Template_Timestampable(
+            array(
              'created' =>
              array(
               'name' => 'created_at',
@@ -58,7 +65,8 @@ abstract class BasePopularArticles extends Doctrine_Record
              array(
               'name' => 'updated_at',
              ),
-             ));
+             )
+        );
         $this->actAs($softdelete0);
         $this->actAs($timestampable0);
     }

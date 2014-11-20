@@ -26,7 +26,7 @@ class GeneratePopularCodes
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->genereatePopularOffers($connection['dsn'], $key, $imbull);
+                    $this->generatePopularOffers($connection['dsn'], $key, $imbull);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -38,7 +38,7 @@ class GeneratePopularCodes
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
-    protected function genereatePopularOffers($dsn, $key, $imbull)
+    protected function generatePopularOffers($dsn, $key, $imbull)
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();

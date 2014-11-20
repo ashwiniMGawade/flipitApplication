@@ -149,11 +149,6 @@ class MoneySaving extends BaseMoneySaving
 
     public static function getPopularArticlesAndCategory()
     {
-        return self::getPopularArticlesOfCategory();
-    }
-
-    public static function getPopularArticlesOfCategory()
-    {
         $popularArticles = Doctrine_Query::create()
             ->select(
                 'p.*, chap.*, a.id, a.title, a.plusTitle, a.permalink, a.content, a.authorid, 
