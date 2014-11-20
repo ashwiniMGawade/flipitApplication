@@ -943,4 +943,19 @@ class Admin_UserController extends Zend_Controller_Action
         $varnishObj->addUrl( rtrim( HTTP_PATH_FRONTEND. $userPage  , '/'  ));
     }
 
+    public function checkexportpasswordAction()
+    {
+        $u =  new GlobalExportPassword();
+        $cnt  = $u->checkPasswordForExport($this->_getParam('password'), 'shopExport');
+
+        if($cnt > 0) {
+
+            echo Zend_Json::encode(true);
+
+        } else {
+
+            echo Zend_Json::encode(false);
+        }
+        die();
+    }
 }

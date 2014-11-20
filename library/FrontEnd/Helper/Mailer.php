@@ -34,21 +34,12 @@ class FrontEnd_Helper_Mailer {
                 )
             );
         $directLoginAndUnsubscribeLinks = !empty($directlinks) ? $directlinks : '';
-
-        if (!empty($pathConstants)) {
-            $siteUrl = $pathConstants['httpPathLocale'];
-            $httpPath = $pathConstants['httpPath'].'/';
-            $locale = $pathConstants['locale'];
-        } else {
-            $siteUrl = LOCALE != '' ? 'http://www.flipit.com/'.LOCALE.'/' : 'http://www.kortingscode.nl/';
-            $httpPath = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
-            $locale = LOCALE;
+        if (!empty($pathConstants) && !isset($pathConstants['exportScript'])) {
+            $email = Settings::getEmailSettings('sender_email_address');
+            $name = Settings::getEmailSettings('sender_name');
+            $fromEmail = !empty($email) ? $email : $fromEmail;
+            $fromName = !empty($name) ? $name :  $fromName;
         }
-        
-        $email = Settings::getEmailSettings('sender_email_address');
-        $name = Settings::getEmailSettings('sender_name');
-        $fromEmail = !empty($email) ? $email : $fromEmail;
-        $fromName = !empty($name) ? $name :  $fromName;
 
         $message = array(
                         'subject'    => $subject,
@@ -65,22 +56,41 @@ class FrontEnd_Helper_Mailer {
                         'content' => $headerText
                         );
 
-        $basePath = new Zend_View();
-        $basePath->setBasePath(APPLICATION_PATH . '/views/');
         $footer = array(
-                        'name'    => 'footer',
-                        'content' =>  $basePath->partial(
-                            'emails/footer.phtml',
+                    'name'    => 'footer',
+                    'content' =>  '',
+                    array(
+                        'siteUrl' => ''
+                    )
+                );
+        if (!empty($pathConstants) && !isset($pathConstants['exportScript'])) {
+            if (!empty($pathConstants)) {
+                $siteUrl = $pathConstants['httpPathLocale'];
+                $httpPath = $pathConstants['httpPath'].'/';
+                $locale = $pathConstants['locale'];
+            } else {
+                $siteUrl = LOCALE != '' ? 'http://www.flipit.com/'.LOCALE.'/' : 'http://www.kortingscode.nl/';
+                $httpPath = LOCALE != '' ? 'http://www.flipit.com/' : 'http://www.kortingscode.nl/';
+                $locale = LOCALE;
+            }
+
+            $basePath = new Zend_View();
+            $basePath->setBasePath(APPLICATION_PATH . '/views/');
+            $footer = array(
+                            'name'    => 'footer',
+                            'content' =>  $basePath->partial(
+                                'emails/footer.phtml',
+                                array(
+                                    'httpPathLocale' => $siteUrl,
+                                    'httpPath' => $httpPath,
+                                    'locale' => $locale
+                                )
+                            ),
                             array(
-                                'httpPathLocale' => $siteUrl,
-                                'httpPath' => $httpPath,
-                                'locale' => $locale
+                                'siteUrl' => $siteUrl
                             )
-                        ),
-                        array(
-                            'siteUrl' => $siteUrl
-                        )
-                    );
+                        );
+        }
         $result = $this->mandrill->messages->sendTemplate('main', array($content, $footer, $emailHeader), $message);
     }
 }

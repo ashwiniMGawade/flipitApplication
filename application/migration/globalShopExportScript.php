@@ -6,6 +6,11 @@ class GlobalShopExport
     protected $shopsData = array();
     protected $row = 4;
     protected $column = 4;
+    public $_mandrillKey = '';
+    public $exportPassword = '';
+    public $mandrillSenderEmailAddress = '';
+    public $mandrillSenderName = '';
+
     public function __construct()
     {
         require_once 'ConstantForMigration.php';
@@ -17,7 +22,7 @@ class GlobalShopExport
         );
         require_once(LIBRARY_PATH.'/FrontEnd/Helper/Mailer.php');
         $frontControlerObject = $application->getOption('resources');
-        $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
+        $this->_mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
@@ -25,7 +30,7 @@ class GlobalShopExport
         echo CommonMigrationFunctions::showProgressMessage(
             'get all shops data from databases of all locales'
         );
-       /* foreach ($connections as $key => $connection) {
+        foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
                     $this->getAllShops($connection ['dsn'], $key, $imbull);
@@ -35,21 +40,71 @@ class GlobalShopExport
                 }
                 echo "\n\n";
             }
-        }*/
+        }
+
         $this->exportShopsInExcel();
+        $this->saveGlobalExportPassword($imbull);
+        $this->sendMailToSuperAdmin();
         $manager->closeConnection($doctrineImbullDbConnection);
+    }
+
+    protected function saveGlobalExportPassword($dsn)
+    {
+        $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
+        $manager = CommonMigrationFunctions::loadDoctrineModels();
+        GlobalExportPassword::savePasswordForExportDownloads('shopExport');
+        $this->exportPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
+        $manager->closeConnection($doctrineSiteDbConnection);
+    }
+
+    protected function sendMailToSuperAdmin()
+    {
+        $mailer  = new FrontEnd_Helper_Mailer(array('mandrillKey' => $this->_mandrillKey));
+        $basePath = new Zend_View();
+        $basePath->setBasePath(APPLICATION_PATH . '/views/');
+        $content = array(
+            'name'    => 'content',
+            'content' => $basePath->partial(
+                'emails/exportScriptPassword.phtml',
+                array(
+                    'password' => $this->exportPassword
+                    )
+            )
+        );
+        $mailer->send(
+            $this->mandrillSenderName,
+            $this->mandrillSenderEmailAddress,
+            'Arthur',
+            'arthur@imbull.com',
+            'Global Export password',
+            $content,
+            '',
+            '',
+            '',
+            '',
+            array(
+                'exportScript' => 'yes'
+             )
+        );
     }
 
     protected function getAllShops($dsn, $key, $imbull)
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
-        $customLocale = LocaleSettings::getLocaleSettings();
+        /*$customLocale = LocaleSettings::getLocaleSettings();
         $customLocale = !empty($customLocale[0]['locale']) ? $customLocale[0]['locale'] : 'nl_NL';
         $allShopsData = Shop::exportShopsList();
         $this->shopsData[$key]['data'] = $allShopsData;
         $this->shopsData[$key]['customLocale'] = $customLocale;
-        $this->shopsData[$key]['dsn'] = $dsn;
+        $this->shopsData[$key]['dsn'] = $dsn;*/
+
+        if ($key == 'en') {
+            $settings = Signupmaxaccount::getAllMaxAccounts();
+            $this->mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
+            $this->mandrillSenderName = $settings[0]['sendername'];
+        }
+
         $manager->closeConnection($doctrineSiteDbConnection);
         echo "\n";
         echo $key." Shops have been fetched successfully!!!";
@@ -386,32 +441,6 @@ class GlobalShopExport
             $objWriter->save($shopFile);
             echo "\n";
             $key = 'excels/';*/
-            /*$mailer  = new FrontEnd_Helper_Mailer();
-            $content = array(
-                            'name'    => 'content',
-                            'content' => $this->view->partial(
-                                'emails/emailLayout.phtml',
-                                array(
-                                    'topOffers' => Offer::getTopOffers(5),
-                                    'mailType' => 'welcome',
-                                    'firstName' => $visitorDetails[0]['firstName']
-                                    )
-                            )
-                        );
-            $visitorName = $visitorDetails[0]['firstName'] .' '. $visitorDetails[0]['lastName'];
-            BackEnd_Helper_MandrillHelper::getDirectLoginLinks($this, 'frontend', $visitorDetails[0]['email']);
-            $mailer->send(
-                FrontEnd_Helper_viewHelper::__email('email_sitename'),
-                $fromEmail[0]['emailperlocale'],
-                $visitorName,
-                $visitorDetails[0]['email'],
-                FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail subject'),
-                $content,
-                FrontEnd_Helper_viewHelper::__email('email_Welcome e-mail header'),
-                '',
-                $this->_loginLinkAndData
-            );*/
-
            /* CommonMigrationFunctions::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
             CommonMigrationFunctions::deleteDirectory($pathToFile);*/
         }

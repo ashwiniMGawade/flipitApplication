@@ -10,10 +10,14 @@ class BackEnd_Helper_MandrillHelper
 
     public static function getDirectLoginLinks($currentObject, $linkType = '', $visitorEmail = '', $mandrillKey = '')
     {
-        if ($linkType != 'scheduleNewsletterSender') {
-            $testEmail = $currentObject->getRequest()->getParam('testEmail');
+        if ($linkType == 'globalShopExport') {
             $passwordKey = MD5('12345678');
-            $sendParameter = $currentObject->getRequest()->getParam('send');
+        } else {
+            if ($linkType != 'scheduleNewsletterSender') {
+                $testEmail = $currentObject->getRequest()->getParam('testEmail');
+                $passwordKey = MD5('12345678');
+                $sendParameter = $currentObject->getRequest()->getParam('send');
+            }
         }
 
         $visitorDirectLoginInformation = array();
@@ -28,7 +32,7 @@ class BackEnd_Helper_MandrillHelper
                 $passwordKey,
                 $currentObject
             );
-        } elseif (isset($linkType) && $linkType == 'frontend') {
+        } elseif ((isset($linkType) && $linkType == 'frontend') || (isset($linkType) && $linkType == 'globalShopExport')) {
             self::setMandrillMergeVars(
                 $visitorDirectLoginInformation,
                 $visitorInformation,

@@ -754,19 +754,31 @@ EOD;
     ) {
         $basePath = new Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
-        $content = array(
-            'name'    => 'content',
-            'content' => $basePath->partial(
-                'emails/emailLayout.phtml',
-                array(
-                    'topVouchercodes' => $topVouchercodes,
-                    'categoryVouchers' => $categoryVouchers,
-                    'categoryInformation' => $categoryInformation,
-                    'pathConstants' => $pathConstants,
-                    'codeAlert' => $codeAlert
+        if (isset($pathConstants['globalShopExport']) && $pathConstants['globalShopExport'] == 'globalShopExport') {
+            $content = array(
+                'name'    => 'content',
+                'content' => $basePath->partial(
+                    'emails/forgotpassword.phtml',
+                    array(
+                        'password' => $pathConstants['globalShopExportPassword']
+                    )
                 )
-            )
-        );
+            );
+        } else {
+            $content = array(
+                'name'    => 'content',
+                'content' => $basePath->partial(
+                    'emails/emailLayout.phtml',
+                    array(
+                        'topVouchercodes' => $topVouchercodes,
+                        'categoryVouchers' => $categoryVouchers,
+                        'categoryInformation' => $categoryInformation,
+                        'pathConstants' => $pathConstants,
+                        'codeAlert' => $codeAlert
+                    )
+                )
+            );
+        }
         sort($mandrillUsersList);
         sort($recipientMetaData);
         sort($mandrillMergeVars);

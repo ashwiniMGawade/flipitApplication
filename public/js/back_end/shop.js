@@ -1,5 +1,15 @@
 
 var validateNewShop = null; 
+var validRules = {
+		label : "",
+		url : "",
+		position:""
+	};
+	var focusRules = {
+			label : "",
+			url : "",
+			position:""
+	};
 /**
  * execute when document is loaded 
  * @author spsingh updated by karj
@@ -74,6 +84,7 @@ function init(){
 			shopListTable.fnCustomRedraw();
 		}
 	});
+validateGlobalExportForm();
 
 }
 
@@ -442,3 +453,228 @@ function searchByShop(){
 	getShops(searchArt,0,0,'asc');
 }
 
+function showGlobalExportPopUp()
+{
+    $('#globalExportPopUp').html('');
+    customPopUp('globalExportPopUp');
+        $.ajax({
+            url : HOST_PATH + "admin/shop/global-export-xlx-download",
+            method : "post",
+            data : {},
+            type : "post",
+            success : function(data) {
+                $('#globalExportPopUp').show();
+				$('#globalExportPopUp').html(data);
+                //$(window).trigger('load');
+            }
+        });
+      return false;
+}
+
+function showModel(id,rootid,type){
+	 $('form#menuForm :input').val("");
+	 $('form#menuForm span#imageName').html('');
+	 $('form#menuForm div.m-item-popup-btm a.menuDelete').remove();
+	 removeBorders();
+	switch(type){
+	 
+	default:
+		$('#submitButton').attr('value','add');
+		 $('input#hid').val('');
+		$('#myModal').modal('show');
+	}
+}
+/**
+ * Hide bootstrap model
+ * @returns {Boolean}
+ * @author mkaur
+ */
+function hideModel(){
+	$('#myModal').modal('hide');
+	return false;
+}
+
+function removeBorders(){
+	$("div.mainpage-content-right").removeClass("error").removeClass('success')
+	.prev("div").removeClass('focus').removeClass('error').removeClass('success') ;
+}
+
+function validateGlobalExportForm(){
+	
+	validateNewMenu = $("form#globalExportForm")
+		.validate({	
+			errorClass : 'error',
+			validClass : 'success',
+			errorElement : 'span',
+			ignore: ".ignore, :hidden",
+			errorPlacement : function(error, element) {
+				element.parent("div").prev("div")
+						.html(error);
+			},
+		rules : {
+			password : {
+				required : true,
+				remote : {
+                            url : HOST_PATH
+                                 + "admin/user/checkexportpassword",
+
+                            type : "post",
+                            beforeSend : function(xhr) {
+                            },
+                            complete : function(data) {
+                            	if (data.responseText == 'true') {
+                            		$('#myModal').modal('hide');
+                            	}
+                            }
+                        }
+			}
+			},
+		messages : {
+			password : {
+				required : ""
+			}
+		},
+		onfocusin : function(element) {
+			
+			// display hint messages when an element got focus 
+			if (!$(element).parent('div').prev("div")
+					.hasClass('success')) {
+				
+	    		 var label = this.errorsFor(element);
+	    		 if( $(label).attr('hasError')  )
+	    	     {
+	    			 if($( label ).attr('remote-validated') != "true")
+	    			 	{
+						 this.showLabel(element, focusRules[element.name]);
+							
+							$(element).parent('div').removeClass(
+											this.settings.errorClass)
+									.removeClass(
+											this.settings.validClass)
+									.prev("div")
+									.addClass('focus')
+									.removeClass(
+											this.settings.errorClass)
+									.removeClass(
+											this.settings.validClass);
+	    			 	}
+	    			 
+	    	     } else {
+	    	    	
+	    	     /*if(element.value!==''){
+	    	    	 this.showLabel(element, focusRules[element.name]);
+	    	    		 $(element).parent('div')
+						 .removeClass("error success")
+	    	    			.prev("div").removeClass('focus error success') ;
+	    	    		 $('span.help-inline', $(element).parent('div')
+									.prev('div')).text(
+						 validRules[element.name] ).hide();
+	    	    	 }
+	    	    	 else{*/
+					this.showLabel(element, focusRules[element.name]);
+						$(element).parent('div').removeClass(
+									this.settings.errorClass)
+							.removeClass(
+									this.settings.validClass)
+							.prev("div")
+							.addClass('focus')
+							.removeClass(
+									this.settings.errorClass)
+							.removeClass(
+									this.settings.validClass);
+	    	    	// }
+    	    	 }
+			}
+		},
+	highlight : function(element,errorClass, validClass) {
+			// highlight borders in case of error  
+			$(element).parent('div')
+			.removeClass(validClass)
+			.addClass(errorClass).prev("div")
+			.removeClass(validClass)
+			.addClass(errorClass);
+			$('span.help-inline', $(element).parent('div')
+					.prev('div')).removeClass(validClass) ;
+		
+	},
+	unhighlight : function(element,
+			errorClass, validClass) {
+			// check to display errors for ignored elements or not 
+			var showError = false ;
+			switch( element.nodeName.toLowerCase() ) {
+			case 'select' :
+				var val = $(element).val();
+				
+				if($($(element).children(':selected')).attr('default') == undefined)
+				{
+					showError = true ;
+				} else
+				{
+					showError  = false;
+				}
+				break ; 
+			case 'input':
+				if ( this.checkable(element) ) {
+					
+					showError = this.getLength(element.value, element) > 0;
+					
+				} else if($.trim(element.value).length > 0) {
+					
+						showError =  true ;
+						
+					} else {
+						
+						showError = false ;
+					}
+						
+				break ; 
+			default:
+				var val = $(element).val();
+				showError =  $.trim(val).length > 0;
+			}
+			if(! showError ){
+				// hide errors message and remove highlighted borders 
+					$(
+							'span.help-inline',
+							$(element).parent('div')
+							.prev('div')).hide();
+					
+						$(element).parent('div')
+						.removeClass(errorClass)
+						.removeClass(validClass)
+						
+						.prev("div")
+						.removeClass(errorClass)
+						.removeClass(validClass);
+					    
+			} else
+			{
+				if(element.type !== "file"){
+					$(element).parent('div')
+					.removeClass(errorClass)
+					.addClass(validClass).prev(
+							"div").addClass(
+							validClass)
+					.removeClass(errorClass);
+					
+					$('span.help-inline', $(element).parent('div')
+									.prev('div')).text(
+						 validRules[element.name] ).show();
+				} else{
+					$(element).parent('div')
+					.removeClass(errorClass)
+					.removeClass(validClass)
+					
+					.prev("div")
+					.removeClass(errorClass)
+					.removeClass(validClass) ;
+				}
+			}
+		 
+	},
+	 submitHandler: function(form) {
+    	form.submit();
+	}
+		
+		});
+	}
