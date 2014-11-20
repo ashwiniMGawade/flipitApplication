@@ -21,7 +21,7 @@ class GeneratePopularArticles
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
-                    $this->genereatePopularArticles($connection['dsn'], $key, $imbull);
+                    $this->generatePopularArticles($connection['dsn'], $key, $imbull);
                 } catch (Exception $e) {
                     echo $e->getMessage();
                     echo "\n\n";
@@ -33,7 +33,7 @@ class GeneratePopularArticles
         $manager->closeConnection($doctrineImbullDbConnection);
     }
 
-    protected function genereatePopularArticles($dsn, $key, $imbull)
+    protected function generatePopularArticles($dsn, $key, $imbull)
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
