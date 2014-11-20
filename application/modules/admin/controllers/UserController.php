@@ -945,15 +945,15 @@ class Admin_UserController extends Zend_Controller_Action
 
     public function checkexportpasswordAction()
     {
-        $u =  new GlobalExportPassword();
-        $cnt  = $u->checkPasswordForExport($this->_getParam('password'), 'shopExport');
+        $globalExportPassword =  new GlobalExportPassword();
+        $globalExportPasswordCount = $globalExportPassword->checkPasswordForExport(
+            $this->_getParam('password'),
+            'shopExport'
+        );
 
-        if($cnt > 0) {
-
+        if ($globalExportPasswordCount > 0) {
             echo Zend_Json::encode(true);
-
         } else {
-
             echo Zend_Json::encode(false);
         }
         die();

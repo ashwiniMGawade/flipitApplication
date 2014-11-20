@@ -92,12 +92,12 @@ class GlobalShopExport
     {
         $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
         $manager = CommonMigrationFunctions::loadDoctrineModels();
-        /*$customLocale = LocaleSettings::getLocaleSettings();
+        $customLocale = LocaleSettings::getLocaleSettings();
         $customLocale = !empty($customLocale[0]['locale']) ? $customLocale[0]['locale'] : 'nl_NL';
         $allShopsData = Shop::exportShopsList();
         $this->shopsData[$key]['data'] = $allShopsData;
         $this->shopsData[$key]['customLocale'] = $customLocale;
-        $this->shopsData[$key]['dsn'] = $dsn;*/
+        $this->shopsData[$key]['dsn'] = $dsn;
 
         if ($key == 'en') {
             $settings = Signupmaxaccount::getAllMaxAccounts();
@@ -426,7 +426,7 @@ class GlobalShopExport
     protected function exportShopsInExcel()
     {
         if (! empty($this->shopsData)) {
-            /*echo "\n";
+            echo "\n";
             echo "Parse shops data and save it into excel file\n";
             $objPHPExcel = $this->getExcelSheet();
 
@@ -440,9 +440,9 @@ class GlobalShopExport
             $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
             $objWriter->save($shopFile);
             echo "\n";
-            $key = 'excels/';*/
-           /* CommonMigrationFunctions::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
-            CommonMigrationFunctions::deleteDirectory($pathToFile);*/
+            $key = 'excels/';
+            CommonMigrationFunctions::copyDirectory($pathToFile, UPLOAD_DATA_FOLDER_EXCEL_PATH.$key);
+            CommonMigrationFunctions::deleteDirectory($pathToFile);
         }
     }
 

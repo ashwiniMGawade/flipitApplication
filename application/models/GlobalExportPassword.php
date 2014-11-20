@@ -11,7 +11,8 @@ class GlobalExportPassword extends BaseGlobalExportPassword
             ->fetchArray();
 
         if (!empty($globalExportInformation)) {
-            $globalExportPassword = Doctrine_Core::getTable("GlobalExportPassword")->find($globalExportInformation[0]['id']);
+            $globalExportPassword = Doctrine_Core::getTable("GlobalExportPassword")
+                ->find($globalExportInformation[0]['id']);
             $globalExportPassword->password = mt_rand();
             $globalExportPassword->save();
         } else {
