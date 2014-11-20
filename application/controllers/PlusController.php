@@ -37,11 +37,10 @@ class PlusController extends Zend_Controller_Action
             getRequestedDataBySetGetCache(
                 (string)"all_categoriesArticles_list",
                 array('function' =>
-                'MoneySaving::getCategoryWiseArticles', 'parameters' => array()
+                'MoneySaving::getPopularArticlesAndCategory', 'parameters' => array()
                 ),
                 ''
             );
-
         $moneySavingPartialFunctions = new FrontEnd_Helper_MoneySavingGuidesPartialFunctions();
         $allArticlesWithAuthorDetails = $moneySavingPartialFunctions->addAuthorDetailsInArticles($categoryWiseArticles);
         $popularStores = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(

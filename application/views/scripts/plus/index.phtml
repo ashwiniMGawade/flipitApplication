@@ -40,17 +40,8 @@ LOCALE == '' ? $logoPlusCssClass = 'kc-text' : $logoPlusCssClass = 'flipit-text'
 </div>
 <main role="main" id="main">
 <?php
-foreach ($this->allArticles as $articleValues) {
-   foreach ($articleValues as $articleValue) {
-        $articleDetails[] = $articleValue;
-    }
-}
- 
+$articleDetails = $this->allArticles;
 if (!empty($this->allArticles)) {
-    usort(
-        $articleDetails,
-        "FrontEnd_Helper_MoneySavingGuidesPartialFunctions::getArticlesAccordingToDescendingOrder"
-    );
     $articlesInformation = array_chunk($articleDetails, 8);
     for ($articleCounter =0; $articleCounter < count($articlesInformation) ; $articleCounter++) { 
         if ($articleCounter == 0) {?>
