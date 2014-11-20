@@ -6,7 +6,7 @@ class GlobalShopExport
     protected $shopsData = array();
     protected $row = 4;
     protected $column = 4;
-    public $_mandrillKey = '';
+    public $mandrillKey = '';
     public $exportPassword = '';
     public $mandrillSenderEmailAddress = '';
     public $mandrillSenderName = '';
@@ -22,7 +22,7 @@ class GlobalShopExport
         );
         require_once(LIBRARY_PATH.'/FrontEnd/Helper/Mailer.php');
         $frontControlerObject = $application->getOption('resources');
-        $this->_mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
+        $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
         $connections = CommonMigrationFunctions::getAllConnectionStrings();
         $manager = CommonMigrationFunctions::getGlobalDbConnectionManger();
         $doctrineImbullDbConnection = CommonMigrationFunctions::getGlobalDbConnection($connections);
@@ -59,7 +59,7 @@ class GlobalShopExport
 
     protected function sendMailToSuperAdmin()
     {
-        $mailer  = new FrontEnd_Helper_Mailer(array('mandrillKey' => $this->_mandrillKey));
+        $mailer  = new FrontEnd_Helper_Mailer(array('mandrillKey' => $this->mandrillKey));
         $basePath = new Zend_View();
         $basePath->setBasePath(APPLICATION_PATH . '/views/');
         $content = array(
@@ -68,7 +68,7 @@ class GlobalShopExport
                 'emails/exportScriptPassword.phtml',
                 array(
                     'password' => $this->exportPassword
-                    )
+                )
             )
         );
         $mailer->send(
@@ -84,7 +84,7 @@ class GlobalShopExport
             '',
             array(
                 'exportScript' => 'yes'
-             )
+            )
         );
     }
 
