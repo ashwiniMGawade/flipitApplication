@@ -69,6 +69,21 @@ jQuery(document).ready(function() {
 	if(jQuery("div.coupon-code").length > 0) {
 		jQuery("div.coupon-code").bigText({'maximumFontSize': 20});
 	}
+	var offset = 200;
+	var duration = 500;
+	jQuery(window).scroll(function() {
+	if (jQuery(this).scrollTop() > offset) {
+	jQuery('.scroll-to-top').fadeIn(duration);
+	} else {
+	jQuery('.scroll-to-top').fadeOut(duration);
+	}
+	});
+
+	jQuery('.scroll-to-top').click(function(event) {
+	event.preventDefault();
+	jQuery('html, body').animate({scrollTop: 0}, duration);
+	return false;
+	})
 });
 
 function htmlEncode(value){
@@ -77,17 +92,17 @@ function htmlEncode(value){
 
 
 function htmlDecode(value){
-	  return $('<div/>').html(value).text();
+	return $('<div/>').html(value).text();
 }
 function showLightBox(link){
 	jQuery('#myModalLightBox').modal('show');
 }
 function refreshVarnish(){
-	 window.location.href = HOST_PATH +  "admin/refreshvarnish";
+	window.location.href = HOST_PATH +  "admin/refreshvarnish";
 }
 
 function ucfirst (str) {
-	  str += '';
-	  var f = str.charAt(0).toUpperCase();
-	  return f + str.substr(1);
-	}
+	str += '';
+	var f = str.charAt(0).toUpperCase();
+	return f + str.substr(1);
+}
