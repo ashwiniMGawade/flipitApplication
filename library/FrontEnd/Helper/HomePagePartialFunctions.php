@@ -389,19 +389,19 @@ class FrontEnd_Helper_HomePagePartialFunctions
                 <a href="'. $link.'" class="all">'.$textButtomLink.'</a><ul>';
         $moneySavingGuidestHtml = '';
         foreach ($savingGuides as $savingGuide) {
-            $savingImage = !empty($savingGuide['thumbnail'])
-                ? PUBLIC_PATH_CDN.ltrim($savingGuide['thumbnail']['path'], "/"). $savingGuide['thumbnail']['name']
+            $savingImage = !empty($savingGuide['articles']['thumbnail'])
+                ? PUBLIC_PATH_CDN.ltrim($savingGuide['articles']['thumbnail']['path'], "/"). $savingGuide['articles']['thumbnail']['name']
                 : '';
-            $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['permalink'];
+            $savingPermalink = FrontEnd_Helper_viewHelper::__link('link_plus').'/'.$savingGuide['articles']['permalink'];
 
-            $savingTitle = mb_strlen($savingGuide['title'], 'UTF-8') > 50
-                ? mb_substr($savingGuide['title'], 0, 50, 'UTF-8') . "..."
-                : $savingGuide['title'];
+            $savingTitle = mb_strlen($savingGuide['articles']['title'], 'UTF-8') > 50
+                ? mb_substr($savingGuide['articles']['title'], 0, 50, 'UTF-8') . "..."
+                : $savingGuide['articles']['title'];
                 
             $allowedTags = '';
             $guideDescription = strip_tags(
-                isset($savingGuide['chapters'][0]['content'])
-                ? $savingGuide['chapters'][0]['content'] : '',
+                isset($savingGuide['articles']['chapters'][0]['content'])
+                ? $savingGuide['articles']['chapters'][0]['content'] : '',
                 $allowedTags
             );
             $savingContent = mb_strlen($guideDescription, 'UTF-8') > 85

@@ -13,14 +13,15 @@
 
 class PopularArticles extends BasePopularArticles
 {
-    public static function getPopularArticlesAndNewestArticles($articlesList, $changesArticlesDataForSorting)
+    public static function getPopularArticlesAndNewestArticles($articlesList, $changedArticlesDataForSorting)
     {
         foreach ($articlesList as $article) {
-            if (!in_array($article['id'], $changesArticlesDataForSorting)) {
+            if (!in_array($article['id'], $changedArticlesDataForSorting)) {
                 $position = intval(self::getMaxPosition() + 1);
                 self::savePopularArticle($article['id'], $position);
             }
         }
+        self::clearCacheOfArticles();
         return self::getPopularArticles();
     }
 
@@ -71,6 +72,7 @@ class PopularArticles extends BasePopularArticles
                 $i++;
             }
         }
+        self::clearCacheOfArticles();
     }
 
     public static function getPopularArticles()
@@ -86,5 +88,13 @@ class PopularArticles extends BasePopularArticles
             ->orderBy('p.position ASC')
             ->fetchArray();
         return $popularArticles;
+    }
+
+    public static function clearCacheOfArticles()
+    {
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_moneySaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_categoriesArticles_list');
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('all_homemanisaving_list');
     }
 }

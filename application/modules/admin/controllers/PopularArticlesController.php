@@ -15,12 +15,7 @@ class Admin_PopularArticlesController extends Zend_Controller_Action
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
     }
-
-    public function init()
-    {
-        
-    }
-
+    
     public function indexAction()
     {
         $getArticlesList = Articles::getArticlesList();

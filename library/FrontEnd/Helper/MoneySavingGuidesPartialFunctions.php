@@ -7,30 +7,30 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
         foreach ($categoryWiseAllArticles as $article) {
             $profileLink = HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link("link_redactie")."/"
                     . $article['authorDetails']['slug'];
-            $articleUpdatedAtDate = new Zend_Date($article['publishdate']);
+            $articleUpdatedAtDate = new Zend_Date($article['articles']['publishdate']);
             $articleUpdatedAtDate = $articleUpdatedAtDate->get(Zend_Date::DATE_LONG);
             $authorName = FrontEnd_Helper_AuthorPartialFunctions::getAuthorName(
                 $article['authorDetails']['firstName'],
                 $article['authorDetails']['lastName']
             );
-            $articleImage = !empty($article['thumbnail']) ?
-                PUBLIC_PATH_CDN.$article['thumbnail']['path'].$article['thumbnail']['name'] : '';
+            $articleImage = !empty($article['articles']['thumbnail']) ?
+                PUBLIC_PATH_CDN.$article['articles']['thumbnail']['path'].$article['articles']['thumbnail']['name'] : '';
 
-            if (isset($article['plusTitle']) && $article['plusTitle'] != '') {
-                $articleTitle = mb_strlen($article['plusTitle']) > 50
-                    ? mb_substr($article['plusTitle'], 0, 50).'..'
-                    : $article['plusTitle'];
-                $altTitle = $article['plusTitle'];
+            if (isset($article['articles']['plusTitle']) && $article['articles']['plusTitle'] != '') {
+                $articleTitle = mb_strlen($article['articles']['plusTitle']) > 50
+                    ? mb_substr($article['articles']['plusTitle'], 0, 50).'..'
+                    : $article['articles']['plusTitle'];
+                $altTitle = $article['articles']['plusTitle'];
             } else {
-                $articleTitle = mb_strlen($article['title']) > 50
-                    ? mb_substr($article['title'], 0, 50).'..'
-                    : $article['title'];
-                $altTitle = $article['title'];
+                $articleTitle = mb_strlen($article['articles']['title']) > 50
+                    ? mb_substr($article['articles']['title'], 0, 50).'..'
+                    : $article['articles']['title'];
+                $altTitle = $article['articles']['title'];
             }
             
             $articleBy = $authorName != '' ? FrontEnd_Helper_viewHelper::__translate('By') : '';
-            $categoryTitleBackgroundColor = !empty($article['articlecategory'][0]['categorytitlecolor'])
-                                                ? $article['articlecategory'][0]['categorytitlecolor']
+            $categoryTitleBackgroundColor = !empty($article['articles']['articlecategory'][0]['categorytitlecolor'])
+                                                ? $article['articles']['articlecategory'][0]['categorytitlecolor']
                                                 : 'e69342';
             $relatedArticles .=
                     '<article class="article col-md-3 col-sm-4 col-xs-6 ">
@@ -39,7 +39,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                                 '.$article['artcileCategoryType'].'
                             </span>
                             <a href= "'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
-                                .$article['permalink'].'">
+                                .$article['articles']['permalink'].'">
                                 <img class="lazy" data-original="'.$articleImage.'"
                                 width="270" height="192" alt="'.$altTitle.'">
                                 <noscript>
@@ -51,7 +51,7 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
                             <div class="box">
                                 <h2>
                                     <a href="'.HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::getPagePermalink().'/'
-                                        .$article['permalink'].'">
+                                        .$article['articles']['permalink'].'">
                                        '.$articleTitle.'
                                     </a>
                                 </h2>
@@ -70,14 +70,12 @@ class FrontEnd_Helper_MoneySavingGuidesPartialFunctions
 
     public function addAuthorDetailsInArticles($categoryWiseArticles)
     {
-        $artcileCategoryTypes = array_keys($categoryWiseArticles);
-        foreach ($artcileCategoryTypes as $artcileCategoryType) {
-            foreach ($categoryWiseArticles[$artcileCategoryType] as $key => $categoryWiseArticle) {
-                $categoryWiseArticles[$artcileCategoryType][$key]['authorDetails'] =
-                    User::getUserDetails($categoryWiseArticle['authorid']);
-                $categoryWiseArticles[$artcileCategoryType][$key]['artcileCategoryType'] = $artcileCategoryType;
-            }
+        foreach ($categoryWiseArticles as $key => $categoryWiseArticle) {
+            $categoryWiseArticles[$key]['authorDetails'] =
+                User::getUserDetails($categoryWiseArticle['articles']['authorid']);
+            $categoryWiseArticles[$key]['artcileCategoryType'] = $categoryWiseArticle['articles']['articlecategory'][0]['name'];
         }
+        
         return $categoryWiseArticles;
     }
 
