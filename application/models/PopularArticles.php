@@ -13,7 +13,7 @@
 
 class PopularArticles extends BasePopularArticles
 {
-    public static function getPopularArticlesAndNewestArticles($articlesList, $changedArticlesDataForSorting)
+    public static function saveArticles($articlesList, $changedArticlesDataForSorting, $flag = true)
     {
         foreach ($articlesList as $article) {
             if (!in_array($article['id'], $changedArticlesDataForSorting)) {
@@ -21,8 +21,12 @@ class PopularArticles extends BasePopularArticles
                 self::savePopularArticle($article['id'], $position);
             }
         }
-        self::clearCacheOfArticles();
-        return self::getPopularArticles();
+        if ($flag) {
+            self::clearCacheOfArticles();
+        } else {
+            array_map('unlink', glob(PUBLIC_PATH.'tmp/*'));
+        }
+        return true;
     }
 
     public static function savePopularArticle($articleId, $position)

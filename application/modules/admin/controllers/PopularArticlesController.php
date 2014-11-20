@@ -21,11 +21,8 @@ class Admin_PopularArticlesController extends Zend_Controller_Action
         $getArticlesList = Articles::getArticlesList();
         $popularArticles = PopularArticles::getPopularArticles();
         $changedArticlesDataForSorting = PopularArticles::changeArticlesDataForSorting($popularArticles);
-        $articlesList = PopularArticles::getPopularArticlesAndNewestArticles(
-            $getArticlesList,
-            $changedArticlesDataForSorting
-        );
-        $this->view->articles = $articlesList;
+        PopularArticles::saveArticles($getArticlesList, $changedArticlesDataForSorting);
+        $this->view->articles = PopularArticles::getPopularArticles();
     }
 
     public function savepopulararticlespositionAction()
