@@ -3,7 +3,7 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
 {
     public function getExcludedShopIdsBySearchedKeywords($searchedKeywords)
     {
-        $excludedKeywords = ExcludedKeyword::getExcludedKeywords($searchedKeywords);
+        $excludedKeywords = \KC\Repository\ExcludedKeyword::getExcludedKeywords($searchedKeywords);
         $shopIds = '';
 
         if (!empty($excludedKeywords[0])) :

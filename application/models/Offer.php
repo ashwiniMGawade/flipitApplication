@@ -954,7 +954,7 @@ class Offer extends BaseOffer
                  $clientIP = FrontEnd_Helper_viewHelper::getRealIpAddress();
                  $clientProperAddress = ip2long($clientIP);
                  # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
+                 $conversion = \KC\Repository\Conversions::getConversionId($shopData['id'], $clientProperAddress, 'offer');
                  $subid = str_replace('A2ASUBID', $conversion['subid'], $subid);
             }
         }

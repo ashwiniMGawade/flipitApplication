@@ -1429,7 +1429,7 @@ public static function getShopDetail($shopId)
                  $ip = ip2long($clientIP);
 
                  # get click detail and replcae A2ASUBID click subid
-                 $conversion = Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
+                 $conversion = \KC\Repository\Conversions::getConversionId( $data['id'] , $ip , 'shop') ;
 
                  $subid = str_replace('A2ASUBID',$conversion['subid'] , $subid );
             }

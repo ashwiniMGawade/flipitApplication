@@ -45,7 +45,7 @@ class Admin_SearchbarController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         if($this->getRequest ()->isPost ()){
-            $keyword = ExcludedKeyword::addKeywords($params);
+            $keyword = \KC\Repository\ExcludedKeyword::addKeywords($params);
             $flash = $this->_helper->getHelper ( 'FlashMessenger' );
             $message = $this->view->translate ( 'Excluded keyword has been created successfully' );
             $flash->addMessage ( array ('success' => $message ));
@@ -64,7 +64,7 @@ class Admin_SearchbarController extends Zend_Controller_Action
     {
          $params = $this->_getAllParams();
         // cal to function in ExcludedKeyword model class
-         $keywordList =  ExcludedKeyword::getKeywordList($params);
+         $keywordList =  \KC\Repository\ExcludedKeyword::getKeywordList($params);
          echo Zend_Json::encode ( $keywordList );
          die ;
     }
@@ -81,14 +81,14 @@ class Admin_SearchbarController extends Zend_Controller_Action
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         if($id>0){
         // get keyword to edit on id basis
-            $searchbar = ExcludedKeyword::getKeywordForEdit($id);
+            $searchbar = \KC\Repository\ExcludedKeyword::getKeywordForEdit($id);
             $this->view->editKeyword = $searchbar;
 
          }
         if ($this->getRequest ()->isPost ()){
             $params = $this->getRequest ()->getParams ();
             // cal to update keyword function
-            $searchbar = ExcludedKeyword::updateKeyword($params );
+            $searchbar = \KC\Repository\ExcludedKeyword::updateKeyword($params );
             $flash = $this->_helper->getHelper ( 'FlashMessenger' );
             $message = $this->view->translate ( 'Excluded Keyword has been updated successfully' );
             $flash->addMessage ( array ('success' => $message ) );
@@ -105,7 +105,7 @@ class Admin_SearchbarController extends Zend_Controller_Action
     public function deletekeywordsAction()
     {
         $id = $this->getRequest()->getParam('id');
-        ExcludedKeyword::deleteKeyword($id);
+        \KC\Repository\ExcludedKeyword::deleteKeyword($id);
         $flash = $this->_helper->getHelper ( 'FlashMessenger' );
         $message = $this->view->translate ( 'Excluded Keyword has been deleted successfully' );
         $flash->addMessage ( array ('success' => $message ) );
@@ -122,7 +122,7 @@ class Admin_SearchbarController extends Zend_Controller_Action
     public function exportsearchbarlistAction()
     {
         //call to get all keywords function from database
-        $data = ExcludedKeyword::exportKeywordList ();
+        $data = \KC\Repository\ExcludedKeyword::exportKeywordList ();
 
         //create object of phpExcel
         $objPHPExcel = new PHPExcel();
@@ -227,7 +227,7 @@ class Admin_SearchbarController extends Zend_Controller_Action
     {
         $selectedShop = $this->getRequest()->getParam('selectedShop');
         $srh = $this->getRequest ()->getParam ( 'keyword' );
-        $data = ExcludedKeyword::searchShops($srh,$selectedShop);
+        $data = \KC\Repository\ExcludedKeyword::searchShops($srh,$selectedShop);
         $ar = array ();
         if (sizeof ( $data ) > 0) {
             foreach ( $data as $d ) {
@@ -251,7 +251,7 @@ class Admin_SearchbarController extends Zend_Controller_Action
 public function checkstoreexistAction()
 {
     $id = $this->getRequest()->getParam('id');
-    $retVal = ExcludedKeyword::checkStoreExistOrNot($id);
+    $retVal = \KC\Repository\ExcludedKeyword::checkStoreExistOrNot($id);
     echo Zend_Json::encode($retVal);
     die();
 }

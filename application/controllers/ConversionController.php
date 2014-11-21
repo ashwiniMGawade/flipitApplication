@@ -26,7 +26,7 @@ class ConversionController extends Zend_Controller_Action
             getRequestedDataBySetGetCache(
                 'all_conversion_details',
                 array(
-                    'function' => 'Conversions::getConversionDetail', 'parameters' => array($subId)
+                    'function' => '\KC\Repository\Conversions::getConversionDetail', 'parameters' => array($subId)
                 )
             );
         $fileName = $logDirectoryPath  . 'conversion';
@@ -42,7 +42,7 @@ class ConversionController extends Zend_Controller_Action
 EOD;
 
             FrontEnd_Helper_viewHelper::writeLog($log, $fileName) ;
-            Conversions::updateConverted($subId);
+            \KC\Repository\Conversions::updateConverted($subId);
             $orderId = $this->getRequest()->getParam("orderid", false);
             $total = $this->getRequest()->getParam("total", false);
             $sku = $this->getRequest()->getParam("sku", "");
