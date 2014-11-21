@@ -30,23 +30,20 @@ $("input#searchFieldBrandHeader").autocomplete({
         $('form').submit(function() {
             return false;
         });
-        //window.location.href = HOST_PATH_LOCALE + ui.item.permalink;
     },
     focus: function( event, ui ) {
             $('li.wLi2').removeClass('select');
             $('a#ui-active-menuitem').parents('li').addClass('select');
            },
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
-        url = item.permalink;
+   //alert(JSON.stringify(item));
+        url = item.value;
         return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
-            $("<a href=" + HOST_PATH_LOCALE + url + "></a>").html((__highlight(item.label,$("input#searchFieldBrandHeader").val()))))
+            $('<a href="" onClick="redirect(\'' + url + '\')"></a>').html((__highlight(item.label,$("input#searchFieldBrandHeader").val()))))
         .appendTo(ul);
      };  
-    $("a#searchbuttonHeader").click(function(){
-    if ($("input#searchFieldBrandHeader")
-        .val() == $(
-        "input#searchedBrandKeyword")
-        .val() && $("input#searchFieldBrandHeader").val()!='') {
+    $("a#searchbuttonBrandHeader").click(function(){
+    if ($("input#searchFieldBrandHeader").val()!='') {
         var autocomplete = $('input#searchFieldBrandHeader').data("autocomplete");  
         var matcher = new RegExp("("+ $.ui.autocomplete.escapeRegex($('input#searchFieldBrandHeader').val())+ ")", "ig");
         autocomplete.widget().children(".ui-menu-item").each(
@@ -74,13 +71,9 @@ $("input#searchFieldBrandHeader").autocomplete({
             if (searchedKeywordValue == 'Vind kortingscodes voor jouw favoriete winkels..') {
                 return false;
             }
-            
-            $('form').submit(function() {
-                return false;
-            });
-            var searchUrl = HOST_PATH_LOCALE + __("zoeken") + '/' + encodeURIComponent(searchedKeywordValue);
-            window.location.href = searchUrl;
+            var searchUrl = HOST_PATH_LOCALE + __("mijn-favorieten");     
         }
+        redirect($("input#searchedBrandKeyword").val());
     }
     });
     
@@ -109,13 +102,8 @@ if(event.which == 13 && $("input#searchFieldBrandHeader").val()!='' && $("input#
         if(searchedKeywordValue == 'Vind kortingscodes voor jouw favoriete winkels..'){
             return false;
         }
-        $('form').submit(function() {
-          return false;
-        });
-
-        var searchUrl = HOST_PATH_LOCALE + __("mijn-favorieten") + '/' + encodeURIComponent(searchedKeywordValue);
-        window.location.href = searchUrl;
     }
+    redirect($("input#searchedBrandKeyword").val());
 }
 $('ul.ui-autocomplete').addClass('wd1');
 });
@@ -125,6 +113,16 @@ function __highlight(s, t) {
     var matcher = new RegExp("(" + $.ui.autocomplete.escapeRegex(t) + ")", "ig");
     return s.replace(matcher, '<span>$1</span>');
 }
+
+function redirect (url) {
+    var Return_URL = HOST_PATH_LOCALE + __("mijn-favorieten");
+    var form = $('<form action="' + Return_URL + '" method="post">' +
+    '<input type="text" name="searchBrand" value="' + url + '" />' +
+    '</form>');
+    $('body').append(form);
+    form.submit();
+}
+
 function validateSearch() {
     validator = $('form#search-brand-form')
     .validate({
