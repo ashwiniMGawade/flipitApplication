@@ -42,13 +42,13 @@ class CategoryController extends Zend_Controller_Action
                 'category_'.$cacheKey.'_voucherCodes',
                 array(
                     'function' => 'Category::getCategoryVoucherCodes',
-                    'parameters' => array($categoryDetails[0]['id'], 71)
+                    'parameters' => array($categoryDetails[0]['id'])
                 )
             );
             $offersWithPagination = FrontEnd_Helper_viewHelper::renderPagination(
                 $categoryVoucherCodes,
                 $this->_getAllParams(),
-                20,
+               20,
                 9
             );
             $this->view->offersWithPagination = $offersWithPagination;
