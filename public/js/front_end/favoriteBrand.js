@@ -36,7 +36,6 @@ $("input#searchFieldBrandHeader").autocomplete({
             $('a#ui-active-menuitem').parents('li').addClass('select');
            },
     }).data( "autocomplete" )._renderItem = function( ul, item, url ) {
-   //alert(JSON.stringify(item));
         url = item.value;
         return $("<li class='wLi2'></li>").data("item.autocomplete", item).append(
             $('<a href="" onClick="redirect(\'' + url + '\')"></a>').html((__highlight(item.label,$("input#searchFieldBrandHeader").val()))))
