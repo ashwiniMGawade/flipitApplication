@@ -17,11 +17,52 @@ class Admin_SpecialPagesOffersController extends Zend_Controller_Action
     
     public function indexAction()
     {
-        
+        $pageId = $this->getRequest()->getParam('pageId');
+        $speciListPages = Page::getSpecialListPages();
+        if (isset($pageId)) {
+            $pageId = $this->getRequest()->getParam('pageId');
+        } else {
+            $pageId = $speciListPages[0]['id'];
+        }
+        $specialPageOffers = SpecialPagesOffers::getSpecialPageOfferById($pageId);
+        $offerIds = array();
+        foreach ($specialPageOffers as $pOffer) {
+            $offerIds[] = $pOffer['offerId'];
+        }
+        $allOffer = PopularCode::searchAllOffer($offerIds);
+        $this->view->specialPageOffers = $specialPageOffers;
+        $this->view->offer = $allOffer;
+        $this->view->specialPages = $speciListPages;
+        $this->view->pageId = $pageId;
     }
 
-    public function savepopulararticlespositionAction()
+
+    public function addofferAction()
     {
-        return true;
+        $offerId = $this->getRequest()->getParam('id');
+        $pageId = $this->getRequest()->getParam('pageId');
+        $result = SpecialPagesOffers::addOfferInList($offerId, $pageId);
+        echo Zend_Json::encode($result);
+        die();
+    }
+ 
+    public function deletecodeAction()
+    {
+        $id = $this->getRequest()->getParam('id');
+        $position = $this->getRequest()->getParam('pos');
+        $pageId = $this->getRequest()->getParam('pageId');
+        $isUpdated = SpecialPagesOffers::deleteCode($id, $position, $pageId);
+        $specialPageOffers = SpecialPagesOffers::getSpecialPageOfferById($pageId);
+        echo Zend_Json::encode($specialPageOffers);
+        die();
+    }
+
+    public function savepositionAction()
+    {
+        $pageId = $this->getRequest()->getParam('pageId');
+        SpecialPagesOffers::savePosition($this->getRequest()->getParam('offersIds'), $pageId);
+        $popularArticles = SpecialPagesOffers::getSpecialPageOfferById($pageId);
+        echo Zend_Json::encode($popularArticles);
+        exit();
     }
 }
