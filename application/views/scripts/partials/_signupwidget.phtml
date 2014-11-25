@@ -28,7 +28,10 @@ name="<?php echo $this->zendForm->zendFormName; ?>" id="<?php echo $this->zendFo
         <?php
     }
     ?>
-    <?php echo $this->zendForm->shopId->renderViewHelper();?>
+    <?php echo $this->zendForm->shopId->renderViewHelper();
+        $memberOnly = !isset($this->codesWidget) ? ',setMembersonlyValue()' : '';
+    ?>
+    <?php echo $this->zendForm->membersOnly->renderViewHelper();?>
     <?php echo $this->zendForm->formName->renderViewHelper();?>
     <?php
     $submitButtonText = isset($this->codesWidget) && $this->codesWidget == '1' ? FrontEnd_Helper_viewHelper::__form('form_Subscribe & get code') : FrontEnd_Helper_viewHelper::__form('form_signup_button');
@@ -39,7 +42,7 @@ name="<?php echo $this->zendForm->zendFormName; ?>" id="<?php echo $this->zendFo
         array(
             'class'=>'btn blue btn-lg btn-primary '.$this->zendForm->submitButtonClassName,
             'id'=>'Login',
-            'onclick' => 'setHiddenFieldValue(), signUpNewsLetter("' . $this->zendForm->zendFormName .'")'
+            'onclick' => 'setHiddenFieldValue(), signUpNewsLetter("' . $this->zendForm->zendFormName .'")'.$memberOnly
         )
     )
     ?>

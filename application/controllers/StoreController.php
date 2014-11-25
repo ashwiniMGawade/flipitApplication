@@ -42,6 +42,18 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
+        if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
+            $offerVisiblity = Offer::getOfferVisability($shopParams['popup']);
+            if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
+                $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
+                if (!empty($shopInfo) && isset($shopInfo[0]['permaLink'])) {
+                    $this->_redirect(
+                        HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']
+                    );
+                }
+            }
+        }
+
         $currentShopId = $shopParams['id'];
         $shopId = $this->getRequest()->getParam('id');
 

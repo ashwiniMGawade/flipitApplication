@@ -1132,6 +1132,18 @@ class Offer extends BaseOffer
 
         return true;
     }
+
+    public static function getOfferVisability($offerId)
+    {
+        $offerVisability = Doctrine_Query::create()
+        ->select('o.id')
+        ->from("Offer o")
+        ->where("o.Visability ='MEM'")
+        ->andWhere("o.id =$offerId")
+        ->fetchArray();
+
+        return !empty($offerVisability) ? true : false;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
