@@ -394,10 +394,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
     {
         $termAndConditionLink ='';
-        if (
-            isset($currentOffer->userGenerated)
-            ? $currentOffer->userGenerated == 0
-            : '' && $termsAndConditions!=''
+        if ($termsAndConditions!=''
             && $termsAndConditions!=null
         ) {
             $termAndConditionLink = '<li>

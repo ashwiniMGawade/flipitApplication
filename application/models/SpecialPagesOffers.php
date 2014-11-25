@@ -8,6 +8,55 @@
 
 class SpecialPagesOffers extends BaseSpecialPagesOffers
 {
+
+    public static function getSpecialPageOffersByPageIdForFrontEnd($pageId)
+    {
+        $currentDate = date("Y-m-d H:i");
+        $specialPageOffers = Doctrine_Query::create()
+        ->select(
+            'op.pageId,op.offerId,o.couponCodeType,o.totalViewcount as clicks,o.title,o.refURL,o.refOfferUrl,
+            o.discountType,o.startDate,o.endDate,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,
+            o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
+            o.updated_at as lastUpdate,s.name,s.refUrl,
+            s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
+            ologo.name,terms.content'
+        )
+        ->from('SpecialPagesOffers op')
+        ->leftJoin('op.offers o')
+        ->leftJoin('o.logo ologo')
+        ->leftJoin('o.termandcondition terms')
+        ->andWhere(
+            "(couponCodeType = 'UN' AND (SELECT count(id) FROM CouponCode cc WHERE cc.offerid = o.id and status=1)  > 0)
+            or couponCodeType = 'GN'"
+        )
+        ->leftJoin('o.shop s')
+        ->leftJoin('o.vote vot')
+        ->leftJoin('s.logo l')
+        ->leftJoin('s.favoriteshops fv')
+        ->where('op.pageId = '.$pageId)
+        ->andWhere('o.enddate > "'.$currentDate.'"')
+        ->andWhere('o.startdate <= "'.$currentDate.'"')
+        ->andWhere('o.deleted = 0')
+        ->andWhere('s.deleted = 0')
+        ->andWhere('s.status = 1')
+        ->andWhere('o.Visability!="MEM"')
+        ->orderBy('op.position')
+        ->fetchArray();
+        return self::removeDuplicateOffers($specialPageOffers);
+    }
+
+    public static function removeDuplicateOffers($specialPageOffers)
+    {
+        $specialOffersWithoutDuplication = array();
+        if (count($specialPageOffers) > 0) {
+            $countOfSpecialPageOffers = count($specialPageOffers);
+            for ($offerIndex = 0; $offerIndex < $countOfSpecialPageOffers; $offerIndex++) {
+                $specialOffersWithoutDuplication[$offerIndex] = $specialPageOffers[$offerIndex]['offers'];
+            }
+        }
+        return $specialOffersWithoutDuplication;
+    }
+
     public static function getSpecialPageOfferById($pageId)
     {
         $specialPageOffers = Doctrine_Query::create()

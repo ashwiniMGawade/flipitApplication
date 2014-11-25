@@ -375,6 +375,10 @@ class Offer extends BaseOffer
         $pageRelatedOffers = self::getSpecialOffersByPage($specialPage['id'], $currentDate);
         $constraintsRelatedOffers = self::getOffersByPageConstraints($specialPage, $currentDate);
         $pageRelatedOffersAndPageConstraintsOffers = array_merge($pageRelatedOffers, $constraintsRelatedOffers);
+        $pageRelatedOffersAndPageConstraintsOffers = array_merge(
+            SpecialPagesOffers::getSpecialPageOffersByPageIdForFrontEnd($specialPage['id']),
+            $pageRelatedOffersAndPageConstraintsOffers
+        );
         $specialOffers = self::getDataForOfferPhtml($pageRelatedOffersAndPageConstraintsOffers, $specialPage);
         return $specialOffers;
     }
@@ -394,7 +398,7 @@ class Offer extends BaseOffer
             o.editorPicks,o.discount,o.discountvalueType,o.startdate,o.extendedOffer,o.extendedUrl,
             o.updated_at as lastUpdate,s.name,s.refUrl,
             s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path,
-            ologo.name,terms.content as terms'
+            ologo.name,terms.content'
         )
         ->from('refOfferPage op')
         ->leftJoin('op.Offer o')
