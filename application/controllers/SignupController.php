@@ -363,4 +363,18 @@ class SignupController extends Zend_Controller_Action
         );
         $this->view->zendForm =  $signUpForm;
     }
+
+    public function signupwidgetcodesAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
+        $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
+        $signUpFormLargeForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(
+            'largeSignupForm'.rand(),
+            'SignUp'
+        );
+        $this->view->zendForm =  $signUpFormLargeForm;
+        $this->view->codesWidget = '1';
+    }
 }

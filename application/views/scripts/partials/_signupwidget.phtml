@@ -16,7 +16,11 @@ class="<?php echo $this->zendForm->zendFormClassName !='' ? 'email-form form-inl
 name="<?php echo $this->zendForm->zendFormName; ?>" id="<?php echo $this->zendForm->zendFormName; ?>">
     <?php
     if ($this->zendForm->submitButtonClassName != 'orange') {
-        echo $signUpHeader.$this->zendForm->emailAddress->renderViewHelper();
+        if (!isset($this->codesWidget)) {
+            echo $signUpHeader.$this->zendForm->emailAddress->renderViewHelper();
+        } else {
+            echo $this->zendForm->emailAddress->renderViewHelper();
+        }
     } else { ?>
         <div class="form-group">
             <?php echo $this->zendForm->emailAddress->renderViewHelper();?>
@@ -26,10 +30,12 @@ name="<?php echo $this->zendForm->zendFormName; ?>" id="<?php echo $this->zendFo
     ?>
     <?php echo $this->zendForm->shopId->renderViewHelper();?>
     <?php echo $this->zendForm->formName->renderViewHelper();?>
-    <?php  
+    <?php
+    $submitButtonText = isset($this->codesWidget) && $this->codesWidget == '1' ? FrontEnd_Helper_viewHelper::__form('form_Subscribe & get code') : FrontEnd_Helper_viewHelper::__form('form_signup_button');
+
     echo $this->formSubmit(
         'signupformbutton',
-        FrontEnd_Helper_viewHelper::__form('form_signup_button'),
+        $submitButtonText,
         array(
             'class'=>'btn blue btn-lg btn-primary '.$this->zendForm->submitButtonClassName,
             'id'=>'Login',

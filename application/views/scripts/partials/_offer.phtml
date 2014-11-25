@@ -5,6 +5,11 @@
 <section class="section">
 <?php
 $offerCounter = '';
+$visitorInformation = '';
+if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
+    $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+}
+
 foreach ($this->offers as $offer) {
     $offerCounter++;
     $offer = (object) $offer;
@@ -33,7 +38,13 @@ foreach ($this->offers as $offer) {
     ?>
             <div class="box">
                 <div class="text">
-                    <p> <?php echo $offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires)?></p>
+                    <p> <?php
+                        $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
+                            ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Member").'</span>'
+                            : '';
+                        echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);
+                        ?>
+                    </p>
                     <?php 
                     echo $offerPartial->getCommonRedirectUrlForOffer(
                         $offer,
@@ -47,23 +58,51 @@ foreach ($this->offers as $offer) {
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
-    echo $offerPartial->getCommonRedirectUrlForOffer(
-        $offer,
-        $urlToShow,
-        $offerBounceRate,
-        $permalink,
-        'mainOfferClickoutButton'
-    );
-    echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
+    if (!empty($visitorInformation)) {
+        echo $offerPartial->getCommonRedirectUrlForOffer(
+            $offer,
+            $urlToShow,
+            $offerBounceRate,
+            $permalink,
+            'mainOfferClickoutButton'
+        );
+        echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
+    } else {
+        if ($offer->Visability == 'MEM') {
+            echo $this->esi($this->locale.'signup/signupwidgetcodes?shopId='.$offer->shop['id']
+                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
+        } else {
+            echo $offerPartial->getCommonRedirectUrlForOffer(
+                $offer,
+                $urlToShow,
+                $offerBounceRate,
+                $permalink,
+                'mainOfferClickoutButton'
+            );
+            echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink); 
+        }
+    }
     ?>
                 </div>
-                <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
-                    <span class="instruction">
-                        <strong><?php echo $this->translate('enter this code at checkout')?></strong>
-                    </span>
-                    <strong class="code-value"><?php echo $couponCode;?></strong>
-                </div>
-    
+                <?php if (!empty($visitorInformation)) { ?>
+                    <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
+                        <span class="instruction">
+                            <strong><?php echo $this->translate('enter this code at checkout')?></strong>
+                        </span>
+                        <strong class="code-value"><?php echo $couponCode;?></strong>
+                    </div>
+                <?php } else {
+                    if ($offer->Visability != 'MEM') {?>     
+                        <div class="the-code" id="offerCodeDiv<?php echo $offer->id ;?>">
+                            <span class="instruction">
+                                <strong><?php echo $this->translate('enter this code at checkout')?></strong>
+                            </span>
+                            <strong class="code-value"><?php echo $couponCode;?></strong>
+                        </div>
+                    <?php
+                    }
+                }
+                ?>
                 <ul class="view-list">
     <?php 
     if (isset($offer->extendedOffer) && $offer->extendedOffer =='1') {

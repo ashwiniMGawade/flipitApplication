@@ -1030,7 +1030,7 @@ class Offer extends BaseOffer
             ->andWhere('s.id='.$id)
             ->andWhere('s.deleted = 0')
             ->andWhere('o.discountType != "NW"')
-            ->andWhere('o.Visability!="MEM"')
+           // ->andWhere('o.Visability!="MEM"')
             ->orderBy('o.editorPicks DESC')
             ->addOrderBy('o.exclusiveCode DESC')
             ->addOrderBy('o.discountType ASC')
