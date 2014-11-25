@@ -40,10 +40,10 @@ class PopularCode extends \KC\Entity\PopularCode
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-        ->select('v.id, ((sum(v.onClick)) / (DATEDIFF(NOW(),o.startDate))) as pop, o.startDate')
+        ->select('v.id, (sum(v.onClick) / (DATE_DIFF(CURRENT_TIMESTAMP(),o.startDate))) as pop, o.startDate')
         ->from('KC\Entity\ViewCount', 'v')
-        ->leftJoin('v.viewcount o')
-        ->leftJoin('o.shopOffers s')
+        ->leftJoin('v.viewcount', 'o')
+        ->leftJoin('o.shopOffers', 's')
         ->where('v.updated_at <='."'".$nowDate."'")
         ->andWhere('v.updated_at >='."'".$past4Days."'")
         ->andWhere('o.deleted = 0')
@@ -68,8 +68,9 @@ class PopularCode extends \KC\Entity\PopularCode
     {
         $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $entityManagerLocale
-        ->select('p.popularcode, p.position')
-        ->from('KC\Entity\PopularCode', 'p');
+        ->select('offer.id as popularcode, p.position')
+        ->from('KC\Entity\PopularCode', 'p')
+        ->leftJoin('p.popularcode offer');
         $popIds = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         foreach($popIds as $popId):
             $query = $entityManagerLocale
@@ -77,7 +78,7 @@ class PopularCode extends \KC\Entity\PopularCode
             ->from('KC\Entity\Offer', 'o')
             ->where('o.id ='.$popId['popularcode'])
             ->andWhere('o.endDate <'."'".$date."'");
-            $popIdsToDelete = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+            $popIdsToDelete = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
             if($popIdsToDelete):
                 self::deletePopular($popId['popularcode'], $popId['position'], $flagForCache);
             endif;
@@ -92,7 +93,7 @@ class PopularCode extends \KC\Entity\PopularCode
         $query = $entityManagerLocale
         ->select('p.id,o.id as offerId,p.type,p.position')
         ->from('KC\Entity\PopularCode', 'p')
-        ->leftJoin('p.popularcode o')
+        ->leftJoin('p.popularcode', 'o')
         ->orderBy('p.position');
         $allExistingPopularCodes = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $allExistingPopularCodes;
@@ -254,7 +255,7 @@ class PopularCode extends \KC\Entity\PopularCode
         ->andWhere('s.status = 1')
         ->andWhere('o.offline = 0')
         ->andWhere('o.endDate >'."'".$date."'")
-        ->andWhere('o.startdate <='."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
         ->andWhere("o.title LIKE '$keyword%'")
         ->setParameter(4, 'CD')
         ->andWhere('o.discountType = ?4')
@@ -279,7 +280,7 @@ class PopularCode extends \KC\Entity\PopularCode
         ->andWhere('s.deleted = 0')
         ->andWhere('o.offline = 0')
         ->andWhere('o.endDate >'."'".$date."'")
-        ->andWhere('o.startdate <='."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
         ->setParameter(4, 'CD')
         ->andWhere('o.discountType = ?4')
         ->setParameter(5, 'MEM')
@@ -300,12 +301,12 @@ class PopularCode extends \KC\Entity\PopularCode
             ->from('KC\Entity\PopularCode', 'p')
             ->leftJoin('p.popularcode', 'o')
             ->leftJoin('o.shopOffers', 's')
-            ->where('o.deleted =0')
+            ->where('o.deleted = 0')
             ->andWhere("o.userGenerated = 0")
             ->andWhere('s.deleted = 0')
             ->andWhere('o.offline = 0')
             ->andWhere('o.endDate >'."'".$date."'")
-            ->andWhere('o.startdate <='."'".$date."'")
+            ->andWhere('o.startDate <='."'".$date."'")
             ->setMaxResults($limit)
             ->orderBy('p.position', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -321,18 +322,21 @@ class PopularCode extends \KC\Entity\PopularCode
         $date = date('Y-m-d H:i:s');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('p.id, o.title, o.shopid,o.couponCodeType,o.extendedOffer,o.startDate,o.endDate,o.extendedUrl,o.couponCode as couponcode ,o.exclusiveCode as exclusivecode ,o.discount,o.discountvalueType,s.name, s.id as shopId, s.permaLink,l.path,l.name as shopImageName, p.type, p.position, p.offerid')
+        ->select('o.title, o.id as offerId, o.couponCodeType,o.extendedOffer,o.startDate,o.endDate,o.extendedUrl,o.couponCode as couponcode ,o.exclusiveCode as exclusivecode ,o.discount,o.discountvalueType,s.name as shopName, s.id as shopId, s.permaLink,l.path,l.name, p.type, p.position')
         ->from('KC\Entity\PopularCode', 'p')
         ->leftJoin('p.popularcode', 'o')
         ->leftJoin('o.shopOffers', 's')
         ->leftJoin('s.logo', 'l')
         ->where('o.deleted = 0')
-        ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM 'KC\Entity\CouponCode cc WHERE cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'")
+        ->andWhere(
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+            cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+        )
         ->andWhere('s.deleted = 0')
         ->andWhere('o.offline = 0')
         ->andWhere('s.status = 1')
         ->andWhere('o.endDate >'."'".$date."'")
-        ->andWhere('o.startdate <='."'".$date."'")
+        ->andWhere('o.startDate <='."'".$date."'")
         ->setParameter(4, 'CD')
         ->andWhere('o.discountType = ?4')
         ->setParameter(5, 'MEM')
@@ -356,14 +360,17 @@ class PopularCode extends \KC\Entity\PopularCode
             ->leftJoin('s.logo', 'l')
             ->leftJoin('o.offertermandcondition', 'term')
             ->where('o.deleted =0')
-            ->andWhere("(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode WHERE cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'")
+            ->andWhere(
+            "(o.couponCodeType = 'UN' AND (SELECT count(cc.id)  FROM KC\Entity\CouponCode cc WHERE
+            cc.offer = o.id and cc.status=1)  > 0) or o.couponCodeType = 'GN'"
+            )
             ->andWhere('s.deleted=0')
             ->setParameter(1, $id)
             ->andWhere($queryBuilder->expr()->notIn('s.id', '?1'))
             ->andWhere('o.offline = 0')
             ->andWhere('s.status = 1')
             ->andWhere('o.endDate >'."'".$date."'")
-            ->andWhere('o.startdate <='."'".$date."'")
+            ->andWhere('o.startDate <='."'".$date."'")
             ->setParameter(4, 'CD')
             ->andWhere('o.discountType = ?4')
             ->setParameter(5, 'MEM')
@@ -393,13 +400,9 @@ class PopularCode extends \KC\Entity\PopularCode
             ->from('KC\Entity\PopularCode', 'pc')
             ->where('pc.popularcode =' . $id);
             $pc = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
             if (sizeof($pc) > 0) {
-
                 $flag = '2';
-
             } else {
-
                 $flag = '1';
                 //find last postion  from database
                 $query = $queryBuilder
@@ -408,7 +411,6 @@ class PopularCode extends \KC\Entity\PopularCode
                 ->orderBy('p.position', 'DESC')
                 ->setMaxResults(1);
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-
                 if (sizeof($data) > 0) {
                     $NewPos = $data[0]['position'];
 
@@ -525,7 +527,8 @@ class PopularCode extends \KC\Entity\PopularCode
 
         $nextCodePosition = (intval($previousCodePosition) + 1);
 
-        $queryBuilder ->update('KC\Entity\PopularCode', 'p')
+        $queryBuilderForNewPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $queryBuilderForNewPosition ->update('KC\Entity\PopularCode', 'p')
                 ->set('p.position', $nextCodePosition)
                 ->where('p.id = '.$previousCodeId)
                 ->getQuery()->execute();
@@ -552,7 +555,8 @@ class PopularCode extends \KC\Entity\PopularCode
             ->where('p.id ='. $currentCodeId)
             ->getQuery()->execute();
 
-        $queryBuilder ->update('KC\Entity\PopularCode', 'pc')
+        $queryBuilderForNewPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
+        $queryBuilderForNewPosition ->update('KC\Entity\PopularCode', 'pc')
             ->set('pc.position', $currentPosition)
             ->where('pc.id ='.$nextCodeId)
             ->getQuery()->execute();
@@ -598,36 +602,34 @@ class PopularCode extends \KC\Entity\PopularCode
                 $type = "AT";
             }
 
-            $lock = Doctrine_Core::getTable('PopularCode')
-            ->find($lockStatus[0]['id']);
-            $lock->type = $type;
-            $lock->save();
-
+            $queryBuilder ->update('KC\Entity\PopularCode', 'p')
+            ->set('p.type', $queryBuilder->expr()->literal($type))
+            ->where('p.id ='. $lockStatus[0]['id'])
+            ->getQuery()->execute();
             return true ;
         }
-
         return false ;
-
     }
 
     public static function savePopularOffersPosition($offerId)
     {
         if (!empty($offerId)) {
-            $databaseConnection = Doctrine_Manager::getInstance()->getConnection('doctrine_site')->getDbh();
-            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 0;');
-            $databaseConnection->query('TRUNCATE TABLE popular_code');
-            $databaseConnection->query('SET FOREIGN_KEY_CHECKS = 1;');
-            unset($databaseConnection);
+            $entityManagerLocale  = \Zend_Registry::get('emLocale');
+            $tableName = 'popular_code';
+            $entityManagerLocale->getDatabasePlatform()->getTruncateTableSQL($tableName);
             $offerId = explode(',', $offerId);
             $i = 1;
-
             foreach ($offerId as $offerIdValue) {
-                $entityManagerLocale  = \Zend_Registry::get('emLocale');
+                
                 $popularCode = new \KC\Entity\PopularCode();
                 $popularCode->popularcode = $offerIdValue;
                 $popularCode->position = $i;
                 $popularCode->type = "MN";
-                $popularCode->status = "1";
+                $popularCode->status = 1;
+                $popularCode->deleted = 0;
+                $popularCode->created_at = new \DateTime('now');
+                $popularCode->updated_at = new \DateTime('now');
+                print_r($popularCode);die;
                 $entityManagerLocale->persist($popularCode);
                 $entityManagerLocale->flush();
                 $i++;

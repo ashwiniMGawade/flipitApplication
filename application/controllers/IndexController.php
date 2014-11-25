@@ -22,8 +22,10 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        $a = new \KC\Repository\Rights();
-        print_r($a->addRights());
+        $format = 'Y-m-j H:i:s';
+        $date = date($format);
+        $a = new \KC\Repository\PopularCode();
+        print_r($a->savePopularOffersPosition(2,3,4));
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
