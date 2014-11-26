@@ -2630,7 +2630,7 @@ class Offer Extends \KC\Entity\Offer
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
         ->select('count(*) as total')
-        ->from("FavoriteShop")
+        ->from("KC\Entity\FavoriteShop")
         ->where('shopId='.$shopId);
         $data = $query->getQuery()->getSingleResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if ($data[0]['total']>0) {
@@ -2642,6 +2642,7 @@ class Offer Extends \KC\Entity\Offer
 
     public static function addFavoriteShop($sid, $flag)
     {
+        $entityManagerUser  = \Zend_Registry::get('emLocale');
         $userid = \Auth_VisitorAdapter::getIdentity()->id;
         if ($flag=='1' || $flag==1) {
             $fvshop = new KC\Entity\FavoriteShop();
