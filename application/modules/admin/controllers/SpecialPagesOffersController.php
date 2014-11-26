@@ -18,11 +18,11 @@ class Admin_SpecialPagesOffersController extends Zend_Controller_Action
     public function indexAction()
     {
         $pageId = $this->getRequest()->getParam('pageId');
-        $speciListPages = Page::getSpecialListPages();
+        $specialListPages = Page::getSpecialListPages();
         if (isset($pageId)) {
             $pageId = $this->getRequest()->getParam('pageId');
         } else {
-            $pageId = $speciListPages[0]['id'];
+            $pageId = $specialListPages[0]['id'];
         }
         $specialPageOffers = SpecialPagesOffers::getSpecialPageOfferById($pageId);
         $offerIds = array();
@@ -32,7 +32,7 @@ class Admin_SpecialPagesOffersController extends Zend_Controller_Action
         $allOffer = PopularCode::searchAllOffer($offerIds);
         $this->view->specialPageOffers = $specialPageOffers;
         $this->view->offer = $allOffer;
-        $this->view->specialPages = $speciListPages;
+        $this->view->specialPages = $specialListPages;
         $this->view->pageId = $pageId;
     }
 
@@ -43,7 +43,7 @@ class Admin_SpecialPagesOffersController extends Zend_Controller_Action
         $pageId = $this->getRequest()->getParam('pageId');
         $result = SpecialPagesOffers::addOfferInList($offerId, $pageId);
         echo Zend_Json::encode($result);
-        die();
+        exit();
     }
  
     public function deletecodeAction()
@@ -54,7 +54,7 @@ class Admin_SpecialPagesOffersController extends Zend_Controller_Action
         $isUpdated = SpecialPagesOffers::deleteCode($id, $position, $pageId);
         $specialPageOffers = SpecialPagesOffers::getSpecialPageOfferById($pageId);
         echo Zend_Json::encode($specialPageOffers);
-        die();
+        exit();
     }
 
     public function savepositionAction()

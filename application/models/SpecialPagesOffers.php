@@ -142,14 +142,14 @@ class SpecialPagesOffers extends BaseSpecialPagesOffers
                 $updateWithNewPosition = Doctrine_Query::create()
                     ->update('SpecialPagesOffers p')
                     ->set('position', $newPosition)
-                    ->where('p.id = ?' , $newOffer['id']);
+                    ->where('p.id = ?', $newOffer['id']);
                 $updateWithNewPosition->execute();
                 $newPosition++;
             }
             self::clearCacheOfSpecialPagesOffers($pageId);
-            return true ;
+            return true;
         }
-        return false ;
+        return false;
     }
 
     public static function savePosition($offerIds, $pageId)

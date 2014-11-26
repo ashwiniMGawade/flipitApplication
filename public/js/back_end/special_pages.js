@@ -73,7 +73,6 @@ function searchByTxt() {
 }
 
 function changeSelectedClass() {
-    
     $('ul#specialPages li').removeClass('selected');
     $(this).addClass('selected');
     addSelectedClassOnButton(2);
@@ -175,25 +174,25 @@ function deleteCode() {
     var pos = $('ul#specialPages li.selected').attr('relpos');
     $.ajax({
         url : HOST_PATH + "admin/specialpagesoffers/deletecode/id/" +id+ "/pos/"+pos+"/pageId/"+pageId,
-            method : "post",
-            dataType : "json",
-            type : "post",
-            success : function(json) {
-                $('ul#specialPages li').remove();
-                var li = '';
+        method : "post",
+        dataType : "json",
+        type : "post",
+        success : function(json) {
+            $('ul#specialPages li').remove();
+            var li = '';
 
-                for(var i in json) {
-                    li+= "<li class='ui-state-default' relpos='" + json[i].position 
-                    + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" 
-                    + json[i].offers.title +"</span></li>";
-                }
-
-                $('select#offerlist').append('<option value="' + offerId + '">' + title  + '</option>');
-                $('ul#specialPages').append(li);
-                $('ul#specialPages li#'+id).addClass('selected');
-                $('ul#specialPages li').click(changeSelectedClass);
-                selectedElements();
+            for(var i in json) {
+                li+= "<li class='ui-state-default' relpos='" + json[i].position 
+                + "' reloffer='" + json[i].offerId + "' id='" + json[i].id + "' ><span>" 
+                + json[i].offers.title +"</span></li>";
             }
+
+            $('select#offerlist').append('<option value="' + offerId + '">' + title  + '</option>');
+            $('ul#specialPages').append(li);
+            $('ul#specialPages li#'+id).addClass('selected');
+            $('ul#specialPages li').click(changeSelectedClass);
+            selectedElements();
+        }
     });
 }
 
