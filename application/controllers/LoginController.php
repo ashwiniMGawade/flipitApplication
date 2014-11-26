@@ -78,7 +78,6 @@ class LoginController extends Zend_Controller_Action
             $shopIdNameSpace = new Zend_Session_Namespace('shopId');
             if ($shopIdNameSpace->shopId) {
                 $shopName = Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
-
                 $membersNamespace = new Zend_Session_Namespace('membersOnly');
                 if (isset($membersNamespace->membersOnly) && $membersNamespace->membersOnly == '1') {
                     $shopInfo = Shop::getShopInformation(base64_decode($shopIdNameSpace->shopId));
@@ -87,8 +86,6 @@ class LoginController extends Zend_Controller_Action
                     $shopPermalink = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
                 }
                 $membersNamespace->membersOnly = '';
-
-                    
                 $visitorFavouriteShopStatus = Visitor::getFavoriteShopsForUser(
                     Auth_VisitorAdapter::getIdentity()->id,
                     base64_decode($shopIdNameSpace->shopId)

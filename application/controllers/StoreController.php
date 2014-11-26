@@ -43,13 +43,11 @@ class StoreController extends Zend_Controller_Action
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
         if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
-            $offerVisiblity = Offer::getOfferVisability($shopParams['popup']);
+            $offerVisiblity = Offer::getOfferVisiblity($shopParams['popup']);
             if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
                 $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
                 if (!empty($shopInfo) && isset($shopInfo[0]['permaLink'])) {
-                    $this->_redirect(
-                        HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']
-                    );
+                    $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
                 }
             }
         }

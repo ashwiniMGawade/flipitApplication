@@ -343,9 +343,11 @@ class Shop extends BaseShop
 
     public static function getShopInformation($shopId)
     {
-        $shop = Doctrine_Query::create()->select('s.permaLink,s.name')
+        $shop = Doctrine_Query::create()
+            ->select('s.permaLink,s.name')
             ->from('Shop s')
-            ->where('s.id='.$shopId)->fetchArray();
+            ->where('s.id='.$shopId)
+            ->fetchArray();
         return $shop;
     }
     ##################################################################################

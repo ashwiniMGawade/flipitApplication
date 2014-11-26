@@ -394,7 +394,6 @@ class SignupController extends Zend_Controller_Action
                 $this->_getParam('id')
             )
         );
-        
         $this->_helper->layout->disableLayout();
         $params = $this->getRequest()->getParams();
         $membersNamespace = new Zend_Session_Namespace('membersOnly');
@@ -402,15 +401,11 @@ class SignupController extends Zend_Controller_Action
         $visitorShopId = new Zend_Session_Namespace('shopId');
         $visitorShopId->shopId = $params['shopId'];
         if ($visitorInformation > 0) {
-            $message = FrontEnd_Helper_viewHelper::__translate(
-                'Your e-mail address is already known to us.
-                 If you forgot your password, click here to change your password'
-            );
+            $message = FrontEnd_Helper_viewHelper::__translate('Your e-mail address is already known to us. If you forgot your password, click here to change your password');
             $forgotPasswordLink =
-            HTTP_PATH_LOCALE .
-            FrontEnd_Helper_viewHelper::__link('link_login').'/'
-            .FrontEnd_Helper_viewHelper::__link('link_forgotpassword');
-
+                HTTP_PATH_LOCALE .
+                FrontEnd_Helper_viewHelper::__link('link_login').'/'
+                .FrontEnd_Helper_viewHelper::__link('link_forgotpassword');
             self::showFlashMessage(
                 $message ." " . "<a href='".$forgotPasswordLink."'>"
                 . FrontEnd_Helper_viewHelper::__translate('forgot password') ."</a>",
@@ -421,7 +416,6 @@ class SignupController extends Zend_Controller_Action
         }
         $visitorEmail = new Zend_Session_Namespace('emailAddressSignup');
         $visitorEmail->emailAddressSignup = $params['emailAddress'];
-    
         $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
     }
 }

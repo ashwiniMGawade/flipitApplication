@@ -37,7 +37,7 @@ foreach ($this->offers as $offer) {
                 <div class="text">
                     <p> <?php
                         $membersOnly = isset($offer->Visability) && $offer->Visability == 'MEM'
-                            ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Member").'</span>'
+                            ? '<span class="members-only-image"></span><span class="members-only">'.$this->translate("Members Only").'</span>'
                             : '';
                         echo $membersOnly.$offerPartial->getOfferOptionAndOfferDates($offer, $daysTillOfferExpires);
                         ?>
