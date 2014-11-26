@@ -18,7 +18,7 @@ class TransController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        $translationModel = new Translations();
+        $translationModel = new \KC\Repository\Translations();
         $form = $this->getHelper('Transl8')->_createForm();
         $form->populate($this->getRequest()->getParams());
 
@@ -41,8 +41,8 @@ class TransController extends Zend_Controller_Action
         $this->_helper->layout->disableLayout();
         $this->_helper->viewRenderer->setNoRender();
 
-        $session 	= new Zend_Session_Namespace('Transl8');
-        $httpScheme = FrontEnd_Helper_viewHelper::getServerNameScheme();
+        $session 	= new \Zend_Session_Namespace('Transl8');
+        $httpScheme = \FrontEnd_Helper_viewHelper::getServerNameScheme();
         $storeUrl 	= $this->_getParam('storeUrl', 'http://'.$httpScheme.'.flipit.com');
         $hash 		= $this->_getParam('hash', false);
 
@@ -81,7 +81,7 @@ class TransController extends Zend_Controller_Action
 
     protected function writeTranslationsToCsv($localLanguageFilePath)
     {
-        $csvWritableTranslations = Translations::getCsvWritableTranslations();
+        $csvWritableTranslations = \KC\Repository\Translations::getCsvWritableTranslations();
         $csvWriter = new Application_Service_Infrastructure_Csv_Writer($localLanguageFilePath);
         (!empty($csvWritableTranslations) ? $csvWriter->writeFromArray($csvWritableTranslations) : '');
     }
