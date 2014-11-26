@@ -168,6 +168,7 @@ class PopularCode extends \KC\Entity\PopularCode
                 $pc->popularcode = $entityManagerLocale->find('KC\Entity\Offer', $p['offerId']);
                 $pc->position = $p['position'];
                 $pc->deleted = 0;
+                $pc->status = 1;
                 $pc->created_at = new \DateTime('now');
                 $pc->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pc);
@@ -295,8 +296,8 @@ class PopularCode extends \KC\Entity\PopularCode
             ->andWhere("o.userGenerated = 0")
             ->andWhere('s.deleted = 0')
             ->andWhere('o.offline = 0')
-            ->andWhere('o.endDate >'."'".$date."'")
-            ->andWhere('o.startDate <='."'".$date."'")
+            //->andWhere('o.endDate >'."'".$date."'")
+            //->andWhere('o.startDate <='."'".$date."'")
             ->setMaxResults($limit)
             ->orderBy('p.position', 'ASC');
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
@@ -385,7 +386,8 @@ class PopularCode extends \KC\Entity\PopularCode
 
         if (sizeof($Offer) > 0) {
             //check offer exist or not
-            $query = $queryBuilder
+            $queryBuilderPopularCode = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilderPopularCode
             ->select('pc')
             ->from('KC\Entity\PopularCode', 'pc')
             ->where('pc.popularcode =' . $id);
@@ -395,7 +397,8 @@ class PopularCode extends \KC\Entity\PopularCode
             } else {
                 $flag = '1';
                 //find last postion  from database
-                $query = $queryBuilder
+                $queryBuilderPosition = \Zend_Registry::get('emLocale')->createQueryBuilder();
+                $query = $queryBuilderPosition
                 ->select('p.position')
                 ->from('KC\Entity\PopularCode', 'p')
                 ->orderBy('p.position', 'DESC')
@@ -403,7 +406,6 @@ class PopularCode extends \KC\Entity\PopularCode
                 $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
                 if (sizeof($data) > 0) {
                     $NewPos = $data[0]['position'];
-
                 } else {
                     $NewPos =  0 ;
                 }
@@ -413,6 +415,7 @@ class PopularCode extends \KC\Entity\PopularCode
                 $pc->popularcode = $entityManagerLocale->find('KC\Entity\Offer', $id);
                 $pc->position = (intval($NewPos) + 1);
                 $pc->deleted = 0;
+                $pc->status = 1;
                 $pc->created_at = new \DateTime('now');
                 $pc->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pc);
