@@ -21,12 +21,12 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        echo "<pre>";
+        //echo "<pre>";
         $format = 'Y-m-j H:i:s';
         $date = date($format);
-        $a = new \KC\Repository\PopularCode();
-        print_r($a->savePopularOffersPosition(2,3,4));
-        die('END');
+        //$a = new \KC\Repository\PopularCode();
+        //print_r($a->savePopularOffersPosition(2,3,4));
+        //die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
