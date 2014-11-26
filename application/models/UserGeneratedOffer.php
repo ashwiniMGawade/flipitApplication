@@ -93,7 +93,8 @@ class UserGeneratedOffer extends BaseOffer
 
             $key = '6_topOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -131,7 +132,8 @@ class UserGeneratedOffer extends BaseOffer
 
             $key = '6_topOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -169,7 +171,8 @@ class UserGeneratedOffer extends BaseOffer
 
             $key = '6_topOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -208,7 +211,8 @@ class UserGeneratedOffer extends BaseOffer
 
             $key = '6_topOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -374,7 +378,8 @@ class UserGeneratedOffer extends BaseOffer
         //call cache function
         $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+        $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
         $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -481,7 +486,8 @@ class UserGeneratedOffer extends BaseOffer
     $this->save();
     $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+    $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
+    FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
     $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
     FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
