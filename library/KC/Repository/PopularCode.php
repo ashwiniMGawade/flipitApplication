@@ -122,42 +122,32 @@ class PopularCode extends \KC\Entity\PopularCode
             if (!empty($manullyAddedCodes[$lenOldMN])) {
                 if ($manullyAddedCodes[$lenOldMN]['position'] == $position) {
                     $Ar = array('type' => $manullyAddedCodes[$lenOldMN]['type'],
-                            'offerId' => $manullyAddedCodes[$lenOldMN]['offer']['id'],
+                            'popularcode' => $manullyAddedCodes[$lenOldMN]['offer']['id'],
                             'position' => $manullyAddedCodes[$lenOldMN]['position']);
 
                     $newArray[$manullyAddedCodes[$lenOldMN]['offer']['id']] = $Ar;
                     $lenOldMN++;
                     $position++;
-
                 } elseif (!array_key_exists(@$newPopularCodes[$lenNewPop]['offerId'], $newArray)) {
-
-                    $Ar = array('type' => 'AT', 'offerId' => @$newPopularCodes[$lenNewPop]['offerId'],
+                    $Ar = array('type' => 'AT', 'popularcode' => @$newPopularCodes[$lenNewPop]['offerId'],
                             'position' => $position);
                     @$newArray[$newPopularCodes[$lenNewPop]['offerId']] = $Ar;
                     $lenNewPop++;
                     $position++;
-
                 } else {
-
                     $lenNewPop++;
                 }
-
             } elseif (!array_key_exists($newPopularCodes[$lenNewPop]['offerId'], $newArray)) {
-
-                $Ar = array('type' => 'AT', 'offerId' => $newPopularCodes[$lenNewPop]['offerId'],
+                $Ar = array('type' => 'AT', 'popularcode' => $newPopularCodes[$lenNewPop]['offerId'],
                         'position' => $position);
                 $newArray[$newPopularCodes[$lenNewPop]['offerId']] = $Ar;
                 $lenNewPop++;
                 $position++;
-
             } else {
-
                 $lenNewPop++;
             }
-
             $length++;
         }
-
         return $newArray;
     }
 
@@ -170,15 +160,16 @@ class PopularCode extends \KC\Entity\PopularCode
             ->getQuery();
         $query->execute();
         foreach ($newArray as $p) {
-
             if ($p['type']!='MN' && $p['offerId']!='') {
-
                 //save popular code in database if new
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $pc = new \KC\Entity\PopularCode();
                 $pc->type = $p['type'];
-                $pc->popularcode = $p['offerId'];
+                $pc->popularcode = $entityManagerLocale->find('KC\Entity\Offer', $p['offerId']);
                 $pc->position = $p['position'];
+                $pc->deleted = 0;
+                $pc->created_at = new \DateTime('now');
+                $pc->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pc);
                 $entityManagerLocale->flush();
 
@@ -199,7 +190,6 @@ class PopularCode extends \KC\Entity\PopularCode
 
             }
         }
-
         return true;
     }
 
@@ -420,8 +410,11 @@ class PopularCode extends \KC\Entity\PopularCode
                 $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $pc = new \KC\Entity\PopularCode();
                 $pc->type = 'MN';
-                $pc->popularcode = $id;
+                $pc->popularcode = $entityManagerLocale->find('KC\Entity\Offer', $id);
                 $pc->position = (intval($NewPos) + 1);
+                $pc->deleted = 0;
+                $pc->created_at = new \DateTime('now');
+                $pc->updated_at = new \DateTime('now');
                 $entityManagerLocale->persist($pc);
                 $entityManagerLocale->flush();
                 
@@ -614,22 +607,23 @@ class PopularCode extends \KC\Entity\PopularCode
     public static function savePopularOffersPosition($offerId)
     {
         if (!empty($offerId)) {
-            $entityManagerLocale  = \Zend_Registry::get('emLocale');
-            $tableName = 'popular_code';
-            $entityManagerLocale->getDatabasePlatform()->getTruncateTableSQL($tableName);
+            $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
+            $query = $queryBuilder->delete('KC\Entity\PopularCode', 's')
+            ->where('s.id > 0')
+            ->getQuery();
+            $query->execute();
             $offerId = explode(',', $offerId);
             $i = 1;
             foreach ($offerId as $offerIdValue) {
-                
+                $entityManagerLocale  = \Zend_Registry::get('emLocale');
                 $popularCode = new \KC\Entity\PopularCode();
-                $popularCode->popularcode = $offerIdValue;
+                $popularCode->popularcode = $entityManagerLocale->find('KC\Entity\Offer', $offerIdValue);
                 $popularCode->position = $i;
                 $popularCode->type = "MN";
                 $popularCode->status = 1;
                 $popularCode->deleted = 0;
                 $popularCode->created_at = new \DateTime('now');
                 $popularCode->updated_at = new \DateTime('now');
-                print_r($popularCode);die;
                 $entityManagerLocale->persist($popularCode);
                 $entityManagerLocale->flush();
                 $i++;
