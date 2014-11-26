@@ -1030,7 +1030,6 @@ class Offer extends BaseOffer
             ->andWhere('s.id='.$id)
             ->andWhere('s.deleted = 0')
             ->andWhere('o.discountType != "NW"')
-           // ->andWhere('o.Visability!="MEM"')
             ->orderBy('o.editorPicks DESC')
             ->addOrderBy('o.exclusiveCode DESC')
             ->addOrderBy('o.discountType ASC')
@@ -1136,11 +1135,11 @@ class Offer extends BaseOffer
     public static function getOfferVisability($offerId)
     {
         $offerVisability = Doctrine_Query::create()
-        ->select('o.id')
-        ->from("Offer o")
-        ->where("o.Visability ='MEM'")
-        ->andWhere("o.id =$offerId")
-        ->fetchArray();
+            ->select('o.id')
+            ->from("Offer o")
+            ->where("o.Visability ='MEM'")
+            ->andWhere("o.id =$offerId")
+            ->fetchArray();
 
         return !empty($offerVisability) ? true : false;
     }
