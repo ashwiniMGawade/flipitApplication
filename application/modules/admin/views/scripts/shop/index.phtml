@@ -6,11 +6,13 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/bootbox.min.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.js");
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
 //$this->headScript()->appendFile(PUBLIC_PATH . "/js/ext-lang-de-min.js?1209478552");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/jquery.validate.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "/js/back_end/shop.js");
 
 $sessionNamespace = new Zend_Session_Namespace();
 
 ?>
+
 <?php echo $this->headTitle()->append('Shops List');?>
 <div id="imbullbody-content" style="overflow: hidden;">
         <!-- Shops list start -->
@@ -42,7 +44,7 @@ $sessionNamespace = new Zend_Session_Namespace();
            <?php
             # make gloabl shop export only available for superadmins
          	if ( $sessionNamespace->settings['rights']['site']['rights'] == '1' ) : ?>
-                   / <a href="<?php echo HTTP_PATH ?>admin/shop/global-export-xlx"><?php echo $this->translate('Global Export List'); ?></a>
+                   / <a href="javascript:void(0);" onclick='showModel("","","add");'><?php echo $this->translate('Global Export List'); ?></a>
           <?php endif;?>
          </p>
 
@@ -77,3 +79,35 @@ $sessionNamespace = new Zend_Session_Namespace();
 
       <!-- Shops list End -->
  </div>
+
+<div class="modal display-none popup-width" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" 
+    aria-hidden="true">
+    <div class="wrap columns-2">
+        <form name="globalExportForm" id="globalExportForm" method="post" 
+            action="<?php echo HTTP_PATH ?>admin/shop/global-export-xlx">
+            <div class="m-item-popup-hdr"><?php echo $this->translate('Global export password');?></div>
+            <div id="poststuff" class="metabox-holder has-right-sidebar">
+                <div id="post-body">
+                    <div class="mainpage-content-line">
+                        <div class="mainpage-content-left">
+                            <label>
+                                <strong><?php echo $this->translate('Password');?></strong>
+                            </label>
+                        </div>
+                        <div class="mainpage-content-right-inner-right-other display-none"></div>
+                        <div class="mainpage-content-right">
+                            <input type="text" placeholder="Password.." class="span3" name="password" id="password">
+                        </div>
+                    </div> 
+              </div>
+              <br class="clear">
+            </div>
+            <div class="m-item-popup-btm">
+                <input type="hidden" id="hidimageorg" name="hidimageorg">
+                <button id="submitButton" class="btn btn-large btn-primary fl export-submit-btn" 
+                    type="submit"><?php echo $this->translate('Submit');?></button> 
+                <button class="btn ml10 m5" data-dismiss="modal"><?php echo $this->translate('Cancel');?></button>
+            </div>
+        </form>
+    </div>
+</div>

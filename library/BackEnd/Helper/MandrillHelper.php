@@ -28,7 +28,7 @@ class BackEnd_Helper_MandrillHelper
                 $passwordKey,
                 $currentObject
             );
-        } elseif (isset($linkType) && $linkType == 'frontend') {
+        } elseif ((isset($linkType) && $linkType == 'frontend')) {
             self::setMandrillMergeVars(
                 $visitorDirectLoginInformation,
                 $visitorInformation,

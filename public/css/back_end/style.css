@@ -3475,3 +3475,8 @@ div#error-message {
 .shop-wordcount-width{
 	width: 99% !important;
 }
+
+#globalExportForm .export-submit-btn{
+    margin-top: 6px;
+    padding: 4px 20px;
+}
