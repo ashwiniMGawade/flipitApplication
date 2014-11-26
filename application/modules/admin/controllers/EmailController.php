@@ -5,14 +5,14 @@ class Admin_EmailController extends Zend_Controller_Action
     public $flashMessenger = '';
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
         $params = $this->_getAllParams();
-        if (!Auth_StaffAdapter::hasIdentity()) {
-            $referer = new Zend_Session_Namespace('referer');
+        if (!\Auth_StaffAdapter::hasIdentity()) {
+            $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect('/admin/auth/index');
         }
-        BackEnd_Helper_viewHelper::closeConnection($conn2);
+        \BackEnd_Helper_viewHelper::closeConnection($conn2);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
 
@@ -44,155 +44,124 @@ class Admin_EmailController extends Zend_Controller_Action
     public function getEmailsAction()
     {
         $params = $this->_getAllParams();
-        $emailData = Emails::getAllEmailsContent($params);
+        $emailData = \KC\Repository\Emails::getAllEmailsContent($params);
 
         echo Zend_Json::encode($emailData);
         die();
     }
 
-
-    /**
-     * Get template data
-     * @author asharma
-     * @params template ID
-     * @version 1.0
-     */
     public function editEmailsAction()
     {
         $params = $this->_getAllParams();
         $this->view->offerId = $params['id'];
-
         $this->view->qstring = $_SERVER['QUERY_STRING'];
-
         $templateId = $params['id'];
-
-        $templateData = Emails::getTemplateContent($templateId);
-        //echo "<pre>";print_r($templateData);die;
+        $templateData = \KC\Repository\Emails::getTemplateContent($templateId);
         $this->view->templateId = $templateId;
         $this->view->templateData = $templateData;
-        // end code
     }
 
 
-    /**
-     * emailHeaderFooter
-     *
-     * save email header/footer content
-     *
-     * @author Amit Sharma
-     */
     public function emailHeaderFooterAction()
     {
         # sanitize data
         $data = mysql_escape_string(
-                BackEnd_Helper_viewHelper::stripSlashesFromString(
-                        $this->getRequest()->getParam('data'))) ;
-
-       $templateId = $this->getRequest()->getParam('templateId');
+            \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $this->getRequest()->getParam('data')
+            )
+        );
+        $templateId = $this->getRequest()->getParam('templateId');
         # check tepmlete type
         switch($this->getRequest()->getParam('template')) {
             case 'email-header':
                 # update headet template content
-                Emails::updateHeaderContent($data, $templateId );
-            break;
+                \KC\Repository\Emails::updateHeaderContent($data, $templateId);
+                break;
 
             case 'email-footer':
                 # update footer template content
-                Emails::updateFooterContent($data, $templateId);
-            break;
+                \KC\Repository\Emails::updateFooterContent($data, $templateId);
+                break;
         }
-
         die ;
     }
 
 
 
-      public function saveemailcontentAction()
+    public function saveemailcontentAction()
     {
         # sanitize data
         $val = mysql_escape_string(
-                            BackEnd_Helper_viewHelper::stripSlashesFromString(
-                                        $this->getRequest()->getParam('val'))) ;
-
+            \BackEnd_Helper_viewHelper::stripSlashesFromString(
+                $this->getRequest()->getParam('val')
+            )
+        );
         $templateId =  $this->getRequest()->getParam('templateId');
-
-        Emails::updateBodyContent($val, $templateId);
-
+        \KC\Repository\Emails::updateBodyContent($val, $templateId);
         die;
     }
 
-
-      /**
-     * mandrill
-     *
-     * This function initialize the mandrill and send the mail using mandrill template
-     *
-     * @author cbhopal
-     * @version 1.0
-     */
     public function mandrillAction()
     {
         if ($this->_request->isPost()) {
             //add the flash mesage that the newsletter has been sent
             $flash = $this->_helper->getHelper('FlashMessenger');
 
-            $isScheduled = $this->getRequest()->getParam("isScheduled" , false);
+            $isScheduled = $this->getRequest()->getParam("isScheduled", false);
 
-            if($isScheduled) {
-                if(Signupmaxaccount::saveScheduledNewsletter( $this->getRequest())) {
-                    $flash->addMessage(array('success' => $this->view->translate('Newsletter has been successfully scheduled')));
+            if ($isScheduled) {
+                if (\KC\Repository\Signupmaxaccount::saveScheduledNewsletter($this->getRequest())) {
+                    $flash->addMessage(
+                        array(
+                            'success' => $this->view->translate('Newsletter has been successfully scheduled')
+                        )
+                    );
                 } else {
-                    $flash->addMessage(array('error' => $this->view->translate('There is some problem in your data') ));
+                    $flash->addMessage(array('error' => $this->view->translate('There is some problem in your data')));
                 }
 
-                $this->_helper->redirector('emailcontent' , 'accountsetting' , null ) ;
+                $this->_helper->redirector('emailcontent', 'accountsetting', null);
             }
 
             # update current scheduled status to sent
-            Signupmaxaccount::updateNewsletterSchedulingStatus();
+            \KC\Repository\Signupmaxaccount::updateNewsletterSchedulingStatus();
 
-            if(LOCALE == '') {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND , '/') ."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
+            if (LOCALE == '') {
+                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') ."><img src='".HTTP_PATH."public/images/HeaderMail.gif'/></a>";
                 $siteName = "Kortingscode.nl";
-            } else  {
-                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND , '/') ."><img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
+            } else {
+                $imgLogoMail = "<a href=". rtrim(HTTP_PATH_FRONTEND, '/') ."><img src='".HTTP_PATH."public/images/flipit-welcome-mail.jpg'/></a>";
                 $siteName = "Flipit.com";
             }
 
-            set_time_limit ( 10000 );
-            ini_set('max_execution_time',115200);
-            ini_set("memory_limit","1024M");
+            set_time_limit(10000);
+            ini_set('max_execution_time', 115200);
+            ini_set("memory_limit", "1024M");
 
             //get offers from top ten popular shops and top one cateory as in homepage
-
-            $voucherflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShops_list');
-
+            $voucherflag =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularShops_list');
             //key not exist in cache
 
-            if($voucherflag){
+            if ($voucherflag) {
 
                 # get 10 popular vouchercodes for news letter
-                $topVouchercodes = FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
-                $topVouchercodes =  FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes,10);
+                $topVouchercodes = \FrontEnd_Helper_viewHelper::gethomeSections("popular", 10) ;
+                $topVouchercodes =  \FrontEnd_Helper_viewHelper::fillupTopCodeWithNewest($topVouchercodes, 10);
 
             } else {
-                $topVouchercodes = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShops_list');
+                $topVouchercodes = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularShops_list');
             }
 
-            $categoryflag =  FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
+            $categoryflag =  \FrontEnd_Helper_viewHelper::checkCacheStatusByKey('10_popularCategories_list');
 
             //key not exist in cache
 
-            if($categoryflag){
-
-                $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10),0,1);
-
-                FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
+            if ($categoryflag) {
+                $topCategories = array_slice(FrontEnd_Helper_viewHelper::gethomeSections("category", 10), 0, 1);
+                \FrontEnd_Helper_viewHelper::setInCache('10_popularCategories_list', $topCategories);
 
             } else {
-
-                $topCategories = FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
-
+                $topCategories = \FrontEnd_Helper_viewHelper::getFromCacheByKey('10_popularCategories_list');
             }
 
 
@@ -250,21 +219,28 @@ class Admin_EmailController extends Zend_Controller_Action
                             );
 
             //merge all the arrays into single array
-            $data = array_merge($voucherCodesData['dataShopName'],
-                    $voucherCodesData['dataOfferName'],
-                    $voucherCodesData['dataShopImage'],
-                    $voucherCodesData['expDate'],
-                    $this->headerMail, $this->dataShopNameCat,
-                    $this->dataOfferNameCat, $this->dataShopImageCat,
-                    $this->expDateCat, $this->category
+            $data = array_merge(
+                $voucherCodesData['dataShopName'],
+                $voucherCodesData['dataOfferName'],
+                $voucherCodesData['dataShopImage'],
+                $voucherCodesData['expDate'],
+                $this->headerMail,
+                $this->dataShopNameCat,
+                $this->dataOfferNameCat,
+                $this->dataShopImageCat,
+                $this->expDateCat,
+                $this->category
             );
 
             //merge the permalinks array and static content array into single array
-            $dataPermalink = array_merge($voucherCodesData['shopPermalink'], $this->shopPermalinkCat,
-                                         $this->staticContent);
+            $dataPermalink = array_merge(
+                $voucherCodesData['shopPermalink'],
+                $this->shopPermalinkCat,
+                $this->staticContent
+            );
 
             //initialize mandrill with the template name and other necessary options
-            $mandrill = new Mandrill_Init( $this->getInvokeArg('mandrillKey'));
+            $mandrill = new Mandrill_Init($this->getInvokeArg('mandrillKey'));
             $template_name = $this->getInvokeArg('newsletterTemplate');
             $template_content = $data;
 
@@ -279,7 +255,6 @@ class Admin_EmailController extends Zend_Controller_Action
                     'merge_vars' => $this->loginLinkAndData
             );
 
-
             try {
 
                 $mandrill->messages->sendTemplate($template_name, $template_content, $message);
@@ -291,19 +266,14 @@ class Admin_EmailController extends Zend_Controller_Action
                 $message = $this->view->translate('There is some problem in your data');
 
             }
-
             //send newsletter
-
             $flash->addMessage(array('success' => $message));
-
             //redirect to account setting controller after mail sent
-            $this->_helper->redirector('emailcontent' , 'accountsetting' , null ) ;
+            $this->_helper->redirector('emailcontent', 'accountsetting', null);
         } else {
-
-            $this->_helper->redirector('index' , 'index' , null ) ;
+            $this->_helper->redirector('index', 'index', null);
         }
         die;
-
     }
 
     public function emailSettingsAction()

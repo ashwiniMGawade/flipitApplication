@@ -108,11 +108,11 @@ class Admin_AccountsettingController extends Zend_Controller_Action
     public function indexAction()
     {
         // action body
-        $store_data = Signupfavoriteshop::getalladdstore();
+        $store_data = \KC\Repository\Signupfavoriteshop::getalladdstore();
         $this->view->store_data = $store_data;
-        $data = Signupcodes::getfreeCodelogin();
+        $data = \KC\Repository\Signupcodes::getfreeCodelogin();
         $this->view->codelogindata = $data;
-        $maxacc_data = Signupmaxaccount::getAllMaxAccounts();
+        $maxacc_data = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
         $this->view->maxacc_data = $maxacc_data;
     }
 
@@ -226,12 +226,12 @@ class Admin_AccountsettingController extends Zend_Controller_Action
 
     public function emailcontentAction()
     {
-        $data = Signupmaxaccount::getAllMaxAccounts();
+        $data = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
 
         $this->view->data = $data;
-        $this->view->localeSettings = LocaleSettings::getLocaleSettings();
+        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
         $this->view->rights = $this->_settings['administration'];
-        $this->view->timezones_list = Signupmaxaccount::$timezones;
+        $this->view->timezones_list = \KC\Repository\Signupmaxaccount::$timezones;
     }
 
     public function saveemailcontentAction()
