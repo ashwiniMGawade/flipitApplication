@@ -99,7 +99,7 @@ EOD;
             $site_name = "Flipit.com";
         }
         $locale = LOCALE != '' ? '/'.LOCALE : '';
-        $chainLocale = KC\Entity\Website::getWebsiteDetails('', strtolower($site_name).$locale);
+        $chainLocale = \KC\Repository\Website::getWebsiteDetails('', strtolower($site_name).$locale);
         $ogCustomLocale = explode('_', $chainLocale['chain']);
         $ogCustomLocale = isset($ogCustomLocale[1]) ? $ogCustomLocale[1] : $ogCustomLocale[0];
         $ogLocale = !empty($chainLocale) && $chainLocale['chain'] != '' ?
@@ -685,11 +685,11 @@ EOD;
         $variable = str_replace(
             array('[month]', '[year]', '[day]', '[offers]', '[coupons]', '[accounts]', '[visitors]', '[shops]'),
             array(CURRENT_MONTH, CURRENT_YEAR, CURRENT_DAY,
-            KC\Entity\Dashboard::getDashboardValueToDispaly("total_no_of_offers"),
-            KC\Entity\Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code"),
-            KC\Entity\Dashboard::getDashboardValueToDispaly("total_no_members"),
-            KC\Entity\Dashboard::getDashboardValueToDispaly("total_no_members"),
-            KC\Entity\Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code")),
+            KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_of_offers"),
+            KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code"),
+            KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_members"),
+            KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_members"),
+            KC\Repository\Dashboard::getDashboardValueToDispaly("total_no_of_shops_online_code")),
             $variable
         );
         return $variable;
