@@ -27,7 +27,7 @@ class Page Extends \KC\Entity\Page
         if (!empty($pageDetails)) {
             return $pageDetails;
         } else {
-            throw new Zend_Controller_Action_Exception('', 404);
+            throw new \Zend_Controller_Action_Exception('', 404);
         }
     }
 
@@ -42,9 +42,7 @@ class Page Extends \KC\Entity\Page
             ->setParameter(2, 1)
             ->andWhere('page.publish = ?2')
             ->setParameter(3, 0)
-            ->andWhere('page.pagelock = ?3')
-            ->setParameter(4, 0)
-            ->andWhere('page.pagelock = ?4');
+            ->andWhere('page.pageLock = ?3');
         $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $pageDetails;
     }
@@ -192,7 +190,7 @@ class Page Extends \KC\Entity\Page
             ->andWhere("page.pageTitle LIKE '$srhPage%'");
         if ($roleId>2) {
             $query->setParameter(3, 0);
-            $query->andWhere('page.pagelock = ?3');
+            $query->andWhere('page.pageLock = ?3');
         }
         if (trim($params["searchType"])!= 'undefined') {
             $query->setParameter(4, $params['searchType']);
@@ -396,7 +394,7 @@ class Page Extends \KC\Entity\Page
             ->andWhere("page.pageTitle LIKE '$keyword%'");
         $role =  \Zend_Auth::getInstance()->getIdentity()->users->id;
         if ($role=='4' || $role=='3') {
-            $query->setParameter(3, 0)->andWhere('page.pagelock = ?3');
+            $query->setParameter(3, 0)->andWhere('page.pageLock = ?3');
         }
         $query->orderBy("page.pageTitle", "ASC")->setMaxResults(5);
         $pageDetails = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);

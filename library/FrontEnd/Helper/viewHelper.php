@@ -911,7 +911,7 @@ EOD;
     {
         $currentObject->getResponse()->setHttpResponseCode(404);
         $currentObject->view->popularShops = \KC\Repository\Shop::getPopularStores(12);
-        $websitesWithLocales = self::getWebsitesLocales(Website::getAllWebsites());
+        $websitesWithLocales = self::getWebsitesLocales(\KC\Repository\Website::getAllWebsites());
         $currentObject->view->flipitLocales = $websitesWithLocales;
     }
 
