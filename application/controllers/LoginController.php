@@ -78,6 +78,17 @@ class LoginController extends Zend_Controller_Action
             $shopIdNameSpace = new Zend_Session_Namespace('shopId');
             if ($shopIdNameSpace->shopId) {
                 $shopName = Shop::getShopName(base64_decode($shopIdNameSpace->shopId));
+
+                $membersNamespace = new Zend_Session_Namespace('membersOnly');
+                if (isset($membersNamespace->membersOnly) && $membersNamespace->membersOnly == '1') {
+                    $shopInfo = Shop::getShopInformation(base64_decode($shopIdNameSpace->shopId));
+                    $shopPermalink = !empty($shopInfo) ? $shopInfo[0]['permaLink'] : '';
+                } else {
+                    $shopPermalink = FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                }
+                $membersNamespace->membersOnly = '';
+
+                    
                 $visitorFavouriteShopStatus = Visitor::getFavoriteShopsForUser(
                     Auth_VisitorAdapter::getIdentity()->id,
                     base64_decode($shopIdNameSpace->shopId)
@@ -93,7 +104,7 @@ class LoginController extends Zend_Controller_Action
                 }
                 $shopIdNameSpace->shopId = '';
                 $message = $shopName. " ".  FrontEnd_Helper_viewHelper::__translate($messageText);
-                $redirectUrl = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten');
+                $redirectUrl = HTTP_PATH_LOCALE. $shopPermalink;
                 self::addFlashMessage($message, $redirectUrl, 'success');
             } else {
                 $this->_redirect($redirectUrl);

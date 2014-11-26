@@ -259,7 +259,11 @@ class FrontEnd_Helper_OffersPartialFunctions
                 '<div class="'.$class.'">
                 '.$offerAnchorTagContent.' </div>';
         } else {
-            if (isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
+            $visitorInformation = '';
+            if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
+                $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+            }
+            if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
                 $offerLink =
                     '<span class="'.$class.'">
                 '.$offerAnchorText.' </span>';

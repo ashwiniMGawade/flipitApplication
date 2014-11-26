@@ -33,7 +33,6 @@ class FrontEnd_Helper_SignUpPartialFunction
                     break;
             }
             if ($whichFormIsPostForValidation->isValid($currentSubmittedForm->getRequest()->getPost())) {
-                print_r($currentSubmittedForm->getRequest()->getParams()); die;
                 $signUpStep2Url = self::signUpRedirectLink($whichFormIsPostForValidation);
                 header('location:'. $signUpStep2Url);
                 exit();

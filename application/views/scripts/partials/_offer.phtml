@@ -6,9 +6,6 @@
 <?php
 $offerCounter = '';
 $visitorInformation = '';
-if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
-    $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-}
 
 foreach ($this->offers as $offer) {
     $offerCounter++;
@@ -58,6 +55,10 @@ foreach ($this->offers as $offer) {
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
+    if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
+        $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+    }
+    
     if (!empty($visitorInformation)) {
         echo $offerPartial->getCommonRedirectUrlForOffer(
             $offer,
