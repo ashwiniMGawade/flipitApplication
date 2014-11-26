@@ -359,6 +359,8 @@ class Offer extends BaseOffer
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
         $key = 'shop_expiredOffers'  . $shopId . '_list';
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+        $shophowtokey = '6_topOffersHowto'  . $shopId . '_list';
+        FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allMoneySavingGuideLists');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('20_topOffers_list');
         FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll('allOfferList');
@@ -1003,7 +1005,7 @@ class Offer extends BaseOffer
         return $OfferDetails;
     }
 
-    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false)
+    public static function getAllOfferOnShop($id, $limit = null, $getExclusiveOnly = false, $includingOffline = false, $visibility = false)
     {
         $nowDate = date("Y-m-d H:i");
         $offers = Doctrine_Query::create()
@@ -1034,7 +1036,6 @@ class Offer extends BaseOffer
             ->andWhere('s.id='.$id)
             ->andWhere('s.deleted = 0')
             ->andWhere('o.discountType != "NW"')
-            ->andWhere('o.Visability!="MEM"')
             ->orderBy('o.editorPicks DESC')
             ->addOrderBy('o.exclusiveCode DESC')
             ->addOrderBy('o.discountType ASC')
@@ -1044,6 +1045,10 @@ class Offer extends BaseOffer
 
         if ($getExclusiveOnly) {
             $offers = $offers->andWhere('o.exclusiveCode = 1');
+        }
+
+        if ($visibility) {
+            $offers = $offers->andWhere('o.Visability != "MEM"');
         }
 
         if ($limit) {
@@ -1136,6 +1141,18 @@ class Offer extends BaseOffer
 
         return true;
     }
+
+    public static function getOfferVisiblity($offerId)
+    {
+        $offerVisiblity = Doctrine_Query::create()
+            ->select('o.id')
+            ->from("Offer o")
+            ->where("o.Visability ='MEM'")
+            ->andWhere("o.id =$offerId")
+            ->fetchArray();
+
+        return !empty($offerVisiblity) ? true : false;
+    }
     ##################################################################################
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
@@ -1169,7 +1186,8 @@ class Offer extends BaseOffer
 
             $key = '6_topOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -1228,7 +1246,8 @@ class Offer extends BaseOffer
 
             $key = '6_topOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -1337,7 +1356,8 @@ class Offer extends BaseOffer
 
             $key = '6_topOffers'  . $u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . $u->shopId . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  .$u->shopId . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -1668,7 +1688,8 @@ class Offer extends BaseOffer
             //call cache function
             $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 
@@ -1991,7 +2012,8 @@ class Offer extends BaseOffer
 
             $key = '6_topOffers'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-
+            $shophowtokey = '6_topOffersHowto'  . intval($params['selctedshop']) . '_list';
+            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($shophowtokey);
             $key = 'shop_latestUpdates'  . intval($params['selctedshop']) . '_list';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
 

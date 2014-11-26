@@ -1,6 +1,10 @@
 function setHiddenFieldValue() {
     $('input#shopId').val($('input#currentShop').val());
 };
+
+function setMembersonlyValue() {
+    $('input#membersOnly').val(1);
+};
 function signUpNewsLetter(formName){ 
     var formName = 'form#' + formName;
     validateSignUpNewsLetter(formName);

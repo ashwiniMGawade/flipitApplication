@@ -542,7 +542,7 @@ EOD;
                 $shopData = Offer::getAllOfferOnShop($shopId);
                 break;
             case 'topsixoffers':
-                $shopData = Offer::getAllOfferOnShop($shopId, $limit);
+                $shopData = Offer::getAllOfferOnShop($shopId, $limit, false, false, true);
                 break;
             case 'popular':
                 $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);

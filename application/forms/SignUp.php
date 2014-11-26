@@ -34,8 +34,9 @@ class Application_Form_SignUp extends Application_Form_Base
         $emailAddressTextBox->setLabel(FrontEnd_Helper_viewHelper::__form('from_email_address'));
         
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
+        $membersonlyHiddenField =  new Zend_Form_Element_Hidden('membersOnly');
         $formNameIdHiddenField =  new Zend_Form_Element_Hidden('formName');
         $formNameIdHiddenField->setValue($this->zendFormName);
-        $this->addElements(array($emailAddressTextBox, $shopIdHiddenField,  $formNameIdHiddenField));
+        $this->addElements(array($emailAddressTextBox, $shopIdHiddenField,  $formNameIdHiddenField, $membersonlyHiddenField));
     }
 }
