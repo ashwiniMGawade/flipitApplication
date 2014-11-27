@@ -119,9 +119,9 @@ $mostPopularCoupon = FrontEnd_Helper_layoutContent::getMostPopularCouponOnEarth(
                             </strong>
                         </a>
                         <p><span class="mark"><?php echo 'Added: '.
-                        date('M d, Y', strtotime($mostPopularCoupon['mostPopularCoupon'][0]['startDate'])).
+                        $mostPopularCoupon['mostPopularCoupon'][0]['startDate']->format('M d, Y').
                         ', Expires on: '.
-                        date('M d, Y', strtotime($mostPopularCoupon['mostPopularCoupon'][0]['endDate'])); ?></span>
+                        $mostPopularCoupon['mostPopularCoupon'][0]['endDate']->format('M d, Y'); ?></span>
                             <?php echo $mostPopularCoupon['mostPopularCoupon'][0]['exclusiveCode'] != '' ? 
                             '<span class="mark2">Exclusive</span>' : '' ; ?></p>
                         <a href="<?php echo $domainName.$mostPopularCoupon['mostPopularCoupon'][1]['permaLink']; ?>">

@@ -788,7 +788,7 @@ class Offer Extends \KC\Entity\Offer
             'o.id,o.Visability,o.userGenerated,o.title,o.authorId,
             o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
             o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refURL as refUrl,
-            o.discountType,o.startDate as startdate,o.endDate, s.id as shopId'
+            o.discountType,o.startDate,o.endDate, s.id as shopId'
         )
             ->from('KC\Entity\Offer', 'o')
             ->leftJoin('o.shopOffers', 's')

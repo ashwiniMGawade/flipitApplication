@@ -396,7 +396,7 @@ EOD;
 
     public static function getSplashInformation()
     {
-        $splash = new Splash();
+        $splash = new \KC\Repository\Splash();
         return $splash->getSplashInformation();
     }
 
