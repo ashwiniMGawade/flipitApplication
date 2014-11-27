@@ -78,12 +78,6 @@ EOD;
         }
         return rtrim($permalink, '/');
     }
-
-    public static function generateShopMoneySavingGuideArticle($slug, $limit, $articleId)
-    {
-        $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $articleId);
-        return $ShopMoneySavingGuideArticle;
-    }
     
     public static function getFooterData()
     {
@@ -402,7 +396,7 @@ EOD;
 
     public static function getSplashInformation()
     {
-        $splash = new Splash();
+        $splash = new \KC\Repository\Splash();
         return $splash->getSplashInformation();
     }
 
