@@ -68,9 +68,9 @@ class Translations Extends \KC\Entity\Translations
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('translations')
-        ->from('KC\Entity\Translations', 'translations')
-        ->where("BINARY translations.translationKey = '".$translation['translationKey']."'");
+        ->select('t')
+        ->from('KC\Entity\Translations', 't')
+        ->where("t.translationKey = '".$translation['translationKey']."'");
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $data;
     }

@@ -2,14 +2,14 @@
 namespace KC\Repository;
 class MoneySaving Extends \KC\Entity\MoneySaving
 {
-    #####################################################
-    ############# REFACTORED CODE #######################
-    ####################################################
     public static function getMostReadArticles($limit, $userId = "")
     {
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
-        ->select('chap, av.id, sum(av.onload) as pop, a, at.path, at.name, ai.name, ai.path')
+        ->select(
+            'chap.id as chapterId, chap.content as chapterContent, av.id, sum(av.onload) as pop,
+            a.title, a.permalink, a.metadescription, a.content, at.path, at.name, ai.name, ai.path'
+        )
         ->from('KC\Entity\ArticleViewCount', 'av')
         ->leftJoin('av.articles', 'a')
         ->leftJoin('a.thumbnail', 'at')
@@ -19,9 +19,9 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         ->orderBy('pop', 'DESC')
         ->where('a.deleted = 0');
         if (isset($userId)  && $userId!= "") {
-            $mostReadArticles->andWhere('a.authorid ='.$userId.'');
+            $query->andWhere('a.authorid ='.$userId.'');
         }
-        $mostReadArticles = $mostReadArticles->setMaxResult($limit);
+        $mostReadArticles = $query->setMaxResults($limit);
         $mostReadArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $mostReadArticles;
     }
@@ -42,7 +42,7 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             ->Where('a.deleted = 0')
             ->andWhere('a.id !='.$articleId)
             ->orderBy('a.publishdate', 'DESC')
-            ->setMaxResult($limit);
+            ->setMaxResults($limit);
         $recentlyAddedArticles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $recentlyAddedArticles;
     }
@@ -113,9 +113,9 @@ class MoneySaving Extends \KC\Entity\MoneySaving
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder
             ->select(
-                'chap, a.id, a.title, a.permalink, a.content, a.authorid, 
-                a.authorname, a.created_at, a.publishdate, ai.path, ai.name as articleImageName,aai.path,
-                aai.name, ac.categorytitlecolor'
+                'chap.id as chapterId, chap.content as chapterContent, a.id, a.title, a.permalink, a.content,
+                a.authorid, a.authorname, a.created_at, a.publishdate, ai.path as articleImagePath,
+                ai.name as articleImageName, aai.path, aai.name, ac.categorytitlecolor'
             )
             ->from('KC\Entity\Articles', 'a')
             ->leftJoin('a.thumbnail', 'ai')
@@ -123,28 +123,12 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             ->leftJoin('a.refArticleCategory', 'r')
             ->leftjoin('a.category', 'ac')
             ->leftJoin('a.articleChapter', 'chap')
-            ->where('r.articlecategory ='.$categoryId)
+            ->where('ac.id ='.$categoryId)
             ->andWhere('a.deleted = 0')
-            ->setMaxResult($limit)
+            ->setMaxResults($limit)
             ->orderBy('a.publishdate', 'DESC');
         $articles = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         return $articles;
-    }
-
-
- ################## REFACTORED #######################
-
-    public static function getSaving()
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('p.id,o.title,p.type,p.position')
-        ->from('KC\Entity\MoneysavingArticle', 'p')
-        ->leftJoin('p.article', 'o')
-        ->orderBy('p.position', 'ASC');
-        $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $data;
-
     }
 
     public static function delartCategories($pageid)
@@ -156,129 +140,5 @@ class MoneySaving Extends \KC\Entity\MoneySaving
             ->getQuery();
             $query->execute();
         return true;
-    }
-
-    public static function getAllMoneySavingArticleForSearch($keyword, $limit)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('DISTINCT a,ai,chap')
-        ->from('KC\Entity\Articles', 'a')
-        ->leftJoin('a.thumbnail', 'ai')
-        ->innerJoin('a.refArticleCategory', 'r')
-        ->innerJoin('r.moneysaving', 'm')
-        ->leftJoin('a.articleChapter', 'chap')
-        ->setMaxResult(6)
-        ->where('a.deleted= 0')
-        ->andWhere("a.title LIKE '%?%' or a.content LIKE '%?%'", $keyword, $keyword);
-        $papularArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $papularArticle;
-    }
-
-    public static function generateMoneySavingArticles($id)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('DISTINCT a.id')
-        ->from('KC\Entity\Articles', 'a')
-        ->innerJoin('a.refArticleCategory', 'r')
-        ->innerJoin('r.moneysaving', 'm')
-        ->innerJoin('m.page', 'p')
-        ->where('p.id ='.$id);
-        $popularArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $popularArticle;
-    }
-
-    public static function getMostpopularArticles($id, $limit)
-    {
-        $format = 'Y-m-j H:m:s';
-        $date = date($format);
-        $past1Day = date($format, strtotime('-1 day' . $date));
-        $start = date('Y-m-d').' 00:00:00';
-        $end = date('Y-m-d').' 23:59:59';
-        $nowDate = $date;
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('chap.*,av.articleid, a.permalink, ((sum(av.onclick)) / (DATEDIFF(NOW(),a.publishdate))) as pop, a.title,a.content, a.authorname, a.authorid,  a.publishdate, ai.path, ai.name')
-        ->from('KC\Entity\ArticleViewCount', 'av')
-        ->leftJoin('av.articles', 'a')
-        ->leftJoin('a.articleImage', 'ai')
-        ->leftJoin('a.articleChapter', 'chap')
-        ->where('av.updated_at >=' . "'$start' AND av.updated_at <="."'$end'")
-        ->setMaxResult($limit)
-        ->groupBy('av.articleid')
-        ->orderBy('pop DESC');
-        $popularArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $popularArticle;
-    }
-
-    public static function generateShopMoneySavingGuideArticle($slug, $limit, $shopId)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('chap,a.permalink,a.title,a.content, a.authorname, a.authorid, ai.path, ai.name, at.path, at.name')
-        ->from('KC\Entity\Articles', 'a')
-        ->leftJoin('a.articleImage', 'ai')
-        ->leftJoin('a.thumbnail', 'at')
-        ->leftJoin('a.storearticles', 'rs')
-        ->leftJoin('a.articleChapter', 'chap')
-        ->where('rs.articleshops='.$shopId)
-        ->andWhere('a.deleted = 0')
-        ->setMaxResult($limit);
-        $shopMoneySavingGuideArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $shopMoneySavingGuideArticle;
-    }
-
-    public static function generateMostReadArticleOfcategory($catId, $limit = 6)
-    {
-        $moneySavingArticles = self::generateMoneySavingArticlesOfcategory($catId);
-        $artArr = array();
-        for ($i=0; $i<count($moneySavingArticles); $i++) {
-            $artArr[] = $moneySavingArticles[$i]['id'];
-        }
-
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select(
-            'chap, aai.path, aai.name, ai.path, ai.name, av.id, av.articleid, sum(av.onclick) as pop,
-            a.title,a.content, a.authorname, a.permalink, a.authorid, a.publishdate'
-        )
-        ->from('KC\Entity\ArticleViewCount', 'av')
-        ->leftJoin('av.articles', 'a')
-        ->leftJoin('a.thumbnail', 'ai')
-        ->leftJoin('a.articleChapter', 'chap')
-        ->where('a.deleted=0')
-        ->setParameter(1, $artArr)
-        ->andWhere($queryBuilder->expr()->in('av.articles', '?1'))
-        ->groupBy('av.articles')
-        ->orderBy('pop DESC')
-        ->setMaxResult($limit);
-        $mostReadArticle = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $mostReadArticle;
-    }
-
-    public static function generateMoneySavingArticlesOfcategory($catId)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('DISTINCT a.id')
-        ->from('KC\Entity\Articles', 'a')
-        ->innerJoin('a.refArticleCategory', 'r')
-        ->where('r.articlecategory =' .$catId);
-        $article = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $article;
-    }
-
-    public static function generateRelatedCategory($catId, $limit = 10)
-    {
-        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $queryBuilder
-        ->select('ac.id, r.name as categoryName, r.permaLink, ci.path, ci.name')
-        ->from('KC\Entity\Articlecategory', 'ac')
-        ->leftJoin('ac.ArtCatIcon', 'ci')
-        ->where('ac.id ='.$catId)
-        ->setMaxResult($limit);
-        $relatedCategory = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $relatedCategory;
     }
 }
