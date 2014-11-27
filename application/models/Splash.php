@@ -4,24 +4,20 @@ class Splash extends BaseSplash
 {
     public function getSplashInformation()
     {
-        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder
-            ->select('s')
-            ->from('\KC\Entity\Splash', 's');
-        $splashInformation = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $splashInformation = Doctrine_Query::create()
+            ->select('*')
+            ->from('Splash')->fetchArray();
         return $splashInformation;
     }
 
     public function deleteSplashoffer()
     {
-        $queryBuilder  = \Zend_Registry::get('emUser')->createQueryBuilder();
-        $query = $queryBuilder->delete('\KC\Entity\Splash', 's')->getQuery()->execute();
+        Doctrine_Query::create()->delete()->from('Splash')->execute();
         return true;
     }
 
     public function getOfferById($offerId)
     {
-        $offer = \Zend_Registry::get('emLocale')->find('\KC\Entity\Offer', $offerId);
-        return $offer;
+        return Doctrine_Core::getTable('Offer')->findOneBy('id', $offerId);
     }
 }
