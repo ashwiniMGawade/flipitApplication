@@ -267,17 +267,14 @@ function getOffers(txtOffer,txtShop,type,iStart,iSortCol,iSortDir) {
 								
 								var abc = null;
 								
-								if(obj.aData.startDate === null){
-									abc = " ";
-								}else{
-									var tag = '';
-									var dat = obj.aData.startDate;
+								if(obj.aData.startDate !=null && obj.aData.startDate !='undefined' ) {
+								var splitdate = obj.aData.startDate.date.split(" ");
+								if(obj.aData.startDate.date != null && splitdate[0] != '1970-01-01') {
 									
-									tag = dat.split("-");
-									tag2 = tag[2];
-									var da = tag2.split(" ");
-									abc ="<a href='javascript:void(0)'>" +  (da[0]+'-'+tag[1]+'-'+tag[0]) + "</a>";
+										abc = obj.aData.startDate.date;
+								abc ="<a href='javascript:void(0)'>" +  obj.aData.startDate.date + "</a>";
 								}
+							}
 								 return abc;
 								 
 							},
@@ -288,21 +285,17 @@ function getOffers(txtOffer,txtShop,type,iStart,iSortCol,iSortDir) {
 						{
 							"fnRender" : function(obj) {
 								
-								var def = null;
+								var date = "";
+								if(obj.aData.endDate !=null && obj.aData.endDate !='undefined' ) {
+									var splitdate = obj.aData.endDate.date.split(" ");
+									if (obj.aData.endDate.date != null && splitdate[0] != '1970-01-01') {
+										
+											var date = obj.aData.endDate.date;
 								
-								if(obj.aData.endDate === null){
-									def = " ";
-								}else{
-									var tag = '';
-									var dat = obj.aData.endDate;
 									
-									tag = dat.split("-");
-									tag2 = tag[2];
-									var da = tag2.split(" ");
-									def ="<a href='javascript:void(0)'>" +  (da[0]+'-'+tag[1]+'-'+tag[0]) + "</a>";
-								}
-								
-								 return def;
+									}
+								}	
+								 return "<a href='javascript:void(0)'>" + date + "</a>";
 							},
 							"bSearchable" : true,
 							"bSortable" : true,

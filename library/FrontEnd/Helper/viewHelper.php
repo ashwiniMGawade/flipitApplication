@@ -78,12 +78,6 @@ EOD;
         }
         return rtrim($permalink, '/');
     }
-
-    public static function generateShopMoneySavingGuideArticle($slug, $limit, $articleId)
-    {
-        $ShopMoneySavingGuideArticle = MoneySaving::generateShopMoneySavingGuideArticle($slug, $limit, $articleId);
-        return $ShopMoneySavingGuideArticle;
-    }
     
     public static function getFooterData()
     {

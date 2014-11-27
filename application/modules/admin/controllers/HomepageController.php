@@ -175,7 +175,7 @@ class Admin_HomepageController extends Zend_Controller_Action
     public function indexAction()
     {
         // action body
-        $u = Auth_StaffAdapter::getIdentity();
+        $u = \Auth_StaffAdapter::getIdentity();
         $role = $u->users->id;
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
@@ -210,7 +210,7 @@ class Admin_HomepageController extends Zend_Controller_Action
             $message = $this->view->translate('Changes has been saved successfully.');
             $flash->addMessage(array('success' => $message ));
             $parmas = $this->_getAllParams();
-            $result = Signupmaxaccount::updateHeaderImage($parmas);
+            $result = \KC\Repository\Signupmaxaccount::updateHeaderImage($parmas);
 
             self::updateVarnish();
 
@@ -230,7 +230,7 @@ class Admin_HomepageController extends Zend_Controller_Action
                 $message = $this->view->translate('Changes has been saved successfully.');
                 $flash->addMessage(array('success' => $message ));
                 $parmas = $this->_getAllParams();
-                About::update($parmas);
+                \KC\Repository\About::update($parmas);
 
                 self::updateVarnish();
 
@@ -244,12 +244,12 @@ class Admin_HomepageController extends Zend_Controller_Action
 
 
         // return updated about content
-        $this->view->about = KC\Repository\About::getAboutContent();
+        $this->view->about = \KC\Repository\About::getAboutContent();
 
         // return updated about content
-        $this->view->seenIn = KC\Repository\SeenIn::getSeenInContent();
+        $this->view->seenIn = \KC\Repository\SeenIn::getSeenInContent();
 
-        $this->view->data = KC\Repository\PopularShop::getPopularShop();
+        $this->view->data = \KC\Repository\PopularShop::getPopularShop();
 
         //Return Popular voucher code from database
         //$data = PopularCode::getPopularCode();
@@ -257,21 +257,21 @@ class Admin_HomepageController extends Zend_Controller_Action
         $this->view->code = @$data;
 
         //Return Popular category code from database
-        $catg = KC\Repository\KC\Repository\KC\Repository\KC\Repository\PopularCategory::getPopularCategories();
+        $catg = \KC\Repository\PopularCategory::getPopularCategories();
         $this->view->category = @$catg;
 
         //Return Popular category code from database
-        $special = KC\Repository\KC\Repository\KC\Repository\SpecialList::getsplpage();
+        $special = \KC\Repository\SpecialList::getsplpage();
         $this->view->Speciallist = @$special;
 
         // Return Money saving Article from database
         $this->view->articles = KC\Repository\KC\Repository\MoneysavingArticle::getSaving();
 
         // Return locale for front end
-        $this->view->locale = KC\Repository\Signupmaxaccount::getAllMaxAccounts();
-        $this->view->localeSettings = KC\Repository\KC\Repository\KC\Repository\LocaleSettings::getLocaleSettings();
-        $this->view->timezones_list = KC\Repository\KC\Repository\Signupmaxaccount::$timezones;
-        $this->view->localeStatus = KC\Repository\Website::getLocaleStatus($_COOKIE['site_name']);
+        $this->view->locale = \KC\Repository\Signupmaxaccount::getAllMaxAccounts();
+        $this->view->localeSettings = \KC\Repository\LocaleSettings::getLocaleSettings();
+        $this->view->timezones_list = \KC\Repository\Signupmaxaccount::$timezones;
+        $this->view->localeStatus = \KC\Repository\Website::getLocaleStatus($_COOKIE['site_name']);
 
     }
 
