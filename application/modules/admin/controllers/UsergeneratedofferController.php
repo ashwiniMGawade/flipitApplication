@@ -50,17 +50,17 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function permanentdeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $deletePermanent = Offer::permanentDeleteOffer($id);
+        $deletePermanent = \KC\Repository\Offer::permanentDeleteOffer($id);
         die;
     }
     public function addofferAction()
     {
 
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
         $this->view->shopList=$shopObj->getOfferShopList();
-        $catObj = new Category();
+        $catObj = new \KC\Repository\Category();
         $this->view->catList=$catObj->getCategoryList();
-        $pageObj = new Page();
+        $pageObj = new \KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
 
      }
@@ -69,13 +69,13 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $params = $this->_getAllParams();
         $this->view->qstring = $_SERVER['QUERY_STRING'];
         $this->view->offerId = $params['id'];
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
         $this->view->shopList=$shopObj->getOfferShopList();
-        $catObj = new Category();
+        $catObj = new \KC\Repository\Category();
         $this->view->catList=$catObj->getCategoryList();
-        $pageObj = new Page();
+        $pageObj = new \KC\Repository\Page();
         $this->view->pages = $pageObj->getPagesOffer();
-           $this->view->offerVoteList = Vote::getofferVoteList($params['id']);
+           $this->view->offerVoteList = \KC\Repository\Vote::getofferVoteList($params['id']);
 
     }
 
@@ -83,7 +83,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function updateofferAction()
     {
         $params = $this->_getAllParams();
-        $offer = Doctrine_Core::getTable("UserGeneratedOffer")->find($params['offerId']);
+        $offer = new \KC\Repository\UserGeneratedOffer();
         $offer->updateOffer($params);
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('Offer has been updated successfully.');
@@ -99,7 +99,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function shopdetailAction()
     {
         $params = $this->_getAllParams();
-        $shopObj = new Shop();
+        $shopObj = new \KC\Repository\Shop();
         echo Zend_Json::encode($shopObj->getShopDetail($params['shopId']));
         die;
     }
@@ -108,7 +108,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
 
-        $offerObj = new Offer();
+        $offerObj = new \KC\Repository\UserGeneratedOffer();
         $offerObj->saveOffer($params);
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $this->view->translate('Offer has been added successfully.');
@@ -128,7 +128,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         //cal to getofferlist function from offer model class
-        $offerList = UserGeneratedOffer::getofferList($params);
+        $offerList = \KC\Repository\UserGeneratedOffer::getofferList($params);
         echo Zend_Json::encode($offerList);
         die();
     }
@@ -143,7 +143,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
         //cal to getofferlist function from offer model class
-        $offerVoteList = Vote::getofferVoteList($params);
+        $offerVoteList = \KC\Repository\Vote::getofferVoteList($params);
         echo Zend_Json::encode($offerVoteList);
         die();
     }
@@ -156,7 +156,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //cal to moveToTrash function from offer model class
-        $trash = Offer::moveToTrash($id);
+        $trash = \KC\Repository\Offer::moveToTrash($id);
 
         if (intval($trash) > 0) {
 
@@ -184,7 +184,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $offlineval = $this->getRequest()->getParam('ob');
 
         //call to maketooffline function from offer model class
-        $res = UserGeneratedOffer::makeToOffline($id, $offlineval);
+        $res = \KC\Repository\UserGeneratedOffer::makeToOffline($id, $offlineval);
 
         if (intval($res) > 0) {
 
@@ -210,7 +210,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $id = $this->getRequest()->getParam('id');
 
         //call to maketooffline function from offer model class
-        $res = Vote::deleteVote($id);
+        $res = \KC\Repository\Vote::deleteVote($id);
 
         if (intval($res) > 0) {
 
@@ -238,14 +238,12 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $srh = $this->getRequest()->getParam('keyword');
         $flag = $this->getRequest()->getParam('flag');
         //cal to searchToFiveShop function from offer model class
-        $data = UserGeneratedOffer::searchToFiveShop($srh, $flag);
-        //echo $data;
-        //die;
+        $data = \KC\Repository\UserGeneratedOffer::searchToFiveShop($srh, $flag);
         $ar = array();
         $removeDup = array();
         if (sizeof($data) > 0) {
             foreach ($data as $d) {
-                    $id =  $d['shop']['id'];
+                    $id =  $d['id'];
                     //array fro remove duplicate search text
                     if(isset($removeDup[$id])) {
                         $removeDup[$id] = $id;
@@ -283,7 +281,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $flag = $this->getRequest()->getParam('flag');
 
         //cal to searchToFiveShop function from offer model class
-        $data = UserGeneratedOffer::searchToFiveOffer($srh, $flag);
+        $data = \KC\Repository\UserGeneratedOffer::searchToFiveOffer($srh, $flag);
 
         $ar = array();
         $removeDup = array();
@@ -325,7 +323,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function exportofferlistAction()
     {
         // get all shop from database
-        $data = Offer::exportofferList();
+        $data = \KC\Repository\Offer::exportofferList();
         //echo "<pre>";
         //print_r($data);
         // create object of phpExcel
@@ -525,7 +523,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //cal to deleteOffer function from offer model class
-        $deletePermanent = Offer::deleteOffer($id);
+        $deletePermanent = \KC\Repository\Offer::deleteOffer($id);
 
         $flash = $this->_helper->getHelper('FlashMessenger');
         if (intval($deletePermanent) > 0) {
@@ -550,7 +548,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     {
         $id = $this->getRequest()->getParam('id');
         //cal to restoreOffer function from offer model class
-        $restore = Offer::restoreOffer($id);
+        $restore = \KC\Repository\Offer::restoreOffer($id);
 
         if (intval($restore) > 0) {
 
@@ -572,7 +570,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function offerdetailAction()
     {
             $id = $this->getRequest()->getParam('offerId');
-            $offerObj = new UserGeneratedOffer();
+            $offerObj = new \KC\Repository\UserGeneratedOffer();
             $offerDetail = $offerObj->getOfferDetail($id);
             echo Zend_Json::encode($offerDetail);
             die;

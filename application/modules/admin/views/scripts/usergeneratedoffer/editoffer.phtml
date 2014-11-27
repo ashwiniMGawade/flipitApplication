@@ -31,7 +31,8 @@ $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
 $date = date("Y-m-d");// current date
 $today = time();
 $twoMonthsLater = strtotime("+2 months", $today);
-$role =  Zend_Auth::getInstance()->getIdentity()->roleId;
+$u = Auth_StaffAdapter::getIdentity();
+$role = $u->users->id;
 ?>
 <?php echo $this->headTitle()->append('Edit User Generated Offer');?>
 <div class="wrap columns-2">
