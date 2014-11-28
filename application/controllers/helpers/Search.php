@@ -30,7 +30,7 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
     public static function getshopsByExcludedShopIds($shopIds)
     {
         $shopsForSearchPage = array();
-        $shopsByShopIds = Shop::getShopsByShopIds($shopIds);
+        $shopsByShopIds = \KC\Repository\Shop::getShopsByShopIds($shopIds);
 
         foreach ($shopsByShopIds as $shopsByShopId) :
             $shopsForSearchPage[$shopsByShopId['id']] = $shopsByShopId;
@@ -41,7 +41,7 @@ class Zend_Controller_Action_Helper_Search extends Zend_Controller_Action_Helper
 
     public static function getPopularStores($searchedKeywords)
     {
-        $popularStores = Shop::getStoresForSearchByKeyword($searchedKeywords, 8);
+        $popularStores = \KC\Repository\Shop::getStoresForSearchByKeyword($searchedKeywords, 8);
         $popularStoresForSearchPage = self::getPopularStoresForSearchPage($popularStores);
         return $popularStoresForSearchPage;
     }

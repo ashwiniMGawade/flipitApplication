@@ -3,14 +3,14 @@ class Zend_Controller_Action_Helper_Branding extends Zend_Controller_Action_Help
 {
     public function start()
     {
-        setcookie('passCache', '1', time() + 3600*8, '/');        
+        setcookie('passCache', '1', time() + 3600*8, '/');
 
         $storeUrl             = $this->getRequest()->getParam('storeUrl', false);
         $linkValidationHash   = $this->getRequest()->getParam('hash', false);
         $shopID               = $this->getRequest()->getParam('shopID', false);
 
         $session        = new Zend_Session_Namespace('Branding');
-        $shopBranding   = Shop::getShopBranding($shopID);
+        $shopBranding   = \KC\Repository\Shop::getShopBranding($shopID);
 
         if (!empty($shopBranding)) {
             $session->data = $shopBranding;

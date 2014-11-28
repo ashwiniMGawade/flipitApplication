@@ -1,14 +1,14 @@
 <?php
 namespace KC\Repository;
 
-class Vote extends \KC\Entity\Vote
+class Vote extends \KC\Entity\Votes
 {
     public static function getofferVoteList($idOffer)
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
         $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('KC\Entity\Vote', 'v')
+            ->from('KC\Entity\Votes', 'v')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
@@ -34,7 +34,7 @@ class Vote extends \KC\Entity\Vote
             $u->execute(); */
 
             $entityManagerLocale  =\Zend_Registry::get('emLocale');
-            $v =  $entityManagerLocale->find('KC\Entity\Vote', $id);
+            $v =  $entityManagerLocale->find('KC\Entity\Votes', $id);
             $entityManagerLocale->remove($v);
             $entityManagerLocale->flush();
 
@@ -50,7 +50,7 @@ class Vote extends \KC\Entity\Vote
         $idOffer = $params['id'];
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('v')
-            ->from('KC\Entity\Vote', 'v')
+            ->from('KC\Entity\Votes', 'v')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
@@ -62,7 +62,7 @@ class Vote extends \KC\Entity\Vote
         if (count($offerVotesList) > 0) {
             self::deleteVote($offerVotesList[0]['id']);
         }
-        $vote  = new \KC\Entity\Vote();
+        $vote  = new \KC\Entity\Votes();
         $vote->offer = $entityManagerLocale->find('KC\Entity\Offer', $params['id']);
         if ($params['vote']=='1') {
             $vote->vote = 'positive';
@@ -82,7 +82,7 @@ class Vote extends \KC\Entity\Vote
 
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('count(v) as cnt')
-            ->from('KC\Entity\Vote', 'v')
+            ->from('KC\Entity\Votes', 'v')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
@@ -93,7 +93,7 @@ class Vote extends \KC\Entity\Vote
 
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('count(v) as cnt')
-            ->from('KC\Entity\Vote', 'v')
+            ->from('KC\Entity\Votes', 'v')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $idOffer))
             ->where('v.offer = ?1')
             ->setParameter(2, '0')
@@ -116,7 +116,7 @@ class Vote extends \KC\Entity\Vote
     public function addfeedback($params)
     {
         $entityManagerLocale  =\Zend_Registry::get('emLocale');
-        $v = $entityManagerLocale->find('KC\Entity\Vote', $params['id']);
+        $v = $entityManagerLocale->find('KC\Entity\Votes', $params['id']);
         $v->moneySaved = $params['amount'];
         $v->product = $params['product'];
         $entityManagerLocale->persist($v);
@@ -141,7 +141,7 @@ class Vote extends \KC\Entity\Vote
         # check for previous vote from same ip
         $queryBuilder = $entityManagerLocale->createQueryBuilder();
         $query = $queryBuilder->select('vt.id')
-            ->from('KC\Entity\Vote', 'vt')
+            ->from('KC\Entity\Votes', 'vt')
             ->setParameter(1, $entityManagerLocale->find('KC\Entity\Offer', $offer))
             ->where('vt.offer = ?1')
             ->setParameter(2, '0')
@@ -151,7 +151,7 @@ class Vote extends \KC\Entity\Vote
         $data = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         if (empty($data)) {
             # save vote for an offer
-            $cnt  = new \KC\Entity\Vote();
+            $cnt  = new \KC\Entity\Votes();
             $cnt->offer =  $entityManagerLocale->find('KC\Entity\Offer', $offer);
             $cnt->visitorId = Auth_VisitorAdapter::getIdentity()->id;
             $cnt->vote = $vote;
