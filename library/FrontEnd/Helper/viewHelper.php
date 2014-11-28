@@ -763,7 +763,8 @@ EOD;
                     'categoryVouchers' => $categoryVouchers,
                     'categoryInformation' => $categoryInformation,
                     'pathConstants' => $pathConstants,
-                    'codeAlert' => $codeAlert
+                    'codeAlert' => $codeAlert,
+                    'mandrillNewsletterSubject' => $mandrillNewsletterSubject
                 )
             )
         );

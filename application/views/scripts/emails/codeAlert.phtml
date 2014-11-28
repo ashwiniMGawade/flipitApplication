@@ -1,7 +1,8 @@
 <?php
 $link = $this->httpPathLocale.FrontEnd_Helper_viewHelper::__link('link_top-20');
+$codeAlertSubject = !empty($this->mandrillNewsletterSubject) ? $this->mandrillNewsletterSubject : '';
 $utmParameters = $this->mailType != 'welcome'
-    ? '?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y') : '';
+    ? '?utm_source=transactional&utm_medium=email&utm_campaign='.$codeAlertSubject : '';
 ?>
 <?php
 $topOffer = (object) $this->codeAlert;
@@ -11,7 +12,7 @@ $exclusiveCode = '';
 $exclusiveImage = '';
 if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
     $exclusiveCode = FrontEnd_Helper_viewHelper::__email('email_exclusive');
-    $exclusiveImage = "style='background:url(".$this->httpPath."public/images/star.png) no-repeat right top #fef6ec;'";         
+    $exclusiveImage = $this->httpPath."public/images/star.png";         
 }
 ?>
 <tr>
@@ -30,10 +31,10 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
                             <td valign="top" width="132" style="border:1px solid #dddddd; border-radius:5px;">
                                 <table width="100%" cellpadding="0" cellspacing="0">
                                     <tbody><tr>
-                                        <td height="70" align="center">
+                                        <td height="66" align="center">
                                             <a href="<?php echo $this->httpPathLocale.$topOffer->shop['permaLink'].$utmParameters; ?>" style="text-decoration:none; color:#fff;">
                                                 <img src="<?php echo $this->publicPathCdn.ltrim($topOffer->shop['logo']['path'],'/').'thum_big_'.$topOffer->shop['logo']['name']; ?>" style="vertical-align:top;" 
-                                                width="102" height="70" alt="<?php echo $topOffer->shop['name']; ?>">
+                                                width="132" height="66" alt="<?php echo $topOffer->shop['name']; ?>">
                                             </a>
                                         </td>
                                     </tr>
@@ -60,15 +61,15 @@ if( isset($topOffer->exclusiveCode) && $topOffer->exclusiveCode == 1) {
                                                         style="padding:0 0 2px; 
                                                         font:14px/17px Arial, Helvetica, sans-serif; 
                                                         color:#363636;">
-                                                        <span><?php echo $topOffer->shop['name']; ?></span>
-                                                        <span style="line-height:0; margin-right: 5px; margin-left: 5px;">
+                                                        <span style="float: left;"><?php echo $topOffer->shop['name']; ?></span>
+                                                        <span style="line-height:0; margin-right: 5px; margin-left: 5px; float: left;">
                                                             <img src="<?php echo $exclusiveImage; ?>" 
                                                                 vspace="0" hspace="0" 
                                                                 width="14" height="17" alt="">
                                                         </span>
                                                         <span 
                                                             style="font:bold 12px/17px Arial, Helvetica, sans-serif; 
-                                                                color:#e89438;"><?php echo $exclusiveCode; ?></span>
+                                                                color:#e89438; float: left;"><?php echo $exclusiveCode; ?></span>
                                                     </td>  
                                                 </tr>
                                             </tbody></table>

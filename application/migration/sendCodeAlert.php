@@ -15,6 +15,7 @@ class SendCodeAlert
     public $_to = array();
     public $mandrillKey = "";
     public $template = "";
+    public $shopId = "";
 
     public function __construct()
     {
@@ -165,6 +166,7 @@ class SendCodeAlert
                 if (!empty($visitorIds)) {
                     $visitorIds = implode(',', $visitorIds);
                     $this->visitorId = $visitorIds;
+                    $this->shopId = $codeAlertOffer['shop']['id'];
                     BackEnd_Helper_MandrillHelper::getDirectLoginLinks(
                         $this,
                         'scheduleNewsletterSender',
