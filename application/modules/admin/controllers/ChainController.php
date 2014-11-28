@@ -163,7 +163,7 @@ class Admin_ChainController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
 
-        $chains =  Chain::returnChainList($params);
+        $chains =  \KC\Repository\Chain::returnChainList($params);
 
         $this->_helper->json($chains);
     }
@@ -276,7 +276,7 @@ class Admin_ChainController extends Zend_Controller_Action
 
         if ($this->_request->isPost()) {
             # save new chain
-            $chain = new Chain();
+            $chain = new \KC\Repository\Chain();
             $ret = $chain->saveChain($this->getRequest());
 
             $flash = $this->_helper->getHelper ( 'FlashMessenger' );

@@ -24,6 +24,8 @@ class Chain extends \KC\Entity\Chain
                 $entityManagerUser  = \Zend_Registry::get('emUser');
                 $chain = new \KC\Entity\Chain();
                 $chain->name = $name ;
+                $chain->created_at = new \DateTime('now');
+                $chain->updated_at = new \DateTime('now');
                 $entityManagerUser->persist($chain);
                 $entityManagerUser->flush();
                 return true ;

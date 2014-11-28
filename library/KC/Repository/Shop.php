@@ -329,10 +329,12 @@ class Shop extends \KC\Entity\Shop
     ################## END REFACTORED CODE ###########################################
     ##################################################################################
 
-    public function addChain($id)
+    public static function addChain($chainItemId, $shopId)
     {
-        $this->chainItemId = $id;
-        $this->save();
+        $queryBuilder->update('KC\Entity\Shop', 's')
+        ->set('s.chainItemId', $chainItemId)
+        ->where('s.id ='.$shopId)
+        ->getQuery()->execute();
     }
 
     public function getAllShopNames($keyword)
