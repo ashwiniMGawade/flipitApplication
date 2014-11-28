@@ -41,15 +41,17 @@ endif;
                     <header class="heading">
                         <div class="hold">
                             <?php 
-                            if(count($this->favouriteShops) > 0) :
+                            if(!empty($this->favouriteShops)) :
                                 $messageWithAlreadyAddedBrand = 
                                     $this->translate('You follow'). " " .count($this->favouriteShops) . " "
                                     .$this->translate('brands already, that’s great.');
                                 $messageAddMore = $this->translate('Why not add some more?');
+                                $messageAddMoreSideBar = $this->translate('Why not you add some more?');
                              else:
                                 $messageWithAlreadyAddedBrand = 
                                     $this->translate("You have not follow any brand from brands list");
                                 $messageAddMore = $this->translate("Please seach and follow the brand");
+                                $messageAddMoreSideBar = $this->translate('Please seach and follow the more brand');
                             endif;
                             ?>
                             <?php echo $messageWithAlreadyAddedBrand;?>
@@ -79,7 +81,7 @@ endif;
                 <article class="block white">
                     <header class="heading">
                         <?php echo $this->translate('Brands you already follow.');?>
-                        <span class="mark-text"><?php echo $messageAddMore;?></span>
+                        <span class="mark-text"><?php echo $messageAddMoreSideBar;?></span>
                     </header>
                     <div class="box-area">
                     <?php echo $favouriteShops; ?>

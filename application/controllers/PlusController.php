@@ -123,9 +123,7 @@ class PlusController extends Zend_Controller_Action
                     'function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
-            $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
-            getRequestedDataBySetGetCache("2_recentlyAddedArticles_list", array('function' =>
-                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array($articleDetails[0]['id'], 3)));
+            $this->view->recentlyAddedArticles = MoneySaving::getRecentlyAddedArticles($articleDetails[0]['id'], 3);
             $this->view->topPopularOffers = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
                 'Offer::getTopOffers', 'parameters' => array(5)));
