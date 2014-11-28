@@ -331,6 +331,7 @@ class Shop extends \KC\Entity\Shop
 
     public static function addChain($chainItemId, $shopId)
     {
+        $queryBuilder = \Zend_Registry::get('emLocale')->createQueryBuilder();
         $queryBuilder->update('KC\Entity\Shop', 's')
         ->set('s.chainItemId', $chainItemId)
         ->where('s.id ='.$shopId)

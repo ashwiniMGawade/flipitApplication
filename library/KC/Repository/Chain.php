@@ -40,6 +40,7 @@ class Chain extends \KC\Entity\Chain
     {
         $srh =  @$params["searchText"] != 'undefined' ? @$params["searchText"] : '';
         $queryBuilder = \Zend_Registry::get('emUser')->createQueryBuilder();
+
         $query = $queryBuilder
             ->from('KC\Entity\Chain', 'c')
             ->where("c.name LIKE '$srh%'");
@@ -51,7 +52,7 @@ class Chain extends \KC\Entity\Chain
         $builder
             ->setQueryBuilder($query)
             ->add('text', 'c.name')
-            ->add('number', addSelect("(SELECT count(ci.id) FROM ChainItem ci WHERE ci.chainId = c.id ) as totalShops"));
+           ->add('number', '(SELECT count(ci.id) FROM KC\Entity\ChainItem ci WHERE ci.chainItem = c.id) as totalShops');
         $list = $builder->getTable()->getResultQueryBuilder()->getQuery()->getArrayResult();
         $list = \DataTable_Helper::getResponse($list, $request);
         return $list;

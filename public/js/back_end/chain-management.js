@@ -120,7 +120,7 @@ function getChainList(iStart, iSortCol, iSortDir) {
 
 										if (obj.aData.website != null) {
 											
-											var val = obj.aData.website;
+											var val = obj.aData.website.name;
 											 
 											return '<p editId="'
 													+ obj.aData.id

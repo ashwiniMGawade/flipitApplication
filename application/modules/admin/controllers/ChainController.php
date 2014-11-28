@@ -12,21 +12,21 @@ class Admin_ChainController extends Zend_Controller_Action
      */
     public function preDispatch()
     {
-        $conn2 = BackEnd_Helper_viewHelper::addConnection ();
+        $conn2 = \BackEnd_Helper_viewHelper::addConnection ();
 
         $params = $this->_getAllParams ();
-        if (! Auth_StaffAdapter::hasIdentity ()) {
-            $referer = new Zend_Session_Namespace('referer');
+        if (! \Auth_StaffAdapter::hasIdentity ()) {
+            $referer = new \Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
             $this->_redirect ( '/admin/auth/index' );
         }
 
-        BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
+        \BackEnd_Helper_viewHelper::closeConnection ( $conn2 );
 
         $this->view->controllerName = $this->getRequest ()->getParam ( 'controller' );
         $this->view->action = $this->getRequest ()->getParam ( 'action' );
 
-        $sessionNamespace = new Zend_Session_Namespace();
+        $sessionNamespace = new \Zend_Session_Namespace();
 
         if($sessionNamespace->settings['rights']['administration']['rights'] != '1' && $sessionNamespace->settings['rights']['administration']['rights'] !='2' ) {
 
@@ -57,7 +57,7 @@ class Admin_ChainController extends Zend_Controller_Action
 
         if($chianId) {
 
-            $this->view->websites = Website::getAllWebsites();
+            $this->view->websites = \KC\Repository\Website::getAllWebsites();
 
             $this->view->chainId = $chianId ;
 
@@ -68,16 +68,16 @@ class Admin_ChainController extends Zend_Controller_Action
 
             if ($this->_request->isPost()) {
                 $localeId = $request->getParam('locale' , false);
-                $website = Website::getWebsiteDetails($localeId);
-                $localeData = explode('/', $website['name']);
+                $website = \KC\Repository\Website::getWebsiteDetails($localeId);
+                $localeData = explode('/', $website[0]['name']);
                 $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
-                $connObj = BackEnd_Helper_DatabaseManager::addConnection($locale);
-                $localeSettings = new LocaleSettings($connObj['connName']);
+                $connObj = \BackEnd_Helper_DatabaseManager::addConnection($locale);
+                $localeSettings = new \KC\Repository\LocaleSettings($connObj['connName']);
                 $localeSetting = $localeSettings->getLocaleSettings();
                 $langLocale = !empty($localeSetting[0]['locale']) ? $localeSetting[0]['locale'] : 'nl_NL';
-                Zend_Registry::set('db_locale', $locale ) ;
+                \Zend_Registry::set('db_locale', $locale ) ;
                 
-                $chain = new ChainItem();
+                $chain = new \KC\Repository\ChainItem();
                 $ret = $chain->saveChain($request, $langLocale);
                 # if chain is saved then refresh shop page in varnish
                 if($ret) {
@@ -88,8 +88,8 @@ class Admin_ChainController extends Zend_Controller_Action
                     $message = $this->view->translate ( 'This shop has been already added for this particulat locale' );
                     $flash->addMessage ( array ('error' => $message ));
                 }
-                $connObj = BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
-                Zend_Registry::set('db_locale', false ) ;
+                $connObj = \BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
+                \Zend_Registry::set('db_locale', false ) ;
                 $this->_redirect ( HTTP_PATH . 'admin/chain/chain-item/chain/'. $chianId  );
             }
         } else {
@@ -108,17 +108,16 @@ class Admin_ChainController extends Zend_Controller_Action
 
             if($id) {
                 # get selected locale and create
-
-                $website = Website::getWebsiteDetails($id);
-
-                $localeData = explode('/', $website['name']);
+                $website = \KC\Repository\Website::getWebsiteDetails($id);
+                
+                $localeData = explode('/', $website[0]['name']);
 
                 $locale = isset($localeData[1]) ?  $localeData[1] : "en" ;
 
 
-                $connObj = BackEnd_Helper_DatabaseManager::addConnection($locale);
+                $connObj = \BackEnd_Helper_DatabaseManager::addConnection($locale);
 
-                $shops = new Shop($connObj['connName']);
+                $shops = new \KC\Repository\Shop($connObj['connName']);
 
                 $key = $this->getRequest()->getParam('keyword');
 
@@ -126,7 +125,7 @@ class Admin_ChainController extends Zend_Controller_Action
                 # get shop data return an array
                 $shopsData = $shops->getAllShopNames($key);
 
-                $connObj = BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
+                $connObj = \BackEnd_Helper_DatabaseManager::closeConnection($connObj['adapter']);
 
 
                 $shops = array();
@@ -181,8 +180,7 @@ class Admin_ChainController extends Zend_Controller_Action
 
         # validate for valid integr chain id
         if(intval($id) > 0) {
-            $chain =  Chain::returnChainDetail($id);
-
+            $chain =  \KC\Repository\Chain::returnChainDetail($id);
             $this->view->chain = $chain;
         }else {
             $this->_redirect ( HTTP_PATH . 'admin/chain' );
@@ -201,8 +199,7 @@ class Admin_ChainController extends Zend_Controller_Action
     {
         $params = $this->_getAllParams();
 
-        $chains =  ChainItem::returnChainItemList($params);
-
+        $chains =  \KC\Repository\ChainItem::returnChainItemList($params);
         $this->_helper->json($chains);
     }
 
@@ -214,7 +211,7 @@ class Admin_ChainController extends Zend_Controller_Action
 
         if($id) {
 
-            $data = Chain::deleteChain($id);
+            $data = \KC\Repository\Chain::deleteChain($id);
 
             $flash = $this->_helper->getHelper('FlashMessenger');
 
@@ -244,7 +241,7 @@ class Admin_ChainController extends Zend_Controller_Action
 
         if($id) {
 
-            if(ChainItem::deleteChainItem($id)) {
+            if(\KC\Repository\ChainItem::deleteChainItem($id)) {
 
                 $flash = $this->_helper->getHelper('FlashMessenger');
                 $message = $this->view->translate('Shop has been deleted successfully');
@@ -303,7 +300,7 @@ class Admin_ChainController extends Zend_Controller_Action
     public function searchChainAction()
     {
         $ch = $this->getRequest()->getParam('keyword' );
-        $data = Chain::searchChain( $ch);
+        $data = \KC\Repository\Chain::searchChain( $ch);
         $ar = array ();
         if (sizeof ( $data ) > 0) {
             foreach ( $data as $d ) {
@@ -313,7 +310,7 @@ class Admin_ChainController extends Zend_Controller_Action
             $msg = $this->view->translate('No Record Found');
             $ar [] = $msg;
         }
-        echo Zend_Json::encode ($ar);
+        echo \Zend_Json::encode ($ar);
         die ();
     }
 

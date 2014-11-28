@@ -19,18 +19,19 @@ class ChainItem extends \KC\Entity\ChainItem
             $shopName = $shop[0]['name'];
             $shopPermalink = $shop[0]['permaLink'];
             $website = $request->getParam('locale', false);
-            $chain = $request->getParam('chain', false);
-
-            if ($shopName && $website && $chain) {
+            $chainId = $request->getParam('chain', false);
+            if ($shopName && $website && $chainId) {
                 try {
                     $entityManagerUser  = \Zend_Registry::get('emUser');
                     $chain = new \KC\Entity\ChainItem();
-                    $chain->websiteId = $website;
+                    $chain->website = $entityManagerUser->find('KC\Entity\Website', $website);
+                    $chain->chainItem = $entityManagerUser->find('KC\Entity\Chain', $chainId);
                     $chain->shopName = $shopName;
                     $chain->permalink = $shopPermalink;
-                    $chain->chainId = $chain;
                     $chain->shopId = $shopId;
                     $chain->locale = $locale;
+                    $chain->created_at = new \DateTime('now');
+                    $chain->updated_at = new \DateTime('now');
                     # check if shop is online and also show chian status
                     if ($shop[0]['status'] == 1 && $shop[0]['showChains'] == 1) {
                         $chain->status = 1 ;
