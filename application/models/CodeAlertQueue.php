@@ -78,15 +78,18 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         return $codeAlertOffers;
     }
 
-    public static function getCodeAlertList($codeAlertParameters)
+    public static function getCodeAlertList($codeAlertParameters, $sentCodes = '')
     {
         $searchText = isset($codeAlertParameters["SearchText"]) && $codeAlertParameters["SearchText"] != 'undefined'
             ? $codeAlertParameters["SearchText"] : '';
         $codeAlertOfferIds = Doctrine_Query::create()
         ->select('c.*')
         ->from("CodeAlertQueue c")
-        ->andWhere("c.offerId LIKE ?", "$searchText%")
-        ->orderBy("c.id DESC")->fetchArray();
+        ->where("c.offerId LIKE ?", "$searchText%")
+        ->orderBy("c.id DESC");
+        $deletedStatus = isset($sentCodes) && $sentCodes != '' ? 1 : 0;
+        $codeAlertOfferIds =  $codeAlertOfferIds->andWhere('c.deleted = '.$deletedStatus);
+        $codeAlertOfferIds =  $codeAlertOfferIds->fetchArray();
         $codeAlertOffersId = array();
         foreach ($codeAlertOfferIds as $codeAlertOfferId) {
             $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
@@ -128,7 +131,9 @@ class CodeAlertQueue extends BaseCodeAlertQueue
 
     public static function clearCodeAlertQueueByOfferId($offerId)
     {
-        Doctrine_Query::create()->delete()->from('CodeAlertQueue c')->where("c.offerId=".$offerId)->execute();
+        Doctrine_Query::create()->update('CodeAlertQueue c')
+            ->set('c.deleted', 1);
+            $updateRouteLink->where("c.offerId=".$offerId)->execute();
         return true;
     }
 }
