@@ -471,6 +471,21 @@ function showGlobalExportPopUp()
       return false;
 }
 
+function sendExportPasswordEmail()
+{
+	$('body').append('<div id="export-password-modal"><div class="modal-backdrop  in"><div id="overlay"><img id="img-load" src="/public/images/ajax-loader2.gif"/></div></div></div>');
+	$.ajax({
+        url : HOST_PATH + "admin/shop/global-export-xlx-password",
+        method : "post",
+        data : {},
+        type : "post",
+        success : function(data) {
+        	$('#export-password-modal').remove();
+            showModel("","","add");
+        }
+    });
+}
+
 function showModel(id,rootid,type){
 	$('form#menuForm :input').val("");
 	$('form#menuForm span#imageName').html('');
@@ -513,7 +528,6 @@ function validateGlobalExportForm(){
                         },
                         complete : function(data) {
                             if (data.responseText == 'true') {
-                                $('#myModal').modal('hide');
                             }
                         }
                     }
@@ -630,6 +644,7 @@ function validateGlobalExportForm(){
             submitHandler: function(form) {
                 form.submit();
                 $('#globalExportForm')[0].reset();
+                $('#myModal').modal('hide');
             }
         });
 }

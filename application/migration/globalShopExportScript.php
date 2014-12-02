@@ -7,9 +7,6 @@ class GlobalShopExport
     protected $row = 4;
     protected $column = 4;
     public $mandrillKey = '';
-    public $exportPassword = '';
-    public $mandrillSenderEmailAddress = '';
-    public $mandrillSenderName = '';
 
     public function __construct()
     {
@@ -43,49 +40,7 @@ class GlobalShopExport
         }
 
         $this->exportShopsInExcel();
-        $this->saveGlobalExportPassword($imbull);
-        $this->sendMailToSuperAdmin();
         $manager->closeConnection($doctrineImbullDbConnection);
-    }
-
-    protected function saveGlobalExportPassword($dsn)
-    {
-        $doctrineSiteDbConnection = CommonMigrationFunctions::getDoctrineSiteConnection($dsn);
-        $manager = CommonMigrationFunctions::loadDoctrineModels();
-        GlobalExportPassword::savePasswordForExportDownloads('shopExport');
-        $this->exportPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
-        $manager->closeConnection($doctrineSiteDbConnection);
-    }
-
-    protected function sendMailToSuperAdmin()
-    {
-        $mailer  = new FrontEnd_Helper_Mailer(array('mandrillKey' => $this->mandrillKey));
-        $basePath = new Zend_View();
-        $basePath->setBasePath(APPLICATION_PATH . '/views/');
-        $content = array(
-            'name'    => 'content',
-            'content' => $basePath->partial(
-                'emails/exportScriptPassword.phtml',
-                array(
-                    'password' => $this->exportPassword
-                )
-            )
-        );
-        $mailer->send(
-            $this->mandrillSenderName,
-            $this->mandrillSenderEmailAddress,
-            'Arthur',
-            'arthur@imbull.com',
-            'Global Export password',
-            $content,
-            '',
-            '',
-            '',
-            '',
-            array(
-                'exportScript' => 'yes'
-            )
-        );
     }
 
     protected function getAllShops($dsn, $key, $imbull)
@@ -98,13 +53,6 @@ class GlobalShopExport
         $this->shopsData[$key]['data'] = $allShopsData;
         $this->shopsData[$key]['customLocale'] = $customLocale;
         $this->shopsData[$key]['dsn'] = $dsn;
-
-        if ($key == 'en') {
-            $settings = Signupmaxaccount::getAllMaxAccounts();
-            $this->mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
-            $this->mandrillSenderName = $settings[0]['sendername'];
-        }
-
         $manager->closeConnection($doctrineSiteDbConnection);
         echo "\n";
         echo $key." Shops have been fetched successfully!!!";
