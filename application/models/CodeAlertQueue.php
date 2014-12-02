@@ -13,6 +13,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
                     ->select("*")
                     ->from("CodeAlertQueue")
                     ->where('offerId = '.$offerId)
+                    ->andWhere('deleted = 0')
                     ->fetchArray();
 
                 if (empty($codeAlertInformation)) {
@@ -111,7 +112,10 @@ class CodeAlertQueue extends BaseCodeAlertQueue
                 ->leftJoin('o.logo img')
                 ->leftJoin('o.offernews news')
                 ->leftJoin('o.tiles t')
-                ->addSelect("(SELECT count(fs.id) FROM FavoriteShop fs WHERE fs.shopId = s.id) as visitors")
+                ->addSelect(
+                    "(SELECT count(fs.id) FROM FavoriteShop fs LEFT JOIN fs.visitors vs 
+                    WHERE fs.shopId = s.id AND vs.id = fs.visitorId AND vs.codealert = 1) as visitors"
+                )
                 ->addSelect("(SELECT cq.id FROM CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
                 ->andWhere("o.id IN($offerIds)")
                 ->andWhere("o.userGenerated = '0'");
@@ -131,9 +135,11 @@ class CodeAlertQueue extends BaseCodeAlertQueue
 
     public static function clearCodeAlertQueueByOfferId($offerId)
     {
-        Doctrine_Query::create()->update('CodeAlertQueue c')
-            ->set('c.deleted', 1);
-            $updateRouteLink->where("c.offerId=".$offerId)->execute();
+        Doctrine_Query::create()
+            ->update('CodeAlertQueue c')
+            ->set('c.deleted', 1)
+            ->where("c.offerId=".$offerId)
+            ->execute();
         return true;
     }
 }
