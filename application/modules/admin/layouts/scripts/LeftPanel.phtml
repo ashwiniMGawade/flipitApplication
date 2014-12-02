@@ -251,10 +251,10 @@
                         <li>
                             <a href="<?php echo HTTP_PATH?>admin/email/code-alert-settings" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Code alert settings');?> </a>
                         </li>
-                        <?php if($controller == 'email' && $action == 'code-alert-queue-list') { $userColorClass = "new-blue"; }else { 
+                        <?php if($controller == 'email' && $action == 'code-alert-log-list') { $userColorClass = "new-blue"; }else { 
                         $userColorClass = "new-gray"; } ?>
                         <li>
-                            <a href="<?php echo HTTP_PATH?>admin/email/code-alert-queue-list" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Code alert Sent log');?> </a>
+                            <a href="<?php echo HTTP_PATH?>admin/email/code-alert-log-list" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Code alert log');?> </a>
                         </li>
                     </ul>
                 </div>

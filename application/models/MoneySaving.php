@@ -53,8 +53,9 @@ class MoneySaving extends BaseMoneySaving
             ->leftJoin('a.articleImage aai')
             ->leftJoin('a.articlecategory ac')
             ->leftJoin('a.chapters chap')
-            ->Where('a.deleted = 0')
+            ->where('a.deleted = 0')
             ->andWhere('a.id !='.$articleId)
+            ->andWhere('a.publish = 1')
             ->orderBy('a.publishdate DESC')
             ->limit($limit)
             ->fetchArray();
