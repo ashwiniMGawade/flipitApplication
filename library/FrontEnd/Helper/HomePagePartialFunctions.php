@@ -42,7 +42,7 @@ class FrontEnd_Helper_HomePagePartialFunctions
             $offerType,
             $imageName,
             FrontEnd_Helper_viewHelper::__form($headerText),
-            36,
+            70,
             $offerType,
             '',
             $offerType=='topOffers' ? '' : 'newOffer'
