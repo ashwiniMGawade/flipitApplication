@@ -1258,10 +1258,13 @@ class Offer extends BaseOffer
 
             $key = 'extendedTopOffer_of_'.$u->shopId;
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
-            $key = 'extended_'.
-                FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($u->extendedurl).
-                '_couponDetails';
-            FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+
+            if(!empty($u->extendedurl)) {
+                $key = 'extended_'.
+                    FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($u->extendedurl).
+                    '_couponDetails';
+                FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);
+            }
 
             $key = 'offer_'.$id.'_details';
             FrontEnd_Helper_viewHelper::clearCacheByKeyOrAll($key);

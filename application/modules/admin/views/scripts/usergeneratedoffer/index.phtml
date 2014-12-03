@@ -8,74 +8,81 @@ $this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery-ui-1.8.16.custom.min.j
 $this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/jquery-ui-1.8.16.custom.css" );
 
 $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
-
-
 ?>
 <?php echo $this->headTitle()->append('User Generated Offers List');?>     
-     
-      <!-- offerList starts -->
-       <div id="offerList">
-        <div class="wrap columns-2">
-
+<div id="offerList">
+    <div class="wrap columns-2">
         <div class='wrap columns-2'>
-		<?php if($this->messageSuccess!='' || $this->messageError!='' ){?>
-		<br><div class ="mainpage-content-colorbox success">
-		<?php if($this->messageSuccess!=''){?>
-		<span class="successserver"><?php echo $this->messageSuccess; ?></span>
-		<?php }?>
-		<?php if($this->messageError!=''){?>
-		<span class="errorserver"><?php echo $this->messageError; ?></span>
-		<?php } ?>
-		</div>
-		<?php 
-		}?>
-		</div>
-          <h1 class="fl">User Generated Offers</h1>
         <?php 
-          if($role=='1' || $role=='2')
-			{
-		?>
-          
-		<?php } ?>
-          	<div class="clear"></div>
-          	<!-- <p class="text-right"><a href='<?php echo HTTP_PATH; ?>admin/offer/exportofferlist'><?php echo $this->translate('Export List')?></a></p>-->
-            <div class="mainpage-content-colorbox">
-                <form class="form-search" id="searchform">
-                	<div class="fl">                   
-                        <input type="text" placeholder="<?php echo $this->translate('Search offer')?>" class="span3" id="searchOffer" name="searchOffer" style="width:515px;">
-                     <!--    <button type='button' onClick='searchByOffer();' id='searchOfferButton' value='searchOfferButton' class="btn btn-primary"><?php echo $this->translate('Search');?></button> -->
-                    </div>             	
-                    <div class="fl ml15"> 
-                        <select id='couponType' name='couponType'>
-                        	<option value=''>All</option>
-                            <option value='CD'>Coupon</option>
-                            <option value='SL'>Sale</option>
-                            <option value='PA'>Printable</option>
-                        </select>
-                    </div>                    
-                    <div class="mainpage-content-searchbart">
-                        <div class="mainpage-content-right-searchbar">
-                        <button type='button' onClick='searchByShop();' id='searchShopeButton' value='searchShopeButton' class="btn btn-primary"><?php echo $this->translate('Search');?></button></div>
-                        <div class="mainpage-content-right-inner-left-searchbar-other"><input type="text" placeholder="<?php echo $this->translate('Search shop')?>" class="span3" id="searchShop" name="searchShop" style="width:300px;"></div>
-                    </div>                         
-                </form>
+        if($this->messageSuccess!='' || $this->messageError!='' ) {
+            ?>
+            <br>
+            <div class ="mainpage-content-colorbox success">
+                <?php 
+                if($this->messageSuccess!='') {
+                    ?>
+                    <span class="successserver"><?php echo $this->messageSuccess; ?></span>
+                    <?php 
+                }?>
+                <?php 
+                if($this->messageError!='') {
+                    ?>
+                    <span class="errorserver"><?php echo $this->messageError; ?></span>
+                    <?php 
+                } 
+                ?>
             </div>
-            <table class="table table-bordered table-striped" id="offerListTable">
-                <thead>
-                  <tr>
-                  	<th><?php echo $this->translate('Id'); ?></th>
-                    <th style="width: 228px !important;"><?php echo $this->translate('Name');?></th>
-                    <th style="width: 53px;"><?php echo $this->translate('Approved');?></th>
-                    <th style="width: 59px;"><?php echo $this->translate('Type');?></th>
-                    <th style="width: 95px;"><?php echo $this->translate('Store');?></th>
-                    <th style="width: 62px;"><?php echo $this->translate('Start');?></th>
-                    <th style="width: 62px;"><?php echo $this->translate('End');?></th>
-                    <th style="width: 64px;"><?php echo $this->translate('Clickouts');?></th>
-                    <th style="width: 95px;"><?php echo $this->translate('Author');?></th>
-                    <th style="width: 56px;"><?php echo $this->translate('Offline');?></th>
-                  </tr>
-                </thead>
-             </table>
-       </div>
-       <!-- offerList ends -->
-	</div>
+            <?php
+        }?>
+        </div>
+        <h1 class="fl"><?php echo $this->translate('Social Offers')?></h1>
+        <div class="clear"></div>
+        <div class="mainpage-content-colorbox">
+            <form class="form-search" id="searchform">
+                <div class="fl">
+                    <input type='hidden' id="searchOffer" name="searchOffer" style="width:300px;"/>
+                </div>
+                <div class="fl ml15">
+                    <select id='couponType' name='couponType'>
+                        <option value=''>All</option>
+                        <option value='CD'>Coupon</option>
+                        <option value='SL'>Sale</option>
+                        <option value='PA'>Printable</option>
+                    </select>
+                </div>
+                <div class="mainpage-content-searchbart">
+                    <div class="mainpage-content-right-searchbar-offer">
+                        <button type='button' onClick='searchByShop();' 
+                        id='searchShopeButton' value='searchShopeButton' 
+                        class="btn btn-primary"><?php echo $this->translate('Search');?>
+                        </button>
+                    </div>
+                    <div class="mainpage-content-right-inner-left-searchbar-other">
+                      <input type="hidden" class="span3" id="searchShop" 
+                      name="searchShop" style="width:35%;float:left;">
+                    </div>
+                    <div class="mainpage-content-right-inner-left-searchbar-other">
+                      <input type="hidden" class="span3" id="searchCoupon" 
+                      name="searchCoupon" style="width:35%;float:left;">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <table class="table table-bordered table-striped" id="offerListTable">
+            <thead>
+                <tr>
+                    <th><?php echo $this->translate('Title');?></th>
+                    <th><?php echo $this->translate('Shop');?></th>
+                    <th><?php echo $this->translate('Type');?></th>
+                    <th><?php echo $this->translate('Deeplinking');?></th>
+                    <th><?php echo $this->translate('Coupon Code');?></th>
+                    <th><?php echo $this->translate('Start');?></th>
+                    <th><?php echo $this->translate('End');?></th>
+                    <th><?php echo $this->translate('Clickouts');?></th>
+                    <th><?php echo $this->translate('Author');?></th>
+                    <th><?php echo $this->translate('Delete');?></th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

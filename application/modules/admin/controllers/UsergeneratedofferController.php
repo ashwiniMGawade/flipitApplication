@@ -1,12 +1,7 @@
 <?php
 class Admin_UsergeneratedofferController extends Zend_Controller_Action
 {
-    /**
-     * check authentication before load the page
-     * @see Zend_Controller_Action::preDispatch()
-     * @author kraj
-     * @version 1.0
-     */
+    
     public function preDispatch()
     {
         $conn2 = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
@@ -24,35 +19,105 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
 
         # redirect of a user don't have any permission for this controller
         $sessionNamespace = new Zend_Session_Namespace();
-        if($sessionNamespace->settings['rights']['system manager']['rights'] != '1') {
+        if ($sessionNamespace->settings['rights']['system manager']['rights'] != '1') {
             $this->_redirect('/admin/auth/index');
         }
 
     }
-    public function init()
+
+    public function getofferAction()
     {
+        $params = $this->_getAllParams();
+        $offerList = UserGeneratedOffer::getofferList($params);
+        echo Zend_Json::encode($offerList);
+        die();
     }
-    /**
-     * display list of offer in this view
-     * @author kraj
-     * @version 1.0
-     */
+
     public function indexAction()
     {
-        // action body
         $flash = $this->_helper->getHelper('FlashMessenger');
         $message = $flash->getMessages();
         $this->view->messageSuccess = isset($message[0]['success']) ? $message[0]['success'] : '';
         $this->view->messageError = isset($message[0]['error']) ? $message[0]['error'] : '';
+    }
 
+    public function searchtopfiveshopAction()
+    {
+        $srh = $this->getRequest()->getParam('keyword');
+        $flag = $this->getRequest()->getParam('flag');
+        $data = UserGeneratedOffer::searchToFiveShop($srh, $flag);
+        $ar = array();
+        $removeDup = array();
+        if (sizeof($data) > 0) {
+            foreach ($data as $d) {
+                $id =  $d['shop']['id'];
+                if (isset($removeDup[$id])) {
+                    $removeDup[$id] = $id;
+                } else {
+                    $removeDup[$id] = $id;
+                    $ar[] = ucfirst($d['name']);
+                }
+            }
+        } else {
+            $msg = $this->view->translate('No Record Found');
+            $ar[] = $msg;
+        }
+        echo Zend_Json::encode($ar);
+        die;
+    }
+
+    public function searchtopfiveofferAction()
+    {
+        $srh = $this->getRequest()->getParam('keyword');
+        $flag = $this->getRequest()->getParam('flag');
+        $data = UserGeneratedOffer::searchToFiveOffer($srh, $flag);
+        $ar = array();
+        $removeDup = array();
+        if (sizeof($data) > 0) {
+
+            foreach ($data as $d) {
+                $id =  $d['id'];
+                if (isset($removeDup[$id])) {
+                    $removeDup[$id] = $id;
+                } else {
+                    $removeDup[$id] = $id;
+                    $ar[] = ucfirst($d['title']);
+                }
+            }
+        } else {
+            $msg = $this->view->translate('No Record Found');
+            $ar[] = $msg;
+        }
+        echo Zend_Json::encode($ar);
+        die;
+    }
+
+    public function searchtopfivecouponAction()
+    {
+        $srh = $this->getRequest()->getParam('keyword');
+        $flag = $this->getRequest()->getParam('flag');
+        $data = UserGeneratedOffer::searchToFiveCoupon($srh, $flag);
+        $ar = array();
+        if (sizeof($data) > 0) {
+            foreach ($data as $d) {
+                $id =  $d['id'];
+                $ar[] = $d['couponCode'];
+            }
+        } else {
+            $msg = $this->view->translate('No Record Found');
+            $ar[] = $msg;
+        }
+        echo Zend_Json::encode($ar);
+        die;
     }
 
     public function permanentdeleteAction()
     {
         $id = $this->getRequest()->getParam('id');
-        $deletePermanent = Offer::permanentDeleteOffer($id);
+        $deletePermanent = Offer::deleteOffer($id);
         die;
     }
+    
     public function addofferAction()
     {
 
@@ -63,7 +128,8 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $pageObj = new Page();
         $this->view->pages = $pageObj->getPagesOffer();
 
-     }
+    }
+
     public function editofferAction()
     {
         $params = $this->_getAllParams();
@@ -75,7 +141,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $this->view->catList=$catObj->getCategoryList();
         $pageObj = new Page();
         $this->view->pages = $pageObj->getPagesOffer();
-           $this->view->offerVoteList = Vote::getofferVoteList($params['id']);
+        $this->view->offerVoteList = Vote::getofferVoteList($params['id']);
 
     }
 
@@ -117,61 +183,15 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         die;
     }
 
-
-    /**
-     * Get offer list from database by flag
-     * flag (1 deleted  or 0 not deleted )
-     * @author kraj
-     * @version 1.0
-     */
-    public function getofferAction()
-    {
-        $params = $this->_getAllParams();
-        //cal to getofferlist function from offer model class
-        $offerList = UserGeneratedOffer::getofferList($params);
-        echo Zend_Json::encode($offerList);
-        die();
-    }
-
-    /**
-     * Get offer Votes from database
-     * flag (1 deleted  or 0 not deleted )
-     * @author Raman
-     * @version 1.0
-     */
     public function getoffervoteAction()
     {
         $params = $this->_getAllParams();
-        //cal to getofferlist function from offer model class
         $offerVoteList = Vote::getofferVoteList($params);
         echo Zend_Json::encode($offerVoteList);
         die();
     }
-    /**
-     * record move in trash
-     * @author kraj
-     * @version 1.0
-     */
-    public function movetotrashAction()
-    {
-        $id = $this->getRequest()->getParam('id');
-        //cal to moveToTrash function from offer model class
-        $trash = Offer::moveToTrash($id);
+   
 
-        if (intval($trash) > 0) {
-
-            $flash = $this->_helper->getHelper('FlashMessenger');
-            $message = $this->view->translate('Record has been moved to trash');
-            $flash->addMessage(array('success' => $message));
-
-        } else {
-
-            $message = $this->view->translate('Problem in your data.');
-            $flash->addMessage(array('error' => $message));
-        }
-        echo Zend_Json::encode($trash);
-        die;
-    }
 
     /**
      * Make a user generated offer offline
@@ -227,108 +247,9 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         die;
     }
 
-/**
-     * search to five shop from database by flag
-     * flag (1 deleted  or 0 not deleted )
-     * @author Er.kundal
-     * @version 1.0
-     */
-    public function searchtopfiveshopAction()
-    {
-        $srh = $this->getRequest()->getParam('keyword');
-        $flag = $this->getRequest()->getParam('flag');
-        //cal to searchToFiveShop function from offer model class
-        $data = UserGeneratedOffer::searchToFiveShop($srh, $flag);
-        //echo $data;
-        //die;
-        $ar = array();
-        $removeDup = array();
-        if (sizeof($data) > 0) {
-            foreach ($data as $d) {
-                    $id =  $d['shop']['id'];
-                    //array fro remove duplicate search text
-                    if(isset($removeDup[$id])) {
-                        $removeDup[$id] = $id;
-
-                    } else {
-
-                        $removeDup[$id] = $id;
-                        $ar[] = ucfirst($d['name']);
-
-                    }
-
-            }
-
-        } else {
-
-            $msg = $this->view->translate('No Record Found');
-            $ar[] = $msg;
-        }
-        echo Zend_Json::encode($ar);
-        die;
-
-        // action body
-    }
-
-
-    /**
-     * search to five offer from database by flag
-     * flag (1 deleted  or 0 not deleted )
-     * @author Er.kundal
-     * @version 1.0
-     */
-    public function searchtopfiveofferAction()
-    {
-        $srh = $this->getRequest()->getParam('keyword');
-        $flag = $this->getRequest()->getParam('flag');
-
-        //cal to searchToFiveShop function from offer model class
-        $data = UserGeneratedOffer::searchToFiveOffer($srh, $flag);
-
-        $ar = array();
-        $removeDup = array();
-        if (sizeof($data) > 0) {
-
-            foreach ($data as $d) {
-
-                $id =  $d['id'];
-                //array fro remove duplicate search text
-                if(isset($removeDup[$id])) {
-                    $removeDup[$id] = $id;
-
-                } else {
-
-                    $removeDup[$id] = $id;
-                    $ar[] = ucfirst($d['title']);
-
-                }
-
-            }
-
-        } else {
-
-            $msg = $this->view->translate('No Record Found');
-            $ar[] = $msg;
-        }
-        echo Zend_Json::encode($ar);
-        die;
-
-        // action body
-    }
-
-
-    /**
-     * Export offer list in excell file
-     * @author kraj
-     * @version 1.0
-     */
     public function exportofferlistAction()
     {
-        // get all shop from database
         $data = Offer::exportofferList();
-        //echo "<pre>";
-        //print_r($data);
-        // create object of phpExcel
         $objPHPExcel = new PHPExcel();
         $objPHPExcel->setActiveSheetIndex(0);
         $objPHPExcel->getActiveSheet()->setCellValue('A1', $this->view->translate('Title'));
@@ -342,59 +263,39 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $objPHPExcel->getActiveSheet()->setCellValue('I1', $this->view->translate('Author'));
         $column = 2;
         $row = 2;
-        // loop for each offer
         foreach ($data as $offer) {
-
-            // condition apply on offer
             $title = '';
             if ($offer['title'] == '' || $offer['title'] == 'undefined'
                     || $offer['title'] == null || $offer['title'] == '0') {
-
                 $title = '';
-
             } else {
-
                 $title = $offer['title'];
             }
             $shopname = '';
             if (isset($offer['shop'])) {
-
                 if ($offer['shop']['shopname'] == ''
                         || $offer['shop']['shopname'] == 'undefined'
                         || $offer['shop']['shopname'] == null
                         || $offer['shop']['shopname'] == '0') {
-
                     $shopname = '';
-
                 } else {
-
                     $shopname = $offer['shop']['shopname'];
                 }
             }
             $type = '';
             if ($offer['discountType'] == 'CD') {
-
                 $type = $this->view->translate('Coupon');
-
             } elseif ($offer['discountType'] == 'SL') {
-
                 $type = $this->view->translate('Sale');
-
             } else {
-
                 $type = $this->view->translate('Printable');
             }
-            // get visability name from array
             $Visability = '';
             if ($offer['Visability'] == 'DE') {
-
                 $Visability = $this->view->translate('Default');
-
             } else {
-
                 $Visability = $this->view->translate('Members');
             }
-
             // get extended from array
             $Extended = '';
             if ($offer['extendedOffer'] == true) {
