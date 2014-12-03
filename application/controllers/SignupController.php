@@ -380,6 +380,7 @@ class SignupController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->offerId = $this->getRequest()->getParam('offerId');
         $this->view->signupFormWidgetType = $this->getRequest()->getParam('signupFormWidgetType');
         $this->view->shopLogoOrDefaultImage = $this->getRequest()->getParam('shopLogoOrDefaultImage');
         $signUpFormLargeForm = FrontEnd_Helper_SignUpPartialFunction::createFormForSignUp(

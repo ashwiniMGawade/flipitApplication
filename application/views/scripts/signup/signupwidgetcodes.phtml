@@ -1,1 +1,7 @@
-<?php echo $this->render('partials/_signupForm.phtml'); ?>
+<?php
+if(Auth_VisitorAdapter::hasIdentity()) :
+    echo $this->render('offer/_offer-code-buttons.phtml');
+else :
+    echo $this->render('partials/_signupForm.phtml');
+endif;
+?>

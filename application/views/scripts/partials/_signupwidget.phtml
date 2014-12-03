@@ -35,7 +35,7 @@ name="<?php echo $this->zendForm->zendFormName; ?>" id="<?php echo $this->zendFo
     ?>
     <?php echo $this->zendForm->shopId->renderViewHelper();
         $memberOnly = isset($this->codesWidget) && $this->codesWidget == '1' 
-            ? ',setMembersonlyValue()' 
+            ? ',setMembersonlyValue(),signUpMembersOnly("' . $this->zendForm->zendFormName .'")' 
             : ',signUpNewsLetter("' . $this->zendForm->zendFormName .'")';
     ?>
     <?php echo $this->zendForm->membersOnly->renderViewHelper();?>

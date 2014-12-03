@@ -55,11 +55,11 @@ foreach ($this->offers as $offer) {
                 <div class="buttons" id="offerButton<?php echo $offer->id ;?>">
     <?php
     $permalink = $this->offersType=='categoryOffers' ? $this->categoryPermaLink : $offer->shop['permalink'];
-    if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
-        $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
-    }
-    
-    if (!empty($visitorInformation)) {
+
+    if ($offer->Visability == 'MEM') {
+        echo $this->esi($this->locale.'signup/signupwidgetcodes?shopId='.$offer->shop['id']
+            .'&signupFormWidgetType=widgetWithinOffers&offerId='.$offer->id.'&shopLogoOrDefaultImage=');
+    } else {
         echo $offerPartial->getCommonRedirectUrlForOffer(
             $offer,
             $urlToShow,
@@ -67,21 +67,7 @@ foreach ($this->offers as $offer) {
             $permalink,
             'mainOfferClickoutButton'
         );
-        echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink);
-    } else {
-        if ($offer->Visability == 'MEM') {
-            echo $this->esi($this->locale.'signup/signupwidgetcodes?shopId='.$offer->shop['id']
-                .'&signupFormWidgetType=widgetWithinOffers&shopLogoOrDefaultImage=');
-        } else {
-            echo $offerPartial->getCommonRedirectUrlForOffer(
-                $offer,
-                $urlToShow,
-                $offerBounceRate,
-                $permalink,
-                'mainOfferClickoutButton'
-            );
-            echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink); 
-        }
+        echo $offerPartial->getSecondButtonforOffer($offer, $urlToShow, $offerBounceRate, $permalink); 
     }
     ?>
                 </div>
