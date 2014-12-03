@@ -1614,7 +1614,7 @@ class Admin_ShopController extends Zend_Controller_Action
             $this->mandrillSenderName,
             $this->mandrillSenderEmailAddress,
             'Arthur',
-            'arthur@imbull.com',
+            'export@imbull.com',
             'Global Export password',
             $content,
             '',
