@@ -15,8 +15,6 @@ $memberOnlyFormAction = isset($this->codesWidget) && $this->codesWidget == '1'
     .'/'
     .FrontEnd_Helper_viewHelper::__link('link_membersonlysetsessions')
     : '';
-echo $memberOnlyFormAction;
-echo HTTP_PATH_LOCALE;
 ?>
 <form action="<?php echo $memberOnlyFormAction; ?>" method="post" 
 class="<?php echo $this->zendForm->zendFormClassName !='' ? 'email-form form-inline' : 'form-signin newsletter '; ?>" 

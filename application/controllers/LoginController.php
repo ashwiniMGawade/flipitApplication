@@ -130,7 +130,6 @@ class LoginController extends Zend_Controller_Action
     {
         Auth_VisitorAdapter::clearIdentity();
         setcookie('kc_unique_user_id', "", time() - 64800, '/');
-        setcookie('membersonly', "", time() - 64800, '/');
         # set reponse header X-Nocache used for varnish
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         Zend_Session::namespaceUnset('favouriteShopId');
