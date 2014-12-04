@@ -865,7 +865,7 @@ class Offer extends BaseOffer
             ->from("Offer o")
             ->leftJoin('o.shop s')
             ->where('o.deleted='.$deletedStatus)
-            ->andWhere("o.userGenerated = '0'");
+            ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")');
         if ($userRole=='4') {
             $getOffersQuery->andWhere("o.Visability='DE'");
         }
@@ -2127,8 +2127,8 @@ class Offer extends BaseOffer
         ->leftJoin('o.tiles t')
         ->addSelect("(SELECT  count(cc.status) FROM CouponCode cc WHERE cc.offerid = o.id and cc.status = 0) as used")
         ->addSelect("(SELECT  count(ccc.status) FROM CouponCode ccc WHERE ccc.offerid = o.id and ccc.status = 1) as available")
-        ->andWhere("o.id =$offerId")->andWhere("o.userGenerated = '0'")->fetchArray();
-
+        ->andWhere("o.id =$offerId")
+        ->fetchArray();
         return $offerDetails;
     }
 
