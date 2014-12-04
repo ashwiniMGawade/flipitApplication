@@ -27,7 +27,7 @@ class PlusController extends Zend_Controller_Action
             getRequestedDataBySetGetCache(
                 (string)"all_mostreadMsArticlePage_list",
                 array('function' =>
-                'MoneySaving::getMostReadArticles',
+                '\KC\Repository\MoneySaving::getMostReadArticles',
                 'parameters' => array(3)
                 ),
                 ''
@@ -37,7 +37,7 @@ class PlusController extends Zend_Controller_Action
             getRequestedDataBySetGetCache(
                 (string)"all_categoriesArticles_list",
                 array('function' =>
-                'MoneySaving::getCategoryWiseArticles', 'parameters' => array()
+                '\KC\Repository\MoneySaving::getCategoryWiseArticles', 'parameters' => array()
                 ),
                 ''
             );
@@ -101,7 +101,7 @@ class PlusController extends Zend_Controller_Action
             getRequestedDataBySetGetCache(
                 (string)"4_categoriesArticles_list",
                 array('function' =>
-                'MoneySaving::getCategoryWiseArticles', 'parameters' => array(5))
+                '\KC\Repository\MoneySaving::getCategoryWiseArticles', 'parameters' => array(5))
             );
 
         $articlesRelatedToCurrentCategory =
@@ -121,12 +121,12 @@ class PlusController extends Zend_Controller_Action
                 );
             $this->view->mostReadArticles = FrontEnd_Helper_viewHelper::
                 getRequestedDataBySetGetCache("all_mostreadMsArticlePage_list", array(
-                    'function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(3)));
+                    'function' => '\KC\Repository\MoneySaving::getMostReadArticles', 'parameters' => array(3)));
             $this->view->articleDetails = $articleDetails[0];
             $this->view->articlesRelatedToCurrentCategory = $articlesRelatedToCurrentCategory;
             $this->view->recentlyAddedArticles =  FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("2_recentlyAddedArticles_list", array('function' =>
-                'MoneySaving::getRecentlyAddedArticles', 'parameters' => array($articleDetails[0]['id'], 3)));
+                '\KC\Repository\MoneySaving::getRecentlyAddedArticles', 'parameters' => array($articleDetails[0]['id'], 3)));
             $this->view->topPopularOffers = FrontEnd_Helper_viewHelper::
             getRequestedDataBySetGetCache("5_topOffers_list", array('function' =>
                 'Offer::getTopOffers', 'parameters' => array(5)));

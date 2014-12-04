@@ -22,8 +22,8 @@ class IndexController extends Zend_Controller_Action
     public function indexAction()
     {
         echo "<pre>";
-        $a = new \KC\Repository\MoneySaving();
-        print_r($a->getAllMoneySavingArticlesOfCategory(1,3));
+        $a = new \KC\Repository\ViewCount();
+        print_r($a->getAmountClickoutsLastWeek(1,3));
         die('END');
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
