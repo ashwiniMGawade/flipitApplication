@@ -389,6 +389,9 @@ class SignupController extends Zend_Controller_Action
         );
         $this->view->zendForm =  $signUpFormLargeForm;
         $this->view->codesWidget = '1';
+        $this->view->formAction = HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven')
+            .'/'
+            .FrontEnd_Helper_viewHelper::__link('link_membersonlysetsessions');
     }
 
     public function membersonlysetsessionsAction()
