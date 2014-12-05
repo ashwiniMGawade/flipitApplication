@@ -1,34 +1,34 @@
 <?php
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/datepicker.css" );
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/timepicker.css" );
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css" );
-$this->headLink ()->appendStylesheet ( PUBLIC_PATH . "css/back_end/bootstrap-combobox.css" );
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/datepicker.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/timepicker.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "js/back_end/openwysiwyg_v1.4.7/styles/wysiwyg.css");
+$this->headLink()->appendStylesheet(PUBLIC_PATH . "css/back_end/bootstrap-combobox.css");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.ui.widget.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.iframe-transport.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.fileupload.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.validate.js");
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/select2.min.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/date.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-datepicker.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/bootstrap-timepicker.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/bootbox.min.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "/js/jquery.NobleCount.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootstrap-typeahead.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/select2.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/date.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-datepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/bootstrap-timepicker.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/bootbox.min.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/jquery.textareaCounter.plugin.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "/js/jquery.NobleCount.js");
 $this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/ckeditor.js");
-$this->headScript ()->appendFile (PUBLIC_PATH . "js/back_end/ckeditor/config.js" );
-$this->headScript ()->appendFile ( PUBLIC_PATH . "js/back_end/social-codes.js" );
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/ckeditor/config.js");
+$this->headScript()->appendFile(PUBLIC_PATH . "js/back_end/social-codes.js");
 
-$date = date ( "Y-m-d" );
-$today = time ();
+$date = date("Y-m-d");
+$today = time();
 $twoMonthsLater = date('t-m-Y');
-$role = Zend_Auth::getInstance ()->getIdentity ()->roleId;
+$role = Zend_Auth::getInstance()->getIdentity()->roleId;
 $code = "kortingscodeoffernews";
 $secret = base64_encode($code);
 $shopLogo = $this->offerShoLogo;
 ?>
 <script type="text/javascript">
-var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" ;
+var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/"; ?>";
 </script>
 <?php echo $this->headTitle()->append('Social Code');?>
 <div class="wrap columns-2 edit-offer-main-cont">
@@ -44,7 +44,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
             if(isset($this->offerShoLogo[0]['shop']['permaLink'])) :
                 ?>
                 <button type="button" 
-                    onClick="window.open('<?php echo HTTP_PATH_FRONTEND ; ?>/<?php echo $this->offerShoLogo[0]['shop']['permaLink'] ;?>','_blank')" href="_blank" class="btn btn-primary ml10">
+                    onClick="window.open('<?php echo HTTP_PATH_FRONTEND; ?>/<?php echo $this->offerShoLogo[0]['shop']['permaLink'];?>','_blank')" href="_blank" class="btn btn-primary ml10">
                 <?php echo $this->translate('Open store page'); ?>
                 </button>
             <?php endif;    ?>
@@ -122,18 +122,18 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <?php
                         $shopPicture = PUBLIC_PATH.'images/NoImage/catLogo_95_95.jpg';
-                        if (file_exists(ROOT_PATH.$shopLogo[0]['shop']['logo']['path'].'thum_large_'.$shopLogo[0]['shop']['logo']['name'])) {
+                        if(file_exists(ROOT_PATH.$shopLogo[0]['shop']['logo']['path'].'thum_large_'.$shopLogo[0]['shop']['logo']['name'])) {
                           $shopPicture = PUBLIC_PATH_LOCALE.$shopLogo[0]['shop']['logo']['path']
-                            .'thum_large_'.$shopLogo[0]['shop']['logo']['name'] ;
+                            .'thum_large_'.$shopLogo[0]['shop']['logo']['name'];
                          }
                       ?>
-                    <img alt="<?php echo $this->translate('Shop logo'); ?>" src="<?php echo $shopPicture ; ?>" />
+                    <img alt="<?php echo $this->translate('Shop logo'); ?>" src="<?php echo $shopPicture; ?>" />
                     <div style="margin-right: 0px;" class="mainpage-content-right-inner-left-other">
                         <input  data-max-size="2097152" type="file" name="logoFile" id="logoFile" class="ignore" />
                         <span id="logo_file_message" class="help-inline" 
                             style="display: inline-block; padding-bottom: 5px; margin-left: 10px;">
                             <?php 
-                            echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB, Ratio 2:01)'); 
+                            echo $this->translate('Upload .jpg or .png file only(Maximum file size: 2MB, Ratio 2:01)'); 
                             ?>
                         </span>
                     </div>
@@ -154,9 +154,9 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                 class="combobox" name="whichshop" id="whichshop">
                                 <option value=""></option>
                                 <?php
-                                for ($i = 0; $i < count ( $this->shopList ); $i ++) {
-                                    if (trim ( $this->shopList [$i] ['name'] ) != '') {
-                                        $shopname = substr ( $this->shopList [$i] ['name'], 0, 70 );?>
+                                for($i = 0; $i < count($this->shopList); $i ++) {
+                                    if(trim($this->shopList [$i] ['name']) != '') {
+                                        $shopname = substr($this->shopList [$i] ['name'], 0, 70);?>
                                         <option value="<?php echo $this->shopList[$i]['id']; ?>">
                                             <?php echo $shopname;?>
                                         </option>
@@ -336,7 +336,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     </div>
                         <div class="categories" style="position:relative;" name="category">
                            <?php 
-                           for($i = 0; $i < count ( $this->catList ); $i ++) {
+                           for($i = 0; $i < count($this->catList); $i ++) {
                                 ?>
                                 <div class="square-btn-offer">
                                 <input type="checkbox" value="<?php echo $this->catList[$i]['id']; ?>" 
@@ -357,7 +357,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                                         title="<?php echo $this->catList[$i]['name'];?>" 
                                         class="btn square-btn" id="categoryBtn-<?php echo $this->catList[$i]['id'];?>" 
                                         onClick="addCategory('<?php echo $this->catList[$i]['id']; ?>')">
-                                        <img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath ;?>">
+                                        <img alt="Baby &amp; Kinderen" src="<?php echo $categoryIconPath;?>">
                                      </button>
                                      <div class="clear"></div>
                                         <span class="image-description-text">
@@ -424,7 +424,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <div data-toggle="buttons-checkbox" class="btn-group mb20">
                         <button type="button" class="btn btn-primary" id="uploadOfferOption"
                             onClick="printOption('uploadOfferOption')">
-                            <?php echo $this->translate('Upload Offer (pdf or jpg)');?>
+                            <?php echo $this->translate('Upload Offer(pdf or jpg)');?>
                         </button>
                         <button type="button" class="btn" id="userefurlOption"
                             onClick="printOption('userefurlOption')">
@@ -439,7 +439,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                             <input type="file" class="ignore" name="uploadoffer" id="uploadoffer"
                                 onchange="checkFileType(event)" />
                             <span>
-                                <?php echo $this->translate('Upload .jpg or .png file only (Maximum file size: 2MB)')?>
+                                <?php echo $this->translate('Upload .jpg or .png file only(Maximum file size: 2MB)')?>
                             </span>
                         </div>
                         <input type="checkbox" value="offerrefurl" id="offerrefurlcheck" 
@@ -727,7 +727,7 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <div class="mainpage-content-right-inner-left-other">
                         <textarea class="input-xlarge mbot bbot ignore" id="extendedOfferMetadesc" 
                             name="extendedOfferMetadesc" 
-                            placeholder="Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben codes en korting beschikbaar voor lente zomer, herfst & winter." rows="3">
+                            placeholder="<?php echo $this->translate('Een Center Parcs actiecode of kortingscode is zo gevonden op Actiecode.nl. Wij hebben codes en korting beschikbaar voor lente zomer, herfst & winter.');?>" rows="3">
                         </textarea>
                     <span id="metaDescLeft" class="disabled btop word-count nobel offer-wordcount-width"></span>
                 </div>
@@ -742,12 +742,12 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/" ; ?>" 
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <div class="mainpage-content-right-inner-left-other">
                         <input type="text" 
-                            name="extendedOfferRefurl" <?php echo ($this->role == '3' || $this->role == '4') 
+                            name="extendedOfferRefurl" <?php echo($this->role == '3' || $this->role == '4') 
                                 ? "disabled=disabled" 
-                                : "" ;  ?> id="extendedOfferRefurl" 
+                                : "";  ?> id="extendedOfferRefurl" 
                             placeholder="<?php echo $this->translate('permalink'); ?>" class="span3 ignore">
                         <?php if($this->role == '3' || $this->role == '4'):?>
-                            <input value="<?php echo $this->data['permaLink'] ; ?>" type="hidden" 
+                            <input value="<?php echo $this->data['permaLink']; ?>" type="hidden" 
                                 name="extendedOfferRefurl" id="extendedOfferRefurl" />
                         <?php endif;?>
                     </div>

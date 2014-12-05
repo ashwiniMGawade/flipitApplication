@@ -3,8 +3,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
 {
     public function preDispatch()
     {
-        $dbConnection = BackEnd_Helper_viewHelper::addConnection();//connection generate with second database
-        $params = $this->_getAllParams();
+        $dbConnection = BackEnd_Helper_viewHelper::addConnection();
         if (!Auth_StaffAdapter::hasIdentity()) {
             $referer = new Zend_Session_Namespace('referer');
             $referer->refer = "http://".$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
@@ -37,19 +36,19 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
 
     public function searchtopfiveshopAction()
     {
-        $seachString = $this->getRequest()->getParam('keyword');
+        $searchString = $this->getRequest()->getParam('keyword');
         $deletedFlag = $this->getRequest()->getParam('flag');
-        $searchResults = UserGeneratedOffer::searchToFiveShop($seachString, $deletedFlag);
+        $searchResults = UserGeneratedOffer::searchToFiveShop($searchString, $deletedFlag);
         $resultWithoutDuplication = array();
         $removeDuplicateRecords = array();
         if (sizeof($searchResults) > 0) {
-            foreach ($searchResults as $d) {
-                $id =  $d['shop']['id'];
+            foreach ($searchResults as $shop) {
+                $id =  $shop['shop']['id'];
                 if (isset($removeDuplicateRecords[$id])) {
                     $removeDuplicateRecords[$id] = $id;
                 } else {
                     $removeDuplicateRecords[$id] = $id;
-                    $resultWithoutDuplication[] = ucfirst($d['name']);
+                    $resultWithoutDuplication[] = ucfirst($shop['name']);
                 }
             }
         } else {
@@ -62,19 +61,19 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
 
     public function searchtopfiveofferAction()
     {
-        $seachString = $this->getRequest()->getParam('keyword');
+        $searchString = $this->getRequest()->getParam('keyword');
         $deletedFlag = $this->getRequest()->getParam('flag');
-        $searchResults = UserGeneratedOffer::searchToFiveOffer($seachString, $deletedFlag);
+        $searchResults = UserGeneratedOffer::searchToFiveOffer($searchString, $deletedFlag);
         $resultWithoutDuplication = array();
         $removeDuplicateRecords = array();
         if (sizeof($searchResults) > 0) {
-            foreach ($searchResults as $d) {
-                $id =  $d['id'];
+            foreach ($searchResults as $offer) {
+                $id =  $offer['id'];
                 if (isset($removeDuplicateRecords[$id])) {
                     $removeDuplicateRecords[$id] = $id;
                 } else {
                     $removeDuplicateRecords[$id] = $id;
-                    $resultWithoutDuplication[] = ucfirst($d['title']);
+                    $resultWithoutDuplication[] = ucfirst($offer['title']);
                 }
             }
         } else {
@@ -87,14 +86,14 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
 
     public function searchtopfivecouponAction()
     {
-        $seachString = $this->getRequest()->getParam('keyword');
+        $searchString = $this->getRequest()->getParam('keyword');
         $deletedFlag = $this->getRequest()->getParam('flag');
-        $searchResults = UserGeneratedOffer::searchToFiveCoupon($seachString, $deletedFlag);
+        $searchResults = UserGeneratedOffer::searchToFiveCoupon($searchString, $deletedFlag);
         $resultWithoutDuplication = array();
         if (sizeof($searchResults) > 0) {
-            foreach ($searchResults as $d) {
-                $id =  $d['id'];
-                $resultWithoutDuplication[] = $d['couponCode'];
+            foreach ($searchResults as $coupon) {
+                $id =  $coupon['id'];
+                $resultWithoutDuplication[] = $coupon['couponCode'];
             }
         } else {
             $recordNotFoundMessage = $this->view->translate('No Record Found');
@@ -129,14 +128,7 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function updateofferAction()
     {
         $params = $this->_getAllParams();
-        $offer = Doctrine_Core::getTable("Offer")->find($params['offerId']);
-        if (!empty($params['approveSocialCode'])) {
-            $offer->approved = 1;
-        } else {
-            $offer->approved = 0;
-        }
-        $offer->save();
-
+        $offer = UserGeneratedOffer::saveApprovedStatus($params['offerId'], $params['approveSocialCode']);
         $offerUpdate = $offer->updateOffer($params);
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         if ($offerUpdate['result']) {

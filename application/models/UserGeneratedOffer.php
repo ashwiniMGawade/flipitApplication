@@ -52,7 +52,7 @@ class UserGeneratedOffer extends BaseOffer
 
     public static function searchToFiveOffer($keyword, $flag)
     {
-        $data = Doctrine_Query::create()
+        $offers = Doctrine_Query::create()
         ->select('o.title as title')
         ->from("UserGeneratedOffer o")
         ->where('o.deleted=' . "'$flag'")
@@ -60,12 +60,12 @@ class UserGeneratedOffer extends BaseOffer
         ->andWhere("o.title LIKE ?", "$keyword%")
         ->andWhere("o.userGenerated = '1'")
         ->orderBy("o.title ASC")->limit(5)->fetchArray();
-        return $data;
+        return $offers;
     }
     
     public static function searchToFiveShop($keyword, $flag)
     {
-        $data = Doctrine_Query::create()
+        $shops = Doctrine_Query::create()
         ->select('o.id,s.name as name')
         ->from("UserGeneratedOffer o")->leftJoin('o.shop s')
         ->where('o.deleted=' . "'$flag'")
@@ -73,12 +73,12 @@ class UserGeneratedOffer extends BaseOffer
         ->andWhere("s.name LIKE '".$keyword."%'")
         ->andWhere("o.userGenerated = '1'")
         ->orderBy("s.id ASC")->limit(5)->fetchArray();
-        return $data;
+        return $shops;
     }
 
     public static function searchToFiveCoupon($keyword, $flag)
     {
-        $data = Doctrine_Query::create()
+        $coupons = Doctrine_Query::create()
         ->select()
         ->from("UserGeneratedOffer o")
         ->where('o.deleted=' . "'$flag'")
@@ -87,6 +87,18 @@ class UserGeneratedOffer extends BaseOffer
         ->orderBy("o.id ASC")
         ->limit(5)
         ->fetchArray();
-        return $data;
+        return $coupons;
+    }
+
+    public static function saveApprovedStatus($offerId, $status)
+    {
+        $offer = Doctrine_Core::getTable("Offer")->find($offerId);
+        if (!empty($status)) {
+            $offer->approved = 1;
+        } else {
+            $offer->approved = 0;
+        }
+        $offer->save();
+        return $offer;
     }
 }
