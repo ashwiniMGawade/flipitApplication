@@ -101,4 +101,23 @@ class UserGeneratedOffer extends BaseOffer
         $offer->save();
         return $offer;
     }
+
+    /**
+    * addOffer
+    *
+    * Add userGenerate offer from front-end
+    */
+    public static function addOffer($params)
+    {
+        $offer  = new UserGeneratedOffer();
+        $offer->Visability = 'DE';
+        $offer->discountType = 'CD';
+        $offer->extendedFullDescription = $params['offer_desc'];
+        $offer->shopId = $params['shopId'];
+        $offer->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($params['offer_code']);
+        $offer->userGenerated = true;
+        $offer->authorId = Auth_VisitorAdapter::getIdentity()->id;
+        $offer->authorName = Auth_VisitorAdapter::getIdentity()->firstName;
+        $offer->save();
+    }
 }

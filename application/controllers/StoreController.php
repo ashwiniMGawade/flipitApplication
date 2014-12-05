@@ -408,4 +408,17 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
+
+    public function socialcodeAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $socialcodeForm =  new Application_Form_SocialCode();
+        $this->view->zendForm = $socialcodeForm;
+        if ($this->getRequest()->isPost()) {
+            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
+            } else {
+                $socialcodeForm->highlightErrorElements();
+            }
+        }
+    }
 }
