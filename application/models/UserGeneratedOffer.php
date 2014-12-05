@@ -6,7 +6,7 @@
  */
 class UserGeneratedOffer extends BaseOffer
 {
-    public static function getOfferList($parameters)
+    public static function getOffersList($parameters)
     {
         $userRole           = Auth_StaffAdapter::getIdentity()->roleId;
         $searchOffer        = $parameters["offerText"]!='undefined' ? $parameters["offerText"] : '';

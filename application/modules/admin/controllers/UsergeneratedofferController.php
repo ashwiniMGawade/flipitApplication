@@ -22,8 +22,8 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
     public function getofferAction()
     {
         $params = $this->_getAllParams();
-        $offerList = UserGeneratedOffer::getOfferList($params);
-        echo Zend_Json::encode($offerList);
+        $offersList = UserGeneratedOffer::getOffersList($params);
+        echo Zend_Json::encode($offersList);
         die();
     }
 
@@ -120,8 +120,8 @@ class Admin_UsergeneratedofferController extends Zend_Controller_Action
         $this->view->offerShoLogo = $shop;
         $this->view->shopList = Shop::getOfferShopList();
         $this->view->catList= Category::getCategoriesInformation();
-        $pageObj = new Page();
-        $this->view->pages = $pageObj->getPagesOffer();
+        $page = new Page();
+        $this->view->pages = $page->getPagesOffer();
         $allTiles = OfferTiles::getAllTiles();
         $this->view->tiles = $allTiles;
     }

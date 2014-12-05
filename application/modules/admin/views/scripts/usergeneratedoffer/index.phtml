@@ -44,10 +44,10 @@ $role =  Zend_Auth::getInstance()->getIdentity()->roleId;
                 </div>
                 <div class="fl ml15">
                     <select id='couponType' name='couponType'>
-                        <option value=''>All</option>
-                        <option value='CD'>Coupon</option>
-                        <option value='SL'>Sale</option>
-                        <option value='PA'>Printable</option>
+                        <option value=''><?php echo $this->translate('All');?></option>
+                        <option value='CD'><?php echo $this->translate('Coupon');?></option>
+                        <option value='SL'><?php echo $this->translate('Sale');?></option>
+                        <option value='PA'><?php echo $this->translate('Printable');?></option>
                     </select>
                 </div>
                 <div class="mainpage-content-searchbart">
