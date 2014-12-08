@@ -1,9 +1,9 @@
 
 $(document).ready(function(){
-	$('input#shopId').val($('input#currentShop').val())
-	$('#expireDate').datepicker({
-		dateFormat: "dd-mm-yy"
-	});
+    $('input#shopId').val($('input#currentShop').val())
+    $('#expireDate').datepicker({
+        dateFormat: "dd-mm-yy"
+    });
     validateAddSocialCode();
     $("#sharecode").submit(function(){
         if($("form#socialcodeForm").valid()){
@@ -29,7 +29,6 @@ function validateAddSocialCode() {
             offerUrl: {
                 required: true,
                 regex  :/((http|https):\/\/)([_a-z\d\-]+(\.[_a-z\d\-]+)+)(([_a-z\d\-\\\.\/]+[_a-z\d\-\\\/])+)*/
-
             },
             code: {
                 required: true
