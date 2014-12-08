@@ -18,9 +18,8 @@ foreach ($socialcodeForm->getElements() as $formElement) {
             <?php echo $socialcodeForm->code->renderViewHelper();?>
             <?php echo $socialcodeForm->expireDate->renderViewHelper();?>
         </div>
-        <?php echo $socialcodeForm->offerDetails->renderViewHelper();?>
-
         <?php 
+        echo $socialcodeForm->offerDetails->renderViewHelper();
         echo $socialcodeForm->shopId->renderViewHelper();
         echo $socialcodeForm->shopPermalink->renderViewHelper();
         echo $this->formSubmit(
@@ -28,8 +27,9 @@ foreach ($socialcodeForm->getElements() as $formElement) {
          FrontEnd_Helper_viewHelper::__form('form_share vouchercode'),
          array('class'=>'btn btn-primary', 'id'=>'sharecode')
         ) ?>
-        <a  
+        <a
         href="<?php echo HTTP_PATH_LOCALE; ?>/<?php echo FrontEnd_Helper_viewHelper::__link('link_all-shops'); ?>">
-        <?php echo $this->translate('Share coupon codes for other shops');?></a>
+        <?php echo $this->translate('Share coupon codes for other shops');?>
+        </a>
     </form>
 </div>

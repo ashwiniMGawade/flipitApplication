@@ -128,7 +128,6 @@ class UserGeneratedOffer extends BaseOffer
 
         $offer->Visability = 'DE';
         $offer->discountType = 'CD';
-        //set default values
         $offer->extendedoffertitle = '';
         $offer->extendedOffer = 0;
         $offer->extendedTitle = '';

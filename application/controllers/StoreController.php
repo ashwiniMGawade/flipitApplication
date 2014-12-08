@@ -420,11 +420,18 @@ class StoreController extends Zend_Controller_Action
             if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
                 $socialcode = $socialcodeForm->getValues();
                 UserGeneratedOffer::addOffer($socialcode);
+                $shareCodeStatus = new Zend_Session_Namespace('shareCodeStatus');
+                $shareCodeStatus->shareCodeStatus = true;
                 $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
                 exit();
             } else {
                 $socialcodeForm->highlightErrorElements();
             }
         }
+    }
+
+    public function socialcodethanksAction()
+    {
+        $this->_helper->layout()->disableLayout();
     }
 }
