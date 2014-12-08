@@ -95,6 +95,12 @@ class UserGeneratedOffer extends BaseOffer
         $offer = Doctrine_Core::getTable("Offer")->find($offerId);
         if (!empty($status)) {
             $offer->approved = 1;
+            $authorId = Offer::getAuthorId($offerId);
+            if (empty($authorId[0]['authorId'])) {
+                $offer->authorId = Auth_StaffAdapter::getIdentity()->id;
+                $offer->authorName = Auth_StaffAdapter::getIdentity()->firstName . " "
+                    . Auth_StaffAdapter::getIdentity()->lastName;
+            }
         } else {
             $offer->approved = 0;
         }
