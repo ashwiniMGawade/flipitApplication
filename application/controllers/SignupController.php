@@ -426,4 +426,11 @@ class SignupController extends Zend_Controller_Action
         $visitorEmail->emailAddressSignup = $params['emailAddress'];
         $this->_redirect(HTTP_PATH_LOCALE. FrontEnd_Helper_viewHelper::__link('link_inschrijven'));
     }
+
+    public function signupmembersonlytitleAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $this->view->shopId = $this->getRequest()->getParam('shopId');
+        $this->view->offerId = $this->getRequest()->getParam('offerId');
+    }
 }

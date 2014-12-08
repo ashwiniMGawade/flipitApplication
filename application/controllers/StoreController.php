@@ -42,6 +42,7 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
+
         if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
             $offerVisiblity = Offer::getOfferVisiblity($shopParams['popup']);
             if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
