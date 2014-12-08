@@ -157,7 +157,7 @@ echo $this->esi($this->locale.'store/followbutton?shopid='.$this->currentStoreIn
         echo $this->esi($this->locale.'signup/signupwidget?shopId='.$this->currentStoreInformation[0]['id']
             .'&signupFormWidgetType=sidebarWidget&shopLogoOrDefaultImage=');
     endif;
-        echo $this->esi($this->locale.'store/socialcode');
+        echo $this->esi($this->locale.'store/socialcode?shopPermalink='.$this->currentStoreInformation[0]['permaLink']);
     ?>
     </aside>
 </div>

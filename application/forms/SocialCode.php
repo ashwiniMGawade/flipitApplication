@@ -11,13 +11,7 @@ class Application_Form_SocialCode extends Application_Form_Base
         $nickname->setRequired(true);
         $nickname->setAttrib('class', 'form-control');
         $nickname->setAttrib('placeholder', 'nickname');
-        $nickname->addValidator(
-            'EmailAddress',
-            true,
-            array(
-                'messages' => array(Zend_Validate_EmailAddress::INVALID_FORMAT=>'Please enter valid email address')
-            )
-        );
+
         $title = new Zend_Form_Element_Text('title');
         $title->setRequired(true);
         $title->setAttrib('class', 'form-control');
@@ -44,7 +38,17 @@ class Application_Form_SocialCode extends Application_Form_Base
         $offerDetails->setAttrib('placeholder', 'Offer Details');
 
         $shopIdHiddenField =  new Zend_Form_Element_Hidden('shopId');
+        $shopPermalinkHiddenField =  new Zend_Form_Element_Hidden('shopPermalink');
 
-        $this->addElements(array($nickname, $title, $offerUrl, $code, $expireDate,  $offerDetails, $shopIdHiddenField));
+        $this->addElements(array(
+            $nickname,
+            $title,
+            $offerUrl,
+            $code,
+            $expireDate,
+            $offerDetails,
+            $shopIdHiddenField,
+            $shopPermalinkHiddenField
+        ));
     }
 }
