@@ -116,7 +116,6 @@ class UserGeneratedOffer extends BaseOffer
         $offer->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($parameters['code']);
         $offer->startDate =  date('Y-m-d H:i:s');
         $offer->endDate = date('Y-m-d', strtotime($parameters['expireDate']));
-
         $offer->offerDescription = $parameters['offerDetails'];
         $offer->shopId = base64_decode($parameters['shopId']);
         $offer->userGenerated = true;
