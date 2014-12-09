@@ -97,4 +97,15 @@ class FavouriteController extends Zend_Controller_Action
         }
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
+
+    public function sharesocialcodeAction()
+    {
+        
+        //if (Auth_VisitorAdapter::hasIdentity()) {
+            $this->view->pageCssClass = 'social-page';
+        //} else {
+         //   $this->_redirect('/');
+        //}
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+    }
 }
