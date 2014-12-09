@@ -1,45 +1,36 @@
+
 <div class="title">
 	Hey Menno <small>How are you? Let’s save some money for you!</small>
 </div>
+<?php
+$socialcodeForm = $this->zendForm;
+foreach ($socialcodeForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+?>
 <div class="section">
 	<div class="row">
 		<div class="col-lg-5 col-md-5 col-sm-5">
-			<div class="title">
-				<h1>Deel jouw <br>social kortingscodes <small>Heeft u een nieuwe kortingsbon gevonden <br>die het delen waard is?</small></h1>
-			</div>
-			<input class="form-control" type="text" placeholder="Nickname">
-			<span class="fake-select">
-				<select class="form-control">
-					<option selected="selected">Store</option>
-					<option>Store</option>
-				</select>
-			</span>
-			<span class="label">Expiry date</span>
-			<div class="select-box">
-				<select class="form-control">
-					<option selected="selected">01</option>
-					<option>02</option>
-					<option>03</option>
-					<option>04</option>
-				</select>
-				<select class="form-control">
-					<option selected="selected">01</option>
-					<option>02</option>
-					<option>03</option>
-					<option>04</option>
-				</select>
-				<select class="form-control">
-					<option selected="selected">1980</option>
-					<option>1981</option>
-					<option>1982</option>
-					<option>1983</option>
-				</select>
-			</div>
-			<input class="form-control" type="text" placeholder="Offer title">
-			<input class="form-control" type="url" placeholder="Offer URL">
-			<input class="form-control" type="url" placeholder="Coupon code">
-			<textarea class="form-control" cols="30" rows="10" placeholder="Offer details"></textarea>
-			<button class="submit btn blue btn-primary">SHARE CODE</button>
+			<form id="socialcodeForm" class="widget-form" name="socialcodeForm" method="POST" action="">
+				<div class="title">
+					<h1>Deel jouw <br>social kortingscodes <small>Heeft u een nieuwe kortingsbon gevonden <br>die het delen waard is?</small></h1>
+				</div>
+				<?php echo $socialcodeForm->nickname->renderViewHelper();?>
+				<span class="fake-select">
+					<?php echo $socialcodeForm->store->renderViewHelper();?>
+				</span>
+				<span class="label">Expiry date</span>
+				<div class="select-box">
+					<?php echo $socialcodeForm->day->renderViewHelper();?>
+					<?php echo $socialcodeForm->month->renderViewHelper();?>
+					<?php echo $socialcodeForm->year->renderViewHelper();?>
+				</div>
+				<?php echo $socialcodeForm->title->renderViewHelper();?>
+				<?php echo $socialcodeForm->offerUrl->renderViewHelper();?>
+				<?php echo $socialcodeForm->code->renderViewHelper();?>
+				<?php echo $socialcodeForm->offerDetails->renderViewHelper();?>
+				<button type='submit' id='sharecode' class="submit btn blue btn-primary">SHARE CODE</button>
+			</form>
 		</div>
 		<div class="col-lg-7 col-md-7 col-sm-7">
 			<article class="block">

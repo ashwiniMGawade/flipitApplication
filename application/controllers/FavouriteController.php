@@ -100,12 +100,22 @@ class FavouriteController extends Zend_Controller_Action
 
     public function sharesocialcodeAction()
     {
-        
+        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+        $this->view->pageCssClass = 'social-page';
+        $socialcodeForm = new Application_Form_SocialCodeSettingForm();
+        $this->view->zendForm = $socialcodeForm;
+        if ($this->getRequest()->isPost()) {
+            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
+                die('WEL');
+            } else {
+                $socialcodeForm->highlightErrorElements();
+            }
+        }
         //if (Auth_VisitorAdapter::hasIdentity()) {
-            $this->view->pageCssClass = 'social-page';
+            
         //} else {
          //   $this->_redirect('/');
         //}
-        $this->getResponse()->setHeader('X-Nocache', 'no-cache');
+       // $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
 }
