@@ -95,10 +95,51 @@ class UserGeneratedOffer extends BaseOffer
         $offer = Doctrine_Core::getTable("Offer")->find($offerId);
         if (!empty($status)) {
             $offer->approved = 1;
+            $authorId = Offer::getAuthorId($offerId);
+            if (empty($authorId[0]['authorId'])) {
+                $offer->authorId = Auth_StaffAdapter::getIdentity()->id;
+                $offer->authorName = Auth_StaffAdapter::getIdentity()->firstName . " "
+                    . Auth_StaffAdapter::getIdentity()->lastName;
+            }
         } else {
             $offer->approved = 0;
         }
         $offer->save();
         return $offer;
+    }
+
+    public static function addOffer($parameters)
+    {
+        $offer  = new UserGeneratedOffer();
+        $offer->nickname = $parameters['nickname'];
+        $offer->title = $parameters['title'];
+        $offer->offerUrl = $parameters['offerUrl'];
+        $offer->couponCode = BackEnd_Helper_viewHelper::stripSlashesFromString($parameters['code']);
+        $offer->startDate =  date('Y-m-d H:i:s');
+        $offer->endDate = date('Y-m-d', strtotime($parameters['expireDate']));
+        $offer->offerDescription = $parameters['offerDetails'];
+        $offer->shopId = base64_decode($parameters['shopId']);
+        $offer->userGenerated = true;
+
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $offer->authorId = Auth_VisitorAdapter::getIdentity()->id;
+            $offer->authorName = Auth_VisitorAdapter::getIdentity()->firstName;
+        }
+
+        $offer->Visability = 'DE';
+        $offer->discountType = 'CD';
+        $offer->extendedoffertitle = '';
+        $offer->extendedOffer = 0;
+        $offer->extendedTitle = '';
+        $offer->extendedUrl = '';
+        $offer->extendedMetaDescription = '';
+        $offer->extendedFullDescription = '';
+        $offer->exclusiveCode= 0;
+        $offer->editorPicks = 0;
+        $offer->maxlimit = 0;
+        $offer->maxcode = 0;
+        $offer->shopExist = 0;
+        $offer->save();
+        return true;
     }
 }

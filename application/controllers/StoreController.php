@@ -408,4 +408,30 @@ class StoreController extends Zend_Controller_Action
         $this->view->shopId = $this->getRequest()->getParam('shopid');
         $this->view->permalink = $this->getRequest()->getParam('permalink');
     }
+
+    public function socialcodeAction()
+    {
+        $this->_helper->layout()->disableLayout();
+        $shopPermalink = $this->getRequest()->getParam('shopPermalink');
+        $socialcodeForm = new Application_Form_SocialCode();
+        $socialcodeForm->getElement('shopPermalink')->setValue($shopPermalink);
+        $this->view->zendForm = $socialcodeForm;
+        if ($this->getRequest()->isPost()) {
+            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
+                $socialcode = $socialcodeForm->getValues();
+                UserGeneratedOffer::addOffer($socialcode);
+                $shareCodeStatus = new Zend_Session_Namespace('shareCodeStatus');
+                $shareCodeStatus->shareCodeStatus = true;
+                $this->_redirect(HTTP_PATH_LOCALE. $socialcode['shopPermalink']);
+                exit();
+            } else {
+                $socialcodeForm->highlightErrorElements();
+            }
+        }
+    }
+
+    public function socialcodethanksAction()
+    {
+        $this->_helper->layout()->disableLayout();
+    }
 }

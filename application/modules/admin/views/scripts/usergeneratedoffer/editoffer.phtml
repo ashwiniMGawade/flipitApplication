@@ -498,14 +498,37 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/"; ?>";
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <div class="mainpage-content-right-inner-left-other">
                         <input type="text" id="addofferTitle" name="addofferTitle" 
-                            placeholder="This account is important, etc" class="span3 mbot bbot">
+                            placeholder="<?php echo $this->translate('This account is important, etc');?>"
+                            class="span3 mbot bbot">
                         <input type="text" disabled="" 
                             value="<?php echo $this->translate('Offer title length 0 characters');?>" 
                             id="metaTextLeft" class="input-xlarge disabled btop word-count">
                     </div>
                 </div>
             </div>
-
+            <div class="mainpage-content-line">
+                <div class="mainpage-content-left">
+                    <label><strong><?php echo $this->translate('Offer Url'); ?></strong></label>
+                </div>
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-right-other"></div>
+                    <div class="mainpage-content-right-inner-left-other">
+                        <input type="text" id="offerUrl" name="offerUrl" 
+                            placeholder="This account is important, etc" class="span3 mbot bbot">
+                    </div>
+                </div>
+            </div>
+            <div class="mainpage-content-line">
+                <div class="mainpage-content-left">
+                    <label><strong><?php echo $this->translate('Offer Description'); ?></strong></label>
+                </div>
+                <div class="mainpage-content-right">
+                    <div class="mainpage-content-right-inner-right-other"></div>
+                    <div class="mainpage-content-right-inner-left-other">
+                        <textarea id="offerDescription" name="offerDescription" class="span3 mbot bbot"></textarea> 
+                    </div>
+                </div>
+            </div>
             <div class="mainpage-content-line mb10">
                 <div class="mainpage-content-left">
                     <label><strong><?php echo $this->translate('Deeplinking is'); ?></strong></label>
