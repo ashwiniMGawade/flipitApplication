@@ -333,14 +333,14 @@ EOD;
         $resultStatus = "false";
         switch (strtolower($eventType)) {
             case 'onclick':
-                if (ViewCount::getOfferClick($offerId, $clientIp) == 0) {
-                    ViewCount::saveOfferClick($offerId, $clientIp);
+                if (\KC\Repository\ViewCount::getOfferClick($offerId, $clientIp) == 0) {
+                    \KC\Repository\ViewCount::saveOfferClick($offerId, $clientIp);
                     $resultStatus = "true";
                 }
                 break;
             case 'onload':
-                if (ViewCount::getOfferOnload($offerId, $clientIp) == 0) {
-                    ViewCount::saveOfferOnload($offerId, $clientIp);
+                if (\KC\Repository\ViewCount::getOfferOnload($offerId, $clientIp) == 0) {
+                    \KC\Repository\ViewCount::saveOfferOnload($offerId, $clientIp);
                     $resultStatus = "true";
                 }
                 break;

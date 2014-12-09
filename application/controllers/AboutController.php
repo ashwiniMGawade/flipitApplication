@@ -91,7 +91,7 @@ class AboutController extends Zend_Controller_Action
         );
         $authorMostReadArticles = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             'user_'. 'mostRead'.$authorId .'_data',
-            array('function' => 'MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
+            array('function' => '\KC\Repository\MoneySaving::getMostReadArticles', 'parameters' => array(4, $authorId)),
             0
         );
         $authorFullName = $authorDetails['firstName'].' '. $authorDetails['lastName'];

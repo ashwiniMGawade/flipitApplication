@@ -13,7 +13,7 @@ class Admin_SplashController extends Zend_Controller_Action
             $this->_redirect('/admin/auth/index');
         }
 
-        BackEnd_Helper_viewHelper::closeConnection($databaseConnection);
+        \BackEnd_Helper_viewHelper::closeConnection($databaseConnection);
         $this->view->controllerName = $this->getRequest()->getParam('controller');
         $this->view->action = $this->getRequest()->getParam('action');
         $sessionNamespace = new Zend_Session_Namespace();
@@ -26,7 +26,7 @@ class Admin_SplashController extends Zend_Controller_Action
             $this->_redirect('/admin');
         }
         $this->flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->splashObject = new Splash();
+        $this->splashObject = new \KC\Repository\Splash();
     }
 
     public function indexAction()
@@ -34,10 +34,11 @@ class Admin_SplashController extends Zend_Controller_Action
         $splashTableData = $this->splashObject->getSplashInformation();
 
         if (!empty($splashTableData)) {
-            $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
+            $connectionObject = \BackEnd_Helper_DatabaseManager::addConnection($splashTableData[0]['locale']);
             $splashOfferDetails = $this->splashObject->getOfferById($splashTableData[0]['offerId']);
-            BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
-            $this->view->currentOfferTitle = $splashOfferDetails['title'];
+            \BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
+           
+            $this->view->currentOfferTitle = $splashOfferDetails->title;
             $this->view->currentOfferLocale = $splashTableData[0]['locale'];
         }
 
@@ -47,12 +48,12 @@ class Admin_SplashController extends Zend_Controller_Action
     public function addOfferAction()
     {
         $urlRequest = $this->getRequest();
-        $this->view->websites = Website::getAllWebsites();
+        $this->view->websites = \KC\Repository\Website::getAllWebsites();
         $this->getFlashMessage();
 
         if ($this->_request->isPost()) {
             $localeId = $urlRequest->getParam('locale', false);
-            $locale = BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
+            $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
             $offerId = $urlRequest->getParam('searchOfferId', false);
             $splashTableData = $this->splashObject->getSplashInformation();
 
@@ -64,7 +65,7 @@ class Admin_SplashController extends Zend_Controller_Action
             $this->splashObject->offerId = $offerId;
             $this->splashObject->locale = $locale;
             $this->splashObject->save();
-            $varnishObject = new Varnish();
+            $varnishObject = new \KC\Entity\Varnish();
             $varnishObject->addUrl("http://www.flipit.com");
             $this->setFlashMessage('Offer has been added successfully');
             $this->_redirect(HTTP_PATH . 'admin/splash');
@@ -79,9 +80,9 @@ class Admin_SplashController extends Zend_Controller_Action
             $localeId = intval($this->getRequest()->getParam('locale', false));
 
             if ($localeId) {
-                $locale = BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
-                $connectionObject = BackEnd_Helper_DatabaseManager::addConnection($locale);
-                $offers = new Offer($connectionObject['connName']);
+                $locale = \BackEnd_Helper_viewHelper::getLocaleByWebsite($localeId);
+                $connectionObject = \BackEnd_Helper_DatabaseManager::addConnection($locale);
+                $offers = new \KC\Entity\Offer($connectionObject['connName']);
                 $offerKeyword = $this->getRequest()->getParam('keyword');
                 $activeCoupons = $offers->getActiveCoupons($offerKeyword);
                 BackEnd_Helper_DatabaseManager::closeConnection($connectionObject['adapter']);
