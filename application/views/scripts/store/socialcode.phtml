@@ -28,7 +28,7 @@ foreach ($socialcodeForm->getElements() as $formElement) {
          array('class'=>'btn btn-primary', 'id'=>'sharecode')
         ) ?>
         <a
-        href="<?php echo HTTP_PATH_LOCALE; ?>/<?php echo FrontEnd_Helper_viewHelper::__link('link_all-shops'); ?>">
+        href="<?php echo HTTP_PATH_LOCALE.FrontEnd_Helper_viewHelper::__link('link_alle-winkels'); ?>">
         <?php echo $this->translate('Share coupon codes for other shops');?>
         </a>
     </form>
