@@ -413,7 +413,7 @@ class StoreController extends Zend_Controller_Action
     {
         $this->_helper->layout()->disableLayout();
         $shopPermalink = $this->getRequest()->getParam('shopPermalink');
-        $socialcodeForm =  new Application_Form_SocialCode();
+        $socialcodeForm = new Application_Form_SocialCode();
         $socialcodeForm->getElement('shopPermalink')->setValue($shopPermalink);
         $this->view->zendForm = $socialcodeForm;
         if ($this->getRequest()->isPost()) {

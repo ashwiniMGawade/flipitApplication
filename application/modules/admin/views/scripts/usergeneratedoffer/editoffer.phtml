@@ -498,7 +498,8 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/"; ?>";
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <div class="mainpage-content-right-inner-left-other">
                         <input type="text" id="addofferTitle" name="addofferTitle" 
-                            placeholder="This account is important, etc" class="span3 mbot bbot">
+                            placeholder="<?php echo $this->translate('This account is important, etc');?>"
+                            class="span3 mbot bbot">
                         <input type="text" disabled="" 
                             value="<?php echo $this->translate('Offer title length 0 characters');?>" 
                             id="metaTextLeft" class="input-xlarge disabled btop word-count">

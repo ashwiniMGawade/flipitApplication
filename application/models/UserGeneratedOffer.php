@@ -108,11 +108,6 @@ class UserGeneratedOffer extends BaseOffer
         return $offer;
     }
 
-    /**
-    * addOffer
-    *
-    * Add userGenerate offer from front-end
-    */
     public static function addOffer($parameters)
     {
         $offer  = new UserGeneratedOffer();
