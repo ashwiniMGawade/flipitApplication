@@ -100,22 +100,59 @@ class FavouriteController extends Zend_Controller_Action
 
     public function sharesocialcodeAction()
     {
+        $flashMessage = $this->_helper->getHelper('FlashMessenger');
+        $message = $flashMessage->getMessages();
+        $this->view->successMessage = isset($message[0]['success']) ?
+        $message[0]['success'] : '';
+        $this->view->errorMessage = isset($message[0]['error']) ?
+        $message[0]['error'] : '';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $this->view->pageCssClass = 'social-page';
-        $socialcodeForm = new Application_Form_SocialCodeSettingForm();
-        $this->view->zendForm = $socialcodeForm;
-        if ($this->getRequest()->isPost()) {
-            if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
-                die('WEL');
-            } else {
-                $socialcodeForm->highlightErrorElements();
+        if (Auth_VisitorAdapter::hasIdentity()) {
+            $userDetails = FrontEnd_Helper_viewHelper::
+            getRequestedDataBySetGetCache(
+                'visitor_'.Auth_VisitorAdapter::getIdentity()->id.'_details',
+                array(
+                    'function' => 'Visitor::getUserFirstName',
+                    'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
+                )
+            );
+            $this->view->userDetails = isset($userDetails[0]) ? $userDetails[0] : '';
+            $socialcodeForm = new Application_Form_SocialCodeSettingForm();
+            $this->view->zendForm = $socialcodeForm;
+            if ($this->getRequest()->isPost()) {
+                if ($socialcodeForm->isValid($this->getRequest()->getPost())) {
+                    $socialcode = $socialcodeForm->getValues();
+                    $endDate = $socialcode['day'].'-'.$socialcode['month'].'-'.$socialcode['year'];
+                    $parameters =  array(
+                        'nickname' => $socialcode['nickname'],
+                        'shopId'=> base64_encode($socialcode['store']),
+                        'title'=> $socialcode['title'],
+                        'offerUrl'=> $socialcode['offerUrl'],
+                        'code'=> $socialcode['code'],
+                        'offerDetails'=>$socialcode['offerDetails'],
+                        'expireDate'=>$endDate
+                    );
+                    UserGeneratedOffer::addOffer($parameters);
+                    $socialcodeForm->reset();
+                    $flashMessage->addMessage(
+                        array(
+                            'success' => FrontEnd_Helper_viewHelper::__translate(
+                                'Thanks for sharing your coupon with the Flipit Community! 
+                                Our team will check the details and publish the code'
+                            )
+                        )
+                    );
+                    $redirectUrl = HTTP_PATH_LOCALE
+                        . FrontEnd_Helper_viewHelper::__link('link_mijn-favorieten')."/"
+                        .FrontEnd_Helper_viewHelper::__link('link_sharesocialcode');
+                    $this->_redirect($redirectUrl);
+                } else {
+                    $socialcodeForm->highlightErrorElements();
+                }
             }
+        } else {
+            $this->_redirect('/');
         }
-        //if (Auth_VisitorAdapter::hasIdentity()) {
-            
-        //} else {
-         //   $this->_redirect('/');
-        //}
-       // $this->getResponse()->setHeader('X-Nocache', 'no-cache');
     }
 }
