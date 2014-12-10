@@ -218,7 +218,7 @@ class Visitor extends BaseVisitor
         ->select(
             'fv.id as fvid,
             fv.visitorId as visitorId,s.name as name,
-            s.permalink as permaLink,o.id, o.title,l.path,l.name,l.id'
+            s.permalink as permaLink,o.id, o.userGenerated, o.approved, o.nickname, o.title,l.path,l.name,l.id'
         )
         ->addSelect(
             "(SELECT COUNT(*) FROM Offer active WHERE

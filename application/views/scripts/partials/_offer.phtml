@@ -127,14 +127,14 @@ foreach ($this->offers as $offer) {
         if($this->offersType!='simple'):
             echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
         endif;
-        if ($offer->userGenerated == 1 && $offer->approved == '1') : ?>
-        <li id="fr">
-            <?php echo $this->translate('Deze code is gedeeld door ').$offer->nickname;?>
-        </li>
-        <?php endif;
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
+    if ($offer->userGenerated == 1 && $offer->approved == '1') : ?>
+        <li id="fr">
+            <?php echo $this->translate('Code shared by ').$offer->nickname;?>
+        </li>
+        <?php endif;
     ?>
                 </ul>
             </div>
