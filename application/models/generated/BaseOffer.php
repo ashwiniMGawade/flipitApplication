@@ -251,10 +251,6 @@ abstract class BaseOffer extends Doctrine_Record
              'type' => 'string',
              'length' => 255
         ));
-        $this->hasColumn('offerDescription', 'string', 1000, array(
-             'type' => 'string',
-             'length' => 1000
-        ));
     }
 
     public function setUp()

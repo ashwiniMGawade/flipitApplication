@@ -1,6 +1,20 @@
-
+<?php echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/addsocialcode.js");
+if($this->successMessage!='' || $this->errorMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox alert-warning">
+        <span class='glyphicon glyphicon-warning-sign'></span>
+        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
+    </div>
+    <?php 
+endif;
+?>
 <div class="title">
-	Hey Menno <small>How are you? Let’s save some money for you!</small>
+
+	<?php 
+	echo $this->translate('Hey'). " ";
+    $visitorFirstName = isset($this->userDetails['firstName']) ? $this->userDetails['firstName'] : '';
+    echo $visitorFirstName;
+    ?>
+	<small><?php echo $this->translate('How are you? Let’s save some money for you!');?></small>
 </div>
 <?php
 $socialcodeForm = $this->zendForm;
@@ -13,7 +27,13 @@ foreach ($socialcodeForm->getElements() as $formElement) {
 		<div class="col-lg-5 col-md-5 col-sm-5">
 			<form id="socialcodeForm" class="widget-form" name="socialcodeForm" method="POST" action="">
 				<div class="title">
-					<h1>Deel jouw <br>social kortingscodes <small>Heeft u een nieuwe kortingsbon gevonden <br>die het delen waard is?</small></h1>
+					<h1><?php echo $this->translate('Deel jouw');?><br>
+						<?php echo $this->translate('social kortingscodes');?>
+						<small>
+							<?php echo $this->translate('Heeft u een nieuwe kortingsbon gevonden');?><br>
+							<?php echo $this->translate('die het delen waard is?');?>
+						</small>
+					</h1>
 				</div>
 				<?php echo $socialcodeForm->nickname->renderViewHelper();?>
 				<span class="fake-select">

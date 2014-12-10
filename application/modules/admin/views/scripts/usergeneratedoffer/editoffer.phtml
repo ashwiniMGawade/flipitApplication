@@ -520,12 +520,13 @@ var CKEDITOR_BASEPATH = "<?php echo PUBLIC_PATH . "js/back_end/ckeditor/"; ?>";
             </div>
             <div class="mainpage-content-line">
                 <div class="mainpage-content-left">
-                    <label><strong><?php echo $this->translate('Offer Description'); ?></strong></label>
+                    <label><strong><?php echo $this->translate('Nickname'); ?></strong></label>
                 </div>
                 <div class="mainpage-content-right">
                     <div class="mainpage-content-right-inner-right-other"></div>
                     <div class="mainpage-content-right-inner-left-other">
-                        <textarea id="offerDescription" name="offerDescription" class="span3 mbot bbot"></textarea> 
+                        <input type="text" id="nickname" name="nickname" 
+                            placeholder="nickname" class="span3 mbot bbot">
                     </div>
                 </div>
             </div>
