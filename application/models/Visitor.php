@@ -236,7 +236,7 @@ class Visitor extends BaseVisitor
         ->andWhere('o.startDate <= "'.$currentDate.'"')
         ->andWhere('o.discountType="CD"')
         ->andWhere('o.Visability!="MEM"')
-        ->andWhere('o.userGenerated=0')
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->limit($limit)
         ->fetchArray();
         return $favouriteShopsOffers;
