@@ -28,7 +28,7 @@ class Offer extends BaseOffer
         $expiredOffers = Doctrine_Query::create()
         ->select(
             's.id, o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate,
-            o.extendedoffer, o.extendedUrl, o.shopid, s.affliateProgram'
+            o.extendedoffer, o.extendedUrl, o.shopid, o.userGenerated, o.approved, o.nickname,s.affliateProgram'
         )
         ->from('Offer o')
         ->leftJoin('o.shop s')
@@ -72,7 +72,7 @@ class Offer extends BaseOffer
                     o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
                     o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode,
                     o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid,
-                    o.offerlogoid, o.userGenerated,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path,
+                    o.offerlogoid, o.userGenerated, o.approved, o.nickname,o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path,
                     img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
                 )
                 ->from('Offer o')
@@ -130,7 +130,7 @@ class Offer extends BaseOffer
                 o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,
                 o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,
                 o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid,
-                o.userGenerated, o.approved,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,
+                o.userGenerated, o.approved, o.nickname,o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,
                 fv.id,vot.id,vot.vote'
             )
             ->from('Offer o')
@@ -258,7 +258,7 @@ class Offer extends BaseOffer
         ->select(
             'p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
             o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
-            o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,
+            o.editorPicks,o.userGenerated, o.approved, o.nickname,o.couponCode,o.extendedOffer,o.totalViewcount,
             o.startDate,o.endDate,o.refOfferUrl,
             o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
             s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name'
@@ -454,7 +454,7 @@ class Offer extends BaseOffer
         $offersConstraintsQuery = Doctrine_Query::create()
         ->select(
             'o.title,o.couponCodeType,o.discountType,o.totalViewcount as clicks,o.startDate,o.endDate,o.refURL,
-            o.refOfferUrl,o.authorId,o.authorName,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
+            o.refOfferUrl,o.authorId,o.authorName,o.userGenerated, o.approved, o.nickname,o.Visability,o.couponCode,o.exclusiveCode,o.editorPicks,o.discount,
             o.discountvalueType,o.startdate,s.name,s.refUrl, s.actualUrl,s.permaLink as permalink,s.views,l.*,fv.id,
             fv.visitorId,fv.shopId,vot.id,vot.vote, ologo.path, ologo.name'
         )
@@ -706,7 +706,7 @@ class Offer extends BaseOffer
         $activeCoupons = Doctrine_Query::create()
         ->select(
             's.id,o.id, o.title, o.visability, o.couponcode, o.refofferurl, o.enddate, o.extendedoffer,
-            o.extendedUrl, o.shopid'
+            o.extendedUrl, o.userGenerated, o.approved, o.nickname, o.shopid'
         )
         ->from('Offer o')
         ->leftJoin('o.shop s')
@@ -725,9 +725,9 @@ class Offer extends BaseOffer
     {
         $offerDetails = Doctrine_Query::create()
             ->select(
-                'o.id,o.Visability,o.userGenerated,o.title,o.authorId,
+                'o.id,o.Visability,o.userGenerated, o.approved, o.nickname,o.title,o.authorId,
                 o.discountvalueType,o.exclusiveCode,o.extendedOffer,o.editorPicks,
-                o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,
+                o.discount,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,
                 o.discountType,o.startdate,o.endDate, o.shopId'
             )
             ->from('Offer o')
@@ -793,7 +793,7 @@ class Offer extends BaseOffer
                 's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,o.refURL,o.discountType,
                 o.id,o.title,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, o.refofferurl, o.startdate,
                 o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount, o.authorId, o.authorName,
-                o.shopid, o.offerlogoid, o.userGenerated, o.approved,img.id, img.path, img.name,fv.shopId,fv.visitorId,o.couponCodeType'
+                o.shopid, o.offerlogoid, o.userGenerated, o.approved, o.nickname,img.id, img.path, img.name,fv.shopId,fv.visitorId,o.couponCodeType'
             )
             ->from('Offer o')
             ->leftJoin('o.shop s')
@@ -825,7 +825,7 @@ class Offer extends BaseOffer
                     's.id,s.name,s.refUrl,s.actualUrl,s.permaLink as permalink,terms.content,
                     o.id,o.title,o.refURL,o.discountType,o.extendedUrl,o.visability,o.discountValueType, o.couponcode, 
                     o.refofferurl, o.startdate,o.enddate, o.exclusivecode, o.editorpicks,o.extendedoffer,o.discount,
-                    o.authorId, o.authorName, o.shopid,o.offerlogoid, o.userGenerated, o.approved,o.couponCodeType,img.id, img.path,
+                    o.authorId, o.authorName, o.shopid,o.offerlogoid, o.userGenerated, o.approved, o.nickname,o.couponCodeType,img.id, img.path,
                     img.name,fv.shopId,fv.visitorId,t.*'
                 )
                 ->from('Offer o')
@@ -864,7 +864,7 @@ class Offer extends BaseOffer
         $getOffersQuery = Doctrine_Query::create()
             ->select(
                 'o.id,o.id,o.title, s.name,s.accountManagerName as acName,o.totalViewcount as clicks,
-                o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName,o.refURL,o.couponcode'
+                o.discountType,o.Visability,o.extendedOffer,o.startDate,o.endDate,authorName, o.userGenerated, o.approved, o.nickname,o.refURL,o.couponcode'
             )
             ->from("Offer o")
             ->leftJoin('o.shop s')
@@ -1015,7 +1015,7 @@ class Offer extends BaseOffer
         $offers = Doctrine_Query::create()
         ->select(
             'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
-            o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
+            o.editorPicks,o.userGenerated, o.approved, o.nickname,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
             o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
             s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
             img.name,vot.id,vot.vote'
@@ -1071,8 +1071,8 @@ class Offer extends BaseOffer
                 ->select(
                     's.id,s.name, s.permaLink as permalink,s.permaLink,s.deepLink,s.deepLinkStatus,
                     s.usergenratedcontent,s.refUrl,s.actualUrl,terms.content,o.id,o.extendedoffer,o.extendedurl,
-                    o.editorpicks,o.Visability,o.userGenerated,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,
-                    o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,
+                    o.editorpicks,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,
+                    o.discount,o.userGenerated, o.approved, o.nickname,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,
                     o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote'
                 )
                 ->from('Offer o')
@@ -1416,7 +1416,7 @@ class Offer extends BaseOffer
     public static function searchToFiveOffer($keyword,$flag)
     {
         $data = Doctrine_Query::create()
-        ->select('o.title as title')
+        ->select('o.title as title, o.userGenerated, o.approved, o.nickname')
         ->from("Offer o")
         ->where('o.deleted=' . "'$flag'")
         ->andWhere("o.title LIKE ?", "$keyword%")
@@ -2346,7 +2346,7 @@ class Offer extends BaseOffer
         $suggestion = array();
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-                                ->select('p.id,o.enddate,o.title,s.refUrl,s.actualUrl,s.permaLink as permalink,o.Visability,o.extendedUrl,o.shopid,o.offerlogoid,o.couponcode,o.exclusivecode,o.discount,o.discountvalueType,s.name,s.logoid,l.path,l.name,p.type,p.position,p.offerId,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+                                ->select('p.id,o.enddate,o.title,o.userGenerated, o.approved, o.nickname,s.refUrl,s.actualUrl,s.permaLink as permalink,o.Visability,o.extendedUrl,o.shopid,o.offerlogoid,o.couponcode,o.exclusivecode,o.discount,o.discountvalueType,s.name,s.logoid,l.path,l.name,p.type,p.position,p.offerId,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
                                 ->from('PopularCode p')
                                 ->leftJoin('p.offer o')
                                 ->leftJoin('o.shop s')
@@ -2447,7 +2447,7 @@ class Offer extends BaseOffer
 
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-                ->select('s.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,p.id,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.couponCodeType,o.userGenerated,o.couponCode,o.refOfferUrl,o.refURL, o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+                ->select('s.id,s.name,s.refUrl, s.actualUrl, s.permaLink as permalink,terms.content,p.id,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.couponCodeType,o.userGenerated, o.approved, o.nickname,o.couponCode,o.refOfferUrl,o.refURL, o.discountType,o.startdate,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
                 ->from('PopularCode p')
                 ->leftJoin('p.offer o')
                 ->leftJoin('o.logo ologo')
@@ -2500,7 +2500,7 @@ class Offer extends BaseOffer
     {
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
-                    ->select('s.id,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
+                    ->select('s.id,s.name,s.usergenratedcontent, s.permaLink as permalink,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,o.id,o.Visability,o.title,o.authorId,o.discountvalueType,o.exclusiveCode,o.discount,o.userGenerated, o.approved, o.nickname,o.couponCode,o.couponCodeType,o.refOfferUrl,o.refUrl,o.discountType,o.endDate,img.id, img.path, img.name,fv.shopId,fv.visitorId,ologo.*,vot.id,vot.vote')
                     ->from('Offer o')
                     ->leftJoin('o.shop s')
                     ->leftJoin('o.logo ologo')
@@ -2546,7 +2546,7 @@ class Offer extends BaseOffer
     {
         $currentDate = date('Y-m-d H:i:s');
         $newestOffersForRss = Doctrine_Query::create()
-            ->select('terms.content as terms,img.name as shopImageName,img.path as shopImagePath,o.id,o.title,s.permaLink as permalink,o.updated_at as lastUpdate')
+            ->select('terms.content as terms,img.name as shopImageName,img.path as shopImagePath,o.id,o.title,o.userGenerated, o.approved, o.nickname,s.permaLink as permalink,o.updated_at as lastUpdate')
             ->from('Offer o')
             ->leftJoin('o.shop s')
             ->leftJoin('o.logo ologo')
@@ -2578,7 +2578,7 @@ class Offer extends BaseOffer
     {
         $currentDate = date('Y-m-d H:i:s');
         $popularOffers = Doctrine_Query::create()
-            ->select('terms.content as terms,o.id,o.title,s.permaLink as permalink,p.id,o.updated_at as lastUpdate,img.name as shopImageName,img.path as shopImagePath')
+            ->select('terms.content as terms,o.id,o.title,o.userGenerated, o.approved, o.nickname,s.permaLink as permalink,p.id,o.updated_at as lastUpdate,img.name as shopImageName,img.path as shopImagePath')
             ->from('PopularCode p')
             ->leftJoin('p.offer o')
             ->leftJoin('o.logo ologo')

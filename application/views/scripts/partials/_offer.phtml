@@ -128,8 +128,8 @@ foreach ($this->offers as $offer) {
             echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
         endif;
         if ($offer->userGenerated == 1 && $offer->approved == '1') : ?>
-        <li class="" >
-            <?php echo $this->translate('Deze code is gedeeld door Ben');?>
+        <li id="fr">
+            <?php echo $this->translate('Deze code is gedeeld door ').$offer->nickname;?>
         </li>
         <?php endif;
     } else {
