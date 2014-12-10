@@ -125,7 +125,8 @@ class UserGeneratedOffer extends BaseOffer
 
         if (Auth_VisitorAdapter::hasIdentity()) {
             $offer->authorId = Auth_VisitorAdapter::getIdentity()->id;
-            $offer->authorName = Auth_VisitorAdapter::getIdentity()->firstName;
+            $offer->authorName = Auth_VisitorAdapter::getIdentity()->firstName. " "
+                . Auth_VisitorAdapter::getIdentity()->lastName;
         }
 
         $offer->Visability = 'DE';
