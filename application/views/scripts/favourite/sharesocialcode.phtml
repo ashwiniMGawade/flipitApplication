@@ -8,13 +8,12 @@ if($this->successMessage!='' || $this->errorMessage!='') : ?>
 endif;
 ?>
 <div class="title">
-
-	<?php 
-	echo $this->translate('Hey'). " ";
+    <?php 
+    echo $this->translate('Hey'). " ";
     $visitorFirstName = isset($this->userDetails['firstName']) ? $this->userDetails['firstName'] : '';
     echo $visitorFirstName;
     ?>
-	<small><?php echo $this->translate('How are you? Let’s save some money for you!');?></small>
+    <small><?php echo $this->translate('How are you? Let’s save some money for you!');?></small>
 </div>
 <?php
 $socialcodeForm = $this->zendForm;
@@ -23,131 +22,50 @@ foreach ($socialcodeForm->getElements() as $formElement) {
 }
 ?>
 <div class="section">
-	<div class="row">
-		<div class="col-lg-5 col-md-5 col-sm-5">
-			<form id="socialcodeForm" class="widget-form" name="socialcodeForm" method="POST" action="">
-				<div class="title">
-					<h1><?php echo $this->translate('Deel jouw');?><br>
-						<?php echo $this->translate('social kortingscodes');?>
-						<small>
-							<?php echo $this->translate('Heeft u een nieuwe kortingsbon gevonden');?><br>
-							<?php echo $this->translate('die het delen waard is?');?>
-						</small>
-					</h1>
-				</div>
-				<?php echo $socialcodeForm->nickname->renderViewHelper();?>
-				<span class="fake-select">
-					<?php echo $socialcodeForm->store->renderViewHelper();?>
-				</span>
-				<span class="label">Expiry date</span>
-				<div class="select-box">
-					<?php echo $socialcodeForm->day->renderViewHelper();?>
-					<?php echo $socialcodeForm->month->renderViewHelper();?>
-					<?php echo $socialcodeForm->year->renderViewHelper();?>
-				</div>
-				<?php echo $socialcodeForm->title->renderViewHelper();?>
-				<?php echo $socialcodeForm->offerUrl->renderViewHelper();?>
-				<?php echo $socialcodeForm->code->renderViewHelper();?>
-				<?php echo $socialcodeForm->offerDetails->renderViewHelper();?>
-				<button type='submit' id='sharecode' class="submit btn blue btn-primary">SHARE CODE</button>
-			</form>
-		</div>
-		<div class="col-lg-7 col-md-7 col-sm-7">
-			<article class="block">
-				<div class="holder">
-					<a href="#" class="code blue">
-						<div class="center">
-							<div class="code-holder">
-								<img width="130" height="68" alt="Ola Cabs" src="http://www.flipit.com/public/in/images/upload/shop/thum_medium_store_1374236823_olacabs.png">
-							</div>
-						</div>
-						<footer class="bottom">deal</footer>
-					</a>
-					<div class="box">
-						<div class="text">
-							<p><span class="social">Social</span>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-							<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-						</div>
-						<div class="buttons">
-							<button class="btn blue btn-primary">Get code &amp; Open site</button>
-						</div>
-						<div class="the-code">
-							<span class="instruction"><strong>enter this code at checkout</strong></span>
-							<strong class="code-value">aktiecode2014</strong>
-						</div>
-						<ul class="view-list">
-							<li><a href="#" class="terms">Terms &amp; conditions</a></li>
-							<li>Deze code is gedeeld door Ben</li>
-						</ul>
-					</div>
-				</div>
-				<div class="terms-block">
-					<h2>Terms &amp; Conditions</h2>
-					<ol class="num-list">
-						<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-						<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-						<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-						<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-						<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-						<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-						<li>One code is valid for a maximum of 6 people in the party.</li>
-						<li>Please present the code to your waiter/waitress when ordering your meal.</li>
-						<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-						<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-					</ol>
-				</div>
-			</article>
-			<article class="block active">
-				<div class="holder">
-					<a href="#" class="code">
-						<div class="center">
-							<div class="code-holder">
-								<img width="130" height="68" alt="Ola Cabs" src="http://www.flipit.com/public/in/images/upload/shop/thum_medium_store_1374236823_olacabs.png">
-							</div>
-						</div>
-						<footer class="bottom">code</footer>
-					</a>
-					<div class="box">
-						<div class="text">
-							<p><span class="social">Social</span>Added on November 4th 2013, Expires on Februari 31st 2014</p>
-							<a href="#" class="link">Up to 15% off USA Car Hire in the Avis New Year Sale</a>
-						</div>
-						<div class="buttons">
-							<button class="btn blue btn-primary">Get code &amp; Open site</button>
-							<button class="btn orange btn-warning btn-code">Get code</button>
-						</div>
-						<div class="the-code">
-							<span class="instruction"><strong>enter this code at checkout</strong></span>
-							<strong class="code-value">aktiecode2014</strong>
-						</div>
-						<ul class="view-list">
-							<li><a href="#" class="terms">Terms &amp; conditions</a></li>
-							<li>Deze code is gedeeld door Ben</li>
-						</ul>
-					</div>
-				</div>
-				<div class="offer-box">
-					<hr class="alt2">
-					<div class="offer">
-						<span>Grab this offer now:</span> <a href="#">Open the website David Bridal website</a>
-					</div>
-				</div>
-				<div class="terms-block">
-					<h2>Terms &amp; Conditions</h2>
-					<ol class="num-list">
-						<li>This offer entitles the bearer to 25% off food at your selected ASK Italian - please see your voucher for details.</li>
-						<li>This offer is valid from 27th January - 24th February 2014 excluding Friday 14th February after 5pm and all Saturdays. Not all restaurants are participating in this offer on all days - please check your voucher carefully.</li>
-						<li>Sorry, due to refurbishments, this offer is not available in the following ASK Italian restaurants: Durham from 27th Jan - 1st February, Westwood Cross from 27th Jan - 10th February, Southend from 27th Jan - 12th February, Rayleigh from 3rd-5th February, Solihull from 10th - 13th February.</li>
-						<li> The following exclusions apply: drinks, set and sharing menus, the Menu del Giorno and takeaway. Extra toppings and substitutions are excluded.</li>
-						<li>No cash or meal alternative will be offered in lieu of a specific food item not being available.</li>
-						<li>This offer cannot be used in conjunction with any other offer, including Tesco vouchers and has no monetary value.</li>
-						<li>One code is valid for a maximum of 6 people in the party.</li>
-						<li>Please present the code to your waiter/waitress when ordering your meal.</li>
-						<li>Codes will be checked against a live database and incorrect or previously used codes will not be accepted.</li>
-						<li>Promoter: ASK Restaurants Ltd, 5th Floor, 2 Balcombe Street, London, NW1 6NW.</li>
-					</ol>
-				</div>
-			</article>
-		</div>
-	</div>
+    <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-5">
+            <form id="socialcodeForm" class="widget-form" name="socialcodeForm" method="POST" action="">
+                <div class="title">
+                    <h1><?php echo $this->translate('Deel jouw');?><br>
+                        <?php echo $this->translate('social kortingscodes');?>
+                        <small>
+                            <?php echo $this->translate('Heeft u een nieuwe kortingsbon gevonden');?><br>
+                            <?php echo $this->translate('die het delen waard is?');?>
+                        </small>
+                    </h1>
+                </div>
+                <?php echo $socialcodeForm->nickname->renderViewHelper();?>
+                <span class="fake-select">
+                    <?php echo $socialcodeForm->store->renderViewHelper();?>
+                </span>
+                <span class="label">Expiry date</span>
+                <div class="select-box">
+                    <?php echo $socialcodeForm->day->renderViewHelper();?>
+                    <?php echo $socialcodeForm->month->renderViewHelper();?>
+                    <?php echo $socialcodeForm->year->renderViewHelper();?>
+                </div>
+                <?php echo $socialcodeForm->title->renderViewHelper();?>
+                <?php echo $socialcodeForm->offerUrl->renderViewHelper();?>
+                <?php echo $socialcodeForm->code->renderViewHelper();?>
+                <?php echo $socialcodeForm->offerDetails->renderViewHelper();?>
+                <button type='submit' id='sharecode' class="submit btn blue btn-primary">SHARE CODE</button>
+            </form>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-7">
+        <?php 
+        if(count($this->offers) > 0):
+            echo $this->partial(
+                'partials/_offer.phtml',
+                array(
+                    'offers' => $this->offers,
+                    'offersType'=>'usergenerated',
+                    'shopName' =>'',
+                    'shopId' =>'',
+                    'zendForm'=>''
+                )
+            );
+        endif;
+        ?>
+        </div>
+    </div>
 </div>
