@@ -21,8 +21,15 @@ foreach ($this->offers as $offer) {
     if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
          $couponCode = '';
     }
+    if ($offer->exclusiveCode == '1') {
+        $offerClass = "orange-block";
+    } else if ($offer->userGenerated == '1') {
+        $offerClass = "social-block";
+    } else {
+        $offerClass = "active";
+    }
     ?>
-    <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
+    <article class="block <?php echo $offerClass; ?>">
         <div class="holder offer-holder" id="<?php echo $offer->id; ?>">
     <?php 
     echo $offerPartial->getCommonRedirectUrlForOffer(
@@ -116,11 +123,15 @@ foreach ($this->offers as $offer) {
         if ($termsAndConditions != '') {
             echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
         }
-        
         echo $offerPartial->getExtendedOfferLink($offer);
         if($this->offersType!='simple'):
             echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
         endif;
+        if ($offer->userGenerated == 1 && $offer->approved == '1') : ?>
+        <li class="" >
+            <?php echo $this->translate('Deze code is gedeeld door Ben');?>
+        </li>
+        <?php endif;
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
@@ -154,6 +165,7 @@ foreach ($this->offers as $offer) {
             </ol>
         </div>
         <?php endif; ?>
+       
     </article>
     <?php
     if($offerCounter == 1) :

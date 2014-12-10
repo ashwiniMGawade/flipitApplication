@@ -33,7 +33,7 @@ class Offer extends BaseOffer
         ->from('Offer o')
         ->leftJoin('o.shop s')
         ->where('o.deleted=0')
-        ->andWhere('o.userGenerated=0')
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->andWhere('o.enddate<'."'".$expiredDate."'")
         ->andWhere('o.discounttype="CD"')
         ->andWhere('s.deleted = 0')
@@ -93,7 +93,7 @@ class Offer extends BaseOffer
                 ->andWhere('o.Visability!="MEM"')
                 ->andWhere('o.enddate > "'.$date.'"')
                 ->andWhere('o.startdate <= "'.$date.'"')
-                ->andWhere('o.userGenerated=0')
+                ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
                 ->andWhereIn("o.shopId", $similarShopsIds)
                 ->andWhere("o.shopId != ".$shopId)
                 ->orderBy('o.startdate DESC')
@@ -149,7 +149,7 @@ class Offer extends BaseOffer
             ->andWhere('o.Visability!="MEM"')
             ->andWhere('o.enddate > "'.$date.'"')
             ->andWhere('o.startdate <= "'.$date.'"')
-            ->andWhere('o.userGenerated=0')
+            ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
             ->andWhere("c.categoryId IN ($commaSepratedCategroyIdValues)")
             ->andWhere("s.id != ".$shopId)
             ->orderBy('o.startdate DESC')
@@ -285,7 +285,7 @@ class Offer extends BaseOffer
             ->andWhere('o.enddate > "'.$currentDate.'"')
             ->andWhere('o.startdate <= "'.$currentDate.'"')
             ->andWhere('o.discounttype = "CD"')
-            ->andWhere('o.userGenerated = 0')
+            ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
             ->andWhere('o.Visability != "MEM"')
             ->orderBy('p.position ASC')
             ->limit($limit)
@@ -326,8 +326,12 @@ class Offer extends BaseOffer
             ->andWhere('o.discountType != "NW"')
             ->andWhere('o.discounttype="CD"')
             ->andWhere('o.Visability != "MEM"')
-            ->andWhere('o.userGenerated=0')
             ->orderBy('o.startdate DESC');
+        if ($type == 'UserGeneratedOffers') {
+            $newestCouponCodes->andWhere('o.userGenerated=1');
+        } else {
+            $newestCouponCodes->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")');
+        }
         if ($shopId!='') {
             $newestCouponCodes->andWhere('s.id = '.$shopId.'');
         }
@@ -465,7 +469,7 @@ class Offer extends BaseOffer
         ->leftJoin('s.logo l')
         ->leftJoin('s.favoriteshops fv')
         ->andWhere('o.deleted =0')
-        ->andWhere("o.userGenerated = 0")
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->andWhere('s.deleted =0')
         ->andWhere('o.enddate > "'.$currentDate.'"')
         ->andWhere('o.startdate <= "'.$currentDate.'"')
@@ -707,7 +711,7 @@ class Offer extends BaseOffer
         ->from('Offer o')
         ->leftJoin('o.shop s')
         ->where('o.deleted=0')
-        ->andWhere('o.userGenerated=0')
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->andWhere("o.title LIKE '%$keyword%'")
         ->andWhere('o.enddate>'."'".$currentDate."'")
         ->andWhere('o.discounttype="CD"')
@@ -728,7 +732,7 @@ class Offer extends BaseOffer
             )
             ->from('Offer o')
             ->where('o.deleted = 0')
-            ->andWhere('o.userGenerated=0')
+            ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
             ->andWhere('o.id='.$offerId)
             ->andWhere('o.discounttype="CD"')
             ->orderBy('o.id DESC')
@@ -798,7 +802,7 @@ class Offer extends BaseOffer
             ->leftJoin('o.termandcondition terms')
             ->leftJoin('o.tiles t')
             ->where('o.deleted = 0')
-            ->andWhere("o.userGenerated = 0")
+            ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
             ->andWhere('o.offline = 0')
             ->andWhere('s.deleted = 0')
             ->andWhere('o.startdate <= "'.$currentDate.'"')
@@ -1012,7 +1016,7 @@ class Offer extends BaseOffer
         ->select(
             'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
             o.editorPicks,o.userGenerated,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
-            o.endDate,o.refOfferUrl,o.couponCodeType, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
+            o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
             s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
             img.name,vot.id,vot.vote'
         )
@@ -1091,7 +1095,7 @@ class Offer extends BaseOffer
                 ->andWhere('o.discountType != "NW"')
                 ->andWhere('o.discounttype="CD"')
                 ->andWhere('o.Visability != "MEM"')
-                ->andWhere('o.userGenerated=0')
+                ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
                 ->orderBy('o.startdate DESC');
         if ($shopId!='') {
                     $newestOffers->andWhere('s.id = '.$shopId.'');
@@ -1416,7 +1420,10 @@ class Offer extends BaseOffer
         ->from("Offer o")
         ->where('o.deleted=' . "'$flag'")
         ->andWhere("o.title LIKE ?", "$keyword%")
-        ->orderBy("o.title ASC")->andWhere("o.userGenerated = '0'")->limit(5)->fetchArray();
+        ->orderBy("o.title ASC")
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+        ->limit(5)
+        ->fetchArray();
 
         return $data;
     }
@@ -1433,7 +1440,8 @@ class Offer extends BaseOffer
         ->select()
         ->from("Offer o")->leftJoin('o.shop s')
         ->where('o.deleted=' . "'$flag'")
-        ->andWhere("s.name LIKE ?", "$keyword%")->andWhere("o.userGenerated = '0'")
+        ->andWhere("s.name LIKE ?", "$keyword%")
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->orderBy("s.id ASC")->groupBy('s.name')->limit(5)->fetchArray();
         //print_r($data); die;
         return $data;
@@ -2098,7 +2106,7 @@ class Offer extends BaseOffer
         ->leftJoin('o.shop s')
         ->leftJoin('o.termandcondition term')
         ->where("o.deleted=0")
-        ->andWhere("o.userGenerated=0")
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->orderBy("o.id DESC")
         ->fetchArray();
 
@@ -2346,7 +2354,7 @@ class Offer extends BaseOffer
                                 ->leftJoin('s.favoriteshops fv')
                                 ->leftJoin('s.logo l')
                                 ->where('o.deleted =0')
-                                ->andWhere("o.userGenerated = 0")
+                                ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
                                 ->andWhere('s.deleted = 0')
                                 ->andWhere('o.offline = 0')
                                 ->andWhere('o.startdate <= "'.$date.'"')
@@ -2450,14 +2458,13 @@ class Offer extends BaseOffer
                 ->leftJoin('o.termandcondition terms')
                 ->where('o.deleted = 0')
                 ->andWhere("(couponCodeType = 'UN' AND (SELECT count(id)  FROM CouponCode c WHERE c.offerid = o.id and status=1)  > 0) or couponCodeType = 'GN'")
-                ->andWhere("o.userGenerated = 0")
+                ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
                 ->andWhere('o.enddate > "'.$date.'"')
                 ->andWhere('o.startdate <= "'.$date.'"')
                 ->andWhere('s.deleted = 0')
                 ->andWhere('s.status = 1')
                 ->andWhere('o.discounttype="CD"')
-                ->andWhere('o.Visability!="MEM"')
-                ->andWhere('o.userGenerated=0');
+                ->andWhere('o.Visability!="MEM"');
 
                 if ($shopId!='') {
 
@@ -2489,7 +2496,7 @@ class Offer extends BaseOffer
       * @return array $data
       * @version 1.0
       */
-    public static function commongetMemberOnlyOffer($type,$limit)
+    public static function commongetMemberOnlyOffer($type, $limit)
     {
         $date = date('Y-m-d H:i:s');
         $data = Doctrine_Query::create()
@@ -2501,7 +2508,7 @@ class Offer extends BaseOffer
                     ->leftJoin('s.logo img')
                     ->leftJoin('s.favoriteshops fv')
                     ->leftJoin('o.termandcondition terms')
-                    ->where('o.deleted = 0' )
+                    ->where('o.deleted = 0')
                     ->andWhere('s.deleted = 0')
                     ->andWhere('o.Visability = "MEM"')
                     ->andWhere('o.enddate > "'.$date.'"')
@@ -2586,7 +2593,7 @@ class Offer extends BaseOffer
             ->andWhere('s.deleted = 0')
             ->andWhere('o.discounttype="CD"')
             ->andWhere('o.Visability!="MEM"')
-            ->andWhere('o.userGenerated=0')
+            ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
             ->orderBy('p.position ASC')->fetchArray();
         $popularOfferForRss = array();
 
@@ -2785,7 +2792,7 @@ class Offer extends BaseOffer
                 ->andWhere('o.enddate > "'.$date.'"')
                 ->andWhere('o.startdate <= "'.$date.'"')
                 ->andWhere('o.discounttype = "CD"')
-                ->andWhere('o.userGenerated = 0')
+                ->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
                 ->andWhere('o.Visability != "MEM"')
                 ->orderBy('p.position ASC')
                 ->limit($limit)

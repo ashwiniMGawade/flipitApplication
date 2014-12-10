@@ -264,7 +264,7 @@ class PopularCode extends BasePopularCode
         ->andWhere("o.title LIKE ?", "$keyword%")
         ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
-        ->andWhere('o.userGenerated=0')
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         //->orderBy("o.title")
         ->limit(10)->fetchArray();
 
@@ -291,7 +291,7 @@ class PopularCode extends BasePopularCode
         ->andWhere('o.startdate <= "'.$date.'"')
         ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
-        ->andWhere('o.userGenerated=0')
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->andWhereNotIn('o.id', $listOfPopularCode)
         ->fetchArray();
 

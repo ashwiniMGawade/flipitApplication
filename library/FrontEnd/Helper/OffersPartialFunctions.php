@@ -68,10 +68,15 @@ class FrontEnd_Helper_OffersPartialFunctions
         return $userLoginStatus;
     }
 
-    public function getOfferOption($offerOption)
+    public function getOfferOption($offerOption, $type)
     {
-        $offerOptionHtml = '<strong class="exclusive">
-        <span class="glyphicon glyphicon-star"></span>'.$offerOption.'</strong>';
+        if ($type == 'ex' || $type == 'ed') {
+            $offerOptionHtml = '<strong class="exclusive">
+            <span class="glyphicon glyphicon-star"></span>'.$offerOption.'</strong>';
+        } else if ($type == 'sc') {
+            $offerOptionHtml = '<strong class="exclusive">
+            <span class="social-icon"></span>'.$offerOption.'</strong>';
+        }
         return $offerOptionHtml;
     }
 
@@ -79,9 +84,11 @@ class FrontEnd_Helper_OffersPartialFunctions
     {
         $offerOption = '';
         if ($currentOffer->exclusiveCode == '1'):
-            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'));
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Exclusive'), 'ex');
         elseif ($currentOffer->editorPicks =='1'):
-            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Editor'));
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('Editor'), 'ed');
+        elseif ($currentOffer->userGenerated =='1'):
+            $offerOption = self::getOfferOption(FrontEnd_Helper_viewHelper::__translate('social'), 'sc');
         endif;
         return $offerOption;
     }
