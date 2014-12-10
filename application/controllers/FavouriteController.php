@@ -117,11 +117,12 @@ class FavouriteController extends Zend_Controller_Action
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );
-            echo Auth_VisitorAdapter::getIdentity()->id;
-            $offers = Offer::getNewestOffers('UserGeneratedOffers', '', '', Auth_VisitorAdapter::getIdentity()->id);
-            echo "<pre>";
-            print_r($offers);
-            die;
+            $this->view->offers =  Offer::getNewestOffers(
+                'UserGeneratedOffers',
+                '',
+                '',
+                Auth_VisitorAdapter::getIdentity()->id
+            );
             $this->view->userDetails = isset($userDetails[0]) ? $userDetails[0] : '';
             $socialcodeForm = new Application_Form_SocialCodeSettingForm();
             $this->view->zendForm = $socialcodeForm;
