@@ -2,7 +2,14 @@
 <script type="text/javascript">
     var domainName = "<?php echo HTTP_PATH; ?>";
 </script>
-<section class="section">
+<?php
+$class = "section";
+if (zend_Controller_Front::getInstance()->getRequest()->getControllerName()=='Favourite' 
+    && zend_Controller_Front::getInstance()->getRequest()->getActionName()=='sharesocialcode') {
+    $class = "";
+}
+?>
+<section class="<?php echo $class; ?>">
 <?php
 $offerCounter = '';
 $visitorInformation = '';
@@ -21,9 +28,22 @@ foreach ($this->offers as $offer) {
     if (isset($offer->couponCodeType) && $offer->couponCodeType == 'UN') {
          $couponCode = '';
     }
+    $offerHolderClass = "offer-holder";
+    if ($offer->exclusiveCode == '1') {
+        $offerClass = "orange-block";
+    } else if ($offer->userGenerated == '1') {
+        $offerClass = "";
+        $offerHolderClass = "";
+        if ($offer->approved == '1') {
+            $offerClass = "social-block"; 
+            $offerHolderClass = "offer-holder";
+        }
+    } else {
+        $offerClass = "active";
+    }
     ?>
-    <article class="block <?php echo $offer->exclusiveCode == '1' ? "orange-block" : "active"; ?>">
-        <div class="holder offer-holder" id="<?php echo $offer->id; ?>">
+    <article class="block <?php echo $offerClass; ?>">
+        <div class="holder <?php echo $offerHolderClass; ?>" id="<?php echo $offer->id; ?>">
     <?php 
     echo $offerPartial->getCommonRedirectUrlForOffer(
         $offer,
@@ -116,7 +136,6 @@ foreach ($this->offers as $offer) {
         if ($termsAndConditions != '') {
             echo $offerPartial->getTermAndConditionsLink($offer, $termsAndConditions);
         }
-        
         echo $offerPartial->getExtendedOfferLink($offer);
         if($this->offersType!='simple'):
             echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], $showHyphen);
@@ -124,6 +143,11 @@ foreach ($this->offers as $offer) {
     } else {
         echo $offerPartial->getViewAllCodeLink($offer->shop['name'], $offer->shop['permalink'], '');
     }
+    if ($offer->userGenerated == 1 && $offer->approved == '0') : ?>
+        <li id="fr">
+            <?php echo $this->translate('Code shared by ').$offer->nickname;?>
+        </li>
+        <?php endif;
     ?>
                 </ul>
             </div>
@@ -154,6 +178,7 @@ foreach ($this->offers as $offer) {
             </ol>
         </div>
         <?php endif; ?>
+       
     </article>
     <?php
     if($offerCounter == 1) :

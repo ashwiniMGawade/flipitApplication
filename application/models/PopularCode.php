@@ -264,7 +264,7 @@ class PopularCode extends BasePopularCode
         ->andWhere("o.title LIKE ?", "$keyword%")
         ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
-        ->andWhere('o.userGenerated=0')
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         //->orderBy("o.title")
         ->limit(10)->fetchArray();
 
@@ -281,7 +281,7 @@ class PopularCode extends BasePopularCode
         $format = 'Y-m-j H:i:s';
         $date = date($format);
         $data = Doctrine_Query::create()
-        ->select('o.title as title,o.id as id')
+        ->select('o.title as title,o.id as id, o.userGenerated, o.approved, o.nickname')
         ->from("Offer o")
         ->leftJoin('o.shop s')
         ->where('o.deleted=0')
@@ -291,7 +291,7 @@ class PopularCode extends BasePopularCode
         ->andWhere('o.startdate <= "'.$date.'"')
         ->andWhere('o.discounttype="CD"')
         ->andWhere('o.Visability!="MEM"')
-        ->andWhere('o.userGenerated=0')
+        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
         ->andWhereNotIn('o.id', $listOfPopularCode)
         ->fetchArray();
 

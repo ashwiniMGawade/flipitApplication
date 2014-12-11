@@ -490,7 +490,7 @@ function setFormData(data) {
     }
     jQuery('#addofferTitle').val(data[0].title);
     jQuery('#offerUrl').val(data[0].offerUrl);
-    jQuery('#offerDescription').val(data[0].offerDescription);
+    jQuery('#nickname').val(data[0].nickname);
     jQuery('#metaTextLeft').val(__("Offer title length ") + parseInt(data[0].title.length) + __(" characters"));
     jQuery('#offerRefUrl').val(data[0].refURL);
     if (data[0].refURL) {

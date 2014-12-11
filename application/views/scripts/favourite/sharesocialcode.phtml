@@ -1,0 +1,73 @@
+<?php echo $this->minifyHeadScript()->prependFile(HTTP_PATH."public/js/front_end/addsocialcode.js");
+if($this->successMessage!='' || $this->errorMessage!='') : ?>
+    <div id="messageDiv" class="yellow-box-error-box-code myprofile-messagebox alert-warning">
+        <span class='glyphicon glyphicon-warning-sign'></span>
+        <strong><?php echo $this->successMessage!='' ? $this->successMessage : $this->errorMessage;?></strong>
+    </div>
+    <?php 
+endif;
+?>
+<div class="title">
+    <?php 
+    echo $this->translate('Hey'). " ";
+    $visitorFirstName = isset($this->userDetails['firstName']) ? $this->userDetails['firstName'] : '';
+    echo $visitorFirstName;
+    ?>
+    <small><?php echo $this->translate('How are you? Let’s save some money for you!');?></small>
+</div>
+<?php
+$socialcodeForm = $this->zendForm;
+foreach ($socialcodeForm->getElements() as $formElement) {
+    $formElement->getDecorator('label')->setOption('tag', null);
+}
+?>
+<div class="section">
+    <div class="row">
+        <div class="col-lg-5 col-md-5 col-sm-5">
+            <form id="socialcodeForm" class="widget-form" name="socialcodeForm" method="POST" action="">
+                <div class="title">
+                    <h1><?php echo $this->translate('Deel jouw');?><br>
+                        <?php echo $this->translate('social kortingscodes');?>
+                        <small>
+                            <?php echo $this->translate('Heeft u een nieuwe kortingsbon gevonden');?><br>
+                            <?php echo $this->translate('die het delen waard is?');?>
+                        </small>
+                    </h1>
+                </div>
+                <?php echo $socialcodeForm->nickname->renderViewHelper();?>
+                <span class="fake-select">
+                    <?php echo $socialcodeForm->store->renderViewHelper();?>
+                </span>
+                <span class="label">Expiry date</span>
+                <div class="select-box">
+                    <?php echo $socialcodeForm->day->renderViewHelper();?>
+                    <?php echo $socialcodeForm->month->renderViewHelper();?>
+                    <?php echo $socialcodeForm->year->renderViewHelper();?>
+                </div>
+                <?php echo $socialcodeForm->title->renderViewHelper();?>
+                <?php echo $socialcodeForm->offerUrl->renderViewHelper();?>
+                <?php echo $socialcodeForm->code->renderViewHelper();?>
+                <?php echo $socialcodeForm->offerDetails->renderViewHelper();?>
+                <button type='submit' id='sharecode' class="submit btn blue btn-primary">
+                    <?php echo $this->translate('SHARE CODE');?>
+                </button>
+            </form>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-7">
+        <?php 
+        if(count($this->offers) > 0):
+            echo $this->partial(
+                'partials/_offer.phtml',
+                array(
+                    'offers' => $this->offers,
+                    'offersType'=>'simple',
+                    'shopName' =>'',
+                    'shopId' =>'',
+                    'zendForm'=>''
+                )
+            );
+        endif;
+        ?>
+        </div>
+    </div>
+</div>

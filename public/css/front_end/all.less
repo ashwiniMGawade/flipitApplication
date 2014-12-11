@@ -25,6 +25,18 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 #couponCode{
 	cursor: pointer;
 }
+.block {
+	.holder {
+		.box {
+			.view-list 
+			{
+				li#fr {
+					float:right;
+				}
+			}
+		}
+	}
+}
 #wrapper{
 	width:100%;
 	position:relative;
@@ -810,10 +822,21 @@ div.box a.remove-fovourite.blue{
 	color:#e89438;
 	padding:0 6px 0 0;
 	.glyphicon-star{
-		font-size:14px;
+		font-size:18px;
 		top:2px;
 		left:2px;
 		padding:0 4px 0 0;
+	}
+	.social-icon{
+		background: url(../../images/splashgrey.png) no-repeat 100% 0%;
+    	font-size:14px;
+		top:2px;
+		left:2px;
+		padding:0 4px 0 0;
+		width:16px;
+		height:16px;
+		margin-right:5px;
+		float:left;
 	}
 }
 .section-2{
@@ -901,6 +924,23 @@ div.box a.remove-fovourite.blue{
 		}
 		.terms-block{
 			display:none;
+		}
+	}
+	.social-block{
+		.holder{
+			background:#fef6ec url(../../images/hoeklogo.png) no-repeat 100% 0%;
+		}
+		.offer-holder:hover{
+			background:#fef6ec url(../../images/hoeklogo.png) no-repeat 100% 0%;
+    		border: none;
+    		padding: 30px;
+		}
+		.alt2{
+			border-color:#edd5b6;
+			position:relative;
+		}
+		.text p{
+			padding: 0 40px 0 0;
 		}
 	}
 	.terms-block{
@@ -4774,4 +4814,65 @@ img.logo.kortingscode{
 			}
 		}
 	}
+}
+.social-page{
+	.select-box{
+		overflow:hidden;
+		margin:0 0 19px;
+		select.form-control{
+			width:111px;
+			margin:0 0 0 12px;
+			&:first-child{margin:0;}
+		}
+	}
+}
+@media only screen and (max-width: 1199px){
+	.select-box{
+		select.form-control{width:71px;}
+	}
+	.social-page{
+		.section{
+			.select-box{
+				.select.form-control{
+					width:81px;
+					margin:0 0 0 11px;
+					&:first-child{margin:0;}
+				}
+			}
+		}
+	}
+}
+@media only screen and (max-width: 991px){
+	.select-box{
+		select.form-control{
+			width:100%;
+			float:none;
+			margin:0 0 10px;
+			&:first-child{margin:0 0 10px;}
+		}
+	}
+	.social-page{
+		.section{
+			.select-box{
+				overflow:hidden;
+				select.form-control{
+					float:none;
+					width:100%;
+					margin:0 0 10px;
+					&:first-child{margin:0 0 10px;}
+				}
+			}
+		}
+	}
+}
+@media only screen and (max-width: 767px){
+	.select-box{
+		margin:0 0 15px;
+		select.form-control{
+			margin:0 0 15px;
+			&:first-child{margin:0 0 15px;}
+		}
+	}
+	.fake-select,
+	.edit-page .fake-select{margin:0 0 15px;}
 }
