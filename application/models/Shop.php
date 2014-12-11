@@ -361,7 +361,7 @@ class Shop extends BaseShop
             $query->andWhere("s.status=1")
             ->andWhere("s.name LIKE ?", "$keyword%");
         }
-        return   $allShops = $query->fetchArray();
+        return $allShops = $query->fetchArray();
     }
 
     ##################################################################################

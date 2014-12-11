@@ -48,7 +48,9 @@ foreach ($socialcodeForm->getElements() as $formElement) {
                 <?php echo $socialcodeForm->offerUrl->renderViewHelper();?>
                 <?php echo $socialcodeForm->code->renderViewHelper();?>
                 <?php echo $socialcodeForm->offerDetails->renderViewHelper();?>
-                <button type='submit' id='sharecode' class="submit btn blue btn-primary">SHARE CODE</button>
+                <button type='submit' id='sharecode' class="submit btn blue btn-primary">
+                    <?php echo $this->translate('SHARE CODE');?>
+                </button>
             </form>
         </div>
         <div class="col-lg-7 col-md-7 col-sm-7">

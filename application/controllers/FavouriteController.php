@@ -102,10 +102,8 @@ class FavouriteController extends Zend_Controller_Action
     {
         $flashMessage = $this->_helper->getHelper('FlashMessenger');
         $message = $flashMessage->getMessages();
-        $this->view->successMessage = isset($message[0]['success']) ?
-        $message[0]['success'] : '';
-        $this->view->errorMessage = isset($message[0]['error']) ?
-        $message[0]['error'] : '';
+        $this->view->successMessage = isset($message[0]['success']) ? $message[0]['success'] : '';
+        $this->view->errorMessage = isset($message[0]['error']) ? $message[0]['error'] : '';
         $this->getResponse()->setHeader('X-Nocache', 'no-cache');
         $this->view->pageCssClass = 'social-page';
         if (Auth_VisitorAdapter::hasIdentity()) {
@@ -117,7 +115,7 @@ class FavouriteController extends Zend_Controller_Action
                     'parameters' => array(Auth_VisitorAdapter::getIdentity()->id)
                 )
             );
-            $this->view->offers =  Offer::getNewestOffers(
+            $this->view->offers = Offer::getNewestOffers(
                 'UserGeneratedOffers',
                 '',
                 '',
@@ -143,10 +141,7 @@ class FavouriteController extends Zend_Controller_Action
                     $socialcodeForm->reset();
                     $flashMessage->addMessage(
                         array(
-                            'success' => FrontEnd_Helper_viewHelper::__translate(
-                                'Thanks for sharing your coupon with the Flipit Community! 
-                                Our team will check the details and publish the code'
-                            )
+                            'success' => FrontEnd_Helper_viewHelper::__translate('Thanks for sharing your coupon with the Flipit Community! Our team will check the details and publish the code')
                         )
                     );
                     $redirectUrl = HTTP_PATH_LOCALE

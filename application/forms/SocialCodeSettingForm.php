@@ -7,8 +7,6 @@ class Application_Form_SocialCodeSettingForm extends Application_Form_Base
     }
     public function init()
     {
-        
-        
         $nickname = new Zend_Form_Element_Text('nickname');
         $nickname->setRequired(true);
         $nickname->setAttrib('class', 'form-control');
