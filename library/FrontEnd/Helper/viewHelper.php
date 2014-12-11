@@ -949,6 +949,12 @@ EOD;
         return $cacheKey;
     }
 
+    public static function getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen($keyword)
+    {
+        $keyword = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#.=-]/", "-", $keyword);
+        return $keyword;
+    }
+
     public static function getSinupImage()
     {
         $documentRoot = dirname(dirname(dirname(dirname(__FILE__))));
