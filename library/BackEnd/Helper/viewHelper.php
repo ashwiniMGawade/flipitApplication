@@ -174,10 +174,6 @@ class BackEnd_Helper_viewHelper
         return $ext;
     }
 
-    /**
-     * Create connection with other databse
-     * mean Imbull
-     */
     public static function addConnection()
     {
 
@@ -210,28 +206,13 @@ class BackEnd_Helper_viewHelper
 
     }
 
-
-    /**
-     * Close databse connection
-     * mean Imbull
-     */
-
-
     public static function closeConnection($conn)
     {
         //      $manager = Doctrine_Manager::getInstance();
         //      $manager->closeConnection($conn);
 
     }
-    /**
-     * Generate thumnail
-     * @param Array $file
-     * @param string $orFileName
-     * @param integer $toWidth
-     * @param integer $toHeight
-     * @param string $savePath
-     * @author kraj
-     */
+  
     public static function resizeImage($file, $orFileName, $toWidth, $toHeight, $savePath)
     {
 
@@ -367,17 +348,7 @@ class BackEnd_Helper_viewHelper
 
     }
 
-
-    /**
-     * Generate thumnail
-     * @param Array $file
-     * @param string $orFileName
-     * @param integer $toWidth
-     * @param integer $toHeight
-     * @param string $savePath
-     * @author kraj
-     */
-    public static function resizeImageForFrontEnd($file,$orFileName,$toWidth,$toHeight,$savePath)
+    public static function resizeImageForFrontEnd($file, $orFileName, $toWidth, $toHeight, $savePath)
     {
         $image =$file["name"];
         $img  = $file['tmp_name'];
@@ -445,15 +416,6 @@ class BackEnd_Helper_viewHelper
         }
     }
 
-    /**
-     * Generate thumnail for images which are picked from a folder
-     * @param string $originalImage
-     * @param integer $toWidth
-     * @param integer $toHeight
-     * @param string $path
-     * @param string $type
-     * @author Raman modified by kraj
-     */
     public static function resizeImageFromFolder($originalImage, $toWidth, $toHeight, $savePath, $type)
     {
         ini_set("memory_limit", "256M");
@@ -552,7 +514,7 @@ class BackEnd_Helper_viewHelper
     
     var $image;
     var $image_type;
-    function load($filename)
+    public function load($filename)
     {
         $image_info = getimagesize($filename);
         $this->image_type = $image_info[2];
@@ -565,7 +527,7 @@ class BackEnd_Helper_viewHelper
         }
     }
 
-    function save($filename, $image_type=IMAGETYPE_JPEG, $compression=75, $permissions=null)
+    public function save($filename, $image_type = IMAGETYPE_JPEG, $compression = 75, $permissions = null)
     {
         if ($image_type == IMAGETYPE_JPEG) {
             imagejpeg($this->image, $filename, $compression);
@@ -578,7 +540,8 @@ class BackEnd_Helper_viewHelper
             chmod($filename, $permissions);
         }
     }
-    function output ($image_type=IMAGETYPE_JPEG) {
+    public function output($image_type = IMAGETYPE_JPEG)
+    {
         if ($image_type == IMAGETYPE_JPEG) {
             imagejpeg($this->image);
         } elseif ($image_type == IMAGETYPE_GIF) {
@@ -593,12 +556,12 @@ class BackEnd_Helper_viewHelper
         return imagesx($this->image);
     }
 
-    function getHeight()
+    public function getHeight()
     {
         return imagesy($this->image);
     }
 
-    function resizeToHeight($height)
+    public function resizeToHeight($height)
     {
 
         $ratio = $height / self::getHeight();
@@ -606,19 +569,22 @@ class BackEnd_Helper_viewHelper
         self::resize($width, $height);
     }
 
-    function resizeToWidth($width) {
+    public function resizeToWidth($width)
+    {
         $ratio = $width / self::getWidth();
         $height = self::getheight() * $ratio;
         self::resize($width, $height);
     }
 
-    function scale($scale) {
+    public function scale($scale)
+    {
         $width = self::getWidth() * $scale/100;
         $height = self::getheight() * $scale/100;
         self::resize($width, $height);
     }
 
-    function resize($width, $height) {
+    public function resize($width, $height)
+    {
         $new_image = imagecreatetruecolor($width, $height);
         imagecopyresampled($new_image, $this->image, 0, 0, 0, 0, $width, $height, self::getWidth(), self::getHeight());
         $this->image = $new_image;
@@ -634,20 +600,12 @@ class BackEnd_Helper_viewHelper
         return $output;
     }
 
-    /**
-     * currentRelease
-     *
-     * fucntion returns the current version and release date
-     * @return array
-     * @author Kim Pellikaan
-     */
-
     public static function currentRelease()
     {
         // Getting the currently deployed version and displaying in the sidebar
         if ($handle = opendir('/var/www/flipit.com/releases')) {
             # This is the correct way to loop over the directory.
-            while (false !== ($entry = readdir($handle))){
+            while (false !== ($entry = readdir($handle))) {
                 if ($entry != "." && $entry != "..") {
                         $dir[] = $entry;
                 }
@@ -661,17 +619,8 @@ class BackEnd_Helper_viewHelper
         return array('version' => $version , 'releaseDate' => $releaseDate );
     }
 
-    /**
-     * random md5 poassword generator
-     *
-     *
-     * @return password string
-     * @author sp singh
-     */
-
     public static function randomPassword()
     {
-
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
         $pass = array(); //remember to declare $pass as an array
         $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
@@ -690,8 +639,7 @@ class BackEnd_Helper_viewHelper
      * @param string $input
      * @param boolean $stripTags set true for strip out all tags
      */
-
-    static function  removeScriptTag($input,$stripTags = false)
+    public static function removeScriptTag($input, $stripTags = false)
     {
         if (is_array($input)) {
             foreach ($input as $var => $val) {
@@ -715,7 +663,7 @@ class BackEnd_Helper_viewHelper
     }
 
 
-        /**
+    /**
     * Sort a 2 dimensional array based on 1 or more indexes.
     *
     * msort() can be used to sort a rowset like array on one or more
@@ -738,23 +686,17 @@ class BackEnd_Helper_viewHelper
                 foreach ($array as $k => $v) {
                     $sort_key = '';
                     if (!is_array($key)) {
-
                         # keep same index for preserved values
-                        if($preserveValue && ($preserveValue == $v[$key] || is_array($preserveValue) && in_array($v[$key], $preserveValue)) )
-                        {
+                        if ($preserveValue && ($preserveValue == $v[$key] || is_array($preserveValue) && in_array($v[$key], $preserveValue))) {
                             $sort_key = "" ;
                         } else {
 
                             $sort_key = $v[$key];
                         }
-
                     } else {
-
                         foreach ($key as $key_key) {
-
                             # keep same index for preserved values
-                            if($preserveValue &&  ( $preserveValue == $v[$key_key] || is_array($preserveValue) && in_array($v[$key_key], $preserveValue)) )
-                            {
+                            if ($preserveValue &&  ($preserveValue == $v[$key_key] || is_array($preserveValue) && in_array($v[$key_key], $preserveValue))) {
                                 continue;
                             }
                             $sort_key .= $v[$key_key];
@@ -780,7 +722,6 @@ class BackEnd_Helper_viewHelper
 
     public static function getTopVouchercodesDataMandrill($topVouchercodes)
     {
-
         $path =  defined('HTTP_PATH_FRONTEND') ? HTTP_PATH_FRONTEND :  HTTP_PATH_LOCALE ;
         $publicPath  =  defined('PUBLIC_PATH_CDN') ? PUBLIC_PATH_CDN :  PUBLIC_PATH ;
         $dataShopName = $dataShopImage =  $shopPermalink = $expDate = $dataOfferName = array();
