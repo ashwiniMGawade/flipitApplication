@@ -20,7 +20,6 @@ class BackEnd_Helper_viewHelper
             $featuredOnClass = '';
             $featuredOffClass = 'btn-primary default';
         }
-
         $featuredCategoryButton = '<button onclick="setOnOff(event,\'featured-category\',\'on\');" class="btn '.$featuredOnClass.'" type="button">'.$this->zendTranslate->translate('Yes').'</button>                     
             <button onclick="setOnOff(event,\'featured-category\',\'off\');" class="btn '.$featuredOffClass.'" type="button">'.$this->zendTranslate->translate('No').'</button>';
         return $featuredCategoryButton;
@@ -33,6 +32,7 @@ class BackEnd_Helper_viewHelper
         $locale = isset($localeName[1]) ?  $localeName[1] : "en";
         return $locale;
     }
+
     public function getLocaleStatusButtons($localeStatus)
     {
         if ($localeStatus == 'online') {
@@ -42,7 +42,6 @@ class BackEnd_Helper_viewHelper
             $localeOnClass = '';
             $localeOffClass = 'btn-primary default';
         }
-
         $localeStatusButton = '<button onclick="LocaleStatusToggle(this);"
             class="btn '.$localeOnClass.'"
             data-status="online"
@@ -61,7 +60,6 @@ class BackEnd_Helper_viewHelper
             APPLICATION_PATH . '/configs/application.ini'
         );
         $connections = $application->getOption('doctrine');
-
         foreach ($connections as $key => $connection) {
             if ($key != 'imbull') {
                 try {
@@ -73,7 +71,6 @@ class BackEnd_Helper_viewHelper
                 }
             }
         }
- 
         return !empty($varnishUrlsCount) ? array_sum($varnishUrlsCount) : 0;
     }
     #####################################################
@@ -137,7 +134,6 @@ class BackEnd_Helper_viewHelper
             'port' => '465'
             );
         }
-
         //$transport = new Zend_Mail_Transport_Smtp('smtp.gmail.com',$config);
         $mail = new Zend_Mail();
         $mail->setBodyHtml($body);
@@ -148,7 +144,6 @@ class BackEnd_Helper_viewHelper
 //      $mail->addTo($params['email'], $params['first_name']);
 //      $mail->setSubject('Account detail on '.$this->view->SiteName.' ');
 //      $mail->send();
-
         $email_data = \KC\Repository\Signupmaxaccount::getemailmaxaccounts();
         $emailFrom  = $email_data[0]['emailperlocale'];
         if (count($to) > 0) {
@@ -208,9 +203,8 @@ class BackEnd_Helper_viewHelper
 
     public static function closeConnection($conn)
     {
-        //      $manager = Doctrine_Manager::getInstance();
-        //      $manager->closeConnection($conn);
-
+        //$manager = Doctrine_Manager::getInstance();
+        //$manager->closeConnection($conn);
     }
   
     public static function resizeImage($file, $orFileName, $toWidth, $toHeight, $savePath)
@@ -323,9 +317,7 @@ class BackEnd_Helper_viewHelper
                 $transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
                 imagefilledrectangle($newImg, 0, 0, $width, $height, $transparent);
             }
-
             imagecopyresampled($newImg, $im, 0, 0, 0, 0, $width, $height, $imgInfo[0], $imgInfo[1]);
-
             //Generate the file, and rename it to $newfilename
             switch ($imgInfo[2]) {
                 case 1:
@@ -345,7 +337,6 @@ class BackEnd_Helper_viewHelper
             //imagedestroy($tmp);
             imagedestroy($newImg);
         }
-
     }
 
     public static function resizeImageForFrontEnd($file, $orFileName, $toWidth, $toHeight, $savePath)
@@ -392,7 +383,6 @@ class BackEnd_Helper_viewHelper
                 $transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
                 imagefilledrectangle($newImg, 0, 0, $width, $height, $transparent);
             }
-
             imagecopyresampled($newImg, $im, 0, 0, 0, 0, $width, $height, $imgInfo[0], $imgInfo[1]);
             //Generate the file, and rename it to $newfilename
             switch ($imgInfo[2]) {
@@ -460,9 +450,7 @@ class BackEnd_Helper_viewHelper
                 $transparent = imagecolorallocatealpha($newImg, 255, 255, 255, 127);
                 imagefilledrectangle($newImg, 0, 0, $width, $height, $transparent);
             }
-
             imagecopyresampled($newImg, $im, 0, 0, 0, 0, $width, $height, $imgInfo[0], $imgInfo[1]);
-
             # Generate the file, and rename it to $newImg
             switch ($imgInfo[2]) {
                 case 1:
@@ -540,6 +528,7 @@ class BackEnd_Helper_viewHelper
             chmod($filename, $permissions);
         }
     }
+
     public function output($image_type = IMAGETYPE_JPEG)
     {
         if ($image_type == IMAGETYPE_JPEG) {
@@ -563,7 +552,6 @@ class BackEnd_Helper_viewHelper
 
     public function resizeToHeight($height)
     {
-
         $ratio = $height / self::getHeight();
         $width = self::getWidth() * $ratio;
         self::resize($width, $height);
@@ -702,12 +690,10 @@ class BackEnd_Helper_viewHelper
                             $sort_key .= $v[$key_key];
 
                         }
-
                         $sort_flags = SORT_STRING;
                     }
                     $mapping[$k] = $sort_key;
                 }
-
                 asort($mapping, $sort_flags);
                 $sorted = array();
                 foreach ($mapping as $k => $v) {
@@ -725,38 +711,30 @@ class BackEnd_Helper_viewHelper
         $path =  defined('HTTP_PATH_FRONTEND') ? HTTP_PATH_FRONTEND :  HTTP_PATH_LOCALE ;
         $publicPath  =  defined('PUBLIC_PATH_CDN') ? PUBLIC_PATH_CDN :  PUBLIC_PATH ;
         $dataShopName = $dataShopImage =  $shopPermalink = $expDate = $dataOfferName = array();
-
         foreach ($topVouchercodes as $key => $value) {
-
             $permalinkEmail = $path . $value['offer']['shop']['permaLink'].'?utm_source=transactional&utm_medium=email&utm_campaign='.date('d-m-Y');
             //sets the $dataShopName array with shop names
             $dataShopName[$key]['name'] = "shopTitle_".($key+1);
             $dataShopName[$key]['content'] = "<a style='color:#333333; text-decoration:none;'href='$permalinkEmail'>".$value['offer']['shop']['name']."</a>";
-
             //sets the $dataOfferName array with offer names
             $dataOfferName[$key]['name'] = "offerTitle_".($key+1);
             $dataOfferName[$key]['content'] = $value['offer']['title'];
-
             //set the logo for shop if it exists or not in $dataShopImage array
             if(count($value['offer']['shop']['logo']) > 0):
                 $img = $publicPath.$value['offer']['shop']['logo']['path'].'thum_medium_store_'. $value['offer']['shop']['logo']['name'];
             else:
                 $img = $publicPath."images/NoImage/NoImage_200x100.jpg";
             endif;
-
             $dataShopImage[$key]['name'] = 'shopLogo_'.($key+1);
             $dataShopImage[$key]['content'] = "<a href='$permalinkEmail'><img src='$img'></a>";
-
             //set $expDate array with the expiry date of offer
             $expiryDate = new Zend_Date($value['offer']['endDate']);
             $expDate[$key]['name'] = 'expDate_'.($key+1);
             $expDate[$key]['content'] = FrontEnd_Helper_viewHelper::__link('link_Verloopt op:') ." " . $expiryDate->get(Zend_Date::DATE_MEDIUM);
-
             //set $shopPermalink array with the permalink of shop
             $shopPermalink[$key]['name'] = 'shopPermalink_'.($key+1);
             $shopPermalink[$key]['content'] = $permalinkEmail;
         }
-
         return array(
             'dataShopName' => $dataShopName,
             'dataShopImage' => $dataShopImage,
@@ -770,7 +748,6 @@ class BackEnd_Helper_viewHelper
     {
         $id = \KC\Repository\Emails::getTemplateId($type);
         return $id;
-        
     }
 
     public static function insertTemplateData($id)
