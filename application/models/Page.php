@@ -41,7 +41,7 @@ class Page extends BasePage
     }
     public static function getPageDetailsInError($page)
     {
-        $currentDate = date('Y-m-d 00:00:00');
+        $currentDate = date('Y-m-d H:i:s');
         $pageDetails = Doctrine_Query::create()->from('Page p')
          ->where("p.permaLink='".$page."'")
         ->leftJoin("p.widget w")
