@@ -214,7 +214,7 @@ Doctrine_Core::loadModels(APPLICATION_PATH . '/models');
                 $pc->save();
 
                 $offerID = $p['offerId'];
-                $authorId = FrontEnd_Helper_viewHelper::getAuthorId($offerID);
+                $authorId = \KC\Repsoitory\Offer::getAuthorId($offerID);
 
                 $uid = $authorId[0]['authorId'];
                 $popularcodekey ="all_". "popularcode".$uid ."_list";

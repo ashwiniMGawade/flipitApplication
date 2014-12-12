@@ -101,16 +101,16 @@ EOD;
 
         $socialMediaValue =
             array(
-                'og:title'=>\FrontEnd_Helper_viewHelper::replaceStringVariable($headMetaValue->facebookTitle),
+                'og:title'=>self::replaceStringVariable($headMetaValue->facebookTitle),
                 'og:type'=>'website',
                 'og:url'=> $headMetaValue->facebookShareUrl,
-                'og:description'=>\FrontEnd_Helper_viewHelper::replaceStringVariable(
+                'og:description'=>self::replaceStringVariable(
                     $headMetaValue->facebookDescription
                 ),
                 'og:locale'=>$ogLocale,
                 'og:image'=>$headMetaValue->facebookImage,
                 'og:site_name'=>$site_name,
-                'twitter:description'=>\FrontEnd_Helper_viewHelper::replaceStringVariable(
+                'twitter:description'=>self::replaceStringVariable(
                     $headMetaValue->twitterDescription
                 ),
                 'twitter:site'=>$site_name
@@ -643,17 +643,6 @@ EOD;
                 break;
         }
         return $result;
-    }
-
-    public static function getAuthorId($offerId)
-    {
-        $entityManagerLocale = \Zend_Registry::get('emLocale')->createQueryBuilder();
-        $query = $entityManagerLocale
-        ->select('o.authorId')
-        ->from('KC\Entity\Offer', 'o')
-        ->where("o.id =".$offerId);
-        $userId = $query->getQuery()->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        return $userId;
     }
 
     public static function replaceKeyword(&$item, $key)
