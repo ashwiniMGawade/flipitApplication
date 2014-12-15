@@ -44,7 +44,7 @@ class Category extends BaseCategory
         ->andWhere("s.deleted = 0")
         ->andWhere("s.status = 1")
         ->andWhere("o.deleted = 0")
-        ->andWhere('(o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1")')
+        ->andWhere('o.userGenerated=0')
         ->andWhere('o.enddate > "'.$currentDateAndTime.'"')
         ->andWhere('o.startdate < "'.$currentDateAndTime.'"')
         ->andWhere('o.discounttype="CD"')
