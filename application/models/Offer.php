@@ -1020,7 +1020,7 @@ class Offer extends BaseOffer
         ->select(
             'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
-            o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
+            o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.userGenerated, o.nickname,o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
             s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
             img.name,vot.id,vot.vote'
         )
@@ -1040,7 +1040,7 @@ class Offer extends BaseOffer
             ->andWhere('o.startdate <= "'.$nowDate.'"');
         }
 
-        $offers= $offers->andWhere('o.userGenerated=0')
+        $offers= $offers->andWhere('((o.userGenerated=0 and o.approved="0") or (o.userGenerated=1 and o.approved="1"))')
             ->andWhere('s.id='.$id)
             ->andWhere('s.deleted = 0')
             ->andWhere('o.discountType != "NW"')
