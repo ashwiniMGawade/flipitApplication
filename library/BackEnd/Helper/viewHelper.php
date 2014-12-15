@@ -134,16 +134,9 @@ class BackEnd_Helper_viewHelper
             'port' => '465'
             );
         }
-        //$transport = new Zend_Mail_Transport_Smtp('smtp.gmail.com',$config);
         $mail = new Zend_Mail();
         $mail->setBodyHtml($body);
         $mail->setBodyText(strip_tags($body));
-//      $mail = new Zend_Mail();
-//      $mail->setBodyText("Dear ".$params['first_name'].",\n\nYour new account has been created on ".$this->view->SiteName." your login credentials are given below.\nUsername: ".$params['email']."\nPassword: ".$params['password']."\nTo activate your account click on the link given below\n".HTTP_PATH."index/confirm/refId/".base64_encode($registerUser)."\n\nThank You \n".$this->view->SiteName." ");
-//      $mail->setFrom($this->view->SiteName, $this->view->EmailFrom);
-//      $mail->addTo($params['email'], $params['first_name']);
-//      $mail->setSubject('Account detail on '.$this->view->SiteName.' ');
-//      $mail->send();
         $email_data = \KC\Repository\Signupmaxaccount::getemailmaxaccounts();
         $emailFrom  = $email_data[0]['emailperlocale'];
         if (count($to) > 0) {
@@ -362,12 +355,10 @@ class BackEnd_Helper_viewHelper
                 break;
             }
             if ($toWidth==0 && $toHeight!=0) {
-                //get width
                 $width = self::resizeToHeightImage($toHeight, $img);
                 $toWidth = $width;
                 $height = $toHeight;
             } elseif ($toWidth!=0 && $toHeight==0) {
-                //get height
                 $height     = self::resizeToWidthImage($toWidth, $img);
                 $toHeight = $height;
                 $width      = $toWidth;
@@ -489,7 +480,6 @@ class BackEnd_Helper_viewHelper
         $ratio = $height / self::getHeightImage($file);
         $width = self::getWidthImage($file) * $ratio;
         return  $width;
-        //self::resize($width,$height);
     }
    
     public static function resizeToWidthImage($width, $file)
@@ -497,7 +487,6 @@ class BackEnd_Helper_viewHelper
         $ratio = $width / self::getWidthImage($file);
         $height = self::getheightImage($file) * $ratio;
         return  $height;
-        //self::resize($width,$height);
     }
     
     var $image;
@@ -581,8 +570,8 @@ class BackEnd_Helper_viewHelper
     public static function stripSlashesFromString($string)
     {
         $search = array(
-            '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
-            '@[\\\]@'   // Strip out slashes
+            '@<script[^>]*?>.*?</script>@si',
+            '@[\\\]@'
         );
         $output = preg_replace($search, array('',''), $string);
         return $output;
@@ -610,23 +599,15 @@ class BackEnd_Helper_viewHelper
     public static function randomPassword()
     {
         $alphabet = "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ0123456789";
-        $pass = array(); //remember to declare $pass as an array
-        $alphaLength = strlen($alphabet) - 1; //put the length -1 in cache
+        $pass = array(); 
+        $alphaLength = strlen($alphabet) - 1; 
         for ($i = 0; $i < 8; $i++) {
             $n = rand(0, $alphaLength);
             $pass[] = $alphabet[$n];
         }
-        return md5(implode($pass)); //turn the array into a string
+        return md5(implode($pass)); 
     }
 
-    /**
-     * removeScriptTag
-     *
-     * This function is specially designd for backend text editor input to strip out javasctrip tags
-     *
-     * @param string $input
-     * @param boolean $stripTags set true for strip out all tags
-     */
     public static function removeScriptTag($input, $stripTags = false)
     {
         if (is_array($input)) {
@@ -641,7 +622,7 @@ class BackEnd_Helper_viewHelper
                 $intput = strip_tags($input);
             }
             $search = array(
-                '@<script[^>]*?>.*?</script>@si',   // Strip out javascript
+                '@<script[^>]*?>.*?</script>@si',
                 '@<![\s\S]*?--[ \t\n\r]*>@'
             );
             $output = preg_replace($search, '', $input);
@@ -650,22 +631,6 @@ class BackEnd_Helper_viewHelper
         return $output;
     }
 
-
-    /**
-    * Sort a 2 dimensional array based on 1 or more indexes.
-    *
-    * msort() can be used to sort a rowset like array on one or more
-    * 'headers' (keys in the 2th array).
-    *
-    * @param array        $array      The array to sort.
-    * @param string|array $key        The index(es) to sort the array on.
-    * param string|array  $preserveValue set values which you don't want to sort or keep current position. these values would always be on first after that sorted values
-    * @param int          $sort_flags The optional parameter to modify the sorting
-    *                                 behavior. This parameter does not work when
-    *                                 supplying an array in the $key parameter.
-    *
-    * @return array The sorted array.
-    */
     public static function msort($array, $key, $preserveValue = false, $sort_flags = SORT_REGULAR)
     {
         if (is_array($array) && count($array) > 0) {
