@@ -21,10 +21,10 @@ class IndexController extends Zend_Controller_Action
 
     public function indexAction()
     {
-        echo "<pre>";
+        /*echo "<pre>";
         $a = new \KC\Repository\ViewCount();
         print_r($a->getAmountClickoutsLastWeek(1,3));
-        die('END');
+        die('END');*/
         $this->view->canonical = '';
         $this->view->controllerName = $this->getRequest()->getControllerName();
         $this->view->action = $this->getRequest()->getActionName();
@@ -43,14 +43,14 @@ class IndexController extends Zend_Controller_Action
 
             $this->view->topOffers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "10_popularOffersHome_list",
-                array('function' => 'Offer::getTopOffers', 'parameters' => array(10)
+                array('function' => 'KC\Repository\Offer::getTopOffers', 'parameters' => array(10)
                 ),
                 ''
             );
             
             $topCategories = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
                 "10_popularCategories_list",
-                array('function' => 'Category::getPopularCategories', 'parameters' => array(10, 'home')
+                array('function' => 'KC\Repository\Category::getPopularCategories', 'parameters' => array(10, 'home')
                 ),
                 ''
             );

@@ -2,6 +2,9 @@
     <div class="container">
         <ul class="shops">
 <?php
+/*echo "<pre>";
+print_r($this->top9Stores);
+die;*/
 foreach ($this->top9Stores as $top9StoreIndex => $top9Store):
     $storeImage = PUBLIC_PATH_CDN.ltrim($top9Store['imgpath'], "/") .'thum_medium_'. $top9Store['imgname'];
 ?>
