@@ -70,7 +70,8 @@ class Offer extends BaseOffer
                 ->select(
                     's.id,s.permalink as permalink,s.name,s.deepLink,s.usergenratedcontent,s.deepLinkStatus,
                     o.refURL, o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability,
-                    o.discountType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode,
+                    o.discountType, o.couponCode, o.refofferurl, o.startdate, o.userGenerated, o.nickname, o.approved,
+                    o.enddate, o.exclusiveCode,
                     o.editorPicks,o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid,
                     o.offerlogoid, o.couponCodeType, o.approved,o.discountvalueType,img.id, img.path,
                     img.name,fv.shopId,fv.visitorId,fv.id,vot.id,vot.vote'
@@ -130,7 +131,7 @@ class Offer extends BaseOffer
                 o.refOfferUrl, s.refUrl,s.actualUrl,terms.content,o.id,o.title, o.Visability, o.discountType,
                 o.couponCodeType, o.couponCode, o.refofferurl, o.startdate, o.enddate, o.exclusiveCode, o.editorPicks,
                 o.extendedoffer,o.extendedUrl,o.discount, o.authorId, o.authorName, o.shopid, o.offerlogoid,
-                o.discountvalueType,img.id, img.path, img.name,fv.shopId,fv.visitorId,
+                o.discountvalueType,o.userGenerated, o.approved, o.nickname,img.id, img.path, img.name,fv.shopId,fv.visitorId,
                 fv.id,vot.id,vot.vote'
             )
             ->from('Offer o')
@@ -259,7 +260,7 @@ class Offer extends BaseOffer
             'p.id,o.id,sc.categoryId,o.couponCodeType,o.refURL,
             o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,
-            o.startDate,o.endDate,o.refOfferUrl,
+            o.startDate,o.endDate,o.refOfferUrl,o.userGenerated,o.nickname, o.approved,
             o.extendedUrl,s.id,s.name,s.permalink as permalink,s.usergenratedcontent,s.deepLink,s.deepLinkStatus,
             s.refUrl,s.actualUrl,terms.content,img.id, img.path, img.name'
         )
@@ -1020,7 +1021,8 @@ class Offer extends BaseOffer
         ->select(
             'o.id,o.authorId,o.refURL,o.discountType,o.title,o.discountvalueType,o.Visability,o.exclusiveCode,
             o.editorPicks,o.couponCode,o.extendedOffer,o.totalViewcount,o.startDate,
-            o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.userGenerated, o.nickname,o.extendedUrl,l.*,t.*,s.id,s.name,s.permalink as permalink,
+            o.endDate,o.refOfferUrl,o.couponCodeType, o.approved, o.userGenerated, o.nickname,o.extendedUrl,
+            l.*,t.*,s.id,s.name,s.permalink as permalink,
             s.usergenratedcontent,s.deepLink,s.deepLinkStatus,s.refUrl,s.actualUrl,terms.content,img.id, img.path,
             img.name,vot.id,vot.vote'
         )
