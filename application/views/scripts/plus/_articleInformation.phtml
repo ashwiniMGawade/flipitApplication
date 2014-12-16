@@ -17,7 +17,7 @@ $websiteName = FrontEnd_Helper_viewHelper::getWebsiteName(LOCALE);
         <h1><?php echo $articleDetails['title'];?></h1>
     </header>
     <header class="meta">
-        <p>
+        <p class="article-detail">
             <?php echo $byAuthorName[0]; ?>
             <a class='black-link-bold' href="<?php echo $profileLink; ?>"><?php echo $byAuthorName[1];?></a>
             <?php echo empty($byAuthorName[1]) ? '' : '&nbsp;'; ?>

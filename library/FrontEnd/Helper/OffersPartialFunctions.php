@@ -259,40 +259,50 @@ class FrontEnd_Helper_OffersPartialFunctions
                 '<div class="'.$class.'">
                 '.$offerAnchorTagContent.' </div>';
         } else {
-            if ($currentOffer->discountType == "CD") {
-                $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
-                $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
-                ga('send', 'event', 'aff', '$offerBounceRate'),
-                OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
+            $visitorInformation = '';
+            if (!empty(Auth_VisitorAdapter::getIdentity()->id)) {
+                $visitorInformation = Visitor::getUserDetails(Auth_VisitorAdapter::getIdentity()->id);
+            }
+            if (empty($visitorInformation) && isset($currentOffer->Visability) && $currentOffer->Visability == 'MEM') {
                 $offerLink =
-                    '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
-                    href="'.$urlToShow.'" vote="0" rel="nofollow" 
-                    target="_self" onClick="'.$onClick.'">
-                '.$offerAnchorText.' </a>';
-            } else if ($currentOffer->discountType == "SL") {
-                if ($class == "btn blue btn-primary") {
-                    $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
-                    $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
-                }
-                $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
-                ga('send', 'event', 'aff', '$offerBounceRate')";
-                $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" 
-                    href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
-                 '.$offerAnchorText.'</a>';
+                    '<span class="'.$class.'">
+                '.$offerAnchorText.' </span>';
             } else {
-                if ($class == "btn blue btn-primary") {
-                    $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
-                    $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+                if ($currentOffer->discountType == "CD") {
+                    $onClick = $currentOffer->discountType == "SL" ? "showCodeInformation($currentOffer->id)," : " ";
+                    $onClick .= "viewCounter('onclick', 'offer', $currentOffer->id),
+                    ga('send', 'event', 'aff', '$offerBounceRate'),
+                    OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')";
+                    $offerLink =
+                        '<a  id="'.$currentOffer->id.'" class="'.$class.'" 
+                        href="'.$urlToShow.'" vote="0" rel="nofollow" 
+                        target="_self" onClick="'.$onClick.'">
+                    '.$offerAnchorText.' </a>';
+                } else if ($currentOffer->discountType == "SL") {
+                    if ($class == "btn blue btn-primary") {
+                        $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
+                        $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to Visit Sale');
+                    }
+                    $onClick = "viewCounter('onclick', 'offer', $currentOffer->id),
+                    ga('send', 'event', 'aff', '$offerBounceRate')";
+                    $offerLink =
+                        '<a id="'.$currentOffer->id.'" class="'.$class.'" 
+                        href="'.$urlToShow.'" vote="0" rel="nofollow" target="_blank" onClick="'.$onClick.'">
+                     '.$offerAnchorText.'</a>';
+                } else {
+                    if ($class == "btn blue btn-primary") {
+                        $offerAnchorTagContent = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+                        $offerAnchorText = FrontEnd_Helper_viewHelper::__translate('Click to View Information');
+                    }
+                    $onClick =
+                        self::getUserIsLoggedInOrNot() == "true"
+                        ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
+                        : HTTP_PATH_LOCALE."accountlogin";
+                    $offerLink =
+                        '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
+                        alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
+                        '.$offerAnchorText .'</a>';
                 }
-                $onClick =
-                    self::getUserIsLoggedInOrNot() == "true"
-                    ? "OpenInNewTab('".HTTP_PATH_LOCALE.$currentOffer->shop['permalink'].$popupLink."')"
-                    : HTTP_PATH_LOCALE."accountlogin";
-                $offerLink =
-                    '<a id="'.$currentOffer->id.'" class="'.$class.'" vote = "0" href= "'.$urlToShow.'" 
-                    alt = "'.$urlToShow.'" target="_blank" onclick = "'.$onClick.'" rel="nofollow">
-                    '.$offerAnchorText .'</a>';
             }
         }
         return $headOpen. $offerLink . $headClose;
@@ -394,10 +404,7 @@ class FrontEnd_Helper_OffersPartialFunctions
     public function getTermAndConditionsLink($currentOffer, $termsAndConditions)
     {
         $termAndConditionLink ='';
-        if (
-            isset($currentOffer->userGenerated)
-            ? $currentOffer->userGenerated == 0
-            : '' && $termsAndConditions!=''
+        if ($termsAndConditions!=''
             && $termsAndConditions!=null
         ) {
             $termAndConditionLink = '<li>

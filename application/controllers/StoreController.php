@@ -42,6 +42,17 @@ class StoreController extends Zend_Controller_Action
         $this->view->canonical = FrontEnd_Helper_viewHelper::generateCononical($shopPermalink);
         $shopRecordsLimit = 10;
         $shopParams = $this->_getAllParams();
+
+        if (isset($shopParams['popup']) && $shopParams['popup'] != '') {
+            $offerVisiblity = Offer::getOfferVisiblity($shopParams['popup']);
+            if (!Auth_VisitorAdapter::hasIdentity() && $offerVisiblity == 1) {
+                $shopInfo = Shop::getShopInformation($this->getRequest()->getParam('id'));
+                if (!empty($shopInfo) && isset($shopInfo[0]['permaLink'])) {
+                    $this->_redirect(HTTP_PATH_LOCALE. $shopInfo[0]['permaLink']);
+                }
+            }
+        }
+
         $currentShopId = $shopParams['id'];
         $shopId = $this->getRequest()->getParam('id');
 
@@ -130,6 +141,12 @@ class StoreController extends Zend_Controller_Action
             $explodedPermalink = explode("/", $shopPermalink);
             $shopPermalink = $explodedPermalink[1];
         }
+        $shopPermalink =  explode("?", $shopPermalink);
+        if (isset($shopPermalink[0])) {
+            $shopPermalink = $shopPermalink[0];
+        }
+        $this->view->storePageUrl = $shopPermalink;
+
         $cacheKey = FrontEnd_Helper_viewHelper::getPermalinkAfterRemovingSpecialChracter($shopInformation[0]['permaLink']);
         if ($this->view->currentStoreInformation[0]['discussions'] == 1) {
             $this->view->discussionComments =
@@ -319,7 +336,7 @@ class StoreController extends Zend_Controller_Action
                 $howToGuides[0]['id'])
             )
         );
-        $allOffersInStoreKey = '6_topOffers'.$ShopList;
+        $allOffersInStoreKey = '6_topOffersHowto'.$ShopList;
         $offers = FrontEnd_Helper_viewHelper::getRequestedDataBySetGetCache(
             $allOffersInStoreKey,
             array('function' => 'FrontEnd_Helper_viewHelper::commonfrontendGetCode',

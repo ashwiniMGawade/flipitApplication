@@ -3475,3 +3475,14 @@ div#error-message {
 .shop-wordcount-width{
 	width: 99% !important;
 }
+
+#globalExportForm .export-submit-btn{
+    margin-top: 6px;
+    padding: 4px 20px;
+}
+.export-password-success{
+	float: left;
+    margin-left: 22px;
+    padding-bottom: 20px;
+    color: red;
+}

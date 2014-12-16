@@ -11,6 +11,8 @@ class Application_Form_SearchBrand extends Application_Form_Base
         $searchBrand->setRequired(true);
         $searchBrand->setAttrib('placeholder', FrontEnd_Helper_viewHelper::__form('form_Search brand to follow'));
         $searchBrand->setAttrib('class', 'form-control text-active');
-        $this->addElements(array($searchBrand));
+        $searchBrand->setAttrib('id', 'searchFieldBrandHeader');
+        $searchBrandHidden = new Zend_Form_Element_Hidden('searchedBrandKeyword');
+        $this->addElements(array($searchBrand, $searchBrandHidden));
     }
 }

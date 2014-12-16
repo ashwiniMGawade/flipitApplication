@@ -28,7 +28,7 @@ class BackEnd_Helper_MandrillHelper
                 $passwordKey,
                 $currentObject
             );
-        } elseif (isset($linkType) && $linkType == 'frontend') {
+        } elseif ((isset($linkType) && $linkType == 'frontend')) {
             self::setMandrillMergeVars(
                 $visitorDirectLoginInformation,
                 $visitorInformation,
@@ -41,6 +41,8 @@ class BackEnd_Helper_MandrillHelper
                 ? $currentObject->visitorId: '';
             $unsubscribeLink = isset($currentObject->visitorId) && $currentObject->visitorId != ''
                 ? 'directcodealertunsubscribe': 'directloginunsubscribe';
+            $shopId = isset($currentObject->shopId) && $currentObject->shopId != ''
+                ? '/'.base64_encode($currentObject->shopId): '';
             $visitors = new Visitor();
             $visitors = $visitors->getVisitorsToSendNewsletter($visitorId);
             if ($linkType == 'scheduleNewsletterSender') {
@@ -82,7 +84,7 @@ class BackEnd_Helper_MandrillHelper
                     $frontendPath
                     . FrontEnd_Helper_viewHelper::__link("link_login")
                     . "/" .$unsubscribeLink
-                    . "/" . base64_encode($visitorValue['email']) ."/". $visitorValue['password'];
+                    . "/" . base64_encode($visitorValue['email']) ."/". $visitorValue['password'].$shopId;
                 
                 $visitorInformation[$visitorKey]['email'] = $visitorValue['email'];
                 $visitorInformation[$visitorKey]['name'] =

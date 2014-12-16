@@ -251,6 +251,11 @@
                         <li>
                             <a href="<?php echo HTTP_PATH?>admin/email/code-alert-settings" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Code alert settings');?> </a>
                         </li>
+                        <?php if($controller == 'email' && $action == 'code-alert-log-list') { $userColorClass = "new-blue"; }else { 
+                        $userColorClass = "new-gray"; } ?>
+                        <li>
+                            <a href="<?php echo HTTP_PATH?>admin/email/code-alert-log-list" class="<?php echo $userColorClass; ?>" tabindex="1"><?php echo $this->translate('Code alert log');?> </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -314,6 +319,53 @@
 	        <a href="<?php echo HTTP_PATH;?>admin/popularcode" class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile" ><?php echo $this->translate('Popular Codes');?></a>
       </li>
 
+        <li 
+            <?php 
+            if($controller == 'populararticles') { 
+                ?> 
+                class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" 
+                <?php 
+            } else { 
+                ?> 
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" 
+                <?php 
+            }
+            ?> id="menu-links">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH;?>admin/populararticles"><br></a>
+            </div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH;?>admin/populararticles"
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile">
+                <?php echo $this->translate('Popular Articles');?>
+            </a>
+        </li>
+
+        <li 
+            <?php 
+            if($controller == 'specialpagesoffers') { 
+                ?> 
+                class="imbull-has-submenu  menu-top menu-icon-popular imbull-has-current-submenu current" 
+                <?php 
+            } else { 
+                ?> 
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-popular" 
+                <?php 
+            }
+            ?> id="menu-links">
+            <div class="imbull-menu-image">
+                <a href="<?php echo HTTP_PATH;?>admin/specialpagesoffers"><br></a>
+            </div>
+            <div class="">
+                <div></div>
+            </div>
+            <a href="<?php echo HTTP_PATH;?>admin/specialpagesoffers"
+                class="imbull-has-submenu imbull-not-current-submenu menu-top menu-icon-profile">
+                <?php echo $this->translate('Special Pages Offers');?>
+            </a>
+        </li>
 
 	      <li <?php if($controller == 'searchbar') {?>  class="imbull-has-submenu menu-top menu-icon-searchbar imbull-menu-open imbull-has-current-submenu" <?php } else { ?> class="imbull-has-submenu menu-top menu-icon-searchbar imbull-menu-open imbull-not-current-submenu" <?php }?> id="menu-links">
 

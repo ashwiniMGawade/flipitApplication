@@ -29,8 +29,8 @@ class FrontEnd_Helper_SignUpPartialFunction
                     $whichFormIsPostForValidation = $signUpFormSidebarWidget;
                     break;
                 default:
-                    return;
-                break;
+                    $whichFormIsPostForValidation = $signUpFormForStorePage;
+                    break;
             }
             if ($whichFormIsPostForValidation->isValid($currentSubmittedForm->getRequest()->getPost())) {
                 $signUpStep2Url = self::signUpRedirectLink($whichFormIsPostForValidation);

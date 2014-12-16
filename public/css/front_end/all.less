@@ -114,7 +114,7 @@ body{min-width:320px;-webkit-font-smoothing: subpixel-antialiased!important;}
 	background:#252423;
 	box-shadow: -15px 0 10px -10px rgba(0,0,0,.5) inset;
 	ul {
-		padding:0;
+		padding: 0px 0px 0px 5px;
 		margin:0;
 		list-style:none;
 		ul {
@@ -318,7 +318,7 @@ img.logo.kortingscode{
 				float:left;
 				> a{
 					display:block;
-					padding:39px 23px 39px 25px;
+					padding:39px 23px 42px 25px;
 					color:@white-color;
 					outline: none;
 					&:hover,
@@ -877,7 +877,7 @@ div.box a.remove-fovourite.blue{
 			display:block;
 			vertical-align:top;
 			color:@light-blue;
-			font-size:14px;
+			font-size:18px;
 			line-height:26px;
 			margin-bottom: 15px;
 			text-decoration:none;
@@ -953,12 +953,12 @@ div.box a.remove-fovourite.blue{
 		&:focus{text-decoration:none;}
 		.center{
 			display:table;
-			width:99.8%;
+			width:100%;
 			padding:5px;
 			height:60px;
 			vertical-align:middle;
 			.border-radius (2px 2px 0 0);
-			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 			.code-holder{
 				display:table-cell;
 				vertical-align:middle;
@@ -988,9 +988,9 @@ div.box a.remove-fovourite.blue{
 			line-height:14px;
 			font-weight:bold;
 			padding: 8px;
-			width: 99.8%;
+			width: 100%;
 			border-radius: 0 0 2px 2px;
-			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+			box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2);
 			-webkit-border-radius: 0 0 2px 2px;
 		}
 	}
@@ -1176,7 +1176,7 @@ div.box a.remove-fovourite.blue{
 	overflow:hidden;
 	li{
 		float:left;
-		margin:0 4.2% 3.8% 0;
+		margin:0 3.2% 3.8% 0;
 		img{
 			vertical-align:top;
 			.border-radius;
@@ -1260,6 +1260,7 @@ div.line:last-child {border-bottom: none;}
 	&:after {.after}
 	a,span.replace{
 		&:after {.after}
+		color: #878a8d;
 		display:block;
 		font-size:12px;
 		line-height:18px;
@@ -1315,12 +1316,12 @@ div.line:last-child {border-bottom: none;}
 	color:#a3a4a5;
 	text-decoration: none;
 }
-.mark:hover{
+.mark:hover, span.replace:hover{
 	background: #e5e6e6;
 	color:#383e43;
 }
 .section-module{
-	a{
+	a, span.replace{
 		&:hover,
 		&:focus{
 			.mark{
@@ -2652,6 +2653,7 @@ hr.alt2{
 			text-align:center;
 			padding:2px;
 			margin:0;
+			cursor: text;
 		}
 		.btn.blue{
 			display:block;
@@ -3345,7 +3347,7 @@ span.pop{
 		#nav{
 			ul{
 				li{
-					>a{padding:24px 23px 23px 25px;}
+					>a{padding:24px 23px 27px 25px;}
 				}
                 li.kc-menu{
                     padding: 12px 12px 10px;
@@ -3371,10 +3373,10 @@ span.pop{
 		}
 	}
 	.shops{
-		margin:0 -7% -3% 0;
+		margin:0 -20% -3% 0;
 		li{
-			width:13%;
-			margin:0 3% 3% 0;
+			width:25%;
+			margin:3%;
 			img{
 				max-width:100%;
 				height:auto;
@@ -3612,7 +3614,7 @@ span.pop{
 		#nav{
 			ul{
 				li{
-					a{padding:24px 10px 23px 12px;}
+					a{padding:24px 10px 27px 12px;}
 				}
                 li.kc-menu{
                     padding: 12px 12px 10px;
@@ -4696,7 +4698,10 @@ img.logo.kortingscode{
 		}
 	}
 }
-
+#signup-lightbox .lightbox .singup-heading {
+	max-width: 100%;
+	margin: 8% auto;
+}
 .saving-guide-image-wrapper{
 	width: 135px; 
 	overflow: hidden; 
@@ -4730,6 +4735,9 @@ img.logo.kortingscode{
 			a{
 				text-decoration: none;
 			}
+			a.dropdown-toggle{
+				background: none repeat scroll 0 0 #e49542;
+    		}
 			ul.dropdown-menu{
 				background: none repeat scroll 0 0 #2d2c2c;
 				box-shadow: 1px 0 2px 1px #2d2c2c;

@@ -51,8 +51,10 @@ class Articles extends BaseArticles
     public static function getAllArticles($limit = 0)
     {
         $currentDateTime = date('Y-m-d 00:00:00');
-        $allArticles = Doctrine_Query::create()->select()
-                ->from("Articles a")
+        $allArticles = Doctrine_Query::create()
+                ->select()
+                ->from('PopularArticles p')
+                ->leftJoin('p.articles a')
                 ->leftJoin('a.relatedstores as stores')
                 ->leftJoin('a.relatedcategory as related')
                 ->leftJoin('a.thumbnail')
@@ -62,6 +64,7 @@ class Articles extends BaseArticles
                 ->where('a.publish = "1"')
                 ->andWhere("a.deleted= 0")
                 ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+                ->orderBy('p.position')
                 ->limit($limit)
                 ->fetchArray();
         return $allArticles;
@@ -79,6 +82,18 @@ class Articles extends BaseArticles
             ->orderBy('a.id')
             ->fetchArray();
         return $allArticlesPermalink;
+    }
+
+    public static function getArticlesList()
+    {
+        $currentDateTime = date('Y-m-d 00:00:00');
+        $articlesList = Doctrine_Query::create()->select('a.id, a.title')
+            ->from("Articles a")
+            ->where('a.publish = "1"')
+            ->andWhere("a.deleted= 0")
+            ->andWhere('a.publishdate <="'.$currentDateTime.'"')
+            ->fetchArray();
+        return $articlesList;
     }
     ###############################################
     ########## END REFACTORED CODE ################

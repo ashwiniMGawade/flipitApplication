@@ -2,6 +2,10 @@
 
 class Admin_ShopController extends Zend_Controller_Action
 {
+    public $mandrillKey = '';
+    public $exportPassword = '';
+    public $mandrillSenderEmailAddress = '';
+    public $mandrillSenderName = '';
     /**
      * check authentication before load the page
      * @see Zend_Controller_Action::preDispatch()
@@ -1552,22 +1556,76 @@ class Admin_ShopController extends Zend_Controller_Action
      */
     public function globalExportXlxAction()
     {
-        # set fiel and its trnslattions
-        $file =  APPLICATION_PATH. '/../data/excels/globalShopList.xlsx' ;
-        $fileName =  $this->view->translate($file);
-
         $this->_helper->layout()->disableLayout();
         $this->_helper->viewRenderer->setNoRender(true);
-
-        # set reponse headers and body
-        $this->getResponse()
-        ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
-        ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-        ->setHeader('Cache-Control', 'max-age=0')
-        ->setBody(file_get_contents($fileName));
+        $globalExportParameters = $this->_getAllParams();
+        $checkPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
+        if (isset($globalExportParameters['password']) && $globalExportParameters['password'] == $checkPassword) {
+            # set fiel and its trnslattions
+            $file =  APPLICATION_PATH. '/../data/excels/globalShopList.xlsx' ;
+            $fileName =  $this->view->translate($file);
+            # set reponse headers and body
+            $this->getResponse()
+                ->setHeader('Content-Disposition', 'attachment;filename=' . basename($fileName))
+                ->setHeader('Content-type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                ->setHeader('Cache-Control', 'max-age=0')
+                ->setBody(file_get_contents($fileName));
+        }
     }
 
+    public function globalExportXlxPasswordAction()
+    {
+        $this->saveGlobalExportPassword();
+        $this->sendMailToSuperAdmin();
+        exit();
+    }
 
+    protected function saveGlobalExportPassword()
+    {
+        GlobalExportPassword::savePasswordForExportDownloads('shopExport');
+        $this->exportPassword = GlobalExportPassword::getPasswordForExportDownloads('shopExport');
+    }
+
+    protected function sendMailToSuperAdmin()
+    {
+        $application = new Zend_Application(
+            APPLICATION_ENV,
+            APPLICATION_PATH . '/configs/application.ini'
+        );
+        $frontControlerObject = $application->getOption('resources');
+        $this->mandrillKey = $frontControlerObject['frontController']['params']['mandrillKey'];
+        $mailer  = new FrontEnd_Helper_Mailer(array('mandrillKey' => $this->mandrillKey));
+        $basePath = new Zend_View();
+        $basePath->setBasePath(APPLICATION_PATH . '/views/');
+        $content = array(
+            'name'    => 'content',
+            'content' => $basePath->partial(
+                'emails/exportScriptPassword.phtml',
+                array(
+                    'password' => $this->exportPassword
+                )
+            )
+        );
+        
+        $settings = Signupmaxaccount::getAllMaxAccounts();
+        $this->mandrillSenderEmailAddress = $settings[0]['emailperlocale'];
+        $this->mandrillSenderName = $settings[0]['sendername'];
+        $mailer->send(
+            $this->mandrillSenderName,
+            $this->mandrillSenderEmailAddress,
+            'Arthur',
+            'export@imbull.com',
+            'Global Export password',
+            $content,
+            '',
+            '',
+            '',
+            '',
+            array(
+                'exportScript' => 'yes'
+            )
+        );
+    }
 
     /**
      * change shop status(online/ofline)

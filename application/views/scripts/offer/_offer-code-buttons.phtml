@@ -1,0 +1,21 @@
+<?php
+$offer = Offer::getOfferDetailOnShop($this->offerId);
+$offer = (object) $offer;
+$offerPartial = new FrontEnd_Helper_OffersPartialFunctions();
+$urlToShow = $offerPartial->getUrlToShow($offer);
+$offerBounceRate = "/out/offer/".$offer->id;
+$permalink = $offer->shop['permalink'];
+echo $offerPartial->getCommonRedirectUrlForOffer(
+    $offer,
+    $urlToShow,
+    $offerBounceRate,
+    $permalink,
+    'mainOfferClickoutButton'
+);
+echo $offerPartial->getSecondButtonforOffer(
+    $offer,
+    $urlToShow,
+    $offerBounceRate,
+    $permalink
+);
+?>

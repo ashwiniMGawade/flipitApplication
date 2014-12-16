@@ -542,7 +542,7 @@ EOD;
                 $shopData = Offer::getAllOfferOnShop($shopId);
                 break;
             case 'topsixoffers':
-                $shopData = Offer::getAllOfferOnShop($shopId, $limit);
+                $shopData = Offer::getAllOfferOnShop($shopId, $limit, false, false, true);
                 break;
             case 'popular':
                 $shopData = Offer::commongetpopularOffers($type, $limit, $shopId, $userId);
@@ -763,7 +763,8 @@ EOD;
                     'categoryVouchers' => $categoryVouchers,
                     'categoryInformation' => $categoryInformation,
                     'pathConstants' => $pathConstants,
-                    'codeAlert' => $codeAlert
+                    'codeAlert' => $codeAlert,
+                    'mandrillNewsletterSubject' => $mandrillNewsletterSubject
                 )
             )
         );
@@ -946,6 +947,12 @@ EOD;
     {
         $cacheKey = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#.=-]/", "", $permalink);
         return $cacheKey;
+    }
+
+    public static function getPermalinkAfterRemovingSpecialCharacterAndReplacedWithHyphen($keyword)
+    {
+        $keyword = preg_replace("/[\/\&_~,`@!(){}:'*+^%#$?#.=-]/", "-", $keyword);
+        return $keyword;
     }
 
     public static function getSinupImage()

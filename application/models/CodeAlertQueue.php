@@ -13,6 +13,7 @@ class CodeAlertQueue extends BaseCodeAlertQueue
                     ->select("*")
                     ->from("CodeAlertQueue")
                     ->where('offerId = '.$offerId)
+                    ->andWhere('deleted = 0')
                     ->fetchArray();
 
                 if (empty($codeAlertInformation)) {
@@ -78,15 +79,18 @@ class CodeAlertQueue extends BaseCodeAlertQueue
         return $codeAlertOffers;
     }
 
-    public static function getCodeAlertList($codeAlertParameters)
+    public static function getCodeAlertList($codeAlertParameters, $sentCodes = '')
     {
         $searchText = isset($codeAlertParameters["SearchText"]) && $codeAlertParameters["SearchText"] != 'undefined'
             ? $codeAlertParameters["SearchText"] : '';
         $codeAlertOfferIds = Doctrine_Query::create()
         ->select('c.*')
         ->from("CodeAlertQueue c")
-        ->andWhere("c.offerId LIKE ?", "$searchText%")
-        ->orderBy("c.id DESC")->fetchArray();
+        ->where("c.offerId LIKE ?", "$searchText%")
+        ->orderBy("c.id DESC");
+        $deletedStatus = isset($sentCodes) && $sentCodes != '' ? 1 : 0;
+        $codeAlertOfferIds =  $codeAlertOfferIds->andWhere('c.deleted = '.$deletedStatus);
+        $codeAlertOfferIds =  $codeAlertOfferIds->fetchArray();
         $codeAlertOffersId = array();
         foreach ($codeAlertOfferIds as $codeAlertOfferId) {
             $shop = FavoriteShop::getShopsById($codeAlertOfferId['shopId']);
@@ -108,7 +112,10 @@ class CodeAlertQueue extends BaseCodeAlertQueue
                 ->leftJoin('o.logo img')
                 ->leftJoin('o.offernews news')
                 ->leftJoin('o.tiles t')
-                ->addSelect("(SELECT count(fs.id) FROM FavoriteShop fs WHERE fs.shopId = s.id) as visitors")
+                ->addSelect(
+                    "(SELECT count(fs.id) FROM FavoriteShop fs LEFT JOIN fs.visitors vs 
+                    WHERE fs.shopId = s.id AND vs.id = fs.visitorId AND vs.codealert = 1) as visitors"
+                )
                 ->addSelect("(SELECT cq.id FROM CodeAlertQueue cq WHERE cq.offerId = o.id) as codeAlertId")
                 ->andWhere("o.id IN($offerIds)")
                 ->andWhere("o.userGenerated = '0'");
@@ -128,7 +135,11 @@ class CodeAlertQueue extends BaseCodeAlertQueue
 
     public static function clearCodeAlertQueueByOfferId($offerId)
     {
-        Doctrine_Query::create()->delete()->from('CodeAlertQueue c')->where("c.offerId=".$offerId)->execute();
+        Doctrine_Query::create()
+            ->update('CodeAlertQueue c')
+            ->set('c.deleted', 1)
+            ->where("c.offerId=".$offerId)
+            ->execute();
         return true;
     }
 }

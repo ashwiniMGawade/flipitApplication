@@ -53,8 +53,9 @@ class MoneySaving extends BaseMoneySaving
             ->leftJoin('a.articleImage aai')
             ->leftJoin('a.articlecategory ac')
             ->leftJoin('a.chapters chap')
-            ->Where('a.deleted = 0')
+            ->where('a.deleted = 0')
             ->andWhere('a.id !='.$articleId)
+            ->andWhere('a.publish = 1')
             ->orderBy('a.publishdate DESC')
             ->limit($limit)
             ->fetchArray();
@@ -147,7 +148,27 @@ class MoneySaving extends BaseMoneySaving
         return $articles;
     }
 
-
+    public static function getPopularArticlesAndCategory()
+    {
+        $popularArticles = Doctrine_Query::create()
+            ->select(
+                'p.*, chap.*, a.id, a.title, a.plusTitle, a.permalink, a.content, a.authorid, 
+                a.authorname, a.created_at, a.publishdate, ai.path, ai.name,aai.path, aai.name,
+                ac.categorytitlecolor, ac.name'
+            )
+            ->from('PopularArticles p')
+            ->leftJoin('p.articles a')
+            ->leftJoin('a.thumbnail ai')
+            ->leftJoin('a.articleImage aai')
+            ->leftJoin('a.refarticlecategory r')
+            ->leftjoin('a.articlecategory ac')
+            ->leftJoin('a.chapters chap')
+            ->andWhere('a.deleted=0')
+            ->andWhere('a.publish = 1')
+            ->orderBy('p.position ASC')
+            ->fetchArray();
+        return $popularArticles;
+    }
 
  ################## REFACTORED #######################
     /**
